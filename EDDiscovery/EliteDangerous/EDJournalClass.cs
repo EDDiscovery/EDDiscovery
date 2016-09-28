@@ -16,101 +16,34 @@ using System.Runtime.InteropServices;
 
 namespace EDDiscovery.EliteDangerous
 {
-    public class EDJournalClass
+    public class MonitorWatcher
     {
         public delegate void NewJournalEntryHandler(JournalEntry je);
         public event NewJournalEntryHandler OnNewJournalEntry;
 
+        public string m_watcherfolder;
+
         Dictionary<string, EDJournalReader> netlogreaders = new Dictionary<string, EDJournalReader>();
+        EDJournalReader lastnfi = null;          // last one read..
         FileSystemWatcher m_Watcher;
-        string m_watcherfolder;
-        ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
         System.ComponentModel.BackgroundWorker m_worker;
-        EDJournalReader lastnfi = null;          // last one read..
-        private static Regex journalNamePrefixRe = new Regex("(?<prefix>.*)[.]0*(?<part>[0-9][0-9]*)[.]log");
         private int ticksNoActivity = 0;
+        ConcurrentQueue<string> m_netLogFileQueue;
 
-        public EDJournalClass()
+        public MonitorWatcher(string folder)
         {
-        }
-
-        public static string GetDefaultJournalDir()
-        {
-            string path;
-
-            // Windows Saved Games path (Vista and above)
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6)
-            {
-                IntPtr pszPath;
-                if (SHGetKnownFolderPath(Win32FolderId_SavedGames, 0, IntPtr.Zero, out pszPath) == 0)
-                {
-                    path = Marshal.PtrToStringUni(pszPath);
-                    Marshal.FreeCoTaskMem(pszPath);
-                    return Path.Combine(path, "Frontier Developments", "Elite Dangerous");
-                }
-            }
-
-            // OS X ApplicationSupportDirectory path (Darwin 12.0 == OS X 10.8)
-            if (Environment.OSVersion.Platform == PlatformID.Unix && Environment.OSVersion.Version.Major >= 12)
-            {
-                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "Frontier Developments", "Elite Dangerous");
-
-                if (Directory.Exists(path))
-                {
-                    return path;
-                }
-            }
-
-            return null;
-        }
-
-        public static string GetJournalDir()        // MAY return null if folder does not exist..
-        {
-            try
-            {
-                string journaldirstored = EDDConfig.Instance.JournalDir;
-                string autopath = GetDefaultJournalDir();
-
-                string datapath;
-
-                if (EDDConfig.Instance.JournalDirAutoMode && autopath != null )
-                {
-                    datapath = autopath;
-                }
-                else
-                {
-                    string cmdrpath = EDDConfig.Instance.CurrentCommander.NetLogDir;
-
-                    if (cmdrpath != null && cmdrpath != "" && Directory.Exists(cmdrpath))
-                        datapath = cmdrpath;
-                    else
-                        datapath = journaldirstored;
-                }
-
-                if (Directory.Exists(datapath))   // if logfiles directory is not found
-                    return datapath;
-                else
-                    return null;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("GetJournalDir exception: " + ex.Message);
-                return null;
-            }
+            m_watcherfolder = folder;
         }
 
         public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
-            string datapath = GetJournalDir();  // ensures folder is there, else null.
-
-            if (datapath == null)
-                return;
+            System.Diagnostics.Trace.WriteLine("Scanned "+ m_watcherfolder);
 
             Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => (t.type & 0xFF) == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
 
             // order by file write time so we end up on the last one written
-            FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "Journal.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+            FileInfo[] allFiles = Directory.EnumerateFiles(m_watcherfolder, "Journal.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
             List<EDJournalReader> readersToUpdate = new List<EDJournalReader>();
 
@@ -241,33 +174,27 @@ namespace EDDiscovery.EliteDangerous
             {
                 try
                 {
-                    string logpath = GetJournalDir();
+                    m_netLogFileQueue = new ConcurrentQueue<string>();
+                    m_Watcher = new System.IO.FileSystemWatcher();
+                    m_Watcher.Path = m_watcherfolder +Path.DirectorySeparatorChar;
+                    m_Watcher.Filter = "Journal.*.log";
+                    m_Watcher.IncludeSubdirectories = false;
+                    m_Watcher.NotifyFilter = NotifyFilters.FileName;
+                    m_Watcher.Changed += new FileSystemEventHandler(OnNewFile);
+                    m_Watcher.Created += new FileSystemEventHandler(OnNewFile);
+                    m_Watcher.EnableRaisingEvents = true;
 
-                    if (logpath!=null)
-                    {
-                        m_watcherfolder = string.Copy(logpath); // being paranoid.  keep our own copy, in case it gets changed out from under us
-                        m_netLogFileQueue = new ConcurrentQueue<string>();
-                        m_Watcher = new System.IO.FileSystemWatcher();
-                        m_Watcher.Path = logpath + Path.DirectorySeparatorChar;
-                        m_Watcher.Filter = "Journal.*.log";
-                        m_Watcher.IncludeSubdirectories = false;
-                        m_Watcher.NotifyFilter = NotifyFilters.FileName;
-                        m_Watcher.Changed += new FileSystemEventHandler(OnNewFile);
-                        m_Watcher.Created += new FileSystemEventHandler(OnNewFile);
-                        m_Watcher.EnableRaisingEvents = true;
+                    m_worker = new System.ComponentModel.BackgroundWorker();
+                    m_worker.DoWork += ScanTickWorker;
+                    m_worker.RunWorkerCompleted += ScanTickDone;
+                    m_worker.WorkerSupportsCancellation = true;
 
-                        m_worker = new System.ComponentModel.BackgroundWorker();
-                        m_worker.DoWork += ScanTickWorker;
-                        m_worker.RunWorkerCompleted += ScanTickDone;
-                        m_worker.WorkerSupportsCancellation = true;
+                    m_scantimer = new System.Windows.Forms.Timer();
+                    m_scantimer.Interval = 2000;
+                    m_scantimer.Tick += ScanTick;
+                    m_scantimer.Start();
 
-                        m_scantimer = new System.Windows.Forms.Timer();
-                        m_scantimer.Interval = 2000;
-                        m_scantimer.Tick += ScanTick;
-                        m_scantimer.Start();
-
-                        System.Diagnostics.Trace.WriteLine("Start Monitor");
-                    }
+                    System.Diagnostics.Trace.WriteLine("Start Monitor on " + m_watcherfolder);
                 }
                 catch (Exception ex)
                 {
@@ -298,13 +225,13 @@ namespace EDDiscovery.EliteDangerous
                 m_Watcher.Dispose();
                 m_Watcher = null;
 
-                System.Diagnostics.Trace.WriteLine("Stop Monitor");
+                System.Diagnostics.Trace.WriteLine("Stop Monitor on " + m_watcherfolder); 
             }
         }
 
-        public void NetLogDirChanged() // call from owner of scanner.
+        public void StopStartMonitor() // call from owner of scanner.
         {
-            if (m_Watcher != null)       
+            if (m_Watcher != null)
             {
                 StopMonitor();
                 StartMonitor();
@@ -322,7 +249,8 @@ namespace EDDiscovery.EliteDangerous
                 foreach (var ent in entries)
                 {
                     System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
-                    OnNewJournalEntry(ent);
+                    if ( OnNewJournalEntry != null )
+                        OnNewJournalEntry(ent);
                 }
             }
         }
@@ -347,11 +275,6 @@ namespace EDDiscovery.EliteDangerous
 
             try
             {
-                if (EDDConfig.Instance.JournalDirAutoMode)
-                {
-                    EliteDangerousClass.CheckED();
-                }
-
                 string filename = null;
 
                 if (m_netLogFileQueue.TryDequeue(out filename))      // if a new one queued, we swap to using it
@@ -449,6 +372,104 @@ namespace EDDiscovery.EliteDangerous
         {                                                                   // and it can kick in before any data has had time to be written to it...
             string filename = e.FullPath;
             m_netLogFileQueue.Enqueue(filename);
+        }
+
+    }
+
+    public class EDJournalClass
+    {
+        public delegate void NewJournalEntryHandler(JournalEntry je);
+        public event NewJournalEntryHandler OnNewJournalEntry;
+
+        private static Regex journalNamePrefixRe = new Regex("(?<prefix>.*)[.]0*(?<part>[0-9][0-9]*)[.]log");
+
+        List<MonitorWatcher> watchers = new List<MonitorWatcher>();
+
+        public EDJournalClass()
+        {
+        }
+
+        public static string GetDefaultJournalDir()
+        {
+            string path;
+
+            // Windows Saved Games path (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6)
+            {
+                IntPtr pszPath;
+                if (SHGetKnownFolderPath(Win32FolderId_SavedGames, 0, IntPtr.Zero, out pszPath) == 0)
+                {
+                    path = Marshal.PtrToStringUni(pszPath);
+                    Marshal.FreeCoTaskMem(pszPath);
+                    return Path.Combine(path, "Frontier Developments", "Elite Dangerous");
+                }
+            }
+
+            // OS X ApplicationSupportDirectory path (Darwin 12.0 == OS X 10.8)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Environment.OSVersion.Version.Major >= 12)
+            {
+                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "Frontier Developments", "Elite Dangerous");
+
+                if (Directory.Exists(path))
+                {
+                    return path;
+                }
+            }
+
+            return null;
+        }
+
+        public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
+        {
+            List<EDCommander> listCommanders = EDDConfig.Instance.ListOfCommanders;
+
+            for( int i = 0; i < listCommanders.Count; i++ )             // list of commanders may be added to via this operation..
+            {
+                string datapath = listCommanders[i].NetLogDir;
+
+                if (datapath == null || datapath.Length == 0)
+                    datapath = GetDefaultJournalDir();  // ensures folder is there, else null.
+
+                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(datapath)) >= 0)
+                    continue;       // already done
+
+                System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}" , datapath));
+
+                MonitorWatcher mw = new MonitorWatcher(datapath);
+                watchers.Add(mw);
+                mw.ParseJournalFiles(cancelRequested, updateProgress, forceReload);     // may create new commanders at the end
+                mw.OnNewJournalEntry += NewPosition;
+            }
+        }
+
+        public void StartMonitor()
+        {
+            foreach (MonitorWatcher mw in watchers)
+            {
+                mw.StartMonitor();
+            }
+        }
+
+        public void StopMonitor()
+        {
+            foreach (MonitorWatcher mw in watchers)
+            {
+                mw.StopMonitor();
+            }
+        }
+
+        public void NetLogDirChanged() // call from owner of scanner.
+        {
+            foreach (MonitorWatcher mw in watchers)
+            {
+                mw.StopStartMonitor();
+            }
+        }
+
+        public void NewPosition(EliteDangerous.JournalEntry je)
+        {
+            if (OnNewJournalEntry != null)
+                OnNewJournalEntry(je);
         }
 
         private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");

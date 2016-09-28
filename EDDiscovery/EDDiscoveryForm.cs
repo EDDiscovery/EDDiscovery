@@ -1280,7 +1280,7 @@ namespace EDDiscovery
         {
             try
             {
-                Process.Start(EliteDangerous.EDJournalClass.GetJournalDir());
+                //TBDProcess.Start(EliteDangerous.EDJournalClass.GetJournalDir());
             }
             catch (Exception ex)
             {
@@ -1553,19 +1553,12 @@ namespace EDDiscovery
                 return;
             }
 
-            if (DisplayedCommander >= 0)
+            if (!_refreshWorker.IsBusy)
             {
-                if (!_refreshWorker.IsBusy)
-                {
-                    travelHistoryControl1.RefreshButton(false);
-                    journalViewControl1.RefreshButton(false);
+                travelHistoryControl1.RefreshButton(false);
+                journalViewControl1.RefreshButton(false);
 
-                    _refreshWorker.RunWorkerAsync(new RefreshHistoryParameters { ForceReload = forceReload });
-                }
-            }
-            else
-            {
-                //TBDRefreshHistory(VisitedSystemsClass.GetAll(DisplayedCommander));
+                _refreshWorker.RunWorkerAsync(new RefreshHistoryParameters { ForceReload = forceReload });
             }
         }
 
@@ -1576,23 +1569,22 @@ namespace EDDiscovery
 
         private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
         {
-            var worker = (BackgroundWorker)sender;
-            RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
-            bool forceReload = param.ForceReload;
-
-            journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-
-            journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
-
-            if (worker.CancellationPending)
+            if (DisplayedCommander >= 0)
             {
-                e.Cancel = true;
-                e.Result = null;
-                return;
-            }
+                var worker = (BackgroundWorker)sender;
+                RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
+                bool forceReload = param.ForceReload;
 
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
-            e.Result = jlist;
+                journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+
+                journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
+
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
         }
 
         private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1601,11 +1593,15 @@ namespace EDDiscovery
             {
                 if (e.Error != null)
                 {
-                    travelHistoryControl1.LogLineHighlight("History Refresh Error: " + e.Error.Message );
+                    travelHistoryControl1.LogLineHighlight("History Refresh Error: " + e.Error.Message);
                 }
-                else if (e.Result != null)
+                else
                 {
-                    TransferToFrontEnd((List<EliteDangerous.JournalEntry>)e.Result);
+                    travelHistoryControl1.CheckCommandersListBox();             // in case a new commander has been detected
+                    settings.UpdateCommandersListBox();
+
+                    List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+                    TransferToFrontEnd(jlist);
                     ReportProgress(-1, "");
                     travelHistoryControl1.LogLine("Refresh Complete." );
                 }
@@ -1663,11 +1659,17 @@ namespace EDDiscovery
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
-            HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast);
-            history.Add(he);
+            if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
+            {
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast);
+                history.Add(he);
 
-            travelHistoryControl1.AddNewEntry(he);
-            journalViewControl1.AddNewEntry(he);
+                travelHistoryControl1.AddNewEntry(he);
+                journalViewControl1.AddNewEntry(he);
+            }
+
+            travelHistoryControl1.CheckCommandersListBox();
+            settings.UpdateCommandersListBox();
         }
 
         #endregion

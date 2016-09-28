@@ -57,17 +57,9 @@ namespace EDDiscovery2
         private bool _orderrowsinverted = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
-        private BindingList<EDCommander> _listCommanders = new BindingList<EDCommander>();
-        public BindingList<EDCommander> listCommanders
-        {
-            get
-            {
-                if (_listCommanders.Count == 0)
-                    Update();
-
-                return _listCommanders;
-            }
-        }
+        private List<EDCommander> _ListOfCommanders;
+        public List<EDCommander> ListOfCommanders { get { if (_ListOfCommanders == null) Update();  return _ListOfCommanders;  } }
+        
         private int currentCmdrID=0;
         private Dictionary<string, object> settings = new Dictionary<string, object>();
         private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
@@ -117,7 +109,7 @@ namespace EDDiscovery2
 
             set
             {
-                var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
+                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
                 if (cmdr != null)
                 {
                     currentCmdrID = cmdr.index;
@@ -130,19 +122,19 @@ namespace EDDiscovery2
         {
             get
             {
-                if (currentCmdrID >= listCommanders.Count)
-                    currentCmdrID = listCommanders.Count - 1;
+                if (currentCmdrID >= ListOfCommanders.Count)
+                    currentCmdrID = ListOfCommanders.Count - 1;
 
-                return listCommanders[currentCmdrID];
+                return ListOfCommanders[currentCmdrID];
             }
         }
 
         public EDCommander Commander( int i )
         {
-            if (i >= listCommanders.Count)
-                i = listCommanders.Count - 1;
+            if (i >= ListOfCommanders.Count)
+                i = ListOfCommanders.Count - 1;
 
-            return listCommanders[i];
+            return ListOfCommanders[i];
         }
 
         public bool EDSMLog
@@ -208,9 +200,6 @@ namespace EDDiscovery2
                 SQLiteDBClass.PutSettingBool("KeepOnTop", value);
             }
         }
-
-        public string JournalDir { get { return GetSettingString("JournalDir"); } set { PutSettingString("JournalDir", value); } }
-        public bool JournalDirAutoMode { get { return GetSettingBool("JournalDirAutoMode"); } set { PutSettingBool("JournalDirAutoMode", value); } }
 
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
@@ -295,15 +284,16 @@ namespace EDDiscovery2
                 _orderrowsinverted = SQLiteDBClass.GetSettingBool("OrderRowsInverted", false);
                 _focusOnNewSystem = SQLiteDBClass.GetSettingBool("FocusOnNewSystem", false);
                 _keepOnTop = SQLiteDBClass.GetSettingBool("KeepOnTop", false);
+
                 LoadCommanders();
 
-                if (_listCommanders.Count == 0)
-                {
+                if (ListOfCommanders.Count == 0 )
                     GetNewCommander();
-                }
 
                 int activecommander = SQLiteDBClass.GetSettingInt("ActiveCommander", 0);
-                var cmdr = _listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
+
+                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
+
                 if (cmdr != null)
                 {
                     currentCmdrID = cmdr.index;
@@ -319,84 +309,84 @@ namespace EDDiscovery2
 
         private void LoadCommanders()
         {
-            _listCommanders.Clear();
+            if ( _ListOfCommanders == null )
+                _ListOfCommanders = new List<EDCommander>();
 
-            int maxnr = -1;
-
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            lock (_ListOfCommanders)
             {
-                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders"))
+                _ListOfCommanders.Clear();
+
+                int maxnr = -1;
+
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
                 {
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders"))
                     {
-                        while (reader.Read())
+                        using (DbDataReader reader = cmd.ExecuteReader())
                         {
-                            int id = Convert.ToInt32(reader["Id"]);
-                            string name = Convert.ToString(reader["Name"]);
-                            string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
-
-                            if (id > maxnr)
-                                maxnr = id;
-
-                            if ((long)reader["Deleted"] == 0)
+                            while (reader.Read())
                             {
-                                EDCommander edcmdr = new EDCommander(id, name, edsmapikey);
-                                edcmdr.NetLogDir = Convert.ToString(reader["NetLogDir"]);
-                                _listCommanders.Add(edcmdr);
+                                int id = Convert.ToInt32(reader["Id"]);
+                                string name = Convert.ToString(reader["Name"]);
+                                string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
+
+                                if (id > maxnr)
+                                    maxnr = id;
+
+                                if ((long)reader["Deleted"] == 0)
+                                {
+                                    EDCommander edcmdr = new EDCommander(id, name, edsmapikey);
+                                    edcmdr.NetLogDir = Convert.ToString(reader["NetLogDir"]);
+                                    _ListOfCommanders.Add(edcmdr);
+                                }
+                            }
+                        }
+                    }
+
+                    if (maxnr == -1)        // migrate from really old code
+                    {
+                        using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmApiKey, NetLogDir, Deleted) VALUES (@Id, @Name, @EdsmApiKey, @NetLogDir, @Deleted)"))
+                        {
+                            cmd.AddParameter("@Id", DbType.Int32);
+                            cmd.AddParameter("@Name", DbType.String);
+                            cmd.AddParameter("@EdsmApiKey", DbType.String);
+                            cmd.AddParameter("@NetLogDir", DbType.String);
+                            cmd.AddParameter("@Deleted", DbType.Boolean);
+
+                            // Migrate old settigns.
+                            string apikey = conn.GetSettingStringCN("EDSMApiKey", "");
+                            string commanderName = conn.GetSettingStringCN("CommanderName", "");
+
+                            for (int i = 0; i < 100; i++)
+                            {
+                                EDCommander cmdr = new EDCommander(i,
+                                    conn.GetSettingStringCN("EDCommanderName" + i.ToString(), commanderName),
+                                    conn.GetSettingStringCN("EDCommanderApiKey" + i.ToString(), apikey));
+                                cmdr.NetLogDir = conn.GetSettingStringCN("EDCommanderNetLogPath" + i.ToString(), null);
+                                bool deleted = conn.GetSettingBoolCN("EDCommanderDeleted" + i.ToString(), false);
+
+                                if (cmdr.Name != "")
+                                {
+                                    cmd.Parameters["@Id"].Value = cmdr.Nr;
+                                    cmd.Parameters["@Name"].Value = cmdr.Name;
+                                    cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
+                                    cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
+                                    cmd.Parameters["@Deleted"].Value = deleted;
+                                    cmd.ExecuteNonQuery();
+
+                                    _ListOfCommanders.Add(cmdr);
+                                }
+
+                                commanderName = "";
+                                apikey = "";
                             }
                         }
                     }
                 }
-
-                if (maxnr == -1)
-                {
-                    using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmApiKey, NetLogDir, Deleted) VALUES (@Id, @Name, @EdsmApiKey, @NetLogDir, @Deleted)"))
-                    {
-                        cmd.AddParameter("@Id", DbType.Int32);
-                        cmd.AddParameter("@Name", DbType.String);
-                        cmd.AddParameter("@EdsmApiKey", DbType.String);
-                        cmd.AddParameter("@NetLogDir", DbType.String);
-                        cmd.AddParameter("@Deleted", DbType.Boolean);
-
-                        // Migrate old settigns.
-                        string apikey = conn.GetSettingStringCN("EDSMApiKey", "");
-                        string commanderName = conn.GetSettingStringCN("CommanderName", "");
-
-                        for (int i = 0; i < 100; i++)
-                        {
-                            EDCommander cmdr = new EDCommander(i,
-                                conn.GetSettingStringCN("EDCommanderName" + i.ToString(), commanderName),
-                                conn.GetSettingStringCN("EDCommanderApiKey" + i.ToString(), apikey));
-                            cmdr.NetLogDir = conn.GetSettingStringCN("EDCommanderNetLogPath" + i.ToString(), null);
-                            bool deleted = conn.GetSettingBoolCN("EDCommanderDeleted" + i.ToString(), false);
-
-                            if (cmdr.Name != "")
-                            {
-                                cmd.Parameters["@Id"].Value = cmdr.Nr;
-                                cmd.Parameters["@Name"].Value = cmdr.Name;
-                                cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
-                                cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
-                                cmd.Parameters["@Deleted"].Value = deleted;
-                                cmd.ExecuteNonQuery();
-
-                                if (!deleted)
-                                    _listCommanders.Add(cmdr);
-                            }
-
-                            commanderName = "";
-                            apikey = "";
-                        }
-                    }
-                }
-            }
-
-            if (_listCommanders.Count == 0)
-            {
-                _listCommanders.Add(GetNewCommander());
             }
         }
 
-        public void StoreCommanders(IEnumerable<EDCommander> dictcmdr)
+        public void UpdateCommanders(List<EDCommander> cmdrlist)
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
@@ -407,19 +397,20 @@ namespace EDDiscovery2
                     cmd.AddParameter("@EdsmApiKey", DbType.String);
                     cmd.AddParameter("@NetLogDir", DbType.String);
 
-                    foreach (EDCommander edcmdr in _listCommanders)
+                    foreach (EDCommander edcmdr in cmdrlist)
                     {
                         cmd.Parameters["@Id"].Value = edcmdr.Nr;
                         cmd.Parameters["@Name"].Value = edcmdr.Name;
                         cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
-                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "" ;
+                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "";
                         cmd.ExecuteNonQuery();
                     }
+
+                    LoadCommanders();       // refresh in-memory copy
                 }
             }
-
-            LoadCommanders();
         }
+
 
         internal EDCommander GetNewCommander(string name = null, string edsmApiKey = null, string overridepath = null)
         {
@@ -444,7 +435,7 @@ namespace EDDiscovery2
 
                 if (name == null)
                 {
-                    using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name"))
+                    using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name WHERE rowid = last_insert_rowid()"))
                     {
                         cmd.AddParameterWithValue("@Name", cmdr.Name);
                         cmd.ExecuteNonQuery();
@@ -452,7 +443,7 @@ namespace EDDiscovery2
                 }
             }
 
-            _listCommanders.Add(cmdr);
+            LoadCommanders();       // refresh in-memory copy
 
             return cmdr;
         }
@@ -468,7 +459,7 @@ namespace EDDiscovery2
                 }
             }
 
-            LoadCommanders();
+            LoadCommanders();       // refresh in-memory copy
         }
     }
 }

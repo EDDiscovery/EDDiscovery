@@ -145,7 +145,7 @@ namespace EDDiscovery
             dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.HistoryTag].Tag = item;
             dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.NoteTag].Tag = snc;
 
-            dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
+            dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
             string tip = item.EventSummary + Environment.NewLine + item.EventDescription + Environment.NewLine + item.EventDetailedInfo;
             dataGridViewTravel.Rows[rownr].Cells[0].ToolTipText = tip;
@@ -427,13 +427,20 @@ namespace EDDiscovery
 
         #endregion
 
+
+        public void CheckCommandersListBox()
+        {
+            if (comboBoxCommander.Items.Count-1 != EDDConfig.Instance.ListOfCommanders.Count)       // account for hidden log
+                LoadCommandersListBox();
+        }
+
         public void LoadCommandersListBox()
         {
             comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
 
             commanders.Add(new EDCommander(-1, "Hidden log", ""));
-            commanders.AddRange(EDDiscoveryForm.EDDConfig.listCommanders);
+            commanders.AddRange(EDDiscoveryForm.EDDConfig.ListOfCommanders);
 
             comboBoxCommander.DataSource = null;
             comboBoxCommander.DataSource = commanders;
