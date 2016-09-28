@@ -142,9 +142,9 @@ namespace EDDiscovery
 
         public bool UpdateCommanderID(int v)
         {
-            //TBD how do we do this..
             if (Journalid != 0)
             {
+                EliteDangerous.JournalEntry.UpdateCommanderID(Journalid, v);
             }
             return false;
         }

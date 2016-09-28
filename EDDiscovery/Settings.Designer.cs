@@ -30,11 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBox1 = new ExtendedControls.GroupBoxCustom();
-            this.button_Browse = new ExtendedControls.ButtonExt();
-            this.textBoxNetLogDir = new ExtendedControls.TextBoxBorder();
-            this.radioButton_Manual = new ExtendedControls.RadioButtonCustom();
-            this.radioButton_Auto = new ExtendedControls.RadioButtonCustom();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
             this.checkBoxKeepOnTop = new ExtendedControls.CheckBoxCustom();
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
@@ -65,92 +60,13 @@
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNetLogDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox1.SuspendLayout();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.SuspendLayout();
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBox1.BackColorScaling = 0.5F;
-            this.groupBox1.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBox1.BorderColorScaling = 0.5F;
-            this.groupBox1.Controls.Add(this.button_Browse);
-            this.groupBox1.Controls.Add(this.textBoxNetLogDir);
-            this.groupBox1.Controls.Add(this.radioButton_Manual);
-            this.groupBox1.Controls.Add(this.radioButton_Auto);
-            this.groupBox1.FillClientAreaWithAlternateColor = false;
-            this.groupBox1.Location = new System.Drawing.Point(0, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(819, 87);
-            this.groupBox1.TabIndex = 19;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Elite Dangerous Journal location (Set to manual to use folder below or commander " +
-    "specific journal path)";
-            this.groupBox1.TextPadding = 0;
-            this.groupBox1.TextStartPosition = -1;
-            // 
-            // button_Browse
-            // 
-            this.button_Browse.BorderColorScaling = 1.25F;
-            this.button_Browse.ButtonColorScaling = 0.5F;
-            this.button_Browse.ButtonDisabledScaling = 0.5F;
-            this.button_Browse.Location = new System.Drawing.Point(728, 46);
-            this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(75, 23);
-            this.button_Browse.TabIndex = 3;
-            this.button_Browse.Text = "Browse";
-            this.button_Browse.UseVisualStyleBackColor = true;
-            this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
-            // 
-            // textBoxNetLogDir
-            // 
-            this.textBoxNetLogDir.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxNetLogDir.BorderColorScaling = 0.5F;
-            this.textBoxNetLogDir.Location = new System.Drawing.Point(97, 48);
-            this.textBoxNetLogDir.Name = "textBoxNetLogDir";
-            this.textBoxNetLogDir.Size = new System.Drawing.Size(623, 20);
-            this.textBoxNetLogDir.TabIndex = 2;
-            this.textBoxNetLogDir.Validated += new System.EventHandler(this.textBoxNetLogDir_Validated);
-            // 
-            // radioButton_Manual
-            // 
-            this.radioButton_Manual.AutoSize = true;
-            this.radioButton_Manual.FontNerfReduction = 0.5F;
-            this.radioButton_Manual.Location = new System.Drawing.Point(17, 49);
-            this.radioButton_Manual.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButton_Manual.Name = "radioButton_Manual";
-            this.radioButton_Manual.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButton_Manual.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButton_Manual.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButton_Manual.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButton_Manual.Size = new System.Drawing.Size(60, 17);
-            this.radioButton_Manual.TabIndex = 1;
-            this.radioButton_Manual.TabStop = true;
-            this.radioButton_Manual.Text = "Manual";
-            this.radioButton_Manual.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_Auto
-            // 
-            this.radioButton_Auto.AutoSize = true;
-            this.radioButton_Auto.FontNerfReduction = 0.5F;
-            this.radioButton_Auto.Location = new System.Drawing.Point(17, 26);
-            this.radioButton_Auto.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButton_Auto.Name = "radioButton_Auto";
-            this.radioButton_Auto.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButton_Auto.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButton_Auto.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButton_Auto.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButton_Auto.Size = new System.Drawing.Size(47, 17);
-            this.radioButton_Auto.TabIndex = 0;
-            this.radioButton_Auto.TabStop = true;
-            this.radioButton_Auto.Text = "Auto";
-            this.radioButton_Auto.UseVisualStyleBackColor = true;
-            this.radioButton_Auto.CheckedChanged += new System.EventHandler(this.radioButton_Auto_CheckedChanged);
             // 
             // groupBoxTheme
             // 
@@ -163,7 +79,7 @@
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 435);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 372);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 120);
             this.groupBoxTheme.TabIndex = 18;
@@ -257,7 +173,7 @@
             this.groupBox2.Controls.Add(this.textBoxHomeSystem);
             this.groupBox2.Controls.Add(this.panel_defaultmapcolor);
             this.groupBox2.FillClientAreaWithAlternateColor = false;
-            this.groupBox2.Location = new System.Drawing.Point(440, 280);
+            this.groupBox2.Location = new System.Drawing.Point(440, 217);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(379, 100);
             this.groupBox2.TabIndex = 17;
@@ -389,7 +305,7 @@
             this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
             this.groupBox3.Controls.Add(this.checkboxSkipSlowUpdates);
             this.groupBox3.FillClientAreaWithAlternateColor = false;
-            this.groupBox3.Location = new System.Drawing.Point(3, 280);
+            this.groupBox3.Location = new System.Drawing.Point(3, 217);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(426, 149);
             this.groupBox3.TabIndex = 16;
@@ -490,12 +406,13 @@
             this.groupBox4.BorderColorScaling = 0.5F;
             this.groupBox4.Controls.Add(this.btnDeleteCommander);
             this.groupBox4.Controls.Add(this.buttonAddCommander);
+            this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.dataGridViewCommanders);
             this.groupBox4.FillClientAreaWithAlternateColor = false;
-            this.groupBox4.Location = new System.Drawing.Point(0, 93);
+            this.groupBox4.Location = new System.Drawing.Point(0, 4);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(819, 184);
+            this.groupBox4.Size = new System.Drawing.Size(819, 210);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Commanders";
@@ -531,7 +448,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(125, 21);
+            this.label2.Location = new System.Drawing.Point(134, 40);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(309, 13);
             this.label2.TabIndex = 1;
@@ -550,7 +467,7 @@
             this.ColumnCommander,
             this.ColumnEDSMAPIKey,
             this.ColumnNetLogDir});
-            this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 45);
+            this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 71);
             this.dataGridViewCommanders.MultiSelect = false;
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
             this.dataGridViewCommanders.RowHeadersWidth = 20;
@@ -593,19 +510,25 @@
             this.ColumnNetLogDir.MinimumWidth = 150;
             this.ColumnNetLogDir.Name = "ColumnNetLogDir";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(133, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(370, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Leave Journal Location blank to use the standard frontier location for journals";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxTheme);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
             this.Name = "Settings";
             this.Size = new System.Drawing.Size(937, 725);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBoxTheme.ResumeLayout(false);
             this.groupBoxTheme.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -651,10 +574,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDir;
-        private ExtendedControls.ButtonExt button_Browse;
-        private ExtendedControls.TextBoxBorder textBoxNetLogDir;
-        private ExtendedControls.RadioButtonCustom radioButton_Manual;
-        private ExtendedControls.RadioButtonCustom radioButton_Auto;
-        private ExtendedControls.GroupBoxCustom groupBox1;
+        private System.Windows.Forms.Label label1;
     }
 }
