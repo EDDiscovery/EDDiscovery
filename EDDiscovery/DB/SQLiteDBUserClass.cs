@@ -29,9 +29,6 @@ namespace EDDiscovery.DB
                 if (dbver < 7)
                     UpgradeUserDB7(conn);
 
-                if (dbver < 8)
-                    UpgradeUserDB8(conn);
-
                 if (dbver < 9)
                     UpgradeUserDB9(conn);
 
@@ -44,17 +41,8 @@ namespace EDDiscovery.DB
                 if (dbver < 12)
                     UpgradeUserDB12(conn);
 
-                if (dbver < 14)
-                    UpgradeUserDB14(conn);
-
                 if (dbver < 16)
                     UpgradeUserDB16(conn);
-
-                if (dbver < 17)
-                    UpgradeUserDB17(conn);
-
-                if (dbver < 18)
-                    UpgradeUserDB18(conn);
 
                 if (dbver < 101)
                     UpgradeUserDB101(conn);
@@ -91,14 +79,6 @@ namespace EDDiscovery.DB
             SQLiteDBClass.PerformUpgrade(conn, 2, false, false, new[] { query4 });
         }
 
-        /*
-        private static void UpgradeDB3(SQLiteConnectionED conn)
-        {
-            string query1 = "ALTER TABLE Systems ADD COLUMN Note TEXT";
-            SQLiteDBClass.PerformUpgrade(conn, 3, false, false, new[] { query1 });
-        }
-         */
-
         private static void UpgradeUserDB4(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN Note TEXT";
@@ -107,16 +87,8 @@ namespace EDDiscovery.DB
 
         private static void UpgradeUserDB7(SQLiteConnectionED conn)
         {
-            string query1 = "DROP TABLE IF EXISTS VisitedSystems";
-            string query2 = "CREATE TABLE VisitedSystems(id INTEGER PRIMARY KEY  NOT NULL, Name TEXT NOT NULL, Time DATETIME NOT NULL, Unit Text, Commander Integer, Source Integer, edsm_sync BOOL DEFAULT (null))";
             string query3 = "CREATE TABLE TravelLogUnit(id INTEGER PRIMARY KEY  NOT NULL, type INTEGER NOT NULL, name TEXT NOT NULL, size INTEGER, path TEXT)";
-            SQLiteDBClass.PerformUpgrade(conn, 7, true, false, new[] { query1, query2, query3 });
-        }
-
-        private static void UpgradeUserDB8(SQLiteConnectionED conn)
-        {
-            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Map_colour INTEGER DEFAULT (-65536)";
-            SQLiteDBClass.PerformUpgrade(conn, 8, true, false, new[] { query1 });
+            SQLiteDBClass.PerformUpgrade(conn, 7, true, false, new[] { query3 });
         }
 
         private static void UpgradeUserDB9(SQLiteConnectionED conn)
@@ -136,8 +108,7 @@ namespace EDDiscovery.DB
         {
             string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
             string query3 = "ALTER TABLE Objects ADD COLUMN terraform Integer";
-            string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
-            SQLiteDBClass.PerformUpgrade(conn, 11, true, false, new[] { query2, query3, query4 });
+            SQLiteDBClass.PerformUpgrade(conn, 11, true, false, new[] { query2, query3 });
         }
 
         private static void UpgradeUserDB12(SQLiteConnectionED conn)
@@ -148,44 +119,11 @@ namespace EDDiscovery.DB
         }
 
 
-        private static bool UpgradeUserDB14(SQLiteConnectionED conn)
-        {
-            //Default is Color.Red.ToARGB()
-            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN X double";
-            string query2 = "ALTER TABLE VisitedSystems ADD COLUMN Y double";
-            string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Z double";
-
-            SQLiteDBClass.PerformUpgrade(conn, 14, true, false, new[] { query1, query2, query3 });
-            return true;
-        }
-
         private static void UpgradeUserDB16(SQLiteConnectionED conn)
         {
             string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT, Note TEXT NOT Null )";
             SQLiteDBClass.PerformUpgrade(conn, 16, true, false, new[] { query });
         }
-
-
-        private static void UpgradeUserDB17(SQLiteConnectionED conn)
-        {
-            string query6 = "Update VisitedSystems set x=null, y=null, z=null where x=0 and y=0 and z=0 and name!=\"Sol\"";
-            SQLiteDBClass.PerformUpgrade(conn, 17, true, false, new[] { query6 }, () =>
-            {
-                conn.PutSettingStringCN("EDSMLastSystems", "2010 - 01 - 01 00:00:00");        // force EDSM sync..
-                conn.PutSettingStringCN("EDDBSystemsTime", "0");                               // force EDDB
-                conn.PutSettingStringCN("EDSCLastDist", "2010-01-01 00:00:00");                // force distances
-            });
-        }
-
-        private static void UpgradeUserDB18(SQLiteConnectionED conn)
-        {
-            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN id_edsm_assigned Integer";
-            string query2 = "CREATE INDEX VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)";
-            string query3 = "CREATE INDEX VisitedSystems_position ON VisitedSystems (X, Y, Z)";
-
-            SQLiteDBClass.PerformUpgrade(conn, 18, true, false, new[] { query1, query2, query3 });
-        }
-
 
         private static void UpgradeUserDB101(SQLiteConnectionED conn)
         {
@@ -270,6 +208,7 @@ namespace EDDiscovery.DB
                 "DROP TABLE IF EXISTS Stations",
                 "DROP TABLE IF EXISTS station_commodities",
                 "DROP TABLE IF EXISTS Journals",
+                "DROP TABLE IF EXISTS VisitedSystems"
             };
 
             foreach (string query in queries)
@@ -285,9 +224,6 @@ namespace EDDiscovery.DB
         {
             string[] queries = new[]
             {
-                "CREATE INDEX IF NOT EXISTS VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)",
-                "CREATE INDEX IF NOT EXISTS VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)",
-                "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Commander ON TravelLogUnit(CommanderId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_TravelLogId ON JournalEntries (TravelLogId)",
@@ -309,29 +245,66 @@ namespace EDDiscovery.DB
 
         public static void TranferVisitedSystemstoJournalTableIfRequired()
         {
-            if (SQLiteDBClass.GetSettingBool("ImportVisitedSystems", false) == false )
+            if (System.IO.File.Exists(SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
             {
-                TranferVisitedSystemstoJournalTable();
-                SQLiteDBClass.PutSettingBool("ImportVisitedSystems", true);
+                if (SQLiteDBClass.GetSettingBool("ImportVisitedSystems", false) == false)
+                {
+                    TranferVisitedSystemstoJournalTable();
+                    SQLiteDBClass.PutSettingBool("ImportVisitedSystems", true);
+                }
             }
         }
 
         public static void TranferVisitedSystemstoJournalTable()        // DONE purposely without using any VisitedSystem code.. so we can blow it away later.
         {
             List<Object[]> ehl = new List<Object[]>();
+            Dictionary<string, Dictionary<string, double>> dists = new Dictionary<string, Dictionary<string, double>>(StringComparer.CurrentCultureIgnoreCase);
 
             List<EDDiscovery2.DB.TravelLogUnit> tlus = EDDiscovery2.DB.TravelLogUnit.GetAll();
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            using (SQLiteConnectionOld conn = new SQLiteConnectionOld())
             {
-                                                               // 0    1    2    3         4         5          6 7 8 9
-                using (DbCommand cmd = conn.CreateCommand("Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z,id_edsm_assigned From VisitedSystems Order By Time"))
+                //                                                0      1      2
+                using (DbCommand cmd = conn.CreateCommand("SELECT NameA, NameB, Dist FROM Distances WHERE Status = 3"))
                 {
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            Object[] array = new Object[16];
+                            object[] vals = new object[3];
+                            reader.GetValues(vals);
+
+                            string namea = (string)vals[0];
+                            string nameb = (string)vals[1];
+                            double dist = (double)vals[2];
+
+                            if (!dists.ContainsKey(namea))
+                            {
+                                dists[namea] = new Dictionary<string, double>(StringComparer.CurrentCultureIgnoreCase);
+                            }
+
+                            dists[namea][nameb] = dist;
+
+                            if (!dists.ContainsKey(nameb))
+                            {
+                                dists[nameb] = new Dictionary<string, double>(StringComparer.CurrentCultureIgnoreCase);
+                            }
+
+                            dists[nameb][namea] = dist;
+                        }
+                    }
+                }
+
+                                                               // 0    1    2    3         4         5          6 7 8 9
+                using (DbCommand cmd = conn.CreateCommand("Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z,id_edsm_assigned From VisitedSystems Order By Time"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        string prev = "";
+
+                        while (reader.Read())
+                        {
+                            Object[] array = new Object[17];
                             reader.GetValues(array);                    // love this call.
 
                             string tluname = (string)array[2];          // 2 is in terms of its name.. look it up
@@ -345,11 +318,25 @@ namespace EDDiscovery.DB
                                 Console.WriteLine("Entry with tluname {0} not found in TLU list", tluname);
                             }
 
+                            array[16] = null;
+                            if (dists.ContainsKey((string)array[0]))
+                            {
+                                Dictionary<string, double> _dists = dists[(string)array[0]];
+                                if (_dists.ContainsKey(prev))
+                                {
+                                    array[16] = _dists[prev];
+                                }
+                            }
+
                             ehl.Add(array);
+                            prev = (string)array[0];
                         }
                     }
                 }
+            }
 
+            using (SQLiteConnectionUserUTC conn = new SQLiteConnectionUserUTC())
+            {
                 using (DbTransaction txn = conn.BeginTransaction())
                 {
                     foreach (Object[] array in ehl)
@@ -366,13 +353,18 @@ namespace EDDiscovery.DB
 
                             JObject je = new JObject();
 
-                            je["timestamp"] = ((DateTime)array[1]).ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
+                            je["timestamp"] = DateTime.SpecifyKind((DateTime)array[1], DateTimeKind.Local).ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
                             je["event"] = "FSDJump";
                             je["StarSystem"] = ((string)array[0]);
 
                             if (System.DBNull.Value != array[6] && System.DBNull.Value != array[7] && System.DBNull.Value != array[8])
                             {
                                 je["StarPos"] = new JArray() {array[6], array[7], array[8] };
+                            }
+
+                            if (array[16] != null)
+                            {
+                                je["JumpDist"] = (double)array[16];
                             }
 
                             je["EDDMapColor"] = ((long)array[5]);
