@@ -260,7 +260,7 @@ namespace EDDiscovery.DB
             List<Object[]> ehl = new List<Object[]>();
             Dictionary<string, Dictionary<string, double>> dists = new Dictionary<string, Dictionary<string, double>>(StringComparer.CurrentCultureIgnoreCase);
 
-            List<EDDiscovery2.DB.TravelLogUnit> tlus = EDDiscovery2.DB.TravelLogUnit.GetAll();
+            List<EDDiscovery2.DB.TravelLogUnit> tlus = EDDiscovery2.DB.TravelLogUnit.GetAll().Where(t => t.type == 1).ToList();
 
             using (SQLiteConnectionOld conn = new SQLiteConnectionOld())
             {
@@ -311,25 +311,22 @@ namespace EDDiscovery.DB
                             EDDiscovery2.DB.TravelLogUnit tlu = tlus.Find(x => x.Name.Equals(tluname, StringComparison.InvariantCultureIgnoreCase));
 
                             if (tlu != null)                            // found it, assign to slot 15 the id.
+                            {
                                 array[15] = (long)tlu.id;
-                            else
-                            {
-                                array[15] = (long)0;
-                                Console.WriteLine("Entry with tluname {0} not found in TLU list", tluname);
-                            }
 
-                            array[16] = null;
-                            if (dists.ContainsKey((string)array[0]))
-                            {
-                                Dictionary<string, double> _dists = dists[(string)array[0]];
-                                if (_dists.ContainsKey(prev))
+                                array[16] = null;
+                                if (dists.ContainsKey((string)array[0]))
                                 {
-                                    array[16] = _dists[prev];
+                                    Dictionary<string, double> _dists = dists[(string)array[0]];
+                                    if (_dists.ContainsKey(prev))
+                                    {
+                                        array[16] = _dists[prev];
+                                    }
                                 }
-                            }
 
-                            ehl.Add(array);
-                            prev = (string)array[0];
+                                ehl.Add(array);
+                                prev = (string)array[0];
+                            }
                         }
                     }
                 }
