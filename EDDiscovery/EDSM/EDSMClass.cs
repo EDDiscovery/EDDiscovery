@@ -37,7 +37,9 @@ namespace EDDiscovery2.EDSM
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
         }
-        
+
+        public string ServerAddress { get { return _serverAddress;  } }
+
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
             return SubmitDistances(cmdr, from, new Dictionary<string, double> { { to, dist } });
@@ -174,7 +176,7 @@ namespace EDDiscovery2.EDSM
             if (File.Exists(EDSMDistancesFileName + ".etag"))
                 File.Delete(EDSMDistancesFileName + ".etag");
 
-            if (EDDBClass.DownloadFile("https://www.edsm.net/dump/distances.json", EDSMDistancesFileName))
+            if (EDDBClass.DownloadFile(_serverAddress + "dump/distances.json", EDSMDistancesFileName))
                 return EDSMDistancesFileName;
             else
                 return null;
@@ -271,7 +273,7 @@ namespace EDDiscovery2.EDSM
             {
                 string edsmhiddensystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmhiddensystems.json");
                 bool newfile = false;
-                EDDBClass.DownloadFile("https://www.edsm.net/api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
+                EDDBClass.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
                 string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
 
@@ -303,7 +305,7 @@ namespace EDDiscovery2.EDSM
 
                 var json = response.Body;
 
-                //https://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
+                //https://.../api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
 
                 if (json.Length > 1)
                 {
@@ -545,7 +547,7 @@ namespace EDDiscovery2.EDSM
                 sysID = msg["id"].Value<string>();
             }
 
-            string url = "https://www.edsm.net/show-system/index/id/" + sysID + "/name/" + encodedSys;
+            string url = _serverAddress + "show-system/index/id/" + sysID + "/name/" + encodedSys;
             return url;
         }
 

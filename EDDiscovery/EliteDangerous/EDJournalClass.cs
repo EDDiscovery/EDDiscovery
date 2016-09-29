@@ -84,7 +84,7 @@ namespace EDDiscovery.EliteDangerous
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
-                    List<JournalEntry> entries = reader.ReadJournalLog().ToList();
+                    List<JournalEntry> entries = reader.ReadJournalLog().ToList();      // this may create new commanders, and may write to the TLU db
 
                     using (DbTransaction tn = cn.BeginTransaction())
                     {
@@ -238,23 +238,6 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
-            if (e.Error == null && !e.Cancelled)
-            {
-                List<JournalEntry> entries = (List<JournalEntry>)e.Result;
-
-                foreach (var ent in entries)
-                {
-                    System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
-                    if ( OnNewJournalEntry != null )
-                        OnNewJournalEntry(ent);
-                }
-            }
-        }
-
         private void ScanTick(object sender, EventArgs e)
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
@@ -368,6 +351,23 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            if (e.Error == null && !e.Cancelled)
+            {
+                List<JournalEntry> entries = (List<JournalEntry>)e.Result;
+
+                foreach (var ent in entries)                    // pass them to the handler
+                {
+                    System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
+                    if (OnNewJournalEntry != null)
+                        OnNewJournalEntry(ent);
+                }
+            }
+        }
+
         private void OnNewFile(object sender, FileSystemEventArgs e)        // only picks up new files
         {                                                                   // and it can kick in before any data has had time to be written to it...
             string filename = e.FullPath;
@@ -381,12 +381,12 @@ namespace EDDiscovery.EliteDangerous
         public delegate void NewJournalEntryHandler(JournalEntry je);
         public event NewJournalEntryHandler OnNewJournalEntry;
 
-        private static Regex journalNamePrefixRe = new Regex("(?<prefix>.*)[.]0*(?<part>[0-9][0-9]*)[.]log");
-
-        List<MonitorWatcher> watchers = new List<MonitorWatcher>();
+        private List<MonitorWatcher> watchers = new List<MonitorWatcher>();
+        private string frontierfolder;
 
         public EDJournalClass()
         {
+            frontierfolder = GetDefaultJournalDir();
         }
 
         public static string GetDefaultJournalDir()
@@ -419,26 +419,50 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
+        public string GetWatchFolder(string d)
+        {
+            return (d == null || d.Length == 0) ? frontierfolder : d;
+        }
+
         public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
             List<EDCommander> listCommanders = EDDConfig.Instance.ListOfCommanders;
 
-            for( int i = 0; i < listCommanders.Count; i++ )             // list of commanders may be added to via this operation..
+            for (int i = 0; i < listCommanders.Count; i++)             // see if new watchers are needed
             {
-                string datapath = listCommanders[i].NetLogDir;
+                string datapath = GetWatchFolder(listCommanders[i].NetLogDir);
 
-                if (datapath == null || datapath.Length == 0)
-                    datapath = GetDefaultJournalDir();  // ensures folder is there, else null.
-
-                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(datapath)) >= 0)
+                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(datapath)) >= 0)       // if we already have a watch on this folder..
                     continue;       // already done
 
-                System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}" , datapath));
-
+                System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", datapath));
                 MonitorWatcher mw = new MonitorWatcher(datapath);
                 watchers.Add(mw);
-                mw.ParseJournalFiles(cancelRequested, updateProgress, forceReload);     // may create new commanders at the end
                 mw.OnNewJournalEntry += NewPosition;
+            }
+
+            List<int> tobedeleted = new List<int>();
+            for (int i = 0; i < watchers.Count; i++)
+            {
+                bool found = false;
+                for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
+                    found |= watchers[i].m_watcherfolder.Equals(GetWatchFolder(listCommanders[j].NetLogDir));
+
+                if (!found)
+                    tobedeleted.Add(i);
+            }
+
+            foreach (int i in tobedeleted)
+            {
+                System.Diagnostics.Trace.WriteLine(string.Format("Delete watch on {0}", watchers[i].m_watcherfolder));
+                MonitorWatcher mw = watchers[i];
+                mw.StopMonitor();          // just in case
+                watchers.Remove(mw);
+            }
+
+            for (int i = 0; i < watchers.Count; i++)             // parse files of all folders being watched
+            {
+                watchers[i].ParseJournalFiles(cancelRequested, updateProgress, forceReload);     // may create new commanders at the end, but won't need any new watchers, because they will obv be in the same folder
             }
         }
 
@@ -455,14 +479,6 @@ namespace EDDiscovery.EliteDangerous
             foreach (MonitorWatcher mw in watchers)
             {
                 mw.StopMonitor();
-            }
-        }
-
-        public void NetLogDirChanged() // call from owner of scanner.
-        {
-            foreach (MonitorWatcher mw in watchers)
-            {
-                mw.StopStartMonitor();
             }
         }
 
