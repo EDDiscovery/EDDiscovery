@@ -337,35 +337,6 @@ namespace EDDiscovery2.EDSM
             return listDistances;
         }
 
-        public int GetComments(DateTime starttime, out List<SystemNoteClass> notes)
-        {
-            notes = new List<SystemNoteClass>();
-
-            var json = GetComments(starttime);
-            if (json == null)
-            {
-                return 0;
-            }
-
-            JObject msg = JObject.Parse(json);
-            int msgnr = msg["msgnum"].Value<int>();
-
-            JArray comments = (JArray)msg["comments"];
-            if (comments != null)
-            {
-                foreach (JObject jo in comments)
-                {
-                    SystemNoteClass note = new SystemNoteClass();
-                    note.Name = jo["system"].Value<string>();
-                    note.Note = jo["comment"].Value<string>();
-                    note.Time = DateTime.ParseExact(jo["lastUpdate"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-                    notes.Add(note);
-                }
-            }
-
-            return msgnr;
-        }
-
         public string GetComments(DateTime starttime)
         {
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
@@ -374,7 +345,6 @@ namespace EDDiscovery2.EDSM
 
             if ((int)response.StatusCode >= 400)
                 return null;
-
 
             return response.Body;
         }
@@ -393,10 +363,10 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public string SetComment(SystemNoteClass sn)
+        public string SetComment(string systemName, string note)
         {
             string query;
-            query = "set-comment?systemName=" + HttpUtility.UrlEncode(sn.Name) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(sn.Note);
+            query = "set-comment?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
             var response = RequestGet("api-logs-v1/" + query);
 
             if ((int)response.StatusCode >= 400)
@@ -405,12 +375,12 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public string SetLog(string systemName, DateTime dateVisited)
+        public string SetLog(string systemName, DateTime dateVisitedlocal)
         {
             string query;
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
-                  "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+                  "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedlocal.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
             var response = RequestGet("api-logs-v1/" + query);
 
             if ((int)response.StatusCode >= 400)
@@ -435,11 +405,51 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public int GetLogs(DateTime starttime, out List<HistoryEntry> log)
+        public bool SendTravelLog(string name, DateTime timelocal, bool coord, double x, double y, double z, out string error)
+        {
+            error = "";
+
+            string json = null;
+
+            try
+            {
+                if (!coord)
+                    json = SetLog(name, timelocal);
+                else
+                    json = SetLogWithPos(name, timelocal, x, y, z);
+            }
+            catch (Exception ex)
+            {
+                error = "EDSM sync error, connection to server failed";
+                System.Diagnostics.Trace.WriteLine("EDSM Sync error:" + ex.ToString());
+            }
+
+            if (json != null)
+            {
+                JObject msg = (JObject)JObject.Parse(json);
+
+                int msgnum = msg["msgnum"].Value<int>();
+                string msgstr = msg["msg"].Value<string>();
+
+                if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
+                {
+                    return true;
+                }
+                else
+                {
+                    error = "EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr;
+                    System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + name);
+                }
+            }
+
+            return false;
+        }
+
+        public int GetLogs(DateTime starttime, out List<HistoryEntry> log)     
         {
             log = new List<HistoryEntry>();
 
-            string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
+            string query = "get-logs?showId=1&startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);
 
@@ -458,17 +468,23 @@ namespace EDDiscovery2.EDSM
 
             if (logs != null)
             {
-                foreach (JObject jo in logs)
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
-                    string name = jo["system"].Value<string>();
-                    string ts = jo["date"].Value<string>();
-                    DateTime et = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    foreach (JObject jo in logs)
+                    {
+                        string name = jo["system"].Value<string>();
+                        string ts = jo["date"].Value<string>();
+                        long id = jo["systemId"].Value<long>();
+                        DateTime et = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); // UTC time
 
-                    SystemClass sc = new SystemClass(name);
+                        SystemClass sc = SystemClass.GetSystem(id, cn, SystemClass.SystemIDType.EdsmId);
+                        if (sc == null)
+                            sc = new SystemClass(name);
 
-                    HistoryEntry he = new HistoryEntry();
-                    he.MakeVSEntry(sc, et, EDDConfig.Instance.DefaultMapColour, "","");       // FSD jump entry
-                    log.Add(he);
+                        HistoryEntry he = new HistoryEntry();
+                        he.MakeVSEntry(sc, et, EDDConfig.Instance.DefaultMapColour, "", "");       // FSD jump entry
+                        log.Add(he);
+                    }
                 }
             }
 
@@ -509,10 +525,8 @@ namespace EDDiscovery2.EDSM
                     systems.Add(sysname["name"].ToString());
                 }
             }
-                    return systems;
 
-
-
+            return systems;
         }
 
         public bool ShowSystemInEDSM(string sysName, long? id_edsm = null)

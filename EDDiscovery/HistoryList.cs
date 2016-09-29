@@ -27,13 +27,17 @@ namespace EDDiscovery
                                        //       if edsm_id=-1 a load from SystemTable will occur with the name used
                                        // SO the journal reader can just read data in that table only, does not need to do a system match
 
-        public DateTime EventTime;
+        public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
+        public DateTime EventTimeUTC;
         public string EventSummary;
         public string EventDescription;
         public string EventDetailedInfo;
 
         public int MapColour;
-        public bool EdsmSync;           // synced FSDJump with EDSM?  TBD where is it stored.
+
+        public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
+        public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
+        public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
 
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
 
@@ -42,7 +46,7 @@ namespace EDDiscovery
             Debug.Assert(sys != null);
             EntryType = EliteDangerous.JournalTypeEnum.FSDJump;
             System = sys;
-            EventTime = eventt;
+            EventTimeUTC = eventt;
             EventSummary = "Jump to " + System.name;
             EventDescription = dist;
             EventDetailedInfo = info;
@@ -101,9 +105,11 @@ namespace EDDiscovery
                 EntryType = je.EventTypeID,
                 Journalid = je.Id,
                 System = isys,
-                EventTime = je.EventTimeLocal,
+                EventTimeUTC = je.EventTimeUTC,
                 MapColour = mapcolour,
                 EdsmSync = je.SyncedEDSM,
+                EDDNSync = je.SyncedEDDN,
+                StartMarker = je.StartMarker,
                 EventSummary = summary,
                 EventDescription = info,
                 EventDetailedInfo = detailed
@@ -176,13 +182,13 @@ namespace EDDiscovery
 
         public List<HistoryEntry> FilterByNumber(int max)
         {
-            return historylist.OrderByDescending(s => s.EventTime).Take(max).ToList();
+            return historylist.OrderByDescending(s => s.EventTimeUTC).Take(max).ToList();
         }
 
         public List<HistoryEntry> FilterByDate(TimeSpan days)
         {
             var oldestData = DateTime.Now.Subtract(days);
-            return (from systems in historylist where systems.EventTime >= oldestData orderby systems.EventTime descending select systems).ToList();
+            return (from systems in historylist where systems.EventTimeUTC >= oldestData orderby systems.EventTimeUTC descending select systems).ToList();
         }
 
         public int Count { get { return historylist.Count;  } }
@@ -207,7 +213,7 @@ namespace EDDiscovery
         {
             get
             {
-                return historylist.OrderByDescending(s => s.EventTime).ToList();
+                return historylist.OrderByDescending(s => s.EventTimeUTC).ToList();
             }
         }
 
@@ -226,6 +232,15 @@ namespace EDDiscovery
                 return (from s in historylist where s.IsFSDJump && s.System.HasCoordinate select s).ToList();
             }
         }
+
+        public List<HistoryEntry> FilterByFSD
+        {
+            get
+            {
+                return (from s in historylist where s.IsFSDJump select s).ToList();
+            }
+        }
+
 
         public HistoryEntry GetLast
         {
@@ -263,7 +278,7 @@ namespace EDDiscovery
         public int GetFSDJumps( TimeSpan t )
         {
             DateTime tme = DateTime.Now.Subtract(t);
-            return (from s in historylist where s.IsFSDJump && s.EventTime>=tme select s).Count();
+            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal>=tme select s).Count();
         }
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid
@@ -279,18 +294,19 @@ namespace EDDiscovery
         {
             double dist;
             double dx, dy, dz;
-            Dictionary<long, ISystem> systems = distlist.Values.GroupBy(s => s.id).ToDictionary(g => g.Key, g => g.First());
 
             foreach (HistoryEntry pos in historylist)
             {
-                if (pos.System.HasCoordinate && !systems.ContainsKey(pos.System.id))   // if co-ords, and not in list already..
+                var list = distlist.Values.ToList();
+
+                if (pos.System.HasCoordinate && list.FindIndex(qx => qx.name.Equals(pos.System.name, StringComparison.InvariantCultureIgnoreCase)) == -1)
                 {
                     dx = (pos.System.x - x);
                     dy = (pos.System.y - y);
                     dz = (pos.System.z - z);
                     dist = dx * dx + dy * dy + dz * dz;
 
-                    if (dist > 0.001 || !removezerodiststar)
+                    if (dist >= 0.1 || !removezerodiststar)
                     {
                         if (distlist.Count < maxitems)          // if less than max, add..
                             distlist.Add(dist, pos.System);

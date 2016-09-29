@@ -41,9 +41,6 @@ namespace EDDiscovery
 
         private static EDDiscoveryForm _discoveryForm;
 
-        internal bool EDSMSyncTo = true;
-        internal bool EDSMSyncFrom = true;
-
         DataGridViewRow currentGridRow = null;
         SummaryPopOut summaryPopOut = null;
         List<EDCommander> commanders = null;
@@ -71,10 +68,8 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
 
-            EDSMSyncTo = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
-            EDSMSyncFrom = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
-            checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
-            checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
+            checkBoxEDSMSyncTo.Checked = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
+            checkBoxEDSMSyncFrom.Checked = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, "EDUIHistory");
             richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
@@ -128,7 +123,7 @@ namespace EDDiscovery
             if ( snc == null && item.IsFSDJump )
                 snc = SystemNoteClass.GetNoteOnSystem(item.System.name);
 
-            object[] rowobj = { item.EventTime, "", item.EventSummary, item.EventDescription, (snc != null) ? snc.Note : "" };
+            object[] rowobj = { item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (snc != null) ? snc.Note : "" };
 
             int rownr;
             if (insert)
@@ -169,13 +164,7 @@ namespace EDDiscovery
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
 
                     if (checkBoxEDSMSyncTo.Checked == true)
-                    {
-                        EDSMClass edsm = new EDSMClass();
-                        edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-                        edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-                        Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, he, null));
-                    }
+                        EDSMSync.SendTravelLog(he);
                 }
 
                 AddNewHistoryRow(true, he);
@@ -586,16 +575,8 @@ namespace EDDiscovery
 
                     currentGridRow.Cells[TravelHistoryColumns.Note].Value = txt;
 
-                    EDSMClass edsm = new EDSMClass();
-
-                    edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-                    edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-                    if (edsm.commanderName == null || edsm.apiKey == null)
-                        return;
-
-                    if (edsm.commanderName.Length>1 && edsm.apiKey.Length>1)
-                        edsm.SetComment(sn);
+                    if (checkBoxEDSMSyncTo.Checked && sys.IsFSDJump )       // only send on FSD jumps
+                        EDSMSync.SendComments(sn.Name,sn.Note);
 
                     _discoveryForm.Map.UpdateNote();
                     RefreshSummaryRow(dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index]);    // tell it this row was changed
@@ -624,6 +605,8 @@ namespace EDDiscovery
                 var dists = DistanceClass.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
 
                 EDSMClass edsm = new EDSMClass();
+
+                //TBD crap doing it here
 
                 foreach (var dist in dists)
                 {
@@ -666,10 +649,9 @@ namespace EDDiscovery
                 {
                     MessageBox.Show("Please enter EDSM api key (In settings) before sending travel history to EDSM!");
                     return;
-
                 }
 
-              //TBD  _discoveryForm.EdsmSync.StartSync(EDSMSyncTo, EDSMSyncFrom, EDDConfig.Instance.DefaultMapColour);
+                _discoveryForm.EdsmSync.StartSync(checkBoxEDSMSyncTo.Checked, checkBoxEDSMSyncFrom.Checked, EDDConfig.Instance.DefaultMapColour);
             }
             catch (Exception ex)
             {
@@ -790,12 +772,10 @@ namespace EDDiscovery
 
         private void checkBoxEDSMSyncTo_CheckedChanged(object sender, EventArgs e)
         {
-            EDSMSyncTo = checkBoxEDSMSyncTo.Checked;
         }
 
         private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
         {
-            EDSMSyncFrom = checkBoxEDSMSyncFrom.Checked;
         }
 
         private void button2DMap_Click(object sender, EventArgs e)
