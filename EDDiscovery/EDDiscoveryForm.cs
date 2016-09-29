@@ -122,6 +122,9 @@ namespace EDDiscovery
         {
             var splashform = Forms.SplashForm.ShowAsync();
             InitializeComponent();
+
+            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+
             ProcessCommandLineOptions();
 
             string logpath = "";
@@ -290,15 +293,22 @@ namespace EDDiscovery
             if ( ai != -1 && ai < parts.Count - 1)
             {
                 Tools.appfolder = parts[ai + 1];
+                label_version.Text += " (Using " + Tools.appfolder + ")";
             }
 
             option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
 
             if (parts.FindIndex(x => x.Equals("-EDSMBeta", StringComparison.InvariantCultureIgnoreCase)) != -1)
-                EDSMClass.ServerAddress = "http//beta.edsm.net:8080/";
+            {
+                EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
+                label_version.Text += " (EDSMBeta)";
+            }
 
             if (parts.FindIndex(x => x.Equals("-EDSMNull", StringComparison.InvariantCultureIgnoreCase)) != -1)
+            {
                 EDSMClass.ServerAddress = "";
+                label_version.Text += " (EDSM No server)";
+            }
 
             option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
         }
@@ -429,9 +439,6 @@ namespace EDDiscovery
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;
-            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
-            if (Tools.appfolder != "EDDiscovery")
-                label_version.Text += " (Using " + Tools.appfolder + ")";
 
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 

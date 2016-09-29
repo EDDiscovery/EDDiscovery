@@ -132,7 +132,6 @@ namespace EDDiscovery2
         {
             List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.UpdateCommanders(edcommanders);
-            UpdateCommandersListBox();
             _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
         }
 
