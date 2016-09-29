@@ -155,6 +155,12 @@ namespace EDDiscovery.DB
             {
                 if (Thread.CurrentThread == _owningThread)
                 {
+                    if (_locktimer != null)
+                    {
+                        _locktimer.Dispose();
+                        _locktimer = null;
+                    }
+
                     Monitor.Exit(_transactionLock);
                 }
                 else
@@ -165,6 +171,12 @@ namespace EDDiscovery.DB
 
                     lock (_waitingthreads)
                     {
+                        if (_locktimer != null)
+                        {
+                            _locktimer.Dispose();
+                            _locktimer = null;
+                        }
+
                         _transactionLock = new object();
 
                         foreach (var thread in _waitingthreads.Keys)
@@ -181,11 +193,6 @@ namespace EDDiscovery.DB
                 _locktaken = false;
             }
 
-            if (_locktimer != null)
-            {
-                _locktimer.Dispose();
-                _locktimer = null;
-            }
         }
         #endregion
     }
