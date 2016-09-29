@@ -132,7 +132,7 @@ namespace EDDiscovery2
 
             int currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
-            var history = from systems in syslist where systems.EventTime > start && systems.EventTime<endDate && systems.System.HasCoordinate == true  orderby systems.EventTime  select systems;
+            var history = from systems in syslist where systems.EventTimeLocal > start && systems.EventTimeLocal<endDate && systems.System.HasCoordinate == true  orderby systems.EventTimeUTC  select systems;
             List<HistoryEntry> listHistory = history.ToList();
 
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);

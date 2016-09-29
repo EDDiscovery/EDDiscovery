@@ -665,7 +665,7 @@ namespace EDDiscovery
 
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
                 journalmonitor.OnNewJournalEntry += NewPosition;
-                //TBD REMOVED - EDSM sync from not working   EDSMsync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(RefreshEDSMEvent);
+                //TBD REMOVED - EDSM sync back not working   EDSMsync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(RefreshEDSMEvent);
 
                 panelInfo.Visible = false;
 
@@ -1296,7 +1296,7 @@ namespace EDDiscovery
         {
             try
             {
-                //TBDProcess.Start(EliteDangerous.EDJournalClass.GetJournalDir());
+                Process.Start(EliteDangerous.EDJournalClass.GetDefaultJournalDir());
             }
             catch (Exception ex)
             {
@@ -1562,8 +1562,6 @@ namespace EDDiscovery
 
         public void RefreshHistoryAsync(bool forceReload = false)
         {
-            // Put this in to speed up testing of other systems - TBD return;
-
             if (PendingClose)
             {
                 return;

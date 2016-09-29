@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace EDDiscovery2.EDSM
 {  
@@ -57,26 +58,28 @@ namespace EDDiscovery2.EDSM
             running = false;
         }
 
-
-        public void Sync()
+        private void Sync()
         {
             try
             {
                 EDSMClass edsm = new EDSMClass();
-
-                edsm.apiKey =  EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+                edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
                 edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
-                List<HistoryEntry> log;
-                edsm.GetLogs(new DateTime(2011, 1, 1), out log);
-                if (log == null)
-                    log = new List<HistoryEntry>();
+                if (edsm.apiKey.Length < 1 || edsm.commanderName.Length < 1)
+                    return;
 
-                if (_syncTo)        // send systems to EDSM..
+                List<HistoryEntry> edsmsystemlog = null;
+                bool triedlogs = false;
+
+                List<HistoryEntry> hlfsdunsyncedlist = mainForm.history.FilterByNotEDSMSyncedAndFSD;        // unsynced and FSD jumps only
+
+                if ( _syncTo && hlfsdunsyncedlist.Count > 0 )                   // send systems to edsm
                 {
-                    List<HistoryEntry> hlfsdunsyncedlist = mainForm.history.FilterByNotEDSMSyncedAndFSD;        // unsynced and FSD jumps only
-
                     mainForm.LogLine("EDSM: Sending " + hlfsdunsyncedlist.Count.ToString() + " flightlog entries");
+
+                    edsm.GetLogs(new DateTime(2011, 1, 1), out edsmsystemlog);        // always returns a log, time is in UTC as per HistoryEntry and JournalEntry
+                    triedlogs = true;
 
                     foreach (var he in hlfsdunsyncedlist)
                     {
@@ -86,98 +89,130 @@ namespace EDDiscovery2.EDSM
                             return;
                         }
 
-                        if (  he.EdsmSync == false)
-                        {
-                            HistoryEntry ps2 = (from c in log where c.System.name == he.System.name && c.EventTime.Ticks == he.EventTime.Ticks select c).FirstOrDefault();
+                        HistoryEntry ps2 = (from c in edsmsystemlog where c.System.name == he.System.name && c.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks select c).FirstOrDefault();
 
-                            if (ps2 != null)                // it did, just make sure EDSM sync flag is set..
-                            {
+                        if (ps2 != null)                // it did, just make sure EDSM sync flag is set..
+                        {
+                            he.SetEdsmSync();
+                        }
+                        else
+                        {
+                            string errmsg;              // (verified with EDSM 29/9/2016)
+
+                                                        // it converts to UTC inside the function, supply local for now
+                            if ( edsm.SendTravelLog(he.System.name, he.EventTimeLocal, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg) )
                                 he.SetEdsmSync();
-                            }
-                            else
+
+                            if (errmsg.Length > 0)
+                                mainForm.LogLine(errmsg);
+                        }
+                    }
+
+                    // TBD Comments to edsm?
+                }
+
+                if ( _syncFrom )                                                            // now do comments from edsm
+                {
+                    var json = edsm.GetComments(new DateTime(2011, 1, 1));
+
+                    if (json != null)
+                    {
+                        JObject msg = JObject.Parse(json);
+                        int msgnr = msg["msgnum"].Value<int>();
+
+                        JArray comments = (JArray)msg["comments"];
+                        if (comments != null)
+                        {
+                            foreach (JObject jo in comments)
                             {
-                                SendTravelLog(edsm, he, mainForm);  // else send it
+                                string name = jo["system"].Value<string>();
+                                string note = jo["comment"].Value<string>();
+                                DateTime localtime = DateTime.ParseExact(jo["lastUpdate"].Value<string>(), "yyyy-MM-dd HH:mm:ss", 
+                                            CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+
+                                SystemNoteClass curnote = SystemNoteClass.GetNoteOnSystem(name);
+
+                                if (curnote != null)
+                                {
+                                                                                // curnote uses local time to store
+                                    if (localtime.Ticks > curnote.Time.Ticks)   // if newer, add on (verified with EDSM 29/9/2016)
+                                    {
+                                        curnote.Note += ". EDSM: " + note;
+                                        curnote.Time = localtime;
+                                        curnote.Update();
+                                    }
+                                }
+                                else
+                                {
+                                    curnote = new SystemNoteClass();
+                                    curnote.Note = note;
+                                    curnote.Time = localtime;
+                                    curnote.Name = name;
+                                    curnote.Journalid = 0;
+                                    curnote.Add();
+                                }
                             }
                         }
                     }
                 }
 
-#if false
-                //TBD removed..
+                int sysadded = 0;
 
-                TravelLogUnit tlu = null;
-
-                bool newsystem = false;
-                if (_syncFrom)
+                if (_syncFrom )
                 {
-                    List<SystemNoteClass> notes;
-                    int nret = edsm.GetComments(new DateTime(2011, 1, 1), out notes);
+                    if (!triedlogs)
+                        edsm.GetLogs(new DateTime(2011, 1, 1), out edsmsystemlog);        // always returns a log
 
-                
-                    // Check for new systems from EDSM
-                    foreach (var system in log)
+                    List<HistoryEntry> hlfsdlist = mainForm.history.FilterByFSD;  // FSD jumps only
+
+                    TravelLogUnit tlu = null;
+
+                    foreach (HistoryEntry he in edsmsystemlog)
                     {
-                        VisitedSystemsClass ps2 = mainForm?.VisitedSystems == null ? null : 
-                            (from c in mainForm.VisitedSystems where c.Name == system.Name && c.Time.Ticks == system.Time.Ticks select c).FirstOrDefault<VisitedSystemsClass>();
-                        if (ps2 == null)  // Add to local DB...
+
+
+                        //TBD - time zones..
+
+
+                                // if we don't have an entry in our history, of a system name at a particular time
+                                // some problem here, requires more debugging
+                        if ( hlfsdlist.FindIndex(x=>x.System.name.Equals(he.System.name) && x.EventTimeUTC == he.EventTimeUTC) < 0 )   
                         {
-                            if (tlu == null) // If we dontt have a travellogunit yet then create it. 
+                            if (tlu == null) // If we dont have a travellogunit yet then create it. 
                             {
                                 tlu = new TravelLogUnit();
 
                                 tlu.type = 2;  // EDSM
-                                tlu.Path = "https://www.edsm.net/api-logs-v1/get-logs";
                                 tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                                 tlu.Size = 0;
+                                tlu.Path = "EDSM";
+                                tlu.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
                                 tlu.Add();  // Add to Database
                             }
 
-                            VisitedSystemsClass vs = new VisitedSystemsClass();
+                            EDDiscovery.EliteDangerous.JournalEntry je =
+                                EDDiscovery.EliteDangerous.JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value, he.EventTimeUTC,
+                                                                                              he.System.name, he.System.x, he.System.y, he.System.z,
+                                                                                              _defmapcolour);
 
-                            vs.Source = tlu.id;
-                            vs.Unit = tlu.Name;
+                            je.Add();
+                            System.Diagnostics.Trace.WriteLine(string.Format("Add EDSM system {0}", he.System.name));
 
-                            vs.Name = system.Name;
-                            vs.Time = system.Time;
-                            vs.MapColour = _defmapcolour;
-                            vs.EDSM_sync = true;
-                            vs.Commander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
-
-
-                            vs.Add();  // Add to DB;
-                            System.Diagnostics.Trace.WriteLine("New from EDSM");
-                            newsystem = true;
-
+                            sysadded++;
+                            if (sysadded == 100)
+                                break;
+                            break;
                         }
                     }
 
-                    // Sync comments from EDSM
-                    foreach (var note in notes)
-                    {
-                        SystemNoteClass dbnote = SystemNoteClass.GetSystemNoteClass(note.Name.ToLower());
-
-                        if ( dbnote != null )       // if there..
-                        {
-                            if (note.Time > dbnote.Time)
-                            {
-                                dbnote.Time = note.Time;
-                                dbnote.Note = note.Note;
-                                dbnote.Update();
-                            }
-                        }
-                        else
-                        {
-                            note.Add();
-                        }
-                    }
+                    mainForm.LogLine(string.Format("EDSM downloaded {0} systems" , sysadded));
                 }
+
                 mainForm.LogLine("EDSM sync Done");
 
-                if (newsystem)
-                    OnNewEDSMTravelLog(this);
-#endif
-
+                //                if (newsystem)
+                //OnNewEDSMTravelLog(this);
             }
             catch (Exception ex)
             {
@@ -186,50 +221,38 @@ namespace EDDiscovery2.EDSM
             }
         }
 
-        internal static bool SendTravelLog(EDSMClass edsm, HistoryEntry he, EDDiscoveryForm mainform)
+        public static void SendTravelLog(HistoryEntry he) // (verified with EDSM 29/9/2016)
         {
-            if (he.EdsmSync == true)        // no action if true..
-                return true;
+            EDSMClass edsm = new EDSMClass();
+            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
-            string json = null;
+            if (edsm.apiKey.Length < 1 || edsm.commanderName.Length < 1)
+                return;
 
-            try
-            {
-                if (!he.System.HasCoordinate)
-                    json = edsm.SetLog(he.System.name, he.EventTime);
-                else
-                    json = edsm.SetLogWithPos(he.System.name, he.EventTime, he.System.x, he.System.y, he.System.z);
-            }
-            catch (Exception ex )
-            {
-                if (mainform != null)
-                    mainform.LogLine("EDSM sync error, connection to server failed");
-
-                System.Diagnostics.Trace.WriteLine("EDSM Sync error:" + ex.ToString());
-            }
-
-            if (json != null)
-            {
-                JObject msg = (JObject)JObject.Parse(json);
-
-                int msgnum = msg["msgnum"].Value<int>();
-                string msgstr = msg["msg"].Value<string>();
-
-                if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
-                {
+            string errmsg;
+            Task taskEDSM = Task.Factory.StartNew(() =>
+            {                                                   // LOCAL time, there is a UTC converter inside this call
+                if (edsm.SendTravelLog(he.System.name, he.EventTimeLocal, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg))
                     he.SetEdsmSync();
-                    return true;
-                }
-                else
-                {
-                    if (mainform != null)
-                        mainform.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr);
-
-                    System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + he.System.name);
-                }
-            }
-
-            return false;
+            });
         }
+
+        public static void SendComments(string star , string note) // (verified with EDSM 29/9/2016)
+        {
+            EDSMClass edsm = new EDSMClass();
+
+            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+
+            if (edsm.apiKey.Length < 1 || edsm.commanderName.Length < 1)
+                return;
+
+            Task taskEDSM = Task.Factory.StartNew(() =>
+            {
+                edsm.SetComment(star, note);
+            });
+        }
+
     }
 }

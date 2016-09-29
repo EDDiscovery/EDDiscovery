@@ -69,7 +69,7 @@ namespace EDDiscovery
                 detail = item.EventDescription + Environment.NewLine;
             detail += item.EventDetailedInfo;
 
-            object[] rowobj = { item.EventTime, "", item.EventSummary, detail };
+            object[] rowobj = { item.EventTimeLocal, "", item.EventSummary, detail };
 
             int rownr;
 

@@ -880,7 +880,7 @@ namespace EDDiscovery2
 
             DatasetBuilder builder = new DatasetBuilder();
 
-            List<HistoryEntry> filtered = _systemlist.Where(s => s.EventTime >= startTime && s.EventTime <= endTime).OrderBy(s => s.EventTime).ToList();
+            List<HistoryEntry> filtered = _systemlist.Where(s => s.EventTimeLocal >= startTime && s.EventTimeLocal <= endTime).OrderBy(s => s.EventTimeUTC).ToList();
 
             _datasets_systems = builder.BuildSystems(drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked, 
                             drawADiscOnStarsWithPositionToolStripMenuItem.Checked, 

@@ -334,6 +334,21 @@ namespace EDDiscovery.EliteDangerous
             return jr;
         }
 
+        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, DateTime utc, string name, double x, double y, double z, int mc)
+        {
+            JObject jo = new JObject();
+            jo["timestamp"] = utc.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
+            jo["event"] = "FSDJump";
+            jo["StarSystem"] = name;
+            jo["StarPos"] = new JArray(x, y, z);
+            jo["EDDMapColor"] = mc;
+
+            JournalEntry je = CreateJournalEntry(jo.ToString());
+            je.TLUId = tluid;
+            je.CommanderId = cmdrid;
+            return je;
+        }
+
         public bool Add()
         {
             using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
