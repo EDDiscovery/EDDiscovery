@@ -1345,8 +1345,8 @@ namespace EDDiscovery.DB
                                     // see if EDSM data changed..
                                     if (!dbsys.name.Equals(name))
                                     {
-                                        updateNameCmd.Parameters["Name"].Value = name;
-                                        updateNameCmd.Parameters["EdsmId"].Value = edsmid;
+                                        updateNameCmd.Parameters["@Name"].Value = name;
+                                        updateNameCmd.Parameters["@EdsmId"].Value = edsmid;
                                         updateNameCmd.ExecuteNonQuery();
                                     }
 
