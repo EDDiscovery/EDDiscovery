@@ -125,13 +125,15 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.GetNewCommander();
             UpdateCommandersListBox();
             _discoveryForm.TravelControl.LoadCommandersListBox();
+            _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
         }
 
         private void dataGridViewCommanders_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.UpdateCommanders(edcommanders);
-            _discoveryForm.TravelControl.LoadCommandersListBox();
+            UpdateCommandersListBox();
+            _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
         }
 
         private void btnDeleteCommander_Click(object sender, EventArgs e)
@@ -155,8 +157,9 @@ namespace EDDiscovery2
                 if (result == DialogResult.Yes)
                 {
                     EDDConfig.Instance.DeleteCommander(row);
-                    UpdateCommandersListBox();
                     _discoveryForm.TravelControl.LoadCommandersListBox();
+                    UpdateCommandersListBox();
+                    _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
                 }
             }
         }

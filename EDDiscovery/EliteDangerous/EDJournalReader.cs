@@ -45,7 +45,7 @@ namespace EDDiscovery.EliteDangerous
                 if (line.Length == 0)
                     continue;
 
-                System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName));
+                //System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName));
 
                 try
                 {
@@ -71,7 +71,7 @@ namespace EDDiscovery.EliteDangerous
                         EDCommander _commander = EDDiscovery2.EDDConfig.Instance.ListOfCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
 
                         if (_commander == null)
-                            _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname,null,(cmdrid>=0) ? EDDConfig.Instance.Commander(cmdrid).NetLogDir : null);
+                            _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname,null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path)?"":TravelLogUnit.Path);
 
                         cmdrid = _commander.Nr;
 

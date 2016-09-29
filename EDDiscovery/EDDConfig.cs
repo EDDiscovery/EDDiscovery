@@ -412,17 +412,17 @@ namespace EDDiscovery2
         }
 
 
-        internal EDCommander GetNewCommander(string name = null, string edsmApiKey = null, string overridepath = null)
+        public EDCommander GetNewCommander(string name = null, string edsmApiKey = null, string netlogpath = null)
         {
             EDCommander cmdr;
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmApiKey,Deleted) VALUES (@Name,@EdsmApiKey,@Deleted)"))
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmApiKey,NetLogDir,Deleted) VALUES (@Name,@EdsmApiKey,@NetLogDir,@Deleted)"))
                 {
                     cmd.AddParameterWithValue("@Name", name ?? "");
                     cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
-                    cmd.AddParameterWithValue("@NetLogDir", overridepath ?? "");
+                    cmd.AddParameterWithValue("@NetLogDir", netlogpath ?? "");
                     cmd.AddParameterWithValue("@Deleted", false);
                     cmd.ExecuteNonQuery();
                 }

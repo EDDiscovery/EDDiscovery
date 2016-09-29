@@ -876,8 +876,9 @@ namespace EDDiscovery
                 string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
 
                 travelHistoryControl1.LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
+
                 bool newfile;
-                bool success = EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
+                bool success = EDDBClass.DownloadFile(edsm.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
                     SQLiteDBSystemClass.CreateTempSystemsTable();
 
@@ -1652,12 +1653,6 @@ namespace EDDiscovery
 
             travelHistoryControl1.Display();
             journalViewControl1.Display();
-        }
-
-        public void ChangedJournalSettings()
-        {
-            Console.WriteLine("Journal changed");
-            journalmonitor.NetLogDirChanged();
         }
 
         public void NewPosition(EliteDangerous.JournalEntry je)
