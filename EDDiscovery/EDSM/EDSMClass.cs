@@ -31,14 +31,16 @@ namespace EDDiscovery2.EDSM
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
-            _serverAddress = "https://www.edsm.net/";
+            _serverAddress = ServerAddress;
             EDSMDistancesFileName = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
         }
 
-        public string ServerAddress { get { return _serverAddress;  } }
+        static string edsm_server_address = "https://www.edsm.net/";
+        public static string ServerAddress { get { return edsm_server_address; } set { edsm_server_address = value; } }
+        public static bool IsServerAddressValid { get { return edsm_server_address.Length > 0; } }
 
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
@@ -176,7 +178,7 @@ namespace EDDiscovery2.EDSM
             if (File.Exists(EDSMDistancesFileName + ".etag"))
                 File.Delete(EDSMDistancesFileName + ".etag");
 
-            if (EDDBClass.DownloadFile(_serverAddress + "dump/distances.json", EDSMDistancesFileName))
+            if (DownloadFileHandler.DownloadFile(_serverAddress + "dump/distances.json", EDSMDistancesFileName))
                 return EDSMDistancesFileName;
             else
                 return null;
@@ -273,7 +275,7 @@ namespace EDDiscovery2.EDSM
             {
                 string edsmhiddensystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmhiddensystems.json");
                 bool newfile = false;
-                EDDBClass.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
+                DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
                 string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
 
@@ -424,6 +426,7 @@ namespace EDDiscovery2.EDSM
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
                  "&x=" + HttpUtility.UrlEncode(x.ToString(CultureInfo.InvariantCulture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(CultureInfo.InvariantCulture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(CultureInfo.InvariantCulture)) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+
             var response = RequestGet("api-logs-v1/" + query);
 
             if ((int)response.StatusCode >= 400)

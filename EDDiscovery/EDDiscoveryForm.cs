@@ -293,6 +293,14 @@ namespace EDDiscovery
             }
 
             option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
+
+            if (parts.FindIndex(x => x.Equals("-EDSMBeta", StringComparison.InvariantCultureIgnoreCase)) != -1)
+                EDSMClass.ServerAddress = "http//beta.edsm.net:8080/";
+
+            if (parts.FindIndex(x => x.Equals("-EDSMNull", StringComparison.InvariantCultureIgnoreCase)) != -1)
+                EDSMClass.ServerAddress = "";
+
+            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
@@ -503,7 +511,7 @@ namespace EDDiscovery
 
             foreach (string file in files)
             {
-                var task = EDDBClass.BeginDownloadFile(
+                var task = EDDiscovery2.HTTP.DownloadFileHandler.BeginDownloadFile(
                     "http://eddiscovery.astronet.se/Maps/" + file,
                     Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
                     (n) =>
@@ -526,7 +534,7 @@ namespace EDDiscovery
         private bool DownloadMapFile(string file)
         {
             bool newfile = false;
-            if (EDDBClass.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
+            if (EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
             {
                 if (newfile)
                     travelHistoryControl1.LogLine("Downloaded map: " + file);
@@ -878,7 +886,7 @@ namespace EDDiscovery
                 travelHistoryControl1.LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
 
                 bool newfile;
-                bool success = EDDBClass.DownloadFile(edsm.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
+                bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
                     SQLiteDBSystemClass.CreateTempSystemsTable();
 

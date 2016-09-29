@@ -136,7 +136,6 @@ namespace EDDiscovery
                             JournalLocOrJump je = new JournalFSDJump(jo)
                             {
                                 TLUId = (int)reader.TravelLogUnit.id,
-                                SyncedEDSM = false,
                                 CommanderId = currentcmdrid,
                             };
 

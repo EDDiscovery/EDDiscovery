@@ -74,11 +74,11 @@ namespace EDDiscovery2.EDSM
 
                 if (_syncTo)        // send systems to EDSM..
                 {
-                    List<HistoryEntry> systems = mainForm.history.FilterByNotEDSMSyncedAndFSD;        // unsynced and FSD jumps only
+                    List<HistoryEntry> hlfsdunsyncedlist = mainForm.history.FilterByNotEDSMSyncedAndFSD;        // unsynced and FSD jumps only
 
-                    mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries");
+                    mainForm.LogLine("EDSM: Sending " + hlfsdunsyncedlist.Count.ToString() + " flightlog entries");
 
-                    foreach (var system in systems)
+                    foreach (var he in hlfsdunsyncedlist)
                     {
                         if (Exit)
                         {
@@ -86,18 +86,17 @@ namespace EDDiscovery2.EDSM
                             return;
                         }
 
-                        if ( system.EdsmSync == false)
+                        if (  he.EdsmSync == false)
                         {
-                            // check if it exist in EDSM Log we just downloaded..
-                            HistoryEntry ps2 = (from c in log where c.System.name == system.System.name && c.EventTime.Ticks == system.EventTime.Ticks select c).FirstOrDefault();
+                            HistoryEntry ps2 = (from c in log where c.System.name == he.System.name && c.EventTime.Ticks == he.EventTime.Ticks select c).FirstOrDefault();
 
                             if (ps2 != null)                // it did, just make sure EDSM sync flag is set..
                             {
-                                system.UpdateEdsmSync();
+                                he.SetEdsmSync();
                             }
                             else
                             {
-                                SendTravelLog(edsm, system, mainForm);  // else send it
+                                SendTravelLog(edsm, he, mainForm);  // else send it
                             }
                         }
                     }
@@ -196,7 +195,6 @@ namespace EDDiscovery2.EDSM
 
             try
             {
-
                 if (!he.System.HasCoordinate)
                     json = edsm.SetLog(he.System.name, he.EventTime);
                 else
@@ -219,7 +217,7 @@ namespace EDDiscovery2.EDSM
 
                 if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
                 {
-                    he.UpdateEdsmSync();
+                    he.SetEdsmSync();
                     return true;
                 }
                 else

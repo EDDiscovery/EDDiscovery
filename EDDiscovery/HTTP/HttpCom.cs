@@ -15,6 +15,12 @@ namespace EDDiscovery2.HTTP
 
         protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null, bool handleException = false)
         {
+            if (_serverAddress == null || _serverAddress.Length == 0)           // for debugging, set _serveraddress empty
+            {
+                System.Diagnostics.Trace.WriteLine("POST:" + action);
+                return new ResponseData(HttpStatusCode.Unauthorized);
+            }
+
             try
             {
                 try
@@ -109,6 +115,12 @@ namespace EDDiscovery2.HTTP
 
         protected ResponseData RequestPatch(string json, string action, NameValueCollection headers = null, bool handleException = false)
         {
+            if (_serverAddress == null || _serverAddress.Length == 0)           // for debugging, set _serveraddress empty
+            {
+                System.Diagnostics.Trace.WriteLine("PATCH:" + action);
+                return new ResponseData(HttpStatusCode.Unauthorized);
+            }
+
             try
             {
                 try
@@ -200,6 +212,12 @@ namespace EDDiscovery2.HTTP
 
         protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false)
         {
+            if ( _serverAddress == null || _serverAddress.Length == 0 )           // for debugging, set _serveraddress empty
+            {
+                System.Diagnostics.Trace.WriteLine("GET:" + action);
+                return new ResponseData(HttpStatusCode.Unauthorized);
+            }
+
             try
             {
                 try
@@ -294,6 +312,12 @@ namespace EDDiscovery2.HTTP
 
         protected ResponseData RequestDelete(string action, NameValueCollection headers = null, bool handleException = false)
         {
+            if (_serverAddress == null || _serverAddress.Length == 0)           // for debugging, set _serveraddress empty
+            {
+                System.Diagnostics.Trace.WriteLine("DELETE:" + action);
+                return new ResponseData(HttpStatusCode.Unauthorized);
+            }
+
             try
             {
                 try

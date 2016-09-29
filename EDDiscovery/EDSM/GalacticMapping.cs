@@ -1,6 +1,7 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
+using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -34,16 +35,17 @@ namespace EDDiscovery.EDSM
             try
             {
                 EDSMClass edsm = new EDSMClass();
-                string url = edsm.ServerAddress + "galactic-mapping/json-edd";
+                string url = EDSMClass.ServerAddress + "galactic-mapping/json-edd";
                 bool newfile;
 
-                return EDDBClass.DownloadFile(url, GalacticMappingFile, out newfile);
+                return DownloadFileHandler.DownloadFile(url, GalacticMappingFile, out newfile);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("DownloadFromEDSM exception:" + ex.Message);
-                return false;
             }
+
+            return false;
         }
 
         public bool ParseData()
