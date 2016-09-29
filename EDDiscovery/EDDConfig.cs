@@ -57,6 +57,7 @@ namespace EDDiscovery2
         private bool _orderrowsinverted = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
+        private bool _displayUTC = false; 
         private List<EDCommander> _ListOfCommanders;
         public List<EDCommander> ListOfCommanders { get { if (_ListOfCommanders == null) Update();  return _ListOfCommanders;  } }
         
@@ -201,6 +202,19 @@ namespace EDDiscovery2
             }
         }
 
+        public bool DisplayUTC
+        {
+            get
+            {
+                return _displayUTC;
+            }
+            set
+            {
+                _displayUTC = value;
+                SQLiteDBClass.PutSettingBool("DisplayUTC", value);
+            }
+        }
+
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
 
@@ -284,6 +298,7 @@ namespace EDDiscovery2
                 _orderrowsinverted = SQLiteDBClass.GetSettingBool("OrderRowsInverted", false);
                 _focusOnNewSystem = SQLiteDBClass.GetSettingBool("FocusOnNewSystem", false);
                 _keepOnTop = SQLiteDBClass.GetSettingBool("KeepOnTop", false);
+                _displayUTC = SQLiteDBClass.GetSettingBool("DisplayUTC", false);
 
                 LoadCommanders();
 

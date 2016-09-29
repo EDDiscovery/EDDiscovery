@@ -61,6 +61,7 @@
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNetLogDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkBoxUTC = new ExtendedControls.CheckBoxCustom();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -79,7 +80,7 @@
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 372);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 391);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 120);
             this.groupBoxTheme.TabIndex = 18;
@@ -300,6 +301,7 @@
             this.groupBox3.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox3.BorderColorScaling = 0.5F;
             this.groupBox3.Controls.Add(this.checkBoxFocusNewSystem);
+            this.groupBox3.Controls.Add(this.checkBoxUTC);
             this.groupBox3.Controls.Add(this.checkBox_Distances);
             this.groupBox3.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
@@ -307,7 +309,7 @@
             this.groupBox3.FillClientAreaWithAlternateColor = false;
             this.groupBox3.Location = new System.Drawing.Point(3, 217);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 149);
+            this.groupBox3.Size = new System.Drawing.Size(426, 168);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
@@ -518,6 +520,23 @@
             this.ColumnNetLogDir.MinimumWidth = 50;
             this.ColumnNetLogDir.Name = "ColumnNetLogDir";
             // 
+            // checkBoxUTC
+            // 
+            this.checkBoxUTC.AutoSize = true;
+            this.checkBoxUTC.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxUTC.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxUTC.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxUTC.FontNerfReduction = 0.5F;
+            this.checkBoxUTC.Location = new System.Drawing.Point(17, 133);
+            this.checkBoxUTC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxUTC.Name = "checkBoxUTC";
+            this.checkBoxUTC.Size = new System.Drawing.Size(209, 17);
+            this.checkBoxUTC.TabIndex = 0;
+            this.checkBoxUTC.Text = "Display Game time instead of local time";
+            this.checkBoxUTC.TickBoxReductionSize = 10;
+            this.checkBoxUTC.UseVisualStyleBackColor = true;
+            this.checkBoxUTC.CheckedChanged += new System.EventHandler(this.checkBoxUTC_CheckedChanged);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -574,5 +593,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDir;
+        private ExtendedControls.CheckBoxCustom checkBoxUTC;
     }
 }

@@ -60,6 +60,8 @@ namespace EDDiscovery
             }
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
+
+            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
         }
 
         private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
@@ -69,7 +71,7 @@ namespace EDDiscovery
                 detail = item.EventDescription + Environment.NewLine;
             detail += item.EventDetailedInfo;
 
-            object[] rowobj = { item.EventTimeLocal, "", item.EventSummary, detail };
+            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail };
 
             int rownr;
 

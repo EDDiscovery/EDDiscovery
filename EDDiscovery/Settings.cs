@@ -63,6 +63,8 @@ namespace EDDiscovery2
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxFocusNewSystem.Checked = EDDiscoveryForm.EDDConfig.FocusOnNewSystem;
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
+
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
@@ -101,6 +103,7 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
             EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
+            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
         }
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -275,6 +278,12 @@ namespace EDDiscovery2
             }
         }
 
+        private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
+            _discoveryForm.RefreshDisplays();
+        }
 
     }
 }
+
