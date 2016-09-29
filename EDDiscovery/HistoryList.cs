@@ -10,6 +10,7 @@ using System.Text;
 
 namespace EDDiscovery
 {
+    [DebuggerDisplay("Event {EventType} {System.name} ({System.x,nq},{System.y,nq},{System.z,nq}) {EventTimeUTC}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
     {                                   
         public int Indexno;            // for display purposes.
@@ -221,7 +222,7 @@ namespace EDDiscovery
         {
             get
             {
-                return (from s in historylist where s.EdsmSync == false && s.IsFSDJump select s).ToList();
+                return (from s in historylist where s.EdsmSync == false && s.IsFSDJump orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
 

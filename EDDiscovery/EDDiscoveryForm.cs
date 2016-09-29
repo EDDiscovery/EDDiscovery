@@ -665,7 +665,7 @@ namespace EDDiscovery
 
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
                 journalmonitor.OnNewJournalEntry += NewPosition;
-                //TBD REMOVED - EDSM sync back not working   EDSMsync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(RefreshEDSMEvent);
+                EdsmSync.OnDownloadedSystems += RefreshDueToEDSMDownloadedSystems;
 
                 panelInfo.Visible = false;
 
@@ -679,6 +679,15 @@ namespace EDDiscovery
                 checkInstallerTask = CheckForNewInstaller();
             }
         }
+
+        private void RefreshDueToEDSMDownloadedSystems()
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                RefreshHistoryAsync();
+            });
+        }
+
 
         private void _travelHistoryControl1_InitialRefreshDone(object sender, EventArgs e)
         {
@@ -704,15 +713,6 @@ namespace EDDiscovery
         {
             ReportProgress(e.ProgressPercentage, (string)e.UserState);
         }
-
-//  TBD when EDSM sync works again       internal void RefreshEDSMEvent(object source)
-       //{
-         //   Invoke((MethodInvoker)delegate
-           // {
-             //   RefreshHistoryAsync();
-            //});
-        //}
-
 
         #endregion
 
@@ -1664,6 +1664,11 @@ namespace EDDiscovery
             if (PendingClose)
                 return;
 
+            RefreshDisplays();
+        }
+
+        public void RefreshDisplays()
+        {
             travelHistoryControl1.Display();
             journalViewControl1.Display();
         }

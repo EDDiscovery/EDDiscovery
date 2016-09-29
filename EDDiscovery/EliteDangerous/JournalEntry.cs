@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -229,6 +230,7 @@ namespace EDDiscovery.EliteDangerous
         StartMarker = 0x0100,           // measure distance start pos marker
     };
 
+    [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmId} C {CommanderId}")]
     public abstract class JournalEntry
     {
         public long Id;                          // this is the entry ID
@@ -334,7 +336,7 @@ namespace EDDiscovery.EliteDangerous
             return jr;
         }
 
-        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, DateTime utc, string name, double x, double y, double z, int mc)
+        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, DateTime utc, string name, double x, double y, double z, int mc, int syncflag)
         {
             JObject jo = new JObject();
             jo["timestamp"] = utc.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
@@ -346,6 +348,7 @@ namespace EDDiscovery.EliteDangerous
             JournalEntry je = CreateJournalEntry(jo.ToString());
             je.TLUId = tluid;
             je.CommanderId = cmdrid;
+            je.Synced = syncflag;
             return je;
         }
 
@@ -357,6 +360,7 @@ namespace EDDiscovery.EliteDangerous
                 return ret;
             }
         }
+
         public bool Add(SQLiteConnectionUserUTC cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventStrName, @EventData, @EdsmId, @Synced)", tn))

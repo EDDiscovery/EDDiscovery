@@ -70,6 +70,7 @@ namespace EDDiscovery
 
             checkBoxEDSMSyncTo.Checked = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
             checkBoxEDSMSyncFrom.Checked = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
+            buttonSync.Enabled = checkBoxEDSMSyncTo.Checked | checkBoxEDSMSyncFrom.Checked;
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, "EDUIHistory");
             richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
@@ -115,6 +116,8 @@ namespace EDDiscovery
             RefreshTargetInfo();
             UpdateDependentsWithSelection();
             _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map
+
+            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
         }
 
         public void AddNewHistoryRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
@@ -123,7 +126,7 @@ namespace EDDiscovery
             if ( snc == null && item.IsFSDJump )
                 snc = SystemNoteClass.GetNoteOnSystem(item.System.name);
 
-            object[] rowobj = { item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (snc != null) ? snc.Note : "" };
+            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (snc != null) ? snc.Note : "" };
 
             int rownr;
             if (insert)
@@ -772,10 +775,12 @@ namespace EDDiscovery
 
         private void checkBoxEDSMSyncTo_CheckedChanged(object sender, EventArgs e)
         {
+            buttonSync.Enabled = checkBoxEDSMSyncTo.Checked | checkBoxEDSMSyncFrom.Checked;
         }
 
         private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
         {
+            buttonSync.Enabled = checkBoxEDSMSyncTo.Checked | checkBoxEDSMSyncFrom.Checked;
         }
 
         private void button2DMap_Click(object sender, EventArgs e)
