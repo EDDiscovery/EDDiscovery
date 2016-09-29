@@ -222,11 +222,11 @@ namespace EDDiscovery.EliteDangerous
     }
 
 
-    enum SyncFlags
+    public enum SyncFlags
     {
         EDSM = 0x01,
         EDDN = 0x02,
-        Future = 0x04,
+        StartMarker = 0x0100,           // measure distance start pos marker
     };
 
     public abstract class JournalEntry
@@ -252,15 +252,7 @@ namespace EDDiscovery.EliteDangerous
         {
             get
             {
-                return (Synced & (int)SyncFlags.EDSM) == (int)SyncFlags.EDSM;
-            }
-
-            set
-            {
-                if (value == true)
-                    Synced |= (int)SyncFlags.EDSM;
-                else
-                    Synced &= (int)(~SyncFlags.EDSM);
+                return (Synced & (int)SyncFlags.EDSM) !=0;
             }
         }
 
@@ -268,15 +260,15 @@ namespace EDDiscovery.EliteDangerous
         {
             get
             {
-                return (Synced & (int)SyncFlags.EDDN) == (int)SyncFlags.EDDN;
+                return (Synced & (int)SyncFlags.EDDN) != 0;
             }
+        }
 
-            set
+        public bool StartMarker
+        {
+            get
             {
-                if (value == true)
-                    Synced |= (int)SyncFlags.EDDN;
-                else
-                    Synced &= (int)(~SyncFlags.EDDN);
+                return (Synced & (int)SyncFlags.StartMarker) != 0;
             }
         }
 
@@ -350,18 +342,6 @@ namespace EDDiscovery.EliteDangerous
                 return ret;
             }
         }
-
-        public long LastID()
-        {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
-            {
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
-                {
-                    return (long)SQLiteDBClass.SQLScalar(cn, cmd2);
-                }
-            }
-        }
-
         public bool Add(SQLiteConnectionUserUTC cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventStrName, @EventData, @EdsmId, @Synced)", tn))
@@ -393,9 +373,9 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        private bool Update(SQLiteConnectionUserUTC cn)
+        private bool Update(SQLiteConnectionUserUTC cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id",tn))
             {
                 cmd.AddParameterWithValue("@ID", Id);
                 cmd.AddParameterWithValue("@EventTime", EventTimeUTC);  // MUST use UTC connection
@@ -416,33 +396,25 @@ namespace EDDiscovery.EliteDangerous
         {
             using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
             {
-                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid"))
+                JournalEntry ent = Get(journalid, cn);
+
+                if (ent != null)
                 {
-                    cmd.AddParameterWithValue("@journalid", journalid);
+                    JObject jo = (JObject)JObject.Parse(ent.EventDataString);
 
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    if (jsonpos)
                     {
-                        while (reader.Read())
-                        {
-                            JournalEntry ent = CreateJournalEntry(reader);
+                        jo["StarPos"] = new JArray() { system.x, system.y, system.z };
+                    }
 
-                            JObject jo = (JObject)JObject.Parse(ent.EventDataString);
+                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID"))
+                    {
+                        cmd2.AddParameterWithValue("@ID", journalid);
+                        cmd2.AddParameterWithValue("@EventData", jo.ToString());
+                        cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
-                            if (jsonpos)
-                            {
-                                jo["StarPos"] = new JArray() { system.x, system.y, system.z };
-                            }
-
-                            using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID"))
-                            {
-                                cmd2.AddParameterWithValue("@ID", journalid);
-                                cmd2.AddParameterWithValue("@EventData", jo.ToString());
-                                cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
-
-                                System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid", journalid));
-                                SQLiteDBClass.SQLNonQueryText(cn, cmd2);
-                            }
-                        }
+                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid", journalid));
+                        SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                     }
                 }
             }
@@ -452,29 +424,45 @@ namespace EDDiscovery.EliteDangerous
         {
             using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
             {
-                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid"))
+                JournalEntry ent = Get(journalid, cn);
+
+                if (ent != null)
                 {
-                    cmd.AddParameterWithValue("@journalid", journalid);
+                    JObject jo = (JObject)JObject.Parse(ent.EventDataString);
 
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    jo["EDDMapColor"] = mapcolour;
+
+                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData where ID = @ID"))
                     {
-                        while (reader.Read())
-                        {
-                            JournalEntry ent = CreateJournalEntry(reader);
+                        cmd2.AddParameterWithValue("@ID", journalid);
+                        cmd2.AddParameterWithValue("@EventData", jo.ToString());
 
-                            JObject jo = (JObject)JObject.Parse(ent.EventDataString);
+                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with map colour", journalid));
+                        SQLiteDBClass.SQLNonQueryText(cn, cmd2);
+                    }
+                }
+            }
+        }
 
-                            jo["EDDMapColor"] = mapcolour;
+        public static void UpdateSyncFlagBit(long journalid, SyncFlags bit, bool value)
+        {
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            {
+                JournalEntry je = Get(journalid, cn);
 
-                            using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData where ID = @ID"))
-                            {
-                                cmd2.AddParameterWithValue("@ID", journalid);
-                                cmd2.AddParameterWithValue("@EventData", jo.ToString());
+                if (je != null)
+                {
+                    if (value)
+                        je.Synced |= (int)bit;
+                    else
+                        je.Synced &= ~(int)bit;
 
-                                System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with map colour", journalid));
-                                SQLiteDBClass.SQLNonQueryText(cn, cmd2);
-                            }
-                        }
+                    using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid"))
+                    {
+                        cmd.AddParameterWithValue("@journalid", journalid);
+                        cmd.AddParameterWithValue("@sync", je.Synced);
+                        System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", journalid , je.Synced));
+                        SQLiteDBClass.SQLNonQueryText(cn, cmd);
                     }
                 }
             }
@@ -492,6 +480,24 @@ namespace EDDiscovery.EliteDangerous
                     SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 }
             }
+        }
+
+        static public JournalEntry Get(long journalid, SQLiteConnectionUserUTC cn)
+        {
+            using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid"))
+            {
+                cmd.AddParameterWithValue("@journalid", journalid);
+
+                using (DbDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        return CreateJournalEntry(reader);
+                    }
+                }
+            }
+
+            return null;
         }
 
         static public List<JournalEntry> GetAll(int commander = -999)

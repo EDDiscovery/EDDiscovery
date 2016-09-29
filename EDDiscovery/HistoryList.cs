@@ -140,23 +140,21 @@ namespace EDDiscovery
             }
         }
 
-        public bool UpdateCommanderID(int v)
+        public void UpdateCommanderID(int v)
         {
             if (Journalid != 0)
             {
                 EliteDangerous.JournalEntry.UpdateCommanderID(Journalid, v);
             }
-            return false;
         }
 
-        public bool UpdateEdsmSync()
+        public void SetEdsmSync()
         {
-            //TBD how do we do this..
+            EdsmSync = true;
             if (Journalid != 0)
             {
+                EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EDSM, true );
             }
-            EdsmSync = true;
-            return false;
         }
 
     }
