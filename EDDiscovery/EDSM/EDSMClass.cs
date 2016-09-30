@@ -31,11 +31,15 @@ namespace EDDiscovery2.EDSM
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
-            _serverAddress = ServerAddress;
-            EDSMDistancesFileName = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
-
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
+
+            _serverAddress = ServerAddress;
+
+            EDSMDistancesFileName = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
+
+            apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
         }
 
         static string edsm_server_address = "https://www.edsm.net/";

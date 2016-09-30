@@ -432,7 +432,7 @@ namespace EDDiscovery.EliteDangerous
                         cmd2.AddParameterWithValue("@EventData", jo.ToString());
                         cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
-                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid", journalid));
+                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos {1}/edsmid", journalid, jsonpos));
                         SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                     }
                 }

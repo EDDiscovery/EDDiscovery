@@ -18,8 +18,7 @@ namespace EDDiscovery.EliteDangerous
         public TimeZoneInfo TimeZone { get; set; }
         public TimeSpan TimeZoneOffset { get; set; }
 
-        // Journal ID
-        public int JournalId { get { return (int)TravelLogUnit.id; } }
+        public static bool disable_beta_commander_check = false;        // strictly for debugging purposes
 
         public EDJournalReader(string filename) : base(filename)
         {
@@ -28,6 +27,9 @@ namespace EDDiscovery.EliteDangerous
         public EDJournalReader(TravelLogUnit tlu) : base(tlu)
         {
         }
+
+        // Journal ID
+        public int JournalId { get { return (int)TravelLogUnit.id; } }
 
         public bool ReadJournalLog(out JournalEntry je)
         {
@@ -54,7 +56,7 @@ namespace EDDiscovery.EliteDangerous
                     {
                         JournalEvents.JournalFileHeader header = (JournalEvents.JournalFileHeader)je;
 
-                        if (header.Beta)
+                        if (header.Beta && !disable_beta_commander_check)
                         {
                             TravelLogUnit.type |= 0x8000;
                         }

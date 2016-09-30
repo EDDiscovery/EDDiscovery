@@ -135,7 +135,7 @@ namespace EDDiscovery
                 {
                     Directory.CreateDirectory(logpath);
                 }
-#if false
+
                 if (!Debugger.IsAttached)
                 {
                     logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
@@ -152,7 +152,6 @@ namespace EDDiscovery
                 }
                 // Log first-chance exceptions to help diagnose errors
                 Register_FirstChanceException_Handler();
-#endif
             }
             catch (Exception ex)
             {
@@ -309,6 +308,14 @@ namespace EDDiscovery
                 EDSMClass.ServerAddress = "";
                 label_version.Text += " (EDSM No server)";
             }
+
+            if (parts.FindIndex(x => x.Equals("-DISABLEBETACHECK", StringComparison.InvariantCultureIgnoreCase)) != -1)
+            {
+                EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
+                label_version.Text += " (no BETA detect)";
+            }
+
+
 
             option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
         }

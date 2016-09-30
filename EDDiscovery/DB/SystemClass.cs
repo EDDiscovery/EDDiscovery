@@ -1710,46 +1710,39 @@ namespace EDDiscovery.DB
             return ret;
         }
 
-        public static SystemClass EDSMAssign(ISystem s, long journalid, SQLiteConnectionSystem conn = null) // called find an EDSM system corresponding to s
+        public static SystemClass FindEDSM(ISystem s, SQLiteConnectionSystem conn = null) // called find an EDSM system corresponding to s
         {
             SystemClass system = null;
-            bool closeit = false;
-
-            if (conn == null)
-            {
-                closeit = true;
-                conn = new SQLiteConnectionSystem();
-            }
 
             if (s.status != SystemStatusEnum.EDSC)      // if not EDSM already..
             {
+                bool closeit = false;
+
+                if (conn == null)
+                {
+                    closeit = true;
+                    conn = new SQLiteConnectionSystem();
+                }
+
                 if (s.id_edsm > 0)                      // if it has an ID, look it up
                     system = SystemClass.GetSystem(s.id_edsm, conn, SystemClass.SystemIDType.EdsmId);
 
-                if ( system == null )                   // not found, so  try
+                if (system == null)                   // not found, so  try
                 {
                     if (s.HasCoordinate)                // if has co-ord, its cardinal, only match on this
                     {
                         system = SystemClass.GetSystemNearestTo(s.x, s.y, s.z, conn);       // find it
-
-                        if (system != null)                                                 // if found, update the journal with the edsm_id
-                            EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(journalid, system, false); // no need to update JSON POS its there already
                     }
                     else
                     {
                         system = SystemClass.GetSystem(s.name, conn);   // find on name
-
-                        if (system != null)                                                 // if found, update the journal with the edsm_id
-                        {
-                            EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(journalid, system, true); // found a name, and we don't have a co-ord, so introduce it
-                        }
                     }
                 }
-            }
 
-            if (closeit && conn != null)
-            {
-                conn.Dispose();
+                if (closeit && conn != null)
+                {
+                    conn.Dispose();
+                }
             }
 
             return system;
