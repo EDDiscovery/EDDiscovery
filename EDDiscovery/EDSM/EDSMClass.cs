@@ -194,6 +194,7 @@ namespace EDDiscovery2.EDSM
             DateTime lstsystdate;
             // First system in EDSM is from 2015-05-01 00:39:40
             DateTime gammadate = new DateTime(2015, 5, 1, 0, 0, 0, DateTimeKind.Utc);
+            bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
 
             if (SystemClass.IsSystemsTableEmpty())
             {
@@ -202,7 +203,8 @@ namespace EDDiscovery2.EDSM
             else
             {
                 // Get the most recent modify time returned from EDSM
-                lstsystdate = SystemClass.GetLastSystemModifiedTime() - TimeSpan.FromSeconds(1);
+                DateTime lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+                lstsystdate = lastmod - TimeSpan.FromSeconds(1);
 
                 if (lstsystdate < gammadate)
                 {
@@ -263,7 +265,7 @@ namespace EDDiscovery2.EDSM
                     break;
                 }
 
-                updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, false, discoveryform, cancelRequested, reportProgress, false);
+                updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, discoveryform, cancelRequested, reportProgress, false);
                 lstsystdate += TimeSpan.FromHours(12);
             }
             discoveryform.LogLine($"System download complete");

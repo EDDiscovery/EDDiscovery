@@ -618,7 +618,10 @@ namespace EDDiscovery
                 galacticMapping.DownloadFromEDSM();
 
                 // Skip EDSM full update if update has been performed in last 4 days
-                if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays > 4 ||
+                bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
+                DateTime lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+
+                if (DateTime.UtcNow.Subtract(lastmod).TotalDays > 4 ||
                     DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
                 {
                     performedsmsync = true;
@@ -755,7 +758,9 @@ namespace EDDiscovery
 
             // Force a full sync if newest data is more than 14 days old
 
-            if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays >= 14)
+            bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
+            DateTime lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+            if (DateTime.UtcNow.Subtract(lastmod).TotalDays >= 14)
             {
                 performedsmsync = true;
             }
@@ -890,14 +895,16 @@ namespace EDDiscovery
                     SQLiteDBSystemClass.CreateTempSystemsTable();
 
                     string rwsysfiletime = "2014-01-01 00:00:00";
+                    bool outoforder = false;
                     using (var reader = new StreamReader(s))
-                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, true, discoveryform, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
+                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, discoveryform, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
                     if (!cancelRequested())       // abort, without saving time, to make it do it again
                     {
                         SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
                         travelHistoryControl1.LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
                         SQLiteDBSystemClass.ReplaceSystemsTable();
+                        SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
                         reportProgress(-1, "");
                     }
                     else
