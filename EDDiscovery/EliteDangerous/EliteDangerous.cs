@@ -8,7 +8,6 @@ using System.Management;
 using System.IO;
 using EDDiscovery.DB;
 using Newtonsoft.Json.Linq;
-using EDDiscovery2.EDDB;
 
 namespace EDDiscovery2
 {
@@ -387,34 +386,6 @@ namespace EDDiscovery2
         }
 
 
-
-
-        static public Commodity String2Commodity(string str)
-        {
-
-            var v = EDDBClass.commodities.FirstOrDefault(m => m.Value.name == str).Value;
-
-            return v;
-        }
-
-        static public List<Commodity> EDCommodities2ID(JArray ja)
-        {
-            List<Commodity> commodity = new List<Commodity>();
-
-            if (ja == null)
-                return null;
-
-            for (int ii = 0; ii < ja.Count; ii++)
-            {
-                string ecstr = ja[ii].Value<string>();
-
-                commodity.Add(String2Commodity(ecstr));
-
-            }
-            return commodity;
-        }
-
-       
 
 
 
