@@ -513,7 +513,7 @@ namespace EDDiscovery.DB
             return isempty;
         }
 
-        public static DateTime GetLastSystemEntryTime()
+        public static DateTime GetLastSystemModifiedTime()
         {
             DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
 
@@ -521,12 +521,12 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("SELECT VersionTimestamp FROM EdsmSystems ORDER BY VersionTimestamp DESC LIMIT 1"))
+                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateTimestamp FROM EdsmSystems ORDER BY UpdateTimestamp DESC LIMIT 1"))
                     {
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
-                            if (reader.Read() && System.DBNull.Value != reader["VersionTimestamp"])
-                                lasttime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["VersionTimestamp"]);
+                            if (reader.Read() && System.DBNull.Value != reader["UpdateTimestamp"])
+                                lasttime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]);
                         }
                     }
                 }
@@ -542,8 +542,11 @@ namespace EDDiscovery.DB
 
         // Systems in data dumps are now sorted by modify time ascending, so
         // the last inserted system should be the most recently modified system.
-        public static DateTime GetLastSystemModifiedTimeFast()
+       
+        public static DateTime GetLastSystemModifiedTimeFastly()
         {
+            Debug.Assert(false);  //ROb: Broken.. no its not.  have evidence from EDSM that the updatetimestamp can be out of order than the ID
+
             DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
 
             try
