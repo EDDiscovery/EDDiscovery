@@ -265,7 +265,7 @@ namespace EDDiscovery.DB
             using (SQLiteConnectionOld conn = new SQLiteConnectionOld())
             {
                 //                                                0      1      2
-                using (DbCommand cmd = conn.CreateCommand("SELECT NameA, NameB, Dist FROM Distances WHERE Status >= 3"))
+                using (DbCommand cmd = conn.CreateCommand("SELECT NameA, NameB, Dist FROM Distances WHERE Status >= 1"))    // any distance pairs okay
                 {
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
@@ -376,7 +376,6 @@ namespace EDDiscovery.DB
                     }
 
                     txn.Commit();
-                    Console.WriteLine("Converted VS->JT");
                 }
             }
 
