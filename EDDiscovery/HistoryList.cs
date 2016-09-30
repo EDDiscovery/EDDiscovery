@@ -283,14 +283,14 @@ namespace EDDiscovery
 
         public void FillEDSM(HistoryEntry syspos)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
-            if (syspos.System.status == SystemStatusEnum.EDSC)
+            if (syspos.System.status == SystemStatusEnum.EDSC || syspos.System.id_edsm == -1 )  // if set already, or we tried and failed..
                 return;
 
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
             foreach (HistoryEntry he in historylist)       // list of systems in historylist using the same system object
             {
-                if (Object.ReferenceEquals(he,syspos))
+                if (Object.ReferenceEquals(he.System,syspos.System))
                     alsomatching.Add(he);
             }
 
