@@ -46,9 +46,9 @@
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.synchroniseWithEDSMDistancesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugBetaFixHiddenLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.read21AndFormerLogFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,7 +86,6 @@
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.reloadAllLogsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._refreshWorker = new System.ComponentModel.BackgroundWorker();
-            this.read21AndFormerLogFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -192,14 +191,12 @@
             this.prospectingToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.prospectingToolStripMenuItem.Text = "(DEBUG) Prospecting";
             this.prospectingToolStripMenuItem.Visible = false;
-
             // 
             // adminToolStripMenuItem
             // 
             this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.forceEDDBUpdateToolStripMenuItem,
             this.syncEDSMSystemsToolStripMenuItem,
-            this.synchroniseWithEDSMDistancesToolStripMenuItem,
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
             this.debugBetaFixHiddenLogToolStripMenuItem,
             this.read21AndFormerLogFilesToolStripMenuItem});
@@ -221,13 +218,6 @@
             this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM Stars";
             this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
-            // synchroniseWithEDSMDistancesToolStripMenuItem
-            // 
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Name = "synchroniseWithEDSMDistancesToolStripMenuItem";
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Text = "Synchronise with EDSM Distances";
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Click += new System.EventHandler(this.synchroniseWithEDSMDistancesToolStripMenuItem_Click);
-            // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
             // 
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
@@ -241,6 +231,13 @@
             this.debugBetaFixHiddenLogToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.debugBetaFixHiddenLogToolStripMenuItem.Text = "Fix hidden log entries for BETA";
             this.debugBetaFixHiddenLogToolStripMenuItem.Click += new System.EventHandler(this.debugBetaFixHiddenLogToolStripMenuItem_Click);
+            // 
+            // read21AndFormerLogFilesToolStripMenuItem
+            // 
+            this.read21AndFormerLogFilesToolStripMenuItem.Name = "read21AndFormerLogFilesToolStripMenuItem";
+            this.read21AndFormerLogFilesToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.read21AndFormerLogFilesToolStripMenuItem.Text = "Read 2.1 and former log files";
+            this.read21AndFormerLogFilesToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFilesToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -608,13 +605,6 @@
             this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
             this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
             // 
-            // read21AndFormerLogFilesToolStripMenuItem
-            // 
-            this.read21AndFormerLogFilesToolStripMenuItem.Name = "read21AndFormerLogFilesToolStripMenuItem";
-            this.read21AndFormerLogFilesToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
-            this.read21AndFormerLogFilesToolStripMenuItem.Text = "Read 2.1 and former log files";
-            this.read21AndFormerLogFilesToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFilesToolStripMenuItem_Click);
-            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -706,7 +696,6 @@
         public SavedRouteExpeditionControl savedRouteExpeditionControl1;
         private ExtendedControls.StatusStripCustom statusStrip1;
         private System.Windows.Forms.ToolStripMenuItem debugBetaFixHiddenLogToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem synchroniseWithEDSMDistancesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;

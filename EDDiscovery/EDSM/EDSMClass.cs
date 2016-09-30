@@ -1,7 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
-using EDDiscovery2.EDDB;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
@@ -295,51 +294,6 @@ namespace EDDiscovery2.EDSM
         
         }
 
-        public List<DistanceClass> GetDistances(string systemname)
-        {
-            List<DistanceClass> listDistances = new List<DistanceClass>();
-            try
-            {
-                string query;
-                query = "?sysname=" + HttpUtility.UrlEncode(systemname) + "&coords=1&distances=1&submitted=1";
-
-                var response = RequestGet("api-v1/system" + query);
-
-                if ((int)response.StatusCode >= 400)
-                    return listDistances;
-
-
-                var json = response.Body;
-
-                //https://.../api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
-
-                if (json.Length > 1)
-                {
-                    JObject ditancesresp = (JObject)JObject.Parse(json);
-
-                    JArray distances = (JArray)ditancesresp["distances"];
-
-                    if (distances != null)
-                    {
-                        foreach (JObject jo in distances)
-                        {
-                            DistanceClass dc = new DistanceClass();
-
-                            dc.NameA = systemname;
-                            dc.NameB = jo["name"].Value<string>();
-                            dc.Dist = jo["dist"].Value<float>();
-//                            dc.CommanderCreate = jo[]
-
-                            listDistances.Add(dc);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-            return listDistances;
-        }
 
         public string GetComments(DateTime starttime)
         {

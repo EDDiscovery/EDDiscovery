@@ -1,7 +1,6 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery2;
 using EDDiscovery2.DB;
-using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.Forms;
 using Newtonsoft.Json.Linq;
@@ -579,7 +578,6 @@ namespace EDDiscovery
 
         bool performedsmsync = false;
         bool performeddbsync = false;
-        bool performedsmdistsync = false;
 
         private void _checkSystemsWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -646,11 +644,6 @@ namespace EDDiscovery
                 DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
                 if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
                     performeddbsync = true;
-
-                string lstdist = SQLiteConnectionSystem.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-                DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
-                if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
-                    performedsmdistsync = true;
             }
         }
 
@@ -788,13 +781,6 @@ namespace EDDiscovery
                     performhistoryrefresh = true;
                 }
             }
-
-            if (EDDConfig.UseDistances && !cancelRequested())
-            {
-                performhistoryrefresh |= PerformDistanceFullSync(cancelRequested, reportProgress);
-            }
-            else
-                performedsmdistsync = false;
 
             if (!cancelRequested())
             {
@@ -948,18 +934,19 @@ namespace EDDiscovery
         {
             try
             {
-                EDDBClass eddb = new EDDBClass();
-
                 travelHistoryControl1.LogLine("Get systems from EDDB.");
 
-                if (eddb.GetSystems())
+                string systemFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems.json");
+                bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v4/systems_populated.json", systemFileName);
+
+                if (success)
                 {
                     if (cancelRequested())
                         return;
 
                     travelHistoryControl1.LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
 
-                    long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName, travelHistoryControl1.LogLineHighlight);
+                    long number = SystemClass.ParseEDDBUpdateSystems(systemFileName, travelHistoryControl1.LogLineHighlight);
 
                     travelHistoryControl1.LogLine("Local database updated with EDDB data, " + number + " systems updated");
                     SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
@@ -975,86 +962,6 @@ namespace EDDiscovery
                 travelHistoryControl1.LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
             }
         }
-
-        private bool PerformDistanceFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
-        {
-            long numbertotal = 0;
-
-            try
-            {
-                string lstdist = SQLiteConnectionSystem.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-                EDSMClass edsm = new EDSMClass();
-
-                if (performedsmdistsync)
-                {
-                    travelHistoryControl1.LogLine("Downloading full EDSM distance data.");
-                    string filename = edsm.GetEDSMDistances();
-
-                    if (cancelRequested())
-                        return false;
-
-                    if (filename != null)
-                    {
-                        travelHistoryControl1.LogLine("Updating all distances with EDSM distance data.");
-                        long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true, cancelRequested, reportProgress, travelHistoryControl1.LogLineHighlight);
-                        numbertotal += numberx;
-                        SQLiteConnectionSystem.PutSettingString("EDSCLastDist", lstdist);
-                        travelHistoryControl1.LogLine("Local database updated with EDSM Distance data, " + numberx + " distances updated.");
-                    }
-                }
-
-                if (cancelRequested())
-                    return false;
-
-                travelHistoryControl1.LogLine("Updating distances with latest EDSM data.");
-
-                string json = null;
-                try
-                {
-                    json = edsm.RequestDistances(lstdist);
-
-                    if (json == null)
-                        travelHistoryControl1.LogLine("No response from EDSM Distance server.");
-                    else
-                    {
-                        long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false, cancelRequested, reportProgress, travelHistoryControl1.LogLineHighlight);
-                        numbertotal += number;
-                    }
-                }
-                catch (WebException ex)
-                {
-                    if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
-                    {
-                        string status = ((HttpWebResponse)ex.Response).StatusDescription;
-                        travelHistoryControl1.LogLine($"Download of EDSM distances from the server failed ({status})");
-                    }
-                    else
-                    {
-                        travelHistoryControl1.LogLine($"Download of EDSM distances from the server failed ({ex.Status.ToString()})");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    travelHistoryControl1.LogLine($"Download of EDSM distances from the server failed ({ex.Message})");
-                }
-
-                if (cancelRequested())
-                    return false;
-
-                travelHistoryControl1.LogLine("Local database updated with EDSM Distance data, " + numbertotal + " distances updated.");
-                SQLiteConnectionSystem.PutSettingString("EDSCLastDist", lstdist);
-
-                performedsmdistsync = false;
-                GC.Collect();
-            }
-            catch (Exception ex)
-            {
-                travelHistoryControl1.LogLineHighlight("GetEDSMDistances exception: " + ex.Message);
-            }
-
-            return (numbertotal != 0);
-        }
-
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
@@ -1354,31 +1261,6 @@ namespace EDDiscovery
             }
             else
                 MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
-        }
-
-        private void synchroniseWithEDSMDistancesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!EDDConfig.UseDistances)
-                MessageBox.Show("EDSM Distances are turned off, please turn on first in settings");
-            else if (!_syncWorker.IsBusy)      // we want it to have run, to completion, to allow another go..
-            {
-                performedsmdistsync = true;
-                AsyncPerformSync();
-            }
-            else
-                MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
-        }
-
-        public bool RequestDistanceSync()
-        {
-            if (performedsmdistsync == false)
-            {
-                performedsmdistsync = true;
-                AsyncPerformSync();
-                return true;
-            }
-            else
-                return false;
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)

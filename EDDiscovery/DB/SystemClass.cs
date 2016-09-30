@@ -25,8 +25,16 @@ namespace EDDiscovery.DB
         EDDiscovery = 3,
         EDDB = 4,
         Inhumierer = 5,
-
     }
+
+    public enum SystemInfoSource
+    {
+        RW = 1,
+        EDSC = 2,
+        EDDB = 4,
+        EDSM = 5
+    }
+
 
     [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
     public class SystemClass : EDDiscovery2.DB.InMemory.SystemClass
@@ -55,11 +63,11 @@ namespace EDDiscovery.DB
             x = vx; y = vy; z = vz;
         }
 
-        public SystemClass(JObject jo, EDDiscovery2.DB.SystemInfoSource source)
+        public SystemClass(JObject jo, SystemInfoSource source)
         {
             try
             {
-                if (source == EDDiscovery2.DB.SystemInfoSource.RW)
+                if (source == SystemInfoSource.RW)
                 {
                     try
                     {
@@ -77,7 +85,7 @@ namespace EDDiscovery.DB
                     {
                     }
                 }
-                else if (source == EDDiscovery2.DB.SystemInfoSource.EDSC)
+                else if (source == SystemInfoSource.EDSC)
                 {
                     JArray ja = (JArray)jo["coord"];
 
@@ -106,7 +114,7 @@ namespace EDDiscovery.DB
                     UpdateDate = jo["updatedate"].Value<DateTime>();
                     status = SystemStatusEnum.EDSC;
                 }
-                else if (source == EDDiscovery2.DB.SystemInfoSource.EDSM)
+                else if (source == SystemInfoSource.EDSM)
                 {
                     JObject coords = (JObject)jo["coords"];
 
@@ -146,7 +154,7 @@ namespace EDDiscovery.DB
 
                     status = SystemStatusEnum.EDSC;
                 }
-                else if (source == EDDiscovery2.DB.SystemInfoSource.EDDB)
+                else if (source == SystemInfoSource.EDDB)
                 {
                     name = jo["name"].Value<string>();
                     SearchName = name.ToLower();
@@ -199,14 +207,6 @@ namespace EDDiscovery.DB
                 return Math.Sqrt((s1.x - x) * (s1.x - x) + (s1.y - y) * (s1.y - y) + (s1.z - z) * (s1.z - z));
             else
                 return -1;
-        }
-
-        public static double DistanceIncludeDB(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
-        {
-            double dist = Distance(s1, s2);
-            if (dist < 0)
-                dist = DistanceClass.FindDistance(s1, s2);
-            return dist;
         }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
@@ -1566,7 +1566,7 @@ namespace EDDiscovery.DB
                             {
                                 JObject jo = JObject.Load(jr);
 
-                                SystemClass system = new SystemClass(jo, EDDiscovery2.DB.SystemInfoSource.EDDB);
+                                SystemClass system = new SystemClass(jo, SystemInfoSource.EDDB);
 
                                 if (system.HasEDDBInformation)                                  // screen out for speed any EDDB data with empty interesting fields
                                 {
