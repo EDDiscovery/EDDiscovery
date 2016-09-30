@@ -1025,7 +1025,6 @@ namespace EDDiscovery
 
             HistoryEntry prev = _discoveryForm.history.PreviousFrom(rightclicksystem, true);    // null can be passed in safely
 
-            enterDistanceToPreviousStarToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.IsFSDJump && prev != null);
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
         }
@@ -1215,50 +1214,7 @@ namespace EDDiscovery
 
             this.Cursor = Cursors.Default;
         }
-
-        // enabled only if rightclick system is set and prev is present..
-        private void enterDistanceToPreviousStarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DistanceForm frm = new DistanceForm();
-            DialogResult res = frm.ShowDialog();
-
-            if (res == DialogResult.OK)
-            {
-                var dist = DistanceParser.ParseJumpDistance(frm.Value.Trim());
-
-                if (!dist.HasValue)
-                    MessageBox.Show("Distance in wrong format!");
-                else
-                {
-                    HistoryEntry prev = _discoveryForm.history.PreviousFrom(rightclicksystem, true);
-
-                    DistanceClass distance = DistanceClass.GetDistanceClass(rightclicksystem.System, prev.System);
-                    DistanceClass dstore = null;
-
-                    if (distance == null)
-                    {
-                        dstore = new DistanceClass();
-                        dstore.NameA = rightclicksystem.System.name;
-                        dstore.NameB = prev.System.name;
-                    }
-                    else
-                        dstore = distance;
-
-                    dstore.Dist = dist.Value;
-                    dstore.CreateTime = DateTime.UtcNow;
-                    dstore.CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name.Trim();
-                    dstore.Status = DistancsEnum.EDDiscovery;
-
-                    if (distance != null)
-                        dstore.Update();
-                    else
-                        dstore.Store();
-
-                    dataGridViewTravel.Rows[rightclickrow].Cells[TravelHistoryColumns.Information].Value = frm.Value.Trim();
-                }
-            }
-        }
-
+        
         private void selectCorrectSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //TBD removed, not sure how we are doing this now

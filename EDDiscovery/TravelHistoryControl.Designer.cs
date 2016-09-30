@@ -40,7 +40,6 @@
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.routeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enterDistanceToPreviousStarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.labelclosests = new System.Windows.Forms.Label();
@@ -134,7 +133,6 @@
             this.moveToAnotherCommanderToolStripMenuItem,
             this.addToTrilaterationToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
-            this.enterDistanceToPreviousStarToolStripMenuItem,
             this.selectCorrectSystemToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
             this.historyContextMenu.Size = new System.Drawing.Size(233, 180);
@@ -213,13 +211,6 @@
             this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
-            // 
-            // enterDistanceToPreviousStarToolStripMenuItem
-            // 
-            this.enterDistanceToPreviousStarToolStripMenuItem.Name = "enterDistanceToPreviousStarToolStripMenuItem";
-            this.enterDistanceToPreviousStarToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.enterDistanceToPreviousStarToolStripMenuItem.Text = "Enter distance to previous star";
-            this.enterDistanceToPreviousStarToolStripMenuItem.Click += new System.EventHandler(this.enterDistanceToPreviousStarToolStripMenuItem_Click);
             // 
             // selectCorrectSystemToolStripMenuItem
             // 
@@ -1207,7 +1198,6 @@
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem enterDistanceToPreviousStarToolStripMenuItem;
         private ExtendedControls.DrawnPanel buttonEDSM;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.TextBoxBorder textBoxTargetDist;

@@ -47,7 +47,7 @@
             this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.groupBox3 = new ExtendedControls.GroupBoxCustom();
             this.checkBoxFocusNewSystem = new ExtendedControls.CheckBoxCustom();
-            this.checkBox_Distances = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxUTC = new ExtendedControls.CheckBoxCustom();
             this.checkBoxOrderRowsInverted = new ExtendedControls.CheckBoxCustom();
             this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
             this.checkboxSkipSlowUpdates = new ExtendedControls.CheckBoxCustom();
@@ -61,7 +61,6 @@
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNetLogDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.checkBoxUTC = new ExtendedControls.CheckBoxCustom();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -80,9 +79,9 @@
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 391);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 345);
             this.groupBoxTheme.Name = "groupBoxTheme";
-            this.groupBoxTheme.Size = new System.Drawing.Size(426, 120);
+            this.groupBoxTheme.Size = new System.Drawing.Size(426, 166);
             this.groupBoxTheme.TabIndex = 18;
             this.groupBoxTheme.TabStop = false;
             this.groupBoxTheme.Text = "Theme";
@@ -302,14 +301,13 @@
             this.groupBox3.BorderColorScaling = 0.5F;
             this.groupBox3.Controls.Add(this.checkBoxFocusNewSystem);
             this.groupBox3.Controls.Add(this.checkBoxUTC);
-            this.groupBox3.Controls.Add(this.checkBox_Distances);
             this.groupBox3.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
             this.groupBox3.Controls.Add(this.checkboxSkipSlowUpdates);
             this.groupBox3.FillClientAreaWithAlternateColor = false;
             this.groupBox3.Location = new System.Drawing.Point(3, 217);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 168);
+            this.groupBox3.Size = new System.Drawing.Size(426, 122);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
@@ -323,7 +321,7 @@
             this.checkBoxFocusNewSystem.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxFocusNewSystem.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxFocusNewSystem.FontNerfReduction = 0.5F;
-            this.checkBoxFocusNewSystem.Location = new System.Drawing.Point(17, 87);
+            this.checkBoxFocusNewSystem.Location = new System.Drawing.Point(17, 69);
             this.checkBoxFocusNewSystem.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxFocusNewSystem.Name = "checkBoxFocusNewSystem";
             this.checkBoxFocusNewSystem.Size = new System.Drawing.Size(132, 17);
@@ -333,22 +331,22 @@
             this.checkBoxFocusNewSystem.UseVisualStyleBackColor = true;
             this.checkBoxFocusNewSystem.CheckedChanged += new System.EventHandler(this.checkBoxFocusNewSystem_CheckedChanged);
             // 
-            // checkBox_Distances
+            // checkBoxUTC
             // 
-            this.checkBox_Distances.AutoSize = true;
-            this.checkBox_Distances.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBox_Distances.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBox_Distances.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBox_Distances.FontNerfReduction = 0.5F;
-            this.checkBox_Distances.Location = new System.Drawing.Point(17, 18);
-            this.checkBox_Distances.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBox_Distances.Name = "checkBox_Distances";
-            this.checkBox_Distances.Size = new System.Drawing.Size(219, 17);
-            this.checkBox_Distances.TabIndex = 0;
-            this.checkBox_Distances.Text = "Get Distance Pairs from EDSM (Optional)";
-            this.checkBox_Distances.TickBoxReductionSize = 10;
-            this.checkBox_Distances.UseVisualStyleBackColor = true;
-            this.checkBox_Distances.CheckedChanged += new System.EventHandler(this.checkBox_Distances_CheckedChanged);
+            this.checkBoxUTC.AutoSize = true;
+            this.checkBoxUTC.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxUTC.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxUTC.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxUTC.FontNerfReduction = 0.5F;
+            this.checkBoxUTC.Location = new System.Drawing.Point(17, 92);
+            this.checkBoxUTC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxUTC.Name = "checkBoxUTC";
+            this.checkBoxUTC.Size = new System.Drawing.Size(209, 17);
+            this.checkBoxUTC.TabIndex = 0;
+            this.checkBoxUTC.Text = "Display Game time instead of local time";
+            this.checkBoxUTC.TickBoxReductionSize = 10;
+            this.checkBoxUTC.UseVisualStyleBackColor = true;
+            this.checkBoxUTC.CheckedChanged += new System.EventHandler(this.checkBoxUTC_CheckedChanged);
             // 
             // checkBoxOrderRowsInverted
             // 
@@ -357,7 +355,7 @@
             this.checkBoxOrderRowsInverted.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxOrderRowsInverted.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxOrderRowsInverted.FontNerfReduction = 0.5F;
-            this.checkBoxOrderRowsInverted.Location = new System.Drawing.Point(17, 64);
+            this.checkBoxOrderRowsInverted.Location = new System.Drawing.Point(17, 46);
             this.checkBoxOrderRowsInverted.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxOrderRowsInverted.Name = "checkBoxOrderRowsInverted";
             this.checkBoxOrderRowsInverted.Size = new System.Drawing.Size(196, 17);
@@ -373,7 +371,7 @@
             this.checkBoxEDSMLog.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxEDSMLog.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxEDSMLog.FontNerfReduction = 0.5F;
-            this.checkBoxEDSMLog.Location = new System.Drawing.Point(17, 41);
+            this.checkBoxEDSMLog.Location = new System.Drawing.Point(17, 23);
             this.checkBoxEDSMLog.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
             this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
@@ -390,7 +388,7 @@
             this.checkboxSkipSlowUpdates.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkboxSkipSlowUpdates.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkboxSkipSlowUpdates.FontNerfReduction = 0.5F;
-            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(17, 110);
+            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(182, 21);
             this.checkboxSkipSlowUpdates.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
             this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
@@ -520,23 +518,6 @@
             this.ColumnNetLogDir.MinimumWidth = 50;
             this.ColumnNetLogDir.Name = "ColumnNetLogDir";
             // 
-            // checkBoxUTC
-            // 
-            this.checkBoxUTC.AutoSize = true;
-            this.checkBoxUTC.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxUTC.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxUTC.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxUTC.FontNerfReduction = 0.5F;
-            this.checkBoxUTC.Location = new System.Drawing.Point(17, 133);
-            this.checkBoxUTC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxUTC.Name = "checkBoxUTC";
-            this.checkBoxUTC.Size = new System.Drawing.Size(209, 17);
-            this.checkBoxUTC.TabIndex = 0;
-            this.checkBoxUTC.Text = "Display Game time instead of local time";
-            this.checkBoxUTC.TickBoxReductionSize = 10;
-            this.checkBoxUTC.UseVisualStyleBackColor = true;
-            this.checkBoxUTC.CheckedChanged += new System.EventHandler(this.checkBoxUTC_CheckedChanged);
-            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -566,7 +547,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dataGridViewCommanders;
         private ExtendedControls.GroupBoxCustom groupBox3;
-        private ExtendedControls.CheckBoxCustom checkBox_Distances;
         private ExtendedControls.CheckBoxCustom checkBoxEDSMLog;
         public ExtendedControls.CheckBoxCustom checkboxSkipSlowUpdates;
         private ExtendedControls.GroupBoxCustom groupBox2;

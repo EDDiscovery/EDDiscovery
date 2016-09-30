@@ -55,9 +55,6 @@ namespace EDDiscovery2
 
         public void InitSettingsTab()
         {
-            checkBox_Distances.Enabled = false;         // disable over checked to indicate its not a user thing
-            checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
-            checkBox_Distances.Enabled = true;
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
             checkboxSkipSlowUpdates.Checked = EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates;
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
@@ -97,7 +94,6 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
             SQLiteDBClass.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
 
-            EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
@@ -265,17 +261,6 @@ namespace EDDiscovery2
             EDDConfig.Instance.KeepOnTop = checkBoxKeepOnTop.Checked;
             this.FindForm().TopMost = checkBoxKeepOnTop.Checked;
             _discoveryForm.keepOnTopChanged(checkBoxKeepOnTop.Checked);
-        }
-
-        private void checkBox_Distances_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
-
-            if (checkBox_Distances.Checked && checkBox_Distances.Enabled)
-            {
-                _discoveryForm.RequestDistanceSync();
-                MessageBox.Show("Requesting updated distances from EDSM, please wait");
-            }
         }
 
         private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
