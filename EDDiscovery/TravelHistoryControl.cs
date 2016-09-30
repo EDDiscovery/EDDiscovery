@@ -199,12 +199,11 @@ namespace EDDiscovery
         {
             currentGridRow = rw;
 
-            HistoryEntry syspos = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            _discoveryForm.history.FillEDSM(rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry); // Fill in any EDSM info we have
+
             SystemNoteClass note = rw.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
-
+            HistoryEntry syspos = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;     // reload, it may have changed
             Debug.Assert(syspos != null);
-
-            syspos.EnsureSystemEDSM();               // Lazy load of data..
 
             textBoxSystem.Text = syspos.System.name;
             
@@ -597,68 +596,19 @@ namespace EDDiscovery
 
         private void buttonSync_Click(object sender, EventArgs e)
         {
-            if (EDDiscoveryForm.EDDConfig.CurrentCommander.Name.Equals(""))
+            if (!EDDConfig.Instance.CheckCommanderEDSMAPI)
             {
-                MessageBox.Show("Please enter commander name before sending distances/ travel history to EDSM!");
+                MessageBox.Show("Please ensure a commander is selected and it has a EDSM API key set");
                 return;
             }
 
             try
             {
-                var dists = DistanceClass.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
-
-                EDSMClass edsm = new EDSMClass();
-
-                //TBD crap doing it here
-
-                foreach (var dist in dists)
-                {
-                    string json;
-
-                    if (dist.Dist > 0)
-                    {
-                        LogLine("Add distance: " + dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00") + "ly");
-                        json = edsm.SubmitDistances(EDDiscoveryForm.EDDConfig.CurrentCommander.Name, dist.NameA, dist.NameB, dist.Dist);
-                    }
-                    else
-                    {
-                        if (dist.Dist < 0)  // Can removedistance by adding negative value
-                            dist.Delete();
-                        else
-                        {
-                            dist.Status = DistancsEnum.EDDiscoverySubmitted;
-                            dist.Update();
-                        }
-                        json = null;
-                    }
-                    if (json != null)
-                    {
-                        string str = "";
-                        bool trilok;
-                        if (edsm.ShowDistanceResponse(json, out str, out trilok))
-                        {
-                            LogLine("EDSM Response " + str);
-                            dist.Status = DistancsEnum.EDDiscoverySubmitted;
-                            dist.Update();
-                        }
-                        else
-                        {
-                            LogLine("EDSM Response " + str);
-                        }
-                    }
-                }
-
-                if (EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey.Equals(""))
-                {
-                    MessageBox.Show("Please enter EDSM api key (In settings) before sending travel history to EDSM!");
-                    return;
-                }
-
                 _discoveryForm.EdsmSync.StartSync(checkBoxEDSMSyncTo.Checked, checkBoxEDSMSyncFrom.Checked, EDDConfig.Instance.DefaultMapColour);
             }
             catch (Exception ex)
             {
-                _discoveryForm.LogLine($"Distance submission failed: {ex.Message}");
+                _discoveryForm.LogLine($"EDSM Sync failed: {ex.Message}");
             }
         }
 

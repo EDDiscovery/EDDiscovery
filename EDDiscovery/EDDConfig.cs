@@ -138,6 +138,14 @@ namespace EDDiscovery2
             return ListOfCommanders[i];
         }
 
+        public bool CheckCommanderEDSMAPI
+        {
+            get
+            {
+                return CurrentCmdrID >= 0 && CurrentCommander.Name.Length > 0 && CurrentCommander.APIKey.Length > 0;
+            }
+        }
+
         public bool EDSMLog
         {
             get

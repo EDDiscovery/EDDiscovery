@@ -65,11 +65,6 @@ namespace EDDiscovery2.EDSM
                 mainForm.LogLine("EDSM sync begin");
 
                 EDSMClass edsm = new EDSMClass();
-                edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-                if (edsm.apiKey.Length < 1 || edsm.commanderName.Length < 1)
-                    return;
 
                 List<HistoryEntry> hlfsdunsyncedlist = mainForm.history.FilterByNotEDSMSyncedAndFSD;        // first entry is oldest
 
@@ -229,12 +224,10 @@ namespace EDDiscovery2.EDSM
 
         public static void SendTravelLog(HistoryEntry he) // (verified with EDSM 29/9/2016, seen UTC time being sent, and same UTC time on ESDM).
         {
-            EDSMClass edsm = new EDSMClass();
-            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-            if (edsm.apiKey.Length < 1 || edsm.commanderName.Length < 1)
+            if (!EDDConfig.Instance.CheckCommanderEDSMAPI)
                 return;
+
+            EDSMClass edsm = new EDSMClass();
 
             string errmsg;
             Task taskEDSM = Task.Factory.StartNew(() =>
@@ -246,13 +239,10 @@ namespace EDDiscovery2.EDSM
 
         public static void SendComments(string star , string note) // (verified with EDSM 29/9/2016)
         {
-            EDSMClass edsm = new EDSMClass();
-
-            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-            if (edsm.apiKey.Length < 1 || edsm.commanderName.Length < 1)
+            if (!EDDConfig.Instance.CheckCommanderEDSMAPI)
                 return;
+
+            EDSMClass edsm = new EDSMClass();
 
             Task taskEDSM = Task.Factory.StartNew(() =>
             {

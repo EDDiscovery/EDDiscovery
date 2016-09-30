@@ -10,7 +10,7 @@ using System.Text;
 
 namespace EDDiscovery
 {
-    [DebuggerDisplay("Event {EventType} {System.name} ({System.x,nq},{System.y,nq},{System.z,nq}) {EventTimeUTC}")]
+    [DebuggerDisplay("Event {EntryType} {System.name} ({System.x,nq},{System.y,nq},{System.z,nq}) {EventTimeUTC}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
     {                                   
         public int Indexno;            // for display purposes.
@@ -83,10 +83,13 @@ namespace EDDiscovery
                     newsys = new SystemClass(jl.StarSystem);
                     newsys.id_edsm = jl.EdsmID;
 
-                    SystemClass s = SystemClass.EDSMAssign(newsys, jl.Id, conn);      // has no co-ord, did we find it?
+                    SystemClass s = SystemClass.FindEDSM(newsys,conn);      // has no co-ord, did we find it?
 
-                    if (s != null)                                              // yes, use
+                    if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
+                    {                                                       // so next time we don't have to do this again..
+                        EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(jl.Id, s, s.HasCoordinate);
                         newsys = s;
+                    }
                 }
 
                 if (jfsd != null)
@@ -121,19 +124,6 @@ namespace EDDiscovery
         {  get
             { 
               return EDDiscovery.Properties.Resources.floppy;
-            }
-        }
-
-        public void EnsureSystemEDSM()        // fill in from EDSM
-        {
-            if (System.id_edsm >= 0)         // if never tried..
-            {
-                SystemClass s = SystemClass.EDSMAssign(System, Journalid);
-
-                if (s != null)
-                    System = s;
-                else
-                    System.id_edsm = -1;    // don't try again
             }
         }
 
@@ -286,8 +276,45 @@ namespace EDDiscovery
         {
             foreach (HistoryEntry he in historylist)
             {
-                if (!he.System.HasCoordinate && he.IsFSDJump)
-                    he.EnsureSystemEDSM();        // fill in from EDSM if possible - only occurs
+                if ( he.IsFSDJump )
+                    FillEDSM(he);
+            }
+        }
+
+        public void FillEDSM(HistoryEntry syspos)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        {
+            if (syspos.System.status == SystemStatusEnum.EDSC)
+                return;
+
+            List<HistoryEntry> alsomatching = new List<HistoryEntry>();
+
+            foreach (HistoryEntry he in historylist)       // list of systems in historylist using the same system object
+            {
+                if (Object.ReferenceEquals(he,syspos))
+                    alsomatching.Add(he);
+            }
+
+            SystemClass s = null;
+            if (syspos.System.id_edsm >= 0)                 // if never tried..
+                s = SystemClass.FindEDSM(syspos.System);
+
+            if (s != null)
+            {
+                foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
+                {
+                    bool updateedsmid = he.System.id_edsm <= 0;
+                    bool updatepos = he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump && !syspos.System.HasCoordinate && s.HasCoordinate;
+
+                    if ( updatepos || updateedsmid )
+                        EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(he.Journalid, s, updatepos);
+
+                    he.System = s;
+                }
+            }
+            else
+            {
+                foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
+                    he.System.id_edsm = -1;                     // can't do it
             }
         }
 

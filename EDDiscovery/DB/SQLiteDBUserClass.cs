@@ -265,7 +265,7 @@ namespace EDDiscovery.DB
             using (SQLiteConnectionOld conn = new SQLiteConnectionOld())
             {
                 //                                                0      1      2
-                using (DbCommand cmd = conn.CreateCommand("SELECT NameA, NameB, Dist FROM Distances WHERE Status = 3"))
+                using (DbCommand cmd = conn.CreateCommand("SELECT NameA, NameB, Dist FROM Distances WHERE Status >= 3"))
                 {
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
@@ -310,23 +310,20 @@ namespace EDDiscovery.DB
                             string tluname = (string)array[2];          // 2 is in terms of its name.. look it up
                             EDDiscovery2.DB.TravelLogUnit tlu = tlus.Find(x => x.Name.Equals(tluname, StringComparison.InvariantCultureIgnoreCase));
 
-                            if (tlu != null)                            // found it, assign to slot 15 the id.
+                            array[15] = (tlu != null) ? (long)tlu.id : 0;      // even if we don't find it, tlu may be screwed up, still want to import
+
+                            array[16] = null;
+                            if (prev.Length>0 && dists.ContainsKey((string)array[0]))
                             {
-                                array[15] = (long)tlu.id;
-
-                                array[16] = null;
-                                if (dists.ContainsKey((string)array[0]))
+                                Dictionary<string, double> _dists = dists[(string)array[0]];
+                                if (_dists.ContainsKey(prev))
                                 {
-                                    Dictionary<string, double> _dists = dists[(string)array[0]];
-                                    if (_dists.ContainsKey(prev))
-                                    {
-                                        array[16] = _dists[prev];
-                                    }
+                                    array[16] = _dists[prev];
                                 }
-
-                                ehl.Add(array);
-                                prev = (string)array[0];
                             }
+
+                            ehl.Add(array);
+                            prev = (string)array[0];
                         }
                     }
                 }
