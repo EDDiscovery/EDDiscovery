@@ -332,23 +332,26 @@ namespace EDDiscovery2._3DMap
             string flightdir =  Path.Combine(Tools.GetAppDataDirectory(), "Flights");
             DirectoryInfo dirInfo = new DirectoryInfo(flightdir);
 
-            try
+            if (dirInfo.Exists)
             {
-                var sortedfiles = dirInfo.EnumerateFiles("*.flight", SearchOption.AllDirectories).OrderByDescending(x => x.LastWriteTime).Take(15).ToList();
-
-                foreach( FileInfo file in sortedfiles )
+                try
                 {
-                    ToolStripMenuItem tsmi = new ToolStripMenuItem();
-                    tsmi.Text = "Load "  + Path.GetFileNameWithoutExtension(file.FullName);
-                    tsmi.Size = new Size(195, 22);
-                    tsmi.Click += new System.EventHandler(ab);
-                    tsmi.Tag = file.FullName;
-                    tsmi.Image = image;
-                    tsb.DropDownItems.Add(tsmi);
+                    var sortedfiles = dirInfo.EnumerateFiles("*.flight", SearchOption.AllDirectories).OrderByDescending(x => x.LastWriteTime).Take(15).ToList();
+
+                    foreach (FileInfo file in sortedfiles)
+                    {
+                        ToolStripMenuItem tsmi = new ToolStripMenuItem();
+                        tsmi.Text = "Load " + Path.GetFileNameWithoutExtension(file.FullName);
+                        tsmi.Size = new Size(195, 22);
+                        tsmi.Click += new System.EventHandler(ab);
+                        tsmi.Tag = file.FullName;
+                        tsmi.Image = image;
+                        tsb.DropDownItems.Add(tsmi);
+                    }
                 }
-            }
-            catch
-            {
+                catch
+                {
+                }
             }
         }
 
