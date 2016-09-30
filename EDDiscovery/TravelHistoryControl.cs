@@ -126,7 +126,9 @@ namespace EDDiscovery
             if ( snc == null && item.IsFSDJump )
                 snc = SystemNoteClass.GetNoteOnSystem(item.System.name);
 
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (snc != null) ? snc.Note : "" };
+            //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
+
+            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription , (snc != null) ? snc.Note : "" };
 
             int rownr;
             if (insert)
