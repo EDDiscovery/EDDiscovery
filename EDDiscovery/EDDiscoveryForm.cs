@@ -658,8 +658,6 @@ namespace EDDiscovery
                     travelHistoryControl1.LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
                 }
 
-                Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
-
                 imageHandler1.StartWatcher();
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 

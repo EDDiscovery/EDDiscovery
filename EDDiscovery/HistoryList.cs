@@ -274,17 +274,28 @@ namespace EDDiscovery
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid
         {
-            foreach (HistoryEntry he in historylist)
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
-                if ( he.IsFSDJump )
-                    FillEDSM(he);
+                foreach (HistoryEntry he in historylist)
+                {
+                    if (he.IsFSDJump && !he.System.HasCoordinate)   // try and load ones without position.. if its got pos we are happy
+                        FillEDSM(he, cn);
+                }
             }
         }
 
-        public void FillEDSM(HistoryEntry syspos)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || syspos.System.id_edsm == -1 )  // if set already, or we tried and failed..
                 return;
+
+            bool closeit = false;
+
+            if (conn == null)
+            {
+                closeit = true;
+                conn = new SQLiteConnectionSystem();
+            }
 
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
@@ -293,10 +304,10 @@ namespace EDDiscovery
                 if (Object.ReferenceEquals(he.System,syspos.System))
                     alsomatching.Add(he);
             }
-
+            
             SystemClass s = null;
             if (syspos.System.id_edsm >= 0)                 // if never tried..
-                s = SystemClass.FindEDSM(syspos.System);
+                s = SystemClass.FindEDSM(syspos.System,conn);
 
             if (s != null)
             {
@@ -316,6 +327,9 @@ namespace EDDiscovery
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                     he.System.id_edsm = -1;                     // can't do it
             }
+
+            if (closeit && conn != null)
+                conn.Dispose();
         }
 
         public void CalculateSqDistances(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar)
