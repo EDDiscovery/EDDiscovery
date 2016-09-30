@@ -303,7 +303,7 @@ namespace EDDiscovery
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                 {
                     bool updateedsmid = he.System.id_edsm <= 0;
-                    bool updatepos = he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump && !syspos.System.HasCoordinate && s.HasCoordinate;
+                    bool updatepos = (he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump || he.EntryType == EliteDangerous.JournalTypeEnum.Location ) && !syspos.System.HasCoordinate && s.HasCoordinate;
 
                     if ( updatepos || updateedsmid )
                         EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(he.Journalid, s, updatepos);
