@@ -1219,18 +1219,69 @@ namespace EDDiscovery
         
         private void selectCorrectSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TBD removed, not sure how we are doing this now
-            //using (Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(this, rightclicksystem))
-            //{
-                //DialogResult result = form.ShowDialog();
-                //if (result == DialogResult.OK)
-                //{
-                    //rightclicksystem.id_edsm_assigned = form.AssignedEdsmId;
-                    //rightclicksystem.curSystem = form.AssignedSystem;
-                    //rightclicksystem.Update();
-                    //_discoveryForm.RefreshHistoryAsync();
-                //}
-            //}
+            int firstrow = rightclickrow;
+            int lastrow = rightclickrow;
+            EliteDangerous.JournalEvents.JournalLocOrJump journalent = null;
+            List<HistoryEntry> entries = new List<HistoryEntry>();
+            List<JournalEntry> jents = new List<JournalEntry>();
+
+            for (int i = rightclickrow - 1; i >= 0; i--)
+            {
+                var ent = (HistoryEntry)dataGridViewTravel.Rows[i].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                if (ent.System.id_edsm != rightclicksystem.System.id_edsm || ent.EntryType == JournalTypeEnum.Died)
+                    break;
+                firstrow = i;
+                if (ent.EntryType == JournalTypeEnum.FSDJump)
+                    break;
+            }
+
+            for (int i = rightclickrow + 1; i < dataGridViewTravel.RowCount; i++)
+            {
+                var ent = (HistoryEntry)dataGridViewTravel.Rows[i].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                if (ent.System.id_edsm != rightclicksystem.System.id_edsm || ent.EntryType == JournalTypeEnum.FSDJump)
+                    break;
+                lastrow = i;
+                if (ent.EntryType == JournalTypeEnum.Died)
+                    break;
+            }
+
+            using (SQLiteConnectionUserUTC conn = new SQLiteConnectionUserUTC())
+            {
+                for (int i = firstrow; i <= lastrow; i++)
+                {
+                    var entry = (HistoryEntry)dataGridViewTravel.Rows[i].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                    entries.Add(entry);
+                    jents.Add(JournalEntry.Get(entry.Journalid, conn));
+                }
+            }
+
+            journalent = jents.OfType<EliteDangerous.JournalEvents.JournalLocOrJump>().FirstOrDefault();
+
+            if (journalent == null)
+            {
+                MessageBox.Show("Could not find Location or FSDJump entry associated with selected journal entry");
+                return;
+            }
+
+            using (Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(this, journalent))
+            {
+                DialogResult result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    foreach (var entry in entries)
+                    {
+                        entry.System = form.AssignedSystem;
+                    }
+
+                    foreach (var jent in jents)
+                    {
+                        jent.EdsmID = (int)form.AssignedEdsmId;
+                        jent.Update();
+                    }
+
+                    _discoveryForm.RefreshHistoryAsync();
+                }
+            }
         }
 
         private void routeToolStripMenuItem_Click(object sender, EventArgs e)
