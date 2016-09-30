@@ -778,7 +778,7 @@ namespace EDDiscovery
                     travelHistoryControl1.LogLine("Indexing systems table");
                     SQLiteDBSystemClass.CreateSystemsTableIndexes();
 
-                    //PerformEDDBFullSync(cancelRequested, reportProgress);
+                    PerformEDDBFullSync(cancelRequested, reportProgress);
                     performhistoryrefresh = true;
                 }
             }
@@ -935,6 +935,40 @@ namespace EDDiscovery
         {
             AsyncPerformSync();
         }
+
+        private void PerformEDDBFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
+        {
+            try
+            {
+                travelHistoryControl1.LogLine("Get systems from EDDB.");
+
+                string systemFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems.json");
+                bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v4/systems_populated.json", systemFileName);
+
+                if (success)
+                {
+                    if (cancelRequested())
+                        return;
+
+                    travelHistoryControl1.LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
+
+                    long number = SystemClass.ParseEDDBUpdateSystems(systemFileName, travelHistoryControl1.LogLineHighlight);
+
+                    travelHistoryControl1.LogLine("Local database updated with EDDB data, " + number + " systems updated");
+                    SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
+                }
+                else
+                    travelHistoryControl1.LogLineHighlight("Failed to download EDDB Systems. Will try again next run.");
+
+                GC.Collect();
+                performeddbsync = false;
+            }
+            catch (Exception ex)
+            {
+                travelHistoryControl1.LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
+            }
+        }
+
 
         #endregion
 
