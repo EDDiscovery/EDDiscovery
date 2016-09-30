@@ -332,12 +332,6 @@
     <Compile Include="Forms\BookmarkForm.Designer.cs">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DistanceForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DistanceForm.Designer.cs">
-      <DependentUpon>DistanceForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\SplashForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -428,11 +422,8 @@
     <Compile Include="DB\ISystem.cs" />
     <Compile Include="DB\InMemory\SystemClass.cs" />
     <Compile Include="DB\IVisitedSystems.cs" />
-    <Compile Include="DB\StationClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\WantedSystemClass.cs" />
-    <Compile Include="EDDB\Commodity.cs" />
-    <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
     <Compile Include="EDDTheme.cs" />
@@ -450,7 +441,6 @@
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
     <Compile Include="DataGridViewSorter.cs" />
-    <Compile Include="DB\DistanceClass.cs" />
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
@@ -631,9 +621,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TimedMessage.resx">
       <DependentUpon>TimedMessage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DistanceForm.resx">
-      <DependentUpon>DistanceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>

@@ -1,5 +1,4 @@
 ﻿using EDDiscovery.DB;
-using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
