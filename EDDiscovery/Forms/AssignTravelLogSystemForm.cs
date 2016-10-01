@@ -44,7 +44,6 @@ namespace EDDiscovery.Forms
         public long AssignedEdsmId { get { return _linkSystem == null ? 0 : _linkSystem.id_edsm; } }
         public ISystem AssignedSystem { get { return _linkSystem; } }
 
-        private TravelHistoryControl _travelHistory;
         private ISystem _linkSystem;
         private List<ISystem> _alternatives;
         private string _namestatus;
@@ -55,7 +54,6 @@ namespace EDDiscovery.Forms
         public AssignTravelLogSystemForm(TravelHistoryControl travelHistory, EliteDangerous.JournalEvents.JournalLocOrJump vsc)
         {
             InitializeComponent();
-            this._travelHistory = travelHistory;
             this._travelLogEntry = vsc;
             SystemClass.GetSystemAndAlternatives(vsc, out _linkSystem, out _alternatives, out _namestatus);
 
