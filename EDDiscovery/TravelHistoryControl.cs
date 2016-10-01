@@ -1219,40 +1219,48 @@ namespace EDDiscovery
         
         private void selectCorrectSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int firstrow = rightclickrow;
-            int lastrow = rightclickrow;
-            EliteDangerous.JournalEvents.JournalLocOrJump journalent = null;
-            List<HistoryEntry> entries = new List<HistoryEntry>();
-            List<JournalEntry> jents = new List<JournalEntry>();
+            List<JournalEntry> jents = JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).OrderBy(j => j.EventTimeUTC).ThenBy(j => j.Id).ToList();
+            int selindex = jents.FindIndex(j => j.Id == rightclicksystem.Journalid);
+            int firstrow = selindex;
+            int lastrow = selindex;
 
-            for (int i = rightclickrow - 1; i >= 0; i--)
+            if (selindex < 0)
             {
-                var ent = (HistoryEntry)dataGridViewTravel.Rows[i].Cells[TravelHistoryColumns.HistoryTag].Tag;
-                if (ent.System.id_edsm != rightclicksystem.System.id_edsm || ent.EntryType == JournalTypeEnum.Died)
-                    break;
-                firstrow = i;
-                if (ent.EntryType == JournalTypeEnum.FSDJump)
-                    break;
+                // Selected entry is not in history for commander - abort.
+                return;
+            }
+
+            EliteDangerous.JournalEvents.JournalLocOrJump journalent = null;
+
+            if (jents[selindex].EventTypeID != JournalTypeEnum.FSDJump)
+            {
+                for (int i = selindex - 1; i >= 0; i--)
+                {
+                    var jent = jents[i];
+                    if (jent.EdsmID != rightclicksystem.System.id_edsm || jent.EventTypeID == JournalTypeEnum.Died)
+                        break;
+                    firstrow = i;
+                    if (jent.EventTypeID == JournalTypeEnum.FSDJump)
+                        break;
+                }
             }
 
             for (int i = rightclickrow + 1; i < dataGridViewTravel.RowCount; i++)
             {
-                var ent = (HistoryEntry)dataGridViewTravel.Rows[i].Cells[TravelHistoryColumns.HistoryTag].Tag;
-                if (ent.System.id_edsm != rightclicksystem.System.id_edsm || ent.EntryType == JournalTypeEnum.FSDJump)
+                var jent = jents[i];
+                if (jent.EdsmID != rightclicksystem.System.id_edsm || jent.EventTypeID == JournalTypeEnum.FSDJump)
                     break;
                 lastrow = i;
-                if (ent.EntryType == JournalTypeEnum.Died)
+                if (jent.EventTypeID == JournalTypeEnum.Died)
                     break;
             }
 
-            using (SQLiteConnectionUserUTC conn = new SQLiteConnectionUserUTC())
+            var _jents = jents;
+            jents = new List<JournalEntry>();
+
+            for (int i = firstrow; i <= lastrow; i++)
             {
-                for (int i = firstrow; i <= lastrow; i++)
-                {
-                    var entry = (HistoryEntry)dataGridViewTravel.Rows[i].Cells[TravelHistoryColumns.HistoryTag].Tag;
-                    entries.Add(entry);
-                    jents.Add(JournalEntry.Get(entry.Journalid, conn));
-                }
+                jents.Add(_jents[i]);
             }
 
             journalent = jents.OfType<EliteDangerous.JournalEvents.JournalLocOrJump>().FirstOrDefault();
@@ -1268,11 +1276,6 @@ namespace EDDiscovery
                 DialogResult result = form.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    foreach (var entry in entries)
-                    {
-                        entry.System = form.AssignedSystem;
-                    }
-
                     foreach (var jent in jents)
                     {
                         jent.EdsmID = (int)form.AssignedEdsmId;
