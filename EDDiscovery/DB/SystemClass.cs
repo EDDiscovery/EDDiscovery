@@ -577,11 +577,11 @@ namespace EDDiscovery.DB
 
         // Systems in data dumps are now sorted by modify time ascending, so
         // the last inserted system should be the most recently modified system.
-       
-        public static DateTime GetLastSystemModifiedTimeFastly()
+        //
+        // The beta.edsm.net dumps are currently still in coordinate order, so
+        // anything using this should check whether the last dump was ordered by date
+        public static DateTime GetLastSystemModifiedTimeFast()
         {
-            Debug.Assert(false);  //ROb: Broken.. no its not.  have evidence from EDSM that the updatetimestamp can be out of order than the ID
-
             DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
 
             try
@@ -1048,22 +1048,22 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsString(string json, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StringReader sr = new StringReader(json))
-                return ParseEDSMUpdateSystemsStream(sr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
+                return ParseEDSMUpdateSystemsStream(sr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
-                return ParseEDSMUpdateSystemsStream(sr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
+                return ParseEDSMUpdateSystemsStream(sr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsStream(TextReader sr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        public static long ParseEDSMUpdateSystemsStream(TextReader sr, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             using (JsonTextReader jr = new JsonTextReader(sr))
-                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
+                return ParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
         }
 
         private static Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> GetEdsmSystemsLite(SQLiteConnectionSystem cn)
@@ -1108,7 +1108,7 @@ namespace EDDiscovery.DB
             return systemsByEdsmId;
         }
 
-        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionSystem cn, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, SQLiteConnectionSystem cn, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             DateTime maxdate;
 
@@ -1245,6 +1245,8 @@ namespace EDDiscovery.DB
 
                                 if (updatedate > maxdate)
                                     maxdate = updatedate;
+                                else if (updatedate < maxdate - TimeSpan.FromHours(1))
+                                    outoforder = true;
 
                                 EDDiscovery2.DB.InMemory.SystemClassBase dbsys = null;
 
@@ -1367,11 +1369,11 @@ namespace EDDiscovery.DB
             return updatecount + insertcount;
         }
 
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())  // open the db
             {
-                return DoParseEDSMUpdateSystemsReader(jr, ref date, cn, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
+                return DoParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, cn, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
             }
         }
 
