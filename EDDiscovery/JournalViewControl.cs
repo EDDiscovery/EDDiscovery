@@ -68,8 +68,9 @@ namespace EDDiscovery
         {
             string detail = "";
             if (item.EventDescription.Length > 0)
-                detail = item.EventDescription + Environment.NewLine;
-            detail += item.EventDetailedInfo;
+                detail = item.EventDescription;
+            if ( item.EventDetailedInfo.Length>0)
+                detail += Environment.NewLine + item.EventDetailedInfo;
 
             object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail };
 

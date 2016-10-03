@@ -107,7 +107,7 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme61);
             _discoveryForm.theme.UpdatePatch(panel_theme62);
             _discoveryForm.theme.UpdatePatch(panel_theme70);
-            textBox_Font.Text = _discoveryForm.theme.FontName;
+            textBox_Font.Text = _discoveryForm.theme.FontName + " " + _discoveryForm.theme.FontSize + " points";
             checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
         }
 
