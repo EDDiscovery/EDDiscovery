@@ -126,6 +126,7 @@ namespace EDDiscovery
 
             ProcessCommandLineOptions();
 
+
             string logpath = "";
             try
             {
@@ -1217,7 +1218,10 @@ namespace EDDiscovery
         {
             try
             {
-                Process.Start(EliteDangerous.EDJournalClass.GetDefaultJournalDir());
+                string cmdrfolder = EDDConfig.Instance.ListOfCommanders[EDDConfig.Instance.CurrentCmdrID].NetLogDir;
+                if (cmdrfolder.Length < 1)
+                    cmdrfolder = EliteDangerous.EDJournalClass.GetDefaultJournalDir();
+                Process.Start(cmdrfolder);
             }
             catch (Exception ex)
             {
