@@ -109,6 +109,7 @@
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -133,36 +134,37 @@
             this.moveToAnotherCommanderToolStripMenuItem,
             this.addToTrilaterationToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
-            this.selectCorrectSystemToolStripMenuItem});
+            this.selectCorrectSystemToolStripMenuItem,
+            this.toolStripMenuItemStartStop});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 180);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 202);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
             // 
             this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
-            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
             this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
             // 
             // starMapColourToolStripMenuItem
             // 
             this.starMapColourToolStripMenuItem.Name = "starMapColourToolStripMenuItem";
-            this.starMapColourToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.starMapColourToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.starMapColourToolStripMenuItem.Text = "Star Map Colour...";
             this.starMapColourToolStripMenuItem.Click += new System.EventHandler(this.starMapColourToolStripMenuItem_Click);
             // 
             // hideSystemToolStripMenuItem
             // 
             this.hideSystemToolStripMenuItem.Name = "hideSystemToolStripMenuItem";
-            this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.hideSystemToolStripMenuItem.Text = "Hide system";
             this.hideSystemToolStripMenuItem.Click += new System.EventHandler(this.hideSystemToolStripMenuItem_Click);
             // 
             // moveToAnotherCommanderToolStripMenuItem
             // 
             this.moveToAnotherCommanderToolStripMenuItem.Name = "moveToAnotherCommanderToolStripMenuItem";
-            this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.moveToAnotherCommanderToolStripMenuItem.Text = "Move to another Commander";
             this.moveToAnotherCommanderToolStripMenuItem.Click += new System.EventHandler(this.moveToAnotherCommanderToolStripMenuItem_Click);
             // 
@@ -174,7 +176,7 @@
             this.bothToolStripMenuItem,
             this.routeToolStripMenuItem});
             this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
-            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.addToTrilaterationToolStripMenuItem.Text = "Add to ...";
             // 
             // trilaterationToolStripMenuItem
@@ -208,14 +210,14 @@
             // viewOnEDSMToolStripMenuItem
             // 
             this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
-            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
             // selectCorrectSystemToolStripMenuItem
             // 
             this.selectCorrectSystemToolStripMenuItem.Name = "selectCorrectSystemToolStripMenuItem";
-            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.selectCorrectSystemToolStripMenuItem.Text = "Assign new system";
             this.selectCorrectSystemToolStripMenuItem.Click += new System.EventHandler(this.selectCorrectSystemToolStripMenuItem_Click);
             // 
@@ -1096,6 +1098,13 @@
             this.TopPanel.Size = new System.Drawing.Size(594, 32);
             this.TopPanel.TabIndex = 26;
             // 
+            // toolStripMenuItemStartStop
+            // 
+            this.toolStripMenuItemStartStop.Name = "toolStripMenuItemStartStop";
+            this.toolStripMenuItemStartStop.Size = new System.Drawing.Size(293, 22);
+            this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
+            this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1210,5 +1219,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private ExtendedControls.ButtonExt buttonFilter;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
     }
 }

@@ -449,6 +449,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap startflag {
+            get {
+                object obj = ResourceManager.GetObject("startflag", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Stationenter {
             get {
                 object obj = ResourceManager.GetObject("Stationenter", resourceCulture);
@@ -472,6 +482,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap stellaremnant {
             get {
                 object obj = ResourceManager.GetObject("stellaremnant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stopflag {
+            get {
+                object obj = ResourceManager.GetObject("stopflag", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

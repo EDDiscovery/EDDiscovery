@@ -61,7 +61,6 @@
             this._syncWorker = new System.ComponentModel.BackgroundWorker();
             this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._refreshWorker = new System.ComponentModel.BackgroundWorker();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
@@ -337,13 +336,6 @@
             // 
             this.edsmRefreshTimer.Interval = 900000;
             this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
-            // 
-            // reloadAllLogsForCurrentCommanderToolStripMenuItem
-            // 
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Name = "reloadAllLogsForCurrentCommanderToolStripMenuItem";
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(277, 22);
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Text = "Reload all logs for current commander";
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.reloadAllLogsForCurrentCommanderToolStripMenuItem_Click);
             // 
             // _refreshWorker
             // 
@@ -679,7 +671,6 @@
         private System.ComponentModel.BackgroundWorker _syncWorker;
         private System.ComponentModel.BackgroundWorker _checkSystemsWorker;
         private System.Windows.Forms.Timer edsmRefreshTimer;
-        private System.Windows.Forms.ToolStripMenuItem reloadAllLogsForCurrentCommanderToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageJournal;
         private JournalViewControl journalViewControl1;
         private System.ComponentModel.BackgroundWorker _refreshWorker;

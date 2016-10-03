@@ -1430,20 +1430,12 @@ namespace EDDiscovery
         }
 
 
-        private void reloadAllLogsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RefreshHistoryAsync(forceReload: true);
-        }
+        
 #endregion
 
 #region Update Views with new commander 
 
-        private class RefreshHistoryParameters
-        {
-            public bool ForceReload;
-        }
-
-        public void RefreshHistoryAsync(bool forceReload = false)
+        public void RefreshHistoryAsync()
         {
             if (PendingClose)
             {
@@ -1459,11 +1451,11 @@ namespace EDDiscovery
 
                     journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
-                    _refreshWorker.RunWorkerAsync(new RefreshHistoryParameters { ForceReload = forceReload });
+                    _refreshWorker.RunWorkerAsync();
                 }
                 else
                 {
-                    TransferToFrontEnd();
+                    TransferToFrontEnd(false);              // hidden systems.. don't bother doing any edsm checks
                 }
             }
         }
@@ -1478,8 +1470,6 @@ namespace EDDiscovery
             if (DisplayedCommander >= 0)
             {
                 var worker = (BackgroundWorker)sender;
-                RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
-                bool forceReload = param.ForceReload;
 
                 journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
 
@@ -1504,7 +1494,7 @@ namespace EDDiscovery
                     travelHistoryControl1.CheckCommandersListBox();             // in case a new commander has been detected
                     settings.UpdateCommandersListBox();
 
-                    TransferToFrontEnd();
+                    TransferToFrontEnd(true);
                     ReportProgress(-1, "");
                     travelHistoryControl1.LogLine("Refresh Complete." );
                 }
@@ -1525,7 +1515,12 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        private void TransferToFrontEnd()
+        public void RefreshFrontEnd()           // this just does another fetch and redisplay, does not check log files, or edsm systems
+        {
+            TransferToFrontEnd(false);
+        }
+
+        private void TransferToFrontEnd(bool checkedsm)
         {
             List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
 
@@ -1538,7 +1533,7 @@ namespace EDDiscovery
                 HistoryEntry prev = null;
                 foreach (EliteDangerous.JournalEntry je in jlist)
                 {
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, conn);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, checkedsm, conn);
                     prev = he;
                     history.Add(he);
                 }
@@ -1562,7 +1557,7 @@ namespace EDDiscovery
 
             if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
             {
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast);
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast, true);
                 history.Add(he);
 
                 travelHistoryControl1.AddNewEntry(he);

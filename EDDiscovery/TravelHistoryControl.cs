@@ -92,7 +92,8 @@ namespace EDDiscovery
 
         public void Display()
         {
-            currentGridRow = null;
+            int rowno = (dataGridViewTravel.CurrentCell != null) ? dataGridViewTravel.CurrentCell.RowIndex : 0;
+            int cellno = (dataGridViewTravel.CurrentCell != null) ? dataGridViewTravel.CurrentCell.ColumnIndex : 0;
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
@@ -107,10 +108,16 @@ namespace EDDiscovery
                 AddNewHistoryRow(false, result[ii]);      // for every one in filter, add a row.
             }
 
-            if (dataGridViewTravel.Rows.Count>0)
-                ShowSystemInformation(dataGridViewTravel.Rows[0]);
-
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
+
+            if (dataGridViewTravel.Rows.Count > 0)
+            {
+                rowno = Math.Min(rowno, dataGridViewTravel.Rows.Count - 1);
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[cellno];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                ShowSystemInformation(dataGridViewTravel.Rows[rowno]);
+            }
+            else
+                currentGridRow = null;
 
             RedrawSummary();
             RefreshTargetInfo();
@@ -624,7 +631,7 @@ namespace EDDiscovery
 
         public static void PaintEventColumn( DataGridView grid, DataGridViewRowPostPaintEventArgs e, 
                                              int totalentries, HistoryEntry he , 
-                                           int hpos, int colwidth , bool showfsdmapcolour )
+                                             int hpos, int colwidth , bool showfsdmapcolour )
         {
             string rowIdx; 
 
@@ -646,6 +653,8 @@ namespace EDDiscovery
                 e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br , headerBounds, centerFormat);
 
             int noicons = (he.IsFSDJump && showfsdmapcolour) ? 2 : 1;
+            if (he.StartMarker || he.StopMarker)
+                noicons++;
 
             int padding = 4;
             int size = 18;
@@ -662,7 +671,15 @@ namespace EDDiscovery
                 {
                     e.Graphics.FillEllipse(b, new Rectangle(hstart+2, top+2, size-4, size-4));
                 }
+
+                hstart += size + padding;
             }
+
+            if (he.StartMarker)
+                e.Graphics.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(hstart, top, size, size));
+            else if (he.StopMarker)
+                e.Graphics.DrawImage(EDDiscovery.Properties.Resources.stopflag, new Rectangle(hstart, top, size, size));
+
         }
 
         private void buttonEDDB_Click(object sender, EventArgs e)
@@ -1019,7 +1036,6 @@ namespace EDDiscovery
 
         #region TravelHistoryRightClick
 
-
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
             if (dataGridViewTravel.SelectedCells.Count == 0)      // need something selected  stops context menu opening on nothing..
@@ -1301,6 +1317,15 @@ namespace EDDiscovery
             }
 
             _discoveryForm.savedRouteExpeditionControl1.AppendRows(toAdd.Select(v => v.System.name).ToArray());
+        }
+
+        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                _discoveryForm.history.SetStartStop(rightclicksystem);
+                _discoveryForm.RefreshFrontEnd();                                   // which will cause DIsplay to be called as some point
+            }
         }
 
 
