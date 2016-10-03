@@ -46,6 +46,9 @@ namespace EDDiscovery
 
         public void Display()
         {
+            int rowno = (dataGridViewJournal.CurrentCell != null) ? dataGridViewJournal.CurrentCell.RowIndex : 0;
+            int cellno = (dataGridViewJournal.CurrentCell != null) ? dataGridViewJournal.CurrentCell.ColumnIndex : 0;
+
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(_discoveryForm.history); 
@@ -60,6 +63,12 @@ namespace EDDiscovery
             }
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
+
+            if (dataGridViewJournal.Rows.Count > 0)
+            {
+                rowno = Math.Min(rowno, dataGridViewJournal.Rows.Count - 1);
+                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[cellno];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+            }
 
             dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
         }

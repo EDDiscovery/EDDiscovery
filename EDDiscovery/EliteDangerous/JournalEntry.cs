@@ -228,6 +228,7 @@ namespace EDDiscovery.EliteDangerous
         EDSM = 0x01,
         EDDN = 0x02,
         StartMarker = 0x0100,           // measure distance start pos marker
+        StopMarker = 0x0200,            // measure distance stop pos marker
     };
 
     [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmId} C {CommanderId}")]
@@ -250,29 +251,10 @@ namespace EDDiscovery.EliteDangerous
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
         public string EventDataString { get { return jEventData.ToString(); } }     // Get only, functions will modify them to add additional data on
 
-        public bool SyncedEDSM
-        {
-            get
-            {
-                return (Synced & (int)SyncFlags.EDSM) !=0;
-            }
-        }
-
-        public bool SyncedEDDN
-        {
-            get
-            {
-                return (Synced & (int)SyncFlags.EDDN) != 0;
-            }
-        }
-
-        public bool StartMarker
-        {
-            get
-            {
-                return (Synced & (int)SyncFlags.StartMarker) != 0;
-            }
-        }
+        public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
+        public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
+        public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
+        public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
 
 
         public virtual void FillInformation(out string summary, out string info, out string detailed)

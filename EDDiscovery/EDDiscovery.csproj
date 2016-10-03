@@ -591,6 +591,8 @@
     <None Include="Resources\textsent.png" />
     <None Include="Resources\textreceived.png" />
     <None Include="Resources\scan.png" />
+    <None Include="Resources\stopflag.png" />
+    <None Include="Resources\startflag.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
