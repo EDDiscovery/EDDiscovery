@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.DB;
 using EDDiscovery.Controls;
+using EDDiscovery2.EDSM;
 
 namespace EDDiscovery
 {
@@ -37,8 +38,9 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
             dataGridViewJournal.MakeDoubleBuffered();
-            dataGridViewJournal.Columns[JournalHistoryColumns.Text].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            //does not seem to work well - keep for ref. dataGridViewJournal.Columns[JournalHistoryColumns.Text].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            //dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
             cfs.Changed += EventFilterChanged;
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, "JournalTimeHistory");
@@ -51,7 +53,7 @@ namespace EDDiscovery
 
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-            List<HistoryEntry> result = filter.Filter(_discoveryForm.history); 
+            List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
 
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString("JournalHistoryControlEventFilter", "All"));
 
@@ -64,10 +66,13 @@ namespace EDDiscovery
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
+            dataGridViewJournal.AutoResizeRows();
             if (dataGridViewJournal.Rows.Count > 0)
             {
                 rowno = Math.Min(rowno, dataGridViewJournal.Rows.Count - 1);
                 dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[cellno];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                dataGridViewJournal.FirstDisplayedScrollingRowIndex = rowno;
+                System.Diagnostics.Trace.WriteLine(string.Format("Cell {0} {1}", rowno, cellno));
             }
 
             dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
@@ -78,7 +83,7 @@ namespace EDDiscovery
             string detail = "";
             if (item.EventDescription.Length > 0)
                 detail = item.EventDescription;
-            if ( item.EventDetailedInfo.Length>0)
+            if (item.EventDetailedInfo.Length > 0)
                 detail += Environment.NewLine + item.EventDetailedInfo;
 
             object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail };
@@ -158,8 +163,8 @@ namespace EDDiscovery
             {
                 Collapse(ref delta, JournalHistoryColumns.Text);         // pick columns on preference list to shrink
                 Collapse(ref delta, JournalHistoryColumns.Event);         // pick columns on preference list to shrink
-                Collapse(ref delta, JournalHistoryColumns.Time);         
-                Collapse(ref delta, JournalHistoryColumns.Type);         
+                Collapse(ref delta, JournalHistoryColumns.Time);
+                Collapse(ref delta, JournalHistoryColumns.Type);
             }
             else
                 dataGridViewJournal.Columns[JournalHistoryColumns.Text].Width += delta;   // note is used to fill out columns
@@ -224,7 +229,7 @@ namespace EDDiscovery
             DataGridView grid = sender as DataGridView;
             TravelHistoryControl.PaintEventColumn(sender as DataGridView, e,
                 _discoveryForm.history.Count, (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag,
-                grid.RowHeadersWidth + grid.Columns[0].Width, grid.Columns[1].Width , false);
+                grid.RowHeadersWidth + grid.Columns[0].Width, grid.Columns[1].Width, false);
         }
 
         #endregion
@@ -243,6 +248,92 @@ namespace EDDiscovery
                 DataGridViewSorter.DataGridSort(dataGridViewJournal, e.ColumnIndex);
             }
 
+        }
+
+        private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            if (!_discoveryForm.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
+                _discoveryForm.TravelControl.buttonMap_Click(sender, e);
+            this.Cursor = Cursors.Default;
+
+            if (_discoveryForm.Map.Is3DMapsRunning)             // double check here! for paranoia.
+            {
+                if (_discoveryForm.Map.MoveToSystem(rightclicksystem.System))
+                    _discoveryForm.Map.Show();
+            }
+        }
+
+        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            EDSMClass edsm = new EDSMClass();
+            long? id_edsm = rightclicksystem.System?.id_edsm;
+
+            if (id_edsm == 0)
+            {
+                id_edsm = null;
+            }
+
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
+                _discoveryForm.LogLineHighlight("System could not be found - has not been synched or EDSM is unavailable");
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                _discoveryForm.history.SetStartStop(rightclicksystem);
+                _discoveryForm.RefreshFrontEnd();                                   // which will cause DIsplay to be called as some point
+            }
+        }
+
+        private void historyContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
+            viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+        }
+
+        HistoryEntry rightclicksystem = null;
+        int rightclickrow = -1;
+        HistoryEntry leftclicksystem = null;
+        int leftclickrow = -1;
+
+        private void dataGridViewJournal_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+            {
+                rightclicksystem = null;
+                rightclickrow = -1;
+            }
+            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
+            {
+                leftclicksystem = null;
+                leftclickrow = -1;
+            }
+
+            if (dataGridViewJournal.SelectedCells.Count < 2 || dataGridViewJournal.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+            {
+                DataGridView.HitTestInfo hti = dataGridViewJournal.HitTest(e.X, e.Y);
+                if (hti.Type == DataGridViewHitTestType.Cell)
+                {
+                    dataGridViewJournal.ClearSelection();                // select row under cursor.
+                    dataGridViewJournal.Rows[hti.RowIndex].Selected = true;
+
+                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+                    {
+                        rightclickrow = hti.RowIndex;
+                        rightclicksystem = (HistoryEntry)dataGridViewJournal.Rows[hti.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag;
+                    }
+                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
+                    {
+                        leftclickrow = hti.RowIndex;
+                        leftclicksystem = (HistoryEntry)dataGridViewJournal.Rows[hti.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag;
+                    }
+                }
+            }
         }
     }
 }
