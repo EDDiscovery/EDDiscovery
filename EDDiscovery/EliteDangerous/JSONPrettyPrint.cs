@@ -12,7 +12,7 @@ namespace EDDiscovery
         List<string> newname;   // change to this name (optional)
         List<double> scale;     // scale by this
         List<string> format;    // print in this format (0.0) use 'ls' to put postfix/prefix, or holds 'B;false;true' if boolean conversion
-        List<string> eventqual; // null for none, else has to match eventqual passed in to match
+        List<string[]> eventqual; // null for none, else has to match eventqual passed in to match
 
         public JSONConverters()
         {
@@ -20,21 +20,21 @@ namespace EDDiscovery
             newname = new List<string>();
             scale = new List<double>();
             format = new List<string>();
-            eventqual = new List<string>();
+            eventqual = new List<string[]>();
         }
 
         // name = list of id's to match "one;two;three" or just a single "one"
         // nmane = replace name with this, or null keep name, or "" no name
         // eventq = limit to these events, "one;two;three" or a single "one"
-        // Scale - f can be a full format string "'hello' 0.0 'postfix'"
 
+        // Scale - f can be a full format string "'hello' 0.0 'postfix'"
         public void AddScale(string name, double s, string f = "0.0", string nname = null, string eventq = null)
         {
             names.Add(name);
             newname.Add(nname);
             scale.Add(s);
             format.Add(f);
-            eventqual.Add(eventq);
+            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
         }
 
         public void AddBool(string name, string falsevalue , string truevalue , string nname = null, string eventq = null)    // converts a true/false bool into these string, with an optional name removal
@@ -43,7 +43,7 @@ namespace EDDiscovery
             newname.Add(nname);
             scale.Add(0);
             format.Add("B;" + falsevalue + ";" + truevalue);
-            eventqual.Add(eventq);
+            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
         }
 
         public void AddState(string name, string emptyvalue, string nname = null, string eventq = null)    // adds an empty state and allows the name to be removed
@@ -52,31 +52,39 @@ namespace EDDiscovery
             newname.Add(nname);
             scale.Add(0);
             format.Add("S;" + emptyvalue);
-            eventqual.Add(eventq);
+            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
         }
 
         // prepostfix "Prefix;postfix"   ;postfix can be not given.
-
         public void AddPrePostfix(string name, string prepostfix, string nname = null, string eventq = null)    // adds an postfix string to the value and allows the name to be removed
         {
             names.Add(name);
             newname.Add(nname);
             scale.Add(0);
             format.Add("P;" + prepostfix);
-            eventqual.Add(eventq);
+            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
+        }
+
+        // prepostindex "Prefix;postfix;index offset;value;value;value etc" 
+        public void AddIndex(string name, string prepostindex, string nname = null, string eventq = null)    // indexer
+        {
+            names.Add(name);
+            newname.Add(nname);
+            scale.Add(0);
+            format.Add("I;" + prepostindex);
+            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
         }
 
 
         public string Convert(string pname, string value , bool noname , string eventname)
         {
-            string displayname = Tools.SplitCapsWord(pname); 
+            string displayname = Tools.SplitCapsWord(pname);
 
             for ( int i = names.Count-1; i>=0; i--)
             {
                 string[] ids = names[i].Split(';');
 
-                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && 
-                        ( eventqual[i] == null || Array.FindIndex(eventqual[i].Split(';'),x=>x.Equals(eventname))!=-1 ))
+                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && (eventqual[i] ==null ||  Array.FindIndex(eventqual[i],x=>x.Equals(eventname))!=-1 ))
                 {
                     if (format[i][0] == 'B')        // BOOLEAN
                     {
@@ -87,7 +95,7 @@ namespace EDDiscovery
                         if (bool.TryParse(value, out bv))
                             value = booleanvalues[(bv) ? 2 : 1];
                         else if (int.TryParse(value, out iv))
-                            value = booleanvalues[(iv!=0) ? 2 : 1];
+                            value = booleanvalues[(iv != 0) ? 2 : 1];
                         else
                             value = booleanvalues[1];       // presume false, may be empty
                     }
@@ -98,14 +106,27 @@ namespace EDDiscovery
                         if (value.Length == 0)
                             value = statevalues[1];
                     }
-                    else if (format[i][0] == 'P')   // Postfix
+                    else if (format[i][0] == 'P')   // pre-Postfix
                     {
                         string[] statevalues = format[i].Split(';');
 
-                        if (statevalues.Length>=2 && !value.Contains(statevalues[1]))       // don't repeat
+                        if (statevalues.Length >= 2 && !value.Contains(statevalues[1]))       // don't repeat
                             value = statevalues[1] + value;
-                        if (statevalues.Length>=3 && !value.Contains(statevalues[2]))       // don't repeat
+                        if (statevalues.Length >= 3 && !value.Contains(statevalues[2]))       // don't repeat
                             value += statevalues[2];
+                    }
+                    else if (format[i][0] == 'I')   // index
+                    {
+                        string[] statevalues = format[i].Split(';');        // 0 = I, 1 = pre, 2 = post, 3 = offset, 4 = index from 0 on
+
+                        int iv = 0,offset = 0;
+                        if (int.TryParse(value, out iv) && statevalues.Length>=5 && int.TryParse(statevalues[3],out offset))
+                        {
+                            if ( iv >= offset && iv < offset + statevalues.Length - 4)
+                            {
+                                value = statevalues[1] + statevalues[iv - offset + 4] + statevalues[2];
+                            }
+                        }
                     }
                     else
                     {                               // VALUE, presume double
@@ -131,104 +152,21 @@ namespace EDDiscovery
             return ret;
         }
 
-        public static JSONConverters StandardConverters()
-        {
-            JSONConverters jc = new JSONConverters();
-            jc.AddScale("DistanceFromArrivalLS", 1.0, "0.0'ls'","Arrival");
-            jc.AddScale("MassEM", 1.0, "0.0'em'", "Mass");
-            jc.AddScale("MassMT", 1.0, "0.0'mt'", "Mass");
-            jc.AddScale("SurfacePressure", 1.0, "0.0'p'");
-            jc.AddScale("Radius", 1.0 / 1000, "0.0'km'");
-            jc.AddScale("InnerRad", 1.0 / 1000, "0.0'km'", "Inner Radius");
-            jc.AddScale("OuterRad", 1.0 / 1000, "0.0'km'", "Outer Radius");
-            jc.AddScale("OrbitalPeriod;RotationPeriod", 1.0 / 86400, "0.0' days orbit'" ,"");
-            jc.AddScale("SurfaceGravity", 1.0 / 9.8, "0.0'g'");
-            jc.AddScale("SurfaceTemperature", 1.0, "0.0'K'");
-            jc.AddScale("Scooped", 1.0, "'Scooped '0.0't'", "", "FuelScoop");
-            jc.AddScale("Total", 1.0, "'Fuel Level '0.0't'", "", "FuelScoop");
-            jc.AddScale("Fuel Level", 1.0, "Fuel Level Left '0.0't'","");
-            jc.AddScale("Amount", 1.0, "'Fuel Bought '0.0't'", "", "RefuelAll");
-            jc.AddScale("BoostValue", 1.0, "0.0' boost'", "", "JetConeBoost");
-
-            jc.AddBool("TidalLock", "Not Tidally Locked", "Tidally Locked", ""); // remove name
-            jc.AddBool("Landable", "Not Landable", "Landable", ""); // remove name
-            jc.AddBool("ShieldsUp", "Shields Down", "Shields Up Captain", ""); // remove name
-            jc.AddState("TerraformState", "Not Terrraformable", "");    // remove name
-            jc.AddState("Atmosphere", "No Atmosphere", "");
-            jc.AddState("Volcanism", "No Volcanism", "");
-            jc.AddPrePostfix("StationType", "; Type", "");
-            jc.AddPrePostfix("StationName", "; Station", "");
-            jc.AddPrePostfix("DestinationSystem", "; Destination Star System", "");
-            jc.AddPrePostfix("DestinationStation", "; Destination Station", "");
-            jc.AddPrePostfix("StarSystem;System", "; Star System", "");    
-            jc.AddPrePostfix("Allegiance", "; Allegiance", "");
-            jc.AddPrePostfix("Security", "; Security", "");
-            jc.AddPrePostfix("Faction", "; Faction", "");
-            jc.AddPrePostfix("Government", "Government Type ", "");
-            jc.AddPrePostfix("Economy", "Economy Type ", "");
-            jc.AddBool("Docked", "Not Docked", "Docked", "");   // remove name
-            jc.AddBool("PlayerControlled", "NPC Controlled", "Player Controlled", ""); // remove name
-
-            jc.AddPrePostfix("Body", "At ", "");
-
-            jc.AddPrePostfix("Category", "; material", "", "MaterialCollected;MaterialDiscovered;MaterialDiscarded");
-            jc.AddPrePostfix("Name", "", "", "MaterialCollected;MaterialDiscovered;MaterialDiscarded");
-            jc.AddPrePostfix("Count", "; items", "", "MaterialDiscarded");
-
-            jc.AddPrePostfix("To", "To ", "", "VehicleSwitch");
-            jc.AddPrePostfix("Name", "", "", "CrewAssign");
-
-            jc.AddPrePostfix("Role", "; role", "", "CrewAssign");
-            jc.AddPrePostfix("Name", "", "", "MissionAccepted;MissionAbandoned;MissionCompleted;MissionFailed");
-            jc.AddPrePostfix("Cost;ShipPrice", "; credits", "");
-            jc.AddPrePostfix("Amount", "; credits", "", "PayLegacyFines");
-            jc.AddPrePostfix("BuyPrice", "Bought for ; credits", "");
-            jc.AddPrePostfix("SellPrice", "Sold for ; credits","");
-
-            jc.AddPrePostfix("LandingPad", "On pad ", "");
-
-            jc.AddPrePostfix("BuyItem", "; bought", "");
-            jc.AddPrePostfix("SellItem", "; sold", "");
-
-            jc.AddPrePostfix("Credits", "; credits", "", "LoadGame");
-            jc.AddPrePostfix("Ship;ShipType", "Ship ;", "");
-            jc.AddPrePostfix("StoreOldShip", "; stored", "");
-
-            jc.AddScale("Health", 100.0, "'Health' 0.0'%'", "");
-
-            jc.AddScale("Distance", 1.0 / 299792458.0 / 365 / 24 / 60 / 60, "'Distance' 0.0'ly'", "", "ShipyardTransfer");
-            jc.AddPrePostfix("TransferPrice", "; credits", "", "ShipyardTransfer");
-
-            jc.AddPrePostfix("Name", "; settlement", "", "ApproachSettlement");
-            jc.AddPrePostfix("Item", ";", "", "Repair");
-
-            jc.AddPrePostfix("BodyName", "Scan ", "", "Scan");
-            jc.AddScale("DistanceFromArrivalLS", 1.0, "0.0' from arrival point'", "", "Scan");
-            jc.AddPrePostfix("StarType", "; type star", "", "Scan");
-            jc.AddScale("StellarMass", 1.0, "0.0' stellar masses'", "", "Scan");
-            jc.AddScale("Radius", 1.0 , "0.0' km radius'", "", "Scan");
-            jc.AddScale("AbsoluteMagnitude", 1.0, "0.0' absolute magnitude'", "", "Scan");
-            jc.AddScale("OrbitalPeriod", 1.0 / 86400, "0.0' days orbit'", "", "Scan");
-            jc.AddScale("RotationPeriod", 1.0 / 86400, "0.0' days rotation'", "", "Scan");
-            jc.AddPrePostfix("PlanetClass", "; planet class", "", "Scan");
-            return jc;
-        }
-
     };
 
-    public class JSONPrettyPrint
+    public class JSONPrettyPrint                        // THIS is a generic JSON pretty print - keep journals out of it..
     {
-        private string[] removeitems;
-        private string[] duplicatepostfixremove;
-        private JSONConverters jconvertvalue;
+        private string[] removeitems;                   // never to be printed
+        private string[] duplicatepostfixremove;        // for _localised strings
+        private JSONConverters jconvertvalue;           // converter
         private int maxlinelen;
-        private string eventtype;
+        private string eventtype;                       // the event type string ("SellExplorationData")
 
-        public JSONPrettyPrint( JSONConverters c , string r , string d , string eventp)
+        public JSONPrettyPrint( JSONConverters c , string removeit , string duplist , string eventp)
         {
             jconvertvalue = c;
-            removeitems = r.Split(';');
-            duplicatepostfixremove = d.Split(';');
+            removeitems = removeit.Split(';');
+            duplicatepostfixremove = duplist.Split(';');
             eventtype = eventp;
         }
 
@@ -293,6 +231,7 @@ namespace EDDiscovery
 
         private void ExpandTokens(JToken jt, ref string outstr, ref int linelen, int childno , int siblings)
         {
+            //System.Diagnostics.Trace.WriteLine("parent JT " + jt.Path + " is a " + jt.Type.ToString());
             if (jt.HasValues)
             {
                 string name = jt.Path;
@@ -337,14 +276,16 @@ namespace EDDiscovery
 
                 int cno = 1;
 
+                JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String , JTokenType.Float , JTokenType.TimeSpan };
+
                 foreach (JToken jc in jt.Children())
                 {
-                    //System.Diagnostics.Trace.WriteLine(string.Format(" >> {0} : {1}", cno, jc.Type.ToString()));
+                    //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} : {1} {2}", cno, jc.Path, jc.Type.ToString()));
                     if (jc.HasValues)
                     {
                         ExpandTokens(jc, ref outstr, ref linelen, cno , totalchildren);
                     }
-                    else
+                    else if ( Array.FindIndex(decodeable,x=>x==jc.Type )!=-1 )
                     {
                         string value = jc.Value<string>();
 

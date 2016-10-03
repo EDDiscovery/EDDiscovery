@@ -123,26 +123,33 @@ namespace EDDiscovery
         public System.Drawing.Bitmap GetIcon
         {  get
             { 
-                switch( EntryType )
+                switch( EntryType )     // Alpha order please!
                 {
-                    case EliteDangerous.JournalTypeEnum.FSDJump:
-                        return EDDiscovery.Properties.Resources.hyperspace;
-                    case EliteDangerous.JournalTypeEnum.Docked:
-                        return EDDiscovery.Properties.Resources.Stationenter;
-                    case EliteDangerous.JournalTypeEnum.Undocked:
-                        return EDDiscovery.Properties.Resources.Stationexit;
+                    case EliteDangerous.JournalTypeEnum.Bounty:
+                        return EDDiscovery.Properties.Resources.bounty;
+                    case EliteDangerous.JournalTypeEnum.CrewAssign:
+                    case EliteDangerous.JournalTypeEnum.CrewHire:
+                    case EliteDangerous.JournalTypeEnum.CrewFire:
+                        return EDDiscovery.Properties.Resources.crew;
                     case EliteDangerous.JournalTypeEnum.Died:
                         return EDDiscovery.Properties.Resources.Coffinicon;
+                    case EliteDangerous.JournalTypeEnum.Docked:
+                        return EDDiscovery.Properties.Resources.Stationenter;
+                    case EliteDangerous.JournalTypeEnum.FSDJump:
+                        return EDDiscovery.Properties.Resources.hyperspace;
+                    case EliteDangerous.JournalTypeEnum.HeatDamage:
+                    case EliteDangerous.JournalTypeEnum.HeatWarning:
+                        return EDDiscovery.Properties.Resources.heatdamage;
+                    case EliteDangerous.JournalTypeEnum.HullDamage:
+                        return EDDiscovery.Properties.Resources.damage;
                     case EliteDangerous.JournalTypeEnum.ModuleBuy:
                     case EliteDangerous.JournalTypeEnum.ModuleRetrieve:
                     case EliteDangerous.JournalTypeEnum.ModuleSell:
                     case EliteDangerous.JournalTypeEnum.ModuleStore:
                     case EliteDangerous.JournalTypeEnum.ModuleSwap:
                         return EDDiscovery.Properties.Resources.module;
-                    case EliteDangerous.JournalTypeEnum.CrewAssign:
-                    case EliteDangerous.JournalTypeEnum.CrewHire:
-                    case EliteDangerous.JournalTypeEnum.CrewFire:
-                        return EDDiscovery.Properties.Resources.crew;
+                    case EliteDangerous.JournalTypeEnum.Undocked:
+                        return EDDiscovery.Properties.Resources.Stationexit;
                     default:
                         return EDDiscovery.Properties.Resources.genericevent;
                 }
