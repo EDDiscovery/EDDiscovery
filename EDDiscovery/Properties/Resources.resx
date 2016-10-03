@@ -220,4 +220,25 @@
   <data name="ImageTravel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ImageTravel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Coffinicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Coffinicon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="crew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\crew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="genericevent" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\event.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hyperspace" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hyperspace.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="module" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\module.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Stationenter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Stationenter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Stationexit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Stationexit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
