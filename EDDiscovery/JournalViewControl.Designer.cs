@@ -43,11 +43,16 @@
             this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
+            this.historyContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -198,6 +203,7 @@
             this.Event,
             this.ColumnType,
             this.ColumnText});
+            this.dataGridViewJournal.ContextMenuStrip = this.historyContextMenu;
             this.dataGridViewJournal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewJournal.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewJournal.Name = "dataGridViewJournal";
@@ -207,6 +213,7 @@
             this.dataGridViewJournal.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewJournal_ColumnHeaderMouseClick);
             this.dataGridViewJournal.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewJournal_ColumnWidthChanged);
             this.dataGridViewJournal.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewJournal_RowPostPaint);
+            this.dataGridViewJournal.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewJournal_MouseDown);
             this.dataGridViewJournal.Resize += new System.EventHandler(this.dataGridViewJournal_Resize);
             // 
             // ColumnTime
@@ -239,6 +246,37 @@
             this.ColumnText.ReadOnly = true;
             this.ColumnText.Width = 700;
             // 
+            // historyContextMenu
+            // 
+            this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mapGotoStartoolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem,
+            this.toolStripMenuItemStartStop});
+            this.historyContextMenu.Name = "historyContextMenu";
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 70);
+            this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
+            // 
+            // mapGotoStartoolStripMenuItem
+            // 
+            this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
+            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
+            this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem
+            // 
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItemStartStop
+            // 
+            this.toolStripMenuItemStartStop.Name = "toolStripMenuItemStartStop";
+            this.toolStripMenuItemStartStop.Size = new System.Drawing.Size(293, 22);
+            this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
+            this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
+            // 
             // JournalViewControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -251,6 +289,7 @@
             this.panel1.PerformLayout();
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).EndInit();
+            this.historyContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -273,5 +312,9 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ContextMenuStrip historyContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
     }
 }

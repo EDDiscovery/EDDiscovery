@@ -12,7 +12,9 @@ namespace EDDiscovery
 {
     [DebuggerDisplay("Event {EntryType} {System.name} ({System.x,nq},{System.y,nq},{System.z,nq}) {EventTimeUTC}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
-    {                                   
+    {
+        #region Variables
+
         public int Indexno;            // for display purposes.
 
         public EliteDangerous.JournalTypeEnum EntryType;
@@ -40,8 +42,18 @@ namespace EDDiscovery
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
-
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
+
+        // Calculated values, not from JE
+
+        private double travelled_distance;
+        private TimeSpan travelled_seconds;
+        bool travelling;
+        bool travelled_missingjump;
+
+        #endregion
+
+        #region Constructors
 
         public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0)
         {
@@ -57,13 +69,10 @@ namespace EDDiscovery
             EdsmSync = true; 
         }
 
-        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm , SQLiteConnectionSystem conn = null)
+        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, SQLiteConnectionSystem conn = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
-
-            string summary, info, detailed;
-            je.FillInformation(out summary, out info, out detailed);
 
             int mapcolour = 0;
 
@@ -99,7 +108,7 @@ namespace EDDiscovery
                 if (jfsd != null)
                 {
                     if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
-                        info += SystemClass.Distance(isys, newsys).ToString("0.00") + " ly";
+                        jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here
 
                     mapcolour = jfsd.MapColor;
                 }
@@ -107,7 +116,10 @@ namespace EDDiscovery
                 isys = newsys;
             }
 
-            return new HistoryEntry
+            string summary, info, detailed;
+            je.FillInformation(out summary, out info, out detailed);
+
+            HistoryEntry he = new HistoryEntry
             {
                 Indexno = indexno,
                 EntryType = je.EventTypeID,
@@ -123,7 +135,55 @@ namespace EDDiscovery
                 EventDescription = info,
                 EventDetailedInfo = detailed
             };
+
+            if (prev != null && prev.travelling)      // if we are travelling..
+            {
+                he.travelled_distance = prev.travelled_distance;
+                he.travelled_missingjump = prev.travelled_missingjump;
+
+                if (he.IsFSDJump)
+                {
+                    double dist = ((EliteDangerous.JournalEvents.JournalFSDJump)je).JumpDist;
+                    if (dist <= 0)
+                        he.travelled_missingjump = true;
+                    else
+                        he.travelled_distance += dist;
+                }
+
+                he.travelled_seconds = prev.travelled_seconds;
+
+                if (he.EntryType != EliteDangerous.JournalTypeEnum.LoadGame)        // time between last entry and load game is not real time
+                {
+                    he.travelled_seconds += he.EventTimeUTC.Subtract(prev.EventTimeUTC);
+                }
+                
+                if (he.StopMarker || he.StartMarker)
+                {
+                    he.travelling = false;
+                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling stopped " + he.travelled_distance + (he.travelled_missingjump ? " LY(*)" : " LY") + " time " + he.travelled_seconds;
+                    he.travelled_distance = 0;
+                    he.travelled_seconds = new TimeSpan(0);
+                }
+                else
+                {
+                    he.travelling = true;
+                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling";
+
+                    if (he.IsFSDJump)
+                        he.EventDetailedInfo += " distance " + he.travelled_distance.ToString("0.0") + (he.travelled_missingjump ? " LY (*)" : " LY");
+
+                    he.EventDetailedInfo += " time " + he.travelled_seconds;
+                }
+                    
+            }
+
+            if (he.StartMarker)
+                he.travelling = true;
+
+            return he;
         }
+
+        #endregion
 
         public System.Drawing.Bitmap GetIcon
         {  get
