@@ -34,20 +34,18 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openEliteDangerousDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show3DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openEliteDangerousDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugBetaFixHiddenLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.read21AndFormerLogFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +58,11 @@
             this.labelPanelText = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
+            this._syncWorker = new System.ComponentModel.BackgroundWorker();
+            this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
+            this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._refreshWorker = new System.ComponentModel.BackgroundWorker();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
@@ -81,11 +84,6 @@
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this._syncWorker = new System.ComponentModel.BackgroundWorker();
-            this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
-            this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._refreshWorker = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -108,7 +106,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(247, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(155, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -116,89 +114,66 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openEliteDangerousDirectoryToolStripMenuItem,
-            this.showLogfilesToolStripMenuItem,
             this.show2DMapsToolStripMenuItem,
             this.show3DMapsToolStripMenuItem,
             this.statisticsToolStripMenuItem,
             this.changeMapColorToolStripMenuItem,
             this.editThemeToolStripMenuItem,
-            this.exitToolStripMenuItem,
-            this.prospectingToolStripMenuItem});
+            this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
-            // openEliteDangerousDirectoryToolStripMenuItem
-            // 
-            this.openEliteDangerousDirectoryToolStripMenuItem.Name = "openEliteDangerousDirectoryToolStripMenuItem";
-            this.openEliteDangerousDirectoryToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.openEliteDangerousDirectoryToolStripMenuItem.Text = "Open Elite Dangerous directory";
-            this.openEliteDangerousDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openEliteDangerousDirectoryToolStripMenuItem_Click);
-            // 
-            // showLogfilesToolStripMenuItem
-            // 
-            this.showLogfilesToolStripMenuItem.Name = "showLogfilesToolStripMenuItem";
-            this.showLogfilesToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.showLogfilesToolStripMenuItem.Text = "Show logfiles";
-            this.showLogfilesToolStripMenuItem.Click += new System.EventHandler(this.showLogfilesToolStripMenuItem_Click);
-            // 
             // show2DMapsToolStripMenuItem
             // 
             this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
-            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.show2DMapsToolStripMenuItem.Text = "Show 2D maps";
             this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
             // show3DMapsToolStripMenuItem
             // 
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.show3DMapsToolStripMenuItem.Text = "Show 3D maps";
             this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
             // 
             // statisticsToolStripMenuItem
             // 
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.statisticsToolStripMenuItem.Text = "Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
             // 
             // changeMapColorToolStripMenuItem
             // 
             this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
-            this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.changeMapColorToolStripMenuItem.Text = "Set Default Map Colour";
             this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
             // 
             // editThemeToolStripMenuItem
             // 
             this.editThemeToolStripMenuItem.Name = "editThemeToolStripMenuItem";
-            this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.editThemeToolStripMenuItem.Text = "Edit Theme";
             this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // prospectingToolStripMenuItem
-            // 
-            this.prospectingToolStripMenuItem.Name = "prospectingToolStripMenuItem";
-            this.prospectingToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.prospectingToolStripMenuItem.Text = "(DEBUG) Prospecting";
-            this.prospectingToolStripMenuItem.Visible = false;
             // 
             // adminToolStripMenuItem
             // 
             this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.forceEDDBUpdateToolStripMenuItem,
             this.syncEDSMSystemsToolStripMenuItem,
+            this.showLogfilesToolStripMenuItem,
+            this.openEliteDangerousDirectoryToolStripMenuItem,
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
-            this.debugBetaFixHiddenLogToolStripMenuItem,
             this.read21AndFormerLogFilesToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
@@ -207,35 +182,42 @@
             // forceEDDBUpdateToolStripMenuItem
             // 
             this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
-            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
             this.forceEDDBUpdateToolStripMenuItem.Text = "Synchronise with EDDB";
             this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
             // 
             // syncEDSMSystemsToolStripMenuItem
             // 
             this.syncEDSMSystemsToolStripMenuItem.Name = "syncEDSMSystemsToolStripMenuItem";
-            this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
             this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM Stars";
             this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
+            // 
+            // showLogfilesToolStripMenuItem
+            // 
+            this.showLogfilesToolStripMenuItem.Name = "showLogfilesToolStripMenuItem";
+            this.showLogfilesToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
+            this.showLogfilesToolStripMenuItem.Text = "Show journal files directory of current commander";
+            this.showLogfilesToolStripMenuItem.Click += new System.EventHandler(this.showLogfilesToolStripMenuItem_Click);
+            // 
+            // openEliteDangerousDirectoryToolStripMenuItem
+            // 
+            this.openEliteDangerousDirectoryToolStripMenuItem.Name = "openEliteDangerousDirectoryToolStripMenuItem";
+            this.openEliteDangerousDirectoryToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
+            this.openEliteDangerousDirectoryToolStripMenuItem.Text = "Show Elite Dangerous directory";
+            this.openEliteDangerousDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openEliteDangerousDirectoryToolStripMenuItem_Click);
             // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
             // 
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click);
-            // 
-            // debugBetaFixHiddenLogToolStripMenuItem
-            // 
-            this.debugBetaFixHiddenLogToolStripMenuItem.Name = "debugBetaFixHiddenLogToolStripMenuItem";
-            this.debugBetaFixHiddenLogToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
-            this.debugBetaFixHiddenLogToolStripMenuItem.Text = "Fix hidden log entries for BETA";
-            this.debugBetaFixHiddenLogToolStripMenuItem.Click += new System.EventHandler(this.debugBetaFixHiddenLogToolStripMenuItem_Click);
             // 
             // read21AndFormerLogFilesToolStripMenuItem
             // 
             this.read21AndFormerLogFilesToolStripMenuItem.Name = "read21AndFormerLogFilesToolStripMenuItem";
-            this.read21AndFormerLogFilesToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.read21AndFormerLogFilesToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
             this.read21AndFormerLogFilesToolStripMenuItem.Text = "Read 2.1 and former log files";
             this.read21AndFormerLogFilesToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFilesToolStripMenuItem_Click);
             // 
@@ -335,6 +317,42 @@
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
             // 
+            // _syncWorker
+            // 
+            this._syncWorker.WorkerReportsProgress = true;
+            this._syncWorker.WorkerSupportsCancellation = true;
+            this._syncWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._syncWorker_DoWork);
+            this._syncWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._syncWorker_ProgressChanged);
+            this._syncWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._syncWorker_RunWorkerCompleted);
+            // 
+            // _checkSystemsWorker
+            // 
+            this._checkSystemsWorker.WorkerReportsProgress = true;
+            this._checkSystemsWorker.WorkerSupportsCancellation = true;
+            this._checkSystemsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._checkSystemsWorker_DoWork);
+            this._checkSystemsWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._checkSystemsWorker_ProgressChanged);
+            this._checkSystemsWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._checkSystemsWorker_RunWorkerCompleted);
+            // 
+            // edsmRefreshTimer
+            // 
+            this.edsmRefreshTimer.Interval = 900000;
+            this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
+            // 
+            // reloadAllLogsForCurrentCommanderToolStripMenuItem
+            // 
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Name = "reloadAllLogsForCurrentCommanderToolStripMenuItem";
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(277, 22);
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Text = "Reload all logs for current commander";
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.reloadAllLogsForCurrentCommanderToolStripMenuItem_Click);
+            // 
+            // _refreshWorker
+            // 
+            this._refreshWorker.WorkerReportsProgress = true;
+            this._refreshWorker.WorkerSupportsCancellation = true;
+            this._refreshWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RefreshHistoryWorker);
+            this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
+            this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
+            // 
             // tabControl1
             // 
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -403,7 +421,6 @@
             this.journalViewControl1.Name = "journalViewControl1";
             this.journalViewControl1.Size = new System.Drawing.Size(979, 665);
             this.journalViewControl1.TabIndex = 0;
-            this.journalViewControl1.Load += new System.EventHandler(this.journalViewControl1_Load);
             // 
             // tabPageTriletaration
             // 
@@ -569,42 +586,6 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
-            // _syncWorker
-            // 
-            this._syncWorker.WorkerReportsProgress = true;
-            this._syncWorker.WorkerSupportsCancellation = true;
-            this._syncWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._syncWorker_DoWork);
-            this._syncWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._syncWorker_ProgressChanged);
-            this._syncWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._syncWorker_RunWorkerCompleted);
-            // 
-            // _checkSystemsWorker
-            // 
-            this._checkSystemsWorker.WorkerReportsProgress = true;
-            this._checkSystemsWorker.WorkerSupportsCancellation = true;
-            this._checkSystemsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._checkSystemsWorker_DoWork);
-            this._checkSystemsWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._checkSystemsWorker_ProgressChanged);
-            this._checkSystemsWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._checkSystemsWorker_RunWorkerCompleted);
-            // 
-            // edsmRefreshTimer
-            // 
-            this.edsmRefreshTimer.Interval = 900000;
-            this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
-            // 
-            // reloadAllLogsForCurrentCommanderToolStripMenuItem
-            // 
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Name = "reloadAllLogsForCurrentCommanderToolStripMenuItem";
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(277, 22);
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Text = "Reload all logs for current commander";
-            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.reloadAllLogsForCurrentCommanderToolStripMenuItem_Click);
-            // 
-            // _refreshWorker
-            // 
-            this._refreshWorker.WorkerReportsProgress = true;
-            this._refreshWorker.WorkerSupportsCancellation = true;
-            this._refreshWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RefreshHistoryWorker);
-            this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
-            this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
-            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -659,15 +640,12 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryHomepageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem frontierForumThreadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openEliteDangerousDirectoryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem statisticsToolStripMenuItem;
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Label labelPanelText;
         private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem forceEDDBUpdateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem prospectingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem syncEDSMSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gitHubToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportIssueIdeasToolStripMenuItem;
@@ -695,7 +673,6 @@
         private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
         public SavedRouteExpeditionControl savedRouteExpeditionControl1;
         private ExtendedControls.StatusStripCustom statusStrip1;
-        private System.Windows.Forms.ToolStripMenuItem debugBetaFixHiddenLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
@@ -707,6 +684,8 @@
         private JournalViewControl journalViewControl1;
         private System.ComponentModel.BackgroundWorker _refreshWorker;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openEliteDangerousDirectoryToolStripMenuItem;
     }
 }
 

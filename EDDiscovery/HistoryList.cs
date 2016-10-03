@@ -148,6 +148,12 @@ namespace EDDiscovery
                     case EliteDangerous.JournalTypeEnum.ModuleStore:
                     case EliteDangerous.JournalTypeEnum.ModuleSwap:
                         return EDDiscovery.Properties.Resources.module;
+                    case EliteDangerous.JournalTypeEnum.Scan:
+                        return EDDiscovery.Properties.Resources.scan;
+                    case EliteDangerous.JournalTypeEnum.SendText:
+                        return EDDiscovery.Properties.Resources.textsent;
+                    case EliteDangerous.JournalTypeEnum.ReceiveText:
+                        return EDDiscovery.Properties.Resources.textreceived;
                     case EliteDangerous.JournalTypeEnum.Undocked:
                         return EDDiscovery.Properties.Resources.Stationexit;
                     default:
