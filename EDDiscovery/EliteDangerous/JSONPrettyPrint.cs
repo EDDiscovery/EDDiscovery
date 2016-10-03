@@ -75,7 +75,8 @@ namespace EDDiscovery
             {
                 string[] ids = names[i].Split(';');
 
-                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && ( eventqual[i] == null || Array.FindIndex(eventname.Split(';'),x=>x.Equals(eventname))!=-1 ))
+                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && 
+                        ( eventqual[i] == null || Array.FindIndex(eventqual[i].Split(';'),x=>x.Equals(eventname))!=-1 ))
                 {
                     if (format[i][0] == 'B')        // BOOLEAN
                     {
@@ -140,13 +141,14 @@ namespace EDDiscovery
             jc.AddScale("Radius", 1.0 / 1000, "0.0'km'");
             jc.AddScale("InnerRad", 1.0 / 1000, "0.0'km'", "Inner Radius");
             jc.AddScale("OuterRad", 1.0 / 1000, "0.0'km'", "Outer Radius");
-            jc.AddScale("OrbitalPeriod;RotationPeriod", 1.0 / 86400, "0.0' days'");
+            jc.AddScale("OrbitalPeriod;RotationPeriod", 1.0 / 86400, "0.0' days orbit'" ,"");
             jc.AddScale("SurfaceGravity", 1.0 / 9.8, "0.0'g'");
             jc.AddScale("SurfaceTemperature", 1.0, "0.0'K'");
             jc.AddScale("Scooped", 1.0, "'Scooped '0.0't'", "", "FuelScoop");
             jc.AddScale("Total", 1.0, "'Fuel Level '0.0't'", "", "FuelScoop");
             jc.AddScale("Fuel Level", 1.0, "Fuel Level Left '0.0't'","");
-            jc.AddScale("Amount", 1.0, "'Fuel level '0.0't'", "", "RefuelAll");
+            jc.AddScale("Amount", 1.0, "'Fuel Bought '0.0't'", "", "RefuelAll");
+            jc.AddScale("BoostValue", 1.0, "0.0' boost'", "", "JetConeBoost");
 
             jc.AddBool("TidalLock", "Not Tidally Locked", "Tidally Locked", ""); // remove name
             jc.AddBool("Landable", "Not Landable", "Landable", ""); // remove name
@@ -156,13 +158,14 @@ namespace EDDiscovery
             jc.AddState("Volcanism", "No Volcanism", "");
             jc.AddPrePostfix("StationType", "; Type", "");
             jc.AddPrePostfix("StationName", "; Station", "");
-            jc.AddPrePostfix("DestinationSystem", "; Star System", "");
+            jc.AddPrePostfix("DestinationSystem", "; Destination Star System", "");
+            jc.AddPrePostfix("DestinationStation", "; Destination Station", "");
             jc.AddPrePostfix("StarSystem;System", "; Star System", "");    
             jc.AddPrePostfix("Allegiance", "; Allegiance", "");
             jc.AddPrePostfix("Security", "; Security", "");
             jc.AddPrePostfix("Faction", "; Faction", "");
-            jc.AddPrePostfix("Government", "; Government", "");
-            jc.AddPrePostfix("Economy", "; Economy", "");
+            jc.AddPrePostfix("Government", "Government Type ", "");
+            jc.AddPrePostfix("Economy", "Economy Type ", "");
             jc.AddBool("Docked", "Not Docked", "Docked", "");   // remove name
             jc.AddBool("PlayerControlled", "NPC Controlled", "Player Controlled", ""); // remove name
 
@@ -196,6 +199,18 @@ namespace EDDiscovery
             jc.AddScale("Distance", 1.0 / 299792458.0 / 365 / 24 / 60 / 60, "'Distance' 0.0'ly'", "", "ShipyardTransfer");
             jc.AddPrePostfix("TransferPrice", "; credits", "", "ShipyardTransfer");
 
+            jc.AddPrePostfix("Name", "; settlement", "", "ApproachSettlement");
+            jc.AddPrePostfix("Item", ";", "", "Repair");
+
+            jc.AddPrePostfix("BodyName", "Scan ", "", "Scan");
+            jc.AddScale("DistanceFromArrivalLS", 1.0, "0.0' from arrival point'", "", "Scan");
+            jc.AddPrePostfix("StarType", "; type star", "", "Scan");
+            jc.AddScale("StellarMass", 1.0, "0.0' stellar masses'", "", "Scan");
+            jc.AddScale("Radius", 1.0 , "0.0' km radius'", "", "Scan");
+            jc.AddScale("AbsoluteMagnitude", 1.0, "0.0' absolute magnitude'", "", "Scan");
+            jc.AddScale("OrbitalPeriod", 1.0 / 86400, "0.0' days orbit'", "", "Scan");
+            jc.AddScale("RotationPeriod", 1.0 / 86400, "0.0' days rotation'", "", "Scan");
+            jc.AddPrePostfix("PlanetClass", "; planet class", "", "Scan");
             return jc;
         }
 
