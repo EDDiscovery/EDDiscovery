@@ -72,17 +72,6 @@ namespace EDDiscovery
                         visitedSystems.Add(vs);
                     else if (!visitedSystems.Last().StarSystem.Equals(vs.StarSystem, StringComparison.CurrentCultureIgnoreCase))  // Avoid duplicate if times exist in same system from different files.
                         visitedSystems.Add(vs);
-                    else
-                    {
-                        /*
-                        VisitedSystemsClass vs2 = (VisitedSystemsClass)visitedSystems.Last<VisitedSystemsClass>();
-                        if (vs2.id != vs.id)
-                        {
-                            vs.Commander = -2; // Move to dupe user
-                            vs.Update();
-                        }
-                         */
-                    }
                 }
             }
 

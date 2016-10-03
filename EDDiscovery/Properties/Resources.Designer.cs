@@ -419,6 +419,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap scan {
+            get {
+                object obj = ResourceManager.GetObject("scan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap selectedmarker {
             get {
                 object obj = ResourceManager.GetObject("selectedmarker", resourceCulture);
@@ -482,6 +492,26 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap StopNormalRed {
             get {
                 object obj = ResourceManager.GetObject("StopNormalRed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap textreceived {
+            get {
+                object obj = ResourceManager.GetObject("textreceived", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap textsent {
+            get {
+                object obj = ResourceManager.GetObject("textsent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

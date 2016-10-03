@@ -314,10 +314,6 @@ namespace EDDiscovery
                 EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
                 label_version.Text += " (no BETA detect)";
             }
-
-
-
-            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
@@ -335,7 +331,6 @@ namespace EDDiscovery
                 if (option_debugoptions)
                 {
                     button_test.Visible = true;
-                    prospectingToolStripMenuItem.Visible = true;
                 }
             }
             catch (Exception ex)
@@ -1434,24 +1429,12 @@ namespace EDDiscovery
             }
         }
 
-        private void debugBetaFixHiddenLogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Confirm you wish to reset all hidden (duplicate) entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                EliteDangerous.JournalEntry.ResetCommanderID(-2, EDDConfig.CurrentCommander.Nr);
-            }
-        }
 
         private void reloadAllLogsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RefreshHistoryAsync(forceReload: true);
         }
 #endregion
-
-        private void journalViewControl1_Load(object sender, EventArgs e)
-        {
-
-        }
 
 #region Update Views with new commander 
 
@@ -1590,9 +1573,8 @@ namespace EDDiscovery
             settings.UpdateCommandersListBox();
         }
 
+
         #endregion
-
-
     }
 }
 
