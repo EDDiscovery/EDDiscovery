@@ -39,6 +39,7 @@ namespace EDDiscovery
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
+        public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
 
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
 
@@ -56,7 +57,7 @@ namespace EDDiscovery
             EdsmSync = true; 
         }
 
-        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, SQLiteConnectionSystem conn = null)
+        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm , SQLiteConnectionSystem conn = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -79,16 +80,19 @@ namespace EDDiscovery
                     newsys.id_edsm = jl.EdsmID;       // pass across the EDSMID for the lazy load process.
                 }
                 else
-                {                           // try and find it, preferably thru id, else thru name
+                {                           // Default one
                     newsys = new SystemClass(jl.StarSystem);
                     newsys.id_edsm = jl.EdsmID;
 
-                    SystemClass s = SystemClass.FindEDSM(newsys,conn);      // has no co-ord, did we find it?
+                    if (checkedsm)          // see if we can find the right system
+                    {
+                        SystemClass s = SystemClass.FindEDSM(newsys, conn);      // has no co-ord, did we find it?
 
-                    if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
-                    {                                                       // so next time we don't have to do this again..
-                        EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(jl.Id, s, s.HasCoordinate);
-                        newsys = s;
+                        if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
+                        {                                                       // so next time we don't have to do this again..
+                            EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(jl.Id, s, s.HasCoordinate);
+                            newsys = s;
+                        }
                     }
                 }
 
@@ -114,6 +118,7 @@ namespace EDDiscovery
                 EdsmSync = je.SyncedEDSM,
                 EDDNSync = je.SyncedEDDN,
                 StartMarker = je.StartMarker,
+                StopMarker = je.StopMarker,
                 EventSummary = summary,
                 EventDescription = info,
                 EventDetailedInfo = detailed
@@ -460,6 +465,32 @@ namespace EDDiscovery
             return GetEnumerator();
         }
 
+        public void SetStartStop( HistoryEntry hs )
+        {
+            bool started = false;
+
+            foreach ( HistoryEntry he in historylist )
+            {
+                if (hs == he)
+                {
+                    if (he.StartMarker)
+                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StartMarker, false);
+                    else if (he.StopMarker)
+                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StopMarker, false);
+                    else if ( started == false )
+                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StartMarker, true);
+                    else
+                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StopMarker, true);
+
+                    break;
+                }
+                else if (he.StartMarker)
+                    started = true;
+                else if (he.StopMarker)
+                    started = false;
+            }
+        }
+
         public static HistoryEntry FindNextSystem(List<HistoryEntry> syslist, string sysname, int dir)
         {
             int index = syslist.FindIndex(x => x.System.name.Equals(sysname));
@@ -523,5 +554,6 @@ namespace EDDiscovery
                 return (from systems in he where events.Contains(Tools.SplitCapsWord(systems.EntryType.ToString())) select systems).ToList();
             }
         }
+
     }
 }
