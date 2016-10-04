@@ -330,6 +330,9 @@ namespace EDDiscovery
                         JSONPrettyPrint jpp = new JSONPrettyPrint(EliteDangerous.JournalEntry.StandardConverters(), "event;timestamp", "_Localised", (string)jo["event"]);
                         string s = jpp.PrettyPrint(line, 80);
                         System.Diagnostics.Trace.WriteLine(s);
+
+                        EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
+                        System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
                     }
                 }
             }

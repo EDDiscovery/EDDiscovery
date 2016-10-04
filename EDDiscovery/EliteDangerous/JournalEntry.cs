@@ -130,6 +130,7 @@ namespace EDDiscovery.EliteDangerous
         WingJoin = 970,
         WingLeave = 980,
 
+        EDDItemSet = 2000,
     }
 
     public enum CombatRank
@@ -1025,6 +1026,10 @@ namespace EDDiscovery.EliteDangerous
                     break;
                 case "PowerplayVoucher":
                     je = new JournalPowerplayVoucher(jo);
+                    break;
+
+                case "EDDItemSet":
+                    je = new JournalEDDItemSet(jo);
                     break;
 
                     //je = new JournalUnhandled(jo, Eventstr);
