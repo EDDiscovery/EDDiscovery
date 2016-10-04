@@ -110,6 +110,7 @@
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this.eDDNTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -135,9 +136,10 @@
             this.addToTrilaterationToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
             this.selectCorrectSystemToolStripMenuItem,
-            this.toolStripMenuItemStartStop});
+            this.toolStripMenuItemStartStop,
+            this.eDDNTestToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 202);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 224);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -907,19 +909,19 @@
             this.addToTrilaterationToolStripMenuItem1,
             this.viewOnEDSMToolStripMenuItem1});
             this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
+            this.closestContextMenu.Size = new System.Drawing.Size(177, 48);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
             this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
-            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
             this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
             this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
             // 
             // viewOnEDSMToolStripMenuItem1
             // 
             this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
-            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
             this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
@@ -1105,6 +1107,13 @@
             this.TopPanel.Size = new System.Drawing.Size(594, 32);
             this.TopPanel.TabIndex = 26;
             // 
+            // eDDNTestToolStripMenuItem
+            // 
+            this.eDDNTestToolStripMenuItem.Name = "eDDNTestToolStripMenuItem";
+            this.eDDNTestToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.eDDNTestToolStripMenuItem.Text = "EDDN test";
+            this.eDDNTestToolStripMenuItem.Click += new System.EventHandler(this.eDDNTestToolStripMenuItem_Click);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1220,5 +1229,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private ExtendedControls.ButtonExt buttonFilter;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
+        private System.Windows.Forms.ToolStripMenuItem eDDNTestToolStripMenuItem;
     }
 }

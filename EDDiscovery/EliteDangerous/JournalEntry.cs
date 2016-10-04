@@ -509,6 +509,17 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
+        static public JournalEntry Get(long journalid)
+        {
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            {
+                return Get(journalid, cn);
+            }
+        }
+
+
+
+
         static public List<JournalEntry> GetAll(int commander = -999)
         {
             List<JournalEntry> list = new List<JournalEntry>();

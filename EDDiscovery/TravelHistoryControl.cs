@@ -15,6 +15,9 @@ using System.Threading;
 using System.Collections.Concurrent;
 using EDDiscovery.EDSM;
 using EDDiscovery.EliteDangerous;
+using EDDiscovery.EDDN;
+using EDDiscovery.EliteDangerous.JournalEvents;
+using Newtonsoft.Json.Linq;
 
 namespace EDDiscovery
 {
@@ -1378,5 +1381,36 @@ namespace EDDiscovery
 
         #endregion
 
+        private void eDDNTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            EDDNClass eddn = new EDDNClass();
+            var id = rightclicksystem.Journalid;
+
+            JournalEntry je = JournalEntry.Get(id);
+            JObject msg = null;
+
+            if (je.EventTypeID == JournalTypeEnum.FSDJump)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalFSDJump);
+
+            }
+            if (msg != null)
+            {
+                eddn.PostMessage(msg);
+            }
+
+            //long? id_edsm = rightclicksystem.System?.id_edsm;
+
+            //if (id_edsm == 0)
+            //{
+            //    id_edsm = null;
+            //}
+
+            //if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
+            //    LogLineHighlight("System could not be found - has not been synched or EDSM is unavailable");
+
+            this.Cursor = Cursors.Default;
+        }
     }
 }
