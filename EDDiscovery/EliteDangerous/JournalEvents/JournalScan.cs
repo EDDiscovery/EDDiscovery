@@ -92,6 +92,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool? Landable { get; set; }
         public Dictionary<string, double> Materials { get; set; }
 
+        internal double GetMaterial(string v)
+        {
+            if (Materials == null)
+                return 0.0;
+
+            if (!Materials.ContainsKey(v.ToLower()))
+                return 0.0;
+
+            return Materials[v.ToLower()];
+        }
     }
 
     public class PlanetRing
