@@ -265,4 +265,43 @@
   <data name="stopflag" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\stopflag.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="approachsettlement" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\approachsettlement.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="commitcrime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\commitcrime.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fighter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fighter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="liftoff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\liftoff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="location" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\location.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="materialcollected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\materialcollected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="materialdiscarded" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\materialdiscarded.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="materialdiscovered" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\materialdiscovered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mothership" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mothership.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shields" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\shields.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="srv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\srv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="supercruiseenter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\supercruiseenter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="supercruiseexit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\supercruiseexit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
