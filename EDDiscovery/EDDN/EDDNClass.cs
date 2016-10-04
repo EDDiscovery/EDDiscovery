@@ -65,6 +65,57 @@ namespace EDDiscovery.EDDN
             return msg;
         }
 
+        public JObject CreateEDDNMessage(JournalDocked journal)
+        {
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = "http://schemas.elite-markets.net/eddn/journal/1/test";
+
+            JObject message = new JObject();
+
+            message["StarSystem"] = journal.StarSystem;
+            message["StationName"] = journal.StationName;
+            message["StationType"] = journal.StationType;
+            message["Faction"] = journal.Faction;
+            message["Government"] = journal.Government;
+            message["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            message["Allegiance"] = journal.Allegiance;
+            message["Security"] = journal.Security;
+            message["event"] = journal.EventTypeStr;
+            message["Economy"] = journal.Economy;
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNMessage(JournalScan journal)
+        {
+            JObject msg = new JObject();
+
+            return null;
+/*
+            msg["header"] = Header();
+            msg["$schemaRef"] = "http://schemas.elite-markets.net/eddn/journal/1/test";
+
+            JObject message = new JObject();
+
+            message["StarSystem"] = journal.StarSystem;
+            message["Faction"] = journal.Faction;
+            message["Government"] = journal.Government;
+            message["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            message["Allegiance"] = journal.Allegiance;
+            message["Security"] = journal.Security;
+            message["event"] = journal.EventTypeStr;
+            message["Economy"] = journal.Economy;
+
+            msg["message"] = message;
+            return msg;
+
+    */
+        }
+
+
         public bool PostMessage(JObject msg)
         {
 

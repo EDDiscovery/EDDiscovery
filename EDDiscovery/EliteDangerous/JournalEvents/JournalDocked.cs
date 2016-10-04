@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             StationName = Tools.GetStringDef(evt["StationName"]);
             StationType = Tools.GetStringDef(evt["StationType"]);
+            StarSystem = Tools.GetStringDef(evt["StarSystem"]);
             CockpitBreach = Tools.GetBool(evt["CockpitBreach"]);
             Faction = Tools.GetStringDef(evt["Faction"]);
             FactionState = Tools.GetStringDef(evt["FactionState"]);
@@ -37,6 +38,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string StationName { get; set; }
         public string StationType { get; set; }
+        public string StarSystem { get; set; }
         public bool CockpitBreach { get; set; }
         public string Faction { get; set; }
         public string FactionState { get; set; }

@@ -1395,6 +1395,15 @@ namespace EDDiscovery
                 msg = eddn.CreateEDDNMessage(je as JournalFSDJump);
 
             }
+            else if (je.EventTypeID == JournalTypeEnum.Docked)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalDocked);
+            }
+            else if (je.EventTypeID == JournalTypeEnum.Scan)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalScan);
+            }
+
             if (msg != null)
             {
                 eddn.PostMessage(msg);
