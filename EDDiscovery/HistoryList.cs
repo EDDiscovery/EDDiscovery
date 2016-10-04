@@ -204,39 +204,83 @@ namespace EDDiscovery
         public System.Drawing.Bitmap GetIcon
         {  get
             { 
-                switch( EntryType )     // Alpha order please!
+                switch( EntryType )     // Alpha order (as much as possible) please!
                 {
+                    case EliteDangerous.JournalTypeEnum.ApproachSettlement:
+                        return EDDiscovery.Properties.Resources.approachsettlement;
                     case EliteDangerous.JournalTypeEnum.Bounty:
                         return EDDiscovery.Properties.Resources.bounty;
+
+                    case EliteDangerous.JournalTypeEnum.CommitCrime:
+                        return EDDiscovery.Properties.Resources.commitcrime;
+
                     case EliteDangerous.JournalTypeEnum.CrewAssign:
                     case EliteDangerous.JournalTypeEnum.CrewHire:
                     case EliteDangerous.JournalTypeEnum.CrewFire:
                         return EDDiscovery.Properties.Resources.crew;
+
                     case EliteDangerous.JournalTypeEnum.Died:
                         return EDDiscovery.Properties.Resources.Coffinicon;
                     case EliteDangerous.JournalTypeEnum.Docked:
                         return EDDiscovery.Properties.Resources.Stationenter;
                     case EliteDangerous.JournalTypeEnum.FSDJump:
                         return EDDiscovery.Properties.Resources.hyperspace;
+
                     case EliteDangerous.JournalTypeEnum.HeatDamage:
                     case EliteDangerous.JournalTypeEnum.HeatWarning:
                         return EDDiscovery.Properties.Resources.heatdamage;
+
                     case EliteDangerous.JournalTypeEnum.HullDamage:
                         return EDDiscovery.Properties.Resources.damage;
+                    case EliteDangerous.JournalTypeEnum.Liftoff:
+                        return EDDiscovery.Properties.Resources.liftoff;
+                    case EliteDangerous.JournalTypeEnum.Location:
+                        return EDDiscovery.Properties.Resources.location;
+
+                    case EliteDangerous.JournalTypeEnum.LaunchSRV:
+                    case EliteDangerous.JournalTypeEnum.DockSRV:
+                        return EDDiscovery.Properties.Resources.srv;
+
+                    case EliteDangerous.JournalTypeEnum.LaunchFighter:
+                    case EliteDangerous.JournalTypeEnum.DockFighter:
+                        return EDDiscovery.Properties.Resources.fighter;
+
+                    case EliteDangerous.JournalTypeEnum.MaterialCollected:
+                        return EDDiscovery.Properties.Resources.materialcollected;
+                    case EliteDangerous.JournalTypeEnum.MaterialDiscarded:
+                        return EDDiscovery.Properties.Resources.materialdiscarded;
+                    case EliteDangerous.JournalTypeEnum.MaterialDiscovered:
+                        return EDDiscovery.Properties.Resources.materialdiscovered;
+
                     case EliteDangerous.JournalTypeEnum.ModuleBuy:
                     case EliteDangerous.JournalTypeEnum.ModuleRetrieve:
                     case EliteDangerous.JournalTypeEnum.ModuleSell:
                     case EliteDangerous.JournalTypeEnum.ModuleStore:
                     case EliteDangerous.JournalTypeEnum.ModuleSwap:
                         return EDDiscovery.Properties.Resources.module;
+
                     case EliteDangerous.JournalTypeEnum.Scan:
                         return EDDiscovery.Properties.Resources.scan;
                     case EliteDangerous.JournalTypeEnum.SendText:
                         return EDDiscovery.Properties.Resources.textsent;
+
+                    case EliteDangerous.JournalTypeEnum.ShieldState:
+                        return EDDiscovery.Properties.Resources.shields;
+
+                    case EliteDangerous.JournalTypeEnum.SupercruiseEntry:
+                        return EDDiscovery.Properties.Resources.supercruiseenter;
+                    case EliteDangerous.JournalTypeEnum.SupercruiseExit:
+                        return EDDiscovery.Properties.Resources.supercruiseexit;
+
+                    case EliteDangerous.JournalTypeEnum.RestockVehicle:
+                        return EventDescription.Contains("SRV") ? EDDiscovery.Properties.Resources.srv : EDDiscovery.Properties.Resources.fighter;
                     case EliteDangerous.JournalTypeEnum.ReceiveText:
                         return EDDiscovery.Properties.Resources.textreceived;
                     case EliteDangerous.JournalTypeEnum.Undocked:
                         return EDDiscovery.Properties.Resources.Stationexit;
+
+                    case EliteDangerous.JournalTypeEnum.VehicleSwitch: //TBD
+                        return EventDescription.Contains("Mothership") ? EDDiscovery.Properties.Resources.mothership : EDDiscovery.Properties.Resources.fighter;
                     default:
                         return EDDiscovery.Properties.Resources.genericevent;
                 }

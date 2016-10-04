@@ -571,6 +571,9 @@
     <None Include="Resources\damage.png" />
     <None Include="Resources\heatdamage.png" />
     <None Include="Resources\bounty.png" />
+    <None Include="Resources\commitcrime.png" />
+    <None Include="Resources\approachsettlement.png" />
+    <None Include="Resources\fighter.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -594,6 +597,16 @@
     <None Include="Resources\scan.png" />
     <None Include="Resources\stopflag.png" />
     <None Include="Resources\startflag.png" />
+    <None Include="Resources\liftoff.png" />
+    <None Include="Resources\srv.png" />
+    <None Include="Resources\location.png" />
+    <None Include="Resources\materialcollected.png" />
+    <None Include="Resources\materialdiscarded.png" />
+    <None Include="Resources\materialdiscovered.png" />
+    <None Include="Resources\shields.png" />
+    <None Include="Resources\supercruiseexit.png" />
+    <None Include="Resources\mothership.png" />
+    <None Include="Resources\supercruiseenter.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
