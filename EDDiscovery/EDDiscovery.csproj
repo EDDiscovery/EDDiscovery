@@ -232,6 +232,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingRequested.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingTimeout.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockSRV.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEDDItemSet.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEjectCargo.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerApply.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerCraft.cs" />
