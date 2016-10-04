@@ -67,6 +67,7 @@ namespace EDDiscovery
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
             dataGridViewJournal.AutoResizeRows();
+
             if (dataGridViewJournal.Rows.Count > 0)
             {
                 rowno = Math.Min(rowno, dataGridViewJournal.Rows.Count - 1);
@@ -84,7 +85,7 @@ namespace EDDiscovery
             if (item.EventDescription.Length > 0)
                 detail = item.EventDescription;
             if (item.EventDetailedInfo.Length > 0)
-                detail += Environment.NewLine + item.EventDetailedInfo;
+                detail += ((detail.Length>0) ? Environment.NewLine : "") + item.EventDetailedInfo;
 
             object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail };
 

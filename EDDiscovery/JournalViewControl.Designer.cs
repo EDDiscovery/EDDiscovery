@@ -39,16 +39,16 @@
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewJournal = new System.Windows.Forms.DataGridView();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
@@ -216,36 +216,6 @@
             this.dataGridViewJournal.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewJournal_MouseDown);
             this.dataGridViewJournal.Resize += new System.EventHandler(this.dataGridViewJournal_Resize);
             // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 100;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 140;
-            // 
-            // Event
-            // 
-            this.Event.HeaderText = "Event";
-            this.Event.MinimumWidth = 32;
-            this.Event.Name = "Event";
-            this.Event.ReadOnly = true;
-            // 
-            // ColumnType
-            // 
-            this.ColumnType.HeaderText = "Description";
-            this.ColumnType.MinimumWidth = 50;
-            this.ColumnType.Name = "ColumnType";
-            this.ColumnType.ReadOnly = true;
-            // 
-            // ColumnText
-            // 
-            this.ColumnText.HeaderText = "Information";
-            this.ColumnText.MinimumWidth = 100;
-            this.ColumnText.Name = "ColumnText";
-            this.ColumnText.ReadOnly = true;
-            this.ColumnText.Width = 700;
-            // 
             // historyContextMenu
             // 
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -277,6 +247,37 @@
             this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
             this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
             // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.MinimumWidth = 100;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.Width = 140;
+            // 
+            // Event
+            // 
+            this.Event.HeaderText = "Event";
+            this.Event.MinimumWidth = 32;
+            this.Event.Name = "Event";
+            this.Event.ReadOnly = true;
+            this.Event.Width = 80;
+            // 
+            // ColumnType
+            // 
+            this.ColumnType.HeaderText = "Description";
+            this.ColumnType.MinimumWidth = 50;
+            this.ColumnType.Name = "ColumnType";
+            this.ColumnType.ReadOnly = true;
+            // 
+            // ColumnText
+            // 
+            this.ColumnText.HeaderText = "Information";
+            this.ColumnText.MinimumWidth = 100;
+            this.ColumnText.Name = "ColumnText";
+            this.ColumnText.ReadOnly = true;
+            this.ColumnText.Width = 700;
+            // 
             // JournalViewControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,10 +303,6 @@
         private System.Windows.Forms.Panel panel1;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Event;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnText;
         private ExtendedControls.TextBoxBorder textBoxFilter;
         private System.Windows.Forms.ToolTip toolTipEddb;
         private ExtendedControls.ComboBoxCustom comboBoxJournalWindow;
@@ -316,5 +313,9 @@
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Event;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnText;
     }
 }

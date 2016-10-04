@@ -126,7 +126,6 @@ namespace EDDiscovery
 
             ProcessCommandLineOptions();
 
-
             string logpath = "";
             try
             {
@@ -313,6 +312,26 @@ namespace EDDiscovery
             {
                 EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
                 label_version.Text += " (no BETA detect)";
+            }
+
+            int jr = parts.FindIndex(x => x.Equals("-READJOURNAL", StringComparison.InvariantCultureIgnoreCase));   // use this so much to check journal decoding
+            if (jr != -1)
+            {
+                string file = parts[jr + 1];
+                System.IO.StreamReader filejr = new System.IO.StreamReader(file);
+                string line;
+                while ((line = filejr.ReadLine()) != null)
+                {
+                    System.Diagnostics.Trace.WriteLine(line);
+                    if (line.Length > 0)
+                    {
+                        JObject jo = (JObject)JObject.Parse(line);
+
+                        JSONPrettyPrint jpp = new JSONPrettyPrint(EliteDangerous.JournalEntry.StandardConverters(), "event;timestamp", "_Localised", (string)jo["event"]);
+                        string s = jpp.PrettyPrint(line, 80);
+                        System.Diagnostics.Trace.WriteLine(s);
+                    }
+                }
             }
         }
 
@@ -1423,9 +1442,10 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to reset all travelled history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 EliteDangerous.JournalEntry.ResetCommanderID(-1, EDDConfig.CurrentCommander.Nr);
+                RefreshHistoryAsync();
             }
         }
 

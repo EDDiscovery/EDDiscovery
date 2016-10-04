@@ -104,12 +104,12 @@
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.TopPanel = new System.Windows.Forms.Panel();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TopPanel = new System.Windows.Forms.Panel();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -137,7 +137,7 @@
             this.selectCorrectSystemToolStripMenuItem,
             this.toolStripMenuItemStartStop});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 202);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 180);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -1051,6 +1051,19 @@
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
             this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
             // 
+            // TopPanel
+            // 
+            this.TopPanel.Controls.Add(this.buttonFilter);
+            this.TopPanel.Controls.Add(this.textBoxFilter);
+            this.TopPanel.Controls.Add(this.label1);
+            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
+            this.TopPanel.Controls.Add(this.label2);
+            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TopPanel.Location = new System.Drawing.Point(0, 0);
+            this.TopPanel.Name = "TopPanel";
+            this.TopPanel.Size = new System.Drawing.Size(594, 32);
+            this.TopPanel.TabIndex = 26;
+            // 
             // ColumnTime
             // 
             this.ColumnTime.HeaderText = "Time";
@@ -1062,10 +1075,10 @@
             // Icon
             // 
             this.Icon.HeaderText = "Event";
-            this.Icon.MinimumWidth = 50;
+            this.Icon.MinimumWidth = 32;
             this.Icon.Name = "Icon";
             this.Icon.ReadOnly = true;
-            this.Icon.Width = 50;
+            this.Icon.Width = 80;
             // 
             // ColumnSystem
             // 
@@ -1091,19 +1104,6 @@
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
             this.ColumnNote.Width = 137;
-            // 
-            // TopPanel
-            // 
-            this.TopPanel.Controls.Add(this.buttonFilter);
-            this.TopPanel.Controls.Add(this.textBoxFilter);
-            this.TopPanel.Controls.Add(this.label1);
-            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
-            this.TopPanel.Controls.Add(this.label2);
-            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TopPanel.Location = new System.Drawing.Point(0, 0);
-            this.TopPanel.Name = "TopPanel";
-            this.TopPanel.Size = new System.Drawing.Size(594, 32);
-            this.TopPanel.TabIndex = 26;
             // 
             // TravelHistoryControl
             // 
@@ -1213,12 +1213,12 @@
         private ExtendedControls.AutoCompleteTextBox textBoxTarget;
         private ExtendedControls.ButtonExt buttonExtSummaryPopOut;
         private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
+        private ExtendedControls.ButtonExt buttonFilter;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
-        private ExtendedControls.ButtonExt buttonFilter;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
     }
 }
