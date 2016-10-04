@@ -10,7 +10,7 @@ using System.Text;
 
 namespace EDDiscovery
 {
-    [DebuggerDisplay("Event {EntryType} {System.name} ({System.x,nq},{System.y,nq},{System.z,nq}) {EventTimeUTC}")]
+    [DebuggerDisplay("Event {EntryType} {System.name} ({System.x,nq},{System.y,nq},{System.z,nq}) {EventTimeUTC} JID:{Journalid}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
     {
         #region Variables
