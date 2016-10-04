@@ -76,7 +76,7 @@ namespace EDDiscovery
         }
 
 
-        public string Convert(string pname, string value , bool noname , string eventname)
+        public string Convert(string pname, string value , string eventname)
         {
             string displayname = Tools.SplitCapsWord(pname);
 
@@ -147,7 +147,7 @@ namespace EDDiscovery
 
             //System.Diagnostics.Trace.WriteLine(string.Format("{0} {1} ", displayname , value ));
 
-            string ret = ((displayname.Length > 0 && !noname) ? displayname + ":" : "") + value;
+            string ret = ((displayname.Length > 0) ? displayname + ":" : "") + value;
 
             return ret;
         }
@@ -254,9 +254,6 @@ namespace EDDiscovery
                     }
                 }
 
-                //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Type.ToString()));
-                //System.Diagnostics.Trace.WriteLine("   " + childno + " : " + siblings + " : " + name + ":" + jt.Type.ToString() + "!");
-
                 int totalchildren = jt.Children().Count();
 
                 bool isarray = jt is JArray;
@@ -264,7 +261,7 @@ namespace EDDiscovery
 
                 LF(ref outstr, ref linelen);
 
-                if (isarray)
+                if (isarray)            
                 {
                     if (totalchildren >= 1 && jt.Children().First() is JObject )
                         LF(ref outstr, ref linelen,true);
@@ -289,9 +286,9 @@ namespace EDDiscovery
                     {
                         string value = jc.Value<string>();
 
-                        if (jconvertvalue != null)
-                            value = jconvertvalue.Convert(name, value, isarray , eventtype);
-                        else if ( !isarray )
+                        if (jconvertvalue != null)                                  // if converter, pass in to process
+                            value = jconvertvalue.Convert(name, value, eventtype);
+                        else if ( !isarray )                                        // if no converter, array elements do are not named..
                             value = name + ":" + value;
 
                         outstr +=  value + ", ";

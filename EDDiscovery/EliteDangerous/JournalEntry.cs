@@ -401,7 +401,8 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public static void UpdateEDSMIDAndPos(long journalid, ISystem system, bool jsonpos)
+        //dist >0 to update
+        public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos , double dist )
         {
             using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
             {
@@ -416,13 +417,16 @@ namespace EDDiscovery.EliteDangerous
                         jo["StarPos"] = new JArray() { system.x, system.y, system.z };
                     }
 
+                    if (dist > 0)
+                        jo["JumpDist"] = dist;
+
                     using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID"))
                     {
                         cmd2.AddParameterWithValue("@ID", journalid);
                         cmd2.AddParameterWithValue("@EventData", jo.ToString());
                         cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
-                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos {1}/edsmid", journalid, jsonpos));
+                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos {1}/edsmid {2} dist {3}", journalid, jsonpos, system.id_edsm, dist));
                         SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                     }
                 }
@@ -1014,7 +1018,19 @@ namespace EDDiscovery.EliteDangerous
 
         static public bool ResetCommanderID(int from , int to)
         {
-            // TODO..
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            {
+                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdridto where CommanderID=@cmdridfrom"))
+                {
+                    if (from == -1)
+                        cmd.CommandText = "Update JournalEntries set CommanderID = @cmdridto";
+
+                    cmd.AddParameterWithValue("@cmdridto", to);
+                    cmd.AddParameterWithValue("@cmdridfrom", from);
+                    System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with {1}", from , to));
+                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                }
+            }
             return true;
         }
 
@@ -1035,6 +1051,7 @@ namespace EDDiscovery.EliteDangerous
             jc.AddScale("Fuel Level", 1.0, "Fuel Level Left '0.0't'", "");
             jc.AddScale("Amount", 1.0, "'Fuel Bought '0.0't'", "", "RefuelAll");
             jc.AddScale("BoostValue", 1.0, "0.0' boost'", "", "JetConeBoost");
+            jc.AddScale("StarPos", 1.0, "0.0","");          // any entry StarPos loses it name (inside arrays). StarPos as an array name gets printed sep.
 
             jc.AddBool("TidalLock", "Not Tidally Locked", "Tidally Locked", ""); // remove name
             jc.AddBool("Landable", "Not Landable", "Landable", ""); // remove name

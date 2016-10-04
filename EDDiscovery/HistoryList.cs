@@ -49,7 +49,7 @@ namespace EDDiscovery
         private double travelled_distance;
         private TimeSpan travelled_seconds;
         bool travelling;
-        bool travelled_missingjump;
+        int travelled_missingjump;
 
         #endregion
 
@@ -87,6 +87,13 @@ namespace EDDiscovery
                 {
                     newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
                     newsys.id_edsm = jl.EdsmID;       // pass across the EDSMID for the lazy load process.
+
+                    if (jfsd != null && jfsd.JumpDist <= 0 && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
+                    {
+                        jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jl.Id, newsys, false, jfsd.JumpDist);   // no need to do pos, already have it
+                    }
+
                 }
                 else
                 {                           // Default one
@@ -99,8 +106,12 @@ namespace EDDiscovery
 
                         if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
                         {                                                       // so next time we don't have to do this again..
-                            EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(jl.Id, s, s.HasCoordinate);
                             newsys = s;
+
+                            if (jfsd != null && jfsd.JumpDist <= 0 && newsys.HasCoordinate && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
+                                jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here.  EDSM systems always have co-ords, but we should check anyway
+
+                            EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jl.Id, newsys, newsys.HasCoordinate, jfsd.JumpDist);
                         }
                     }
                 }
@@ -108,6 +119,7 @@ namespace EDDiscovery
                 if (jfsd != null)
                 {
                     if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
+                     
                         jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here
 
                     mapcolour = jfsd.MapColor;
@@ -145,22 +157,26 @@ namespace EDDiscovery
                 {
                     double dist = ((EliteDangerous.JournalEvents.JournalFSDJump)je).JumpDist;
                     if (dist <= 0)
-                        he.travelled_missingjump = true;
+                        he.travelled_missingjump++;
                     else
                         he.travelled_distance += dist;
                 }
 
                 he.travelled_seconds = prev.travelled_seconds;
+                TimeSpan diff = he.EventTimeUTC.Subtract(prev.EventTimeUTC);
 
-                if (he.EntryType != EliteDangerous.JournalTypeEnum.LoadGame)        // time between last entry and load game is not real time
+                if (he.EntryType != EliteDangerous.JournalTypeEnum.LoadGame && diff < new TimeSpan(2, 0, 0))   // time between last entry and load game is not real time
                 {
-                    he.travelled_seconds += he.EventTimeUTC.Subtract(prev.EventTimeUTC);
+                    he.travelled_seconds += diff;
                 }
-                
+
                 if (he.StopMarker || he.StartMarker)
                 {
                     he.travelling = false;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling stopped " + he.travelled_distance + (he.travelled_missingjump ? " LY(*)" : " LY") + " time " + he.travelled_seconds;
+                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") + 
+                                        ((he.travelled_missingjump>0) ? " LY(" + he.travelled_missingjump + " unknown distance jumps)" : " LY") + 
+                                        " time " + he.travelled_seconds;
+
                     he.travelled_distance = 0;
                     he.travelled_seconds = new TimeSpan(0);
                 }
@@ -170,7 +186,7 @@ namespace EDDiscovery
                     he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling";
 
                     if (he.IsFSDJump)
-                        he.EventDetailedInfo += " distance " + he.travelled_distance.ToString("0.0") + (he.travelled_missingjump ? " LY (*)" : " LY");
+                        he.EventDetailedInfo += " distance " + he.travelled_distance.ToString("0.0") + ((he.travelled_missingjump>0) ? " LY (*)" : " LY");
 
                     he.EventDetailedInfo += " time " + he.travelled_seconds;
                 }
@@ -417,7 +433,7 @@ namespace EDDiscovery
                     bool updatepos = (he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump || he.EntryType == EliteDangerous.JournalTypeEnum.Location ) && !syspos.System.HasCoordinate && s.HasCoordinate;
 
                     if ( updatepos || updateedsmid )
-                        EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(he.Journalid, s, updatepos);
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, s, updatepos,-1);  // update pos and edsmid, jdist not updated
 
                     he.System = s;
                 }
