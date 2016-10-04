@@ -209,7 +209,7 @@ namespace EDDiscovery
         {
             Button b = sender as Button;
             cfs.FilterButton("JournalHistoryControlEventFilter", b,
-                             _discoveryForm.theme.TextBackColor, _discoveryForm.theme.TextBlockColor);
+                             _discoveryForm.theme.TextBackColor, _discoveryForm.theme.TextBlockColor, _discoveryForm);
         }
 
         private void EventFilterChanged(object sender, EventArgs e)
