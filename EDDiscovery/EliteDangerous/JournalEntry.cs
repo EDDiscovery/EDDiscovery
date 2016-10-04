@@ -232,7 +232,7 @@ namespace EDDiscovery.EliteDangerous
         StopMarker = 0x0200,            // measure distance stop pos marker
     };
 
-    [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmId} C {CommanderId}")]
+    [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmID} JID {Id} C {CommanderId}")]
     public abstract class JournalEntry
     {
         public long Id;                          // this is the entry ID

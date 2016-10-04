@@ -322,8 +322,10 @@ namespace EDDiscovery
                 string line;
                 while ((line = filejr.ReadLine()) != null)
                 {
+                    if (line.Equals("END"))
+                        break;
                     System.Diagnostics.Trace.WriteLine(line);
-                    if (line.Length > 0)
+                    if (line.Length > 0 )
                     {
                         JObject jo = (JObject)JObject.Parse(line);
 
@@ -1235,10 +1237,15 @@ namespace EDDiscovery
         {
             try
             {
-                string cmdrfolder = EDDConfig.Instance.ListOfCommanders[EDDConfig.Instance.CurrentCmdrID].NetLogDir;
-                if (cmdrfolder.Length < 1)
-                    cmdrfolder = EliteDangerous.EDJournalClass.GetDefaultJournalDir();
-                Process.Start(cmdrfolder);
+                EDCommander cmdr = EDDConfig.Instance.ListOfCommanders.Find(x => x.Nr == EDDConfig.Instance.CurrentCmdrID);
+
+                if (cmdr != null)
+                {
+                    string cmdrfolder = cmdr.NetLogDir;
+                    if (cmdrfolder.Length < 1)
+                        cmdrfolder = EliteDangerous.EDJournalClass.GetDefaultJournalDir();
+                    Process.Start(cmdrfolder);
+                }
             }
             catch (Exception ex)
             {
