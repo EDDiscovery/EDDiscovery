@@ -420,6 +420,21 @@ namespace EDDiscovery
             }
         }
 
+        public DateTime GetMaxDate
+        {
+            get
+            {
+                return historylist.Max(x => x.EventTimeUTC);
+            }
+        }
+        public DateTime GetMinDate
+        {
+            get
+            {
+                return historylist.Min(x => x.EventTimeUTC);
+            }
+        }
+
 
         public int GetVisitsCount(string name)
         {

@@ -54,6 +54,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             OrbitalPeriod = Tools.GetDouble(evt["StellarMass"]);
             RotationPeriod = Tools.GetDouble(evt["StellarMass"]);
             Rings = evt["Rings"]?.ToObject<PlanetRing[]>();
+            DistanceFromArrivalLS = Tools.GetDouble(evt["DistanceFromArrivalLS"]);
 
             TidalLock = evt.Value<bool?>("TidalLock") ?? false;
             TerraformState = Tools.GetStringDef(evt["TerraformState"]);

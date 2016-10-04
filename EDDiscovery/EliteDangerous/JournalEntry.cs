@@ -553,6 +553,33 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+
+        public static List<JournalEntry> GetByEventType(JournalTypeEnum eventtype, int commanderid, DateTime start, DateTime stop)
+        {
+            List<JournalEntry> vsc = new List<JournalEntry>();
+
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE EventTypeID = @eventtype and  CommanderID=@commander and  EventTime >@start and EventTime<@Stop ORDER BY EventTime ASC"))
+                {
+                    cmd.AddParameterWithValue("@eventtype", (int)eventtype);
+                    cmd.AddParameterWithValue("@commander", (int)commanderid);
+                    cmd.AddParameterWithValue("@start", start);
+                    cmd.AddParameterWithValue("@stop", stop);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            vsc.Add(JournalEntry.CreateJournalEntry(reader));
+                        }
+                    }
+                }
+            }
+            return vsc;
+        }
+
+
+
         public static List<JournalEntry> GetAllByTLU(long tluid )
         {
             List<JournalEntry> vsc = new List<JournalEntry>();

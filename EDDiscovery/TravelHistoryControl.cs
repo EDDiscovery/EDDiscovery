@@ -18,6 +18,7 @@ using EDDiscovery.EliteDangerous;
 using EDDiscovery.EDDN;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
+using EDDiscovery.Export;
 
 namespace EDDiscovery
 {
@@ -1421,5 +1422,32 @@ namespace EDDiscovery
 
             this.Cursor = Cursors.Default;
         }
+
+        private void buttonExport_Click(object sender, EventArgs e)
+        {
+            ExportScan export = new ExportScan();
+
+            SaveFileDialog dlg = new SaveFileDialog();
+
+            dlg.Filter = "CSV export| *.csv";
+            dlg.Title = "Export scan data to Excel (csv)";
+
+            var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+
+            List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
+
+            List<JournalEntry> scans = new List<JournalEntry>();
+
+            scans = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                export.ScanToCSV(dlg.FileName, scans);
+                Process.Start(dlg.FileName);
+            }
+
+
+        }
+
     }
 }
