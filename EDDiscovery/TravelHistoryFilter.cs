@@ -105,7 +105,7 @@ namespace EDDiscovery
         string dbstring;
         public event EventHandler Changed;
 
-        public void FilterButton(string db , Control ctr, Color back, Color fore)
+        public void FilterButton(string db , Control ctr, Color back, Color fore, Form parent)
         {
             if (cc == null)
             {
@@ -127,7 +127,7 @@ namespace EDDiscovery
                 cc.CheckedChanged += FilterCheckChanged;
                 cc.PositionBelow(ctr, new Size(ctr.Width*2, 400));
                 cc.SetColour(back,fore);
-                cc.Show();
+                cc.Show(parent);
             }
             else
                 cc.Close();
