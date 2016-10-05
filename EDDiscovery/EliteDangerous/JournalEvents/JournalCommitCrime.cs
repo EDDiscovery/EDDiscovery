@@ -25,5 +25,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Victim { get; set; }
         public int? Fine { get; set; }
         public int? Bounty { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.commitcrime; } }
+
     }
 }

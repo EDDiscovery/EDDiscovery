@@ -304,4 +304,46 @@
   <data name="supercruiseexit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\supercruiseexit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ammunition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ammunition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dockingdenied" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dockingdenied.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dockinggranted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dockinggranted.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="modulebuy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\modulebuy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="moduleretrieve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\moduleretrieve.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="modulesell" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\modulesell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="modulestore" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\modulestore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="moduleswap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\moduleswap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refuel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refuel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refuelall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refuelall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="repair" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\repair.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="repairall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\repairall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ressurect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ressurect.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="selfdestruct" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\selfdestruct.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

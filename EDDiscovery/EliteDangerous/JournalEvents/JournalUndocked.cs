@@ -16,6 +16,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         
         }
         public string StationName { get; set; }
-  
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationexit; } }
     }
 }

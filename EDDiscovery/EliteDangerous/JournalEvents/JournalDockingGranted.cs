@@ -24,5 +24,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string StationName { get; set; }
         public int LandingPad { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.dockinggranted; } }
+
     }
 }

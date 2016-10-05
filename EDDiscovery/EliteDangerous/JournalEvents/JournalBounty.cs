@@ -23,5 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Reward { get; set; }
         public string VictimFaction { get; set; }
         public bool SharedWithOthers { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
     }
 }

@@ -49,5 +49,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Government_Localised { get; set; }
         public string Security { get; set; }
         public string Security_Localised { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
+
     }
 }

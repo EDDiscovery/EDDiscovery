@@ -39,8 +39,7 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             dataGridViewJournal.MakeDoubleBuffered();
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            //does not seem to work well - keep for ref. dataGridViewJournal.Columns[JournalHistoryColumns.Text].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            //dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewJournal.RowTemplate.Height = 24;
             cfs.Changed += EventFilterChanged;
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, "JournalTimeHistory");

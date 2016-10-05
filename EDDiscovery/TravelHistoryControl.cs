@@ -92,6 +92,7 @@ namespace EDDiscovery
         private void TravelHistoryControl_Load(object sender, EventArgs e)
         {
             dataGridViewTravel.MakeDoubleBuffered();
+            dataGridViewTravel.RowTemplate.Height = 24;
         }
 
         public void Display()
@@ -661,7 +662,7 @@ namespace EDDiscovery
                 noicons++;
 
             int padding = 4;
-            int size = 18;
+            int size = 24;
             int hstart = (hpos + colwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
 
             int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
@@ -1011,7 +1012,7 @@ namespace EDDiscovery
                 bool expanded = (ch < 25);
 
                 string text = leftclicksystem.EventDescription + ((expanded) ? (Environment.NewLine + leftclicksystem.EventDetailedInfo) : "");
-                int h = 22;
+                int h = 24;
 
                 if (expanded)
                 {

@@ -18,5 +18,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string From { get; set; }
         public string Message { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.textreceived; } }
+
     }
 }

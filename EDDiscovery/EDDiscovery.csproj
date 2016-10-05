@@ -576,6 +576,9 @@
     <None Include="Resources\commitcrime.png" />
     <None Include="Resources\approachsettlement.png" />
     <None Include="Resources\fighter.png" />
+    <None Include="Resources\dockingdenied.png" />
+    <None Include="Resources\dockinggranted.png" />
+    <None Include="Resources\ammunition.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -609,6 +612,17 @@
     <None Include="Resources\supercruiseexit.png" />
     <None Include="Resources\mothership.png" />
     <None Include="Resources\supercruiseenter.png" />
+    <None Include="Resources\selfdestruct.png" />
+    <None Include="Resources\ressurect.png" />
+    <None Include="Resources\refuelall.png" />
+    <None Include="Resources\repairall.png" />
+    <None Include="Resources\repair.png" />
+    <None Include="Resources\refuel.png" />
+    <None Include="Resources\moduleswap.png" />
+    <None Include="Resources\moduleretrieve.png" />
+    <None Include="Resources\modulestore.png" />
+    <None Include="Resources\modulesell.png" />
+    <None Include="Resources\modulebuy.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

@@ -336,6 +336,11 @@ namespace EDDiscovery
                         EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
                         System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
                     }
+
+                    Bitmap x1 = EliteDangerous.JournalEntry.GetIcon("ApproachSettlement");
+                    Bitmap x2 = EliteDangerous.JournalEntry.GetIcon("Bounty");
+
+
                 }
             }
         }

@@ -23,5 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Faction { get; set; }
         public int Cost { get; set; }
         public CombatRank CombatRank { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crew; } }
     }
 }
