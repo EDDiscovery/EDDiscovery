@@ -13,5 +13,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StationName = Tools.GetStringDef(evt["StationName"]);
         }
         public string StationName { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.dockingrequest; } }
     }
 }
