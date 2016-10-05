@@ -36,5 +36,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return base.DefaultRemoveItems() + ";ShipID";
         }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadgame; } }
+
     }
 }

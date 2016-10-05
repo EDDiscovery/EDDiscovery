@@ -31,5 +31,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Empire { get; set; }
         public int Federation { get; set; }
         public int CQC { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.progress; } }
+
     }
 }
