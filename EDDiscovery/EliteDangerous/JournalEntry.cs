@@ -295,6 +295,15 @@ namespace EDDiscovery.EliteDangerous
             TLUId = 0;
         }
 
+        public JournalEntry(JournalTypeEnum jtype)
+        {
+            jEventData = null;
+            EventTypeID = jtype;
+            EventTypeStr = jtype.ToString();
+            EventTimeUTC = DateTime.UtcNow;
+            TLUId = 0;
+        }
+
         static public JournalEntry CreateJournalEntry(DataRow dr)
         {
             string EDataString = (string)dr["EventData"];
