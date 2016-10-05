@@ -15,5 +15,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string Loadout { get; set; }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.srv; } }
+
     }
 }

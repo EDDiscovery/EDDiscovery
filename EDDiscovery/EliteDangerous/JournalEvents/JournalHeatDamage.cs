@@ -21,5 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string VictimFaction { get; set; }
         public int Reward { get; set; }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.heatdamage; } }
+
     }
 }

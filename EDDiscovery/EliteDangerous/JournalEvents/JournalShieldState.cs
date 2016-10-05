@@ -18,5 +18,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public bool ShieldsUp { get; set; }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.shields; } }
+
     }
 }

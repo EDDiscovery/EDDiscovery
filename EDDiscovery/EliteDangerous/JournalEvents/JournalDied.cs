@@ -44,5 +44,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         }
         public Killer[] Killers { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Coffinicon; } }
+
     }
 }

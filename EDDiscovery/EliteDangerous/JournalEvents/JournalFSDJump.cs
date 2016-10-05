@@ -68,5 +68,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 jEventData["EDDMapColor"] = value;
             }
         }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.hyperspace; } }
+
     }
 }

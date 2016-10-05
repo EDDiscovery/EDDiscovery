@@ -21,5 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Cost { get; set; }
         public bool Bankrupt { get; set; }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ressurect; } }
+
     }
 }

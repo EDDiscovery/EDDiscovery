@@ -9,10 +9,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalHeatWarning(JObject evt ) : base(evt, JournalTypeEnum.HeatWarning)
         {
-
-
         }
 
-
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.heatdamage; } }
     }
 }

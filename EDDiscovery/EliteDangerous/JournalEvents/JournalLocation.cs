@@ -64,5 +64,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             detailed = ToShortString("StarSystem;StationName;StationType;Docked;Economy_Localised");      
         }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
+
     }
 }

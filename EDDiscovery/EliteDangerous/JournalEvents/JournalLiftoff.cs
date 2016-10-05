@@ -16,5 +16,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.liftoff; } }
+
     }
 }

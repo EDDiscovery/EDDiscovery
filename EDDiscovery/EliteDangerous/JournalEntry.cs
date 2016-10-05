@@ -637,11 +637,402 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
+        static public Type TypeOfJournalEntry(string text)
+        {
+            switch (text)
+            {
+                case "ApproachSettlement":
+                    return typeof(JournalApproachSettlement);
+
+                case "Bounty":
+                    return typeof(JournalBounty);
+
+                case "BuyAmmo":
+                    return typeof(JournalBuyAmmo);
+
+                case "BuyDrones":
+                    return typeof(JournalBuyDrones);
+
+                case "BuyExplorationData":
+                    return typeof(JournalBuyExplorationData);
+
+                case "BuyTradeData":
+                    return typeof(JournalBuyTradeData);
+
+
+
+                case "CockpitBreached":
+                    return typeof(JournalCockpitBreached);
+
+                case "CollectCargo":
+                    return typeof(JournalCollectCargo);
+
+                case "CommitCrime":
+                    return typeof(JournalCommitCrime);
+
+                case "CommunityGoalJoin":
+                    return typeof(JournalCommunityGoalJoin);
+
+                case "CommunityGoalReward":
+                    return typeof(JournalCommunityGoalReward);
+
+                case "CrewAssign":
+                    return typeof(JournalCrewAssign);
+
+                case "CrewFire":
+                    return typeof(JournalCrewFire);
+
+                case "CrewHire":
+                    return typeof(JournalCrewHire);
+
+                case "DatalinkScan":
+                    return typeof(JournalDatalinkScan);
+
+                case "DockFighter":
+                    return typeof(JournalDockFighter);
+
+                case "DockSRV":
+                    return typeof(JournalDockSRV);
+
+
+                case "Docked":
+                    return typeof(JournalDocked);
+
+
+                case "Died":
+                    return typeof(JournalDied);
+
+
+                case "fileheader":
+                case "Fileheader":
+                    return typeof(JournalFileHeader);
+
+
+                case "FSDJump":
+                    return typeof(JournalFSDJump);
+
+
+                case "Location":
+                    return typeof(JournalLocation);
+
+
+                case "LoadGame":
+                    return typeof(JournalLoadGame);
+
+
+                case "Scan":
+                    return typeof(JournalScan);
+
+
+
+                case "SellExplorationData":
+                    return typeof(JournalSellExplorationData);
+
+
+                case "Undocked":
+                    return typeof(JournalUndocked);
+
+
+                case "DockingCancelled":
+                    return typeof(JournalDockingCancelled);
+
+
+                case "DockingDenied":
+                    return typeof(JournalDockingDenied);
+
+                case "DockingGranted":
+                    return typeof(JournalDockingGranted);
+
+
+                case "DockingRequested":
+                    return typeof(JournalDockingRequested);
+
+
+                case "DockingTimeout":
+                    return typeof(JournalDockingTimeout);
+
+
+
+                case "EngineerApply":
+                    return typeof(JournalEngineerApply);
+
+                case "EngineerCraft":
+                    return typeof(JournalEngineerCraft);
+
+                case "EngineerProgress":
+                    return typeof(JournalEngineerProgress);
+
+
+                case "EscapeInterdiction":
+                    return typeof(JournalEscapeInterdiction);
+
+                case "FactionKillBond":
+                    return typeof(JournalFactionKillBond);
+
+                case "HeatDamage":
+                    return typeof(JournalHeatDamage);
+
+                case "HeatWarning":
+                    return typeof(JournalHeatWarning);
+
+                case "HullDamage":
+                    return typeof(JournalHullDamage);
+
+                case "Interdicted":
+                    return typeof(JournalInterdicted);
+
+                case "Interdiction":
+                    return typeof(JournalInterdiction);
+
+
+
+
+                case "FuelScoop":
+                    return typeof(JournalFuelScoop);
+
+
+                case "JetConeBoost":
+                    return typeof(JournalJetConeBoost);
+
+                case "JetConeDamage":
+                    return typeof(JournalJetConeDamage);
+
+
+
+                case "LaunchSRV":
+                    return typeof(JournalLaunchSRV);
+
+                case "Liftoff":
+                    return typeof(JournalLiftoff);
+
+                case "MarketBuy":
+                    return typeof(JournalMarketBuy);
+
+                case "MarketSell":
+                    return typeof(JournalMarketSell);
+
+
+
+                case "MaterialCollected":
+                    return typeof(JournalMaterialCollected);
+
+                case "MaterialDiscarded":
+                    return typeof(JournalMaterialDiscarded);
+
+                case "MaterialDiscovered":
+                    return typeof(JournalMaterialDiscovered);
+
+                case "MiningRefined":
+                    return typeof(JournalMiningRefined);
+
+
+                case "MissionAbandoned":
+                    return typeof(JournalMissionAbandoned);
+
+                case "MissionAccepted":
+                    return typeof(JournalMissionAccepted);
+
+                case "MissionCompleted":
+                    return typeof(JournalMissionCompleted);
+
+                case "MissionFailed":
+                    return typeof(JournalMissionFailed);
+
+                case "NewCommander":
+                    return typeof(JournalNewCommander);
+
+
+                case "Continued":
+                    return typeof(JournalContinued);
+
+
+                case "Rank":
+                    return typeof(JournalRank);
+
+
+                case "Progress":
+                    return typeof(JournalProgress);
+
+
+                case "SupercruiseEntry":
+                    return typeof(JournalSupercruiseEntry);
+
+
+                case "SupercruiseExit":
+                    return typeof(JournalSupercruiseExit);
+
+
+                case "ModuleBuy":
+                    return typeof(JournalModuleBuy);
+
+
+                case "ModuleRetrieve":
+                    return typeof(JournalModuleRetrieve);
+
+
+                case "ModuleSell":
+                    return typeof(JournalModuleSell);
+
+
+                case "ModuleStore":
+                    return typeof(JournalModuleStore);
+
+
+                case "ModuleSwap":
+                    return typeof(JournalModuleSwap);
+
+
+                case "PVPKill":
+                    return typeof(JournalPVPKill);
+
+
+                case "RefuelAll":
+                    return typeof(JournalRefuelAll);
+
+                case "RefuelPartial":
+                    return typeof(JournalRefuelPartial);
+
+                case "Repair":
+                    return typeof(JournalRepair);
+
+                case "RepairAll":
+                    return typeof(JournalRepairAll);
+
+                case "RestockVehicle":
+                    return typeof(JournalRestockVehicle);
+
+
+                case "Resurrect":
+                    return typeof(JournalResurrect);
+
+
+                case "Screenshot":
+                    return typeof(JournalScreenshot);
+
+                case "SelfDestruct":
+                    return typeof(JournalSelfDestruct);
+
+                case "ShieldState":
+                    return typeof(JournalShieldState);
+
+                case "ShipyardBuy":
+                    return typeof(JournalShipyardBuy);
+
+                case "ShipyardNew":
+                    return typeof(JournalShipyardNew);
+
+                case "ShipyardSell":
+                    return typeof(JournalShipyardSell);
+
+                case "ShipyardSwap":
+                    return typeof(JournalShipyardSwap);
+
+                case "ShipyardTransfer":
+                    return typeof(JournalShipyardTransfer);
+
+
+                case "Synthesis":
+                    return typeof(JournalSynthesis);
+
+                case "Touchdown":
+                    return typeof(JournalTouchdown);
+
+                case "USSDrop":
+                    return typeof(JournalUSSDrop);
+
+                case "VehicleSwitch":
+                    return typeof(JournalVehicleSwitch);
+
+                case "WingAdd":
+                    return typeof(JournalWingAdd);
+
+                case "WingJoin":
+                    return typeof(JournalWingJoin);
+
+                case "WingLeave":
+                    return typeof(JournalWingLeave);
+
+
+                case "ReceiveText":
+                    return typeof(JournalReceiveText);
+
+                case "SendText":
+                    return typeof(JournalSendText);
+
+
+                case "PayFines":
+                    return typeof(JournalPayFines);
+
+                case "PayLegacyFines":
+                    return typeof(JournalPayLegacyFines);
+
+                case "Promotion":
+                    return typeof(JournalPromotion);
+
+                case "RebootRepair":
+                    return typeof(JournalRebootRepair);
+
+                case "RedeemVoucher":
+                    return typeof(JournalRedeemVoucher);
+
+
+
+                case "CapShipBond":
+                    return typeof(JournalCapShipBond);
+
+                case "ClearSavedGame":
+                    return typeof(JournalClearSavedGame);
+
+
+                case "EjectCargo":
+                    return typeof(JournalEjectCargo);
+
+                case "LaunchFighter":
+                    return typeof(JournalLaunchFighter);
+
+                case "SellDrones":
+                    return typeof(JournalSellDrones);
+
+
+
+                case "PowerplayCollect":
+                    return typeof(JournalPowerplayCollect);
+
+                case "PowerplayDefect":
+                    return typeof(JournalPowerplayDefect);
+
+                case "PowerplayDeliver":
+                    return typeof(JournalPowerplayDeliver);
+
+                case "PowerplayFastTrack":
+                    return typeof(JournalPowerplayFastTrack);
+
+                case "PowerplayJoin":
+                    return typeof(JournalPowerplayJoin);
+
+                case "PowerplayLeave":
+                    return typeof(JournalPowerplayLeave);
+
+                case "PowerplaySalary":
+                    return typeof(JournalPowerplaySalary);
+
+                case "PowerplayVote":
+                    return typeof(JournalPowerplayVote);
+
+                case "PowerplayVoucher":
+                    return typeof(JournalPowerplayVoucher);
+
+
+                case "EDDItemSet":
+                    return typeof(JournalEDDItemSet);
+
+            }
+
+            return null;
+        }
 
         static public JournalEntry CreateJournalEntry(string text)
         {
-            JournalEntry je=null;
-
             JObject jo = (JObject)JObject.Parse(text);
 
             string Eventstr = Tools.GetStringNull(jo["event"]);
@@ -649,412 +1040,24 @@ namespace EDDiscovery.EliteDangerous
             if (Eventstr == null)  // Should normaly not happend unless corrupt string.
                 return null;
 
-            switch (Eventstr)
+            Type jtype = TypeOfJournalEntry(Eventstr);
+
+            if ( jtype == null )
             {
-                case "ApproachSettlement":
-                    je = new JournalApproachSettlement(jo);
-                    break;
-                case "Bounty":
-                    je = new JournalBounty(jo);
-                    break;
-                case "BuyAmmo":
-                    je = new JournalBuyAmmo(jo);
-                    break;
-                case "BuyDrones":
-                    je = new JournalBuyDrones(jo);
-                    break;
-                case "BuyExplorationData":
-                    je = new JournalBuyExplorationData(jo);
-                    break;
-                case "BuyTradeData":
-                    je = new JournalBuyTradeData(jo);
-                    break;
-
-
-                case "CockpitBreached":
-                    je = new JournalCockpitBreached(jo);
-                    break;
-                case "CollectCargo":
-                    je = new JournalCollectCargo(jo);
-                    break;
-                case "CommitCrime":
-                    je = new JournalCommitCrime(jo);
-                    break;
-                case "CommunityGoalJoin":
-                    je = new JournalCommunityGoalJoin(jo);
-                    break;
-                case "CommunityGoalReward":
-                    je = new JournalCommunityGoalReward(jo);
-                    break;
-
-                case "CrewAssign":
-                    je = new JournalCrewAssign(jo);
-                    break;
-                case "CrewFire":
-                    je = new JournalCrewFire(jo);
-                    break;
-                case "CrewHire":
-                    je = new JournalCrewHire(jo);
-                    break;
-
-
-
-                case "DatalinkScan":
-                    je = new JournalDatalinkScan(jo);
-                    break;
-                case "DockFighter":
-                    je = new JournalDockFighter(jo);
-                    break;
-                case "DockSRV":
-                    je = new JournalDockSRV(jo);
-                    break;
-
-                case "Docked":
-                    je = new JournalDocked(jo);
-                    break;
-
-                case "Died":
-                    je = new JournalDied(jo);
-                    break;
-
-                case "fileheader":
-                case "Fileheader":
-                    je = new JournalFileHeader(jo);
-                    break;
-
-                case "FSDJump":
-                    je = new JournalFSDJump(jo);
-                    break;
-
-                case "Location":
-                    je = new JournalLocation(jo);
-                    break;
-
-                case "LoadGame":
-                    je = new JournalLoadGame(jo);
-                    break;
-
-                case "Scan":
-                    je = new JournalScan(jo);
-                    break;
-
-
-                case "SellExplorationData":
-                    je = new JournalSellExplorationData(jo);
-                    break;
-
-                case "Undocked":
-                    je = new JournalUndocked(jo);
-                    break;
-
-                case "DockingCancelled":
-                    je = new JournalDockingCancelled(jo);
-                    break;
-
-                case "DockingDenied":
-                    je = new JournalDockingDenied(jo);
-                    break;
-                case "DockingGranted":
-                    je = new JournalDockingGranted(jo);
-                    break;
-
-                case "DockingRequested":
-                    je = new JournalDockingRequested(jo);
-                    break;
-
-                case "DockingTimeout":
-                    je = new JournalDockingTimeout(jo);
-                    break;
-
-
-                case "EngineerApply":
-                    je = new JournalEngineerApply(jo);
-                    break;
-                case "EngineerCraft":
-                    je = new JournalEngineerCraft(jo);
-                    break;
-                case "EngineerProgress":
-                    je = new JournalEngineerProgress(jo);
-                    break;
-
-                case "EscapeInterdiction":
-                    je = new JournalEscapeInterdiction(jo);
-                    break;
-                case "FactionKillBond":
-                    je = new JournalFactionKillBond(jo);
-                    break;
-                case "HeatDamage":
-                    je = new JournalHeatDamage(jo);
-                    break;
-                case "HeatWarning":
-                    je = new JournalHeatWarning(jo);
-                    break;
-                case "HullDamage":
-                    je = new JournalHullDamage(jo);
-                    break;
-                case "Interdicted":
-                    je = new JournalInterdicted(jo);
-                    break;
-                case "Interdiction":
-                    je = new JournalInterdiction(jo);
-                    break;
-
-
-
-                case "FuelScoop":
-                    je = new JournalFuelScoop(jo);
-                    break;
-
-                case "JetConeBoost":
-                    je = new JournalJetConeBoost(jo);
-                    break;
-                case "JetConeDamage":
-                    je = new JournalJetConeDamage(jo);
-                    break;
-
-
-                case "LaunchSRV":
-                    je = new JournalLaunchSRV(jo);
-                    break;
-                case "Liftoff":
-                    je = new JournalLiftoff(jo);
-                    break;
-                case "MarketBuy":
-                    je = new JournalMarketBuy(jo);
-                    break;
-                case "MarketSell":
-                    je = new JournalMarketSell(jo);
-                    break;
-
-
-                case "MaterialCollected":
-                    je = new JournalMaterialCollected(jo);
-                    break;
-                case "MaterialDiscarded":
-                    je = new JournalMaterialDiscarded(jo);
-                    break;
-                case "MaterialDiscovered":
-                    je = new JournalMaterialDiscovered(jo);
-                    break;
-                case "MiningRefined":
-                    je = new JournalMiningRefined(jo);
-                    break;
-
-                case "MissionAbandoned":
-                    je = new JournalMissionAbandoned(jo);
-                    break;
-                case "MissionAccepted":
-                    je = new JournalMissionAccepted(jo);
-                    break;
-                case "MissionCompleted":
-                    je = new JournalMissionCompleted(jo);
-                    break;
-                case "MissionFailed":
-                    je = new JournalMissionFailed(jo);
-                    break;
-                case "NewCommander":
-                    je = new JournalNewCommander(jo);
-                    break;
-
-                case "Continued":
-                    je = new JournalContinued(jo);
-                    break;
-
-                case "Rank":
-                    je = new JournalRank(jo);
-                    break;
-                    
-                case "Progress":
-                    je = new JournalProgress(jo);
-                    break;
-
-                case "SupercruiseEntry":
-                    je = new JournalSupercruiseEntry(jo);
-                    break;
-
-                case "SupercruiseExit":
-                    je = new JournalSupercruiseExit(jo);
-                    break;
-
-                case "ModuleBuy":
-                    je = new JournalModuleBuy(jo);
-                    break;
-
-                case "ModuleRetrieve":
-                    je = new JournalModuleRetrieve(jo);
-                    break;
-
-                case "ModuleSell":
-                    je = new JournalModuleSell(jo);
-                    break;
-
-                case "ModuleStore":
-                    je = new JournalModuleStore(jo);
-                    break;
-
-                case "ModuleSwap":
-                    je = new JournalModuleSwap(jo);
-                    break;
-
-                case "PVPKill":
-                    je = new JournalPVPKill(jo);
-                    break;
-
-                case "RefuelAll":
-                    je = new JournalRefuelAll(jo);
-                    break;
-                case "RefuelPartial":
-                    je = new JournalRefuelPartial(jo);
-                    break;
-                case "Repair":
-                    je = new JournalRepair(jo);
-                    break;
-                case "RepairAll":
-                    je = new JournalRepairAll(jo);
-                    break;
-                case "RestockVehicle":
-                    je = new JournalRestockVehicle(jo);
-                    break;
-
-                case "Resurrect":
-                    je = new JournalResurrect(jo);
-                    break;
-
-                case "Screenshot":
-                    je = new JournalScreenshot(jo);
-                    break;
-                case "SelfDestruct":
-                    je = new JournalSelfDestruct(jo);
-                    break;
-                case "ShieldState":
-                    je = new JournalShieldState(jo);
-                    break;
-                case "ShipyardBuy":
-                    je = new JournalShipyardBuy(jo);
-                    break;
-                case "ShipyardNew":
-                    je = new JournalShipyardNew(jo);
-                    break;
-                case "ShipyardSell":
-                    je = new JournalShipyardSell(jo);
-                    break;
-                case "ShipyardSwap":
-                    je = new JournalShipyardSwap(jo);
-                    break;
-                case "ShipyardTransfer":
-                    je = new JournalShipyardTransfer(jo);
-                    break;
-
-                case "Synthesis":
-                    je = new JournalSynthesis(jo);
-                    break;
-                case "Touchdown":
-                    je = new JournalTouchdown(jo);
-                    break;
-                case "USSDrop":
-                    je = new JournalUSSDrop(jo);
-                    break;
-                case "VehicleSwitch":
-                    je = new JournalVehicleSwitch(jo);
-                    break;
-                case "WingAdd":
-                    je = new JournalWingAdd(jo);
-                    break;
-                case "WingJoin":
-                    je = new JournalWingJoin(jo);
-                    break;
-                case "WingLeave":
-                    je = new JournalWingLeave(jo);
-                    break;
-
-                case "ReceiveText":
-                    je = new JournalReceiveText(jo);
-                    break;
-                case "SendText":
-                    je = new JournalSendText(jo);
-                    break;
-
-                case "PayFines":
-                    je = new JournalPayFines(jo);
-                    break;
-                case "PayLegacyFines":
-                    je = new JournalPayLegacyFines(jo);
-                    break;
-                case "Promotion":
-                    je = new JournalPromotion(jo);
-                    break;
-                case "RebootRepair":
-                    je = new JournalRebootRepair(jo);
-                    break;
-                case "RedeemVoucher":
-                    je = new JournalRedeemVoucher(jo);
-                    break;
-
-
-                case "CapShipBond":
-                    je = new JournalCapShipBond(jo);
-                    break;
-                case "ClearSavedGame":
-                    je = new JournalClearSavedGame(jo);
-                    break;
-
-                case "EjectCargo":
-                    je = new JournalEjectCargo(jo);
-                    break;
-                case "LaunchFighter":
-                    je = new JournalLaunchFighter(jo);
-                    break;
-                case "SellDrones":
-                    je = new JournalSellDrones(jo);
-                    break;
-
-
-                case "PowerplayCollect":
-                    je = new JournalPowerplayCollect(jo);
-                    break;
-                case "PowerplayDefect":
-                    je = new JournalPowerplayDefect(jo);
-                    break;
-                case "PowerplayDeliver":
-                    je = new JournalPowerplayDeliver(jo);
-                    break;
-                case "PowerplayFastTrack":
-                    je = new JournalPowerplayFastTrack(jo);
-                    break;
-                case "PowerplayJoin":
-                    je = new JournalPowerplayJoin(jo);
-                    break;
-                case "PowerplayLeave":
-                    je = new JournalPowerplayLeave(jo);
-                    break;
-                case "PowerplaySalary":
-                    je = new JournalPowerplaySalary(jo);
-                    break;
-                case "PowerplayVote":
-                    je = new JournalPowerplayVote(jo);
-                    break;
-                case "PowerplayVoucher":
-                    je = new JournalPowerplayVoucher(jo);
-                    break;
-
-                case "EDDItemSet":
-                    je = new JournalEDDItemSet(jo);
-                    break;
-
-                    //je = new JournalUnhandled(jo, Eventstr);
-                    //System.Diagnostics.Trace.WriteLine("Unhandled event: " + Eventstr);
-                    //break;
-
-                default:
-                    je = new JournalUnknown(jo, Eventstr);
-                    System.Diagnostics.Trace.WriteLine("Unknown event: " + Eventstr);
-
-                    break;
+                System.Diagnostics.Trace.WriteLine("Unknown event: " + Eventstr);
+                return new JournalUnknown(jo, Eventstr);
             }
-
-            return je;
+            else
+                return (JournalEntry)Activator.CreateInstance(jtype, jo);
         }
 
+        static public System.Drawing.Bitmap GetIcon(string text, bool usealt = false)
+        {
+            Type jtype = TypeOfJournalEntry(text);
+            System.Reflection.PropertyInfo p = jtype.GetProperty((usealt) ? "IconAlt" : "Icon");
+            System.Reflection.MethodInfo getter = p?.GetGetMethod();
+            return (getter != null) ? ((System.Drawing.Bitmap)getter.Invoke(null, null)) : EDDiscovery.Properties.Resources.genericevent;
+        }
 
         static public JournalTypeEnum JournalString2Type(string str)
         {
