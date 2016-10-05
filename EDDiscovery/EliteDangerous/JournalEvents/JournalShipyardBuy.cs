@@ -43,5 +43,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return base.DefaultRemoveItems() + ";SellShipID;StoreShipID";
         }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.shipyardnew; } }
     }
 }

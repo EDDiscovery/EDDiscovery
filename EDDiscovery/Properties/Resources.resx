@@ -346,4 +346,19 @@
   <data name="selfdestruct" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\selfdestruct.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="dockingrequest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dockingrequest.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shipyardnew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\shipyardnew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shipyardsell" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\shipyardsell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shipyardswap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\shipyardswap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shipyardtransfer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\shipyardtransfer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

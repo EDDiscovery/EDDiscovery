@@ -213,6 +213,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap dockingrequest {
+            get {
+                object obj = ResourceManager.GetObject("dockingrequest", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ExplorationHazard {
             get {
                 object obj = ResourceManager.GetObject("ExplorationHazard", resourceCulture);
@@ -672,6 +682,46 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap shields {
             get {
                 object obj = ResourceManager.GetObject("shields", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap shipyardnew {
+            get {
+                object obj = ResourceManager.GetObject("shipyardnew", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap shipyardsell {
+            get {
+                object obj = ResourceManager.GetObject("shipyardsell", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap shipyardswap {
+            get {
+                object obj = ResourceManager.GetObject("shipyardswap", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap shipyardtransfer {
+            get {
+                object obj = ResourceManager.GetObject("shipyardtransfer", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
