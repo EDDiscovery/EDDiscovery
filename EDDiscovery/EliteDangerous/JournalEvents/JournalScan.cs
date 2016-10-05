@@ -92,6 +92,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool? Landable { get; set; }
         public Dictionary<string, double> Materials { get; set; }
 
+        public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
+
         internal double GetMaterial(string v)
         {
             if (Materials == null)
