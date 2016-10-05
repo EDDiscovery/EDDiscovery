@@ -89,30 +89,69 @@ namespace EDDiscovery.EDDN
             return msg;
         }
 
-        public JObject CreateEDDNMessage(JournalScan journal)
+        public JObject CreateEDDNMessage(JournalScan journal, string starSystem)
         {
             JObject msg = new JObject();
 
-            return null;
-/*
+           
+
             msg["header"] = Header();
             msg["$schemaRef"] = "http://schemas.elite-markets.net/eddn/journal/1/test";
 
             JObject message = new JObject();
 
-            message["StarSystem"] = journal.StarSystem;
-            message["Faction"] = journal.Faction;
-            message["Government"] = journal.Government;
             message["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ssZ");
-            message["Allegiance"] = journal.Allegiance;
-            message["Security"] = journal.Security;
             message["event"] = journal.EventTypeStr;
-            message["Economy"] = journal.Economy;
+            message["StarSystem"] = starSystem;
+
+            if (journal.StarType != null && !journal.StarType.Equals("")) // check if star.
+            {
+                message["Bodyname"] = journal.BodyName;
+                message["DistanceFromArrivalLS"] = journal.DistanceFromArrivalLS;
+                message["StarType"] = journal.StarType;
+                message["StellarMass"] = journal.StellarMass;
+                message["Radius"] = journal.Radius;
+                message["AbsoluteMagnitude"] = journal.AbsoluteMagnitude;
+                message["OrbitalPeriod"] = journal.OrbitalPeriod;
+                message["RotationPeriod"] = journal.RotationPeriod;
+
+                if (journal.Rings!= null && journal.Rings.Length > 0)
+                {
+                    message["Rings"] = JArray.FromObject(journal.Rings);
+                }
+            }
+            else
+            {
+                message["Bodyname"] = journal.BodyName;
+                message["DistanceFromArrivalLS"] = journal.DistanceFromArrivalLS;
+                message["TidalLock"] = journal.TidalLock;
+                message["TerraformState"] = journal.TerraformState;
+                message["PlanetClass"] = journal.PlanetClass;
+                message["Atmosphere"] = journal.Atmosphere;
+                message["Volcanism"] = journal.Volcanism;
+                message["SurfaceGravity"] = journal.SurfaceGravity;
+                message["SurfaceTemperature"] = journal.SurfaceTemperature;
+                message["SurfacePressure"] = journal.SurfacePressure;
+                message["Landable"] = journal.Landable;
+                message["OrbitalPeriod"] = journal.OrbitalPeriod;
+                message["RotationPeriod"] = journal.RotationPeriod;
+
+                if (journal.Rings != null && journal.Rings.Length > 0)
+                {
+                    message["Rings"] = JArray.FromObject(journal.Rings);
+                }
+
+                if (journal.Materials.Count > 0)
+                {
+                    message["Materials"] = JObject.Parse(journal.MaterialsString);
+                }
+            }
+
 
             msg["message"] = message;
             return msg;
 
-    */
+   
         }
 
 
@@ -121,7 +160,9 @@ namespace EDDiscovery.EDDN
 
             ResponseData resp = RequestPost(msg.ToString(), "");
 
-            return true;
+            if (resp.StatusCode == System.Net.HttpStatusCode.OK)
+                return true;
+            else return false;
         }
     }
 }
