@@ -97,8 +97,7 @@ namespace EDDiscovery
 
         public void Display()
         {
-            int rowno = (dataGridViewTravel.CurrentCell != null) ? dataGridViewTravel.CurrentCell.RowIndex : 0;
-            int cellno = (dataGridViewTravel.CurrentCell != null) ? dataGridViewTravel.CurrentCell.ColumnIndex : 0;
+            Tuple<long, int> pos = CurrentGridPosByJID();
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
@@ -115,14 +114,15 @@ namespace EDDiscovery
 
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
 
-            if (dataGridViewTravel.Rows.Count > 0)
+            int rowno = FindGridPosByJID(pos.Item1);
+
+            if (rowno > 0)
             {
-                rowno = Math.Min(rowno, dataGridViewTravel.Rows.Count - 1);
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[cellno];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
                 ShowSystemInformation(dataGridViewTravel.Rows[rowno]);
             }
             else
-                currentGridRow = null;
+                ShowSystemInformation(null);
 
             RedrawSummary();
             RefreshTargetInfo();
@@ -213,44 +213,55 @@ namespace EDDiscovery
         {
             currentGridRow = rw;
 
-            _discoveryForm.history.FillEDSM(rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry); // Fill in any EDSM info we have
-
-            SystemNoteClass note = rw.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
-            HistoryEntry syspos = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;     // reload, it may have changed
-            Debug.Assert(syspos != null);
-
-            textBoxSystem.Text = syspos.System.name;
-            
-            if (syspos.System.HasCoordinate)         // cursystem has them?
+            if (rw == null)
             {
-                textBoxX.Text = syspos.System.x.ToString(SingleCoordinateFormat);
-                textBoxY.Text = syspos.System.y.ToString(SingleCoordinateFormat);
-                textBoxZ.Text = syspos.System.z.ToString(SingleCoordinateFormat);
-
-                textBoxSolDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
+                textBoxSystem.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
+                textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
+                textBoxVisits.Text = textBoxState.Text = textBoxSolDist.Text = richTextBoxNote.Text = "";
+                buttonRoss.Enabled = buttonEDDB.Enabled = false;
+                
             }
-            else 
+            else
             {
-                textBoxX.Text = "?";
-                textBoxY.Text = "?";
-                textBoxZ.Text = "?";
-                textBoxSolDist.Text = "";
+                _discoveryForm.history.FillEDSM(rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry); // Fill in any EDSM info we have
+
+                SystemNoteClass note = rw.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
+                HistoryEntry syspos = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;     // reload, it may have changed
+                Debug.Assert(syspos != null);
+
+                textBoxSystem.Text = syspos.System.name;
+
+                if (syspos.System.HasCoordinate)         // cursystem has them?
+                {
+                    textBoxX.Text = syspos.System.x.ToString(SingleCoordinateFormat);
+                    textBoxY.Text = syspos.System.y.ToString(SingleCoordinateFormat);
+                    textBoxZ.Text = syspos.System.z.ToString(SingleCoordinateFormat);
+
+                    textBoxSolDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
+                }
+                else
+                {
+                    textBoxX.Text = "?";
+                    textBoxY.Text = "?";
+                    textBoxZ.Text = "?";
+                    textBoxSolDist.Text = "";
+                }
+
+                int count = _discoveryForm.history.GetVisitsCount(syspos.System.name);
+                textBoxVisits.Text = count.ToString();
+
+                bool enableedddross = (syspos.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
+
+                buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
+
+                textBoxAllegiance.Text = EnumStringFormat(syspos.System.allegiance.ToString());
+                textBoxEconomy.Text = EnumStringFormat(syspos.System.primary_economy.ToString());
+                textBoxGovernment.Text = EnumStringFormat(syspos.System.government.ToString());
+                textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
+                richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
+
+                closestsystem_queue.Add(syspos.System);
             }
-
-            int count = _discoveryForm.history.GetVisitsCount(syspos.System.name);
-            textBoxVisits.Text = count.ToString();
-
-            bool enableedddross = (syspos.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
-
-            buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
-
-            textBoxAllegiance.Text = EnumStringFormat(syspos.System.allegiance.ToString());
-            textBoxEconomy.Text = EnumStringFormat(syspos.System.primary_economy.ToString());
-            textBoxGovernment.Text = EnumStringFormat(syspos.System.government.ToString());
-            textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
-            richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
-
-            closestsystem_queue.Add(syspos.System);
         }
 
         private string EnumStringFormat(string str)
@@ -745,9 +756,13 @@ namespace EDDiscovery
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
         {
+            Tuple<long, int> pos = CurrentGridPosByJID();
+
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
-            RedrawSummary();
-            UpdateDependentsWithSelection();
+
+            int rowno = FindGridPosByJID(pos.Item1);
+            if (rowno > 0)
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
         }
 
 
@@ -1452,6 +1467,29 @@ namespace EDDiscovery
             }
 
 
+        }
+
+        Tuple<long, int> CurrentGridPosByJID()
+        {
+            long jid = (dataGridViewTravel.CurrentCell != null) ? ((HistoryEntry)(dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag)).Journalid : 0;
+            int cellno = (dataGridViewTravel.CurrentCell != null) ? dataGridViewTravel.CurrentCell.ColumnIndex : 0;
+            return new Tuple<long, int>(jid, cellno);
+        }
+
+        int FindGridPosByJID(long jid)
+        {
+            if (dataGridViewTravel.Rows.Count > 0 && jid != 0)
+            {
+                foreach (DataGridViewRow r in dataGridViewTravel.Rows)
+                {
+                    if (r.Visible && ((HistoryEntry)(r.Cells[TravelHistoryColumns.HistoryTag].Tag)).Journalid == jid)
+                    {
+                        return r.Index;
+                    }
+                }
+            }
+
+            return -1;
         }
 
     }

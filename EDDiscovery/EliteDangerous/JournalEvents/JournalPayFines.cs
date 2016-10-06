@@ -17,5 +17,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public int Amount { get; set; }
         public double BrokerPercentage { get; set; }
+
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.payfines; } }
     }
 }

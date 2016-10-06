@@ -40,6 +40,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return base.DefaultRemoveItems() + ";MissionID";
         }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.missionaccepted; } }
+
+
     }
 
 }

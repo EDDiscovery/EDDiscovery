@@ -584,6 +584,9 @@
     <None Include="Resources\engineerprogress.png" />
     <None Include="Resources\engineerapply.png" />
     <None Include="Resources\dockinggranted.png" />
+    <None Include="Resources\fuelscoop.png" />
+    <None Include="Resources\ejectcargo.png" />
+    <None Include="Resources\buyexplorationdata.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -602,8 +605,6 @@
     <None Include="Resources\Stationenter.png" />
     <None Include="Resources\module.png" />
     <None Include="Resources\Stationexit.png" />
-    <None Include="Resources\textsent.png" />
-    <None Include="Resources\textreceived.png" />
     <None Include="Resources\scan.png" />
     <None Include="Resources\stopflag.png" />
     <None Include="Resources\startflag.png" />
@@ -637,6 +638,14 @@
     <None Include="Resources\progress.png" />
     <None Include="Resources\interdicted.png" />
     <None Include="Resources\interdiction.png" />
+    <None Include="Resources\screenshot.png" />
+    <None Include="Resources\payfines.png" />
+    <None Include="Resources\textreceived.png" />
+    <None Include="Resources\textsent.png" />
+    <None Include="Resources\missionfailed.png" />
+    <None Include="Resources\missioncompleted.png" />
+    <None Include="Resources\missionaccepted.png" />
+    <None Include="Resources\missionabandoned.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
