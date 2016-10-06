@@ -570,7 +570,6 @@
     <None Include="Resources\hyperspace.png" />
     <None Include="Resources\event.png" />
     <None Include="Resources\Coffinicon.png" />
-    <None Include="Resources\crew.png" />
     <None Include="Resources\damage.png" />
     <None Include="Resources\heatdamage.png" />
     <None Include="Resources\bounty.png" />
@@ -578,9 +577,13 @@
     <None Include="Resources\approachsettlement.png" />
     <None Include="Resources\fighter.png" />
     <None Include="Resources\dockingdenied.png" />
-    <None Include="Resources\dockinggranted.png" />
     <None Include="Resources\ammunition.png" />
     <None Include="Resources\dockingrequest.png" />
+    <None Include="Resources\crew.png" />
+    <None Include="Resources\engineercraft.png" />
+    <None Include="Resources\engineerprogress.png" />
+    <None Include="Resources\engineerapply.png" />
+    <None Include="Resources\dockinggranted.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -632,6 +635,8 @@
     <None Include="Resources\loadgame.png" />
     <None Include="Resources\rank.png" />
     <None Include="Resources\progress.png" />
+    <None Include="Resources\interdicted.png" />
+    <None Include="Resources\interdiction.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

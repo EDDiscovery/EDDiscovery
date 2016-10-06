@@ -23,5 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Blueprint { get; set; }
         public int Level { get; set; }
         public Dictionary<string, int> Ingredients { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineercraft; } }
     }
 }
