@@ -47,8 +47,7 @@ namespace EDDiscovery
 
         public void Display()
         {
-            int rowno = (dataGridViewJournal.CurrentCell != null) ? dataGridViewJournal.CurrentCell.RowIndex : 0;
-            int cellno = (dataGridViewJournal.CurrentCell != null) ? dataGridViewJournal.CurrentCell.ColumnIndex : 0;
+            Tuple<long, int> pos = CurrentGridPosByJID();
 
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
@@ -67,12 +66,12 @@ namespace EDDiscovery
 
             dataGridViewJournal.AutoResizeRows();
 
-            if (dataGridViewJournal.Rows.Count > 0)
+
+            int rowno = FindGridPosByJID(pos.Item1);
+
+            if (rowno > 0)
             {
-                rowno = Math.Min(rowno, dataGridViewJournal.Rows.Count - 1);
-                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[cellno];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
-                dataGridViewJournal.FirstDisplayedScrollingRowIndex = rowno;
-                System.Diagnostics.Trace.WriteLine(string.Format("Cell {0} {1}", rowno, cellno));
+                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
             }
 
             dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
@@ -218,7 +217,13 @@ namespace EDDiscovery
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
         {
+            Tuple<long, int> pos = CurrentGridPosByJID();
+
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
+
+            int rowno = FindGridPosByJID(pos.Item1);
+            if (rowno > 0)
+                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
         }
 
         #endregion
@@ -335,5 +340,30 @@ namespace EDDiscovery
                 }
             }
         }
+
+        Tuple<long, int> CurrentGridPosByJID()
+        {
+            long jid = (dataGridViewJournal.CurrentCell != null) ? ((HistoryEntry)(dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag)).Journalid : 0;
+            int cellno = (dataGridViewJournal.CurrentCell != null) ? dataGridViewJournal.CurrentCell.ColumnIndex : 0;
+            return new Tuple<long, int>(jid, cellno);
+        }
+
+        int FindGridPosByJID(long jid)
+        {
+            if (dataGridViewJournal.Rows.Count > 0 && jid != 0)
+            {
+                foreach (DataGridViewRow r in dataGridViewJournal.Rows)
+                {
+                    if (r.Visible && ((HistoryEntry)(r.Cells[JournalHistoryColumns.HistoryTag].Tag)).Journalid == jid)
+                    {
+                        return r.Index;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
     }
+
 }

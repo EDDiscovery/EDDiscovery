@@ -17,5 +17,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public double Scooped { get; set; }
         public double Total { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.fuelscoop; } }
     }
 }
