@@ -223,6 +223,36 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap engineerapply {
+            get {
+                object obj = ResourceManager.GetObject("engineerapply", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap engineercraft {
+            get {
+                object obj = ResourceManager.GetObject("engineercraft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap engineerprogress {
+            get {
+                object obj = ResourceManager.GetObject("engineerprogress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ExplorationHazard {
             get {
                 object obj = ResourceManager.GetObject("ExplorationHazard", resourceCulture);
@@ -346,6 +376,26 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap imgCheck {
             get {
                 object obj = ResourceManager.GetObject("imgCheck", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap interdicted {
+            get {
+                object obj = ResourceManager.GetObject("interdicted", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap interdiction {
+            get {
+                object obj = ResourceManager.GetObject("interdiction", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

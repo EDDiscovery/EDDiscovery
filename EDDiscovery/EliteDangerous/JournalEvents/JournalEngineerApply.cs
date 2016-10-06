@@ -24,5 +24,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Level { get; set; }
         public bool? Override { get; set; }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineerapply; } }
     }
 }
