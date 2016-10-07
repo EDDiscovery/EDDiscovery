@@ -586,13 +586,15 @@
     <None Include="Resources\engineerapply.png" />
     <None Include="Resources\dockinggranted.png" />
     <None Include="Resources\fuelscoop.png" />
-    <None Include="Resources\ejectcargo.png" />
     <None Include="Resources\buyexplorationdata.png" />
     <None Include="Resources\dockingcancelled.png" />
     <None Include="Resources\dockingtimeout.png" />
     <None Include="Resources\escapeinterdiction.png" />
     <None Include="Resources\buydrones.png" />
     <None Include="Resources\buytradedata.png" />
+    <None Include="Resources\ejectcargo.png" />
+    <None Include="Resources\collectcargo.png" />
+    <None Include="Resources\cockpitbreached.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

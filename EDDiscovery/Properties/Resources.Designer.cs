@@ -173,9 +173,29 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cockpitbreached {
+            get {
+                object obj = ResourceManager.GetObject("cockpitbreached", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Coffinicon {
             get {
                 object obj = ResourceManager.GetObject("Coffinicon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap collectcargo {
+            get {
+                object obj = ResourceManager.GetObject("collectcargo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
