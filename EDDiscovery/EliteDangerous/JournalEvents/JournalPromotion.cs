@@ -24,5 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public TradeRank Trade { get; set; }
         public ExplorationRank Explore { get; set; }
         public CQCRank CQC { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.promotion; } }
     }
 }

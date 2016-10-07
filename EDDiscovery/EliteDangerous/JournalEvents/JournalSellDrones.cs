@@ -24,5 +24,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Count { get; set; }
         public int SellPrice { get; set; }
         public int TotalSale { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.selldrones; } }
+
     }
 }

@@ -17,5 +17,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Interdictor { get; set; }
         public bool IsPlayer { get; set; }
 
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.escapeinterdiction; } }
     }
 }

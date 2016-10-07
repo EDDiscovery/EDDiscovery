@@ -26,5 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string[] Discovered { get; set; }
         public int BaseValue { get; set; }
         public int Bonus { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.sellexplorationdata; } }
     }
 }

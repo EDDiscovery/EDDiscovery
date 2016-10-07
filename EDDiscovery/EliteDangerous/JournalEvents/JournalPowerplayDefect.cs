@@ -18,5 +18,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string FromPower { get; set; }
         public string ToPower { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplaydefect; } }
     }
 }
