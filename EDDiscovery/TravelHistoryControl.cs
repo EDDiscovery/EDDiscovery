@@ -121,6 +121,12 @@ namespace EDDiscovery
                 dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
                 ShowSystemInformation(dataGridViewTravel.Rows[rowno]);
             }
+            else if ( dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0 )
+            {
+                rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[1];
+                ShowSystemInformation(dataGridViewTravel.Rows[rowno]);
+            }
             else
                 ShowSystemInformation(null);
 
