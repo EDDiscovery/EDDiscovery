@@ -35,5 +35,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool IllegalGoods { get; set; }
         public bool StolenGoods { get; set; }
         public bool BlackMarket { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketsell; } }
+
     }
 }

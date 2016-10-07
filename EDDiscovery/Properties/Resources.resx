@@ -412,4 +412,67 @@
   <data name="screenshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\screenshot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="buydrones" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buydrones.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buytradedata" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buytradedata.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dockingcancelled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dockingcancelled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dockingtimeout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dockingtimeout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="escapeinterdiction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\escapeinterdiction.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="marketbuy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\marketbuy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="marketsell" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\marketsell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="newcommander" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\newcommander.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplaycollect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplaycollect.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplaydefect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplaydefect.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplaydeliver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplaydeliver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplayfasttrack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplayfasttrack.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplayjoin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplayjoin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplayleave" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplayleave.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplaysalary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplaysalary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplayvote" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplayvote.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powerplayvoucher" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\powerplayvoucher.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="promotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\promotion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rebootrepair" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rebootrepair.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="selldrones" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\selldrones.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sellexplorationdata" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sellexplorationdata.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

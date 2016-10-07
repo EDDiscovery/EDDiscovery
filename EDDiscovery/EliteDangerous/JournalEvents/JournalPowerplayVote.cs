@@ -19,5 +19,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Power { get; set; }
         public string System { get; set; }
         public int Votes { get; set; }
+
+        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplayvote; } }
     }
 }

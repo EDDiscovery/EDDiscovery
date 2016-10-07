@@ -550,6 +550,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="App.Portable.config" />
+    <None Include="Resources\promotion.pspimage" />
     <None Include="Resources\shipyardnew.pspimage" />
     <None Include="Resources\YellowDot.png" />
     <None Include="Resources\OrangeDot.png" />
@@ -587,6 +588,11 @@
     <None Include="Resources\fuelscoop.png" />
     <None Include="Resources\ejectcargo.png" />
     <None Include="Resources\buyexplorationdata.png" />
+    <None Include="Resources\dockingcancelled.png" />
+    <None Include="Resources\dockingtimeout.png" />
+    <None Include="Resources\escapeinterdiction.png" />
+    <None Include="Resources\buydrones.png" />
+    <None Include="Resources\buytradedata.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -646,6 +652,22 @@
     <None Include="Resources\missioncompleted.png" />
     <None Include="Resources\missionaccepted.png" />
     <None Include="Resources\missionabandoned.png" />
+    <None Include="Resources\marketsell.png" />
+    <None Include="Resources\marketbuy.png" />
+    <None Include="Resources\newcommander.png" />
+    <None Include="Resources\promotion.png" />
+    <None Include="Resources\rebootrepair.png" />
+    <None Include="Resources\sellexplorationdata.png" />
+    <None Include="Resources\selldrones.png" />
+    <None Include="Resources\powerplayvote.png" />
+    <None Include="Resources\powerplayleave.png" />
+    <None Include="Resources\powerplaysalary.png" />
+    <None Include="Resources\powerplayjoin.png" />
+    <None Include="Resources\powerplaydefect.png" />
+    <None Include="Resources\powerplaydeliver.png" />
+    <None Include="Resources\powerplaycollect.png" />
+    <None Include="Resources\powerplayfasttrack.png" />
+    <None Include="Resources\powerplayvoucher.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
