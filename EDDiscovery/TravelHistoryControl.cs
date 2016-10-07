@@ -124,7 +124,7 @@ namespace EDDiscovery
             else if ( dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0 )
             {
                 rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[1];
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Description];
                 ShowSystemInformation(dataGridViewTravel.Rows[rowno]);
             }
             else
