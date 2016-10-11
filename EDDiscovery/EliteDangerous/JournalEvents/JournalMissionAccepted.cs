@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
@@ -36,6 +37,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             TargetType = Tools.GetStringDef(evt["TargetType"]);
             TargetFaction = Tools.GetStringDef(evt["TargetFaction"]);
             MissionId = Tools.GetInt(evt["MissionID"]);
+
+            if (!Tools.IsNullOrEmptyT(evt["Expiry"]))
+                Expiry = DateTime.Parse(evt.Value<string>("Expiry"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+
+            DestinationSystem = Tools.GetStringDef(evt["DestinationSystem"]);
+            DestinationStation = Tools.GetStringDef(evt["DestinationStation"]);
+            PassengerType = Tools.GetStringDef(evt["PassengerType"]);
+
+            PassengerCount = Tools.GetInt(evt["PassengerCount"]);
+            PassengerVIPs = Tools.GetBool(evt["PassengerVIPs"]);
+            PassengerWanted = Tools.GetBool(evt["PassengerWanted"]);
+
+
+
         }
         public string Name { get; set; }
         public string Faction { get; set; }
