@@ -14,10 +14,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             System = Tools.GetStringDef(evt["System"]);
             Cost = Tools.GetInt(evt["Cost"]);
+            Count = Tools.GetInt(evt["Count"]);
         }
 
         public string System { get; set; }
         public int Cost { get; set; }
+        public int Count { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.buytradedata; } }
     }

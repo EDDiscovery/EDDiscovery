@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
@@ -13,6 +14,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Target: name of target
     //•	TargetType: type of target
     //•	TargetFaction: target’s faction
+//•	Expiry: mission expiry time, in ISO 8601
+//•	DestinationSystem
+//•	DestinationStation
+//•	PassengerCount
+//•	PassengerVIPs: bool
+//•	PassengerWanted: bool
+//•	PassengerType: eg Tourist, Soldier, Explorer,...
+
+
+
     public class JournalMissionAccepted : JournalEntry
     {
         public JournalMissionAccepted(JObject evt ) : base(evt, JournalTypeEnum.MissionAccepted)
@@ -34,6 +45,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string TargetType { get; set; }
         public string TargetFaction { get; set; }
         public int MissionId { get; set; }
+
+        public DateTime Expiry { get; set; }
+        public string DestinationSystem { get; set; }
+        public string DestinationStation { get; set; }
+        public int PassengerCount { get; set; }
+        public bool PassengerVIPs { get; set; }
+        public bool PassengerWanted { get; set; }
+        public string PassengerType { get; set; }
+
+
 
         public override string DefaultRemoveItems()
         {

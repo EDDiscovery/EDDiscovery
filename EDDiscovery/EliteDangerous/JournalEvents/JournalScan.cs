@@ -53,6 +53,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             AbsoluteMagnitude = evt.Value<double?>("StellarMass");
             OrbitalPeriod = Tools.GetDouble(evt["StellarMass"]);
             RotationPeriod = Tools.GetDouble(evt["StellarMass"]);
+            Age = Tools.GetDouble(evt["Age"]);
             Rings = evt["Rings"]?.ToObject<PlanetRing[]>();
             DistanceFromArrivalLS = Tools.GetDouble(evt["DistanceFromArrivalLS"]);
 
@@ -67,6 +68,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             SurfacePressure = evt.Value<double?>("SurfacePressure");
             Landable = evt.Value<bool?>("Landable") ?? false;
             Materials = evt["Materials"]?.ToObject<Dictionary<string, double>>();
+
+            SemiMajorAxis = Tools.GetDouble(evt["SemiMajorAxis"]);
+            Eccentricity = Tools.GetDouble(evt["Eccentricity"]);
+            OrbitalInclination = Tools.GetDouble(evt["OrbitalInclination"]);
+            Periapsis = Tools.GetDouble(evt["Periapsis"]);
+
 
         }
 
@@ -93,6 +100,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public Dictionary<string, double> Materials { get; set; }
 
         public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
+        
+        public double Age { get; set; }
+
+        public double SemiMajorAxis;
+        public double Eccentricity;
+        public double OrbitalInclination;
+        public double Periapsis;
+
+
 
         internal double GetMaterial(string v)
         {

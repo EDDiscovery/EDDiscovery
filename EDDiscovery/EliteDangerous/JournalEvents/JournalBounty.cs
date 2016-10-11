@@ -17,13 +17,21 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Reward = Tools.GetInt(evt["Reward"]);
             VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
             SharedWithOthers = Tools.GetBool(evt["SharedWithOthers"],false);
-
+            Rewards = evt["Rewards"]?.ToObject<BountyReward[]>();
         }
         public string Faction { get; set; }
         public int Reward { get; set; }
         public string VictimFaction { get; set; }
         public bool SharedWithOthers { get; set; }
+        public BountyReward[] Rewards { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
     }
+
+    public class BountyReward
+    {
+        public string Faction;
+        public int Reward;
+    }
+
 }

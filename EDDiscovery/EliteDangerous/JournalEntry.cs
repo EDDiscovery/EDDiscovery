@@ -108,6 +108,7 @@ namespace EDDiscovery.EliteDangerous
         RestockVehicle = 750,
         Resurrect = 760,
         Scan = 770,
+        ScientificResearch = 775,
         Screenshot = 780,
         SelfDestruct = 790,
         SellDrones = 800,
@@ -129,6 +130,9 @@ namespace EDDiscovery.EliteDangerous
         WingAdd = 960,
         WingJoin = 970,
         WingLeave = 980,
+        ModuleSellRemote = 990,
+        FetchRemoteModule = 1000,
+        MassModuleStore = 1010,
 
         EDDItemSet = 2000,
     }
@@ -722,8 +726,9 @@ namespace EDDiscovery.EliteDangerous
 
                 case "Scan":
                     return typeof(JournalScan);
-
-
+                    
+                case "ScientificResearch":
+                    return typeof(JournalScientificResearch);
 
                 case "SellExplorationData":
                     return typeof(JournalSellExplorationData);
@@ -1022,6 +1027,13 @@ namespace EDDiscovery.EliteDangerous
                 case "PowerplayVoucher":
                     return typeof(JournalPowerplayVoucher);
 
+
+                case "ModuleSellRemote":
+                    return typeof(JournalModuleSellRemote);
+                case "FetchRemoteModule":
+                    return typeof(JournalFetchRemoteModule);
+                case "MassModuleStore":
+                    return typeof(JournalMassModuleStore);
 
                 case "EDDItemSet":
                     return typeof(JournalEDDItemSet);
