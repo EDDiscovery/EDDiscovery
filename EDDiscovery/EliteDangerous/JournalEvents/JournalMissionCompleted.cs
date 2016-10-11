@@ -46,6 +46,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int? Donation { get; set; }
         public string[] PermitsAwarded { get; set; }
         public int MissionId { get; set; }
+        public string CommodityReward { get; set; }
 
         public override string DefaultRemoveItems()
         {

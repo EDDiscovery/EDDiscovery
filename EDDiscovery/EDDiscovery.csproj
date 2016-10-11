@@ -239,6 +239,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEscapeInterdiction.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFactionKillBond.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFetchRemoteModule.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFuelScope.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalHeatDamage.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMarketBuy.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMarketSell.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalMassModuleStore.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMaterialCollected.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMaterialDiscarded.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMaterialDiscovered.cs" />
@@ -268,6 +270,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleBuy.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleRetrieve.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleSell.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSellRemote.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleStore.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalNewCommander.cs" />
@@ -296,6 +299,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalRestockVehicle.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalResurrect.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalScientificResearch.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSelfDestruct.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellDrones.cs" />

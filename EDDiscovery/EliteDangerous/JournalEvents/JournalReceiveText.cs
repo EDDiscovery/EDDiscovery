@@ -15,9 +15,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             From = Tools.GetStringDef(evt["From"]);
             Message = Tools.GetStringDef(evt["Message"]);
+            Channel = Tools.GetStringDef(evt["Channel"]);
+
         }
         public string From { get; set; }
         public string Message { get; set; }
+        public string Channel { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.textreceived; } }
 

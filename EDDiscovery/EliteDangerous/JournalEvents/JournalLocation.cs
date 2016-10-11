@@ -37,6 +37,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
             Security = Tools.GetStringDef(evt["Security"]);
             Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
+            BodyType = Tools.GetStringDef(evt["BodyType"]);
+
+            PowerplayState = Tools.GetStringDef(evt["PowerplayState"]);
+
+            if (!Tools.IsNullOrEmptyT(evt["Powers"]))
+                Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
+
         }
 
         public string Body { get; set; }
@@ -52,6 +59,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Government_Localised { get; set; }
         public string Security { get; set; }
         public string Security_Localised { get; set; }
+        public string BodyType { get; set; }
+        public string PowerplayState { get; set; }
+        public string[] Powers { get; set; }
+
 
         public override void FillInformation(out string summary, out string info, out string detailed)
         {
