@@ -223,6 +223,8 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewFire.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewHire.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkScan.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkVoucher.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalDataScanned.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockFighter.cs" />
