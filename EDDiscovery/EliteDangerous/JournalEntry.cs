@@ -133,8 +133,12 @@ namespace EDDiscovery.EliteDangerous
         ModuleSellRemote = 990,
         FetchRemoteModule = 1000,
         MassModuleStore = 1010,
+        DatalinkVoucher = 1020,
+        DataScanned = 1030,
+
 
         EDDItemSet = 2000,
+
     }
 
     public enum CombatRank
@@ -1034,6 +1038,16 @@ namespace EDDiscovery.EliteDangerous
                     return typeof(JournalFetchRemoteModule);
                 case "MassModuleStore":
                     return typeof(JournalMassModuleStore);
+
+
+
+                case "DatalinkVoucher":
+                    return typeof(JournalDatalinkVoucher);
+                case "DataScanned":
+                    return typeof(JournalDataScanned);
+
+
+
 
                 case "EDDItemSet":
                     return typeof(JournalEDDItemSet);
