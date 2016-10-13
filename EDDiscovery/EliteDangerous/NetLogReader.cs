@@ -424,7 +424,8 @@ namespace EDDiscovery
                         }
                     }
 
-                    if (last != null && je.StarSystem.Equals(last.StarSystem, StringComparison.InvariantCultureIgnoreCase))
+                    if (last != null && je.StarSystem.Equals(last.StarSystem, StringComparison.InvariantCultureIgnoreCase)
+                                     && (!je.HasCoordinate || !last.HasCoordinate || (je.StarPos - last.StarPos).LengthSquared < 0.001))
                         continue;
 
                     if (je.EventTimeUTC.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
