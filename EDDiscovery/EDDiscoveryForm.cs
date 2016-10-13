@@ -1455,6 +1455,24 @@ namespace EDDiscovery
             }
         }
 
+        private void read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+
+            DialogResult dlgResult = dirdlg.ShowDialog();
+
+            if (dlgResult == DialogResult.OK)
+            {
+                string errstr = null;
+                string logpath = dirdlg.SelectedPath;
+                //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
+                this.Cursor = Cursors.WaitCursor;
+                NetLogClass.ParseFiles(logpath, out errstr, EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, true);
+                RefreshHistoryAsync();
+                this.Cursor = Cursors.Default;
+            }
+        }
+
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)

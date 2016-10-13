@@ -66,12 +66,17 @@ namespace EDDiscovery
 
             if (vsSystemsList != null)
             {
+                JournalLocOrJump last = visitedSystems.LastOrDefault();
+
                 foreach (JournalLocOrJump vs in vsSystemsList)
                 {
                     if (visitedSystems.Count == 0)
                         visitedSystems.Add(vs);
-                    else if (!visitedSystems.Last().StarSystem.Equals(vs.StarSystem, StringComparison.CurrentCultureIgnoreCase))  // Avoid duplicate if times exist in same system from different files.
+                    else if (last == null ||
+                             (!last.StarSystem.Equals(vs.StarSystem, StringComparison.CurrentCultureIgnoreCase) &&
+                              (!last.HasCoordinate || !vs.HasCoordinate || (last.StarPos - vs.StarPos).LengthSquared < 0.001)))  // Avoid duplicate if times exist in same system from different files.
                         visitedSystems.Add(vs);
+                    last = vs;
                 }
             }
 
