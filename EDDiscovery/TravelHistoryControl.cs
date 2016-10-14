@@ -627,7 +627,9 @@ namespace EDDiscovery
 
         private void buttonSync_Click(object sender, EventArgs e)
         {
-            if (!EDDConfig.Instance.CheckCommanderEDSMAPI)
+            EDSMClass edsm = new EDSMClass();
+
+            if (!edsm.IsApiKeySet)
             {
                 MessageBox.Show("Please ensure a commander is selected and it has a EDSM API key set");
                 return;
@@ -635,7 +637,7 @@ namespace EDDiscovery
 
             try
             {
-                _discoveryForm.EdsmSync.StartSync(checkBoxEDSMSyncTo.Checked, checkBoxEDSMSyncFrom.Checked, EDDConfig.Instance.DefaultMapColour);
+                _discoveryForm.EdsmSync.StartSync(edsm, checkBoxEDSMSyncTo.Checked, checkBoxEDSMSyncFrom.Checked, EDDConfig.Instance.DefaultMapColour);
             }
             catch (Exception ex)
             {
