@@ -18,10 +18,11 @@ using System.Windows.Forms;
 
 namespace EDDiscovery2.EDSM
 {
-    class EDSMClass : HttpCom
+    public class EDSMClass : HttpCom
     {
         public string commanderName;
         public string apiKey;
+        public bool IsApiKeySet { get { return !(string.IsNullOrEmpty(commanderName) || string.IsNullOrEmpty(apiKey)); } }
 
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
@@ -299,6 +300,9 @@ namespace EDDiscovery2.EDSM
 
         public string GetComments(DateTime starttime)
         {
+            if (!IsApiKeySet)
+                return null;
+
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);
@@ -312,6 +316,9 @@ namespace EDDiscovery2.EDSM
 
         public string GetComment(string systemName)
         {
+            if (!IsApiKeySet)
+                return null;
+
             string query;
             query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName);
 
@@ -325,6 +332,9 @@ namespace EDDiscovery2.EDSM
 
         public string SetComment(string systemName, string note)
         {
+            if (!IsApiKeySet)
+                return null;
+
             string query;
             query = "set-comment?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
             var response = RequestGet("api-logs-v1/" + query);
@@ -337,6 +347,9 @@ namespace EDDiscovery2.EDSM
 
         public string SetLog(string systemName, DateTime dateVisitedutc)
         {
+            if (!IsApiKeySet)
+                return null;
+
             string query;
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
@@ -351,6 +364,9 @@ namespace EDDiscovery2.EDSM
 
         public string SetLogWithPos(string systemName, DateTime dateVisitedutc, double x, double y, double z)
         {
+            if (!IsApiKeySet)
+                return null;
+
             string query;
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
@@ -367,6 +383,12 @@ namespace EDDiscovery2.EDSM
 
         public bool SendTravelLog(string name, DateTime timeutc, bool coord, double x, double y, double z, out string error)
         {
+            if (!IsApiKeySet)
+            {
+                error = "EDSM API Key not set";
+                return false;
+            }
+
             error = "";
 
             string json = null;
@@ -408,6 +430,9 @@ namespace EDDiscovery2.EDSM
         public int GetLogs(DateTime starttimeutc, out List<HistoryEntry> log)     
         {
             log = new List<HistoryEntry>();
+
+            if (!IsApiKeySet)
+                return 0;
 
             string query = "get-logs?showId=1&startdatetime=" + HttpUtility.UrlEncode(starttimeutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
@@ -453,7 +478,7 @@ namespace EDDiscovery2.EDSM
 
         public bool IsKnownSystem(string sysName)
         {
-            string query = "system?sysname=" + HttpUtility.UrlEncode(sysName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            string query = "system?sysname=" + HttpUtility.UrlEncode(sysName);
             var response = RequestGet("api-v1/" + query);
             var json = response.Body;
             if (json == null)
@@ -514,7 +539,7 @@ namespace EDDiscovery2.EDSM
             }
             else
             {
-                string query = "system?sysname=" + encodedSys + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&showId=1";
+                string query = "system?sysname=" + encodedSys + "&showId=1";
                 var response = RequestGet("api-v1/" + query);
                 var json = response.Body;
                 if (json == null || json.ToString() == "[]")
