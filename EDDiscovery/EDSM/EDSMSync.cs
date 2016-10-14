@@ -31,7 +31,7 @@ namespace EDDiscovery2.EDSM
             mainForm = frm;
         }
 
-        public bool StartSync(bool syncto, bool syncfrom, int defmapcolour)
+        public bool StartSync(EDSMClass edsm, bool syncto, bool syncfrom, int defmapcolour)
         {
             if (running) // Only start once.
                 return false;
@@ -39,9 +39,9 @@ namespace EDDiscovery2.EDSM
             _syncFrom = syncfrom;
             _defmapcolour = defmapcolour;
 
-            ThreadEDSMSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
+            ThreadEDSMSync = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(SyncThread));
             ThreadEDSMSync.Name = "EDSM Sync";
-            ThreadEDSMSync.Start();
+            ThreadEDSMSync.Start(edsm);
 
             return true;
         }
@@ -51,20 +51,19 @@ namespace EDDiscovery2.EDSM
             Exit = true;
         }
 
-        private void SyncThread()
+        private void SyncThread(object _edsm)
         {
+            EDSMClass edsm = (EDSMClass)_edsm;
             running = true;
-            Sync();
+            Sync(edsm);
             running = false;
         }
 
-        private void Sync()
+        private void Sync(EDSMClass edsm)
         {
             try
             {
                 mainForm.LogLine("EDSM sync begin");
-
-                EDSMClass edsm = new EDSMClass();
 
                 List<HistoryEntry> hlfsdunsyncedlist = mainForm.history.FilterByNotEDSMSyncedAndFSD;        // first entry is oldest
 
@@ -224,10 +223,10 @@ namespace EDDiscovery2.EDSM
 
         public static void SendTravelLog(HistoryEntry he) // (verified with EDSM 29/9/2016, seen UTC time being sent, and same UTC time on ESDM).
         {
-            if (!EDDConfig.Instance.CheckCommanderEDSMAPI)
-                return;
-
             EDSMClass edsm = new EDSMClass();
+
+            if (!edsm.IsApiKeySet)
+                return;
 
             string errmsg;
             Task taskEDSM = Task.Factory.StartNew(() =>
@@ -239,10 +238,10 @@ namespace EDDiscovery2.EDSM
 
         public static void SendComments(string star , string note) // (verified with EDSM 29/9/2016)
         {
-            if (!EDDConfig.Instance.CheckCommanderEDSMAPI)
-                return;
-
             EDSMClass edsm = new EDSMClass();
+
+            if (!edsm.IsApiKeySet)
+                return;
 
             Task taskEDSM = Task.Factory.StartNew(() =>
             {
