@@ -59,6 +59,8 @@ namespace EDDiscovery.DB
                 if (dbver < 105)
                     UpgradeUserDB105(conn);
 
+                if (dbver < 106)
+                    UpgradeUserDB106(conn);
 
                 CreateUserDBTableIndexes();
 
@@ -195,6 +197,12 @@ namespace EDDiscovery.DB
 
 
             SQLiteDBClass.PerformUpgrade(conn, 105, true, false, new[] { query1, query2, query3 });
+        }
+
+        private static void UpgradeUserDB106(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE SystemNote ADD COLUMN EdsmId INTEGER NOT NULL DEFAULT -1";
+            SQLiteDBClass.PerformUpgrade(conn, 106, true, false, new[] { query1 });
         }
 
 
