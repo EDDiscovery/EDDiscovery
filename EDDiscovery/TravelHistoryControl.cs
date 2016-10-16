@@ -1470,7 +1470,8 @@ namespace EDDiscovery
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                export.ScanToCSV(dlg.FileName, scans);
+                export.GetData(_discoveryForm);
+                export.ToCSV(dlg.FileName);
                 Process.Start(dlg.FileName);
             }
 

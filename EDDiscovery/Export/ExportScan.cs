@@ -10,15 +10,26 @@ using System.Text;
 
 namespace EDDiscovery.Export
 {
-    public class ExportScan
+    public class ExportScan : ExportBase
     {
-        string delimiter = ",";
+        private List<JournalEntry> scans;
 
-        public bool ScanToCSV(string filename, List<JournalEntry> scans)
+        override public bool GetData(EDDiscoveryForm _discoveryForm)
         {
-            if (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Equals(","))
-                delimiter = ";";
+            var filter = (TravelHistoryFilter)_discoveryForm.TravelControl.comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
+            List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
+
+            scans = new List<JournalEntry>();
+
+            scans = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
+
+            return true;
+        }
+
+        override public bool ToCSV(string filename)
+        {
+   
             using (StreamWriter writer = new StreamWriter(filename))
             {
                 // Write header
@@ -139,24 +150,6 @@ namespace EDDiscovery.Export
             return true;
         }
 
-      private string MakeValueCsvFriendly(object value)
-        {
-            if (value == null) return delimiter;
-            if (value is Nullable && ((INullable)value).IsNull) return delimiter;
-
-            if (value is DateTime)
-            {
-                if (((DateTime)value).TimeOfDay.TotalSeconds == 0)
-                    return ((DateTime)value).ToString("yyyy-MM-dd") + delimiter; ;
-                return ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss") + delimiter; ;
-            }
-            string output = value.ToString();
-
-            if (output.Contains(",") || output.Contains("\""))
-                output = '"' + output.Replace("\"", "\"\"") + '"';
-
-            return output + delimiter;
-
-        }
+  
     }
 }

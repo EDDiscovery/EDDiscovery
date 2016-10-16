@@ -1165,7 +1165,7 @@
         #endregion
 
         private ExtendedControls.ButtonExt button_RefreshHistory;
-        private ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
+        internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelclosests;
         private ExtendedControls.ButtonExt buttonMap;
