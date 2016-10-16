@@ -135,7 +135,7 @@ namespace EDDiscovery.EliteDangerous
         MassModuleStore = 1010,
         DatalinkVoucher = 1020,
         DataScanned = 1030,
-
+        CommunityGoalDiscard = 1040,
 
         EDDItemSet = 2000,
 
@@ -1039,15 +1039,13 @@ namespace EDDiscovery.EliteDangerous
                 case "MassModuleStore":
                     return typeof(JournalMassModuleStore);
 
-
-
                 case "DatalinkVoucher":
                     return typeof(JournalDatalinkVoucher);
                 case "DataScanned":
                     return typeof(JournalDataScanned);
 
-
-
+                case "CommunityGoalDiscard":
+                    return typeof(JournalCommunityGoalDiscard);
 
                 case "EDDItemSet":
                     return typeof(JournalEDDItemSet);
