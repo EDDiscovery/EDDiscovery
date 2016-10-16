@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    //When Written: when signing up to a community goal
     //Parameters:
     //•	Name
     //•	System
