@@ -49,11 +49,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             BodyName = Tools.GetStringDef(evt["BodyName"]);
             StarType = Tools.GetStringDef(evt["StarType"]);
             StellarMass = evt.Value<double?>("StellarMass");
-            Radius = evt.Value<double?>("StellarMass");
-            AbsoluteMagnitude = evt.Value<double?>("StellarMass");
-            OrbitalPeriod = Tools.GetDouble(evt["StellarMass"]);
-            RotationPeriod = Tools.GetDouble(evt["StellarMass"]);
-            Age = Tools.GetDouble(evt["Age"]);
+            Radius = evt.Value<double?>("Radius");
+            AbsoluteMagnitude = evt.Value<double?>("AbsoluteMagnitude");
+            RotationPeriod = Tools.GetDouble(evt["RotationPeriod"]);
+            Age = Tools.GetDouble(evt["Age_MY"]);
             Rings = evt["Rings"]?.ToObject<PlanetRing[]>();
             DistanceFromArrivalLS = Tools.GetDouble(evt["DistanceFromArrivalLS"]);
 
@@ -73,6 +72,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Eccentricity = Tools.GetDouble(evt["Eccentricity"]);
             OrbitalInclination = Tools.GetDouble(evt["OrbitalInclination"]);
             Periapsis = Tools.GetDouble(evt["Periapsis"]);
+            OrbitalPeriod = Tools.GetDouble(evt["OrbitalPeriod"]);
 
 
         }

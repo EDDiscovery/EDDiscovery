@@ -24,7 +24,9 @@ namespace EDDiscovery
 
             exportTypeList = new List<ExportTypeClass>();
 
-            exportTypeList.Add(new ExportTypeClass("Exploration scans", new ExportScan()));
+            exportTypeList.Add(new ExportTypeClass("Exploration scans (all)", new ExportScan()));
+            exportTypeList.Add(new ExportTypeClass("Exploration scans (Stars)", new ExportScan(true, false)));
+            exportTypeList.Add(new ExportTypeClass("Exploration scans (Planets)", new ExportScan(false, true)));
             exportTypeList.Add(new ExportTypeClass("Travel history", new ExportFSDJump()));
 
         }
