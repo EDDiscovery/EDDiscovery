@@ -50,7 +50,7 @@ namespace EDDiscovery.Export
         protected string MakeValueCsvFriendly(object value)
         {
             if (value == null) return delimiter;
-            if (value is Nullable && ((INullable)value).IsNull) return delimiter;
+            if (value is INullable && ((INullable)value).IsNull) return delimiter;
 
             if (value is DateTime)
             {
