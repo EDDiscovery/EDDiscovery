@@ -173,6 +173,8 @@ namespace EDDiscovery
             journalViewControl1.InitControl(this);
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
+            exportControl1.InitControl(this);
+
 
             EdsmSync = new EDSMSync(this);
 

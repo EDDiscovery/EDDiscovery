@@ -83,6 +83,8 @@
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tabPageExport = new System.Windows.Forms.TabPage();
+            this.exportControl1 = new EDDiscovery.ExportControl();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -94,6 +96,7 @@
             this.tabPageRoutesExpeditions.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.tabPageExport.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -105,7 +108,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(246, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(154, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -366,6 +369,7 @@
             this.tabControl1.Controls.Add(this.tabPageScreenshots);
             this.tabControl1.Controls.Add(this.tabPageRoute);
             this.tabControl1.Controls.Add(this.tabPageRoutesExpeditions);
+            this.tabControl1.Controls.Add(this.tabPageExport);
             this.tabControl1.Controls.Add(this.tabPageSettings);
             this.tabControl1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);
@@ -588,6 +592,25 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
+            // tabPageExport
+            // 
+            this.tabPageExport.Controls.Add(this.exportControl1);
+            this.tabPageExport.Location = new System.Drawing.Point(4, 22);
+            this.tabPageExport.Name = "tabPageExport";
+            this.tabPageExport.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageExport.Size = new System.Drawing.Size(985, 671);
+            this.tabPageExport.TabIndex = 8;
+            this.tabPageExport.Text = "Export";
+            this.tabPageExport.UseVisualStyleBackColor = true;
+            // 
+            // exportControl1
+            // 
+            this.exportControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.exportControl1.Location = new System.Drawing.Point(3, 3);
+            this.exportControl1.Name = "exportControl1";
+            this.exportControl1.Size = new System.Drawing.Size(979, 665);
+            this.exportControl1.TabIndex = 0;
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -628,6 +651,7 @@
             this.tabPageSettings.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tabPageExport.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -686,6 +710,8 @@
         private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openEliteDangerousDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPageExport;
+        private ExportControl exportControl1;
     }
 }
 
