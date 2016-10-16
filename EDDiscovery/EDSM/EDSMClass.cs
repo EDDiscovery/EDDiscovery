@@ -303,7 +303,7 @@ namespace EDDiscovery2.EDSM
             if (!IsApiKeySet)
                 return null;
 
-            string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
+            string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&showId=1";
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);
 
@@ -330,13 +330,20 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public string SetComment(string systemName, string note)
+        public string SetComment(string systemName, string note, long edsmid = 0)
         {
             if (!IsApiKeySet)
                 return null;
 
             string query;
             query = "set-comment?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
+
+            if (edsmid > 0)
+            {
+                // For future use when EDSM adds the ability to link a comment to a system by EDSM ID
+                query += "&systemId=" + edsmid;
+            }
+
             var response = RequestGet("api-logs-v1/" + query);
 
             if ((int)response.StatusCode >= 400)
