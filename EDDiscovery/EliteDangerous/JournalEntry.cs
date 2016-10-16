@@ -1078,6 +1078,12 @@ namespace EDDiscovery.EliteDangerous
         static public System.Drawing.Bitmap GetIcon(string text, bool usealt = false)
         {
             Type jtype = TypeOfJournalEntry(text);
+
+            if (jtype == null)
+            {
+                return EDDiscovery.Properties.Resources.genericevent;
+            }
+
             System.Reflection.PropertyInfo p = jtype.GetProperty((usealt) ? "IconAlt" : "Icon");
             System.Reflection.MethodInfo getter = p?.GetGetMethod();
             return (getter != null) ? ((System.Drawing.Bitmap)getter.Invoke(null, null)) : EDDiscovery.Properties.Resources.genericevent;

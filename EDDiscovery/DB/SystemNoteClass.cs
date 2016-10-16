@@ -15,6 +15,7 @@ namespace EDDiscovery2.DB
         public string Name;                 //Journalid <>0, Name clear, journal marker
         public DateTime Time;
         public string Note;
+        public long EdsmId;
 
         public SystemNoteClass()
         {
@@ -27,6 +28,7 @@ namespace EDDiscovery2.DB
             Name = (string)dr["Name"];
             Time = (DateTime)dr["Time"];
             Note = (string)dr["Note"];
+            EdsmId = (long)dr["EdsmId"];
         }
 
 
@@ -41,12 +43,13 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid) values (@name, @time, @note, @journalid)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid, edsmid) values (@name, @time, @note, @journalid, @edsmid)"))
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@time", Time);
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@journalid", Journalid);
+                cmd.AddParameterWithValue("@edsmid", EdsmId);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -70,13 +73,14 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid  where ID=@id")) 
+            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid, EdsmId=@EdsmId  where ID=@id")) 
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
                 cmd.AddParameterWithValue("@Note", Note);
                 cmd.AddParameterWithValue("@Time", Time);
                 cmd.AddParameterWithValue("@journalid", Journalid);
+                cmd.AddParameterWithValue("@EdsmId", EdsmId);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
             }
@@ -121,9 +125,9 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static SystemNoteClass GetNoteOnSystem(string name)      // case insensitive.. null if not there  matches journalid=0,
+        public static SystemNoteClass GetNoteOnSystem(string name, long edsmid = -1)      // case insensitive.. null if not there
         {
-            return globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && x.Journalid == 0 );
+            return globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || x.EdsmId <= 0 || x.EdsmId == edsmid) );
         }
 
         public static SystemNoteClass GetNoteOnJournalEntry(long jid)
