@@ -1563,7 +1563,7 @@ namespace EDDiscovery2
                 {                                                   // try and find the associated bookmark..
                     BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
 
-                    SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.name) : null;
+                    SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.name, cursystem.id_edsm) : null;
                     string note = (sn != null) ? sn.Note : "";
 
                     BookmarkForm frm = new BookmarkForm();
@@ -1866,7 +1866,7 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "Distance from " + _clickedGMO.name + ": " + dist.ToString("0.0");
                 }
 
-                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname);   // may be null
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, hoversystem == null ? 0 : hoversystem.id_edsm);   // may be null
                 if (sn != null && sn.Note.Trim().Length>0 )
                 {
                     info += Environment.NewLine + "Notes: " + sn.Note.Trim();
@@ -2018,7 +2018,7 @@ namespace EDDiscovery2
             {
                 if ( vs.System.HasCoordinate)
                 { 
-                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.name);
+                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.name, vs.System.id_edsm);
 
                     if (notecs!=null )
                     {

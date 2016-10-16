@@ -105,7 +105,7 @@ namespace EDDiscovery2._3DMap
             {
                 foreach (HistoryEntry vs in syslists)
                 {
-                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.name);
+                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.name, vs.System.id_edsm);
 
                     if (notecs != null)         // if we have a note..
                     {

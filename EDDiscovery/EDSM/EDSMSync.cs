@@ -236,7 +236,7 @@ namespace EDDiscovery2.EDSM
             });
         }
 
-        public static void SendComments(string star , string note) // (verified with EDSM 29/9/2016)
+        public static void SendComments(string star , string note, long edsmid = 0) // (verified with EDSM 29/9/2016)
         {
             EDSMClass edsm = new EDSMClass();
 
@@ -245,7 +245,7 @@ namespace EDDiscovery2.EDSM
 
             Task taskEDSM = Task.Factory.StartNew(() =>
             {
-                edsm.SetComment(star, note);
+                edsm.SetComment(star, note, edsmid);
             });
         }
 

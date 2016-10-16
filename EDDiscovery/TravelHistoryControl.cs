@@ -142,7 +142,24 @@ namespace EDDiscovery
         {
             SystemNoteClass snc = SystemNoteClass.GetNoteOnJournalEntry(item.Journalid);
             if ( snc == null && item.IsFSDJump )
-                snc = SystemNoteClass.GetNoteOnSystem(item.System.name);
+                snc = SystemNoteClass.GetNoteOnSystem(item.System.name, item.System.id_edsm);
+
+            // Try to fill EDSM ID where a system note is set but journal item EDSM ID is not set
+            if (snc != null && snc.Name != null && snc.EdsmId > 0 && item.System.id_edsm <= 0)
+            {
+                item.System.id_edsm = 0;
+                _discoveryForm.history.FillEDSM(item);
+
+                if (snc.Journalid != item.Journalid && item.System.id_edsm > 0 && snc.EdsmId != item.System.id_edsm)
+                    snc = null;
+            }
+
+            if (snc != null && snc.Name != null && snc.Journalid == item.Journalid && item.System.id_edsm > 0 && snc.EdsmId != item.System.id_edsm)
+            {
+                snc.EdsmId = item.System.id_edsm;
+                snc.Update();
+            }
+
 
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
@@ -587,12 +604,13 @@ namespace EDDiscovery
 
                 if ( (sn == null && txt.Length>0) || (sn!=null && !sn.Note.Equals(txt))) // if no system note, and text,  or system not is not text
                 {
-                    if ( sn != null )           // already there, update
+                    if ( sn != null && (sn.Journalid == sys.Journalid || sn.Journalid == 0 || (sn.Name.Equals(sys.System.name, StringComparison.InvariantCultureIgnoreCase) && sn.EdsmId <= 0) || (sn.EdsmId > 0 && sn.EdsmId == sys.System.id_edsm)) )           // already there, update
                     { 
                         sn.Note = txt;
                         sn.Time = DateTime.Now;
                         sn.Name = (sys.IsFSDJump) ? sys.System.name : "";
-                        sn.Journalid = (sys.IsFSDJump) ? 0 : sys.Journalid;
+                        sn.Journalid = sys.Journalid;
+                        sn.EdsmId = sys.IsFSDJump ? sys.System.id_edsm : 0;
                         sn.Update();
                     }
                     else
@@ -601,7 +619,8 @@ namespace EDDiscovery
                         sn.Note = txt;
                         sn.Time = DateTime.Now;
                         sn.Name = (sys.IsFSDJump) ? sys.System.name : "";
-                        sn.Journalid = (sys.IsFSDJump) ? 0 : sys.Journalid;
+                        sn.Journalid = sys.Journalid;
+                        sn.EdsmId = sys.IsFSDJump ? sys.System.id_edsm : 0;
                         sn.Add();
                         currentGridRow.Cells[TravelHistoryColumns.NoteTag].Tag = sn;
                     }
@@ -609,7 +628,7 @@ namespace EDDiscovery
                     currentGridRow.Cells[TravelHistoryColumns.Note].Value = txt;
 
                     if (checkBoxEDSMSyncTo.Checked && sys.IsFSDJump )       // only send on FSD jumps
-                        EDSMSync.SendComments(sn.Name,sn.Note);
+                        EDSMSync.SendComments(sn.Name,sn.Note,sn.EdsmId);
 
                     _discoveryForm.Map.UpdateNote();
                     RefreshSummaryRow(dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index]);    // tell it this row was changed
