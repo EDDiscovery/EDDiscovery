@@ -76,7 +76,6 @@
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonExport = new ExtendedControls.ButtonExt();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
@@ -630,20 +629,6 @@
             this.labelCMDR.TabIndex = 17;
             this.labelCMDR.Text = "Cmdr";
             // 
-            // buttonExport
-            // 
-            this.buttonExport.BorderColorScaling = 1.25F;
-            this.buttonExport.ButtonColorScaling = 0.5F;
-            this.buttonExport.ButtonDisabledScaling = 0.5F;
-            this.buttonExport.Location = new System.Drawing.Point(524, 3);
-            this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(67, 23);
-            this.buttonExport.TabIndex = 26;
-            this.buttonExport.Text = "Export";
-            this.toolTipEddb.SetToolTip(this.buttonExport, "Select what events are shown");
-            this.buttonExport.UseVisualStyleBackColor = true;
-            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
-            // 
             // buttonFilter
             // 
             this.buttonFilter.BorderColorScaling = 1.25F;
@@ -1118,7 +1103,6 @@
             // 
             // TopPanel
             // 
-            this.TopPanel.Controls.Add(this.buttonExport);
             this.TopPanel.Controls.Add(this.buttonFilter);
             this.TopPanel.Controls.Add(this.textBoxFilter);
             this.TopPanel.Controls.Add(this.label1);
@@ -1246,6 +1230,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.ToolStripMenuItem eDDNTestToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonExport;
     }
 }
