@@ -1449,7 +1449,7 @@ namespace EDDiscovery
             }
             else if (je.EventTypeID == JournalTypeEnum.Scan)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalScan, rightclicksystem.System.name);
+                msg = eddn.CreateEDDNMessage(je as JournalScan, rightclicksystem.System.name, rightclicksystem.System.x, rightclicksystem.System.y, rightclicksystem.System.z);
             }
 
             if (msg != null)
