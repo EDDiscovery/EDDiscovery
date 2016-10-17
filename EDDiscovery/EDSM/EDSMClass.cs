@@ -314,13 +314,15 @@ namespace EDDiscovery2.EDSM
         }
 
 
-        public string GetComment(string systemName)
+        public string GetComment(string systemName, long edsmid = 0)
         {
             if (!IsApiKeySet)
                 return null;
 
             string query;
-            query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName);
+            query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            if (edsmid > 0)
+                query += "&systemId=" + edsmid;
 
             var response = RequestGet("api-logs-v1/" + query);
 
