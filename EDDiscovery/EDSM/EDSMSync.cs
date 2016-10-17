@@ -168,16 +168,50 @@ namespace EDDiscovery2.EDSM
                 {
                     List<HistoryEntry> edsmsystemlog = null;
                     edsm.GetLogs(new DateTime(2011, 1, 1), out edsmsystemlog);        // get the full list of systems
+                    edsmsystemlog = edsmsystemlog.OrderBy(s => s.EventTimeUTC).ToList();
 
-                    List<HistoryEntry> hlfsdlist = mainForm.history.FilterByFSD;  // FSD jumps only
+                    List<HistoryEntry> hlfsdlist = mainForm.history.FilterByFSD.OrderBy(h => h.EventTimeUTC).ToList();  // FSD jumps only
                     
                     List<HistoryEntry> toadd = new List<HistoryEntry>();
 
+                    int previdx = -1;
                     foreach (HistoryEntry he in edsmsystemlog)      // find out list of ones not present
                     {
-                        if (hlfsdlist.FindIndex(x => x.System.name.Equals(he.System.name) && x.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks) < 0)
+                        int index = hlfsdlist.FindIndex(x => x.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase) && x.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks);
+
+                        if (index < 0)
+                        {
+                            // Look for any entries where DST may have thrown off the time
+                            foreach (var vi in hlfsdlist.Select((v,i) => new {v = v, i = i}).Where(vi => vi.v.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase)))
+                            {
+                                if (vi.i > previdx)
+                                {
+                                    double hdiff = vi.v.EventTimeUTC.Subtract(he.EventTimeUTC).TotalHours;
+                                    if (hdiff >= -2 && hdiff <= 2 && hdiff == Math.Floor(hdiff))
+                                    {
+                                        if (vi.v.System.id_edsm <= 0)
+                                        {
+                                            vi.v.System.id_edsm = 0;
+                                            mainForm.history.FillEDSM(vi.v);
+                                        }
+
+                                        if (vi.v.System.id_edsm <= 0 || vi.v.System.id_edsm == he.System.id_edsm)
+                                        {
+                                            index = vi.i;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (index < 0)
                         {
                             toadd.Add(he);
+                        }
+                        else
+                        {
+                            previdx = index;
                         }
                     }
 
