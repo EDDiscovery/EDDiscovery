@@ -131,10 +131,15 @@ namespace EDDiscovery2.EDSM
                                 string name = jo["system"].Value<string>();
                                 string note = jo["comment"].Value<string>();
                                 string utctime = jo["lastUpdate"].Value<string>();
+                                int edsmid = 0;
+
+                                if (!Int32.TryParse(Tools.GetStringDef(jo["systemId"], "0"), out edsmid))
+                                    edsmid = 0;
+
                                 DateTime localtime = DateTime.ParseExact(utctime, "yyyy-MM-dd HH:mm:ss", 
                                             CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
-                                SystemNoteClass curnote = SystemNoteClass.GetNoteOnSystem(name);
+                                SystemNoteClass curnote = SystemNoteClass.GetNoteOnSystem(name, edsmid);
 
                                 if (curnote != null)
                                 {
@@ -143,6 +148,7 @@ namespace EDDiscovery2.EDSM
                                     {
                                         curnote.Note += ". EDSM: " + note;
                                         curnote.Time = localtime;
+                                        curnote.EdsmId = edsmid;
                                         curnote.Update();
                                         commentsadded++;
                                     }
@@ -154,6 +160,7 @@ namespace EDDiscovery2.EDSM
                                     curnote.Time = localtime;
                                     curnote.Name = name;
                                     curnote.Journalid = 0;
+                                    curnote.EdsmId = edsmid;
                                     curnote.Add();
                                     commentsadded++;
                                 }
