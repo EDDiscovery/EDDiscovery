@@ -316,6 +316,12 @@ namespace EDDiscovery.DB
                             reader.GetValues(array);                    // love this call.
 
                             string tluname = (string)array[2];          // 2 is in terms of its name.. look it up
+
+                            if (tluname.StartsWith("EDSM-")) // Don't migrate the entries that were synced from EDSM
+                            {                                // We can sync them from EDSM later.
+                                continue;
+                            }
+
                             EDDiscovery2.DB.TravelLogUnit tlu = tlus.Find(x => x.Name.Equals(tluname, StringComparison.InvariantCultureIgnoreCase));
 
                             array[15] = (tlu != null) ? (long)tlu.id : 0;      // even if we don't find it, tlu may be screwed up, still want to import
