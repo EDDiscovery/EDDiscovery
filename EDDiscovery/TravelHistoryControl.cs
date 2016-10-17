@@ -822,7 +822,7 @@ namespace EDDiscovery
 
                 if (sc != null && sc.HasCoordinate)
                 {
-                    SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sn);        // has it got a note?
+                    SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sc.name, sc.id_edsm);        // has it got a note?
 
                     if (nc != null)
                     {
