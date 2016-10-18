@@ -1691,13 +1691,26 @@ namespace EDDiscovery.DB
 
                 if (system == null)                   // not found, so  try
                 {
-                    if (s.HasCoordinate)                // if has co-ord, its cardinal, only match on this
+                    List<SystemClass> systemsByName = GetSystemsByName(s.name, conn);
+
+                    if (systemsByName.Count == 0 && s.HasCoordinate)
                     {
-                        system = SystemClass.GetSystemNearestTo(s.x, s.y, s.z, conn);       // find it
+                        system = GetSystemNearestTo(s.x, s.y, s.z, conn);
                     }
                     else
                     {
-                        system = SystemClass.GetSystem(s.name, conn);   // find on name
+                        double mindist = 0.5;
+
+                        foreach (SystemClass sys in systemsByName)
+                        {
+                            double dist = Distance(sys, s);
+
+                            if (dist < mindist)
+                            {
+                                mindist = dist;
+                                system = sys;
+                            }
+                        }
                     }
                 }
 
