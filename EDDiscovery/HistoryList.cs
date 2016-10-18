@@ -38,6 +38,7 @@ namespace EDDiscovery
 
         public int MapColour;
 
+        public bool IsStarPosFromEDSM;  // flag populated from journal entry when HE is made. Was the star position taken from EDSM?
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
@@ -76,6 +77,7 @@ namespace EDDiscovery
 
             int mapcolour = 0;
             journalupdate = false;
+            bool starposfromedsm = false;
 
             if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
             {
@@ -135,6 +137,7 @@ namespace EDDiscovery
                 }
 
                 isys = newsys;
+                starposfromedsm = jl.HasCoordinate ? jl.StarPosFromEDSM : newsys.HasCoordinate;
             }
 
             string summary, info, detailed;
@@ -154,7 +157,8 @@ namespace EDDiscovery
                 StopMarker = je.StopMarker,
                 EventSummary = summary,
                 EventDescription = info,
-                EventDetailedInfo = detailed
+                EventDetailedInfo = detailed,
+                IsStarPosFromEDSM = starposfromedsm
             };
 
             if (prev != null && prev.travelling)      // if we are travelling..

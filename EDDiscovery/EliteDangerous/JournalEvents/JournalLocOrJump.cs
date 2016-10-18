@@ -11,12 +11,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public string StarSystem { get; set; }
         public Vector3 StarPos { get; set; }
+        public bool StarPosFromEDSM { get; set; }
 
         public bool HasCoordinate { get { return !float.IsNaN(StarPos.X); } }
 
         protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype ) : base(jo, jtype)
         {
             StarSystem = Tools.GetStringDef(jo["StarSystem"],"Unknown!");
+            StarPosFromEDSM = Tools.GetBool(jo["StarPosFromEDSM"], false);
 
             Vector3 pos = new Vector3();
 
