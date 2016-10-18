@@ -1445,7 +1445,7 @@ namespace EDDiscovery
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalDocked, rightclicksystem.System.name, rightclicksystem.System.x, rightclicksystem.System.y, rightclicksystem.System.z);
+                msg = eddn.CreateEDDNMessage(je as JournalDocked, rightclicksystem.System.x, rightclicksystem.System.y, rightclicksystem.System.z);
             }
             else if (je.EventTypeID == JournalTypeEnum.Scan)
             {
