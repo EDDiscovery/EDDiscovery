@@ -124,7 +124,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(100, 65);
             this.label10.TabIndex = 11;
-            this.label10.Text = "For Steam, select Scan For JPG and turn off remove orginals";
+            this.label10.Text = "For Steam, select Scan For JPG and turn off remove originals";
             // 
             // groupBoxCropSettings
             // 
