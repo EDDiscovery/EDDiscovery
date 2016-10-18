@@ -65,7 +65,7 @@ namespace EDDiscovery.EDDN
             return msg;
         }
 
-        public JObject CreateEDDNMessage(JournalDocked journal)
+        public JObject CreateEDDNMessage(JournalDocked journal, double x, double y, double z)
         {
             JObject msg = new JObject();
 
@@ -77,6 +77,8 @@ namespace EDDiscovery.EDDN
             message.Remove("Economy_Localised");
             message.Remove("Government_Localised");
             message.Remove("Security_Localised");
+
+            message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
             msg["message"] = message;
             return msg;
