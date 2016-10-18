@@ -740,6 +740,7 @@ namespace EDDiscovery
         private void buttonRoss_Click(object sender, EventArgs e)
         {
             HistoryEntry sys = currentGridRow.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            _discoveryForm.history.FillEDSM(sys, reload: true);
 
             if (currentGridRow!= null && sys.System.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + sys.System.id_eddb.ToString());
@@ -748,6 +749,7 @@ namespace EDDiscovery
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
             HistoryEntry sys = currentGridRow.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            _discoveryForm.history.FillEDSM(sys, reload: true);
 
             if (currentGridRow != null && sys.System != null) // solve a possible exception
             {
