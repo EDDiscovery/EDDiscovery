@@ -40,7 +40,7 @@ namespace EDDiscovery.EDDN
 
         public JObject CreateEDDNMessage(JournalFSDJump journal)
         {
-            if (!journal.HasCoordinate)
+            if (!journal.HasCoordinate || journal.StarPosFromEDSM)
                 return null;
 
             JObject msg = new JObject();
@@ -61,6 +61,7 @@ namespace EDDiscovery.EDDN
             message.Remove("FuelUsed");
             message.Remove("FuelLevel");
             message.Remove("EDDMapColor");
+            message.Remove("StarPosFromEDSM");
 
             msg["message"] = message;
             return msg;
