@@ -756,7 +756,7 @@ namespace EDDiscovery
                 if (!String.IsNullOrEmpty(sys.System.name))
                 {
                     long? id_edsm = sys.System.id_edsm;
-                    if (id_edsm == 0)
+                    if (id_edsm <= 0)
                     {
                         id_edsm = null;
                     }
@@ -1275,7 +1275,7 @@ namespace EDDiscovery
             EDSMClass edsm = new EDSMClass();
             long? id_edsm = rightclicksystem.System?.id_edsm;
 
-            if (id_edsm == 0)
+            if (id_edsm <= 0)
             {
                 id_edsm = null;
             }

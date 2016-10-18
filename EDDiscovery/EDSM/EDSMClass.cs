@@ -558,7 +558,7 @@ namespace EDDiscovery2.EDSM
                 sysID = msg["id"].Value<string>();
             }
 
-            string url = _serverAddress + "show-system/index/id/" + sysID + "/name/" + encodedSys;
+            string url = _serverAddress + "system/id/" + sysID + "/name/" + encodedSys;
             return url;
         }
 
