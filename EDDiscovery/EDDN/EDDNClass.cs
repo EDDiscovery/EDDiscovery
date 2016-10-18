@@ -43,7 +43,7 @@ namespace EDDiscovery.EDDN
             if (!journal.HasCoordinate)
                 return null;
 
-            if (journal.JumpDist <= 0.0)   //  Checkl for old ED 2.1. converted jump.
+            if (journal.FuelUsed <= 0.0)   //  Checkl for old ED 2.1. converted jump.
                 return null;
 
             JObject msg = new JObject();
