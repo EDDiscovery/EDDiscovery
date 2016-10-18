@@ -43,15 +43,16 @@ namespace EDDiscovery.EDDN
             if (!journal.HasCoordinate)
                 return null;
 
-            if (journal.FuelUsed <= 0.0)   //  Checkl for old ED 2.1. converted jump.
-                return null;
-
             JObject msg = new JObject();
             
             msg["header"] = Header();
             msg["$schemaRef"] = "http://schemas.elite-markets.net/eddn/journal/1/test";
 
             JObject message = (JObject) JObject.Parse(journal.EventDataString);
+
+            if (Tools.IsNullOrEmptyT(message["FuelUsed"]))  // Old ED 2.1 messages has no Fuel used fields
+                return null;
+
 
             message.Remove("Economy_Localised");
             message.Remove("Government_Localised");
