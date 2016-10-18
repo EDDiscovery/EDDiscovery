@@ -441,6 +441,7 @@ namespace EDDiscovery.EliteDangerous
                     if (jsonpos)
                     {
                         jo["StarPos"] = new JArray() { system.x, system.y, system.z };
+                        jo["StarPosFromEDSM"] = true;
                     }
 
                     if (dist > 0)
