@@ -99,14 +99,13 @@ namespace EDDiscovery.EliteDangerous
 
                     reader.TravelLogUnit.Update();
 
-                    if (updateProgress != null)
-                    {
-                        updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
-                    }
+                    updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
                     lastnfi = reader;
                 }
             }
+
+            updateProgress(-1, "");
         }
 
         private EDJournalReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null)
