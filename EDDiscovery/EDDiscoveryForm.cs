@@ -338,11 +338,11 @@ namespace EDDiscovery
 
         private void CheckGitHub()
         {
-            JArray ja;
+            JObject jo;
 
             GitHubClass github = new GitHubClass();
 
-            ja =github.GetAllReleases();
+            jo =github.GetLatestRelease();
 
         }
 
