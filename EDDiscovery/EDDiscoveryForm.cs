@@ -380,6 +380,7 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
+                CheckGitHub();
                 EDDiscoveryServer eds = new EDDiscoveryServer();
 
                 string inst = eds.GetLastestInstaller();
@@ -403,6 +404,16 @@ namespace EDDiscovery
 
                 }
             });
+        }
+
+        private void CheckGitHub()
+        {
+            JArray ja;
+
+            GitHubClass github = new GitHubClass();
+
+            ja =github.GetAllReleases();
+
         }
 
         private void InitFormControls()
