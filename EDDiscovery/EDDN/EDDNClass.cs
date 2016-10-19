@@ -89,8 +89,6 @@ namespace EDDiscovery.EDDN
         {
             JObject msg = new JObject();
 
-           
-
             msg["header"] = Header();
             msg["$schemaRef"] = "http://schemas.elite-markets.net/eddn/journal/1/test";
 
@@ -101,8 +99,6 @@ namespace EDDiscovery.EDDN
 
             msg["message"] = message;
             return msg;
-
-   
         }
 
 
