@@ -198,7 +198,7 @@ namespace EDDiscovery
 
                 if (he.IsFSDJump)
                 {
-                    int count = _discoveryForm.history.GetVisitsCount(he.System.name);
+                    int count = _discoveryForm.history.GetVisitsCount(he.System.name, he.System.id_edsm);
                     LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
 
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
@@ -246,7 +246,7 @@ namespace EDDiscovery
             }
             else
             {
-                _discoveryForm.history.FillEDSM(rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry); // Fill in any EDSM info we have
+                _discoveryForm.history.FillEDSM(rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry, reload: true); // Fill in any EDSM info we have
 
                 SystemNoteClass note = rw.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
                 HistoryEntry syspos = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;     // reload, it may have changed
@@ -270,7 +270,7 @@ namespace EDDiscovery
                     textBoxSolDist.Text = "";
                 }
 
-                int count = _discoveryForm.history.GetVisitsCount(syspos.System.name);
+                int count = _discoveryForm.history.GetVisitsCount(syspos.System.name, syspos.System.id_edsm);
                 textBoxVisits.Text = count.ToString();
 
                 bool enableedddross = (syspos.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
@@ -740,6 +740,7 @@ namespace EDDiscovery
         private void buttonRoss_Click(object sender, EventArgs e)
         {
             HistoryEntry sys = currentGridRow.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            _discoveryForm.history.FillEDSM(sys, reload: true);
 
             if (currentGridRow!= null && sys.System.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + sys.System.id_eddb.ToString());
@@ -748,13 +749,14 @@ namespace EDDiscovery
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
             HistoryEntry sys = currentGridRow.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            _discoveryForm.history.FillEDSM(sys, reload: true);
 
             if (currentGridRow != null && sys.System != null) // solve a possible exception
             {
                 if (!String.IsNullOrEmpty(sys.System.name))
                 {
                     long? id_edsm = sys.System.id_edsm;
-                    if (id_edsm == 0)
+                    if (id_edsm <= 0)
                     {
                         id_edsm = null;
                     }
@@ -1273,7 +1275,7 @@ namespace EDDiscovery
             EDSMClass edsm = new EDSMClass();
             long? id_edsm = rightclicksystem.System?.id_edsm;
 
-            if (id_edsm == 0)
+            if (id_edsm <= 0)
             {
                 id_edsm = null;
             }
