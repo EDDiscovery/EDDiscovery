@@ -1441,19 +1441,16 @@ namespace EDDiscovery
 
         private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            adminToolStripMenuItem.DropDown.Close();
             FolderBrowserDialog dirdlg = new FolderBrowserDialog();
 
             DialogResult dlgResult = dirdlg.ShowDialog();
 
             if (dlgResult == DialogResult.OK)
             {
-                string errstr = null;
                 string logpath = dirdlg.SelectedPath;
                 //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                this.Cursor = Cursors.WaitCursor;
-                NetLogClass.ParseFiles(logpath, out errstr, EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, false);
-                RefreshHistoryAsync();
-                this.Cursor = Cursors.Default;
+                RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false);
             }
         }
 
@@ -1465,13 +1462,9 @@ namespace EDDiscovery
 
             if (dlgResult == DialogResult.OK)
             {
-                string errstr = null;
                 string logpath = dirdlg.SelectedPath;
                 //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                this.Cursor = Cursors.WaitCursor;
-                NetLogClass.ParseFiles(logpath, out errstr, EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, true);
-                RefreshHistoryAsync();
-                this.Cursor = Cursors.Default;
+                RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true);
             }
         }
 
@@ -1490,7 +1483,13 @@ namespace EDDiscovery
 
 #region Update Views with new commander 
 
-        public void RefreshHistoryAsync()
+        protected class RefreshWorkerArgs
+        {
+            public string NetLogPath;
+            public bool ForceNetLogReload;
+        }
+
+        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false)
         {
             if (PendingClose)
             {
@@ -1499,19 +1498,17 @@ namespace EDDiscovery
 
             if (!_refreshWorker.IsBusy)
             {
-                if (DisplayedCommander >= 0)
-                {
-                    travelHistoryControl1.RefreshButton(false);
-                    journalViewControl1.RefreshButton(false);
+                travelHistoryControl1.RefreshButton(false);
+                journalViewControl1.RefreshButton(false);
 
-                    journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+                journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
-                    _refreshWorker.RunWorkerAsync();
-                }
-                else
+                RefreshWorkerArgs args = new RefreshWorkerArgs
                 {
-                    TransferToFrontEnd(false);              // hidden systems.. don't bother doing any edsm checks
-                }
+                    NetLogPath = netlogpath,
+                    ForceNetLogReload = forcenetlogreload
+                };
+                _refreshWorker.RunWorkerAsync(args);
             }
         }
 
@@ -1522,17 +1519,87 @@ namespace EDDiscovery
 
         private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
         {
+            RefreshWorkerArgs args = e.Argument as RefreshWorkerArgs;
+            var worker = (BackgroundWorker)sender;
+
+            if (args != null)
+            {
+                if (args.NetLogPath != null)
+                {
+                    string errstr = null;
+                    NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload);
+                }
+            }
+
+            List<HistoryEntry> history = new List<HistoryEntry>();
+
             if (DisplayedCommander >= 0)
             {
-                var worker = (BackgroundWorker)sender;
-
                 journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
+            }
 
-                if (worker.CancellationPending)
+            worker.ReportProgress(-1, "Resolving systems");
+
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+            List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
+
+            ISystem isys = new SystemClass("Unknown");
+
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
+            {
+                HistoryEntry prev = null;
+                foreach (EliteDangerous.JournalEntry je in jlist)
                 {
-                    e.Cancel = true;
-                    return;
+                    bool journalupdate = false;
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, true, out journalupdate, conn);
+                    prev = he;
+
+                    history.Add(he);
+
+                    if (journalupdate)
+                    {
+                        jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
+                    }
                 }
+            }
+
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            if (jlistUpdated.Count > 0)
+            {
+                worker.ReportProgress(-1, "Updating journal entries");
+
+                using (SQLiteConnectionUserUTC conn = new SQLiteConnectionUserUTC())
+                {
+                    using (DbTransaction txn = conn.BeginTransaction())
+                    {
+                        foreach (Tuple<EliteDangerous.JournalEntry, HistoryEntry> jehe in jlistUpdated)
+                        {
+                            EliteDangerous.JournalEntry je = jehe.Item1;
+                            HistoryEntry he = jehe.Item2;
+                            EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+                            if (jfsd != null)
+                            {
+                                EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, conn, txn);
+                            }
+                        }
+
+                        txn.Commit();
+                    }
+                }
+            }
+
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                e.Result = history;
             }
         }
 
@@ -1549,7 +1616,7 @@ namespace EDDiscovery
                     travelHistoryControl1.CheckCommandersListBox();             // in case a new commander has been detected
                     settings.UpdateCommandersListBox();
 
-                    TransferToFrontEnd(true);
+                    TransferToFrontEnd((List<HistoryEntry>)e.Result);
                     ReportProgress(-1, "");
                     travelHistoryControl1.LogLine("Refresh Complete." );
                 }
@@ -1572,26 +1639,16 @@ namespace EDDiscovery
 
         public void RefreshFrontEnd()           // this just does another fetch and redisplay, does not check log files, or edsm systems
         {
-            TransferToFrontEnd(false);
+            RefreshDisplays();
         }
 
-        private void TransferToFrontEnd(bool checkedsm)
+        private void TransferToFrontEnd(List<HistoryEntry> historyents)
         {
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
-
             history.Clear();
-
-            ISystem isys = new SystemClass("Unknown");
-
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
+            
+            foreach (var ent in historyents)
             {
-                HistoryEntry prev = null;
-                foreach (EliteDangerous.JournalEntry je in jlist)
-                {
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, checkedsm, conn);
-                    prev = he;
-                    history.Add(he);
-                }
+                history.Add(ent);
             }
 
             if (PendingClose)
@@ -1612,7 +1669,19 @@ namespace EDDiscovery
 
             if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
             {
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast, true);
+                bool journalupdate = false;
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast, true, out journalupdate);
+
+                if (journalupdate)
+                {
+                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+
+                    if (jfsd != null)
+                    {
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
+                    }
+                }
+
                 history.Add(he);
 
                 travelHistoryControl1.AddNewEntry(he);

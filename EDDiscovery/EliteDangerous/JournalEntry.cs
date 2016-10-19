@@ -420,11 +420,19 @@ namespace EDDiscovery.EliteDangerous
         }
 
         //dist >0 to update
-        public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos , double dist )
+        public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos , double dist, SQLiteConnectionUserUTC cn = null, DbTransaction tn = null)
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            bool ownconn = false;
+
+            try
             {
-                JournalEntry ent = Get(journalid, cn);
+                if (cn == null)
+                {
+                    ownconn = true;
+                    cn = new SQLiteConnectionUserUTC();
+                }
+
+                JournalEntry ent = Get(journalid, cn, tn);
 
                 if (ent != null)
                 {
@@ -433,20 +441,28 @@ namespace EDDiscovery.EliteDangerous
                     if (jsonpos)
                     {
                         jo["StarPos"] = new JArray() { system.x, system.y, system.z };
+                        jo["StarPosFromEDSM"] = true;
                     }
 
                     if (dist > 0)
                         jo["JumpDist"] = dist;
 
-                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID"))
+                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID", tn))
                     {
                         cmd2.AddParameterWithValue("@ID", journalid);
                         cmd2.AddParameterWithValue("@EventData", jo.ToString());
                         cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
                         System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos {1}/edsmid {2} dist {3}", journalid, jsonpos, system.id_edsm, dist));
-                        SQLiteDBClass.SQLNonQueryText(cn, cmd2);
+                        cmd2.ExecuteNonQuery();
                     }
+                }
+            }
+            finally
+            {
+                if (ownconn)
+                {
+                    cn.Dispose();
                 }
             }
         }
@@ -513,9 +529,9 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        static public JournalEntry Get(long journalid, SQLiteConnectionUserUTC cn)
+        static public JournalEntry Get(long journalid, SQLiteConnectionUserUTC cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid"))
+            using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid", tn))
             {
                 cmd.AddParameterWithValue("@journalid", journalid);
 

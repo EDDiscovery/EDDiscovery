@@ -176,7 +176,8 @@ namespace EDDiscovery.Forms
         {
             if (_linkSystem != null)
             {
-                string url = String.Format("https://www.edsm.net/show-system/index/id/{0}/name/{1}", _linkSystem.id_edsm, Uri.EscapeDataString(_linkSystem.name));
+                var edsm = new EDDiscovery2.EDSM.EDSMClass();
+                string url = edsm.GetUrlToEDSMSystem(_linkSystem.name, _linkSystem.id_edsm);
                 System.Diagnostics.Process.Start(url);
             }
         }

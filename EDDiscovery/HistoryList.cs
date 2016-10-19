@@ -38,6 +38,7 @@ namespace EDDiscovery
 
         public int MapColour;
 
+        public bool IsStarPosFromEDSM;  // flag populated from journal entry when HE is made. Was the star position taken from EDSM?
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
@@ -69,12 +70,14 @@ namespace EDDiscovery
             EdsmSync = true; 
         }
 
-        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, SQLiteConnectionSystem conn = null)
+        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
 
             int mapcolour = 0;
+            journalupdate = false;
+            bool starposfromedsm = false;
 
             if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
             {
@@ -86,12 +89,12 @@ namespace EDDiscovery
                 if (jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
                 {
                     newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
-                    newsys.id_edsm = jl.EdsmID;       // pass across the EDSMID for the lazy load process.
+                    newsys.id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID;       // pass across the EDSMID for the lazy load process.
 
                     if (jfsd != null && jfsd.JumpDist <= 0 && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
                     {
                         jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jl.Id, newsys, false, jfsd.JumpDist);   // no need to do pos, already have it
+                        journalupdate = true;
                     }
 
                 }
@@ -109,9 +112,15 @@ namespace EDDiscovery
                             newsys = s;
 
                             if (jfsd != null && jfsd.JumpDist <= 0 && newsys.HasCoordinate && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
+                            {
                                 jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here.  EDSM systems always have co-ords, but we should check anyway
+                                journalupdate = true;
+                            }
 
-                            EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jl.Id, newsys, newsys.HasCoordinate, jfsd.JumpDist);
+                            if (jl.EdsmID <= 0 && newsys.id_edsm > 0)
+                            {
+                                journalupdate = true;
+                            }
                         }
                     }
                 }
@@ -119,13 +128,16 @@ namespace EDDiscovery
                 if (jfsd != null)
                 {
                     if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
-                     
+                    {
                         jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here
+                        journalupdate = true;
+                    }
 
                     mapcolour = jfsd.MapColor;
                 }
 
                 isys = newsys;
+                starposfromedsm = jl.HasCoordinate ? jl.StarPosFromEDSM : newsys.HasCoordinate;
             }
 
             string summary, info, detailed;
@@ -145,7 +157,8 @@ namespace EDDiscovery
                 StopMarker = je.StopMarker,
                 EventSummary = summary,
                 EventDescription = info,
-                EventDetailedInfo = detailed
+                EventDetailedInfo = detailed,
+                IsStarPosFromEDSM = starposfromedsm
             };
 
             if (prev != null && prev.travelling)      // if we are travelling..
@@ -364,9 +377,9 @@ namespace EDDiscovery
         }
 
 
-        public int GetVisitsCount(string name)
+        public int GetVisitsCount(string name, long edsmid = 0)
         {
-            return (from row in historylist where row.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) select row).Count();
+            return historylist.Where(he => he.IsFSDJump && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || he.System.id_edsm == edsmid)).Count();
         }
 
         public int GetFSDJumps( TimeSpan t )
@@ -387,9 +400,9 @@ namespace EDDiscovery
             }
         }
 
-        public void FillEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
-            if (syspos.System.status == SystemStatusEnum.EDSC || syspos.System.id_edsm == -1 )  // if set already, or we tried and failed..
+            if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1) )  // if set already, or we tried and failed..
                 return;
 
             bool closeit = false;
