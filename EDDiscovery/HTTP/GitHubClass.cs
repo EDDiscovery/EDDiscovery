@@ -34,25 +34,48 @@ namespace EDDiscovery
         public JArray GetAllReleases()
         {
 
-            HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscovery/releases") as HttpWebRequest;
-            request.UserAgent = "TestApp";
-            using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+            try
             {
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                string content1 = reader.ReadToEnd();
+                HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscovery/releases") as HttpWebRequest;
+                request.UserAgent = "TestApp";
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    string content1 = reader.ReadToEnd();
+                    JArray ja = JArray.Parse(content1);
+                    return ja;
+                }
             }
-
-
-
-            ResponseData resp = RequestGet("releases");
-
-            if (resp.StatusCode == System.Net.HttpStatusCode.OK)
+            catch (Exception ex)
             {
-                string text = resp.Body;
-                JArray ja = JArray.Parse(text);
-                return ja;
+                return null;
             }
-            else return null;
+            
         }
+
+        public JObject GetLatestRelease()
+        {
+
+            try
+            {
+                HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscovery/releases/latest") as HttpWebRequest;
+                request.UserAgent = "TestApp";
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    string content1 = reader.ReadToEnd();
+                    JObject ja = JObject.Parse(content1);
+                    return ja;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
+
+
+
     }
 }
