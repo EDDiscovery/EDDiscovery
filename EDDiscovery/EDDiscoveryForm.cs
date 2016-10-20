@@ -24,6 +24,8 @@ using System.Configuration;
 using EDDiscovery.EDSM;
 using System.Threading.Tasks;
 using System.Text;
+using EDDiscovery.HTTP;
+using EDDiscovery.Forms;
 
 namespace EDDiscovery
 {
@@ -87,6 +89,9 @@ namespace EDDiscovery
         Task<bool> downloadMapsTask = null;
         Task checkInstallerTask = null;
         private string logname = "";
+
+        EliteDangerous.EDJournalClass journalmonitor;
+        GitHubRelease newRelease;
 
         private bool CanSkipSlowUpdates()
         {
@@ -310,41 +315,40 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
-                CheckGitHub();
-                EDDiscoveryServer eds = new EDDiscoveryServer();
+                GitHubClass github = new GitHubClass();
 
-                string inst = eds.GetLastestInstaller();
-                if (inst != null)
+                GitHubRelease rel = github.GetLatestRelease();
+
+                if (rel != null)
                 {
-                    JObject jo = (JObject)JObject.Parse(inst);
-
-                    string newVersion = jo["Version"].Value<string>();
-                    string newInstaller = jo["Filename"].Value<string>();
+                    //string newInstaller = jo["Filename"].Value<string>();
 
                     var currentVersion = Application.ProductVersion;
 
                     Version v1, v2;
-                    v1 = new Version(newVersion);
+                    v1 = new Version(rel.ReleaseVersion);
                     v2 = new Version(currentVersion);
 
-                    if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
+                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
                     {
-                        this.BeginInvoke(new Action(() => LogLineHighlight("New EDDiscovery installer available " + "http://eddiscovery.astronet.se/release/" + newInstaller)));
+                        newRelease = rel;
+                        this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
+                        this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
+
                     }
 
                 }
             });
         }
 
-        private void CheckGitHub()
+
+        private void PanelInfoNewRelease()
         {
-            JObject jo;
-
-            GitHubClass github = new GitHubClass();
-
-            jo =github.GetLatestRelease();
-
+            panelInfo.BackColor = Color.Green;
+            labelPanelText.Text = "New version availible!";
+            panelInfo.Visible = true;
         }
+
 
         private void InitFormControls()
         {
@@ -633,13 +637,15 @@ namespace EDDiscovery
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(travelHistoryControl1.NewPosition);
                 travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
 
-                panelInfo.Visible = false;
 
                 LogLine("Reading travel history");
                 travelHistoryControl1.HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
                 travelHistoryControl1.RefreshHistoryAsync();
 
                 DeleteOldLogFiles();
+
+
+                panelInfo.Visible = false;
 
                 checkInstallerTask = CheckForNewInstaller();
             }
@@ -1569,5 +1575,18 @@ namespace EDDiscovery
             travelHistoryControl1.RefreshHistoryAsync(forceReload: true);
         }
         #endregion
+
+
+
+        private void panelInfo_Click(object sender, EventArgs e)
+        {
+            if (newRelease!=null)
+            {
+                NewReleaseForm frm = new NewReleaseForm();
+                frm.release = newRelease;
+
+                frm.ShowDialog(this);
+            }
+        }
     }
 }

@@ -71,6 +71,8 @@
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageRoutesExpeditions = new System.Windows.Forms.TabPage();
             this.savedRouteExpeditionControl1 = new EDDiscovery.SavedRouteExpeditionControl();
+            this.tabPageExport = new System.Windows.Forms.TabPage();
+            this.exportControl1 = new EDDiscovery.ExportControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery2.Settings();
             this.button_test = new ExtendedControls.ButtonExt();
@@ -91,6 +93,7 @@
             this.tabPageScreenshots.SuspendLayout();
             this.tabPageRoute.SuspendLayout();
             this.tabPageRoutesExpeditions.SuspendLayout();
+            this.tabPageExport.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -293,6 +296,7 @@
             this.panelInfo.Name = "panelInfo";
             this.panelInfo.Size = new System.Drawing.Size(331, 23);
             this.panelInfo.TabIndex = 17;
+            this.panelInfo.Click += new System.EventHandler(this.panelInfo_Click);
             // 
             // labelPanelText
             // 
