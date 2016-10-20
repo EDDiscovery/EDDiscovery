@@ -413,7 +413,7 @@ namespace EDDiscovery
         private void PanelInfoNewRelease()
         {
             panelInfo.BackColor = Color.Green;
-            labelPanelText.Text = "New version availible!";
+            labelPanelText.Text = "Download new release!";
             panelInfo.Visible = true;
         }
 
