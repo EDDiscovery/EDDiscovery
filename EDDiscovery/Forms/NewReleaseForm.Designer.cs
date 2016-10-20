@@ -160,7 +160,7 @@
             this.Controls.Add(this.textBoxReleaseName);
             this.Name = "NewReleaseForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "New release available";
+            this.Text = "EDDiscovery release";
             this.Load += new System.EventHandler(this.NewReleaseForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
