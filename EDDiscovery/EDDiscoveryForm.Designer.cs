@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,6 +75,8 @@
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageRoutesExpeditions = new System.Windows.Forms.TabPage();
             this.savedRouteExpeditionControl1 = new EDDiscovery.SavedRouteExpeditionControl();
+            this.tabPageExport = new System.Windows.Forms.TabPage();
+            this.exportControl1 = new EDDiscovery.ExportControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery2.Settings();
             this.button_test = new ExtendedControls.ButtonExt();
@@ -83,8 +85,6 @@
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tabPageExport = new System.Windows.Forms.TabPage();
-            this.exportControl1 = new EDDiscovery.ExportControl();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -94,9 +94,9 @@
             this.tabPageScreenshots.SuspendLayout();
             this.tabPageRoute.SuspendLayout();
             this.tabPageRoutesExpeditions.SuspendLayout();
+            this.tabPageExport.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.tabPageExport.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -296,6 +296,7 @@
             this.panelInfo.Name = "panelInfo";
             this.panelInfo.Size = new System.Drawing.Size(331, 23);
             this.panelInfo.TabIndex = 17;
+            this.panelInfo.Click += new System.EventHandler(this.panelInfo_Click);
             // 
             // labelPanelText
             // 
@@ -386,7 +387,7 @@
             this.tabControl1.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControl1.TabOpaque = 100F;
             this.tabControl1.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControl1.TabStyle = tabStyleSquare1;
+            this.tabControl1.TabStyle = tabStyleSquare2;
             this.tabControl1.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControl1.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
@@ -504,6 +505,25 @@
             this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(979, 665);
             this.savedRouteExpeditionControl1.TabIndex = 0;
             // 
+            // tabPageExport
+            // 
+            this.tabPageExport.Controls.Add(this.exportControl1);
+            this.tabPageExport.Location = new System.Drawing.Point(4, 22);
+            this.tabPageExport.Name = "tabPageExport";
+            this.tabPageExport.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageExport.Size = new System.Drawing.Size(985, 671);
+            this.tabPageExport.TabIndex = 8;
+            this.tabPageExport.Text = "Export";
+            this.tabPageExport.UseVisualStyleBackColor = true;
+            // 
+            // exportControl1
+            // 
+            this.exportControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.exportControl1.Location = new System.Drawing.Point(3, 3);
+            this.exportControl1.Name = "exportControl1";
+            this.exportControl1.Size = new System.Drawing.Size(979, 665);
+            this.exportControl1.TabIndex = 0;
+            // 
             // tabPageSettings
             // 
             this.tabPageSettings.Controls.Add(this.settings);
@@ -592,25 +612,6 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
-            // tabPageExport
-            // 
-            this.tabPageExport.Controls.Add(this.exportControl1);
-            this.tabPageExport.Location = new System.Drawing.Point(4, 22);
-            this.tabPageExport.Name = "tabPageExport";
-            this.tabPageExport.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageExport.Size = new System.Drawing.Size(985, 671);
-            this.tabPageExport.TabIndex = 8;
-            this.tabPageExport.Text = "Export";
-            this.tabPageExport.UseVisualStyleBackColor = true;
-            // 
-            // exportControl1
-            // 
-            this.exportControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.exportControl1.Location = new System.Drawing.Point(3, 3);
-            this.exportControl1.Name = "exportControl1";
-            this.exportControl1.Size = new System.Drawing.Size(979, 665);
-            this.exportControl1.TabIndex = 0;
-            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -648,10 +649,10 @@
             this.tabPageScreenshots.PerformLayout();
             this.tabPageRoute.ResumeLayout(false);
             this.tabPageRoutesExpeditions.ResumeLayout(false);
+            this.tabPageExport.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.tabPageExport.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

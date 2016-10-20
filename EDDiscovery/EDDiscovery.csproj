@@ -357,6 +357,12 @@
     <Compile Include="Forms\BookmarkForm.Designer.cs">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\NewReleaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewReleaseForm.Designer.cs">
+      <DependentUpon>NewReleaseForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SplashForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -390,6 +396,7 @@
     <Compile Include="HistoryList.cs" />
     <Compile Include="HTTP\DownloadFile.cs" />
     <Compile Include="HTTP\GitHubClass.cs" />
+    <Compile Include="HTTP\GitHubRelease.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
@@ -733,6 +740,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BookmarkForm.resx">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewReleaseForm.resx">
+      <DependentUpon>NewReleaseForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SplashForm.resx">
       <DependentUpon>SplashForm.cs</DependentUpon>

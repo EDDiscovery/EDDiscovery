@@ -1,4 +1,5 @@
 ﻿using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery.HTTP;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
@@ -53,7 +54,7 @@ namespace EDDiscovery
             
         }
 
-        public JObject GetLatestRelease()
+        public GitHubRelease GetLatestRelease()
         {
 
             try
@@ -65,7 +66,14 @@ namespace EDDiscovery
                     StreamReader reader = new StreamReader(response.GetResponseStream());
                     string content1 = reader.ReadToEnd();
                     JObject ja = JObject.Parse(content1);
-                    return ja;
+
+                    if (ja != null)
+                    {
+                        GitHubRelease rel = new GitHubRelease(ja);
+                        return rel;
+                    }
+                    else
+                        return null; ;
                 }
             }
             catch (Exception ex)
