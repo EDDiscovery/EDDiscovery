@@ -357,7 +357,6 @@ namespace EDDiscovery.DB
                             cmd.AddParameterWithValue("@cid", (long)array[3]);
                             cmd.AddParameterWithValue("@eti", EDDiscovery.EliteDangerous.JournalTypeEnum.FSDJump);
                             cmd.AddParameterWithValue("@et", "FSDJump");
-                            cmd.AddParameterWithValue("@etime", (DateTime)array[1]);
 
                             JObject je = new JObject();
 
@@ -376,6 +375,7 @@ namespace EDDiscovery.DB
                             }
 
                             je["EDDMapColor"] = ((long)array[5]);
+                            cmd.AddParameterWithValue("@etime", (DateTime)je["timestamp"]);
                             cmd.AddParameterWithValue("@edata", je.ToString());    // order number - look at the dbcommand above
 
                             long edsmid = 0;
