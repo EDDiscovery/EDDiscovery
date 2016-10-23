@@ -431,6 +431,9 @@ namespace EDDiscovery.EliteDangerous
             {
                 string datapath = GetWatchFolder(listCommanders[i].NetLogDir);
 
+                if (datapath == null || datapath.Length == 0 || !Directory.Exists(datapath))
+                    continue;
+
                 if (watchers.FindIndex(x => x.m_watcherfolder.Equals(datapath)) >= 0)       // if we already have a watch on this folder..
                     continue;       // already done
 
