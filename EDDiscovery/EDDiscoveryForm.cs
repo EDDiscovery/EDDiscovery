@@ -90,7 +90,6 @@ namespace EDDiscovery
         Task checkInstallerTask = null;
         private string logname = "";
 
-        EliteDangerous.EDJournalClass journalmonitor;
         GitHubRelease newRelease;
 
         private bool CanSkipSlowUpdates()
@@ -332,7 +331,7 @@ namespace EDDiscovery
                     if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
                     {
                         newRelease = rel;
-                        this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
+                        this.BeginInvoke(new Action(() => travelHistoryControl1.LogTextHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
                         this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
 
                     }
@@ -345,7 +344,7 @@ namespace EDDiscovery
         private void PanelInfoNewRelease()
         {
             panelInfo.BackColor = Color.Green;
-            labelPanelText.Text = "New version availible!";
+            labelPanelText.Text = "Click to download new version!";
             panelInfo.Visible = true;
         }
 
@@ -1581,6 +1580,17 @@ namespace EDDiscovery
         private void panelInfo_Click(object sender, EventArgs e)
         {
             if (newRelease!=null)
+            {
+                NewReleaseForm frm = new NewReleaseForm();
+                frm.release = newRelease;
+
+                frm.ShowDialog(this);
+            }
+        }
+
+        private void labelPanelText_Click(object sender, EventArgs e)
+        {
+            if (newRelease != null)
             {
                 NewReleaseForm frm = new NewReleaseForm();
                 frm.release = newRelease;

@@ -1,5 +1,4 @@
-﻿using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery.HTTP;
+﻿using EDDiscovery.HTTP;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,12 +16,12 @@ namespace EDDiscovery
         public string commanderName;
 
         private readonly string fromSoftwareVersion;
-        private readonly string fromSoftware;
+
         private readonly string githubServer = "https://api.github.com/repos/EDDiscovery/EDDiscovery/";
 
         public GitHubClass()
         {
-            fromSoftware = "EDDiscovery";
+
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
             commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;

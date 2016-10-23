@@ -179,6 +179,21 @@ namespace EDDiscovery
         }
 
 
+        static public string GetStringNull(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return null;
+            return jToken.Value<string>();
+        }
+
+        static public string GetStringDef(JToken jToken, string def = "")
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
+            return jToken.Value<string>();
+        }
+
+
         static public  bool IsNullOrEmptyT(JToken token)
         {
             return (token == null) ||
