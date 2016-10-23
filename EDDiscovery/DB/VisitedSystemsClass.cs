@@ -129,6 +129,10 @@ namespace EDDiscovery2.DB
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
+
+                if (Time > new DateTime(2016, 10, 26))  // Dont add after Elite Dangerous 2.2 release
+                    return false;
+
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from VisitedSystems"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
