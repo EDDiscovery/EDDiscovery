@@ -1537,20 +1537,20 @@ namespace EDDiscovery
             RefreshWorkerArgs args = e.Argument as RefreshWorkerArgs;
             var worker = (BackgroundWorker)sender;
 
-            if (args != null)
-            {
-                if (args.NetLogPath != null)
-                {
-                    string errstr = null;
-                    NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload);
-                }
-            }
-
             List<HistoryEntry> history = new List<HistoryEntry>();
 
             if (DisplayedCommander >= 0)
             {
                 journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
+
+                if (args != null)
+                {
+                    if (args.NetLogPath != null)
+                    {
+                        string errstr = null;
+                        NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload);
+                    }
+                }
             }
 
             worker.ReportProgress(-1, "Resolving systems");
