@@ -45,7 +45,7 @@ namespace EDDiscovery.Forms
 
         private void buttonUrlOpen_Click(object sender, EventArgs e)
         {
-
+            Process.Start(release.HtmlURL);
         }
 
         private void labelName_Click(object sender, EventArgs e)
