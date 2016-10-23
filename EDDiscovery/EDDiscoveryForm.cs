@@ -1722,6 +1722,17 @@ namespace EDDiscovery
                 frm.ShowDialog(this);
             }
         }
+
+        private void labelPanelText_Click(object sender, EventArgs e)
+        {
+            if (newRelease != null)
+            {
+                NewReleaseForm frm = new NewReleaseForm();
+                frm.release = newRelease;
+
+                frm.ShowDialog(this);
+            }
+        }
     }
 }
 
