@@ -207,6 +207,13 @@ namespace EDDiscovery
                         EDSMSync.SendTravelLog(he);
                 }
 
+                if (he.ISEDDNMessage)
+                {
+                    if (checkBoxEDDNSync.Checked == true)
+                        EDDNSync.SendEDDNEvent(he);
+                }
+
+
                 AddNewHistoryRow(true, he);
 
                 if (he.IsFSDJump)

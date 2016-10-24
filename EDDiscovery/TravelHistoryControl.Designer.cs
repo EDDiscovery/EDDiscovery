@@ -111,6 +111,7 @@
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this.checkBoxEDDNSync = new ExtendedControls.CheckBoxCustom();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -934,6 +935,7 @@
             // 
             // panel_topright
             // 
+            this.panel_topright.Controls.Add(this.checkBoxEDDNSync);
             this.panel_topright.Controls.Add(this.button_RefreshHistory);
             this.panel_topright.Controls.Add(this.checkBoxEDSMSyncFrom);
             this.panel_topright.Controls.Add(this.buttonMap2D);
@@ -1114,6 +1116,23 @@
             this.TopPanel.Size = new System.Drawing.Size(594, 32);
             this.TopPanel.TabIndex = 26;
             // 
+            // checkBoxEDDNSync
+            // 
+            this.checkBoxEDDNSync.AutoSize = true;
+            this.checkBoxEDDNSync.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDDNSync.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDDNSync.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDDNSync.FontNerfReduction = 0.5F;
+            this.checkBoxEDDNSync.Location = new System.Drawing.Point(214, 71);
+            this.checkBoxEDDNSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDDNSync.Name = "checkBoxEDDNSync";
+            this.checkBoxEDDNSync.Size = new System.Drawing.Size(73, 17);
+            this.checkBoxEDDNSync.TabIndex = 23;
+            this.checkBoxEDDNSync.Text = "To EDDN";
+            this.checkBoxEDDNSync.TickBoxReductionSize = 10;
+            this.toolTipEddb.SetToolTip(this.checkBoxEDDNSync, "Send event data (jumps scan dock) to EDDN");
+            this.checkBoxEDDNSync.UseVisualStyleBackColor = true;
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1230,5 +1249,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.ToolStripMenuItem eDDNTestToolStripMenuItem;
+        internal ExtendedControls.CheckBoxCustom checkBoxEDDNSync;
     }
 }
