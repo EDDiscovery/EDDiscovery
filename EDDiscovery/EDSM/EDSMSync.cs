@@ -41,6 +41,7 @@ namespace EDDiscovery2.EDSM
 
             ThreadEDSMSync = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(SyncThread));
             ThreadEDSMSync.Name = "EDSM Sync";
+            ThreadEDSMSync.IsBackground = true;
             ThreadEDSMSync.Start(edsm);
 
             return true;

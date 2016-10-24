@@ -12,3 +12,5 @@ packages
 /EDDiscovery.v12.suo
 *.ncrunch*
 /test
+/Installer/Setup Files
+/Installer/EDDiscovery - Beta-cache

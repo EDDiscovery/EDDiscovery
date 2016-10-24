@@ -1,4 +1,5 @@
 ﻿using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous;
 using EDDiscovery2.DB;
 using OpenTK;
 using System;
@@ -44,6 +45,8 @@ namespace EDDiscovery
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
+        public bool ISEDDNMessage { get { if (EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) return true; else return false; } }
+
 
         // Calculated values, not from JE
 
@@ -254,6 +257,14 @@ namespace EDDiscovery
                 EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EDSM, true );
             }
         }
+        public void SetEddnSync()
+        {
+            EDDNSync = true;
+            if (Journalid != 0)
+            {
+                EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EDDN, true);
+            }
+        }
 
     }
 
@@ -316,6 +327,15 @@ namespace EDDiscovery
                 return (from s in historylist where s.EdsmSync == false && s.IsFSDJump orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
+
+        public List<HistoryEntry> FilterByNotEDDNSynced
+        {
+            get
+            {
+                return (from s in historylist where s.EDDNSync == false && s.ISEDDNMessage  orderby s.EventTimeUTC ascending select s).ToList();
+            }
+        }
+
 
         public List<HistoryEntry> FilterByFSDAndPosition
         {

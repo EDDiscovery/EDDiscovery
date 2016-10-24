@@ -1,4 +1,5 @@
-﻿using EDDiscovery.EliteDangerous.JournalEvents;
+﻿using EDDiscovery.EliteDangerous;
+using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
@@ -37,6 +38,10 @@ namespace EDDiscovery.EDDN
 
             return header;
         }
+
+
+   
+
 
         public JObject CreateEDDNMessage(JournalFSDJump journal)
         {

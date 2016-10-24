@@ -206,6 +206,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EDDN\EDDNClass.cs" />
+    <Compile Include="EDDN\EDDNSync.cs" />
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
