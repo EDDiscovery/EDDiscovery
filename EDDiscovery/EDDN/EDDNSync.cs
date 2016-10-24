@@ -107,12 +107,10 @@ namespace EDDiscovery2.EDSM
 
         public static bool SendEDDNEvent(HistoryEntry he) // (verified with EDSM 29/9/2016, seen UTC time being sent, and same UTC time on ESDM).
         {
-
-            string errmsg;
             Task taskEDSM = Task.Factory.StartNew(() =>
             {                                                   // LOCAL time, there is a UTC converter inside this call
                 if (SendToEDDN(he))
-                    he.SetEdsmSync();
+                    he.SetEddnSync();
             });
 
             return true;
