@@ -40,7 +40,14 @@ namespace EDDiscovery.EDDN
         }
 
 
-   
+        private string GetEDDNSchemaRef()
+        {
+            if (commanderName.StartsWith("[Beta]"))
+                return "http://schemas.elite-markets.net/eddn/journal/1/test";
+            else
+                return "http://schemas.elite-markets.net/eddn/journal/1";
+        }
+
 
 
         public JObject CreateEDDNMessage(JournalFSDJump journal)
@@ -51,7 +58,7 @@ namespace EDDiscovery.EDDN
             JObject msg = new JObject();
             
             msg["header"] = Header();
-            msg["$schemaRef"] = "http://schemas.elite-markets.net/eddn/journal/1/test";
+            msg["$schemaRef"] = GetEDDNSchemaRef();
 
             JObject message = (JObject) JObject.Parse(journal.EventDataString);
 
@@ -62,6 +69,7 @@ namespace EDDiscovery.EDDN
             message.Remove("Economy_Localised");
             message.Remove("Government_Localised");
             message.Remove("Security_Localised");
+            message.Remove("BoostUsed");
             message.Remove("JumpDist");
             message.Remove("FuelUsed");
             message.Remove("FuelLevel");
@@ -77,13 +85,14 @@ namespace EDDiscovery.EDDN
             JObject msg = new JObject();
 
             msg["header"] = Header();
-            msg["$schemaRef"] = "http://schemas.elite-markets.net/eddn/journal/1/test";
+            msg["$schemaRef"] = GetEDDNSchemaRef();
 
             JObject message = (JObject)JObject.Parse(journal.EventDataString);
 
             message.Remove("Economy_Localised");
             message.Remove("Government_Localised");
             message.Remove("Security_Localised");
+            message.Remove("CockpitBreach");
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
@@ -96,7 +105,7 @@ namespace EDDiscovery.EDDN
             JObject msg = new JObject();
 
             msg["header"] = Header();
-            msg["$schemaRef"] = "http://schemas.elite-markets.net/eddn/journal/1/test";
+            msg["$schemaRef"] = GetEDDNSchemaRef();
 
             JObject message = (JObject)JObject.Parse(journal.EventDataString);
 
