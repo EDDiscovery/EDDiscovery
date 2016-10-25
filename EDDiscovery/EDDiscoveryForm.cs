@@ -1129,8 +1129,6 @@ namespace EDDiscovery
             travelHistoryControl1.SaveSettings();
             journalViewControl1.SaveSettings();
 
-            SQLiteDBClass.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
-            SQLiteDBClass.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
         }
 
         Thread safeClose;
