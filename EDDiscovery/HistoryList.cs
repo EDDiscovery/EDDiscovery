@@ -261,6 +261,15 @@ namespace EDDiscovery
             }
         }
 
+        public bool IsJournalEventInEventFilter(string[] events)
+        {
+            return events.Contains(Tools.SplitCapsWord(EntryType.ToString()));
+        }
+
+        public bool IsJournalEventInEventFilter(string eventstr)
+        {
+            return eventstr == "All" || IsJournalEventInEventFilter(eventstr.Split(';'));
+        }
     }
 
 
@@ -642,9 +651,8 @@ namespace EDDiscovery
             else
             {
                 string[] events = eventstring.Split(';');
-                return (from systems in he where events.Contains(Tools.SplitCapsWord(systems.EntryType.ToString())) select systems).ToList();
+                return (from systems in he where systems.IsJournalEventInEventFilter(events) select systems).ToList();
             }
         }
-
     }
 }
