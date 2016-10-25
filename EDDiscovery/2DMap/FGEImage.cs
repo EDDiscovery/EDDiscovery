@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EDDiscovery;
 
 namespace EDDiscovery2
 {
@@ -283,24 +284,31 @@ namespace EDDiscovery2
                     if (json != null)
                     {
                         FGEImage fgeimg;
-                        pfile = (JObject)JObject.Parse(json);
+                        try
+                        {
+                            pfile = (JObject)JObject.Parse(json);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
 
                         if (File.Exists(fi.FullName.Replace(".json", ".png")))
                             fgeimg = new FGEImage(fi.FullName.Replace(".json", ".png"));
                         else
                             fgeimg = new FGEImage(fi.FullName.Replace(".json", ".jpg"));
 
-                        fgeimg.TopLeft = new Point(pfile["x1"].Value<int>(), pfile["y1"].Value<int>());
-                        fgeimg.pxTopLeft = new Point(pfile["px1"].Value<int>(), pfile["py1"].Value<int>());
+                        fgeimg.TopLeft = new Point(Tools.GetInt(pfile["x1"], 0), Tools.GetInt(pfile["y1"], 0));
+                        fgeimg.pxTopLeft = new Point(Tools.GetInt(pfile["px1"], 0), Tools.GetInt(pfile["py1"], 0));
 
-                        fgeimg.TopRight = new Point(pfile["x2"].Value<int>(), pfile["y1"].Value<int>());
-                        fgeimg.pxTopRight = new Point(pfile["px2"].Value<int>(), pfile["py1"].Value<int>());
+                        fgeimg.TopRight = new Point(Tools.GetInt(pfile["x2"], 0), Tools.GetInt(pfile["y1"], 0));
+                        fgeimg.pxTopRight = new Point(Tools.GetInt(pfile["px2"], 0), Tools.GetInt(pfile["py1"], 0));
 
-                        fgeimg.BottomLeft = new Point(pfile["x1"].Value<int>(), pfile["y2"].Value<int>());
-                        fgeimg.pxBottomLeft = new Point(pfile["px1"].Value<int>(), pfile["py2"].Value<int>());
+                        fgeimg.BottomLeft = new Point(Tools.GetInt(pfile["x1"], 0), Tools.GetInt(pfile["y2"], 0));
+                        fgeimg.pxBottomLeft = new Point(Tools.GetInt(pfile["px1"], 0), Tools.GetInt(pfile["py2"], 0));
 
-                        fgeimg.BottomRight = new Point(pfile["x2"].Value<int>(), pfile["y2"].Value<int>());
-                        fgeimg.pxBottomRight = new Point(pfile["px2"].Value<int>(), pfile["py2"].Value<int>());
+                        fgeimg.BottomRight = new Point(Tools.GetInt(pfile["x2"], 0), Tools.GetInt(pfile["y2"], 0));
+                        fgeimg.pxBottomRight = new Point(Tools.GetInt(pfile["px2"], 0), Tools.GetInt(pfile["py2"], 0));
 
                         fgeimg.Area = (double)(fgeimg.TopRight.X - fgeimg.TopLeft.X) * (double)(fgeimg.TopLeft.Y - fgeimg.BottomRight.Y);
                         //Console.WriteLine("img {0} {1}", fgeimg.FileName, fgeimg.Area);
