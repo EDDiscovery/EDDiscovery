@@ -106,7 +106,10 @@ namespace EDDiscovery
         public void AddNewEntry(HistoryEntry he)
         {
             if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString("JournalHistoryControlEventFilter", "All")))
+            {
                 AddNewJournalRow(true, he);
+                dataGridViewJournal.AutoResizeRows();
+            }
         }
 
         #region Layout
