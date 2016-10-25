@@ -80,14 +80,11 @@
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
-            this.checkBoxEDSMSyncFrom = new ExtendedControls.CheckBoxCustom();
             this.buttonMap2D = new ExtendedControls.ButtonExt();
-            this.checkBoxEDSMSyncTo = new ExtendedControls.CheckBoxCustom();
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.buttonExtSummaryPopOut = new ExtendedControls.ButtonExt();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
-            this.checkBoxEDDNSync = new ExtendedControls.CheckBoxCustom();
             this.panelRight = new System.Windows.Forms.Panel();
             this.panel_bottomright = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
@@ -697,24 +694,6 @@
             this.button_RefreshHistory.UseVisualStyleBackColor = true;
             this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
             // 
-            // checkBoxEDSMSyncFrom
-            // 
-            this.checkBoxEDSMSyncFrom.AutoSize = true;
-            this.checkBoxEDSMSyncFrom.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxEDSMSyncFrom.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSMSyncFrom.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSMSyncFrom.FontNerfReduction = 0.5F;
-            this.checkBoxEDSMSyncFrom.Location = new System.Drawing.Point(214, 51);
-            this.checkBoxEDSMSyncFrom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSMSyncFrom.Name = "checkBoxEDSMSyncFrom";
-            this.checkBoxEDSMSyncFrom.Size = new System.Drawing.Size(83, 17);
-            this.checkBoxEDSMSyncFrom.TabIndex = 22;
-            this.checkBoxEDSMSyncFrom.Text = "From EDSM";
-            this.checkBoxEDSMSyncFrom.TickBoxReductionSize = 10;
-            this.toolTipEddb.SetToolTip(this.checkBoxEDSMSyncFrom, "Receive data from EDSM");
-            this.checkBoxEDSMSyncFrom.UseVisualStyleBackColor = true;
-            this.checkBoxEDSMSyncFrom.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncFrom_CheckedChanged);
-            // 
             // buttonMap2D
             // 
             this.buttonMap2D.BorderColorScaling = 1.25F;
@@ -728,24 +707,6 @@
             this.toolTipEddb.SetToolTip(this.buttonMap2D, "Open the 2D Map");
             this.buttonMap2D.UseVisualStyleBackColor = true;
             this.buttonMap2D.Click += new System.EventHandler(this.button2DMap_Click);
-            // 
-            // checkBoxEDSMSyncTo
-            // 
-            this.checkBoxEDSMSyncTo.AutoSize = true;
-            this.checkBoxEDSMSyncTo.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxEDSMSyncTo.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSMSyncTo.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSMSyncTo.FontNerfReduction = 0.5F;
-            this.checkBoxEDSMSyncTo.Location = new System.Drawing.Point(214, 32);
-            this.checkBoxEDSMSyncTo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSMSyncTo.Name = "checkBoxEDSMSyncTo";
-            this.checkBoxEDSMSyncTo.Size = new System.Drawing.Size(73, 17);
-            this.checkBoxEDSMSyncTo.TabIndex = 21;
-            this.checkBoxEDSMSyncTo.Text = "To EDSM";
-            this.checkBoxEDSMSyncTo.TickBoxReductionSize = 10;
-            this.toolTipEddb.SetToolTip(this.checkBoxEDSMSyncTo, "Send data to EDSM");
-            this.checkBoxEDSMSyncTo.UseVisualStyleBackColor = true;
-            this.checkBoxEDSMSyncTo.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncTo_CheckedChanged);
             // 
             // comboBoxCommander
             // 
@@ -774,6 +735,7 @@
         "rs");
             this.comboBoxCommander.ValueMember = "";
             this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
+            this.comboBoxCommander.Click += new System.EventHandler(this.comboBoxCommander_Click);
             // 
             // buttonExtSummaryPopOut
             // 
@@ -817,24 +779,6 @@
             this.toolTipEddb.SetToolTip(this.buttonSync, "Send history to your EDSM account (make sure the EDSM ID is set in settings)");
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
-            // 
-            // checkBoxEDDNSync
-            // 
-            this.checkBoxEDDNSync.AutoSize = true;
-            this.checkBoxEDDNSync.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxEDDNSync.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDDNSync.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDDNSync.FontNerfReduction = 0.5F;
-            this.checkBoxEDDNSync.Location = new System.Drawing.Point(214, 71);
-            this.checkBoxEDDNSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDDNSync.Name = "checkBoxEDDNSync";
-            this.checkBoxEDDNSync.Size = new System.Drawing.Size(73, 17);
-            this.checkBoxEDDNSync.TabIndex = 23;
-            this.checkBoxEDDNSync.Text = "To EDDN";
-            this.checkBoxEDDNSync.TickBoxReductionSize = 10;
-            this.toolTipEddb.SetToolTip(this.checkBoxEDDNSync, "Send event data (jumps scan dock) to EDDN");
-            this.checkBoxEDDNSync.UseVisualStyleBackColor = true;
-            this.checkBoxEDDNSync.CheckedChanged += new System.EventHandler(this.checkBoxEDDNSync_CheckedChanged);
             // 
             // panelRight
             // 
@@ -953,11 +897,8 @@
             // 
             // panel_topright
             // 
-            this.panel_topright.Controls.Add(this.checkBoxEDDNSync);
             this.panel_topright.Controls.Add(this.button_RefreshHistory);
-            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncFrom);
             this.panel_topright.Controls.Add(this.buttonMap2D);
-            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncTo);
             this.panel_topright.Controls.Add(this.comboBoxCommander);
             this.panel_topright.Controls.Add(this.labelCMDR);
             this.panel_topright.Controls.Add(this.buttonExtSummaryPopOut);
@@ -1214,8 +1155,6 @@
         private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
         private ExtendedControls.ComboBoxCustom comboBoxCommander;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem;
-        internal ExtendedControls.CheckBoxCustom checkBoxEDSMSyncFrom;
-        internal ExtendedControls.CheckBoxCustom checkBoxEDSMSyncTo;
         private System.Windows.Forms.DataGridView dataGridViewNearest;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
@@ -1250,6 +1189,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.ToolStripMenuItem eDDNTestToolStripMenuItem;
-        internal ExtendedControls.CheckBoxCustom checkBoxEDDNSync;
     }
 }
