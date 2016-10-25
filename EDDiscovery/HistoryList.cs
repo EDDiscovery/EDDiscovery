@@ -268,7 +268,7 @@ namespace EDDiscovery
 
         public bool IsJournalEventInEventFilter(string eventstr)
         {
-            return IsJournalEventInEventFilter(eventstr.Split(';'));
+            return eventstr == "All" || IsJournalEventInEventFilter(eventstr.Split(';'));
         }
     }
 
