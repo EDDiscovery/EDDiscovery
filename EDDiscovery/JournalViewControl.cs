@@ -105,7 +105,8 @@ namespace EDDiscovery
 
         public void AddNewEntry(HistoryEntry he)
         {
-            AddNewJournalRow(true, he);
+            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString("JournalHistoryControlEventFilter", "All")))
+                AddNewJournalRow(true, he);
         }
 
         #region Layout
