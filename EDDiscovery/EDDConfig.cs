@@ -349,17 +349,16 @@ namespace EDDiscovery2
                         {
                             while (reader.Read())
                             {
-                                int id = Convert.ToInt32(reader["Id"]);
+                                EDCommander edcmdr = new EDCommander(reader);
+
                                 string name = Convert.ToString(reader["Name"]);
                                 string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
 
-                                if (id > maxnr)
-                                    maxnr = id;
+                                if (edcmdr.Nr > maxnr)
+                                    maxnr = edcmdr.Nr;
 
-                                if ((long)reader["Deleted"] == 0)
+                                if (edcmdr.Deleted == false)
                                 {
-                                    EDCommander edcmdr = new EDCommander(id, name, edsmapikey);
-                                    edcmdr.NetLogDir = Convert.ToString(reader["NetLogDir"]);
                                     _ListOfCommanders.Add(edcmdr);
                                 }
                             }
@@ -368,13 +367,16 @@ namespace EDDiscovery2
 
                     if (maxnr == -1)        // migrate from really old code
                     {
-                        using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmApiKey, NetLogDir, Deleted) VALUES (@Id, @Name, @EdsmApiKey, @NetLogDir, @Deleted)"))
+                        using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmApiKey, NetLogDir, Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Id, @Name, @EdsmApiKey, @NetLogDir, @Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
                         {
                             cmd.AddParameter("@Id", DbType.Int32);
                             cmd.AddParameter("@Name", DbType.String);
                             cmd.AddParameter("@EdsmApiKey", DbType.String);
                             cmd.AddParameter("@NetLogDir", DbType.String);
                             cmd.AddParameter("@Deleted", DbType.Boolean);
+                            cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
+                            cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
+                            cmd.AddParameter("@SyncToEddn", DbType.Boolean);
 
                             // Migrate old settigns.
                             string apikey = conn.GetSettingStringCN("EDSMApiKey", "");
@@ -384,9 +386,10 @@ namespace EDDiscovery2
                             {
                                 EDCommander cmdr = new EDCommander(i,
                                     conn.GetSettingStringCN("EDCommanderName" + i.ToString(), commanderName),
-                                    conn.GetSettingStringCN("EDCommanderApiKey" + i.ToString(), apikey));
+                                    conn.GetSettingStringCN("EDCommanderApiKey" + i.ToString(), apikey) ,true, false, true);
                                 cmdr.NetLogDir = conn.GetSettingStringCN("EDCommanderNetLogPath" + i.ToString(), null);
                                 bool deleted = conn.GetSettingBoolCN("EDCommanderDeleted" + i.ToString(), false);
+
 
                                 if (cmdr.Name != "")
                                 {
@@ -395,6 +398,10 @@ namespace EDDiscovery2
                                     cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
                                     cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
                                     cmd.Parameters["@Deleted"].Value = deleted;
+                                    cmd.Parameters["@SyncToEdsm"].Value = cmdr.SyncToEdsm;
+                                    cmd.Parameters["@SyncFromEdsm"].Value = cmdr.SyncFromEdsm;
+                                    cmd.Parameters["@SyncToEddn"].Value = cmdr.SyncToEddn;
+
                                     cmd.ExecuteNonQuery();
 
                                     _ListOfCommanders.Add(cmdr);
@@ -413,12 +420,15 @@ namespace EDDiscovery2
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir WHERE Id=@Id"))
+                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn WHERE Id=@Id"))
                 {
                     cmd.AddParameter("@Id", DbType.Int32);
                     cmd.AddParameter("@Name", DbType.String);
                     cmd.AddParameter("@EdsmApiKey", DbType.String);
                     cmd.AddParameter("@NetLogDir", DbType.String);
+                    cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
+                    cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
+                    cmd.AddParameter("@SyncToEddn", DbType.Boolean);
 
                     foreach (EDCommander edcmdr in cmdrlist)
                     {
@@ -426,6 +436,9 @@ namespace EDDiscovery2
                         cmd.Parameters["@Name"].Value = edcmdr.Name;
                         cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
                         cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "";
+                        cmd.Parameters["@SyncToEdsm"].Value = edcmdr.SyncToEdsm;
+                        cmd.Parameters["@SyncFromEdsm"].Value = edcmdr.SyncFromEdsm;
+                        cmd.Parameters["@SyncToEddn"].Value = edcmdr.SyncToEddn;
                         cmd.ExecuteNonQuery();
                     }
 
@@ -441,22 +454,34 @@ namespace EDDiscovery2
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmApiKey,NetLogDir,Deleted) VALUES (@Name,@EdsmApiKey,@NetLogDir,@Deleted)"))
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmApiKey,NetLogDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Name,@EdsmApiKey,@NetLogDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
                 {
                     cmd.AddParameterWithValue("@Name", name ?? "");
                     cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
                     cmd.AddParameterWithValue("@NetLogDir", netlogpath ?? "");
                     cmd.AddParameterWithValue("@Deleted", false);
+                    cmd.AddParameterWithValue("@SyncToEdsm", true);
+                    cmd.AddParameterWithValue("@SyncFromEdsm", false);
+                    cmd.AddParameterWithValue("@SyncToEddn", true);
                     cmd.ExecuteNonQuery();
                 }
 
                 using (DbCommand cmd = conn.CreateCommand("SELECT Id FROM Commanders WHERE rowid = last_insert_rowid()"))
                 {
                     int nr = Convert.ToInt32(cmd.ExecuteScalar());
-                    cmdr = new EDCommander(nr, name ?? ("CMDR " + nr.ToString()), "");
+                }
+                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders WHERE rowid = last_insert_rowid()"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        reader.Read();
+                        {
+                            cmdr = new EDCommander(reader);
+                        }
+                    }
                 }
 
-                if (name == null)
+                 if (name == null)
                 {
                     using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name WHERE rowid = last_insert_rowid()"))
                     {

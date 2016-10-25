@@ -485,7 +485,7 @@ namespace EDDiscovery
             comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
 
-            commanders.Add(new EDCommander(-1, "Hidden log", ""));
+            commanders.Add(new EDCommander(-1, "Hidden log", "", false, false, false));
             commanders.AddRange(EDDiscoveryForm.EDDConfig.ListOfCommanders);
 
             comboBoxCommander.DataSource = null;
@@ -810,6 +810,11 @@ namespace EDDiscovery
         private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
         {
             buttonSync.Enabled = checkBoxEDSMSyncTo.Checked | checkBoxEDSMSyncFrom.Checked;
+        }
+
+        private void checkBoxEDDNSync_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void button2DMap_Click(object sender, EventArgs e)
