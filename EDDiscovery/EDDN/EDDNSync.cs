@@ -85,7 +85,6 @@ namespace EDDiscovery2.EDSM
                         }
 
                         {
-                            string errmsg;              // (verified with EDSM 29/9/2016)
                             if (EDDNSync.SendEDDNEvent(he))
                                 edsmsystemssent++;
 
