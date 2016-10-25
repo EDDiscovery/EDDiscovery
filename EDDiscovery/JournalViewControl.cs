@@ -200,7 +200,7 @@ namespace EDDiscovery
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
             _discoveryForm.LogLine("Refresh History.");
-            _discoveryForm.RefreshHistoryAsync();
+            _discoveryForm.RefreshHistoryAsync(checkedsm: true);
         }
 
         private void buttonFilter_Click(object sender, EventArgs e)

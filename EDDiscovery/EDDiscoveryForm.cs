@@ -1507,9 +1507,10 @@ namespace EDDiscovery
         {
             public string NetLogPath;
             public bool ForceNetLogReload;
+            public bool CheckEdsm;
         }
 
-        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false)
+        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool checkedsm = false)
         {
             if (PendingClose)
             {
@@ -1526,7 +1527,8 @@ namespace EDDiscovery
                 RefreshWorkerArgs args = new RefreshWorkerArgs
                 {
                     NetLogPath = netlogpath,
-                    ForceNetLogReload = forcenetlogreload
+                    ForceNetLogReload = forcenetlogreload,
+                    CheckEdsm = checkedsm
                 };
                 _refreshWorker.RunWorkerAsync(args);
             }
@@ -1571,7 +1573,7 @@ namespace EDDiscovery
                 foreach (EliteDangerous.JournalEntry je in jlist)
                 {
                     bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, true, out journalupdate, conn);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn);
                     prev = he;
 
                     history.Add(he);

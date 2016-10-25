@@ -788,7 +788,7 @@ namespace EDDiscovery
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
             LogLine("Refresh History.");
-            _discoveryForm.RefreshHistoryAsync();
+            _discoveryForm.RefreshHistoryAsync(checkedsm: true);
         }
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
