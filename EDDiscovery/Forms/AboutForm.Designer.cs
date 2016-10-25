@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.labelVersion = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.linkLabelFDForum = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
@@ -39,10 +39,14 @@
             this.linkLabelEDSM = new System.Windows.Forms.LinkLabel();
             this.linkLabelGitHubIssue = new System.Windows.Forms.LinkLabel();
             this.linkLabelEDDB = new System.Windows.Forms.LinkLabel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel1.Location = new System.Drawing.Point(331, 19);
@@ -56,22 +60,23 @@
             this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelVersion.Location = new System.Drawing.Point(12, 19);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(142, 24);
+            this.labelVersion.Size = new System.Drawing.Size(132, 24);
             this.labelVersion.TabIndex = 1;
-            this.labelVersion.Text = "EDDicscovery v";
+            this.labelVersion.Text = "EDDiscovery v";
             // 
             // textBox1
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBox1.BackColor = System.Drawing.Color.Transparent;
             this.textBox1.Location = new System.Drawing.Point(16, 46);
-            this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(309, 185);
+            this.textBox1.Size = new System.Drawing.Size(309, 240);
             this.textBox1.TabIndex = 1;
             // 
             // buttonOK
             // 
+            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonOK.Location = new System.Drawing.Point(581, 399);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
@@ -83,7 +88,8 @@
             // linkLabelFDForum
             // 
             this.linkLabelFDForum.AutoSize = true;
-            this.linkLabelFDForum.Location = new System.Drawing.Point(57, 270);
+            this.linkLabelFDForum.Location = new System.Drawing.Point(45, 27);
+            this.linkLabelFDForum.Margin = new System.Windows.Forms.Padding(45, 1, 3, 1);
             this.linkLabelFDForum.Name = "linkLabelFDForum";
             this.linkLabelFDForum.Size = new System.Drawing.Size(74, 13);
             this.linkLabelFDForum.TabIndex = 3;
@@ -95,7 +101,8 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(42, 246);
+            this.label1.Location = new System.Drawing.Point(30, 1);
+            this.label1.Margin = new System.Windows.Forms.Padding(30, 1, 3, 1);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 24);
             this.label1.TabIndex = 4;
@@ -104,7 +111,8 @@
             // linkLabelGitHub
             // 
             this.linkLabelGitHub.AutoSize = true;
-            this.linkLabelGitHub.Location = new System.Drawing.Point(57, 283);
+            this.linkLabelGitHub.Location = new System.Drawing.Point(45, 42);
+            this.linkLabelGitHub.Margin = new System.Windows.Forms.Padding(45, 1, 3, 1);
             this.linkLabelGitHub.Name = "linkLabelGitHub";
             this.linkLabelGitHub.Size = new System.Drawing.Size(40, 13);
             this.linkLabelGitHub.TabIndex = 5;
@@ -115,7 +123,8 @@
             // linkLabelEDSM
             // 
             this.linkLabelEDSM.AutoSize = true;
-            this.linkLabelEDSM.Location = new System.Drawing.Point(57, 309);
+            this.linkLabelEDSM.Location = new System.Drawing.Point(45, 72);
+            this.linkLabelEDSM.Margin = new System.Windows.Forms.Padding(45, 1, 3, 1);
             this.linkLabelEDSM.Name = "linkLabelEDSM";
             this.linkLabelEDSM.Size = new System.Drawing.Size(38, 13);
             this.linkLabelEDSM.TabIndex = 6;
@@ -126,7 +135,8 @@
             // linkLabelGitHubIssue
             // 
             this.linkLabelGitHubIssue.AutoSize = true;
-            this.linkLabelGitHubIssue.Location = new System.Drawing.Point(57, 296);
+            this.linkLabelGitHubIssue.Location = new System.Drawing.Point(45, 57);
+            this.linkLabelGitHubIssue.Margin = new System.Windows.Forms.Padding(45, 1, 3, 1);
             this.linkLabelGitHubIssue.Name = "linkLabelGitHubIssue";
             this.linkLabelGitHubIssue.Size = new System.Drawing.Size(139, 13);
             this.linkLabelGitHubIssue.TabIndex = 7;
@@ -137,7 +147,8 @@
             // linkLabelEDDB
             // 
             this.linkLabelEDDB.AutoSize = true;
-            this.linkLabelEDDB.Location = new System.Drawing.Point(57, 322);
+            this.linkLabelEDDB.Location = new System.Drawing.Point(45, 87);
+            this.linkLabelEDDB.Margin = new System.Windows.Forms.Padding(45, 1, 3, 1);
             this.linkLabelEDDB.Name = "linkLabelEDDB";
             this.linkLabelEDDB.Size = new System.Drawing.Size(37, 13);
             this.linkLabelEDDB.TabIndex = 8;
@@ -145,28 +156,44 @@
             this.linkLabelEDDB.Text = "EDDB";
             this.linkLabelEDDB.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelEDDB_LinkClicked);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.flowLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
+            this.flowLayoutPanel1.Controls.Add(this.label1);
+            this.flowLayoutPanel1.Controls.Add(this.linkLabelFDForum);
+            this.flowLayoutPanel1.Controls.Add(this.linkLabelGitHub);
+            this.flowLayoutPanel1.Controls.Add(this.linkLabelGitHubIssue);
+            this.flowLayoutPanel1.Controls.Add(this.linkLabelEDSM);
+            this.flowLayoutPanel1.Controls.Add(this.linkLabelEDDB);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(13, 289);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(312, 133);
+            this.flowLayoutPanel1.TabIndex = 9;
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(675, 434);
-            this.Controls.Add(this.linkLabelEDDB);
-            this.Controls.Add(this.linkLabelGitHubIssue);
-            this.Controls.Add(this.linkLabelEDSM);
-            this.Controls.Add(this.linkLabelGitHub);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.linkLabelFDForum);
-            this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.labelVersion);
+            this.Controls.Add(this.buttonOK);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.textBox1);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(600, 420);
             this.Name = "AboutForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About EDDiscovery";
             this.Load += new System.EventHandler(this.AboutForm_Load);
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -175,7 +202,7 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label textBox1;
         private System.Windows.Forms.Button buttonOK;
         internal System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.LinkLabel linkLabelFDForum;
@@ -184,5 +211,6 @@
         private System.Windows.Forms.LinkLabel linkLabelEDSM;
         private System.Windows.Forms.LinkLabel linkLabelGitHubIssue;
         private System.Windows.Forms.LinkLabel linkLabelEDDB;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
