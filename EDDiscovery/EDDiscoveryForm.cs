@@ -383,27 +383,34 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
-                GitHubClass github = new GitHubClass();
-
-                GitHubRelease rel = github.GetLatestRelease();
-
-                if (rel != null)
+                try
                 {
-                    //string newInstaller = jo["Filename"].Value<string>();
 
-                    var currentVersion = Application.ProductVersion;
+                    GitHubClass github = new GitHubClass();
 
-                    Version v1, v2;
-                    v1 = new Version(rel.ReleaseVersion);
-                    v2 = new Version(currentVersion);
+                    GitHubRelease rel = github.GetLatestRelease();
 
-                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                    if (rel != null)
                     {
-                        newRelease = rel;
-                        this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
-                        this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
+                        //string newInstaller = jo["Filename"].Value<string>();
 
+                        var currentVersion = Application.ProductVersion;
+
+                        Version v1, v2;
+                        v1 = new Version(rel.ReleaseVersion);
+                        v2 = new Version(currentVersion);
+
+                        if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                        {
+                            newRelease = rel;
+                            this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
+                            this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
+
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
 
                 }
             });
