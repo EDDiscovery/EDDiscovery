@@ -18,7 +18,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public bool ShieldsUp { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.shields; } }
+        public static System.Drawing.Bitmap IconSelect(string desc)
+        {
+            if (desc.Contains("Down"))
+                return EDDiscovery.Properties.Resources.shieldsdown;
+            else
+                return EDDiscovery.Properties.Resources.shieldsup;
+        }
 
     }
 }

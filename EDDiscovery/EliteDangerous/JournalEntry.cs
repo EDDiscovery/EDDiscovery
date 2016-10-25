@@ -1091,18 +1091,27 @@ namespace EDDiscovery.EliteDangerous
                 return (JournalEntry)Activator.CreateInstance(jtype, jo);
         }
 
-        static public System.Drawing.Bitmap GetIcon(string text, bool usealt = false)
+        static public System.Drawing.Bitmap GetIcon(string eventtypestr, string seltext = null )    // get ICON associated with the event type.
         {
-            Type jtype = TypeOfJournalEntry(text);
+            Type jtype = TypeOfJournalEntry(eventtypestr);
 
             if (jtype == null)
             {
                 return EDDiscovery.Properties.Resources.genericevent;
             }
 
-            System.Reflection.PropertyInfo p = jtype.GetProperty((usealt) ? "IconAlt" : "Icon");
-            System.Reflection.MethodInfo getter = p?.GetGetMethod();
-            return (getter != null) ? ((System.Drawing.Bitmap)getter.Invoke(null, null)) : EDDiscovery.Properties.Resources.genericevent;
+            System.Reflection.MethodInfo m = jtype.GetMethod("IconSelect");                 // first we see if the class defines this function..
+
+            if ( m != null )
+            {
+                return (System.Drawing.Bitmap)m.Invoke(null, new Object [] { seltext });    // if so, pass it the string and let it pick the icon
+            }
+            else
+            {
+                System.Reflection.PropertyInfo p = jtype.GetProperty("Icon");               // else use the Icon property, or if its not defined, its a generic event
+                System.Reflection.MethodInfo getter = p?.GetGetMethod();
+                return (getter != null) ? ((System.Drawing.Bitmap)getter.Invoke(null, null)) : EDDiscovery.Properties.Resources.genericevent;
+            }
         }
 
         static public JournalTypeEnum JournalString2Type(string str)
