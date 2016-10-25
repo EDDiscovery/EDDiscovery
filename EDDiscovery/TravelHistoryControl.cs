@@ -212,22 +212,25 @@ namespace EDDiscovery
                         EDDNSync.SendEDDNEvent(he);
                 }
 
-
-                AddNewHistoryRow(true, he);
-
                 if (he.IsFSDJump)
                     _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map - only cares about FSD changes
 
-                RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
-                RefreshTargetInfo();                                        // tell the target system its changed the latest system
-
-                // Move focus to new row
-                if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
+                if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString("TravelHistoryControlEventFilter", "All")))
                 {
-                    dataGridViewTravel.ClearSelection();
-                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
-                    ShowSystemInformation(dataGridViewTravel.Rows[0]);
-                    UpdateDependentsWithSelection();
+                    List<HistoryEntry> result = HistoryList.FilterByJournalEvent(new List<HistoryEntry> { he }, SQLiteDBClass.GetSettingString("TravelHistoryControlEventFilter", "All"));
+                    AddNewHistoryRow(true, he);
+
+                    RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
+                    RefreshTargetInfo();                                        // tell the target system its changed the latest system
+
+                    // Move focus to new row
+                    if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
+                    {
+                        dataGridViewTravel.ClearSelection();
+                        dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                        ShowSystemInformation(dataGridViewTravel.Rows[0]);
+                        UpdateDependentsWithSelection();
+                    }
                 }
             }
             catch (Exception ex)
