@@ -42,7 +42,7 @@ namespace EDDiscovery.EDDN
 
         private string GetEDDNSchemaRef()
         {
-            if (commanderName.StartsWith("[Beta]"))
+            if (commanderName.StartsWith("[BETA]"))
                 return "http://schemas.elite-markets.net/eddn/journal/1/test";
             else
                 return "http://schemas.elite-markets.net/eddn/journal/1";
