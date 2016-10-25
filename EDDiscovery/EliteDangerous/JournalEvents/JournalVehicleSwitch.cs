@@ -14,8 +14,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string To { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.mothership; } }
-        public static System.Drawing.Bitmap IconAlt { get { return EDDiscovery.Properties.Resources.fighter; } }
-
+        public static System.Drawing.Bitmap IconSelect(string desc)
+        {
+            if (desc.Contains("Mothership"))
+                return EDDiscovery.Properties.Resources.mothership;
+            else
+                return EDDiscovery.Properties.Resources.fighter;
+        }
     }
 }

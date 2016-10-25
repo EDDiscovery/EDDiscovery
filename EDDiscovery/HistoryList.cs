@@ -221,12 +221,7 @@ namespace EDDiscovery
         {
             get
             {
-                if (EntryType == EliteDangerous.JournalTypeEnum.RestockVehicle)
-                    return EliteDangerous.JournalEntry.GetIcon(EntryType.ToString(), !EventDescription.Contains("SRV"));
-                else if (EntryType == EliteDangerous.JournalTypeEnum.VehicleSwitch)
-                    return EliteDangerous.JournalEntry.GetIcon(EntryType.ToString(), !EventDescription.Contains("Mothership"));
-                else
-                    return EliteDangerous.JournalEntry.GetIcon(EntryType.ToString());
+                return EliteDangerous.JournalEntry.GetIcon(EntryType.ToString(),EventDescription);
             }
         }
 
