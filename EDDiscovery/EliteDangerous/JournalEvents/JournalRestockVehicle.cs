@@ -23,8 +23,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Cost { get; set; }
         public int Count { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.srv; } }
-        public static System.Drawing.Bitmap IconAlt { get { return EDDiscovery.Properties.Resources.fighter; } }
-
+        public static System.Drawing.Bitmap IconSelect(string desc)
+        {
+            if (desc.Contains("SRV"))
+                return EDDiscovery.Properties.Resources.srv;
+            else
+                return EDDiscovery.Properties.Resources.fighter;
+        }
     }
 }
