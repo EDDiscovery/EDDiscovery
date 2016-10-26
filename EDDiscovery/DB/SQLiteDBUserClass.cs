@@ -225,7 +225,32 @@ namespace EDDiscovery.DB
         private static void UpgradeUserDB108(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Commanders ADD COLUMN JournalDir TEXT";
-            SQLiteDBClass.PerformUpgrade(conn, 108, true, false, new[] { query1 });
+            SQLiteDBClass.PerformUpgrade(conn, 108, true, false, new[] { query1 }, () =>
+            {
+                using (DbCommand cmd = conn.CreateCommand("SELECT Nr, NetLogDir, JournalDir FROM Commanders"))
+                {
+                    using (DbDataReader rdr = cmd.ExecuteReader())
+                    {
+                        int nr = Convert.ToInt32(rdr["Nr"]);
+                        object netlogdir = rdr["NetLogDir"];
+                        object journaldir = rdr["JournalDir"];
+
+                        if (netlogdir != DBNull.Value && journaldir == DBNull.Value)
+                        {
+                            string logdir = Convert.ToString(netlogdir);
+
+                            if (logdir != null && System.IO.Directory.Exists(logdir) && System.IO.Directory.EnumerateFiles(logdir, "journal*.log").Any())
+                            {
+                                using (DbCommand cmd2 = conn.CreateCommand("UPDATE Commanders SET JournalDir=NetLogDir WHERE Nr=@Nr"))
+                                {
+                                    cmd2.AddParameterWithValue("@Nr", nr);
+                                    cmd2.ExecuteNonQuery();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
 
 
