@@ -227,31 +227,38 @@ namespace EDDiscovery.DB
             string query1 = "ALTER TABLE Commanders ADD COLUMN JournalDir TEXT";
             SQLiteDBClass.PerformUpgrade(conn, 108, true, false, new[] { query1 }, () =>
             {
-                using (DbCommand cmd = conn.CreateCommand("SELECT Id, NetLogDir, JournalDir FROM Commanders"))
+                try
                 {
-                    using (DbDataReader rdr = cmd.ExecuteReader())
+                    using (DbCommand cmd = conn.CreateCommand("SELECT Id, NetLogDir, JournalDir FROM Commanders"))
                     {
-                        while (rdr.Read())
+                        using (DbDataReader rdr = cmd.ExecuteReader())
                         {
-                            int nr = Convert.ToInt32(rdr["Id"]);
-                            object netlogdir = rdr["NetLogDir"];
-                            object journaldir = rdr["JournalDir"];
-
-                            if (netlogdir != DBNull.Value && journaldir == DBNull.Value)
+                            while (rdr.Read())
                             {
-                                string logdir = Convert.ToString(netlogdir);
+                                int nr = Convert.ToInt32(rdr["Id"]);
+                                object netlogdir = rdr["NetLogDir"];
+                                object journaldir = rdr["JournalDir"];
 
-                                if (logdir != null && System.IO.Directory.Exists(logdir) && System.IO.Directory.EnumerateFiles(logdir, "journal*.log").Any())
+                                if (netlogdir != DBNull.Value && journaldir == DBNull.Value)
                                 {
-                                    using (DbCommand cmd2 = conn.CreateCommand("UPDATE Commanders SET JournalDir=NetLogDir WHERE Id=@Nr"))
+                                    string logdir = Convert.ToString(netlogdir);
+
+                                    if (logdir != null && System.IO.Directory.Exists(logdir) && System.IO.Directory.EnumerateFiles(logdir, "journal*.log").Any())
                                     {
-                                        cmd2.AddParameterWithValue("@Nr", nr);
-                                        cmd2.ExecuteNonQuery();
+                                        using (DbCommand cmd2 = conn.CreateCommand("UPDATE Commanders SET JournalDir=NetLogDir WHERE Id=@Nr"))
+                                        {
+                                            cmd2.AddParameterWithValue("@Nr", nr);
+                                            cmd2.ExecuteNonQuery();
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine("UpgradeUser108 exception: " + ex.Message);
                 }
             });
         }
