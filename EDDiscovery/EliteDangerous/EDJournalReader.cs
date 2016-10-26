@@ -92,7 +92,7 @@ namespace EDDiscovery.EliteDangerous
                 }
                 catch (  Exception )          // CreateJournal Entry may except, in which case, the line is crap
                 {
-
+                    System.Diagnostics.Trace.WriteLine($"Bad journal line:\n{line}");
                 }
             }
 
