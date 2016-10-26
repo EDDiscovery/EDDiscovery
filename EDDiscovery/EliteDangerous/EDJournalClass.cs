@@ -440,7 +440,7 @@ namespace EDDiscovery.EliteDangerous
 
             for (int i = 0; i < listCommanders.Count; i++)             // see if new watchers are needed
             {
-                string datapath = GetWatchFolder(listCommanders[i].NetLogDir);
+                string datapath = GetWatchFolder(listCommanders[i].JournalDir);
 
                 if (datapath == null || datapath.Length == 0 || !Directory.Exists(datapath))
                     continue;
@@ -459,7 +459,7 @@ namespace EDDiscovery.EliteDangerous
             {
                 bool found = false;
                 for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
-                    found |= watchers[i].m_watcherfolder.Equals(GetWatchFolder(listCommanders[j].NetLogDir));
+                    found |= watchers[i].m_watcherfolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
 
                 if (!found)
                     tobedeleted.Add(i);

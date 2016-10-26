@@ -1268,7 +1268,7 @@ namespace EDDiscovery
 
                 if (cmdr != null)
                 {
-                    string cmdrfolder = cmdr.NetLogDir;
+                    string cmdrfolder = cmdr.JournalDir;
                     if (cmdrfolder.Length < 1)
                         cmdrfolder = EliteDangerous.EDJournalClass.GetDefaultJournalDir();
                     Process.Start(cmdrfolder);
@@ -1462,29 +1462,67 @@ namespace EDDiscovery
         private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             adminToolStripMenuItem.DropDown.Close();
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
+            if (DisplayedCommander >= 0)
             {
-                string logpath = dirdlg.SelectedPath;
-                //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false);
+                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
+                if (cmdr != null)
+                {
+                    string netlogpath = cmdr.NetLogDir;
+                    FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+                    if (netlogpath != null && Directory.Exists(netlogpath))
+                    {
+                        dirdlg.SelectedPath = netlogpath;
+                    }
+
+                    DialogResult dlgResult = dirdlg.ShowDialog();
+
+                    if (dlgResult == DialogResult.OK)
+                    {
+                        string logpath = dirdlg.SelectedPath;
+
+                        if (logpath != netlogpath)
+                        {
+                            cmdr.NetLogDir = logpath;
+                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr });
+                        }
+
+                        //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
+                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false, currentcmdr: cmdr.Nr);
+                    }
+                }
             }
         }
 
         private void read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
+            if (DisplayedCommander >= 0)
             {
-                string logpath = dirdlg.SelectedPath;
-                //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true);
+                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
+                if (cmdr != null)
+                {
+                    string netlogpath = cmdr.NetLogDir;
+                    FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+                    if (netlogpath != null && Directory.Exists(netlogpath))
+                    {
+                        dirdlg.SelectedPath = netlogpath;
+                    }
+
+                    DialogResult dlgResult = dirdlg.ShowDialog();
+
+                    if (dlgResult == DialogResult.OK)
+                    {
+                        string logpath = dirdlg.SelectedPath;
+
+                        if (logpath != netlogpath)
+                        {
+                            cmdr.NetLogDir = logpath;
+                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr });
+                        }
+
+                        //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
+                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true, currentcmdr: cmdr.Nr);
+                    }
+                }
             }
         }
 
@@ -1508,9 +1546,10 @@ namespace EDDiscovery
             public string NetLogPath;
             public bool ForceNetLogReload;
             public bool CheckEdsm;
+            public int CurrentCommander;
         }
 
-        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool checkedsm = false)
+        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool checkedsm = false, int? currentcmdr = null)
         {
             if (PendingClose)
             {
@@ -1528,7 +1567,8 @@ namespace EDDiscovery
                 {
                     NetLogPath = netlogpath,
                     ForceNetLogReload = forcenetlogreload,
-                    CheckEdsm = checkedsm
+                    CheckEdsm = checkedsm,
+                    CurrentCommander = currentcmdr ?? DisplayedCommander
                 };
                 _refreshWorker.RunWorkerAsync(args);
             }
@@ -1546,7 +1586,7 @@ namespace EDDiscovery
 
             List<HistoryEntry> history = new List<HistoryEntry>();
 
-            if (DisplayedCommander >= 0)
+            if (args.CurrentCommander >= 0)
             {
                 journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
 
@@ -1555,7 +1595,7 @@ namespace EDDiscovery
                     if (args.NetLogPath != null)
                     {
                         string errstr = null;
-                        NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload);
+                        NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload, currentcmdrid: args.CurrentCommander);
                     }
                 }
             }
