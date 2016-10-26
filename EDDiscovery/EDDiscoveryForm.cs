@@ -1531,15 +1531,21 @@ namespace EDDiscovery
         }
 
 
-        
-#endregion
+        private void rescanAllJournalFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RefreshHistoryAsync(forcejournalreload: true, checkedsm: true);
+        }
 
-#region Update Views with new commander 
+
+        #endregion
+
+        #region Update Views with new commander 
 
         protected class RefreshWorkerArgs
         {
             public string NetLogPath;
             public bool ForceNetLogReload;
+            public bool ForceJournalReload;
             public bool CheckEdsm;
             public int CurrentCommander;
         }
@@ -1550,7 +1556,7 @@ namespace EDDiscovery
             public MaterialCommoditiesLedger retledger;
         }
 
-        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool checkedsm = false, int? currentcmdr = null)
+        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
         {
             if (PendingClose)
             {
@@ -1568,6 +1574,7 @@ namespace EDDiscovery
                 {
                     NetLogPath = netlogpath,
                     ForceNetLogReload = forcenetlogreload,
+                    ForceJournalReload = forcejournalreload,
                     CheckEdsm = checkedsm,
                     CurrentCommander = currentcmdr ?? DisplayedCommander
                 };
@@ -1590,7 +1597,7 @@ namespace EDDiscovery
 
             if (args.CurrentCommander >= 0)
             {
-                journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
+                journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), forceReload: args.ForceJournalReload);   // Parse files stop monitor..
 
                 if (args != null)
                 {
