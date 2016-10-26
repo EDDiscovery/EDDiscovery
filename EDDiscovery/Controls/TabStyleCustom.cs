@@ -25,6 +25,7 @@ namespace ExtendedControls
                 if ( !textpresent )
                     pos = new Point(borderrect.X + borderrect.Width/2 - icon.Width/2, borderrect.Y + borderrect.Height / 2 - icon.Height / 2);
 
+                gr.SmoothingMode = SmoothingMode.Default;
                 gr.DrawImage(icon, pos);
                 borderrect.X += icon.Width+off/2;
                 borderrect.Width -= icon.Width + off/2;
@@ -158,7 +159,6 @@ namespace ExtendedControls
 
         public override void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft, Image icon)        // provide a standard version..
         {
-            //borderrect.X += shift - 1;  // shift, because its sloped.. this looks about right
             borderrect.Width += shift;
             base.DrawText(gr, borderrect, index, selected, color, text, ft,icon);
         }
