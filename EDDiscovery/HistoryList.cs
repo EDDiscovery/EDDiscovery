@@ -214,7 +214,7 @@ namespace EDDiscovery
             if (he.StartMarker)
                 he.travelling = true;
 
-            he.materialscommodities = MaterialCommoditiesList.Process(je,prev?.materialscommodities);
+           // he.materialscommodities = MaterialCommoditiesList.Process(je,prev?.materialscommodities);
 
             return he;
         }
