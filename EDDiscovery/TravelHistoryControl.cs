@@ -43,6 +43,8 @@ namespace EDDiscovery
 
         private const string SingleCoordinateFormat = "0.##";
 
+        private const int DefaultRowHeight = 26;
+
         private static EDDiscoveryForm _discoveryForm;
 
         DataGridViewRow currentGridRow = null;
@@ -91,7 +93,7 @@ namespace EDDiscovery
         private void TravelHistoryControl_Load(object sender, EventArgs e)
         {
             dataGridViewTravel.MakeDoubleBuffered();
-            dataGridViewTravel.RowTemplate.Height = 26;
+            dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
         }
 
         public void Display()
@@ -1058,26 +1060,32 @@ namespace EDDiscovery
             if ( leftclickrow>=0)                                                   // Click expands it..
             {
                 int ch = dataGridViewTravel.Rows[leftclickrow].Height;
-                bool expanded = (ch < 25);
+                bool toexpand = (ch <= DefaultRowHeight);
 
-                string text = leftclicksystem.EventDescription + ((expanded) ? (Environment.NewLine + leftclicksystem.EventDetailedInfo) : "");
-                int h = 26;
+                string infotext = leftclicksystem.EventDescription + ((toexpand && leftclicksystem.EventDetailedInfo.Length>0) ? (Environment.NewLine + leftclicksystem.EventDetailedInfo) : "");
 
-                if (expanded)
+                int h = DefaultRowHeight;
+
+                if (toexpand)
                 {
-                    SizeF sizef;
                     using (Graphics g = Parent.CreateGraphics())
                     {
-                        sizef = g.MeasureString(text, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Information].Width);
-                    }
+                        int desch = (int)(g.MeasureString((string)dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Description].Value, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Description].Width-4).Height + 2);
+                        int infoh = (int)(g.MeasureString(infotext, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Information].Width-4).Height + 2);
+                        int noteh = (int)(g.MeasureString((string)dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Note].Value, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Note].Width-4).Height + 2);
 
-                    h = (int)(sizef.Height + 2);
+                        h = Math.Max(desch, h);
+                        h = Math.Max(infoh, h);
+                        h = Math.Max(noteh, h);
+                    }
                 }
 
-                dataGridViewTravel.Rows[leftclickrow].Height = h;
-                dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Value = text;
+                toexpand = (h > DefaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
 
-                DataGridViewTriState ti = (expanded) ? DataGridViewTriState.True : DataGridViewTriState.False;
+                dataGridViewTravel.Rows[leftclickrow].Height = h;
+                dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Value = infotext;
+
+                DataGridViewTriState ti = (toexpand) ? DataGridViewTriState.True : DataGridViewTriState.False;
 
                 dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Style.WrapMode = ti;
                 dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Description].Style.WrapMode = ti;
@@ -1085,7 +1093,7 @@ namespace EDDiscovery
             }
 
         }
-        
+
         #endregion
 
         #region TravelHistoryRightClick

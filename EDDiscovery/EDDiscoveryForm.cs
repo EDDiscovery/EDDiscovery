@@ -341,11 +341,6 @@ namespace EDDiscovery
                         EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
                         System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
                     }
-
-                    Bitmap x1 = EliteDangerous.JournalEntry.GetIcon("ApproachSettlement");
-                    Bitmap x2 = EliteDangerous.JournalEntry.GetIcon("Bounty");
-
-
                 }
             }
         }
@@ -1549,6 +1544,12 @@ namespace EDDiscovery
             public int CurrentCommander;
         }
 
+        protected class RefreshWorkerResults
+        {
+            public List<HistoryEntry> rethistory;
+            public MaterialCommoditiesLedger retledger;
+        }
+
         public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool checkedsm = false, int? currentcmdr = null)
         {
             if (PendingClose)
@@ -1585,6 +1586,7 @@ namespace EDDiscovery
             var worker = (BackgroundWorker)sender;
 
             List<HistoryEntry> history = new List<HistoryEntry>();
+            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
 
             if (args.CurrentCommander >= 0)
             {
@@ -1605,7 +1607,7 @@ namespace EDDiscovery
             List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
 
-            ISystem isys = new SystemClass("Unknown");
+            //ISystem isys = new SystemClass("Unknown");
 
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
@@ -1616,7 +1618,8 @@ namespace EDDiscovery
                     HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn);
                     prev = he;
 
-                    history.Add(he);
+                    history.Add(he);                        // add to the history list here..
+                    matcommodledger.Process(je);            // update the ledger
 
                     if (journalupdate)
                     {
@@ -1661,7 +1664,7 @@ namespace EDDiscovery
             }
             else
             {
-                e.Result = history;
+                e.Result = new RefreshWorkerResults { rethistory = history, retledger = matcommodledger };
             }
         }
 
@@ -1678,9 +1681,19 @@ namespace EDDiscovery
                     travelHistoryControl1.CheckCommandersListBox();             // in case a new commander has been detected
                     settings.UpdateCommandersListBox();
 
-                    TransferToFrontEnd((List<HistoryEntry>)e.Result);
+                    history.Clear();
+
+                    foreach (var ent in ((RefreshWorkerResults)e.Result).rethistory)
+                    {
+                        history.Add(ent);
+                    }
+
+                    history.materialcommodititiesledger = ((RefreshWorkerResults)e.Result).retledger;
+
                     ReportProgress(-1, "");
                     travelHistoryControl1.LogLine("Refresh Complete." );
+
+                    RefreshDisplays();
                 }
 
                 travelHistoryControl1.RefreshButton(true);
@@ -1701,21 +1714,6 @@ namespace EDDiscovery
 
         public void RefreshFrontEnd()           // this just does another fetch and redisplay, does not check log files, or edsm systems
         {
-            RefreshDisplays();
-        }
-
-        private void TransferToFrontEnd(List<HistoryEntry> historyents)
-        {
-            history.Clear();
-            
-            foreach (var ent in historyents)
-            {
-                history.Add(ent);
-            }
-
-            if (PendingClose)
-                return;
-
             RefreshDisplays();
         }
 
@@ -1745,7 +1743,7 @@ namespace EDDiscovery
                 }
 
                 history.Add(he);
-
+//TBD
                 travelHistoryControl1.AddNewEntry(he);
                 journalViewControl1.AddNewEntry(he);
             }

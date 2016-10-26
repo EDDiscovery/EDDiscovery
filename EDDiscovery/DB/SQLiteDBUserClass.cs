@@ -68,7 +68,8 @@ namespace EDDiscovery.DB
                 if (dbver < 108)
                     UpgradeUserDB108(conn);
 
-
+                if (dbver < 109)
+                    UpgradeUserDB109(conn);
 
                 CreateUserDBTableIndexes();
 
@@ -272,6 +273,19 @@ namespace EDDiscovery.DB
             });
         }
 
+        private static void UpgradeUserDB109(SQLiteConnectionUser conn)
+        {
+            string query1 = "CREATE TABLE MaterialsCommodities ( " +
+                "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "Category TEXT NOT NULL, " +
+                "Name TEXT NOT NULL COLLATE NOCASE, " +
+                "Type TEXT NOT NULL COLLATE NOCASE," +
+                "UNIQUE(Category,Name)" +
+                ") ";
+
+            SQLiteDBClass.PerformUpgrade(conn, 109, true, false, new[] { query1 });
+            EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
+        }
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)
         {
@@ -283,7 +297,8 @@ namespace EDDiscovery.DB
                 "DROP TABLE IF EXISTS Stations",
                 "DROP TABLE IF EXISTS station_commodities",
                 "DROP TABLE IF EXISTS Journals",
-                "DROP TABLE IF EXISTS VisitedSystems"
+                "DROP TABLE IF EXISTS VisitedSystems",
+                "DROP TABLE IF EXISTS Objects"
             };
 
             foreach (string query in queries)
@@ -305,6 +320,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTypeId ON JournalEntries (EventTypeId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventType ON JournalEntries (EventType)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTime ON JournalEntries (EventTime)",
+                "CREATE INDEX IF NOT EXISTS MaterialsCommodities_ClassName ON MaterialsCommodities (Category,Name)",
             };
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {

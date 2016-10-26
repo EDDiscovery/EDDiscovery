@@ -1220,7 +1220,7 @@ namespace EDDiscovery.EliteDangerous
             jc.AddScale("DistanceFromArrivalLS", 1.0, "0.0' ls from arrival point'", "", JL(new[] { JournalTypeEnum.Scan }));
             jc.AddPrePostfix("StarType", "; type star", "", JL(new[] { JournalTypeEnum.Scan }));
             jc.AddScale("StellarMass", 1.0, "0.0' stellar masses'", "", JL(new[] { JournalTypeEnum.Scan }));
-            jc.AddScale("Radius", 1.0, "0.0' km radius'", "", JL(new[] { JournalTypeEnum.Scan }));
+            jc.AddScale("Radius", 1.0/1000.0, "0.0' km radius'", "", JL(new[] { JournalTypeEnum.Scan }));
             jc.AddScale("AbsoluteMagnitude", 1.0, "0.0' absolute magnitude'", "", JL(new[] { JournalTypeEnum.Scan }));
             jc.AddScale("OrbitalPeriod", 1.0 / 86400, "0.0' days orbit'", "", JL(new[] { JournalTypeEnum.Scan }));
             jc.AddScale("RotationPeriod", 1.0 / 86400, "0.0' days rotation'", "", JL(new[] { JournalTypeEnum.Scan }));
