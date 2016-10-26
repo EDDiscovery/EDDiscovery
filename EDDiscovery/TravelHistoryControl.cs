@@ -363,12 +363,12 @@ namespace EDDiscovery
 
                 Invoke((MethodInvoker)delegate
                 {
-                    labelclosests.Text = "";
+//TBD                    labelclosests.Text = "";
                     dataGridViewNearest.Rows.Clear();
 
                     if (closestsystemlist.Count() > 0)
                     {
-                        labelclosests.Text = "Closest systems from " + cursys.name;
+                        //TBD labelclosests.Text = "Closest systems from " + cursys.name;
                         foreach (KeyValuePair<double, ISystem> tvp in closestsystemlist)
                         {
                             object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
@@ -457,10 +457,11 @@ namespace EDDiscovery
             }
         }
 
-        private void TravelHistoryControl_Resize(object sender, EventArgs e)
+        private void dataGridViewTravel_Resize(object sender, EventArgs e)
         {
             ignorewidthchange = true;
             FillDGVOut();
+            System.Diagnostics.Debug.WriteLine("Resize!");
             ignorewidthchange = false;
         }
 
