@@ -529,6 +529,7 @@ namespace EDDiscovery
             this.ColumnCalculated.MinimumWidth = 75;
             this.ColumnCalculated.Name = "ColumnCalculated";
             this.ColumnCalculated.ReadOnly = true;
+            this.ColumnCalculated.Visible = false;
             // 
             // ColumnStatus
             // 
