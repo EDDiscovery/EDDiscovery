@@ -218,6 +218,11 @@ namespace EDDiscovery.DB
             SQLiteDBClass.PerformUpgrade(conn, 107, true, false, new[] { query1, query2, query3});
         }
 
+        private static void UpgradeUserDB108(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN JournalDir TEXT";
+            SQLiteDBClass.PerformUpgrade(conn, 108, true, false, new[] { query1 });
+        }
 
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)
@@ -317,8 +322,35 @@ namespace EDDiscovery.DB
                     }
                 }
 
-                                                               // 0    1    2    3         4         5          6 7 8 9
-                using (DbCommand cmd = conn.CreateCommand("Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z,id_edsm_assigned From VisitedSystems Order By Time"))
+                int olddbver = SQLiteConnectionOld.GetSettingInt("DBVer", 1);
+
+                if (olddbver < 7) // 2.5.2
+                {
+                    System.Diagnostics.Trace.WriteLine("Database too old - unable to migrate travel log");
+                    return;
+                }
+
+                string query;
+
+                if (olddbver < 8) // 2.5.6
+                {
+                    query = "Select Name,Time,Unit,Commander,edsm_sync, -65536 AS Map_colour, NULL AS X, NULL AS Y, NULL AS Z, NULL as id_edsm_assigned From VisitedSystems Order By Time";
+                }
+                else if (olddbver < 14) // 3.2.1
+                {
+                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour, NULL AS X, NULL AS Y, NULL AS Z, NULL as id_edsm_assigned From VisitedSystems Order By Time";
+                }
+                else if (olddbver < 18) // 4.0.2
+                {
+                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z, NULL AS id_edsm_assigned From VisitedSystems Order By Time";
+                }
+                else
+                {
+                    //              0    1    2    3         4         5          6 7 8 9
+                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z,id_edsm_assigned From VisitedSystems Order By Time";
+                }
+
+                using (DbCommand cmd = conn.CreateCommand(query))
                 {
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
