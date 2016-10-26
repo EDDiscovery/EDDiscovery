@@ -363,12 +363,12 @@ namespace EDDiscovery
 
                 Invoke((MethodInvoker)delegate
                 {
-                    labelclosests.Text = "";
+//TBD                    labelclosests.Text = "";
                     dataGridViewNearest.Rows.Clear();
 
                     if (closestsystemlist.Count() > 0)
                     {
-                        labelclosests.Text = "Closest systems from " + cursys.name;
+                        //TBD labelclosests.Text = "Closest systems from " + cursys.name;
                         foreach (KeyValuePair<double, ISystem> tvp in closestsystemlist)
                         {
                             object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
@@ -398,6 +398,11 @@ namespace EDDiscovery
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
             ignorewidthchange = true;
+
+            splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
+            splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+            splitContainerRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
+
             if (SQLiteConnectionUser.keyExists("TravelControlDGVCol1"))        // if stored values, set back to what they were..
             {
                 for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
@@ -416,6 +421,10 @@ namespace EDDiscovery
         {
             for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
                 SQLiteDBClass.PutSettingInt("TravelControlDGVCol" + ((i + 1).ToString()), dataGridViewTravel.Columns[i].Width);
+
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
         }
 
         void FillDGVOut()
@@ -457,7 +466,7 @@ namespace EDDiscovery
             }
         }
 
-        private void TravelHistoryControl_Resize(object sender, EventArgs e)
+        private void dataGridViewTravel_Resize(object sender, EventArgs e)
         {
             ignorewidthchange = true;
             FillDGVOut();
@@ -1535,5 +1544,6 @@ namespace EDDiscovery
         {
 
         }
+
     }
 }

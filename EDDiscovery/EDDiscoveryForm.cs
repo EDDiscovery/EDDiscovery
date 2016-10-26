@@ -404,7 +404,7 @@ namespace EDDiscovery
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
 
                 }

@@ -173,12 +173,6 @@ namespace ExtendedControls
 
             if (backImageControlBitmap == null)    // First time, we have size..
             {
-                //this.ItemSize = new Size(250, 20);
-                Size sz = this.ItemSize;
-                Rectangle p1, p2;
-                p1 = GetTabRect(0);
-                p2 = GetTabRect(1);
-
                 backImageControlBitmap = new Bitmap(Width, Height);
                 Graphics backGraphics = Graphics.FromImage(backImageControlBitmap);
                 PaintTransparentBackground(backGraphics, ClientRectangle);    // force the paint of the background into this bitmap.
@@ -189,11 +183,7 @@ namespace ExtendedControls
                 tabImageBitmap = new Bitmap(this.Width, this.Height);
                 tabImageGraphics = Graphics.FromImage(this.tabImageBitmap);
 
-                int topheight = DisplayRectangle.Y;
-                int bottomborder = ClientRectangle.Height - DisplayRectangle.Height - topheight;
-                int sideborders = DisplayRectangle.X;
-
-                tabcontrolborder = new Rectangle(0, topheight - 2, ClientRectangle.Width - 1, ClientRectangle.Height - (topheight - 2) - 1);
+                tabcontrolborder = new Rectangle(0, DisplayRectangle.Y - 2, ClientRectangle.Width - 1, DisplayRectangle.Height+4);
             }
 
             backImageGraphics.Clear(Color.Transparent);
@@ -245,10 +235,16 @@ namespace ExtendedControls
             Color tabc1 = (Enabled) ? ((selected) ? TabSelectedColor : ((mouseover) ? TabMouseOverColor : TabNotSelectedColor)) : Multiply(TabNotSelectedColor, TabDisabledScaling);
             Color tabc2 = (FlatStyle == FlatStyle.Popup) ? Multiply(tabc1, TabColorScaling) : tabc1;
             Color taboutline = (selected) ? TabControlBorderColor : TabNotSelectedBorderColor;
-            TabStyle.DrawTab(gr, GetTabRect(i), i, selected, tabc1, tabc2, taboutline);
+
+            Image tabimage = null;
+
+            TabStyle.DrawTab(gr, GetTabRect(i), i, selected, tabc1, tabc2, taboutline, Alignment);
+
+            if (this.ImageList != null && this.TabPages[i].ImageIndex >= 0 && this.TabPages[i].ImageIndex < this.ImageList.Images.Count)
+                tabimage = this.ImageList.Images[this.TabPages[i].ImageIndex];
 
             Color tabtextc = (Enabled) ? ((selected) ? TextSelectedColor : TextNotSelectedColor) : Multiply(TextNotSelectedColor, TabDisabledScaling);
-            TabStyle.DrawText(gr, GetTabRect(i), i, selected, tabtextc, this.TabPages[i].Text, Font);
+            TabStyle.DrawText(gr, GetTabRect(i), i, selected, tabtextc, this.TabPages[i].Text, Font , tabimage);
 
             gr.SmoothingMode = SmoothingMode.Default;
         }
