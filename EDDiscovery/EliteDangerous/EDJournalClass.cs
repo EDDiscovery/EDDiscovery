@@ -427,6 +427,17 @@ namespace EDDiscovery.EliteDangerous
         {
             List<EDCommander> listCommanders = EDDConfig.Instance.ListOfCommanders;
 
+            if (frontierfolder != null && frontierfolder.Length != 0 && Directory.Exists(frontierfolder))
+            {
+                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(frontierfolder)) < 0)
+                {
+                    System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", frontierfolder));
+                    MonitorWatcher mw = new MonitorWatcher(frontierfolder);
+                    watchers.Add(mw);
+                    mw.OnNewJournalEntry += NewPosition;
+                }
+            }
+
             for (int i = 0; i < listCommanders.Count; i++)             // see if new watchers are needed
             {
                 string datapath = GetWatchFolder(listCommanders[i].NetLogDir);
