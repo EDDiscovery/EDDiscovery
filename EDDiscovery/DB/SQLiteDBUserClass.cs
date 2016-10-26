@@ -229,6 +229,7 @@ namespace EDDiscovery.DB
             {
                 try
                 {
+                    List<int> commandersToMigrate = new List<int>();
                     using (DbCommand cmd = conn.CreateCommand("SELECT Id, NetLogDir, JournalDir FROM Commanders"))
                     {
                         using (DbDataReader rdr = cmd.ExecuteReader())
@@ -245,16 +246,24 @@ namespace EDDiscovery.DB
 
                                     if (logdir != null && System.IO.Directory.Exists(logdir) && System.IO.Directory.EnumerateFiles(logdir, "journal*.log").Any())
                                     {
-                                        using (DbCommand cmd2 = conn.CreateCommand("UPDATE Commanders SET JournalDir=NetLogDir WHERE Id=@Nr"))
-                                        {
-                                            cmd2.AddParameterWithValue("@Nr", nr);
-                                            cmd2.ExecuteNonQuery();
-                                        }
+                                        commandersToMigrate.Add(nr);
                                     }
                                 }
                             }
                         }
                     }
+
+                    using (DbCommand cmd2 = conn.CreateCommand("UPDATE Commanders SET JournalDir=NetLogDir WHERE Id=@Nr"))
+                    {
+                        cmd2.AddParameter("@Nr", System.Data.DbType.Int32);
+
+                        foreach (int nr in commandersToMigrate)
+                        {
+                            cmd2.Parameters["@Nr"].Value = nr;
+                            cmd2.ExecuteNonQuery();
+                        }
+                    }
+
                 }
                 catch (Exception ex)
                 {
