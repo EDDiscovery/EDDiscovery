@@ -218,6 +218,11 @@ namespace EDDiscovery.DB
             SQLiteDBClass.PerformUpgrade(conn, 107, true, false, new[] { query1, query2, query3});
         }
 
+        private static void UpgradeUserDB108(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN JournalDir TEXT";
+            SQLiteDBClass.PerformUpgrade(conn, 108, true, false, new[] { query1 });
+        }
 
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)

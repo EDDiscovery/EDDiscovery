@@ -13,6 +13,7 @@ namespace EDDiscovery2
         private string name;
         private string apikey;
         private string netLogDir;
+        private string journalDir;
         private bool syncToEdsm;
         private bool syncFromEdsm;
         private bool syncToEddn;
@@ -25,6 +26,7 @@ namespace EDDiscovery2
             apikey = Convert.ToString(reader["EdsmApiKey"]);
             deleted = Convert.ToBoolean(reader["Deleted"]);
             netLogDir = Convert.ToString(reader["NetLogDir"]);
+            journalDir = Convert.ToString(reader["JournalDir"]);
 
             syncToEdsm = Convert.ToBoolean(reader["SyncToEdsm"]);
             syncFromEdsm = Convert.ToBoolean(reader["SyncFromEdsm"]);
@@ -91,6 +93,18 @@ namespace EDDiscovery2
             set
             {
                 netLogDir = value;
+            }
+        }
+
+        public string JournalDir
+        {
+            get
+            {
+                return journalDir;
+            }
+            set
+            {
+                journalDir = value;
             }
         }
 
