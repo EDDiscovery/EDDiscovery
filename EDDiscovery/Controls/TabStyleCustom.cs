@@ -11,23 +11,43 @@ namespace ExtendedControls
 {
     public abstract class TabStyleCustom
     {
-        public abstract void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline);
+        public abstract void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline, TabAlignment alignment);
 
-        public virtual void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft)        // provide a standard version..
+        public virtual void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft, Image icon)        // provide a standard version..
         {
-            StringFormat f = new StringFormat();
-            f.Alignment = StringAlignment.Center;
-            f.LineAlignment = StringAlignment.Center;
-            gr.SmoothingMode = SmoothingMode.AntiAlias;
-            using (Brush textb = new SolidBrush(color))
-                gr.DrawString(text, ft, textb, borderrect, f);
+            bool textpresent = text.Length > 0;
+
+            if ( icon != null )
+            {
+                int off = 8;
+                Point pos = new Point(borderrect.X + off, borderrect.Y + borderrect.Height / 2 - icon.Height / 2);
+
+                if ( !textpresent )
+                    pos = new Point(borderrect.X + borderrect.Width/2 - icon.Width/2, borderrect.Y + borderrect.Height / 2 - icon.Height / 2);
+
+                gr.DrawImage(icon, pos);
+                borderrect.X += icon.Width+off/2;
+                borderrect.Width -= icon.Width + off/2;
+            }
+
+            if (textpresent)
+            {
+                StringFormat f = new StringFormat();
+                f.Alignment = StringAlignment.Center;
+                f.LineAlignment = StringAlignment.Center;
+                gr.SmoothingMode = SmoothingMode.AntiAlias;
+                using (Brush textb = new SolidBrush(color))
+                    gr.DrawString(text, ft, textb, borderrect, f);
+            }
         }
     }
 
     public class TabStyleSquare : TabStyleCustom
     {
-        public override void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline)
+        public override void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline, TabAlignment alignment)
         {
+            System.Diagnostics.Debug.Assert(alignment == TabAlignment.Top);
+
             int additional = 0;                             // extra depth for fill
 
             if (selected)
@@ -64,8 +84,10 @@ namespace ExtendedControls
 
     public class TabStyleRoundedEdge : TabStyleCustom
     {
-        public override void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline)
+        public override void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline , TabAlignment alignment)
         {
+            System.Diagnostics.Debug.Assert(alignment == TabAlignment.Top);
+
             int additional = 0;                             // extra depth for fill
 
             if (selected)
@@ -105,29 +127,23 @@ namespace ExtendedControls
     {
         private const int shift = 6;
 
-        public override void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline)
+        public override void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline, TabAlignment alignment)
         {
-            int additional = 0;                             // extra depth for fill
-
-            if (selected)
-            {
-                additional = 1;
-                borderrect.Height += borderrect.Y;          // this one uses any height to get it bigger
-                borderrect.Y = 0;
-            }
+            GraphicsPath border = new GraphicsPath();
+            GraphicsPath fill = new GraphicsPath();
 
             int xfar = borderrect.Right - 1;
-            int yfar = borderrect.Bottom - 1;
 
-            GraphicsPath border = new GraphicsPath();
-            border.AddLine(borderrect.X, yfar + additional, borderrect.X + shift, borderrect.Y);
-            border.AddLine(borderrect.X + shift, borderrect.Y, xfar, borderrect.Y);
-            border.AddLine(xfar, borderrect.Y, xfar + shift, yfar + additional);
+            int ybot = (alignment == TabAlignment.Bottom) ? (borderrect.Y) : (borderrect.Bottom - 1);
+            int ytop = (alignment == TabAlignment.Bottom) ? (borderrect.Bottom-1-((selected)?0:2)) : (borderrect.Y - ((selected) ? 2 : 0));
 
-            GraphicsPath fill = new GraphicsPath();
-            fill.AddLine(borderrect.X, yfar + additional + 1, borderrect.X + shift, borderrect.Y);
-            fill.AddLine(borderrect.X + shift, borderrect.Y, xfar, borderrect.Y);
-            fill.AddLine(xfar, borderrect.Y, xfar + shift, yfar + additional + 1);
+            border.AddLine(borderrect.X, ybot, borderrect.X + shift, ytop);
+            border.AddLine(borderrect.X + shift, ytop, xfar, ytop);
+            border.AddLine(xfar, ytop, xfar + shift, ybot);
+
+            fill.AddLine(borderrect.X, ybot + 1, borderrect.X + shift, ytop);
+            fill.AddLine(borderrect.X + shift, ytop, xfar, ytop);
+            fill.AddLine(xfar, ytop, xfar + shift, ybot + 1);
 
             gr.SmoothingMode = SmoothingMode.Default;
 
@@ -140,11 +156,11 @@ namespace ExtendedControls
                 gr.DrawPath(p, border);
         }
 
-        public override void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft)        // provide a standard version..
+        public override void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft, Image icon)        // provide a standard version..
         {
             //borderrect.X += shift - 1;  // shift, because its sloped.. this looks about right
             borderrect.Width += shift;
-            base.DrawText(gr, borderrect, index, selected, color, text, ft);
+            base.DrawText(gr, borderrect, index, selected, color, text, ft,icon);
         }
     }
 }
