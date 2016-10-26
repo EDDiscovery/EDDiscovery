@@ -1695,7 +1695,7 @@ namespace EDDiscovery
                         history.Add(ent);
                     }
 
-                    history.materialcommodititiesledger = ((RefreshWorkerResults)e.Result).retledger;
+                    //history.materialcommodititiesledger = ((RefreshWorkerResults)e.Result).retledger;
 
                     ReportProgress(-1, "");
                     travelHistoryControl1.LogLine("Refresh Complete." );
