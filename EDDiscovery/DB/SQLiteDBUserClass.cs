@@ -65,6 +65,10 @@ namespace EDDiscovery.DB
                 if (dbver < 107)
                     UpgradeUserDB107(conn);
 
+                if (dbver < 108)
+                    UpgradeUserDB108(conn);
+
+
 
                 CreateUserDBTableIndexes();
 
