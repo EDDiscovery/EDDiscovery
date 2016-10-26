@@ -104,7 +104,7 @@ namespace ExtendedControls
         {
             base.OnPaint(e);
 
-            if (BorderColor != Color.Transparent)
+            if (BorderColor != Color.Transparent )
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
