@@ -74,10 +74,7 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
 
-            checkBoxEDSMSyncTo.Checked = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
-            checkBoxEDSMSyncFrom.Checked = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
-            buttonSync.Enabled = checkBoxEDSMSyncTo.Checked | checkBoxEDSMSyncFrom.Checked;
-
+            
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, "EDUIHistory");
             richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
 
@@ -87,6 +84,8 @@ namespace EDDiscovery
             closestthread.Start();
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+
+            buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
 
             cfs.Changed += EventFilterChanged;
         }
@@ -205,32 +204,35 @@ namespace EDDiscovery
 
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
 
-                    if (checkBoxEDSMSyncTo.Checked == true)
+                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm == true)
                         EDSMSync.SendTravelLog(he);
                 }
 
                 if (he.ISEDDNMessage)
                 {
-                    if (checkBoxEDDNSync.Checked == true)
+                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn == true)
                         EDDNSync.SendEDDNEvent(he);
                 }
-
-
-                AddNewHistoryRow(true, he);
 
                 if (he.IsFSDJump)
                     _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map - only cares about FSD changes
 
-                RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
-                RefreshTargetInfo();                                        // tell the target system its changed the latest system
-
-                // Move focus to new row
-                if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
+                if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString("TravelHistoryControlEventFilter", "All")))
                 {
-                    dataGridViewTravel.ClearSelection();
-                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
-                    ShowSystemInformation(dataGridViewTravel.Rows[0]);
-                    UpdateDependentsWithSelection();
+                    List<HistoryEntry> result = HistoryList.FilterByJournalEvent(new List<HistoryEntry> { he }, SQLiteDBClass.GetSettingString("TravelHistoryControlEventFilter", "All"));
+                    AddNewHistoryRow(true, he);
+
+                    RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
+                    RefreshTargetInfo();                                        // tell the target system its changed the latest system
+
+                    // Move focus to new row
+                    if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
+                    {
+                        dataGridViewTravel.ClearSelection();
+                        dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                        ShowSystemInformation(dataGridViewTravel.Rows[0]);
+                        UpdateDependentsWithSelection();
+                    }
                 }
             }
             catch (Exception ex)
@@ -487,7 +489,7 @@ namespace EDDiscovery
             comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
 
-            commanders.Add(new EDCommander(-1, "Hidden log", ""));
+            commanders.Add(new EDCommander(-1, "Hidden log", "", false, false, false));
             commanders.AddRange(EDDiscoveryForm.EDDConfig.ListOfCommanders);
 
             comboBoxCommander.DataSource = null;
@@ -508,6 +510,8 @@ namespace EDDiscovery
                 _discoveryForm.DisplayedCommander = itm.Nr;
                 if (itm.Nr >= 0)
                     EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
+
+                buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
 
                 _discoveryForm.RefreshHistoryAsync();                                   // which will cause DIsplay to be called as some point
             }
@@ -636,7 +640,7 @@ namespace EDDiscovery
 
                     currentGridRow.Cells[TravelHistoryColumns.Note].Value = txt;
 
-                    if (checkBoxEDSMSyncTo.Checked && sys.IsFSDJump )       // only send on FSD jumps
+                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm && sys.IsFSDJump )       // only send on FSD jumps
                         EDSMSync.SendComments(sn.Name,sn.Note,sn.EdsmId);
 
                     _discoveryForm.Map.UpdateNote();
@@ -665,7 +669,7 @@ namespace EDDiscovery
 
             try
             {
-                _discoveryForm.EdsmSync.StartSync(edsm, checkBoxEDSMSyncTo.Checked, checkBoxEDSMSyncFrom.Checked, EDDConfig.Instance.DefaultMapColour);
+                _discoveryForm.EdsmSync.StartSync(edsm, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
             }
             catch (Exception ex)
             {
@@ -789,7 +793,7 @@ namespace EDDiscovery
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
             LogLine("Refresh History.");
-            _discoveryForm.RefreshHistoryAsync();
+            _discoveryForm.RefreshHistoryAsync(checkedsm: true);
         }
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
@@ -803,16 +807,6 @@ namespace EDDiscovery
                 dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
         }
 
-
-        private void checkBoxEDSMSyncTo_CheckedChanged(object sender, EventArgs e)
-        {
-            buttonSync.Enabled = checkBoxEDSMSyncTo.Checked | checkBoxEDSMSyncFrom.Checked;
-        }
-
-        private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
-        {
-            buttonSync.Enabled = checkBoxEDSMSyncTo.Checked | checkBoxEDSMSyncFrom.Checked;
-        }
 
         private void button2DMap_Click(object sender, EventArgs e)
         {
@@ -1537,5 +1531,9 @@ namespace EDDiscovery
             return -1;
         }
 
+        private void comboBoxCommander_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

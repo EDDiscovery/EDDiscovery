@@ -105,7 +105,11 @@ namespace EDDiscovery
 
         public void AddNewEntry(HistoryEntry he)
         {
-            AddNewJournalRow(true, he);
+            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString("JournalHistoryControlEventFilter", "All")))
+            {
+                AddNewJournalRow(true, he);
+                dataGridViewJournal.AutoResizeRows();
+            }
         }
 
         #region Layout
@@ -200,7 +204,7 @@ namespace EDDiscovery
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
             _discoveryForm.LogLine("Refresh History.");
-            _discoveryForm.RefreshHistoryAsync();
+            _discoveryForm.RefreshHistoryAsync(checkedsm: true);
         }
 
         private void buttonFilter_Click(object sender, EventArgs e)

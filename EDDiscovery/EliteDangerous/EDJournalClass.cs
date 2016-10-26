@@ -427,9 +427,20 @@ namespace EDDiscovery.EliteDangerous
         {
             List<EDCommander> listCommanders = EDDConfig.Instance.ListOfCommanders;
 
+            if (frontierfolder != null && frontierfolder.Length != 0 && Directory.Exists(frontierfolder))
+            {
+                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(frontierfolder)) < 0)
+                {
+                    System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", frontierfolder));
+                    MonitorWatcher mw = new MonitorWatcher(frontierfolder);
+                    watchers.Add(mw);
+                    mw.OnNewJournalEntry += NewPosition;
+                }
+            }
+
             for (int i = 0; i < listCommanders.Count; i++)             // see if new watchers are needed
             {
-                string datapath = GetWatchFolder(listCommanders[i].NetLogDir);
+                string datapath = GetWatchFolder(listCommanders[i].JournalDir);
 
                 if (datapath == null || datapath.Length == 0 || !Directory.Exists(datapath))
                     continue;
@@ -448,7 +459,7 @@ namespace EDDiscovery.EliteDangerous
             {
                 bool found = false;
                 for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
-                    found |= watchers[i].m_watcherfolder.Equals(GetWatchFolder(listCommanders[j].NetLogDir));
+                    found |= watchers[i].m_watcherfolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
 
                 if (!found)
                     tobedeleted.Add(i);
