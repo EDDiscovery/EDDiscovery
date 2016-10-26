@@ -50,11 +50,13 @@ namespace EDDiscovery
 
         // Calculated values, not from JE
 
-        private double travelled_distance;
+        private double travelled_distance;  // start/stop distance and time computation
         private TimeSpan travelled_seconds;
         bool travelling;
         int travelled_missingjump;
 
+        MaterialCommoditiesList materialscommodities;  
+        
         #endregion
 
         #region Constructors
@@ -212,6 +214,8 @@ namespace EDDiscovery
             if (he.StartMarker)
                 he.travelling = true;
 
+            he.materialscommodities = MaterialCommoditiesList.Process(je,prev?.materialscommodities);
+
             return he;
         }
 
@@ -267,6 +271,8 @@ namespace EDDiscovery
     public class HistoryList : IEnumerable<HistoryEntry>
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
+
+        public MaterialCommoditiesLedger materialcommodititiesledger;       // and the ledger..
 
         public void Clear()
         {

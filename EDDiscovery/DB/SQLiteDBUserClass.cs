@@ -62,6 +62,9 @@ namespace EDDiscovery.DB
                 if (dbver < 106)
                     UpgradeUserDB106(conn);
 
+                if (dbver < 120)
+                    UpgradeUserDB120(conn);
+
                 CreateUserDBTableIndexes();
 
                 return true;
@@ -206,6 +209,21 @@ namespace EDDiscovery.DB
         }
 
 
+// TBD - clash - need to merge first
+        private static void UpgradeUserDB120(SQLiteConnectionUser conn)
+        {
+            string query1 = "CREATE TABLE MaterialsCommodities ( " +
+                "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "Category TEXT NOT NULL, " +
+                "Name TEXT NOT NULL COLLATE NOCASE, " +
+                "Type TEXT NOT NULL COLLATE NOCASE," +
+                "UNIQUE(Category,Name)" +
+                ") ";
+
+            SQLiteDBClass.PerformUpgrade(conn, 120, true, false, new[] { query1 });
+            EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
+        }
+
         private static void DropOldUserTables(SQLiteConnectionUser conn)
         {
             string[] queries = new[]
@@ -216,7 +234,8 @@ namespace EDDiscovery.DB
                 "DROP TABLE IF EXISTS Stations",
                 "DROP TABLE IF EXISTS station_commodities",
                 "DROP TABLE IF EXISTS Journals",
-                "DROP TABLE IF EXISTS VisitedSystems"
+                "DROP TABLE IF EXISTS VisitedSystems",
+                "DROP TABLE IF EXISTS Objects"
             };
 
             foreach (string query in queries)
@@ -238,6 +257,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTypeId ON JournalEntries (EventTypeId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventType ON JournalEntries (EventType)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTime ON JournalEntries (EventTime)",
+                "CREATE INDEX IF NOT EXISTS MaterialsCommodities_ClassName ON MaterialsCommodities (Category,Name)",
             };
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {

@@ -87,6 +87,7 @@
             this.buttonExtSummaryPopOut = new ExtendedControls.ButtonExt();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
+            this.checkBoxEDDNSync = new ExtendedControls.CheckBoxCustom();
             this.panelRight = new System.Windows.Forms.Panel();
             this.panel_bottomright = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
@@ -111,7 +112,6 @@
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel = new System.Windows.Forms.Panel();
-            this.checkBoxEDDNSync = new ExtendedControls.CheckBoxCustom();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -818,6 +818,23 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
+            // checkBoxEDDNSync
+            // 
+            this.checkBoxEDDNSync.AutoSize = true;
+            this.checkBoxEDDNSync.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDDNSync.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDDNSync.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDDNSync.FontNerfReduction = 0.5F;
+            this.checkBoxEDDNSync.Location = new System.Drawing.Point(214, 71);
+            this.checkBoxEDDNSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDDNSync.Name = "checkBoxEDDNSync";
+            this.checkBoxEDDNSync.Size = new System.Drawing.Size(73, 17);
+            this.checkBoxEDDNSync.TabIndex = 23;
+            this.checkBoxEDDNSync.Text = "To EDDN";
+            this.checkBoxEDDNSync.TickBoxReductionSize = 10;
+            this.toolTipEddb.SetToolTip(this.checkBoxEDDNSync, "Send event data (jumps scan dock) to EDDN");
+            this.checkBoxEDDNSync.UseVisualStyleBackColor = true;
+            // 
             // panelRight
             // 
             this.panelRight.Controls.Add(this.panel_bottomright);
@@ -917,19 +934,19 @@
             this.addToTrilaterationToolStripMenuItem1,
             this.viewOnEDSMToolStripMenuItem1});
             this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(177, 48);
+            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
             this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
-            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
             this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
             this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
             // 
             // viewOnEDSMToolStripMenuItem1
             // 
             this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
-            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
             this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
@@ -1115,23 +1132,6 @@
             this.TopPanel.Name = "TopPanel";
             this.TopPanel.Size = new System.Drawing.Size(594, 32);
             this.TopPanel.TabIndex = 26;
-            // 
-            // checkBoxEDDNSync
-            // 
-            this.checkBoxEDDNSync.AutoSize = true;
-            this.checkBoxEDDNSync.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxEDDNSync.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDDNSync.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDDNSync.FontNerfReduction = 0.5F;
-            this.checkBoxEDDNSync.Location = new System.Drawing.Point(214, 71);
-            this.checkBoxEDDNSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDDNSync.Name = "checkBoxEDDNSync";
-            this.checkBoxEDDNSync.Size = new System.Drawing.Size(73, 17);
-            this.checkBoxEDDNSync.TabIndex = 23;
-            this.checkBoxEDDNSync.Text = "To EDDN";
-            this.checkBoxEDDNSync.TickBoxReductionSize = 10;
-            this.toolTipEddb.SetToolTip(this.checkBoxEDDNSync, "Send event data (jumps scan dock) to EDDN");
-            this.checkBoxEDDNSync.UseVisualStyleBackColor = true;
             // 
             // TravelHistoryControl
             // 
