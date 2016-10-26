@@ -95,11 +95,12 @@ namespace EDDiscovery2
             dataGridView1.Rows.Clear();
 
             dataGridView1.Columns.Add("Name", "System");
-            dataGridView1.Columns.Add("Vists", "Visits");
+            dataGridView1.Columns.Add("Visits", "Visits");
 
             //nr = _discoveryForm.history.GetFSDJumps(new TimeSpan(10000, 0, 0, 0));
 
             var groupeddata = from data in _discoveryForm.history.OrderByDate
+                              where data.IsFSDJump
                               group data by data.System.name
                                   into grouped
                                   select new
