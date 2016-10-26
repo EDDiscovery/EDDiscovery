@@ -684,6 +684,12 @@ namespace EDDiscovery2
                     MyDgv.ScrollBar.FlatStyle = FlatStyle.Popup;
                 }
 
+                if (myControl.Name.Equals("richTextBox_History"))       // override to off
+                {
+                    MyDgv.BorderStyle = BorderStyle.None;
+                    MyDgv.BorderColor = Color.Transparent;
+                }
+                
                 if (myControl.Font.Name.Contains("Courier"))                  // okay if we ordered a fixed font, don't override
                 {
                     Font fntf = new Font(myControl.Font.Name, currentsettings.fontsize); // make one of the selected size
@@ -691,6 +697,8 @@ namespace EDDiscovery2
                 }
                 else
                     myControl.Font = fnt;
+
+                MyDgv.Invalidate();
             }
             else if (myControl is TextBoxBorder)
             {

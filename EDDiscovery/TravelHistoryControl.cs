@@ -398,6 +398,11 @@ namespace EDDiscovery
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
             ignorewidthchange = true;
+
+            splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
+            splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+            splitContainerRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
+
             if (SQLiteConnectionUser.keyExists("TravelControlDGVCol1"))        // if stored values, set back to what they were..
             {
                 for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
@@ -416,6 +421,10 @@ namespace EDDiscovery
         {
             for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
                 SQLiteDBClass.PutSettingInt("TravelControlDGVCol" + ((i + 1).ToString()), dataGridViewTravel.Columns[i].Width);
+
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
         }
 
         void FillDGVOut()
@@ -461,7 +470,6 @@ namespace EDDiscovery
         {
             ignorewidthchange = true;
             FillDGVOut();
-            System.Diagnostics.Debug.WriteLine("Resize!");
             ignorewidthchange = false;
         }
 
@@ -1536,5 +1544,6 @@ namespace EDDiscovery
         {
 
         }
+
     }
 }
