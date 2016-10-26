@@ -4,6 +4,7 @@ using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,12 +18,12 @@ namespace EDDiscovery
         public string commanderName;
 
         private readonly string fromSoftwareVersion;
-        private readonly string fromSoftware;
+//        private readonly string fromSoftware;
         private readonly string githubServer = "https://api.github.com/repos/EDDiscovery/EDDiscovery/";
 
         public GitHubClass()
         {
-            fromSoftware = "EDDiscovery";
+//            fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
             commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
@@ -49,6 +50,8 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
+                Trace.WriteLine($"Exception: {ex.Message}");
+                Trace.WriteLine($"ETrace: {ex.StackTrace}");
                 return null;
             }
             
@@ -78,6 +81,8 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
+                Trace.WriteLine($"Exception: {ex.Message}");
+                Trace.WriteLine($"ETrace: {ex.StackTrace}");
                 return null;
             }
 
