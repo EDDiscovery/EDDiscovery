@@ -60,11 +60,12 @@
             this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNetLogDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnJournalDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSyncToEDSM = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColumnSyncFromEDSM = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColumnSyncToEddn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColumnDeleted = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColumnNetLogDirOld = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -480,11 +481,12 @@
             this.ColumnNr,
             this.ColumnCommander,
             this.ColumnEDSMAPIKey,
-            this.ColumnNetLogDir,
+            this.ColumnJournalDir,
             this.ColumnSyncToEDSM,
             this.ColumnSyncFromEDSM,
             this.ColumnSyncToEddn,
-            this.ColumnDeleted});
+            this.ColumnDeleted,
+            this.ColumnNetLogDirOld});
             this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 71);
             this.dataGridViewCommanders.MultiSelect = false;
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
@@ -519,13 +521,13 @@
             this.ColumnEDSMAPIKey.MinimumWidth = 150;
             this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
             // 
-            // ColumnNetLogDir
+            // ColumnJournalDir
             // 
-            this.ColumnNetLogDir.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnNetLogDir.DataPropertyName = "NetLogDir";
-            this.ColumnNetLogDir.HeaderText = "Override Journal Location";
-            this.ColumnNetLogDir.MinimumWidth = 50;
-            this.ColumnNetLogDir.Name = "ColumnNetLogDir";
+            this.ColumnJournalDir.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnJournalDir.DataPropertyName = "JournalDir";
+            this.ColumnJournalDir.HeaderText = "Override Journal Location";
+            this.ColumnJournalDir.MinimumWidth = 50;
+            this.ColumnJournalDir.Name = "ColumnJournalDir";
             // 
             // ColumnSyncToEDSM
             // 
@@ -559,6 +561,14 @@
             this.ColumnDeleted.Name = "ColumnDeleted";
             this.ColumnDeleted.ReadOnly = true;
             this.ColumnDeleted.Visible = false;
+            // 
+            // ColumnNetLogDirOld
+            // 
+            this.ColumnNetLogDirOld.DataPropertyName = "NetLogDir";
+            this.ColumnNetLogDirOld.HeaderText = "NetLogDir";
+            this.ColumnNetLogDirOld.Name = "ColumnNetLogDirOld";
+            this.ColumnNetLogDirOld.ReadOnly = true;
+            this.ColumnNetLogDirOld.Visible = false;
             // 
             // Settings
             // 
@@ -615,10 +625,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDir;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnJournalDir;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncToEDSM;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncFromEDSM;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncToEddn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnDeleted;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDirOld;
     }
 }
