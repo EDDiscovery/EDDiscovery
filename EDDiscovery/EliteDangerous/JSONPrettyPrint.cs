@@ -132,7 +132,7 @@ namespace EDDiscovery
                     {                               // VALUE, presume double
                         double v = 0;
 
-                        if (double.TryParse(value, out v))        // if it does parse, we can convert it
+                        if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out v))        // if it does parse, we can convert it
                             value = (v * scale[i]).ToString(format[i]);
                     }
 
