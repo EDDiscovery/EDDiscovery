@@ -60,7 +60,12 @@
             this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNetLogDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnJournalDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSyncToEDSM = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColumnSyncFromEDSM = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColumnSyncToEddn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColumnDeleted = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColumnNetLogDirOld = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -476,7 +481,12 @@
             this.ColumnNr,
             this.ColumnCommander,
             this.ColumnEDSMAPIKey,
-            this.ColumnNetLogDir});
+            this.ColumnJournalDir,
+            this.ColumnSyncToEDSM,
+            this.ColumnSyncFromEDSM,
+            this.ColumnSyncToEddn,
+            this.ColumnDeleted,
+            this.ColumnNetLogDirOld});
             this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 71);
             this.dataGridViewCommanders.MultiSelect = false;
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
@@ -489,12 +499,13 @@
             // 
             this.ColumnNr.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.ColumnNr.DataPropertyName = "Nr";
+            this.ColumnNr.FillWeight = 15F;
             this.ColumnNr.HeaderText = "Nr";
-            this.ColumnNr.MinimumWidth = 50;
+            this.ColumnNr.MinimumWidth = 45;
             this.ColumnNr.Name = "ColumnNr";
             this.ColumnNr.ReadOnly = true;
             this.ColumnNr.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColumnNr.Width = 50;
+            this.ColumnNr.Width = 45;
             // 
             // ColumnCommander
             // 
@@ -510,13 +521,54 @@
             this.ColumnEDSMAPIKey.MinimumWidth = 150;
             this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
             // 
-            // ColumnNetLogDir
+            // ColumnJournalDir
             // 
-            this.ColumnNetLogDir.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnNetLogDir.DataPropertyName = "NetLogDir";
-            this.ColumnNetLogDir.HeaderText = "Override Journal Location";
-            this.ColumnNetLogDir.MinimumWidth = 50;
-            this.ColumnNetLogDir.Name = "ColumnNetLogDir";
+            this.ColumnJournalDir.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnJournalDir.DataPropertyName = "JournalDir";
+            this.ColumnJournalDir.HeaderText = "Override Journal Location";
+            this.ColumnJournalDir.MinimumWidth = 50;
+            this.ColumnJournalDir.Name = "ColumnJournalDir";
+            // 
+            // ColumnSyncToEDSM
+            // 
+            this.ColumnSyncToEDSM.DataPropertyName = "SyncToEDSM";
+            this.ColumnSyncToEDSM.FillWeight = 15F;
+            this.ColumnSyncToEDSM.HeaderText = "Sync to EDSM";
+            this.ColumnSyncToEDSM.MinimumWidth = 45;
+            this.ColumnSyncToEDSM.Name = "ColumnSyncToEDSM";
+            // 
+            // ColumnSyncFromEDSM
+            // 
+            this.ColumnSyncFromEDSM.DataPropertyName = "SyncFromEdsm";
+            this.ColumnSyncFromEDSM.FillWeight = 15F;
+            this.ColumnSyncFromEDSM.HeaderText = "Sync From Edsm";
+            this.ColumnSyncFromEDSM.MinimumWidth = 45;
+            this.ColumnSyncFromEDSM.Name = "ColumnSyncFromEDSM";
+            // 
+            // ColumnSyncToEddn
+            // 
+            this.ColumnSyncToEddn.DataPropertyName = "SyncToEddn";
+            this.ColumnSyncToEddn.FillWeight = 15F;
+            this.ColumnSyncToEddn.HeaderText = "Sync to Eddn";
+            this.ColumnSyncToEddn.MinimumWidth = 45;
+            this.ColumnSyncToEddn.Name = "ColumnSyncToEddn";
+            // 
+            // ColumnDeleted
+            // 
+            this.ColumnDeleted.DataPropertyName = "Deleted";
+            this.ColumnDeleted.FillWeight = 10F;
+            this.ColumnDeleted.HeaderText = "Deleted";
+            this.ColumnDeleted.Name = "ColumnDeleted";
+            this.ColumnDeleted.ReadOnly = true;
+            this.ColumnDeleted.Visible = false;
+            // 
+            // ColumnNetLogDirOld
+            // 
+            this.ColumnNetLogDirOld.DataPropertyName = "NetLogDir";
+            this.ColumnNetLogDirOld.HeaderText = "NetLogDir";
+            this.ColumnNetLogDirOld.Name = "ColumnNetLogDirOld";
+            this.ColumnNetLogDirOld.ReadOnly = true;
+            this.ColumnNetLogDirOld.Visible = false;
             // 
             // Settings
             // 
@@ -569,10 +621,15 @@
         private ExtendedControls.CheckBoxCustom checkBoxKeepOnTop;
         private ExtendedControls.ButtonExt btnDeleteCommander;
         private System.Windows.Forms.Label label1;
+        private ExtendedControls.CheckBoxCustom checkBoxUTC;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDir;
-        private ExtendedControls.CheckBoxCustom checkBoxUTC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnJournalDir;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncToEDSM;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncFromEDSM;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncToEddn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnDeleted;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDirOld;
     }
 }

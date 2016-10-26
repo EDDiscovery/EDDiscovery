@@ -378,27 +378,34 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
-                GitHubClass github = new GitHubClass();
-
-                GitHubRelease rel = github.GetLatestRelease();
-
-                if (rel != null)
+                try
                 {
-                    //string newInstaller = jo["Filename"].Value<string>();
 
-                    var currentVersion = Application.ProductVersion;
+                    GitHubClass github = new GitHubClass();
 
-                    Version v1, v2;
-                    v1 = new Version(rel.ReleaseVersion);
-                    v2 = new Version(currentVersion);
+                    GitHubRelease rel = github.GetLatestRelease();
 
-                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                    if (rel != null)
                     {
-                        newRelease = rel;
-                        this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
-                        this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
+                        //string newInstaller = jo["Filename"].Value<string>();
 
+                        var currentVersion = Application.ProductVersion;
+
+                        Version v1, v2;
+                        v1 = new Version(rel.ReleaseVersion);
+                        v2 = new Version(currentVersion);
+
+                        if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                        {
+                            newRelease = rel;
+                            this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
+                            this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
+
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
 
                 }
             });
@@ -1124,8 +1131,6 @@ namespace EDDiscovery
             travelHistoryControl1.SaveSettings();
             journalViewControl1.SaveSettings();
 
-            SQLiteDBClass.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
-            SQLiteDBClass.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
         }
 
         Thread safeClose;
@@ -1258,7 +1263,7 @@ namespace EDDiscovery
 
                 if (cmdr != null)
                 {
-                    string cmdrfolder = cmdr.NetLogDir;
+                    string cmdrfolder = cmdr.JournalDir;
                     if (cmdrfolder.Length < 1)
                         cmdrfolder = EliteDangerous.EDJournalClass.GetDefaultJournalDir();
                     Process.Start(cmdrfolder);
@@ -1452,29 +1457,67 @@ namespace EDDiscovery
         private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             adminToolStripMenuItem.DropDown.Close();
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
+            if (DisplayedCommander >= 0)
             {
-                string logpath = dirdlg.SelectedPath;
-                //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false);
+                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
+                if (cmdr != null)
+                {
+                    string netlogpath = cmdr.NetLogDir;
+                    FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+                    if (netlogpath != null && Directory.Exists(netlogpath))
+                    {
+                        dirdlg.SelectedPath = netlogpath;
+                    }
+
+                    DialogResult dlgResult = dirdlg.ShowDialog();
+
+                    if (dlgResult == DialogResult.OK)
+                    {
+                        string logpath = dirdlg.SelectedPath;
+
+                        if (logpath != netlogpath)
+                        {
+                            cmdr.NetLogDir = logpath;
+                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr });
+                        }
+
+                        //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
+                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false, currentcmdr: cmdr.Nr);
+                    }
+                }
             }
         }
 
         private void read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
+            if (DisplayedCommander >= 0)
             {
-                string logpath = dirdlg.SelectedPath;
-                //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true);
+                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
+                if (cmdr != null)
+                {
+                    string netlogpath = cmdr.NetLogDir;
+                    FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+                    if (netlogpath != null && Directory.Exists(netlogpath))
+                    {
+                        dirdlg.SelectedPath = netlogpath;
+                    }
+
+                    DialogResult dlgResult = dirdlg.ShowDialog();
+
+                    if (dlgResult == DialogResult.OK)
+                    {
+                        string logpath = dirdlg.SelectedPath;
+
+                        if (logpath != netlogpath)
+                        {
+                            cmdr.NetLogDir = logpath;
+                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr });
+                        }
+
+                        //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
+                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true, currentcmdr: cmdr.Nr);
+                    }
+                }
             }
         }
 
@@ -1497,6 +1540,8 @@ namespace EDDiscovery
         {
             public string NetLogPath;
             public bool ForceNetLogReload;
+            public bool CheckEdsm;
+            public int CurrentCommander;
         }
 
         protected class RefreshWorkerResults
@@ -1505,7 +1550,7 @@ namespace EDDiscovery
             public MaterialCommoditiesLedger retledger;
         }
 
-        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false)
+        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool checkedsm = false, int? currentcmdr = null)
         {
             if (PendingClose)
             {
@@ -1522,7 +1567,9 @@ namespace EDDiscovery
                 RefreshWorkerArgs args = new RefreshWorkerArgs
                 {
                     NetLogPath = netlogpath,
-                    ForceNetLogReload = forcenetlogreload
+                    ForceNetLogReload = forcenetlogreload,
+                    CheckEdsm = checkedsm,
+                    CurrentCommander = currentcmdr ?? DisplayedCommander
                 };
                 _refreshWorker.RunWorkerAsync(args);
             }
@@ -1541,7 +1588,7 @@ namespace EDDiscovery
             List<HistoryEntry> history = new List<HistoryEntry>();
             MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
 
-            if (DisplayedCommander >= 0)
+            if (args.CurrentCommander >= 0)
             {
                 journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
 
@@ -1550,7 +1597,7 @@ namespace EDDiscovery
                     if (args.NetLogPath != null)
                     {
                         string errstr = null;
-                        NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload);
+                        NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload, currentcmdrid: args.CurrentCommander);
                     }
                 }
             }
@@ -1568,7 +1615,7 @@ namespace EDDiscovery
                 foreach (EliteDangerous.JournalEntry je in jlist)
                 {
                     bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, true, out journalupdate, conn);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn);
                     prev = he;
 
                     history.Add(he);                        // add to the history list here..

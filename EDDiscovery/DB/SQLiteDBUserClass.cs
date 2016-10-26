@@ -62,8 +62,14 @@ namespace EDDiscovery.DB
                 if (dbver < 106)
                     UpgradeUserDB106(conn);
 
-                if (dbver < 120)
-                    UpgradeUserDB120(conn);
+                if (dbver < 107)
+                    UpgradeUserDB107(conn);
+
+                if (dbver < 108)
+                    UpgradeUserDB108(conn);
+
+                if (dbver < 109)
+                    UpgradeUserDB109(conn);
 
                 CreateUserDBTableIndexes();
 
@@ -209,8 +215,65 @@ namespace EDDiscovery.DB
         }
 
 
-// TBD - clash - need to merge first
-        private static void UpgradeUserDB120(SQLiteConnectionUser conn)
+        private static void UpgradeUserDB107(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN SyncToEdsm INTEGER NOT NULL DEFAULT 1";
+            string query2 = "ALTER TABLE Commanders ADD COLUMN SyncFromEdsm INTEGER NOT NULL DEFAULT 0";
+            string query3 = "ALTER TABLE Commanders ADD COLUMN SyncToEddn INTEGER NOT NULL DEFAULT 1";
+            SQLiteDBClass.PerformUpgrade(conn, 107, true, false, new[] { query1, query2, query3});
+        }
+
+        private static void UpgradeUserDB108(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN JournalDir TEXT";
+            SQLiteDBClass.PerformUpgrade(conn, 108, true, false, new[] { query1 }, () =>
+            {
+                try
+                {
+                    List<int> commandersToMigrate = new List<int>();
+                    using (DbCommand cmd = conn.CreateCommand("SELECT Id, NetLogDir, JournalDir FROM Commanders"))
+                    {
+                        using (DbDataReader rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                int nr = Convert.ToInt32(rdr["Id"]);
+                                object netlogdir = rdr["NetLogDir"];
+                                object journaldir = rdr["JournalDir"];
+
+                                if (netlogdir != DBNull.Value && journaldir == DBNull.Value)
+                                {
+                                    string logdir = Convert.ToString(netlogdir);
+
+                                    if (logdir != null && System.IO.Directory.Exists(logdir) && System.IO.Directory.EnumerateFiles(logdir, "journal*.log").Any())
+                                    {
+                                        commandersToMigrate.Add(nr);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    using (DbCommand cmd2 = conn.CreateCommand("UPDATE Commanders SET JournalDir=NetLogDir WHERE Id=@Nr"))
+                    {
+                        cmd2.AddParameter("@Nr", System.Data.DbType.Int32);
+
+                        foreach (int nr in commandersToMigrate)
+                        {
+                            cmd2.Parameters["@Nr"].Value = nr;
+                            cmd2.ExecuteNonQuery();
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine("UpgradeUser108 exception: " + ex.Message);
+                }
+            });
+        }
+
+        private static void UpgradeUserDB109(SQLiteConnectionUser conn)
         {
             string query1 = "CREATE TABLE MaterialsCommodities ( " +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -220,7 +283,7 @@ namespace EDDiscovery.DB
                 "UNIQUE(Category,Name)" +
                 ") ";
 
-            SQLiteDBClass.PerformUpgrade(conn, 120, true, false, new[] { query1 });
+            SQLiteDBClass.PerformUpgrade(conn, 109, true, false, new[] { query1 });
             EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
         }
 
@@ -323,8 +386,35 @@ namespace EDDiscovery.DB
                     }
                 }
 
-                                                               // 0    1    2    3         4         5          6 7 8 9
-                using (DbCommand cmd = conn.CreateCommand("Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z,id_edsm_assigned From VisitedSystems Order By Time"))
+                int olddbver = SQLiteConnectionOld.GetSettingInt("DBVer", 1);
+
+                if (olddbver < 7) // 2.5.2
+                {
+                    System.Diagnostics.Trace.WriteLine("Database too old - unable to migrate travel log");
+                    return;
+                }
+
+                string query;
+
+                if (olddbver < 8) // 2.5.6
+                {
+                    query = "Select Name,Time,Unit,Commander,edsm_sync, -65536 AS Map_colour, NULL AS X, NULL AS Y, NULL AS Z, NULL as id_edsm_assigned From VisitedSystems Order By Time";
+                }
+                else if (olddbver < 14) // 3.2.1
+                {
+                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour, NULL AS X, NULL AS Y, NULL AS Z, NULL as id_edsm_assigned From VisitedSystems Order By Time";
+                }
+                else if (olddbver < 18) // 4.0.2
+                {
+                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z, NULL AS id_edsm_assigned From VisitedSystems Order By Time";
+                }
+                else
+                {
+                    //              0    1    2    3         4         5          6 7 8 9
+                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z,id_edsm_assigned From VisitedSystems Order By Time";
+                }
+
+                using (DbCommand cmd = conn.CreateCommand(query))
                 {
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
