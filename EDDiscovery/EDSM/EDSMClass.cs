@@ -39,7 +39,7 @@ namespace EDDiscovery2.EDSM
             EDSMDistancesFileName = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
             apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
         }
 
         static string edsm_server_address = "https://www.edsm.net/";
