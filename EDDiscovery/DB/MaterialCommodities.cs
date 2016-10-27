@@ -69,7 +69,7 @@ namespace EDDiscovery2.DB
                 cmd.AddParameterWithValue("@type", type);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from MaterialsCommodities"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
