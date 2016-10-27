@@ -33,7 +33,7 @@ namespace EDDiscovery
             FreezeTrilaterationUI();
             edsm = new EDSMClass();
             edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
             SetTriStatus("Press Start New");
         }
         
@@ -438,12 +438,12 @@ namespace EDDiscovery
             try
             {
                 edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
 
                 var travelHistoryControl = _discoveryForm.TravelControl;
                 if (string.IsNullOrEmpty(edsm.commanderName))
                 {
-                    string commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+                    string commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
 
                     if (string.IsNullOrEmpty(commanderName))
                     {
