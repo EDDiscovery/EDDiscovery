@@ -42,29 +42,31 @@ namespace EDDiscovery.EDSM
 
             try
             {
+                JArray coords = (JArray)jo["coordinates"];
 
-                if (type.Equals("regionQuadrants") || type.Equals("region") || type.Equals("travelRoute") || type.Equals("historicalRoute") || type.Equals("minorRoute"))
+                if (coords.Count > 0)
                 {
-                    JArray coords = (JArray)jo["coordinates"];
-
-                    foreach (JArray ja in coords)
+                    if (coords[0].Type == JTokenType.Array)
                     {
+                        foreach (JArray ja in coords)
+                        {
+                            float x, y, z;
+                            x = ja[0].Value<float>();
+                            y = ja[1].Value<float>();
+                            z = ja[2].Value<float>();
+                            points.Add(new Vector3(x, y, z));
+                        }
+                    }
+                    else
+                    {
+                        JArray plist = coords;
+
                         float x, y, z;
-                        x = ja[0].Value<float>();
-                        y = ja[1].Value<float>();
-                        z = ja[2].Value<float>();
+                        x = plist[0].Value<float>();
+                        y = plist[1].Value<float>();
+                        z = plist[2].Value<float>();
                         points.Add(new Vector3(x, y, z));
                     }
-                }
-                else
-                {
-                    JArray plist = (JArray)jo["coordinates"];
-
-                    float x, y, z;
-                    x = plist[0].Value<float>();
-                    y = plist[1].Value<float>();
-                    z = plist[2].Value<float>();
-                    points.Add(new Vector3(x, y, z));
                 }
             }
             catch (Exception ex)
