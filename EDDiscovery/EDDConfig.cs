@@ -142,7 +142,7 @@ namespace EDDiscovery2
         {
             get
             {
-                return CurrentCmdrID >= 0 && CurrentCommander.Name.Length > 0 && CurrentCommander.APIKey.Length > 0;
+                return CurrentCmdrID >= 0 && CurrentCommander.EdsmName.Length > 0 && CurrentCommander.APIKey.Length > 0;
             }
         }
 
