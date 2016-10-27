@@ -401,6 +401,7 @@ namespace EDDiscovery.DB
                             if (reader.Read())
                             {
                                 sys.name = (string)reader["Name"];
+                                sys.SearchName = sys.name.ToLower();
                             }
                         }
                     }
