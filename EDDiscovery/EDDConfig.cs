@@ -142,7 +142,7 @@ namespace EDDiscovery2
         {
             get
             {
-                return CurrentCmdrID >= 0 && CurrentCommander.Name.Length > 0 && CurrentCommander.APIKey.Length > 0;
+                return CurrentCmdrID >= 0 && CurrentCommander.EdsmName.Length > 0 && CurrentCommander.APIKey.Length > 0;
             }
         }
 
@@ -367,10 +367,11 @@ namespace EDDiscovery2
 
                     if (maxnr == -1)        // migrate from really old code
                     {
-                        using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmApiKey, NetLogDir, Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Id, @Name, @EdsmApiKey, @NetLogDir, @Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
+                        using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmName, EdsmApiKey, NetLogDir, Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Id, @Name, @EdsmName, @EdsmApiKey, @NetLogDir, @Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
                         {
                             cmd.AddParameter("@Id", DbType.Int32);
                             cmd.AddParameter("@Name", DbType.String);
+                            cmd.AddParameter("@EdsmName", DbType.String);
                             cmd.AddParameter("@EdsmApiKey", DbType.String);
                             cmd.AddParameter("@NetLogDir", DbType.String);
                             cmd.AddParameter("@Deleted", DbType.Boolean);
@@ -395,6 +396,7 @@ namespace EDDiscovery2
                                 {
                                     cmd.Parameters["@Id"].Value = cmdr.Nr;
                                     cmd.Parameters["@Name"].Value = cmdr.Name;
+                                    cmd.Parameters["@EdsmName"].Value = cmdr.EdsmName;
                                     cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
                                     cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
                                     cmd.Parameters["@Deleted"].Value = deleted;
@@ -420,10 +422,11 @@ namespace EDDiscovery2
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn WHERE Id=@Id"))
+                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn WHERE Id=@Id"))
                 {
                     cmd.AddParameter("@Id", DbType.Int32);
                     cmd.AddParameter("@Name", DbType.String);
+                    cmd.AddParameter("@EdsmName", DbType.String);
                     cmd.AddParameter("@EdsmApiKey", DbType.String);
                     cmd.AddParameter("@NetLogDir", DbType.String);
                     cmd.AddParameter("@JournalDir", DbType.String);
@@ -435,6 +438,7 @@ namespace EDDiscovery2
                     {
                         cmd.Parameters["@Id"].Value = edcmdr.Nr;
                         cmd.Parameters["@Name"].Value = edcmdr.Name;
+                        cmd.Parameters["@EdsmName"].Value = edcmdr.EdsmName;
                         cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
                         cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "";
                         cmd.Parameters["@JournalDir"].Value = edcmdr.JournalDir != null ? edcmdr.JournalDir : "";
@@ -450,15 +454,16 @@ namespace EDDiscovery2
         }
 
 
-        public EDCommander GetNewCommander(string name = null, string edsmApiKey = null, string journalpath = null)
+        public EDCommander GetNewCommander(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null)
         {
             EDCommander cmdr;
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Name,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
                 {
                     cmd.AddParameterWithValue("@Name", name ?? "");
+                    cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
                     cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
                     cmd.AddParameterWithValue("@JournalDir", journalpath ?? "");
                     cmd.AddParameterWithValue("@Deleted", false);
