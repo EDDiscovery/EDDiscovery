@@ -11,6 +11,7 @@ namespace EDDiscovery2
         private int nr;
         private bool deleted;
         private string name;
+        private string edsmname;
         private string apikey;
         private string netLogDir;
         private string journalDir;
@@ -23,6 +24,7 @@ namespace EDDiscovery2
         {
             nr = Convert.ToInt32(reader["Id"]);
             name = Convert.ToString(reader["Name"]);
+            edsmname = Convert.ToString(reader["EDSMName"]) ?? name;
             apikey = Convert.ToString(reader["EdsmApiKey"]);
             deleted = Convert.ToBoolean(reader["Deleted"]);
             netLogDir = Convert.ToString(reader["NetLogDir"]);
@@ -34,10 +36,11 @@ namespace EDDiscovery2
 
         }
 
-        public EDCommander(int id, string Name, string APIKey, bool SyncToEDSM, bool SyncFromEdsm, bool SyncToEddn)
+        public EDCommander(int id, string Name, string APIKey, bool SyncToEDSM, bool SyncFromEdsm, bool SyncToEddn, string edsmName = null)
         {
             this.nr = id;
             this.name = Name;
+            this.edsmname = edsmName ?? Name;
             this.apikey = APIKey;
             this.syncToEdsm = SyncToEDSM;
             this.syncFromEdsm = SyncFromEdsm;
@@ -67,6 +70,18 @@ namespace EDDiscovery2
             set
             {
                 name = value;
+            }
+        }
+
+        public string EdsmName
+        {
+            get
+            {
+                return edsmname;
+            }
+            set
+            {
+                edsmname = value;
             }
         }
 
