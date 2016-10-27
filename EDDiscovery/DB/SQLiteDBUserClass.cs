@@ -71,6 +71,9 @@ namespace EDDiscovery.DB
                 if (dbver < 109)
                     UpgradeUserDB109(conn);
 
+                if (dbver < 110)
+                    UpgradeUserDB110(conn);
+
                 CreateUserDBTableIndexes();
 
                 return true;
@@ -285,6 +288,13 @@ namespace EDDiscovery.DB
 
             SQLiteDBClass.PerformUpgrade(conn, 109, true, false, new[] { query1 });
             EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
+        }
+
+        private static void UpgradeUserDB110(SQLiteConnectionUser conn)
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN EdsmName TEXT";
+            string query2 = "ALTER TABLE MaterialsCommodities ADD COLUMN ShortName TEXT NOT NULL COLLATE NOCASE";
+            SQLiteDBClass.PerformUpgrade(conn, 110, true, false, new[] { query1, query2 });
         }
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)
