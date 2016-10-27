@@ -293,7 +293,7 @@ namespace EDDiscovery.DB
         private static void UpgradeUserDB110(SQLiteConnectionUser conn)
         {
             string query1 = "ALTER TABLE Commanders ADD COLUMN EdsmName TEXT";
-            string query2 = "ALTER TABLE MaterialsCommodities ADD COLUMN ShortName TEXT NOT NULL COLLATE NOCASE";
+            string query2 = "ALTER TABLE MaterialsCommodities ADD COLUMN ShortName TEXT NOT NULL COLLATE NOCASE DEFAULT ''";
             SQLiteDBClass.PerformUpgrade(conn, 110, true, false, new[] { query1, query2 });
         }
 
