@@ -26,7 +26,7 @@ namespace EDDiscovery
 //            fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
-            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
 
             _serverAddress = githubServer;
         }

@@ -98,7 +98,7 @@ namespace EDDiscovery2.HTTP
                                             string action, 
                                             Func<string, string, NameValueCollection, bool, ResponseData> requestMethod)
         {
-            var commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+            var commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
             JObject jo = JObject.Parse(json);
             jo["user"] = HttpUtility.UrlEncode(commanderName);
             json = jo.ToString();
