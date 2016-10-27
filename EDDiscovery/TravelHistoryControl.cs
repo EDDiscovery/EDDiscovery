@@ -36,11 +36,6 @@ namespace EDDiscovery
             public const int NoteTag = Note;
         }
 
-        public class ClosestSystemsColumns
-        {
-            public const int SystemName = 0;
-        }
-
         private const string SingleCoordinateFormat = "0.##";
 
         private const int DefaultRowHeight = 26;
@@ -51,10 +46,13 @@ namespace EDDiscovery
         SummaryPopOut summaryPopOut = null;
         List<EDCommander> commanders = null;
 
+        TabControlFormList tabcontrolsforms;
+
+        string lastclosestname;
+        SortedList<double, ISystem> lastclosestsystems;
+
         EventFilterSelector cfs = new EventFilterSelector();
 
-        private bool ShutdownEDD = false;
-        
         public HistoryEntry CurrentSystemSelected
         {
             get
@@ -65,6 +63,8 @@ namespace EDDiscovery
             }
         }
 
+        #region Initialisation
+
         public TravelHistoryControl()
         {
             InitializeComponent();
@@ -74,20 +74,105 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
 
-            
+            tabcontrolsforms = new TabControlFormList();
+
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, "EDUIHistory");
             richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
 
             LoadCommandersListBox();
 
-            closestthread = new Thread(CalculateClosestSystems) { Name = "Closest Calc", IsBackground = true };
-            closestthread.Start();
+            // This one is the master computer of star distances, the other windows just use its results..
+            UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlCustomBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
+            primaryucsd.Init(_discoveryForm);
+            primaryucsd.OnNewStarList += NewStarListComputed;
+            primaryucsd.StartComputeThread();
+
+            // Secondary star list.. the compute engine is not used in this one
+            UserControls.UserControlStarDistance secondaryuscd = (UserControls.UserControlStarDistance)tabControlBottom.TabPages["tabPageBottomStarList"].Controls[0];
+            secondaryuscd.Init(_discoveryForm);
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
 
             cfs.Changed += EventFilterChanged;
+
+            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.star);           // DONT use the dialog method, add it programatically, since we can't point at resources using the dialog
+            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.Log);
+        }
+
+        private void panel_topright_Resize(object sender, EventArgs e)
+        {
+            // Move controls around on topright
+
+            int width = panel_topright.Width;
+            int butoffset = buttonMap.Location.X - buttonMap2D.Location.X;
+            int edsmsize = buttonSync.Width;
+            int newxpos = buttonExtSummaryPopOut.Location.X + butoffset;
+
+            Point pos;
+            if (width >= newxpos + edsmsize + 4)
+                pos = new Point(newxpos, buttonExtSummaryPopOut.Location.Y);
+            else
+                pos = new Point(buttonMap2D.Location.X, buttonMap2D.Location.Y + 30);
+
+            buttonSync.Location = pos;
+            panel_topright.Size = new Size(panel_topright.Width, pos.Y + buttonSync.Height + 6);
+
+            // now do this in topright, because its moving around the lower panes. Works in here because topright won't be resized.
+
+            int rossright = buttonRoss.Location.X + buttonRoss.Width;       // from the system panel, far right part
+
+            if (width > rossright + 100)                                    // enough space to more to the right of topright panel?
+                panel_system.Dock = DockStyle.Left;
+            else
+                panel_system.Dock = DockStyle.Top;
+
+            panel_system.Size = new Size(rossright + 4, textBoxGovernment.Location.Y + textBoxGovernment.Height + 6);
+
+            panelTarget.Width = panelNoteArea.Width = width - panel_system.Width;   // and size the target and note panels to..
+        }
+
+        private void panelNoteArea_Resize(object sender, EventArgs e)
+        {
+            int width = panelNoteArea.Width;
+
+            if (width > 300)                              // can we fit onto one line?
+            {
+                labelNote.Location = new Point(2, 2);
+                richTextBoxNote.Location = new Point(labelNote.Location.X + labelNote.Width + 6, labelNote.Location.Y);
+                richTextBoxNote.Width = width - richTextBoxNote.Location.X - 4;
+            }
+            else
+            {
+                labelNote.Location = new Point(2, 2);
+                richTextBoxNote.Location = new Point(2, labelNote.Location.Y + labelNote.Height + 4);
+                richTextBoxNote.Width = width - 4;
+            }
+
+            panelNoteArea.Height = richTextBoxNote.Location.Y + richTextBoxNote.Height + 6;
+        }
+
+        private void panelTarget_Resize(object sender, EventArgs e)
+        {
+            int width = panelTarget.Width;
+
+            if (width > 200)                            // can we fit onto one line?
+            {
+                labelTarget.Location = new Point(2, 2);
+                textBoxTarget.Location = new Point(labelTarget.Location.X + labelTarget.Width + 6, labelTarget.Location.Y);
+                textBoxTarget.Width = width - textBoxTarget.Location.X - 16 - textBoxTargetDist.Width;
+                textBoxTargetDist.Location = new Point(textBoxTarget.Location.X + textBoxTarget.Width + 8, labelTarget.Location.Y);
+            }
+            else
+            {
+                labelNote.Location = new Point(2, 2);
+                textBoxTarget.Location = new Point(2, labelNote.Location.Y + labelNote.Height + 8);
+                textBoxTarget.Width = width - 4;
+                textBoxTargetDist.Location = new Point(2, textBoxTarget.Location.Y + textBoxTarget.Height + 8);
+            }
+
+            panelTarget.Height = textBoxTargetDist.Location.Y + textBoxTargetDist.Height + 6;
         }
 
         private void TravelHistoryControl_Load(object sender, EventArgs e)
@@ -95,6 +180,34 @@ namespace EDDiscovery
             dataGridViewTravel.MakeDoubleBuffered();
             dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
         }
+
+        #endregion
+
+        #region New Stars
+
+        private void NewStarListComputed(string name, SortedList<double, ISystem> csl)
+        {
+            lastclosestname = name;
+            lastclosestsystems = csl;
+            UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlCustomBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
+            primaryucsd.FillGrid(name, csl);
+
+            UserControls.UserControlStarDistance secondaryuscd = (UserControls.UserControlStarDistance)tabControlBottom.TabPages["tabPageBottomStarList"].Controls[0];
+            secondaryuscd.FillGrid(name, csl);
+
+            List<UserControl> lc = tabcontrolsforms.GetListOfControls(typeof(UserControls.UserControlStarDistance));
+            foreach (UserControl uc in lc)
+                ((UserControls.UserControlStarDistance)uc).FillGrid(name, csl);
+        }
+
+        public void CloseClosestSystemThread()
+        {
+            ((UserControls.UserControlStarDistance)(tabControlCustomBottomRight.TabPages[0].Controls[0])).StopComputeThread();
+        }
+
+        #endregion
+
+        #region Display history
 
         public void Display()
         {
@@ -294,7 +407,7 @@ namespace EDDiscovery
                 textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
                 richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
 
-                closestsystem_queue.Add(syspos.System);
+                ((UserControls.UserControlStarDistance)(tabControlCustomBottomRight.TabPages[0].Controls[0])).Add(syspos.System);
             }
         }
 
@@ -308,90 +421,8 @@ namespace EDDiscovery
             return str.Replace("_", " ");
         }
 
-        #region Closest System
-
-        public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
-        {
-            public int Compare(TKey x, TKey y)
-            {
-                int result = x.CompareTo(y);
-                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
-            }
-        }
-
-        Thread closestthread;
-        BlockingCollection<ISystem> closestsystem_queue = new BlockingCollection<ISystem>();
-        SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
-
-        private void CalculateClosestSystems()
-        {
-            ISystem vsc;
-
-            while ( true )
-            {
-                ISystem nextsys = null;
-                ISystem cursys = null;
-                cursys = closestsystem_queue.Take();           // block until got one..
-
-                closestsystemlist.Clear();
-
-                do
-                {
-                    vsc = cursys;
-
-                    if (ShutdownEDD)
-                        return;
-
-                    while (closestsystem_queue.TryTake(out nextsys))    // try and empty the queue in case multiple ones are there
-                    {
-                        //Console.WriteLine("Chuck " + closestname);
-                        vsc = nextsys;
-
-                        if (ShutdownEDD)
-                            return;
-                    }
-
-                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, vsc.x, vsc.y, vsc.z, 50, true, 1000);
-
-                    Invoke((MethodInvoker)delegate      // being paranoid about threads..
-                    {
-                        _discoveryForm.history.CalculateSqDistances(closestsystemlist, vsc.x, vsc.y, vsc.z, 50, true);
-                    });
-
-                    cursys = vsc;
-                } while (closestsystem_queue.TryTake(out vsc));     // if there is another one there, just re-run (slow down doggy!)
-
-                Invoke((MethodInvoker)delegate
-                {
-//TBD                    labelclosests.Text = "";
-                    dataGridViewNearest.Rows.Clear();
-
-                    if (closestsystemlist.Count() > 0)
-                    {
-                        //TBD labelclosests.Text = "Closest systems from " + cursys.name;
-                        foreach (KeyValuePair<double, ISystem> tvp in closestsystemlist)
-                        {
-                            object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
-                            int rowindex = dataGridViewNearest.Rows.Add(rowobj);
-                            dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
-                        }
-                    }
-                });
-            }
-        }
-
-        public void CloseClosestSystemThread()
-        {
-            if (closestthread != null && closestthread.IsAlive)
-            {
-                ShutdownEDD = true;
-                closestsystem_queue.Add(null);
-                closestthread.Join();
-
-            }
-        }
-
         #endregion
+
 
         #region Grid Layout
 
@@ -486,6 +517,7 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Clicks
 
         public void CheckCommandersListBox()
         {
@@ -686,70 +718,29 @@ namespace EDDiscovery
             }
         }
 
-        private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        private void buttonExtTabControls_Click(object sender, EventArgs e)
         {
-            DataGridView grid = sender as DataGridView;
-            PaintEventColumn(grid, e ,
-                            _discoveryForm.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag ,
-                            grid.RowHeadersWidth + grid.Columns[0].Width , grid.Columns[1].Width , true);
+            TabControlForm tcf = tabcontrolsforms.NewForm();
+
+            tcf.AddImage(EDDiscovery.Properties.Resources.star);
+            tcf.AddImage(EDDiscovery.Properties.Resources.Log);
+
+            tcf.SetBorder(_discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost);
+
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
+            tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+
+            UserControls.UserControlStarDistance ucsd = new UserControls.UserControlStarDistance(); // Add a closest distance tab
+            tcf.AddUserControlTab(ucsd, "", 0);
+            if (lastclosestsystems != null)           // if we have some, fill in this grid
+                ucsd.FillGrid(lastclosestname, lastclosestsystems);
+
+            _discoveryForm.theme.ApplyColors(tcf);
+
+            tcf.Show();
         }
 
-        public static void PaintEventColumn( DataGridView grid, DataGridViewRowPostPaintEventArgs e, 
-                                             int totalentries, HistoryEntry he , 
-                                             int hpos, int colwidth , bool showfsdmapcolour )
-        {
-            string rowIdx; 
-
-            if (_discoveryForm.settings.OrderRowsInverted)
-                 rowIdx = he.Indexno.ToString();            // oldest has the highest index
-            else
-                rowIdx = (totalentries - he.Indexno + 1).ToString();
-
-            var centerFormat = new StringFormat()
-            {
-                // right alignment might actually make more sense for numbers
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center
-            };
-
-            var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
-
-            using ( Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-                e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br , headerBounds, centerFormat);
-
-            int noicons = (he.IsFSDJump && showfsdmapcolour) ? 2 : 1;
-            if (he.StartMarker || he.StopMarker)
-                noicons++;
-
-            int padding = 4;
-            int size = 24;
-
-            if (size * noicons > (colwidth-2))
-                size = (colwidth-2) / noicons;
-
-            int hstart = (hpos + colwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
-
-            int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
-
-            e.Graphics.DrawImage(he.GetIcon, new Rectangle(hstart, top, size, size));
-            hstart += size + padding;
-
-            if (he.IsFSDJump && showfsdmapcolour)
-            {
-                using (Brush b = new SolidBrush(Color.FromArgb(he.MapColour)))
-                {
-                    e.Graphics.FillEllipse(b, new Rectangle(hstart+2, top+2, size-6, size-6));
-                }
-
-                hstart += size + padding;
-            }
-
-            if (he.StartMarker)
-                e.Graphics.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(hstart, top, size, size));
-            else if (he.StopMarker)
-                e.Graphics.DrawImage(EDDiscovery.Properties.Resources.stopflag, new Rectangle(hstart, top, size, size));
-
-        }
+        #endregion
 
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
@@ -978,50 +969,78 @@ namespace EDDiscovery
             ToggleSummaryPopOut();
         }
 
-#endregion
+        #endregion
 
-#region ClosestSystemRightClick
+        #region Row Paint
 
-        private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
-
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
-                                                                        .Select(cell => cell.OwningRow)
-                                                                        .Distinct()
-                                                                        .OrderBy(cell => cell.Index);
-
-            this.Cursor = Cursors.WaitCursor;
-            string sysName = "";
-            foreach (DataGridViewRow r in selectedRows)
-            {
-                sysName = r.Cells[ClosestSystemsColumns.SystemName].Value.ToString();
-
-                tctrl.AddSystemToDataGridViewDistances(sysName);
-            }
-
-            this.Cursor = Cursors.Default;
+            DataGridView grid = sender as DataGridView;
+            PaintEventColumn(grid, e,
+                            _discoveryForm.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag,
+                            grid.RowHeadersWidth + grid.Columns[0].Width, grid.Columns[1].Width, true);
         }
 
-        private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
+        public static void PaintEventColumn(DataGridView grid, DataGridViewRowPostPaintEventArgs e,
+                                             int totalentries, HistoryEntry he,
+                                             int hpos, int colwidth, bool showfsdmapcolour)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
-                                                                        .Select(cell => cell.OwningRow)
-                                                                        .Distinct()
-                                                                        .OrderBy(cell => cell.Index);
+            string rowIdx;
 
-            this.Cursor = Cursors.WaitCursor;
-            ISystem system = (ISystem)selectedRows.First<DataGridViewRow>().Tag;
-            EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(system.name, system.id_edsm))
-                LogLineHighlight("System could not be found - has not been synched or EDSM is unavailable");
+            if (_discoveryForm.settings.OrderRowsInverted)
+                rowIdx = he.Indexno.ToString();            // oldest has the highest index
+            else
+                rowIdx = (totalentries - he.Indexno + 1).ToString();
 
-            this.Cursor = Cursors.Default;
+            var centerFormat = new StringFormat()
+            {
+                // right alignment might actually make more sense for numbers
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+
+            var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
+
+            using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+                e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
+
+            int noicons = (he.IsFSDJump && showfsdmapcolour) ? 2 : 1;
+            if (he.StartMarker || he.StopMarker)
+                noicons++;
+
+            int padding = 4;
+            int size = 24;
+
+            if (size * noicons > (colwidth - 2))
+                size = (colwidth - 2) / noicons;
+
+            int hstart = (hpos + colwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
+
+            int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
+
+            e.Graphics.DrawImage(he.GetIcon, new Rectangle(hstart, top, size, size));
+            hstart += size + padding;
+
+            if (he.IsFSDJump && showfsdmapcolour)
+            {
+                using (Brush b = new SolidBrush(Color.FromArgb(he.MapColour)))
+                {
+                    e.Graphics.FillEllipse(b, new Rectangle(hstart + 2, top + 2, size - 6, size - 6));
+                }
+
+                hstart += size + padding;
+            }
+
+            if (he.StartMarker)
+                e.Graphics.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(hstart, top, size, size));
+            else if (he.StopMarker)
+                e.Graphics.DrawImage(EDDiscovery.Properties.Resources.stopflag, new Rectangle(hstart, top, size, size));
+
         }
 
         #endregion
 
-        #region CLicks
+        #region Left/Right CLicks
 
         HistoryEntry rightclicksystem = null;
         int rightclickrow = -1;
@@ -1449,74 +1468,6 @@ namespace EDDiscovery
 
         #endregion
 
-        private void eDDNTestToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Cursor = Cursors.WaitCursor;
-            EDDNClass eddn = new EDDNClass();
-            var id = rightclicksystem.Journalid;
-
-            JournalEntry je = JournalEntry.Get(id);
-            JObject msg = null;
-
-            if (je.EventTypeID == JournalTypeEnum.FSDJump)
-            {
-                msg = eddn.CreateEDDNMessage(je as JournalFSDJump);
-
-            }
-            else if (je.EventTypeID == JournalTypeEnum.Docked)
-            {
-                msg = eddn.CreateEDDNMessage(je as JournalDocked, rightclicksystem.System.x, rightclicksystem.System.y, rightclicksystem.System.z);
-            }
-            else if (je.EventTypeID == JournalTypeEnum.Scan)
-            {
-                msg = eddn.CreateEDDNMessage(je as JournalScan, rightclicksystem.System.name, rightclicksystem.System.x, rightclicksystem.System.y, rightclicksystem.System.z);
-            }
-
-            if (msg != null)
-            {
-                eddn.PostMessage(msg);
-            }
-
-            //long? id_edsm = rightclicksystem.System?.id_edsm;
-
-            //if (id_edsm == 0)
-            //{
-            //    id_edsm = null;
-            //}
-
-            //if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-            //    LogLineHighlight("System could not be found - has not been synched or EDSM is unavailable");
-
-            this.Cursor = Cursors.Default;
-        }
-
-        private void buttonExport_Click(object sender, EventArgs e)
-        {
-            ExportScan export = new ExportScan();
-
-            SaveFileDialog dlg = new SaveFileDialog();
-
-            dlg.Filter = "CSV export| *.csv";
-            dlg.Title = "Export scan data to Excel (csv)";
-
-            var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
-
-            List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
-
-            List<JournalEntry> scans = new List<JournalEntry>();
-
-            scans = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                export.GetData(_discoveryForm);
-                export.ToCSV(dlg.FileName);
-                Process.Start(dlg.FileName);
-            }
-
-
-        }
-
         Tuple<long, int> CurrentGridPosByJID()
         {
             long jid = (dataGridViewTravel.CurrentCell != null) ? ((HistoryEntry)(dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag)).Journalid : 0;
@@ -1539,11 +1490,5 @@ namespace EDDiscovery
 
             return -1;
         }
-
-        private void comboBoxCommander_Click(object sender, EventArgs e)
-        {
-
-        }
-
     }
 }

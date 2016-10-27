@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -45,7 +44,6 @@
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
-            this.label2 = new System.Windows.Forms.Label();
             this.panel_system = new System.Windows.Forms.Panel();
             this.buttonEDSM = new ExtendedControls.DrawnPanel();
             this.label14 = new System.Windows.Forms.Label();
@@ -62,37 +60,33 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.textBoxVisits = new ExtendedControls.TextBoxBorder();
-            this.label8 = new System.Windows.Forms.Label();
-            this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
             this.label_Z = new System.Windows.Forms.Label();
             this.textBoxZ = new ExtendedControls.TextBoxBorder();
             this.labelDistEnter = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxY = new ExtendedControls.TextBoxBorder();
             this.textBoxX = new ExtendedControls.TextBoxBorder();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBoxTargetDist = new ExtendedControls.TextBoxBorder();
-            this.textBoxTarget = new ExtendedControls.AutoCompleteTextBox();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
+            this.labelNote = new System.Windows.Forms.Label();
+            this.labelTarget = new System.Windows.Forms.Label();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.textBoxTargetDist = new ExtendedControls.TextBoxBorder();
+            this.textBoxTarget = new ExtendedControls.AutoCompleteTextBox();
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
             this.buttonMap2D = new ExtendedControls.ButtonExt();
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.buttonExtSummaryPopOut = new ExtendedControls.ButtonExt();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
-            this.closestContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_topright = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.buttonExtTabControls = new ExtendedControls.ButtonExt();
             this.imageListIcons = new System.Windows.Forms.ImageList(this.components);
-            this.TopPanel = new System.Windows.Forms.Panel();
+            this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
@@ -102,45 +96,46 @@
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TopPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControlBottom = new ExtendedControls.TabControlCustom();
-            this.tabPageBottom1 = new System.Windows.Forms.TabPage();
+            this.tabPageBottomLog = new System.Windows.Forms.TabPage();
             this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
-            this.tabPageBottom2 = new System.Windows.Forms.TabPage();
-            this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
+            this.tabPageBottomStarList = new System.Windows.Forms.TabPage();
+            this.userControlStarDistance2 = new EDDiscovery.UserControls.UserControlStarDistance();
             this.splitContainerRight = new System.Windows.Forms.SplitContainer();
+            this.panelTarget = new System.Windows.Forms.Panel();
+            this.panelNoteArea = new System.Windows.Forms.Panel();
+            this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
             this.tabControlCustomBottomRight = new ExtendedControls.TabControlCustom();
-            this.tabPageBottomRightTab1 = new System.Windows.Forms.TabPage();
-            this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
-            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPageBottomRightTab2 = new System.Windows.Forms.TabPage();
+            this.tabPageBottomRightStarList = new System.Windows.Forms.TabPage();
+            this.userControlStarDistance1 = new EDDiscovery.UserControls.UserControlStarDistance();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
-            this.closestContextMenu.SuspendLayout();
             this.panel_topright.SuspendLayout();
-            this.TopPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
+            this.splitContainerLeftRight.Panel1.SuspendLayout();
+            this.splitContainerLeftRight.Panel2.SuspendLayout();
+            this.splitContainerLeftRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeft)).BeginInit();
             this.splitContainerLeft.Panel1.SuspendLayout();
             this.splitContainerLeft.Panel2.SuspendLayout();
             this.splitContainerLeft.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
+            this.TopPanel.SuspendLayout();
             this.tabControlBottom.SuspendLayout();
-            this.tabPageBottom1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
-            this.splitContainerLeftRight.Panel1.SuspendLayout();
-            this.splitContainerLeftRight.Panel2.SuspendLayout();
-            this.splitContainerLeftRight.SuspendLayout();
+            this.tabPageBottomLog.SuspendLayout();
+            this.tabPageBottomStarList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRight)).BeginInit();
             this.splitContainerRight.Panel1.SuspendLayout();
             this.splitContainerRight.Panel2.SuspendLayout();
             this.splitContainerRight.SuspendLayout();
+            this.panelTarget.SuspendLayout();
+            this.panelNoteArea.SuspendLayout();
             this.tabControlCustomBottomRight.SuspendLayout();
-            this.tabPageBottomRightTab1.SuspendLayout();
-            this.dataViewScrollerPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
+            this.tabPageBottomRightStarList.SuspendLayout();
             this.SuspendLayout();
             // 
             // historyContextMenu
@@ -246,15 +241,6 @@
             this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
             this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Show History ";
-            // 
             // panel_system
             // 
             this.panel_system.Controls.Add(this.buttonEDSM);
@@ -272,23 +258,18 @@
             this.panel_system.Controls.Add(this.label10);
             this.panel_system.Controls.Add(this.label9);
             this.panel_system.Controls.Add(this.textBoxVisits);
-            this.panel_system.Controls.Add(this.label8);
-            this.panel_system.Controls.Add(this.richTextBoxNote);
             this.panel_system.Controls.Add(this.label_Z);
             this.panel_system.Controls.Add(this.textBoxZ);
             this.panel_system.Controls.Add(this.labelDistEnter);
             this.panel_system.Controls.Add(this.label5);
             this.panel_system.Controls.Add(this.textBoxY);
             this.panel_system.Controls.Add(this.textBoxX);
-            this.panel_system.Controls.Add(this.label3);
             this.panel_system.Controls.Add(this.label4);
-            this.panel_system.Controls.Add(this.textBoxTargetDist);
-            this.panel_system.Controls.Add(this.textBoxTarget);
             this.panel_system.Controls.Add(this.textBoxSystem);
             this.panel_system.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_system.Location = new System.Drawing.Point(0, 100);
             this.panel_system.Name = "panel_system";
-            this.panel_system.Size = new System.Drawing.Size(337, 208);
+            this.panel_system.Size = new System.Drawing.Size(337, 134);
             this.panel_system.TabIndex = 6;
             // 
             // buttonEDSM
@@ -467,29 +448,6 @@
             this.textBoxVisits.TabIndex = 29;
             this.textBoxVisits.TabStop = false;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 107);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(30, 13);
-            this.label8.TabIndex = 28;
-            this.label8.Text = "Note";
-            // 
-            // richTextBoxNote
-            // 
-            this.richTextBoxNote.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBoxNote.BorderColorScaling = 0.5F;
-            this.richTextBoxNote.HideScrollBar = true;
-            this.richTextBoxNote.Location = new System.Drawing.Point(6, 126);
-            this.richTextBoxNote.Name = "richTextBoxNote";
-            this.richTextBoxNote.ScrollBarWidth = 20;
-            this.richTextBoxNote.ShowLineCount = false;
-            this.richTextBoxNote.Size = new System.Drawing.Size(246, 44);
-            this.richTextBoxNote.TabIndex = 0;
-            this.richTextBoxNote.TextChanged += new System.EventHandler(this.richTextBoxNote_TextChanged);
-            this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
-            // 
             // label_Z
             // 
             this.label_Z.AutoSize = true;
@@ -554,15 +512,6 @@
             this.textBoxX.TabIndex = 17;
             this.textBoxX.TabStop = false;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1, 180);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 13);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "Target";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -571,41 +520,6 @@
             this.label4.Size = new System.Drawing.Size(41, 13);
             this.label4.TabIndex = 16;
             this.label4.Text = "System";
-            // 
-            // textBoxTargetDist
-            // 
-            this.textBoxTargetDist.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTargetDist.BorderColorScaling = 0.5F;
-            this.textBoxTargetDist.Location = new System.Drawing.Point(186, 180);
-            this.textBoxTargetDist.Name = "textBoxTargetDist";
-            this.textBoxTargetDist.ReadOnly = true;
-            this.textBoxTargetDist.Size = new System.Drawing.Size(62, 20);
-            this.textBoxTargetDist.TabIndex = 15;
-            this.textBoxTargetDist.TabStop = false;
-            this.toolTipEddb.SetToolTip(this.textBoxTargetDist, "Distance to target");
-            // 
-            // textBoxTarget
-            // 
-            this.textBoxTarget.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBoxTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBoxTarget.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTarget.BorderColorScaling = 0.5F;
-            this.textBoxTarget.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.textBoxTarget.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBoxTarget.DropDownHeight = 200;
-            this.textBoxTarget.DropDownItemHeight = 20;
-            this.textBoxTarget.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
-            this.textBoxTarget.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.textBoxTarget.DropDownWidth = 0;
-            this.textBoxTarget.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxTarget.Location = new System.Drawing.Point(47, 180);
-            this.textBoxTarget.Name = "textBoxTarget";
-            this.textBoxTarget.Size = new System.Drawing.Size(129, 20);
-            this.textBoxTarget.TabIndex = 15;
-            this.textBoxTarget.TabStop = false;
-            this.toolTipEddb.SetToolTip(this.textBoxTarget, "Sets the target");
-            this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
             // 
             // textBoxSystem
             // 
@@ -617,6 +531,24 @@
             this.textBoxSystem.Size = new System.Drawing.Size(152, 20);
             this.textBoxSystem.TabIndex = 15;
             this.textBoxSystem.TabStop = false;
+            // 
+            // labelNote
+            // 
+            this.labelNote.AutoSize = true;
+            this.labelNote.Location = new System.Drawing.Point(0, 0);
+            this.labelNote.Name = "labelNote";
+            this.labelNote.Size = new System.Drawing.Size(30, 13);
+            this.labelNote.TabIndex = 28;
+            this.labelNote.Text = "Note";
+            // 
+            // labelTarget
+            // 
+            this.labelTarget.AutoSize = true;
+            this.labelTarget.Location = new System.Drawing.Point(2, 9);
+            this.labelTarget.Name = "labelTarget";
+            this.labelTarget.Size = new System.Drawing.Size(38, 13);
+            this.labelTarget.TabIndex = 16;
+            this.labelTarget.Text = "Target";
             // 
             // labelCMDR
             // 
@@ -680,6 +612,42 @@
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
+            // textBoxTargetDist
+            // 
+            this.textBoxTargetDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTargetDist.BorderColorScaling = 0.5F;
+            this.textBoxTargetDist.Location = new System.Drawing.Point(210, 6);
+            this.textBoxTargetDist.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.textBoxTargetDist.Name = "textBoxTargetDist";
+            this.textBoxTargetDist.ReadOnly = true;
+            this.textBoxTargetDist.Size = new System.Drawing.Size(62, 20);
+            this.textBoxTargetDist.TabIndex = 15;
+            this.textBoxTargetDist.TabStop = false;
+            this.toolTipEddb.SetToolTip(this.textBoxTargetDist, "Distance to target");
+            // 
+            // textBoxTarget
+            // 
+            this.textBoxTarget.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBoxTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxTarget.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTarget.BorderColorScaling = 0.5F;
+            this.textBoxTarget.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.textBoxTarget.DropDownBorderColor = System.Drawing.Color.Green;
+            this.textBoxTarget.DropDownHeight = 200;
+            this.textBoxTarget.DropDownItemHeight = 20;
+            this.textBoxTarget.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.textBoxTarget.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.textBoxTarget.DropDownWidth = 0;
+            this.textBoxTarget.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxTarget.Location = new System.Drawing.Point(68, 6);
+            this.textBoxTarget.Name = "textBoxTarget";
+            this.textBoxTarget.Size = new System.Drawing.Size(129, 20);
+            this.textBoxTarget.TabIndex = 15;
+            this.textBoxTarget.TabStop = false;
+            this.toolTipEddb.SetToolTip(this.textBoxTarget, "Sets the target");
+            this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
+            // 
             // button_RefreshHistory
             // 
             this.button_RefreshHistory.BorderColorScaling = 1.25F;
@@ -699,7 +667,7 @@
             this.buttonMap2D.BorderColorScaling = 1.25F;
             this.buttonMap2D.ButtonColorScaling = 0.5F;
             this.buttonMap2D.ButtonDisabledScaling = 0.5F;
-            this.buttonMap2D.Location = new System.Drawing.Point(6, 37);
+            this.buttonMap2D.Location = new System.Drawing.Point(6, 36);
             this.buttonMap2D.Name = "buttonMap2D";
             this.buttonMap2D.Size = new System.Drawing.Size(65, 23);
             this.buttonMap2D.TabIndex = 3;
@@ -735,14 +703,13 @@
         "rs");
             this.comboBoxCommander.ValueMember = "";
             this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
-            this.comboBoxCommander.Click += new System.EventHandler(this.comboBoxCommander_Click);
             // 
             // buttonExtSummaryPopOut
             // 
             this.buttonExtSummaryPopOut.BorderColorScaling = 1.25F;
             this.buttonExtSummaryPopOut.ButtonColorScaling = 0.5F;
             this.buttonExtSummaryPopOut.ButtonDisabledScaling = 0.5F;
-            this.buttonExtSummaryPopOut.Location = new System.Drawing.Point(77, 71);
+            this.buttonExtSummaryPopOut.Location = new System.Drawing.Point(222, 36);
             this.buttonExtSummaryPopOut.Name = "buttonExtSummaryPopOut";
             this.buttonExtSummaryPopOut.Size = new System.Drawing.Size(65, 23);
             this.buttonExtSummaryPopOut.TabIndex = 4;
@@ -757,7 +724,7 @@
             this.buttonMap.BorderColorScaling = 1.25F;
             this.buttonMap.ButtonColorScaling = 0.5F;
             this.buttonMap.ButtonDisabledScaling = 0.5F;
-            this.buttonMap.Location = new System.Drawing.Point(6, 71);
+            this.buttonMap.Location = new System.Drawing.Point(80, 36);
             this.buttonMap.Name = "buttonMap";
             this.buttonMap.Size = new System.Drawing.Size(65, 23);
             this.buttonMap.TabIndex = 4;
@@ -771,7 +738,7 @@
             this.buttonSync.BorderColorScaling = 1.25F;
             this.buttonSync.ButtonColorScaling = 0.5F;
             this.buttonSync.ButtonDisabledScaling = 0.5F;
-            this.buttonSync.Location = new System.Drawing.Point(116, 37);
+            this.buttonSync.Location = new System.Drawing.Point(7, 66);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(92, 23);
             this.buttonSync.TabIndex = 4;
@@ -780,34 +747,13 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
-            // closestContextMenu
-            // 
-            this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToTrilaterationToolStripMenuItem1,
-            this.viewOnEDSMToolStripMenuItem1});
-            this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
-            // 
-            // addToTrilaterationToolStripMenuItem1
-            // 
-            this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
-            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
-            this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
-            this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
-            // 
-            // viewOnEDSMToolStripMenuItem1
-            // 
-            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
-            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
-            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
-            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
-            // 
             // panel_topright
             // 
             this.panel_topright.Controls.Add(this.button_RefreshHistory);
             this.panel_topright.Controls.Add(this.buttonMap2D);
             this.panel_topright.Controls.Add(this.comboBoxCommander);
             this.panel_topright.Controls.Add(this.labelCMDR);
+            this.panel_topright.Controls.Add(this.buttonExtTabControls);
             this.panel_topright.Controls.Add(this.buttonExtSummaryPopOut);
             this.panel_topright.Controls.Add(this.buttonMap);
             this.panel_topright.Controls.Add(this.buttonSync);
@@ -816,35 +762,43 @@
             this.panel_topright.Name = "panel_topright";
             this.panel_topright.Size = new System.Drawing.Size(337, 100);
             this.panel_topright.TabIndex = 26;
+            this.panel_topright.Resize += new System.EventHandler(this.panel_topright_Resize);
             // 
-            // label1
+            // buttonExtTabControls
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(220, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Search";
+            this.buttonExtTabControls.BorderColorScaling = 1.25F;
+            this.buttonExtTabControls.ButtonColorScaling = 0.5F;
+            this.buttonExtTabControls.ButtonDisabledScaling = 0.5F;
+            this.buttonExtTabControls.Location = new System.Drawing.Point(152, 36);
+            this.buttonExtTabControls.Name = "buttonExtTabControls";
+            this.buttonExtTabControls.Size = new System.Drawing.Size(65, 23);
+            this.buttonExtTabControls.TabIndex = 4;
+            this.buttonExtTabControls.Text = "Stats";
+            this.buttonExtTabControls.UseVisualStyleBackColor = true;
+            this.buttonExtTabControls.Click += new System.EventHandler(this.buttonExtTabControls_Click);
             // 
             // imageListIcons
             // 
-            this.imageListIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListIcons.ImageStream")));
+            this.imageListIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageListIcons.ImageSize = new System.Drawing.Size(16, 16);
             this.imageListIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListIcons.Images.SetKeyName(0, "star.png");
-            this.imageListIcons.Images.SetKeyName(1, "Log.png");
             // 
-            // TopPanel
+            // splitContainerLeftRight
             // 
-            this.TopPanel.Controls.Add(this.buttonFilter);
-            this.TopPanel.Controls.Add(this.textBoxFilter);
-            this.TopPanel.Controls.Add(this.label1);
-            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
-            this.TopPanel.Controls.Add(this.label2);
-            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TopPanel.Location = new System.Drawing.Point(0, 0);
-            this.TopPanel.Name = "TopPanel";
-            this.TopPanel.Size = new System.Drawing.Size(550, 32);
-            this.TopPanel.TabIndex = 26;
+            this.splitContainerLeftRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerLeftRight.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerLeftRight.Name = "splitContainerLeftRight";
+            // 
+            // splitContainerLeftRight.Panel1
+            // 
+            this.splitContainerLeftRight.Panel1.Controls.Add(this.splitContainerLeft);
+            // 
+            // splitContainerLeftRight.Panel2
+            // 
+            this.splitContainerLeftRight.Panel2.Controls.Add(this.splitContainerRight);
+            this.splitContainerLeftRight.Size = new System.Drawing.Size(891, 650);
+            this.splitContainerLeftRight.SplitterDistance = 550;
+            this.splitContainerLeftRight.TabIndex = 6;
             // 
             // splitContainerLeft
             // 
@@ -977,11 +931,42 @@
             this.ColumnNote.ReadOnly = true;
             this.ColumnNote.Width = 137;
             // 
+            // TopPanel
+            // 
+            this.TopPanel.Controls.Add(this.buttonFilter);
+            this.TopPanel.Controls.Add(this.textBoxFilter);
+            this.TopPanel.Controls.Add(this.label1);
+            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
+            this.TopPanel.Controls.Add(this.label2);
+            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TopPanel.Location = new System.Drawing.Point(0, 0);
+            this.TopPanel.Name = "TopPanel";
+            this.TopPanel.Size = new System.Drawing.Size(550, 32);
+            this.TopPanel.TabIndex = 26;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(220, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 13);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "Search";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(72, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Show History ";
+            // 
             // tabControlBottom
             // 
             this.tabControlBottom.Alignment = System.Windows.Forms.TabAlignment.Bottom;
-            this.tabControlBottom.Controls.Add(this.tabPageBottom1);
-            this.tabControlBottom.Controls.Add(this.tabPageBottom2);
+            this.tabControlBottom.Controls.Add(this.tabPageBottomLog);
+            this.tabControlBottom.Controls.Add(this.tabPageBottomStarList);
             this.tabControlBottom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlBottom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlBottom.ImageList = this.imageListIcons;
@@ -1004,16 +989,16 @@
             this.tabControlBottom.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlBottom.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
-            // tabPageBottom1
+            // tabPageBottomLog
             // 
-            this.tabPageBottom1.Controls.Add(this.richTextBox_History);
-            this.tabPageBottom1.ImageIndex = 1;
-            this.tabPageBottom1.Location = new System.Drawing.Point(4, 4);
-            this.tabPageBottom1.Name = "tabPageBottom1";
-            this.tabPageBottom1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBottom1.Size = new System.Drawing.Size(542, 119);
-            this.tabPageBottom1.TabIndex = 0;
-            this.tabPageBottom1.UseVisualStyleBackColor = true;
+            this.tabPageBottomLog.Controls.Add(this.richTextBox_History);
+            this.tabPageBottomLog.ImageIndex = 1;
+            this.tabPageBottomLog.Location = new System.Drawing.Point(4, 4);
+            this.tabPageBottomLog.Name = "tabPageBottomLog";
+            this.tabPageBottomLog.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBottomLog.Size = new System.Drawing.Size(542, 119);
+            this.tabPageBottomLog.TabIndex = 0;
+            this.tabPageBottomLog.UseVisualStyleBackColor = true;
             // 
             // richTextBox_History
             // 
@@ -1028,32 +1013,24 @@
             this.richTextBox_History.Size = new System.Drawing.Size(536, 113);
             this.richTextBox_History.TabIndex = 0;
             // 
-            // tabPageBottom2
+            // tabPageBottomStarList
             // 
-            this.tabPageBottom2.Location = new System.Drawing.Point(4, 4);
-            this.tabPageBottom2.Name = "tabPageBottom2";
-            this.tabPageBottom2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBottom2.Size = new System.Drawing.Size(542, 119);
-            this.tabPageBottom2.TabIndex = 1;
-            this.tabPageBottom2.Text = "TBD";
-            this.tabPageBottom2.UseVisualStyleBackColor = true;
+            this.tabPageBottomStarList.Controls.Add(this.userControlStarDistance2);
+            this.tabPageBottomStarList.ImageIndex = 0;
+            this.tabPageBottomStarList.Location = new System.Drawing.Point(4, 4);
+            this.tabPageBottomStarList.Name = "tabPageBottomStarList";
+            this.tabPageBottomStarList.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBottomStarList.Size = new System.Drawing.Size(542, 119);
+            this.tabPageBottomStarList.TabIndex = 1;
+            this.tabPageBottomStarList.UseVisualStyleBackColor = true;
             // 
-            // splitContainerLeftRight
+            // userControlStarDistance2
             // 
-            this.splitContainerLeftRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerLeftRight.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerLeftRight.Name = "splitContainerLeftRight";
-            // 
-            // splitContainerLeftRight.Panel1
-            // 
-            this.splitContainerLeftRight.Panel1.Controls.Add(this.splitContainerLeft);
-            // 
-            // splitContainerLeftRight.Panel2
-            // 
-            this.splitContainerLeftRight.Panel2.Controls.Add(this.splitContainerRight);
-            this.splitContainerLeftRight.Size = new System.Drawing.Size(891, 650);
-            this.splitContainerLeftRight.SplitterDistance = 550;
-            this.splitContainerLeftRight.TabIndex = 6;
+            this.userControlStarDistance2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlStarDistance2.Location = new System.Drawing.Point(3, 3);
+            this.userControlStarDistance2.Name = "userControlStarDistance2";
+            this.userControlStarDistance2.Size = new System.Drawing.Size(536, 113);
+            this.userControlStarDistance2.TabIndex = 0;
             // 
             // splitContainerRight
             // 
@@ -1064,6 +1041,8 @@
             // 
             // splitContainerRight.Panel1
             // 
+            this.splitContainerRight.Panel1.Controls.Add(this.panelTarget);
+            this.splitContainerRight.Panel1.Controls.Add(this.panelNoteArea);
             this.splitContainerRight.Panel1.Controls.Add(this.panel_system);
             this.splitContainerRight.Panel1.Controls.Add(this.panel_topright);
             // 
@@ -1074,11 +1053,47 @@
             this.splitContainerRight.SplitterDistance = 325;
             this.splitContainerRight.TabIndex = 7;
             // 
+            // panelTarget
+            // 
+            this.panelTarget.Controls.Add(this.textBoxTargetDist);
+            this.panelTarget.Controls.Add(this.textBoxTarget);
+            this.panelTarget.Controls.Add(this.labelTarget);
+            this.panelTarget.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTarget.Location = new System.Drawing.Point(0, 284);
+            this.panelTarget.Name = "panelTarget";
+            this.panelTarget.Size = new System.Drawing.Size(337, 32);
+            this.panelTarget.TabIndex = 44;
+            this.panelTarget.Resize += new System.EventHandler(this.panelTarget_Resize);
+            // 
+            // panelNoteArea
+            // 
+            this.panelNoteArea.Controls.Add(this.richTextBoxNote);
+            this.panelNoteArea.Controls.Add(this.labelNote);
+            this.panelNoteArea.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelNoteArea.Location = new System.Drawing.Point(0, 234);
+            this.panelNoteArea.Name = "panelNoteArea";
+            this.panelNoteArea.Size = new System.Drawing.Size(337, 50);
+            this.panelNoteArea.TabIndex = 44;
+            this.panelNoteArea.Resize += new System.EventHandler(this.panelNoteArea_Resize);
+            // 
+            // richTextBoxNote
+            // 
+            this.richTextBoxNote.BorderColor = System.Drawing.Color.Transparent;
+            this.richTextBoxNote.BorderColorScaling = 0.5F;
+            this.richTextBoxNote.HideScrollBar = true;
+            this.richTextBoxNote.Location = new System.Drawing.Point(30, 0);
+            this.richTextBoxNote.Name = "richTextBoxNote";
+            this.richTextBoxNote.ScrollBarWidth = 20;
+            this.richTextBoxNote.ShowLineCount = false;
+            this.richTextBoxNote.Size = new System.Drawing.Size(277, 50);
+            this.richTextBoxNote.TabIndex = 0;
+            this.richTextBoxNote.TextChanged += new System.EventHandler(this.richTextBoxNote_TextChanged);
+            this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
+            // 
             // tabControlCustomBottomRight
             // 
             this.tabControlCustomBottomRight.Alignment = System.Windows.Forms.TabAlignment.Bottom;
-            this.tabControlCustomBottomRight.Controls.Add(this.tabPageBottomRightTab1);
-            this.tabControlCustomBottomRight.Controls.Add(this.tabPageBottomRightTab2);
+            this.tabControlCustomBottomRight.Controls.Add(this.tabPageBottomRightStarList);
             this.tabControlCustomBottomRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlCustomBottomRight.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlCustomBottomRight.ImageList = this.imageListIcons;
@@ -1100,98 +1115,24 @@
             this.tabControlCustomBottomRight.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlCustomBottomRight.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
-            // tabPageBottomRightTab1
+            // tabPageBottomRightStarList
             // 
-            this.tabPageBottomRightTab1.Controls.Add(this.dataViewScrollerPanel2);
-            this.tabPageBottomRightTab1.ImageIndex = 0;
-            this.tabPageBottomRightTab1.Location = new System.Drawing.Point(4, 4);
-            this.tabPageBottomRightTab1.Name = "tabPageBottomRightTab1";
-            this.tabPageBottomRightTab1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBottomRightTab1.Size = new System.Drawing.Size(329, 294);
-            this.tabPageBottomRightTab1.TabIndex = 0;
-            this.tabPageBottomRightTab1.UseVisualStyleBackColor = true;
+            this.tabPageBottomRightStarList.Controls.Add(this.userControlStarDistance1);
+            this.tabPageBottomRightStarList.ImageIndex = 0;
+            this.tabPageBottomRightStarList.Location = new System.Drawing.Point(4, 4);
+            this.tabPageBottomRightStarList.Name = "tabPageBottomRightStarList";
+            this.tabPageBottomRightStarList.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBottomRightStarList.Size = new System.Drawing.Size(329, 294);
+            this.tabPageBottomRightStarList.TabIndex = 0;
+            this.tabPageBottomRightStarList.UseVisualStyleBackColor = true;
             // 
-            // dataViewScrollerPanel2
+            // userControlStarDistance1
             // 
-            this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
-            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
-            this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(3, 3);
-            this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(323, 288);
-            this.dataViewScrollerPanel2.TabIndex = 24;
-            this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
-            // 
-            // vScrollBarCustom2
-            // 
-            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom2.HideScrollBar = true;
-            this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(303, 21);
-            this.vScrollBarCustom2.Maximum = -1;
-            this.vScrollBarCustom2.Minimum = 0;
-            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 267);
-            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom2.SmallChange = 1;
-            this.vScrollBarCustom2.TabIndex = 24;
-            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
-            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -1;
-            this.vScrollBarCustom2.ValueLimited = -1;
-            // 
-            // dataGridViewNearest
-            // 
-            this.dataGridViewNearest.AllowUserToAddRows = false;
-            this.dataGridViewNearest.AllowUserToDeleteRows = false;
-            this.dataGridViewNearest.AllowUserToResizeColumns = false;
-            this.dataGridViewNearest.AllowUserToResizeRows = false;
-            this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col1,
-            this.Distance});
-            this.dataGridViewNearest.ContextMenuStrip = this.closestContextMenu;
-            this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewNearest.Name = "dataGridViewNearest";
-            this.dataGridViewNearest.RowHeadersVisible = false;
-            this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(303, 288);
-            this.dataGridViewNearest.TabIndex = 23;
-            // 
-            // Col1
-            // 
-            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Col1.HeaderText = "Name";
-            this.Col1.Name = "Col1";
-            // 
-            // Distance
-            // 
-            this.Distance.HeaderText = "Distance";
-            this.Distance.Name = "Distance";
-            // 
-            // tabPageBottomRightTab2
-            // 
-            this.tabPageBottomRightTab2.Location = new System.Drawing.Point(4, 4);
-            this.tabPageBottomRightTab2.Name = "tabPageBottomRightTab2";
-            this.tabPageBottomRightTab2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBottomRightTab2.Size = new System.Drawing.Size(329, 294);
-            this.tabPageBottomRightTab2.TabIndex = 1;
-            this.tabPageBottomRightTab2.Text = "TBD";
-            this.tabPageBottomRightTab2.UseVisualStyleBackColor = true;
+            this.userControlStarDistance1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlStarDistance1.Location = new System.Drawing.Point(3, 3);
+            this.userControlStarDistance1.Name = "userControlStarDistance1";
+            this.userControlStarDistance1.Size = new System.Drawing.Size(323, 288);
+            this.userControlStarDistance1.TabIndex = 0;
             // 
             // TravelHistoryControl
             // 
@@ -1204,31 +1145,33 @@
             this.historyContextMenu.ResumeLayout(false);
             this.panel_system.ResumeLayout(false);
             this.panel_system.PerformLayout();
-            this.closestContextMenu.ResumeLayout(false);
             this.panel_topright.ResumeLayout(false);
             this.panel_topright.PerformLayout();
-            this.TopPanel.ResumeLayout(false);
-            this.TopPanel.PerformLayout();
+            this.splitContainerLeftRight.Panel1.ResumeLayout(false);
+            this.splitContainerLeftRight.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).EndInit();
+            this.splitContainerLeftRight.ResumeLayout(false);
             this.splitContainerLeft.Panel1.ResumeLayout(false);
             this.splitContainerLeft.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeft)).EndInit();
             this.splitContainerLeft.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
+            this.TopPanel.ResumeLayout(false);
+            this.TopPanel.PerformLayout();
             this.tabControlBottom.ResumeLayout(false);
-            this.tabPageBottom1.ResumeLayout(false);
-            this.splitContainerLeftRight.Panel1.ResumeLayout(false);
-            this.splitContainerLeftRight.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).EndInit();
-            this.splitContainerLeftRight.ResumeLayout(false);
+            this.tabPageBottomLog.ResumeLayout(false);
+            this.tabPageBottomStarList.ResumeLayout(false);
             this.splitContainerRight.Panel1.ResumeLayout(false);
             this.splitContainerRight.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRight)).EndInit();
             this.splitContainerRight.ResumeLayout(false);
+            this.panelTarget.ResumeLayout(false);
+            this.panelTarget.PerformLayout();
+            this.panelNoteArea.ResumeLayout(false);
+            this.panelNoteArea.PerformLayout();
             this.tabControlCustomBottomRight.ResumeLayout(false);
-            this.tabPageBottomRightTab1.ResumeLayout(false);
-            this.dataViewScrollerPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
+            this.tabPageBottomRightStarList.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1254,7 +1197,7 @@
         private ExtendedControls.ButtonExt buttonSync;
         private System.Windows.Forms.Label label9;
         private ExtendedControls.TextBoxBorder textBoxVisits;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label labelNote;
         private System.Windows.Forms.Label label11;
         private ExtendedControls.TextBoxBorder textBoxEconomy;
         private System.Windows.Forms.Label label10;
@@ -1277,27 +1220,19 @@
         private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
         private ExtendedControls.ComboBoxCustom comboBoxCommander;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridViewNearest;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private System.Windows.Forms.Panel TopPanel;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private System.Windows.Forms.Panel panel_topright;
         private ExtendedControls.ButtonExt buttonMap2D;
-        private System.Windows.Forms.ContextMenuStrip closestContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem trilaterationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem routeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private ExtendedControls.DrawnPanel buttonEDSM;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelTarget;
         private ExtendedControls.TextBoxBorder textBoxTargetDist;
         private ExtendedControls.AutoCompleteTextBox textBoxTarget;
         private ExtendedControls.ButtonExt buttonExtSummaryPopOut;
@@ -1310,14 +1245,18 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private ExtendedControls.TabControlCustom tabControlBottom;
-        private System.Windows.Forms.TabPage tabPageBottom1;
-        private System.Windows.Forms.TabPage tabPageBottom2;
+        private System.Windows.Forms.TabPage tabPageBottomLog;
         private System.Windows.Forms.ImageList imageListIcons;
         private System.Windows.Forms.SplitContainer splitContainerLeft;
         private System.Windows.Forms.SplitContainer splitContainerLeftRight;
         private System.Windows.Forms.SplitContainer splitContainerRight;
         private ExtendedControls.TabControlCustom tabControlCustomBottomRight;
-        private System.Windows.Forms.TabPage tabPageBottomRightTab1;
-        private System.Windows.Forms.TabPage tabPageBottomRightTab2;
+        private System.Windows.Forms.TabPage tabPageBottomRightStarList;
+        private UserControls.UserControlStarDistance userControlStarDistance1;
+        private System.Windows.Forms.TabPage tabPageBottomStarList;
+        private UserControls.UserControlStarDistance userControlStarDistance2;
+        private System.Windows.Forms.Panel panelTarget;
+        private System.Windows.Forms.Panel panelNoteArea;
+        private ExtendedControls.ButtonExt buttonExtTabControls;
     }
 }
