@@ -59,6 +59,7 @@
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnJournalDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSyncToEDSM = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -480,6 +481,7 @@
             this.dataGridViewCommanders.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnNr,
             this.ColumnCommander,
+            this.EdsmName,
             this.ColumnEDSMAPIKey,
             this.ColumnJournalDir,
             this.ColumnSyncToEDSM,
@@ -513,6 +515,11 @@
             this.ColumnCommander.HeaderText = "Commander";
             this.ColumnCommander.MinimumWidth = 150;
             this.ColumnCommander.Name = "ColumnCommander";
+            // 
+            // EdsmName
+            // 
+            this.EdsmName.HeaderText = "EDSM Name";
+            this.EdsmName.Name = "EdsmName";
             // 
             // ColumnEDSMAPIKey
             // 
@@ -624,6 +631,7 @@
         private ExtendedControls.CheckBoxCustom checkBoxUTC;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EdsmName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnJournalDir;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncToEDSM;
