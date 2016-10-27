@@ -518,6 +518,7 @@
             // 
             // EdsmName
             // 
+            this.EdsmName.DataPropertyName = "EdsmName";
             this.EdsmName.HeaderText = "EDSM Name";
             this.EdsmName.Name = "EdsmName";
             // 
