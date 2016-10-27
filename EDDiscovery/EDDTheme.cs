@@ -628,8 +628,6 @@ namespace EDDiscovery2
 
         }
 
-
-
         public void UpdateColorControls(Control parent , Control myControl, Font fnt, int level)
         {
 #if DEBUG

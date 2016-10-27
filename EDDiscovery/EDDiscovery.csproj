@@ -371,6 +371,12 @@
     <Compile Include="Forms\SplashForm.Designer.cs">
       <DependentUpon>SplashForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TabControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TabControlForm.Designer.cs">
+      <DependentUpon>TabControlForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\TimedMessage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -573,6 +579,12 @@
     <Compile Include="JournalViewControl.Designer.cs">
       <DependentUpon>JournalViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlStarDistance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlStarDistance.Designer.cs">
+      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    </Compile>
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -581,6 +593,12 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Forms\TabControlForm.resx">
+      <DependentUpon>TabControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
+      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="App.Portable.config" />
     <None Include="Resources\promotion.pspimage" />
     <None Include="Resources\shipyardnew.pspimage" />
@@ -704,6 +722,8 @@
     <None Include="Resources\powerplayvoucher.png" />
     <None Include="Resources\shieldsup.png" />
     <None Include="Resources\shieldsdown.png" />
+    <None Include="Resources\star.png" />
+    <None Include="Resources\Log.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

@@ -483,7 +483,6 @@ namespace EDDiscovery
         {
             ToolStripManager.Renderer = theme.toolstripRenderer;
             this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
-            //panel_grip.Visible = !theme.WindowsFrame;
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;
