@@ -374,43 +374,49 @@ namespace EDDiscovery
             downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
         }
 
-        private Task CheckForNewInstaller()
+        private Task CheckForNewInstallerAsync()
         {
             return Task.Factory.StartNew(() =>
             {
-                try
-                {
-
-                    GitHubClass github = new GitHubClass();
-
-                    GitHubRelease rel = github.GetLatestRelease();
-
-                    if (rel != null)
-                    {
-                        //string newInstaller = jo["Filename"].Value<string>();
-
-                        var currentVersion = Application.ProductVersion;
-
-                        Version v1, v2;
-                        v1 = new Version(rel.ReleaseVersion);
-                        v2 = new Version(currentVersion);
-
-                        if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
-                        {
-                            newRelease = rel;
-                            this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
-                            this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
-
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                }
+                CheckForNewinstaller();
             });
         }
 
+        private bool CheckForNewinstaller()
+        {
+            try
+            {
+
+                GitHubClass github = new GitHubClass();
+
+                GitHubRelease rel = github.GetLatestRelease();
+
+                if (rel != null)
+                {
+                    //string newInstaller = jo["Filename"].Value<string>();
+
+                    var currentVersion = Application.ProductVersion;
+
+                    Version v1, v2;
+                    v1 = new Version(rel.ReleaseVersion);
+                    v2 = new Version(currentVersion);
+
+                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                    {
+                        newRelease = rel;
+                        this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
+                        this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return false;
+        }
 
         private void PanelInfoNewRelease()
         {
@@ -721,7 +727,7 @@ namespace EDDiscovery
 
                 panelInfo.Visible = false;
 
-                checkInstallerTask = CheckForNewInstaller();
+                checkInstallerTask = CheckForNewInstallerAsync();
             }
         }
 
@@ -1783,6 +1789,24 @@ namespace EDDiscovery
                 frm.release = newRelease;
 
                 frm.ShowDialog(this);
+            }
+        }
+
+        private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CheckForNewinstaller())
+            {
+                if (newRelease != null)
+                {
+                    NewReleaseForm frm = new NewReleaseForm();
+                    frm.release = newRelease;
+
+                    frm.ShowDialog(this);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No new release found", "EDDiscovery", MessageBoxButtons.OK);
             }
         }
     }
