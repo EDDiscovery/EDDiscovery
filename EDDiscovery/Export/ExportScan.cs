@@ -32,7 +32,7 @@ namespace EDDiscovery.Export
 
         override public bool GetData(EDDiscoveryForm _discoveryForm)
         {
-            var filter = (TravelHistoryFilter)_discoveryForm.TravelControl.comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+            var filter = _discoveryForm.TravelControl.GetPrimaryFilter;
 
             List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
 

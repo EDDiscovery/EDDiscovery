@@ -1,4 +1,6 @@
-﻿using ExtendedControls;
+﻿using EDDiscovery.DB;
+using EDDiscovery.UserControls;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +18,8 @@ namespace EDDiscovery2
         TabControlCustom ctc;
         ImageList iml;
         public bool isactive = false;
+        public int displaynumber;
+        public bool norepositionwindow = false;
 
         public TabControlForm()
         {
@@ -28,22 +32,24 @@ namespace EDDiscovery2
         }
 
         public bool windowsborder = true;
-        public void SetBorder(bool winborder , bool topmost)
+        public void SetBorder(bool winborder, bool topmost)
         {
             windowsborder = winborder;
             FormBorderStyle = winborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
             panel_close.Visible = !winborder;
             panel_minimize.Visible = !winborder;
+            label_index.Visible = !winborder;
+            label_index.Text = "View " + displaynumber.ToString();
             TopMost = topmost;
             Invalidate();
         }
 
-        public void AddImage(Image i )
+        public void AddImage(Image i)
         {
             iml.Images.Add(i);
         }
 
-        public void AddUserControlTab( UserControl c ,  string title, int iconindex = -1 )
+        public void AddUserControlTab(EDDiscovery.UserControls.UserControlCommonBase c, string title, int iconindex = -1)
         {
             c.Dock = DockStyle.Fill;
 
@@ -59,22 +65,81 @@ namespace EDDiscovery2
         private void TabControlForm_Activated(object sender, EventArgs e)
         {
             isactive = true;
+            foreach (TabPage tp in ctc.TabPages)
+            {
+                EDDiscovery.UserControls.UserControlCommonBase ucb = (EDDiscovery.UserControls.UserControlCommonBase)tp.Controls[0];
+                ucb.LoadLayout();
+            }
+        }
+
+        private void TabControlForm_Load(object sender, EventArgs e)
+        {
+            string root = "PopUpForm" + displaynumber;
+
+            var top = SQLiteDBClass.GetSettingInt(root + "Top", -1);
+
+            if (top >= 0 && norepositionwindow == false)
+            {
+                var left = SQLiteDBClass.GetSettingInt(root + "Left", 0);
+                var height = SQLiteDBClass.GetSettingInt(root + "Height", 800);
+                var width = SQLiteDBClass.GetSettingInt(root + "Width", 800);
+
+                // Adjust so window fits on screen; just in case user unplugged a monitor or something
+
+                var screen = SystemInformation.VirtualScreen;
+                if (height > screen.Height) height = screen.Height;
+                if (top + height > screen.Height + screen.Top) top = screen.Height + screen.Top - height;
+                if (width > screen.Width) width = screen.Width;
+                if (left + width > screen.Width + screen.Left) left = screen.Width + screen.Left - width;
+                if (top < screen.Top) top = screen.Top;
+                if (left < screen.Left) left = screen.Left;
+
+                this.Top = top;
+                this.Left = left;
+                this.Height = height;
+                this.Width = width;
+
+                this.CreateParams.X = this.Left;
+                this.CreateParams.Y = this.Top;
+                this.StartPosition = FormStartPosition.Manual;
+            }
         }
 
         private void TabControlForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             isactive = false;
+            foreach (TabPage tp in ctc.TabPages)
+            {
+                EDDiscovery.UserControls.UserControlCommonBase ucb = (EDDiscovery.UserControls.UserControlCommonBase)tp.Controls[0];
+                ucb.SaveLayout();
+            }
+
+            string root = "PopUpForm" + displaynumber;
+            SQLiteDBClass.PutSettingInt(root + "Width", this.Width);
+            SQLiteDBClass.PutSettingInt(root + "Height", this.Height);
+            SQLiteDBClass.PutSettingInt(root + "Top", this.Top);
+            SQLiteDBClass.PutSettingInt(root + "Left", this.Left);
+
+            SQLiteDBClass.PutSettingInt(root + "Tab", ctc.SelectedIndex);
         }
 
-        public UserControl FindUserControl( Type c)
+        public void SelectDefaultTab()
         {
-            foreach ( TabPage tp in ctc.TabPages )
+            string root = "PopUpForm" + displaynumber;
+            int i = SQLiteDBClass.GetSettingInt(root + "Tab", 0);
+            if (i < ctc.TabPages.Count)
+                ctc.SelectedIndex = i;
+        }
+
+        public UserControlCommonBase FindUserControl( Type c)
+        {
+            foreach (TabPage tp in ctc.TabPages)
             {
                 foreach (Control ct in tp.Controls)
                 {
                     if (ct.GetType().Equals(c))
                     {
-                        return (UserControl)tp.Controls[0];
+                        return (UserControlCommonBase)tp.Controls[0];
                     }
                 }
             }
@@ -92,7 +157,6 @@ namespace EDDiscovery2
             this.WindowState = FormWindowState.Minimized;
         }
 
-        
         private void TabControlForm_Layout(object sender, LayoutEventArgs e)
         {
             if (ctc != null)
@@ -190,19 +254,24 @@ namespace EDDiscovery2
 
     public class TabControlFormList
     {
-        public List<TabControlForm> tabforms;
+        private List<TabControlForm> tabforms;
+
+        public int Count { get { return tabforms.Count; } }
 
         public TabControlFormList()
         {
             tabforms = new List<TabControlForm>();
         }
 
-        public TabControlForm NewForm()
+        public TabControlForm NewForm( bool noreposition = false)
         {
             TabControlForm tcf = new TabControlForm();
-            tcf.FormClosed += FormClosed;
             tabforms.Add(tcf);
-            tcf.Text = "EDDiscovery View " + tabforms.Count;
+
+            tcf.norepositionwindow = noreposition;
+            tcf.displaynumber = tabforms.Count;
+            tcf.FormClosed += FormClosed;
+            tcf.Text = "EDDiscovery View " + tcf.displaynumber;
             return tcf;
         }
 
@@ -212,15 +281,15 @@ namespace EDDiscovery2
             tabforms.Remove(tcf);
         }
 
-        public List<UserControl> GetListOfControls(Type c)
+        public List<UserControlCommonBase> GetListOfControls(Type c)
         {
-            List<UserControl> lc = new List<UserControl>();
+            List< UserControlCommonBase> lc = new List<UserControlCommonBase>();
 
             foreach (TabControlForm tcf in tabforms)
             {
                 if (tcf.isactive)
                 {
-                    UserControl uc = tcf.FindUserControl(c);
+                    UserControlCommonBase uc = tcf.FindUserControl(c);
                     if (uc != null)
                         lc.Add(uc);
                 }

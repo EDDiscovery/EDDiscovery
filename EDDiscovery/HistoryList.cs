@@ -580,13 +580,25 @@ namespace EDDiscovery
                 if (hs == he)
                 {
                     if (he.StartMarker)
+                    {
                         EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StartMarker, false);
+                        he.StartMarker = false;
+                    }
                     else if (he.StopMarker)
+                    {
                         EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StopMarker, false);
-                    else if ( started == false )
+                        he.StopMarker = false;
+                    }
+                    else if (started == false)
+                    {
                         EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StartMarker, true);
+                        he.StartMarker = true;
+                    }
                     else
+                    {
                         EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StopMarker, true);
+                        he.StopMarker = true;
+                    }
 
                     break;
                 }

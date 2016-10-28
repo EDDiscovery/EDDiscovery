@@ -1299,6 +1299,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap travelgrid {
+            get {
+                object obj = ResourceManager.GetObject("travelgrid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Travelicon {
             get {
                 object obj = ResourceManager.GetObject("Travelicon", resourceCulture);

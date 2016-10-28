@@ -236,7 +236,7 @@ namespace EDDiscovery
         private void dataGridViewJournal_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridView grid = sender as DataGridView;
-            TravelHistoryControl.PaintEventColumn(sender as DataGridView, e,
+            UserControls.UserControlTravelGrid.PaintEventColumn(sender as DataGridView, e,
                 _discoveryForm.history.Count, (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag,
                 grid.RowHeadersWidth + grid.Columns[0].Width, grid.Columns[1].Width, false);
         }
