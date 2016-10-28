@@ -68,7 +68,7 @@
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
             this.panel_topright = new System.Windows.Forms.Panel();
-            this.buttonPopOut = new ExtendedControls.ButtonExt();
+            this.comboBoxCustomPopOut = new ExtendedControls.ComboBoxCustom();
             this.imageListIcons = new System.Windows.Forms.ImageList(this.components);
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
@@ -567,11 +567,11 @@
             // 
             // panel_topright
             // 
+            this.panel_topright.Controls.Add(this.comboBoxCustomPopOut);
             this.panel_topright.Controls.Add(this.button_RefreshHistory);
             this.panel_topright.Controls.Add(this.buttonMap2D);
             this.panel_topright.Controls.Add(this.comboBoxCommander);
             this.panel_topright.Controls.Add(this.labelCMDR);
-            this.panel_topright.Controls.Add(this.buttonPopOut);
             this.panel_topright.Controls.Add(this.buttonExtSummaryPopOut);
             this.panel_topright.Controls.Add(this.buttonMap);
             this.panel_topright.Controls.Add(this.buttonSync);
@@ -582,18 +582,32 @@
             this.panel_topright.TabIndex = 26;
             this.panel_topright.Resize += new System.EventHandler(this.panel_topright_Resize);
             // 
-            // buttonPopOut
+            // comboBoxCustomPopOut
             // 
-            this.buttonPopOut.BorderColorScaling = 1.25F;
-            this.buttonPopOut.ButtonColorScaling = 0.5F;
-            this.buttonPopOut.ButtonDisabledScaling = 0.5F;
-            this.buttonPopOut.Location = new System.Drawing.Point(152, 36);
-            this.buttonPopOut.Name = "buttonPopOut";
-            this.buttonPopOut.Size = new System.Drawing.Size(65, 23);
-            this.buttonPopOut.TabIndex = 4;
-            this.buttonPopOut.Text = "Pop Out";
-            this.buttonPopOut.UseVisualStyleBackColor = true;
-            this.buttonPopOut.Click += new System.EventHandler(this.buttonExtTabControls_Click);
+            this.comboBoxCustomPopOut.ArrowWidth = 1;
+            this.comboBoxCustomPopOut.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomPopOut.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomPopOut.DataSource = null;
+            this.comboBoxCustomPopOut.DisplayMember = "";
+            this.comboBoxCustomPopOut.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomPopOut.DropDownHeight = 106;
+            this.comboBoxCustomPopOut.DropDownWidth = 75;
+            this.comboBoxCustomPopOut.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomPopOut.ItemHeight = 13;
+            this.comboBoxCustomPopOut.Location = new System.Drawing.Point(151, 37);
+            this.comboBoxCustomPopOut.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomPopOut.Name = "comboBoxCustomPopOut";
+            this.comboBoxCustomPopOut.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomPopOut.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomPopOut.ScrollBarWidth = 16;
+            this.comboBoxCustomPopOut.SelectedIndex = -1;
+            this.comboBoxCustomPopOut.SelectedItem = null;
+            this.comboBoxCustomPopOut.SelectedValue = null;
+            this.comboBoxCustomPopOut.Size = new System.Drawing.Size(65, 23);
+            this.comboBoxCustomPopOut.TabIndex = 18;
+            this.comboBoxCustomPopOut.Text = "comboBoxCustom1";
+            this.comboBoxCustomPopOut.ValueMember = "";
+            this.comboBoxCustomPopOut.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPopOut_SelectedIndexChanged);
             // 
             // imageListIcons
             // 
@@ -922,10 +936,10 @@
         private UserControls.UserControlStarDistance userControlStarDistance2;
         private System.Windows.Forms.Panel panelTarget;
         private System.Windows.Forms.Panel panelNoteArea;
-        private ExtendedControls.ButtonExt buttonPopOut;
         private UserControls.UserControlLog userControlLogBottom;
         private System.Windows.Forms.TabPage tabPageBottomRightLog;
         private UserControls.UserControlLog userControlLogBottomRight;
         private UserControls.UserControlTravelGrid userControlTravelGrid;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
     }
 }

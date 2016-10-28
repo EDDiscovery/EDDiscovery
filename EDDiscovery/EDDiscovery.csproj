@@ -401,6 +401,12 @@
     <Compile Include="Forms\SummaryPopOut.Designer.cs">
       <DependentUpon>SummaryPopOut.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\UserControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserControlForm.Designer.cs">
+      <DependentUpon>UserControlForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HistoryList.cs" />
     <Compile Include="HTTP\DownloadFile.cs" />
     <Compile Include="HTTP\GitHubClass.cs" />
@@ -610,6 +616,9 @@
     </Content>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserControlForm.resx">
+      <DependentUpon>UserControlForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlLog.resx">
       <DependentUpon>UserControlLog.cs</DependentUpon>
