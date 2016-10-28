@@ -17,6 +17,7 @@ namespace EDDiscovery2.DB
         public string category { get; set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
         public string name { get; set; }                    // name of it
         public string type { get; set; }                    // and its type, for materials its rarity, for commodities its group ("Metals" etc).
+        public string shortname { get; set; }
 
         // Not in DB
 
@@ -38,15 +39,18 @@ namespace EDDiscovery2.DB
             category = c.category;
             name = String.Copy(c.name);
             type = String.Copy(c.type);
+            shortname = c.shortname;
             count = c.count;
             price = c.price;
         }
 
-        public MaterialCommodities(string cs, string n, string t, int c = 0 , int p = 0)
+        public MaterialCommodities(long i, string cs, string n, string t, string s, int c = 0 , int p = 0)
         {
+            id = i;
             category = cs;
             name = n;
             type = t;
+            shortname = s;
             count = c;
             price = p;
         }
@@ -62,11 +66,12 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into MaterialsCommodities (Category,Name,Type) values (@category,@name,@type)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into MaterialsCommodities (Category,Name,Type,ShortName) values (@category,@name,@type,@shortname)"))
             {
                 cmd.AddParameterWithValue("@category", category);
                 cmd.AddParameterWithValue("@name", name);
                 cmd.AddParameterWithValue("@type", type);
+                cmd.AddParameterWithValue("@shortname", shortname);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from MaterialsCommodities"))
@@ -87,12 +92,13 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update MaterialsCommodities set Category=@category, Name=@name, Type=@type where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update MaterialsCommodities set Category=@category, Name=@name, Type=@type, ShortName=@shortname where ID=@id"))
             {
-                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@id", id);
                 cmd.AddParameterWithValue("@category", category);
                 cmd.AddParameterWithValue("@name", name);
                 cmd.AddParameterWithValue("@type", type);
+                cmd.AddParameterWithValue("@shortname", shortname);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 return true;
@@ -127,7 +133,7 @@ namespace EDDiscovery2.DB
 
         public static MaterialCommodities Get(string c, string name, SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("select Category,Name,Type from MaterialsCommodities WHERE Category = @category And Name==@name"))
+            using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,Type,ShortName from MaterialsCommodities WHERE Category = @category And Name==@name"))
             {
                 cmd.AddParameterWithValue("@category", c);
                 cmd.AddParameterWithValue("@name", name);
@@ -136,7 +142,7 @@ namespace EDDiscovery2.DB
                 {
                     if (reader.Read())           // already sorted, and already limited to max items
                     {
-                        return new MaterialCommodities((string)reader[0], (string)reader[1], (string)reader[2]);
+                        return new MaterialCommodities((long)reader[0],(string)reader[1], (string)reader[2], (string)reader[3],(string)reader[4]);
                     }
                     else
                         return null;
@@ -144,18 +150,26 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static void AddNewType(string c, string n, string t)
+        public static void AddNewType(string c, string namelist, string t, string sn = "")
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
-                string[] list = n.Split(';');
+                string[] list = namelist.Split(';');
 
                 foreach (string s in list)
                 {
-                    if (s.Length > 0 && Get(c, s, cn) == null)
+                    MaterialCommodities mc = Get(c, s, cn);
+
+                    if (mc == null)
                     {
-                        MaterialCommodities mc = new MaterialCommodities(c, s, t);
+                        mc = new MaterialCommodities(0,c, s, t, sn);
                         mc.Add(cn);
+                    }
+                    else
+                    {
+                        mc.shortname = sn;          // So, category/name combo is there, only thing that can be updated is shortname and type..
+                        mc.type = t;
+                        mc.Update(cn);
                     }
                 }
             }
@@ -163,30 +177,31 @@ namespace EDDiscovery2.DB
 
         public static void SetUpInitialTable()
         {
-            AddNewType(MaterialRawCategory, "Antimony", "Very Rare");
-            AddNewType(MaterialRawCategory, "Arsenic", "Common");
-            AddNewType(MaterialRawCategory, "Cadmium", "Rare");
-            AddNewType(MaterialRawCategory, "Carbon", "Very common");
-            AddNewType(MaterialRawCategory, "Chromium;Germanium;", "Common");
-            AddNewType(MaterialRawCategory, "Iron", "Very Common");
-            AddNewType(MaterialRawCategory, "Manganese", "Common");
-            AddNewType(MaterialRawCategory, "Mercury", "Rare");
-            AddNewType(MaterialRawCategory, "Molybdenum", "Rare");
-            AddNewType(MaterialRawCategory, "Nickel", "Very Common");
-            AddNewType(MaterialRawCategory, "Niobium", "Rare");
-            AddNewType(MaterialRawCategory, "Phosphorus", "Very Common");
-            AddNewType(MaterialRawCategory, "Polonium", "Very Rare");
-            AddNewType(MaterialRawCategory, "Ruthenium", "Very Rare");
-            AddNewType(MaterialRawCategory, "Selenium", "Common");
-            AddNewType(MaterialRawCategory, "Sulphur", "Very Common");
-            AddNewType(MaterialRawCategory, "Technetium", "Very Rare");
-            AddNewType(MaterialRawCategory, "Tellurium", "Very Rare");
-            AddNewType(MaterialRawCategory, "Tin", "Rare");
-            AddNewType(MaterialRawCategory, "Tungsten", "Rare");
-            AddNewType(MaterialRawCategory, "Vanadium", "Common");
-            AddNewType(MaterialRawCategory, "Yttrium", "Very Rare");
-            AddNewType(MaterialRawCategory, "Zinc", "Common");
-            AddNewType(MaterialRawCategory, "Zirconium", "Common");
+            AddNewType(MaterialRawCategory, "Antimony", "Very Rare","Sb");
+            AddNewType(MaterialRawCategory, "Arsenic", "Common","As");
+            AddNewType(MaterialRawCategory, "Cadmium", "Rare","Cd");
+            AddNewType(MaterialRawCategory, "Carbon", "Very common","C");
+            AddNewType(MaterialRawCategory, "Chromium", "Common","Cr");
+            AddNewType(MaterialRawCategory, "Germanium", "Common","Ge");
+            AddNewType(MaterialRawCategory, "Iron", "Very Common","Fe");
+            AddNewType(MaterialRawCategory, "Manganese", "Common","Mn");
+            AddNewType(MaterialRawCategory, "Mercury", "Rare","Hg");
+            AddNewType(MaterialRawCategory, "Molybdenum", "Rare","Mo");
+            AddNewType(MaterialRawCategory, "Nickel", "Very Common","Ni");
+            AddNewType(MaterialRawCategory, "Niobium", "Rare","Nb");
+            AddNewType(MaterialRawCategory, "Phosphorus", "Very Common","P");
+            AddNewType(MaterialRawCategory, "Polonium", "Very Rare","Po");
+            AddNewType(MaterialRawCategory, "Ruthenium", "Very Rare","Ru");
+            AddNewType(MaterialRawCategory, "Selenium", "Common","Se");
+            AddNewType(MaterialRawCategory, "Sulphur", "Very Common","S");
+            AddNewType(MaterialRawCategory, "Technetium", "Very Rare","Tc");
+            AddNewType(MaterialRawCategory, "Tellurium", "Very Rare","Te");
+            AddNewType(MaterialRawCategory, "Tin", "Rare","Sn");
+            AddNewType(MaterialRawCategory, "Tungsten", "Rare","W");
+            AddNewType(MaterialRawCategory, "Vanadium", "Common","V");
+            AddNewType(MaterialRawCategory, "Yttrium", "Very Rare","Y");
+            AddNewType(MaterialRawCategory, "Zinc", "Common","Zn");
+            AddNewType(MaterialRawCategory, "Zirconium", "Common","Zr");
 
             AddNewType(CommodityCategory, "Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
             AddNewType(CommodityCategory, "Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", "Consumer Items");
@@ -242,11 +257,11 @@ namespace EDDiscovery2.DB
 
                 if (mcdb == null)             // no record of this, add as Unknown to db
                 {
-                    mcdb = new MaterialCommodities(cat, name, "Unknown");
+                    mcdb = new MaterialCommodities(0,cat, name, "Unknown","");
                     mcdb.Add();                 // and add to data base
                 }
 
-                mc = new MaterialCommodities(cat, name, mcdb.type);        // make a new entry
+                mc = new MaterialCommodities(0,cat, name, mcdb.type,mcdb.shortname);        // make a new entry
                 list.Add(mc);
             }
 
@@ -386,7 +401,7 @@ namespace EDDiscovery2.DB
         void AddCommmodityEvent( DateTime t, JournalTypeEnum j, string name, int count, int buyprice, int pft = 0 )
         {
             MaterialCommodities mcdb = MaterialCommodities.Get(MaterialCommodities.CommodityCategory, name);    // look up in DB and see if we have a record of this type of item
-            MaterialCommodities mc = new MaterialCommodities(MaterialCommodities.CommodityCategory, name, mcdb!=null ? mcdb.type : "Unknown", count, buyprice);
+            MaterialCommodities mc = new MaterialCommodities(0,MaterialCommodities.CommodityCategory, name, mcdb!=null ? mcdb.type : "Unknown", mcdb != null ? mcdb.shortname : "", count, buyprice);
 
             Transaction tr = new Transaction
             {
@@ -402,7 +417,7 @@ namespace EDDiscovery2.DB
         void AddMaterialEvent(DateTime t, JournalTypeEnum j, string cat, string name, int count)
         {
             MaterialCommodities mcdb = MaterialCommodities.Get(cat, name);    // look up in DB and see if we have a record of this type of item
-            MaterialCommodities mc = new MaterialCommodities(cat, name, mcdb != null ? mcdb.type : "Unknown", count);
+            MaterialCommodities mc = new MaterialCommodities(0,cat, name, mcdb != null ? mcdb.type : "Unknown", mcdb != null ? mcdb.shortname : "", count);
 
             Transaction tr = new Transaction
             {
