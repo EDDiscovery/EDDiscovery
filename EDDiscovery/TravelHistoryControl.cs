@@ -20,6 +20,7 @@ using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 using EDDiscovery.Export;
 using EDDiscovery.UserControls;
+using EDDiscovery.Forms;
 
 namespace EDDiscovery
 {
@@ -32,7 +33,7 @@ namespace EDDiscovery
         SummaryPopOut summaryPopOut = null;
         List<EDCommander> commanders = null;
 
-        TabControlFormList tabcontrolsforms;
+        Forms.UserControlFormList usercontrolsforms;
 
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
@@ -50,11 +51,16 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
 
-            tabcontrolsforms = new TabControlFormList();
+            usercontrolsforms = new UserControlFormList();
 
             richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
 
             LoadCommandersListBox();
+
+            comboBoxCustomPopOut.Enabled = false;
+            comboBoxCustomPopOut.Items.AddRange(new string[] { "Pop Out", "Travel Grid", "Log", "Nearest Stars" });
+            comboBoxCustomPopOut.SelectedIndex = 0;
+            comboBoxCustomPopOut.Enabled = true;
 
             userControlTravelGrid.Init(_discoveryForm,0);       // primary first instance
             userControlTravelGrid.OnChangedSelection += ChangedSelection;
@@ -90,20 +96,20 @@ namespace EDDiscovery
 
             if ( width >= buttonMap2D.Location.X + butoffsetx * 4 + buttonSync.Width + 4)  // 2x5
             {
-                buttonPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 2, buttonMap2D.Location.Y);
+                comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 2, buttonMap2D.Location.Y);
                 buttonExtSummaryPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 3, buttonMap2D.Location.Y);
                 buttonSync.Location = new Point(buttonMap2D.Location.X + butoffsetx * 4, buttonMap2D.Location.Y);
             }
             else if (width >= buttonMap2D.Location.X + butoffsetx * 3 + buttonExtSummaryPopOut.Width + 4)   // 2x4x1
             {
-                buttonPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 2, buttonMap2D.Location.Y);
+                comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 2, buttonMap2D.Location.Y);
                 buttonExtSummaryPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 3, buttonMap2D.Location.Y);
                 buttonSync.Location = new Point(buttonMap2D.Location.X, buttonMap2D.Location.Y + butoffsety);
             }
             else  //2x2x2x1
             {
-                buttonPopOut.Location = new Point(buttonMap2D.Location.X, buttonMap2D.Location.Y + butoffsety);
-                buttonExtSummaryPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx, buttonPopOut.Location.Y);
+                comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X, buttonMap2D.Location.Y + butoffsety);
+                buttonExtSummaryPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx, comboBoxCustomPopOut.Location.Y);
                 buttonSync.Location = new Point(buttonMap2D.Location.X, buttonExtSummaryPopOut.Location.Y + butoffsety);
             }
             
@@ -179,7 +185,7 @@ namespace EDDiscovery
             UserControls.UserControlStarDistance secondaryuscd = (UserControls.UserControlStarDistance)tabControlBottom.TabPages["tabPageBottomStarList"].Controls[0];
             secondaryuscd.FillGrid(name, csl);
 
-            foreach (UserControlCommonBase uc in tabcontrolsforms.GetListOfControls(typeof(UserControls.UserControlStarDistance)))
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlStarDistance)))
                 ((UserControls.UserControlStarDistance)uc).FillGrid(name, csl);
         }
 
@@ -196,7 +202,7 @@ namespace EDDiscovery
         {
             userControlTravelGrid.Display(_discoveryForm.history);
 
-            List<UserControlCommonBase> lc = tabcontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid));
+            List<UserControlCommonBase> lc = usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid));
             foreach (UserControlCommonBase uc in lc)
                 ((UserControls.UserControlTravelGrid)uc).Display(_discoveryForm.history);
 
@@ -247,7 +253,7 @@ namespace EDDiscovery
                     }
                 }
 
-                foreach (UserControlCommonBase uc in tabcontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
                     ((UserControls.UserControlTravelGrid)uc).AddNewEntry(he);       // update these as well..
             }
             catch (Exception ex)
@@ -439,7 +445,7 @@ namespace EDDiscovery
         {
             userControlTravelGrid.UpdateCurrentNote(richTextBoxNote.Text);
 
-            foreach (UserControlCommonBase uc in tabcontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
                 ((UserControls.UserControlTravelGrid)uc).UpdateNoteJID(userControlTravelGrid.GetCurrentHistoryEntry.Journalid, richTextBoxNote.Text);
         }
 
@@ -520,37 +526,7 @@ namespace EDDiscovery
 
         private void buttonExtTabControls_Click(object sender, EventArgs e)
         {
-            TabControlForm tcf = tabcontrolsforms.NewForm(_discoveryForm.option_nowindowreposition);
-
-            tcf.AddImage(EDDiscovery.Properties.Resources.star);
-            tcf.AddImage(EDDiscovery.Properties.Resources.Log);
-            tcf.AddImage(EDDiscovery.Properties.Resources.travelgrid);
-
-            tcf.SetBorder(_discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost);
-
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
-            tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-
-            UserControls.UserControlStarDistance ucsd = new UserControls.UserControlStarDistance(); // Add a closest distance tab
-            tcf.AddUserControlTab(ucsd, "", 0);
-            if (lastclosestsystems != null)           // if we have some, fill in this grid
-                ucsd.FillGrid(lastclosestname, lastclosestsystems);
-
-            UserControls.UserControlLog uclog = new UserControls.UserControlLog(); // Add a log
-            UserControls.UserControlLog primarylog = (UserControls.UserControlLog)tabControlBottom.TabPages["tabPageBottomLog"].Controls[0];
-            uclog.CopyTextFrom(primarylog);
-            tcf.AddUserControlTab(uclog, "", 1);
-
-            UserControls.UserControlTravelGrid uctg = new UserControls.UserControlTravelGrid();
-            uctg.Init(_discoveryForm, tabcontrolsforms.Count);
-            uctg.Display(_discoveryForm.history);
-            tcf.AddUserControlTab(uctg, "", 2);
-
-            tcf.SelectDefaultTab();
-
-            _discoveryForm.theme.ApplyColors(tcf);
-
-            tcf.Show();
+            //TBD
         }
 
         #endregion
@@ -694,7 +670,56 @@ namespace EDDiscovery
             }
         }
 
-#region Target System
+
+        private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!comboBoxCustomPopOut.Enabled)
+                return;
+
+            UserControlForm tcf = usercontrolsforms.NewForm(_discoveryForm.option_nowindowreposition);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
+            tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+
+            if (comboBoxCustomPopOut.SelectedIndex == 1)
+            {
+                UserControls.UserControlTravelGrid uctg = new UserControls.UserControlTravelGrid();
+                tcf.AddUserControl(uctg);
+                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlTravelGrid));  // used to determine name and also key for DB
+
+                tcf.Init("Travel History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "TravelHistory" + numopened);
+                uctg.Init(_discoveryForm, numopened);
+                uctg.Display(_discoveryForm.history);
+            }
+            else if (comboBoxCustomPopOut.SelectedIndex == 2)
+            {
+                UserControls.UserControlLog uclog = new UserControls.UserControlLog(); // Add a log
+                tcf.AddUserControl(uclog);
+                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlLog));
+
+                tcf.Init("Log " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Log" + numopened);
+                UserControls.UserControlLog primarylog = (UserControls.UserControlLog)tabControlBottom.TabPages["tabPageBottomLog"].Controls[0];
+                uclog.CopyTextFrom(primarylog);
+            }
+            else if (comboBoxCustomPopOut.SelectedIndex == 3)
+            {
+                UserControls.UserControlStarDistance ucsd = new UserControls.UserControlStarDistance(); // Add a closest distance tab
+                tcf.AddUserControl(ucsd);
+                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlStarDistance));
+
+                tcf.Init("Nearest Stars " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "StarDistance" + numopened);
+                if (lastclosestsystems != null)           // if we have some, fill in this grid
+                    ucsd.FillGrid(lastclosestname, lastclosestsystems);
+            }
+
+            comboBoxCustomPopOut.Enabled = false;
+            comboBoxCustomPopOut.SelectedIndex = 0;
+            comboBoxCustomPopOut.Enabled = true;
+
+            _discoveryForm.theme.ApplyColors(tcf);
+            tcf.Show();
+        }
+
+        #region Target System
 
         public void RefreshTargetInfo()
         {
@@ -806,8 +831,7 @@ namespace EDDiscovery
                     UserControls.UserControlLog secondarylog = (UserControls.UserControlLog)tabControlBottomRight.TabPages["tabPageBottomRightLog"].Controls[0];
                     secondarylog.AppendText(text + Environment.NewLine, color);
 
-                    List<UserControlCommonBase> lc = tabcontrolsforms.GetListOfControls(typeof(UserControls.UserControlLog));
-                    foreach (UserControlCommonBase uc in lc)
+                    foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlLog)))
                         ((UserControls.UserControlLog)uc).AppendText(text + Environment.NewLine, color);
                 });
             }
@@ -815,5 +839,6 @@ namespace EDDiscovery
         }
 
         #endregion
+
     }
 }
