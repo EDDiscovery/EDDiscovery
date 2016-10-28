@@ -78,6 +78,11 @@ namespace ExtendedControls
             UpdateVscroll();
         }
 
+        public void CopyFrom( RichTextBoxScroll other )
+        {
+            TextBox.Rtf = other.TextBox.Rtf;
+        }
+
         #endregion
 
         #region Implementation

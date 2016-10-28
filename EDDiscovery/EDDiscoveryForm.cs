@@ -1791,6 +1791,21 @@ namespace EDDiscovery
             }
         }
 
+        public void Open3DMap(HistoryEntry he)
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            string HomeSystem = settings.MapHomeSystem;
+
+            history.FillInPositionsFSDJumps();
+
+            Map.Prepare(he?.System, settings.MapHomeSystem,
+                        settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
+                        settings.MapZoom, history.FilterByFSDAndPosition);
+            Map.Show();
+            this.Cursor = Cursors.Default;
+        }
+
         private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (CheckForNewinstaller())
@@ -1801,7 +1816,7 @@ namespace EDDiscovery
                     frm.release = newRelease;
 
                     frm.ShowDialog(this);
-    }
+                }
             }
             else
             {

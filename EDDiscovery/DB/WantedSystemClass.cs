@@ -27,7 +27,6 @@ namespace EDDiscovery.DB
         public WantedSystemClass(string SystemName)
         {
             system = SystemName;
-            Add();
         }
 
         public bool Add()

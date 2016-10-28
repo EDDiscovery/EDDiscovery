@@ -373,8 +373,8 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageTravelHistory);
             this.tabControl1.Controls.Add(this.tabPageJournal);
@@ -700,7 +700,7 @@
         private ExtendedControls.DrawnPanel panel_close;
         private ExtendedControls.DrawnPanel panel_minimize;
         private System.Windows.Forms.TabPage tabPageSettings;
-        public  EDDiscovery2.Settings settings;
+        public EDDiscovery2.Settings settings;
         private System.Windows.Forms.TabPage tabPageRoute;
         private RouteControl routeControl1;
         private System.Windows.Forms.TabPage tabPageScreenshots;
@@ -736,4 +736,3 @@
         private System.Windows.Forms.ToolStripMenuItem checkForNewReleaseToolStripMenuItem;
     }
 }
-
