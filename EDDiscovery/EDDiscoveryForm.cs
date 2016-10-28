@@ -374,10 +374,16 @@ namespace EDDiscovery
             downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
         }
 
-        private Task CheckForNewInstaller()
+        private Task CheckForNewInstallerAsync()
         {
             return Task.Factory.StartNew(() =>
             {
+                CheckForNewinstaller();
+            });
+        }
+
+        private bool CheckForNewinstaller()
+        {
                 try
                 {
 
@@ -400,7 +406,7 @@ namespace EDDiscovery
                             newRelease = rel;
                             this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
                             this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
-
+                        return true;
                         }
                     }
                 }
@@ -408,9 +414,9 @@ namespace EDDiscovery
                 {
 
                 }
-            });
-        }
 
+            return false;
+        }
 
         private void PanelInfoNewRelease()
         {
@@ -720,7 +726,7 @@ namespace EDDiscovery
 
                 panelInfo.Visible = false;
 
-                checkInstallerTask = CheckForNewInstaller();
+                checkInstallerTask = CheckForNewInstallerAsync();
             }
         }
 
@@ -1798,6 +1804,24 @@ namespace EDDiscovery
                         settings.MapZoom, history.FilterByFSDAndPosition);
             Map.Show();
             this.Cursor = Cursors.Default;
+        }
+
+        private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CheckForNewinstaller())
+            {
+                if (newRelease != null)
+                {
+                    NewReleaseForm frm = new NewReleaseForm();
+                    frm.release = newRelease;
+
+                    frm.ShowDialog(this);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No new release found", "EDDiscovery", MessageBoxButtons.OK);
+            }
         }
     }
 }

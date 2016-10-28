@@ -47,6 +47,7 @@
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.read21AndFormerLogFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rescanAllJournalFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,7 +86,7 @@
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.rescanAllJournalFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -234,6 +235,13 @@
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Text = "Force reload logs";
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click);
             // 
+            // rescanAllJournalFilesToolStripMenuItem
+            // 
+            this.rescanAllJournalFilesToolStripMenuItem.Name = "rescanAllJournalFilesToolStripMenuItem";
+            this.rescanAllJournalFilesToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
+            this.rescanAllJournalFilesToolStripMenuItem.Text = "Re-scan all journal files";
+            this.rescanAllJournalFilesToolStripMenuItem.Click += new System.EventHandler(this.rescanAllJournalFilesToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -242,7 +250,8 @@
             this.eDDiscoveryHomepageToolStripMenuItem,
             this.frontierForumThreadToolStripMenuItem,
             this.reportIssueIdeasToolStripMenuItem,
-            this.eDDiscoveryChatDiscordToolStripMenuItem});
+            this.eDDiscoveryChatDiscordToolStripMenuItem,
+            this.checkForNewReleaseToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -364,8 +373,8 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageTravelHistory);
             this.tabControl1.Controls.Add(this.tabPageJournal);
@@ -615,12 +624,12 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
-            // rescanAllJournalFilesToolStripMenuItem
+            // checkForNewReleaseToolStripMenuItem
             // 
-            this.rescanAllJournalFilesToolStripMenuItem.Name = "rescanAllJournalFilesToolStripMenuItem";
-            this.rescanAllJournalFilesToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
-            this.rescanAllJournalFilesToolStripMenuItem.Text = "Re-scan all journal files";
-            this.rescanAllJournalFilesToolStripMenuItem.Click += new System.EventHandler(this.rescanAllJournalFilesToolStripMenuItem_Click);
+            this.checkForNewReleaseToolStripMenuItem.Name = "checkForNewReleaseToolStripMenuItem";
+            this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.checkForNewReleaseToolStripMenuItem.Text = "Check for new release";
+            this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -691,7 +700,7 @@
         private ExtendedControls.DrawnPanel panel_close;
         private ExtendedControls.DrawnPanel panel_minimize;
         private System.Windows.Forms.TabPage tabPageSettings;
-        public  EDDiscovery2.Settings settings;
+        public EDDiscovery2.Settings settings;
         private System.Windows.Forms.TabPage tabPageRoute;
         private RouteControl routeControl1;
         private System.Windows.Forms.TabPage tabPageScreenshots;
@@ -724,6 +733,6 @@
         private System.Windows.Forms.TabPage tabPageExport;
         private ExportControl exportControl1;
         private System.Windows.Forms.ToolStripMenuItem rescanAllJournalFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkForNewReleaseToolStripMenuItem;
     }
 }
-
