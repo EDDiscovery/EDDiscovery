@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlLog : UserControl
+    public partial class UserControlLog : UserControlCommonBase
     {
         public UserControlLog()
         {
@@ -26,5 +26,9 @@ namespace EDDiscovery.UserControls
         {
             richTextBox_History.CopyFrom(other.richTextBox_History);
         }
+
+        public override void LoadLayout() { }
+        public override void SaveLayout() { }
+
     }
 }

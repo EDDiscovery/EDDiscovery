@@ -51,7 +51,7 @@ namespace EDDiscovery.Forms
         private Dictionary<long, SystemLink> _systemLinks;
         private List<SystemLink> _systemLinkList;
 
-        public AssignTravelLogSystemForm(TravelHistoryControl travelHistory, EliteDangerous.JournalEvents.JournalLocOrJump vsc)
+        public AssignTravelLogSystemForm(EliteDangerous.JournalEvents.JournalLocOrJump vsc)
         {
             InitializeComponent();
             this._travelLogEntry = vsc;

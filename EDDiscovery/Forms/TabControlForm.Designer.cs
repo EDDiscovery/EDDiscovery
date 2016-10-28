@@ -31,6 +31,7 @@
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.statusStripCustom1 = new ExtendedControls.StatusStripCustom();
+            this.label_index = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // panel_close
@@ -73,11 +74,22 @@
             this.statusStripCustom1.TabIndex = 22;
             this.statusStripCustom1.Text = "statusStripCustom1";
             // 
+            // label_index
+            // 
+            this.label_index.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_index.AutoSize = true;
+            this.label_index.Location = new System.Drawing.Point(508, 13);
+            this.label_index.Name = "label_index";
+            this.label_index.Size = new System.Drawing.Size(27, 13);
+            this.label_index.TabIndex = 23;
+            this.label_index.Text = "N/A";
+            // 
             // TabControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 470);
+            this.Controls.Add(this.label_index);
             this.Controls.Add(this.statusStripCustom1);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.panel_close);
@@ -85,6 +97,7 @@
             this.Text = "TabControlForm";
             this.Activated += new System.EventHandler(this.TabControlForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TabControlForm_FormClosing);
+            this.Load += new System.EventHandler(this.TabControlForm_Load);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.TabControlForm_Layout);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -96,5 +109,6 @@
         private ExtendedControls.DrawnPanel panel_close;
         private ExtendedControls.DrawnPanel panel_minimize;
         private ExtendedControls.StatusStripCustom statusStripCustom1;
+        private System.Windows.Forms.Label label_index;
     }
 }

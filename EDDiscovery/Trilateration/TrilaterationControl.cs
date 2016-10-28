@@ -797,12 +797,18 @@ namespace EDDiscovery
 
         public void AddWantedSystem(string sysName)
         {
-            if (wanted == null) wanted = new List<WantedSystemClass>();
-            WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
+            if (wanted == null)
+                PopulateLocalWantedSystems();
+            
+            WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();  //duplicate?
+
             if (entry == null)
             {
-                WantedSystemClass toAdd = new WantedSystemClass(sysName);
+                WantedSystemClass toAdd = new WantedSystemClass(sysName);       // make one..
+                toAdd.Add();                                                    // add to db.
+
                 wanted.Add(toAdd);
+
                 SystemClass star = SystemClass.GetSystem(sysName);
                 if (star == null)
                     star = new SystemClass(sysName);
