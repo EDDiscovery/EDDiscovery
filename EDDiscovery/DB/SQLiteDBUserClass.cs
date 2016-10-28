@@ -296,6 +296,7 @@ namespace EDDiscovery.DB
             string query1 = "ALTER TABLE Commanders ADD COLUMN EdsmName TEXT";
             string query2 = "ALTER TABLE MaterialsCommodities ADD COLUMN ShortName TEXT NOT NULL COLLATE NOCASE DEFAULT ''";
             SQLiteDBClass.PerformUpgrade(conn, 110, true, false, new[] { query1, query2 });
+            EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();        // RUN again, will update shortname
         }
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)
