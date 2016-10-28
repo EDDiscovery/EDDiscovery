@@ -579,11 +579,26 @@
     <Compile Include="JournalViewControl.Designer.cs">
       <DependentUpon>JournalViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlCommonBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlLog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlLog.Designer.cs">
+      <DependentUpon>UserControlLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlStarDistance.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\UserControlStarDistance.Designer.cs">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlTravelGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlTravelGrid.Designer.cs">
+      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </Compile>
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -596,8 +611,14 @@
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlLog.resx">
+      <DependentUpon>UserControlLog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
+      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.Portable.config" />
     <None Include="Resources\promotion.pspimage" />
@@ -724,6 +745,7 @@
     <None Include="Resources\shieldsdown.png" />
     <None Include="Resources\star.png" />
     <None Include="Resources\Log.png" />
+    <None Include="Resources\travelgrid.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

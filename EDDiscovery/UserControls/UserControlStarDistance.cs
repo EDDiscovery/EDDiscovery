@@ -15,7 +15,7 @@ using EDDiscovery2.EDSM;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarDistance : UserControl
+    public partial class UserControlStarDistance : UserControlCommonBase
     {
         public UserControlStarDistance()
         {
@@ -26,6 +26,9 @@ namespace EDDiscovery.UserControls
         {
             _discoveryForm = form;
         }
+
+        public override void LoadLayout() { }
+        public override void SaveLayout() { }
 
         public void StartComputeThread()
         {
