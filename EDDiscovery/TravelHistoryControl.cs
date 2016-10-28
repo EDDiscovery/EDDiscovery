@@ -82,7 +82,7 @@ namespace EDDiscovery
             LoadCommandersListBox();
 
             // This one is the master computer of star distances, the other windows just use its results..
-            UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlCustomBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
+            UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
             primaryucsd.Init(_discoveryForm);
             primaryucsd.OnNewStarList += NewStarListComputed;
             primaryucsd.StartComputeThread();
@@ -189,7 +189,7 @@ namespace EDDiscovery
         {
             lastclosestname = name;
             lastclosestsystems = csl;
-            UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlCustomBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
+            UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
             primaryucsd.FillGrid(name, csl);
 
             UserControls.UserControlStarDistance secondaryuscd = (UserControls.UserControlStarDistance)tabControlBottom.TabPages["tabPageBottomStarList"].Controls[0];
@@ -202,7 +202,7 @@ namespace EDDiscovery
 
         public void CloseClosestSystemThread()
         {
-            ((UserControls.UserControlStarDistance)(tabControlCustomBottomRight.TabPages[0].Controls[0])).StopComputeThread();
+            ((UserControls.UserControlStarDistance)(tabControlBottomRight.TabPages[0].Controls[0])).StopComputeThread();
         }
 
         #endregion
@@ -407,7 +407,7 @@ namespace EDDiscovery
                 textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
                 richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
 
-                ((UserControls.UserControlStarDistance)(tabControlCustomBottomRight.TabPages[0].Controls[0])).Add(syspos.System);
+                ((UserControls.UserControlStarDistance)(tabControlBottomRight.TabPages[0].Controls[0])).Add(syspos.System);
             }
         }
 
@@ -734,6 +734,12 @@ namespace EDDiscovery
             tcf.AddUserControlTab(ucsd, "", 0);
             if (lastclosestsystems != null)           // if we have some, fill in this grid
                 ucsd.FillGrid(lastclosestname, lastclosestsystems);
+
+            UserControls.UserControlLog uclog = new UserControls.UserControlLog(); // Add a log
+            UserControls.UserControlLog primarylog = (UserControls.UserControlLog)tabControlBottom.TabPages["tabPageBottomLog"].Controls[0];
+            uclog.CopyTextFrom(primarylog);
+
+            tcf.AddUserControlTab(uclog, "", 1);
 
             _discoveryForm.theme.ApplyColors(tcf);
 
@@ -1460,7 +1466,15 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    richTextBox_History.AppendText(text + Environment.NewLine, color);
+                    UserControls.UserControlLog primarylog = (UserControls.UserControlLog)tabControlBottom.TabPages["tabPageBottomLog"].Controls[0];
+                    primarylog.AppendText(text + Environment.NewLine, color);
+
+                    UserControls.UserControlLog secondarylog = (UserControls.UserControlLog)tabControlBottomRight.TabPages["tabPageBottomRightLog"].Controls[0];
+                    secondarylog.AppendText(text + Environment.NewLine, color);
+
+                    List<UserControl> lc = tabcontrolsforms.GetListOfControls(typeof(UserControls.UserControlLog));
+                    foreach (UserControl uc in lc)
+                        ((UserControls.UserControlLog)uc).AppendText(text + Environment.NewLine, color);
                 });
             }
             catch { }
