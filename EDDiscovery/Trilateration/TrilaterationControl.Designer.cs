@@ -405,10 +405,8 @@ namespace EDDiscovery
             // 
             // splitContainerCustom1
             // 
-            this.splitContainerCustom1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainerCustom1.Location = new System.Drawing.Point(3, 105);
+            this.splitContainerCustom1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerCustom1.Location = new System.Drawing.Point(0, 99);
             this.splitContainerCustom1.Name = "splitContainerCustom1";
             // 
             // splitContainerCustom1.Panel1
@@ -418,9 +416,8 @@ namespace EDDiscovery
             // splitContainerCustom1.Panel2
             // 
             this.splitContainerCustom1.Panel2.Controls.Add(this.dataViewScroller_Wanted);
-            this.splitContainerCustom1.Panel2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 50);
-            this.splitContainerCustom1.Size = new System.Drawing.Size(892, 521);
-            this.splitContainerCustom1.SplitterDistance = 484;
+            this.splitContainerCustom1.Size = new System.Drawing.Size(924, 582);
+            this.splitContainerCustom1.SplitterDistance = 500;
             this.splitContainerCustom1.TabIndex = 25;
             // 
             // splitContainerCustom2
@@ -437,9 +434,8 @@ namespace EDDiscovery
             // splitContainerCustom2.Panel2
             // 
             this.splitContainerCustom2.Panel2.Controls.Add(this.richTextBox_History);
-            this.splitContainerCustom2.Panel2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 50);
-            this.splitContainerCustom2.Size = new System.Drawing.Size(484, 521);
-            this.splitContainerCustom2.SplitterDistance = 317;
+            this.splitContainerCustom2.Size = new System.Drawing.Size(500, 582);
+            this.splitContainerCustom2.SplitterDistance = 354;
             this.splitContainerCustom2.TabIndex = 0;
             // 
             // dataViewScroller_Distances
@@ -451,7 +447,7 @@ namespace EDDiscovery
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
             this.dataViewScroller_Distances.ScrollBarWidth = 20;
-            this.dataViewScroller_Distances.Size = new System.Drawing.Size(484, 317);
+            this.dataViewScroller_Distances.Size = new System.Drawing.Size(500, 354);
             this.dataViewScroller_Distances.TabIndex = 0;
             this.dataViewScroller_Distances.VerticalScrollBarDockRight = true;
             // 
@@ -466,13 +462,13 @@ namespace EDDiscovery
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(464, 21);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(480, 21);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 296);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 333);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -497,7 +493,7 @@ namespace EDDiscovery
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewDistances.Size = new System.Drawing.Size(464, 317);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(480, 354);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
@@ -549,7 +545,7 @@ namespace EDDiscovery
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.ScrollBarWidth = 20;
             this.richTextBox_History.ShowLineCount = false;
-            this.richTextBox_History.Size = new System.Drawing.Size(484, 150);
+            this.richTextBox_History.Size = new System.Drawing.Size(500, 224);
             this.richTextBox_History.TabIndex = 0;
             // 
             // dataViewScroller_Wanted
@@ -561,7 +557,7 @@ namespace EDDiscovery
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
             this.dataViewScroller_Wanted.ScrollBarWidth = 20;
-            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(404, 471);
+            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(420, 582);
             this.dataViewScroller_Wanted.TabIndex = 0;
             this.dataViewScroller_Wanted.VerticalScrollBarDockRight = true;
             // 
@@ -576,13 +572,13 @@ namespace EDDiscovery
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(384, 21);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(400, 21);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 450);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 561);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 14;
@@ -620,7 +616,7 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
             this.dataGridViewClosestSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(384, 471);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(400, 582);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
