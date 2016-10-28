@@ -473,7 +473,10 @@ namespace EDDiscovery2.EDSM
 
                         SystemClass sc = SystemClass.GetSystem(id, cn, SystemClass.SystemIDType.EdsmId);
                         if (sc == null)
-                            sc = new SystemClass(name);
+                            sc = new SystemClass(name)
+                            {
+                                id_edsm = id
+                            };
 
                         HistoryEntry he = new HistoryEntry();
                         he.MakeVSEntry(sc, etutc, EDDConfig.Instance.DefaultMapColour, "", "");       // FSD jump entry
