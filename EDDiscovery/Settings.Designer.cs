@@ -52,10 +52,8 @@
             this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
             this.checkboxSkipSlowUpdates = new ExtendedControls.CheckBoxCustom();
             this.groupBox4 = new ExtendedControls.GroupBoxCustom();
-            this.btnDeleteCommander = new ExtendedControls.ButtonExt();
-            this.buttonAddCommander = new ExtendedControls.ButtonExt();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,10 +65,15 @@
             this.ColumnSyncToEddn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColumnDeleted = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColumnNetLogDirOld = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnDeleteCommander = new ExtendedControls.ButtonExt();
+            this.buttonAddCommander = new ExtendedControls.ButtonExt();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,9 +88,9 @@
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 345);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 382);
             this.groupBoxTheme.Name = "groupBoxTheme";
-            this.groupBoxTheme.Size = new System.Drawing.Size(426, 166);
+            this.groupBoxTheme.Size = new System.Drawing.Size(426, 108);
             this.groupBoxTheme.TabIndex = 18;
             this.groupBoxTheme.TabStop = false;
             this.groupBoxTheme.Text = "Theme";
@@ -179,7 +182,7 @@
             this.groupBox2.Controls.Add(this.textBoxHomeSystem);
             this.groupBox2.Controls.Add(this.panel_defaultmapcolor);
             this.groupBox2.FillClientAreaWithAlternateColor = false;
-            this.groupBox2.Location = new System.Drawing.Point(440, 217);
+            this.groupBox2.Location = new System.Drawing.Point(440, 254);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(379, 100);
             this.groupBox2.TabIndex = 17;
@@ -311,7 +314,7 @@
             this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
             this.groupBox3.Controls.Add(this.checkboxSkipSlowUpdates);
             this.groupBox3.FillClientAreaWithAlternateColor = false;
-            this.groupBox3.Location = new System.Drawing.Point(3, 217);
+            this.groupBox3.Location = new System.Drawing.Point(3, 254);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(426, 122);
             this.groupBox3.TabIndex = 16;
@@ -410,65 +413,61 @@
             this.groupBox4.BackColorScaling = 0.5F;
             this.groupBox4.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox4.BorderColorScaling = 0.5F;
+            this.groupBox4.Controls.Add(this.dataViewScrollerPanel1);
             this.groupBox4.Controls.Add(this.btnDeleteCommander);
             this.groupBox4.Controls.Add(this.buttonAddCommander);
             this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Controls.Add(this.label2);
-            this.groupBox4.Controls.Add(this.dataGridViewCommanders);
             this.groupBox4.FillClientAreaWithAlternateColor = false;
             this.groupBox4.Location = new System.Drawing.Point(0, 4);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(819, 210);
+            this.groupBox4.Size = new System.Drawing.Size(819, 244);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Commanders";
             this.groupBox4.TextPadding = 0;
             this.groupBox4.TextStartPosition = -1;
             // 
-            // btnDeleteCommander
+            // dataViewScrollerPanel1
             // 
-            this.btnDeleteCommander.BorderColorScaling = 1.25F;
-            this.btnDeleteCommander.ButtonColorScaling = 0.5F;
-            this.btnDeleteCommander.ButtonDisabledScaling = 0.5F;
-            this.btnDeleteCommander.Location = new System.Drawing.Point(680, 16);
-            this.btnDeleteCommander.Name = "btnDeleteCommander";
-            this.btnDeleteCommander.Size = new System.Drawing.Size(121, 23);
-            this.btnDeleteCommander.TabIndex = 3;
-            this.btnDeleteCommander.Text = "Delete Commander";
-            this.btnDeleteCommander.UseVisualStyleBackColor = true;
-            this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
+            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewCommanders);
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(10, 69);
+            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(793, 169);
+            this.dataViewScrollerPanel1.TabIndex = 4;
+            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
-            // buttonAddCommander
+            // vScrollBarCustom1
             // 
-            this.buttonAddCommander.BorderColorScaling = 1.25F;
-            this.buttonAddCommander.ButtonColorScaling = 0.5F;
-            this.buttonAddCommander.ButtonDisabledScaling = 0.5F;
-            this.buttonAddCommander.Location = new System.Drawing.Point(11, 16);
-            this.buttonAddCommander.Name = "buttonAddCommander";
-            this.buttonAddCommander.Size = new System.Drawing.Size(104, 23);
-            this.buttonAddCommander.TabIndex = 0;
-            this.buttonAddCommander.Text = "Add commander";
-            this.buttonAddCommander.UseVisualStyleBackColor = true;
-            this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(133, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(416, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Leave Override Journal Location blank to use the standard Frontier location for j" +
-    "ournals";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(134, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(354, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Get an EDSM API key from https://www.edsm.net in \"My account\" menu";
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = false;
+            this.vScrollBarCustom1.LargeChange = 0;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(773, 47);
+            this.vScrollBarCustom1.Maximum = -1;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 122);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 3;
+            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = -1;
+            this.vScrollBarCustom1.ValueLimited = -1;
             // 
             // dataGridViewCommanders
             // 
@@ -489,11 +488,12 @@
             this.ColumnSyncToEddn,
             this.ColumnDeleted,
             this.ColumnNetLogDirOld});
-            this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 71);
+            this.dataGridViewCommanders.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewCommanders.MultiSelect = false;
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
             this.dataGridViewCommanders.RowHeadersWidth = 20;
-            this.dataGridViewCommanders.Size = new System.Drawing.Size(792, 128);
+            this.dataGridViewCommanders.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.dataGridViewCommanders.Size = new System.Drawing.Size(773, 169);
             this.dataGridViewCommanders.TabIndex = 2;
             this.dataGridViewCommanders.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCommanders_CellEndEdit);
             // 
@@ -578,6 +578,51 @@
             this.ColumnNetLogDirOld.ReadOnly = true;
             this.ColumnNetLogDirOld.Visible = false;
             // 
+            // btnDeleteCommander
+            // 
+            this.btnDeleteCommander.BorderColorScaling = 1.25F;
+            this.btnDeleteCommander.ButtonColorScaling = 0.5F;
+            this.btnDeleteCommander.ButtonDisabledScaling = 0.5F;
+            this.btnDeleteCommander.Location = new System.Drawing.Point(680, 16);
+            this.btnDeleteCommander.Name = "btnDeleteCommander";
+            this.btnDeleteCommander.Size = new System.Drawing.Size(121, 23);
+            this.btnDeleteCommander.TabIndex = 3;
+            this.btnDeleteCommander.Text = "Delete Commander";
+            this.btnDeleteCommander.UseVisualStyleBackColor = true;
+            this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
+            // 
+            // buttonAddCommander
+            // 
+            this.buttonAddCommander.BorderColorScaling = 1.25F;
+            this.buttonAddCommander.ButtonColorScaling = 0.5F;
+            this.buttonAddCommander.ButtonDisabledScaling = 0.5F;
+            this.buttonAddCommander.Location = new System.Drawing.Point(11, 16);
+            this.buttonAddCommander.Name = "buttonAddCommander";
+            this.buttonAddCommander.Size = new System.Drawing.Size(104, 23);
+            this.buttonAddCommander.TabIndex = 0;
+            this.buttonAddCommander.Text = "Add commander";
+            this.buttonAddCommander.UseVisualStyleBackColor = true;
+            this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(133, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(416, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Leave Override Journal Location blank to use the standard Frontier location for j" +
+    "ournals";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(134, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(354, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Get an EDSM API key from https://www.edsm.net in \"My account\" menu";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -596,6 +641,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.ResumeLayout(false);
 
@@ -640,5 +686,7 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncToEddn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnDeleted;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDirOld;
+        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
+        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
     }
 }
