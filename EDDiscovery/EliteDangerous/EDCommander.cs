@@ -24,7 +24,7 @@ namespace EDDiscovery2
         {
             nr = Convert.ToInt32(reader["Id"]);
             name = Convert.ToString(reader["Name"]);
-            edsmname = Convert.ToString(reader["EDSMName"]) ?? name;
+            edsmname = reader["EDSMName"] == DBNull.Value ? name : Convert.ToString(reader["EDSMName"]) ?? name;
             apikey = Convert.ToString(reader["EdsmApiKey"]);
             deleted = Convert.ToBoolean(reader["Deleted"]);
             netLogDir = Convert.ToString(reader["NetLogDir"]);
