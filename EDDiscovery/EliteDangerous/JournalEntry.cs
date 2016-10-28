@@ -337,7 +337,8 @@ namespace EDDiscovery.EliteDangerous
             jr.Id = (int)(long)dr["Id"];
             jr.TLUId = (int)(long)dr["TravelLogId"];
             jr.CommanderId = (int)(long)dr["CommanderId"];
-            jr.EventTimeUTC = (DateTime)dr["EventTime"];
+            if (jr.EventTimeUTC == default(DateTime))
+                jr.EventTimeUTC = ((DateTime)dr["EventTime"]).ToUniversalTime();
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
             jr.EdsmID = (int)(long)dr["EdsmID"];
             jr.Synced = (int)(long)dr["Synced"];
