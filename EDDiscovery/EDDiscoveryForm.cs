@@ -846,11 +846,15 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    travelHistoryControl1.LogLine("Checking for new EDSM systems (may take a few moments).");
-                    EDSMClass edsm = new EDSMClass();
-                    long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
-                    travelHistoryControl1.LogLine("EDSM updated " + updates + " systems.");
-                    performhistoryrefresh |= (updates > 0);
+                    lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+                    if (DateTime.UtcNow.Subtract(lastmod).TotalHours >= 1)
+                    {
+                        travelHistoryControl1.LogLine("Checking for new EDSM systems (may take a few moments).");
+                        EDSMClass edsm = new EDSMClass();
+                        long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
+                        travelHistoryControl1.LogLine("EDSM updated " + updates + " systems.");
+                        performhistoryrefresh |= (updates > 0);
+                    }
                 }
             }
 
