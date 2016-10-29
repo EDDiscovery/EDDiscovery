@@ -588,6 +588,12 @@
     <Compile Include="UserControls\UserControlCommonBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\UserControlJournalGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlJournalGrid.Designer.cs">
+      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlLog.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -619,6 +625,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
+      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlLog.resx">
       <DependentUpon>UserControlLog.cs</DependentUpon>

@@ -174,6 +174,9 @@ namespace EDDiscovery.UserControls
 
         public int Display( HistoryList hl )           // rowno current.. -1 if nothing
         {
+            if (hl == null)     // just for safety
+                return -1;
+
             current_historylist = hl;
             Tuple<long, int> pos = CurrentGridPosByJID();
 
