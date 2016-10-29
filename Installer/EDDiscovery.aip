@@ -13,14 +13,15 @@
     <ROW Property="AI_ImagesColor" Value="powderblue" MultiBuildValue="AnyCPU_Debug:orange" MsiKey="AI_ImagesColor"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPHELPLINK" Value="https://forums.frontier.co.uk/showthread.php?t=138155&amp;p=2113535"/>
+    <ROW Property="ARPPRODUCTICON" Value="EDDiscovery.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="http://eddiscovery.astronet.se/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{E7F7F324-CFDB-409D-A528-5118DEFF1613} 1053:{8309209E-AA7B-46C8-B7C8-1FCC69BFEFB8} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{90424A90-4C38-41BE-96EF-7B27DE5191A1} 1053:{F2BCBB07-B91D-472F-863F-F8ED53525EC6} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="5.0.15" Type="32"/>
+    <ROW Property="ProductVersion" Value="5.0.16" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
