@@ -17,8 +17,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StartDead = Tools.GetBool(evt["StartDead"]);
             GameMode = Tools.GetStringDef(evt["GameMode"]);
             Group = Tools.GetStringDef(evt["Group"]);
-            Credits = Tools.GetInt(evt["Credits"]);
-            Loan = Tools.GetInt(evt["Loan"]);
+            Credits = Tools.GetInt64(evt["Credits"]);
+            Loan = Tools.GetInt64(evt["Loan"]);
         }
 
         public string LoadGameCommander { get; set; }
@@ -28,8 +28,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool StartDead { get; set; }
         public string GameMode { get; set; }
         public string Group { get; set; }
-        public int Credits { get; set; }
-        public int Loan { get; set; }
+        public long Credits { get; set; }
+        public long Loan { get; set; }
 
         public override string DefaultRemoveItems()
         {
