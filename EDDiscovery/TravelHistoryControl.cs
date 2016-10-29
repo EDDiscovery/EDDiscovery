@@ -58,7 +58,7 @@ namespace EDDiscovery
             LoadCommandersListBox();
 
             comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.Items.AddRange(new string[] { "Pop Out", "Travel Grid", "Log", "Nearest Stars" });
+            comboBoxCustomPopOut.Items.AddRange(new string[] { "Pop Out", "Travel Grid", "Journal", "Log", "Nearest Stars" });
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
@@ -67,14 +67,18 @@ namespace EDDiscovery
             userControlTravelGrid.OnResort += Resort;
 
             // This one is the master computer of star distances, the other windows just use its results..
-            UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
-            primaryucsd.Init(_discoveryForm);
-            primaryucsd.OnNewStarList += NewStarListComputed;
-            primaryucsd.StartComputeThread();
+
+            userControlStarDistanceBottomRight.Init(_discoveryForm);
+            userControlStarDistanceBottomRight.OnNewStarList += NewStarListComputed;
+            userControlStarDistanceBottomRight.StartComputeThread();
 
             // Secondary star list.. the compute engine is not used in this one
-            UserControls.UserControlStarDistance secondaryuscd = (UserControls.UserControlStarDistance)tabControlBottom.TabPages["tabPageBottomStarList"].Controls[0];
-            secondaryuscd.Init(_discoveryForm);
+
+            userControlStarDistanceBottom.Init(_discoveryForm);
+
+            // Bottom Journal..
+
+            userControlJournalGridBottom.Init(_discoveryForm, 1000 , false);                            // use 1000. 0 is the journal main tab, 1..N are popups
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
@@ -82,6 +86,7 @@ namespace EDDiscovery
 
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.star);           // DONT use the dialog method, add it programatically, since we can't point at resources using the dialog
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.Log);
+            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.travelgrid);
         }
 
         private void panel_topright_Resize(object sender, EventArgs e)
@@ -179,11 +184,8 @@ namespace EDDiscovery
         {
             lastclosestname = name;
             lastclosestsystems = csl;
-            UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
-            primaryucsd.FillGrid(name, csl);
-
-            UserControls.UserControlStarDistance secondaryuscd = (UserControls.UserControlStarDistance)tabControlBottom.TabPages["tabPageBottomStarList"].Controls[0];
-            secondaryuscd.FillGrid(name, csl);
+            userControlStarDistanceBottomRight.FillGrid(name, csl);
+            userControlStarDistanceBottom.FillGrid(name, csl);
 
             foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlStarDistance)))
                 ((UserControls.UserControlStarDistance)uc).FillGrid(name, csl);
@@ -191,7 +193,7 @@ namespace EDDiscovery
 
         public void CloseClosestSystemThread()
         {
-            ((UserControls.UserControlStarDistance)(tabControlBottomRight.TabPages[0].Controls[0])).StopComputeThread();
+            userControlStarDistanceBottomRight.StopComputeThread();
         }
 
         #endregion
@@ -202,9 +204,13 @@ namespace EDDiscovery
         {
             userControlTravelGrid.Display(_discoveryForm.history);
 
-            List<UserControlCommonBase> lc = usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid));
-            foreach (UserControlCommonBase uc in lc)
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
                 ((UserControls.UserControlTravelGrid)uc).Display(_discoveryForm.history);
+
+            userControlJournalGridBottom.Display(_discoveryForm.history);
+
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlJournalGrid)))
+                ((UserControls.UserControlJournalGrid)uc).Display(_discoveryForm.history);
 
             ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
             RedrawSummary();
@@ -255,6 +261,11 @@ namespace EDDiscovery
 
                 foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
                     ((UserControls.UserControlTravelGrid)uc).AddNewEntry(he);       // update these as well..
+
+                userControlJournalGridBottom.AddNewEntry(he);
+
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlJournalGrid)))
+                    ((UserControls.UserControlJournalGrid)uc).AddNewEntry(he);      // and the journal views need it
             }
             catch (Exception ex)
             {
@@ -314,7 +325,8 @@ namespace EDDiscovery
                 richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
 
                 UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
-                primaryucsd.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
+
+                userControlStarDistanceBottomRight.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
 
             }
         }
@@ -340,6 +352,7 @@ namespace EDDiscovery
             splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
             splitContainerRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
             userControlTravelGrid.LoadLayout();
+            userControlJournalGridBottom.LoadLayout();
 
             tabControlBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", 0);
             tabControlBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", 0);
@@ -348,6 +361,8 @@ namespace EDDiscovery
         public void SaveSettings()     // called by form when closing
         {
             userControlTravelGrid.SaveLayout();
+            userControlJournalGridBottom.SaveLayout();
+
             SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
             SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
             SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
@@ -524,11 +539,6 @@ namespace EDDiscovery
             }
         }
 
-        private void buttonExtTabControls_Click(object sender, EventArgs e)
-        {
-            //TBD
-        }
-
         #endregion
 
         private void buttonEDDB_Click(object sender, EventArgs e)
@@ -582,6 +592,8 @@ namespace EDDiscovery
         public void RefreshButton(bool state)
         {
             button_RefreshHistory.Enabled = state;
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlJournalGrid)))
+                ((UserControls.UserControlJournalGrid)uc).RefreshButton(state);      // and the journal views need it
         }
 
         private void button_RefreshHistory_Click(object sender, EventArgs e)
@@ -692,15 +704,24 @@ namespace EDDiscovery
             }
             else if (comboBoxCustomPopOut.SelectedIndex == 2)
             {
+                UserControls.UserControlJournalGrid uctg = new UserControls.UserControlJournalGrid();
+                tcf.AddUserControl(uctg);
+                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlJournalGrid));  // used to determine name and also key for DB
+
+                tcf.Init("Journal History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "JournalHistory" + numopened);
+                uctg.Init(_discoveryForm, numopened, true);
+                uctg.Display(_discoveryForm.history);
+            }
+            else if (comboBoxCustomPopOut.SelectedIndex == 3)
+            {
                 UserControls.UserControlLog uclog = new UserControls.UserControlLog(); // Add a log
                 tcf.AddUserControl(uclog);
                 int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlLog));
 
                 tcf.Init("Log " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Log" + numopened);
-                UserControls.UserControlLog primarylog = (UserControls.UserControlLog)tabControlBottom.TabPages["tabPageBottomLog"].Controls[0];
-                uclog.CopyTextFrom(primarylog);
+                uclog.CopyTextFrom(userControlLogBottom);
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 3)
+            else if (comboBoxCustomPopOut.SelectedIndex == 4)
             {
                 UserControls.UserControlStarDistance ucsd = new UserControls.UserControlStarDistance(); // Add a closest distance tab
                 tcf.AddUserControl(ucsd);
@@ -717,6 +738,7 @@ namespace EDDiscovery
 
             _discoveryForm.theme.ApplyColors(tcf);
             tcf.Show();
+            tcf.Focus();
         }
 
         #region Target System
@@ -825,11 +847,8 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    UserControls.UserControlLog primarylog = (UserControls.UserControlLog)tabControlBottom.TabPages["tabPageBottomLog"].Controls[0];
-                    primarylog.AppendText(text + Environment.NewLine, color);
-
-                    UserControls.UserControlLog secondarylog = (UserControls.UserControlLog)tabControlBottomRight.TabPages["tabPageBottomRightLog"].Controls[0];
-                    secondarylog.AppendText(text + Environment.NewLine, color);
+                    userControlLogBottom.AppendText(text + Environment.NewLine, color);
+                    userControlLogBottomRight.AppendText(text + Environment.NewLine, color);
 
                     foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlLog)))
                         ((UserControls.UserControlLog)uc).AppendText(text + Environment.NewLine, color);

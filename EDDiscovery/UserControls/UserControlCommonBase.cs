@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public abstract class UserControlCommonBase : UserControl
+    public class UserControlCommonBase : UserControl
     {
-        public abstract void LoadLayout();
-        public abstract void SaveLayout();
+        public virtual void LoadLayout() { }
+        public virtual void SaveLayout() { }
     }
 }
