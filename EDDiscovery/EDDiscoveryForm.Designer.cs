@@ -360,7 +360,7 @@
             // 
             // edsmRefreshTimer
             // 
-            this.edsmRefreshTimer.Interval = 900000;
+            this.edsmRefreshTimer.Interval = 3600000;
             this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
             // 
             // _refreshWorker
