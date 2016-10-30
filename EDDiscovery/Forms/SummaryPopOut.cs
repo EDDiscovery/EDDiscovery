@@ -242,6 +242,7 @@ namespace EDDiscovery2
 
             if (rw != null)
             {
+                HistoryEntry he = (HistoryEntry)rw.Cells[EDDiscovery.TravelHistoryControl.TravelHistoryColumns.HistoryTag].Tag;
 
                 if (Config(Configuration.showNothingWhenDocked) && (he.IsLanded || he.IsDocked))
                 {
@@ -328,6 +329,7 @@ namespace EDDiscovery2
 
             List<ControlEntryProperties> cep = new List<ControlEntryProperties>();
 
+            HistoryEntry he = (HistoryEntry)vscrow.Cells[EDDiscovery.TravelHistoryControl.TravelHistoryColumns.HistoryTag].Tag;
 
             if (Config( Configuration.showEDSMButton))
                 cep.Add(new ControlEntryProperties(butfont, panel_grip.ForeColor, "!!<EDSMBUT:" + (string)he.System.name));
