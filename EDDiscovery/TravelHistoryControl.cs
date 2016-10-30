@@ -800,7 +800,6 @@ namespace EDDiscovery
         {
             if (IsSummaryPopOutReady)
             {
-                summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
                 summaryPopOut.ResetForm(userControlTravelGrid.TravelGrid);
                 summaryPopOut.RefreshTarget(userControlTravelGrid.TravelGrid, _discoveryForm.history.GetLastWithPosition);
             }

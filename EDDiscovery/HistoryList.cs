@@ -55,8 +55,14 @@ namespace EDDiscovery
         bool travelling;
         int travelled_missingjump;
 
-        MaterialCommoditiesList materialscommodities;  
-        
+        MaterialCommoditiesList materialscommodities;
+
+        private bool? docked;                       // are we docked.  Null if don't know, else true/false
+        private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
+
+        public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
+        public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
+
         #endregion
 
         #region Constructors
@@ -215,6 +221,29 @@ namespace EDDiscovery
                 he.travelling = true;
 
             he.materialscommodities = MaterialCommoditiesList.Process(je,prev?.materialscommodities);
+
+            // WORK out docked/landed state
+
+            if (prev != null)
+            {
+                if (prev.docked.HasValue)                   // copy docked..
+                    he.docked = prev.docked;
+                if (prev.landed.HasValue)
+                    he.landed = prev.landed;
+            }
+
+            if (je.EventTypeID == JournalTypeEnum.Location)
+                he.docked = (je as EliteDangerous.JournalEvents.JournalLocation).Docked;
+            else if (je.EventTypeID == JournalTypeEnum.Docked)
+                he.docked = true;
+            else if (je.EventTypeID == JournalTypeEnum.Undocked)
+                he.docked = false;
+            else if (je.EventTypeID == JournalTypeEnum.Touchdown)
+                he.landed = true;
+            else if (je.EventTypeID == JournalTypeEnum.Liftoff)
+                he.landed = false;
+            else if (je.EventTypeID == JournalTypeEnum.LoadGame)
+                he.landed = (je as EliteDangerous.JournalEvents.JournalLoadGame).StartLanded;
 
             return he;
         }

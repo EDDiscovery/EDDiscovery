@@ -243,6 +243,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap divider {
+            get {
+                object obj = ResourceManager.GetObject("divider", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap dockingcancelled {
             get {
                 object obj = ResourceManager.GetObject("dockingcancelled", resourceCulture);
