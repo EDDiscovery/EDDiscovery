@@ -947,7 +947,6 @@ namespace EDDiscovery
         {
             if (IsSummaryPopOutReady)
             {
-                summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
                 summaryPopOut.ResetForm(dataGridViewTravel);
                 summaryPopOut.RefreshTarget(dataGridViewTravel, _discoveryForm.history.GetLastWithPosition);
             }
