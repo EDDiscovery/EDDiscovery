@@ -278,7 +278,19 @@ namespace EDDiscovery
 
             var trace = new StackTrace(1, true);
 
-            System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.Message}\n{trace.ToString()}");
+            // Ignore first-chance exceptions in threads outside our code
+            bool ourcode = false;
+            foreach (var frame in trace.GetFrames())
+            {
+                if (frame.GetMethod().DeclaringType.Assembly == Assembly.GetExecutingAssembly())
+                {
+                    ourcode = true;
+                    break;
+                }
+            }
+
+            if (ourcode)
+                System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.Message}\n{trace.ToString()}");
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
