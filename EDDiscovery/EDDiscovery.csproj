@@ -627,6 +627,7 @@
     <None Include="Resources\ejectcargo.png" />
     <None Include="Resources\collectcargo.png" />
     <None Include="Resources\cockpitbreached.png" />
+    <None Include="Resources\divider.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
