@@ -1666,7 +1666,7 @@ namespace EDDiscovery
             {
                 worker.ReportProgress(-1, "Updating journal entries");
 
-                using (SQLiteConnectionUserUTC conn = new SQLiteConnectionUserUTC())
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
                 {
                     using (DbTransaction txn = conn.BeginTransaction())
                     {

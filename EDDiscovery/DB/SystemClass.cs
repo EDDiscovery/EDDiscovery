@@ -287,14 +287,21 @@ namespace EDDiscovery.DB
         }
 
 
-        public static List<long> GetEdsmIdsFromName(string name)
+        public static List<long> GetEdsmIdsFromName(string name, SQLiteConnectionSystem cn = null)
         {
             List<long> ret = new List<long>();
 
             if (name.Length > 0)
             {
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+                bool ownconn = false;
+                try
                 {
+                    if (cn == null)
+                    {
+                        ownconn = true;
+                        cn = new SQLiteConnectionSystem();
+                    }
+
                     using (DbCommand cmd = cn.CreateCommand("SELECT Name,EdsmId FROM SystemNames WHERE Name==@first"))
                     {
                         cmd.AddParameterWithValue("first", name);
@@ -307,6 +314,13 @@ namespace EDDiscovery.DB
                                 ret.Add((long)rdr[1]);
                             }
                         }
+                    }
+                }
+                finally
+                {
+                    if (ownconn)
+                    {
+                        cn.Dispose();
                     }
                 }
             }
@@ -324,7 +338,7 @@ namespace EDDiscovery.DB
         {
             List<SystemClass> systems = new List<SystemClass>();
 
-            List<long> edsmidlist = GetEdsmIdsFromName(name);
+            List<long> edsmidlist = GetEdsmIdsFromName(name, cn);
 
             foreach (long edsmid in edsmidlist )
             {
@@ -1372,7 +1386,7 @@ namespace EDDiscovery.DB
 
         private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())  // open the db
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(shortlived: false))  // open the db
             {
                 return DoParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, cn, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
             }
@@ -1470,7 +1484,7 @@ namespace EDDiscovery.DB
             int updated = 0;
             int inserted = 0;
 
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())  // open the db
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(shortlived: false))  // open the db
             {
                 DbCommand selectCmd = null;
                 DbCommand insertCmd = null;
