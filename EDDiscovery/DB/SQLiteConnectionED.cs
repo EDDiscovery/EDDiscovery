@@ -21,19 +21,44 @@ namespace EDDiscovery.DB
         public SQLiteConnectionUser() : base(SQLiteDBClass.UserDatabase)
         {
         }
-    }
 
-    public class SQLiteConnectionUserUTC : SQLiteConnectionED<SQLiteConnectionUser> // THIS passes a message that times in the db are in UTC. So when we read it out, we get UTC.
-    {
-        public SQLiteConnectionUserUTC() : base(SQLiteDBClass.UserDatabase,EDDSqlDbSelection.None,true)
+        public SQLiteConnectionUser(bool utc = true, bool shortlived = true) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc, shortlived: shortlived)
         {
+        }
+
+        protected SQLiteConnectionUser(bool initializing, bool utc, bool shortlived) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc, initializing: initializing, shortlived: shortlived)
+        {
+        }
+
+        public static void Initialize()
+        {
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, true))
+            {
+                SQLiteDBUserClass.UpgradeUserDB(conn);
+            }
         }
     }
 
     public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
     {
-        public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
+        public SQLiteConnectionSystem() : this(shortlived: true)
         {
+        }
+
+        public SQLiteConnectionSystem(bool shortlived = true) : base(SQLiteDBClass.SystemDatabase, shortlived: shortlived)
+        {
+        }
+
+        protected SQLiteConnectionSystem(bool initializing, bool shortlived) : base(SQLiteDBClass.SystemDatabase, initializing: initializing, shortlived: shortlived)
+        {
+        }
+
+        public static void Initialize()
+        {
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, true))
+            {
+                SQLiteDBSystemClass.UpgradeSystemsDB(conn);
+            }
         }
     }
 
@@ -50,6 +75,7 @@ namespace EDDiscovery.DB
         where TConn : SQLiteConnectionED, new()
     {
         private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private SQLiteTxnLockED<TConn> _shortLivedTxnLock;
 
         public class SchemaLock : IDisposable
         {
@@ -72,7 +98,8 @@ namespace EDDiscovery.DB
             }
         }
 
-        public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None, bool utctimeindicator = false )
+        public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None, bool utctimeindicator = false, bool initializing = false, bool shortlived = true)
+            : base(initializing)
         {
             bool locktaken = false;
             try
@@ -90,6 +117,12 @@ namespace EDDiscovery.DB
 
                 if (utctimeindicator)   // indicate treat dates as UTC.
                     _cn.ConnectionString += "DateTimeKind=Utc;";
+
+                if (shortlived)
+                {
+                    _shortLivedTxnLock = new SQLiteTxnLockED<TConn>();
+                    _shortLivedTxnLock.Open();
+                }
 
                 _cn.Open();
 
@@ -115,13 +148,15 @@ namespace EDDiscovery.DB
 
         public override DbCommand CreateCommand(string cmd, DbTransaction tn = null)
         {
-            return new SQLiteCommandED<TConn>(_cn.CreateCommand(cmd), tn);
+            AssertThreadOwner();
+            return new SQLiteCommandED<TConn>(_cn.CreateCommand(cmd), this, tn);
         }
 
         public override DbTransaction BeginTransaction(IsolationLevel isolevel)
         {
             // Take the transaction lock before beginning the
             // transaction to avoid a deadlock
+            AssertThreadOwner();
             var txnlock = new SQLiteTxnLockED<TConn>();
             txnlock.Open();
             return new SQLiteTransactionED<TConn>(_cn.BeginTransaction(isolevel), txnlock);
@@ -131,6 +166,7 @@ namespace EDDiscovery.DB
         {
             // Take the transaction lock before beginning the
             // transaction to avoid a deadlock
+            AssertThreadOwner();
             var txnlock = new SQLiteTxnLockED<TConn>();
             txnlock.Open();
             return new SQLiteTransactionED<TConn>(_cn.BeginTransaction(), txnlock);
@@ -143,7 +179,7 @@ namespace EDDiscovery.DB
 
         // disposing: true if Dispose() was called, false
         // if being finalized by the garbage collector
-        protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -158,7 +194,15 @@ namespace EDDiscovery.DB
                 {
                     _schemaLock.ExitReadLock();
                 }
+
+                if (_shortLivedTxnLock != null)
+                {
+                    _shortLivedTxnLock.Dispose();
+                    _shortLivedTxnLock = null;
+                }
             }
+
+            base.Dispose(disposing);
         }
 
         #region Settings
@@ -249,6 +293,34 @@ namespace EDDiscovery.DB
         //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
         // causes the program to become unresponsive during big DB updates
         protected DbConnection _cn;
+        protected Thread _owningThread;
+        protected System.Diagnostics.StackTrace _openStackTrace;
+        protected static List<SQLiteConnectionED> _openConnections = new List<SQLiteConnectionED>();
+
+        protected SQLiteConnectionED(bool initializing)
+        {
+            lock (_openConnections)
+            {
+                List<SQLiteConnectionED> threadconns = SQLiteConnectionED._openConnections.Where(c => c._owningThread == Thread.CurrentThread).ToList();
+                if (threadconns.Count != 0 && !initializing)
+                {
+                    System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace(true);
+                    System.Diagnostics.Trace.WriteLine($"WARNING: Thread {Thread.CurrentThread.Name} ({Thread.CurrentThread.ManagedThreadId}) is opening multiple concurrent connections");
+                    System.Diagnostics.Trace.WriteLine($"{trace.ToString()}");
+                }
+                SQLiteConnectionED._openConnections.Add(this);
+            }
+            _owningThread = Thread.CurrentThread;
+            _openStackTrace = new System.Diagnostics.StackTrace(true);
+        }
+
+        protected void AssertThreadOwner()
+        {
+            if (Thread.CurrentThread != _owningThread)
+            {
+                throw new InvalidOperationException($"DB connection was passed between threads.  Owning thread: {_owningThread.Name} ({_owningThread.ManagedThreadId}); this thread: {Thread.CurrentThread.Name} ({Thread.CurrentThread.ManagedThreadId})");
+            }
+        }
 
         public string DBFile { get; protected set; }
 
@@ -307,6 +379,14 @@ namespace EDDiscovery.DB
         public abstract DbTransaction BeginTransaction(IsolationLevel isolevel);
         public abstract DbTransaction BeginTransaction();
         public abstract void Dispose();
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (_openConnections)
+            {
+                SQLiteConnectionED._openConnections.Remove(this);
+            }
+        }
 
 
         #region Settings

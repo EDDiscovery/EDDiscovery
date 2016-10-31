@@ -233,7 +233,7 @@ namespace EDDiscovery2.EDSM
                         tlu.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
                         tlu.Add();  // Add to Database
 
-                        using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+                        using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
                         {
                             foreach (HistoryEntry he in toadd)
                             {
