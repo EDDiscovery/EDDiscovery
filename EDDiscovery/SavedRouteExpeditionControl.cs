@@ -654,7 +654,7 @@ namespace EDDiscovery
 
         private void deleteRowsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
             foreach (int index in selectedRows.Reverse())
             {
                 dataGridViewRouteSystems.Rows.RemoveAt(index);
