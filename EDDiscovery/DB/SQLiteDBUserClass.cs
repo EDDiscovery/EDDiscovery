@@ -333,6 +333,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventType ON JournalEntries (EventType)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTime ON JournalEntries (EventTime)",
                 "CREATE INDEX IF NOT EXISTS MaterialsCommodities_ClassName ON MaterialsCommodities (Category,Name)",
+                "CREATE INDEX IF NOT EXISTS MaterialsCommodities_Name ON MaterialsCommodities (Name)",
             };
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {

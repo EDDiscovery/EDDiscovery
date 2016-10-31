@@ -14,11 +14,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Name = Tools.GetStringDef(evt["Name"]);
             System = Tools.GetStringDef(evt["System"]);
-            Reward = Tools.GetInt(evt["Reward"]);
+            Reward = Tools.GetLong(evt["Reward"]);
         }
         public string Name { get; set; }
         public string System { get; set; }
-        public int Reward { get; set; }
+        public long Reward { get; set; }
 
     }
 }

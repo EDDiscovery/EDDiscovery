@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    
+
   public class JournalShipyardSell : JournalEntry
     {
         //When Written: when selling a ship stored in the shipyard
@@ -19,12 +19,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             ShipType = Tools.GetStringDef(evt["ShipType"]);
             SellShipId = Tools.GetInt(evt["SellShipID"]);
-            ShipPrice = Tools.GetInt(evt["ShipPrice"]);
+            ShipPrice = Tools.GetLong(evt["ShipPrice"]);
             System = Tools.GetStringDef(evt["System"]);
         }
         public string ShipType { get; set; }
         public int SellShipId { get; set; }
-        public int ShipPrice { get; set; }
+        public long ShipPrice { get; set; }
         public string System { get; set; }
 
         public override string DefaultRemoveItems()

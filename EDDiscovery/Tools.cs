@@ -169,7 +169,7 @@ namespace EDDiscovery
             return jToken.Value<int>();
         }
 
-        static public long GetInt64(JToken jToken, long def = 0)
+        static public long GetLong(JToken jToken, long def = 0)
         {
             if (IsNullOrEmptyT(jToken))
                 return def;

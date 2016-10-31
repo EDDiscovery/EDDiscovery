@@ -51,6 +51,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.MakeDoubleBuffered();
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.RowTemplate.Height = 26;
+            dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
@@ -118,8 +119,6 @@ namespace EDDiscovery.UserControls
             }
             else
                 dataGridViewJournal.Columns[JournalHistoryColumns.Text].Width += delta;   // note is used to fill out columns
-
-            dataGridViewJournal.AutoResizeRows();
         }
 
         void Collapse(ref int delta, int col)
@@ -169,8 +168,6 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
-            dataGridViewJournal.AutoResizeRows();
-
             int rowno = FindGridPosByJID(pos.Item1);
 
             if (rowno > 0)
@@ -212,7 +209,6 @@ namespace EDDiscovery.UserControls
             if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")))
             {
                 AddNewJournalRow(true, he);
-                dataGridViewJournal.AutoResizeRows();
             }
         }
 

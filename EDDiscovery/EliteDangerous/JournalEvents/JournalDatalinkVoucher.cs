@@ -14,17 +14,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalDatalinkVoucher(JObject evt) : base(evt, JournalTypeEnum.DatalinkVoucher)
         {
             VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
-            Reward = Tools.GetInt(evt["Reward"]);
+            Reward = Tools.GetLong(evt["Reward"]);
             PayeeFaction = Tools.GetStringDef(evt["PayeeFaction"]);
 
         }
         public string PayeeFaction { get; set; }
-        public int Reward { get; set; }
+        public long Reward { get; set; }
         public string VictimFaction { get; set; }
-     
 
- 
+
+
     }
 
- 
+
 }

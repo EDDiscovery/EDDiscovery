@@ -17,14 +17,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             CrimeType = Tools.GetStringDef(evt["CrimeType"]);
             Faction = Tools.GetStringDef(evt["Faction"]);
-            Fine = evt.Value<int?>("Fine");
-            Bounty = evt.Value<int?>("Bounty");
+            Fine = evt.Value<long?>("Fine");
+            Bounty = evt.Value<long?>("Bounty");
         }
         public string CrimeType { get; set; }
         public string Faction { get; set; }
         public string Victim { get; set; }
-        public int? Fine { get; set; }
-        public int? Bounty { get; set; }
+        public long? Fine { get; set; }
+        public long? Bounty { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.commitcrime; } }
 

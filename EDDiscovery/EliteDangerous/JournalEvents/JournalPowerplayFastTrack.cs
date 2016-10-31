@@ -13,11 +13,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalPowerplayFastTrack(JObject evt) : base(evt, JournalTypeEnum.PowerplayFastTrack)
         {
             Power = Tools.GetStringDef(evt["Power"]);
-            Cost = Tools.GetInt(evt["Cost"]);
+            Cost = Tools.GetLong(evt["Cost"]);
 
         }
         public string Power { get; set; }
-        public int Cost { get; set; }
+        public long Cost { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplayfasttrack; } }
     }

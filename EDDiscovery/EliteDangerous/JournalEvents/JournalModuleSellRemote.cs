@@ -14,14 +14,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Slot = Tools.GetStringDef(evt["StorageSlot"]);
             SellItem = Tools.GetStringDef(evt["SellItem"]);
-            SellPrice = Tools.GetInt(evt["SellPrice"]);
+            SellPrice = Tools.GetLong(evt["SellPrice"]);
             Ship = Tools.GetStringDef(evt["Ship"]);
             ShipId = Tools.GetInt(evt["ShipID"]);
             ServerId = Tools.GetInt(evt["ServerId"]);
         }
         public string Slot { get; set; }
         public string SellItem { get; set; }
-        public int SellPrice { get; set; }
+        public long SellPrice { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public int ServerId { get; set; }

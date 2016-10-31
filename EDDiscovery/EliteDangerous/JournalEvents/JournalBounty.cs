@@ -4,7 +4,7 @@ using System.Linq;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: player is awarded a bounty for a kill
-    //Parameters: 
+    //Parameters:
     //•	Faction: the faction awarding the bounty
     //•	Reward: the reward value
     //•	VictimFaction: the victim’s faction
@@ -14,13 +14,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalBounty(JObject evt ) : base(evt, JournalTypeEnum.Bounty)
         {
             Faction = Tools.GetStringDef(evt["Faction"]);
-            Reward = Tools.GetInt(evt["Reward"]);
+            Reward = Tools.GetLong(evt["Reward"]);
             VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
             SharedWithOthers = Tools.GetBool(evt["SharedWithOthers"],false);
             Rewards = evt["Rewards"]?.ToObject<BountyReward[]>();
         }
         public string Faction { get; set; }
-        public int Reward { get; set; }
+        public long Reward { get; set; }                // might be wrong Finwen TBD
         public string VictimFaction { get; set; }
         public bool SharedWithOthers { get; set; }
         public BountyReward[] Rewards { get; set; }
@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     public class BountyReward
     {
         public string Faction;
-        public int Reward;
+        public long Reward;
     }
 
 }

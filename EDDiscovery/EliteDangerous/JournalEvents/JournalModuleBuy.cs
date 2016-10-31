@@ -18,20 +18,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Slot = Tools.GetStringDef(evt["Slot"]);
             BuyItem = Tools.GetStringDef(evt["BuyItem"]);
-            BuyPrice = Tools.GetInt(evt["BuyPrice"]);
+            BuyPrice = Tools.GetLong(evt["BuyPrice"]);
             Ship = Tools.GetStringDef(evt["Ship"]);
             ShipId = Tools.GetInt(evt["ShipID"]);
             SellItem = Tools.GetStringDef(evt["SellItem"]);
-            SellPrice = evt.Value<int?>("SellPrice");
+            SellPrice = evt.Value<long?>("SellPrice");
 
         }
         public string Slot { get; set; }
         public string BuyItem { get; set; }
-        public int BuyPrice { get; set; }
+        public long BuyPrice { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public string SellItem { get; set; }
-        public int? SellPrice { get; set; }
+        public long? SellPrice { get; set; }
 
         public override string DefaultRemoveItems()
         {

@@ -1237,6 +1237,9 @@ namespace EDDiscovery.EliteDangerous
             jc.AddIndex("Explore", "; explorer;0;Aimless;Mostly Aimless;Scout;Surveyor;Trailblazer;Pathfinder;Ranger;Pioneer;Elite", "", JL(new[] { JournalTypeEnum.Rank }));
             jc.AddIndex("Empire", "; Empire;0;None;Outsider;Serf;Master;Squire;Knight;Lord;Baron;Viscount;Count;Earl;Marquis;Duke;Prince;King", "", JL(new[] { JournalTypeEnum.Rank }));
             jc.AddIndex("Federation", "; Federation;0;None;Recruit;Cadet;Midshipman;Petty Officer;Chief Pretty Officer;Warren Officer;Ensign;Lieutenant;Lieutenant Commander;Post Commander;Post Captain;Rear Admiral;Vice Admiral;Admiral", "", JL(new[] { JournalTypeEnum.Rank }));
+
+            jc.AddSpecial("Latitude", JSONConverters.Types.TLat, "");
+            jc.AddSpecial("Longitude", JSONConverters.Types.TLong, "");
             return jc;
         }
 

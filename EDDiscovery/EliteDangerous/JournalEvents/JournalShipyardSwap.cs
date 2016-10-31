@@ -13,7 +13,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StoreOldShip: (if storing old ship) type of ship being stored
     //•	StoreShipID
     //•	SellOldShip: (if selling old ship) type of ship being sold
-    //•	SellShipID  
+    //•	SellShipID
     public class JournalShipyardSwap : JournalEntry
     {
         public JournalShipyardSwap(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSwap)
@@ -24,15 +24,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StoreShipId = evt.Value<int?>("StoreShipID");
             SellOldShip = Tools.GetStringDef(evt["SellOldShip"]);
             SellShipId = evt.Value<int?>("SellShipID");
-            SellPrice = evt.Value<int?>("SellPrice");
+            SellPrice = evt.Value<long?>("SellPrice");
         }
+
         public string ShipType { get; set; }
         public int ShipId { get; set; }
         public string StoreOldShip { get; set; }
         public int? StoreShipId { get; set; }
         public string SellOldShip { get; set; }
         public int? SellShipId { get; set; }
-        public int? SellPrice { get; set; }
+        public long? SellPrice { get; set; }
 
         public override string DefaultRemoveItems()
         {

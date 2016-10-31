@@ -19,13 +19,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (!Tools.IsNullOrEmptyT(evt["Discovered"]))
                 Discovered = evt.Value<JArray>("Discovered").Values<string>().ToArray();
 
-            BaseValue = Tools.GetInt(evt["BaseValue"]);
-            Bonus = Tools.GetInt(evt["Bonus"]);
+            BaseValue = Tools.GetLong(evt["BaseValue"]);
+            Bonus = Tools.GetLong(evt["Bonus"]);
         }
         public string[] Systems { get; set; }
         public string[] Discovered { get; set; }
-        public int BaseValue { get; set; }
-        public int Bonus { get; set; }
+        public long BaseValue { get; set; }
+        public long Bonus { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.sellexplorationdata; } }
     }

@@ -44,7 +44,7 @@ namespace EDDiscovery2.DB
             price = c.price;
         }
 
-        public MaterialCommodities(long i, string cs, string n, string t, string s, int c = 0 , int p = 0)
+        public MaterialCommodities(long i, string cs, string n, string t, string s, int c = 0 , long p = 0)
         {
             id = i;
             category = cs;
@@ -143,6 +143,24 @@ namespace EDDiscovery2.DB
                     if (reader.Read())           // already sorted, and already limited to max items
                     {
                         return new MaterialCommodities((long)reader[0],(string)reader[1], (string)reader[2], (string)reader[3],(string)reader[4]);
+                    }
+                    else
+                        return null;
+                }
+            }
+        }
+
+        public static MaterialCommodities Get(string name, SQLiteConnectionUser cn)
+        {
+            using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,Type,ShortName from MaterialsCommodities WHERE Name==@name"))
+            {
+                cmd.AddParameterWithValue("@name", name);
+
+                using (DbDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())           // already sorted, and already limited to max items
+                    {
+                        return new MaterialCommodities((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4]);
                     }
                     else
                         return null;
@@ -280,7 +298,7 @@ namespace EDDiscovery2.DB
             mc.count = Math.Max(mc.count - num, 0);
         }
 
-        public void Bought(string name, int num, int price)         // commodity
+        public void Bought(string name, int num, long price)         // commodity
         {
             MaterialCommodities mc = EnsurePresent(MaterialCommodities.CommodityCategory, name);
 
@@ -295,7 +313,7 @@ namespace EDDiscovery2.DB
             Bought(name, num, 0);
         }
 
-        public int Sold(string name, int num, int price)   // commodity
+        public int Sold(string name, int num, long price)   // commodity
         {
             MaterialCommodities mc = EnsurePresent(MaterialCommodities.CommodityCategory, name);
             mc.count = Math.Max(mc.count - num, 0);
@@ -352,9 +370,9 @@ namespace EDDiscovery2.DB
                     newmc.Collected(jmr.Type, 1);
                     break;
 
-                case JournalTypeEnum.MissionCompleted:      // Commodities can be rewarded
-                    newmc = newmc.Clone();
-                    JournalMissionCompleted jmc = (JournalMissionCompleted)je;
+                case JournalTypeEnum.MissionCompleted:      // Commodities can be rewarded - never seen. leave for now. question is out on forums
+                    //newmc = newmc.Clone();
+                    //JournalMissionCompleted jmc = (JournalMissionCompleted)je;
                     // TBD
                     break;
 
@@ -388,7 +406,7 @@ namespace EDDiscovery2.DB
             public DateTime utctime;                               // when it was done.
             public JournalTypeEnum jtype;                          // what caused it..
             public MaterialCommodities materialcommoditity;        // holds material/commoditity 
-            public int profit;                                     // any profit?
+            public long profit;                                     // any profit?
         }
 
         private List<Transaction> transactions;
@@ -398,7 +416,7 @@ namespace EDDiscovery2.DB
             transactions = new List<Transaction>();
         }
 
-        void AddCommmodityEvent( DateTime t, JournalTypeEnum j, string name, int count, int buyprice, int pft = 0 )
+        void AddCommmodityEvent( DateTime t, JournalTypeEnum j, string name, int count, long buyprice, long pft = 0 )
         {
             MaterialCommodities mcdb = MaterialCommodities.Get(MaterialCommodities.CommodityCategory, name);    // look up in DB and see if we have a record of this type of item
             MaterialCommodities mc = new MaterialCommodities(0,MaterialCommodities.CommodityCategory, name, mcdb!=null ? mcdb.type : "Unknown", mcdb != null ? mcdb.shortname : "", count, buyprice);
@@ -458,8 +476,8 @@ namespace EDDiscovery2.DB
                     AddCommmodityEvent(je.EventTimeUTC, je.EventTypeID, jmr.Type, 1, 0);
                     break;
 
-                case JournalTypeEnum.MissionCompleted:      // Commodities can be rewarded
-                    JournalMissionCompleted jmc = (JournalMissionCompleted)je;
+                case JournalTypeEnum.MissionCompleted:      // Commodities can be rewarded - never seen. leave for now. question is out on forums
+                    //JournalMissionCompleted jmc = (JournalMissionCompleted)je;
                     //TBD
                     break;
 
