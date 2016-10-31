@@ -8,137 +8,154 @@ namespace EDDiscovery
 {
     public class JSONConverters
     {
-        List<string> names;     // match on any part of this (List searched in backward order)
-        List<string> newname;   // change to this name (optional)
-        List<double> scale;     // scale by this
-        List<string> format;    // print in this format (0.0) use 'ls' to put postfix/prefix, or holds 'B;false;true' if boolean conversion
-        List<string[]> eventqual; // null for none, else has to match eventqual passed in to match
+        public enum Types
+        {
+            TScale,     // treat as a double, scale, then print using the string format as per string.Format.  "'text'0.0'more text'"
+            TBool,      // Replace a bool/1/0 with true/false value in format is "falsetext;truetext";
+            TState,     // if value is empty, use this name in format
+            TPrePost,   // prepostfix, format is "Prefix;postfix"   ;postfix can be not given.
+            TIndex,     // prepostindex "Prefix;postfix;index offset;value;value;value etc" 
+            TLat,       // format as a lat 10 N/S degree 20'30. format can be empty or prefix;postfix as above
+            TLong,      // format as a long 10 E/W degree 20'30. format can be empty or prefix;postfix as above
+        };
+
+        struct Converters
+        {
+            public Converters(string fn, string nname, Types t , double s, string f, string[] q )
+            {
+                fieldnames = fn;
+                newname = nname;
+                converttype = t;
+                scale = s;
+                format = f;
+                eventqual = q;
+            }
+
+            public string fieldnames;     // match on any part of this (List searched in backward order)
+            public string newname;   // change to this name (optional)
+            public Types converttype;
+            public double scale;     // scale value by this
+            public string format;    // format info
+            public string[] eventqual; // null for none, else has to match eventqual passed in to match
+        }
+
+        List<Converters> converters;
 
         public JSONConverters()
         {
-            names = new List<string>();
-            newname = new List<string>();
-            scale = new List<double>();
-            format = new List<string>();
-            eventqual = new List<string[]>();
+            converters = new List<Converters>();
         }
 
         // name = list of id's to match "one;two;three" or just a single "one"
         // nmane = replace name with this, or null keep name, or "" no name
         // eventq = limit to these events, "one;two;three" or a single "one"
 
-        // Scale - f can be a full format string "'hello' 0.0 'postfix'"
         public void AddScale(string name, double s, string f = "0.0", string nname = null, string eventq = null)
         {
-            names.Add(name);
-            newname.Add(nname);
-            scale.Add(s);
-            format.Add(f);
-            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
+            converters.Add(new Converters(name, nname, Types.TScale, s, f, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public void AddBool(string name, string falsevalue , string truevalue , string nname = null, string eventq = null)    // converts a true/false bool into these string, with an optional name removal
         {
-            names.Add(name);
-            newname.Add(nname);
-            scale.Add(0);
-            format.Add("B;" + falsevalue + ";" + truevalue);
-            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
+            converters.Add(new Converters(name, nname, Types.TBool, 0, falsevalue + ";" + truevalue, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public void AddState(string name, string emptyvalue, string nname = null, string eventq = null)    // adds an empty state and allows the name to be removed
         {
-            names.Add(name);
-            newname.Add(nname);
-            scale.Add(0);
-            format.Add("S;" + emptyvalue);
-            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
+            converters.Add(new Converters(name, nname, Types.TState, 0, emptyvalue, (eventq != null) ? eventq.Split(';') : null));
         }
-
-        // prepostfix "Prefix;postfix"   ;postfix can be not given.
+        
         public void AddPrePostfix(string name, string prepostfix, string nname = null, string eventq = null)    // adds an postfix string to the value and allows the name to be removed
         {
-            names.Add(name);
-            newname.Add(nname);
-            scale.Add(0);
-            format.Add("P;" + prepostfix);
-            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
+            converters.Add(new Converters(name, nname, Types.TPrePost, 0, prepostfix, (eventq != null) ? eventq.Split(';') : null));
         }
-
-        // prepostindex "Prefix;postfix;index offset;value;value;value etc" 
+        
         public void AddIndex(string name, string prepostindex, string nname = null, string eventq = null)    // indexer
         {
-            names.Add(name);
-            newname.Add(nname);
-            scale.Add(0);
-            format.Add("I;" + prepostindex);
-            eventqual.Add((eventq != null) ? eventq.Split(';') : null);
+            converters.Add(new Converters(name, nname, Types.TIndex, 0, prepostindex, (eventq != null) ? eventq.Split(';') : null));
         }
 
+        public void AddSpecial(string name, Types t, string format, string nname = null, string eventq = null)    // indexer
+        {
+            converters.Add(new Converters(name, nname, t, 0, format, (eventq != null) ? eventq.Split(';') : null));
+        }
 
         public string Convert(string pname, string value , string eventname)
         {
             string displayname = Tools.SplitCapsWord(pname);
 
-            for ( int i = names.Count-1; i>=0; i--)
+            for ( int i = converters.Count-1; i>=0; i--)
             {
-                string[] ids = names[i].Split(';');
+                string[] ids = converters[i].fieldnames.Split(';');
 
-                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && (eventqual[i] ==null ||  Array.FindIndex(eventqual[i],x=>x.Equals(eventname))!=-1 ))
+                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && (converters[i].eventqual ==null ||  Array.FindIndex(converters[i].eventqual,x=>x.Equals(eventname))!=-1 ))
                 {
-                    if (format[i][0] == 'B')        // BOOLEAN
-                    {
-                        string[] booleanvalues = format[i].Split(';');
+                    string[] formatsplit = converters[i].format.Split(';');
 
-                        bool bv = false;
-                        int iv = 0;
-                        if (bool.TryParse(value, out bv))
-                            value = booleanvalues[(bv) ? 2 : 1];
-                        else if (int.TryParse(value, out iv))
-                            value = booleanvalues[(iv != 0) ? 2 : 1];
-                        else
-                            value = booleanvalues[1];       // presume false, may be empty
-                    }
-                    else if (format[i][0] == 'S')   // State
+                    switch (converters[i].converttype)
                     {
-                        string[] statevalues = format[i].Split(';');
+                        case Types.TBool:
+                            bool bv = false;
+                            int iv = 0;
+                            if (bool.TryParse(value, out bv))
+                                value = formatsplit[(bv) ? 1 : 0];
+                            else if (int.TryParse(value, out iv))
+                                value = formatsplit[(iv != 0) ? 1 : 0];
+                            else
+                                value = formatsplit[0];       // presume false, may be empty
+                            break;
 
-                        if (value.Length == 0)
-                            value = statevalues[1];
-                    }
-                    else if (format[i][0] == 'P')   // pre-Postfix
-                    {
-                        string[] statevalues = format[i].Split(';');
+                        case Types.TState:
+                            if (value.Length == 0)
+                                value = formatsplit[0];
+                            break;
 
-                        if (statevalues.Length >= 2 && !value.Contains(statevalues[1]))       // don't repeat
-                            value = statevalues[1] + value;
-                        if (statevalues.Length >= 3 && !value.Contains(statevalues[2]))       // don't repeat
-                            value += statevalues[2];
-                    }
-                    else if (format[i][0] == 'I')   // index
-                    {
-                        string[] statevalues = format[i].Split(';');        // 0 = I, 1 = pre, 2 = post, 3 = offset, 4 = index from 0 on
+                        case Types.TPrePost:
+                            if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
+                                value = formatsplit[0] + value;
+                            if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
+                                value += formatsplit[1];
+                            break;
 
-                        int iv = 0,offset = 0;
-                        if (int.TryParse(value, out iv) && statevalues.Length>=5 && int.TryParse(statevalues[3],out offset))
-                        {
-                            if ( iv >= offset && iv < offset + statevalues.Length - 4)
+                        case Types.TIndex:
+                            int ix = 0, offset = 0;
+                            if (int.TryParse(value, out ix) && formatsplit.Length >= 4 && int.TryParse(formatsplit[2], out offset))
                             {
-                                value = statevalues[1] + statevalues[iv - offset + 4] + statevalues[2];
+                                if (ix >= offset && ix < offset + formatsplit.Length - 3)
+                                {
+                                    value = formatsplit[0] + formatsplit[ix - offset + 3] + formatsplit[1];
+                                }
                             }
-                        }
-                    }
-                    else
-                    {                               // VALUE, presume double
-                        double v = 0;
+                            break;
 
-                        if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out v))        // if it does parse, we can convert it
-                            value = (v * scale[i]).ToString(format[i]);
+                        case Types.TLat:
+                        case Types.TLong:
+                            double lv;
+                            if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lv))        // if it does parse, we can convert it
+                            {
+                                long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
+
+                                string marker = (arcsec < 0) ? "S" : "N";       // presume lat
+                                if (converters[i].converttype == Types.TLong )
+                                    marker = (arcsec < 0) ? "W" : "E";       // presume lat
+                                arcsec = Math.Abs(arcsec);
+                                value = string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60 );
+                                if (formatsplit.Length >= 2)
+                                    value = formatsplit[0] + value + formatsplit[1];
+                            }
+                            break;
+
+                        default:
+                            double v = 0;
+
+                            if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out v))        // if it does parse, we can convert it
+                                value = (v * converters[i].scale).ToString(converters[i].format);
+                            break;
                     }
 
-                    if (newname[i] != null)
+                    if (converters[i].newname != null)
                     {
-                        displayname = newname[i];
+                        displayname = converters[i].newname;
                     }
 
                     break;

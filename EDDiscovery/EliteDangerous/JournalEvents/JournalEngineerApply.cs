@@ -16,13 +16,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Engineer = Tools.GetStringDef(evt["Engineer"]);
             Blueprint = Tools.GetStringDef(evt["Blueprint"]);
             Level = Tools.GetInt(evt["Level"]);
-            Override = Tools.GetBool(evt["Override"]);
+            Override = Tools.GetStringDef("Override");
 
         }
         public string Engineer { get; set; }
         public string Blueprint { get; set; }
         public int Level { get; set; }
-        public bool? Override { get; set; }
+        public string Override { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineerapply; } }
     }

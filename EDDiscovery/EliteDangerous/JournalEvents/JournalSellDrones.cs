@@ -17,13 +17,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Type = Tools.GetStringDef(evt["Type"]);
             Count = Tools.GetInt(evt["Count"]);
-            SellPrice = Tools.GetInt(evt["SellPrice"]);
-            TotalSale = Tools.GetInt(evt["TotalSale"]);
+            SellPrice = Tools.GetLong(evt["SellPrice"]);
+            TotalSale = Tools.GetLong(evt["TotalSale"]);
         }
         public string Type { get; set; }
         public int Count { get; set; }
-        public int SellPrice { get; set; }
-        public int TotalSale { get; set; }
+        public long SellPrice { get; set; }
+        public long TotalSale { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.selldrones; } }
 

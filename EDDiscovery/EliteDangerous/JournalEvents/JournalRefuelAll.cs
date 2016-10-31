@@ -12,10 +12,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRefuelAll(JObject evt ) : base(evt, JournalTypeEnum.RefuelAll)
         {
-            Cost = Tools.GetInt(evt["Cost"]);
+            Cost = Tools.GetLong(evt["Cost"]);
             Amount = Tools.GetInt(evt["Amount"]);
         }
-        public int Cost { get; set; }
+        public long Cost { get; set; }
         public int Amount { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.refuelall; } }

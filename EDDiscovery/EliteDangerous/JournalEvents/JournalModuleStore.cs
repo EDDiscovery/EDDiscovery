@@ -23,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StoredItem = Tools.GetStringDef(evt["StoredItem"]);
             EngineerModifications = Tools.GetStringDef(evt["EngineerModifications"]);
             ReplacementItem = Tools.GetStringDef(evt["ReplacementItem"]);
-            Cost = Tools.GetInt(evt["Cost"]);
+            Cost = Tools.GetLong(evt["Cost"]);
         }
         public string Slot { get; set; }
         public string Ship { get; set; }
@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string StoredItem { get; set; }
         public string EngineerModifications { get; set; }
         public string ReplacementItem { get; set; }
-        public int Cost { get; set; }
+        public long Cost { get; set; }
 
         public override string DefaultRemoveItems()
         {

@@ -16,12 +16,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Name = Tools.GetStringDef(evt["Name"]);
             Faction = Tools.GetStringDef(evt["Faction"]);
-            Cost = Tools.GetInt(evt["Cost"]);
+            Cost = Tools.GetLong(evt["Cost"]);
             CombatRank = (CombatRank)Tools.GetInt(evt["CombatRank"]);
         }
         public string Name { get; set; }
         public string Faction { get; set; }
-        public int Cost { get; set; }
+        public long Cost { get; set; }
         public CombatRank CombatRank { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crew; } }

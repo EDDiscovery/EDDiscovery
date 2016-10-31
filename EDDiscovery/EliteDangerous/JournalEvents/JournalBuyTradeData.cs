@@ -13,13 +13,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalBuyTradeData(JObject evt ) : base(evt, JournalTypeEnum.BuyTradeData)
         {
             System = Tools.GetStringDef(evt["System"]);
-            Cost = Tools.GetInt(evt["Cost"]);
-            Count = Tools.GetInt(evt["Count"]);
+            Cost = Tools.GetLong(evt["Cost"]);
+            Count = Tools.GetLong(evt["Count"]);
         }
 
         public string System { get; set; }
-        public int Cost { get; set; }
-        public int Count { get; set; }
+        public long Cost { get; set; }
+        public long Count { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.buytradedata; } }
     }

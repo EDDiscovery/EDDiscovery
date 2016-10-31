@@ -17,8 +17,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StartDead = Tools.GetBool(evt["StartDead"]);
             GameMode = Tools.GetStringDef(evt["GameMode"]);
             Group = Tools.GetStringDef(evt["Group"]);
-            Credits = Tools.GetInt64(evt["Credits"]);
-            Loan = Tools.GetInt64(evt["Loan"]);
+            Credits = Tools.GetLong(evt["Credits"]);
+            Loan = Tools.GetLong(evt["Loan"]);
         }
 
         public string LoadGameCommander { get; set; }

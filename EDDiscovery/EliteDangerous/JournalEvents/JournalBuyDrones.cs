@@ -15,14 +15,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Type = Tools.GetStringDef(evt["Type"]);
             Count = Tools.GetInt(evt["Count"]);
-            BuyPrice = Tools.GetInt(evt["BuyPrice"]);
-            TotalCost = Tools.GetInt(evt["TotalCost"]);
+            BuyPrice = Tools.GetLong(evt["BuyPrice"]);
+            TotalCost = Tools.GetLong(evt["TotalCost"]);
 
         }
         public string Type { get; set; }
         public int Count { get; set; }
-        public int BuyPrice { get; set; }
-        public int TotalCost { get; set; }
+        public long BuyPrice { get; set; }
+        public long TotalCost { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.buydrones; } }
     }

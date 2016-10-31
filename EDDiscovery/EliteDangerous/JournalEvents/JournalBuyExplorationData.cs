@@ -5,7 +5,7 @@ using System.Linq;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When Written: when buying system data via the galaxy map
-    //Parameters: 
+    //Parameters:
     //•	System
     //•	Cost
     public class JournalBuyExplorationData : JournalEntry
@@ -13,11 +13,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalBuyExplorationData(JObject evt ) : base(evt, JournalTypeEnum.BuyExplorationData)
         {
             System = Tools.GetStringDef(evt["System"]);
-            Cost = Tools.GetInt(evt["Cost"]);
+            Cost = Tools.GetLong(evt["Cost"]);
 
         }
         public string System { get; set; }
-        public int Cost { get; set; }
+        public long Cost { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.buyexplorationdata; } }
     }

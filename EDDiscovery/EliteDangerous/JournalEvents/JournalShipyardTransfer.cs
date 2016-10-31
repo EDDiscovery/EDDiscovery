@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	ShipID
     //•	System: where it is
     //•	Distance: how far away
-    //•	TransferPrice: cost of transfer   
+    //•	TransferPrice: cost of transfer
     public class JournalShipyardTransfer : JournalEntry
     {
         public JournalShipyardTransfer(JObject evt ) : base(evt, JournalTypeEnum.ShipyardTransfer)
@@ -21,15 +21,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             ShipId = Tools.GetInt(evt["ShipID"]);
             System = Tools.GetStringDef(evt["System"]);
             Distance = Tools.GetDouble(evt["Distance"]);
-            TransferPrice = Tools.GetInt(evt["TransferPrice"]);
-
-
+            TransferPrice = Tools.GetLong(evt["TransferPrice"]);
         }
+
         public string ShipType { get; set; }
         public int ShipId { get; set; }
         public string System { get; set; }
         public double Distance { get; set; }
-        public int TransferPrice { get; set; }
+        public long TransferPrice { get; set; }
 
         public override string DefaultRemoveItems()
         {

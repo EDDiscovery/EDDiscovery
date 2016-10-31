@@ -4,7 +4,7 @@ using System.Linq;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: Player rewarded for taking part in a combat zone
-    //Parameters: 
+    //Parameters:
     //•	Reward
     //•	AwardingFaction
     //•	VictimFaction
@@ -14,10 +14,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             AwardingFaction = Tools.GetStringDef(evt["AwardingFaction"]);
             VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
-            Reward = Tools.GetInt(evt["Reward"]);
+            Reward = Tools.GetLong(evt["Reward"]);
         }
         public string AwardingFaction { get; set; }
         public string VictimFaction { get; set; }
-        public int Reward { get; set; }
+        public long Reward { get; set; }
     }
 }

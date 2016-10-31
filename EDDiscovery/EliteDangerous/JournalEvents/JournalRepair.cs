@@ -12,11 +12,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
             Item = Tools.GetStringDef(evt["Item"]);
-            Cost = Tools.GetInt(evt["Cost"]);
+            Cost = Tools.GetLong(evt["Cost"]);
 
         }
         public string Item { get; set; }
-        public int Cost { get; set; }
+        public long Cost { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.repair; } }
 

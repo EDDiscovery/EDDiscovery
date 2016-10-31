@@ -13,12 +13,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
         {
             Option = Tools.GetStringDef(evt["Option"]);
-            Cost = Tools.GetInt(evt["Cost"]);
+            Cost = Tools.GetLong(evt["Cost"]);
             Bankrupt = Tools.GetBool(evt["Bankrupt"]);
 
         }
         public string Option { get; set; }
-        public int Cost { get; set; }
+        public long Cost { get; set; }
         public bool Bankrupt { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ressurect; } }

@@ -76,7 +76,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public string Name;
         public int Count;
-        public int BuyPrice;
+        public long BuyPrice;
     }
 
     public class MaterialList
@@ -122,7 +122,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public System.Collections.Generic.List<CommodityItem> Commodities { get; protected set; }
 
-        public void Set(string name, int count, int buyprice)
+        public void Set(string name, int count, long buyprice)
         {
             if (Commodities == null)
                 Commodities = new System.Collections.Generic.List<CommodityItem>();

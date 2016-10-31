@@ -27,8 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Target = Tools.GetStringDef(evt["Target"]);
             TargetType = Tools.GetStringDef(evt["TargetType"]);
             TargetFaction = Tools.GetStringDef(evt["TargetFaction"]);
-            Reward = evt.Value<int?>("Reward") ?? 0;
-            Donation = evt.Value<int?>("Donation");
+            Reward = evt.Value<long?>("Reward") ?? 0;
+            Donation = evt.Value<long?>("Donation");
 
             if ( !Tools.IsNullOrEmptyT( evt["PermitsAwarded"]))
                 PermitsAwarded = evt.Value<JArray>("PermitsAwarded").Values<string>().ToArray();
@@ -42,8 +42,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Target { get; set; }
         public string TargetType { get; set; }
         public string TargetFaction { get; set; }
-        public int Reward { get; set; }
-        public int? Donation { get; set; }
+        public long? Reward { get; set; }
+        public long? Donation { get; set; }
         public string[] PermitsAwarded { get; set; }
         public int MissionId { get; set; }
         public string CommodityReward { get; set; }

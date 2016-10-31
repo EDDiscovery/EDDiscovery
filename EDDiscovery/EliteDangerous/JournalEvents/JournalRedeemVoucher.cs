@@ -13,12 +13,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRedeemVoucher(JObject evt) : base(evt, JournalTypeEnum.RedeemVoucher)
         {
-            Type = Tools.GetStringDef(evt["Type"]);   
-            Amount = Tools.GetInt(evt["Amount"]);
+            Type = Tools.GetStringDef(evt["Type"]);
+            Amount = Tools.GetLong(evt["Amount"]);
             BrokerPercentage = Tools.GetDouble(evt["BrokerPercentage"]);
         }
         public string Type { get; set; }
-        public int Amount { get; set; }
+        public long Amount { get; set; }
         public double BrokerPercentage { get; set; }
     }
 }

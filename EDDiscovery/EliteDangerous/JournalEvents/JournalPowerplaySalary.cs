@@ -12,10 +12,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalPowerplaySalary(JObject evt) : base(evt, JournalTypeEnum.PowerplaySalary)
         {
             Power = Tools.GetStringDef(evt["Power"]);
-            Amount = Tools.GetInt(evt["Amount"]);
+            Amount = Tools.GetLong(evt["Amount"]);
         }
         public string Power { get; set; }
-        public int Amount { get; set; }
+        public long Amount { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplaysalary; } }
     }

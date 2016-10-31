@@ -15,12 +15,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Type = Tools.GetStringDef(evt["Type"]);
             Loadout = Tools.GetStringDef(evt["Loadout"]);
-            Cost = Tools.GetInt(evt["Cost"]);
+            Cost = Tools.GetLong(evt["Cost"]);
             Count = Tools.GetInt(evt["Count"]);
         }
         public string Type { get; set; }
         public string Loadout { get; set; }
-        public int Cost { get; set; }
+        public long Cost { get; set; }
         public int Count { get; set; }
 
         public static System.Drawing.Bitmap IconSelect(string desc)
