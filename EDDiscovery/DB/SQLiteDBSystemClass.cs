@@ -46,7 +46,7 @@ namespace EDDiscovery.DB
                 if (dbver < 102)
                     UpgradeSystemsDB102(conn);
 
-                CreateSystemDBTableIndexes();
+                CreateSystemDBTableIndexes(conn);
 
                 return true;
             }
@@ -57,7 +57,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static void UpgradeSystemsDB2(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB2(SQLiteConnectionED conn)
         {
             string query = "CREATE TABLE Systems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , name TEXT NOT NULL COLLATE NOCASE , x FLOAT, y FLOAT, z FLOAT, cr INTEGER, commandercreate TEXT, createdate DATETIME, commanderupdate TEXT, updatedate DATETIME, status INTEGER, population INTEGER )";
             string query3 = "CREATE TABLE Distances (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  UNIQUE , NameA TEXT NOT NULL , NameB TEXT NOT NULL , Dist FLOAT NOT NULL , CommanderCreate TEXT NOT NULL , CreateTime DATETIME NOT NULL , Status INTEGER NOT NULL )";
@@ -216,7 +216,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private static void CreateSystemDBTableIndexes()
+        private static void CreateSystemDBTableIndexes(SQLiteConnectionSystem conn)
         {
             string[] queries = new[]
             {
@@ -231,14 +231,12 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS StationsIndex_system_ID  ON Stations (system_id ASC)",
                 "CREATE INDEX IF NOT EXISTS StationsIndex_system_Name  ON Stations (Name ASC)",
             };
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
+
+            foreach (string query in queries)
             {
-                foreach (string query in queries)
+                using (DbCommand cmd = conn.CreateCommand(query))
                 {
-                    using (DbCommand cmd = conn.CreateCommand(query))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

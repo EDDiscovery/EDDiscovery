@@ -192,7 +192,6 @@ namespace EDDiscovery.DB
 
                 _locktaken = false;
             }
-
         }
         #endregion
     }
@@ -376,9 +375,11 @@ namespace EDDiscovery.DB
     {
         // This is the wrapped transaction
         protected SQLiteTransactionED<TConn> _transaction;
+        protected SQLiteConnectionED _connection;
 
-        public SQLiteCommandED(DbCommand cmd, DbTransaction txn = null)
+        public SQLiteCommandED(DbCommand cmd, SQLiteConnectionED conn, DbTransaction txn = null)
         {
+            _connection = conn;
             InnerCommand = cmd;
             if (txn != null)
             {
@@ -392,7 +393,7 @@ namespace EDDiscovery.DB
         public override string CommandText { get { return InnerCommand.CommandText; } set { InnerCommand.CommandText = value; } }
         public override int CommandTimeout { get { return InnerCommand.CommandTimeout; } set { InnerCommand.CommandTimeout = value; } }
         public override CommandType CommandType { get { return InnerCommand.CommandType; } set { InnerCommand.CommandType = value; } }
-        protected override DbConnection DbConnection { get { return InnerCommand.Connection; } set { InnerCommand.Connection = value; } }
+        protected override DbConnection DbConnection { get { return InnerCommand.Connection; } set { throw new InvalidOperationException("Cannot change connection of command"); } }
         protected override DbParameterCollection DbParameterCollection { get { return InnerCommand.Parameters; } }
         protected override DbTransaction DbTransaction { get { return _transaction; } set { SetTransaction(value); } }
         public override bool DesignTimeVisible { get { return InnerCommand.DesignTimeVisible; } set { InnerCommand.DesignTimeVisible = value; } }
@@ -539,15 +540,8 @@ namespace EDDiscovery.DB
                     SplitDataBase();
                 }
 
-                using (var conn = new SQLiteConnectionUser())
-                {
-                    SQLiteDBUserClass.UpgradeUserDB(conn);                                            // upgrade it
-                }
-
-                using (var conn = new SQLiteConnectionSystem())
-                {
-                    SQLiteDBSystemClass.UpgradeSystemsDB(conn);                                            // upgrade it
-                }
+                SQLiteConnectionUser.Initialize();
+                SQLiteConnectionSystem.Initialize();
             }
             catch (Exception ex)
             {
