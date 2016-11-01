@@ -266,6 +266,7 @@ namespace EDDiscovery2
         public FormMap()
         {
             InitializeComponent();
+            OpenTK.Toolkit.Init();
         }
 
         private void FormMap_Load(object sender, EventArgs e)
@@ -1739,7 +1740,7 @@ namespace EDDiscovery2
                     _mouseStartTranslateXZ.Y = _mouseStartRotate.Y = _mouseStartTranslateXY.Y = e.Y;
                     //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
-                    Matrix4 transform = Matrix4.CreateRotationZ((float)(-posdir.CameraDirection.Y * Math.PI / 180.0f));
+                    Matrix3 transform = Matrix3.CreateRotationZ((float)(-posdir.CameraDirection.Y * Math.PI / 180.0f));
                     Vector3 translation = new Vector3(-dx * (1.0f / zoomfov.Zoom) * 2.0f, dy * (1.0f / zoomfov.Zoom) * 2.0f, 0.0f);
                     translation = Vector3.Transform(translation, transform);
 
