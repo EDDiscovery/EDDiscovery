@@ -77,9 +77,9 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            for (int i = 0; i < readersToUpdate.Count; i++)
             {
-                for (int i = 0; i < readersToUpdate.Count; i++)
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
                 {
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
@@ -97,7 +97,7 @@ namespace EDDiscovery.EliteDangerous
                         tn.Commit();
                     }
 
-                    reader.TravelLogUnit.Update();
+                    reader.TravelLogUnit.Update(cn);
 
                     updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
@@ -313,7 +313,7 @@ namespace EDDiscovery.EliteDangerous
                     netlogpos = nfi.TravelLogUnit.Size;
                     List<JournalEntry> ents = nfi.ReadJournalLog().ToList();
 
-                    using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+                    using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
                     {
                         using (DbTransaction txn = cn.BeginTransaction())
                         {

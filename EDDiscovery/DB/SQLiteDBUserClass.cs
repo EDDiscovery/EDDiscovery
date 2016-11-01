@@ -75,7 +75,7 @@ namespace EDDiscovery.DB
                 if (dbver < 110)
                     UpgradeUserDB110(conn);
 
-                CreateUserDBTableIndexes();
+                CreateUserDBTableIndexes(conn);
 
                 return true;
             }
@@ -322,7 +322,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private static void CreateUserDBTableIndexes()
+        private static void CreateUserDBTableIndexes(SQLiteConnectionUser conn)
         {
             string[] queries = new[]
             {
@@ -335,14 +335,12 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS MaterialsCommodities_ClassName ON MaterialsCommodities (Category,Name)",
                 "CREATE INDEX IF NOT EXISTS MaterialsCommodities_Name ON MaterialsCommodities (Name)",
             };
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+
+            foreach (string query in queries)
             {
-                foreach (string query in queries)
+                using (DbCommand cmd = conn.CreateCommand(query))
                 {
-                    using (DbCommand cmd = conn.CreateCommand(query))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
@@ -466,7 +464,7 @@ namespace EDDiscovery.DB
                 }
             }
 
-            using (SQLiteConnectionUserUTC conn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
             {
                 using (DbTransaction txn = conn.BeginTransaction())
                 {
