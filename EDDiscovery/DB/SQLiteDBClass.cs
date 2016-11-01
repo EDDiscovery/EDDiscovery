@@ -20,7 +20,6 @@ namespace EDDiscovery.DB
     {
         private static ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         private static SQLiteTxnLockED<TConn> _writeLockOwner;
-        private static Thread _writerThread;
         private Thread _owningThread;
         public DbCommand _executingCommand;
         public bool _commandExecuting = false;
@@ -106,6 +105,11 @@ namespace EDDiscovery.DB
 
         public void OpenReader()
         {
+            if (_owningThread != Thread.CurrentThread)
+            {
+                throw new InvalidOperationException("Transaction lock passed between threads");
+            }
+
             if (!_lock.IsReadLockHeld && !_lock.IsUpgradeableReadLockHeld)
             {
                 if (_lock.IsWriteLockHeld)
@@ -125,7 +129,7 @@ namespace EDDiscovery.DB
                         }
                     }
 
-                    _writerThread = Thread.CurrentThread;
+                    _writeLockOwner = this;
                 }
                 else
                 {
@@ -144,6 +148,11 @@ namespace EDDiscovery.DB
 
         public void OpenWriter()
         {
+            if (_owningThread != Thread.CurrentThread)
+            {
+                throw new InvalidOperationException("Transaction lock passed between threads");
+            }
+
             if (!_lock.IsWriteLockHeld)
             {
                 if (_lock.IsReadLockHeld)
@@ -163,7 +172,7 @@ namespace EDDiscovery.DB
                         }
                     }
 
-                    _writerThread = Thread.CurrentThread;
+                    _writeLockOwner = this;
                 }
 
                 while (!_lock.TryEnterWriteLock(1000))
