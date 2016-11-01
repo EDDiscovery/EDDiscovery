@@ -210,7 +210,7 @@ namespace EDDiscovery
                     stream = File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     ownstream = true;
                 }
-                while (!cancelRequested() && this.ReadLine(out line, stream))
+                while (!cancelRequested() && this.ReadLine(out line, l => l, stream))
                 {
                     ParseLineTime(line);
 
