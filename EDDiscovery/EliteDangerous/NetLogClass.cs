@@ -128,9 +128,9 @@ namespace EDDiscovery
                 }
             }
 
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            for (int i = 0; i < readersToUpdate.Count; i++)
             {
-                for (int i = 0; i < readersToUpdate.Count; i++)
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
                 {
                     int ji = 0;
 

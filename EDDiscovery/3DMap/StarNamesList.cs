@@ -239,9 +239,9 @@ namespace EDDiscovery2
 
                 //string res = "";  // used to view whats added/removed/draw..
 
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+                foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                 {
-                    foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
+                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                     {
                         StarNames sys = null;
                         bool draw = false;

@@ -363,14 +363,14 @@ namespace EDDiscovery.EliteDangerous
 
         public bool Add()
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 bool ret = Add(cn);
                 return ret;
             }
         }
 
-        public bool Add(SQLiteConnectionUserUTC cn, DbTransaction tn = null)
+        public bool Add(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventStrName, @EventData, @EdsmId, @Synced)", tn))
             {
@@ -395,13 +395,13 @@ namespace EDDiscovery.EliteDangerous
 
         public bool Update()
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnectionUserUTC cn, DbTransaction tn = null)
+        private bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id",tn))
             {
@@ -421,7 +421,7 @@ namespace EDDiscovery.EliteDangerous
         }
 
         //dist >0 to update
-        public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos , double dist, SQLiteConnectionUserUTC cn = null, DbTransaction tn = null)
+        public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos , double dist, SQLiteConnectionUser cn = null, DbTransaction tn = null)
         {
             bool ownconn = false;
 
@@ -430,7 +430,7 @@ namespace EDDiscovery.EliteDangerous
                 if (cn == null)
                 {
                     ownconn = true;
-                    cn = new SQLiteConnectionUserUTC();
+                    cn = new SQLiteConnectionUser(utc: true);
                 }
 
                 JournalEntry ent = Get(journalid, cn, tn);
@@ -470,7 +470,7 @@ namespace EDDiscovery.EliteDangerous
 
         public static void UpdateMapColour(long journalid, int mapcolour)
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 JournalEntry ent = Get(journalid, cn);
 
@@ -494,7 +494,7 @@ namespace EDDiscovery.EliteDangerous
 
         public static void UpdateSyncFlagBit(long journalid, SyncFlags bit, bool value)
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 JournalEntry je = Get(journalid, cn);
 
@@ -518,7 +518,7 @@ namespace EDDiscovery.EliteDangerous
 
         public static void UpdateCommanderID(long journalid, int cmdrid)
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdrid where ID=@journalid"))
                 {
@@ -530,7 +530,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        static public JournalEntry Get(long journalid, SQLiteConnectionUserUTC cn, DbTransaction tn = null)
+        static public JournalEntry Get(long journalid, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid", tn))
             {
@@ -550,7 +550,7 @@ namespace EDDiscovery.EliteDangerous
 
         static public JournalEntry Get(long journalid)
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 return Get(journalid, cn);
             }
@@ -563,7 +563,7 @@ namespace EDDiscovery.EliteDangerous
         {
             List<JournalEntry> list = new List<JournalEntry>();
 
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where CommanderID=@commander Order by EventTime ASC"))
                 {
@@ -593,7 +593,7 @@ namespace EDDiscovery.EliteDangerous
         {
             List<JournalEntry> vsc = new List<JournalEntry>();
 
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE EventTypeID = @eventtype and  CommanderID=@commander and  EventTime >@start and EventTime<@Stop ORDER BY EventTime ASC"))
                 {
@@ -619,7 +619,7 @@ namespace EDDiscovery.EliteDangerous
         {
             List<JournalEntry> vsc = new List<JournalEntry>();
 
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLogId = @source ORDER BY EventTime ASC"))
                 {
@@ -639,7 +639,7 @@ namespace EDDiscovery.EliteDangerous
         public static T GetLast<T>(int cmdrid, DateTime before)
             where T : JournalEntry
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime < @time ORDER BY EventTime DESC"))
                 {
@@ -1129,7 +1129,7 @@ namespace EDDiscovery.EliteDangerous
 
         static public bool ResetCommanderID(int from , int to)
         {
-            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdridto where CommanderID=@cmdridfrom"))
                 {

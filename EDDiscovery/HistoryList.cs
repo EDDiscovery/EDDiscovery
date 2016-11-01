@@ -449,52 +449,76 @@ namespace EDDiscovery
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid
         {
+            List<Tuple<HistoryEntry, SystemClass>> updatesystems = new List<Tuple<HistoryEntry, SystemClass>>();
+
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 foreach (HistoryEntry he in historylist)
                 {
                     if (he.IsFSDJump && !he.System.HasCoordinate)   // try and load ones without position.. if its got pos we are happy
-                        FillEDSM(he, cn);
+                        updatesystems.Add(new Tuple<HistoryEntry, SystemClass>(he, FindEDSM(he)));
+                }
+            }
+
+            foreach (Tuple<HistoryEntry, SystemClass> he in updatesystems)
+            {
+                FillEDSM(he.Item1, edsmsys: he.Item2, findsys: false);
+            }
+        }
+
+        public SystemClass FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
+        {
+            if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
+                return null;
+
+            bool ownconn = false;
+
+            try
+            {
+                if (conn == null)
+                {
+                    ownconn = true;
+                    conn = new SQLiteConnectionSystem();
+                }
+
+                return SystemClass.FindEDSM(syspos.System, conn);
+            }
+            finally
+            {
+                if (ownconn && conn != null)
+                {
+                    conn.Dispose();
                 }
             }
         }
 
-        public void FillEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, SystemClass edsmsys = null, bool findsys = true, bool reload = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1) )  // if set already, or we tried and failed..
                 return;
-
-            bool closeit = false;
-
-            if (conn == null)
-            {
-                closeit = true;
-                conn = new SQLiteConnectionSystem();
-            }
 
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
             foreach (HistoryEntry he in historylist)       // list of systems in historylist using the same system object
             {
-                if (Object.ReferenceEquals(he.System,syspos.System))
+                if (Object.ReferenceEquals(he.System, syspos.System))
                     alsomatching.Add(he);
             }
-            
-            SystemClass s = null;
-            if (syspos.System.id_edsm >= 0)                 // if never tried..
-                s = SystemClass.FindEDSM(syspos.System,conn);
 
-            if (s != null)
+            if (findsys)
+                edsmsys = FindEDSM(syspos, reload: reload);
+
+            if (edsmsys != null)
             {
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                 {
                     bool updateedsmid = he.System.id_edsm <= 0;
-                    bool updatepos = (he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump || he.EntryType == EliteDangerous.JournalTypeEnum.Location ) && !syspos.System.HasCoordinate && s.HasCoordinate;
+                    bool updatepos = (he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump || he.EntryType == EliteDangerous.JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
 
-                    if ( updatepos || updateedsmid )
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, s, updatepos,-1);  // update pos and edsmid, jdist not updated
+                    if (updatepos || updateedsmid)
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1);  // update pos and edsmid, jdist not updated
 
-                    he.System = s;
+                    he.System = edsmsys;
                 }
             }
             else
@@ -502,9 +526,6 @@ namespace EDDiscovery
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                     he.System.id_edsm = -1;                     // can't do it
             }
-
-            if (closeit && conn != null)
-                conn.Dispose();
         }
 
         public void CalculateSqDistances(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar)

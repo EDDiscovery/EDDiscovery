@@ -125,7 +125,7 @@ namespace EDDiscovery2.DB
 
         public static MaterialCommodities Get(string c, string name)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
                 return Get(c, name, cn);
             }

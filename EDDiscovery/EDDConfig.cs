@@ -341,7 +341,7 @@ namespace EDDiscovery2
 
                 int maxnr = -1;
 
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
                 {
                     using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders"))
                     {
@@ -364,8 +364,11 @@ namespace EDDiscovery2
                             }
                         }
                     }
+                }
 
-                    if (maxnr == -1)        // migrate from really old code
+                if (maxnr == -1)        // migrate from really old code
+                {
+                    using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
                     {
                         using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmName, EdsmApiKey, NetLogDir, Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Id, @Name, @EdsmName, @EdsmApiKey, @NetLogDir, @Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
                         {
