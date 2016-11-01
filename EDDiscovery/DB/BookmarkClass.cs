@@ -135,7 +135,7 @@ namespace EDDiscovery2.DB
         {
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
                     {

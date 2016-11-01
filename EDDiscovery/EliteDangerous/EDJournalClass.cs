@@ -77,9 +77,9 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true, shortlived: false))
+            for (int i = 0; i < readersToUpdate.Count; i++)
             {
-                for (int i = 0; i < readersToUpdate.Count; i++)
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
                 {
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);

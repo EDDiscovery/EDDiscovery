@@ -160,7 +160,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
                 {
                     using (DbCommand cmd1 = cn.CreateCommand("select * from routes_expeditions"))
                     {

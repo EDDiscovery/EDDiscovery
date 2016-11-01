@@ -131,7 +131,7 @@ namespace EDDiscovery2.DB
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
@@ -153,7 +153,7 @@ namespace EDDiscovery2.DB
         public static List<string> GetAllNames()
         {
             List<string> names = new List<string>();
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT DISTINCT Name FROM TravelLogUnit"))
                 {
@@ -171,7 +171,7 @@ namespace EDDiscovery2.DB
 
         public static TravelLogUnit Get(string name)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Name = @name ORDER BY Id DESC"))
                 {
