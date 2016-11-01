@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalJetConeDamage(JObject evt ) : base(evt, JournalTypeEnum.JetConeDamage)
         {
-            Module = Tools.GetStringDef(evt["Module"]);
+            Module = JSONHelper.GetStringDef(evt["Module"]);
 
         }
         public string Module { get; set; }

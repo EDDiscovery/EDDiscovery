@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalNewCommander(JObject evt ) : base(evt, JournalTypeEnum.NewCommander)
         {
-            Package = Tools.GetStringDef(evt["Package"]);
+            Package = JSONHelper.GetStringDef(evt["Package"]);
         }
 
         public string Name { get; set; }

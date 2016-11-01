@@ -10,8 +10,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommunityGoalDiscard(JObject evt) : base(evt, JournalTypeEnum.CommunityGoalDiscard)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
-            System = Tools.GetStringDef(evt["System"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
+            System = JSONHelper.GetStringDef(evt["System"]);
         }
         public string Name { get; set; }
         public string System { get; set; }

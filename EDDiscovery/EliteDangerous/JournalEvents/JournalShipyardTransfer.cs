@@ -17,11 +17,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardTransfer(JObject evt ) : base(evt, JournalTypeEnum.ShipyardTransfer)
         {
-            ShipType = Tools.GetStringDef(evt["ShipType"]);
-            ShipId = Tools.GetInt(evt["ShipID"]);
-            System = Tools.GetStringDef(evt["System"]);
-            Distance = Tools.GetDouble(evt["Distance"]);
-            TransferPrice = Tools.GetLong(evt["TransferPrice"]);
+            ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
+            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            System = JSONHelper.GetStringDef(evt["System"]);
+            Distance = JSONHelper.GetDouble(evt["Distance"]);
+            TransferPrice = JSONHelper.GetLong(evt["TransferPrice"]);
         }
 
         public string ShipType { get; set; }

@@ -12,9 +12,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplayVote(JObject evt) : base(evt, JournalTypeEnum.PowerplayVote)
         {
-            Power = Tools.GetStringDef(evt["Power"]);
-            System = Tools.GetStringDef(evt["System"]);
-            Votes = Tools.GetInt(evt["Votes"]);
+            Power = JSONHelper.GetStringDef(evt["Power"]);
+            System = JSONHelper.GetStringDef(evt["System"]);
+            Votes = JSONHelper.GetInt(evt["Votes"]);
         }
         public string Power { get; set; }
         public string System { get; set; }

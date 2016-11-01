@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplayVoucher(JObject evt) : base(evt, JournalTypeEnum.PowerplayVoucher)
         {
-            Power = Tools.GetStringDef(evt["Power"]);
+            Power = JSONHelper.GetStringDef(evt["Power"]);
 
             Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
         }

@@ -14,8 +14,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardNew(JObject evt ) : base(evt, JournalTypeEnum.ShipyardNew)
         {
-            ShipType = Tools.GetStringDef(evt["ShipType"]);
-            ShipId = Tools.GetInt(evt["NewShipID"]);
+            ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
+            ShipId = JSONHelper.GetInt(evt["NewShipID"]);
 
         }
         public string ShipType { get; set; }

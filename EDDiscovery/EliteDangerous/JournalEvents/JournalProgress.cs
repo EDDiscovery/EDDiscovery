@@ -17,12 +17,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalProgress(JObject evt ) : base(evt, JournalTypeEnum.Progress)
         {
-            Combat = Tools.GetInt(evt["Combat"]);
-            Trade = Tools.GetInt(evt["Trade"]);
-            Explore = Tools.GetInt(evt["Explore"]);
-            Empire = Tools.GetInt(evt["Empire"]);
-            Federation = Tools.GetInt(evt["Federation"]);
-            CQC = Tools.GetInt(evt["CQC"]);
+            Combat = JSONHelper.GetInt(evt["Combat"]);
+            Trade = JSONHelper.GetInt(evt["Trade"]);
+            Explore = JSONHelper.GetInt(evt["Explore"]);
+            Empire = JSONHelper.GetInt(evt["Empire"]);
+            Federation = JSONHelper.GetInt(evt["Federation"]);
+            CQC = JSONHelper.GetInt(evt["CQC"]);
 
         }
         public int Combat { get; set; }

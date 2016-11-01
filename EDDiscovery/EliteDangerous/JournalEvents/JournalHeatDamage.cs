@@ -13,9 +13,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalHeatDamage(JObject evt ) : base(evt, JournalTypeEnum.HeatDamage)
         {
-            AwardingFaction = Tools.GetStringDef(evt["AwardingFaction"]);
-            VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
-            Reward = Tools.GetLong(evt["Reward"]);
+            AwardingFaction = JSONHelper.GetStringDef(evt["AwardingFaction"]);
+            VictimFaction = JSONHelper.GetStringDef(evt["VictimFaction"]);
+            Reward = JSONHelper.GetLong(evt["Reward"]);
         }
         public string AwardingFaction { get; set; }
         public string VictimFaction { get; set; }

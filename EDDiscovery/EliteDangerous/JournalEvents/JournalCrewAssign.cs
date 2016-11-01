@@ -12,8 +12,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCrewAssign(JObject evt) : base(evt, JournalTypeEnum.CrewAssign)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
-            Role = Tools.GetStringDef(evt["Role"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
+            Role = JSONHelper.GetStringDef(evt["Role"]);
         }
         public string Name { get; set; }
         public string Role { get; set; }

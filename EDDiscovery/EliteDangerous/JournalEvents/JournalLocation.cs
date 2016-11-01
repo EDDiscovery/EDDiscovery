@@ -24,24 +24,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLocation(JObject evt ) : base(evt, JournalTypeEnum.Location)
         {
-            Body = Tools.GetStringDef(evt["Body"]);
-            Docked = evt.Value < bool ?>("Docked") ?? false;
-            StationName = Tools.GetStringDef(evt["StationName"]);
-            StationType = Tools.GetStringDef(evt["StationType"]);
-            Faction = Tools.GetStringDef(evt["Faction"]);
-            FactionState = Tools.GetStringDef(evt["FactionState"]);
-            Allegiance = Tools.GetStringDef(evt["Allegiance"]);
-            Economy = Tools.GetStringDef(evt["Economy"]);
-            Economy_Localised = Tools.GetStringDef(evt["Economy_Localised"]);
-            Government = Tools.GetStringDef(evt["Government"]);
-            Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
-            Security = Tools.GetStringDef(evt["Security"]);
-            Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
-            BodyType = Tools.GetStringDef(evt["BodyType"]);
+            Body = JSONHelper.GetStringDef(evt["Body"]);
+            Docked = JSONHelper.GetBool(evt["Docked"]);
+            StationName = JSONHelper.GetStringDef(evt["StationName"]);
+            StationType = JSONHelper.GetStringDef(evt["StationType"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
+            Allegiance = JSONHelper.GetStringDef(evt["Allegiance"]);
+            Economy = JSONHelper.GetStringDef(evt["Economy"]);
+            Economy_Localised = JSONHelper.GetStringDef(evt["Economy_Localised"]);
+            Government = JSONHelper.GetStringDef(evt["Government"]);
+            Government_Localised = JSONHelper.GetStringDef(evt["Government_Localised"]);
+            Security = JSONHelper.GetStringDef(evt["Security"]);
+            Security_Localised = JSONHelper.GetStringDef(evt["Security_Localised"]);
+            BodyType = JSONHelper.GetStringDef(evt["BodyType"]);
 
-            PowerplayState = Tools.GetStringDef(evt["PowerplayState"]);
+            PowerplayState = JSONHelper.GetStringDef(evt["PowerplayState"]);
 
-            if (!Tools.IsNullOrEmptyT(evt["Powers"]))
+            if (!JSONHelper.IsNullOrEmptyT(evt["Powers"]))
                 Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
 
         }

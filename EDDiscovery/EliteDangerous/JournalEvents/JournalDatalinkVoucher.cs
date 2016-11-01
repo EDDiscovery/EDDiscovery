@@ -13,9 +13,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDatalinkVoucher(JObject evt) : base(evt, JournalTypeEnum.DatalinkVoucher)
         {
-            VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
-            Reward = Tools.GetLong(evt["Reward"]);
-            PayeeFaction = Tools.GetStringDef(evt["PayeeFaction"]);
+            VictimFaction = JSONHelper.GetStringDef(evt["VictimFaction"]);
+            Reward = JSONHelper.GetLong(evt["Reward"]);
+            PayeeFaction = JSONHelper.GetStringDef(evt["PayeeFaction"]);
 
         }
         public string PayeeFaction { get; set; }

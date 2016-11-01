@@ -12,9 +12,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
         {
-            Option = Tools.GetStringDef(evt["Option"]);
-            Cost = Tools.GetLong(evt["Cost"]);
-            Bankrupt = Tools.GetBool(evt["Bankrupt"]);
+            Option = JSONHelper.GetStringDef(evt["Option"]);
+            Cost = JSONHelper.GetLong(evt["Cost"]);
+            Bankrupt = JSONHelper.GetBool(evt["Bankrupt"]);
 
         }
         public string Option { get; set; }

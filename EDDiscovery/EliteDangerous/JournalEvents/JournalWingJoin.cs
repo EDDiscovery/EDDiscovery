@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalWingJoin(JObject evt ) : base(evt, JournalTypeEnum.WingJoin)
         {
-            if (!Tools.IsNullOrEmptyT(evt["Others"]))
+            if (!JSONHelper.IsNullOrEmptyT(evt["Others"]))
                 Others = evt.Value<JArray>("Others").Values<string>().ToArray();
 
         }

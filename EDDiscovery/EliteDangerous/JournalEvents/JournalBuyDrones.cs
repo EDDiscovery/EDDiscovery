@@ -13,10 +13,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalBuyDrones(JObject evt ) : base(evt, JournalTypeEnum.BuyDrones)
         {
-            Type = Tools.GetStringDef(evt["Type"]);
-            Count = Tools.GetInt(evt["Count"]);
-            BuyPrice = Tools.GetLong(evt["BuyPrice"]);
-            TotalCost = Tools.GetLong(evt["TotalCost"]);
+            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Count = JSONHelper.GetInt(evt["Count"]);
+            BuyPrice = JSONHelper.GetLong(evt["BuyPrice"]);
+            TotalCost = JSONHelper.GetLong(evt["TotalCost"]);
 
         }
         public string Type { get; set; }

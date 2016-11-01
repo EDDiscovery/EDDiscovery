@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSynthesis(JObject evt ) : base(evt, JournalTypeEnum.Synthesis)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
             Materials = evt["Materials"]?.ToObject<Dictionary<string, int>>();
         }
         public string Name { get; set; }

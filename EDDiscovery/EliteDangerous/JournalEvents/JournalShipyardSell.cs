@@ -17,10 +17,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         //•	System: (if ship is in another system) name of system
         public JournalShipyardSell(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSell)
         {
-            ShipType = Tools.GetStringDef(evt["ShipType"]);
-            SellShipId = Tools.GetInt(evt["SellShipID"]);
-            ShipPrice = Tools.GetLong(evt["ShipPrice"]);
-            System = Tools.GetStringDef(evt["System"]);
+            ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
+            SellShipId = JSONHelper.GetInt(evt["SellShipID"]);
+            ShipPrice = JSONHelper.GetLong(evt["ShipPrice"]);
+            System = JSONHelper.GetStringDef(evt["System"]);
         }
         public string ShipType { get; set; }
         public int SellShipId { get; set; }

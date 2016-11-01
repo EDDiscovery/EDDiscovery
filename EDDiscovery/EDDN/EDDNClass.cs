@@ -62,7 +62,7 @@ namespace EDDiscovery.EDDN
 
             JObject message = (JObject) JObject.Parse(journal.EventDataString);
 
-            if (Tools.IsNullOrEmptyT(message["FuelUsed"]))  // Old ED 2.1 messages has no Fuel used fields
+            if (JSONHelper.IsNullOrEmptyT(message["FuelUsed"]))  // Old ED 2.1 messages has no Fuel used fields
                 return null;
 
 

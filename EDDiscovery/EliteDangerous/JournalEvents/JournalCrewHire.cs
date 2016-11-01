@@ -14,10 +14,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCrewHire(JObject evt) : base(evt, JournalTypeEnum.CrewHire)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
-            Faction = Tools.GetStringDef(evt["Faction"]);
-            Cost = Tools.GetLong(evt["Cost"]);
-            CombatRank = (CombatRank)Tools.GetInt(evt["CombatRank"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            Cost = JSONHelper.GetLong(evt["Cost"]);
+            CombatRank = (CombatRank)JSONHelper.GetInt(evt["CombatRank"]);
         }
         public string Name { get; set; }
         public string Faction { get; set; }

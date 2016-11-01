@@ -12,12 +12,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleSellRemote(JObject evt) : base(evt, JournalTypeEnum.ModuleSellRemote)
         {
-            Slot = Tools.GetStringDef(evt["StorageSlot"]);
-            SellItem = Tools.GetStringDef(evt["SellItem"]);
-            SellPrice = Tools.GetLong(evt["SellPrice"]);
-            Ship = Tools.GetStringDef(evt["Ship"]);
-            ShipId = Tools.GetInt(evt["ShipID"]);
-            ServerId = Tools.GetInt(evt["ServerId"]);
+            Slot = JSONHelper.GetStringDef(evt["StorageSlot"]);
+            SellItem = JSONHelper.GetStringDef(evt["SellItem"]);
+            SellPrice = JSONHelper.GetLong(evt["SellPrice"]);
+            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            ServerId = JSONHelper.GetInt(evt["ServerId"]);
         }
         public string Slot { get; set; }
         public string SellItem { get; set; }

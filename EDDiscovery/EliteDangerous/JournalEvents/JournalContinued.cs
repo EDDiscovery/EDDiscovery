@@ -11,7 +11,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalContinued(JObject evt ) : base(evt, JournalTypeEnum.Continued)
         {
-            Part = Tools.GetInt(evt["Part"]);
+            Part = JSONHelper.GetInt(evt["Part"]);
         }
 
         public int Part { get; set; }

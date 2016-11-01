@@ -15,10 +15,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommitCrime(JObject evt ) : base(evt, JournalTypeEnum.CommitCrime)
         {
-            CrimeType = Tools.GetStringDef(evt["CrimeType"]);
-            Faction = Tools.GetStringDef(evt["Faction"]);
-            Fine = evt.Value<long?>("Fine");
-            Bounty = evt.Value<long?>("Bounty");
+            CrimeType = JSONHelper.GetStringDef(evt["CrimeType"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            Fine = JSONHelper.GetLongNull(evt["ddevent"]);
+            Bounty = JSONHelper.GetLongNull(evt["Bounty"]);
         }
         public string CrimeType { get; set; }
         public string Faction { get; set; }
@@ -27,6 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long? Bounty { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.commitcrime; } }
+
 
     }
 }

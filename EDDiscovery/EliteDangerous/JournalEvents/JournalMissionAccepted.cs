@@ -29,25 +29,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionAccepted(JObject evt ) : base(evt, JournalTypeEnum.MissionAccepted)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
-            Faction = Tools.GetStringDef(evt["Faction"]);
-            Commodity = Tools.GetStringDef(evt["Commodity"]);
-            Count = evt.Value<int?>("Count");
-            Target = Tools.GetStringDef(evt["Target"]);
-            TargetType = Tools.GetStringDef(evt["TargetType"]);
-            TargetFaction = Tools.GetStringDef(evt["TargetFaction"]);
-            MissionId = Tools.GetInt(evt["MissionID"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            Commodity = JSONHelper.GetStringDef(evt["Commodity"]);
+            Count = JSONHelper.GetIntNull(evt["Count"]);
+            Target = JSONHelper.GetStringDef(evt["Target"]);
+            TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
+            TargetFaction = JSONHelper.GetStringDef(evt["TargetFaction"]);
+            MissionId = JSONHelper.GetInt(evt["MissionID"]);
 
-            if (!Tools.IsNullOrEmptyT(evt["Expiry"]))
+            if (!JSONHelper.IsNullOrEmptyT(evt["Expiry"]))
                 Expiry = DateTime.Parse(evt.Value<string>("Expiry"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 
-            DestinationSystem = Tools.GetStringDef(evt["DestinationSystem"]);
-            DestinationStation = Tools.GetStringDef(evt["DestinationStation"]);
-            PassengerType = Tools.GetStringDef(evt["PassengerType"]);
+            DestinationSystem = JSONHelper.GetStringDef(evt["DestinationSystem"]);
+            DestinationStation = JSONHelper.GetStringDef(evt["DestinationStation"]);
+            PassengerType = JSONHelper.GetStringDef(evt["PassengerType"]);
 
-            PassengerCount = Tools.GetInt(evt["PassengerCount"]);
-            PassengerVIPs = Tools.GetBool(evt["PassengerVIPs"]);
-            PassengerWanted = Tools.GetBool(evt["PassengerWanted"]);
+            PassengerCount = JSONHelper.GetInt(evt["PassengerCount"]);
+            PassengerVIPs = JSONHelper.GetBool(evt["PassengerVIPs"]);
+            PassengerWanted = JSONHelper.GetBool(evt["PassengerWanted"]);
 
 
 

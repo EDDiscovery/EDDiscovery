@@ -10,15 +10,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
-            LoadGameCommander = Tools.GetStringDef(evt["Commander"]);
-            Ship = Tools.GetStringDef(evt["Ship"]);
-            ShipId = Tools.GetInt(evt["ShipID"]);
-            StartLanded = Tools.GetBool(evt["StartLanded"]);
-            StartDead = Tools.GetBool(evt["StartDead"]);
-            GameMode = Tools.GetStringDef(evt["GameMode"]);
-            Group = Tools.GetStringDef(evt["Group"]);
-            Credits = Tools.GetLong(evt["Credits"]);
-            Loan = Tools.GetLong(evt["Loan"]);
+            LoadGameCommander = JSONHelper.GetStringDef(evt["Commander"]);
+            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            StartLanded = JSONHelper.GetBool(evt["StartLanded"]);
+            StartDead = JSONHelper.GetBool(evt["StartDead"]);
+            GameMode = JSONHelper.GetStringDef(evt["GameMode"]);
+            Group = JSONHelper.GetStringDef(evt["Group"]);
+            Credits = JSONHelper.GetLong(evt["Credits"]);
+            Loan = JSONHelper.GetLong(evt["Loan"]);
         }
 
         public string LoadGameCommander { get; set; }

@@ -20,20 +20,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionCompleted(JObject evt ) : base(evt, JournalTypeEnum.MissionCompleted)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
-            Faction = Tools.GetStringDef(evt["Faction"]);
-            Commodity = Tools.GetStringDef(evt["Commodity"]);
-            Count = evt.Value<int?>("Count");
-            Target = Tools.GetStringDef(evt["Target"]);
-            TargetType = Tools.GetStringDef(evt["TargetType"]);
-            TargetFaction = Tools.GetStringDef(evt["TargetFaction"]);
-            Reward = evt.Value<long?>("Reward") ?? 0;
-            Donation = evt.Value<long?>("Donation");
+            Name = JSONHelper.GetStringDef(evt["Name"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            Commodity = JSONHelper.GetStringDef(evt["Commodity"]);
+            Count = JSONHelper.GetIntNull(evt["Count"]);
+            Target = JSONHelper.GetStringDef(evt["Target"]);
+            TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
+            TargetFaction = JSONHelper.GetStringDef(evt["TargetFaction"]);
+            Reward = JSONHelper.GetLongNull(evt["Reward"]) ?? 0;
+            Donation = JSONHelper.GetLongNull(evt["Donation"]);
 
-            if ( !Tools.IsNullOrEmptyT( evt["PermitsAwarded"]))
+            if ( !JSONHelper.IsNullOrEmptyT( evt["PermitsAwarded"]))
                 PermitsAwarded = evt.Value<JArray>("PermitsAwarded").Values<string>().ToArray();
 
-            MissionId = Tools.GetInt(evt["MissionID"]);
+            MissionId = JSONHelper.GetInt(evt["MissionID"]);
         }
         public string Name { get; set; }
         public string Faction { get; set; }

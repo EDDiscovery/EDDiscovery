@@ -15,10 +15,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalPromotion(JObject evt) : base(evt, JournalTypeEnum.Promotion)
         {
-            Combat = (CombatRank)Tools.GetInt(evt["Combat"]);
-            Trade = (TradeRank)Tools.GetInt(evt["Trade"]);
-            Explore = (ExplorationRank)Tools.GetInt(evt["Explore"]);
-            CQC = (CQCRank)Tools.GetInt(evt["CQC"]);
+            Combat = (CombatRank)JSONHelper.GetInt(evt["Combat"]);
+            Trade = (TradeRank)JSONHelper.GetInt(evt["Trade"]);
+            Explore = (ExplorationRank)JSONHelper.GetInt(evt["Explore"]);
+            CQC = (CQCRank)JSONHelper.GetInt(evt["CQC"]);
         }
         public CombatRank Combat { get; set; }
         public TradeRank Trade { get; set; }

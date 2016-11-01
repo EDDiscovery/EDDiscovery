@@ -21,13 +21,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardBuy(JObject evt ) : base(evt, JournalTypeEnum.ShipyardBuy)
         {
-            ShipType = Tools.GetStringDef(evt["ShipType"]);
-            ShipPrice = Tools.GetLong(evt["ShipPrice"]);
-            StoreOldShip = Tools.GetStringDef(evt["StoreOldShip"]);
-            StoreShipId = evt.Value<int?>("StoreShipID");
-            SellOldShip = Tools.GetStringDef(evt["SellOldShip"]);
-            SellShipId = evt.Value<int?>("SellShipID");
-            SellPrice = evt.Value<long?>("SellPrice");
+            ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
+            ShipPrice = JSONHelper.GetLong(evt["ShipPrice"]);
+            StoreOldShip = JSONHelper.GetStringDef(evt["StoreOldShip"]);
+            StoreShipId = JSONHelper.GetIntNull(evt["StoreShipID"]);
+            SellOldShip = JSONHelper.GetStringDef(evt["SellOldShip"]);
+            SellShipId = JSONHelper.GetIntNull(evt["SellShipID"]);
+            SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
 
         }
         public string ShipType { get; set; }

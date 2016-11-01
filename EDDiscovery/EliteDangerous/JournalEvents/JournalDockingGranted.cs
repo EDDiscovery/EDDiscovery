@@ -19,8 +19,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingGranted(JObject evt ) : base(evt, JournalTypeEnum.DockingGranted)
         {
-            StationName = Tools.GetStringDef(evt["StationName"]);
-            LandingPad = Tools.GetInt(evt["LandingPad"]);
+            StationName = JSONHelper.GetStringDef(evt["StationName"]);
+            LandingPad = JSONHelper.GetInt(evt["LandingPad"]);
         }
         public string StationName { get; set; }
         public int LandingPad { get; set; }

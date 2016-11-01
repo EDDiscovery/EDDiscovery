@@ -12,8 +12,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPayFines(JObject evt) : base(evt, JournalTypeEnum.PayFines)
         {
-            Amount = Tools.GetLong(evt["Amount"]);
-            BrokerPercentage = Tools.GetDouble(evt["BrokerPercentage"]);
+            Amount = JSONHelper.GetLong(evt["Amount"]);
+            BrokerPercentage = JSONHelper.GetDouble(evt["BrokerPercentage"]);
         }
         public long Amount { get; set; }
         public double BrokerPercentage { get; set; }

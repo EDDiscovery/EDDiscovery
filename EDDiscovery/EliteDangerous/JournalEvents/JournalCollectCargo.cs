@@ -11,8 +11,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCollectCargo(JObject evt ) : base(evt, JournalTypeEnum.CollectCargo)
         {
-            Type = Tools.GetStringDef(evt["Type"]);
-            Stolen = Tools.GetBool(evt["Stolen"]);
+            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Stolen = JSONHelper.GetBool(evt["Stolen"]);
         }
         public string Type { get; set; }
         public bool Stolen { get; set; }

@@ -13,9 +13,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRedeemVoucher(JObject evt) : base(evt, JournalTypeEnum.RedeemVoucher)
         {
-            Type = Tools.GetStringDef(evt["Type"]);
-            Amount = Tools.GetLong(evt["Amount"]);
-            BrokerPercentage = Tools.GetDouble(evt["BrokerPercentage"]);
+            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Amount = JSONHelper.GetLong(evt["Amount"]);
+            BrokerPercentage = JSONHelper.GetDouble(evt["BrokerPercentage"]);
         }
         public string Type { get; set; }
         public long Amount { get; set; }

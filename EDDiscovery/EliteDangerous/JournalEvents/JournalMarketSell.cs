@@ -18,14 +18,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {
-            Type = Tools.GetStringDef(evt["Type"]);
-            Count = Tools.GetInt(evt["Count"]);
-            SellPrice = Tools.GetLong(evt["SellPrice"]);
-            TotalSale = Tools.GetLong(evt["TotalSale"]);
-            AvgPricePaid = Tools.GetLong(evt["AvgPricePaid"]);
-            IllegalGoods = Tools.GetBool(evt["IllegalGoods"]);
-            StolenGoods = Tools.GetBool(evt["StolenGoods"]);
-            BlackMarket = Tools.GetBool(evt["BlackMarket"]);
+            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Count = JSONHelper.GetInt(evt["Count"]);
+            SellPrice = JSONHelper.GetLong(evt["SellPrice"]);
+            TotalSale = JSONHelper.GetLong(evt["TotalSale"]);
+            AvgPricePaid = JSONHelper.GetLong(evt["AvgPricePaid"]);
+            IllegalGoods = JSONHelper.GetBool(evt["IllegalGoods"]);
+            StolenGoods = JSONHelper.GetBool(evt["StolenGoods"]);
+            BlackMarket = JSONHelper.GetBool(evt["BlackMarket"]);
         }
 
         public string Type { get; set; }

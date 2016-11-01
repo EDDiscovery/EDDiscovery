@@ -16,10 +16,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEjectCargo(JObject evt) : base(evt, JournalTypeEnum.EjectCargo)
         {
-            Type = Tools.GetStringDef(evt["Type"]);
-            Count = Tools.GetInt(evt["Count"]);
-            Abandoned = Tools.GetBool(evt["Abandoned"]);
-            PowerplayOrigin = Tools.GetStringDef(evt["PowerplayOrigin"]);
+            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Count = JSONHelper.GetInt(evt["Count"]);
+            Abandoned = JSONHelper.GetBool(evt["Abandoned"]);
+            PowerplayOrigin = JSONHelper.GetStringDef(evt["PowerplayOrigin"]);
         }
         public string Type { get; set; }
         public int Count { get; set; }

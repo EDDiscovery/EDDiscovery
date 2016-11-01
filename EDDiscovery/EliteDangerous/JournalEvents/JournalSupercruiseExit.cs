@@ -11,9 +11,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSupercruiseExit(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseExit)
         {
-            StarSystem = Tools.GetStringDef(evt["StarSystem"]);
-            Body = Tools.GetStringDef(evt["Body"]);
-            BodyType = Tools.GetStringDef(evt["BodyType"]);
+            StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
+            Body = JSONHelper.GetStringDef(evt["Body"]);
+            BodyType = JSONHelper.GetStringDef(evt["BodyType"]);
         }
         public string StarSystem { get; set; }
         public string Body { get; set; }

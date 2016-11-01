@@ -16,12 +16,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalFetchRemoteModule(JObject evt) : base(evt, JournalTypeEnum.FetchRemoteModule)
         {
-            StorageSlot = Tools.GetStringDef(evt["StorageSlot"]);
-            StoredItem = Tools.GetStringDef(evt["StoredItem"]);
-            TransferCost = Tools.GetLong(evt["TransferCost"]);
-            Ship = Tools.GetStringDef(evt["Ship"]);
-            ShipId = Tools.GetInt(evt["ShipID"]);
-            ServerId = Tools.GetInt(evt["ServerId"]);
+            StorageSlot = JSONHelper.GetStringDef(evt["StorageSlot"]);
+            StoredItem = JSONHelper.GetStringDef(evt["StoredItem"]);
+            TransferCost = JSONHelper.GetLong(evt["TransferCost"]);
+            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            ServerId = JSONHelper.GetInt(evt["ServerId"]);
         }
         public string StorageSlot { get; set; }
         public string StoredItem { get; set; }

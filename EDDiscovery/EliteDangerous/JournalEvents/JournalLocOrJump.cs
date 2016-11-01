@@ -17,12 +17,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype ) : base(jo, jtype)
         {
-            StarSystem = Tools.GetStringDef(jo["StarSystem"],"Unknown!");
-            StarPosFromEDSM = Tools.GetBool(jo["StarPosFromEDSM"], false);
+            StarSystem = JSONHelper.GetStringDef(jo["StarSystem"],"Unknown!");
+            StarPosFromEDSM = JSONHelper.GetBool(jo["StarPosFromEDSM"], false);
 
             Vector3 pos = new Vector3();
 
-            if (!Tools.IsNullOrEmptyT(jo["StarPos"]))            // if its an old VS entry, may not have co-ords
+            if (!JSONHelper.IsNullOrEmptyT(jo["StarPos"]))            // if its an old VS entry, may not have co-ords
             {
                 JArray coords = jo["StarPos"] as JArray;
                 pos.X = coords[0].Value<float>();

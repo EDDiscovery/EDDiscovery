@@ -12,9 +12,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalBuyTradeData(JObject evt ) : base(evt, JournalTypeEnum.BuyTradeData)
         {
-            System = Tools.GetStringDef(evt["System"]);
-            Cost = Tools.GetLong(evt["Cost"]);
-            Count = Tools.GetLong(evt["Count"]);
+            System = JSONHelper.GetStringDef(evt["System"]);
+            Cost = JSONHelper.GetLong(evt["Cost"]);
+            Count = JSONHelper.GetLong(evt["Count"]);
         }
 
         public string System { get; set; }
