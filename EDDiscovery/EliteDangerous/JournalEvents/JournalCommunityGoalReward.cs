@@ -12,9 +12,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommunityGoalReward(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalReward)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
-            System = Tools.GetStringDef(evt["System"]);
-            Reward = Tools.GetLong(evt["Reward"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
+            System = JSONHelper.GetStringDef(evt["System"]);
+            Reward = JSONHelper.GetLong(evt["Reward"]);
         }
         public string Name { get; set; }
         public string System { get; set; }

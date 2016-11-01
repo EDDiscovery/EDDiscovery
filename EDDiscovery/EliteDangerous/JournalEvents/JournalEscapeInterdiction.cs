@@ -11,8 +11,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEscapeInterdiction(JObject evt ) : base(evt, JournalTypeEnum.EscapeInterdiction)
         {
-            Interdictor = Tools.GetStringDef(evt["Interdictor"]);
-            IsPlayer = Tools.GetBool(evt["IsPlayer"]);
+            Interdictor = JSONHelper.GetStringDef(evt["Interdictor"]);
+            IsPlayer = JSONHelper.GetBool(evt["IsPlayer"]);
         }
         public string Interdictor { get; set; }
         public bool IsPlayer { get; set; }

@@ -16,13 +16,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleRetrieve(JObject evt) : base(evt, JournalTypeEnum.ModuleRetrieve)
         {
-            Slot = Tools.GetStringDef(evt["Slot"]);
-            Ship = Tools.GetStringDef(evt["Ship"]);
-            ShipId = Tools.GetInt(evt["ShipID"]);
-            RetrievedItem = Tools.GetStringDef(evt["RetrievedItem"]);
-            EngineerModifications = Tools.GetStringDef(evt["EngineerModifications"]);
-            SwapOutItem = Tools.GetStringDef(evt["SwapOutItem"]);
-            Cost = Tools.GetLong(evt["Cost"]);
+            Slot = JSONHelper.GetStringDef(evt["Slot"]);
+            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            RetrievedItem = JSONHelper.GetStringDef(evt["RetrievedItem"]);
+            EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]);
+            SwapOutItem = JSONHelper.GetStringDef(evt["SwapOutItem"]);
+            Cost = JSONHelper.GetLong(evt["Cost"]);
         }
         public string Slot { get; set; }
         public string Ship { get; set; }

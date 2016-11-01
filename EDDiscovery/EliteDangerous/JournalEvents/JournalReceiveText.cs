@@ -13,9 +13,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalReceiveText(JObject evt) : base(evt, JournalTypeEnum.ReceiveText)
         {
-            From = Tools.GetStringDef(evt["From"]);
-            Message = Tools.GetStringDef(evt["Message"]);
-            Channel = Tools.GetStringDef(evt["Channel"]);
+            From = JSONHelper.GetStringDef(evt["From"]);
+            Message = JSONHelper.GetStringDef(evt["Message"]);
+            Channel = JSONHelper.GetStringDef(evt["Channel"]);
 
         }
         public string From { get; set; }

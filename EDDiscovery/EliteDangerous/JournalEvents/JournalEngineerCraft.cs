@@ -14,9 +14,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEngineerCraft(JObject evt ) : base(evt, JournalTypeEnum.EngineerCraft)
         {
-            Engineer = Tools.GetStringDef(evt["Engineer"]);
-            Blueprint = Tools.GetStringDef(evt["Blueprint"]);
-            Level = Tools.GetInt(evt["Level"]);
+            Engineer = JSONHelper.GetStringDef(evt["Engineer"]);
+            Blueprint = JSONHelper.GetStringDef(evt["Blueprint"]);
+            Level = JSONHelper.GetInt(evt["Level"]);
             Ingredients = evt["Ingredients"]?.ToObject<Dictionary<string, int>>();
         }
         public string Engineer { get; set; }

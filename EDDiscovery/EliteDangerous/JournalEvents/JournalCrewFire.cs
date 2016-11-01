@@ -14,7 +14,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCrewFire(JObject evt) : base(evt, JournalTypeEnum.CrewFire)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
 
         }
         public string Name { get; set; }

@@ -13,11 +13,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleSell(JObject evt ) : base(evt, JournalTypeEnum.ModuleSell)
         {
-            Slot = Tools.GetStringDef(evt["Slot"]);
-            SellItem = Tools.GetStringDef(evt["SellItem"]);
-            SellPrice = Tools.GetLong(evt["SellPrice"]);
-            Ship = Tools.GetStringDef(evt["Ship"]);
-            ShipId = Tools.GetInt(evt["ShipID"]);
+            Slot = JSONHelper.GetStringDef(evt["Slot"]);
+            SellItem = JSONHelper.GetStringDef(evt["SellItem"]);
+            SellPrice = JSONHelper.GetLong(evt["SellPrice"]);
+            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            ShipId = JSONHelper.GetInt(evt["ShipID"]);
 
         }
         public string Slot { get; set; }

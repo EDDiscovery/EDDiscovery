@@ -12,8 +12,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRefuelPartial(JObject evt ) : base(evt, JournalTypeEnum.RefuelPartial)
         {
-            Cost = Tools.GetLong(evt["Cost"]);
-            Amount = Tools.GetInt(evt["Amount"]);
+            Cost = JSONHelper.GetLong(evt["Cost"]);
+            Amount = JSONHelper.GetInt(evt["Amount"]);
         }
         public long Cost { get; set; }
         public int Amount { get; set; }

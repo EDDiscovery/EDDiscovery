@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalVehicleSwitch(JObject evt ) : base(evt, JournalTypeEnum.VehicleSwitch)
         {
-            To = Tools.GetStringDef(evt["To"]);
+            To = JSONHelper.GetStringDef(evt["To"]);
         }
         public string To { get; set; }
 

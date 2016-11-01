@@ -13,10 +13,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRestockVehicle(JObject evt ) : base(evt, JournalTypeEnum.RestockVehicle)
         {
-            Type = Tools.GetStringDef(evt["Type"]);
-            Loadout = Tools.GetStringDef(evt["Loadout"]);
-            Cost = Tools.GetLong(evt["Cost"]);
-            Count = Tools.GetInt(evt["Count"]);
+            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Loadout = JSONHelper.GetStringDef(evt["Loadout"]);
+            Cost = JSONHelper.GetLong(evt["Cost"]);
+            Count = JSONHelper.GetInt(evt["Count"]);
         }
         public string Type { get; set; }
         public string Loadout { get; set; }

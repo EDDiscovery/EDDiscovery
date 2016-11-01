@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingTimeout(JObject evt ) : base(evt, JournalTypeEnum.DockingTimeout)
         {
-            StationName = Tools.GetStringDef(evt["StationName"]);
+            StationName = JSONHelper.GetStringDef(evt["StationName"]);
         }
         public string StationName { get; set; }
 

@@ -13,14 +13,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSellExplorationData(JObject evt ) : base(evt, JournalTypeEnum.SellExplorationData)
         {
-            if (!Tools.IsNullOrEmptyT(evt["Systems"]))
+            if (!JSONHelper.IsNullOrEmptyT(evt["Systems"]))
                 Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
 
-            if (!Tools.IsNullOrEmptyT(evt["Discovered"]))
+            if (!JSONHelper.IsNullOrEmptyT(evt["Discovered"]))
                 Discovered = evt.Value<JArray>("Discovered").Values<string>().ToArray();
 
-            BaseValue = Tools.GetLong(evt["BaseValue"]);
-            Bonus = Tools.GetLong(evt["Bonus"]);
+            BaseValue = JSONHelper.GetLong(evt["BaseValue"]);
+            Bonus = JSONHelper.GetLong(evt["Bonus"]);
         }
         public string[] Systems { get; set; }
         public string[] Discovered { get; set; }

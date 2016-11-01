@@ -17,13 +17,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleStore(JObject evt) : base(evt, JournalTypeEnum.ModuleStore)
         {
-            Slot = Tools.GetStringDef(evt["Slot"]);
-            Ship = Tools.GetStringDef(evt["Ship"]);
-            ShipId = Tools.GetInt(evt["ShipID"]);
-            StoredItem = Tools.GetStringDef(evt["StoredItem"]);
-            EngineerModifications = Tools.GetStringDef(evt["EngineerModifications"]);
-            ReplacementItem = Tools.GetStringDef(evt["ReplacementItem"]);
-            Cost = Tools.GetLong(evt["Cost"]);
+            Slot = JSONHelper.GetStringDef(evt["Slot"]);
+            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            StoredItem = JSONHelper.GetStringDef(evt["StoredItem"]);
+            EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]);
+            ReplacementItem = JSONHelper.GetStringDef(evt["ReplacementItem"]);
+            Cost = JSONHelper.GetLong(evt["Cost"]);
         }
         public string Slot { get; set; }
         public string Ship { get; set; }

@@ -11,8 +11,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplaySalary(JObject evt) : base(evt, JournalTypeEnum.PowerplaySalary)
         {
-            Power = Tools.GetStringDef(evt["Power"]);
-            Amount = Tools.GetLong(evt["Amount"]);
+            Power = JSONHelper.GetStringDef(evt["Power"]);
+            Amount = JSONHelper.GetLong(evt["Amount"]);
         }
         public string Power { get; set; }
         public long Amount { get; set; }

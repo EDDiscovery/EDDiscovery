@@ -1076,7 +1076,7 @@ namespace EDDiscovery.EliteDangerous
         {
             JObject jo = (JObject)JObject.Parse(text);
 
-            string Eventstr = Tools.GetStringNull(jo["event"]);
+            string Eventstr = JSONHelper.GetStringNull(jo["event"]);
 
             if (Eventstr == null)  // Should normaly not happend unless corrupt string.
                 return null;

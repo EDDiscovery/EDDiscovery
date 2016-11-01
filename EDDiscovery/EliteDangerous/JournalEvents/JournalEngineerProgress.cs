@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)
         {
-            StationName = Tools.GetStringDef(evt["StationName"]);
+            StationName = JSONHelper.GetStringDef(evt["StationName"]);
 
         }
         public string StationName { get; set; }

@@ -9,9 +9,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMaterialDiscarded(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscarded)
         {
-            Category = Tools.GetStringDef(evt["Category"]);
-            Name = Tools.GetStringDef(evt["Name"]);
-            Count = Tools.GetInt(evt["Count"]);
+            Category = JSONHelper.GetStringDef(evt["Category"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
+            Count = JSONHelper.GetInt(evt["Count"]);
 
         }
         public string Category { get; set; }

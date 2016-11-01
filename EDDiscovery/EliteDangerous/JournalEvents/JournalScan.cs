@@ -46,33 +46,33 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScan(JObject evt ) : base(evt, JournalTypeEnum.Scan)
         {
-            BodyName = Tools.GetStringDef(evt["BodyName"]);
-            StarType = Tools.GetStringDef(evt["StarType"]);
-            StellarMass = evt.Value<double?>("StellarMass");
-            Radius = evt.Value<double?>("Radius");
-            AbsoluteMagnitude = evt.Value<double?>("AbsoluteMagnitude");
-            RotationPeriod = Tools.GetDouble(evt["RotationPeriod"]);
-            Age = Tools.GetDouble(evt["Age_MY"]);
+            BodyName = JSONHelper.GetStringDef(evt["BodyName"]);
+            StarType = JSONHelper.GetStringDef(evt["StarType"]);
+            StellarMass = JSONHelper.GetDoubleNull(evt["StellarMass"]);
+            Radius = JSONHelper.GetDoubleNull(evt["Radius"]);
+            AbsoluteMagnitude = JSONHelper.GetDoubleNull(evt["AbsoluteMagnitude"]);
+            RotationPeriod = JSONHelper.GetDouble(evt["RotationPeriod"]);
+            Age = JSONHelper.GetDouble(evt["Age_MY"]);
             Rings = evt["Rings"]?.ToObject<PlanetRing[]>();
-            DistanceFromArrivalLS = Tools.GetDouble(evt["DistanceFromArrivalLS"]);
+            DistanceFromArrivalLS = JSONHelper.GetDouble(evt["DistanceFromArrivalLS"]);
 
-            TidalLock = evt.Value<bool?>("TidalLock") ?? false;
-            TerraformState = Tools.GetStringDef(evt["TerraformState"]);
-            PlanetClass = Tools.GetStringDef(evt["PlanetClass"]);
-            Atmosphere = Tools.GetStringDef(evt["Atmosphere"]);
-            Volcanism = Tools.GetStringDef(evt["Volcanism"]);
-            MassEM = evt.Value<double?>("MassEM");
-            SurfaceGravity = evt.Value<double?>("SurfaceGravity");
-            SurfaceTemperature = evt.Value<double?>("SurfaceTemperature");
-            SurfacePressure = evt.Value<double?>("SurfacePressure");
-            Landable = evt.Value<bool?>("Landable") ?? false;
+            TidalLock = JSONHelper.GetBool(evt["TidalLock"]);
+            TerraformState = JSONHelper.GetStringDef(evt["TerraformState"]);
+            PlanetClass = JSONHelper.GetStringDef(evt["PlanetClass"]);
+            Atmosphere = JSONHelper.GetStringDef(evt["Atmosphere"]);
+            Volcanism = JSONHelper.GetStringDef(evt["Volcanism"]);
+            MassEM = JSONHelper.GetDoubleNull(evt["MassEM"]);
+            SurfaceGravity = JSONHelper.GetDoubleNull(evt["SurfaceGravity"]);
+            SurfaceTemperature = JSONHelper.GetDoubleNull(evt["SurfaceTemperature"]);
+            SurfacePressure = JSONHelper.GetDoubleNull(evt["SurfacePressure"]);
+            Landable = JSONHelper.GetBoolNull(evt["Landable"]);
             Materials = evt["Materials"]?.ToObject<Dictionary<string, double>>();
 
-            SemiMajorAxis = Tools.GetDouble(evt["SemiMajorAxis"]);
-            Eccentricity = Tools.GetDouble(evt["Eccentricity"]);
-            OrbitalInclination = Tools.GetDouble(evt["OrbitalInclination"]);
-            Periapsis = Tools.GetDouble(evt["Periapsis"]);
-            OrbitalPeriod = Tools.GetDouble(evt["OrbitalPeriod"]);
+            SemiMajorAxis = JSONHelper.GetDouble(evt["SemiMajorAxis"]);
+            Eccentricity = JSONHelper.GetDouble(evt["Eccentricity"]);
+            OrbitalInclination = JSONHelper.GetDouble(evt["OrbitalInclination"]);
+            Periapsis = JSONHelper.GetDouble(evt["Periapsis"]);
+            OrbitalPeriod = JSONHelper.GetDouble(evt["OrbitalPeriod"]);
 
 
         }

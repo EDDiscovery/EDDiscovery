@@ -10,8 +10,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionFailed(JObject evt ) : base(evt, JournalTypeEnum.MissionFailed)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
-            MissionId = Tools.GetInt(evt["MissionID"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
+            MissionId = JSONHelper.GetInt(evt["MissionID"]);
         }
 
         public string Name { get; set; }

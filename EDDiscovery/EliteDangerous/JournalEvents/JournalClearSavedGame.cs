@@ -11,7 +11,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalClearSavedGame(JObject evt) : base(evt, JournalTypeEnum.ClearSavedGame)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
 
         }
         public string Name { get; set; }

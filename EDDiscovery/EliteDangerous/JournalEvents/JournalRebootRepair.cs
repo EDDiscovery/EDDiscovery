@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRebootRepair(JObject evt) : base(evt, JournalTypeEnum.RebootRepair)
         {
-            if (!Tools.IsNullOrEmptyT(evt["Modules"]))
+            if (!JSONHelper.IsNullOrEmptyT(evt["Modules"]))
                 Modules = evt.Value<JArray>("Modules").Values<string>().ToArray();
         }
         public string[] Modules { get; set; }

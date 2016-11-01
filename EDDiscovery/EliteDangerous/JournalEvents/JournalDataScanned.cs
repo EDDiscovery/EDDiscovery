@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDataScanned(JObject evt) : base(evt, JournalTypeEnum.DataScanned)
         {
-            Type = Tools.GetStringDef(evt["Type"]);
+            Type = JSONHelper.GetStringDef(evt["Type"]);
 
         }
         public string Type { get; set; }

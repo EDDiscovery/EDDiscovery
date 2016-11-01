@@ -134,7 +134,7 @@ namespace EDDiscovery2.EDSM
                                 string utctime = jo["lastUpdate"].Value<string>();
                                 int edsmid = 0;
 
-                                if (!Int32.TryParse(Tools.GetStringDef(jo["systemId"], "0"), out edsmid))
+                                if (!Int32.TryParse(JSONHelper.GetStringDef(jo["systemId"], "0"), out edsmid))
                                     edsmid = 0;
 
                                 DateTime localtime = DateTime.ParseExact(utctime, "yyyy-MM-dd HH:mm:ss", 

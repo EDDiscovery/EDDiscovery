@@ -16,31 +16,31 @@ namespace EDDiscovery.HTTP
             this.jo = jo;
         }
 
-        public string ReleaseName { get { return  Tools.GetStringDef(jo["name"]); } }
+        public string ReleaseName { get { return  JSONHelper.GetStringDef(jo["name"]); } }
 
         public string ReleaseVersion {
             get
             {
-                string str = Tools.GetStringDef(jo["name"]);
+                string str = JSONHelper.GetStringDef(jo["name"]);
 
                 return new string(str.Where(p => char.IsDigit(p) || p=='.').ToArray());
             }
         }
 
-        public string HtmlURL { get { return Tools.GetStringDef(jo["html_url"]); } }
-        public string Time { get { return Tools.GetStringDef(jo["created_at"]); } }
+        public string HtmlURL { get { return JSONHelper.GetStringDef(jo["html_url"]); } }
+        public string Time { get { return JSONHelper.GetStringDef(jo["created_at"]); } }
 
-        public string Description { get { return Tools.GetStringDef(jo["body"]); } }
+        public string Description { get { return JSONHelper.GetStringDef(jo["body"]); } }
 
 
         public string ExeInstallerLink
         {
             get
             {
-                var asset = jo["assets"].FirstOrDefault(j => Tools.GetStringDef(j["name"]).EndsWith(".exe"));
+                var asset = jo["assets"].FirstOrDefault(j => JSONHelper.GetStringDef(j["name"]).EndsWith(".exe"));
                 if (asset != null)
                 {
-                    string url = Tools.GetStringDef(asset["browser_download_url"]);
+                    string url = JSONHelper.GetStringDef(asset["browser_download_url"]);
                     return url;
                 }
                 return null;
@@ -50,10 +50,10 @@ namespace EDDiscovery.HTTP
         {
             get
             {
-                var asset = jo["assets"].FirstOrDefault(j => Tools.GetStringDef(j["name"]).EndsWith(".msi"));
+                var asset = jo["assets"].FirstOrDefault(j => JSONHelper.GetStringDef(j["name"]).EndsWith(".msi"));
                 if (asset != null)
                 {
-                    string url = Tools.GetStringDef(asset["browser_download_url"]);
+                    string url = JSONHelper.GetStringDef(asset["browser_download_url"]);
                     return url;
                 }
                 return null;
@@ -63,10 +63,10 @@ namespace EDDiscovery.HTTP
         {
             get
             {
-                var asset = jo["assets"].FirstOrDefault(j => Tools.GetStringDef(j["name"]).EndsWith(".Portable.zip"));
+                var asset = jo["assets"].FirstOrDefault(j => JSONHelper.GetStringDef(j["name"]).EndsWith(".Portable.zip"));
                 if (asset != null)
                 {
-                    string url = Tools.GetStringDef(asset["browser_download_url"]);
+                    string url = JSONHelper.GetStringDef(asset["browser_download_url"]);
                     return url;
                 }
                 return null;

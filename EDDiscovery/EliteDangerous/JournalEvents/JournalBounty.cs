@@ -13,10 +13,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalBounty(JObject evt ) : base(evt, JournalTypeEnum.Bounty)
         {
-            Faction = Tools.GetStringDef(evt["Faction"]);
-            Reward = Tools.GetLong(evt["Reward"]);
-            VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
-            SharedWithOthers = Tools.GetBool(evt["SharedWithOthers"],false);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            Reward = JSONHelper.GetLong(evt["Reward"]);
+            VictimFaction = JSONHelper.GetStringDef(evt["VictimFaction"]);
+            SharedWithOthers = JSONHelper.GetBool(evt["SharedWithOthers"],false);
             Rewards = evt["Rewards"]?.ToObject<BountyReward[]>();
         }
         public string Faction { get; set; }

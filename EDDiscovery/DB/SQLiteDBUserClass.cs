@@ -288,7 +288,6 @@ namespace EDDiscovery.DB
                 ") ";
 
             SQLiteDBClass.PerformUpgrade(conn, 109, true, false, new[] { query1 });
-            EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
         }
 
         private static void UpgradeUserDB110(SQLiteConnectionUser conn)

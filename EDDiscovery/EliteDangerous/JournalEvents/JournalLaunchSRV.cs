@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLaunchSRV(JObject evt ) : base(evt, JournalTypeEnum.LaunchSRV)
         {
-            Loadout = Tools.GetStringDef(evt["Loadout"]);
+            Loadout = JSONHelper.GetStringDef(evt["Loadout"]);
 
         }
         public string Loadout { get; set; }

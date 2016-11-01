@@ -33,28 +33,28 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalFSDJump(JObject evt ) : base(evt, JournalTypeEnum.FSDJump)
         {
-            Body = Tools.GetStringDef(evt["body"], "Unknown");
-            JumpDist = Tools.GetDouble(evt["JumpDist"]);
-            FuelUsed = Tools.GetDouble(evt["FuelUsed"]);
-            FuelLevel = Tools.GetDouble(evt["FuelLevel"]);
-            BoostUsed = Tools.GetBool(evt["BoostUsed"]);
-            Faction = Tools.GetStringDef(evt["Faction"]);
-            FactionState = Tools.GetStringDef(evt["FactionState"]);
-            Allegiance = Tools.GetStringDef(evt["Allegiance"]);
-            Economy = Tools.GetStringDef(evt["Economy"]);
-            Economy_Localised = Tools.GetStringDef(evt["Economy_Localised"]);
-            Government = Tools.GetStringDef(evt["Government"]);
-            Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
-            Security = Tools.GetStringDef(evt["Security"]);
-            Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
-            PowerplayState = Tools.GetStringDef(evt["PowerplayState"]);
+            Body = JSONHelper.GetStringDef(evt["body"], "Unknown");
+            JumpDist = JSONHelper.GetDouble(evt["JumpDist"]);
+            FuelUsed = JSONHelper.GetDouble(evt["FuelUsed"]);
+            FuelLevel = JSONHelper.GetDouble(evt["FuelLevel"]);
+            BoostUsed = JSONHelper.GetBool(evt["BoostUsed"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
+            Allegiance = JSONHelper.GetStringDef(evt["Allegiance"]);
+            Economy = JSONHelper.GetStringDef(evt["Economy"]);
+            Economy_Localised = JSONHelper.GetStringDef(evt["Economy_Localised"]);
+            Government = JSONHelper.GetStringDef(evt["Government"]);
+            Government_Localised = JSONHelper.GetStringDef(evt["Government_Localised"]);
+            Security = JSONHelper.GetStringDef(evt["Security"]);
+            Security_Localised = JSONHelper.GetStringDef(evt["Security_Localised"]);
+            PowerplayState = JSONHelper.GetStringDef(evt["PowerplayState"]);
 
-            if (!Tools.IsNullOrEmptyT(evt["Powers"]))
+            if (!JSONHelper.IsNullOrEmptyT(evt["Powers"]))
                 Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
 
 
             JToken jm = jEventData["EDDMapColor"];
-            if (Tools.IsNullOrEmptyT(jm))
+            if (JSONHelper.IsNullOrEmptyT(jm))
                 MapColor = EDDiscovery2.EDDConfig.Instance.DefaultMapColour;      // new entries get this default map colour if its not already there
 
 
@@ -93,7 +93,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             get
             {
-                return Tools.GetInt(jEventData["EDDMapColor"], Color.Red.ToArgb());
+                return JSONHelper.GetInt(jEventData["EDDMapColor"], Color.Red.ToArgb());
             }
             set
             {

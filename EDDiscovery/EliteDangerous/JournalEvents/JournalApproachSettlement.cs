@@ -11,7 +11,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalApproachSettlement(JObject evt) : base(evt, JournalTypeEnum.ApproachSettlement)
         {
-            Name = Tools.GetStringDef(evt["Name"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]);
 
         }
         public string Name { get; set; }

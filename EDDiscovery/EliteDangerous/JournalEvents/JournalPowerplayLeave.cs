@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplayLeave(JObject evt) : base(evt, JournalTypeEnum.PowerplayLeave)
         {
-            Power = Tools.GetStringDef(evt["Power"]);
+            Power = JSONHelper.GetStringDef(evt["Power"]);
 
         }
         public string Power { get; set; }
