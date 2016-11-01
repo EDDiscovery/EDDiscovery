@@ -1647,13 +1647,18 @@ namespace EDDiscovery
                     prev = he;
 
                     history.Add(he);                        // add to the history list here..
-                    matcommodledger.Process(je);            // update the ledger
 
                     if (journalupdate)
                     {
                         jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
                     }
                 }
+            }
+
+            // Process the journal to create the material/commodity ledger
+            foreach (EliteDangerous.JournalEntry je in jlist)
+            {
+                matcommodledger.Process(je);            // update the ledger
             }
 
             if (worker.CancellationPending)
