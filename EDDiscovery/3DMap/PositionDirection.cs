@@ -316,10 +316,10 @@ namespace EDDiscovery2._3DMap
 
         public void CalculateEyePosition(float _zoom , out Vector3 eye, out Vector3 normal )
         {
-            Matrix4 transform = Matrix4.Identity;                   // identity nominal matrix, dir is in degrees
-            transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
-            transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
-            transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+            Matrix3 transform = Matrix3.Identity;                   // identity nominal matrix, dir is in degrees
+            transform *= Matrix3.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
+            transform *= Matrix3.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
+            transform *= Matrix3.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
             // transform ends as the camera direction vector
 
             // calculate where eye is, relative to target. its 1000/zoom, rotated by camera rotation
