@@ -81,6 +81,13 @@ namespace EDDiscovery.DB
     public abstract class SQLiteConnectionED<TConn> : SQLiteConnectionED
         where TConn : SQLiteConnectionED, new()
     {
+        public static bool IsReadWaiting
+        {
+            get
+            {
+                return SQLiteTxnLockED<TConn>.IsReadWaiting;
+            }
+        }
         private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private SQLiteTxnLockED<TConn> _transactionLock;
 

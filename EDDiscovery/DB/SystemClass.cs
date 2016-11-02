@@ -1171,211 +1171,216 @@ namespace EDDiscovery.DB
                     }
                 }
 
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))
+                IEnumerator<JObject> jo_enum = objs.GetEnumerator();
+                bool jo_enum_finished = false;
+
+                while (!jo_enum_finished && !cancelRequested())
                 {
-                    using (DbTransaction txn = cn.BeginTransaction())
+                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))
                     {
-                        DbCommand updateNameCmd = null;
-                        DbCommand updateSysCmd = null;
-                        DbCommand insertNameCmd = null;
-                        DbCommand insertSysCmd = null;
-                        DbCommand selectSysCmd = null;
-                        DbCommand selectNameCmd = null;
-
-                        try
+                        using (DbTransaction txn = cn.BeginTransaction())
                         {
-                            updateNameCmd = cn.CreateCommand("UPDATE SystemNames SET Name=@Name WHERE EdsmId=@EdsmId", txn);
-                            updateNameCmd.AddParameter("@Name", DbType.String);
-                            updateNameCmd.AddParameter("@EdsmId", DbType.Int64);
+                            DbCommand updateNameCmd = null;
+                            DbCommand updateSysCmd = null;
+                            DbCommand insertNameCmd = null;
+                            DbCommand insertSysCmd = null;
+                            DbCommand selectSysCmd = null;
+                            DbCommand selectNameCmd = null;
 
-                            updateSysCmd = cn.CreateCommand("UPDATE EdsmSystems SET X=@X, Y=@Y, Z=@Z, UpdateTimestamp=@UpdateTimestamp, VersionTimestamp=@VersionTimestamp, GridId=@GridId, RandomId=@RandomId WHERE EdsmId=@EdsmId", txn);
-                            updateSysCmd.AddParameter("@X", DbType.Int64);
-                            updateSysCmd.AddParameter("@Y", DbType.Int64);
-                            updateSysCmd.AddParameter("@Z", DbType.Int64);
-                            updateSysCmd.AddParameter("@UpdateTimestamp", DbType.Int64);
-                            updateSysCmd.AddParameter("@VersionTimestamp", DbType.Int64);
-                            updateSysCmd.AddParameter("@GridId", DbType.Int64);
-                            updateSysCmd.AddParameter("@RandomId", DbType.Int64);
-                            updateSysCmd.AddParameter("@EdsmId", DbType.Int64);
-
-                            insertNameCmd = cn.CreateCommand("INSERT INTO " + sysnamesTableName + " (Name, EdsmId) VALUES (@Name, @EdsmId)", txn);
-                            insertNameCmd.AddParameter("@Name", DbType.String);
-                            insertNameCmd.AddParameter("@EdsmId", DbType.Int64);
-
-                            insertSysCmd = cn.CreateCommand("INSERT INTO " + edsmsysTableName + " (EdsmId, X, Y, Z, CreateTimestamp, UpdateTimestamp, VersionTimestamp, GridId, RandomId) VALUES (@EdsmId, @X, @Y, @Z, @CreateTimestamp, @UpdateTimestamp, @VersionTimestamp, @GridId, @RandomId)", txn);
-                            insertSysCmd.AddParameter("@EdsmId", DbType.Int64);
-                            insertSysCmd.AddParameter("@X", DbType.Int64);
-                            insertSysCmd.AddParameter("@Y", DbType.Int64);
-                            insertSysCmd.AddParameter("@Z", DbType.Int64);
-                            insertSysCmd.AddParameter("@CreateTimestamp", DbType.Int64);
-                            insertSysCmd.AddParameter("@UpdateTimestamp", DbType.Int64);
-                            insertSysCmd.AddParameter("@VersionTimestamp", DbType.Int64);
-                            insertSysCmd.AddParameter("@GridId", DbType.Int64);
-                            insertSysCmd.AddParameter("@RandomId", DbType.Int64);
-
-                            selectSysCmd = cn.CreateCommand("SELECT Id, X, Y, Z, GridId, RandomId FROM EdsmSystems WHERE EdsmId=@EdsmId");
-                            selectSysCmd.AddParameter("@EdsmId", DbType.Int64);
-
-                            selectNameCmd = cn.CreateCommand("SELECT Name FROM SystemNames WHERE EdsmId = @EdsmId");
-                            selectNameCmd.AddParameter("@EdsmId", DbType.Int64);
-
-                            IEnumerator<JObject> jo_enum = objs.GetEnumerator();
-
-                            while (!cancelRequested())
+                            try
                             {
-                                if (!jo_enum.MoveNext())
+                                updateNameCmd = cn.CreateCommand("UPDATE SystemNames SET Name=@Name WHERE EdsmId=@EdsmId", txn);
+                                updateNameCmd.AddParameter("@Name", DbType.String);
+                                updateNameCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                updateSysCmd = cn.CreateCommand("UPDATE EdsmSystems SET X=@X, Y=@Y, Z=@Z, UpdateTimestamp=@UpdateTimestamp, VersionTimestamp=@VersionTimestamp, GridId=@GridId, RandomId=@RandomId WHERE EdsmId=@EdsmId", txn);
+                                updateSysCmd.AddParameter("@X", DbType.Int64);
+                                updateSysCmd.AddParameter("@Y", DbType.Int64);
+                                updateSysCmd.AddParameter("@Z", DbType.Int64);
+                                updateSysCmd.AddParameter("@UpdateTimestamp", DbType.Int64);
+                                updateSysCmd.AddParameter("@VersionTimestamp", DbType.Int64);
+                                updateSysCmd.AddParameter("@GridId", DbType.Int64);
+                                updateSysCmd.AddParameter("@RandomId", DbType.Int64);
+                                updateSysCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                insertNameCmd = cn.CreateCommand("INSERT INTO " + sysnamesTableName + " (Name, EdsmId) VALUES (@Name, @EdsmId)", txn);
+                                insertNameCmd.AddParameter("@Name", DbType.String);
+                                insertNameCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                insertSysCmd = cn.CreateCommand("INSERT INTO " + edsmsysTableName + " (EdsmId, X, Y, Z, CreateTimestamp, UpdateTimestamp, VersionTimestamp, GridId, RandomId) VALUES (@EdsmId, @X, @Y, @Z, @CreateTimestamp, @UpdateTimestamp, @VersionTimestamp, @GridId, @RandomId)", txn);
+                                insertSysCmd.AddParameter("@EdsmId", DbType.Int64);
+                                insertSysCmd.AddParameter("@X", DbType.Int64);
+                                insertSysCmd.AddParameter("@Y", DbType.Int64);
+                                insertSysCmd.AddParameter("@Z", DbType.Int64);
+                                insertSysCmd.AddParameter("@CreateTimestamp", DbType.Int64);
+                                insertSysCmd.AddParameter("@UpdateTimestamp", DbType.Int64);
+                                insertSysCmd.AddParameter("@VersionTimestamp", DbType.Int64);
+                                insertSysCmd.AddParameter("@GridId", DbType.Int64);
+                                insertSysCmd.AddParameter("@RandomId", DbType.Int64);
+
+                                selectSysCmd = cn.CreateCommand("SELECT Id, X, Y, Z, GridId, RandomId FROM EdsmSystems WHERE EdsmId=@EdsmId");
+                                selectSysCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                selectNameCmd = cn.CreateCommand("SELECT Name FROM SystemNames WHERE EdsmId = @EdsmId");
+                                selectNameCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                while (!cancelRequested() && !SQLiteConnectionSystem.IsReadWaiting)
                                 {
-                                    reportProgress(-1, $"Syncing EDSM systems: {count} processed, {insertcount} new systems, {updatecount} updated systems");
-                                    txn.Commit();
-
-                                    if (jr_eof)
+                                    if (!jo_enum.MoveNext())
                                     {
-                                        date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                        reportProgress(-1, $"Syncing EDSM systems: {count} processed, {insertcount} new systems, {updatecount} updated systems");
+                                        txn.Commit();
 
-                                        Console.WriteLine($"Import took {sw.ElapsedMilliseconds}ms");
-
-                                        for (int id = 0; id < histogramsystems.Length; id++)
+                                        if (jr_eof)
                                         {
-                                            if (histogramsystems[id] != 0)
-                                                Console.WriteLine("Id " + id + " count " + histogramsystems[id]);
-                                        }
+                                            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
-                                        return updatecount + insertcount;
-                                    }
+                                            Console.WriteLine($"Import took {sw.ElapsedMilliseconds}ms");
 
-                                    break;
-                                }
-
-                                JObject jo = jo_enum.Current;
-
-                                JObject coords = (JObject)jo["coords"];
-
-                                if (coords != null && (coords["x"].Type == JTokenType.Float || coords["x"].Type == JTokenType.Integer))
-                                {
-                                    double x = coords["x"].Value<double>();
-                                    double y = coords["y"].Value<double>();
-                                    double z = coords["z"].Value<double>();
-                                    long edsmid = jo["id"].Value<long>();
-                                    string name = jo["name"].Value<string>();
-                                    int gridid = GridId.Id(x, z);
-                                    int randomid = rnd.Next(0, 99);
-                                    DateTime updatedate = jo["date"].Value<DateTime>();
-                                    histogramsystems[gridid]++;
-
-                                    if (updatedate > maxdate)
-                                        maxdate = updatedate;
-                                    else if (updatedate < maxdate - TimeSpan.FromHours(1))
-                                        outoforder = true;
-
-                                    EDDiscovery2.DB.InMemory.SystemClassBase dbsys = null;
-
-                                    if (!useTempSystems)
-                                    {
-                                        if (useCache && systemsByEdsmId.ContainsKey(edsmid))
-                                            dbsys = systemsByEdsmId[edsmid];
-
-                                        if (!useCache)
-                                        {
-                                            selectSysCmd.Parameters["@EdsmId"].Value = edsmid;
-                                            using (DbDataReader reader = selectSysCmd.ExecuteReader())
+                                            for (int id = 0; id < histogramsystems.Length; id++)
                                             {
-                                                if (reader.Read())
-                                                {
-                                                    dbsys = new EDDiscovery2.DB.InMemory.SystemClassBase
-                                                    {
-                                                        id = (long)reader["id"],
-                                                        id_edsm = edsmid
-                                                    };
-
-                                                    if (System.DBNull.Value == reader["x"])
-                                                    {
-                                                        dbsys.x = double.NaN;
-                                                        dbsys.y = double.NaN;
-                                                        dbsys.z = double.NaN;
-                                                    }
-                                                    else
-                                                    {
-                                                        dbsys.x = ((double)(long)reader["X"]) / XYZScalar;
-                                                        dbsys.y = ((double)(long)reader["Y"]) / XYZScalar;
-                                                        dbsys.z = ((double)(long)reader["Z"]) / XYZScalar;
-                                                    }
-
-                                                    dbsys.id_edsm = edsmid;
-                                                    dbsys.gridid = reader["GridId"] == DBNull.Value ? 0 : (int)((long)reader["GridId"]);
-                                                    dbsys.randomid = reader["RandomId"] == DBNull.Value ? 0 : (int)((long)reader["RandomId"]);
-                                                }
+                                                if (histogramsystems[id] != 0)
+                                                    Console.WriteLine("Id " + id + " count " + histogramsystems[id]);
                                             }
 
-                                            if (dbsys != null)
+                                            return updatecount + insertcount;
+                                        }
+
+                                        jo_enum_finished = true;
+                                        break;
+                                    }
+
+                                    JObject jo = jo_enum.Current;
+
+                                    JObject coords = (JObject)jo["coords"];
+
+                                    if (coords != null && (coords["x"].Type == JTokenType.Float || coords["x"].Type == JTokenType.Integer))
+                                    {
+                                        double x = coords["x"].Value<double>();
+                                        double y = coords["y"].Value<double>();
+                                        double z = coords["z"].Value<double>();
+                                        long edsmid = jo["id"].Value<long>();
+                                        string name = jo["name"].Value<string>();
+                                        int gridid = GridId.Id(x, z);
+                                        int randomid = rnd.Next(0, 99);
+                                        DateTime updatedate = jo["date"].Value<DateTime>();
+                                        histogramsystems[gridid]++;
+
+                                        if (updatedate > maxdate)
+                                            maxdate = updatedate;
+                                        else if (updatedate < maxdate - TimeSpan.FromHours(1))
+                                            outoforder = true;
+
+                                        EDDiscovery2.DB.InMemory.SystemClassBase dbsys = null;
+
+                                        if (!useTempSystems)
+                                        {
+                                            if (useCache && systemsByEdsmId.ContainsKey(edsmid))
+                                                dbsys = systemsByEdsmId[edsmid];
+
+                                            if (!useCache)
                                             {
-                                                selectNameCmd.Parameters["@EdsmId"].Value = edsmid;
-                                                using (DbDataReader reader = selectNameCmd.ExecuteReader())
+                                                selectSysCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                using (DbDataReader reader = selectSysCmd.ExecuteReader())
                                                 {
                                                     if (reader.Read())
                                                     {
-                                                        dbsys.name = (string)reader["Name"];
+                                                        dbsys = new EDDiscovery2.DB.InMemory.SystemClassBase
+                                                        {
+                                                            id = (long)reader["id"],
+                                                            id_edsm = edsmid
+                                                        };
+
+                                                        if (System.DBNull.Value == reader["x"])
+                                                        {
+                                                            dbsys.x = double.NaN;
+                                                            dbsys.y = double.NaN;
+                                                            dbsys.z = double.NaN;
+                                                        }
+                                                        else
+                                                        {
+                                                            dbsys.x = ((double)(long)reader["X"]) / XYZScalar;
+                                                            dbsys.y = ((double)(long)reader["Y"]) / XYZScalar;
+                                                            dbsys.z = ((double)(long)reader["Z"]) / XYZScalar;
+                                                        }
+
+                                                        dbsys.id_edsm = edsmid;
+                                                        dbsys.gridid = reader["GridId"] == DBNull.Value ? 0 : (int)((long)reader["GridId"]);
+                                                        dbsys.randomid = reader["RandomId"] == DBNull.Value ? 0 : (int)((long)reader["RandomId"]);
+                                                    }
+                                                }
+
+                                                if (dbsys != null)
+                                                {
+                                                    selectNameCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                    using (DbDataReader reader = selectNameCmd.ExecuteReader())
+                                                    {
+                                                        if (reader.Read())
+                                                        {
+                                                            dbsys.name = (string)reader["Name"];
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
+
+                                        if (dbsys != null)
+                                        {
+                                            // see if EDSM data changed..
+                                            if (!dbsys.name.Equals(name))
+                                            {
+                                                updateNameCmd.Parameters["@Name"].Value = name;
+                                                updateNameCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                updateNameCmd.ExecuteNonQuery();
+                                            }
+
+                                            if (Math.Abs(dbsys.x - x) > 0.01 ||
+                                                Math.Abs(dbsys.y - y) > 0.01 ||
+                                                Math.Abs(dbsys.z - z) > 0.01 ||
+                                                dbsys.gridid != gridid)  // position changed
+                                            {
+                                                updateSysCmd.Parameters["@X"].Value = (long)(x * XYZScalar);
+                                                updateSysCmd.Parameters["@Y"].Value = (long)(y * XYZScalar);
+                                                updateSysCmd.Parameters["@Z"].Value = (long)(z * XYZScalar);
+                                                updateSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                                updateSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                                updateSysCmd.Parameters["@GridId"].Value = gridid;
+                                                updateSysCmd.Parameters["@RandomId"].Value = randomid;
+                                                updateSysCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                updateSysCmd.ExecuteNonQuery();
+                                                updatecount++;
+                                            }
+                                        }
+                                        else                                                                  // not in database..
+                                        {
+                                            insertNameCmd.Parameters["@Name"].Value = name;
+                                            insertNameCmd.Parameters["@EdsmId"].Value = edsmid;
+                                            insertNameCmd.ExecuteNonQuery();
+                                            insertSysCmd.Parameters["@EdsmId"].Value = edsmid;
+                                            insertSysCmd.Parameters["@X"].Value = (long)(x * XYZScalar);
+                                            insertSysCmd.Parameters["@Y"].Value = (long)(y * XYZScalar);
+                                            insertSysCmd.Parameters["@Z"].Value = (long)(z * XYZScalar);
+                                            insertSysCmd.Parameters["@CreateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                            insertSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                            insertSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                            insertSysCmd.Parameters["@GridId"].Value = gridid;
+                                            insertSysCmd.Parameters["@RandomId"].Value = randomid;
+                                            insertSysCmd.ExecuteNonQuery();
+                                            insertcount++;
+                                        }
                                     }
 
-                                    if (dbsys != null)
-                                    {
-                                        // see if EDSM data changed..
-                                        if (!dbsys.name.Equals(name))
-                                        {
-                                            updateNameCmd.Parameters["@Name"].Value = name;
-                                            updateNameCmd.Parameters["@EdsmId"].Value = edsmid;
-                                            updateNameCmd.ExecuteNonQuery();
-                                        }
-
-                                        if (Math.Abs(dbsys.x - x) > 0.01 ||
-                                            Math.Abs(dbsys.y - y) > 0.01 ||
-                                            Math.Abs(dbsys.z - z) > 0.01 ||
-                                            dbsys.gridid != gridid)  // position changed
-                                        {
-                                            updateSysCmd.Parameters["@X"].Value = (long)(x * XYZScalar);
-                                            updateSysCmd.Parameters["@Y"].Value = (long)(y * XYZScalar);
-                                            updateSysCmd.Parameters["@Z"].Value = (long)(z * XYZScalar);
-                                            updateSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                            updateSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                            updateSysCmd.Parameters["@GridId"].Value = gridid;
-                                            updateSysCmd.Parameters["@RandomId"].Value = randomid;
-                                            updateSysCmd.Parameters["@EdsmId"].Value = edsmid;
-                                            updateSysCmd.ExecuteNonQuery();
-                                            updatecount++;
-                                        }
-                                    }
-                                    else                                                                  // not in database..
-                                    {
-                                        insertNameCmd.Parameters["@Name"].Value = name;
-                                        insertNameCmd.Parameters["@EdsmId"].Value = edsmid;
-                                        insertNameCmd.ExecuteNonQuery();
-                                        insertSysCmd.Parameters["@EdsmId"].Value = edsmid;
-                                        insertSysCmd.Parameters["@X"].Value = (long)(x * XYZScalar);
-                                        insertSysCmd.Parameters["@Y"].Value = (long)(y * XYZScalar);
-                                        insertSysCmd.Parameters["@Z"].Value = (long)(z * XYZScalar);
-                                        insertSysCmd.Parameters["@CreateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                        insertSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                        insertSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                        insertSysCmd.Parameters["@GridId"].Value = gridid;
-                                        insertSysCmd.Parameters["@RandomId"].Value = randomid;
-                                        insertSysCmd.ExecuteNonQuery();
-                                        insertcount++;
-                                    }
+                                    count++;
                                 }
-
-                                count++;
                             }
-                        }
-                        finally
-                        {
-                            if (updateNameCmd != null) updateNameCmd.Dispose();
-                            if (updateSysCmd != null) updateSysCmd.Dispose();
-                            if (insertNameCmd != null) insertNameCmd.Dispose();
-                            if (insertSysCmd != null) insertSysCmd.Dispose();
-                            if (selectSysCmd != null) selectSysCmd.Dispose();
+                            finally
+                            {
+                                if (updateNameCmd != null) updateNameCmd.Dispose();
+                                if (updateSysCmd != null) updateSysCmd.Dispose();
+                                if (insertNameCmd != null) insertNameCmd.Dispose();
+                                if (insertSysCmd != null) insertSysCmd.Dispose();
+                                if (selectSysCmd != null) selectSysCmd.Dispose();
+                            }
                         }
                     }
                 }
@@ -1407,65 +1412,75 @@ namespace EDDiscovery.DB
         public static void RemoveHiddenSystems(string json)
         {
             JsonTextReader jr = new JsonTextReader(new StringReader(json));
+            bool jr_eof = false;
 
-            using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
+            while (!jr_eof)
             {
-                using (DbTransaction txn = cn2.BeginTransaction())
+                using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
                 {
-                    DbCommand infoinscmd = null;
-                    DbCommand infodelcmd = null;
-                    DbCommand namedelcmd = null;
-
-                    try
+                    using (DbTransaction txn = cn2.BeginTransaction())
                     {
-                        infoinscmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemAliases (name, id_edsm, id_edsm_mergedto) VALUES (@name, @id_edsm, @id_edsm_mergedto)", txn);
-                        infoinscmd.AddParameter("@name", DbType.String);
-                        infoinscmd.AddParameter("@id_edsm", DbType.Int64);
-                        infoinscmd.AddParameter("@id_edsm_mergedto", DbType.Int64);
-                        infodelcmd = cn2.CreateCommand("DELETE FROM EdsmSystems WHERE EdsmId=@EdsmId", txn);
-                        infodelcmd.AddParameter("@EdsmId", DbType.Int64);
-                        namedelcmd = cn2.CreateCommand("DELETE FROM SystemNames WHERE EdsmId=@EdsmId", txn);
-                        namedelcmd.AddParameter("@EdsmId", DbType.Int64);
+                        DbCommand infoinscmd = null;
+                        DbCommand infodelcmd = null;
+                        DbCommand namedelcmd = null;
 
-                        while (jr.Read())
+                        try
                         {
-                            if (jr.TokenType == JsonToken.StartObject)
+                            infoinscmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemAliases (name, id_edsm, id_edsm_mergedto) VALUES (@name, @id_edsm, @id_edsm_mergedto)", txn);
+                            infoinscmd.AddParameter("@name", DbType.String);
+                            infoinscmd.AddParameter("@id_edsm", DbType.Int64);
+                            infoinscmd.AddParameter("@id_edsm_mergedto", DbType.Int64);
+                            infodelcmd = cn2.CreateCommand("DELETE FROM EdsmSystems WHERE EdsmId=@EdsmId", txn);
+                            infodelcmd.AddParameter("@EdsmId", DbType.Int64);
+                            namedelcmd = cn2.CreateCommand("DELETE FROM SystemNames WHERE EdsmId=@EdsmId", txn);
+                            namedelcmd.AddParameter("@EdsmId", DbType.Int64);
+
+                            while (!SQLiteConnectionSystem.IsReadWaiting)
                             {
-                                JObject jo = JObject.Load(jr);
-
-                                long edsmid = (long)jo["id"];
-                                string name = (string)jo["system"];
-                                string action = (string)jo["action"];
-                                long mergedto = 0;
-
-                                if (jo["mergedTo"] != null)
+                                if (!jr.Read())
                                 {
-                                    mergedto = (long)jo["mergedTo"];
+                                    jr_eof = true;
+                                    break;
                                 }
 
-                                Console.Write("Remove " + edsmid);
-                                infodelcmd.Parameters["@EdsmId"].Value = edsmid;
-                                infodelcmd.ExecuteNonQuery();
-                                namedelcmd.Parameters["@EdsmId"].Value = edsmid;
-                                namedelcmd.ExecuteNonQuery();
-
-                                if (mergedto > 0)
+                                if (jr.TokenType == JsonToken.StartObject)
                                 {
-                                    infoinscmd.Parameters["@name"].Value = name;
-                                    infoinscmd.Parameters["@id_edsm"].Value = edsmid;
-                                    infoinscmd.Parameters["@id_edsm_mergedto"].Value = mergedto;
-                                    infoinscmd.ExecuteNonQuery();
+                                    JObject jo = JObject.Load(jr);
+
+                                    long edsmid = (long)jo["id"];
+                                    string name = (string)jo["system"];
+                                    string action = (string)jo["action"];
+                                    long mergedto = 0;
+
+                                    if (jo["mergedTo"] != null)
+                                    {
+                                        mergedto = (long)jo["mergedTo"];
+                                    }
+
+                                    Console.Write("Remove " + edsmid);
+                                    infodelcmd.Parameters["@EdsmId"].Value = edsmid;
+                                    infodelcmd.ExecuteNonQuery();
+                                    namedelcmd.Parameters["@EdsmId"].Value = edsmid;
+                                    namedelcmd.ExecuteNonQuery();
+
+                                    if (mergedto > 0)
+                                    {
+                                        infoinscmd.Parameters["@name"].Value = name;
+                                        infoinscmd.Parameters["@id_edsm"].Value = edsmid;
+                                        infoinscmd.Parameters["@id_edsm_mergedto"].Value = mergedto;
+                                        infoinscmd.ExecuteNonQuery();
+                                    }
                                 }
                             }
-                        }
 
-                        txn.Commit();
-                    }
-                    finally
-                    {
-                        if (infoinscmd != null) infoinscmd.Dispose();
-                        if (infodelcmd != null) infodelcmd.Dispose();
-                        if (namedelcmd != null) namedelcmd.Dispose();
+                            txn.Commit();
+                        }
+                        finally
+                        {
+                            if (infoinscmd != null) infoinscmd.Dispose();
+                            if (infodelcmd != null) infodelcmd.Dispose();
+                            if (namedelcmd != null) namedelcmd.Dispose();
+                        }
                     }
                 }
             }
@@ -1485,155 +1500,166 @@ namespace EDDiscovery.DB
 
             int updated = 0;
             int inserted = 0;
+            bool jr_eof = false;
 
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
+            while (!jr_eof)
             {
-                DbCommand selectCmd = null;
-                DbCommand insertCmd = null;
-                DbCommand updateCmd = null;
-                DbCommand updateSysCmd = null;
-
-                using (DbTransaction txn = cn.BeginTransaction())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
                 {
-                    try
+                    DbCommand selectCmd = null;
+                    DbCommand insertCmd = null;
+                    DbCommand updateCmd = null;
+                    DbCommand updateSysCmd = null;
+
+                    using (DbTransaction txn = cn.BeginTransaction())
                     {
-                        selectCmd = cn.CreateCommand("SELECT EddbId, Population, EddbUpdatedAt FROM EddbSystems WHERE EdsmId = @EdsmId LIMIT 1", txn);   // 1 return matching ID
-                        selectCmd.AddParameter("@Edsmid", DbType.Int64);
-
-                        insertCmd = cn.CreateCommand("INSERT INTO EddbSystems (EdsmId, EddbId, Name, Faction, Population, GovernmentId, AllegianceId, State, Security, PrimaryEconomyId, NeedsPermit, EddbUpdatedAt) " +
-                                                                      "VALUES (@EdsmId, @EddbId, @Name, @Faction, @Population, @GovernmentId, @AllegianceId, @State, @Security, @PrimaryEconomyid, @NeedsPermit, @EddbUpdatedAt)", txn);
-                        insertCmd.AddParameter("@EdsmId", DbType.Int64);
-                        insertCmd.AddParameter("@EddbId", DbType.Int64);
-                        insertCmd.AddParameter("@Name", DbType.String);
-                        insertCmd.AddParameter("@Faction", DbType.String);
-                        insertCmd.AddParameter("@Population", DbType.Int64);
-                        insertCmd.AddParameter("@GovernmentId", DbType.Int64);
-                        insertCmd.AddParameter("@AllegianceId", DbType.Int64);
-                        insertCmd.AddParameter("@State", DbType.Int64);
-                        insertCmd.AddParameter("@Security", DbType.Int64);
-                        insertCmd.AddParameter("@PrimaryEconomyId", DbType.Int64);
-                        insertCmd.AddParameter("@NeedsPermit", DbType.Int64);
-                        insertCmd.AddParameter("@EddbUpdatedAt", DbType.Int64);
-
-                        updateCmd = cn.CreateCommand("UPDATE EddbSystems SET EddbId=@EddbId, Name=@Name, Faction=@Faction, Population=@Population, GovernmentId=@GovernmentId, AllegianceId=@AllegianceId, State=@State, Security=@Security, PrimaryEconomyId=@PrimaryEconomyId, NeedsPermit=@NeedsPermit, EddbUpdatedAt=@EddbUpdatedAt WHERE EdsmId=@EdsmId", txn);
-                        updateCmd.AddParameter("@EdsmId", DbType.Int64);
-                        updateCmd.AddParameter("@EddbId", DbType.Int64);
-                        updateCmd.AddParameter("@Name", DbType.String);
-                        updateCmd.AddParameter("@Faction", DbType.String);
-                        updateCmd.AddParameter("@Population", DbType.Int64);
-                        updateCmd.AddParameter("@GovernmentId", DbType.Int64);
-                        updateCmd.AddParameter("@AllegianceId", DbType.Int64);
-                        updateCmd.AddParameter("@State", DbType.Int64);
-                        updateCmd.AddParameter("@Security", DbType.Int64);
-                        updateCmd.AddParameter("@PrimaryEconomyId", DbType.Int64);
-                        updateCmd.AddParameter("@NeedsPermit", DbType.Int64);
-                        updateCmd.AddParameter("@EddbUpdatedAt", DbType.Int64);
-
-                        updateSysCmd = cn.CreateCommand("UPDATE EdsmSystems SET EddbId=@EddbId WHERE EdsmId=@EdsmId");
-                        updateSysCmd.AddParameter("@EdsmId", DbType.Int64);
-                        updateSysCmd.AddParameter("@EddbId", DbType.Int64);
-
-                        int c = 0;
-                        int hasinfo = 0;
-                        int lasttc = Environment.TickCount;
-
-                        while (jr.Read())
+                        try
                         {
-                            if (jr.TokenType == JsonToken.StartObject)
+                            selectCmd = cn.CreateCommand("SELECT EddbId, Population, EddbUpdatedAt FROM EddbSystems WHERE EdsmId = @EdsmId LIMIT 1", txn);   // 1 return matching ID
+                            selectCmd.AddParameter("@Edsmid", DbType.Int64);
+
+                            insertCmd = cn.CreateCommand("INSERT INTO EddbSystems (EdsmId, EddbId, Name, Faction, Population, GovernmentId, AllegianceId, State, Security, PrimaryEconomyId, NeedsPermit, EddbUpdatedAt) " +
+                                                                          "VALUES (@EdsmId, @EddbId, @Name, @Faction, @Population, @GovernmentId, @AllegianceId, @State, @Security, @PrimaryEconomyid, @NeedsPermit, @EddbUpdatedAt)", txn);
+                            insertCmd.AddParameter("@EdsmId", DbType.Int64);
+                            insertCmd.AddParameter("@EddbId", DbType.Int64);
+                            insertCmd.AddParameter("@Name", DbType.String);
+                            insertCmd.AddParameter("@Faction", DbType.String);
+                            insertCmd.AddParameter("@Population", DbType.Int64);
+                            insertCmd.AddParameter("@GovernmentId", DbType.Int64);
+                            insertCmd.AddParameter("@AllegianceId", DbType.Int64);
+                            insertCmd.AddParameter("@State", DbType.Int64);
+                            insertCmd.AddParameter("@Security", DbType.Int64);
+                            insertCmd.AddParameter("@PrimaryEconomyId", DbType.Int64);
+                            insertCmd.AddParameter("@NeedsPermit", DbType.Int64);
+                            insertCmd.AddParameter("@EddbUpdatedAt", DbType.Int64);
+
+                            updateCmd = cn.CreateCommand("UPDATE EddbSystems SET EddbId=@EddbId, Name=@Name, Faction=@Faction, Population=@Population, GovernmentId=@GovernmentId, AllegianceId=@AllegianceId, State=@State, Security=@Security, PrimaryEconomyId=@PrimaryEconomyId, NeedsPermit=@NeedsPermit, EddbUpdatedAt=@EddbUpdatedAt WHERE EdsmId=@EdsmId", txn);
+                            updateCmd.AddParameter("@EdsmId", DbType.Int64);
+                            updateCmd.AddParameter("@EddbId", DbType.Int64);
+                            updateCmd.AddParameter("@Name", DbType.String);
+                            updateCmd.AddParameter("@Faction", DbType.String);
+                            updateCmd.AddParameter("@Population", DbType.Int64);
+                            updateCmd.AddParameter("@GovernmentId", DbType.Int64);
+                            updateCmd.AddParameter("@AllegianceId", DbType.Int64);
+                            updateCmd.AddParameter("@State", DbType.Int64);
+                            updateCmd.AddParameter("@Security", DbType.Int64);
+                            updateCmd.AddParameter("@PrimaryEconomyId", DbType.Int64);
+                            updateCmd.AddParameter("@NeedsPermit", DbType.Int64);
+                            updateCmd.AddParameter("@EddbUpdatedAt", DbType.Int64);
+
+                            updateSysCmd = cn.CreateCommand("UPDATE EdsmSystems SET EddbId=@EddbId WHERE EdsmId=@EdsmId");
+                            updateSysCmd.AddParameter("@EdsmId", DbType.Int64);
+                            updateSysCmd.AddParameter("@EddbId", DbType.Int64);
+
+                            int c = 0;
+                            int hasinfo = 0;
+                            int lasttc = Environment.TickCount;
+
+                            while (!SQLiteConnectionSystem.IsReadWaiting)
                             {
-                                JObject jo = JObject.Load(jr);
-
-                                SystemClass system = new SystemClass(jo, SystemInfoSource.EDDB);
-
-                                if (system.HasEDDBInformation)                                  // screen out for speed any EDDB data with empty interesting fields
+                                if (!jr.Read())
                                 {
-                                    hasinfo++;
+                                    jr_eof = true;
+                                    break;
+                                }
 
-                                    selectCmd.Parameters["@EdsmId"].Value = system.id_edsm;     // EDDB carries EDSM ID, so find entry in dB
+                                if (jr.TokenType == JsonToken.StartObject)
+                                {
+                                    JObject jo = JObject.Load(jr);
 
-                                    //DEBUGif ( c > 30000 )  Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Late info system");
+                                    SystemClass system = new SystemClass(jo, SystemInfoSource.EDDB);
 
-                                    long updated_at = 0;
-                                    long population = 0;
-                                    long eddbid = 0;
-
-                                    using (DbDataReader reader1 = selectCmd.ExecuteReader())         // if found (if not, we ignore EDDB system)
+                                    if (system.HasEDDBInformation)                                  // screen out for speed any EDDB data with empty interesting fields
                                     {
-                                        if (reader1.Read())                                     // its there.. check its got the right stuff in it.
+                                        hasinfo++;
+
+                                        selectCmd.Parameters["@EdsmId"].Value = system.id_edsm;     // EDDB carries EDSM ID, so find entry in dB
+
+                                        //DEBUGif ( c > 30000 )  Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Late info system");
+
+                                        long updated_at = 0;
+                                        long population = 0;
+                                        long eddbid = 0;
+
+                                        using (DbDataReader reader1 = selectCmd.ExecuteReader())         // if found (if not, we ignore EDDB system)
                                         {
-                                            eddbid = (long)reader1["EddbId"];
-                                            updated_at = (long)reader1["EddbUpdatedAt"];
-                                            population = (long)reader1["Population"];
+                                            if (reader1.Read())                                     // its there.. check its got the right stuff in it.
+                                            {
+                                                eddbid = (long)reader1["EddbId"];
+                                                updated_at = (long)reader1["EddbUpdatedAt"];
+                                                population = (long)reader1["Population"];
+                                            }
                                         }
-                                    }
 
-                                    updateSysCmd.Parameters["@EdsmId"].Value = system.id_edsm;
-                                    updateSysCmd.Parameters["@EddbId"].Value = system.id_eddb;
-                                    updateSysCmd.ExecuteNonQuery();
+                                        updateSysCmd.Parameters["@EdsmId"].Value = system.id_edsm;
+                                        updateSysCmd.Parameters["@EddbId"].Value = system.id_eddb;
+                                        updateSysCmd.ExecuteNonQuery();
 
-                                    if (eddbid != 0)
-                                    {
-                                        if (updated_at != system.eddb_updated_at || population != system.population)
+                                        if (eddbid != 0)
                                         {
-                                            updateCmd.Parameters["@EddbId"].Value = system.id_eddb;
-                                            updateCmd.Parameters["@Name"].Value = system.name;
-                                            updateCmd.Parameters["@Faction"].Value = system.faction;
-                                            updateCmd.Parameters["@Population"].Value = system.population;
-                                            updateCmd.Parameters["@GovernmentId"].Value = system.government;
-                                            updateCmd.Parameters["@AllegianceId"].Value = system.allegiance;
-                                            updateCmd.Parameters["@State"].Value = system.state;
-                                            updateCmd.Parameters["@Security"].Value = system.security;
-                                            updateCmd.Parameters["@PrimaryEconomyId"].Value = system.primary_economy;
-                                            updateCmd.Parameters["@NeedsPermit"].Value = system.needs_permit;
-                                            updateCmd.Parameters["@EddbUpdatedAt"].Value = system.eddb_updated_at;
-                                            updateCmd.Parameters["@EdsmId"].Value = system.id_edsm;
-                                            updateCmd.ExecuteNonQuery();
-                                            updated++;
+                                            if (updated_at != system.eddb_updated_at || population != system.population)
+                                            {
+                                                updateCmd.Parameters["@EddbId"].Value = system.id_eddb;
+                                                updateCmd.Parameters["@Name"].Value = system.name;
+                                                updateCmd.Parameters["@Faction"].Value = system.faction;
+                                                updateCmd.Parameters["@Population"].Value = system.population;
+                                                updateCmd.Parameters["@GovernmentId"].Value = system.government;
+                                                updateCmd.Parameters["@AllegianceId"].Value = system.allegiance;
+                                                updateCmd.Parameters["@State"].Value = system.state;
+                                                updateCmd.Parameters["@Security"].Value = system.security;
+                                                updateCmd.Parameters["@PrimaryEconomyId"].Value = system.primary_economy;
+                                                updateCmd.Parameters["@NeedsPermit"].Value = system.needs_permit;
+                                                updateCmd.Parameters["@EddbUpdatedAt"].Value = system.eddb_updated_at;
+                                                updateCmd.Parameters["@EdsmId"].Value = system.id_edsm;
+                                                updateCmd.ExecuteNonQuery();
+                                                updated++;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            insertCmd.Parameters["@EdsmId"].Value = system.id_edsm;
+                                            insertCmd.Parameters["@EddbId"].Value = system.id_eddb;
+                                            insertCmd.Parameters["@Name"].Value = system.name;
+                                            insertCmd.Parameters["@Faction"].Value = system.faction;
+                                            insertCmd.Parameters["@Population"].Value = system.population;
+                                            insertCmd.Parameters["@GovernmentId"].Value = system.government;
+                                            insertCmd.Parameters["@AllegianceId"].Value = system.allegiance;
+                                            insertCmd.Parameters["@State"].Value = system.state;
+                                            insertCmd.Parameters["@Security"].Value = system.security;
+                                            insertCmd.Parameters["@PrimaryEconomyId"].Value = system.primary_economy;
+                                            insertCmd.Parameters["@NeedsPermit"].Value = system.needs_permit;
+                                            insertCmd.Parameters["@EddbUpdatedAt"].Value = system.eddb_updated_at;
+                                            insertCmd.ExecuteNonQuery();
+                                            inserted++;
                                         }
                                     }
                                     else
                                     {
-                                        insertCmd.Parameters["@EdsmId"].Value = system.id_edsm;
-                                        insertCmd.Parameters["@EddbId"].Value = system.id_eddb;
-                                        insertCmd.Parameters["@Name"].Value = system.name;
-                                        insertCmd.Parameters["@Faction"].Value = system.faction;
-                                        insertCmd.Parameters["@Population"].Value = system.population;
-                                        insertCmd.Parameters["@GovernmentId"].Value = system.government;
-                                        insertCmd.Parameters["@AllegianceId"].Value = system.allegiance;
-                                        insertCmd.Parameters["@State"].Value = system.state;
-                                        insertCmd.Parameters["@Security"].Value = system.security;
-                                        insertCmd.Parameters["@PrimaryEconomyId"].Value = system.primary_economy;
-                                        insertCmd.Parameters["@NeedsPermit"].Value = system.needs_permit;
-                                        insertCmd.Parameters["@EddbUpdatedAt"].Value = system.eddb_updated_at;
-                                        insertCmd.ExecuteNonQuery();
-                                        inserted++;
+                                        //Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " No info reject");
+                                    }
+
+                                    if (++c % 10000 == 0)
+                                    {
+                                        Console.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " info " + hasinfo + " update " + updated + " new " + inserted);
+                                        lasttc = Environment.TickCount;
                                     }
                                 }
-                                else
-                                {
-                                    //Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " No info reject");
-                                }
-
-                                if (++c % 10000 == 0)
-                                {
-                                    Console.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " info " + hasinfo + " update " + updated + " new " + inserted);
-                                    lasttc = Environment.TickCount;
-                                }
                             }
-                        }
 
-                        txn.Commit();
-                    }
-                    catch
-                    {
-                        MessageBox.Show("There is a problem using the EDDB systems file." + Environment.NewLine +
-                                        "Please perform a manual EDDB sync (see Admin menu) next time you run the program ", "EDDB Sync Error");
-                    }
-                    finally
-                    {
-                        if (selectCmd != null) selectCmd.Dispose();
-                        if (updateCmd != null) updateCmd.Dispose();
-                        if (insertCmd != null) insertCmd.Dispose();
+                            txn.Commit();
+                        }
+                        catch
+                        {
+                            MessageBox.Show("There is a problem using the EDDB systems file." + Environment.NewLine +
+                                            "Please perform a manual EDDB sync (see Admin menu) next time you run the program ", "EDDB Sync Error");
+                            break;
+                        }
+                        finally
+                        {
+                            if (selectCmd != null) selectCmd.Dispose();
+                            if (updateCmd != null) updateCmd.Dispose();
+                            if (insertCmd != null) insertCmd.Dispose();
+                        }
                     }
                 }
             }
