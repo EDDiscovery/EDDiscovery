@@ -13,7 +13,6 @@ namespace EDDiscovery.DB
     {
         public SQLiteConnectionOld() : base(EDDSqlDbSelection.EDDiscovery)
         {
-            Open(EDDbAccessMode.Reader);
         }
     }
 
@@ -25,18 +24,10 @@ namespace EDDiscovery.DB
 
         public SQLiteConnectionUser(bool utc = true, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc)
         {
-            if (mode != EDDbAccessMode.Indeterminate)
-            {
-                Open(mode);
-            }
         }
 
         protected SQLiteConnectionUser(bool initializing, bool utc, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc, initializing: initializing)
         {
-            if (mode != EDDbAccessMode.Indeterminate)
-            {
-                Open(mode);
-            }
         }
 
         public static void Initialize()
@@ -56,23 +47,10 @@ namespace EDDiscovery.DB
 
         public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase)
         {
-            if (mode != EDDbAccessMode.Indeterminate)
-            {
-                Open(mode);
-            }
         }
 
         public SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase, initializing: initializing)
         {
-            if (mode != EDDbAccessMode.Indeterminate)
-            {
-                Open(mode);
-            }
-        }
-
-        public override void Open(EDDbAccessMode mode = EDDbAccessMode.Reader, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
-        {
-            base.Open(mode, selector);
         }
 
         public static void Initialize()
@@ -146,53 +124,27 @@ namespace EDDiscovery.DB
 
                 if (utctimeindicator)   // indicate treat dates as UTC.
                     _cn.ConnectionString += "DateTimeKind=Utc;";
+
+                _transactionLock = new SQLiteTxnLockED<TConn>();
+                _cn.Open();
             }
             catch
             {
+                if (_transactionLock != null)
+                {
+                    _transactionLock.Dispose();
+                }
+
                 if (locktaken)
                 {
                     _schemaLock.ExitReadLock();
                 }
-
                 throw;
-            }
-        }
-
-        public override void Open(EDDbAccessMode mode = EDDbAccessMode.Writer, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
-        {
-            if (_transactionLock == null)
-            {
-                try
-                {
-                    _transactionLock = new SQLiteTxnLockED<TConn>(mode == EDDbAccessMode.Writer);
-                    _transactionLock.OpenReader();
-
-                    _cn.Open();
-
-                    // Attach any other requested databases under their appropriate names
-                    foreach (var dbflag in new[] { EDDSqlDbSelection.EDDiscovery, EDDSqlDbSelection.EDDUser, EDDSqlDbSelection.EDDSystem })
-                    {
-                        if (selector.HasFlag(dbflag))
-                        {
-                            AttachDatabase(dbflag, dbflag.ToString());
-                        }
-                    }
-                }
-                catch
-                {
-                    if (_transactionLock != null)
-                    {
-                        _transactionLock.Dispose();
-                    }
-
-                    throw;
-                }
             }
         }
 
         public override DbCommand CreateCommand(string cmd, DbTransaction tn = null)
         {
-            Open();
             AssertThreadOwner();
             return new SQLiteCommandED<TConn>(_cn.CreateCommand(cmd), this, _transactionLock, tn);
         }
@@ -201,7 +153,6 @@ namespace EDDiscovery.DB
         {
             // Take the transaction lock before beginning the
             // transaction to avoid a deadlock
-            Open();
             AssertThreadOwner();
             _transactionLock.OpenWriter();
             return new SQLiteTransactionED<TConn>(_cn.BeginTransaction(isolevel), _transactionLock);
@@ -211,7 +162,6 @@ namespace EDDiscovery.DB
         {
             // Take the transaction lock before beginning the
             // transaction to avoid a deadlock
-            Open();
             AssertThreadOwner();
             _transactionLock.OpenWriter();
             return new SQLiteTransactionED<TConn>(_cn.BeginTransaction(), _transactionLock);
@@ -258,7 +208,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Reader);
                 return cn.keyExistsCN(sKey);
             }
         }
@@ -267,7 +216,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Reader);
                 return cn.GetSettingIntCN(key, defaultvalue);
             }
         }
@@ -276,7 +224,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Writer);
                 bool ret = cn.PutSettingIntCN(key, intvalue);
                 return ret;
             }
@@ -286,7 +233,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Reader);
                 return cn.GetSettingDoubleCN(key, defaultvalue);
             }
         }
@@ -295,7 +241,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Writer);
                 bool ret = cn.PutSettingDoubleCN(key, doublevalue);
                 return ret;
             }
@@ -305,7 +250,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Reader);
                 return cn.GetSettingBoolCN(key, defaultvalue);
             }
         }
@@ -315,7 +259,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Writer);
                 bool ret = cn.PutSettingBoolCN(key, boolvalue);
                 return ret;
             }
@@ -325,7 +268,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Reader);
                 return cn.GetSettingStringCN(key, defaultvalue);
             }
         }
@@ -334,7 +276,6 @@ namespace EDDiscovery.DB
         {
             using (TConn cn = new TConn())
             {
-                cn.Open(mode: EDDbAccessMode.Writer);
                 bool ret = cn.PutSettingStringCN(key, strvalue);
                 return ret;
             }
@@ -429,7 +370,6 @@ namespace EDDiscovery.DB
             }
         }
 
-        public abstract void Open(EDDbAccessMode mode = EDDbAccessMode.Writer, EDDSqlDbSelection selector = EDDSqlDbSelection.None);
         public abstract DbCommand CreateCommand(string cmd, DbTransaction tn = null);
         public abstract DbTransaction BeginTransaction(IsolationLevel isolevel);
         public abstract DbTransaction BeginTransaction();
