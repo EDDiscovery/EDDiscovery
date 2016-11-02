@@ -27,7 +27,6 @@ namespace EDDiscovery2.DB.InMemory
 
     public class SystemClass : SystemClassBase, ISystem
     {
-        public string SearchName { get; set; }
         public int cr { get; set; }
         public string CommanderCreate { get; set; }
         public DateTime CreateDate { get; set; }

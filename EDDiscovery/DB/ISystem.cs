@@ -38,7 +38,6 @@ namespace EDDiscovery2.DB
     // Definition of the core interface so we can swap out an "offline" version during testing
     public interface ISystem : ISystemBase, ISystemEDDB
     {
-        string SearchName { get; set; }
         int cr { get; set; }
         string CommanderCreate { get; set; }
         DateTime CreateDate { get; set; }
