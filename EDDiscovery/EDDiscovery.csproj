@@ -127,8 +127,9 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK.GLControl">
       <HintPath>..\packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
@@ -640,6 +641,7 @@
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.Portable.config" />
+    <None Include="OpenTK.dll.config" />
     <None Include="Resources\promotion.pspimage" />
     <None Include="Resources\shipyardnew.pspimage" />
     <None Include="Resources\YellowDot.png" />
