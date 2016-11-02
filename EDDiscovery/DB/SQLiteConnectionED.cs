@@ -289,24 +289,15 @@ namespace EDDiscovery.DB
         // causes the program to become unresponsive during big DB updates
         protected DbConnection _cn;
         protected Thread _owningThread;
-        protected System.Diagnostics.StackTrace _openStackTrace;
         protected static List<SQLiteConnectionED> _openConnections = new List<SQLiteConnectionED>();
 
         protected SQLiteConnectionED(bool initializing)
         {
             lock (_openConnections)
             {
-                List<SQLiteConnectionED> threadconns = SQLiteConnectionED._openConnections.Where(c => c._owningThread == Thread.CurrentThread).ToList();
-                if (threadconns.Count != 0 && !initializing)
-                {
-                    System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace(true);
-                    System.Diagnostics.Trace.WriteLine($"WARNING: Thread {Thread.CurrentThread.Name} ({Thread.CurrentThread.ManagedThreadId}) is opening multiple concurrent connections");
-                    System.Diagnostics.Trace.WriteLine($"{trace.ToString()}");
-                }
-                SQLiteConnectionED._openConnections.Add(this);
+                _openConnections.Add(this);
             }
             _owningThread = Thread.CurrentThread;
-            _openStackTrace = new System.Diagnostics.StackTrace(true);
         }
 
         protected void AssertThreadOwner()
