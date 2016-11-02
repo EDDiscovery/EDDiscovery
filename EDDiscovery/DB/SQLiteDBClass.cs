@@ -18,8 +18,16 @@ namespace EDDiscovery.DB
     public class SQLiteTxnLockED<TConn> : IDisposable
         where TConn : SQLiteConnectionED
     {
+        public static bool IsReadWaiting
+        {
+            get
+            {
+                return _lock.IsWriteLockHeld && _readsWaiting > 0;
+            }
+        }
         private static ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private static SQLiteTxnLockED<TConn> _writeLockOwner;
+        private static int _readsWaiting;
         private Thread _owningThread;
         public DbCommand _executingCommand;
         public bool _commandExecuting = false;
@@ -114,17 +122,25 @@ namespace EDDiscovery.DB
             {
                 if (!_isReader)
                 {
-                    while (!_lock.TryEnterReadLock(1000))
+                    try
                     {
-                        SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
-                        if (lockowner != null)
+                        Interlocked.Increment(ref _readsWaiting);
+                        while (!_lock.TryEnterReadLock(1000))
                         {
-                            Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
-                            DebugLongRunningOperation(lockowner);
+                            SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
+                            if (lockowner != null)
+                            {
+                                Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
+                                DebugLongRunningOperation(lockowner);
+                            }
                         }
-                    }
 
-                    _isReader = true;
+                        _isReader = true;
+                    }
+                    finally
+                    {
+                        Interlocked.Decrement(ref _readsWaiting);
+                    }
                 }
             }
         }
