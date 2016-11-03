@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare3 = new ExtendedControls.TabStyleSquare();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             this.textBoxTargetDist = new ExtendedControls.TextBoxBorder();
             this.textBoxTarget = new ExtendedControls.AutoCompleteTextBox();
@@ -61,7 +62,7 @@
             this.userControlsCommoditiesBottom = new EDDiscovery.UserControls.UserControlsCommodities();
             this.tabPageBottomLedger = new System.Windows.Forms.TabPage();
             this.userControlsLedgerBottom = new EDDiscovery.UserControls.UserControlsLedger();
-            this.splitContainerRight = new System.Windows.Forms.SplitContainer();
+            this.splitContainerRightOuter = new System.Windows.Forms.SplitContainer();
             this.panelTarget = new System.Windows.Forms.Panel();
             this.labelTarget = new System.Windows.Forms.Label();
             this.panelNoteArea = new System.Windows.Forms.Panel();
@@ -90,11 +91,23 @@
             this.panel_topright = new System.Windows.Forms.Panel();
             this.comboBoxCustomPopOut = new ExtendedControls.ComboBoxCustom();
             this.labelCMDR = new System.Windows.Forms.Label();
+            this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
+            this.tabControlMiddleRight = new ExtendedControls.TabControlCustom();
+            this.tabPageMiddleRight1 = new System.Windows.Forms.TabPage();
+            this.userControlStarDistanceMiddleRight = new EDDiscovery.UserControls.UserControlStarDistance();
+            this.tabPageMiddleRight2 = new System.Windows.Forms.TabPage();
+            this.userControlLogMiddleRight = new EDDiscovery.UserControls.UserControlLog();
             this.tabControlBottomRight = new ExtendedControls.TabControlCustom();
-            this.tabPageBottomRightStarList = new System.Windows.Forms.TabPage();
+            this.tabPageBottomRight1 = new System.Windows.Forms.TabPage();
             this.userControlStarDistanceBottomRight = new EDDiscovery.UserControls.UserControlStarDistance();
-            this.tabPageBottomRightLog = new System.Windows.Forms.TabPage();
+            this.tabPageBottomRight2 = new System.Windows.Forms.TabPage();
             this.userControlLogBottomRight = new EDDiscovery.UserControls.UserControlLog();
+            this.tabPageMiddleRight3 = new System.Windows.Forms.TabPage();
+            this.tabPageMiddleRight4 = new System.Windows.Forms.TabPage();
+            this.tabPageBottomRight3 = new System.Windows.Forms.TabPage();
+            this.tabPageBottomRight4 = new System.Windows.Forms.TabPage();
+            this.userControlsMaterials1 = new EDDiscovery.UserControls.UserControlsMaterials();
+            this.userControlsMaterials2 = new EDDiscovery.UserControls.UserControlsMaterials();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -110,17 +123,26 @@
             this.tabPageBottomMaterials.SuspendLayout();
             this.tabPageBottomCommodities.SuspendLayout();
             this.tabPageBottomLedger.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRight)).BeginInit();
-            this.splitContainerRight.Panel1.SuspendLayout();
-            this.splitContainerRight.Panel2.SuspendLayout();
-            this.splitContainerRight.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightOuter)).BeginInit();
+            this.splitContainerRightOuter.Panel1.SuspendLayout();
+            this.splitContainerRightOuter.Panel2.SuspendLayout();
+            this.splitContainerRightOuter.SuspendLayout();
             this.panelTarget.SuspendLayout();
             this.panelNoteArea.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panel_topright.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightInner)).BeginInit();
+            this.splitContainerRightInner.Panel1.SuspendLayout();
+            this.splitContainerRightInner.Panel2.SuspendLayout();
+            this.splitContainerRightInner.SuspendLayout();
+            this.tabControlMiddleRight.SuspendLayout();
+            this.tabPageMiddleRight1.SuspendLayout();
+            this.tabPageMiddleRight2.SuspendLayout();
             this.tabControlBottomRight.SuspendLayout();
-            this.tabPageBottomRightStarList.SuspendLayout();
-            this.tabPageBottomRightLog.SuspendLayout();
+            this.tabPageBottomRight1.SuspendLayout();
+            this.tabPageBottomRight2.SuspendLayout();
+            this.tabPageMiddleRight3.SuspendLayout();
+            this.tabPageMiddleRight4.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxTargetDist
@@ -337,7 +359,7 @@
             // 
             // splitContainerLeftRight.Panel2
             // 
-            this.splitContainerLeftRight.Panel2.Controls.Add(this.splitContainerRight);
+            this.splitContainerLeftRight.Panel2.Controls.Add(this.splitContainerRightOuter);
             this.splitContainerLeftRight.Size = new System.Drawing.Size(891, 650);
             this.splitContainerLeftRight.SplitterDistance = 550;
             this.splitContainerLeftRight.TabIndex = 6;
@@ -520,26 +542,26 @@
             this.userControlsLedgerBottom.Size = new System.Drawing.Size(536, 263);
             this.userControlsLedgerBottom.TabIndex = 0;
             // 
-            // splitContainerRight
+            // splitContainerRightOuter
             // 
-            this.splitContainerRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerRight.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerRight.Name = "splitContainerRight";
-            this.splitContainerRight.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainerRightOuter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerRightOuter.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerRightOuter.Name = "splitContainerRightOuter";
+            this.splitContainerRightOuter.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainerRight.Panel1
+            // splitContainerRightOuter.Panel1
             // 
-            this.splitContainerRight.Panel1.Controls.Add(this.panelTarget);
-            this.splitContainerRight.Panel1.Controls.Add(this.panelNoteArea);
-            this.splitContainerRight.Panel1.Controls.Add(this.panel_system);
-            this.splitContainerRight.Panel1.Controls.Add(this.panel_topright);
+            this.splitContainerRightOuter.Panel1.Controls.Add(this.panelTarget);
+            this.splitContainerRightOuter.Panel1.Controls.Add(this.panelNoteArea);
+            this.splitContainerRightOuter.Panel1.Controls.Add(this.panel_system);
+            this.splitContainerRightOuter.Panel1.Controls.Add(this.panel_topright);
             // 
-            // splitContainerRight.Panel2
+            // splitContainerRightOuter.Panel2
             // 
-            this.splitContainerRight.Panel2.Controls.Add(this.tabControlBottomRight);
-            this.splitContainerRight.Size = new System.Drawing.Size(337, 650);
-            this.splitContainerRight.SplitterDistance = 325;
-            this.splitContainerRight.TabIndex = 7;
+            this.splitContainerRightOuter.Panel2.Controls.Add(this.splitContainerRightInner);
+            this.splitContainerRightOuter.Size = new System.Drawing.Size(337, 650);
+            this.splitContainerRightOuter.SplitterDistance = 325;
+            this.splitContainerRightOuter.TabIndex = 17;
             // 
             // panelTarget
             // 
@@ -880,18 +902,104 @@
             this.labelCMDR.TabIndex = 17;
             this.labelCMDR.Text = "Cmdr";
             // 
+            // splitContainerRightInner
+            // 
+            this.splitContainerRightInner.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerRightInner.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerRightInner.Name = "splitContainerRightInner";
+            this.splitContainerRightInner.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainerRightInner.Panel1
+            // 
+            this.splitContainerRightInner.Panel1.Controls.Add(this.tabControlMiddleRight);
+            // 
+            // splitContainerRightInner.Panel2
+            // 
+            this.splitContainerRightInner.Panel2.Controls.Add(this.tabControlBottomRight);
+            this.splitContainerRightInner.Size = new System.Drawing.Size(337, 321);
+            this.splitContainerRightInner.SplitterDistance = 160;
+            this.splitContainerRightInner.TabIndex = 7;
+            // 
+            // tabControlMiddleRight
+            // 
+            this.tabControlMiddleRight.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.tabControlMiddleRight.Controls.Add(this.tabPageMiddleRight1);
+            this.tabControlMiddleRight.Controls.Add(this.tabPageMiddleRight2);
+            this.tabControlMiddleRight.Controls.Add(this.tabPageMiddleRight3);
+            this.tabControlMiddleRight.Controls.Add(this.tabPageMiddleRight4);
+            this.tabControlMiddleRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlMiddleRight.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.tabControlMiddleRight.ImageList = this.imageListIcons;
+            this.tabControlMiddleRight.Location = new System.Drawing.Point(0, 0);
+            this.tabControlMiddleRight.Name = "tabControlMiddleRight";
+            this.tabControlMiddleRight.SelectedIndex = 0;
+            this.tabControlMiddleRight.Size = new System.Drawing.Size(337, 160);
+            this.tabControlMiddleRight.TabColorScaling = 0.5F;
+            this.tabControlMiddleRight.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
+            this.tabControlMiddleRight.TabControlBorderColor = System.Drawing.Color.DarkGray;
+            this.tabControlMiddleRight.TabDisabledScaling = 0.5F;
+            this.tabControlMiddleRight.TabIndex = 0;
+            this.tabControlMiddleRight.TabMouseOverColor = System.Drawing.Color.White;
+            this.tabControlMiddleRight.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
+            this.tabControlMiddleRight.TabNotSelectedColor = System.Drawing.Color.Gray;
+            this.tabControlMiddleRight.TabOpaque = 100F;
+            this.tabControlMiddleRight.TabSelectedColor = System.Drawing.Color.LightGray;
+            this.tabControlMiddleRight.TabStyle = tabStyleSquare2;
+            this.tabControlMiddleRight.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
+            this.tabControlMiddleRight.TextSelectedColor = System.Drawing.SystemColors.ControlText;
+            // 
+            // tabPageMiddleRight1
+            // 
+            this.tabPageMiddleRight1.Controls.Add(this.userControlStarDistanceMiddleRight);
+            this.tabPageMiddleRight1.ImageIndex = 1;
+            this.tabPageMiddleRight1.Location = new System.Drawing.Point(4, 4);
+            this.tabPageMiddleRight1.Name = "tabPageMiddleRight1";
+            this.tabPageMiddleRight1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageMiddleRight1.Size = new System.Drawing.Size(329, 133);
+            this.tabPageMiddleRight1.TabIndex = 0;
+            this.tabPageMiddleRight1.UseVisualStyleBackColor = true;
+            // 
+            // userControlStarDistanceMiddleRight
+            // 
+            this.userControlStarDistanceMiddleRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlStarDistanceMiddleRight.Location = new System.Drawing.Point(3, 3);
+            this.userControlStarDistanceMiddleRight.Name = "userControlStarDistanceMiddleRight";
+            this.userControlStarDistanceMiddleRight.Size = new System.Drawing.Size(323, 127);
+            this.userControlStarDistanceMiddleRight.TabIndex = 0;
+            // 
+            // tabPageMiddleRight2
+            // 
+            this.tabPageMiddleRight2.Controls.Add(this.userControlLogMiddleRight);
+            this.tabPageMiddleRight2.ImageIndex = 0;
+            this.tabPageMiddleRight2.Location = new System.Drawing.Point(4, 4);
+            this.tabPageMiddleRight2.Name = "tabPageMiddleRight2";
+            this.tabPageMiddleRight2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageMiddleRight2.Size = new System.Drawing.Size(329, 133);
+            this.tabPageMiddleRight2.TabIndex = 1;
+            this.tabPageMiddleRight2.UseVisualStyleBackColor = true;
+            // 
+            // userControlLogMiddleRight
+            // 
+            this.userControlLogMiddleRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlLogMiddleRight.Location = new System.Drawing.Point(3, 3);
+            this.userControlLogMiddleRight.Name = "userControlLogMiddleRight";
+            this.userControlLogMiddleRight.Size = new System.Drawing.Size(323, 127);
+            this.userControlLogMiddleRight.TabIndex = 0;
+            // 
             // tabControlBottomRight
             // 
             this.tabControlBottomRight.Alignment = System.Windows.Forms.TabAlignment.Bottom;
-            this.tabControlBottomRight.Controls.Add(this.tabPageBottomRightStarList);
-            this.tabControlBottomRight.Controls.Add(this.tabPageBottomRightLog);
+            this.tabControlBottomRight.Controls.Add(this.tabPageBottomRight1);
+            this.tabControlBottomRight.Controls.Add(this.tabPageBottomRight2);
+            this.tabControlBottomRight.Controls.Add(this.tabPageBottomRight3);
+            this.tabControlBottomRight.Controls.Add(this.tabPageBottomRight4);
             this.tabControlBottomRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlBottomRight.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlBottomRight.ImageList = this.imageListIcons;
             this.tabControlBottomRight.Location = new System.Drawing.Point(0, 0);
             this.tabControlBottomRight.Name = "tabControlBottomRight";
             this.tabControlBottomRight.SelectedIndex = 0;
-            this.tabControlBottomRight.Size = new System.Drawing.Size(337, 321);
+            this.tabControlBottomRight.Size = new System.Drawing.Size(337, 157);
             this.tabControlBottomRight.TabColorScaling = 0.5F;
             this.tabControlBottomRight.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlBottomRight.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -902,47 +1010,104 @@
             this.tabControlBottomRight.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlBottomRight.TabOpaque = 100F;
             this.tabControlBottomRight.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlBottomRight.TabStyle = tabStyleSquare2;
+            this.tabControlBottomRight.TabStyle = tabStyleSquare3;
             this.tabControlBottomRight.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlBottomRight.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
-            // tabPageBottomRightStarList
+            // tabPageBottomRight1
             // 
-            this.tabPageBottomRightStarList.Controls.Add(this.userControlStarDistanceBottomRight);
-            this.tabPageBottomRightStarList.ImageIndex = 0;
-            this.tabPageBottomRightStarList.Location = new System.Drawing.Point(4, 4);
-            this.tabPageBottomRightStarList.Name = "tabPageBottomRightStarList";
-            this.tabPageBottomRightStarList.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBottomRightStarList.Size = new System.Drawing.Size(329, 294);
-            this.tabPageBottomRightStarList.TabIndex = 0;
-            this.tabPageBottomRightStarList.UseVisualStyleBackColor = true;
+            this.tabPageBottomRight1.Controls.Add(this.userControlStarDistanceBottomRight);
+            this.tabPageBottomRight1.ImageIndex = 1;
+            this.tabPageBottomRight1.Location = new System.Drawing.Point(4, 4);
+            this.tabPageBottomRight1.Name = "tabPageBottomRight1";
+            this.tabPageBottomRight1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBottomRight1.Size = new System.Drawing.Size(329, 130);
+            this.tabPageBottomRight1.TabIndex = 0;
+            this.tabPageBottomRight1.UseVisualStyleBackColor = true;
             // 
             // userControlStarDistanceBottomRight
             // 
             this.userControlStarDistanceBottomRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlStarDistanceBottomRight.Location = new System.Drawing.Point(3, 3);
             this.userControlStarDistanceBottomRight.Name = "userControlStarDistanceBottomRight";
-            this.userControlStarDistanceBottomRight.Size = new System.Drawing.Size(323, 288);
+            this.userControlStarDistanceBottomRight.Size = new System.Drawing.Size(323, 124);
             this.userControlStarDistanceBottomRight.TabIndex = 0;
             // 
-            // tabPageBottomRightLog
+            // tabPageBottomRight2
             // 
-            this.tabPageBottomRightLog.Controls.Add(this.userControlLogBottomRight);
-            this.tabPageBottomRightLog.ImageIndex = 1;
-            this.tabPageBottomRightLog.Location = new System.Drawing.Point(4, 4);
-            this.tabPageBottomRightLog.Name = "tabPageBottomRightLog";
-            this.tabPageBottomRightLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBottomRightLog.Size = new System.Drawing.Size(329, 294);
-            this.tabPageBottomRightLog.TabIndex = 1;
-            this.tabPageBottomRightLog.UseVisualStyleBackColor = true;
+            this.tabPageBottomRight2.Controls.Add(this.userControlLogBottomRight);
+            this.tabPageBottomRight2.ImageIndex = 0;
+            this.tabPageBottomRight2.Location = new System.Drawing.Point(4, 4);
+            this.tabPageBottomRight2.Name = "tabPageBottomRight2";
+            this.tabPageBottomRight2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBottomRight2.Size = new System.Drawing.Size(329, 130);
+            this.tabPageBottomRight2.TabIndex = 1;
+            this.tabPageBottomRight2.UseVisualStyleBackColor = true;
             // 
             // userControlLogBottomRight
             // 
             this.userControlLogBottomRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlLogBottomRight.Location = new System.Drawing.Point(3, 3);
             this.userControlLogBottomRight.Name = "userControlLogBottomRight";
-            this.userControlLogBottomRight.Size = new System.Drawing.Size(323, 288);
+            this.userControlLogBottomRight.Size = new System.Drawing.Size(323, 124);
             this.userControlLogBottomRight.TabIndex = 0;
+            // 
+            // tabPageMiddleRight3
+            // 
+            this.tabPageMiddleRight3.Controls.Add(this.userControlsMaterials2);
+            this.tabPageMiddleRight3.Location = new System.Drawing.Point(4, 4);
+            this.tabPageMiddleRight3.Name = "tabPageMiddleRight3";
+            this.tabPageMiddleRight3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageMiddleRight3.Size = new System.Drawing.Size(329, 133);
+            this.tabPageMiddleRight3.TabIndex = 2;
+            this.tabPageMiddleRight3.Text = "tabPage1";
+            this.tabPageMiddleRight3.UseVisualStyleBackColor = true;
+            // 
+            // tabPageMiddleRight4
+            // 
+            this.tabPageMiddleRight4.Controls.Add(this.userControlsMaterials1);
+            this.tabPageMiddleRight4.Location = new System.Drawing.Point(4, 4);
+            this.tabPageMiddleRight4.Name = "tabPageMiddleRight4";
+            this.tabPageMiddleRight4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageMiddleRight4.Size = new System.Drawing.Size(329, 133);
+            this.tabPageMiddleRight4.TabIndex = 3;
+            this.tabPageMiddleRight4.Text = "tabPage2";
+            this.tabPageMiddleRight4.UseVisualStyleBackColor = true;
+            // 
+            // tabPageBottomRight3
+            // 
+            this.tabPageBottomRight3.Location = new System.Drawing.Point(4, 4);
+            this.tabPageBottomRight3.Name = "tabPageBottomRight3";
+            this.tabPageBottomRight3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBottomRight3.Size = new System.Drawing.Size(329, 130);
+            this.tabPageBottomRight3.TabIndex = 2;
+            this.tabPageBottomRight3.Text = "tabPage1";
+            this.tabPageBottomRight3.UseVisualStyleBackColor = true;
+            // 
+            // tabPageBottomRight4
+            // 
+            this.tabPageBottomRight4.Location = new System.Drawing.Point(4, 4);
+            this.tabPageBottomRight4.Name = "tabPageBottomRight4";
+            this.tabPageBottomRight4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBottomRight4.Size = new System.Drawing.Size(329, 130);
+            this.tabPageBottomRight4.TabIndex = 3;
+            this.tabPageBottomRight4.Text = "tabPage2";
+            this.tabPageBottomRight4.UseVisualStyleBackColor = true;
+            // 
+            // userControlsMaterials1
+            // 
+            this.userControlsMaterials1.Location = new System.Drawing.Point(0, 0);
+            this.userControlsMaterials1.Name = "userControlsMaterials1";
+            this.userControlsMaterials1.Size = new System.Drawing.Size(704, 564);
+            this.userControlsMaterials1.TabIndex = 0;
+            // 
+            // userControlsMaterials2
+            // 
+            this.userControlsMaterials2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlsMaterials2.Location = new System.Drawing.Point(3, 3);
+            this.userControlsMaterials2.Name = "userControlsMaterials2";
+            this.userControlsMaterials2.Size = new System.Drawing.Size(323, 127);
+            this.userControlsMaterials2.TabIndex = 0;
             // 
             // TravelHistoryControl
             // 
@@ -966,10 +1131,10 @@
             this.tabPageBottomMaterials.ResumeLayout(false);
             this.tabPageBottomCommodities.ResumeLayout(false);
             this.tabPageBottomLedger.ResumeLayout(false);
-            this.splitContainerRight.Panel1.ResumeLayout(false);
-            this.splitContainerRight.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRight)).EndInit();
-            this.splitContainerRight.ResumeLayout(false);
+            this.splitContainerRightOuter.Panel1.ResumeLayout(false);
+            this.splitContainerRightOuter.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightOuter)).EndInit();
+            this.splitContainerRightOuter.ResumeLayout(false);
             this.panelTarget.ResumeLayout(false);
             this.panelTarget.PerformLayout();
             this.panelNoteArea.ResumeLayout(false);
@@ -978,9 +1143,18 @@
             this.panel_system.PerformLayout();
             this.panel_topright.ResumeLayout(false);
             this.panel_topright.PerformLayout();
+            this.splitContainerRightInner.Panel1.ResumeLayout(false);
+            this.splitContainerRightInner.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightInner)).EndInit();
+            this.splitContainerRightInner.ResumeLayout(false);
+            this.tabControlMiddleRight.ResumeLayout(false);
+            this.tabPageMiddleRight1.ResumeLayout(false);
+            this.tabPageMiddleRight2.ResumeLayout(false);
             this.tabControlBottomRight.ResumeLayout(false);
-            this.tabPageBottomRightStarList.ResumeLayout(false);
-            this.tabPageBottomRightLog.ResumeLayout(false);
+            this.tabPageBottomRight1.ResumeLayout(false);
+            this.tabPageBottomRight2.ResumeLayout(false);
+            this.tabPageMiddleRight3.ResumeLayout(false);
+            this.tabPageMiddleRight4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1030,16 +1204,16 @@
         private System.Windows.Forms.ImageList imageListIcons;
         private System.Windows.Forms.SplitContainer splitContainerLeft;
         private System.Windows.Forms.SplitContainer splitContainerLeftRight;
-        private System.Windows.Forms.SplitContainer splitContainerRight;
+        private System.Windows.Forms.SplitContainer splitContainerRightInner;
         private ExtendedControls.TabControlCustom tabControlBottomRight;
-        private System.Windows.Forms.TabPage tabPageBottomRightStarList;
+        private System.Windows.Forms.TabPage tabPageBottomRight1;
         private UserControls.UserControlStarDistance userControlStarDistanceBottomRight;
         private System.Windows.Forms.TabPage tabPageBottomStarList;
         private UserControls.UserControlStarDistance userControlStarDistanceBottom;
         private System.Windows.Forms.Panel panelTarget;
         private System.Windows.Forms.Panel panelNoteArea;
         private UserControls.UserControlLog userControlLogBottom;
-        private System.Windows.Forms.TabPage tabPageBottomRightLog;
+        private System.Windows.Forms.TabPage tabPageBottomRight2;
         private UserControls.UserControlLog userControlLogBottomRight;
         private UserControls.UserControlTravelGrid userControlTravelGrid;
         private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
@@ -1051,5 +1225,17 @@
         private UserControls.UserControlsCommodities userControlsCommoditiesBottom;
         private System.Windows.Forms.TabPage tabPageBottomLedger;
         private UserControls.UserControlsLedger userControlsLedgerBottom;
+        private System.Windows.Forms.SplitContainer splitContainerRightOuter;
+        private ExtendedControls.TabControlCustom tabControlMiddleRight;
+        private System.Windows.Forms.TabPage tabPageMiddleRight1;
+        private System.Windows.Forms.TabPage tabPageMiddleRight2;
+        private UserControls.UserControlLog userControlLogMiddleRight;
+        private UserControls.UserControlStarDistance userControlStarDistanceMiddleRight;
+        private System.Windows.Forms.TabPage tabPageMiddleRight3;
+        private System.Windows.Forms.TabPage tabPageMiddleRight4;
+        private System.Windows.Forms.TabPage tabPageBottomRight3;
+        private System.Windows.Forms.TabPage tabPageBottomRight4;
+        private UserControls.UserControlsMaterials userControlsMaterials2;
+        private UserControls.UserControlsMaterials userControlsMaterials1;
     }
 }

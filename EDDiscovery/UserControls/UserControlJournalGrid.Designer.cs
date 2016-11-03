@@ -99,6 +99,7 @@
             // 
             this.dataGridViewJournal.AllowUserToAddRows = false;
             this.dataGridViewJournal.AllowUserToDeleteRows = false;
+            this.dataGridViewJournal.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewJournal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewJournal.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
@@ -124,7 +125,6 @@
             this.ColumnTime.MinimumWidth = 100;
             this.ColumnTime.Name = "ColumnTime";
             this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 140;
             // 
             // Event
             // 
@@ -132,7 +132,6 @@
             this.Event.MinimumWidth = 32;
             this.Event.Name = "Event";
             this.Event.ReadOnly = true;
-            this.Event.Width = 80;
             // 
             // ColumnType
             // 
@@ -147,7 +146,6 @@
             this.ColumnText.MinimumWidth = 100;
             this.ColumnText.Name = "ColumnText";
             this.ColumnText.ReadOnly = true;
-            this.ColumnText.Width = 700;
             // 
             // historyContextMenu
             // 

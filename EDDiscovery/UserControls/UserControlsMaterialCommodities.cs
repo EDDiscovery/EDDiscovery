@@ -110,31 +110,12 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
         }
 
-        public override int ColumnWidthPreference(DataGridView notused, int i)  // DGV is passed back in case we have more than one.. we dont
-        {
-            if (materials)
-            {
-                int[] pref = new int[] { 0, 2, 3, 4, 1 };
-                return (i < pref.Length) ? pref[i] : -1;
-            }
-            else
-            {
-                int[] pref = new int[] { 0, 1, 2, 3 };
-                return (i < pref.Length) ? pref[i] : -1;
-            }
-        }
-
-        public override int ColumnExpandPreference() { return 0; }
-
-
         private void dataGridViewMC_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            DGVColumnWidthChanged(dataGridViewMC);
         }
 
         private void dataGridViewMC_Resize(object sender, EventArgs e)
         {
-            DGVResize(dataGridViewMC);
         }
 
         #endregion

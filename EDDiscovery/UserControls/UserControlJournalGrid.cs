@@ -67,22 +67,12 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
         }
 
-        public override int ColumnWidthPreference(DataGridView notused, int i)  // DGV is passed back in case we have more than one.. we dont
-        {
-            int[] pref = new int[] { JournalHistoryColumns.Text, JournalHistoryColumns.Event, JournalHistoryColumns.Time, JournalHistoryColumns.Type };
-            return (i<pref.Length) ? pref[i] : -1;
-        }
-
-        public override int ColumnExpandPreference() { return JournalHistoryColumns.Text; }
-
         private void dataGridViewJournal_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            DGVColumnWidthChanged(dataGridViewJournal);
         }
 
         private void dataGridViewJournal_Resize(object sender, EventArgs e)
         {
-            DGVResize(dataGridViewJournal);
         }
 
 

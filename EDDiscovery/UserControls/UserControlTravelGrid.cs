@@ -96,22 +96,12 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
         }
 
-        public override int ColumnWidthPreference(DataGridView notused, int i)  // Which to shrink first, DGV is passed back in case we have more than one.. we dont
-        {
-            int[] pref = new int[] { TravelHistoryColumns.Note, TravelHistoryColumns.Information, TravelHistoryColumns.Time, TravelHistoryColumns.Icon, TravelHistoryColumns.Description };
-            return (i < pref.Length) ? pref[i] : -1;
-        }
-
-        public override int ColumnExpandPreference() { return TravelHistoryColumns.Note; }
-
         private void dataGridViewTravel_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            DGVColumnWidthChanged(dataGridViewTravel);
         }
 
         private void dataGridViewTravel_Resize(object sender, EventArgs e)
         {
-            DGVResize(dataGridViewTravel);
         }
         
         #endregion
@@ -789,7 +779,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
     }
 
 }
