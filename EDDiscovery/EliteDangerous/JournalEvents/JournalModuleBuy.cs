@@ -18,19 +18,23 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Slot = JSONHelper.GetStringDef(evt["Slot"]);
             BuyItem = JSONHelper.GetStringDef(evt["BuyItem"]);
+            BuyItemLocalised = JSONHelper.GetStringDef(evt["BuyItem_Localised"]);
             BuyPrice = JSONHelper.GetLong(evt["BuyPrice"]);
             Ship = JSONHelper.GetStringDef(evt["Ship"]);
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             SellItem = JSONHelper.GetStringDef(evt["SellItem"]);
+            SellItemLocalised = JSONHelper.GetStringDef(evt["SellItem_Localised"]);
             SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
 
         }
         public string Slot { get; set; }
         public string BuyItem { get; set; }
+        public string BuyItemLocalised { get; set; }
         public long BuyPrice { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public string SellItem { get; set; }
+        public string SellItemLocalised { get; set; }
         public long? SellPrice { get; set; }
 
         public override string DefaultRemoveItems()
@@ -39,6 +43,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulebuy; } }
+
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            string s = (BuyItemLocalised.Length > 0) ? BuyItemLocalised : BuyItem;
+
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s + " on " + Ship, -BuyPrice + ( SellPrice??0) );
+        }
 
     }
 }

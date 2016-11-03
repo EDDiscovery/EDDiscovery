@@ -25,8 +25,6 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
-        bool ignorewidthchange = false;
-
         #region Init
 
         private class JournalHistoryColumns
@@ -52,6 +50,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.RowTemplate.Height = 26;
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+            cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
@@ -60,85 +59,32 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            ignorewidthchange = true;
-
-            string root = DbColumnSave;
-
-            if (SQLiteConnectionUser.keyExists(root + "1"))        // if stored values, set back to what they were..
-            {
-                for (int i = 0; i < dataGridViewJournal.Columns.Count; i++)
-                {
-                    int w = SQLiteDBClass.GetSettingInt(root + ((i + 1).ToString()), -1);
-                    if (w > 10)        // in case something is up (min 10 pixels)
-                        dataGridViewJournal.Columns[i].Width = w;
-                }
-            }
-
-            FillDGVOut();
-
-            ignorewidthchange = false;
+            DGVLoadColumnLayout(dataGridViewJournal, DbColumnSave);
         }
 
         public override void SaveLayout()
         {
-            for (int i = 0; i < dataGridViewJournal.Columns.Count; i++)
-                SQLiteDBClass.PutSettingInt( DbColumnSave + ((i + 1).ToString()), dataGridViewJournal.Columns[i].Width);
+            DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
         }
+
+        public override int ColumnWidthPreference(DataGridView notused, int i)  // DGV is passed back in case we have more than one.. we dont
+        {
+            int[] pref = new int[] { JournalHistoryColumns.Text, JournalHistoryColumns.Event, JournalHistoryColumns.Time, JournalHistoryColumns.Type };
+            return (i<pref.Length) ? pref[i] : -1;
+        }
+
+        public override int ColumnExpandPreference() { return JournalHistoryColumns.Text; }
 
         private void dataGridViewJournal_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            if (!ignorewidthchange)
-            {
-                ignorewidthchange = true;
-                FillDGVOut();       // scale out so its filled..
-                ignorewidthchange = false;
-            }
+            DGVColumnWidthChanged(dataGridViewJournal);
         }
 
         private void dataGridViewJournal_Resize(object sender, EventArgs e)
         {
-            ignorewidthchange = true;
-            FillDGVOut();
-            ignorewidthchange = false;
+            DGVResize(dataGridViewJournal);
         }
 
-        void FillDGVOut()
-        {
-            int twidth = dataGridViewJournal.RowHeadersWidth;        // get how many pixels we are using..
-            for (int i = 0; i < dataGridViewJournal.Columns.Count; i++)
-                twidth += dataGridViewJournal.Columns[i].Width;
-
-            int delta = dataGridViewJournal.Width - twidth;
-
-            if (delta < 0)        // not enough space
-            {
-                Collapse(ref delta, JournalHistoryColumns.Text);         // pick columns on preference list to shrink
-                Collapse(ref delta, JournalHistoryColumns.Event);         // pick columns on preference list to shrink
-                Collapse(ref delta, JournalHistoryColumns.Time);
-                Collapse(ref delta, JournalHistoryColumns.Type);
-            }
-            else
-                dataGridViewJournal.Columns[JournalHistoryColumns.Text].Width += delta;   // note is used to fill out columns
-        }
-
-        void Collapse(ref int delta, int col)
-        {
-            if (delta < 0)
-            {
-                int colsaving = dataGridViewJournal.Columns[col].Width - dataGridViewJournal.Columns[col].MinimumWidth;
-
-                if (-delta <= colsaving)       // if can save 30 from col3, and delta is -20, 20<=30, do it.
-                {
-                    dataGridViewJournal.Columns[col].Width += delta;
-                    delta = 0;
-                }
-                else
-                {
-                    delta += colsaving;
-                    dataGridViewJournal.Columns[col].Width = dataGridViewJournal.Columns[col].MinimumWidth;
-                }
-            }
-        }
 
         #endregion
 

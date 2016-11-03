@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +16,12 @@ namespace EDDiscovery2.DB
     {
         public long id { get; set; }
         public string category { get; set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
-        public string name { get; set; }                    // name of it
+        public string name { get; set; }                    // name of it in nice text
+        public string fdname { get; set; }                  // fdnames
         public string type { get; set; }                    // and its type, for materials its rarity, for commodities its group ("Metals" etc).
-        public string shortname { get; set; }
+        public string shortname { get; set; }               // short abv. name
+        public Color colour { get; set; }                   // colour if its associated with one
+        public int flags { get; set; }                      // 0 is automatically set, 1 is user edited (so don't override)
 
         // Not in DB
 
@@ -38,19 +42,25 @@ namespace EDDiscovery2.DB
             id = c.id;
             category = c.category;
             name = String.Copy(c.name);
+            fdname = String.Copy(c.fdname);
             type = String.Copy(c.type);
             shortname = c.shortname;
+            colour = c.colour;
+            flags = c.flags;
             count = c.count;
             price = c.price;
         }
 
-        public MaterialCommodities(long i, string cs, string n, string t, string s, int c = 0 , long p = 0)
+        public MaterialCommodities(long i, string cs, string n, string fd, string t, string shortn, Color cl, int fl, int c = 0, double  p = 0)
         {
             id = i;
             category = cs;
             name = n;
+            fdname = fd;
             type = t;
-            shortname = s;
+            shortname = shortn;
+            colour = cl;
+            flags = fl;
             count = c;
             price = p;
         }
@@ -66,12 +76,15 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into MaterialsCommodities (Category,Name,Type,ShortName) values (@category,@name,@type,@shortname)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into MaterialsCommodities (Category,Name,FDName,Type,ShortName,Colour,Flags) values (@category,@name,@fdname,@type,@shortname,@colour,@flags)"))
             {
                 cmd.AddParameterWithValue("@category", category);
                 cmd.AddParameterWithValue("@name", name);
+                cmd.AddParameterWithValue("@fdname", fdname);
                 cmd.AddParameterWithValue("@type", type);
                 cmd.AddParameterWithValue("@shortname", shortname);
+                cmd.AddParameterWithValue("@colour", colour.ToArgb());
+                cmd.AddParameterWithValue("@flags", flags);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from MaterialsCommodities"))
@@ -92,13 +105,16 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update MaterialsCommodities set Category=@category, Name=@name, Type=@type, ShortName=@shortname where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update MaterialsCommodities set Category=@category, Name=@name, FDName=@fdname, Type=@type, ShortName=@shortname, Colour=@colour, Flags=@flags where ID=@id"))
             {
                 cmd.AddParameterWithValue("@id", id);
                 cmd.AddParameterWithValue("@category", category);
                 cmd.AddParameterWithValue("@name", name);
+                cmd.AddParameterWithValue("@fdname", fdname);
                 cmd.AddParameterWithValue("@type", type);
                 cmd.AddParameterWithValue("@shortname", shortname);
+                cmd.AddParameterWithValue("@colour", colour.ToArgb());
+                cmd.AddParameterWithValue("@flags", flags);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 return true;
@@ -123,26 +139,32 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodities Get(string c, string name)
+        public static MaterialCommodities GetCatFDName(string cat, string fdname)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
-                return Get(c, name, cn);
+                return GetCatFDName(cat, fdname, cn );
             }
         }
 
-        public static MaterialCommodities Get(string c, string name, SQLiteConnectionUser cn)
+        // if cat is null, fdname only
+        public static MaterialCommodities GetCatFDName(string cat , string fdname, SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,Type,ShortName from MaterialsCommodities WHERE Category = @category And Name==@name"))
+            using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities WHERE FDName=@name"))
             {
-                cmd.AddParameterWithValue("@category", c);
-                cmd.AddParameterWithValue("@name", name);
+                cmd.AddParameterWithValue("@name", fdname);
+
+                if (cat != null)
+                {
+                    cmd.CommandText += " AND Category==@cat";
+                    cmd.AddParameterWithValue("@cat", cat);
+                }
 
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())           // already sorted, and already limited to max items
                     {
-                        return new MaterialCommodities((long)reader[0],(string)reader[1], (string)reader[2], (string)reader[3],(string)reader[4]);
+                        return new MaterialCommodities((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
                     }
                     else
                         return null;
@@ -150,101 +172,173 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodities Get(string name, SQLiteConnectionUser cn)
+        public static List<MaterialCommodities> GetAll(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,Type,ShortName from MaterialsCommodities WHERE Name==@name"))
+            using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities Order by Name"))
             {
-                cmd.AddParameterWithValue("@name", name);
-
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
-                    if (reader.Read())           // already sorted, and already limited to max items
+                    List<MaterialCommodities> list = new List<MaterialCommodities>();
+
+                    while (reader.Read())           // already sorted, and already limited to max items
                     {
-                        return new MaterialCommodities((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4]);
+                        list.Add(new MaterialCommodities((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]));
                     }
-                    else
-                        return null;
+
+                    return list;
                 }
             }
         }
 
-        public static void AddNewType(string c, string namelist, string t, string sn = "")
-        {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                string[] list = namelist.Split(';');
 
-                foreach (string s in list)
+        public static void AddNewType(SQLiteConnectionUser cn, string c, string namelist, string t)
+        {
+            AddNewTypeC(cn, c, Color.Green, namelist, t);
+        }
+
+        public static void AddNewTypeC(SQLiteConnectionUser cn, string c, Color cl, string namelist, string t, string sn = "")
+        {
+            string[] list = namelist.Split(';');
+
+            foreach (string name in list)
+            {
+                if (name.Length > 0)   // just in case a semicolon slips thru
                 {
-                    MaterialCommodities mc = Get(c, s, cn);
+                    string fdname = EDDiscovery.Tools.FDName(name);
+
+                    MaterialCommodities mc = GetCatFDName(null, fdname, cn);
 
                     if (mc == null)
                     {
-                        mc = new MaterialCommodities(0,c, s, t, sn);
+                        mc = new MaterialCommodities(0, c, name, fdname, t, sn, cl, 0);
                         mc.Add(cn);
-                    }
-                    else
+                    }               // don't change any user changed fields
+                    else if (mc.flags == 0 && (!mc.name.Equals(name) && !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || mc.colour.ToArgb() != cl.ToArgb()))
                     {
-                        mc.shortname = sn;          // So, category/name combo is there, only thing that can be updated is shortname and type..
+                        mc.name = name;
+                        mc.shortname = sn;          // So, name is there, update the others
+                        mc.category = c;
                         mc.type = t;
+                        mc.colour = cl;
                         mc.Update(cn);
                     }
                 }
             }
         }
 
+        public static bool ChangeDbText(string fdname, string name, string abv, string cat, string type)
+        {
+            MaterialCommodities mc = GetCatFDName(null,fdname);
+
+            if (mc != null)
+            {
+                mc.name = name;
+                mc.shortname = abv;
+                mc.category = cat;
+                mc.type = type;
+                mc.flags = 1;
+                mc.Update();
+                return true;
+            }
+            else
+                return false;
+        }
+
         public static void SetUpInitialTable()
         {
-            AddNewType(MaterialRawCategory, "Antimony", "Very Rare","Sb");
-            AddNewType(MaterialRawCategory, "Arsenic", "Common","As");
-            AddNewType(MaterialRawCategory, "Cadmium", "Rare","Cd");
-            AddNewType(MaterialRawCategory, "Carbon", "Very common","C");
-            AddNewType(MaterialRawCategory, "Chromium", "Common","Cr");
-            AddNewType(MaterialRawCategory, "Germanium", "Common","Ge");
-            AddNewType(MaterialRawCategory, "Iron", "Very Common","Fe");
-            AddNewType(MaterialRawCategory, "Manganese", "Common","Mn");
-            AddNewType(MaterialRawCategory, "Mercury", "Rare","Hg");
-            AddNewType(MaterialRawCategory, "Molybdenum", "Rare","Mo");
-            AddNewType(MaterialRawCategory, "Nickel", "Very Common","Ni");
-            AddNewType(MaterialRawCategory, "Niobium", "Rare","Nb");
-            AddNewType(MaterialRawCategory, "Phosphorus", "Very Common","P");
-            AddNewType(MaterialRawCategory, "Polonium", "Very Rare","Po");
-            AddNewType(MaterialRawCategory, "Ruthenium", "Very Rare","Ru");
-            AddNewType(MaterialRawCategory, "Selenium", "Common","Se");
-            AddNewType(MaterialRawCategory, "Sulphur", "Very Common","S");
-            AddNewType(MaterialRawCategory, "Technetium", "Very Rare","Tc");
-            AddNewType(MaterialRawCategory, "Tellurium", "Very Rare","Te");
-            AddNewType(MaterialRawCategory, "Tin", "Rare","Sn");
-            AddNewType(MaterialRawCategory, "Tungsten", "Rare","W");
-            AddNewType(MaterialRawCategory, "Vanadium", "Common","V");
-            AddNewType(MaterialRawCategory, "Yttrium", "Very Rare","Y");
-            AddNewType(MaterialRawCategory, "Zinc", "Common","Zn");
-            AddNewType(MaterialRawCategory, "Zirconium", "Common","Zr");
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Antimony", "Very Rare", "Sb");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Polonium", "Very Rare", "Po");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Ruthenium", "Very Rare", "Ru");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Technetium", "Very Rare", "Tc");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Tellurium", "Very Rare", "Te");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Yttrium", "Very Rare", "Y");
 
-            AddNewType(CommodityCategory, "Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
-            AddNewType(CommodityCategory, "Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", "Consumer Items");
-            AddNewType(CommodityCategory, "Algae;Animal Meat;Coffee;Fish;Food Cartridges;Fruit and Vegetables;Grain;Synthetic Meat;Tea", "Foods");
-            AddNewType(CommodityCategory, "Ceramic Composites;CMM Composite;Insulating Membrane;Meta-Alloys;Micro-Weave Cooling Hoses;Neofabric Insulation;Polymers;Semiconductors;Superconductors", "Industrial Materials");
-            AddNewType(CommodityCategory, "Beer;Bootleg Liquor;Liquor;Narcotics;Tobacco;Wine", "Legal Drugs");
-            AddNewType(CommodityCategory, "Articulation Motors;Atmospheric Processors;Building Fabricators;Crop Harvesters;Emergency Power Cells;Energy Grid Assembly;Exhaust Manifold;Geological Equipment", "Machinery");
-            AddNewType(CommodityCategory, "Heatsink Interlink;HN Shock Mount;Ion Distributor;Magnetic Emitter Coil;Marine Equipment", "Machinery");
-            AddNewType(CommodityCategory, "Microbial Furnaces;Mineral Extractors;Modular Terminals;Power Converter;Power Generators;Power Transfer Bus", "Machinery");
-            AddNewType(CommodityCategory, "Radiation Baffle;Reinforced Mounting Plate;Skimmer Components;Thermal Cooling Units;Water Purifiers", "Machinery");
-            AddNewType(CommodityCategory, "Advanced Medicines;Agri-Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", "Medicines");
-            AddNewType(CommodityCategory, "Aluminium;Beryllium;Bismuth;Cobalt;Copper;Gallium;Gold;Hafnium 178;Indium;Lan;hanum;Lithium;Osmium;Palladium;Platinum;Praseodymium;Samarium;Silver;Tantalum;Thallium;Thorium;Titanium;Uranium", "Metals");
-            AddNewType(CommodityCategory, "Bauxite;Bertrandite;Bromellite;Coltan;Cryolite;Gallite;Goslarite", "Minerals");
-            AddNewType(CommodityCategory, "Indite;Jadeite;Lepidolite;Lithium Hydroxide;Low Temperature Diamonds;Methane ;lathrate;Methanol Monohydrate;Moissanite;Painite;Pyrophyllite;Rutile;Taaffeite;Uraninite", "Minerals");
-            AddNewType(CommodityCategory, "Ai Relics;Ancient Artefact;Antimatter Containment Unit;Antiquities;Assault Plans;Black Box;Commercial Samples;Data Core;Diplomatic Bag;Encrypted Correspondence;Encrypted Data Storage;Experimental Chemicals;Fossil Remnants", "Salvage");
-            AddNewType(CommodityCategory, "Galactic Travel Guide;Geological Samples;Hostage;Military Intelligence;Military Plans (USS Cargo);Mysterious Idol;Occupied CryoPod;Occupied Escape Pod;Personal Effects;Political Prisoner;Precious Gems;Prohibited Research Materials;Prototype Tech", "Salvage");
-            AddNewType(CommodityCategory, "Rare Artwork;Rebel Transmissions;Salvageable Wreckage;Sap 8 Core Container;Sc;entific Research;Scientific Samples;Space Pioneer Relics;Tactical Data;Technical Blueprints;Trade Data;Unknown Artefact;Unknown Probe;Unstable Data Core", "Salvage");
-            AddNewType(CommodityCategory, "Imperial Slaves;Slaves", "Slavery");
-            AddNewType(CommodityCategory, "Advanced Catalysers;Animal Monitors;Aquaponic Systems;Auto-Fabricators;Bioreducing Lichen;Computer Components", "Technology");
-            AddNewType(CommodityCategory, "H.E. Suits;Hardware Diagnostic Sensor;Land Enrichment Systems;Medical Diagnostic Equipment;Micro Controllers;Muon Imager", "Technology");
-            AddNewType(CommodityCategory, "Nanobreakers;Resonating Separators;Robotics;Structural Regulators;Telemetry Suite", "Technology");
-            AddNewType(CommodityCategory, "Conductive Fabrics;Leather;Military Grade Fabrics;Natural Fabrics;Synthetic Fabrics", "Textiles");
-            AddNewType(CommodityCategory, "Biowaste;Chemical Waste;Scrap;Toxic Waste", "Waste");
-            AddNewType(CommodityCategory, "Battle Weapons;Landmines;Non-lethal Weapons;Personal Weapons;Reactive Armour", "Weapons");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Yellow, "Cadmium", "Rare", "Cd");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Yellow, "Mercury", "Rare", "Hg");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Yellow, "Molybdenum", "Rare", "Mo");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Yellow, "Niobium", "Rare", "Nb");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Yellow, "Tin", "Rare", "Sn");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Yellow, "Tungsten", "Rare", "W");
+
+                AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Carbon", "Very common", "C");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Iron", "Very Common", "Fe");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Nickel", "Very Common", "Ni");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Phosphorus", "Very Common", "P");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Sulphur", "Very Common", "S");
+
+                AddNewTypeC(cn, MaterialRawCategory, Color.Green, "Arsenic", "Common", "As");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Green, "Chromium", "Common", "Cr");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Green, "Germanium", "Common", "Ge");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Green, "Manganese", "Common", "Mn");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Green, "Selenium", "Common", "Se");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Green, "Vanadium", "Common", "V");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Green, "Zinc", "Common", "Zn");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Green, "Zirconium", "Common", "Zr");
+
+                AddNewType(cn, CommodityCategory, "Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
+                AddNewType(cn, CommodityCategory, "Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", "Consumer Items");
+                AddNewType(cn, CommodityCategory, "Algae;Animal Meat;Coffee;Fish;Food Cartridges;Fruit and Vegetables;Grain;Synthetic Meat;Tea", "Foods");
+                AddNewType(cn, CommodityCategory, "Ceramic Composites;CMM Composite;Insulating Membrane;Meta-Alloys;Micro-Weave Cooling Hoses;Neofabric Insulation;Polymers;Semiconductors;Superconductors", "Industrial Materials");
+                AddNewType(cn, CommodityCategory, "Beer;Bootleg Liquor;Liquor;Narcotics;Tobacco;Wine", "Legal Drugs");
+                AddNewType(cn, CommodityCategory, "Articulation Motors;Atmospheric Processors;Building Fabricators;Crop Harvesters;Emergency Power Cells;Energy Grid Assembly;Exhaust Manifold;Geological Equipment", "Machinery");
+                AddNewType(cn, CommodityCategory, "Heatsink Interlink;HN Shock Mount;Ion Distributor;Magnetic Emitter Coil;Marine Equipment", "Machinery");
+                AddNewType(cn, CommodityCategory, "Microbial Furnaces;Mineral Extractors;Modular Terminals;Power Converter;Power Generators;Power Transfer Bus", "Machinery");
+                AddNewType(cn, CommodityCategory, "Radiation Baffle;Reinforced Mounting Plate;Skimmer Components;Thermal Cooling Units;Water Purifiers", "Machinery");
+                AddNewType(cn, CommodityCategory, "Advanced Medicines;Agri-Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", "Medicines");
+                AddNewType(cn, CommodityCategory, "Aluminium;Beryllium;Bismuth;Cobalt;Copper;Gallium;Gold;Hafnium 178;Indium;Lan;hanum;Lithium;Osmium;Palladium;Platinum;Praseodymium;Samarium;Silver;Tantalum;Thallium;Thorium;Titanium;Uranium", "Metals");
+                AddNewType(cn, CommodityCategory, "Bauxite;Bertrandite;Bromellite;Coltan;Cryolite;Gallite;Goslarite", "Minerals");
+                AddNewType(cn, CommodityCategory, "Indite;Jadeite;Lepidolite;Lithium Hydroxide;Low Temperature Diamonds;Methane ;lathrate;Methanol Monohydrate;Moissanite;Painite;Pyrophyllite;Rutile;Taaffeite;Uraninite", "Minerals");
+                AddNewType(cn, CommodityCategory, "Ai Relics;Ancient Artefact;Antimatter Containment Unit;Antiquities;Assault Plans;Black Box;Commercial Samples;Data Core;Diplomatic Bag;Encrypted Correspondence;Encrypted Data Storage;Experimental Chemicals;Fossil Remnants", "Salvage");
+                AddNewType(cn, CommodityCategory, "Galactic Travel Guide;Geological Samples;Hostage;Military Intelligence;Military Plans (USS Cargo);Mysterious Idol;Occupied CryoPod;Occupied Escape Pod;Personal Effects;Political Prisoner;Precious Gems;Prohibited Research Materials;Prototype Tech", "Salvage");
+                AddNewType(cn, CommodityCategory, "Rare Artwork;Rebel Transmissions;Salvageable Wreckage;Sap 8 Core Container;Sc;entific Research;Scientific Samples;Space Pioneer Relics;Tactical Data;Technical Blueprints;Trade Data;Unknown Artefact;Unknown Probe;Unstable Data Core", "Salvage");
+                AddNewType(cn, CommodityCategory, "Imperial Slaves;Slaves", "Slavery");
+                AddNewType(cn, CommodityCategory, "Advanced Catalysers;Animal Monitors;Aquaponic Systems;Auto-Fabricators;Bioreducing Lichen;Computer Components", "Technology");
+                AddNewType(cn, CommodityCategory, "H.E. Suits;Hardware Diagnostic Sensor;Land Enrichment Systems;Medical Diagnostic Equipment;Micro Controllers;Muon Imager", "Technology");
+                AddNewType(cn, CommodityCategory, "Nanobreakers;Resonating Separators;Robotics;Structural Regulators;Telemetry Suite", "Technology");
+                AddNewType(cn, CommodityCategory, "Conductive Fabrics;Leather;Military Grade Fabrics;Natural Fabrics;Synthetic Fabrics", "Textiles");
+                AddNewType(cn, CommodityCategory, "Biowaste;Chemical Waste;Scrap;Toxic Waste", "Waste");
+                AddNewType(cn, CommodityCategory, "Battle Weapons;Landmines;Non-lethal Weapons;Personal Weapons;Reactive Armour", "Weapons");
+
+                AddNewType(cn, "Encoded", "Scan Data Banks;Disrupted Wake Echoes;Datamined Wake;Hyperspace Trajectories;Wake Solutions", "");
+                AddNewType(cn, "Encoded", "Shield Density Reports;Shield Pattern Analysis;Shield Cycle Recordings;Emission Data;Bulk Scan Data;Consumer Firmware;Shield Soak Analysis;Legacy Firmware", "");
+                AddNewType(cn, "Encoded", "Aberrant Shield Pattern Analysis;Abnormal Compact Emission Data;Adaptive Encryptors Capture;", "");
+                AddNewType(cn, "Encoded", "Anomalous Bulk Scan Data;Anomalous FSD Telemetry;Atypical Disrupted Wake Echoes;Atypical Encryption Archives;Classified Scan Databanks", "");
+                AddNewType(cn, "Encoded", "Classified Scan Fragment;Cracked Industrial Firmware;Datamined Wake Exceptions;Decoded Emission Data;Distorted Shield Cycle Recordings", "");
+                AddNewType(cn, "Encoded", "Divergent Scan Data;Eccentric Hyperspace Trajectories;Exceptional Scrambled Emission Data;Inconsistent Shield Soak Analysis;Irregular Emission Data", "");
+                AddNewType(cn, "Encoded", "Modified Consumer Firmware;Modified Embedded Firmware;Open Symmetric Keys;Peculiar Shield Frequency Data;Security Firmware Patch;Specialised Legacy Firmware", "");
+                AddNewType(cn, "Encoded", "Strange Wake Solutions;Tagged Encryption Codes;Unexpected Emission Data;Unidentified Scan Archives;Untypical Shield Scans;Unusual Encrypted Files", "");
+
+                AddNewType(cn, "Manufactured", "Uncut Focus Crystals;Basic Conductors;Biotech Conductors;Chemical Distillery;Chemical Manipulators;Chemical Processors;Chemical Storage Units", "");
+                AddNewType(cn, "Manufactured", "Refined Focus Crystals;Compact Composites;Compound Shielding;Conductive Ceramics;Conductive Components;Conductive Polymers;Configurable Components", "");
+                AddNewType(cn, "Manufactured", "Core Dynamics Composites;Crystal Shards;Electrochemical Arrays;Exquisite Focus Crystals;Filament Composites;Flawed Focus Crystals", "");
+                AddNewType(cn, "Manufactured", "Focus Crystals;Galvanising Alloys;Grid Resistors;Heat Conduction Wiring;Heat Dispersion Plate;Heat Exchangers;Heat Resistant Ceramics", "");
+                AddNewType(cn, "Manufactured", "Heat Vanes;High Density Composites;Hybrid Capacitors;Imperial Shielding;Improvised Components;Mechanical Components;Mechanical Equipment", "");
+                AddNewType(cn, "Manufactured", "Mechanical Scrap;Military Grade Alloys;Military Supercapacitors;Pharmaceutical Isolators;Phase Alloys;Polymer Capacitors;Precipitated Alloys", "");
+                AddNewType(cn, "Manufactured", "Proprietary Composites;Proto Heat Radiators;Proto Light Alloys;Proto Radiolic Alloys;Salvaged Alloys", "");
+                AddNewType(cn, "Manufactured", "Shield Emitters;Shielding Sensors;Tempered Alloys;Thermic Alloys;Unknown Fragment;Worn Shield Emitters", "");
+
+                loadedlist = GetAll(cn);
+            }
         }
+
+        static List<MaterialCommodities> loadedlist;
+
+        public static void LoadCacheList()
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                loadedlist = GetAll(cn);
+            }
+        }
+
+        public static MaterialCommodities GetCachedMaterial(string fdname)
+        {
+            return loadedlist?.Find(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public static List<MaterialCommodities> GetMaterialsCommoditiesList { get { return loadedlist; } }
     }
 
 
@@ -265,134 +359,86 @@ namespace EDDiscovery2.DB
             return mcl;
         }
 
-        private MaterialCommodities EnsurePresent(string cat, string name)
+        public List<MaterialCommodities> Sort(bool commodity)
         {
-            MaterialCommodities mc = list.Find(x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && x.category.Equals(cat, StringComparison.InvariantCultureIgnoreCase));
+            List<MaterialCommodities> ret = new List<MaterialCommodities>();
+
+            if (commodity)
+                ret = list.Where(x => x.category.Equals(MaterialCommodities.CommodityCategory)).OrderBy(x => x.type)
+                           .ThenBy(x => x.name).ToList();
+            else
+                ret = list.Where(x => !x.category.Equals(MaterialCommodities.CommodityCategory)).OrderBy(x => x.name).ToList();
+
+            return ret;
+        }
+
+        // ifnorecatonsearch is used if you don't know if its a material or commodity.. for future use.
+
+        private MaterialCommodities EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn , bool ignorecatonsearch = false)
+        {
+            MaterialCommodities mc = list.Find(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
 
             if (mc == null)
             {
-                MaterialCommodities mcdb = MaterialCommodities.Get(cat, name);    // look up in DB and see if we have a record of this type of item
+                MaterialCommodities mcdb = MaterialCommodities.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
 
                 if (mcdb == null)             // no record of this, add as Unknown to db
                 {
-                    mcdb = new MaterialCommodities(0,cat, name, "Unknown","");
+                    mcdb = new MaterialCommodities(0,cat, fdname, fdname, "","",Color.Green,0);
                     mcdb.Add();                 // and add to data base
                 }
 
-                mc = new MaterialCommodities(0,cat, name, mcdb.type,mcdb.shortname);        // make a new entry
+                mc = new MaterialCommodities(0,mcdb.category, mcdb.name, mcdb.fdname, mcdb.type,mcdb.shortname , mcdb.colour,0);        // make a new entry
                 list.Add(mc);
             }
 
             return mc;
         }
 
-        public void MaterialObtained(string cat, string name, int num)      // material
+        // ignore cat is only used if you don't know what it is 
+        public void Change(string cat, string name, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            MaterialCommodities mc = EnsurePresent(cat, name);
-            mc.count += num;
-        }
-
-        public void MaterialDiscarded(string cat, string name, int num)     // material
-        {
-            MaterialCommodities mc = EnsurePresent(cat, name);
-            mc.count = Math.Max(mc.count - num, 0);
-        }
-
-        public void Bought(string name, int num, long price)         // commodity
-        {
-            MaterialCommodities mc = EnsurePresent(MaterialCommodities.CommodityCategory, name);
+            MaterialCommodities mc = EnsurePresent(cat, name, conn, ignorecatonsearch);
 
             double costprev = mc.count * mc.price;
             double costnew = num * price;
-            mc.count += num;
-            mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
+            mc.count = Math.Max(mc.count + num, 0); ;
+
+            if ( mc.count > 0 && num > 0 )      // if bought (defensive with mc.count)
+                mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
         }
 
-        public void Collected(string name, int num)         // same as buying at price 0
+        public void Craft(string name, int num)
         {
-            Bought(name, num, 0);
+            MaterialCommodities mc = list.Find(x => x.fdname.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+
+            if ( mc != null )               // if we find it, we remove count, else we don't worry since we may have not got the bought/collected event
+                mc.count = Math.Max(mc.count - num, 0);
         }
 
-        public int Sold(string name, int num, long price)   // commodity
+        public void Set(string cat, string name, int num , double price , SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            MaterialCommodities mc = EnsurePresent(MaterialCommodities.CommodityCategory, name);
-            mc.count = Math.Max(mc.count - num, 0);
-            return (int)(num * (price - mc.price));           // profit is this.. rounded to the credit point
+            MaterialCommodities mc = EnsurePresent(cat, name, conn);
+            mc.count = num;
+            if ( price>0 )
+                mc.price = price;
         }
 
-        public void Ejected(string name, int num)
-        {
-            Sold(name, num, 0);
-        }
-
-        public void Crafted(string name, int num)           // craft uses up either materials or commodities..
-        {
-            MaterialCommodities mc = list.Find(x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase)); // name only..
-
-            if (mc == null)                                 // if we have a record..
-                mc.count = Math.Max(mc.count - num, 0);     // decrement count.. if we don't have a record, ignore it
-        }
-
-
-        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml)
+        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn)
         {
             MaterialCommoditiesList newmc = (oldml == null) ? new MaterialCommoditiesList() : oldml;
 
-            switch (je.EventTypeID)
+            Type jtype = JournalEntry.TypeOfJournalEntry(je.EventTypeStr);
+
+            if (jtype != null)
             {
-                case JournalTypeEnum.MaterialCollected:
-                    newmc = newmc.Clone();
-                    JournalMaterialCollected ji = (JournalMaterialCollected)je;
-                    newmc.MaterialObtained(ji.Category, ji.Name, ji.Count);
-                    break;
+                System.Reflection.MethodInfo m = jtype.GetMethod("MaterialList"); // see if the class defines this function..
 
-                case JournalTypeEnum.MaterialDiscarded:
+                if (m != null)
+                {
                     newmc = newmc.Clone();
-                    JournalMaterialDiscarded jd = (JournalMaterialDiscarded)je;
-                    newmc.MaterialDiscarded(jd.Category, jd.Name, jd.Count);
-                    break;
-
-                case JournalTypeEnum.CollectCargo:
-                    newmc = newmc.Clone();
-                    JournalCollectCargo jcc = (JournalCollectCargo)je;
-                    newmc.Collected(jcc.Type, 1);
-                    break;
-
-                case JournalTypeEnum.EjectCargo:
-                    newmc = newmc.Clone();
-                    JournalEjectCargo jce = (JournalEjectCargo)je;
-                    newmc.Ejected(jce.Type, jce.Count);
-                    break;
-
-                case JournalTypeEnum.MiningRefined:
-                    newmc = newmc.Clone();
-                    JournalMiningRefined jmr = (JournalMiningRefined)je;
-                    newmc.Collected(jmr.Type, 1);
-                    break;
-
-                case JournalTypeEnum.MissionCompleted:      // Commodities can be rewarded - never seen. leave for now. question is out on forums
-                    //newmc = newmc.Clone();
-                    //JournalMissionCompleted jmc = (JournalMissionCompleted)je;
-                    // TBD
-                    break;
-
-                case JournalTypeEnum.MarketBuy:
-                    newmc = newmc.Clone();
-                    JournalMarketBuy jmb = (JournalMarketBuy)je;
-                    newmc.Bought(jmb.Type, jmb.Count, jmb.BuyPrice);
-                    break;
-
-                case JournalTypeEnum.MarketSell:
-                    newmc = newmc.Clone();
-                    JournalMarketSell jms = (JournalMarketSell)je;
-                    newmc.Sold(jms.Type, jms.Count, jms.SellPrice);
-                    break;
-
-                case JournalTypeEnum.EngineerCraft: // i'm guessing commodities also can be used..
-                    newmc = newmc.Clone();
-                    JournalEngineerCraft jec = (JournalEngineerCraft)je;
-                    // TBD  Crafted
-                    break;
+                    m.Invoke(Convert.ChangeType(je, jtype), new Object[] { newmc, conn });
+                }
             }
 
             return newmc;
@@ -403,98 +449,86 @@ namespace EDDiscovery2.DB
     {
         public class Transaction
         {
+            public long jid;
             public DateTime utctime;                               // when it was done.
             public JournalTypeEnum jtype;                          // what caused it..
-            public MaterialCommodities materialcommoditity;        // holds material/commoditity 
-            public long profit;                                     // any profit?
+            public string notes;                                   // notes about the entry
+            public long cashadjust;                                // any profit, 0 if none (negative for cost, positive for profit)
+            public double profitperunit;                             // profit per unit
+            public long cash;                                      // cash total at this point
+
+            public bool IsJournalEventInEventFilter(string[] events)
+            {
+                return events.Contains(EDDiscovery.Tools.SplitCapsWord(jtype.ToString()));
+            }
         }
 
         private List<Transaction> transactions;
+        public long CashTotal = 0;
 
         public MaterialCommoditiesLedger()
         {
             transactions = new List<Transaction>();
         }
 
-        void AddCommmodityEvent( DateTime t, JournalTypeEnum j, string name, int count, long buyprice, long pft = 0 )
+        public List<Transaction> Transactions { get { return transactions; } }
+        
+        public MaterialCommodities GetMaterialCommodity(string cat, string fdname, SQLiteConnectionUser conn)
         {
-            MaterialCommodities mcdb = MaterialCommodities.Get(MaterialCommodities.CommodityCategory, name);    // look up in DB and see if we have a record of this type of item
-            MaterialCommodities mc = new MaterialCommodities(0,MaterialCommodities.CommodityCategory, name, mcdb!=null ? mcdb.type : "Unknown", mcdb != null ? mcdb.shortname : "", count, buyprice);
+            MaterialCommodities mcdb = MaterialCommodities.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
+
+            MaterialCommodities mc = null;
+            if (mcdb != null)
+                mc = new MaterialCommodities(0, cat, mcdb.name, mcdb.fdname, mcdb.type, mcdb.shortname, Color.Green, 0);
+            else
+                mc = new MaterialCommodities(0, cat, fdname, fdname, "", "", Color.Green, 0);
+
+            return mc;
+        }
+
+        public void AddEvent(long jidn, DateTime t, JournalTypeEnum j, string n, long? ca, double ppu = 0)
+        {
+            AddEventCash(jidn, t, j, n, ca.HasValue ? ca.Value : 0, ppu);
+        }
+
+        public void AddEventNoCash(long jidn, DateTime t, JournalTypeEnum j, string n)
+        {
+            AddEventCash(jidn, t, j, n, 0, 0);
+        }
+
+        public void AddEventCash(long jidn, DateTime t, JournalTypeEnum j, string n, long ca , double ppu = 0)
+        {
+            long newcashtotal = CashTotal + ca;
+            //System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3} = {4}", j.ToString(), n, CashTotal, ca , newcashtotal);
+            CashTotal = newcashtotal;
 
             Transaction tr = new Transaction
             {
+                jid = jidn,
                 utctime = t,
                 jtype = j,
-                materialcommoditity = mc,
-                profit = pft
+                notes = n,
+                cashadjust = ca,
+                cash = CashTotal
             };
 
             transactions.Add(tr);
         }
 
-        void AddMaterialEvent(DateTime t, JournalTypeEnum j, string cat, string name, int count)
+
+        public void Process(JournalEntry je, SQLiteConnectionUser conn)
         {
-            MaterialCommodities mcdb = MaterialCommodities.Get(cat, name);    // look up in DB and see if we have a record of this type of item
-            MaterialCommodities mc = new MaterialCommodities(0,cat, name, mcdb != null ? mcdb.type : "Unknown", mcdb != null ? mcdb.shortname : "", count);
+            Type jtype = JournalEntry.TypeOfJournalEntry(je.EventTypeStr);
 
-            Transaction tr = new Transaction
+            if (jtype != null)
             {
-                utctime = t,
-                jtype = j,
-                materialcommoditity = mc,
-            };
+                System.Reflection.MethodInfo m = jtype.GetMethod("Ledger"); // see if the class defines this function..
 
-            transactions.Add(tr);
-        }
+                if (m == null)
+                    m = jtype.GetMethod("LedgerNC"); // see if the class defines this function..
 
-        public void Process(JournalEntry je)
-        {
-            switch (je.EventTypeID)
-            {
-                case JournalTypeEnum.MaterialCollected:
-                    JournalMaterialCollected ji = (JournalMaterialCollected)je;
-                    AddMaterialEvent(je.EventTimeUTC, je.EventTypeID, ji.Category, ji.Name, ji.Count);
-                    break;
-
-                case JournalTypeEnum.MaterialDiscarded:
-                    JournalMaterialDiscarded jd = (JournalMaterialDiscarded)je;
-                    AddMaterialEvent(je.EventTimeUTC, je.EventTypeID, jd.Category, jd.Name, jd.Count);
-                    break;
-
-                case JournalTypeEnum.CollectCargo:
-                    JournalCollectCargo jcc = (JournalCollectCargo)je;
-                    AddCommmodityEvent(je.EventTimeUTC, je.EventTypeID, jcc.Type, 1, 0);
-                    break;
-
-                case JournalTypeEnum.EjectCargo:
-                    JournalEjectCargo jce = (JournalEjectCargo)je;
-                    AddCommmodityEvent(je.EventTimeUTC, je.EventTypeID, jce.Type, jce.Count, 0);
-                    break;
-
-                case JournalTypeEnum.MiningRefined:
-                    JournalMiningRefined jmr = (JournalMiningRefined)je;
-                    AddCommmodityEvent(je.EventTimeUTC, je.EventTypeID, jmr.Type, 1, 0);
-                    break;
-
-                case JournalTypeEnum.MissionCompleted:      // Commodities can be rewarded - never seen. leave for now. question is out on forums
-                    //JournalMissionCompleted jmc = (JournalMissionCompleted)je;
-                    //TBD
-                    break;
-
-                case JournalTypeEnum.MarketBuy:
-                    JournalMarketBuy jmb = (JournalMarketBuy)je;
-                    AddCommmodityEvent(je.EventTimeUTC, je.EventTypeID, jmb.Type, jmb.Count, jmb.BuyPrice);
-                    break;
-
-                case JournalTypeEnum.MarketSell:
-                    JournalMarketSell jms = (JournalMarketSell)je;
-                    AddCommmodityEvent(je.EventTimeUTC, je.EventTypeID, jms.Type, jms.Count, jms.SellPrice, (jms.SellPrice-jms.AvgPricePaid)*jms.Count);
-                    break;
-
-                case JournalTypeEnum.EngineerCraft: // i'm guessing commodities also can be used..
-                    JournalEngineerCraft jec = (JournalEngineerCraft)je;
-                    // TBD  Crafted
-                    break;
+                if (m!=null)
+                    m.Invoke(Convert.ChangeType(je, jtype), new Object[] { this, conn });
             }
         }
 

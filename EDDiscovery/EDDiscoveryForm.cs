@@ -699,6 +699,7 @@ namespace EDDiscovery
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
+                EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
 
                 travelHistoryControl1.LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
@@ -1635,8 +1636,6 @@ namespace EDDiscovery
             List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
 
-            //ISystem isys = new SystemClass("Unknown");
-
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 HistoryEntry prev = null;
@@ -1647,12 +1646,24 @@ namespace EDDiscovery
                     prev = he;
 
                     history.Add(he);                        // add to the history list here..
-                    matcommodledger.Process(je);            // update the ledger
-
+                    
                     if (journalupdate)
                     {
                         jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
                     }
+                }
+            }
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
+            {
+                int i = 0;
+                foreach (EliteDangerous.JournalEntry je in jlist)
+                {
+                    HistoryEntry he = history[i];
+                    he.ProcessWithUserDb(je, (i > 0) ? history[i - 1] : null, conn);        // let the HE do what it wants to with the user db
+
+                    matcommodledger.Process(je, conn);            // update the ledger
+                    i++;
                 }
             }
 
@@ -1757,8 +1768,10 @@ namespace EDDiscovery
 
             if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
             {
+                HistoryEntry last = history.GetLast;
+
                 bool journalupdate = false;
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast, true, out journalupdate);
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
 
                 if (journalupdate)
                 {
@@ -1770,8 +1783,15 @@ namespace EDDiscovery
                     }
                 }
 
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+                {
+                    he.ProcessWithUserDb(je, last, conn);           // let some processes which need the user db to work
+
+                    history.materialcommodititiesledger.Process(je, conn);
+                }
+
                 history.Add(he);
-//TBD
+
                 travelHistoryControl1.AddNewEntry(he);
                 journalViewControl1.AddNewEntry(he);
             }

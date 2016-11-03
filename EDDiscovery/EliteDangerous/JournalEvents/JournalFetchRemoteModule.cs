@@ -18,6 +18,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             StorageSlot = JSONHelper.GetStringDef(evt["StorageSlot"]);
             StoredItem = JSONHelper.GetStringDef(evt["StoredItem"]);
+            StoredItemLocalised = JSONHelper.GetStringDef(evt["StoredItem_Localised"]);
             TransferCost = JSONHelper.GetLong(evt["TransferCost"]);
             Ship = JSONHelper.GetStringDef(evt["Ship"]);
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
@@ -25,15 +26,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string StorageSlot { get; set; }
         public string StoredItem { get; set; }
+        public string StoredItemLocalised { get; set; }
         public long TransferCost { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public int ServerId { get; set; }
 
-
         public override string DefaultRemoveItems()
         {
             return base.DefaultRemoveItems() + ";ShipID;ServerID";
+        }
+
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, StoredItemLocalised + " on " + Ship, -TransferCost);
         }
 
 
