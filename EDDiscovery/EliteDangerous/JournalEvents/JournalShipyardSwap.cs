@@ -22,18 +22,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             StoreOldShip = JSONHelper.GetStringDef(evt["StoreOldShip"]);
             StoreShipId = JSONHelper.GetIntNull(evt["StoreShipID"]);
-            SellOldShip = JSONHelper.GetStringDef(evt["SellOldShip"]);
-            SellShipId = JSONHelper.GetIntNull(evt["SellShipID"]);
-            SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
+            //SellOldShip = JSONHelper.GetStringDef(evt["SellOldShip"]);        // NO EVIDENCE OF THESE
+            //SellShipId = JSONHelper.GetIntNull(evt["SellShipID"]);
+            //SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
         }
 
         public string ShipType { get; set; }
         public int ShipId { get; set; }
         public string StoreOldShip { get; set; }
         public int? StoreShipId { get; set; }
-        public string SellOldShip { get; set; }
-        public int? SellShipId { get; set; }
-        public long? SellPrice { get; set; }
+//        public string SellOldShip { get; set; }
+//        public int? SellShipId { get; set; }
+//        public long? SellPrice { get; set; }
 
         public override string DefaultRemoveItems()
         {

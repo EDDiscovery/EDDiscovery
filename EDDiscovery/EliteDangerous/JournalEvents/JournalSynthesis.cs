@@ -18,5 +18,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Name { get; set; }
         public Dictionary<string, int> Materials { get; set; }
 
+        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            if (Materials != null)
+            {
+                foreach (KeyValuePair<string, int> k in Materials)        // may be commodities or materials
+                    mc.Craft(k.Key, k.Value);        // same as this, uses up materials
+            }
+        }
+
     }
 }

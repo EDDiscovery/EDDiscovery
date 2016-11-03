@@ -75,6 +75,17 @@ namespace EDDiscovery
             }
         }
 
+        public List<MaterialCommoditiesLedger.Transaction> Filter(List<MaterialCommoditiesLedger.Transaction> txlist )
+        {
+            if (MaximumDataAge.HasValue)
+            {
+                var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
+                return (from tx in txlist where tx.utctime >= oldestData orderby tx.utctime descending select tx).ToList();
+            }
+            else
+                return txlist;
+        }
+
         public const int DefaultTravelHistoryFilterIndex = 8;
 
         public static void InitaliseComboBox( ExtendedControls.ComboBoxCustom cc , string dbname )
@@ -105,7 +116,23 @@ namespace EDDiscovery
         string dbstring;
         public event EventHandler Changed;
 
-        public void FilterButton(string db , Control ctr, Color back, Color fore, Form parent)
+        private string selectedlist;
+        private string selectedlistname;
+        private int reserved = 2;
+
+        public void ConfigureThirdOption(string n , string l )      // could be extended later for more..
+        {
+            selectedlistname = n;
+            selectedlist = l;
+            reserved = 3;
+        }
+
+        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent)
+        {
+            FilterButton(db, ctr, back, fore, parent, JournalEntry.GetListOfEventsWithOptMethod(true));
+        }
+
+        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent, List<string> list )
         {
             if (cc == null)
             {
@@ -113,12 +140,11 @@ namespace EDDiscovery
                 cc = new ExtendedControls.CheckedListControlCustom();
                 cc.Items.Add("All");
                 cc.Items.Add("None");
-                cc.Items.Add("Travel");
 
-                foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum)))
-                {
-                    cc.Items.Add(Tools.SplitCapsWord(jte.ToString()));
-                }
+                if (selectedlist != null)
+                    cc.Items.Add(selectedlistname);
+
+                cc.Items.AddRange(list.ToArray());
 
                 cc.SetChecked(SQLiteDBClass.GetSettingString(dbstring, "All"));
                 SetFilterSet();
@@ -135,11 +161,13 @@ namespace EDDiscovery
 
         private void SetFilterSet()
         {
-            string list = cc.GetChecked(3);
+            string list = cc.GetChecked(reserved);
             //Console.WriteLine("List {0}", list);
             cc.SetChecked(list.Equals("All"), 0, 1);
             cc.SetChecked(list.Equals("None"), 1, 1);
-            cc.SetChecked(list.Equals("Docked;FSD Jump;Undocked;"), 2, 1);
+
+            if ( selectedlist!=null)
+                cc.SetChecked(list.Equals(selectedlist), 2, 1);
         }
 
         private void FilterCheckChanged(Object sender, ItemCheckEventArgs e)
@@ -149,15 +177,15 @@ namespace EDDiscovery
             cc.SetChecked(e.NewValue == CheckState.Checked, e.Index, 1);        // force check now (its done after it) so our functions work..
 
             if (e.Index == 0 && e.NewValue == CheckState.Checked)
-                cc.SetChecked(true, 3);
+                cc.SetChecked(true, reserved);
 
             if ((e.Index == 1 && e.NewValue == CheckState.Checked) || (e.Index <= 2 && e.NewValue == CheckState.Unchecked))
-                cc.SetChecked(false, 3);
+                cc.SetChecked(false, reserved);
 
-            if (e.Index == 2 && e.NewValue == CheckState.Checked)
+            if (selectedlist != null && e.Index == 2 && e.NewValue == CheckState.Checked)
             {
-                cc.SetChecked(false, 3);
-                cc.SetChecked("Docked;FSD Jump;Undocked;");
+                cc.SetChecked(false, reserved);
+                cc.SetChecked(selectedlist);
             }
 
             SetFilterSet();

@@ -25,5 +25,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public CombatRank CombatRank { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crew; } }
+
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + Faction, -Cost);
+        }
+
     }
 }

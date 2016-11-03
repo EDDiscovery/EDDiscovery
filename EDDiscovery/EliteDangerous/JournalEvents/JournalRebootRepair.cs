@@ -15,9 +15,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (!JSONHelper.IsNullOrEmptyT(evt["Modules"]))
                 Modules = evt.Value<JArray>("Modules").Values<string>().ToArray();
         }
+
         public string[] Modules { get; set; }
-
-
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rebootrepair; } }
     }
 }

@@ -30,5 +30,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             else
                 return EDDiscovery.Properties.Resources.fighter;
         }
+
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count.ToString(), -Cost);
+        }
+
     }
 }

@@ -601,6 +601,18 @@
     <Compile Include="UserControls\UserControlLog.Designer.cs">
       <DependentUpon>UserControlLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlsLedger.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlsLedger.Designer.cs">
+      <DependentUpon>UserControlsLedger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlsMaterialCommodities.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlsMaterialCommodities.Designer.cs">
+      <DependentUpon>UserControlsMaterialCommodities.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlStarDistance.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -632,6 +644,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlLog.resx">
       <DependentUpon>UserControlLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlsLedger.resx">
+      <DependentUpon>UserControlsLedger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlsMaterialCommodities.resx">
+      <DependentUpon>UserControlsMaterialCommodities.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
@@ -686,6 +704,7 @@
     <None Include="Resources\collectcargo.png" />
     <None Include="Resources\cockpitbreached.png" />
     <None Include="Resources\divider.png" />
+    <None Include="Resources\commodities.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -766,6 +785,8 @@
     <None Include="Resources\star.png" />
     <None Include="Resources\Log.png" />
     <None Include="Resources\travelgrid.png" />
+    <None Include="Resources\material.png" />
+    <None Include="Resources\ledger.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

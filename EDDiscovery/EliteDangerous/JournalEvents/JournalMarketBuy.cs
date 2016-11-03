@@ -25,5 +25,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long TotalCost { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketbuy; } }
+
+        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, Type, Count, BuyPrice, conn);
+        }
+
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            EDDiscovery2.DB.MaterialCommodities mc = mcl.GetMaterialCommodity(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, Type, conn);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, mc.name + " " + mc.count.ToString(),-TotalCost);
+        }
+
     }
 }

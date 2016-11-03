@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this.userControlTG = new EDDiscovery.UserControls.UserControlLog();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,7 +44,6 @@
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userControlTG = new EDDiscovery.UserControls.UserControlLog();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +57,7 @@
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -77,12 +78,20 @@
             this.TopPanel.Size = new System.Drawing.Size(870, 32);
             this.TopPanel.TabIndex = 27;
             // 
+            // userControlTG
+            // 
+            this.userControlTG.Location = new System.Drawing.Point(748, 12);
+            this.userControlTG.Name = "userControlTG";
+            this.userControlTG.Size = new System.Drawing.Size(496, 224);
+            this.userControlTG.TabIndex = 26;
+            this.userControlTG.Load += new System.EventHandler(this.userControlTG_Load);
+            // 
             // buttonFilter
             // 
             this.buttonFilter.BorderColorScaling = 1.25F;
             this.buttonFilter.ButtonColorScaling = 0.5F;
             this.buttonFilter.ButtonDisabledScaling = 0.5F;
-            this.buttonFilter.Location = new System.Drawing.Point(443, 3);
+            this.buttonFilter.Location = new System.Drawing.Point(444, 3);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 25;
@@ -94,7 +103,7 @@
             // 
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
-            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
+            this.textBoxFilter.Location = new System.Drawing.Point(278, 6);
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
@@ -207,11 +216,12 @@
             this.dataGridViewTravel.Size = new System.Drawing.Size(847, 578);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
-            this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellContentDoubleClick);
             this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);
+            this.dataGridViewTravel.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellEnter);
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTravel_ColumnHeaderMouseClick);
             this.dataGridViewTravel.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewTravel_ColumnWidthChanged);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewTravel_RowPostPaint);
+            this.dataGridViewTravel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyDown);
             this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
             this.dataGridViewTravel.Resize += new System.EventHandler(this.dataGridViewTravel_Resize);
             // 
@@ -256,14 +266,6 @@
             this.ColumnNote.ReadOnly = true;
             this.ColumnNote.Width = 137;
             // 
-            // userControlTG
-            // 
-            this.userControlTG.Location = new System.Drawing.Point(748, 12);
-            this.userControlTG.Name = "userControlTG";
-            this.userControlTG.Size = new System.Drawing.Size(496, 224);
-            this.userControlTG.TabIndex = 26;
-            this.userControlTG.Load += new System.EventHandler(this.userControlTG_Load);
-            // 
             // historyContextMenu
             // 
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -274,9 +276,10 @@
             this.addToTrilaterationToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
             this.selectCorrectSystemToolStripMenuItem,
-            this.toolStripMenuItemStartStop});
+            this.toolStripMenuItemStartStop,
+            this.removeJournalEntryToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 180);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 202);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -367,6 +370,13 @@
             this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
             this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
             // 
+            // removeJournalEntryToolStripMenuItem
+            // 
+            this.removeJournalEntryToolStripMenuItem.Name = "removeJournalEntryToolStripMenuItem";
+            this.removeJournalEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.removeJournalEntryToolStripMenuItem.Text = "Remove Journal Entry";
+            this.removeJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.removeJournalEntryToolStripMenuItem_Click);
+            // 
             // UserControlTravelGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -414,5 +424,6 @@
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
+        private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
     }
 }

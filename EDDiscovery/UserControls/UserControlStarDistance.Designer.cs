@@ -35,10 +35,10 @@
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.labelclosests = new System.Windows.Forms.Label();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.labelclosests = new System.Windows.Forms.Label();
             this.closestContextMenu.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
@@ -128,6 +128,21 @@
             this.dataGridViewNearest.Size = new System.Drawing.Size(552, 544);
             this.dataGridViewNearest.TabIndex = 23;
             // 
+            // Col1
+            // 
+            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Col1.HeaderText = "Name";
+            this.Col1.MinimumWidth = 50;
+            this.Col1.Name = "Col1";
+            // 
+            // Distance
+            // 
+            this.Distance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Distance.FillWeight = 25F;
+            this.Distance.HeaderText = "Distance";
+            this.Distance.MinimumWidth = 50;
+            this.Distance.Name = "Distance";
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.labelclosests);
@@ -145,21 +160,6 @@
             this.labelclosests.Size = new System.Drawing.Size(100, 13);
             this.labelclosests.TabIndex = 0;
             this.labelclosests.Text = "Closest System To..";
-            // 
-            // Col1
-            // 
-            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Col1.HeaderText = "Name";
-            this.Col1.MinimumWidth = 50;
-            this.Col1.Name = "Col1";
-            // 
-            // Distance
-            // 
-            this.Distance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Distance.FillWeight = 25F;
-            this.Distance.HeaderText = "Distance";
-            this.Distance.MinimumWidth = 50;
-            this.Distance.Name = "Distance";
             // 
             // UserControlStarDistance
             // 

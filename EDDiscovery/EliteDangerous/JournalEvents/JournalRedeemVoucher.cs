@@ -20,6 +20,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Type { get; set; }
         public long Amount { get; set; }
         public double BrokerPercentage { get; set; }
+
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " Broker " + BrokerPercentage.ToString("0.0") + "%", Amount);
+        }
+
     }
 }
 

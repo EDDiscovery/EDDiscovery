@@ -19,11 +19,21 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Level = JSONHelper.GetInt(evt["Level"]);
             Ingredients = evt["Ingredients"]?.ToObject<Dictionary<string, int>>();
         }
+
         public string Engineer { get; set; }
         public string Blueprint { get; set; }
         public int Level { get; set; }
-        public Dictionary<string, int> Ingredients { get; set; }
+        public Dictionary<string,int> Ingredients { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineercraft; } }
+
+        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            if (Ingredients != null)
+            {
+                foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials
+                    mc.Craft(k.Key, k.Value);
+            }
+        }
     }
 }

@@ -58,7 +58,7 @@ namespace EDDiscovery
             LoadCommandersListBox();
 
             comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.Items.AddRange(new string[] { "Pop Out", "Travel Grid", "Journal", "Log", "Nearest Stars" });
+            comboBoxCustomPopOut.Items.AddRange(new string[] { "Pop Out", "Travel Grid", "Journal", "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" });
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
@@ -76,9 +76,25 @@ namespace EDDiscovery
 
             userControlStarDistanceBottom.Init(_discoveryForm);
 
+            // Materials/Comm bottom
+
+            userControlsMaterialBottom.Init(0);
+            userControlsMaterialBottom.OnChangedCount += MaterialCommodityChangeCount;
+            userControlsMaterialBottom.OnRequestRefresh += MaterialCommodityRequireRefresh;
+
+            userControlsCommoditiesBottom.Init(0);
+            userControlsCommoditiesBottom.OnChangedCount += MaterialCommodityChangeCount;
+            userControlsCommoditiesBottom.OnRequestRefresh += MaterialCommodityRequireRefresh;
+
             // Bottom Journal..
 
             userControlJournalGridBottom.Init(_discoveryForm, 1000 , false);                            // use 1000. 0 is the journal main tab, 1..N are popups
+
+            // Bottom Ledger
+
+            userControlsLedgerBottom.Init(_discoveryForm,0);
+
+            // Other stuff
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
@@ -87,7 +103,33 @@ namespace EDDiscovery
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.star);           // DONT use the dialog method, add it programatically, since we can't point at resources using the dialog
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.Log);
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.travelgrid);
+            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.material);
+            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.commodities);
+            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.ledger);
+
+            int imgindex = 0;
+            foreach (TabPage pg in tabControlBottom.TabPages)
+            {
+                pg.Text = "";
+                pg.ImageIndex = imgindex++;
+            }
+
         }
+
+        void MaterialCommodityChangeCount(List<MaterialCommodities> changelist)
+        {
+            HistoryEntry he = userControlTravelGrid.GetCurrentHistoryEntry;
+            JournalEntry.AddEDDItemSet(EDDiscoveryForm.EDDConfig.CurrentCommander.Nr,he.EventTimeUTC, (he.EntryType == JournalTypeEnum.EDDItemSet) ? he.Journalid : 0 ,  changelist);
+            MaterialCommodities.LoadCacheList();        // in case we did anything..
+            _discoveryForm.RefreshHistoryAsync();
+        }
+
+        void MaterialCommodityRequireRefresh()
+        {
+            MaterialCommodities.LoadCacheList();        // in case we did anything..
+            _discoveryForm.RefreshHistoryAsync();
+        }
+
 
         private void panel_topright_Resize(object sender, EventArgs e)
         {
@@ -212,6 +254,11 @@ namespace EDDiscovery
             foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlJournalGrid)))
                 ((UserControls.UserControlJournalGrid)uc).Display(_discoveryForm.history);
 
+            userControlsLedgerBottom.Display(_discoveryForm.history.materialcommodititiesledger);
+
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsLedger)))
+                ((UserControls.UserControlsLedger)uc).Display(_discoveryForm.history.materialcommodititiesledger);      // and the journal views need it
+
             ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
             RedrawSummary();
             RefreshTargetInfo();
@@ -266,6 +313,9 @@ namespace EDDiscovery
 
                 foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlJournalGrid)))
                     ((UserControls.UserControlJournalGrid)uc).AddNewEntry(he);      // and the journal views need it
+
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsLedger)))
+                    ((UserControls.UserControlsLedger)uc).Display(_discoveryForm.history.materialcommodititiesledger);      // and the journal views need it
             }
             catch (Exception ex)
             {
@@ -283,6 +333,14 @@ namespace EDDiscovery
                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
                 textBoxVisits.Text = textBoxState.Text = textBoxSolDist.Text = richTextBoxNote.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
+
+                userControlsMaterialBottom.Display(null);
+                userControlsCommoditiesBottom.Display(null);
+
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsMaterials)))
+                    ((UserControls.UserControlsMaterials)uc).Display(null);
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsCommodities)))
+                    ((UserControls.UserControlsCommodities)uc).Display(null);
             }
             else
             {
@@ -324,9 +382,15 @@ namespace EDDiscovery
                 textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
                 richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
 
-                UserControls.UserControlStarDistance primaryucsd = (UserControls.UserControlStarDistance)tabControlBottomRight.TabPages["tabPageBottomRightStarList"].Controls[0];
-
                 userControlStarDistanceBottomRight.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
+
+                userControlsMaterialBottom.Display(syspos.MaterialCommodity.Sort(false));
+                userControlsCommoditiesBottom.Display(syspos.MaterialCommodity.Sort(true));
+
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsMaterials)))
+                    ((UserControls.UserControlsMaterials)uc).Display(syspos.MaterialCommodity.Sort(false));
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsCommodities)))
+                    ((UserControls.UserControlsCommodities)uc).Display(syspos.MaterialCommodity.Sort(true));
 
             }
         }
@@ -353,6 +417,9 @@ namespace EDDiscovery
             splitContainerRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
             userControlTravelGrid.LoadLayout();
             userControlJournalGridBottom.LoadLayout();
+            userControlsMaterialBottom.LoadLayout();
+            userControlsCommoditiesBottom.LoadLayout();
+            userControlsLedgerBottom.LoadLayout();
 
             tabControlBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", 0);
             tabControlBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", 0);
@@ -362,6 +429,9 @@ namespace EDDiscovery
         {
             userControlTravelGrid.SaveLayout();
             userControlJournalGridBottom.SaveLayout();
+            userControlsMaterialBottom.SaveLayout();
+            userControlsCommoditiesBottom.SaveLayout();
+            userControlsLedgerBottom.SaveLayout();
 
             SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
             SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
@@ -724,12 +794,52 @@ namespace EDDiscovery
             else if (comboBoxCustomPopOut.SelectedIndex == 4)
             {
                 UserControls.UserControlStarDistance ucsd = new UserControls.UserControlStarDistance(); // Add a closest distance tab
+                
                 tcf.AddUserControl(ucsd);
                 int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlStarDistance));
 
                 tcf.Init("Nearest Stars " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "StarDistance" + numopened);
+
+                ucsd.Init(_discoveryForm);
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
                     ucsd.FillGrid(lastclosestname, lastclosestsystems);
+            }
+            else if (comboBoxCustomPopOut.SelectedIndex == 5)
+            {
+                UserControls.UserControlsMaterials ucmc = new UserControls.UserControlsMaterials(); // Add a closest distance tab
+                tcf.AddUserControl(ucmc);
+                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlsMaterials));
+
+                tcf.Init("Materials " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Materials" + numopened);
+
+                ucmc.Init(numopened);
+                HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
+                if (curpos != null)
+                    ucmc.Display(curpos.MaterialCommodity.Sort(false));
+            }
+            else if (comboBoxCustomPopOut.SelectedIndex == 6)
+            {
+                UserControls.UserControlsCommodities ucmc = new UserControls.UserControlsCommodities(); // Add a closest distance tab
+                tcf.AddUserControl(ucmc);
+                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlsCommodities));
+
+                tcf.Init("Commodities " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Commodities" + numopened);
+
+                ucmc.Init(numopened);
+                HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
+                if (curpos != null)
+                    ucmc.Display(curpos.MaterialCommodity.Sort(true));
+            }
+            else if (comboBoxCustomPopOut.SelectedIndex == 7)
+            {
+                UserControls.UserControlsLedger ucmc = new UserControls.UserControlsLedger(); // Add a closest distance tab
+                tcf.AddUserControl(ucmc);
+                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlsLedger));
+
+                tcf.Init("Ledger " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Ledger" + numopened);
+
+                ucmc.Init(_discoveryForm, numopened);
+                ucmc.Display(_discoveryForm.history.materialcommodititiesledger);
             }
 
             comboBoxCustomPopOut.Enabled = false;
