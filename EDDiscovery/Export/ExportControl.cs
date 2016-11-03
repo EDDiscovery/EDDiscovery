@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using EDDiscovery.Export;
 using EDDiscovery.EliteDangerous;
 using System.Diagnostics;
+using EDDiscovery.EliteDangerous.JournalEvents;
+using System.IO;
 
 namespace EDDiscovery
 {
@@ -85,6 +87,66 @@ namespace EDDiscovery
                 Name = name;
                 export = exportclass;
             }
+
+        }
+
+        private void buttonExportToGalmap_Click(object sender, EventArgs e)
+        {
+            List< JournalEntry>  scans = new List<JournalEntry>();
+            string EDimportstarsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous");
+            string exportfilename = "";
+            var allFiles = Directory.GetFiles(EDimportstarsDir, "VisitedStarsCache.dat", SearchOption.AllDirectories);
+            //, "ImportStars.txt"
+
+            if (allFiles.Count<string>()==0)
+            {
+                MessageBox.Show("Could not find VisitedStarsCache.dat file");
+                return;
+            }
+
+            if (allFiles.Count<string>() == 1)  // signle account  just export
+            {
+                exportfilename = Path.Combine(Path.GetDirectoryName(allFiles[0]), "ImportStars.txt") ;
+            }
+            else  // Many commanders found.   
+            {
+                if (MessageBox.Show("Multiple commanders found. Will export to latest played in Elite Dangerous", "Export info", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    DirectoryInfo newesetDi=null;
+                    for (int ii=0; ii< allFiles.Count<string>();ii++)
+                    {
+                        DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(allFiles[ii]));
+
+                        if (newesetDi == null)
+                            newesetDi = di;
+
+                        if (di.LastWriteTimeUtc > newesetDi.LastWriteTimeUtc)
+                            newesetDi = di;
+                    }
+
+                    exportfilename = Path.Combine(newesetDi.FullName, "ImportStars.txt");
+                }
+            }
+
+
+
+
+            scans = JournalEntry.GetByEventType(JournalTypeEnum.FSDJump, EDDiscoveryForm.EDDConfig.CurrentCmdrID, new DateTime (2014, 1,1), DateTime.UtcNow) ;
+
+            var tscans = scans.ConvertAll<JournalFSDJump>(x=>(JournalFSDJump)x);
+
+            using (StreamWriter writer = new StreamWriter(exportfilename, false))
+            {
+
+                foreach (var system in tscans.Select(o => o.StarSystem).Distinct())
+                {
+                    writer.WriteLine(system);
+                }
+            }
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
 
         }
     }
