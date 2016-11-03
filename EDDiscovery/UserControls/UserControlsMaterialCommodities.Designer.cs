@@ -74,6 +74,7 @@
             // 
             this.dataGridViewMC.AllowUserToAddRows = false;
             this.dataGridViewMC.AllowUserToDeleteRows = false;
+            this.dataGridViewMC.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewMC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMC.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.NameCol,
@@ -94,7 +95,6 @@
             // 
             // NameCol
             // 
-            this.NameCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.NameCol.HeaderText = "Name";
             this.NameCol.MinimumWidth = 50;
             this.NameCol.Name = "NameCol";
@@ -102,7 +102,6 @@
             // 
             // ShortName
             // 
-            this.ShortName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.ShortName.HeaderText = "Abv";
             this.ShortName.MinimumWidth = 25;
             this.ShortName.Name = "ShortName";
@@ -110,7 +109,6 @@
             // 
             // Category
             // 
-            this.Category.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Category.HeaderText = "Category";
             this.Category.MinimumWidth = 50;
             this.Category.Name = "Category";
@@ -118,7 +116,6 @@
             // 
             // Type
             // 
-            this.Type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Type.HeaderText = "Type";
             this.Type.MinimumWidth = 50;
             this.Type.Name = "Type";
@@ -126,7 +123,6 @@
             // 
             // Number
             // 
-            this.Number.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Number.HeaderText = "Number";
             this.Number.MinimumWidth = 50;
             this.Number.Name = "Number";
@@ -134,7 +130,6 @@
             // 
             // Price
             // 
-            this.Price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Price.HeaderText = "Avg. Price";
             this.Price.MinimumWidth = 50;
             this.Price.Name = "Price";

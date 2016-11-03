@@ -121,22 +121,12 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
         }
 
-        public override int ColumnWidthPreference(DataGridView notused, int i)  // DGV is passed back in case we have more than one.. we dont
-        {
-            int[] pref = new int[] { 2,6,0,1,3,4,5 };
-            return (i < pref.Length) ? pref[i] : -1;
-        }
-
-        public override int ColumnExpandPreference() { return 2; }
-
         private void dataGridViewMC_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            DGVColumnWidthChanged(dataGridViewLedger);
         }
 
         private void dataGridViewMC_Resize(object sender, EventArgs e)
         {
-            DGVResize(dataGridViewLedger);
         }
 
         #endregion

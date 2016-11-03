@@ -31,13 +31,6 @@
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.labelNoItems = new System.Windows.Forms.Label();
             this.dataGridViewLedger = new System.Windows.Forms.DataGridView();
-            this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.buttonFilter = new ExtendedControls.ButtonExt();
@@ -45,6 +38,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -77,6 +77,7 @@
             // 
             this.dataGridViewLedger.AllowUserToAddRows = false;
             this.dataGridViewLedger.AllowUserToDeleteRows = false;
+            this.dataGridViewLedger.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewLedger.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewLedger.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TimeCol,
@@ -94,63 +95,6 @@
             this.dataGridViewLedger.TabIndex = 1;
             this.dataGridViewLedger.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewMC_ColumnWidthChanged);
             this.dataGridViewLedger.Resize += new System.EventHandler(this.dataGridViewMC_Resize);
-            // 
-            // TimeCol
-            // 
-            this.TimeCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.TimeCol.HeaderText = "Time";
-            this.TimeCol.MinimumWidth = 50;
-            this.TimeCol.Name = "TimeCol";
-            this.TimeCol.ReadOnly = true;
-            this.TimeCol.Width = 150;
-            // 
-            // Type
-            // 
-            this.Type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Type.HeaderText = "Type";
-            this.Type.MinimumWidth = 50;
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
-            // 
-            // Notes
-            // 
-            this.Notes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 50;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            // 
-            // Credits
-            // 
-            this.Credits.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Credits.HeaderText = "Credits";
-            this.Credits.MinimumWidth = 50;
-            this.Credits.Name = "Credits";
-            this.Credits.ReadOnly = true;
-            // 
-            // Debits
-            // 
-            this.Debits.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Debits.HeaderText = "Debits";
-            this.Debits.MinimumWidth = 50;
-            this.Debits.Name = "Debits";
-            this.Debits.ReadOnly = true;
-            // 
-            // Balance
-            // 
-            this.Balance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Balance.HeaderText = "Balance";
-            this.Balance.MinimumWidth = 50;
-            this.Balance.Name = "Balance";
-            this.Balance.ReadOnly = true;
-            // 
-            // NormProfit
-            // 
-            this.NormProfit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.NormProfit.HeaderText = "Norm Profit";
-            this.NormProfit.MinimumWidth = 20;
-            this.NormProfit.Name = "NormProfit";
-            this.NormProfit.Width = 80;
             // 
             // vScrollBarCustomMC
             // 
@@ -260,6 +204,54 @@
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // TimeCol
+            // 
+            this.TimeCol.HeaderText = "Time";
+            this.TimeCol.MinimumWidth = 50;
+            this.TimeCol.Name = "TimeCol";
+            this.TimeCol.ReadOnly = true;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.MinimumWidth = 50;
+            this.Type.Name = "Type";
+            this.Type.ReadOnly = true;
+            // 
+            // Notes
+            // 
+            this.Notes.HeaderText = "Notes";
+            this.Notes.MinimumWidth = 50;
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            // 
+            // Credits
+            // 
+            this.Credits.HeaderText = "Credits";
+            this.Credits.MinimumWidth = 50;
+            this.Credits.Name = "Credits";
+            this.Credits.ReadOnly = true;
+            // 
+            // Debits
+            // 
+            this.Debits.HeaderText = "Debits";
+            this.Debits.MinimumWidth = 50;
+            this.Debits.Name = "Debits";
+            this.Debits.ReadOnly = true;
+            // 
+            // Balance
+            // 
+            this.Balance.HeaderText = "Balance";
+            this.Balance.MinimumWidth = 50;
+            this.Balance.Name = "Balance";
+            this.Balance.ReadOnly = true;
+            // 
+            // NormProfit
+            // 
+            this.NormProfit.HeaderText = "Norm Profit";
+            this.NormProfit.MinimumWidth = 20;
+            this.NormProfit.Name = "NormProfit";
             // 
             // UserControlsLedger
             // 

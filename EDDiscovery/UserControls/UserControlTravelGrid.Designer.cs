@@ -201,6 +201,7 @@
             this.dataGridViewTravel.AllowUserToDeleteRows = false;
             this.dataGridViewTravel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
@@ -231,7 +232,6 @@
             this.ColumnTime.MinimumWidth = 100;
             this.ColumnTime.Name = "ColumnTime";
             this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 140;
             // 
             // Icon
             // 
@@ -239,7 +239,6 @@
             this.Icon.MinimumWidth = 32;
             this.Icon.Name = "Icon";
             this.Icon.ReadOnly = true;
-            this.Icon.Width = 80;
             // 
             // ColumnSystem
             // 
@@ -247,7 +246,6 @@
             this.ColumnSystem.MinimumWidth = 100;
             this.ColumnSystem.Name = "ColumnSystem";
             this.ColumnSystem.ReadOnly = true;
-            this.ColumnSystem.Width = 150;
             // 
             // ColumnDistance
             // 
@@ -255,7 +253,6 @@
             this.ColumnDistance.MinimumWidth = 50;
             this.ColumnDistance.Name = "ColumnDistance";
             this.ColumnDistance.ReadOnly = true;
-            this.ColumnDistance.Width = 70;
             // 
             // ColumnNote
             // 
@@ -264,7 +261,6 @@
             this.ColumnNote.MinimumWidth = 10;
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
-            this.ColumnNote.Width = 137;
             // 
             // historyContextMenu
             // 

@@ -72,9 +72,10 @@ namespace EDDiscovery
             userControlStarDistanceBottomRight.OnNewStarList += NewStarListComputed;
             userControlStarDistanceBottomRight.StartComputeThread();
 
-            // Secondary star list.. the compute engine is not used in this one
+            // Secondary star lists.. the compute engine is not used in this one
 
             userControlStarDistanceBottom.Init(_discoveryForm);
+            userControlStarDistanceMiddleRight.Init(_discoveryForm);
 
             // Materials/Comm bottom
 
@@ -100,8 +101,8 @@ namespace EDDiscovery
 
             buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
 
-            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.star);           // DONT use the dialog method, add it programatically, since we can't point at resources using the dialog
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.Log);
+            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.star);           // DONT use the dialog method, add it programatically, since we can't point at resources using the dialog
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.travelgrid);
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.material);
             imageListIcons.Images.Add(EDDiscovery.Properties.Resources.commodities);
@@ -228,6 +229,7 @@ namespace EDDiscovery
             lastclosestsystems = csl;
             userControlStarDistanceBottomRight.FillGrid(name, csl);
             userControlStarDistanceBottom.FillGrid(name, csl);
+            userControlStarDistanceMiddleRight.FillGrid(name, csl);
 
             foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlStarDistance)))
                 ((UserControls.UserControlStarDistance)uc).FillGrid(name, csl);
@@ -414,7 +416,9 @@ namespace EDDiscovery
         {
             splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
             splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-            splitContainerRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
+            splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
+            splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
+
             userControlTravelGrid.LoadLayout();
             userControlJournalGridBottom.LoadLayout();
             userControlsMaterialBottom.LoadLayout();
@@ -422,7 +426,8 @@ namespace EDDiscovery
             userControlsLedgerBottom.LoadLayout();
 
             tabControlBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", 0);
-            tabControlBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", 0);
+            tabControlBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", 5);
+            tabControlMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", 1);
         }
 
         public void SaveSettings()     // called by form when closing
@@ -435,10 +440,12 @@ namespace EDDiscovery
 
             SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
             SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRight.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
 
             SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", tabControlBottomRight.SelectedIndex);
             SQLiteDBClass.PutSettingInt("TravelControlBottomTab", tabControlBottom.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", tabControlMiddleRight.SelectedIndex);
         }
 
         #endregion
@@ -958,6 +965,7 @@ namespace EDDiscovery
                 {
                     userControlLogBottom.AppendText(text + Environment.NewLine, color);
                     userControlLogBottomRight.AppendText(text + Environment.NewLine, color);
+                    userControlLogMiddleRight.AppendText(text + Environment.NewLine, color);
 
                     foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlLog)))
                         ((UserControls.UserControlLog)uc).AppendText(text + Environment.NewLine, color);
