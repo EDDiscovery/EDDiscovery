@@ -31,8 +31,7 @@ namespace EDDiscovery.Controls
         {
             InitializeComponent();
             labelCurrent.Text = "None";
-            autofade.Interval = 500;
-            autofade.Tick += FadeOut;
+            autofade.Tick += FadeInOut;
         }
 
         public void PanelClick(object sender , EventArgs e )
@@ -74,6 +73,8 @@ namespace EDDiscovery.Controls
             }
         }
 
+        bool tobevisible = false;
+
         private void panelBottom_MouseEnter(object sender, EventArgs e)
         {
             if (imagepanels == null && Images != null)
@@ -89,7 +90,8 @@ namespace EDDiscovery.Controls
                         BackgroundImage = Images[i],
                         Location = new Point(xpos, 4),
                         Tag = i,
-                        BackgroundImageLayout = ImageLayout.None
+                        BackgroundImageLayout = ImageLayout.None,
+                        Visible = false
                     };
 
                     imagepanels[i].Size = new Size(Images[i].Width, Images[i].Height);
@@ -103,25 +105,41 @@ namespace EDDiscovery.Controls
                 }
             }
 
-
-            for (int i = 0; i < Images.Length; i++)
-            {
-                imagepanels[i].Visible = true;
-            }
-
             autofade.Stop();
+
+            if (!tobevisible)
+            {
+                tobevisible = true;
+                autofade.Interval = 350;
+                autofade.Start();
+                //System.Diagnostics.Debug.WriteLine("{0} {1} Fade in", Environment.TickCount, Name);
+            }
         }
 
         private void panelBottom_MouseLeave(object sender, EventArgs e)     // get this when leaving a panel and going to the icons.. so fade out slowly so it can be cancelled
         {
-            autofade.Start();           
+            autofade.Stop();
+
+            if (tobevisible)
+            {
+                tobevisible = false;
+                autofade.Interval = 750;
+                autofade.Start();
+                //System.Diagnostics.Debug.WriteLine("{0} {1} Fade out", Environment.TickCount, Name);
+            }
         }
 
-        void FadeOut(object sender, EventArgs e)            // hiding
+        void FadeInOut(object sender, EventArgs e)            // hiding
         {
             autofade.Stop();
-            for (int i = 0; i < Images.Length; i++)
-                imagepanels[i].Visible = false;
+
+            //System.Diagnostics.Debug.WriteLine("{0} {1} Fade {2}" , Environment.TickCount, Name, tobevisible);
+
+            if (imagepanels[0].Visible != tobevisible )
+            { 
+                for (int i = 0; i < Images.Length; i++)
+                    imagepanels[i].Visible = tobevisible;
+            }
         }
 
         private void TabStrip_Layout(object sender, LayoutEventArgs e)
