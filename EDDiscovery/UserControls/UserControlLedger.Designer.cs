@@ -39,6 +39,8 @@
             this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.buttonFilter = new ExtendedControls.ButtonExt();
@@ -46,12 +48,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
-            this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
-            this.panelButtons.SuspendLayout();
             this.contextMenuStripLedger.SuspendLayout();
+            this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
@@ -150,6 +150,20 @@
             this.NormProfit.MinimumWidth = 20;
             this.NormProfit.Name = "NormProfit";
             // 
+            // contextMenuStripLedger
+            // 
+            this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemGotoItem});
+            this.contextMenuStripLedger.Name = "contextMenuStripLedger";
+            this.contextMenuStripLedger.Size = new System.Drawing.Size(207, 26);
+            // 
+            // toolStripMenuItemGotoItem
+            // 
+            this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
+            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
+            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
+            this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
+            // 
             // vScrollBarCustomMC
             // 
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -242,7 +256,7 @@
             this.comboBoxHistoryWindow.DisplayMember = "";
             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxHistoryWindow.DropDownHeight = 200;
-            this.comboBoxHistoryWindow.DropDownWidth = 94;
+            this.comboBoxHistoryWindow.DropDownWidth = 1;
             this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxHistoryWindow.ItemHeight = 13;
             this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
@@ -259,20 +273,6 @@
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // contextMenuStripLedger
-            // 
-            this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemGotoItem});
-            this.contextMenuStripLedger.Name = "contextMenuStripLedger";
-            this.contextMenuStripLedger.Size = new System.Drawing.Size(207, 26);
-            // 
-            // toolStripMenuItemGotoItem
-            // 
-            this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
-            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
-            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
-            this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
-            // 
             // UserControlLedger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -284,9 +284,9 @@
             this.dataViewScrollerPanel.ResumeLayout(false);
             this.dataViewScrollerPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).EndInit();
+            this.contextMenuStripLedger.ResumeLayout(false);
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
-            this.contextMenuStripLedger.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

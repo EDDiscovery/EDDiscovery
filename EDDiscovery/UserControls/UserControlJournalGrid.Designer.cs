@@ -246,7 +246,7 @@
             this.comboBoxJournalWindow.DisplayMember = "";
             this.comboBoxJournalWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxJournalWindow.DropDownHeight = 200;
-            this.comboBoxJournalWindow.DropDownWidth = 94;
+            this.comboBoxJournalWindow.DropDownWidth = 1;
             this.comboBoxJournalWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxJournalWindow.ItemHeight = 13;
             this.comboBoxJournalWindow.Location = new System.Drawing.Point(102, 4);

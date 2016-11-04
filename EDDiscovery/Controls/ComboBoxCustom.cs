@@ -244,6 +244,8 @@ namespace ExtendedControls
         public float ButtonColorScaling { get; set; } = 0.5F;           // Popup style only
         public int ScrollBarWidth { get; set; } = 16;
         public FlatStyle FlatStyle { get; set; } = FlatStyle.System;
+
+        //Set width to 1 to scale it to the same width as the Button..
         public int DropDownWidth { get { return _cbsystem.DropDownWidth; } set { _cbsystem.DropDownWidth = value; } }
         public int DropDownHeight { get { return _cbsystem.DropDownHeight; } set { _cbsystem.DropDownHeight = value; } }
         public int ItemHeight { get { return _cbsystem.ItemHeight; } set { _cbsystem.ItemHeight = value; } }
@@ -464,7 +466,7 @@ namespace ExtendedControls
             if (fittableitems > this.Items.Count())                             // no point doing more than we have..
                 fittableitems = this.Items.Count();
 
-            _cbdropdown.Size = new Size(this.DropDownWidth, fittableitems * this.ItemHeight + 4);
+            _cbdropdown.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);
 
             _cbdropdown.SelectionBackColor = this.DropDownBackgroundColor;
             _cbdropdown.MouseOverBackgroundColor = this.MouseOverBackgroundColor;
@@ -491,6 +493,9 @@ namespace ExtendedControls
             }
 
             _cbdropdown.Show(parent);
+             
+            // enforce size.. some reason SHow is scaling it probably due to autosizing.. can't turn off. force back
+            _cbdropdown.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);
         }
 
         private void _cbdropdown_Deactivate(object sender, EventArgs e)
