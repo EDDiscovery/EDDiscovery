@@ -78,6 +78,9 @@ namespace EDDiscovery.DB
                 if (dbver < 111)
                     UpgradeUserDB111(conn);
 
+                if (dbver < 112)
+                    UpgradeUserDB112(conn);
+
                 CreateUserDBTableIndexes(conn);
 
                 return true;
@@ -307,6 +310,13 @@ namespace EDDiscovery.DB
             string query3 = "ALTER TABLE MaterialsCommodities ADD COLUMN FDName TEXT NOT NULL COLLATE NOCASE DEFAULT ''";
             SQLiteDBClass.PerformUpgrade(conn, 111, true, false, new[] { query1, query2, query3 });
         }
+
+        private static void UpgradeUserDB112(SQLiteConnectionUser conn)
+        {
+            string query1 = "DELETE FROM MaterialsCommodities";     // To fix materialcompatibility wuth wrong tables in 5.0.x
+            SQLiteDBClass.PerformUpgrade(conn, 112, true, false, new[] { query1 });
+        }
+
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)
         {
