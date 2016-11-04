@@ -580,12 +580,6 @@ namespace EDDiscovery
 
         #region Clicks
 
-        public void CheckCommandersListBox()
-        {
-            if (comboBoxCommander.Items.Count - 1 != EDDConfig.Instance.ListOfCommanders.Count)       // account for hidden log
-                LoadCommandersListBox();
-        }
-
         public void LoadCommandersListBox()
         {
             comboBoxCommander.Enabled = false;
