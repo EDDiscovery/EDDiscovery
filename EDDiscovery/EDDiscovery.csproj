@@ -195,6 +195,12 @@
     <Compile Include="Controls\LabelExt.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\TabStrip.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TabStrip.Designer.cs">
+      <DependentUpon>TabStrip.cs</DependentUpon>
+    </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DB\MaterialCommodities.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
@@ -601,17 +607,17 @@
     <Compile Include="UserControls\UserControlLog.Designer.cs">
       <DependentUpon>UserControlLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlsLedger.cs">
+    <Compile Include="UserControls\UserControlLedger.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlsLedger.Designer.cs">
-      <DependentUpon>UserControlsLedger.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlLedger.Designer.cs">
+      <DependentUpon>UserControlLedger.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlsMaterialCommodities.cs">
+    <Compile Include="UserControls\UserControlMaterialCommodities.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlsMaterialCommodities.Designer.cs">
-      <DependentUpon>UserControlsMaterialCommodities.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlMaterialCommodities.Designer.cs">
+      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlStarDistance.cs">
       <SubType>UserControl</SubType>
@@ -633,6 +639,9 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Controls\TabStrip.resx">
+      <DependentUpon>TabStrip.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -645,11 +654,11 @@
     <EmbeddedResource Include="UserControls\UserControlLog.resx">
       <DependentUpon>UserControlLog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlsLedger.resx">
-      <DependentUpon>UserControlsLedger.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlLedger.resx">
+      <DependentUpon>UserControlLedger.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlsMaterialCommodities.resx">
-      <DependentUpon>UserControlsMaterialCommodities.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlMaterialCommodities.resx">
+      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
@@ -787,6 +796,7 @@
     <None Include="Resources\travelgrid.png" />
     <None Include="Resources\material.png" />
     <None Include="Resources\ledger.png" />
+    <None Include="Resources\journal.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

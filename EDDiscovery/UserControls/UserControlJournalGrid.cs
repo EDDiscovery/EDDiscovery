@@ -39,6 +39,7 @@ namespace EDDiscovery.UserControls
         public UserControlJournalGrid()
         {
             InitializeComponent();
+            Name = "Journal";
         }
 
         public void Init(EDDiscoveryForm form, int vn , bool showrefresh) //0=primary, 1 = first windowed version, etc

@@ -226,6 +226,16 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
+        public void GotoPosByJID(long jid )
+        {
+            int rowno = FindGridPosByJID(jid);
+            if (rowno >= 0)
+            {
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Information];
+                dataGridViewTravel.Rows[rowno].Selected = true;
+            }
+        }
+
         int FindGridPosByJID(long jid)
         {
             if (dataGridViewTravel.Rows.Count > 0 && jid != 0)

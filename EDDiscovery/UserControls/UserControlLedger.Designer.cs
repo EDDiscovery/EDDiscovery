@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery.UserControls
 {
-    partial class UserControlsLedger
+    partial class UserControlLedger
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,16 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.labelNoItems = new System.Windows.Forms.Label();
             this.dataGridViewLedger = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.buttonFilter = new ExtendedControls.ButtonExt();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -45,9 +39,19 @@
             this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonFilter = new ExtendedControls.ButtonExt();
+            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.panelButtons.SuspendLayout();
+            this.contextMenuStripLedger.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
@@ -87,6 +91,7 @@
             this.Debits,
             this.Balance,
             this.NormProfit});
+            this.dataGridViewLedger.ContextMenuStrip = this.contextMenuStripLedger;
             this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewLedger.Name = "dataGridViewLedger";
             this.dataGridViewLedger.RowHeadersVisible = false;
@@ -94,7 +99,56 @@
             this.dataGridViewLedger.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewLedger.TabIndex = 1;
             this.dataGridViewLedger.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewMC_ColumnWidthChanged);
+            this.dataGridViewLedger.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewLedger_MouseDown);
             this.dataGridViewLedger.Resize += new System.EventHandler(this.dataGridViewMC_Resize);
+            // 
+            // TimeCol
+            // 
+            this.TimeCol.HeaderText = "Time";
+            this.TimeCol.MinimumWidth = 50;
+            this.TimeCol.Name = "TimeCol";
+            this.TimeCol.ReadOnly = true;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.MinimumWidth = 50;
+            this.Type.Name = "Type";
+            this.Type.ReadOnly = true;
+            // 
+            // Notes
+            // 
+            this.Notes.HeaderText = "Notes";
+            this.Notes.MinimumWidth = 50;
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            // 
+            // Credits
+            // 
+            this.Credits.HeaderText = "Credits";
+            this.Credits.MinimumWidth = 50;
+            this.Credits.Name = "Credits";
+            this.Credits.ReadOnly = true;
+            // 
+            // Debits
+            // 
+            this.Debits.HeaderText = "Debits";
+            this.Debits.MinimumWidth = 50;
+            this.Debits.Name = "Debits";
+            this.Debits.ReadOnly = true;
+            // 
+            // Balance
+            // 
+            this.Balance.HeaderText = "Balance";
+            this.Balance.MinimumWidth = 50;
+            this.Balance.Name = "Balance";
+            this.Balance.ReadOnly = true;
+            // 
+            // NormProfit
+            // 
+            this.NormProfit.HeaderText = "Norm Profit";
+            this.NormProfit.MinimumWidth = 20;
+            this.NormProfit.Name = "NormProfit";
             // 
             // vScrollBarCustomMC
             // 
@@ -107,13 +161,13 @@
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 34);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 21);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 506);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 519);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -205,67 +259,34 @@
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // TimeCol
+            // contextMenuStripLedger
             // 
-            this.TimeCol.HeaderText = "Time";
-            this.TimeCol.MinimumWidth = 50;
-            this.TimeCol.Name = "TimeCol";
-            this.TimeCol.ReadOnly = true;
+            this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemGotoItem});
+            this.contextMenuStripLedger.Name = "contextMenuStripLedger";
+            this.contextMenuStripLedger.Size = new System.Drawing.Size(207, 26);
             // 
-            // Type
+            // toolStripMenuItemGotoItem
             // 
-            this.Type.HeaderText = "Type";
-            this.Type.MinimumWidth = 50;
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
+            this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
+            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
+            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
+            this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
             // 
-            // Notes
-            // 
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 50;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            // 
-            // Credits
-            // 
-            this.Credits.HeaderText = "Credits";
-            this.Credits.MinimumWidth = 50;
-            this.Credits.Name = "Credits";
-            this.Credits.ReadOnly = true;
-            // 
-            // Debits
-            // 
-            this.Debits.HeaderText = "Debits";
-            this.Debits.MinimumWidth = 50;
-            this.Debits.Name = "Debits";
-            this.Debits.ReadOnly = true;
-            // 
-            // Balance
-            // 
-            this.Balance.HeaderText = "Balance";
-            this.Balance.MinimumWidth = 50;
-            this.Balance.Name = "Balance";
-            this.Balance.ReadOnly = true;
-            // 
-            // NormProfit
-            // 
-            this.NormProfit.HeaderText = "Norm Profit";
-            this.NormProfit.MinimumWidth = 20;
-            this.NormProfit.Name = "NormProfit";
-            // 
-            // UserControlsLedger
+            // UserControlLedger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelButtons);
-            this.Name = "UserControlsLedger";
+            this.Name = "UserControlLedger";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             this.dataViewScrollerPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).EndInit();
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
+            this.contextMenuStripLedger.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -289,5 +310,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Debits;
         private System.Windows.Forms.DataGridViewTextBoxColumn Balance;
         private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
     }
 }

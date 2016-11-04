@@ -15,6 +15,7 @@ namespace EDDiscovery.UserControls
         public UserControlLog()
         {
             InitializeComponent();
+            Name = "Log";
         }
 
         public void AppendText(string s, Color c)

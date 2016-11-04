@@ -12,7 +12,7 @@ using EDDiscovery2.DB;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlsMaterialCommodities : UserControlCommonBase
+    public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
         public bool materials = false;
         private int displaynumber = 0;
@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
 
         #region Init
 
-        public UserControlsMaterialCommodities()
+        public UserControlMaterialCommodities()
         {
             InitializeComponent();
         }
@@ -303,17 +303,17 @@ namespace EDDiscovery.UserControls
         }
     }
 
-    public class UserControlsMaterials : UserControlsMaterialCommodities
+    public class UserControlMaterials : UserControlMaterialCommodities
     {
-        public UserControlsMaterials()
+        public UserControlMaterials()
         {
             materials = true;
         }
     }
 
-    public class UserControlsCommodities : UserControlsMaterialCommodities
+    public class UserControlCommodities : UserControlMaterialCommodities
     {
-        public UserControlsCommodities()
+        public UserControlCommodities()
         {
             materials = false;
         }

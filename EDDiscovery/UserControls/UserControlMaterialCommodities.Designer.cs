@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery.UserControls
 {
-    partial class UserControlsMaterialCommodities
+    partial class UserControlMaterialCommodities
     {
         /// <summary> 
         /// Required designer variable.
