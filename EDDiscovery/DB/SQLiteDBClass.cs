@@ -18,9 +18,16 @@ namespace EDDiscovery.DB
     public class SQLiteTxnLockED<TConn> : IDisposable
         where TConn : SQLiteConnectionED
     {
-        private static ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+        public static bool IsReadWaiting
+        {
+            get
+            {
+                return _lock.IsWriteLockHeld && _readsWaiting > 0;
+            }
+        }
+        private static ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private static SQLiteTxnLockED<TConn> _writeLockOwner;
-        private static Thread _writerThread;
+        private static int _readsWaiting;
         private Thread _owningThread;
         public DbCommand _executingCommand;
         public bool _commandExecuting = false;
@@ -28,11 +35,11 @@ namespace EDDiscovery.DB
         private string _commandText = null;
         private bool _longRunningLogged = false;
         private bool _isWriter = false;
+        private bool _isReader = false;
 
         #region Constructor and Destructor
-        public SQLiteTxnLockED(bool writer)
+        public SQLiteTxnLockED()
         {
-            _isWriter = writer;
             _owningThread = Thread.CurrentThread;
         }
 
@@ -106,37 +113,33 @@ namespace EDDiscovery.DB
 
         public void OpenReader()
         {
-            if (!_lock.IsReadLockHeld && !_lock.IsUpgradeableReadLockHeld)
+            if (_owningThread != Thread.CurrentThread)
             {
-                if (_lock.IsWriteLockHeld)
-                {
-                    throw new InvalidOperationException("New connection opened while write lock held");
-                }
+                throw new InvalidOperationException("Transaction lock passed between threads");
+            }
 
-                if (_isWriter)
+            if (!_lock.IsWriteLockHeld)
+            {
+                if (!_isReader)
                 {
-                    while (!_lock.TryEnterUpgradeableReadLock(1000))
+                    try
                     {
-                        SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
-                        if (lockowner != null)
+                        Interlocked.Increment(ref _readsWaiting);
+                        while (!_lock.TryEnterReadLock(1000))
                         {
-                            Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
-                            DebugLongRunningOperation(lockowner);
+                            SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
+                            if (lockowner != null)
+                            {
+                                Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
+                                DebugLongRunningOperation(lockowner);
+                            }
                         }
+
+                        _isReader = true;
                     }
-
-                    _writerThread = Thread.CurrentThread;
-                }
-                else
-                {
-                    while (!_lock.TryEnterReadLock(1000))
+                    finally
                     {
-                        SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
-                        if (lockowner != null)
-                        {
-                            Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
-                            DebugLongRunningOperation(lockowner);
-                        }
+                        Interlocked.Decrement(ref _readsWaiting);
                     }
                 }
             }
@@ -144,31 +147,55 @@ namespace EDDiscovery.DB
 
         public void OpenWriter()
         {
-            if (!_lock.IsWriteLockHeld)
+            if (_owningThread != Thread.CurrentThread)
             {
-                if (_lock.IsReadLockHeld)
-                {
-                    throw new InvalidOperationException("Write attempted in read-only connection");
-                }
+                throw new InvalidOperationException("Transaction lock passed between threads");
+            }
 
-                if (!_lock.IsUpgradeableReadLockHeld)
+            if (_lock.IsReadLockHeld)
+            {
+                throw new InvalidOperationException("Write attempted in read-only connection");
+            }
+
+            if (!_isWriter)
+            {
+                try
                 {
-                    while (!_lock.TryEnterUpgradeableReadLock(1000))
+                    if (!_lock.IsUpgradeableReadLockHeld)
                     {
-                        SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
-                        if (lockowner != null)
+                        while (!_lock.TryEnterUpgradeableReadLock(1000))
                         {
-                            Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
-                            DebugLongRunningOperation(lockowner);
+                            SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
+                            if (lockowner != null)
+                            {
+                                Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
+                                DebugLongRunningOperation(lockowner);
+                            }
                         }
+
+                        _isWriter = true;
+                        _writeLockOwner = this;
                     }
 
-                    _writerThread = Thread.CurrentThread;
+                    while (!_lock.TryEnterWriteLock(1000))
+                    {
+                        Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for readers to finish");
+                    }
                 }
-
-                while (!_lock.TryEnterWriteLock(1000))
+                catch
                 {
-                    Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for readers to finish");
+                    if (_isWriter)
+                    {
+                        if (_lock.IsWriteLockHeld)
+                        {
+                            _lock.ExitWriteLock();
+                        }
+
+                        if (_lock.IsUpgradeableReadLockHeld)
+                        {
+                            _lock.ExitUpgradeableReadLock();
+                        }
+                    }
                 }
             }
         }
@@ -178,6 +205,19 @@ namespace EDDiscovery.DB
             if (_lock.IsWriteLockHeld)
             {
                 _lock.ExitWriteLock();
+
+                if (!_lock.IsWriteLockHeld && _lock.IsUpgradeableReadLockHeld)
+                {
+                    _lock.ExitUpgradeableReadLock();
+                }
+            }
+        }
+
+        public void CloseReader()
+        {
+            if (_lock.IsReadLockHeld)
+            {
+                _lock.ExitReadLock();
             }
         }
 
@@ -202,19 +242,13 @@ namespace EDDiscovery.DB
             }
             else
             {
-                if (_lock.IsWriteLockHeld)
+                if (_isWriter)
                 {
-                    _lock.ExitWriteLock();
+                    CloseWriter();
                 }
-
-                if (_lock.IsUpgradeableReadLockHeld)
+                else if (_isReader)
                 {
-                    _lock.ExitUpgradeableReadLock();
-                }
-
-                if (_lock.IsReadLockHeld)
-                {
-                    _lock.ExitReadLock();
+                    CloseReader();
                 }
             }
         }
@@ -387,6 +421,12 @@ namespace EDDiscovery.DB
         public override void Close()
         {
             InnerReader.Close();
+
+            if (_txnlock != null)
+            {
+                _txnlock.CloseReader();
+                _txnlock = null;
+            }
         }
     }
 
@@ -432,34 +472,60 @@ namespace EDDiscovery.DB
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            return new SQLiteDataReaderED<TConn>(this.InnerCommand, behavior, txnlock: _txnlock);
+            _txnlock.OpenReader();
+            try
+            {
+                return new SQLiteDataReaderED<TConn>(this.InnerCommand, behavior, txnlock: _txnlock);
+            }
+            catch
+            {
+                _txnlock.CloseReader();
+                throw;
+            }
         }
 
         public override object ExecuteScalar()
         {
-            _txnlock.BeginCommand(this);
-            object result = InnerCommand.ExecuteScalar();
-            _txnlock.EndCommand();
-            return result;
+            try
+            {
+                _txnlock.OpenReader();
+                _txnlock.BeginCommand(this);
+                return InnerCommand.ExecuteScalar();
+            }
+            finally
+            {
+                _txnlock.EndCommand();
+                _txnlock.CloseReader();
+            }
         }
 
         public override int ExecuteNonQuery()
         {
             if (_transaction != null)
             {
-                _transaction.BeginCommand(this);
-                int result = InnerCommand.ExecuteNonQuery();
-                _transaction.EndCommand();
-                return result;
+                try
+                {
+                    _transaction.BeginCommand(this);
+                    return InnerCommand.ExecuteNonQuery();
+                }
+                finally
+                {
+                    _transaction.EndCommand();
+                }
             }
             else
             {
-                _txnlock.OpenWriter();
-                _txnlock.BeginCommand(this);
-                int result = InnerCommand.ExecuteNonQuery();
-                _txnlock.EndCommand();
-                _txnlock.CloseWriter();
-                return result;
+                try
+                {
+                    _txnlock.OpenWriter();
+                    _txnlock.BeginCommand(this);
+                    return InnerCommand.ExecuteNonQuery();
+                }
+                finally
+                {
+                    _txnlock.EndCommand();
+                    _txnlock.CloseWriter();
+                }
             }
         }
 

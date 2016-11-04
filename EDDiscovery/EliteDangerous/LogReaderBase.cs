@@ -37,7 +37,7 @@ namespace EDDiscovery
             this.TravelLogUnit = tlu;
         }
 
-        public bool ReadLine(out string line, Stream stream = null, bool ownstream = false)
+        public bool ReadLine<T>(out T line, Func<string, T> processor, Stream stream = null, bool ownstream = false)
         {
             // Initialize buffer if not yet allocated
             if (buffer == null)
@@ -83,10 +83,18 @@ namespace EDDiscovery
                             byte[] buf = new byte[endlinepos];
                             Buffer.BlockCopy(buffer, bufferpos, buf, 0, endlinepos);
                             bufferpos += linelen;
-                            TravelLogUnit.Size += linelen;
-                            line = System.Text.Encoding.UTF8.GetString(buf);
-
-                            return true;
+                            try
+                            {
+                                line = processor(System.Text.Encoding.UTF8.GetString(buf));
+                                TravelLogUnit.Size += linelen;
+                                return true;
+                            }
+                            catch
+                            {
+                                buffer = null;
+                                line = default(T);
+                                return false;
+                            }
                         }
                     }
 
@@ -118,7 +126,7 @@ namespace EDDiscovery
                             buffer = null;
                         }
 
-                        line = null;
+                        line = default(T);
                         return false;
                     }
 

@@ -934,13 +934,13 @@ namespace EDDiscovery2._3DMap
         // we rotate around the centre point. hoff/voff allows you to place the bitmap to the side
         public static Vector3[] GetVertices(Vector3 centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Matrix4 rm = Matrix4.Identity;
+            Matrix3 rm = Matrix3.Identity;
             if (rotationdeg.X != 0)
-                rm *= Matrix4.CreateRotationX((float)(rotationdeg.X * Math.PI / 180.0f));
+                rm *= Matrix3.CreateRotationX((float)(rotationdeg.X * Math.PI / 180.0f));
             if (rotationdeg.Y != 0)
-                rm *= Matrix4.CreateRotationY((float)(rotationdeg.Y * Math.PI / 180.0f));
+                rm *= Matrix3.CreateRotationY((float)(rotationdeg.Y * Math.PI / 180.0f));
             if (rotationdeg.Z != 0)
-                rm *= Matrix4.CreateRotationZ((float)(rotationdeg.Z * Math.PI / 180.0f));
+                rm *= Matrix3.CreateRotationZ((float)(rotationdeg.Z * Math.PI / 180.0f));
 
             width /= 2;
             height /= 2;
