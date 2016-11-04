@@ -18,5 +18,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool Stolen { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.collectcargo; } }
+
+        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, Type, 1, 0, conn);
+        }
+
+        public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            EDDiscovery2.DB.MaterialCommodities mc = mcl.GetMaterialCommodity(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, Type, conn);
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, mc.name + " " + mc.count.ToString());
+        }
+
     }
 }

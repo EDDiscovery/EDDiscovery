@@ -583,7 +583,7 @@ namespace EDDiscovery2
         public void SetCustom()
         { currentsettings.name = "Custom"; }                                // set so custom..
 
-        public void ApplyColors(Form form)
+        public void ApplyColors(Form form , Control startcontrol = null )
         {
             form.Opacity = currentsettings.formopacity / 100;
             form.BackColor = currentsettings.colors[Settings.CI.form];
@@ -597,8 +597,8 @@ namespace EDDiscovery2
             Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);
 
             foreach (Control c in form.Controls)
-                UpdateColorControls(form,c, fnt, 0);
-            
+                UpdateColorControls(form, c, fnt, 0);
+
             UpdateToolsTripRenderer();
         }
 
@@ -682,12 +682,7 @@ namespace EDDiscovery2
                     MyDgv.ScrollBar.FlatStyle = FlatStyle.Popup;
                 }
 
-                if (myControl.Name.Equals("richTextBox_History"))       // override to off
-                {
-                    MyDgv.BorderStyle = BorderStyle.None;
-                    MyDgv.BorderColor = Color.Transparent;
-                }
-                
+               
                 if (myControl.Font.Name.Contains("Courier"))                  // okay if we ordered a fixed font, don't override
                 {
                     Font fntf = new Font(myControl.Font.Name, currentsettings.fontsize); // make one of the selected size

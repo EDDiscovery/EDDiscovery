@@ -75,6 +75,9 @@ namespace EDDiscovery.DB
                 if (dbver < 110)
                     UpgradeUserDB110(conn);
 
+                if (dbver < 111)
+                    UpgradeUserDB111(conn);
+
                 CreateUserDBTableIndexes(conn);
 
                 return true;
@@ -295,7 +298,14 @@ namespace EDDiscovery.DB
             string query1 = "ALTER TABLE Commanders ADD COLUMN EdsmName TEXT";
             string query2 = "ALTER TABLE MaterialsCommodities ADD COLUMN ShortName TEXT NOT NULL COLLATE NOCASE DEFAULT ''";
             SQLiteDBClass.PerformUpgrade(conn, 110, true, false, new[] { query1, query2 });
-            EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();        // RUN again, will update shortname
+        }
+
+        private static void UpgradeUserDB111(SQLiteConnectionUser conn)
+        {
+            string query1 = "ALTER TABLE MaterialsCommodities ADD COLUMN Flags INT NOT NULL DEFAULT 0";     // flags
+            string query2 = "ALTER TABLE MaterialsCommodities ADD COLUMN Colour INT NOT NULL DEFAULT 15728640";     // ARGB
+            string query3 = "ALTER TABLE MaterialsCommodities ADD COLUMN FDName TEXT NOT NULL COLLATE NOCASE DEFAULT ''";
+            SQLiteDBClass.PerformUpgrade(conn, 111, true, false, new[] { query1, query2, query3 });
         }
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)
@@ -331,8 +341,8 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTypeId ON JournalEntries (EventTypeId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventType ON JournalEntries (EventType)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTime ON JournalEntries (EventTime)",
-                "CREATE INDEX IF NOT EXISTS MaterialsCommodities_ClassName ON MaterialsCommodities (Category,Name)",
-                "CREATE INDEX IF NOT EXISTS MaterialsCommodities_Name ON MaterialsCommodities (Name)",
+                "CREATE INDEX IF NOT EXISTS MaterialsCommodities_ClassName ON MaterialsCommodities (Name)",
+                "CREATE INDEX IF NOT EXISTS MaterialsCommodities_FDName ON MaterialsCommodities (FDName)",
             };
 
             foreach (string query in queries)

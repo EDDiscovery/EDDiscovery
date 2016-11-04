@@ -20,5 +20,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string System { get; set; }
         public long Reward { get; set; }
 
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + System, Reward);
+        }
+
     }
 }

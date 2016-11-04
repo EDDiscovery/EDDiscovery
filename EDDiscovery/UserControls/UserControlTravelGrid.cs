@@ -64,8 +64,6 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
-        bool ignorewidthchange = false;
-
         EventFilterSelector cfs = new EventFilterSelector();
 
         public UserControlTravelGrid()
@@ -77,8 +75,9 @@ namespace EDDiscovery.UserControls
         {
             discoveryform = form;
             displaynumber = vn;
+            cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave );
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
         }
 
         private void userControlTG_Load(object sender, EventArgs e)
@@ -89,85 +88,20 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            ignorewidthchange = true;
-
-            string root = DbColumnSave;
-
-            if (SQLiteConnectionUser.keyExists(root + "1"))        // if stored values, set back to what they were..
-            {
-                for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
-                {
-                    int w = SQLiteDBClass.GetSettingInt( root + ((i + 1).ToString()), -1);
-                    if (w > 10)        // in case something is up (min 10 pixels)
-                        dataGridViewTravel.Columns[i].Width = w;
-                }
-            }
-
-            FillDGVOut();
-
-            ignorewidthchange = false;
+            DGVLoadColumnLayout(dataGridViewTravel, DbColumnSave);
         }
 
         public override void SaveLayout()
         {
-            for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
-                SQLiteDBClass.PutSettingInt( DbColumnSave + ((i + 1).ToString()), dataGridViewTravel.Columns[i].Width);
+            DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
         }
 
         private void dataGridViewTravel_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            if (!ignorewidthchange)
-            {
-                ignorewidthchange = true;
-                FillDGVOut();       // scale out so its filled..
-                ignorewidthchange = false;
-            }
         }
 
         private void dataGridViewTravel_Resize(object sender, EventArgs e)
         {
-            ignorewidthchange = true;
-            FillDGVOut();
-            ignorewidthchange = false;
-        }
-
-        public void FillDGVOut()
-        {
-            int twidth = dataGridViewTravel.RowHeadersWidth;        // get how many pixels we are using..
-            for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
-                twidth += dataGridViewTravel.Columns[i].Width;
-
-            int delta = dataGridViewTravel.Width - twidth;
-
-            if (delta < 0)        // not enough space
-            {
-                Collapse(ref delta, TravelHistoryColumns.Note);         // pick columns on preference list to shrink
-                Collapse(ref delta, TravelHistoryColumns.Information);
-                Collapse(ref delta, TravelHistoryColumns.Time);
-                Collapse(ref delta, TravelHistoryColumns.Icon);
-                Collapse(ref delta, TravelHistoryColumns.Description);
-            }
-            else
-                dataGridViewTravel.Columns[TravelHistoryColumns.Note].Width += delta;   // note is used to fill out columns
-        }
-
-        private void Collapse(ref int delta, int col)
-        {
-            if (delta < 0)
-            {
-                int colsaving = dataGridViewTravel.Columns[col].Width - dataGridViewTravel.Columns[col].MinimumWidth;
-
-                if (-delta <= colsaving)       // if can save 30 from col3, and delta is -20, 20<=30, do it.
-                {
-                    dataGridViewTravel.Columns[col].Width += delta;
-                    delta = 0;
-                }
-                else
-                {
-                    delta += colsaving;
-                    dataGridViewTravel.Columns[col].Width = dataGridViewTravel.Columns[col].MinimumWidth;
-                }
-            }
         }
         
         #endregion
@@ -209,7 +143,7 @@ namespace EDDiscovery.UserControls
             else
                 rowno = -1;
 
-            currentGridRow = rowno; 
+            currentGridRow = rowno;
 
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
 
@@ -292,6 +226,16 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
+        public void GotoPosByJID(long jid )
+        {
+            int rowno = FindGridPosByJID(jid);
+            if (rowno >= 0)
+            {
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Information];
+                dataGridViewTravel.Rows[rowno].Selected = true;
+            }
+        }
+
         int FindGridPosByJID(long jid)
         {
             if (dataGridViewTravel.Rows.Count > 0 && jid != 0)
@@ -335,13 +279,29 @@ namespace EDDiscovery.UserControls
         {
             currentGridRow = e.RowIndex;
             if (OnChangedSelection != null)
-                OnChangedSelection(e.RowIndex, e.ColumnIndex,false, e.ColumnIndex == TravelHistoryColumns.Note);
+                OnChangedSelection(e.RowIndex, e.ColumnIndex, false, e.ColumnIndex == TravelHistoryColumns.Note);
         }
 
-        private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+
+        private void dataGridViewTravel_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (OnChangedSelection != null)
-                OnChangedSelection(e.RowIndex, e.ColumnIndex, true, e.ColumnIndex == TravelHistoryColumns.Note);
+            //System.Diagnostics.Debug.WriteLine("Cell Enter");
+
+            if ( cursorkeydown )
+            {
+                cursorkeydown = false;
+                currentGridRow = e.RowIndex;
+                if (OnChangedSelection != null)
+                    OnChangedSelection(e.RowIndex, e.ColumnIndex, false, e.ColumnIndex == TravelHistoryColumns.Note);
+            }
+
+        }
+
+        bool cursorkeydown = false;
+        private void dataGridViewTravel_KeyDown(object sender, KeyEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine("Key down " + e.KeyCode);
+            cursorkeydown = (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode==Keys.PageDown || e.KeyCode == Keys.PageUp);
         }
 
         public void UpdateCurrentNote(string s)
@@ -532,6 +492,7 @@ namespace EDDiscovery.UserControls
 
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+            removeJournalEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
@@ -802,10 +763,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                JournalEntry.Delete(rightclicksystem.Journalid);
+                discoveryform.RefreshHistoryAsync();
+            }
+        }
+
         #endregion
 
         #region Event Filter
-        
+
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;

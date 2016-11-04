@@ -37,6 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 {
                     JObject jo = new JObject();
                     jo["Name"] = i.Name;
+                    jo["Category"] = i.Category;
                     jo["Count"] = i.Count;
                     ja.Add(jo);
                 }
@@ -64,11 +65,27 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return evt.ToString();
         }
 
+        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            if (Materials != null)
+            {
+                foreach (MaterialItem m in Materials.Materials)
+                    mc.Set(m.Category, m.Name, m.Count, 0, conn);
+            }
+
+            if (Commodities != null)
+            {
+                foreach (CommodityItem m in Commodities.Commodities)
+                    mc.Set(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
+            }
+        }
+
     }
 
     public class MaterialItem
     {
         public string Name;
+        public string Category;
         public int Count;
     }
 
@@ -76,7 +93,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public string Name;
         public int Count;
-        public long BuyPrice;
+        public double BuyPrice;
     }
 
     public class MaterialList
@@ -93,7 +110,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public System.Collections.Generic.List<MaterialItem> Materials { get; protected set; }
 
-        public void Set(string name, int count)
+        public void Set(string cat, string name, int count)
         {
             if (Materials == null)
                 Materials = new System.Collections.Generic.List<MaterialItem>();
@@ -101,7 +118,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             int i = Materials.FindIndex(x => x.Name.Equals(name));
 
             if (i == -1)
-                Materials.Add(new MaterialItem { Name = name, Count = count });
+                Materials.Add(new MaterialItem { Category=cat, Name = name, Count = count });
             else
                 Materials[i].Count = count;
         }
@@ -122,7 +139,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public System.Collections.Generic.List<CommodityItem> Commodities { get; protected set; }
 
-        public void Set(string name, int count, long buyprice)
+        public void Set(string name, int count, double buyprice)
         {
             if (Commodities == null)
                 Commodities = new System.Collections.Generic.List<CommodityItem>();

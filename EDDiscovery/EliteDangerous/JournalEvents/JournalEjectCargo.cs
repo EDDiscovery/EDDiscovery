@@ -27,5 +27,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string PowerplayOrigin { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ejectcargo; } }
+
+        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, Type, -Count, 0, conn);
+        }
+
+        public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            EDDiscovery2.DB.MaterialCommodities mc = mcl.GetMaterialCommodity(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, Type, conn);
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, mc.name + " " + mc.count.ToString());
+        }
+
     }
 }

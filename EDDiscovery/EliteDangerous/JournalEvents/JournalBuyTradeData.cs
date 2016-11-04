@@ -22,5 +22,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Count { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.buytradedata; } }
+
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, System, -Cost);
+        }
+
     }
 }
