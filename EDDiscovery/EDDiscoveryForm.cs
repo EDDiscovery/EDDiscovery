@@ -1646,7 +1646,7 @@ namespace EDDiscovery
                     prev = he;
 
                     history.Add(he);                        // add to the history list here..
-                    
+
                     if (journalupdate)
                     {
                         jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
