@@ -47,6 +47,7 @@ namespace EDDiscovery
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
         public bool ISEDDNMessage { get { if (EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) return true; else return false; } }
 
+        public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
 
         // Calculated values, not from JE
 
@@ -220,8 +221,6 @@ namespace EDDiscovery
             if (he.StartMarker)
                 he.travelling = true;
 
-            he.materialscommodities = MaterialCommoditiesList.Process(je,prev?.materialscommodities);
-
             // WORK out docked/landed state
 
             if (prev != null)
@@ -246,6 +245,11 @@ namespace EDDiscovery
                 he.landed = (je as EliteDangerous.JournalEvents.JournalLoadGame).StartLanded;
 
             return he;
+        }
+
+        public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, SQLiteConnectionUser conn )      // called after above with a USER connection
+        {
+            materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn);
         }
 
         #endregion
@@ -329,7 +333,7 @@ namespace EDDiscovery
 
         public List<HistoryEntry> FilterByDate(TimeSpan days)
         {
-            var oldestData = DateTime.Now.Subtract(days);
+            var oldestData = DateTime.UtcNow.Subtract(days);
             return (from systems in historylist where systems.EventTimeUTC >= oldestData orderby systems.EventTimeUTC descending select systems).ToList();
         }
 
@@ -722,5 +726,6 @@ namespace EDDiscovery
                 return (from systems in he where systems.IsJournalEventInEventFilter(events) select systems).ToList();
             }
         }
+
     }
 }

@@ -59,10 +59,10 @@
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewJournal);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 34);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
             this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(804, 682);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(804, 684);
             this.dataViewScrollerPanel1.TabIndex = 7;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -83,7 +83,7 @@
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 661);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 663);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 7;
@@ -99,6 +99,7 @@
             // 
             this.dataGridViewJournal.AllowUserToAddRows = false;
             this.dataGridViewJournal.AllowUserToDeleteRows = false;
+            this.dataGridViewJournal.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewJournal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewJournal.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
@@ -110,7 +111,7 @@
             this.dataGridViewJournal.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewJournal.Name = "dataGridViewJournal";
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewJournal.Size = new System.Drawing.Size(784, 682);
+            this.dataGridViewJournal.Size = new System.Drawing.Size(784, 684);
             this.dataGridViewJournal.TabIndex = 0;
             this.dataGridViewJournal.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewJournal_ColumnHeaderMouseClick);
             this.dataGridViewJournal.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewJournal_ColumnWidthChanged);
@@ -124,7 +125,6 @@
             this.ColumnTime.MinimumWidth = 100;
             this.ColumnTime.Name = "ColumnTime";
             this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 140;
             // 
             // Event
             // 
@@ -132,7 +132,6 @@
             this.Event.MinimumWidth = 32;
             this.Event.Name = "Event";
             this.Event.ReadOnly = true;
-            this.Event.Width = 80;
             // 
             // ColumnType
             // 
@@ -147,7 +146,6 @@
             this.ColumnText.MinimumWidth = 100;
             this.ColumnText.Name = "ColumnText";
             this.ColumnText.ReadOnly = true;
-            this.ColumnText.Width = 700;
             // 
             // historyContextMenu
             // 
@@ -191,7 +189,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(804, 34);
+            this.panel1.Size = new System.Drawing.Size(804, 32);
             this.panel1.TabIndex = 8;
             // 
             // buttonRefresh
@@ -199,7 +197,7 @@
             this.buttonRefresh.BorderColorScaling = 1.25F;
             this.buttonRefresh.ButtonColorScaling = 0.5F;
             this.buttonRefresh.ButtonDisabledScaling = 0.5F;
-            this.buttonRefresh.Location = new System.Drawing.Point(560, 4);
+            this.buttonRefresh.Location = new System.Drawing.Point(532, 4);
             this.buttonRefresh.Name = "buttonRefresh";
             this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
             this.buttonRefresh.TabIndex = 3;
@@ -211,7 +209,7 @@
             // 
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
-            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
+            this.textBoxFilter.Location = new System.Drawing.Point(278, 6);
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
@@ -231,7 +229,7 @@
             this.buttonFilter.BorderColorScaling = 1.25F;
             this.buttonFilter.ButtonColorScaling = 0.5F;
             this.buttonFilter.ButtonDisabledScaling = 0.5F;
-            this.buttonFilter.Location = new System.Drawing.Point(458, 4);
+            this.buttonFilter.Location = new System.Drawing.Point(444, 4);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 4;
@@ -260,7 +258,7 @@
             this.comboBoxJournalWindow.SelectedIndex = -1;
             this.comboBoxJournalWindow.SelectedItem = null;
             this.comboBoxJournalWindow.SelectedValue = null;
-            this.comboBoxJournalWindow.Size = new System.Drawing.Size(94, 20);
+            this.comboBoxJournalWindow.Size = new System.Drawing.Size(94, 22);
             this.comboBoxJournalWindow.TabIndex = 0;
             this.comboBoxJournalWindow.ValueMember = "";
             this.comboBoxJournalWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxJournalWindow_SelectedIndexChanged);

@@ -237,5 +237,11 @@ namespace EDDiscovery
                    @"([a-z\d])([A-Z])", "$1 $2"), 
                    @"[-\s]", " ");
         }
+
+        public static string FDName(string normal)
+        {
+            string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
+            return n.ToLower();
+        }
     }
 }

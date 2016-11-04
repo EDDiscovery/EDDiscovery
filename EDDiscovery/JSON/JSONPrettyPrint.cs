@@ -17,6 +17,7 @@ namespace EDDiscovery
             TIndex,     // prepostindex "Prefix;postfix;index offset;value;value;value etc" 
             TLat,       // format as a lat 10 N/S degree 20'30. format can be empty or prefix;postfix as above
             TLong,      // format as a long 10 E/W degree 20'30. format can be empty or prefix;postfix as above
+            TMaterialCommodity, // see if the stupid fdname can be resolved to something better.  format can be empty or prefix;postfix as above
         };
 
         struct Converters
@@ -143,6 +144,16 @@ namespace EDDiscovery
                                 if (formatsplit.Length >= 2)
                                     value = formatsplit[0] + value + formatsplit[1];
                             }
+                            break;
+
+                        case Types.TMaterialCommodity:
+                            EDDiscovery2.DB.MaterialCommodities mc = EDDiscovery2.DB.MaterialCommodities.GetCachedMaterial(value);
+                            if (mc != null)
+                                value = mc.name;
+
+                            if (formatsplit.Length >= 2)
+                                value = formatsplit[0] + value + formatsplit[1];
+
                             break;
 
                         default:

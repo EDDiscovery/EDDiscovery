@@ -12,9 +12,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalUSSDrop(JObject evt ) : base(evt, JournalTypeEnum.USSDrop)
         {
             USSType = JSONHelper.GetStringDef(evt["USSType"]);
+            USSTypeLocalised = JSONHelper.GetStringDef(evt["USSType_Localised"]);
             USSThreat = JSONHelper.GetInt(evt["USSThreat"]);
         }
         public string USSType { get; set; }
         public int USSThreat { get; set; }
+        public string USSTypeLocalised { get; set; }
     }
 }

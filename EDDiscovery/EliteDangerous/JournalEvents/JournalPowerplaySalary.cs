@@ -18,5 +18,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Amount { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplaysalary; } }
+
+        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Power, Amount);
+        }
+
     }
 }

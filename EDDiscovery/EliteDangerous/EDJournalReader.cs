@@ -84,8 +84,18 @@ namespace EDDiscovery.EliteDangerous
 
                 EDCommander _commander = EDDiscovery2.EDDConfig.Instance.ListOfCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
 
-                if (_commander == null)
-                    _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);
+                if (_commander == null )
+                {
+                    if (EDDiscovery2.EDDConfig.Instance.ListOfCommanders.Count == 1 && EDDiscovery2.EDDConfig.Instance.ListOfCommanders[0].Name == "Jameson (Default)" )
+                    {
+                        EDDiscovery2.EDDConfig.Instance.ListOfCommanders[0].Name = newname;
+                        EDDiscovery2.EDDConfig.Instance.ListOfCommanders[0].EdsmName = newname;
+                        EDDiscovery2.EDDConfig.Instance.UpdateCommanders(EDDiscovery2.EDDConfig.Instance.ListOfCommanders); // replaces it
+                    }
+                    else
+                        _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);
+
+                }
 
                 cmdrid = _commander.Nr;
 

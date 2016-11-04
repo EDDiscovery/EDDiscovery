@@ -17,7 +17,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             FromSlot = JSONHelper.GetStringDef(evt["FromSlot"]);
             ToSlot = JSONHelper.GetStringDef(evt["ToSlot"]);
             FromItem = JSONHelper.GetStringDef(evt["FromItem"]);
+            FromItemLocalised = JSONHelper.GetStringDef(evt["FromItem_Localised"]);
             ToItem = JSONHelper.GetStringDef(evt["ToItem"]);
+            ToItemLocalised = JSONHelper.GetStringDef(evt["ToItem_Localised"]);
             Ship = JSONHelper.GetStringDef(evt["Ship"]);
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
 
@@ -25,7 +27,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string FromSlot { get; set; }
         public string ToSlot { get; set; }
         public string FromItem { get; set; }
+        public string FromItemLocalised { get; set; }
         public string ToItem { get; set; }
+        public string ToItemLocalised { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
 
