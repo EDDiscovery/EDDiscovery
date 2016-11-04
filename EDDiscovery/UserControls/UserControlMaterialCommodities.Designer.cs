@@ -184,7 +184,7 @@
             this.comboBoxCustomAdd.DisplayMember = "";
             this.comboBoxCustomAdd.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomAdd.DropDownHeight = 106;
-            this.comboBoxCustomAdd.DropDownWidth = 147;
+            this.comboBoxCustomAdd.DropDownWidth = 1;
             this.comboBoxCustomAdd.Enabled = false;
             this.comboBoxCustomAdd.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomAdd.ItemHeight = 13;
@@ -230,13 +230,13 @@
             this.buttonExtModify.UseVisualStyleBackColor = true;
             this.buttonExtModify.Click += new System.EventHandler(this.buttonExtModify_Click);
             // 
-            // UserControlsMaterialCommodities
+            // UserControlMaterialCommodities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelButtons);
-            this.Name = "UserControlsMaterialCommodities";
+            this.Name = "UserControlMaterialCommodities";
             this.Size = new System.Drawing.Size(704, 564);
             this.dataViewScrollerPanel.ResumeLayout(false);
             this.dataViewScrollerPanel.PerformLayout();

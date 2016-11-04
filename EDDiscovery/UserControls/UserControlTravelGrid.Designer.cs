@@ -127,7 +127,7 @@
             this.comboBoxHistoryWindow.DisplayMember = "";
             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxHistoryWindow.DropDownHeight = 200;
-            this.comboBoxHistoryWindow.DropDownWidth = 94;
+            this.comboBoxHistoryWindow.DropDownWidth = 1;
             this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxHistoryWindow.ItemHeight = 13;
             this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
