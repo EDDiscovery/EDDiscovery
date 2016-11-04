@@ -1717,7 +1717,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    travelHistoryControl1.CheckCommandersListBox();             // in case a new commander has been detected
+                    travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
                     settings.UpdateCommandersListBox();
 
                     history.Clear();
@@ -1796,7 +1796,7 @@ namespace EDDiscovery
                 journalViewControl1.AddNewEntry(he);
             }
 
-            travelHistoryControl1.CheckCommandersListBox();
+            travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
             settings.UpdateCommandersListBox();
         }
 

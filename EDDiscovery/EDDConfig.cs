@@ -311,7 +311,7 @@ namespace EDDiscovery2
                 LoadCommanders();
 
                 if (ListOfCommanders.Count == 0 )
-                    GetNewCommander();
+                    GetNewCommander("Jameson (Default)");
 
                 int activecommander = SQLiteDBClass.GetSettingInt("ActiveCommander", 0);
 
