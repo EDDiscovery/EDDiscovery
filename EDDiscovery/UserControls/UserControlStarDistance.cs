@@ -17,6 +17,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlStarDistance : UserControlCommonBase
     {
+        EDDiscoveryForm _discoveryForm;
+
         public UserControlStarDistance()
         {
             InitializeComponent();
@@ -29,30 +31,6 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout() { }
         public override void SaveLayout() { }
-
-        public void StartComputeThread()
-        {
-            closestthread = new Thread(CalculateClosestSystems) { Name = "Closest Calc", IsBackground = true };
-            closestthread.Start();
-        }
-
-        public void StopComputeThread()
-        {
-            if (closestthread != null && closestthread.IsAlive)
-            {
-                ShutdownEDD = true;
-                closestsystem_queue.Add(null);
-                closestthread.Join();
-            }
-        }
-
-        public void Add( ISystem s )
-        {
-            closestsystem_queue.Add(s);
-        }
-
-        public delegate void NewStarList(string name, SortedList<double, ISystem> csl);
-        public event NewStarList OnNewStarList;
 
         public void FillGrid(string name, SortedList<double, ISystem> csl)
         {
@@ -70,69 +48,6 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-        }
-
-        #region Internals
-
-        EDDiscoveryForm _discoveryForm;
-        bool ShutdownEDD = false;
-        Thread closestthread = null;
-        BlockingCollection<ISystem> closestsystem_queue = new BlockingCollection<ISystem>();
-        SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
-
-        private void CalculateClosestSystems()
-        {
-            ISystem vsc;
-
-            while (true)
-            {
-                ISystem nextsys = null;
-                ISystem cursys = null;
-                cursys = closestsystem_queue.Take();           // block until got one..
-
-                closestsystemlist.Clear();
-
-                do
-                {
-                    vsc = cursys;
-
-                    if (ShutdownEDD)
-                        return;
-
-                    while (closestsystem_queue.TryTake(out nextsys))    // try and empty the queue in case multiple ones are there
-                    {
-                        //Console.WriteLine("Chuck " + closestname);
-                        vsc = nextsys;
-
-                        if (ShutdownEDD)
-                            return;
-                    }
-
-                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, vsc.x, vsc.y, vsc.z, 50, true, 1000);
-
-                    Invoke((MethodInvoker)delegate      // being paranoid about threads..
-                    {
-                        _discoveryForm.history.CalculateSqDistances(closestsystemlist, vsc.x, vsc.y, vsc.z, 50, true);
-                    });
-
-                    cursys = vsc;
-                } while (closestsystem_queue.TryTake(out vsc));     // if there is another one there, just re-run (slow down doggy!)
-
-                Invoke((MethodInvoker)delegate
-                {
-                    if ( OnNewStarList!=null )
-                        OnNewStarList(cursys.name, closestsystemlist);
-                });
-            }
-        }
-
-        private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
-        {
-            public int Compare(TKey x, TKey y)
-            {
-                int result = x.CompareTo(y);
-                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
-            }
         }
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -174,7 +89,102 @@ namespace EDDiscovery.UserControls
 
             this.Cursor = Cursors.Default;
         }
+    }
 
-        #endregion
+    public class ComputeStarDistance       // only from Control for the invoke
+    {
+        public ComputeStarDistance()
+        {
+        }
+
+        public void Init(EDDiscoveryForm form)
+        {
+            _discoveryForm = form;
+        }
+
+
+        public void StartComputeThread()
+        {
+            closestthread = new Thread(CalculateClosestSystems) { Name = "Closest Calc", IsBackground = true };
+            closestthread.Start();
+        }
+
+        public void StopComputeThread()
+        {
+            if (closestthread != null && closestthread.IsAlive)
+            {
+                ShutdownEDD = true;
+                closestsystem_queue.Add(null);
+                closestthread.Join();
+            }
+        }
+
+        public void Add(ISystem s)
+        {
+            closestsystem_queue.Add(s);
+        }
+
+        public delegate void OtherStarDistances(SortedList<double, ISystem> closestsystemlist, ISystem vsc);
+        public event OtherStarDistances OnOtherStarDistances;
+        
+        public delegate void NewStarList(string name, SortedList<double, ISystem> csl);
+        public event NewStarList OnNewStarList;
+
+        EDDiscoveryForm _discoveryForm;
+        bool ShutdownEDD = false;
+        Thread closestthread = null;
+        BlockingCollection<ISystem> closestsystem_queue = new BlockingCollection<ISystem>();
+        SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+
+        private void CalculateClosestSystems()
+        {
+            ISystem vsc;
+
+            while (true)
+            {
+                ISystem nextsys = null;
+                ISystem cursys = null;
+                cursys = closestsystem_queue.Take();           // block until got one..
+
+                closestsystemlist.Clear();
+
+                do
+                {
+                    vsc = cursys;
+
+                    if (ShutdownEDD)
+                        return;
+
+                    while (closestsystem_queue.TryTake(out nextsys))    // try and empty the queue in case multiple ones are there
+                    {
+                        //Console.WriteLine("Chuck " + closestname);
+                        vsc = nextsys;
+
+                        if (ShutdownEDD)
+                            return;
+                    }
+
+                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, vsc.x, vsc.y, vsc.z, 50, true, 1000);
+
+                    if ( OnOtherStarDistances!=null)
+                        OnOtherStarDistances(closestsystemlist, vsc);
+
+                    cursys = vsc;
+                } while (closestsystem_queue.TryTake(out vsc));     // if there is another one there, just re-run (slow down doggy!)
+
+                if (OnNewStarList != null)
+                    OnNewStarList(cursys.name, closestsystemlist);
+            }
+        }
+
+        private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
+        {
+            public int Compare(TKey x, TKey y)
+            {
+                int result = x.CompareTo(y);
+                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
+            }
+        }
+
     }
 }

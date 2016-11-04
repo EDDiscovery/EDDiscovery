@@ -24,9 +24,11 @@ namespace EDDiscovery.UserControls
             {
                 for (int i = 0; i < dgv.Columns.Count; i++)
                 {
-                    int w = SQLiteDBClass.GetSettingInt(root + ((i + 1).ToString()), -1);
+                    string k = root + (i + 1).ToString();
+                    int w = SQLiteDBClass.GetSettingInt(k, -1);
                     if (w >= 10)        // in case something is up (min 10 pixels)
                         dgv.Columns[i].Width = w;
+                    //System.Diagnostics.Debug.WriteLine("Load {0} {1} {2} {3}", Name, k, w, dgv.Columns[i].Width);
                 }
             }
         }
@@ -35,7 +37,9 @@ namespace EDDiscovery.UserControls
         {
             for (int i = 0; i < dgv.Columns.Count; i++)
             {
-                SQLiteDBClass.PutSettingInt(root + ((i + 1).ToString()), dgv.Columns[i].Width);
+                string k = root + (i + 1).ToString();
+                SQLiteDBClass.PutSettingInt(k, dgv.Columns[i].Width);
+                //System.Diagnostics.Debug.WriteLine("Save {0} {1} {2}", Name, k, dgv.Columns[i].Width);
             }
         }
 

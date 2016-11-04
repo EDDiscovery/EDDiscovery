@@ -35,8 +35,11 @@ namespace EDDiscovery
 
         Forms.UserControlFormList usercontrolsforms;
 
+        ComputeStarDistance csd = new ComputeStarDistance();
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
+
+        string logtext = "";     // to keep in case of no logs..
 
         public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
@@ -58,79 +61,133 @@ namespace EDDiscovery
             LoadCommandersListBox();
 
             comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.Items.AddRange(new string[] { "Pop Out", "Travel Grid", "Journal", "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" });
+
+            Bitmap[] bm = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // 1
+                                        EDDiscovery.Properties.Resources.star,      // 2
+                                        EDDiscovery.Properties.Resources.material , // 3
+                                        EDDiscovery.Properties.Resources.commodities, // 4
+                                        EDDiscovery.Properties.Resources.ledger , //5 
+                                        EDDiscovery.Properties.Resources.journal , //6
+                                        EDDiscovery.Properties.Resources.travelgrid , //7 
+                                        };
+
+            comboBoxCustomPopOut.Items.AddRange(new string[] { "Pop Out", "Log", "Nearest Stars" , "Materials",
+                                            "Commodities" , "Ledger" , "Journal", "Travel Grid" });
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
             userControlTravelGrid.Init(_discoveryForm,0);       // primary first instance
             userControlTravelGrid.OnChangedSelection += ChangedSelection;
             userControlTravelGrid.OnResort += Resort;
+            
+            tabStripBottomRight.Images = tabStripMiddleRight.Images = tabStripBottom.Images = bm;
+            tabStripBottom.Tag = 1000;             // these are IDs for purposes of identifying different instances of a control.. 0 = main ones (main travel grid, main tab journal). 1..N are popups
+            tabStripBottomRight.Tag = 1001;
+            tabStripMiddleRight.Tag = 1002;         
+            tabStripBottom.OnRemoving += TabRemoved;
+            tabStripBottomRight.OnRemoving += TabRemoved;
+            tabStripMiddleRight.OnRemoving += TabRemoved;
+            tabStripBottom.OnCreateTab += TabCreate;
+            tabStripBottomRight.OnCreateTab += TabCreate;
+            tabStripMiddleRight.OnCreateTab += TabCreate;
 
-            // This one is the master computer of star distances, the other windows just use its results..
-
-            userControlStarDistanceBottomRight.Init(_discoveryForm);
-            userControlStarDistanceBottomRight.OnNewStarList += NewStarListComputed;
-            userControlStarDistanceBottomRight.StartComputeThread();
-
-            // Secondary star lists.. the compute engine is not used in this one
-
-            userControlStarDistanceBottom.Init(_discoveryForm);
-            userControlStarDistanceMiddleRight.Init(_discoveryForm);
-
-            // Materials/Comm bottom
-
-            userControlsMaterialBottom.Init(0);
-            userControlsMaterialBottom.OnChangedCount += MaterialCommodityChangeCount;
-            userControlsMaterialBottom.OnRequestRefresh += MaterialCommodityRequireRefresh;
-
-            userControlsCommoditiesBottom.Init(0);
-            userControlsCommoditiesBottom.OnChangedCount += MaterialCommodityChangeCount;
-            userControlsCommoditiesBottom.OnRequestRefresh += MaterialCommodityRequireRefresh;
-
-            // Bottom Journal..
-
-            userControlJournalGridBottom.Init(_discoveryForm, 1000 , false);                            // use 1000. 0 is the journal main tab, 1..N are popups
-
-            // Bottom Ledger
-
-            userControlsLedgerBottom.Init(_discoveryForm,0);
-
-            // Other stuff
+            csd.Init(_discoveryForm);
+            csd.OnOtherStarDistances += OtherStarDistances;
+            csd.OnNewStarList += NewStarListComputed;
+            csd.StartComputeThread();
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
+        }
 
-            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.Log);
-            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.star);           // DONT use the dialog method, add it programatically, since we can't point at resources using the dialog
-            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.travelgrid);
-            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.material);
-            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.commodities);
-            imageListIcons.Images.Add(EDDiscovery.Properties.Resources.ledger);
+        void TabRemoved(TabStrip t, Control c )     // called by tab strip when a control is removed
+        {
+            UserControlCommonBase uccb = c as UserControlCommonBase;
+            uccb.SaveLayout();
+        }
 
-            int imgindex = 0;
-            foreach (TabPage pg in tabControlBottom.TabPages)
+        Control TabCreate(TabStrip t, int i )        // called by tab strip when selected index changes
+        {   
+            int displaynumber = (int)t.Tag;         // tab strip - use tag to remember display id which helps us save context.
+            i++;                                    // to make them the same numbers as the pop out
+
+            if (i == 1)
             {
-                pg.Text = "";
-                pg.ImageIndex = imgindex++;
+                UserControlLog sc = new UserControlLog();
+                sc.Text = "Log";
+                sc.AppendText(logtext, _discoveryForm.theme.TextBackColor);
+                _discoveryForm.theme.UpdateColorControls(this.FindForm(), sc, this.FindForm().Font, 0);
+                return sc;
             }
-
+            else if (i == 2)
+            {
+                UserControlStarDistance sc = new UserControlStarDistance();
+                sc.Text = "Stars";
+                sc.Init(_discoveryForm);
+                if (lastclosestsystems != null)           // if we have some, fill in this grid
+                    sc.FillGrid(lastclosestname, lastclosestsystems);
+                _discoveryForm.theme.UpdateColorControls(this.FindForm(), sc, this.FindForm().Font, 0);
+                return sc;
+            }
+            else if (i == 3)
+            {
+                UserControlMaterials ucm = new UserControlMaterials();
+                ucm.OnChangedCount += MaterialCommodityChangeCount;
+                ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
+                ucm.Init(displaynumber);
+                ucm.LoadLayout();
+                ucm.Text = "Materials";
+                if (userControlTravelGrid.GetCurrentHistoryEntry != null)
+                    ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(false));
+                _discoveryForm.theme.UpdateColorControls(this.FindForm(), ucm, this.FindForm().Font, 0);
+                return ucm;
+            }
+            else if (i == 4)
+            {
+                UserControlCommodities ucm = new UserControlCommodities();
+                ucm.Init(displaynumber);
+                ucm.OnChangedCount += MaterialCommodityChangeCount;
+                ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
+                ucm.LoadLayout();
+                ucm.Text = "Commodities";
+                if (userControlTravelGrid.GetCurrentHistoryEntry != null)
+                    ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(true));
+                _discoveryForm.theme.UpdateColorControls(this.FindForm(), ucm, this.FindForm().Font, 0);
+                return ucm;
+            }
+            else if (i == 5)
+            {
+                UserControlLedger ucm = new UserControlLedger();
+                ucm.Init(_discoveryForm, displaynumber);
+                ucm.LoadLayout();
+                ucm.Text = "Ledger";
+                ucm.OnGotoJID += GotoJID;
+                ucm.Display(_discoveryForm.history.materialcommodititiesledger);
+                _discoveryForm.theme.UpdateColorControls(this.FindForm(), ucm, this.FindForm().Font, 0);
+                return ucm;
+            }
+            else if ( i == 6)
+            {
+                UserControlJournalGrid ucm = new UserControlJournalGrid();
+                ucm.Init(_discoveryForm, displaynumber, false);
+                ucm.LoadLayout();
+                ucm.Text = "Journal";
+                ucm.Display(_discoveryForm.history);
+                _discoveryForm.theme.UpdateColorControls(this.FindForm(), ucm, this.FindForm().Font, 0);
+                return ucm;
+            }
+            else 
+            {
+                UserControlTravelGrid ucm = new UserControlTravelGrid();
+                ucm.Init(_discoveryForm, displaynumber);
+                ucm.LoadLayout();
+                ucm.Text = "History";
+                ucm.Display(_discoveryForm.history);
+                _discoveryForm.theme.UpdateColorControls(this.FindForm(), ucm, this.FindForm().Font, 0);
+                return ucm;
+            }
         }
-
-        void MaterialCommodityChangeCount(List<MaterialCommodities> changelist)
-        {
-            HistoryEntry he = userControlTravelGrid.GetCurrentHistoryEntry;
-            JournalEntry.AddEDDItemSet(EDDiscoveryForm.EDDConfig.CurrentCommander.Nr,he.EventTimeUTC, (he.EntryType == JournalTypeEnum.EDDItemSet) ? he.Journalid : 0 ,  changelist);
-            MaterialCommodities.LoadCacheList();        // in case we did anything..
-            _discoveryForm.RefreshHistoryAsync();
-        }
-
-        void MaterialCommodityRequireRefresh()
-        {
-            MaterialCommodities.LoadCacheList();        // in case we did anything..
-            _discoveryForm.RefreshHistoryAsync();
-        }
-
 
         private void panel_topright_Resize(object sender, EventArgs e)
         {
@@ -219,47 +276,96 @@ namespace EDDiscovery
             panelTarget.Height = textBoxTargetDist.Location.Y + textBoxTargetDist.Height + 6;
         }
 
+        void GotoJID(long v)
+        {
+            userControlTravelGrid.GotoPosByJID(v);
+        }
+
         #endregion
 
         #region New Stars
 
-        private void NewStarListComputed(string name, SortedList<double, ISystem> csl)
+        private void OtherStarDistances(SortedList<double, ISystem> closestsystemlist, ISystem vsc )       // on thread..
         {
-            lastclosestname = name;
-            lastclosestsystems = csl;
-            userControlStarDistanceBottomRight.FillGrid(name, csl);
-            userControlStarDistanceBottom.FillGrid(name, csl);
-            userControlStarDistanceMiddleRight.FillGrid(name, csl);
+            Invoke((MethodInvoker)delegate      // being paranoid about threads..
+            {
+                _discoveryForm.history.CalculateSqDistances(closestsystemlist, vsc.x, vsc.y, vsc.z, 50, true);
+            });
+        }
 
-            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlStarDistance)))
-                ((UserControls.UserControlStarDistance)uc).FillGrid(name, csl);
+        private void NewStarListComputed(string name, SortedList<double, ISystem> csl)      // thread..
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                lastclosestname = name;
+                lastclosestsystems = csl;
+                if (tabStripBottom.CurrentControl is UserControlStarDistance)
+                    ((UserControlStarDistance)tabStripBottom.CurrentControl).FillGrid(name, csl);
+                if (tabStripBottomRight.CurrentControl is UserControlStarDistance)
+                    ((UserControlStarDistance)tabStripBottomRight.CurrentControl).FillGrid(name, csl);
+                if (tabStripMiddleRight.CurrentControl is UserControlStarDistance)
+                    ((UserControlStarDistance)tabStripMiddleRight.CurrentControl).FillGrid(name, csl);
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlStarDistance)))
+                    ((UserControlStarDistance)uc).FillGrid(name, csl);
+            });
         }
 
         public void CloseClosestSystemThread()
         {
-            userControlStarDistanceBottomRight.StopComputeThread();
+            csd.StopComputeThread();
         }
 
         #endregion
 
+        #region Material Commodities changers
+
+        void MaterialCommodityChangeCount(List<MaterialCommodities> changelist)
+        {
+            HistoryEntry he = userControlTravelGrid.GetCurrentHistoryEntry;
+            JournalEntry.AddEDDItemSet(EDDiscoveryForm.EDDConfig.CurrentCommander.Nr, he.EventTimeUTC, (he.EntryType == JournalTypeEnum.EDDItemSet) ? he.Journalid : 0, changelist);
+            MaterialCommodities.LoadCacheList();        // in case we did anything..
+            _discoveryForm.RefreshHistoryAsync();
+        }
+
+        void MaterialCommodityRequireRefresh()
+        {
+            MaterialCommodities.LoadCacheList();        // in case we did anything..
+            _discoveryForm.RefreshHistoryAsync();
+        }
+
+        #endregion
+        
         #region Display history
 
         public void Display()
         {
             userControlTravelGrid.Display(_discoveryForm.history);
+            if (tabStripBottom.CurrentControl is UserControlTravelGrid)
+                ((UserControlTravelGrid)tabStripBottom.CurrentControl).Display(_discoveryForm.history);
+            if (tabStripBottomRight.CurrentControl is UserControlTravelGrid)
+                ((UserControlTravelGrid)tabStripBottomRight.CurrentControl).Display(_discoveryForm.history);
+            if (tabStripMiddleRight.CurrentControl is UserControlTravelGrid)
+                ((UserControlTravelGrid)tabStripMiddleRight.CurrentControl).Display(_discoveryForm.history);
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlTravelGrid)))
+                ((UserControlTravelGrid)uc).Display(_discoveryForm.history);
 
-            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
-                ((UserControls.UserControlTravelGrid)uc).Display(_discoveryForm.history);
+            if (tabStripBottom.CurrentControl is UserControlJournalGrid)
+                ((UserControlJournalGrid)tabStripBottom.CurrentControl).Display(_discoveryForm.history);
+            if (tabStripBottomRight.CurrentControl is UserControlJournalGrid)
+                ((UserControlJournalGrid)tabStripBottomRight.CurrentControl).Display(_discoveryForm.history);
+            if (tabStripMiddleRight.CurrentControl is UserControlJournalGrid)
+                ((UserControlJournalGrid)tabStripMiddleRight.CurrentControl).Display(_discoveryForm.history);
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlJournalGrid)))
+                ((UserControlJournalGrid)uc).Display(_discoveryForm.history);
 
-            userControlJournalGridBottom.Display(_discoveryForm.history);
-
-            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlJournalGrid)))
-                ((UserControls.UserControlJournalGrid)uc).Display(_discoveryForm.history);
-
-            userControlsLedgerBottom.Display(_discoveryForm.history.materialcommodititiesledger);
-
-            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsLedger)))
-                ((UserControls.UserControlsLedger)uc).Display(_discoveryForm.history.materialcommodititiesledger);      // and the journal views need it
+            if (tabStripBottom.CurrentControl is UserControlLedger)
+                ((UserControlLedger)tabStripBottom.CurrentControl).Display(_discoveryForm.history.materialcommodititiesledger);
+            if (tabStripBottomRight.CurrentControl is UserControlLedger)
+                ((UserControlLedger)tabStripBottomRight.CurrentControl).Display(_discoveryForm.history.materialcommodititiesledger);
+            if (tabStripMiddleRight.CurrentControl is UserControlLedger)
+                ((UserControlLedger)tabStripMiddleRight.CurrentControl).Display(_discoveryForm.history.materialcommodititiesledger);
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlLedger)))
+                ((UserControlLedger)uc).Display(_discoveryForm.history.materialcommodititiesledger);
 
             ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
             RedrawSummary();
@@ -308,16 +414,33 @@ namespace EDDiscovery
                     }
                 }
 
-                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
-                    ((UserControls.UserControlTravelGrid)uc).AddNewEntry(he);       // update these as well..
+                if (tabStripBottom.CurrentControl is UserControlTravelGrid)
+                    ((UserControlTravelGrid)tabStripBottom.CurrentControl).AddNewEntry(he);
+                if (tabStripBottomRight.CurrentControl is UserControlTravelGrid)
+                    ((UserControlTravelGrid)tabStripBottomRight.CurrentControl).AddNewEntry(he);
+                if (tabStripMiddleRight.CurrentControl is UserControlTravelGrid)
+                    ((UserControlTravelGrid)tabStripMiddleRight.CurrentControl).AddNewEntry(he);
 
-                userControlJournalGridBottom.AddNewEntry(he);
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlTravelGrid)))
+                    ((UserControlTravelGrid)uc).AddNewEntry(he);       // update these as well..
 
-                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlJournalGrid)))
-                    ((UserControls.UserControlJournalGrid)uc).AddNewEntry(he);      // and the journal views need it
+                if (tabStripBottom.CurrentControl is UserControlJournalGrid)
+                    ((UserControlJournalGrid)tabStripBottom.CurrentControl).AddNewEntry(he);
+                if (tabStripBottomRight.CurrentControl is UserControlJournalGrid)
+                    ((UserControlJournalGrid)tabStripBottomRight.CurrentControl).AddNewEntry(he);
+                if (tabStripMiddleRight.CurrentControl is UserControlJournalGrid)
+                    ((UserControlJournalGrid)tabStripMiddleRight.CurrentControl).AddNewEntry(he);
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlJournalGrid)))
+                    ((UserControlJournalGrid)uc).AddNewEntry(he);      // and the journal views need it
 
-                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsLedger)))
-                    ((UserControls.UserControlsLedger)uc).Display(_discoveryForm.history.materialcommodititiesledger);      // and the journal views need it
+                if (tabStripBottom.CurrentControl is UserControlLedger)
+                    ((UserControlLedger)tabStripBottom.CurrentControl).Display(_discoveryForm.history.materialcommodititiesledger);
+                if (tabStripBottomRight.CurrentControl is UserControlLedger)
+                    ((UserControlLedger)tabStripBottomRight.CurrentControl).Display(_discoveryForm.history.materialcommodititiesledger);
+                if (tabStripMiddleRight.CurrentControl is UserControlLedger)
+                    ((UserControlLedger)tabStripMiddleRight.CurrentControl).Display(_discoveryForm.history.materialcommodititiesledger);
+                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlLedger)))
+                    ((UserControlLedger)uc).Display(_discoveryForm.history.materialcommodititiesledger);      // and the journal views need it
             }
             catch (Exception ex)
             {
@@ -329,20 +452,15 @@ namespace EDDiscovery
 
         public void ShowSystemInformation(DataGridViewRow rw)
         {
+            List<MaterialCommodities> matres = null;
+            List<MaterialCommodities> comres = null;
+
             if (rw == null)
             {
                 textBoxSystem.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
                 textBoxVisits.Text = textBoxState.Text = textBoxSolDist.Text = richTextBoxNote.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
-
-                userControlsMaterialBottom.Display(null);
-                userControlsCommoditiesBottom.Display(null);
-
-                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsMaterials)))
-                    ((UserControls.UserControlsMaterials)uc).Display(null);
-                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsCommodities)))
-                    ((UserControls.UserControlsCommodities)uc).Display(null);
             }
             else
             {
@@ -384,17 +502,29 @@ namespace EDDiscovery
                 textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
                 richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
 
-                userControlStarDistanceBottomRight.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
+                csd.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
 
-                userControlsMaterialBottom.Display(syspos.MaterialCommodity.Sort(false));
-                userControlsCommoditiesBottom.Display(syspos.MaterialCommodity.Sort(true));
-
-                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsMaterials)))
-                    ((UserControls.UserControlsMaterials)uc).Display(syspos.MaterialCommodity.Sort(false));
-                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlsCommodities)))
-                    ((UserControls.UserControlsCommodities)uc).Display(syspos.MaterialCommodity.Sort(true));
-
+                matres = syspos.MaterialCommodity.Sort(false);
+                comres = syspos.MaterialCommodity.Sort(true);
             }
+
+            if (tabStripBottom.CurrentControl is UserControlMaterials)
+                ((UserControlMaterials)tabStripBottom.CurrentControl).Display(matres);
+            if (tabStripBottomRight.CurrentControl is UserControlMaterials)
+                ((UserControlMaterials)tabStripBottomRight.CurrentControl).Display(matres);
+            if (tabStripMiddleRight.CurrentControl is UserControlMaterials)
+                ((UserControlMaterials)tabStripMiddleRight.CurrentControl).Display(matres);
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlMaterials)))
+                ((UserControlMaterials)uc).Display(matres);
+
+            if (tabStripBottom.CurrentControl is UserControlCommodities)
+                ((UserControlCommodities)tabStripBottom.CurrentControl).Display(comres);
+            if (tabStripBottomRight.CurrentControl is UserControlCommodities)
+                ((UserControlCommodities)tabStripBottomRight.CurrentControl).Display(comres);
+            if (tabStripMiddleRight.CurrentControl is UserControlCommodities)
+                ((UserControlCommodities)tabStripMiddleRight.CurrentControl).Display(comres);
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlCommodities)))
+                ((UserControlCommodities)uc).Display(comres);
         }
 
         private string EnumStringFormat(string str)
@@ -414,38 +544,36 @@ namespace EDDiscovery
 
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
+            // ORDER IMPORTANT for right outer/inner splitter, otherwise windows fixes it 
             splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
             splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+            splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance); 
             splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
-            splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
 
             userControlTravelGrid.LoadLayout();
-            userControlJournalGridBottom.LoadLayout();
-            userControlsMaterialBottom.LoadLayout();
-            userControlsCommoditiesBottom.LoadLayout();
-            userControlsLedgerBottom.LoadLayout();
 
-            tabControlBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", 0);
-            tabControlBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", 5);
-            tabControlMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", 1);
+            // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
+        
+            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", 4);        
+            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", 0);
+            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", 1);
         }
 
         public void SaveSettings()     // called by form when closing
         {
             userControlTravelGrid.SaveLayout();
-            userControlJournalGridBottom.SaveLayout();
-            userControlsMaterialBottom.SaveLayout();
-            userControlsCommoditiesBottom.SaveLayout();
-            userControlsLedgerBottom.SaveLayout();
+            ((UserControlCommonBase)(tabStripBottom.CurrentControl)).SaveLayout();
+            ((UserControlCommonBase)(tabStripBottomRight.CurrentControl)).SaveLayout();
+            ((UserControlCommonBase)(tabStripMiddleRight.CurrentControl)).SaveLayout();
 
             SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
             SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
             SQLiteDBClass.PutSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
 
-            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", tabControlBottomRight.SelectedIndex);
-            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", tabControlBottom.SelectedIndex);
-            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", tabControlMiddleRight.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", tabStripBottomRight.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", tabStripBottom.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", tabStripMiddleRight.SelectedIndex);
         }
 
         #endregion
@@ -537,8 +665,8 @@ namespace EDDiscovery
         {
             userControlTravelGrid.UpdateCurrentNote(richTextBoxNote.Text);
 
-            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlTravelGrid)))
-                ((UserControls.UserControlTravelGrid)uc).UpdateNoteJID(userControlTravelGrid.GetCurrentHistoryEntry.Journalid, richTextBoxNote.Text);
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlTravelGrid)))
+                ((UserControlTravelGrid)uc).UpdateNoteJID(userControlTravelGrid.GetCurrentHistoryEntry.Journalid, richTextBoxNote.Text);
         }
 
         private void StoreSystemNote()
@@ -669,8 +797,8 @@ namespace EDDiscovery
         public void RefreshButton(bool state)
         {
             button_RefreshHistory.Enabled = state;
-            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlJournalGrid)))
-                ((UserControls.UserControlJournalGrid)uc).RefreshButton(state);      // and the journal views need it
+            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlJournalGrid)))
+                ((UserControlJournalGrid)uc).RefreshButton(state);      // and the journal views need it
         }
 
         private void button_RefreshHistory_Click(object sender, EventArgs e)
@@ -769,41 +897,41 @@ namespace EDDiscovery
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
             tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 
-            if (comboBoxCustomPopOut.SelectedIndex == 1)
+            if (comboBoxCustomPopOut.SelectedIndex == 7)    // match order in bitmap mp and comboBoxCustomPopOut
             {
-                UserControls.UserControlTravelGrid uctg = new UserControls.UserControlTravelGrid();
+                UserControlTravelGrid uctg = new UserControlTravelGrid();
                 tcf.AddUserControl(uctg);
-                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlTravelGrid));  // used to determine name and also key for DB
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlTravelGrid));  // used to determine name and also key for DB
 
                 tcf.Init("Travel History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "TravelHistory" + numopened);
                 uctg.Init(_discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 2)
+            else if (comboBoxCustomPopOut.SelectedIndex == 6)
             {
-                UserControls.UserControlJournalGrid uctg = new UserControls.UserControlJournalGrid();
+                UserControlJournalGrid uctg = new UserControlJournalGrid();
                 tcf.AddUserControl(uctg);
-                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlJournalGrid));  // used to determine name and also key for DB
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlJournalGrid));  // used to determine name and also key for DB
 
                 tcf.Init("Journal History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "JournalHistory" + numopened);
                 uctg.Init(_discoveryForm, numopened, true);
                 uctg.Display(_discoveryForm.history);
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 3)
+            else if (comboBoxCustomPopOut.SelectedIndex == 1)
             {
-                UserControls.UserControlLog uclog = new UserControls.UserControlLog(); // Add a log
+                UserControlLog uclog = new UserControlLog(); // Add a log
                 tcf.AddUserControl(uclog);
-                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlLog));
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlLog));
 
                 tcf.Init("Log " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Log" + numopened);
-                uclog.CopyTextFrom(userControlLogBottom);
+                uclog.AppendText(logtext, _discoveryForm.theme.TextBackColor);
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 4)
+            else if (comboBoxCustomPopOut.SelectedIndex == 2)
             {
-                UserControls.UserControlStarDistance ucsd = new UserControls.UserControlStarDistance(); // Add a closest distance tab
+                UserControlStarDistance ucsd = new UserControlStarDistance(); // Add a closest distance tab
                 
                 tcf.AddUserControl(ucsd);
-                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlStarDistance));
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlStarDistance));
 
                 tcf.Init("Nearest Stars " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "StarDistance" + numopened);
 
@@ -811,11 +939,11 @@ namespace EDDiscovery
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
                     ucsd.FillGrid(lastclosestname, lastclosestsystems);
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 5)
+            else if (comboBoxCustomPopOut.SelectedIndex == 3)
             {
-                UserControls.UserControlsMaterials ucmc = new UserControls.UserControlsMaterials(); // Add a closest distance tab
+                UserControlMaterials ucmc = new UserControlMaterials(); // Add a closest distance tab
                 tcf.AddUserControl(ucmc);
-                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlsMaterials));
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlMaterials));
 
                 tcf.Init("Materials " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Materials" + numopened);
 
@@ -824,11 +952,11 @@ namespace EDDiscovery
                 if (curpos != null)
                     ucmc.Display(curpos.MaterialCommodity.Sort(false));
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 6)
+            else if (comboBoxCustomPopOut.SelectedIndex == 4)
             {
-                UserControls.UserControlsCommodities ucmc = new UserControls.UserControlsCommodities(); // Add a closest distance tab
+                UserControlCommodities ucmc = new UserControlCommodities(); // Add a closest distance tab
                 tcf.AddUserControl(ucmc);
-                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlsCommodities));
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlCommodities));
 
                 tcf.Init("Commodities " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Commodities" + numopened);
 
@@ -837,16 +965,17 @@ namespace EDDiscovery
                 if (curpos != null)
                     ucmc.Display(curpos.MaterialCommodity.Sort(true));
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 7)
+            else if (comboBoxCustomPopOut.SelectedIndex == 5)
             {
-                UserControls.UserControlsLedger ucmc = new UserControls.UserControlsLedger(); // Add a closest distance tab
+                UserControlLedger ucmc = new UserControlLedger(); // Add a closest distance tab
                 tcf.AddUserControl(ucmc);
-                int numopened = usercontrolsforms.CountOf(typeof(UserControls.UserControlsLedger));
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlLedger));
 
                 tcf.Init("Ledger " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Ledger" + numopened);
 
                 ucmc.Init(_discoveryForm, numopened);
                 ucmc.Display(_discoveryForm.history.materialcommodititiesledger);
+                ucmc.OnGotoJID += GotoJID;
             }
 
             comboBoxCustomPopOut.Enabled = false;
@@ -887,9 +1016,9 @@ namespace EDDiscovery
                 summaryPopOut.RefreshTarget(userControlTravelGrid.TravelGrid, _discoveryForm.history.GetLastWithPosition);
         }
 
-#endregion
+        #endregion
 
-#region Summary Pop out
+        #region Summary Pop out
         
         public bool IsSummaryPopOutReady { get { return summaryPopOut != null && !summaryPopOut.IsFormClosed; } }
 
@@ -963,18 +1092,21 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    userControlLogBottom.AppendText(text + Environment.NewLine, color);
-                    userControlLogBottomRight.AppendText(text + Environment.NewLine, color);
-                    userControlLogMiddleRight.AppendText(text + Environment.NewLine, color);
+                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
 
-                    foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControls.UserControlLog)))
-                        ((UserControls.UserControlLog)uc).AppendText(text + Environment.NewLine, color);
+                    if (tabStripBottom.CurrentControl is UserControlLog)
+                        ((UserControlLog)tabStripBottom.CurrentControl).AppendText(text + Environment.NewLine, color);
+                    if (tabStripBottomRight.CurrentControl is UserControlLog)
+                        ((UserControlLog)tabStripBottomRight.CurrentControl).AppendText(text + Environment.NewLine, color);
+                    if (tabStripMiddleRight.CurrentControl is UserControlLog)
+                        ((UserControlLog)tabStripMiddleRight.CurrentControl).AppendText(text + Environment.NewLine, color);
+                    foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlLog)))
+                        ((UserControlLog)uc).AppendText(text + Environment.NewLine, color);
                 });
             }
             catch { }
         }
 
         #endregion
-
     }
 }

@@ -12,7 +12,7 @@ using EDDiscovery2.DB;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlsLedger : UserControlCommonBase
+    public partial class UserControlLedger : UserControlCommonBase
     {
         private int displaynumber = 0;
         EDDiscoveryForm discoveryform;
@@ -23,9 +23,12 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return ("LedgerGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "LedgerGridEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
+        public delegate void GotoJID( long jid);
+        public event GotoJID OnGotoJID;
+
         #region Init
 
-        public UserControlsLedger()
+        public UserControlLedger()
         {
             InitializeComponent();
         }
@@ -83,6 +86,8 @@ namespace EDDiscovery.UserControls
                                         };
 
                         dataGridViewLedger.Rows.Add(rowobj);
+                        dataGridViewLedger.Rows[dataGridViewLedger.Rows.Count - 1].Tag = tx.jid;
+
                     }
 
                     StaticFilters.FilterGridView(dataGridViewLedger, textBoxFilter.Text);
@@ -165,5 +170,53 @@ namespace EDDiscovery.UserControls
             Display(current_mc);
         }
 
+        #region right clicks
+
+        int rightclickrow = -1;
+        int leftclickrow = -1;
+
+        private void dataGridViewLedger_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+            {
+                rightclickrow = -1;
+            }
+            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
+            {
+                leftclickrow = -1;
+            }
+
+            if (dataGridViewLedger.SelectedCells.Count < 2 || dataGridViewLedger.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+            {
+                DataGridView.HitTestInfo hti = dataGridViewLedger.HitTest(e.X, e.Y);
+                if (hti.Type == DataGridViewHitTestType.Cell)
+                {
+                    dataGridViewLedger.ClearSelection();                // select row under cursor.
+                    dataGridViewLedger.Rows[hti.RowIndex].Selected = true;
+
+                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+                    {
+                        rightclickrow = hti.RowIndex;
+                    }
+                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
+                    {
+                        leftclickrow = hti.RowIndex;
+                    }
+                }
+            }
+        }
+
+        private void toolStripMenuItemGotoItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickrow != -1)
+            {
+                long v = (long)dataGridViewLedger.Rows[rightclickrow].Tag;
+
+                if (OnGotoJID != null)
+                    OnGotoJID(v);
+            }
+        }
+
+        #endregion
     }
 }
