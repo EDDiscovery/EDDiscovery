@@ -44,9 +44,20 @@
             this.showNothingWhenDockedtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandTextOverEmptyColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBoxOrder = new System.Windows.Forms.ToolStripComboBox();
+            this.surfaceScanDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanNoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scan15sToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scan30sToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scan60sToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanUntilNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showInPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanRightMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanLeftMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanOnTopMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelExt_NoSystems = new ExtendedControls.LabelExt();
             this.panel_grip = new ExtendedControls.DrawnPanel();
             this.labelExtDockedLanded = new ExtendedControls.LabelExt();
+            this.labelBodyScanData = new ExtendedControls.LabelExt();
             this.contextMenuStripConfig.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,9 +76,10 @@
             this.showDistancesOnFSDJumpsOnlyToolStripMenuItem,
             this.showNothingWhenDockedtoolStripMenuItem,
             this.expandTextOverEmptyColumnsToolStripMenuItem,
-            this.toolStripComboBoxOrder});
+            this.toolStripComboBoxOrder,
+            this.surfaceScanDetailsToolStripMenuItem});
             this.contextMenuStripConfig.Name = "contextMenuStripConfig";
-            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 317);
+            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 339);
             this.contextMenuStripConfig.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStripConfig_Closed);
             // 
             // toolStripMenuItemTargetLine
@@ -200,6 +212,92 @@
             this.toolStripComboBoxOrder.Size = new System.Drawing.Size(200, 23);
             this.toolStripComboBoxOrder.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxOrder_SelectedIndexChanged);
             // 
+            // surfaceScanDetailsToolStripMenuItem
+            // 
+            this.surfaceScanDetailsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scanNoToolStripMenuItem,
+            this.scan15sToolStripMenuItem,
+            this.scan30sToolStripMenuItem,
+            this.scan60sToolStripMenuItem,
+            this.scanUntilNextToolStripMenuItem,
+            this.showInPositionToolStripMenuItem});
+            this.surfaceScanDetailsToolStripMenuItem.Name = "surfaceScanDetailsToolStripMenuItem";
+            this.surfaceScanDetailsToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.surfaceScanDetailsToolStripMenuItem.Text = "Surface scan details...";
+            // 
+            // scanNoToolStripMenuItem
+            // 
+            this.scanNoToolStripMenuItem.Checked = true;
+            this.scanNoToolStripMenuItem.CheckOnClick = true;
+            this.scanNoToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.scanNoToolStripMenuItem.Name = "scanNoToolStripMenuItem";
+            this.scanNoToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.scanNoToolStripMenuItem.Text = "Do Not Show";
+            this.scanNoToolStripMenuItem.Click += new System.EventHandler(this.scanNoToolStripMenuItem_Click);
+            // 
+            // scan15sToolStripMenuItem
+            // 
+            this.scan15sToolStripMenuItem.CheckOnClick = true;
+            this.scan15sToolStripMenuItem.Name = "scan15sToolStripMenuItem";
+            this.scan15sToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.scan15sToolStripMenuItem.Text = "Show for 15s";
+            this.scan15sToolStripMenuItem.Click += new System.EventHandler(this.scan15sToolStripMenuItem_Click);
+            // 
+            // scan30sToolStripMenuItem
+            // 
+            this.scan30sToolStripMenuItem.CheckOnClick = true;
+            this.scan30sToolStripMenuItem.Name = "scan30sToolStripMenuItem";
+            this.scan30sToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.scan30sToolStripMenuItem.Text = "Show for 30s";
+            this.scan30sToolStripMenuItem.Click += new System.EventHandler(this.scan30sToolStripMenuItem_Click);
+            // 
+            // scan60sToolStripMenuItem
+            // 
+            this.scan60sToolStripMenuItem.CheckOnClick = true;
+            this.scan60sToolStripMenuItem.Name = "scan60sToolStripMenuItem";
+            this.scan60sToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.scan60sToolStripMenuItem.Text = "Show for 60s";
+            this.scan60sToolStripMenuItem.Click += new System.EventHandler(this.scan60sToolStripMenuItem_Click);
+            // 
+            // scanUntilNextToolStripMenuItem
+            // 
+            this.scanUntilNextToolStripMenuItem.CheckOnClick = true;
+            this.scanUntilNextToolStripMenuItem.Name = "scanUntilNextToolStripMenuItem";
+            this.scanUntilNextToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.scanUntilNextToolStripMenuItem.Text = "Show until next scan";
+            this.scanUntilNextToolStripMenuItem.Click += new System.EventHandler(this.scanUntilNextToolStripMenuItem_Click);
+            // 
+            // showInPositionToolStripMenuItem
+            // 
+            this.showInPositionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scanRightMenuItem,
+            this.scanLeftMenuItem,
+            this.scanOnTopMenuItem});
+            this.showInPositionToolStripMenuItem.Name = "showInPositionToolStripMenuItem";
+            this.showInPositionToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.showInPositionToolStripMenuItem.Text = "Position ...";
+            // 
+            // scanRightMenuItem
+            // 
+            this.scanRightMenuItem.Name = "scanRightMenuItem";
+            this.scanRightMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanRightMenuItem.Text = "To right";
+            this.scanRightMenuItem.Click += new System.EventHandler(this.scanRightMenuItem_Click);
+            // 
+            // scanLeftMenuItem
+            // 
+            this.scanLeftMenuItem.Name = "scanLeftMenuItem";
+            this.scanLeftMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanLeftMenuItem.Text = "To left";
+            this.scanLeftMenuItem.Click += new System.EventHandler(this.scanLeftMenuItem_Click);
+            // 
+            // scanOnTopMenuItem
+            // 
+            this.scanOnTopMenuItem.Name = "scanOnTopMenuItem";
+            this.scanOnTopMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanOnTopMenuItem.Text = "On top";
+            this.scanOnTopMenuItem.Click += new System.EventHandler(this.scanOnTopMenuItem_Click);
+            // 
             // labelExt_NoSystems
             // 
             this.labelExt_NoSystems.AutoSize = true;
@@ -238,12 +336,23 @@
             this.labelExtDockedLanded.TabIndex = 18;
             this.labelExtDockedLanded.Text = "Docked";
             // 
+            // labelBodyScanData
+            // 
+            this.labelBodyScanData.AutoSize = true;
+            this.labelBodyScanData.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBodyScanData.ForeColor = System.Drawing.Color.White;
+            this.labelBodyScanData.Location = new System.Drawing.Point(370, 12);
+            this.labelBodyScanData.Name = "labelBodyScanData";
+            this.labelBodyScanData.Size = new System.Drawing.Size(0, 20);
+            this.labelBodyScanData.TabIndex = 19;
+            // 
             // SummaryPopOut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(600, 268);
+            this.Controls.Add(this.labelBodyScanData);
             this.Controls.Add(this.labelExtDockedLanded);
             this.Controls.Add(this.labelExt_NoSystems);
             this.Controls.Add(this.panel_grip);
@@ -280,5 +389,16 @@
         private System.Windows.Forms.ToolStripMenuItem expandTextOverEmptyColumnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showNothingWhenDockedtoolStripMenuItem;
         private ExtendedControls.LabelExt labelExtDockedLanded;
+        private ExtendedControls.LabelExt labelBodyScanData;
+        private System.Windows.Forms.ToolStripMenuItem surfaceScanDetailsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scanNoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scan15sToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scan30sToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scan60sToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scanUntilNextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showInPositionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scanRightMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scanLeftMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scanOnTopMenuItem;
     }
 }

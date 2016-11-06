@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -44,6 +45,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //
     public class JournalScan : JournalEntry
     {
+        private const double solarRadius_m = 695700000;
+        private const double oneAU_m = 149597870000;
+        private const double oneDay_s = 86400;
+
         public JournalScan(JObject evt ) : base(evt, JournalTypeEnum.Scan)
         {
             BodyName = JSONHelper.GetStringDef(evt["BodyName"]);
@@ -108,7 +113,97 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double OrbitalInclination;
         public double Periapsis;
 
-
+        public string DisplayString()
+        {
+            StringBuilder scanText = new StringBuilder();
+            scanText.AppendLine(BodyName);
+            scanText.AppendLine();
+            if (!String.IsNullOrEmpty(StarType))
+            {
+                //star
+                switch (StarType)
+                {
+                    case "N":
+                        scanText.AppendLine("Neutron Star");
+                        break;
+                    case "AeBe":
+                        scanText.AppendLine("Herbig Ae/Be");
+                        break;
+                    case "H":
+                        // currently speculative, not confirmed with actual data...
+                        scanText.AppendLine("Black Hole");
+                        break;
+                    default:
+                        scanText.AppendFormat("Class {0} star\n", StarType.Replace("_", " "));
+                        break;
+                }
+                scanText.AppendFormat("Age: {0} million years\n", Age.ToString("##,####"));
+                scanText.AppendFormat("Solar Masses: {0}\n", StellarMass);
+                scanText.AppendFormat("Solar Radius: {0}\n", (Radius.Value / solarRadius_m).ToString("0.0####"));
+                scanText.AppendFormat("Surface Temp: {0}K\n", SurfaceTemperature.Value.ToString("#,###,###"));
+                if (OrbitalPeriod > 0)
+                {
+                    scanText.AppendFormat("Orbital Period: {0}D\n", (OrbitalPeriod / oneDay_s).ToString("###,###,##0.0"));
+                    scanText.AppendFormat("Semi Major Axis: {0}AU\n", (SemiMajorAxis / oneAU_m).ToString("#0.0#"));
+                    scanText.AppendFormat("Oribtal Eccentricity: {0}°\n", Eccentricity);
+                    scanText.AppendFormat("Orbtial Inclination: {0}°\n", OrbitalInclination);
+                    scanText.AppendFormat("Arg Of Periapsis: {0}°\n", Periapsis);
+                }                
+                scanText.AppendFormat("Absolute Magnitude: {0}\n", AbsoluteMagnitude);
+                scanText.AppendFormat("Rotation Period: {0} days\n", (RotationPeriod / oneDay_s).ToString("###,###,##0.0"));
+            }
+            else
+            {
+                //planet
+                scanText.AppendLine(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+                                        ToTitleCase(PlanetClass.ToLower()));
+                scanText.AppendLine(TerraformState == "Terraformable" ? "Candidate for terraforming\n" : String.Empty);
+                scanText.AppendFormat("Earth Masses: {0}\n", MassEM);
+                scanText.AppendFormat("Radius: {0}km\n", (Radius.Value / 1000).ToString("###,##0"));
+                scanText.AppendFormat("Gravity: {0}g\n", SurfaceGravity / 10);
+                scanText.AppendFormat("Surface Temp: {0}K\n", SurfaceTemperature.Value.ToString("#,###,###.00"));
+                if (SurfacePressure.HasValue && !PlanetClass.ToLower().Contains("gas"))
+                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (SurfacePressure.Value / 100000).ToString("#,###,###,###,##0.00"));
+                scanText.AppendFormat("Volcanism: {0}\n", Volcanism == String.Empty ? "No Volcanism" : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+                                        ToTitleCase(Volcanism.ToLower()));
+                if (!PlanetClass.ToLower().Contains("gas"))
+                    scanText.AppendFormat("Atmosphere Type: {0}\n", Atmosphere == String.Empty ? "No Atmosphere" : 
+                                        System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Atmosphere.ToLower()));
+                scanText.AppendFormat("Orbital Period: {0}D\n", (OrbitalPeriod / oneDay_s).ToString("###,###,##0.0"));
+                scanText.AppendFormat("Semi Major Axis: {0}AU\n", (SemiMajorAxis / oneAU_m).ToString("#0.0#"));
+                scanText.AppendFormat("Oribtal Eccentricity: {0}°\n", Eccentricity);
+                scanText.AppendFormat("Orbtial Inclination: {0}°\n", OrbitalInclination);
+                scanText.AppendFormat("Arg Of Periapsis: {0}°\n", Periapsis);
+                scanText.AppendFormat("Rotation Period: {0} days", (RotationPeriod / oneDay_s).ToString("###,###,##0.0"));
+                scanText.AppendLine(TidalLock ? " (Tidally locked)" : "");
+                if (Rings != null && Rings.Any())
+                {
+                    scanText.AppendLine();
+                    scanText.AppendFormat("Ring{0}", Rings.Count() == 1 ? "" : "s");
+                    foreach(PlanetRing ring in Rings)
+                    {
+                        scanText.AppendLine();
+                        scanText.AppendFormat("{0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
+                        scanText.AppendFormat("Mass: {0}MT\n", ring.MassMT.ToString("#,###,###,###,###,###,###,###,###"));
+                        scanText.AppendFormat("Inner Radius: {0}km\n", (ring.InnerRad / 1000).ToString("#,###,###,###,###"));
+                        scanText.AppendFormat("Outer Radius: {0}km\n", (ring.OuterRad / 1000).ToString("#,###,###,###,###"));
+                    }
+                }
+                if (Materials != null && Materials.Any())
+                {
+                    scanText.AppendLine();
+                    scanText.AppendLine("Materials");
+                    foreach(KeyValuePair<string, double> mat in Materials)
+                    {
+                        scanText.AppendFormat("{0} - {1}%\n", 
+                                        System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()), 
+                                        mat.Value.ToString("#0.0#"));
+                    }
+                    
+                }
+            }
+            return scanText.ToNullSafeString();
+        }
 
         internal double GetMaterial(string v)
         {

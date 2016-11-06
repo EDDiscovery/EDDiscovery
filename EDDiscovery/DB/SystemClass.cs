@@ -48,7 +48,6 @@ namespace EDDiscovery.DB
         public SystemClass(string Name)
         {
             name = Name;
-            SearchName = Name.ToLower();
             status = SystemStatusEnum.Unknown;
             x = double.NaN;
             y = double.NaN;
@@ -58,7 +57,6 @@ namespace EDDiscovery.DB
         public SystemClass(string Name, double vx, double vy, double vz)
         {
             name = Name;
-            SearchName = Name.ToLower();
             status = SystemStatusEnum.Unknown;
             x = vx; y = vy; z = vz;
         }
@@ -72,7 +70,6 @@ namespace EDDiscovery.DB
                     JObject coords = (JObject)jo["coords"];
 
                     name = jo["name"].Value<string>();
-                    SearchName = name.ToLower();
 
                     //cr = jo["cr"].Value<int>();
                     x = double.NaN;
@@ -110,7 +107,6 @@ namespace EDDiscovery.DB
                 else if (source == SystemInfoSource.EDDB)
                 {
                     name = jo["name"].Value<string>();
-                    SearchName = name.ToLower();
 
                     cr = 1;
 
@@ -415,7 +411,6 @@ namespace EDDiscovery.DB
                             if (reader.Read())
                             {
                                 sys.name = (string)reader["Name"];
-                                sys.SearchName = sys.name.ToLower();
                             }
                         }
                     }

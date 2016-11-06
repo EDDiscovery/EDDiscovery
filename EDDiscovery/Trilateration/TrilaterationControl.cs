@@ -392,7 +392,7 @@ namespace EDDiscovery
             {
                 var cell = dataGridViewDistances[0, i];
                 SystemClass s2 = cell.Tag as SystemClass;
-                if (s2 != null && s2.SearchName.Equals(system.SearchName))
+                if (s2 != null && s2.name.Equals(system.name, StringComparison.OrdinalIgnoreCase))
                 {
                     return;
                 }
