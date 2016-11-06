@@ -219,6 +219,11 @@ namespace EDDiscovery
             _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map
         }
 
+        public void NewBodyScan(JournalScan js)
+        {
+            if (IsSummaryPopOutReady)
+                summaryPopOut.ShowScanData(js);
+        }
 
         public void AddNewEntry(HistoryEntry he)
         {

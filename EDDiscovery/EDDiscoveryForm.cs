@@ -1779,6 +1779,8 @@ namespace EDDiscovery
 //TBD
                 travelHistoryControl1.AddNewEntry(he);
                 journalViewControl1.AddNewEntry(he);
+                if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
+                    travelHistoryControl1.NewBodyScan(je as EliteDangerous.JournalEvents.JournalScan);
             }
 
             travelHistoryControl1.CheckCommandersListBox();
