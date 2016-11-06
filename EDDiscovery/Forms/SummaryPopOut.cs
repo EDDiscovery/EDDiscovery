@@ -31,15 +31,19 @@ namespace EDDiscovery2
         }
 
         public bool IsFormClosed { get; set; } = false;
+        
         private Color transparentkey = Color.Red;
         private Timer autofade = new Timer();
+        private Timer scanhide = new Timer();
         private ControlTable lt;
         private Font butfont = new Font("Microsoft Sans Serif", 8.25F);
         private int statictoplines = 0;
-
+        
         private bool hideall = false;
 
         private List<int> columnpos;
+        private int visiblecolwidth;
+        private bool bodyScanShowing = false;
         List<Button> dividers;
 
         public event EventHandler RequiresRefresh;
@@ -64,18 +68,29 @@ namespace EDDiscovery2
             showBlackBoxAroundText = 4096,
             showExpandOverColumns = 8192,
             showNothingWhenDocked = 16384,
+            showScan15s = 32768,
+            showScan30s = 65536,
+            showScan60s = 131072,
+            showScanIndefinite = 262144,
+            showScanRight = 524288,
+            showScanLeft = 1048576,
+            showScanOnTop = 2097152
         };
 
-        Configuration config = (Configuration)(Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showTime | Configuration.showDescription | Configuration.showInformation | Configuration.showNotes | Configuration.showXYZ | Configuration.showDistancePerStar);
+        Configuration config = (Configuration)(Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showTime | Configuration.showDescription | 
+                                               Configuration.showInformation | Configuration.showNotes | Configuration.showXYZ | Configuration.showDistancePerStar |
+                                               Configuration.showScan15s | Configuration.showScan30s | Configuration.showScan60s | Configuration.showScanIndefinite |
+                                               Configuration.showScanRight | Configuration.showScanLeft | Configuration.showScanOnTop);
 
         bool Config(Configuration c) { return ( config & c ) != 0; }
-
+        
         public SummaryPopOut()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             InitializeComponent();
             autofade.Interval = 500;
             autofade.Tick += FadeOut;
+            scanhide.Tick += HideScanData;
             TopMost = true;
             UpdateEventsOnControls(this);
             this.BackColor = transparentkey;
@@ -95,6 +110,17 @@ namespace EDDiscovery2
             showDistancesOnFSDJumpsOnlyToolStripMenuItem.Checked = Config(Configuration.showDistancesOnFSDJumpsOnly);
             expandTextOverEmptyColumnsToolStripMenuItem.Checked = Config(Configuration.showExpandOverColumns);
             showNothingWhenDockedtoolStripMenuItem.Checked = Config(Configuration.showNothingWhenDocked);
+            scanNoToolStripMenuItem.Checked = !Config(Configuration.showScan15s) && !Config(Configuration.showScan30s) && !Config(Configuration.showScan60s) && !Config(Configuration.showScanIndefinite);
+            scan15sToolStripMenuItem.Checked = Config(Configuration.showScan15s);
+            scan30sToolStripMenuItem.Checked = Config(Configuration.showScan30s);
+            scan60sToolStripMenuItem.Checked = Config(Configuration.showScan60s);
+            scanUntilNextToolStripMenuItem.Checked = Config(Configuration.showScanIndefinite);
+            if (Config(Configuration.showScan15s)) scanhide.Interval = 15000;
+            if (Config(Configuration.showScan30s)) scanhide.Interval = 30000;
+            if (Config(Configuration.showScan60s)) scanhide.Interval = 60000;
+            scanRightMenuItem.Checked = Config(Configuration.showScanRight);
+            scanLeftMenuItem.Checked = Config(Configuration.showScanLeft);
+            scanOnTopMenuItem.Checked = Config(Configuration.showScanOnTop);
 
             toolStripComboBoxOrder.Enabled = false; // indicate its a program change
             toolStripComboBoxOrder.SelectedIndex = SQLiteDBClass.GetSettingInt("SummaryPanelLayout", 0);
@@ -134,46 +160,83 @@ namespace EDDiscovery2
         void ResetTabList()                             // work out optimum tab spacing by what is selected
         {
             columnpos = new List<int>();
+            visiblecolwidth = 4;
 
             int pos = 4;
             columnpos.Add(pos);
 
-            if (Config( Configuration.showEDSMButton))       // mirrors UpdateRow
-                columnpos.Add(pos=pos+60);
+            if (bodyScanShowing && Config(Configuration.showScanLeft))
+            {
+                columnpos.Add(pos += 200);
+                visiblecolwidth += 200;
+            }
 
-            if (Config( Configuration.showTime))
-                columnpos.Add(pos = pos + 80);
+            if (Config(Configuration.showEDSMButton))       // mirrors UpdateRow
+            {
+                columnpos.Add(pos += 60);
+                visiblecolwidth += 60;
+            }
 
-            if (Config( Configuration.showDescription))
-                columnpos.Add(pos = pos + 200);
+            if (Config(Configuration.showTime))
+            {
+                columnpos.Add(pos += 80);
+                visiblecolwidth += 80;
+            }
 
-            if (Config( Configuration.showInformation))
-                columnpos.Add(pos = pos + 200);
+            if (Config(Configuration.showDescription))
+            {
+                columnpos.Add(pos += 200);
+                visiblecolwidth += 200;
+            }
 
-            if (toolStripComboBoxOrder.SelectedIndex == 0 && Config( Configuration.showNotes))
-                columnpos.Add(pos = pos + 200);
+            if (Config(Configuration.showInformation))
+            {
+                columnpos.Add(pos += 200);
+                visiblecolwidth += 200;
+            }
 
-            if (toolStripComboBoxOrder.SelectedIndex == 2 && Config( Configuration.showDistancePerStar))
-                columnpos.Add(pos = pos + 60);
+            if (toolStripComboBoxOrder.SelectedIndex == 0 && Config(Configuration.showNotes))
+            {
+                columnpos.Add(pos += 200);
+                visiblecolwidth += 200;
+            }
+
+            if (toolStripComboBoxOrder.SelectedIndex == 2 && Config(Configuration.showDistancePerStar))
+            {
+                columnpos.Add(pos += 60);
+                visiblecolwidth += 60;
+            }
 
             if (Config( Configuration.showXYZ))
             {
-                columnpos.Add(pos = pos + 60);
-                columnpos.Add(pos = pos + 50);
-                columnpos.Add(pos = pos + 60);
+                columnpos.Add(pos += 60);
+                columnpos.Add(pos += 50);
+                columnpos.Add(pos += 60);
+                visiblecolwidth += 170;
             }
 
-            if (toolStripComboBoxOrder.SelectedIndex > 0 && Config( Configuration.showNotes))
-                columnpos.Add(pos = pos + 200);
+            if (toolStripComboBoxOrder.SelectedIndex > 0 && Config(Configuration.showNotes))
+            {
+                columnpos.Add(pos += 200);
+                visiblecolwidth += 200;
+            }
 
-            if (toolStripComboBoxOrder.SelectedIndex < 2 && Config( Configuration.showDistancePerStar))
-                columnpos.Add(pos = pos + 60);
+            if (toolStripComboBoxOrder.SelectedIndex < 2 && Config(Configuration.showDistancePerStar))
+            {
+                columnpos.Add(pos += 60);
+                visiblecolwidth += 60;
+            }
+
+            if (bodyScanShowing && Config(Configuration.showScanRight))
+            {
+                columnpos.Add(pos += 200);
+            }
 
             while (columnpos.Count < 4)                                         // need a minimum of 4 columns for target info
                 columnpos.Add(columnpos[columnpos.Count - 1] + 100);
             
         }
-
+        
         public void SetGripperColour(Color grip)
         {
             if (grip.GetBrightness() < 0.15)       // override if its too dark..
@@ -199,7 +262,7 @@ namespace EDDiscovery2
             lt = new ControlTable(this, 30, 8, 20 , ClientRectangle.Height);
             statictoplines = 0;
 
-            tabscalar = (double)FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font).SizeInPoints / 8.25;
+            tabscalar = FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font).SizeInPoints / 8.25;
 
             labelExt_NoSystems.Visible = false;
             labelExtDockedLanded.Visible = false;
@@ -220,6 +283,7 @@ namespace EDDiscovery2
                 CheckDocked(vsc.Rows.Count>0 ? vsc.Rows[0] : null);                          // if we are docked.. 
 
                 labelExt_NoSystems.Visible = vsc.Rows.Count == 0;
+                labelBodyScanData.Font = vsc.Font;
             }
             else
                 labelExt_NoSystems.Visible = true;
@@ -328,8 +392,12 @@ namespace EDDiscovery2
                 rowc = Color.White;
 
             List<ControlEntryProperties> cep = new List<ControlEntryProperties>();
-
+            
             HistoryEntry he = EDDiscovery.UserControls.UserControlTravelGrid.GetHistoryEntry(vscrow);
+
+            // add an empty column, the scan data will go over the top
+            if (bodyScanShowing && Config(Configuration.showScanLeft))
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, string.Empty));
 
             if (Config( Configuration.showEDSMButton))
                 cep.Add(new ControlEntryProperties(butfont, panel_grip.ForeColor, "!!<EDSMBUT:" + (string)he.System.name));
@@ -377,6 +445,64 @@ namespace EDDiscovery2
             {
                 lt.RefreshTextAtID(vscrow.Index,cep);      // refresh this one with rowid= index
             }
+        }
+
+        
+        public void ShowScanData(EDDiscovery.EliteDangerous.JournalEvents.JournalScan scan)
+        {
+            if (Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite))
+            {
+                SuspendLayout();
+
+                if (!Config(Configuration.showScanIndefinite)) scanhide.Stop();
+
+                labelBodyScanData.Height = this.ClientRectangle.Height - 8;
+                labelBodyScanData.Width = 200;
+                labelBodyScanData.Text = scan.DisplayString();
+                bodyScanShowing = true;
+
+                if (Config(Configuration.showScanLeft))
+                {
+                    ResetTabList();
+                    labelBodyScanData.Left = 4;
+                    RequiresRefresh(this, null);
+                }
+                else if (Config(Configuration.showScanRight))
+                {
+                    labelBodyScanData.Left = visiblecolwidth + 4;
+                }
+                else if (Config(Configuration.showScanOnTop))
+                {
+                    labelBodyScanData.Width = this.ClientRectangle.Width - 8;
+                    labelBodyScanData.Left = 4;
+                    lt.SetDisplaySize(0);
+                }
+
+                labelBodyScanData.Visible = true;
+                
+                ResumeLayout();
+                if (!Config(Configuration.showScanIndefinite)) scanhide.Start();
+            }
+            
+        }
+
+        private void HideScanData(object sender, EventArgs e)
+        {
+            labelBodyScanData.Visible = false;
+
+            bodyScanShowing = false;
+
+            if (Config(Configuration.showScanLeft))
+            {
+                ResetTabList();
+                RequiresRefresh(this, null);
+            }
+            else if (Config(Configuration.showScanOnTop))
+            {
+                lt.SetDisplaySize(this.ClientRectangle.Height);
+            }
+            
+            scanhide.Stop();
         }
 
         private string DistToStar(HistoryEntry he, Point3D tpos)
@@ -667,6 +793,78 @@ namespace EDDiscovery2
             FlipConfig(Configuration.showNothingWhenDocked, ((ToolStripMenuItem)sender).Checked);
         }
 
+        private void scanNoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSurfaceScanBehaviour(null, ((ToolStripMenuItem)sender).Checked);
+            SetScanPosition(null);
+        }
+
+        private void scan15sToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSurfaceScanBehaviour(Configuration.showScan15s, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void scan30sToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSurfaceScanBehaviour(Configuration.showScan30s, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void scan60sToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSurfaceScanBehaviour(Configuration.showScan60s, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void scanUntilNextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSurfaceScanBehaviour(Configuration.showScanIndefinite, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void SetSurfaceScanBehaviour(Configuration? itemClicked, bool newState)
+        {
+            if (itemClicked.HasValue && newState)
+            {
+                FlipConfig(Configuration.showScan15s, itemClicked == Configuration.showScan15s);
+                FlipConfig(Configuration.showScan30s, itemClicked == Configuration.showScan30s);
+                FlipConfig(Configuration.showScan60s, itemClicked == Configuration.showScan60s);
+                FlipConfig(Configuration.showScanIndefinite, itemClicked == Configuration.showScanIndefinite);
+                scanNoToolStripMenuItem.Checked = false;
+                scan15sToolStripMenuItem.Checked = itemClicked == Configuration.showScan15s;
+                scan30sToolStripMenuItem.Checked = itemClicked == Configuration.showScan30s;
+                scan60sToolStripMenuItem.Checked = itemClicked == Configuration.showScan60s;
+                scanUntilNextToolStripMenuItem.Checked = itemClicked == Configuration.showScanIndefinite;
+                switch (itemClicked)
+                {
+                    case Configuration.showScan15s:
+                        scanhide.Interval = 15000;
+                        break;
+                    case Configuration.showScan30s:
+                        scanhide.Interval = 30000;
+                        break;
+                    case Configuration.showScan60s:
+                        scanhide.Interval = 60000;
+                        break;
+                }
+                //default a position if there isn't one selected
+                if (!Config(Configuration.showScanLeft) && !Config(Configuration.showScanRight) && !!Config(Configuration.showScanOnTop)) FlipConfig(Configuration.showScanRight, true);
+            }
+            else
+            {
+                // turned off
+                FlipConfig(Configuration.showScan15s, false);
+                FlipConfig(Configuration.showScan30s, false);
+                FlipConfig(Configuration.showScan60s, false);
+                FlipConfig(Configuration.showScanIndefinite, false);
+                scanNoToolStripMenuItem.Checked = true;
+                scan15sToolStripMenuItem.Checked = false;
+                scan30sToolStripMenuItem.Checked = false;
+                scan60sToolStripMenuItem.Checked = false;
+                scanUntilNextToolStripMenuItem.Checked = false;
+            }
+
+            RequiresRefresh(this, null);
+
+        }
+
         private void toolStripComboBoxOrder_SelectedIndexChanged(object sender, EventArgs e)
         {
             ToolStripComboBox cbx = (ToolStripComboBox)sender;
@@ -701,6 +899,32 @@ namespace EDDiscovery2
             if (!ClientRectangle.Contains(this.PointToClient(MousePosition)))
                 autofade.Start(); 
         }
+
+        private void scanRightMenuItem_Click(object sender, EventArgs e)
+        {
+            SetScanPosition(Configuration.showScanRight);
+        }
+
+        private void scanLeftMenuItem_Click(object sender, EventArgs e)
+        {
+            SetScanPosition(Configuration.showScanLeft);
+        }
+        
+        private void scanOnTopMenuItem_Click(object sender, EventArgs e)
+        {
+            SetScanPosition(Configuration.showScanOnTop);
+        }
+
+        private void SetScanPosition(Configuration? position)
+        {
+            FlipConfig(Configuration.showScanLeft, position.HasValue && position.Value == Configuration.showScanLeft);
+            FlipConfig(Configuration.showScanRight, position.HasValue && position.Value == Configuration.showScanRight);
+            FlipConfig(Configuration.showScanOnTop, position.HasValue && position.Value == Configuration.showScanOnTop);
+            scanRightMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanRight;
+            scanLeftMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanLeft;
+            scanOnTopMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanOnTop;
+        }
+
     }
 
     public class ControlTable : IDisposable
@@ -828,7 +1052,7 @@ namespace EDDiscovery2
             {
                 if (cep[i].text.Length >= 11 && cep[i].text.Substring(0,11).Equals("!!<EDSMBUT:"))
                 {
-                    ExtendedControls.DrawnPanel edsm = new ExtendedControls.DrawnPanel();
+                    DrawnPanel edsm = new DrawnPanel();
                     edsm.Name = cep[i].text.Substring(11);
                     edsm.Image = DrawnPanel.ImageType.Text;
                     edsm.ImageText = "EDSM";
@@ -864,9 +1088,9 @@ namespace EDDiscovery2
                 items[i].Font = cep[i].font;
                 items[i].ForeColor = cep[i].colour;
 
-                if (items[i] is ExtendedControls.DrawnPanel)
+                if (items[i] is DrawnPanel)
                 {
-                    ExtendedControls.DrawnPanel dp = items[i] as ExtendedControls.DrawnPanel;
+                    DrawnPanel dp = items[i] as DrawnPanel;
                     dp.MouseOverColor = ButtonExt.Multiply(cep[i].colour, 1.3F);
                     dp.MouseSelectedColor = ButtonExt.Multiply(cep[i].colour, 1.5F);
                     dp.BackColor = Color.Black;
@@ -905,13 +1129,13 @@ namespace EDDiscovery2
 
             for (; j < items.Count && expandover; j++)                    // find next non empty column
             {
-                if (items[i] is ExtendedControls.DrawnPanel || items[j].Text.Length > 0)
+                if (items[i] is DrawnPanel || items[j].Text.Length > 0)
                     break;
             }
 
             int width = tabstops[j] - tabstops[i] - 4;
 
-            if (items[i] is ExtendedControls.DrawnPanel)
+            if (items[i] is DrawnPanel)
                 items[i].Size = new Size(Math.Min(width, 64), items[i].Size.Height);
             else
                 items[i].Size = new Size(width, items[i].Size.Height);
