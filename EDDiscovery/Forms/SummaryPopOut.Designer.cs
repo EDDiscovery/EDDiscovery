@@ -53,11 +53,13 @@
             this.showInPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scanRightMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scanLeftMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanBelowMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scanOnTopMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelExt_NoSystems = new ExtendedControls.LabelExt();
             this.panel_grip = new ExtendedControls.DrawnPanel();
             this.labelExtDockedLanded = new ExtendedControls.LabelExt();
             this.labelBodyScanData = new ExtendedControls.LabelExt();
+            this.scanAboveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripConfig.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,7 +81,7 @@
             this.toolStripComboBoxOrder,
             this.surfaceScanDetailsToolStripMenuItem});
             this.contextMenuStripConfig.Name = "contextMenuStripConfig";
-            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 339);
+            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 317);
             this.contextMenuStripConfig.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStripConfig_Closed);
             // 
             // toolStripMenuItemTargetLine
@@ -272,6 +274,8 @@
             this.showInPositionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.scanRightMenuItem,
             this.scanLeftMenuItem,
+            this.scanAboveMenuItem,
+            this.scanBelowMenuItem,
             this.scanOnTopMenuItem});
             this.showInPositionToolStripMenuItem.Name = "showInPositionToolStripMenuItem";
             this.showInPositionToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
@@ -290,6 +294,13 @@
             this.scanLeftMenuItem.Size = new System.Drawing.Size(152, 22);
             this.scanLeftMenuItem.Text = "To left";
             this.scanLeftMenuItem.Click += new System.EventHandler(this.scanLeftMenuItem_Click);
+            // 
+            // scanBelowMenuItem
+            // 
+            this.scanBelowMenuItem.Name = "scanBelowMenuItem";
+            this.scanBelowMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanBelowMenuItem.Text = "Below";
+            this.scanBelowMenuItem.Click += new System.EventHandler(this.scanBelowMenuItem_Click);
             // 
             // scanOnTopMenuItem
             // 
@@ -346,6 +357,14 @@
             this.labelBodyScanData.Size = new System.Drawing.Size(0, 20);
             this.labelBodyScanData.TabIndex = 19;
             // 
+            // scanAboveMenuItem
+            // 
+            this.scanAboveMenuItem.DoubleClickEnabled = true;
+            this.scanAboveMenuItem.Name = "scanAboveMenuItem";
+            this.scanAboveMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanAboveMenuItem.Text = "Above";
+            this.scanAboveMenuItem.Click += new System.EventHandler(this.scanAboveMenuItem_Click);
+            // 
             // SummaryPopOut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -400,5 +419,7 @@
         private System.Windows.Forms.ToolStripMenuItem scanRightMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scanLeftMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scanOnTopMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scanBelowMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scanAboveMenuItem;
     }
 }
