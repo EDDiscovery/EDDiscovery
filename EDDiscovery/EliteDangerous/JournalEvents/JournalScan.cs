@@ -116,22 +116,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string DisplayString()
         {
             StringBuilder scanText = new StringBuilder();
-            scanText.AppendLine(BodyName);
-            scanText.AppendLine();
+            scanText.AppendFormat("{0}\n", BodyName);
+            scanText.Append("\n");
             if (!String.IsNullOrEmpty(StarType))
             {
                 //star
                 switch (StarType)
                 {
                     case "N":
-                        scanText.AppendLine("Neutron Star");
+                        scanText.Append("Neutron Star\n");
                         break;
                     case "AeBe":
-                        scanText.AppendLine("Herbig Ae/Be");
+                        scanText.Append("Herbig Ae/Be\n");
                         break;
                     case "H":
                         // currently speculative, not confirmed with actual data...
-                        scanText.AppendLine("Black Hole");
+                        scanText.Append("Black Hole\n");
                         break;
                     default:
                         scanText.AppendFormat("Class {0} star\n", StarType.Replace("_", " "));
@@ -155,9 +155,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             else
             {
                 //planet
-                scanText.AppendLine(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+                scanText.AppendFormat("{0}\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
                                         ToTitleCase(PlanetClass.ToLower()));
-                scanText.AppendLine(TerraformState == "Terraformable" ? "Candidate for terraforming\n" : String.Empty);
+                scanText.Append(TerraformState == "Terraformable" ? "Candidate for terraforming\n" : "\n");
                 scanText.AppendFormat("Earth Masses: {0}\n", MassEM);
                 scanText.AppendFormat("Radius: {0}km\n", (Radius.Value / 1000).ToString("###,##0"));
                 scanText.AppendFormat("Gravity: {0}g\n", SurfaceGravity / 10);
@@ -175,14 +175,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 scanText.AppendFormat("Orbtial Inclination: {0}°\n", OrbitalInclination);
                 scanText.AppendFormat("Arg Of Periapsis: {0}°\n", Periapsis);
                 scanText.AppendFormat("Rotation Period: {0} days", (RotationPeriod / oneDay_s).ToString("###,###,##0.0"));
-                scanText.AppendLine(TidalLock ? " (Tidally locked)" : "");
+                scanText.Append(TidalLock ? " (Tidally locked)\n" : "\n");
                 if (Rings != null && Rings.Any())
                 {
-                    scanText.AppendLine();
+                    scanText.Append("\n");
                     scanText.AppendFormat("Ring{0}", Rings.Count() == 1 ? "" : "s");
                     foreach(PlanetRing ring in Rings)
                     {
-                        scanText.AppendLine();
+                        scanText.Append("\n");
                         scanText.AppendFormat("{0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
                         scanText.AppendFormat("Mass: {0}MT\n", ring.MassMT.ToString("#,###,###,###,###,###,###,###,###"));
                         scanText.AppendFormat("Inner Radius: {0}km\n", (ring.InnerRad / 1000).ToString("#,###,###,###,###"));
@@ -191,8 +191,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 }
                 if (Materials != null && Materials.Any())
                 {
-                    scanText.AppendLine();
-                    scanText.AppendLine("Materials");
+                    scanText.Append("\n");
+                    scanText.Append("Materials\n");
                     foreach(KeyValuePair<string, double> mat in Materials)
                     {
                         scanText.AppendFormat("{0} - {1}%\n", 
