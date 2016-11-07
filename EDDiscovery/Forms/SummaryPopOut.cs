@@ -44,6 +44,9 @@ namespace EDDiscovery2
         private List<int> columnpos;
         private int visiblecolwidth;
         private bool bodyScanShowing = false;
+        private int noScanHeight;
+        private int noScanTop;
+        private bool resizingForScan = false;
         List<Button> dividers;
 
         public event EventHandler RequiresRefresh;
@@ -60,6 +63,7 @@ namespace EDDiscovery2
             showNotes = 16,
             showXYZ = 32,
             showDistancePerStar = 64,
+            showScanAbove = 128,
 
             showDoesNotAffectTabs = 1024,        // above this, tab positions are not changed by changes in these values
 
@@ -74,13 +78,14 @@ namespace EDDiscovery2
             showScanIndefinite = 262144,
             showScanRight = 524288,
             showScanLeft = 1048576,
-            showScanOnTop = 2097152
+            showScanOnTop = 2097152,
+            showScanBelow = 4194304
         };
 
         Configuration config = (Configuration)(Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showTime | Configuration.showDescription | 
                                                Configuration.showInformation | Configuration.showNotes | Configuration.showXYZ | Configuration.showDistancePerStar |
                                                Configuration.showScan15s | Configuration.showScan30s | Configuration.showScan60s | Configuration.showScanIndefinite |
-                                               Configuration.showScanRight | Configuration.showScanLeft | Configuration.showScanOnTop);
+                                               Configuration.showScanRight | Configuration.showScanLeft | Configuration.showScanOnTop | Configuration.showScanBelow);
 
         bool Config(Configuration c) { return ( config & c ) != 0; }
         
@@ -259,7 +264,7 @@ namespace EDDiscovery2
 
             ControlTable ltold = lt;
 
-            lt = new ControlTable(this, 30, 8, 20 , ClientRectangle.Height);
+            lt = new ControlTable(this, 30, (bodyScanShowing && Config(Configuration.showScanAbove) ?  labelBodyScanData.Height + 27 : 8), 20 , ClientRectangle.Height);
             statictoplines = 0;
 
             tabscalar = FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font).SizeInPoints / 8.25;
@@ -455,6 +460,11 @@ namespace EDDiscovery2
                 SuspendLayout();
 
                 if (!Config(Configuration.showScanIndefinite)) scanhide.Stop();
+                if (!bodyScanShowing)
+                {
+                    noScanHeight = this.Height;
+                    noScanTop = this.Top;
+                }
 
                 labelBodyScanData.Height = this.ClientRectangle.Height - 8;
                 labelBodyScanData.Width = 200;
@@ -477,11 +487,40 @@ namespace EDDiscovery2
                     labelBodyScanData.Left = 4;
                     lt.SetDisplaySize(0);
                 }
+                else if (Config(Configuration.showScanBelow))
+                {
+                    resizingForScan = true;
+                    this.Height += 608;
+                    labelBodyScanData.Height = 604;
+                    labelBodyScanData.Top = noScanHeight + 4;
+                    labelBodyScanData.Left = (this.Width / 2) - 100;
+                }
+                else if (Config(Configuration.showScanAbove))
+                {
+                    resizingForScan = true;
+                    int count = 0;
+                    int i = 0;
+                    string pattern = "\n";
+                    while ((i = labelBodyScanData.Text.IndexOf("\n", i)) != -1)
+                    {
+                        i += pattern.Length;
+                        count++;
+                    }
+                    // this is a lot of magic numbers, works for me but I remain a bit worried that other resolutions will see odd behaviour...
+                    int requiredHeight = (count * (int)(labelBodyScanData.Font.SizeInPoints + 2.3)) + 16;
+                    this.Height += (requiredHeight + 32);
+                    this.Top = noScanTop - requiredHeight - 32;
+                    labelBodyScanData.Height = requiredHeight;
+                    labelBodyScanData.Top = 4;
+                    labelBodyScanData.Left = (this.Width / 2) - 100;
+                    RequiresRefresh(this, null);
+                }
 
                 labelBodyScanData.Visible = true;
                 
                 ResumeLayout();
                 if (!Config(Configuration.showScanIndefinite)) scanhide.Start();
+
             }
             
         }
@@ -489,19 +528,27 @@ namespace EDDiscovery2
         private void HideScanData(object sender, EventArgs e)
         {
             labelBodyScanData.Visible = false;
-
+            resizingForScan = false;
             bodyScanShowing = false;
 
             if (Config(Configuration.showScanLeft))
             {
                 ResetTabList();
-                RequiresRefresh(this, null);
             }
             else if (Config(Configuration.showScanOnTop))
             {
                 lt.SetDisplaySize(this.ClientRectangle.Height);
             }
-            
+            else if (Config(Configuration.showScanBelow) || Config(Configuration.showScanAbove))
+            {
+                this.Height = noScanHeight;
+                if (Config(Configuration.showScanAbove)) this.Top = noScanTop;
+                lt.SetDisplaySize(this.ClientRectangle.Height);
+            }
+            // bring the cursor back if we hid it
+            Cursor.Show();
+
+            RequiresRefresh(this, null);
             scanhide.Stop();
         }
 
@@ -597,7 +644,7 @@ namespace EDDiscovery2
 
         private void SummaryPopOut_Resize(object sender, EventArgs e)
         {
-            lt.SetDisplaySize(hideall ? 0 : this.ClientRectangle.Height);
+            if (!bodyScanShowing) lt.SetDisplaySize(hideall ? 0 : this.ClientRectangle.Height);
         }
 
         void FadeOut(object sender, EventArgs e)            // hiding
@@ -630,6 +677,13 @@ namespace EDDiscovery2
 
         private void MouseEnterControl(object sender, EventArgs e)
         {
+            if (resizingForScan)
+            {
+                // stops the cursor appearing and the form fading in if we resize for a scan event and the mouse is now in the control
+                resizingForScan = false;
+                Cursor.Hide();
+                return;
+            }
             autofade.Stop();
             if (panel_grip.Visible == false)
             {
@@ -920,11 +974,24 @@ namespace EDDiscovery2
             FlipConfig(Configuration.showScanLeft, position.HasValue && position.Value == Configuration.showScanLeft);
             FlipConfig(Configuration.showScanRight, position.HasValue && position.Value == Configuration.showScanRight);
             FlipConfig(Configuration.showScanOnTop, position.HasValue && position.Value == Configuration.showScanOnTop);
+            FlipConfig(Configuration.showScanBelow, position.HasValue && position.Value == Configuration.showScanBelow);
+            FlipConfig(Configuration.showScanAbove, position.HasValue && position.Value == Configuration.showScanAbove);
             scanRightMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanRight;
             scanLeftMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanLeft;
             scanOnTopMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanOnTop;
+            scanBelowMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanBelow;
+            scanAboveMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanAbove;
         }
 
+        private void scanBelowMenuItem_Click(object sender, EventArgs e)
+        {
+            SetScanPosition(Configuration.showScanBelow);
+        }
+
+        private void scanAboveMenuItem_Click(object sender, EventArgs e)
+        {
+            SetScanPosition(Configuration.showScanAbove);
+        }
     }
 
     public class ControlTable : IDisposable
