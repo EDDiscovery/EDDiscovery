@@ -133,8 +133,42 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                         // currently speculative, not confirmed with actual data...
                         scanText.Append("Black Hole\n");
                         break;
+                    case "TTS":
+                        scanText.Append("T Tauri\n");
+                        break;
+                    case "CS":
+                    case "C":
+                    case "CN":
+                    case "CJ":
+                    case "CHd":
+                        scanText.AppendFormat("Carbon ({0}) star\n", StarType);
+                        break;
+                    case "W":
+                    case "WN":
+                    case "WNC":
+                    case "WC":
+                    case "WO":
+                        scanText.AppendFormat("Wolf-Rayet ({0}) star\n", StarType);
+                        break;
+                    case "D":
+                    case "DA":
+                    case "DAB":
+                    case "DAO":
+                    case "DAZ":
+                    case "DAV":
+                    case "DB":
+                    case "DBZ":
+                    case "DBV":
+                    case "DO":
+                    case "DOV":
+                    case "DQ":
+                    case "DC":
+                    case "DCV":
+                    case "DX":
+                        scanText.AppendFormat("White Dwarf ({0}) star\n", StarType);
+                        break;
                     default:
-                        scanText.AppendFormat("Class {0} star\n", StarType.Replace("_", " "));
+                        scanText.AppendFormat("Class {0} star\n", StarType.Replace("_", " ").Replace("Super", " Super").Replace("Giant", " Giant"));
                         break;
                 }
                 scanText.AppendFormat("Age: {0} million years\n", Age.ToString("##,####"));
