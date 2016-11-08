@@ -708,11 +708,12 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
-        public static void RemoveDuplicateFSDEntries(int currentcmdrid )
+        public static int RemoveDuplicateFSDEntries(int currentcmdrid )
         {
             // list of systems in journal, sorted by time
             List<JournalLocOrJump> vsSystemsEnts = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().OrderBy(j => j.EventTimeUTC).ToList();
 
+            int count = 0;
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 for (int ji = 1; ji < vsSystemsEnts.Count; ji++)
@@ -727,12 +728,14 @@ namespace EDDiscovery.EliteDangerous
                         if ( previssame )
                         {
                             Delete(prev.Id, cn);
+                            count++;
                             System.Diagnostics.Debug.WriteLine("Dup {0} {1} {2} {3}", prev.Id, current.Id, prev.StarSystem, current.StarSystem);
                         }
                     }
                 }
             }
 
+            return count;
         }
 
         static public Type TypeOfJournalEntry(string text)
