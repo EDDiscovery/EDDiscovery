@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
         private const int DefaultRowHeight = 26;
 
         private static EDDiscoveryForm discoveryform;
-        private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
+        private int displaynumber;                          
 
         private string DbFilterSave { get { return "TravelHistoryControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return "TravelControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
