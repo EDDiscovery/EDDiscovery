@@ -393,7 +393,7 @@ namespace EDDiscovery
         public void NewBodyScan(JournalScan js)
         {
             if (IsSummaryPopOutReady)
-                summaryPopOut.ShowScanData(js);
+                summaryPopOut.ShowScanData(js, _discoveryForm.theme.TextBlockColor);
         }
 
         public void AddNewEntry(HistoryEntry he)
