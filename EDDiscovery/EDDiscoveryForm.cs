@@ -1559,6 +1559,33 @@ namespace EDDiscovery
             RefreshHistoryAsync(forcejournalreload: true, checkedsm: true);
         }
 
+        private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CheckForNewinstaller())
+            {
+                if (newRelease != null)
+                {
+                    NewReleaseForm frm = new NewReleaseForm();
+                    frm.release = newRelease;
+
+                    frm.ShowDialog(this);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No new release found", "EDDiscovery", MessageBoxButtons.OK);
+            }
+        }
+
+        private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDDConfig.CurrentCommander.Nr);
+                RefreshHistoryAsync();
+            }
+        }
+
 
         #endregion
 
@@ -1845,23 +1872,6 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
-        private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (CheckForNewinstaller())
-            {
-                if (newRelease != null)
-                {
-                    NewReleaseForm frm = new NewReleaseForm();
-                    frm.release = newRelease;
-
-                    frm.ShowDialog(this);
-                }
-            }
-            else
-            {
-                MessageBox.Show("No new release found", "EDDiscovery", MessageBoxButtons.OK);
-            }
-        }
     }
 }
 

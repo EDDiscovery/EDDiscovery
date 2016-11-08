@@ -55,6 +55,7 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryChatDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
@@ -86,7 +87,7 @@
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -110,7 +111,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(246, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(247, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -125,7 +126,7 @@
             this.editThemeToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // show2DMapsToolStripMenuItem
@@ -179,7 +180,8 @@
             this.openEliteDangerousDirectoryToolStripMenuItem,
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
             this.read21AndFormerLogFilesToolStripMenuItem,
-            this.rescanAllJournalFilesToolStripMenuItem});
+            this.rescanAllJournalFilesToolStripMenuItem,
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "Admin";
@@ -298,6 +300,13 @@
             this.eDDiscoveryChatDiscordToolStripMenuItem.Text = "EDDiscovery chat (Discord)";
             this.eDDiscoveryChatDiscordToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryChatDiscordToolStripMenuItem_Click);
             // 
+            // checkForNewReleaseToolStripMenuItem
+            // 
+            this.checkForNewReleaseToolStripMenuItem.Name = "checkForNewReleaseToolStripMenuItem";
+            this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.checkForNewReleaseToolStripMenuItem.Text = "Check for new release";
+            this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
+            // 
             // panelInfo
             // 
             this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -373,8 +382,8 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageTravelHistory);
             this.tabControl1.Controls.Add(this.tabPageJournal);
@@ -624,12 +633,12 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
-            // checkForNewReleaseToolStripMenuItem
+            // deleteDuplicateFSDJumpEntriesToolStripMenuItem
             // 
-            this.checkForNewReleaseToolStripMenuItem.Name = "checkForNewReleaseToolStripMenuItem";
-            this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.checkForNewReleaseToolStripMenuItem.Text = "Check for new release";
-            this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Name = "deleteDuplicateFSDJumpEntriesToolStripMenuItem";
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Text = "Delete duplicate FSD Jump entries";
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Click += new System.EventHandler(this.deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -734,5 +743,6 @@
         private ExportControl exportControl1;
         private System.Windows.Forms.ToolStripMenuItem rescanAllJournalFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForNewReleaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteDuplicateFSDJumpEntriesToolStripMenuItem;
     }
 }

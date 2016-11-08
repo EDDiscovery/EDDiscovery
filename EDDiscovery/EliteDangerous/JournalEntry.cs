@@ -708,6 +708,33 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
+        public static void RemoveDuplicateFSDEntries(int currentcmdrid )
+        {
+            // list of systems in journal, sorted by time
+            List<JournalLocOrJump> vsSystemsEnts = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().OrderBy(j => j.EventTimeUTC).ToList();
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                for (int ji = 1; ji < vsSystemsEnts.Count; ji++)
+                {
+                    JournalEvents.JournalFSDJump prev = vsSystemsEnts[ji - 1] as JournalEvents.JournalFSDJump;
+                    JournalEvents.JournalFSDJump current = vsSystemsEnts[ji] as JournalEvents.JournalFSDJump;
+
+                    if ( prev != null && current != null )
+                    {
+                        bool previssame = (prev.StarSystem.Equals(current.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !current.HasCoordinate || (prev.StarPos - current.StarPos).LengthSquared < 0.01));
+
+                        if ( previssame )
+                        {
+                            Delete(prev.Id, cn);
+                            System.Diagnostics.Debug.WriteLine("Dup {0} {1} {2} {3}", prev.Id, current.Id, prev.StarSystem, current.StarSystem);
+                        }
+                    }
+                }
+            }
+
+        }
+
         static public Type TypeOfJournalEntry(string text)
         {
             //foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum))) // check code only to make sure names match
