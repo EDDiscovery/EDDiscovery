@@ -30,12 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
-            this.userControlTG = new EDDiscovery.UserControls.UserControlLog();
+            this.panelHistoryIcon = new System.Windows.Forms.Panel();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelSearch = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelHistory = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
@@ -58,6 +58,7 @@
             this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -66,25 +67,26 @@
             // 
             // TopPanel
             // 
-            this.TopPanel.Controls.Add(this.userControlTG);
+            this.TopPanel.Controls.Add(this.panelHistoryIcon);
             this.TopPanel.Controls.Add(this.buttonFilter);
             this.TopPanel.Controls.Add(this.textBoxFilter);
-            this.TopPanel.Controls.Add(this.label1);
+            this.TopPanel.Controls.Add(this.labelSearch);
             this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
-            this.TopPanel.Controls.Add(this.label2);
+            this.TopPanel.Controls.Add(this.labelHistory);
             this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopPanel.Location = new System.Drawing.Point(0, 0);
             this.TopPanel.Name = "TopPanel";
             this.TopPanel.Size = new System.Drawing.Size(870, 32);
             this.TopPanel.TabIndex = 27;
             // 
-            // userControlTG
+            // panelHistoryIcon
             // 
-            this.userControlTG.Location = new System.Drawing.Point(748, 12);
-            this.userControlTG.Name = "userControlTG";
-            this.userControlTG.Size = new System.Drawing.Size(496, 224);
-            this.userControlTG.TabIndex = 26;
-            this.userControlTG.Load += new System.EventHandler(this.userControlTG_Load);
+            this.panelHistoryIcon.BackgroundImage = global::EDDiscovery.Properties.Resources.travelgrid;
+            this.panelHistoryIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelHistoryIcon.Location = new System.Drawing.Point(3, 4);
+            this.panelHistoryIcon.Name = "panelHistoryIcon";
+            this.panelHistoryIcon.Size = new System.Drawing.Size(24, 24);
+            this.panelHistoryIcon.TabIndex = 26;
             // 
             // buttonFilter
             // 
@@ -96,6 +98,7 @@
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 25;
             this.buttonFilter.Text = "Event Filter";
+            this.toolTip1.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
@@ -107,16 +110,17 @@
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.textBoxFilter, "Display entries matching this string");
             this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
             // 
-            // label1
+            // labelSearch
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(220, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Search";
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(220, 7);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 24;
+            this.labelSearch.Text = "Search";
             // 
             // comboBoxHistoryWindow
             // 
@@ -141,17 +145,18 @@
             this.comboBoxHistoryWindow.SelectedValue = null;
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
             this.comboBoxHistoryWindow.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // label2
+            // labelHistory
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Show History ";
+            this.labelHistory.AutoSize = true;
+            this.labelHistory.Location = new System.Drawing.Point(33, 8);
+            this.labelHistory.Name = "labelHistory";
+            this.labelHistory.Size = new System.Drawing.Size(42, 13);
+            this.labelHistory.TabIndex = 0;
+            this.labelHistory.Text = "History ";
             // 
             // dataViewScrollerPanel1
             // 
@@ -373,6 +378,10 @@
             this.removeJournalEntryToolStripMenuItem.Text = "Remove Journal Entry";
             this.removeJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.removeJournalEntryToolStripMenuItem_Click);
             // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
             // UserControlTravelGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -395,9 +404,9 @@
         private System.Windows.Forms.Panel TopPanel;
         private ExtendedControls.ButtonExt buttonFilter;
         private ExtendedControls.TextBoxBorder textBoxFilter;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelSearch;
         internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelHistory;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         public System.Windows.Forms.DataGridView dataGridViewTravel;
@@ -406,7 +415,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
-        private UserControlLog userControlTG;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem starMapColourToolStripMenuItem;
@@ -421,5 +429,7 @@
         private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
+        private System.Windows.Forms.Panel panelHistoryIcon;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

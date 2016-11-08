@@ -71,13 +71,19 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(EDDiscoveryForm form, int vn ) //0=primary, 1 = first windowed version, etc
+        public void Init(EDDiscoveryForm form, int vn , bool showhistoryicon ) //vn 0=primary, 1 = first windowed version, etc
         {
             discoveryform = form;
             displaynumber = vn;
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
+
+            if ( !showhistoryicon )
+            {
+                panelHistoryIcon.Visible = false;
+                labelHistory.Location = new Point(panelHistoryIcon.Location.X, labelHistory.Location.Y);
+            }
         }
 
         private void userControlTG_Load(object sender, EventArgs e)

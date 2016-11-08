@@ -507,9 +507,10 @@ namespace EDDiscovery
 
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
-            theme.ApplyColors(this);
+            theme.ApplyToForm(this);
 
             travelHistoryControl1.Display();                         // so we repaint this with correct colours.
+            journalViewControl1.Display();
 
             TravelControl.RedrawSummary();
         }

@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelSelected = new System.Windows.Forms.Panel();
             this.labelCurrent = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,5 +82,6 @@
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Label labelCurrent;
         private System.Windows.Forms.Panel panelSelected;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

@@ -30,13 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
+            this.labelNote = new System.Windows.Forms.Label();
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.splitContainerRightOuter = new System.Windows.Forms.SplitContainer();
             this.panelTarget = new System.Windows.Forms.Panel();
             this.labelTarget = new System.Windows.Forms.Label();
             this.panelNoteArea = new System.Windows.Forms.Panel();
-            this.labelNote = new System.Windows.Forms.Label();
             this.panel_system = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -99,6 +99,20 @@
             this.splitContainerRightInner.Panel2.SuspendLayout();
             this.splitContainerRightInner.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // toolTipEddb
+            // 
+            this.toolTipEddb.ShowAlways = true;
+            // 
+            // labelNote
+            // 
+            this.labelNote.AutoSize = true;
+            this.labelNote.Location = new System.Drawing.Point(0, 0);
+            this.labelNote.Name = "labelNote";
+            this.labelNote.Size = new System.Drawing.Size(30, 13);
+            this.labelNote.TabIndex = 28;
+            this.labelNote.Text = "Note";
+            this.toolTipEddb.SetToolTip(this.labelNote, "Enter a note against the currently selected entry");
             // 
             // splitContainerLeftRight
             // 
@@ -187,15 +201,6 @@
             this.panelNoteArea.Size = new System.Drawing.Size(337, 50);
             this.panelNoteArea.TabIndex = 44;
             this.panelNoteArea.Resize += new System.EventHandler(this.panelNoteArea_Resize);
-            // 
-            // labelNote
-            // 
-            this.labelNote.AutoSize = true;
-            this.labelNote.Location = new System.Drawing.Point(0, 0);
-            this.labelNote.Name = "labelNote";
-            this.labelNote.Size = new System.Drawing.Size(30, 13);
-            this.labelNote.TabIndex = 28;
-            this.labelNote.Text = "Note";
             // 
             // panel_system
             // 
@@ -610,8 +615,8 @@
             this.comboBoxCustomPopOut.DataSource = null;
             this.comboBoxCustomPopOut.DisplayMember = "";
             this.comboBoxCustomPopOut.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomPopOut.DropDownHeight = 106;
-            this.comboBoxCustomPopOut.DropDownWidth = 75;
+            this.comboBoxCustomPopOut.DropDownHeight = 200;
+            this.comboBoxCustomPopOut.DropDownWidth = 150;
             this.comboBoxCustomPopOut.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomPopOut.ItemHeight = 13;
             this.comboBoxCustomPopOut.Location = new System.Drawing.Point(151, 37);
@@ -626,6 +631,7 @@
             this.comboBoxCustomPopOut.Size = new System.Drawing.Size(65, 23);
             this.comboBoxCustomPopOut.TabIndex = 18;
             this.comboBoxCustomPopOut.Text = "comboBoxCustom1";
+            this.toolTipEddb.SetToolTip(this.comboBoxCustomPopOut, "Open another window");
             this.comboBoxCustomPopOut.ValueMember = "";
             this.comboBoxCustomPopOut.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPopOut_SelectedIndexChanged);
             // 

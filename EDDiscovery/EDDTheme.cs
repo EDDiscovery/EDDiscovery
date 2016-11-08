@@ -583,11 +583,18 @@ namespace EDDiscovery2
         public void SetCustom()
         { currentsettings.name = "Custom"; }                                // set so custom..
 
-        public void ApplyColors(Form form , Control startcontrol = null )
+        public void ApplyToForm(Form form)
         {
             form.Opacity = currentsettings.formopacity / 100;
             form.BackColor = currentsettings.colors[Settings.CI.form];
 
+            ApplyToControls(form);        // form is the parent of form!
+
+            UpdateToolsTripRenderer();
+        }
+
+        public void ApplyToControls(Control parent)
+        { 
             if (currentsettings.fontname.Equals("") || currentsettings.fontsize < minfontsize)
             {
                 currentsettings.fontname = "Microsoft Sans Serif";          // in case schemes were loaded
@@ -596,39 +603,11 @@ namespace EDDiscovery2
 
             Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);
 
-            foreach (Control c in form.Controls)
-                UpdateColorControls(form, c, fnt, 0);
-
-            UpdateToolsTripRenderer();
+            foreach (Control c in parent.Controls)
+                UpdateColorControls(parent, c, fnt, 0);
         }
 
-        private void UpdateToolsTripRenderer()
-        {
-            // Menu
-            toolstripRenderer.colMenuBackground = currentsettings.colors[Settings.CI.menu_back];
-            toolstripRenderer.colMenuText = currentsettings.colors[Settings.CI.menu_fore];
-            toolstripRenderer.colMenuSelectedBack = currentsettings.colors[Settings.CI.menu_dropdownback];
-            toolstripRenderer.colMenuSelectedText = currentsettings.colors[Settings.CI.menu_dropdownfore];
-
-
-            toolstripRenderer.Dark = Color.Pink; // currentsettings.colors[Settings.CI.menu_dropdownback];
-            //Bitmap bmp = new Bitmap(1, 1);
-            toolstripRenderer.ButtonSelectedBorder = currentsettings.colors[Settings.CI.textbox_success]; ;
-            toolstripRenderer.ButtonSelectBackLight = currentsettings.colors[Settings.CI.button_text];
-
-            // Need a button/Menu highlight
-            toolstripRenderer.ButtonSelectBackDark = currentsettings.colors[Settings.CI.menu_dropdownback];
-
-            // ToolStrip
-            toolstripRenderer.colToolStripBorder = currentsettings.colors[Settings.CI.textbox_border];  // change to tool_Strip border
-            toolstripRenderer.colToolStripBackGround = currentsettings.colors[Settings.CI.toolstrip_back];
-            toolstripRenderer.colToolStripSeparator = currentsettings.colors[Settings.CI.textbox_border];  // change to tool_Strip border
-
-
-
-        }
-
-        public void UpdateColorControls(Control parent , Control myControl, Font fnt, int level)
+        private void UpdateColorControls(Control parent , Control myControl, Font fnt, int level)
         {
 #if DEBUG
             //string pad = "                             ".Substring(0, level);
@@ -993,6 +972,30 @@ namespace EDDiscovery2
             {
                 UpdateColorControls(myControl,subC,fnt,level+1);
             }
+        }
+
+
+        private void UpdateToolsTripRenderer()
+        {
+            // Menu
+            toolstripRenderer.colMenuBackground = currentsettings.colors[Settings.CI.menu_back];
+            toolstripRenderer.colMenuText = currentsettings.colors[Settings.CI.menu_fore];
+            toolstripRenderer.colMenuSelectedBack = currentsettings.colors[Settings.CI.menu_dropdownback];
+            toolstripRenderer.colMenuSelectedText = currentsettings.colors[Settings.CI.menu_dropdownfore];
+
+
+            toolstripRenderer.Dark = Color.Pink; // currentsettings.colors[Settings.CI.menu_dropdownback];
+            //Bitmap bmp = new Bitmap(1, 1);
+            toolstripRenderer.ButtonSelectedBorder = currentsettings.colors[Settings.CI.textbox_success]; ;
+            toolstripRenderer.ButtonSelectBackLight = currentsettings.colors[Settings.CI.button_text];
+
+            // Need a button/Menu highlight
+            toolstripRenderer.ButtonSelectBackDark = currentsettings.colors[Settings.CI.menu_dropdownback];
+
+            // ToolStrip
+            toolstripRenderer.colToolStripBorder = currentsettings.colors[Settings.CI.textbox_border];  // change to tool_Strip border
+            toolstripRenderer.colToolStripBackGround = currentsettings.colors[Settings.CI.toolstrip_back];
+            toolstripRenderer.colToolStripSeparator = currentsettings.colors[Settings.CI.textbox_border];  // change to tool_Strip border
         }
 
         public Color GroupBoxOverride(Control parent, Color d)      // if its a group box behind the control, use the group box back color..

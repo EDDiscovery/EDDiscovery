@@ -14,6 +14,8 @@ namespace EDDiscovery.Controls
     {
         public bool StripAtTop { get; set;  } = false;
         public Bitmap[] Images;     // images
+        public string[] ToolTips;
+
         public int SelectedIndex { get { return si; } set { ChangePanel(value); } }
         public Control CurrentControl;
 
@@ -22,6 +24,9 @@ namespace EDDiscovery.Controls
 
         public delegate Control CreateTab(TabStrip t, int no);
         public event CreateTab OnCreateTab;
+
+        public delegate void PostCreateTab(TabStrip t, int no);
+        public event PostCreateTab OnPostCreateTab;
 
         private Panel[] imagepanels;
         private Timer autofade = new Timer();
@@ -70,6 +75,7 @@ namespace EDDiscovery.Controls
                 panelSelected.BackgroundImage = Images[i];
                 si = i;
 
+                OnPostCreateTab(this, i);
             }
         }
 
@@ -98,6 +104,11 @@ namespace EDDiscovery.Controls
                     imagepanels[i].Click += PanelClick;
                     imagepanels[i].MouseEnter += panelBottom_MouseEnter;
                     imagepanels[i].MouseLeave += panelBottom_MouseLeave;
+
+                    if ( ToolTips != null )
+                        toolTip1.SetToolTip(imagepanels[i], ToolTips[i]);
+
+                    toolTip1.ShowAlways =true;      // if not, it never appears
 
                     panelBottom.Controls.Add(imagepanels[i]);
 
