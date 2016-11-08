@@ -47,6 +47,7 @@
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
             this.label2 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
             this.historyContextMenu.SuspendLayout();
@@ -142,6 +143,7 @@
             // 
             // ColumnText
             // 
+            this.ColumnText.FillWeight = 300F;
             this.ColumnText.HeaderText = "Information";
             this.ColumnText.MinimumWidth = 100;
             this.ColumnText.Name = "ColumnText";
@@ -202,6 +204,7 @@
             this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
             this.buttonRefresh.TabIndex = 3;
             this.buttonRefresh.Text = "Refresh";
+            this.toolTip1.SetToolTip(this.buttonRefresh, "Rescan the journal files and refresh the display");
             this.buttonRefresh.UseVisualStyleBackColor = true;
             this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
             // 
@@ -213,6 +216,7 @@
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.textBoxFilter, "Display entries matching this string");
             this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
             // 
             // label1
@@ -234,6 +238,7 @@
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 4;
             this.buttonFilter.Text = "Event Filter";
+            this.toolTip1.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
@@ -260,6 +265,7 @@
             this.comboBoxJournalWindow.SelectedValue = null;
             this.comboBoxJournalWindow.Size = new System.Drawing.Size(94, 22);
             this.comboBoxJournalWindow.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.comboBoxJournalWindow, "Select the entries selected by age");
             this.comboBoxJournalWindow.ValueMember = "";
             this.comboBoxJournalWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxJournalWindow_SelectedIndexChanged);
             // 
@@ -271,6 +277,10 @@
             this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "Show History ";
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // UserControlJournalGrid
             // 
@@ -294,10 +304,6 @@
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private System.Windows.Forms.DataGridView dataGridViewJournal;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Event;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnText;
         private System.Windows.Forms.Panel panel1;
         private ExtendedControls.ButtonExt buttonRefresh;
         private ExtendedControls.TextBoxBorder textBoxFilter;
@@ -309,5 +315,10 @@
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Event;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnText;
     }
 }

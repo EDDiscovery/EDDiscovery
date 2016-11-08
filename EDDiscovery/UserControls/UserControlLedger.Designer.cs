@@ -48,6 +48,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.contextMenuStripLedger.SuspendLayout();
@@ -216,6 +217,7 @@
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 25;
             this.buttonFilter.Text = "Event Filter";
+            this.toolTip1.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
@@ -227,6 +229,7 @@
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.textBoxFilter, "Display entries matching this string");
             this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
             // 
             // label2
@@ -270,8 +273,13 @@
             this.comboBoxHistoryWindow.SelectedValue = null;
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
             this.comboBoxHistoryWindow.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // UserControlLedger
             // 
@@ -312,5 +320,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
