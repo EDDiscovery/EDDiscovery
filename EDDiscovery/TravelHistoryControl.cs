@@ -393,7 +393,7 @@ namespace EDDiscovery
         public void NewBodyScan(JournalScan js)
         {
             if (IsSummaryPopOutReady)
-                summaryPopOut.ShowScanData(js, _discoveryForm.theme.TextBlockColor);
+                summaryPopOut.ShowScanData(js);
         }
 
         public void AddNewEntry(HistoryEntry he)
@@ -1044,6 +1044,7 @@ namespace EDDiscovery
                 SummaryPopOut p = new SummaryPopOut();
                 p.RequiresRefresh += SummaryRefreshRequested;
                 p.SetGripperColour(_discoveryForm.theme.LabelColor);
+                p.SetTextColour(_discoveryForm.theme.SPanelColor);
                 p.ResetForm(userControlTravelGrid.TravelGrid);
                 p.RefreshTarget(userControlTravelGrid.TravelGrid, _discoveryForm.history.GetLastWithPosition); 
                 p.Show();
