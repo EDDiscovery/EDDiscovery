@@ -46,6 +46,7 @@
             this.label20 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -81,6 +82,7 @@
             this.panel_theme62 = new System.Windows.Forms.Panel();
             this.panel_theme61 = new System.Windows.Forms.Panel();
             this.panel_theme60 = new System.Windows.Forms.Panel();
+            this.panel_theme70 = new System.Windows.Forms.Panel();
             this.panel_theme16 = new System.Windows.Forms.Panel();
             this.panel_theme14 = new System.Windows.Forms.Panel();
             this.panel_theme13 = new System.Windows.Forms.Panel();
@@ -101,8 +103,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.panel_theme70 = new System.Windows.Forms.Panel();
+            this.panel_theme71 = new System.Windows.Forms.Panel();
+            this.label29 = new System.Windows.Forms.Label();
             this.groupBoxColors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -120,6 +122,8 @@
             // 
             // groupBoxColors
             // 
+            this.groupBoxColors.Controls.Add(this.label29);
+            this.groupBoxColors.Controls.Add(this.panel_theme71);
             this.groupBoxColors.Controls.Add(this.label8);
             this.groupBoxColors.Controls.Add(this.comboBox_ButtonStyle);
             this.groupBoxColors.Controls.Add(this.comboBox_TextBorder);
@@ -338,6 +342,15 @@
             this.label26.Size = new System.Drawing.Size(49, 13);
             this.label26.TabIndex = 6;
             this.label26.Text = "ToolStrip";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(531, 266);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(62, 13);
+            this.label28.TabIndex = 6;
+            this.label28.Text = "Check Tick";
             // 
             // label21
             // 
@@ -674,6 +687,16 @@
             this.panel_theme60.TabIndex = 5;
             this.panel_theme60.Tag = "";
             // 
+            // panel_theme70
+            // 
+            this.panel_theme70.AccessibleDescription = "";
+            this.panel_theme70.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme70.Location = new System.Drawing.Point(608, 260);
+            this.panel_theme70.Name = "panel_theme70";
+            this.panel_theme70.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme70.TabIndex = 5;
+            this.panel_theme70.Tag = "";
+            // 
             // panel_theme16
             // 
             this.panel_theme16.AccessibleDescription = "";
@@ -868,24 +891,24 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Font";
             // 
-            // label28
+            // panel_theme71
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(531, 266);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(62, 13);
-            this.label28.TabIndex = 6;
-            this.label28.Text = "Check Tick";
+            this.panel_theme71.AccessibleDescription = "";
+            this.panel_theme71.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme71.Location = new System.Drawing.Point(608, 190);
+            this.panel_theme71.Name = "panel_theme71";
+            this.panel_theme71.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme71.TabIndex = 6;
+            this.panel_theme71.Tag = "";
             // 
-            // panel_theme70
+            // label29
             // 
-            this.panel_theme70.AccessibleDescription = "";
-            this.panel_theme70.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme70.Location = new System.Drawing.Point(608, 260);
-            this.panel_theme70.Name = "panel_theme70";
-            this.panel_theme70.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme70.TabIndex = 5;
-            this.panel_theme70.Tag = "";
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(531, 196);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(44, 13);
+            this.label29.TabIndex = 11;
+            this.label29.Text = "S-Panel";
             // 
             // ThemeEditor
             // 
@@ -986,5 +1009,7 @@
         private System.Windows.Forms.Panel panel_theme61;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Panel panel_theme70;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Panel panel_theme71;
     }
 }

@@ -61,6 +61,7 @@ namespace EDDiscovery2
             SetPanel(panel_theme61, "Tool Strip Border Colour", EDDTheme.Settings.CI.toolstrip_border);
             SetPanel(panel_theme62, "Tool Strip Checked Colour", EDDTheme.Settings.CI.toolstrip_buttonchecked);
             SetPanel(panel_theme70, "Check Box Tick Color", EDDTheme.Settings.CI.checkbox_tick );
+            SetPanel(panel_theme71, "S-Panel Text Colour", EDDTheme.Settings.CI.s_panel);
 
             UpdatePatchesEtc();
 
@@ -107,6 +108,7 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme61);
             _discoveryForm.theme.UpdatePatch(panel_theme62);
             _discoveryForm.theme.UpdatePatch(panel_theme70);
+            _discoveryForm.theme.UpdatePatch(panel_theme71);
             textBox_Font.Text = _discoveryForm.theme.FontName + " " + _discoveryForm.theme.FontSize + " points";
             checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
         }
