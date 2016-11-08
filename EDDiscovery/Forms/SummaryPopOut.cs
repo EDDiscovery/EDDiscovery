@@ -453,7 +453,7 @@ namespace EDDiscovery2
         }
 
         
-        public void ShowScanData(EDDiscovery.EliteDangerous.JournalEvents.JournalScan scan)
+        public void ShowScanData(EDDiscovery.EliteDangerous.JournalEvents.JournalScan scan, Color textColour)
         {
             if (Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite))
             {
@@ -469,6 +469,7 @@ namespace EDDiscovery2
                 labelBodyScanData.Height = this.ClientRectangle.Height - 8;
                 labelBodyScanData.Width = 200;
                 labelBodyScanData.Text = scan.DisplayString();
+                labelBodyScanData.ForeColor = textColour;
                 bodyScanShowing = true;
 
                 if (Config(Configuration.showScanLeft))
