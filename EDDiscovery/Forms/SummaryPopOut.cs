@@ -48,6 +48,7 @@ namespace EDDiscovery2
         private int noScanTop;
         private bool resizingForScan = false;
         List<Button> dividers;
+        private Color themeColour;
 
         public event EventHandler RequiresRefresh;
 
@@ -257,6 +258,12 @@ namespace EDDiscovery2
             this.BackColor = transparentkey;
             this.TransparencyKey = transparentkey;
         }
+
+        public void SetTextColour(Color fromTheme)
+        {
+            themeColour = fromTheme;
+            labelBodyScanData.ForeColor = fromTheme;
+        }
         
         public void ResetForm(DataGridView vsc)
         {
@@ -391,38 +398,34 @@ namespace EDDiscovery2
 
             if (!vscrow.Visible)            // may not be visible due to being turned off.. if so, reject.
                 return;
-
-            Color rowc = CSel(vsc.Rows[vscrow.Index].DefaultCellStyle.ForeColor, vsc.ForeColor);
-            if (rowc.GetBrightness() < 0.15)       // override if its too dark..
-                rowc = Color.White;
-
+            
             List<ControlEntryProperties> cep = new List<ControlEntryProperties>();
             
             HistoryEntry he = EDDiscovery.UserControls.UserControlTravelGrid.GetHistoryEntry(vscrow);
 
             // add an empty column, the scan data will go over the top
             if (bodyScanShowing && Config(Configuration.showScanLeft))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, string.Empty));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, string.Empty));
 
             if (Config( Configuration.showEDSMButton))
                 cep.Add(new ControlEntryProperties(butfont, panel_grip.ForeColor, "!!<EDSMBUT:" + (string)he.System.name));
 
             if (Config( Configuration.showTime))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, ((DateTime)vscrow.Cells[0].Value).ToString("HH:mm.ss")));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, ((DateTime)vscrow.Cells[0].Value).ToString("HH:mm.ss")));
 
             if (Config( Configuration.showDescription))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font),  rowc, (string)vscrow.Cells[2].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[2].Value));
 
             if (Config( Configuration.showInformation))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), rowc, (string)vscrow.Cells[3].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[3].Value));
 
             if (toolStripComboBoxOrder.SelectedIndex == 0 && Config( Configuration.showNotes))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), rowc, (string)vscrow.Cells[4].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[4].Value));
 
             bool showdistance = !Config( Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDJump;
 
             if (toolStripComboBoxOrder.SelectedIndex == 2 && Config( Configuration.showDistancePerStar))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), rowc, showdistance ? DistToStar(he, tpos) : "" ));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), themeColour, showdistance ? DistToStar(he, tpos) : "" ));
 
             if (Config( Configuration.showXYZ) )
             {
@@ -430,16 +433,16 @@ namespace EDDiscovery2
                 string yv = (he.System.HasCoordinate && showdistance) ? he.System.y.ToString("0.00") : "";
                 string zv = (he.System.HasCoordinate && showdistance) ? he.System.z.ToString("0.00") : "";
 
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, xv));
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, yv));
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, zv));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, xv));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, yv));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, zv));
             }
 
             if (toolStripComboBoxOrder.SelectedIndex > 0 && Config( Configuration.showNotes))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), rowc, (string)vscrow.Cells[4].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[4].Value));
 
             if (toolStripComboBoxOrder.SelectedIndex < 2 && Config( Configuration.showDistancePerStar))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), rowc, showdistance ? DistToStar(he, tpos) : ""));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), themeColour, showdistance ? DistToStar(he, tpos) : ""));
 
             if (addit)
             {
@@ -453,7 +456,7 @@ namespace EDDiscovery2
         }
 
         
-        public void ShowScanData(EDDiscovery.EliteDangerous.JournalEvents.JournalScan scan, Color textColour)
+        public void ShowScanData(EDDiscovery.EliteDangerous.JournalEvents.JournalScan scan)
         {
             if (Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite))
             {
@@ -469,7 +472,6 @@ namespace EDDiscovery2
                 labelBodyScanData.Height = this.ClientRectangle.Height - 8;
                 labelBodyScanData.Width = 200;
                 labelBodyScanData.Text = scan.DisplayString();
-                labelBodyScanData.ForeColor = textColour;
                 bodyScanShowing = true;
 
                 if (Config(Configuration.showScanLeft))
