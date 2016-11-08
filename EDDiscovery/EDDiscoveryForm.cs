@@ -1581,7 +1581,8 @@ namespace EDDiscovery
         {
             if (MessageBox.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDDConfig.CurrentCommander.Nr);
+                int n = EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDDConfig.CurrentCommander.Nr);
+                LogLine("Removed " + n + " FSD entries");
                 RefreshHistoryAsync();
             }
         }
