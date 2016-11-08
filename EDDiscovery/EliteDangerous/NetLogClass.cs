@@ -31,20 +31,20 @@ namespace EDDiscovery
         {
         }
 
-        public static List<JournalEntry> ParseFiles(string datapath, out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false, Dictionary<string, NetLogFileReader> netlogreaders = null, int currentcmdrid = -1)
+        static public void ParseFiles(string datapath, out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false, Dictionary<string, NetLogFileReader> netlogreaders = null, int currentcmdrid = -1)
         {
             error = null;
 
             if (datapath == null)
             {
                 error = "Netlog directory not set!";
-                return null;
+                return;
             }
 
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
                 error = "Netlog directory is not present!";
-                return null;
+                return; 
             }
 
             if (netlogreaders == null)
@@ -57,42 +57,14 @@ namespace EDDiscovery
                 currentcmdrid = EDDConfig.Instance.CurrentCmdrID;
             }
 
-            List<JournalLocOrJump> visitedSystems = new List<JournalLocOrJump>();
+            // TLUs
             List<TravelLogUnit> tlus = TravelLogUnit.GetAll();
             Dictionary<string, TravelLogUnit> netlogtravelogUnits = tlus.Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
             Dictionary<long, string> travellogunitid2name = netlogtravelogUnits.Values.ToDictionary(t => t.id, t => t.Name);
             Dictionary<string, List<JournalLocOrJump>> vsc_lookup = JournalEntry.GetAll().OfType<JournalLocOrJump>().GroupBy(v => v.TLUId).Where(g => travellogunitid2name.ContainsKey(g.Key)).ToDictionary(g => travellogunitid2name[g.Key], g => g.ToList());
-            HashSet<long> netlogtluids = new HashSet<long>(netlogtravelogUnits.Values.Select(t => t.id).ToList());
-            HashSet<long> journaltluids = new HashSet<long>(tlus.Where(t => t.type == 3).Select(t => t.id).ToList());
+
+            // list of systems in journal, sorted by time
             List<JournalLocOrJump> vsSystemsEnts = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().OrderBy(j => j.EventTimeUTC).ToList();
-            List<JournalLocOrJump> vsSystemsList = vsSystemsEnts.Where(j => netlogtluids.Contains(j.TLUId)).ToList();
-            List<JournalLocOrJump> journalEnts = vsSystemsEnts.Where(j => journaltluids.Contains(j.TLUId)).ToList();
-
-            if (vsSystemsList != null && forceReload == false)
-            {
-                JournalLocOrJump last = visitedSystems.LastOrDefault();
-                int ji = 0;
-
-                foreach (JournalLocOrJump vs in vsSystemsList)
-                {
-                    while (ji < journalEnts.Count && journalEnts[ji].EventTimeUTC < vs.EventTimeUTC)
-                    {
-                        ji++;
-                    }
-
-                    JournalLocOrJump prev = (ji > 0 && (ji - 1) < journalEnts.Count) ? journalEnts[ji + 1] : null;
-                    JournalLocOrJump next = ji < journalEnts.Count ? journalEnts[ji] : null;
-
-                    bool lastissame = (last != null && last.StarSystem.Equals(vs.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!last.HasCoordinate || !vs.HasCoordinate || (last.StarPos - vs.StarPos).LengthSquared < 0.001));
-                    bool previssame = (prev != null && prev.StarSystem.Equals(vs.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !vs.HasCoordinate || (prev.StarPos - vs.StarPos).LengthSquared < 0.001));
-                    bool nextissame = (next != null && next.StarSystem.Equals(vs.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!next.HasCoordinate || !vs.HasCoordinate || (next.StarPos - vs.StarPos).LengthSquared < 0.001));
-
-                    if (!(lastissame || previssame || nextissame))
-                        visitedSystems.Add(vs);
-
-                    last = vs;
-                }
-            }
 
             // order by file write time so we end up on the last one written
             FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "netLog.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
@@ -149,27 +121,23 @@ namespace EDDiscovery
                                 CommanderId = currentcmdrid,
                             };
 
-                            while (ji < journalEnts.Count && journalEnts[ji].EventTimeUTC < je.EventTimeUTC)
+                            while (ji < vsSystemsEnts.Count && vsSystemsEnts[ji].EventTimeUTC < je.EventTimeUTC)
                             {
-                                ji++;
+                                ji++;   // move to next entry which is bigger in time or equal to ours.
                             }
 
                             JournalLocOrJump prev = (ji > 0 && (ji - 1) < vsSystemsEnts.Count) ? vsSystemsEnts[ji - 1] : null;
                             JournalLocOrJump next = ji < vsSystemsEnts.Count ? vsSystemsEnts[ji] : null;
 
-                            bool previssame = (prev != null && prev.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !je.HasCoordinate || (prev.StarPos - je.StarPos).LengthSquared < 0.001));
-                            bool nextissame = (next != null && next.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!next.HasCoordinate || !je.HasCoordinate || (next.StarPos - je.StarPos).LengthSquared < 0.001));
-                            bool nextissametime = (next != null && next.EventTimeUTC == je.EventTimeUTC);
+                            bool previssame = (prev != null && prev.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !je.HasCoordinate || (prev.StarPos - je.StarPos).LengthSquared < 0.01));
+                            bool nextissame = (next != null && next.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!next.HasCoordinate || !je.HasCoordinate || (next.StarPos - je.StarPos).LengthSquared < 0.01));
+
+                           // System.Diagnostics.Debug.WriteLine("{0} {1} {2}", ji, vsSystemsEnts[ji].EventTimeUTC, je.EventTimeUTC);
 
                             if (!(previssame || nextissame))
                             {
                                 je.Add(cn, tn);
-                                visitedSystems.Add(je);
-                            }
-                            
-                            if (!previssame && nextissame && nextissametime && netlogtluids.Contains(next.TLUId))
-                            {
-                                visitedSystems.Add(next);
+                                System.Diagnostics.Debug.WriteLine("Add {0} {1}", je.EventTimeUTC, je.EventDataString);
                             }
                         }
 
@@ -184,8 +152,6 @@ namespace EDDiscovery
                     }
                 }
             }
-
-            return visitedSystems.ToList<JournalEntry>();
         }
 
         private static NetLogFileReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null, Dictionary<string, List<JournalLocOrJump>> vsc_lookup = null, Dictionary<string, NetLogFileReader> netlogreaders = null)
