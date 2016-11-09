@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox_Preview = new ExtendedControls.GroupBoxCustom();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox_Prevcontrols = new ExtendedControls.GroupBoxCustom();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBoxCropSettings = new ExtendedControls.GroupBoxCustom();
@@ -62,7 +62,7 @@
             this.comboBoxScanFor = new ExtendedControls.ComboBoxCustom();
             this.comboBoxFormat = new ExtendedControls.ComboBoxCustom();
             this.groupBox_Preview.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox_Prevcontrols.SuspendLayout();
             this.groupBoxCropSettings.SuspendLayout();
             this.groupBox_Controls.SuspendLayout();
@@ -74,7 +74,7 @@
             this.groupBox_Preview.BackColorScaling = 0.5F;
             this.groupBox_Preview.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox_Preview.BorderColorScaling = 0.5F;
-            this.groupBox_Preview.Controls.Add(this.pictureBox1);
+            this.groupBox_Preview.Controls.Add(this.pictureBox);
             this.groupBox_Preview.Controls.Add(this.groupBox_Prevcontrols);
             this.groupBox_Preview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_Preview.FillClientAreaWithAlternateColor = false;
@@ -86,16 +86,16 @@
             this.groupBox_Preview.TextPadding = 0;
             this.groupBox_Preview.TextStartPosition = -1;
             // 
-            // pictureBox1
+            // pictureBox
             // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(149, 16);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(746, 493);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 9;
-            this.pictureBox1.TabStop = false;
+            this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox.Location = new System.Drawing.Point(149, 16);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(746, 493);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox.TabIndex = 9;
+            this.pictureBox.TabStop = false;
             // 
             // groupBox_Prevcontrols
             // 
@@ -588,7 +588,7 @@
             this.Size = new System.Drawing.Size(898, 662);
             this.Load += new System.EventHandler(this.ImageHandler_Load);
             this.groupBox_Preview.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.groupBox_Prevcontrols.ResumeLayout(false);
             this.groupBox_Prevcontrols.PerformLayout();
             this.groupBoxCropSettings.ResumeLayout(false);
@@ -610,7 +610,7 @@
         private ExtendedControls.TextBoxBorder textBoxOutputDir;
         private ExtendedControls.ComboBoxCustom comboBoxFormat;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox;
         private ExtendedControls.CheckBoxCustom checkBoxRemove;
         private ExtendedControls.ComboBoxCustom comboBoxFileNameFormat;
         private System.Windows.Forms.Label label4;

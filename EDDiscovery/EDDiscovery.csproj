@@ -259,7 +259,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalEscapeInterdiction.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFactionKillBond.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFetchRemoteModule.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFileheader.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFuelScope.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalHeatDamage.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalHeatWarning.cs" />
@@ -535,10 +535,10 @@
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EliteDangerous\NetLogClass.cs" />
-    <Compile Include="ImageHandler\ImageHandler.cs">
+    <Compile Include="ImageHandler.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ImageHandler\ImageHandler.Designer.cs">
+    <Compile Include="ImageHandler.Designer.cs">
       <DependentUpon>ImageHandler.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -592,6 +592,18 @@
     </Compile>
     <Compile Include="JournalViewControl.Designer.cs">
       <DependentUpon>JournalViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlStats.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlStats.Designer.cs">
+      <DependentUpon>UserControlStats.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlScreenshot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlScreenshot.Designer.cs">
+      <DependentUpon>UserControlScreenshot.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlCommonBase.cs">
       <SubType>UserControl</SubType>
@@ -661,8 +673,14 @@
     <EmbeddedResource Include="UserControls\UserControlMaterialCommodities.resx">
       <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlScreenshot.resx">
+      <DependentUpon>UserControlScreenshot.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlStats.resx">
+      <DependentUpon>UserControlStats.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
@@ -799,6 +817,7 @@
     <None Include="Resources\material.png" />
     <None Include="Resources\ledger.png" />
     <None Include="Resources\journal.png" />
+    <None Include="Resources\stats.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
@@ -861,7 +880,7 @@
     <EmbeddedResource Include="Forms\ThemeEditor.resx">
       <DependentUpon>ThemeEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ImageHandler\ImageHandler.resx">
+    <EmbeddedResource Include="ImageHandler.resx">
       <DependentUpon>ImageHandler.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MoveToCommander.resx">

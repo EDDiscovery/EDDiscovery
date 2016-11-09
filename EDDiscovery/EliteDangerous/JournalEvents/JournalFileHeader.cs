@@ -6,9 +6,9 @@ using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    public class JournalFileHeader : JournalEntry
+    public class JournalFileheader : JournalEntry
     {
-        public JournalFileHeader(JObject evt ) : base(evt, JournalTypeEnum.FileHeader)
+        public JournalFileheader(JObject evt ) : base(evt, JournalTypeEnum.Fileheader)
         {
 
             GameVersion = JSONHelper.GetStringDef(evt["gameversion"]);

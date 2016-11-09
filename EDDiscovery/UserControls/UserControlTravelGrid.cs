@@ -55,6 +55,7 @@ namespace EDDiscovery.UserControls
 
         private const int DefaultRowHeight = 26;
 
+        private TravelHistoryControl travelhistorycontrol;
         private static EDDiscoveryForm discoveryform;
         private int displaynumber;                          
 
@@ -71,19 +72,23 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(EDDiscoveryForm form, int vn , bool showhistoryicon ) //vn 0=primary, 1 = first windowed version, etc
+        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
         {
-            discoveryform = form;
+            travelhistorycontrol = thc;
             displaynumber = vn;
+            discoveryform = thc._discoveryForm;
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
-            if ( !showhistoryicon )
-            {
-                panelHistoryIcon.Visible = false;
-                labelHistory.Location = new Point(panelHistoryIcon.Location.X, labelHistory.Location.Y);
-            }
+            thc.OnHistoryChange += Display;
+            thc.OnNewEntry += AddNewEntry;
+        }
+
+        public void NoHistoryIcon()
+        {
+            panelHistoryIcon.Visible = false;
+            labelHistory.Location = new Point(panelHistoryIcon.Location.X, labelHistory.Location.Y);
         }
 
         private void userControlTG_Load(object sender, EventArgs e)
@@ -97,9 +102,11 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewTravel, DbColumnSave);
         }
 
-        public override void SaveLayout()
+        public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
+            travelhistorycontrol.OnHistoryChange -= Display;
+            travelhistorycontrol.OnNewEntry -= AddNewEntry;
         }
 
         private void dataGridViewTravel_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
@@ -112,10 +119,10 @@ namespace EDDiscovery.UserControls
         
         #endregion
 
-        public int Display( HistoryList hl )           // rowno current.. -1 if nothing
+        public void Display( HistoryList hl )           // rowno current.. -1 if nothing
         {
             if (hl == null)     // just for safety
-                return -1;
+                return;
 
             current_historylist = hl;
             Tuple<long, int> pos = CurrentGridPosByJID();
@@ -152,11 +159,9 @@ namespace EDDiscovery.UserControls
             currentGridRow = rowno;
 
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
-
-            return rowno;
         }
 
-        public void AddNewHistoryRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
+        private void AddNewHistoryRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
         {
             SystemNoteClass snc = SystemNoteClass.GetNoteOnJournalEntry(item.Journalid);
             if (snc == null && item.IsFSDJump)
@@ -207,15 +212,17 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows[rownr].Cells[4].ToolTipText = tip;
         }
 
-        public bool AddNewEntry(HistoryEntry he)
+        private void AddNewEntry(HistoryEntry he)
         {
-            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")))
+            if (WouldAddEntry(he))
             {
                 AddNewHistoryRow(true, he);
-                return true;
             }
-            else
-                return false;
+        }
+
+        public bool WouldAddEntry(HistoryEntry he)
+        {
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
         }
         
         public void SelectTopRow()

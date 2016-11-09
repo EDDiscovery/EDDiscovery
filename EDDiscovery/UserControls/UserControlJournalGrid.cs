@@ -15,7 +15,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlJournalGrid : UserControlCommonBase
     {
-        private static EDDiscoveryForm discoveryform;
+        private EDDiscoveryForm discoveryform;
+        private TravelHistoryControl travelhistorycontrol;
         private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
         EventFilterSelector cfs = new EventFilterSelector();
 
@@ -42,9 +43,10 @@ namespace EDDiscovery.UserControls
             Name = "Journal";
         }
 
-        public void Init(EDDiscoveryForm form, int vn , bool showrefresh) //0=primary, 1 = first windowed version, etc
+        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
         {
-            discoveryform = form;
+            travelhistorycontrol = thc;
+            discoveryform = thc._discoveryForm;
             displaynumber = vn;
 
             dataGridViewJournal.MakeDoubleBuffered();
@@ -55,7 +57,15 @@ namespace EDDiscovery.UserControls
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
-            buttonRefresh.Visible = showrefresh;
+            thc.OnHistoryChange += Display;
+            thc.OnNewEntry += AddNewEntry;
+
+            buttonRefresh.Visible = false;
+        }
+
+        public void ShowRefresh()
+        {
+            buttonRefresh.Visible = true;
         }
 
         public override void LoadLayout()
@@ -63,9 +73,11 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewJournal, DbColumnSave);
         }
 
-        public override void SaveLayout()
+        public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
+            travelhistorycontrol.OnHistoryChange -= Display;
+            travelhistorycontrol.OnNewEntry -= AddNewEntry;
         }
 
         private void dataGridViewJournal_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
@@ -141,7 +153,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows[rownr].Cells[JournalHistoryColumns.HistoryTag].Tag = item;
         }
 
-        public void AddNewEntry(HistoryEntry he)
+        private void AddNewEntry(HistoryEntry he)
         {
             if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")))
             {

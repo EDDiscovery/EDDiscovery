@@ -54,7 +54,7 @@ namespace EDDiscovery.EliteDangerous
         FactionKillBond = 270,
         FSDJump = 280,
         FuelScoop = 290,
-        FileHeader = 300,
+        Fileheader = 300,
         HeatDamage = 310,
         HeatWarning = 320,
         HullDamage = 330,
@@ -746,7 +746,7 @@ namespace EDDiscovery.EliteDangerous
                 //Debug.Assert(p != null);
             //}
 
-            Type t = Type.GetType("EDDiscovery.EliteDangerous.JournalEvents.Journal" + text);
+            Type t = Type.GetType("EDDiscovery.EliteDangerous.JournalEvents.Journal" + text,false,true); // no exception, ignore case here
             return t;
         }
 

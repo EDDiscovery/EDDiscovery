@@ -94,8 +94,7 @@ namespace EDDiscovery.Forms
             isactive = false;
 
             if (uc != null)
-                uc.SaveLayout();
-
+                uc.Closing();
 
             string root = "PopUpForm" + refname;
             SQLiteDBClass.PutSettingInt(root + "Width", this.Width);

@@ -73,6 +73,7 @@ namespace EDDiscovery
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
+        public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
         public bool option_nowindowreposition { get; set; } = false;                             // Cmd line options
         public bool option_debugoptions { get; set; } = false;
@@ -173,7 +174,7 @@ namespace EDDiscovery
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
-            journalViewControl1.InitControl(this);
+            journalViewControl1.InitControl(travelHistoryControl1,0);
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
             exportControl1.InitControl(this);
@@ -509,8 +510,7 @@ namespace EDDiscovery
 
             theme.ApplyToForm(this);
 
-            travelHistoryControl1.Display();                         // so we repaint this with correct colours.
-            journalViewControl1.Display();
+            travelHistoryControl1.Display();
 
             TravelControl.RedrawSummary();
         }
@@ -1788,7 +1788,6 @@ namespace EDDiscovery
         public void RefreshDisplays()
         {
             travelHistoryControl1.Display();
-            journalViewControl1.Display();
         }
 
         public void NewPosition(EliteDangerous.JournalEntry je)
@@ -1821,8 +1820,8 @@ namespace EDDiscovery
 
                 history.Add(he);
 
-                travelHistoryControl1.AddNewEntry(he);
-                journalViewControl1.AddNewEntry(he);
+                travelHistoryControl1.AddNewEntry(he);          // we add to this, which informs all user controls, to refresh, via the callbacks (incl the main journal window)
+
                 if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
                     travelHistoryControl1.NewBodyScan(je as EliteDangerous.JournalEvents.JournalScan);
             }
