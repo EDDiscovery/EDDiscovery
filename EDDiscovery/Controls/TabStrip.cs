@@ -79,22 +79,86 @@ namespace EDDiscovery.Controls
             }
         }
 
+        int tabdisplaystart = 0;    // first tab
+        int tabtotalwidth = 0;      // width of all tabs, plus spaces
+        int tabdisplayed = 0;       // number of tabs
+
+        private void TabStrip_Layout(object sender, LayoutEventArgs e)
+        {
+            if (StripAtTop && panelBottom.Dock != DockStyle.Top)
+            {
+                panelBottom.Dock = DockStyle.Top;
+            }
+        }
+
+        const int Spacing = 4;
+
+        void DisplayTabs( bool setvisible )
+        {
+            int i = 0;
+            for (; i < tabdisplaystart; i++)
+                imagepanels[i].Visible = false;
+
+            bool arrowson = false;
+            bool titleon = true;
+
+            if (setvisible)
+            {
+                int xpos = panelSelected.Width + Spacing*4;       // start here
+                int stoppoint = DisplayRectangle.Width - Spacing; // stop here
+
+                int spaceforarrowsandoneicon = panelArrowLeft.Width + Spacing + imagepanels[0].Width + Spacing + panelArrowRight.Width;
+
+                if ( xpos + spaceforarrowsandoneicon > stoppoint)   // no space at all !
+                {
+                    xpos = 0;                                       // turn off titles, use all the space
+                    titleon = false;
+                }
+
+                if ( xpos + tabtotalwidth > stoppoint )     // if total tab width (icon space icon..) too big
+                {
+                    panelArrowLeft.Location = new Point(xpos, 6);
+                    xpos += panelArrowLeft.Width + Spacing; // move over allowing space for left and spacing
+                    stoppoint -= panelArrowRight.Width + Spacing;     // allow space for right arrow plus padding
+                    arrowson = true;
+                }
+
+                tabdisplayed = 0;           
+                for (; i < imagepanels.Length && xpos < stoppoint - Images[i].Width; i++)
+                {                                           // if its soo tight, may display nothing, thats okay
+                    imagepanels[i].Location = new Point(xpos, 6);
+                    xpos += Images[i].Width + Spacing*2;
+                    imagepanels[i].Visible = true;
+                    tabdisplayed++;
+                }
+
+                if ( arrowson )
+                    panelArrowRight.Location = new Point(xpos, 6);
+            }
+
+            for (; i < imagepanels.Length;i++)
+                imagepanels[i].Visible = false;
+
+            panelArrowRight.Visible = panelArrowLeft.Visible = arrowson;
+            panelSelected.Visible = titleon;
+            labelCurrent.Visible = !setvisible;             // because text widths are so variable, dep on font/dialog units, turn off during selection
+            currentlyvisible = setvisible;
+        }
+
         bool tobevisible = false;
+        bool currentlyvisible = false;
 
         private void panelBottom_MouseEnter(object sender, EventArgs e)
         {
             if (imagepanels == null && Images != null)
             {
-                imagepanels = new Panel[Images.Length];
+                imagepanels = new Panel[Images.Length];     // set to say 4 and you can test it with arrows
 
-                int xpos = 150;
-
-                for (int i = 0; i < Images.Length; i++)
+                for (int i = 0; i < imagepanels.Length; i++)
                 {
                     imagepanels[i] = new Panel()
                     {
                         BackgroundImage = Images[i],
-                        Location = new Point(xpos, 4),
                         Tag = i,
                         BackgroundImageLayout = ImageLayout.None,
                         Visible = false
@@ -105,15 +169,18 @@ namespace EDDiscovery.Controls
                     imagepanels[i].MouseEnter += panelBottom_MouseEnter;
                     imagepanels[i].MouseLeave += panelBottom_MouseLeave;
 
-                    if ( ToolTips != null )
-                        toolTip1.SetToolTip(imagepanels[i], ToolTips[i]);
+                    tabtotalwidth += Images[i].Width + Spacing*2;
 
-                    toolTip1.ShowAlways =true;      // if not, it never appears
+                    if (ToolTips != null)
+                    {
+                        toolTip1.SetToolTip(imagepanels[i], ToolTips[i]);
+                        toolTip1.ShowAlways = true;      // if not, it never appears
+                    }
 
                     panelBottom.Controls.Add(imagepanels[i]);
-
-                    xpos += Images[i].Width + 8;
                 }
+
+                tabtotalwidth -= Spacing * 2;           // don't count last spacing.
             }
 
             autofade.Stop();
@@ -146,19 +213,32 @@ namespace EDDiscovery.Controls
 
             //System.Diagnostics.Debug.WriteLine("{0} {1} Fade {2}" , Environment.TickCount, Name, tobevisible);
 
-            if (imagepanels[0].Visible != tobevisible )
-            { 
-                for (int i = 0; i < Images.Length; i++)
-                    imagepanels[i].Visible = tobevisible;
+            if (currentlyvisible != tobevisible)
+                DisplayTabs(tobevisible);
+        }
+
+        private void panelArrowRight_Click(object sender, EventArgs e)
+        {
+            if (tabdisplaystart < imagepanels.Length - tabdisplayed)
+            {
+                tabdisplaystart++;
+                DisplayTabs(true);
             }
         }
 
-        private void TabStrip_Layout(object sender, LayoutEventArgs e)
+        private void panelArrowLeft_Click(object sender, EventArgs e)
         {
-            if (StripAtTop && panelBottom.Dock != DockStyle.Top )
+            if (tabdisplaystart > 0)
             {
-                panelBottom.Dock = DockStyle.Top;
+                tabdisplaystart--;
+                DisplayTabs(true);
             }
+
+        }
+
+        private void TabStrip_Resize(object sender, EventArgs e)
+        {
+            tabdisplaystart = 0;        // because we will display a different set next time
         }
     }
 }

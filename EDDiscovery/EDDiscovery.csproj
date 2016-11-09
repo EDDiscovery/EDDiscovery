@@ -734,6 +734,8 @@
     <None Include="Resources\cockpitbreached.png" />
     <None Include="Resources\divider.png" />
     <None Include="Resources\commodities.png" />
+    <None Include="Resources\ArrowLeft.png" />
+    <None Include="Resources\ArrowRight.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
