@@ -509,7 +509,8 @@ namespace EDDiscovery2.DB
                 jtype = j,
                 notes = n,
                 cashadjust = ca,
-                cash = CashTotal
+                cash = CashTotal,
+                profitperunit = ppu
             };
 
             transactions.Add(tr);

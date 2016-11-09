@@ -147,7 +147,7 @@
             // 
             // NormProfit
             // 
-            this.NormProfit.HeaderText = "Norm Profit";
+            this.NormProfit.HeaderText = "Profit Per Unit";
             this.NormProfit.MinimumWidth = 20;
             this.NormProfit.Name = "NormProfit";
             // 
@@ -311,6 +311,9 @@
         internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
         private System.Windows.Forms.Label label1;
         private ExtendedControls.TextBoxBorder textBoxFilter;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
+        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
@@ -318,8 +321,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Debits;
         private System.Windows.Forms.DataGridViewTextBoxColumn Balance;
         private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
-        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
