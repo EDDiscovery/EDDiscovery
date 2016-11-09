@@ -15,7 +15,8 @@ namespace EDDiscovery.UserControls
     public partial class UserControlLedger : UserControlCommonBase
     {
         private int displaynumber = 0;
-        EDDiscoveryForm discoveryform;
+        private EDDiscoveryForm discoveryform;
+        private TravelHistoryControl travelhistorycontrol;
 
         EventFilterSelector cfs = new EventFilterSelector();
 
@@ -33,9 +34,10 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(EDDiscoveryForm f , int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
         {
-            discoveryform = f;
+            travelhistorycontrol = thc;
+            discoveryform = thc._discoveryForm;
             displaynumber = vn;
 
             dataGridViewLedger.MakeDoubleBuffered();
@@ -46,6 +48,8 @@ namespace EDDiscovery.UserControls
 
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
+
+            thc.OnLedgerChange += Display;
         }
 
         #endregion
@@ -121,9 +125,10 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewLedger, DbColumnSave);
         }
 
-        public override void SaveLayout()
+        public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
+            travelhistorycontrol.OnLedgerChange -= Display;
         }
 
         private void dataGridViewMC_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)

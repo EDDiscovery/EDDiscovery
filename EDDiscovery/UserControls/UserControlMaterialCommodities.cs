@@ -14,6 +14,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
+        private TravelHistoryControl travelhistorycontrol;
         public bool materials = false;
         private int displaynumber = 0;
         private int namecol, abvcol, catcol, typecol, numcol, pricecol;
@@ -34,8 +35,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
         {
+            travelhistorycontrol = thc;
             displaynumber = vn;
 
             dataGridViewMC.MakeDoubleBuffered();
@@ -56,12 +58,16 @@ namespace EDDiscovery.UserControls
             typecol = (materials) ? 3 : 1;
             numcol = (materials) ? 4 : 2;
             pricecol = (materials) ? -1 : 3;
+
+            if (materials)
+                thc.OnNewSelectionMaterials += Display;
+            else
+                thc.OnNewSelectionCommodities += Display;
         }
 
         #endregion
 
         #region Display
-
 
         public void Display(List<MaterialCommodities> mc)
         {
@@ -105,9 +111,14 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
         }
 
-        public override void SaveLayout()
+        public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
+
+            if (materials)
+                travelhistorycontrol.OnNewSelectionMaterials -= Display;
+            else
+                travelhistorycontrol.OnNewSelectionCommodities -= Display;
         }
 
         private void dataGridViewMC_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
@@ -290,7 +301,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("End edit");
+            //System.Diagnostics.Debug.WriteLine("End edit");
             DataGridViewCell c = dataGridViewMC.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
             if (e.ColumnIndex == numcol)

@@ -64,9 +64,9 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
-            if (je.EventTypeID == JournalTypeEnum.FileHeader)
+            if (je.EventTypeID == JournalTypeEnum.Fileheader)
             {
-                JournalEvents.JournalFileHeader header = (JournalEvents.JournalFileHeader)je;
+                JournalEvents.JournalFileheader header = (JournalEvents.JournalFileheader)je;
 
                 if (header.Beta && !disable_beta_commander_check)
                 {

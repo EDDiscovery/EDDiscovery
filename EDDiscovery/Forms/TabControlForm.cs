@@ -111,7 +111,7 @@ namespace EDDiscovery2
             foreach (TabPage tp in ctc.TabPages)
             {
                 EDDiscovery.UserControls.UserControlCommonBase ucb = (EDDiscovery.UserControls.UserControlCommonBase)tp.Controls[0];
-                ucb.SaveLayout();
+                ucb.Closing();
             }
 
             string root = "PopUpForm" + displaynumber;
