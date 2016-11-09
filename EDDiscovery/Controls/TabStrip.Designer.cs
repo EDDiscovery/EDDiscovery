@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.panelArrowRight = new System.Windows.Forms.Panel();
+            this.panelArrowLeft = new System.Windows.Forms.Panel();
             this.panelSelected = new System.Windows.Forms.Panel();
             this.labelCurrent = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -38,6 +40,8 @@
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.panelArrowRight);
+            this.panelBottom.Controls.Add(this.panelArrowLeft);
             this.panelBottom.Controls.Add(this.panelSelected);
             this.panelBottom.Controls.Add(this.labelCurrent);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -48,6 +52,32 @@
             this.panelBottom.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.panelBottom.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
+            // panelArrowRight
+            // 
+            this.panelArrowRight.BackgroundImage = global::EDDiscovery.Properties.Resources.ArrowRight;
+            this.panelArrowRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelArrowRight.Location = new System.Drawing.Point(304, 4);
+            this.panelArrowRight.Name = "panelArrowRight";
+            this.panelArrowRight.Size = new System.Drawing.Size(12, 20);
+            this.panelArrowRight.TabIndex = 2;
+            this.panelArrowRight.Visible = false;
+            this.panelArrowRight.Click += new System.EventHandler(this.panelArrowRight_Click);
+            this.panelArrowRight.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.panelArrowRight.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            // 
+            // panelArrowLeft
+            // 
+            this.panelArrowLeft.BackgroundImage = global::EDDiscovery.Properties.Resources.ArrowLeft;
+            this.panelArrowLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelArrowLeft.Location = new System.Drawing.Point(272, 4);
+            this.panelArrowLeft.Name = "panelArrowLeft";
+            this.panelArrowLeft.Size = new System.Drawing.Size(12, 20);
+            this.panelArrowLeft.TabIndex = 2;
+            this.panelArrowLeft.Visible = false;
+            this.panelArrowLeft.Click += new System.EventHandler(this.panelArrowLeft_Click);
+            this.panelArrowLeft.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.panelArrowLeft.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            // 
             // panelSelected
             // 
             this.panelSelected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
@@ -55,6 +85,8 @@
             this.panelSelected.Name = "panelSelected";
             this.panelSelected.Size = new System.Drawing.Size(24, 24);
             this.panelSelected.TabIndex = 1;
+            this.panelSelected.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.panelSelected.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
             // labelCurrent
             // 
@@ -64,6 +96,8 @@
             this.labelCurrent.Size = new System.Drawing.Size(92, 13);
             this.labelCurrent.TabIndex = 0;
             this.labelCurrent.Text = "Tab Strip Control..";
+            this.labelCurrent.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.labelCurrent.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
             // TabStrip
             // 
@@ -71,6 +105,7 @@
             this.Name = "TabStrip";
             this.Size = new System.Drawing.Size(562, 352);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.TabStrip_Layout);
+            this.Resize += new System.EventHandler(this.TabStrip_Resize);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.ResumeLayout(false);
@@ -83,5 +118,7 @@
         private System.Windows.Forms.Label labelCurrent;
         private System.Windows.Forms.Panel panelSelected;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Panel panelArrowRight;
+        private System.Windows.Forms.Panel panelArrowLeft;
     }
 }

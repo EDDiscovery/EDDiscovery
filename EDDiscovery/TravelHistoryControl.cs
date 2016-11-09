@@ -119,7 +119,7 @@ namespace EDDiscovery
                                         EDDiscovery.Properties.Resources.journal , //6
                                         EDDiscovery.Properties.Resources.travelgrid , //7 
                                         EDDiscovery.Properties.Resources.screenshot, //8
-                                        EDDiscovery.Properties.Resources.stats, //8
+                                        EDDiscovery.Properties.Resources.stats, //9
                                         };
 
             string[] tooltips = new string[] { "Display the program log",

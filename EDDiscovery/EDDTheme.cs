@@ -674,6 +674,7 @@ namespace EDDiscovery2
                     myControl.Font = fnt;
 
                 MyDgv.Invalidate();
+                MyDgv.PerformLayout();
             }
             else if (myControl is TextBoxBorder)
             {
