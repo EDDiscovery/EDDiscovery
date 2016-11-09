@@ -47,7 +47,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {
             EDDiscovery2.DB.MaterialCommodities mc = mcl.GetMaterialCommodity(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, Type, conn);
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, mc.name + " " + mc.count.ToString(), SellPrice, (double)(SellPrice - AvgPricePaid) / (double)Count);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, mc.name + " " + Count + " Avg " + AvgPricePaid, SellPrice, (double)(SellPrice - AvgPricePaid));
         }
 
     }
