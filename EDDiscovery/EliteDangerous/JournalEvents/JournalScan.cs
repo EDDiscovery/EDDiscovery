@@ -48,6 +48,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         private const double solarRadius_m = 695700000;
         private const double oneAU_m = 149597870000;
         private const double oneDay_s = 86400;
+        private const double oneMoon_MT = 73420000000000;
 
         public JournalScan(JObject evt ) : base(evt, JournalTypeEnum.Scan)
         {
@@ -185,6 +186,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 }                
                 scanText.AppendFormat("Absolute Magnitude: {0}\n", AbsoluteMagnitude);
                 scanText.AppendFormat("Rotation Period: {0} days\n", (RotationPeriod / oneDay_s).ToString("###,###,##0.0"));
+                if (Rings != null && Rings.Any())
+                {
+                    scanText.Append("\n");
+                    scanText.AppendFormat("Belt{0}", Rings.Count() == 1 ? "" : "s");
+                    foreach (PlanetRing ring in Rings)
+                    {
+                        scanText.Append("\n");
+                        scanText.AppendFormat("{0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
+                        scanText.AppendFormat("Moon Masses: {0}\n", (ring.MassMT / oneMoon_MT).ToString("#,###,###,##0.0######"));
+                        scanText.AppendFormat("Inner Radius: {0}ls\n", (ring.InnerRad / 300000000).ToString("#,###,###,###,###"));
+                        scanText.AppendFormat("Outer Radius: {0}ls\n", (ring.OuterRad / 300000000).ToString("#,###,###,###,###"));
+                    }
+                }
             }
             else
             {
@@ -196,7 +210,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 scanText.AppendFormat("Radius: {0}km\n", (Radius.Value / 1000).ToString("###,##0"));
                 scanText.AppendFormat("Gravity: {0}g\n", SurfaceGravity / 10);
                 scanText.AppendFormat("Surface Temp: {0}K\n", SurfaceTemperature.Value.ToString("#,###,###.00"));
-                if (SurfacePressure.HasValue && !PlanetClass.ToLower().Contains("gas"))
+                if (SurfacePressure.HasValue && SurfacePressure.Value > 0.00 && !PlanetClass.ToLower().Contains("gas"))
                     scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (SurfacePressure.Value / 100000).ToString("#,###,###,###,##0.00"));
                 scanText.AppendFormat("Volcanism: {0}\n", Volcanism == String.Empty ? "No Volcanism" : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
                                         ToTitleCase(Volcanism.ToLower()));
