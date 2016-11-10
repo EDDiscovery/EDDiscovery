@@ -549,12 +549,6 @@
     <Compile Include="RouteControl.Designer.cs">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\StatsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\StatsForm.Designer.cs">
-      <DependentUpon>StatsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="SavedRouteExpeditionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -906,9 +900,6 @@
     </Content>
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\StatsForm.resx">
-      <DependentUpon>StatsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SystemViewForm.resx">
       <DependentUpon>SystemViewForm.cs</DependentUpon>

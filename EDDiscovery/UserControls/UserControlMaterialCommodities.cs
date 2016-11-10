@@ -59,18 +59,20 @@ namespace EDDiscovery.UserControls
             numcol = (materials) ? 4 : 2;
             pricecol = (materials) ? -1 : 3;
 
-            if (materials)
-                thc.OnNewSelectionMaterials += Display;
-            else
-                thc.OnNewSelectionCommodities += Display;
+            thc.OnTravelSelectionChanged += Display;
         }
 
         #endregion
 
         #region Display
 
-        public void Display(List<MaterialCommodities> mc)
+        public void Display(HistoryEntry he, HistoryList hl)
         {
+            Display(he?.MaterialCommodity.Sort(!materials));
+        }
+
+        public void Display(List<MaterialCommodities> mc)
+        { 
             DisableEditing();
 
             last_mc = mc;
@@ -115,10 +117,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
 
-            if (materials)
-                travelhistorycontrol.OnNewSelectionMaterials -= Display;
-            else
-                travelhistorycontrol.OnNewSelectionCommodities -= Display;
+            travelhistorycontrol.OnTravelSelectionChanged -= Display;
         }
 
         private void dataGridViewMC_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)

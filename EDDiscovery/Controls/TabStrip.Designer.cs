@@ -81,7 +81,7 @@
             // panelSelected
             // 
             this.panelSelected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.panelSelected.Location = new System.Drawing.Point(3, 4);
+            this.panelSelected.Location = new System.Drawing.Point(3, 3);
             this.panelSelected.Name = "panelSelected";
             this.panelSelected.Size = new System.Drawing.Size(24, 24);
             this.panelSelected.TabIndex = 1;
