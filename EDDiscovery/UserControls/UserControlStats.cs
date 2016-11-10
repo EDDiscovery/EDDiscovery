@@ -172,7 +172,9 @@ namespace EDDiscovery.UserControls
                 height += row.Height + 1;
             }
             height += dataGridViewStats.ColumnHeadersHeight+2;
-            dataGridViewStats.ClientSize = new Size(panelData.Width, height);
+            
+            dataGridViewStats.Location = new Point(0, 0);                           // When window sizes down, you can end up with controls being placed on negative values.  
+            dataGridViewStats.Size = new Size(panelData.Width, height);             // all controls should be placed each time.
 
             mostVisited.Location = new Point(0, height );
             mostVisited.Size = new Size(panelData.Width, mostVisited.Height);
