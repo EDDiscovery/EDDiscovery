@@ -39,6 +39,12 @@ namespace EDDiscovery.UserControls
         public delegate void Resort();
         public event Resort OnResort;
 
+        public delegate void AddedNewEntry(HistoryEntry he, HistoryList hl, bool accepted);
+        public AddedNewEntry OnAddedNewEntry;
+
+        public delegate void Redisplay(HistoryList hl);
+        public Redisplay OnRedisplay;
+
         #region Init
 
         private class TravelHistoryColumns
@@ -81,20 +87,17 @@ namespace EDDiscovery.UserControls
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
-            thc.OnHistoryChange += Display;
-            thc.OnNewEntry += AddNewEntry;
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += AddNewEntry;
+
+            dataGridViewTravel.MakeDoubleBuffered();
+            dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
         }
 
         public void NoHistoryIcon()
         {
             panelHistoryIcon.Visible = false;
             labelHistory.Location = new Point(panelHistoryIcon.Location.X, labelHistory.Location.Y);
-        }
-
-        private void userControlTG_Load(object sender, EventArgs e)
-        {
-            dataGridViewTravel.MakeDoubleBuffered();
-            dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
         }
 
         public override void LoadLayout()
@@ -105,18 +108,10 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
-            travelhistorycontrol.OnHistoryChange -= Display;
-            travelhistorycontrol.OnNewEntry -= AddNewEntry;
+            discoveryform.OnHistoryChange -= Display;
+            discoveryform.OnNewEntry -= AddNewEntry;
         }
 
-        private void dataGridViewTravel_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
-        {
-        }
-
-        private void dataGridViewTravel_Resize(object sender, EventArgs e)
-        {
-        }
-        
         #endregion
 
         public void Display( HistoryList hl )           // rowno current.. -1 if nothing
@@ -159,6 +154,19 @@ namespace EDDiscovery.UserControls
             currentGridRow = rowno;
 
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+
+            if (OnRedisplay != null)
+                OnRedisplay(hl);
+        }
+
+        private void AddNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            bool add = WouldAddEntry(he);
+            if (add)
+                AddNewHistoryRow(true, he);
+
+            if (OnAddedNewEntry != null)
+                OnAddedNewEntry(he, hl, add);
         }
 
         private void AddNewHistoryRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
@@ -210,14 +218,6 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows[rownr].Cells[2].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[3].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[4].ToolTipText = tip;
-        }
-
-        private void AddNewEntry(HistoryEntry he)
-        {
-            if (WouldAddEntry(he))
-            {
-                AddNewHistoryRow(true, he);
-            }
         }
 
         public bool WouldAddEntry(HistoryEntry he)

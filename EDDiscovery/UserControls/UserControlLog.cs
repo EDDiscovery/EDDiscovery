@@ -12,7 +12,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlLog : UserControlCommonBase
     {
-        private TravelHistoryControl travelhistorycontrol;
+        private EDDiscoveryForm discoveryform;
 
         public UserControlLog()
         {
@@ -22,13 +22,13 @@ namespace EDDiscovery.UserControls
 
         public override void Init(TravelHistoryControl thc, int displayno)
         {
-            travelhistorycontrol = thc;
-            travelhistorycontrol.OnNewLogEntry += AppendText;
+            discoveryform = thc._discoveryForm;
+            discoveryform.OnNewLogEntry += AppendText;
         }
 
         public override void Closing()
         {
-            travelhistorycontrol.OnNewLogEntry -= AppendText;
+            discoveryform.OnNewLogEntry -= AppendText;
         }
 
         public void AppendText(string s, Color c)
