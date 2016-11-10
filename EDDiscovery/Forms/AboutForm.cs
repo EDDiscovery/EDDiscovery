@@ -20,15 +20,16 @@ namespace EDDiscovery2.Forms
         private void AboutForm_Load(object sender, EventArgs e)
         {
             textBox1.Text = "Lead developer:" + Environment.NewLine +
-            "Cmdr Finwen  (Robert Wahlström )" + Environment.NewLine + Environment.NewLine + 
-            "Additional developers:" +Environment.NewLine +
-            "Corbin Moran " +Environment.NewLine +
-            "Cruento Mucrone" + Environment.NewLine+
-            "Robby" + Environment.NewLine+
-            "Myshka" + Environment.NewLine+
-            "Zed" + Environment.NewLine+
-            "Marlon Blake" + Environment.NewLine+
-            "Majkl" + Environment.NewLine+
+            "Cmdr Finwen  (Robert Wahlström )" + Environment.NewLine + 
+            Environment.NewLine +
+            "Main developers:" + Environment.NewLine +
+            "Robby" + Environment.NewLine +
+            "Bravada Cadelanne" + Environment.NewLine +
+            Environment.NewLine +
+            "Additional developers:" + Environment.NewLine +
+            "Cruento Mucrone" +   ", Corbin Moran " + Environment.NewLine +
+            "Myshka , Zed" + Environment.NewLine+
+            "Marlon Blake, Majkl" + Environment.NewLine+
             "Smacker" + Environment.NewLine;
 
             buttonOK.Select();
