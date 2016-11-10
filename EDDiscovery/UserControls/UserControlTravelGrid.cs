@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows[rownr].Cells[4].ToolTipText = tip;
         }
 
-        private void AddNewEntry(HistoryEntry he)
+        private void AddNewEntry(HistoryEntry he, HistoryList hl)
         {
             if (WouldAddEntry(he))
             {

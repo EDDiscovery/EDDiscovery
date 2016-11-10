@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows[rownr].Cells[JournalHistoryColumns.HistoryTag].Tag = item;
         }
 
-        private void AddNewEntry(HistoryEntry he)
+        private void AddNewEntry(HistoryEntry he, HistoryList hl)
         {
             if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")))
             {

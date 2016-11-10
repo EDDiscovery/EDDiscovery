@@ -928,7 +928,7 @@ namespace EDDiscovery2
                     MyDgv.RowHeadersWidth = (int)(sz.Width + 6);        // size it to the text, need a little more for rounding
                 }
             }
-            else if (myControl is VScrollBarCustom && parent is DataViewScrollerPanel)
+            else if (myControl is VScrollBarCustom && (parent is DataViewScrollerPanel || parent is Panel))
             {                   // a VScrollbarCustom inside a dataview scroller panel themed as a scroller panel
                 VScrollBarCustom MyDgv = (VScrollBarCustom)myControl;
 
