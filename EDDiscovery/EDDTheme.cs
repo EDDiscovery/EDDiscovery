@@ -10,6 +10,7 @@ using EDDiscovery;
 using System.IO;
 using System.Diagnostics;
 using ExtendedControls;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery2
 {
@@ -222,6 +223,7 @@ namespace EDDiscovery2
         public string TextBlockBorderStyle { get { return currentsettings.textboxborderstyle; } set { SetCustom(); currentsettings.textboxborderstyle = value; } }
         public Color VisitedSystemColor { get { return currentsettings.colors[Settings.CI.travelgrid_visited]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_visited] = value; } }
         public Color NonVisitedSystemColor { get { return currentsettings.colors[Settings.CI.travelgrid_nonvisted]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_nonvisted] = value; } }
+        public Color GridCellText { get { return currentsettings.colors[Settings.CI.grid_celltext]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_celltext] = value; } }
 
         public string ButtonStyle { get { return currentsettings.buttonstyle; } set { SetCustom(); currentsettings.buttonstyle= value; } }
 
@@ -229,6 +231,21 @@ namespace EDDiscovery2
         public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
         public string FontName { get { return currentsettings.fontname; } set { SetCustom(); currentsettings.fontname = value; } }
         public float FontSize { get { return currentsettings.fontsize; } set { SetCustom(); currentsettings.fontsize = value; } }
+
+        public Font GetFont
+        {
+            get
+            {
+                if (currentsettings.fontname.Equals("") || currentsettings.fontsize < minfontsize)
+                {
+                    currentsettings.fontname = "Microsoft Sans Serif";          // in case schemes were loaded
+                    currentsettings.fontsize = 8.25F;
+                }
+
+                return new Font(currentsettings.fontname, currentsettings.fontsize);
+            }
+        }
+
 
         private Settings currentsettings;           // if name = custom, then its not a standard theme..
         private List<Settings> themelist;
@@ -597,15 +614,8 @@ namespace EDDiscovery2
         }
 
         public void ApplyToControls(Control parent)
-        { 
-            if (currentsettings.fontname.Equals("") || currentsettings.fontsize < minfontsize)
-            {
-                currentsettings.fontname = "Microsoft Sans Serif";          // in case schemes were loaded
-                currentsettings.fontsize = 8.25F;
-            }
-
-            Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);
-
+        {
+            Font fnt = GetFont;
             foreach (Control c in parent.Controls)
                 UpdateColorControls(parent, c, fnt, 0);
         }
@@ -928,8 +938,8 @@ namespace EDDiscovery2
                     MyDgv.RowHeadersWidth = (int)(sz.Width + 6);        // size it to the text, need a little more for rounding
                 }
             }
-            else if (myControl is VScrollBarCustom && parent is DataViewScrollerPanel)
-            {                   // a VScrollbarCustom inside a dataview scroller panel themed as a scroller panel
+            else if (myControl is VScrollBarCustom && (parent is DataViewScrollerPanel || parent is EDDiscovery.UserControls.UserControlStats))
+            {                   // a VScrollbarCustom inside a dataview scroller panel themed as a scroller panel, or a other
                 VScrollBarCustom MyDgv = (VScrollBarCustom)myControl;
 
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))
@@ -949,7 +959,7 @@ namespace EDDiscovery2
                 else
                     MyDgv.FlatStyle = FlatStyle.System;
             }
-            else if ( myControl is NumericUpDownCustom )
+            else if (myControl is NumericUpDownCustom)
             {
                 NumericUpDownCustom MyDgv = (NumericUpDownCustom)myControl;
 
@@ -963,6 +973,11 @@ namespace EDDiscovery2
                 MyDgv.updown.MouseOverColor = ButtonExt.Multiply(c1, mouseoverscaling);
                 MyDgv.updown.MouseSelectedColor = ButtonExt.Multiply(c1, mouseselectedscaling);
                 MyDgv.Invalidate();
+            }
+            else if (myControl is Chart)
+            {
+                Chart ctrl = (Chart)myControl;
+                ctrl.BackColor = Color.Transparent;
             }
             else
             {

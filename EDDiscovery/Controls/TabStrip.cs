@@ -117,7 +117,7 @@ namespace EDDiscovery.Controls
 
                 if ( xpos + tabtotalwidth > stoppoint )     // if total tab width (icon space icon..) too big
                 {
-                    panelArrowLeft.Location = new Point(xpos, 6);
+                    panelArrowLeft.Location = new Point(xpos, 4);
                     xpos += panelArrowLeft.Width + Spacing; // move over allowing space for left and spacing
                     stoppoint -= panelArrowRight.Width + Spacing;     // allow space for right arrow plus padding
                     arrowson = true;
@@ -126,14 +126,14 @@ namespace EDDiscovery.Controls
                 tabdisplayed = 0;           
                 for (; i < imagepanels.Length && xpos < stoppoint - Images[i].Width; i++)
                 {                                           // if its soo tight, may display nothing, thats okay
-                    imagepanels[i].Location = new Point(xpos, 6);
+                    imagepanels[i].Location = new Point(xpos, 3);
                     xpos += Images[i].Width + Spacing*2;
                     imagepanels[i].Visible = true;
                     tabdisplayed++;
                 }
 
                 if ( arrowson )
-                    panelArrowRight.Location = new Point(xpos, 6);
+                    panelArrowRight.Location = new Point(xpos, 4);
             }
 
             for (; i < imagepanels.Length;i++)

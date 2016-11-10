@@ -64,12 +64,19 @@ namespace EDDiscovery.UserControls
 
             imageheight = (int)((double)imagewidth / ratiopicture);
 
-            pictureBox.Location = new Point((boxwidth - imagewidth)/2, (boxheight - imageheight) / 2);
-            pictureBox.Size = new Size(imagewidth, imageheight);
+            try
+            {
+                pictureBox.Location = new Point((boxwidth - imagewidth) / 2, (boxheight - imageheight) / 2);
+                pictureBox.Size = new Size(imagewidth, imageheight);
 
-            pictureBox.ImageLocation = ImagePath;
-            pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox.Visible = true;
+                pictureBox.ImageLocation = ImagePath;                       // this could except, so protect..
+                pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                pictureBox.Visible = true;
+            }
+            catch
+            {
+                pictureBox.Visible = false;
+            }
         }
 
         private void UserControlScreenshot_Resize(object sender, EventArgs e)

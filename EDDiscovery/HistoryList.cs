@@ -447,8 +447,26 @@ namespace EDDiscovery
 
         public int GetFSDJumps( TimeSpan t )
         {
-            DateTime tme = DateTime.Now.Subtract(t);
-            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal>=tme select s).Count();
+            DateTime tme = DateTime.UtcNow.Subtract(t);
+            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC>=tme select s).Count();
+        }
+
+        public int GetFSDJumpsBeforeUTC(DateTime utc)
+        {
+            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal < utc select s).Count();
+        }
+
+        public delegate bool FurthestFund(HistoryEntry he, ref double lastv);
+        public HistoryEntry GetConditionally( double lastv, FurthestFund f )              // give a comparision function, find entry
+        {
+            HistoryEntry best = null;
+            foreach( HistoryEntry s in historylist )
+            {
+                if (f(s, ref lastv))
+                    best = s;
+            }
+
+            return best;
         }
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid
