@@ -956,6 +956,7 @@ namespace EDDiscovery
                 int numopened = usercontrolsforms.CountOf(typeof(UserControlStats));  // used to determine name and also key for DB
                 tcf.Init("Statistics " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Stats" + numopened);
                 ucm.Init(this, numopened);
+                ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
 
             comboBoxCustomPopOut.Enabled = false;
