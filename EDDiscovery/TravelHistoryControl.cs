@@ -51,7 +51,7 @@ namespace EDDiscovery
         public delegate void HistoryChange(HistoryList l);
         public event HistoryChange OnHistoryChange;
 
-        public delegate void NewEntry(HistoryEntry l);
+        public delegate void NewEntry(HistoryEntry l, HistoryList hl);
         public event NewEntry OnNewEntry;
 
         public delegate void NewSelectionMaterials(List<MaterialCommodities> mc);
@@ -447,7 +447,7 @@ namespace EDDiscovery
                     _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map - only cares about FSD changes
 
                 if (OnNewEntry != null)     // add to all
-                    OnNewEntry(he);
+                    OnNewEntry(he,_discoveryForm.history);
 
                 if ( userControlTravelGrid.WouldAddEntry(he) )                  // if accepted it on main grid..
                 {
