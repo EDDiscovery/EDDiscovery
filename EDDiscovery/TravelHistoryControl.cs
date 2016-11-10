@@ -39,29 +39,12 @@ namespace EDDiscovery
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
 
-        string logtext = "";     // to keep in case of no logs..
-
         public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
         // Subscribe to these to get various events - layout controls via their Init function do this.
 
-        public delegate void LedgerChange(MaterialCommoditiesLedger l);     
-        public event LedgerChange OnLedgerChange;
-
-        public delegate void HistoryChange(HistoryList l);
-        public event HistoryChange OnHistoryChange;
-
-        public delegate void NewEntry(HistoryEntry l, HistoryList hl);
-        public event NewEntry OnNewEntry;
-
-        public delegate void NewSelectionMaterials(List<MaterialCommodities> mc);
-        public event NewSelectionMaterials OnNewSelectionMaterials;
-
-        public delegate void NewSelectionCommodities(List<MaterialCommodities> mc);
-        public event NewSelectionCommodities OnNewSelectionCommodities;
-
-        public delegate void NewLogEntry(string txt, Color c);
-        public event NewLogEntry OnNewLogEntry;
+        public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);
+        public event TravelSelectionChanged OnTravelSelectionChanged;
 
         #region Initialisation
 
@@ -87,11 +70,14 @@ namespace EDDiscovery
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
-            userControlTravelGrid.Init(this, 0);       // primary first instance - this registers with above events to get info
-            userControlTravelGrid.OnChangedSelection += ChangedSelection;
-            userControlTravelGrid.OnResort += Resort;
+            userControlTravelGrid.Init(this, 0);       // primary first instance - this registers with events in discoveryform to get info
+                                                        // then this display, to update its own controls..
+            userControlTravelGrid.OnRedisplay += UpdatedDisplay;        // call back when you've added a new entry..
+            userControlTravelGrid.OnAddedNewEntry += UpdatedWithAddNewEntry;        // call back when you've added a new entry..
+            userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
+            userControlTravelGrid.OnResort += Resort;   // and if he or she resorts
 
-            TabConfigure(tabStripBottom,1000);
+            TabConfigure(tabStripBottom,1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
             TabConfigure(tabStripBottomRight,1001);
             TabConfigure(tabStripMiddleRight,1002);
 
@@ -156,7 +142,7 @@ namespace EDDiscovery
                 UserControlLog sc = new UserControlLog();
                 sc.Text = "Log";
                 sc.Init(this, displaynumber);
-                sc.AppendText(logtext, _discoveryForm.theme.TextBackColor);
+                sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
                 return sc;
             }
             else if (i == 2)
@@ -235,7 +221,7 @@ namespace EDDiscovery
                 ucm.Init(this, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Statistics";
-                ucm.Display(_discoveryForm.history);
+                ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
                 return ucm;
             }
             else
@@ -399,14 +385,8 @@ namespace EDDiscovery
 
         #region Display history
 
-        public void Display()
+        public void UpdatedDisplay(HistoryList hl)                      // called from main travelgrid when refreshed display
         {
-            if (OnHistoryChange != null)
-                OnHistoryChange(_discoveryForm.history);
-
-            if (OnLedgerChange != null)
-                OnLedgerChange(_discoveryForm.history.materialcommodititiesledger);
-
             ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
             RedrawSummary();
             RefreshTargetInfo();
@@ -414,22 +394,16 @@ namespace EDDiscovery
             _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map
         }
 
-        public void NewBodyScan(JournalScan js)
-        {
-            if (IsSummaryPopOutReady)
-                summaryPopOut.ShowScanData(js);
-        }
-
-        public void AddNewEntry(HistoryEntry he)
+        public void UpdatedWithAddNewEntry(HistoryEntry he, HistoryList hl, bool accepted)     // main travel grid calls after getting a new entry
         {
             try
-            {
+            {   // try is a bit old, probably do not need it.
                 StoreSystemNote();
 
                 if (he.IsFSDJump)
                 {
                     int count = _discoveryForm.history.GetVisitsCount(he.System.name, he.System.id_edsm);
-                    LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
+                    _discoveryForm.LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
 
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
 
@@ -446,10 +420,7 @@ namespace EDDiscovery
                 if (he.IsFSDJump)
                     _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map - only cares about FSD changes
 
-                if (OnNewEntry != null)     // add to all
-                    OnNewEntry(he,_discoveryForm.history);
-
-                if ( userControlTravelGrid.WouldAddEntry(he) )                  // if accepted it on main grid..
+                if ( accepted )                                                 // if accepted it on main grid..
                 {
                     RefreshSummaryRow(userControlTravelGrid.GetRow(0), true);   // Tell the summary new row has been added
                     RefreshTargetInfo();                                        // tell the target system its changed the latest system
@@ -461,9 +432,6 @@ namespace EDDiscovery
                         UpdateDependentsWithSelection();
                     }
                 }
-
-                if (OnLedgerChange != null)
-                    OnLedgerChange(_discoveryForm.history.materialcommodititiesledger);
             }
             catch (Exception ex)
             {
@@ -475,8 +443,7 @@ namespace EDDiscovery
 
         public void ShowSystemInformation(DataGridViewRow rw)
         {
-            List<MaterialCommodities> matres = null;
-            List<MaterialCommodities> comres = null;
+            HistoryEntry syspos = null;
 
             if (rw == null)
             {
@@ -487,7 +454,7 @@ namespace EDDiscovery
             }
             else
             {
-                HistoryEntry syspos = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
+                syspos = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
                 Debug.Assert(syspos != null);
 
                 _discoveryForm.history.FillEDSM(syspos, reload: true); // Fill in any EDSM info we have
@@ -526,16 +493,10 @@ namespace EDDiscovery
                 richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
 
                 csd.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
-
-                matres = syspos.MaterialCommodity.Sort(false);
-                comres = syspos.MaterialCommodity.Sort(true);
             }
 
-            if (OnNewSelectionMaterials != null)
-                OnNewSelectionMaterials(matres);
-
-            if (OnNewSelectionCommodities != null)
-                OnNewSelectionCommodities(comres);
+            if (OnTravelSelectionChanged != null)
+                OnTravelSelectionChanged(syspos, _discoveryForm.history);
         }
 
         private string EnumStringFormat(string str)
@@ -724,8 +685,8 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                LogLineHighlight("Exception : " + ex.Message);
-                LogLineHighlight(ex.StackTrace);
+                _discoveryForm.LogLineHighlight("Exception : " + ex.Message);
+                _discoveryForm.LogLineHighlight(ex.StackTrace);
             }
         }
 
@@ -806,7 +767,7 @@ namespace EDDiscovery
 
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
-            LogLine("Refresh History.");
+            _discoveryForm.LogLine("Refresh History.");
             _discoveryForm.RefreshHistoryAsync(checkedsm: true);
         }
 
@@ -908,7 +869,7 @@ namespace EDDiscovery
 
                 tcf.Init("Log " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Log" + numopened);
                 uclog.Init(this, numopened);
-                uclog.AppendText(logtext, _discoveryForm.theme.TextBackColor);
+                uclog.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
             }
             else if (comboBoxCustomPopOut.SelectedIndex == 2)
             {
@@ -1089,39 +1050,16 @@ namespace EDDiscovery
             ToggleSummaryPopOut();
         }
 
-#endregion
-
-#region LogOut
-
-        public void LogLine(string text)
+        public void NewBodyScan(JournalScan js)
         {
-            LogLineColor(text, _discoveryForm.theme.TextBlockColor);
+            if (IsSummaryPopOutReady)
+                summaryPopOut.ShowScanData(js);
         }
 
-        public void LogLineHighlight(string text)
-        {
-            LogLineColor(text, _discoveryForm.theme.TextBlockHighlightColor);
-        }
+        #endregion
 
-        public void LogLineSuccess(string text)
-        {
-            LogLineColor(text, _discoveryForm.theme.TextBlockSuccessColor);
-        }
-
-        public void LogLineColor(string text, Color color)
-        {
-            try
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
-
-                    if (OnNewLogEntry != null)
-                        OnNewLogEntry(text + Environment.NewLine, color);
-                });
-            }
-            catch { }
-        }
+        #region LogOut
+ 
 
 #endregion
     }

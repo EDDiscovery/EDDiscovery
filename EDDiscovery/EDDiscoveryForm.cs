@@ -80,7 +80,15 @@ namespace EDDiscovery
 
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
-        public event EventHandler HistoryRefreshed;
+        public event EventHandler HistoryRefreshed; // this is an internal hook
+
+
+        public delegate void HistoryChange(HistoryList l);          // subscribe to get events
+        public event HistoryChange OnHistoryChange;
+        public delegate void NewEntry(HistoryEntry l, HistoryList hl);
+        public event NewEntry OnNewEntry;
+        public delegate void NewLogEntry(string txt, Color c);
+        public event NewLogEntry OnNewLogEntry;
 
         static public GalacticMapping galacticMapping;
 
@@ -417,7 +425,7 @@ namespace EDDiscovery
                         if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
                         {
                             newRelease = rel;
-                            this.BeginInvoke(new Action(() => travelHistoryControl1.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
+                            this.BeginInvoke(new Action(() => LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
                             this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
                         return true;
                         }
@@ -486,11 +494,11 @@ namespace EDDiscovery
         {
             if (EliteDangerousClass.EDRunning)
             {
-                travelHistoryControl1.LogLine("EliteDangerous is running.");
+                LogLine("EliteDangerous is running.");
             }
             else
             {
-                travelHistoryControl1.LogLine("EliteDangerous is not running.");
+                LogLine("EliteDangerous is not running.");
             }
         }
 
@@ -510,7 +518,8 @@ namespace EDDiscovery
 
             theme.ApplyToForm(this);
 
-            travelHistoryControl1.Display();
+            if (OnHistoryChange!=null)
+                OnHistoryChange(history);
 
             TravelControl.RedrawSummary();
         }
@@ -523,7 +532,7 @@ namespace EDDiscovery
         {
             if (CanSkipSlowUpdates())
             {
-                travelHistoryControl1.LogLine("Skipping checking for new maps (DEBUG option).");
+                LogLine("Skipping checking for new maps (DEBUG option).");
                 var tcs = new TaskCompletionSource<bool>();
                 tcs.SetResult(false);
                 return tcs.Task;
@@ -534,7 +543,7 @@ namespace EDDiscovery
                 if (!Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
                     Directory.CreateDirectory(Path.Combine(Tools.GetAppDataDirectory(), "Maps"));
 
-                travelHistoryControl1.LogLine("Checking for new EDDiscovery maps");
+                LogLine("Checking for new EDDiscovery maps");
 
                 DeleteMapFile("DW4.png");
                 DeleteMapFile("SC-00.jpg");
@@ -565,12 +574,12 @@ namespace EDDiscovery
                     "Formidine trans.png",
                     "Formidine trans.json"
                 },
-                (s) => travelHistoryControl1.LogLine("Map check complete."),
+                (s) => LogLine("Map check complete."),
                 registerCancelCallback);
             }
             catch (Exception ex)
             {
-                travelHistoryControl1.LogLineHighlight("DownloadImages exception: " + ex.Message);
+                LogLineHighlight("DownloadImages exception: " + ex.Message);
                 var tcs = new TaskCompletionSource<bool>();
                 tcs.SetException(ex);
                 return tcs.Task;
@@ -589,7 +598,7 @@ namespace EDDiscovery
                     Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
                     (n) =>
                     {
-                        if (n) travelHistoryControl1.LogLine("Downloaded map: " + file);
+                        if (n) LogLine("Downloaded map: " + file);
                     }, cb => cancelCallbacks.Add(cb));
                 tasks.Add(task);
             }
@@ -610,7 +619,7 @@ namespace EDDiscovery
             if (EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
             {
                 if (newfile)
-                    travelHistoryControl1.LogLine("Downloaded map: " + file);
+                    LogLine("Downloaded map: " + file);
                 return true;
             }
             else
@@ -628,7 +637,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                travelHistoryControl1.LogLine("Exception in DeleteMapFile:" + ex.Message);
+                LogLine("Exception in DeleteMapFile:" + ex.Message);
             }
         }
 
@@ -674,7 +683,7 @@ namespace EDDiscovery
             if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
             {
                 // Also update galactic mapping from EDSM 
-                travelHistoryControl1.LogLine("Get galactic mapping from EDSM.");
+                LogLine("Get galactic mapping from EDSM.");
                 galacticMapping.DownloadFromEDSM();
 
                 // Skip EDSM full update if update has been performed in last 4 days
@@ -702,7 +711,7 @@ namespace EDDiscovery
                 SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
                 EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
 
-                travelHistoryControl1.LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
+                LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
                 string timestr = SQLiteConnectionSystem.GetSettingString("EDDBSystemsTime", "0");
                 DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
@@ -719,7 +728,7 @@ namespace EDDiscovery
             {
                 if (ex != null)
                 {
-                    travelHistoryControl1.LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                    LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
                 }
 
                 imageHandler1.StartWatcher();
@@ -730,7 +739,7 @@ namespace EDDiscovery
                 EdsmSync.OnDownloadedSystems += RefreshDueToEDSMDownloadedSystems;
 
 
-                travelHistoryControl1.LogLine("Reading travel history");
+                LogLine("Reading travel history");
                 HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
 
                 RefreshHistoryAsync();
@@ -765,7 +774,7 @@ namespace EDDiscovery
                 {
                     string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
 
-                    travelHistoryControl1.LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
+                    LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
                                     "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
                                     "Please continue running ED Discovery until refresh is complete.");
                 }
@@ -841,7 +850,7 @@ namespace EDDiscovery
 
                 if (!cancelRequested())
                 {
-                    travelHistoryControl1.LogLine("Indexing systems table");
+                    LogLine("Indexing systems table");
                     SQLiteDBSystemClass.CreateSystemsTableIndexes();
 
                     PerformEDDBFullSync(cancelRequested, reportProgress);
@@ -851,22 +860,22 @@ namespace EDDiscovery
 
             if (!cancelRequested())
             {
-                travelHistoryControl1.LogLine("Indexing systems table");
+                LogLine("Indexing systems table");
                 SQLiteDBSystemClass.CreateSystemsTableIndexes();
 
                 if (CanSkipSlowUpdates())
                 {
-                    travelHistoryControl1.LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
+                    LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
                 }
                 else
                 {
                     lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
                     if (DateTime.UtcNow.Subtract(lastmod).TotalHours >= 1)
                     {
-                        travelHistoryControl1.LogLine("Checking for new EDSM systems (may take a few moments).");
+                        LogLine("Checking for new EDSM systems (may take a few moments).");
                         EDSMClass edsm = new EDSMClass();
                         long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
-                        travelHistoryControl1.LogLine("EDSM updated " + updates + " systems.");
+                        LogLine("EDSM updated " + updates + " systems.");
                         performhistoryrefresh |= (updates > 0);
                     }
                 }
@@ -884,15 +893,15 @@ namespace EDDiscovery
             {
                 if (ex != null)
                 {
-                    travelHistoryControl1.LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                    LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
                 }
 
                 long totalsystems = SystemClass.GetTotalSystems();
-                travelHistoryControl1.LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
 
                 if (performhistoryrefresh)
                 {
-                    travelHistoryControl1.LogLine("Refresh due to updating systems");
+                    LogLine("Refresh due to updating systems");
                     HistoryRefreshed += HistoryFinishedRefreshing;
                     RefreshHistoryAsync();
                 }
@@ -904,14 +913,14 @@ namespace EDDiscovery
         private void HistoryFinishedRefreshing(object sender, EventArgs e)
         {
             HistoryRefreshed -= HistoryFinishedRefreshing;
-            travelHistoryControl1.LogLine("Refreshing complete.");
+            LogLine("Refreshing complete.");
 
             if (syncwasfirstrun)
             {
-                travelHistoryControl1.LogLine("EDSM and EDDB update complete. Please restart ED Discovery to complete the synchronisation ");
+                LogLine("EDSM and EDDB update complete. Please restart ED Discovery to complete the synchronisation ");
             }
             else if (syncwaseddboredsm)
-                travelHistoryControl1.LogLine("EDSM and/or EDDB update complete.");
+                LogLine("EDSM and/or EDDB update complete.");
         }
 
         private void _syncWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -943,18 +952,18 @@ namespace EDDiscovery
 
                 EDSMClass edsm = new EDSMClass();
 
-                travelHistoryControl1.LogLine("Get hidden systems from EDSM and remove from database");
+                LogLine("Get hidden systems from EDSM and remove from database");
 
                 SystemClass.RemoveHiddenSystems();
 
                 if (cancelRequested())
                     return false;
 
-                travelHistoryControl1.LogLine("Download systems file from EDSM.");
+                LogLine("Download systems file from EDSM.");
 
                 string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
 
-                travelHistoryControl1.LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
+                LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
 
                 bool newfile;
                 bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
@@ -968,7 +977,7 @@ namespace EDDiscovery
                     if (!cancelRequested())       // abort, without saving time, to make it do it again
                     {
                         SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                        travelHistoryControl1.LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
+                        LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
                         SQLiteDBSystemClass.ReplaceSystemsTable();
                         SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
@@ -982,7 +991,7 @@ namespace EDDiscovery
 
                 if (!success)
                 {
-                    travelHistoryControl1.LogLine("Failed to download EDSM system file from server, will check next time");
+                    LogLine("Failed to download EDSM system file from server, will check next time");
                     return false;
                 }
 
@@ -990,14 +999,14 @@ namespace EDDiscovery
                 if (cancelRequested())
                     return false;
 
-                travelHistoryControl1.LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
+                LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
                 performedsmsync = false;
                 GC.Collect();
             }
             catch (Exception ex)
             {
-                travelHistoryControl1.LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
+                LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
             }
 
             return (updates > 0);
@@ -1012,7 +1021,7 @@ namespace EDDiscovery
         {
             try
             {
-                travelHistoryControl1.LogLine("Get systems from EDDB.");
+                LogLine("Get systems from EDDB.");
 
                 string systemFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems.json");
                 bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v4/systems_populated.json", systemFileName);
@@ -1022,22 +1031,22 @@ namespace EDDiscovery
                     if (cancelRequested())
                         return;
 
-                    travelHistoryControl1.LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
+                    LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
 
-                    long number = SystemClass.ParseEDDBUpdateSystems(systemFileName, travelHistoryControl1.LogLineHighlight);
+                    long number = SystemClass.ParseEDDBUpdateSystems(systemFileName, LogLineHighlight);
 
-                    travelHistoryControl1.LogLine("Local database updated with EDDB data, " + number + " systems updated");
+                    LogLine("Local database updated with EDDB data, " + number + " systems updated");
                     SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
                 }
                 else
-                    travelHistoryControl1.LogLineHighlight("Failed to download EDDB Systems. Will try again next run.");
+                    LogLineHighlight("Failed to download EDDB Systems. Will try again next run.");
 
                 GC.Collect();
                 performeddbsync = false;
             }
             catch (Exception ex)
             {
-                travelHistoryControl1.LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
+                LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
             }
         }
 
@@ -1046,14 +1055,38 @@ namespace EDDiscovery
 
         #region Logging
 
-        public void LogLine(string s)
+        private string logtext = "";     // to keep in case of no logs..
+
+        public string LogText { get { return logtext; } }
+
+        public void LogLine(string text)
         {
-            travelHistoryControl1.LogLine(s);
+            LogLineColor(text, theme.TextBlockColor);
         }
 
-        public void LogLineHighlight(string s)
+        public void LogLineHighlight(string text)
         {
-            travelHistoryControl1.LogLineHighlight(s);
+            LogLineColor(text, theme.TextBlockHighlightColor);
+        }
+
+        public void LogLineSuccess(string text)
+        {
+            LogLineColor(text, theme.TextBlockSuccessColor);
+        }
+
+        public void LogLineColor(string text, Color color)
+        {
+            try
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
+
+                    if (OnNewLogEntry != null)
+                        OnNewLogEntry(text + Environment.NewLine, color);
+                });
+            }
+            catch { }
         }
 
         public void ReportProgress(int percentComplete, string message)
@@ -1177,7 +1210,7 @@ namespace EDDiscovery
                 }
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
-                travelHistoryControl1.LogLineHighlight("Closing down, please wait..");
+                LogLineHighlight("Closing down, please wait..");
                 Console.WriteLine("Close.. safe close launched");
                 safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
                 safeClose.Start();
@@ -1298,15 +1331,6 @@ namespace EDDiscovery
             }
         }
 
-        private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            StatsForm frm = new StatsForm();
-
-            frm._discoveryForm = this;
-            frm.Show();
-
-        }
-
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
@@ -1318,8 +1342,6 @@ namespace EDDiscovery
         {
             TravelControl.buttonMap_Click(sender, e);
         }
-
-
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1742,7 +1764,7 @@ namespace EDDiscovery
             {
                 if (e.Error != null)
                 {
-                    travelHistoryControl1.LogLineHighlight("History Refresh Error: " + e.Error.Message);
+                    LogLineHighlight("History Refresh Error: " + e.Error.Message);
                 }
                 else
                 {
@@ -1759,9 +1781,10 @@ namespace EDDiscovery
                     history.materialcommodititiesledger = ((RefreshWorkerResults)e.Result).retledger;
 
                     ReportProgress(-1, "");
-                    travelHistoryControl1.LogLine("Refresh Complete." );
+                    LogLine("Refresh Complete." );
 
-                    RefreshDisplays();
+                    if (OnHistoryChange != null)
+                        OnHistoryChange(history);
                 }
 
                 travelHistoryControl1.RefreshButton(true);
@@ -1780,14 +1803,10 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        public void RefreshFrontEnd()           // this just does another fetch and redisplay, does not check log files, or edsm systems
-        {
-            RefreshDisplays();
-        }
-
         public void RefreshDisplays()
         {
-            travelHistoryControl1.Display();
+            if (OnHistoryChange != null)
+                OnHistoryChange(history);
         }
 
         public void NewPosition(EliteDangerous.JournalEntry je)
@@ -1820,7 +1839,8 @@ namespace EDDiscovery
 
                 history.Add(he);
 
-                travelHistoryControl1.AddNewEntry(he);          // we add to this, which informs all user controls, to refresh, via the callbacks (incl the main journal window)
+                if (OnNewEntry != null)
+                    OnNewEntry(he,history);
 
                 if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
                     travelHistoryControl1.NewBodyScan(je as EliteDangerous.JournalEvents.JournalScan);
@@ -1832,8 +1852,6 @@ namespace EDDiscovery
 
 
         #endregion
-
-
 
         private void panelInfo_Click(object sender, EventArgs e)
         {

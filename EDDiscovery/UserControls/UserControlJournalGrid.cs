@@ -57,8 +57,8 @@ namespace EDDiscovery.UserControls
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
-            thc.OnHistoryChange += Display;
-            thc.OnNewEntry += AddNewEntry;
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += AddNewEntry;
 
             buttonRefresh.Visible = false;
         }
@@ -76,18 +76,9 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
-            travelhistorycontrol.OnHistoryChange -= Display;
-            travelhistorycontrol.OnNewEntry -= AddNewEntry;
+            discoveryform.OnHistoryChange -= Display;
+            discoveryform.OnNewEntry -= AddNewEntry;
         }
-
-        private void dataGridViewJournal_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
-        {
-        }
-
-        private void dataGridViewJournal_Resize(object sender, EventArgs e)
-        {
-        }
-
 
         #endregion
 
