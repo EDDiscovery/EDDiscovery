@@ -46,6 +46,9 @@ namespace EDDiscovery
         public const int WM_NCMOUSEMOVE = 0xA0;
         public const int HT_CLIENT = 0x1;
         public const int HT_CAPTION = 0x2;
+        public const int HT_LEFT = 0xA;
+        public const int HT_RIGHT = 0xB;
+        public const int HT_BOTTOM = 0xF;
         public const int HT_BOTTOMRIGHT = 0x11;
         public const int WM_NCL_RESIZE = 0x112;
         public const int HT_RESIZE = 61448;
@@ -1461,6 +1464,7 @@ namespace EDDiscovery
             else if (m.Msg == WM_NCHITTEST)
             {
                 base.WndProc(ref m);
+                //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
 
                 if ((int)m.Result == HT_CLIENT)
                 {
@@ -1471,6 +1475,18 @@ namespace EDDiscovery
                     if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
                     {
                         m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                    }
+                    else if ( p.Y > this.ClientSize.Height - statusStrip1.Height )
+                    {
+                        m.Result = (IntPtr)HT_BOTTOM;
+                    }
+                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
+                    {
+                        m.Result = (IntPtr)HT_RIGHT;
+                    }
+                    else if (p.X < 5)
+                    {
+                        m.Result = (IntPtr)HT_LEFT;
                     }
                     else if (!theme.WindowsFrame)
                     {
@@ -1483,7 +1499,7 @@ namespace EDDiscovery
                 base.WndProc(ref m);
             }
         }
-
+        
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
         {
             EDDiscoveryForm_MouseDown(sender, e);
