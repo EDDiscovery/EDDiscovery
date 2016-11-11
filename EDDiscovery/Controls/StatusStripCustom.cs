@@ -34,7 +34,7 @@ namespace ExtendedControls
                     int y = unchecked((short)((uint)m.LParam >> 16));
                     Point p = PointToClient(new Point(x, y));
 
-                    if (p.X >= this.ClientSize.Width - this.ClientSize.Height)
+                    if (p.X >= this.ClientSize.Width - this.ClientSize.Height || p.Y >= this.ClientSize.Height - 5) // corner, or bottom strip
                     {
                         // Tell the system to test the parent
                         m.Result = (IntPtr)HT_TRANSPARENT;
