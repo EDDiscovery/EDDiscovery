@@ -15,6 +15,8 @@ namespace EDDiscovery
 {
     public partial class JournalViewControl : UserControl
     {
+        EDDiscoveryForm discoveryform;
+
         public JournalViewControl()
         {
             InitializeComponent();
@@ -22,8 +24,10 @@ namespace EDDiscovery
 
         public void InitControl(EDDiscoveryForm ed, int displaynumber)
         {
+            discoveryform = ed;
             userControlJournalGrid.Init(ed,displaynumber);
             userControlJournalGrid.ShowRefresh();
+            userControlJournalGrid.OnPopOut += PopOut;
         }
 
         #region Layout
@@ -41,6 +45,11 @@ namespace EDDiscovery
         public void RefreshButton(bool state)
         {
             userControlJournalGrid.RefreshButton(state);
+        }
+
+        public void PopOut()
+        {
+            discoveryform.TravelControl.PopOut(TravelHistoryControl.PopOuts.Journal);
         }
 
         #endregion

@@ -450,7 +450,7 @@
             // buttonEDSM
             // 
             this.buttonEDSM.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEDSM.Image = ExtendedControls.DrawnPanel.ImageType.Text;
+            this.buttonEDSM.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Text;
             this.buttonEDSM.ImageText = "EDSM";
             this.buttonEDSM.Location = new System.Drawing.Point(208, 6);
             this.buttonEDSM.MarginSize = 0;
@@ -479,7 +479,7 @@
             this.buttonRoss.BackColor = System.Drawing.SystemColors.ControlText;
             this.buttonRoss.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonRoss.ForeColor = System.Drawing.SystemColors.Control;
-            this.buttonRoss.Image = ExtendedControls.DrawnPanel.ImageType.Ross;
+            this.buttonRoss.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Ross;
             this.buttonRoss.ImageText = null;
             this.buttonRoss.Location = new System.Drawing.Point(275, 6);
             this.buttonRoss.MarginSize = 0;
@@ -496,7 +496,7 @@
             this.buttonEDDB.BackColor = System.Drawing.SystemColors.Control;
             this.buttonEDDB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonEDDB.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonEDDB.Image = ExtendedControls.DrawnPanel.ImageType.EDDB;
+            this.buttonEDDB.ImageSelected = ExtendedControls.DrawnPanel.ImageType.EDDB;
             this.buttonEDDB.ImageText = null;
             this.buttonEDDB.Location = new System.Drawing.Point(252, 6);
             this.buttonEDDB.MarginSize = 0;

@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelArrowRight = new System.Windows.Forms.Panel();
             this.panelArrowLeft = new System.Windows.Forms.Panel();
             this.panelSelected = new System.Windows.Forms.Panel();
@@ -40,6 +41,7 @@
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.drawnPanelPopOut);
             this.panelBottom.Controls.Add(this.panelArrowRight);
             this.panelBottom.Controls.Add(this.panelArrowLeft);
             this.panelBottom.Controls.Add(this.panelSelected);
@@ -51,6 +53,20 @@
             this.panelBottom.TabIndex = 0;
             this.panelBottom.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.panelBottom.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            // 
+            // drawnPanelPopOut
+            // 
+            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout;
+            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.DrawnImage;
+            this.drawnPanelPopOut.ImageText = null;
+            this.drawnPanelPopOut.Location = new System.Drawing.Point(387, 3);
+            this.drawnPanelPopOut.MarginSize = 4;
+            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
+            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
+            this.drawnPanelPopOut.Name = "drawnPanelPopOut";
+            this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
+            this.drawnPanelPopOut.TabIndex = 3;
+            this.drawnPanelPopOut.Click += new System.EventHandler(this.panelPopOut_Click);
             // 
             // panelArrowRight
             // 
@@ -120,5 +136,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panelArrowRight;
         private System.Windows.Forms.Panel panelArrowLeft;
+        private ExtendedControls.DrawnPanel drawnPanelPopOut;
     }
 }

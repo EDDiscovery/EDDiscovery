@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
 
 namespace EDDiscovery.Controls
 {
@@ -15,7 +16,8 @@ namespace EDDiscovery.Controls
         public bool StripAtTop { get; set;  } = false;
         public Bitmap[] Images;     // images
         public string[] ToolTips;
-
+        public bool ShowPopOut { get; set; }= true;
+        
         public int SelectedIndex { get { return si; } set { ChangePanel(value); } }
         public Control CurrentControl;
 
@@ -28,15 +30,19 @@ namespace EDDiscovery.Controls
         public delegate void PostCreateTab(TabStrip t, int no);
         public event PostCreateTab OnPostCreateTab;
 
+        public delegate void PopOut(TabStrip t, int no);
+        public event PopOut OnPopOut;
+
         private Panel[] imagepanels;
         private Timer autofade = new Timer();
         private int si = 0;
-       
+
         public TabStrip()
         {
             InitializeComponent();
             labelCurrent.Text = "None";
             autofade.Tick += FadeInOut;
+            drawnPanelPopOut.Visible = false;
         }
 
         public void PanelClick(object sender , EventArgs e )
@@ -55,11 +61,13 @@ namespace EDDiscovery.Controls
                 this.Controls.Remove(CurrentControl);
                 CurrentControl.Dispose();
                 CurrentControl = null;
+                drawnPanelPopOut.Visible = false;
+                labelCurrent.Visible = false;
             }
 
             if ( OnCreateTab != null )
             {
-                CurrentControl = OnCreateTab(this,i);
+                CurrentControl = OnCreateTab(this, i);
                 CurrentControl.Dock = DockStyle.Fill;
 
                 if (StripAtTop)
@@ -71,9 +79,16 @@ namespace EDDiscovery.Controls
                 }
                 else
                     this.Controls.Add(CurrentControl);
-                labelCurrent.Text = CurrentControl.Text;
-                panelSelected.BackgroundImage = Images[i];
+
                 si = i;
+
+                panelSelected.BackgroundImage = Images[i];
+
+                labelCurrent.Text = CurrentControl.Text;
+                labelCurrent.Visible = !tabstripvisible;
+
+                drawnPanelPopOut.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, 3);
+                drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
 
                 OnPostCreateTab(this, i);
             }
@@ -142,11 +157,13 @@ namespace EDDiscovery.Controls
             panelArrowRight.Visible = panelArrowLeft.Visible = arrowson;
             panelSelected.Visible = titleon;
             labelCurrent.Visible = !setvisible;             // because text widths are so variable, dep on font/dialog units, turn off during selection
-            currentlyvisible = setvisible;
+            tabstripvisible = setvisible;
+
+            drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
         }
 
         bool tobevisible = false;
-        bool currentlyvisible = false;
+        bool tabstripvisible = false;
 
         private void panelBottom_MouseEnter(object sender, EventArgs e)
         {
@@ -213,7 +230,7 @@ namespace EDDiscovery.Controls
 
             //System.Diagnostics.Debug.WriteLine("{0} {1} Fade {2}" , Environment.TickCount, Name, tobevisible);
 
-            if (currentlyvisible != tobevisible)
+            if (tabstripvisible != tobevisible)
                 DisplayTabs(tobevisible);
         }
 
@@ -239,6 +256,19 @@ namespace EDDiscovery.Controls
         private void TabStrip_Resize(object sender, EventArgs e)
         {
             tabdisplaystart = 0;        // because we will display a different set next time
+        }
+
+        private void panelPopOut_Click(object sender, EventArgs e)
+        {
+            if (OnPopOut != null)
+                OnPopOut(this, si);
+        }
+
+        private void panelPopOut_Paint_Unused(object sender, PaintEventArgs e)
+        {
+
+            //Image img = new Bitmap(i.Width, i.Height);
+            
         }
     }
 }

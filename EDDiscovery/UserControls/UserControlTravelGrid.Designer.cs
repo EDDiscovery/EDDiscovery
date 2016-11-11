@@ -30,12 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelHistoryIcon = new System.Windows.Forms.Panel();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.labelSearch = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
-            this.labelHistory = new System.Windows.Forms.Label();
+            this.labelTime = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
@@ -67,17 +68,32 @@
             // 
             // TopPanel
             // 
+            this.TopPanel.Controls.Add(this.drawnPanelPopOut);
             this.TopPanel.Controls.Add(this.panelHistoryIcon);
             this.TopPanel.Controls.Add(this.buttonFilter);
             this.TopPanel.Controls.Add(this.textBoxFilter);
             this.TopPanel.Controls.Add(this.labelSearch);
             this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
-            this.TopPanel.Controls.Add(this.labelHistory);
+            this.TopPanel.Controls.Add(this.labelTime);
             this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopPanel.Location = new System.Drawing.Point(0, 0);
             this.TopPanel.Name = "TopPanel";
             this.TopPanel.Size = new System.Drawing.Size(870, 32);
             this.TopPanel.TabIndex = 27;
+            // 
+            // drawnPanelPopOut
+            // 
+            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout;
+            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.DrawnImage;
+            this.drawnPanelPopOut.ImageText = null;
+            this.drawnPanelPopOut.Location = new System.Drawing.Point(32, 3);
+            this.drawnPanelPopOut.MarginSize = 4;
+            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
+            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
+            this.drawnPanelPopOut.Name = "drawnPanelPopOut";
+            this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
+            this.drawnPanelPopOut.TabIndex = 27;
+            this.drawnPanelPopOut.Click += new System.EventHandler(this.drawnPanelPopOut_Click);
             // 
             // panelHistoryIcon
             // 
@@ -134,7 +150,7 @@
             this.comboBoxHistoryWindow.DropDownWidth = 1;
             this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxHistoryWindow.ItemHeight = 13;
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(110, 4);
             this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
             this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -143,20 +159,20 @@
             this.comboBoxHistoryWindow.SelectedIndex = -1;
             this.comboBoxHistoryWindow.SelectedItem = null;
             this.comboBoxHistoryWindow.SelectedValue = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
+            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 20);
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.toolTip1.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // labelHistory
+            // labelTime
             // 
-            this.labelHistory.AutoSize = true;
-            this.labelHistory.Location = new System.Drawing.Point(33, 8);
-            this.labelHistory.Name = "labelHistory";
-            this.labelHistory.Size = new System.Drawing.Size(42, 13);
-            this.labelHistory.TabIndex = 0;
-            this.labelHistory.Text = "History ";
+            this.labelTime.AutoSize = true;
+            this.labelTime.Location = new System.Drawing.Point(64, 7);
+            this.labelTime.Name = "labelTime";
+            this.labelTime.Size = new System.Drawing.Size(30, 13);
+            this.labelTime.TabIndex = 0;
+            this.labelTime.Text = "Time";
             // 
             // dataViewScrollerPanel1
             // 
@@ -232,26 +248,28 @@
             // ColumnTime
             // 
             this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 100;
+            this.ColumnTime.MinimumWidth = 50;
             this.ColumnTime.Name = "ColumnTime";
             this.ColumnTime.ReadOnly = true;
             // 
             // Icon
             // 
+            this.Icon.FillWeight = 50F;
             this.Icon.HeaderText = "Event";
-            this.Icon.MinimumWidth = 32;
+            this.Icon.MinimumWidth = 50;
             this.Icon.Name = "Icon";
             this.Icon.ReadOnly = true;
             // 
             // ColumnSystem
             // 
             this.ColumnSystem.HeaderText = "Description";
-            this.ColumnSystem.MinimumWidth = 100;
+            this.ColumnSystem.MinimumWidth = 50;
             this.ColumnSystem.Name = "ColumnSystem";
             this.ColumnSystem.ReadOnly = true;
             // 
             // ColumnDistance
             // 
+            this.ColumnDistance.FillWeight = 200F;
             this.ColumnDistance.HeaderText = "Information";
             this.ColumnDistance.MinimumWidth = 50;
             this.ColumnDistance.Name = "ColumnDistance";
@@ -259,9 +277,8 @@
             // 
             // ColumnNote
             // 
-            this.ColumnNote.FillWeight = 150F;
             this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.MinimumWidth = 10;
+            this.ColumnNote.MinimumWidth = 20;
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
             // 
@@ -404,15 +421,10 @@
         private ExtendedControls.TextBoxBorder textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
         internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
-        private System.Windows.Forms.Label labelHistory;
+        private System.Windows.Forms.Label labelTime;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         public System.Windows.Forms.DataGridView dataGridViewTravel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem starMapColourToolStripMenuItem;
@@ -429,5 +441,11 @@
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
         private System.Windows.Forms.Panel panelHistoryIcon;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
+        private ExtendedControls.DrawnPanel drawnPanelPopOut;
     }
 }

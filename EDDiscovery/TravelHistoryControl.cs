@@ -46,6 +46,44 @@ namespace EDDiscovery
         public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);
         public event TravelSelectionChanged OnTravelSelectionChanged;
 
+        string[] popoutlist = new string[] { "Pop Out", "Log", "Nearest Stars" , "Materials",
+                                            "Commodities" , "Ledger" , "Journal", "Travel Grid" , "Screen Shot", "Statistics" };
+
+        Bitmap[] popoutbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts
+                                        EDDiscovery.Properties.Resources.star,      // 2
+                                        EDDiscovery.Properties.Resources.material , // 3
+                                        EDDiscovery.Properties.Resources.commodities, // 4
+                                        EDDiscovery.Properties.Resources.ledger , //5 
+                                        EDDiscovery.Properties.Resources.journal , //6
+                                        EDDiscovery.Properties.Resources.travelgrid , //7 
+                                        EDDiscovery.Properties.Resources.screenshot, //8
+                                        EDDiscovery.Properties.Resources.stats, //9
+                                        };
+
+        string[] popouttooltips = new string[] { "Display the program log",
+                                               "Display the nearest stars to the currently selected entry",
+                                               "Display the material count at the currently selected entry",
+                                               "Display the commoditity count at the currently selected entry",
+                                               "Display a ledger of cash related entries",
+                                               "Display the journal grid view",
+                                               "Display the history grid view",
+                                               "Display the screen shot view",
+                                               "Display statistics from the history"
+                                            };
+
+        public enum PopOuts        // in order added to tabcontrol and in order added to combo box
+        {
+            Log = 1,
+            NS = 2,
+            Materials = 3,
+            Commodities = 4,
+            Ledger = 5,
+            Journal = 6,
+            TravelGrid = 7,
+            ScreenShot = 8,
+            Statistics = 9
+        };
+        
         #region Initialisation
 
         public TravelHistoryControl()
@@ -65,8 +103,7 @@ namespace EDDiscovery
 
             comboBoxCustomPopOut.Enabled = false;
 
-            comboBoxCustomPopOut.Items.AddRange(new string[] { "Pop Out", "Log", "Nearest Stars" , "Materials",
-                                            "Commodities" , "Ledger" , "Journal", "Travel Grid" , "Screen Shot", "Statistics" });
+            comboBoxCustomPopOut.Items.AddRange(popoutlist);
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
@@ -76,6 +113,7 @@ namespace EDDiscovery
             userControlTravelGrid.OnAddedNewEntry += UpdatedWithAddNewEntry;        // call back when you've added a new entry..
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
             userControlTravelGrid.OnResort += Resort;   // and if he or she resorts
+            userControlTravelGrid.OnPopOut += TGPopOut;
 
             TabConfigure(tabStripBottom,1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
             TabConfigure(tabStripBottomRight,1001);
@@ -97,33 +135,13 @@ namespace EDDiscovery
 
         void TabConfigure(TabStrip t, int displayno)
         {
-            Bitmap[] bm = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // 1
-                                        EDDiscovery.Properties.Resources.star,      // 2
-                                        EDDiscovery.Properties.Resources.material , // 3
-                                        EDDiscovery.Properties.Resources.commodities, // 4
-                                        EDDiscovery.Properties.Resources.ledger , //5 
-                                        EDDiscovery.Properties.Resources.journal , //6
-                                        EDDiscovery.Properties.Resources.travelgrid , //7 
-                                        EDDiscovery.Properties.Resources.screenshot, //8
-                                        EDDiscovery.Properties.Resources.stats, //9
-                                        };
-
-            string[] tooltips = new string[] { "Display the program log",
-                                               "Display the nearest stars to the currently selected entry",
-                                               "Display the material count at the currently selected entry",
-                                               "Display the commoditity count at the currently selected entry",
-                                               "Display a ledger of cash related entries",
-                                               "Display the journal grid view",
-                                               "Display the history grid view",
-                                               "Display the screen shot view",
-                                               "Display statistics from the history"
-                                            };
-            t.Images = bm;
-            t.ToolTips = tooltips;
+            t.Images = popoutbitmaps;
+            t.ToolTips = popouttooltips;
             t.Tag = displayno;             // these are IDs for purposes of identifying different instances of a control.. 0 = main ones (main travel grid, main tab journal). 1..N are popups
             t.OnRemoving += TabRemoved;
             t.OnCreateTab += TabCreate;
             t.OnPostCreateTab += TabPostCreate;
+            t.OnPopOut += TabPopOut;
         }
 
         void TabRemoved(TabStrip t, Control c )     // called by tab strip when a control is removed
@@ -132,12 +150,13 @@ namespace EDDiscovery
             uccb.Closing();
         }
 
-        Control TabCreate(TabStrip t, int i)        // called by tab strip when selected index changes
+        Control TabCreate(TabStrip t, int si)        // called by tab strip when selected index changes
         {   
             int displaynumber = (int)t.Tag;         // tab strip - use tag to remember display id which helps us save context.
-            i++;                                    // to make them the same numbers as the pop out
 
-            if (i == 1)
+            PopOuts i = (PopOuts)(si + 1);
+
+            if (i == PopOuts.Log)
             {
                 UserControlLog sc = new UserControlLog();
                 sc.Text = "Log";
@@ -145,7 +164,7 @@ namespace EDDiscovery
                 sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
                 return sc;
             }
-            else if (i == 2)
+            else if (i == PopOuts.NS)
             {
                 UserControlStarDistance sc = new UserControlStarDistance();
                 sc.Text = "Stars";
@@ -154,7 +173,7 @@ namespace EDDiscovery
                     sc.FillGrid(lastclosestname, lastclosestsystems);
                 return sc;
             }
-            else if (i == 3)
+            else if (i == PopOuts.Materials)
             {
                 UserControlMaterials ucm = new UserControlMaterials();
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
@@ -166,7 +185,7 @@ namespace EDDiscovery
                     ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(false));
                 return ucm;
             }
-            else if (i == 4)
+            else if (i == PopOuts.Commodities)
             {
                 UserControlCommodities ucm = new UserControlCommodities();
                 ucm.Init( _discoveryForm, displaynumber);
@@ -178,7 +197,7 @@ namespace EDDiscovery
                     ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(true));
                 return ucm;
             }
-            else if (i == 5)
+            else if (i == PopOuts.Ledger)
             {
                 UserControlLedger ucm = new UserControlLedger();
                 ucm.Init( _discoveryForm, displaynumber);
@@ -188,26 +207,31 @@ namespace EDDiscovery
                 ucm.Display(_discoveryForm.history.materialcommodititiesledger);
                 return ucm;
             }
-            else if (i == 6)
+            else if (i == PopOuts.Journal)
             {
                 UserControlJournalGrid ucm = new UserControlJournalGrid();
                 ucm.Init( _discoveryForm, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Journal";
                 ucm.Display(_discoveryForm.history);
+                ucm.NoHistoryIcon();
+                ucm.NoPopOutIcon();
                 return ucm;
             }
-            else if (i == 7)
+            else if (i == PopOuts.TravelGrid)
             {
                 UserControlTravelGrid ucm = new UserControlTravelGrid();
                 ucm.Init( _discoveryForm, displaynumber);
                 ucm.NoHistoryIcon();
+                ucm.NoPopOutIcon();
                 ucm.LoadLayout();
                 ucm.Text = "History";
                 ucm.Display(_discoveryForm.history);
+                ucm.NoHistoryIcon();
+                ucm.NoPopOutIcon();
                 return ucm;
             }
-            else if (i == 8)
+            else if (i == PopOuts.ScreenShot)
             {
                 UserControlScreenshot ucm = new UserControlScreenshot();
                 ucm.Init( _discoveryForm, displaynumber);
@@ -215,7 +239,7 @@ namespace EDDiscovery
                 ucm.Text = "Screen Shot";
                 return ucm;
             }
-            else if (i == 9)
+            else if (i == PopOuts.Statistics)
             {
                 UserControlStats ucm = new UserControlStats();
                 ucm.Init( _discoveryForm, displaynumber);
@@ -231,6 +255,11 @@ namespace EDDiscovery
         void TabPostCreate(TabStrip t, int i)        // called by tab strip after control has been added..
         {
             _discoveryForm.theme.ApplyToControls(t);
+        }
+
+        void TabPopOut(TabStrip t, int i)        // pop out clicked
+        {
+            PopOut((PopOuts)(i+1));
         }
 
         #endregion
@@ -857,11 +886,21 @@ namespace EDDiscovery
             if (!comboBoxCustomPopOut.Enabled)
                 return;
 
+            if (comboBoxCustomPopOut.SelectedIndex>0)
+                PopOut((PopOuts)comboBoxCustomPopOut.SelectedIndex);
+
+            comboBoxCustomPopOut.Enabled = false;
+            comboBoxCustomPopOut.SelectedIndex = 0;
+            comboBoxCustomPopOut.Enabled = true;
+        }
+
+        public void PopOut(PopOuts selected)
+        { 
             UserControlForm tcf = usercontrolsforms.NewForm(_discoveryForm.option_nowindowreposition);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
             tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 
-            if (comboBoxCustomPopOut.SelectedIndex == 1)
+            if (selected == PopOuts.Log)
             {
                 UserControlLog uclog = new UserControlLog(); // Add a log
                 tcf.AddUserControl(uclog);
@@ -871,7 +910,7 @@ namespace EDDiscovery
                 uclog.Init( _discoveryForm, numopened);
                 uclog.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 2)
+            else if (selected == PopOuts.NS)
             {
                 UserControlStarDistance ucsd = new UserControlStarDistance(); // Add a closest distance tab
                 
@@ -884,7 +923,7 @@ namespace EDDiscovery
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
                     ucsd.FillGrid(lastclosestname, lastclosestsystems);
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 3)
+            else if (selected == PopOuts.Materials)
             {
                 UserControlMaterials ucmc = new UserControlMaterials(); // Add a closest distance tab
                 tcf.AddUserControl(ucmc);
@@ -897,7 +936,7 @@ namespace EDDiscovery
                 if (curpos != null)
                     ucmc.Display(curpos.MaterialCommodity.Sort(false));
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 4)
+            else if (selected == PopOuts.Commodities)
             {
                 UserControlCommodities ucmc = new UserControlCommodities(); // Add a closest distance tab
                 tcf.AddUserControl(ucmc);
@@ -910,7 +949,7 @@ namespace EDDiscovery
                 if (curpos != null)
                     ucmc.Display(curpos.MaterialCommodity.Sort(true));
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 5)
+            else if (selected == PopOuts.Ledger)
             {
                 UserControlLedger ucmc = new UserControlLedger(); // Add a closest distance tab
                 tcf.AddUserControl(ucmc);
@@ -922,7 +961,7 @@ namespace EDDiscovery
                 ucmc.Display(_discoveryForm.history.materialcommodititiesledger);
                 ucmc.OnGotoJID += GotoJID;
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 6)
+            else if (selected == PopOuts.Journal)
             {
                 UserControlJournalGrid uctg = new UserControlJournalGrid();
                 tcf.AddUserControl(uctg);
@@ -931,8 +970,10 @@ namespace EDDiscovery
                 tcf.Init("Journal History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "JournalHistory" + numopened);
                 uctg.Init( _discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
+                uctg.NoPopOutIcon();
+                uctg.NoHistoryIcon();
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 7)    // match order in bitmap mp and comboBoxCustomPopOut
+            else if (selected == PopOuts.TravelGrid)    // match order in bitmap mp and comboBoxCustomPopOut
             {
                 UserControlTravelGrid uctg = new UserControlTravelGrid();
                 tcf.AddUserControl(uctg);
@@ -940,8 +981,10 @@ namespace EDDiscovery
                 tcf.Init("Travel History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "TravelHistory" + numopened);
                 uctg.Init( _discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
+                uctg.NoPopOutIcon();
+                uctg.NoHistoryIcon();
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 8)    // match order in bitmap mp and comboBoxCustomPopOut
+            else if (selected == PopOuts.ScreenShot)    // match order in bitmap mp and comboBoxCustomPopOut
             {
                 UserControlScreenshot ucm = new UserControlScreenshot();
                 tcf.AddUserControl(ucm);
@@ -949,7 +992,7 @@ namespace EDDiscovery
                 tcf.Init("ScreenShot " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "ScreenShot" + numopened);
                 ucm.Init( _discoveryForm, numopened);
             }
-            else if (comboBoxCustomPopOut.SelectedIndex == 9)    // match order in bitmap mp and comboBoxCustomPopOut
+            else if (selected == PopOuts.Statistics)    // match order in bitmap mp and comboBoxCustomPopOut
             {
                 UserControlStats ucm = new UserControlStats();
                 tcf.AddUserControl(ucm);
@@ -959,18 +1002,18 @@ namespace EDDiscovery
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
 
-            comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.SelectedIndex = 0;
-            comboBoxCustomPopOut.Enabled = true;
+            tcf.Show();
+            tcf.UserControl.Font = _discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
+                                                                        // ApplyToForm does not apply the font to the actual UC, only
+                                                                        // specific children controls.  The TabControl in the discoveryform ends up autoscaling most stuff
+                                                                        // the children directly attached to the discoveryform are not autoscaled
 
             _discoveryForm.theme.ApplyToForm(tcf);
-            tcf.Show();
-            tcf.Focus();
         }
 
-#endregion
+        #endregion
 
-#region Target System
+        #region Target System
 
         public void RefreshTargetInfo()
         {
@@ -1055,6 +1098,11 @@ namespace EDDiscovery
         {
             if (IsSummaryPopOutReady)
                 summaryPopOut.ShowScanData(js);
+        }
+
+        void TGPopOut()
+        {
+            PopOut(PopOuts.TravelGrid);
         }
 
         #endregion

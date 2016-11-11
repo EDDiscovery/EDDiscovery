@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -13,11 +14,14 @@ namespace ExtendedControls
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
-        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross, Text, Move };
+        public Image DrawnImage { get; set; } = null;                                   // must be set for DrawnImage
+        public ImageAttributes DrawnImageAttributes = null;                             // Image override (colour etc)
+
+        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross, Text, Move , DrawnImage };     // used if no DrawnImage set
 
         public string ImageText { get; set; } = null;       // for Text Type
 
-        public ImageType Image { get; set; } = ImageType.Close;
+        public ImageType ImageSelected { get; set; } = ImageType.Close;
         public int MarginSize { get; set; } = 4;                    // margin around icon, 0 =auto, -1 = zero
 
         #region Public Functions
@@ -29,13 +33,30 @@ namespace ExtendedControls
 
         public bool IsCaptured { get { return mousecapture; } }
 
+        public void SetDrawnBitmapRemapTable( ColorMap[] remap )
+        {
+            ImageAttributes ia = new ImageAttributes();
+            ia.SetRemapTable(remap, ColorAdjustType.Bitmap);
+            DrawnImageAttributes = ia;
+        }
+
         #endregion
-        
+
         #region Implementation
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+
+            if ( ImageSelected == ImageType.DrawnImage )
+            {
+                if (DrawnImageAttributes != null)
+                    e.Graphics.DrawImage(DrawnImage, new Rectangle(0, 0, DrawnImage.Width, DrawnImage.Height), 0, 0, DrawnImage.Width, DrawnImage.Height, GraphicsUnit.Pixel, DrawnImageAttributes);
+                else
+                    e.Graphics.DrawImage(DrawnImage, new Point(0, 0));
+                return;
+            }
+
             int msize = (MarginSize==-1) ? 0 : ((MarginSize > 0) ? MarginSize : ClientRectangle.Height / 6);
             Color pc = (Enabled) ? ((mousedown||mousecapture)?MouseSelectedColor: ((mouseover)?MouseOverColor : this.ForeColor)) : Average(this.ForeColor, this.BackColor, 0.25F);
             //Console.WriteLine("Enabled" + Enabled + " Mouse over " + mouseover + " mouse down " + mousedown);
@@ -54,23 +75,23 @@ namespace ExtendedControls
             int topmarginpx = msize;
             int bottommarginpx = bottompx - msize;
 
-            if (Image == ImageType.Close)
+            if (ImageSelected == ImageType.Close)
             {
                 e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, bottommarginpx));
                 e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
             }
-            else if (Image == ImageType.Minimize)
+            else if (ImageSelected == ImageType.Minimize)
             {
                 e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
             }
-            else if (Image == ImageType.Gripper)
+            else if (ImageSelected == ImageType.Gripper)
             {
                 for (int i = 0; i < 3; i++)
                 {
                     e.Graphics.DrawLine(p1, new Point(rightmarginpx - i * msize, bottompx), new Point(rightpx, bottommarginpx - i * msize));
                 }
             }
-            else if (Image == ImageType.EDDB)
+            else if (ImageSelected == ImageType.EDDB)
             {
                 Brush bbck = new SolidBrush(pc);
                 Rectangle area = new Rectangle(leftmarginpx, topmarginpx, ClientRectangle.Width - 2 * msize, ClientRectangle.Height - 2 * msize);
@@ -91,7 +112,7 @@ namespace ExtendedControls
 
                 pb.Dispose();
             }
-            else if (Image == ImageType.Ross)
+            else if (ImageSelected == ImageType.Ross)
             {
                 Pen pb = new Pen(pc, 3.0F);
                 Point pt1 = new Point(leftmarginpx + 2, bottommarginpx);
@@ -103,7 +124,7 @@ namespace ExtendedControls
 
                 pb.Dispose();
             }
-            else if (Image == ImageType.Text)
+            else if (ImageSelected == ImageType.Text)
             {
                 SizeF size = e.Graphics.MeasureString(this.ImageText, this.Font);
                 double scale = (double)(ClientRectangle.Height-topmarginpx*2) / (double)size.Height;
@@ -121,7 +142,7 @@ namespace ExtendedControls
                         e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(centrehorzpx-(int)(size.Width/2), topmarginpx));
                 }
             }
-            else if (Image == ImageType.Move)
+            else if (ImageSelected == ImageType.Move)
             {
                 centrehorzpx++;
                 centrevertpx++;

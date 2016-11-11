@@ -45,6 +45,9 @@ namespace EDDiscovery.UserControls
         public delegate void Redisplay(HistoryList hl);
         public Redisplay OnRedisplay;
 
+        public delegate void PopOut();
+        public PopOut OnPopOut;
+
         #region Init
 
         private class TravelHistoryColumns
@@ -95,7 +98,12 @@ namespace EDDiscovery.UserControls
         public void NoHistoryIcon()
         {
             panelHistoryIcon.Visible = false;
-            labelHistory.Location = new Point(panelHistoryIcon.Location.X, labelHistory.Location.Y);
+            drawnPanelPopOut.Location = new Point(panelHistoryIcon.Location.X, drawnPanelPopOut.Location.Y);
+        }
+
+        public void NoPopOutIcon()
+        {
+            drawnPanelPopOut.Visible = false;
         }
 
         public override void LoadLayout()
@@ -800,6 +808,12 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void drawnPanelPopOut_Click(object sender, EventArgs e)
+        {
+            if (OnPopOut != null)
+                OnPopOut();
+        }
     }
 
 }

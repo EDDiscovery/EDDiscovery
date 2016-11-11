@@ -23,6 +23,9 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return "JournalGrid" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "JournalEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
+        public delegate void PopOut();
+        public PopOut OnPopOut;
+
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
         #region Init
@@ -59,6 +62,17 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += AddNewEntry;
 
             buttonRefresh.Visible = false;
+        }
+
+        public void NoHistoryIcon()
+        {
+            panelJournalIcon.Visible = false;
+            drawnPanelPopOut.Location = new Point(panelJournalIcon.Location.X, drawnPanelPopOut.Location.Y);
+        }
+
+        public void NoPopOutIcon()
+        {
+            drawnPanelPopOut.Visible = false;
         }
 
         public void ShowRefresh()
@@ -328,5 +342,10 @@ namespace EDDiscovery.UserControls
             return -1;
         }
 
+        private void drawnPanelPopOut_Click(object sender, EventArgs e)
+        {
+            if (OnPopOut != null)
+                OnPopOut();
+        }
     }
 }

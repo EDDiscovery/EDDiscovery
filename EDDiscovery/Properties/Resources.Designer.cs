@@ -889,6 +889,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap popout {
+            get {
+                object obj = ResourceManager.GetObject("popout", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap powerplaycollect {
             get {
                 object obj = ResourceManager.GetObject("powerplaycollect", resourceCulture);

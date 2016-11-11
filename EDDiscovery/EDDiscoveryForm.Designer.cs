@@ -113,7 +113,6 @@
             this.menuStrip1.Size = new System.Drawing.Size(155, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
-            this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
             // 
             // toolsToolStripMenuItem
             // 
@@ -335,7 +334,6 @@
             this.label_version.Size = new System.Drawing.Size(71, 13);
             this.label_version.TabIndex = 21;
             this.label_version.Text = "Version Label";
-            this.label_version.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EDDiscoveryForm_MouseDown);
             // 
             // panel_eddiscovery
             // 
@@ -581,7 +579,7 @@
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.Image = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.ImageText = null;
             this.panel_minimize.Location = new System.Drawing.Point(941, 1);
             this.panel_minimize.MarginSize = 6;
@@ -597,7 +595,7 @@
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.Image = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
             this.panel_close.ImageText = null;
             this.panel_close.Location = new System.Drawing.Point(966, 1);
             this.panel_close.MarginSize = 6;
@@ -655,7 +653,6 @@
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.EDDiscoveryForm_Layout);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EDDiscoveryForm_MouseDown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panelInfo.ResumeLayout(false);

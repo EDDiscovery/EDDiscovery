@@ -41,12 +41,14 @@
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panelJournalIcon = new System.Windows.Forms.Panel();
+            this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.buttonRefresh = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelTime = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
@@ -121,19 +123,21 @@
             // ColumnTime
             // 
             this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 100;
+            this.ColumnTime.MinimumWidth = 50;
             this.ColumnTime.Name = "ColumnTime";
             this.ColumnTime.ReadOnly = true;
             // 
             // Event
             // 
+            this.Event.FillWeight = 50F;
             this.Event.HeaderText = "Event";
-            this.Event.MinimumWidth = 32;
+            this.Event.MinimumWidth = 50;
             this.Event.Name = "Event";
             this.Event.ReadOnly = true;
             // 
             // ColumnType
             // 
+            this.ColumnType.FillWeight = 125F;
             this.ColumnType.HeaderText = "Description";
             this.ColumnType.MinimumWidth = 50;
             this.ColumnType.Name = "ColumnType";
@@ -143,7 +147,7 @@
             // 
             this.ColumnText.FillWeight = 300F;
             this.ColumnText.HeaderText = "Information";
-            this.ColumnText.MinimumWidth = 100;
+            this.ColumnText.MinimumWidth = 50;
             this.ColumnText.Name = "ColumnText";
             this.ColumnText.ReadOnly = true;
             // 
@@ -180,17 +184,42 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.panelJournalIcon);
+            this.panel1.Controls.Add(this.drawnPanelPopOut);
             this.panel1.Controls.Add(this.buttonRefresh);
             this.panel1.Controls.Add(this.textBoxFilter);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.buttonFilter);
             this.panel1.Controls.Add(this.comboBoxJournalWindow);
-            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.labelTime);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(804, 32);
             this.panel1.TabIndex = 8;
+            // 
+            // panelJournalIcon
+            // 
+            this.panelJournalIcon.BackgroundImage = global::EDDiscovery.Properties.Resources.journal;
+            this.panelJournalIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelJournalIcon.Location = new System.Drawing.Point(3, 4);
+            this.panelJournalIcon.Name = "panelJournalIcon";
+            this.panelJournalIcon.Size = new System.Drawing.Size(24, 24);
+            this.panelJournalIcon.TabIndex = 29;
+            // 
+            // drawnPanelPopOut
+            // 
+            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout;
+            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.DrawnImage;
+            this.drawnPanelPopOut.ImageText = null;
+            this.drawnPanelPopOut.Location = new System.Drawing.Point(32, 3);
+            this.drawnPanelPopOut.MarginSize = 4;
+            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
+            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
+            this.drawnPanelPopOut.Name = "drawnPanelPopOut";
+            this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
+            this.drawnPanelPopOut.TabIndex = 28;
+            this.drawnPanelPopOut.Click += new System.EventHandler(this.drawnPanelPopOut_Click);
             // 
             // buttonRefresh
             // 
@@ -252,7 +281,7 @@
             this.comboBoxJournalWindow.DropDownWidth = 1;
             this.comboBoxJournalWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxJournalWindow.ItemHeight = 13;
-            this.comboBoxJournalWindow.Location = new System.Drawing.Point(102, 4);
+            this.comboBoxJournalWindow.Location = new System.Drawing.Point(110, 4);
             this.comboBoxJournalWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxJournalWindow.Name = "comboBoxJournalWindow";
             this.comboBoxJournalWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -261,20 +290,20 @@
             this.comboBoxJournalWindow.SelectedIndex = -1;
             this.comboBoxJournalWindow.SelectedItem = null;
             this.comboBoxJournalWindow.SelectedValue = null;
-            this.comboBoxJournalWindow.Size = new System.Drawing.Size(94, 22);
+            this.comboBoxJournalWindow.Size = new System.Drawing.Size(100, 22);
             this.comboBoxJournalWindow.TabIndex = 0;
             this.toolTip1.SetToolTip(this.comboBoxJournalWindow, "Select the entries selected by age");
             this.comboBoxJournalWindow.ValueMember = "";
             this.comboBoxJournalWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxJournalWindow_SelectedIndexChanged);
             // 
-            // label2
+            // labelTime
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Show History ";
+            this.labelTime.AutoSize = true;
+            this.labelTime.Location = new System.Drawing.Point(64, 7);
+            this.labelTime.Name = "labelTime";
+            this.labelTime.Size = new System.Drawing.Size(30, 13);
+            this.labelTime.TabIndex = 0;
+            this.labelTime.Text = "Time";
             // 
             // toolTip1
             // 
@@ -308,7 +337,7 @@
         private System.Windows.Forms.Label label1;
         private ExtendedControls.ButtonExt buttonFilter;
         private ExtendedControls.ComboBoxCustom comboBoxJournalWindow;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelTime;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
@@ -318,5 +347,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Event;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnText;
+        private ExtendedControls.DrawnPanel drawnPanelPopOut;
+        private System.Windows.Forms.Panel panelJournalIcon;
     }
 }
