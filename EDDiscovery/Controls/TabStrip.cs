@@ -186,6 +186,12 @@ namespace EDDiscovery.Controls
                     imagepanels[i].MouseEnter += panelBottom_MouseEnter;
                     imagepanels[i].MouseLeave += panelBottom_MouseLeave;
 
+                    if (ShowPopOut)
+                    {
+                        imagepanels[i].ContextMenuStrip = contextMenuStrip1;
+                        imagepanels[i].Tag = i;     // remember by index
+                    }
+
                     tabtotalwidth += Images[i].Width + Spacing*2;
 
                     if (ToolTips != null)
@@ -264,11 +270,14 @@ namespace EDDiscovery.Controls
                 OnPopOut(this, si);
         }
 
-        private void panelPopOut_Paint_Unused(object sender, PaintEventArgs e)
+        private void toolStripMenuItemPopOut_Click(object sender, EventArgs e)
         {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            ContextMenuStrip cms = (ContextMenuStrip)tsmi.Owner;
+            Panel p = (Panel)cms.SourceControl;
 
-            //Image img = new Bitmap(i.Width, i.Height);
-            
+            if (OnPopOut != null)
+                OnPopOut(this, (int)p.Tag);
         }
     }
 }
