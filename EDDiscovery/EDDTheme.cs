@@ -603,11 +603,11 @@ namespace EDDiscovery2
         public void SetCustom()
         { currentsettings.name = "Custom"; }                                // set so custom..
 
-        public void ApplyToForm(Form form)
+        public void ApplyToForm(Form form)                                  // we apply the form.Font, so it does not autoscale items directly on the form.
         {
             form.Opacity = currentsettings.formopacity / 100;
             form.BackColor = currentsettings.colors[Settings.CI.form];
-
+  
             ApplyToControls(form);        // form is the parent of form!
 
             UpdateToolsTripRenderer();
@@ -624,7 +624,7 @@ namespace EDDiscovery2
         {
 #if DEBUG
             //string pad = "                             ".Substring(0, level);
-            //Console.WriteLine(pad + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString());
+            //System.Diagnostics.Debug.WriteLine(pad + level + ":" + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString());
 #endif
             float mouseoverscaling = 1.3F;
             float mouseselectedscaling = 1.5F;
@@ -834,6 +834,11 @@ namespace EDDiscovery2
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.label];
                 MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.label], mouseoverscaling);
                 MyDgv.MouseSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.label], mouseselectedscaling);
+
+                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
+                colormap.OldColor = Color.White;
+                colormap.NewColor = MyDgv.ForeColor;
+                MyDgv.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
             }
             else if (myControl is Panel)
             {
@@ -939,7 +944,7 @@ namespace EDDiscovery2
                 }
             }
             else if (myControl is VScrollBarCustom && (parent is DataViewScrollerPanel || parent is EDDiscovery.UserControls.UserControlStats))
-            {                   // a VScrollbarCustom inside a dataview scroller panel themed as a scroller panel, or a other
+            {                   // selected items need VScroll controlled here. Others control it themselves
                 VScrollBarCustom MyDgv = (VScrollBarCustom)myControl;
 
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))

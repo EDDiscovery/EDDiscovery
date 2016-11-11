@@ -814,6 +814,7 @@
     <None Include="Resources\ledger.png" />
     <None Include="Resources\journal.png" />
     <None Include="Resources\stats.png" />
+    <None Include="Resources\popout.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

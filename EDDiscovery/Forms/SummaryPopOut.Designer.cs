@@ -325,7 +325,7 @@
             this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panel_grip.BackColor = System.Drawing.Color.Transparent;
             this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_grip.Image = ExtendedControls.DrawnPanel.ImageType.Gripper;
+            this.panel_grip.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Gripper;
             this.panel_grip.ImageText = null;
             this.panel_grip.Location = new System.Drawing.Point(580, 236);
             this.panel_grip.MarginSize = 6;

@@ -14,7 +14,7 @@ namespace EDDiscovery.Forms
 {
     public partial class UserControlForm : Form
     {
-        UserControlCommonBase uc;
+        public UserControlCommonBase UserControl;
         public bool isactive = false;
         public bool norepositionwindow = false;
         public string refname;
@@ -42,7 +42,7 @@ namespace EDDiscovery.Forms
 
         public void AddUserControl(EDDiscovery.UserControls.UserControlCommonBase c)
         {
-            uc = c;
+            UserControl = c;
             c.Dock = DockStyle.None;
             c.Location = new Point(0, 10);
             c.Size = new Size(200, 200);
@@ -52,8 +52,8 @@ namespace EDDiscovery.Forms
         private void UserControlForm_Activated(object sender, EventArgs e)
         {
             isactive = true;
-            if (uc != null)
-                uc.LoadLayout();
+            if (UserControl != null)
+                UserControl.LoadLayout();
         }
 
         private void UserControlForm_Load(object sender, EventArgs e)
@@ -93,8 +93,8 @@ namespace EDDiscovery.Forms
         {
             isactive = false;
 
-            if (uc != null)
-                uc.Closing();
+            if (UserControl != null)
+                UserControl.Closing();
 
             string root = "PopUpForm" + refname;
             SQLiteDBClass.PutSettingInt(root + "Width", this.Width);
@@ -105,8 +105,8 @@ namespace EDDiscovery.Forms
 
         public UserControlCommonBase FindUserControl(Type c)
         {
-            if (uc.GetType().Equals(c))
-                return uc;
+            if (UserControl.GetType().Equals(c))
+                return UserControl;
             else
                 return null;
         }
@@ -123,10 +123,10 @@ namespace EDDiscovery.Forms
 
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
         {
-            if (uc != null)
+            if (UserControl != null)
             {
-                uc.Location = new Point(2, windowsborder ? 2 : panel_close.Location.Y+panel_close.Height);
-                uc.Size = new Size(ClientRectangle.Width - 4, ClientRectangle.Height - uc.Location.Y - statusStripCustom1.Height);
+                UserControl.Location = new Point(3, windowsborder ? 2 : panel_close.Location.Y+panel_close.Height);
+                UserControl.Size = new Size(ClientRectangle.Width - 6, ClientRectangle.Height - UserControl.Location.Y - statusStripCustom1.Height);
             }
         }
 
@@ -140,6 +140,9 @@ namespace EDDiscovery.Forms
         public const int WM_NCMOUSEMOVE = 0xA0;
         public const int HT_CLIENT = 0x1;
         public const int HT_CAPTION = 0x2;
+        public const int HT_LEFT = 0xA;
+        public const int HT_RIGHT = 0xB;
+        public const int HT_BOTTOM = 0xF;
         public const int HT_BOTTOMRIGHT = 0x11;
         public const int WM_NCL_RESIZE = 0x112;
         public const int HT_RESIZE = 61448;
@@ -202,6 +205,18 @@ namespace EDDiscovery.Forms
                     if (p.X > this.ClientSize.Width - statusStripCustom1.Height && p.Y > this.ClientSize.Height - statusStripCustom1.Height)
                     {
                         m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                    }
+                    else if (p.Y > this.ClientSize.Height - statusStripCustom1.Height)
+                    {
+                        m.Result = (IntPtr)HT_BOTTOM;
+                    }
+                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
+                    {
+                        m.Result = (IntPtr)HT_RIGHT;
+                    }
+                    else if (p.X < 5)
+                    {
+                        m.Result = (IntPtr)HT_LEFT;
                     }
                     else if (!windowsborder)
                     {

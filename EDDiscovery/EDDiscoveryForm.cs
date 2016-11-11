@@ -54,13 +54,6 @@ namespace EDDiscovery
         public const int HT_RESIZE = 61448;
         public const int WM_NCHITTEST = 0x84;
 
-        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
-        {
-            Message message = Message.Create(this.Handle, msg, wparam, lparam);
-            this.WndProc(ref message);
-            return message.Result;
-        }
-
         // Mono compatibility
         private bool _window_dragging = false;
         private Point _window_dragMousePos = Point.Empty;
@@ -1420,15 +1413,6 @@ namespace EDDiscovery
             Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
         }
 
-        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (!theme.WindowsFrame && e.Button == MouseButtons.Left)           // only if theme is borderless
-            {
-                this.Capture = false;
-                SendMessage(WM_NCLBUTTONDOWN, (IntPtr)HT_CAPTION, IntPtr.Zero);
-            }
-        }
-
         protected override void WndProc(ref Message m)
         {
             // Compatibility movement for Mono
@@ -1500,11 +1484,6 @@ namespace EDDiscovery
             }
         }
         
-        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
-        {
-            EDDiscoveryForm_MouseDown(sender, e);
-        }
-
         private void paneleddiscovery_Click(object sender, EventArgs e)
         {
             AboutBox();
