@@ -36,7 +36,10 @@
             this.panelSelected = new System.Windows.Forms.Panel();
             this.labelCurrent = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemPopOut = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBottom.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelBottom
@@ -115,6 +118,20 @@
             this.labelCurrent.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.labelCurrent.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemPopOut});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            // 
+            // toolStripMenuItemPopOut
+            // 
+            this.toolStripMenuItemPopOut.Name = "toolStripMenuItemPopOut";
+            this.toolStripMenuItemPopOut.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemPopOut.Text = "Pop Out";
+            this.toolStripMenuItemPopOut.Click += new System.EventHandler(this.toolStripMenuItemPopOut_Click);
+            // 
             // TabStrip
             // 
             this.Controls.Add(this.panelBottom);
@@ -124,6 +141,7 @@
             this.Resize += new System.EventHandler(this.TabStrip_Resize);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -137,5 +155,7 @@
         private System.Windows.Forms.Panel panelArrowRight;
         private System.Windows.Forms.Panel panelArrowLeft;
         private ExtendedControls.DrawnPanel drawnPanelPopOut;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPopOut;
     }
 }
