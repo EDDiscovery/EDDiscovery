@@ -221,7 +221,7 @@ namespace EDDiscovery.Controls
         {
             autofade.Stop();
 
-            if (tobevisible)
+            if (tobevisible && !stripopen )
             {
                 tobevisible = false;
                 autofade.Interval = 750;
@@ -278,6 +278,19 @@ namespace EDDiscovery.Controls
 
             if (OnPopOut != null)
                 OnPopOut(this, (int)p.Tag);
+        }
+
+        bool stripopen = false;
+
+        private void contextMenuStrip1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            stripopen = false;
+            panelBottom_MouseLeave(sender, e);      // same as a mouse leave on one of the controls
+        }
+
+        private void contextMenuStrip1_Opened(object sender, EventArgs e)
+        {
+            stripopen = true;
         }
     }
 }
