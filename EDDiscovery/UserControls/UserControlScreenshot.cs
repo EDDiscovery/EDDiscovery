@@ -13,7 +13,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScreenshot : UserControlCommonBase
     {
         private int displaynumber = 0;
-        private TravelHistoryControl travelhistorycontrol;
+        private EDDiscoveryForm discoveryform;
 
         string ImagePath = null;
         Point ImageSize;
@@ -24,16 +24,16 @@ namespace EDDiscovery.UserControls
             pictureBox.Visible = false;
         }
 
-        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            travelhistorycontrol = thc;
+            discoveryform = ed;
             displaynumber = vn;
-            travelhistorycontrol._discoveryForm.ImageHandler.OnScreenShot += ScreenShot;
+            discoveryform.ImageHandler.OnScreenShot += ScreenShot;
         }
 
         public override void Closing()
         {
-            travelhistorycontrol._discoveryForm.ImageHandler.OnScreenShot -= ScreenShot;
+            discoveryform.ImageHandler.OnScreenShot -= ScreenShot;
         }
 
         public void ScreenShot(string path, Point size)

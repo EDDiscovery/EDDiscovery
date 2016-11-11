@@ -15,6 +15,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
         private TravelHistoryControl travelhistorycontrol;
+
         public bool materials = false;
         private int displaynumber = 0;
         private int namecol, abvcol, catcol, typecol, numcol, pricecol;
@@ -35,9 +36,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            travelhistorycontrol = thc;
+            travelhistorycontrol = ed.TravelControl;
             displaynumber = vn;
 
             dataGridViewMC.MakeDoubleBuffered();
@@ -59,7 +60,7 @@ namespace EDDiscovery.UserControls
             numcol = (materials) ? 4 : 2;
             pricecol = (materials) ? -1 : 3;
 
-            thc.OnTravelSelectionChanged += Display;
+            travelhistorycontrol.OnTravelSelectionChanged += Display;
         }
 
         #endregion

@@ -24,9 +24,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            _discoveryForm = thc._discoveryForm;
+            _discoveryForm = ed;
         }
 
         public void FillGrid(string name, SortedList<double, ISystem> csl)

@@ -61,7 +61,6 @@ namespace EDDiscovery.UserControls
 
         private const int DefaultRowHeight = 26;
 
-        private TravelHistoryControl travelhistorycontrol;
         private static EDDiscoveryForm discoveryform;
         private int displaynumber;                          
 
@@ -78,11 +77,10 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            travelhistorycontrol = thc;
+            discoveryform = ed;
             displaynumber = vn;
-            discoveryform = thc._discoveryForm;
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);

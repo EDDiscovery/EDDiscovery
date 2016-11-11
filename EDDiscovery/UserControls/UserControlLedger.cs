@@ -16,8 +16,7 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
-        private TravelHistoryControl travelhistorycontrol;
-
+        
         EventFilterSelector cfs = new EventFilterSelector();
 
         private string DbFilterSave { get { return "LedgerGridEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -34,10 +33,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            travelhistorycontrol = thc;
-            discoveryform = thc._discoveryForm;
+            discoveryform = ed;
             displaynumber = vn;
 
             dataGridViewLedger.MakeDoubleBuffered();

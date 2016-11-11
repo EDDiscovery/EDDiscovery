@@ -20,9 +20,9 @@ namespace EDDiscovery.UserControls
             Name = "Log";
         }
 
-        public override void Init(TravelHistoryControl thc, int displayno)
+        public override void Init( EDDiscoveryForm ed, int displayno)
         {
-            discoveryform = thc._discoveryForm;
+            discoveryform = ed;
             discoveryform.OnNewLogEntry += AppendText;
         }
 

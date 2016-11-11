@@ -16,7 +16,6 @@ namespace EDDiscovery.UserControls
     public partial class UserControlJournalGrid : UserControlCommonBase
     {
         private EDDiscoveryForm discoveryform;
-        private TravelHistoryControl travelhistorycontrol;
         private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
         EventFilterSelector cfs = new EventFilterSelector();
 
@@ -43,10 +42,9 @@ namespace EDDiscovery.UserControls
             Name = "Journal";
         }
 
-        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            travelhistorycontrol = thc;
-            discoveryform = thc._discoveryForm;
+            discoveryform = ed;
             displaynumber = vn;
 
             dataGridViewJournal.MakeDoubleBuffered();
