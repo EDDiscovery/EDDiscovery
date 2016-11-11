@@ -20,9 +20,9 @@ namespace EDDiscovery
             InitializeComponent();
         }
 
-        public void InitControl(TravelHistoryControl thc, int displaynumber)
+        public void InitControl(EDDiscoveryForm ed, int displaynumber)
         {
-            userControlJournalGrid.Init(thc,displaynumber);
+            userControlJournalGrid.Init(ed,displaynumber);
             userControlJournalGrid.ShowRefresh();
         }
 

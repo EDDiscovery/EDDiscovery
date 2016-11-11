@@ -182,7 +182,7 @@ namespace EDDiscovery
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
-            journalViewControl1.InitControl(travelHistoryControl1,0);
+            journalViewControl1.InitControl(this,0);
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
             exportControl1.InitControl(this);

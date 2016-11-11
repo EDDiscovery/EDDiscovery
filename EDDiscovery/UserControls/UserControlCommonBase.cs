@@ -13,7 +13,7 @@ namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
     {
-        public virtual void Init( TravelHistoryControl thc, int displayno) { }
+        public virtual void Init( EDDiscoveryForm ed, int displayno) { }
         public virtual void LoadLayout() { }
         public virtual void Closing() { }
 

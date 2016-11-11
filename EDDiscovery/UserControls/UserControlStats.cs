@@ -22,13 +22,13 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(TravelHistoryControl thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            travelhistorycontrol = thc;
-            discoveryform = thc._discoveryForm;
+            discoveryform = ed;
+            travelhistorycontrol = ed.TravelControl;
             displaynumber = vn;
             discoveryform.OnNewEntry += AddNewEntry;
-            thc.OnTravelSelectionChanged += SelectionChanged;
+            travelhistorycontrol.OnTravelSelectionChanged += SelectionChanged;
 
             vScrollBarCustom.Scroll += new System.Windows.Forms.ScrollEventHandler(OnScrollBarChanged);
         }
