@@ -47,7 +47,7 @@ namespace EDDiscovery
         public event TravelSelectionChanged OnTravelSelectionChanged;
 
         string[] popoutlist = new string[] { "Pop Out", "Log", "Nearest Stars" , "Materials",
-                                            "Commodities" , "Ledger" , "Journal", "Travel Grid" , "Screen Shot", "Statistics" };
+                                            "Commodities" , "Ledger" , "Journal", "Travel Grid" , "Screen Shot", "Statistics" , "Scan" };
 
         Bitmap[] popoutbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts
                                         EDDiscovery.Properties.Resources.star,      // 2
@@ -58,6 +58,7 @@ namespace EDDiscovery
                                         EDDiscovery.Properties.Resources.travelgrid , //7 
                                         EDDiscovery.Properties.Resources.screenshot, //8
                                         EDDiscovery.Properties.Resources.stats, //9
+                                        EDDiscovery.Properties.Resources.scan, // 10
                                         };
 
         string[] popouttooltips = new string[] { "Display the program log",
@@ -68,7 +69,8 @@ namespace EDDiscovery
                                                "Display the journal grid view",
                                                "Display the history grid view",
                                                "Display the screen shot view",
-                                               "Display statistics from the history"
+                                               "Display statistics from the history",
+                                               "Display scan data"
                                             };
 
         public enum PopOuts        // in order added to tabcontrol and in order added to combo box
@@ -81,7 +83,8 @@ namespace EDDiscovery
             Journal = 6,
             TravelGrid = 7,
             ScreenShot = 8,
-            Statistics = 9
+            Statistics = 9,
+            Scan = 10
         };
         
         #region Initialisation
@@ -242,10 +245,19 @@ namespace EDDiscovery
             else if (i == PopOuts.Statistics)
             {
                 UserControlStats ucm = new UserControlStats();
-                ucm.Init( _discoveryForm, displaynumber);
+                ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Statistics";
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
+                return ucm;
+            }
+            else if (i == PopOuts.Scan)
+            {
+                UserControlScan ucm = new UserControlScan();
+                ucm.Init(_discoveryForm, displaynumber);
+                ucm.LoadLayout();
+                ucm.Text = "Scan";
+                ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
                 return ucm;
             }
             else
@@ -1000,6 +1012,15 @@ namespace EDDiscovery
                 tcf.Init("Statistics " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Stats" + numopened);
                 ucm.Init( _discoveryForm, numopened);
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
+            }
+            else if (selected == PopOuts.Scan)
+            {
+                UserControlScan ucm = new UserControlScan();
+                tcf.AddUserControl(ucm);
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlStats));  // used to determine name and also key for DB
+                tcf.Init("Scan " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Scan" + numopened);
+                ucm.Init(_discoveryForm, numopened);
+                ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
 
             tcf.Show();

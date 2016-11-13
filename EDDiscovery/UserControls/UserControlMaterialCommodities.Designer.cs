@@ -92,8 +92,6 @@
             this.dataGridViewMC.Size = new System.Drawing.Size(684, 532);
             this.dataGridViewMC.TabIndex = 1;
             this.dataGridViewMC.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellEndEdit);
-            this.dataGridViewMC.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewMC_ColumnWidthChanged);
-            this.dataGridViewMC.Resize += new System.EventHandler(this.dataGridViewMC_Resize);
             // 
             // NameCol
             // 

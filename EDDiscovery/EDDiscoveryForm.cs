@@ -26,6 +26,8 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using EDDiscovery.HTTP;
 using EDDiscovery.Forms;
+using EDDiscovery.EliteDangerous;
+using EDDiscovery.EliteDangerous.JournalEvents;
 
 namespace EDDiscovery
 {
@@ -342,21 +344,39 @@ namespace EDDiscovery
                 string file = parts[jr + 1];
                 System.IO.StreamReader filejr = new System.IO.StreamReader(file);
                 string line;
+                string system = "";
+                StarScan ss = new StarScan();
+
                 while ((line = filejr.ReadLine()) != null)
                 {
                     if (line.Equals("END"))
                         break;
-                    System.Diagnostics.Trace.WriteLine(line);
-                    if (line.Length > 0 )
+                    //System.Diagnostics.Trace.WriteLine(line);
+                    if (line.Length > 0)
                     {
                         JObject jo = (JObject)JObject.Parse(line);
-
                         JSONPrettyPrint jpp = new JSONPrettyPrint(EliteDangerous.JournalEntry.StandardConverters(), "event;timestamp", "_Localised", (string)jo["event"]);
                         string s = jpp.PrettyPrint(line, 80);
-                        System.Diagnostics.Trace.WriteLine(s);
+                        //System.Diagnostics.Trace.WriteLine(s);
 
                         EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
-                        System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
+                        //System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
+
+                        if (je.EventTypeID == JournalTypeEnum.Location)
+                        {
+                            EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
+                            system = jl.StarSystem;
+                        }
+                        else if (je.EventTypeID == JournalTypeEnum.FSDJump)
+                        {
+                            EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
+                            system = jfsd.StarSystem;
+
+                        }
+                        else if (je.EventTypeID == JournalTypeEnum.Scan)
+                        {
+                            ss.Process(je as JournalScan, new SystemClass(system));
+                        }
                     }
                 }
             }
@@ -1622,6 +1642,7 @@ namespace EDDiscovery
         {
             public List<HistoryEntry> rethistory;
             public MaterialCommoditiesLedger retledger;
+            public StarScan retstarscan;
         }
 
         public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
@@ -1662,6 +1683,7 @@ namespace EDDiscovery
 
             List<HistoryEntry> history = new List<HistoryEntry>();
             MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
+            StarScan starscan = new StarScan();
 
             if (args.CurrentCommander >= 0)
             {
@@ -1709,6 +1731,9 @@ namespace EDDiscovery
                     he.ProcessWithUserDb(je, (i > 0) ? history[i - 1] : null, conn);        // let the HE do what it wants to with the user db
 
                     matcommodledger.Process(je, conn);            // update the ledger
+
+                    starscan.Process(je, he.System);
+
                     i++;
                 }
             }
@@ -1749,7 +1774,7 @@ namespace EDDiscovery
             }
             else
             {
-                e.Result = new RefreshWorkerResults { rethistory = history, retledger = matcommodledger };
+                e.Result = new RefreshWorkerResults { rethistory = history, retledger = matcommodledger, retstarscan = starscan };
             }
         }
 
@@ -1774,6 +1799,8 @@ namespace EDDiscovery
                     }
 
                     history.materialcommodititiesledger = ((RefreshWorkerResults)e.Result).retledger;
+
+                    history.starscan = ((RefreshWorkerResults)e.Result).retstarscan;
 
                     ReportProgress(-1, "");
                     LogLine("Refresh Complete." );
