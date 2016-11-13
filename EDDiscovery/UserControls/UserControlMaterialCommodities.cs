@@ -121,14 +121,6 @@ namespace EDDiscovery.UserControls
             travelhistorycontrol.OnTravelSelectionChanged -= Display;
         }
 
-        private void dataGridViewMC_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
-        {
-        }
-
-        private void dataGridViewMC_Resize(object sender, EventArgs e)
-        {
-        }
-
         #endregion
 
         bool ignoresi = false;
