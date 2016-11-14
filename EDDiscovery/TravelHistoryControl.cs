@@ -907,19 +907,19 @@ namespace EDDiscovery
                 int numopened = usercontrolsforms.CountOf(typeof(UserControlLog));
 
                 tcf.Init("Log " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Log" + numopened);
-                uclog.Init( _discoveryForm, numopened);
+                uclog.Init(_discoveryForm, numopened);
                 uclog.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
             }
             else if (selected == PopOuts.NS)
             {
                 UserControlStarDistance ucsd = new UserControlStarDistance(); // Add a closest distance tab
-                
+
                 tcf.AddUserControl(ucsd);
                 int numopened = usercontrolsforms.CountOf(typeof(UserControlStarDistance));
 
                 tcf.Init("Nearest Stars " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "StarDistance" + numopened);
 
-                ucsd.Init( _discoveryForm, numopened);
+                ucsd.Init(_discoveryForm, numopened);
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
                     ucsd.FillGrid(lastclosestname, lastclosestsystems);
             }
@@ -931,7 +931,7 @@ namespace EDDiscovery
 
                 tcf.Init("Materials " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Materials" + numopened);
 
-                ucmc.Init( _discoveryForm, numopened);
+                ucmc.Init(_discoveryForm, numopened);
                 HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
                 if (curpos != null)
                     ucmc.Display(curpos.MaterialCommodity.Sort(false));
@@ -944,7 +944,7 @@ namespace EDDiscovery
 
                 tcf.Init("Commodities " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Commodities" + numopened);
 
-                ucmc.Init( _discoveryForm, numopened);
+                ucmc.Init(_discoveryForm, numopened);
                 HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
                 if (curpos != null)
                     ucmc.Display(curpos.MaterialCommodity.Sort(true));
@@ -957,7 +957,7 @@ namespace EDDiscovery
 
                 tcf.Init("Ledger " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Ledger" + numopened);
 
-                ucmc.Init( _discoveryForm, numopened);
+                ucmc.Init(_discoveryForm, numopened);
                 ucmc.Display(_discoveryForm.history.materialcommodititiesledger);
                 ucmc.OnGotoJID += GotoJID;
             }
@@ -968,7 +968,7 @@ namespace EDDiscovery
                 int numopened = usercontrolsforms.CountOf(typeof(UserControlJournalGrid));  // used to determine name and also key for DB
 
                 tcf.Init("Journal History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "JournalHistory" + numopened);
-                uctg.Init( _discoveryForm, numopened);
+                uctg.Init(_discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
                 uctg.NoPopOutIcon();
                 uctg.NoHistoryIcon();
@@ -979,7 +979,7 @@ namespace EDDiscovery
                 tcf.AddUserControl(uctg);
                 int numopened = usercontrolsforms.CountOf(typeof(UserControlTravelGrid));  // used to determine name and also key for DB
                 tcf.Init("Travel History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "TravelHistory" + numopened);
-                uctg.Init( _discoveryForm, numopened);
+                uctg.Init(_discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
                 uctg.NoPopOutIcon();
                 uctg.NoHistoryIcon();
@@ -990,7 +990,7 @@ namespace EDDiscovery
                 tcf.AddUserControl(ucm);
                 int numopened = usercontrolsforms.CountOf(typeof(UserControlScreenshot));  // used to determine name and also key for DB
                 tcf.Init("ScreenShot " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "ScreenShot" + numopened);
-                ucm.Init( _discoveryForm, numopened);
+                ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.Statistics)    // match order in bitmap mp and comboBoxCustomPopOut
             {
@@ -998,12 +998,14 @@ namespace EDDiscovery
                 tcf.AddUserControl(ucm);
                 int numopened = usercontrolsforms.CountOf(typeof(UserControlStats));  // used to determine name and also key for DB
                 tcf.Init("Statistics " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, _discoveryForm.TopMost, "Stats" + numopened);
-                ucm.Init( _discoveryForm, numopened);
+                ucm.Init(_discoveryForm, numopened);
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
 
             tcf.Show();
-            tcf.UserControl.Font = _discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
+
+            if ( tcf.UserControl != null )
+                tcf.UserControl.Font = _discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
                                                                         // ApplyToForm does not apply the font to the actual UC, only
                                                                         // specific children controls.  The TabControl in the discoveryform ends up autoscaling most stuff
                                                                         // the children directly attached to the discoveryform are not autoscaled

@@ -35,7 +35,7 @@ namespace EDDiscovery.Controls
 
         private Panel[] imagepanels;
         private Timer autofade = new Timer();
-        private int si = 0;
+        private int si = -1;
 
         public TabStrip()
         {
@@ -62,36 +62,45 @@ namespace EDDiscovery.Controls
                 CurrentControl.Dispose();
                 CurrentControl = null;
                 drawnPanelPopOut.Visible = false;
-                labelCurrent.Visible = false;
+                si = -1;
             }
 
             if ( OnCreateTab != null )
             {
                 CurrentControl = OnCreateTab(this, i);
-                CurrentControl.Dock = DockStyle.Fill;
 
-                if (StripAtTop)
+                if (CurrentControl != null)
                 {
-                    Control p = this.Controls[0];
-                    this.Controls.Clear();
-                    this.Controls.Add(CurrentControl);
-                    this.Controls.Add(p);
+                    CurrentControl.Dock = DockStyle.Fill;
+
+                    if (StripAtTop)
+                    {
+                        Control p = this.Controls[0];
+                        this.Controls.Clear();
+                        this.Controls.Add(CurrentControl);
+                        this.Controls.Add(p);
+                    }
+                    else
+                        this.Controls.Add(CurrentControl);
+
+                    si = i;
+
+                    panelSelected.BackgroundImage = Images[i];
+
+                    labelCurrent.Text = CurrentControl.Text;
+                    drawnPanelPopOut.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, 3);
+                    drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
+
+                    OnPostCreateTab(this, i);
                 }
-                else
-                    this.Controls.Add(CurrentControl);
-
-                si = i;
-
-                panelSelected.BackgroundImage = Images[i];
-
-                labelCurrent.Text = CurrentControl.Text;
-                labelCurrent.Visible = !tabstripvisible;
-
-                drawnPanelPopOut.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, 3);
-                drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
-
-                OnPostCreateTab(this, i);
             }
+            else
+            {
+                labelCurrent.Text = "None";
+                drawnPanelPopOut.Visible = false;
+            }
+
+            labelCurrent.Visible = !tabstripvisible;
         }
 
         int tabdisplaystart = 0;    // first tab
@@ -159,7 +168,7 @@ namespace EDDiscovery.Controls
             labelCurrent.Visible = !setvisible;             // because text widths are so variable, dep on font/dialog units, turn off during selection
             tabstripvisible = setvisible;
 
-            drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
+            drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible && si != -1;
         }
 
         bool tobevisible = false;
