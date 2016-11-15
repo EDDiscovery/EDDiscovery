@@ -95,9 +95,9 @@ namespace EDDiscovery.EDDN
             message.Remove("Economy_Localised");
             message.Remove("Government_Localised");
             message.Remove("Security_Localised");
-            message.Remove("SystemEconomy_Localised");
-            message.Remove("SystemGovernment_Localised");
-            message.Remove("SystemSecurity_Localised");
+            message.Remove("StationEconomy_Localised");
+            message.Remove("StationGovernment_Localised");
+            message.Remove("StationSecurity_Localised");
             message.Remove("CockpitBreach");
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
