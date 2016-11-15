@@ -21,21 +21,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalDocked(JObject evt ) : base(evt, JournalTypeEnum.Docked)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
-            StationType = JSONHelper.GetStringDef(evt["StationType"]);
-            StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
-            CockpitBreach = JSONHelper.GetBool(evt["CockpitBreach"]);
+            StationName = Tools.GetStringDef(evt["StationName"]);
+            StationType = Tools.GetStringDef(evt["StationType"]);
+            StarSystem = Tools.GetStringDef(evt["StarSystem"]);
+            CockpitBreach = Tools.GetBool(evt["CockpitBreach"]);
 
-            Faction = JSONHelper.GetStringDef(evt["StationFaction"]);
-            FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
+            Faction = Tools.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
+            FactionState = Tools.GetStringDef(evt["FactionState"]);
 
-            Allegiance = JSONHelper.GetStringDef(evt["StationAllegiance"]);
+            Allegiance = Tools.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
+            Economy = Tools.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
+            Economy_Localised = Tools.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
+            Government = Tools.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
+            Government_Localised = Tools.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
 
-            Economy = JSONHelper.GetStringDef(evt["StationEconomy"]);
-            Economy_Localised = JSONHelper.GetStringDef(evt["StationEconomy_Localised"]);
-
-            Government = JSONHelper.GetStringDef(evt["StationGovernment"]);
-            Government_Localised = JSONHelper.GetStringDef(evt["StationGovernment_Localised"]);
+            //Security = Tools.GetMultiStringDef(evt["Security"]);
+            //Security_Localised = Tools.GetMultiStringDef(evt["Security_Localised"]);
         }
 
         public string StationName { get; set; }
@@ -49,6 +50,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Economy_Localised { get; set; }
         public string Government { get; set; }
         public string Government_Localised { get; set; }
+        //public string Security { get; set; }
+        //public string Security_Localised { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
 
