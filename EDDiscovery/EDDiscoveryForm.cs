@@ -1400,7 +1400,8 @@ namespace EDDiscovery
         {
             AboutForm frm = new AboutForm();
             frm.labelVersion.Text = this.Text;
-            frm.ShowDialog();
+            frm.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            frm.ShowDialog(this);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
