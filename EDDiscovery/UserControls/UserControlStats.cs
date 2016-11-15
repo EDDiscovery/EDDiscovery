@@ -29,21 +29,12 @@ namespace EDDiscovery.UserControls
             displaynumber = vn;
             discoveryform.OnNewEntry += AddNewEntry;
             travelhistorycontrol.OnTravelSelectionChanged += SelectionChanged;
-
-            vScrollBarCustom.Scroll += new System.Windows.Forms.ScrollEventHandler(OnScrollBarChanged);
         }
 
         public override void Closing()
         {
             discoveryform.OnNewEntry -= AddNewEntry;
             travelhistorycontrol.OnTravelSelectionChanged -= SelectionChanged;
-        }
-
-        protected virtual void OnScrollBarChanged(object sender, ScrollEventArgs e)
-        {
-            int percent = e.NewValue;
-            panelData.AutoScrollPosition = new Point(0, percent);       // this is the one to change with AutoScroll off
-           // System.Diagnostics.Debug.WriteLine("Scroll {0} {1} {2}", percent , panelData.AutoScrollPosition.X, panelData.AutoScrollPosition.Y);
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)
@@ -77,22 +68,22 @@ namespace EDDiscovery.UserControls
                                       );
 
                 HistoryEntry north = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.z > l; if (v) l = s.System.z; return v; } );
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.z > l; if (v) l = s.System.z; return v; });
 
                 HistoryEntry south = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.z < l; if (v) l = s.System.z; return v;} );
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.z < l; if (v) l = s.System.z; return v; });
 
                 HistoryEntry east = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.x > l; if (v) l = s.System.x; return v; } );
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.x > l; if (v) l = s.System.x; return v; });
 
                 HistoryEntry west = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.x < l; if (v) l = s.System.x; return v; } );
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.x < l; if (v) l = s.System.x; return v; });
 
                 HistoryEntry up = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.y > l; if (v) l = s.System.y; return v; } );
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.y > l; if (v) l = s.System.y; return v; });
 
                 HistoryEntry down = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.y < l; if (v) l = s.System.y; return v; } );
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.y < l; if (v) l = s.System.y; return v; });
 
                 StatToDGV("Most North", north.System.name + " @ " + north.System.x.ToString("0.0") + "," + north.System.y.ToString("0.0") + "," + north.System.z.ToString("0.0"));
                 StatToDGV("Most South", south.System.name + " @ " + south.System.x.ToString("0.0") + "," + south.System.y.ToString("0.0") + "," + south.System.z.ToString("0.0"));
@@ -152,6 +143,26 @@ namespace EDDiscovery.UserControls
             SizeControls();
         }
 
+        void SizeControls()
+        { 
+            int height = 0;
+            foreach (DataGridViewRow row in dataGridViewStats.Rows)
+            {
+                height += row.Height + 1;
+            }
+            height += dataGridViewStats.ColumnHeadersHeight + 2;
+            dataGridViewStats.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, height);             // all controls should be placed each time.
+            System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
+            mostVisited.Location = new Point(0, height);
+            mostVisited.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, mostVisited.Height);
+        }
+
+        protected override void OnLayout(LayoutEventArgs e)
+        {
+            base.OnLayout(e);       
+            SizeControls();         // need to size controls here as well.. goes tabstrip.. create user control.. calls updatestats with incorrect size.. added to UC panel.. relayout
+        }
+
         void StatToDGV(string title, string data)
         {
             object[] rowobj = { title, data };
@@ -164,38 +175,5 @@ namespace EDDiscovery.UserControls
             dataGridViewStats.Rows.Add(rowobj);
         }
 
-        void SizeControls()
-        {
-            int height = 0;
-            foreach (DataGridViewRow row in dataGridViewStats.Rows)
-            {
-                height += row.Height + 1;
-            }
-            height += dataGridViewStats.ColumnHeadersHeight+2;
-            
-            dataGridViewStats.Location = new Point(0, 0);                           // When window sizes down, you can end up with controls being placed on negative values.  
-            dataGridViewStats.Size = new Size(panelData.Width, height);             // all controls should be placed each time.
-
-            mostVisited.Location = new Point(0, height );
-            mostVisited.Size = new Size(panelData.Width, mostVisited.Height);
-
-            int maxh = 0;
-            foreach (Control c in panelData.Controls)
-            {
-                int bot = c.Location.Y + c.Height;
-                if (bot > maxh)
-                    maxh = bot;
-            }
-
-            vScrollBarCustom.Maximum = maxh - panelData.Height + vScrollBarCustom.LargeChange + 16;
-            vScrollBarCustom.Minimum = 0;
-            //System.Diagnostics.Debug.WriteLine("UC H {0} Max H {1} vscroll {2}", ClientRectangle.Height, maxh, vScrollBarCustom.Maximum);
-        }
-
-        private void UserControlStats_Resize(object sender, EventArgs e)
-        {
-            panelData.Size = new Size(this.ClientRectangle.Width - vScrollBarCustom.Width,this.ClientRectangle.Height);
-            SizeControls();
-        }
     }
 }

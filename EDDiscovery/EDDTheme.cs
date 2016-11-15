@@ -943,10 +943,11 @@ namespace EDDiscovery2
                     MyDgv.RowHeadersWidth = (int)(sz.Width + 6);        // size it to the text, need a little more for rounding
                 }
             }
-            else if (myControl is VScrollBarCustom && (parent is DataViewScrollerPanel || parent is EDDiscovery.UserControls.UserControlStats))
+            else if (myControl is VScrollBarCustom && !(parent is ListControlCustom || parent is RichTextBoxScroll))
             {                   // selected items need VScroll controlled here. Others control it themselves
                 VScrollBarCustom MyDgv = (VScrollBarCustom)myControl;
 
+                System.Diagnostics.Debug.WriteLine("VScrollBarCustom Theme " + level + ":" + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString() + " " + parentcontroltype.Name);
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))
                 {
                     Color c1 = currentsettings.colors[Settings.CI.grid_scrollbutton];

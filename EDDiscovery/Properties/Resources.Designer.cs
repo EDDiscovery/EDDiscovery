@@ -63,6 +63,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Ammonia_Brown {
+            get {
+                object obj = ResourceManager.GetObject("Ammonia_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ammunition {
             get {
                 object obj = ResourceManager.GetObject("ammunition", resourceCulture);
@@ -186,6 +196,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap buytradedata {
             get {
                 object obj = ResourceManager.GetObject("buytradedata", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Class_II_Gas_Giant_Sand1 {
+            get {
+                object obj = ResourceManager.GetObject("Class_II_Gas_Giant_Sand1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -476,6 +496,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap hyperspace {
             get {
                 object obj = ResourceManager.GetObject("hyperspace", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icy_Body_Greenish1 {
+            get {
+                object obj = ResourceManager.GetObject("Icy_Body_Greenish1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1252,6 +1282,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap star {
             get {
                 object obj = ResourceManager.GetObject("star", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Star_K1IV {
+            get {
+                object obj = ResourceManager.GetObject("Star_K1IV", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
