@@ -40,13 +40,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             BoostUsed = Tools.GetBool(evt["BoostUsed"]);
             Faction = Tools.GetStringDef(evt["Faction"]);
             FactionState = Tools.GetStringDef(evt["FactionState"]);
-            Allegiance = Tools.GetStringDef(evt["Allegiance"]);
-            Economy = Tools.GetStringDef(evt["Economy"]);
-            Economy_Localised = Tools.GetStringDef(evt["Economy_Localised"]);
-            Government = Tools.GetStringDef(evt["Government"]);
-            Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
-            Security = Tools.GetStringDef(evt["Security"]);
-            Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
+            Allegiance = Tools.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
+            Economy = Tools.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
+            Economy_Localised = Tools.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
+            Government = Tools.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
+            Government_Localised = Tools.GetMultiStringDef(evt, new string[] { "", "SystemGovernment_Localised" });
+            Security = Tools.GetMultiStringDef(evt, new string[] { "", "SystemSecurity" });
+            Security_Localised = Tools.GetMultiStringDef(evt, new string[] { "", "SystemSecurity_Localised" });
             PowerplayState = Tools.GetStringDef(evt["PowerplayState"]);
 
             if (!Tools.IsNullOrEmptyT(evt["Powers"]))
