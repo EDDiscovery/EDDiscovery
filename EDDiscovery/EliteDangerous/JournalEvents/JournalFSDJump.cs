@@ -33,21 +33,21 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalFSDJump(JObject evt ) : base(evt, JournalTypeEnum.FSDJump)
         {
-            Body = JSONHelper.GetStringDef(evt["body"], "Unknown");
-            JumpDist = JSONHelper.GetDouble(evt["JumpDist"]);
-            FuelUsed = JSONHelper.GetDouble(evt["FuelUsed"]);
-            FuelLevel = JSONHelper.GetDouble(evt["FuelLevel"]);
-            BoostUsed = JSONHelper.GetBool(evt["BoostUsed"]);
-            Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
-            Allegiance = JSONHelper.GetStringDef(evt["Allegiance"]);
-            Economy = JSONHelper.GetStringDef(evt["Economy"]);
-            Economy_Localised = JSONHelper.GetStringDef(evt["Economy_Localised"]);
-            Government = JSONHelper.GetStringDef(evt["Government"]);
-            Government_Localised = JSONHelper.GetStringDef(evt["Government_Localised"]);
-            Security = JSONHelper.GetStringDef(evt["Security"]);
-            Security_Localised = JSONHelper.GetStringDef(evt["Security_Localised"]);
-            PowerplayState = JSONHelper.GetStringDef(evt["PowerplayState"]);
+            Body = Tools.GetStringDef(evt["body"], "Unknown");
+            JumpDist = Tools.GetDouble(evt["JumpDist"]);
+            FuelUsed = Tools.GetDouble(evt["FuelUsed"]);
+            FuelLevel = Tools.GetDouble(evt["FuelLevel"]);
+            BoostUsed = Tools.GetBool(evt["BoostUsed"]);
+            Faction = Tools.GetStringDef(evt["Faction"]);
+            FactionState = Tools.GetStringDef(evt["FactionState"]);
+            Allegiance = Tools.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
+            Economy = Tools.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
+            Economy_Localised = Tools.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
+            Government = Tools.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
+            Government_Localised = Tools.GetMultiStringDef(evt, new string[] { "", "SystemGovernment_Localised" });
+            Security = Tools.GetMultiStringDef(evt, new string[] { "", "SystemSecurity" });
+            Security_Localised = Tools.GetMultiStringDef(evt, new string[] { "", "SystemSecurity_Localised" });
+            PowerplayState = Tools.GetStringDef(evt["PowerplayState"]);
 
             if (!JSONHelper.IsNullOrEmptyT(evt["Powers"]))
                 Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
