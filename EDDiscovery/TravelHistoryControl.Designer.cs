@@ -450,7 +450,7 @@
             // buttonEDSM
             // 
             this.buttonEDSM.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEDSM.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Text;
+            this.buttonEDSM.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
             this.buttonEDSM.ImageText = "EDSM";
             this.buttonEDSM.Location = new System.Drawing.Point(208, 6);
             this.buttonEDSM.MarginSize = 0;

@@ -60,7 +60,7 @@
             // drawnPanelPopOut
             // 
             this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout;
-            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.DrawnImage;
+            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
             this.drawnPanelPopOut.ImageText = null;
             this.drawnPanelPopOut.Location = new System.Drawing.Point(387, 3);
             this.drawnPanelPopOut.MarginSize = 4;

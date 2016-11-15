@@ -1124,7 +1124,7 @@ namespace EDDiscovery2
                 {
                     DrawnPanel edsm = new DrawnPanel();
                     edsm.Name = cep[i].text.Substring(11);
-                    edsm.ImageSelected = DrawnPanel.ImageType.Text;
+                    edsm.ImageSelected = DrawnPanel.ImageType.InverseText;
                     edsm.ImageText = "EDSM";
                     edsm.Size = new Size(100, vsize-6);
                     edsm.MarginSize = -1;       // 0 is auto calc, -1 is zero
