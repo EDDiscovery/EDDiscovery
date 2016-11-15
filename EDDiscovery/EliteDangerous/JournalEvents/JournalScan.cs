@@ -193,7 +193,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     foreach (PlanetRing ring in Rings)
                     {
                         scanText.Append("\n");
-                        scanText.AppendFormat("{0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
+                        scanText.AppendFormat("{0} ({1})\n", ring.Name, DisplayStringFromRingClass(ring.RingClass));
                         scanText.AppendFormat("Moon Masses: {0}\n", (ring.MassMT / oneMoon_MT).ToString("#,###,###,##0.0######"));
                         scanText.AppendFormat("Inner Radius: {0}ls\n", (ring.InnerRad / 300000000).ToString("#,###,###,###,###"));
                         scanText.AppendFormat("Outer Radius: {0}ls\n", (ring.OuterRad / 300000000).ToString("#,###,###,###,###"));
@@ -204,19 +204,21 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 //planet
                 scanText.AppendFormat("{0}\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                        ToTitleCase(PlanetClass.ToLower()));
+                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii", "II").Replace("Ii", "II").Replace("Iv", "IV"));
                 scanText.Append(TerraformState == "Terraformable" ? "Candidate for terraforming\n" : "\n");
                 scanText.AppendFormat("Earth Masses: {0}\n", MassEM);
                 scanText.AppendFormat("Radius: {0}km\n", (Radius.Value / 1000).ToString("###,##0"));
                 scanText.AppendFormat("Gravity: {0}g\n", SurfaceGravity / 10);
                 scanText.AppendFormat("Surface Temp: {0}K\n", SurfaceTemperature.Value.ToString("#,###,###.00"));
-                if (SurfacePressure.HasValue && SurfacePressure.Value > 0.00 && !PlanetClass.ToLower().Contains("gas"))
-                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (SurfacePressure.Value / 100000).ToString("#,###,###,###,##0.00"));
-                scanText.AppendFormat("Volcanism: {0}\n", Volcanism == String.Empty ? "No Volcanism" : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                        ToTitleCase(Volcanism.ToLower()));
                 if (!PlanetClass.ToLower().Contains("gas"))
-                    scanText.AppendFormat("Atmosphere Type: {0}\n", Atmosphere == String.Empty ? "No Atmosphere" : 
+                {
+                    if (SurfacePressure.HasValue && SurfacePressure.Value > 0.00)
+                        scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (SurfacePressure.Value / 100000).ToString("#,###,###,###,##0.00"));
+                    scanText.AppendFormat("Volcanism: {0}\n", Volcanism == String.Empty ? "No Volcanism" : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+                                        ToTitleCase(Volcanism.ToLower()));
+                    scanText.AppendFormat("Atmosphere Type: {0}\n", Atmosphere == String.Empty ? "No Atmosphere" :
                                         System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Atmosphere.ToLower()));
+                }
                 scanText.AppendFormat("Orbital Period: {0}D\n", (OrbitalPeriod / oneDay_s).ToString("###,###,##0.0"));
                 scanText.AppendFormat("Semi Major Axis: {0}AU\n", (SemiMajorAxis / oneAU_m).ToString("#0.0#"));
                 scanText.AppendFormat("Oribtal Eccentricity: {0}°\n", Eccentricity);
@@ -231,7 +233,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     foreach(PlanetRing ring in Rings)
                     {
                         scanText.Append("\n");
-                        scanText.AppendFormat("{0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
+                        scanText.AppendFormat("{0} ({1})\n", ring.Name, DisplayStringFromRingClass(ring.RingClass));
                         scanText.AppendFormat("Mass: {0}MT\n", ring.MassMT.ToString("#,###,###,###,###,###,###,###,###"));
                         scanText.AppendFormat("Inner Radius: {0}km\n", (ring.InnerRad / 1000).ToString("#,###,###,###,###"));
                         scanText.AppendFormat("Outer Radius: {0}km\n", (ring.OuterRad / 1000).ToString("#,###,###,###,###"));
@@ -251,6 +253,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 }
             }
             return scanText.ToNullSafeString();
+        }
+
+        internal string DisplayStringFromRingClass(string ringClass)
+        {
+            switch (ringClass)
+            {
+                case "eRingClass_Icy":
+                    return "Icy";
+                case "eRingClass_Rocky":
+                    return "Rocky";
+                case "eRingClass_MetalRich":
+                    return "Metal Rich";
+                case "eRingClass_Metalic":
+                    return "Metallic";
+                case "eRingClass_RockyIce":
+                    return "Rocky Ice";
+                default:
+                    return ringClass;
+            }
         }
 
         internal double GetMaterial(string v)
