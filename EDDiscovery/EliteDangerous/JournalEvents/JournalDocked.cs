@@ -25,15 +25,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StationType = Tools.GetStringDef(evt["StationType"]);
             StarSystem = Tools.GetStringDef(evt["StarSystem"]);
             CockpitBreach = Tools.GetBool(evt["CockpitBreach"]);
-            Faction = Tools.GetStringDef(evt["Faction"]);
+
+            Faction = Tools.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
             FactionState = Tools.GetStringDef(evt["FactionState"]);
-            Allegiance = Tools.GetStringDef(evt["Allegiance"]);
-            Economy = Tools.GetStringDef(evt["Economy"]);
-            Economy_Localised = Tools.GetStringDef(evt["Economy_Localised"]);
-            Government = Tools.GetStringDef(evt["Government"]);
-            Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
-            Security = Tools.GetStringDef(evt["Security"]);
-            Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
+
+            Allegiance = Tools.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
+            Economy = Tools.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
+            Economy_Localised = Tools.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
+            Government = Tools.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
+            Government_Localised = Tools.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
+
+            //Security = Tools.GetMultiStringDef(evt["Security"]);
+            //Security_Localised = Tools.GetMultiStringDef(evt["Security_Localised"]);
         }
 
         public string StationName { get; set; }
@@ -47,8 +50,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Economy_Localised { get; set; }
         public string Government { get; set; }
         public string Government_Localised { get; set; }
-        public string Security { get; set; }
-        public string Security_Localised { get; set; }
+        //public string Security { get; set; }
+        //public string Security_Localised { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
 

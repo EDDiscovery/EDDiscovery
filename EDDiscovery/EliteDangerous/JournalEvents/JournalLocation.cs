@@ -28,15 +28,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Docked = evt.Value < bool ?>("Docked") ?? false;
             StationName = Tools.GetStringDef(evt["StationName"]);
             StationType = Tools.GetStringDef(evt["StationType"]);
-            Faction = Tools.GetStringDef(evt["Faction"]);
+            Faction = Tools.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
             FactionState = Tools.GetStringDef(evt["FactionState"]);
-            Allegiance = Tools.GetStringDef(evt["Allegiance"]);
-            Economy = Tools.GetStringDef(evt["Economy"]);
-            Economy_Localised = Tools.GetStringDef(evt["Economy_Localised"]);
-            Government = Tools.GetStringDef(evt["Government"]);
-            Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
-            Security = Tools.GetStringDef(evt["Security"]);
-            Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
+            Allegiance = Tools.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance"});
+            Economy = Tools.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
+            Economy_Localised = Tools.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
+            Government = Tools.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
+            Government_Localised = Tools.GetMultiStringDef(evt, new string[] { "SystemGovernment_Localised", "Government_Localised" });
+            Security = Tools.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
+            Security_Localised = Tools.GetMultiStringDef(evt, new string[] { "SystemSecurity_Localised", "Security_Localised" });
             BodyType = Tools.GetStringDef(evt["BodyType"]);
 
             PowerplayState = Tools.GetStringDef(evt["PowerplayState"]);
