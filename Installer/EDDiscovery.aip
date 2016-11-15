@@ -18,7 +18,7 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{BECC2E80-93FF-4AA6-A76D-C3B2678471B6} 1053:{6C717CBB-8EB8-46AE-ADF3-DDF5BBEA256B} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{88A03838-8C49-4D67-BD5F-F6D862FB2348} 1053:{9BA39F64-93DF-4DEC-B2CD-0516C0F04C45} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
     <ROW Property="ProductVersion" Value="5.0.18" Type="32"/>
