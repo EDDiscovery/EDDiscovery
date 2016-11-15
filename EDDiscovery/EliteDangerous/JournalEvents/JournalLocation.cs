@@ -28,21 +28,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Docked = JSONHelper.GetBool(evt["Docked"]);
             StationName = JSONHelper.GetStringDef(evt["StationName"]);
             StationType = JSONHelper.GetStringDef(evt["StationType"]);
-
-            Faction = JSONHelper.GetStringDef(evt["SystemFaction"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
             FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
-
-            Allegiance = JSONHelper.GetStringDef(evt["SystemAllegiance"]);
-
-            Economy = JSONHelper.GetStringDef(evt["SystemEconomy"]);
-            Economy_Localised = JSONHelper.GetStringDef(evt["SystemEconomy_Localised"]);
-
-            Government = JSONHelper.GetStringDef(evt["SystemGovernment"]);
-            Government_Localised = JSONHelper.GetStringDef(evt["SystemGovernment_Localised"]);
-
-            Security = JSONHelper.GetStringDef(evt["SystemSecurity"]);
-            Security_Localised = JSONHelper.GetStringDef(evt["SystemSecurity_Localised"]);
-
+            Allegiance = JSONHelper.GetStringDef(evt["Allegiance"]);
+            Economy = JSONHelper.GetStringDef(evt["Economy"]);
+            Economy_Localised = JSONHelper.GetStringDef(evt["Economy_Localised"]);
+            Government = JSONHelper.GetStringDef(evt["Government"]);
+            Government_Localised = JSONHelper.GetStringDef(evt["Government_Localised"]);
+            Security = JSONHelper.GetStringDef(evt["Security"]);
+            Security_Localised = JSONHelper.GetStringDef(evt["Security_Localised"]);
             BodyType = JSONHelper.GetStringDef(evt["BodyType"]);
 
             PowerplayState = JSONHelper.GetStringDef(evt["PowerplayState"]);

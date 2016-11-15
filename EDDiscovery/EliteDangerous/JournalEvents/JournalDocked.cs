@@ -25,17 +25,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StationType = JSONHelper.GetStringDef(evt["StationType"]);
             StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
             CockpitBreach = JSONHelper.GetBool(evt["CockpitBreach"]);
-
-            Faction = JSONHelper.GetStringDef(evt["StationFaction"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
             FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
-
-            Allegiance = JSONHelper.GetStringDef(evt["StationAllegiance"]);
-
-            Economy = JSONHelper.GetStringDef(evt["StationEconomy"]);
-            Economy_Localised = JSONHelper.GetStringDef(evt["StationEconomy_Localised"]);
-
-            Government = JSONHelper.GetStringDef(evt["StationGovernment"]);
-            Government_Localised = JSONHelper.GetStringDef(evt["StationGovernment_Localised"]);
+            Allegiance = JSONHelper.GetStringDef(evt["Allegiance"]);
+            Economy = JSONHelper.GetStringDef(evt["Economy"]);
+            Economy_Localised = JSONHelper.GetStringDef(evt["Economy_Localised"]);
+            Government = JSONHelper.GetStringDef(evt["Government"]);
+            Government_Localised = JSONHelper.GetStringDef(evt["Government_Localised"]);
+            Security = JSONHelper.GetStringDef(evt["Security"]);
+            Security_Localised = JSONHelper.GetStringDef(evt["Security_Localised"]);
         }
 
         public string StationName { get; set; }
@@ -49,6 +47,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Economy_Localised { get; set; }
         public string Government { get; set; }
         public string Government_Localised { get; set; }
+        public string Security { get; set; }
+        public string Security_Localised { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
 
