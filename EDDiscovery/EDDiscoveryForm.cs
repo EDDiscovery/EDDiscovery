@@ -202,6 +202,9 @@ namespace EDDiscovery
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
         }
 
+
+
+
         // We can't prevent an unhandled exception from killing the application.
         // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
         // Log the exception info if we can, and ask the user to report it.
@@ -746,6 +749,14 @@ namespace EDDiscovery
                 panelInfo.Visible = false;
 
                 checkInstallerTask = CheckForNewInstallerAsync();
+
+                if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
+                {
+                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
+                    {
+                        LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
+                    }
+                }
             }
         }
 

@@ -4,7 +4,10 @@ using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Reflection;
 using System.Text;
 
@@ -76,8 +79,8 @@ namespace EDDiscovery.EDDN
             if (JSONHelper.IsNullOrEmptyT(message["FuelUsed"]))  // Old ED 2.1 messages has no Fuel used fields
                 return null;
 
-            
 
+            message = RemoveCommonKeys(message);
             message.Remove("BoostUsed");
             message.Remove("JumpDist");
             message.Remove("FuelUsed");
@@ -134,5 +137,86 @@ namespace EDDiscovery.EDDN
                 return true;
             else return false;
         }
+
+
+
+        static public bool CheckforEDMC()
+        {
+            string EDMCFileName = null;
+
+
+            try
+            {
+                Process[] processes32 = Process.GetProcessesByName("EDMarketConnector");
+               
+
+                Process[] processes = processes32;
+
+                if (processes == null)
+                {
+                    return  false;
+                }
+                else if (processes.Length == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    string processFilename = null;
+                    try
+                    {
+                        int id = processes[0].Id;
+                        processFilename = GetMainModuleFilepath(id);        // may return null if id not found (seen this)
+
+                        if (processFilename != null)
+                            EDMCFileName = processFilename;
+                    }
+                    catch (Win32Exception)
+                    {
+                    }
+
+                    if (EDMCFileName != null)                                 // if found..
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+            }
+            return false;
+        }
+
+        private static string GetMainModuleFilepath(int processId)
+        {
+            string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
+
+            using (var searcher = new ManagementObjectSearcher(wmiQueryString))
+            {
+                if (searcher != null)           // seen it return null
+                {
+                    using (var results = searcher.Get())
+                    {
+                        if (results != null)
+                        {
+                            foreach (ManagementObject mo in results)
+                            {
+                                if (mo != null)
+                                {
+                                    return (string)mo["ExecutablePath"];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
+
+
     }
 }
