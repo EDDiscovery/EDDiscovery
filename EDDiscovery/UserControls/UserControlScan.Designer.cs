@@ -49,6 +49,7 @@
             this.panelStars.TabIndex = 1;
             this.panelStars.VerticalScrollBarDockRight = true;
             this.panelStars.Click += new System.EventHandler(this.panelStars_Click);
+            this.panelStars.Resize += new System.EventHandler(this.panelStars_Resize);
             // 
             // richTextBoxInfo
             // 
@@ -72,7 +73,7 @@
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
-            this.vScrollBarCustom.LargeChange = 10;
+            this.vScrollBarCustom.LargeChange = 20;
             this.vScrollBarCustom.Location = new System.Drawing.Point(728, 0);
             this.vScrollBarCustom.Maximum = -479;
             this.vScrollBarCustom.Minimum = 0;

@@ -266,6 +266,7 @@ namespace EDDiscovery
 
         void TabPostCreate(TabStrip t, int i)        // called by tab strip after control has been added..
         {
+            System.Diagnostics.Debug.WriteLine("And theme {0}", i);
             _discoveryForm.theme.ApplyToControls(t);
         }
 

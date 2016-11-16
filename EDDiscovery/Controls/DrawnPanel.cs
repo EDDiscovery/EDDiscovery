@@ -14,7 +14,7 @@ namespace ExtendedControls
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
-        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross, InverseText, Move, Text2, None };
+        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross, InverseText, Move, Text, None };
 
         public ImageType ImageSelected { get; set; } = ImageType.Close;
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
@@ -142,8 +142,19 @@ namespace ExtendedControls
                             e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(centrehorzpx - (int)(size.Width / 2), topmarginpx));
                     }
                 }
-                else if (ImageSelected == ImageType.Text2)
+                else if (ImageSelected == ImageType.Text)
                 {
+                    SizeF size = e.Graphics.MeasureString(this.ImageText, this.Font);
+                    double scale = (double)(ClientRectangle.Height - topmarginpx * 2) / (double)size.Height;
+                    // given the available height, scale the font up if its bigger than the current font height.
+
+                    using (Font fnt = new Font(this.Font.Name, (float)(this.Font.SizeInPoints * scale), this.Font.Style))
+                    {
+                        size = e.Graphics.MeasureString(this.ImageText, fnt);
+                        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                        using (Brush textb = new SolidBrush(this.ForeColor))
+                            e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(centrehorzpx - (int)(size.Width / 2), topmarginpx));
+                    }
                 }
                 else if (ImageSelected == ImageType.Move)
                 {

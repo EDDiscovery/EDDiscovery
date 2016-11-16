@@ -69,7 +69,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             nOrbitalInclination = JSONHelper.GetDoubleNull(evt["OrbitalInclination"]);
             nPeriapsis = JSONHelper.GetDoubleNull(evt["Periapsis"]);
 
-            Rings = evt["Rings"]?.ToObject<PlanetRing[]>();
+            Rings = evt["Rings"]?.ToObject<StarPlanetRing[]>();
 
             nTidalLock = JSONHelper.GetBoolNull(evt["TidalLock"]);
             TerraformState = JSONHelper.GetStringNull(evt["TerraformState"]);
@@ -101,7 +101,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nOrbitalInclination;
         public double? nPeriapsis;
 
-        public PlanetRing[] Rings { get; set; }
+        public class StarPlanetRing
+        {
+            public string Name;
+            public string RingClass;
+            public double MassMT;
+            public double InnerRad;
+            public double OuterRad;
+        }
+
+        public StarPlanetRing[] Rings { get; set; }
+        public bool HasRings { get { return Rings != null && Rings.Any(); } }
 
         public bool? nTidalLock { get; set; }
         public string TerraformState { get; set; }
@@ -114,11 +124,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nSurfacePressure { get; set; }
         public bool? nLandable { get; set; }
 
+        public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
         public Dictionary<string, double> Materials { get; set; }
 
-        public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
+        //public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
 
-        public List<JournalScan> children;      // any sub children in scans in memory
+        
 
         public string DisplayString(bool printbodyname = true, int indent = 0)
         {
@@ -214,17 +225,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 if (nRotationPeriod.HasValue)
                     scanText.AppendFormat("Rotation Period: {0} days\n", (nRotationPeriod.Value / oneDay_s).ToString("###,###,##0.0"));
 
-                if (Rings != null && Rings.Any())
+                if (HasRings)
                 {
                     scanText.Append("\n");
                     scanText.AppendFormat("Belt{0}", Rings.Count() == 1 ? "" : "s");
-                    foreach (PlanetRing ring in Rings)
+                    foreach (StarPlanetRing ring in Rings)
                     {
                         scanText.Append("\n");
-                        scanText.AppendFormat("{0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
-                        scanText.AppendFormat("Moon Masses: {0}\n", (ring.MassMT / oneMoon_MT).ToString("#,###,###,##0.0######"));
-                        scanText.AppendFormat("Inner Radius: {0}ls\n", (ring.InnerRad / 300000000).ToString("#,###,###,###,###"));
-                        scanText.AppendFormat("Outer Radius: {0}ls\n", (ring.OuterRad / 300000000).ToString("#,###,###,###,###"));
+                        scanText.AppendFormat("  {0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
+                        scanText.AppendFormat("  Moon Masses: {0}\n", (ring.MassMT / oneMoon_MT).ToString("#,###,###,##0.0######"));
+                        scanText.AppendFormat("  Inner Radius: {0}ls\n", (ring.InnerRad / 300000000).ToString("#,###,###,###,###"));
+                        scanText.AppendFormat("  Outer Radius: {0}ls\n", (ring.OuterRad / 300000000).ToString("#,###,###,###,###"));
                     }
                 }
             }
@@ -276,11 +287,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
                 scanText.Append((nTidalLock.HasValue && nTidalLock.Value) ? " (Tidally locked)\n" : "\n");
 
-                if (Rings != null && Rings.Any())
+                if (HasRings)
                 {
                     scanText.Append("\n");
                     scanText.AppendFormat("Ring{0}", Rings.Count() == 1 ? "" : "s");
-                    foreach (PlanetRing ring in Rings)
+                    foreach (StarPlanetRing ring in Rings)
                     {
                         scanText.Append("\n");
                         scanText.AppendFormat("  {0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
@@ -290,7 +301,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     }
                 }
 
-                if (Materials != null && Materials.Any())
+                if (HasMaterials) 
                 {
                     scanText.Append("\n");
                     scanText.Append("Materials\n");
@@ -306,6 +317,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
+
 
         public System.Drawing.Image GetStarTypeImage()
         {
@@ -392,16 +404,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
     }
 
-    public class PlanetRing
-    {
-        public string Name;
-        public string RingClass;
-        public double MassMT;
-        public double InnerRad;
-        public double OuterRad;
-    }
-
-
 
 
     public class StarScan
@@ -411,15 +413,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public class SystemNode
         {
             public EDDiscovery2.DB.ISystem system;
-            public List<ScanNode> starnodes;
+            public SortedList<string, ScanNode> starnodes;
         };
+
+        public enum ScanNodeType { star , barycentre, planet , moon, starbelt, rings };
 
         public class ScanNode
         {
+            public ScanNodeType type;
             public string fullname;                 // full name
             public string ownname;                  // own name              
-            public List<ScanNode> children;         // kids
-            public bool starisnotcompound;          // only valid for star nodes, set if star node is a star, not a compound star
+            public SortedList<string, ScanNode> children;         // kids
 
             public JournalScan scandata;            // can be null if no scan, its a place holder.
         };
@@ -463,7 +467,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
             else
             {
-                sn = new SystemNode() { system = sys, starnodes = new List<ScanNode>() };
+                sn = new SystemNode() { system = sys, starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>()) };
                 scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
             }
 
@@ -478,12 +482,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         void FindOrAddStar(SystemNode sn, JournalScan sc, string starname )
         {                                                           // so a star line Eol Prou LW-L c8 - 306 A, it it there?
             List<string> elements;
-            bool isastar = false;
-            ReturnElements(sc.BodyName, starname, out elements, out isastar);       // elements[0] = star designator, 1 = planet, 2 = moon
+            ReturnElements(sc.BodyName, starname, out elements);    // elements[0] = star designator
 
-            ScanNode star = sn.starnodes.Find(x => x.ownname.Equals(elements[0], StringComparison.InvariantCultureIgnoreCase));
-
-            if (star == null)
+            ScanNode star;
+            if (!sn.starnodes.TryGetValue(elements[0], out star))
             {
                 star = new ScanNode()
                 {
@@ -491,10 +493,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     fullname = starname + ((elements[0].Length > 0) ? (" " + elements[0]) : ""),
                     scandata = sc,
                     children = null,
-                    starisnotcompound = isastar
+                    type = ScanNodeType.star
                 };
 
-                sn.starnodes.Add(star);
+                sn.starnodes.Add(elements[0], star);
                 System.Diagnostics.Debug.WriteLine("Added star " + star.fullname + " '" + star.ownname + "'");
             }
             else
@@ -509,14 +511,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             // handle Aurioum B A BELT
 
             List<string> elements;
-            bool isastar = false;
-            ReturnElements(sc.BodyName, starname, out elements, out isastar);       // elements[0] = star designator, 1 = planet, 2 = moon
+            ReturnElements(sc.BodyName, starname, out elements);       // elements[0] = star designator or empty, 1 = planet, 2 = moon
 
             if (elements.Count >= 2)            // must have a star, and at least a planet..
             {
-                ScanNode star = sn.starnodes.Find(x => x.ownname.Equals(elements[0], StringComparison.InvariantCultureIgnoreCase));
+                ScanNode star;
 
-                if ( star == null )
+                if (!sn.starnodes.TryGetValue(elements[0], out star))
                 {
                     star = new ScanNode()
                     {
@@ -524,36 +525,35 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                         fullname = starname + ((elements[0].Length > 0) ? (" " + elements[0]) : ""),
                         scandata = null,
                         children = null,
-                        starisnotcompound = isastar
+                        type = (elements[0].Length > 0) ? ScanNodeType.barycentre : ScanNodeType.star
                     };
 
-                    sn.starnodes.Add(star);
+                    sn.starnodes.Add(elements[0],star);
                     System.Diagnostics.Debug.WriteLine("Added star " + star.fullname);
-
                 }
 
-                ScanNode planetscan = star.children?.Find(x => x.ownname.Equals(elements[1], StringComparison.InvariantCultureIgnoreCase));
+                ScanNode planetscan;
 
-                if (planetscan == null)
+                if (star.children == null || !star.children.TryGetValue(elements[1], out planetscan))
                 {
                     if (star.children == null)
-                        star.children = new List<ScanNode>();
+                        star.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                    planetscan = new ScanNode() { ownname = elements[1], fullname = elements[0] + " " + elements[1], scandata = null, children = null };
-                    star.children.Add(planetscan);
+                    planetscan = new ScanNode() { ownname = elements[1], fullname = elements[0] + " " + elements[1], scandata = null, children = null , type = ScanNodeType.planet };
+                    star.children.Add(elements[1], planetscan);
                 }
 
                 if (elements.Count >= 3)          // star, planet, moon
                 {
-                    ScanNode moonscan = planetscan.children?.Find(x => x.ownname.Equals(elements[2], StringComparison.InvariantCultureIgnoreCase));
+                    ScanNode moonscan;
 
-                    if (moonscan == null)
+                    if (planetscan.children == null || !planetscan.children.TryGetValue(elements[2], out moonscan))
                     {
                         if (planetscan.children == null)
-                            planetscan.children = new List<ScanNode>();
+                            planetscan.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                        moonscan = new ScanNode() { ownname = elements[2] , fullname = elements[0] + " " + elements[1] + " " + elements[2], scandata = null, children = null };
-                        planetscan.children.Add(moonscan);
+                        moonscan = new ScanNode() { ownname = elements[2] , fullname = elements[0] + " " + elements[1] + " " + elements[2], scandata = null, children = null , type = ScanNodeType.moon };
+                        planetscan.children.Add(elements[2],moonscan);
                     }
 
                     moonscan.scandata = sc;
@@ -571,10 +571,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 return false;
         }
 
-        private void ReturnElements(string bodyname, string starname, out List<string> elements, out bool isastar)      // 0 = star designator (may be empty), 1 = first name, etc
+        private void ReturnElements(string bodyname, string starname, out List<string> elements)      // 0 = star designator (may be empty), 1 = first name, etc
         {
-            isastar = true;     // presume true
-
             bool namerelatestostar = bodyname.Length > starname.Length && starname.Equals(bodyname.Substring(0, starname.Length), StringComparison.InvariantCultureIgnoreCase);
 
             if (namerelatestostar)
@@ -586,14 +584,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 {
                     elements = restname.Split(' ').ToList();
 
-                    if (!char.IsDigit(elements[0][0]))      // not digits, we have a star designator
-                    {
-                        isastar = elements[0].Length == 1;   // single designator, star, else its a compound
-                    }
-                    else
-                    {
+                    if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
                         elements.Insert(0, "");             // no star designator
-                    }
                 }
                 else
                 {                                           // nothing, so just a star...
@@ -617,7 +609,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 ret = "";
 
-                foreach (StarScan.ScanNode starnode in sn.starnodes)        // always has scan nodes
+                foreach (StarScan.ScanNode starnode in sn.starnodes.Values)        // always has scan nodes
                 {
                     ret += string.Format("Star Name " + starnode.fullname) + Environment.NewLine;
 
@@ -626,7 +618,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
                     if (starnode.children != null)
                     {
-                        foreach (StarScan.ScanNode planetnode in starnode.children)
+                        foreach (StarScan.ScanNode planetnode in starnode.children.Values)
                         {
                             ret += string.Format("    Planet " + planetnode.fullname) + Environment.NewLine;
                             if (planetnode.scandata != null)
@@ -634,7 +626,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
                             if (planetnode.children != null)
                             {
-                                foreach (StarScan.ScanNode moonnode in planetnode.children)
+                                foreach (StarScan.ScanNode moonnode in planetnode.children.Values)
                                 {
                                     ret += string.Format("        Moon " + moonnode.fullname) + Environment.NewLine;
                                     if (moonnode.scandata != null)
@@ -648,6 +640,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             return ret;
         }
+
+        private class DuplicateKeyComparer<TKey> : IComparer<string> where TKey : IComparable      // special compare for sortedlist
+        {
+            public int Compare(string x, string y)
+            {
+                if (x.Length < y.Length)
+                    return -1;
+                else if (x.Length > y.Length)
+                    return 1;
+                else
+                    return x.CompareTo(y);
+            }
+        }
+
     }
 }
 
