@@ -89,6 +89,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             detailed = ToShortString("StarSystem;JumpDist;FuelUsed");       // don't repeat these.
         }
 
+        public bool RealJournalEvent  // True if real ED 2.2+ journal event and not pre 2.2 imported.
+        {
+            get
+            {
+                if (JSONHelper.IsNullOrEmptyT(jEventData["FuelUsed"]))  // Old pre ED 2.2 messages has no Fuel used fields
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+
         public int MapColor
         {
             get

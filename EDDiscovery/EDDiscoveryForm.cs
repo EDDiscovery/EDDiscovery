@@ -26,6 +26,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using EDDiscovery.HTTP;
 using EDDiscovery.Forms;
+using EDDiscovery.EDDN;
 
 namespace EDDiscovery
 {
@@ -1897,6 +1898,14 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
+        private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EDDNSync sync = new EDDNSync(this);
+
+            EDDNClass eddn = new EDDNClass();
+            sync.StartSync(eddn, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn);
+
+        }
     }
 }
 
