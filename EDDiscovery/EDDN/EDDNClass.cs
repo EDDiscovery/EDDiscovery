@@ -48,7 +48,18 @@ namespace EDDiscovery.EDDN
                 return "http://schemas.elite-markets.net/eddn/journal/1";
         }
 
+        private JObject RemoveCommonKeys(JObject obj)
+        {
+            foreach (JProperty prop in obj.Properties().ToList())
+            {
+                if (prop.Name.EndsWith("_Localised") || prop.Name.StartsWith("EDD"))
+                {
+                    obj.Remove(prop.Name);
+                }
+            }
 
+            return obj;
+        }
 
         public JObject CreateEDDNMessage(JournalFSDJump journal)
         {
@@ -65,18 +76,12 @@ namespace EDDiscovery.EDDN
             if (JSONHelper.IsNullOrEmptyT(message["FuelUsed"]))  // Old ED 2.1 messages has no Fuel used fields
                 return null;
 
+            
 
-            message.Remove("Economy_Localised");
-            message.Remove("Government_Localised");
-            message.Remove("Security_Localised");
-            message.Remove("SystemEconomy_Localised");
-            message.Remove("SystemGovernment_Localised");
-            message.Remove("SystemSecurity_Localised");
             message.Remove("BoostUsed");
             message.Remove("JumpDist");
             message.Remove("FuelUsed");
             message.Remove("FuelLevel");
-            message.Remove("EDDMapColor");
             message.Remove("StarPosFromEDSM");
 
             msg["message"] = message;
@@ -92,12 +97,7 @@ namespace EDDiscovery.EDDN
 
             JObject message = (JObject)JObject.Parse(journal.EventDataString);
 
-            message.Remove("Economy_Localised");
-            message.Remove("Government_Localised");
-            message.Remove("Security_Localised");
-            message.Remove("StationEconomy_Localised");
-            message.Remove("StationGovernment_Localised");
-            message.Remove("StationSecurity_Localised");
+            message = RemoveCommonKeys(message);
             message.Remove("CockpitBreach");
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
@@ -118,6 +118,8 @@ namespace EDDiscovery.EDDN
             message["StarSystem"] = starSystem;
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
+
+            message = RemoveCommonKeys(message);
             msg["message"] = message;
             return msg;
         }
