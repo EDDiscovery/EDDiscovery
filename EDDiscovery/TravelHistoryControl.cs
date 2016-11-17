@@ -153,78 +153,98 @@ namespace EDDiscovery
             uccb.Closing();
         }
 
-        Control TabCreate(TabStrip t, int si)        // called by tab strip when selected index changes
+        Control TabCreate(TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {   
-            int displaynumber = (int)t.Tag;         // tab strip - use tag to remember display id which helps us save context.
-
             PopOuts i = (PopOuts)(si + 1);
 
             if (i == PopOuts.Log)
-            {
-                UserControlLog sc = new UserControlLog();
-                sc.Text = "Log";
-                sc.Init( _discoveryForm, displaynumber);
-                sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
-                return sc;
-            }
+                return new UserControlLog();
             else if (i == PopOuts.NS)
+                return new UserControlStarDistance();
+            else if (i == PopOuts.Materials)
+                return new UserControlMaterials();
+            else if (i == PopOuts.Commodities)
+                return new UserControlCommodities();
+            else if (i == PopOuts.Ledger)
+                return new UserControlLedger();
+            else if (i == PopOuts.Journal)
+                return new UserControlJournalGrid();
+            else if (i == PopOuts.TravelGrid)
+                return new UserControlTravelGrid();
+            else if (i == PopOuts.ScreenShot)
+                return new UserControlScreenshot();
+            else if (i == PopOuts.Statistics)
+                return new UserControlStats();
+            else if (i == PopOuts.Scan)
+                return new UserControlScan();
+            else
+                return null;
+        }
+
+        void TabPostCreate(TabStrip t, Control ctrl , int i)        // called by tab strip after control has been added..
+        {                                                           // now we can do the configure of it, with the knowledge the tab has the right size
+            int displaynumber = (int)t.Tag;                         // tab strip - use tag to remember display id which helps us save context.
+
+            if (ctrl is UserControlLog)
             {
-                UserControlStarDistance sc = new UserControlStarDistance();
+                UserControlLog sc = ctrl as UserControlLog;
+                sc.Text = "Log";
+                sc.Init(_discoveryForm, displaynumber);
+                sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
+            }
+            else if (ctrl is UserControlStarDistance)
+            {
+                UserControlStarDistance sc = ctrl as UserControlStarDistance;
                 sc.Text = "Stars";
-                sc.Init( _discoveryForm, displaynumber);
+                sc.Init(_discoveryForm, displaynumber);
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
                     sc.FillGrid(lastclosestname, lastclosestsystems);
-                return sc;
             }
-            else if (i == PopOuts.Materials)
+            else if (ctrl is UserControlMaterials)
             {
-                UserControlMaterials ucm = new UserControlMaterials();
+                UserControlMaterials ucm = ctrl as UserControlMaterials;
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
-                ucm.Init( _discoveryForm, displaynumber);
+                ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Materials";
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)
                     ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(false));
-                return ucm;
             }
-            else if (i == PopOuts.Commodities)
+            else if (ctrl is UserControlCommodities)
             {
-                UserControlCommodities ucm = new UserControlCommodities();
-                ucm.Init( _discoveryForm, displaynumber);
+                UserControlCommodities ucm = ctrl as UserControlCommodities;
+                ucm.Init(_discoveryForm, displaynumber);
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
                 ucm.LoadLayout();
                 ucm.Text = "Commodities";
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)
                     ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(true));
-                return ucm;
             }
-            else if (i == PopOuts.Ledger)
+            else if (ctrl is UserControlLedger)
             {
-                UserControlLedger ucm = new UserControlLedger();
-                ucm.Init( _discoveryForm, displaynumber);
+                UserControlLedger ucm = ctrl as UserControlLedger;
+                ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Ledger";
                 ucm.OnGotoJID += GotoJID;
                 ucm.Display(_discoveryForm.history.materialcommodititiesledger);
-                return ucm;
             }
-            else if (i == PopOuts.Journal)
+            else if (ctrl is UserControlJournalGrid)
             {
-                UserControlJournalGrid ucm = new UserControlJournalGrid();
-                ucm.Init( _discoveryForm, displaynumber);
+                UserControlJournalGrid ucm = ctrl as UserControlJournalGrid;
+                ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Journal";
                 ucm.Display(_discoveryForm.history);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
-                return ucm;
             }
-            else if (i == PopOuts.TravelGrid)
+            else if (ctrl is UserControlTravelGrid)
             {
-                UserControlTravelGrid ucm = new UserControlTravelGrid();
-                ucm.Init( _discoveryForm, displaynumber);
+                UserControlTravelGrid ucm = ctrl as UserControlTravelGrid;
+                ucm.Init(_discoveryForm, displaynumber);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
                 ucm.LoadLayout();
@@ -232,40 +252,31 @@ namespace EDDiscovery
                 ucm.Display(_discoveryForm.history);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
-                return ucm;
             }
-            else if (i == PopOuts.ScreenShot)
+            else if (ctrl is UserControlScreenshot)
             {
-                UserControlScreenshot ucm = new UserControlScreenshot();
-                ucm.Init( _discoveryForm, displaynumber);
+                UserControlScreenshot ucm = ctrl as UserControlScreenshot;
+                ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Screen Shot";
-                return ucm;
             }
-            else if (i == PopOuts.Statistics)
+            else if (ctrl is UserControlStats)
             {
-                UserControlStats ucm = new UserControlStats();
+                UserControlStats ucm = ctrl as UserControlStats;
                 ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Statistics";
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
-                return ucm;
             }
-            else if (i == PopOuts.Scan)
+            else if (ctrl is UserControlScan)
             {
-                UserControlScan ucm = new UserControlScan();
+                UserControlScan ucm = ctrl as UserControlScan;
                 ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
                 ucm.Text = "Scan";
                 ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
-                return ucm;
             }
-            else
-                return null;
-        }
 
-        void TabPostCreate(TabStrip t, int i)        // called by tab strip after control has been added..
-        {
             System.Diagnostics.Debug.WriteLine("And theme {0}", i);
             _discoveryForm.theme.ApplyToControls(t);
         }

@@ -745,6 +745,9 @@
     <None Include="Resources\Class_II_Gas_Giant_Sand1.png" />
     <None Include="Resources\Ammonia_Brown.png" />
     <None Include="Resources\Icy_Body_Greenish1.png" />
+    <None Include="Resources\Belt.png" />
+    <None Include="Resources\Barycentre.jpg" />
+    <None Include="Resources\Barycentre.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -831,6 +834,9 @@
     <None Include="Resources\stats.png" />
     <None Include="Resources\popout.png" />
     <None Include="Resources\Star_K1IV.png" />
+    <None Include="Resources\Ring Only.png" />
+    <None Include="Resources\Ring Only 512.png" />
+    <None Include="Resources\materialmarker.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
