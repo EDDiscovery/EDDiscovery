@@ -279,16 +279,38 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             switch (StarType.ToLower())       // see journal, section 11.2
             {
-                case "t":
-                case "l":
                 case "o":
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.O, string.Format("Luminous Hot Main Sequence star", StarType));
+
                 case "b":
+                    // also have an B1V
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.B6V_Blueish, string.Format("Luminous Blue Main Sequence star", StarType));
+
                 case "a":
+                    // also have an A3V..
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.A9III_White, string.Format("Bluish-White Main Sequence star", StarType));
+
                 case "f":
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.F5VAB, string.Format("White Main Sequence star", StarType));
+
                 case "g":
+                    // also have a G8V
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.G1IV, string.Format("Yellow Main Sequence star", StarType));
+
                 case "k":
+                    // also have a K0V
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Star_K1IV, string.Format("Orange Main Sequence {0} star", StarType));
                 case "m":
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Main Sequence {0} star", StarType));
+                    // also have a M1VA
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.M5V, string.Format("Red Main Sequence {0} star", StarType));
+
+                // dwarfs
+                case "l":
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.L3V, string.Format("Dark Red Non Main Sequence {0} star", StarType));
+                case "t":
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.T4V, string.Format("Methane Dwarf star", StarType));
+                case "y":
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Y2, string.Format("Brown Dwarf star", StarType));
 
                 // proto stars
                 case "aebe":
@@ -299,8 +321,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 // wolf rayet
                 case "w":
                 case "wn":
+                case "wne": // wiki not journal may not be in game
+                case "wnl": // wiki not journal may not be in game
                 case "wnc":
                 case "wc":
+                case "wce": // wiki not journal may not be in game
+                case "wcl": // wiki not journal may not be in game
                 case "wo":
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Wolf-Rayet {0} star", StarType));
 
@@ -310,7 +336,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 case "cn":
                 case "cj":
                 case "chd":
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Carbon {0} star", StarType));
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.C7III, string.Format("Carbon {0} star", StarType));
 
                 case "ms":
                 case "s":
@@ -332,23 +358,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 case "dc":
                 case "dcv":
                 case "dx":
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("White Dwarf ({0}) star", StarType));
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DA6VII_White, string.Format("White Dwarf ({0}) star", StarType));
 
                 case "n":
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Neutron Star");
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Neutron_Star, "Neutron Star");
 
                 case "h":
                     // currently speculative, not confirmed with actual data...
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Black Hole");
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Black Hole");
 
                 case "x":
-                    // currently speculative, not confirmed with actual data...
+                    // currently speculative, not confirmed with actual data... in journal
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Exotic");
 
-                case "supermassiveblackhole":
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Super Massive Black Hole");
+                // Journal.. really?  need evidence these actually are formatted like this.
 
-                case "a bluewhitesupergiant":   // Journal.. really?
+                case "supermassiveblackhole":
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Super Massive Black Hole");
+                case "a bluewhitesupergiant":   
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Blue White Giant");
                 case "f whitesupergiant":
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "F White Super Giant");
