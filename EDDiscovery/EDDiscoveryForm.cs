@@ -1787,7 +1787,8 @@ namespace EDDiscovery
 
                     matcommodledger.Process(je, conn);            // update the ledger
 
-                    starscan.Process(je, he.System);
+                    if (je.EventTypeID == JournalTypeEnum.Scan)
+                        AddScanToBestSystem(starscan, je as JournalScan, i, history);
 
                     i++;
                 }
@@ -1880,6 +1881,20 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
+        private void AddScanToBestSystem(StarScan starscan, JournalScan je, int startindex, List<HistoryEntry> hl)
+        {
+            for (int j = startindex; j >= 0; j--)
+            {
+                if (je.IsStarNameRelated(hl[j].System.name))       // if its part of the name, use it
+                {
+                    starscan.Process(je, hl[j].System);
+                    return;
+                }
+            }
+
+            starscan.Process(je, hl[startindex].System);         // no relationship, add..
+        }
+
         public void RefreshDisplays()
         {
             if (OnHistoryChange != null)
@@ -1912,11 +1927,12 @@ namespace EDDiscovery
                     he.ProcessWithUserDb(je, last, conn);           // let some processes which need the user db to work
 
                     history.materialcommodititiesledger.Process(je, conn);
-
-                    history.starscan.Process(je, he.System);
                 }
 
                 history.Add(he);
+
+                if (je.EventTypeID == JournalTypeEnum.Scan)
+                    AddScanToBestSystem(history.starscan, je as JournalScan, history.Count - 1, history.EntryOrder);
 
                 if (OnNewEntry != null)
                     OnNewEntry(he,history);

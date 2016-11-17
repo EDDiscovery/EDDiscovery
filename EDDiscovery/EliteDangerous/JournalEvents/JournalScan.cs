@@ -446,6 +446,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scan; } }
 
+        public bool IsStarNameRelated(string starname)
+        {
+            return BodyName.Length > starname.Length && starname.Equals(BodyName.Substring(0, starname.Length), StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 
 
@@ -486,13 +490,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return null;
         }
 
-        public void Process(JournalEntry je, EDDiscovery2.DB.ISystem sys)
+        public bool Process(JournalScan sc, EDDiscovery2.DB.ISystem sys)           // FALSE if you can't process it
         {
-            if (je.EventTypeID != JournalTypeEnum.Scan)     // only one processed so far
-                return;
-
-            JournalScan sc = je as JournalScan;
-
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
             Tuple<string, long> withoutedsm = new Tuple<string, long>(sys.name, 0);
 
@@ -517,18 +516,31 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             if (!String.IsNullOrEmpty(sc.StarType))
             {
-                FindOrAddStar(sn, sc, sys.name);
+                return FindOrAddStar(sn, sc, sys.name);
             }
             else
+            {
                 AddUpdatePlanetMoon(sn, sc, sys.name);
+                return true;
+            }
         }
 
-        void FindOrAddStar(SystemNode sn, JournalScan sc, string starname)
+        bool FindOrAddStar(SystemNode sn, JournalScan sc, string starname)
         {                                                           // so a star line Eol Prou LW-L c8 - 306 A, it it there?
-            List<string> elements;
-            ReturnElements(sc.BodyName, starname, out elements);    // elements[0] = star designator.. may be MAIN meaning there is not one..
-            ScanNode s = FindOrAdd(sn, starname, elements[0]);
-            s.scandata = sc;
+            if (sc.IsStarNameRelated(starname))                    // must have a relationship.. otherwise we are getting scans of stuff not in our system
+            {
+                List<string> elements;
+                ReturnElements(sc.BodyName, starname, out elements);    // elements[0] = star designator.. may be MAIN meaning there is not one..
+
+                if (elements.Count == 1)                          // 1 element, the designator, either MAIN or A,B,C etc
+                {
+                    ScanNode s = FindOrAdd(sn, starname, elements[0]);
+                    s.scandata = sc;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         ScanNode FindOrAdd(SystemNode sn, string starname , string designator )
