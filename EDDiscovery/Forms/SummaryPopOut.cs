@@ -419,10 +419,10 @@ namespace EDDiscovery2
                 cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[2].Value));
 
             if (Config( Configuration.showInformation))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[3].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), themeColour, ((string)(vscrow.Cells[3].Value)).Replace("\r\n", " ")));
 
             if (toolStripComboBoxOrder.SelectedIndex == 0 && Config( Configuration.showNotes))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[4].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), themeColour, ((string)vscrow.Cells[4].Value).Replace("\r\n", " ")));
 
             bool showdistance = !Config( Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDJump;
 
@@ -1148,6 +1148,7 @@ namespace EDDiscovery2
                     lab.Text = cep[i].text;
                     lab.Location = new Point(0, vpos);
                     lab.AutoSize = false;
+                    ///////lab.ClipToOneLine = true;
                     lab.Size = new Size(100, vsize-2);
                     parent.Controls.Add(lab);
                     items.Add(lab);
