@@ -748,6 +748,7 @@
     <None Include="Resources\Belt.png" />
     <None Include="Resources\Barycentre.jpg" />
     <None Include="Resources\Barycentre.png" />
+    <None Include="Resources\DefaultStar.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

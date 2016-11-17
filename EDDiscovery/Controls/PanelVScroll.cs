@@ -96,7 +96,7 @@ namespace ExtendedControls
                 PerformLayout();
             }
 
-            vsc.Maximum = maxy - ClientRectangle.Height;
+            vsc.Maximum = maxy - ClientRectangle.Height + vsc.LargeChange;
             vsc.Minimum = 0;
             //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
 

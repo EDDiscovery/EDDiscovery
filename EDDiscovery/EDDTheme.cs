@@ -827,6 +827,9 @@ namespace EDDiscovery2
                 myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
                 myControl.Font = fnt;
             }
+            else if (myControl is DrawnPanelNoTheme)        // ignore these..
+            {
+            }
             else if (myControl is DrawnPanel)
             {
                 DrawnPanel MyDgv = (DrawnPanel)myControl;
@@ -835,8 +838,8 @@ namespace EDDiscovery2
                 MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.label], mouseoverscaling);
                 MyDgv.MouseSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.label], mouseselectedscaling);
 
-                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
-                colormap.OldColor = Color.White;
+                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
                 colormap.NewColor = MyDgv.ForeColor;
                 MyDgv.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
             }
