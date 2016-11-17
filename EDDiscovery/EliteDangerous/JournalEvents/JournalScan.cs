@@ -265,7 +265,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             StarPlanetRing ring = Rings[ringno];
             StringBuilder scanText = new StringBuilder();
-            scanText.AppendFormat("  {0} ({1})\n", ring.Name, ring.RingClass.Replace("eRingClass_", ""));
+            scanText.AppendFormat("  {0} ({1})\n", ring.Name, DisplayStringFromRingClass(ring.RingClass));
             scanText.AppendFormat("  Mass: {0}{1}\n", (ring.MassMT*scale).ToString("N0"),scaletype );
             scanText.AppendFormat("  Inner Radius: {0}km\n", (ring.InnerRad / 1000).ToString("N0"));
             scanText.AppendFormat("  Outer Radius: {0}km\n", (ring.OuterRad / 1000).ToString("N0"));
@@ -287,7 +287,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 case "eRingClass_RockyIce":
                     return "Rocky Ice";
                 default:
-                    return ringClass;
+                    return ringClass.Replace("eRingClass_","");
             }
         }
 
@@ -419,13 +419,62 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public System.Drawing.Image GetPlanetClassImage()
         {
-            System.Drawing.Image ret = EDDiscovery.Properties.Resources.Class_II_Gas_Giant_Sand1;
-            return ret;
+            string name = PlanetClass.ToLower();
+
+            if (name.Contains("gas"))
+            {
+                if (name.Contains("helium"))
+                    return EDDiscovery.Properties.Resources.Helium_Rich_Gas_Giant1;
+                else if (name.Contains("water"))
+                    return EDDiscovery.Properties.Resources.Gas_giant_water_based_life_Brown3;
+                else if (name.Contains("ammonia"))
+                    return EDDiscovery.Properties.Resources.Gas_giant_ammonia_based_life1;
+                else if (name.Contains("iv"))
+                    return EDDiscovery.Properties.Resources.Class_I_Gas_Giant_Brown2;               // MISSING.
+                else if (name.Contains("iii"))
+                    return EDDiscovery.Properties.Resources.Class_III_Gas_Giant_Blue3;
+                else if (name.Contains("ii"))
+                    return EDDiscovery.Properties.Resources.Class_II_Gas_Giant_Sand1;
+                else if (name.Contains("v"))
+                    return EDDiscovery.Properties.Resources.Class_I_Gas_Giant_Brown2;               // MISSING.
+                else
+                    return EDDiscovery.Properties.Resources.Class_I_Gas_Giant_Brown2;
+            }
+            else if (name.Contains("ammonia"))
+                return EDDiscovery.Properties.Resources.Ammonia_Brown;      // also have orange.
+            else if (name.Contains("earth"))
+                return EDDiscovery.Properties.Resources.Earth_Like_Standard;
+            else if (name.Contains("ice"))
+                return EDDiscovery.Properties.Resources.Rocky_Ice_World_Sol_Titan;
+            else if (name.Contains("icy"))
+                return EDDiscovery.Properties.Resources.Icy_Body_Greenish1;
+            else if (name.Contains("water"))
+            {
+                if (name.Contains("giant"))
+                    return EDDiscovery.Properties.Resources.Water_Giant1;
+                else
+                    return EDDiscovery.Properties.Resources.Water_World_No_Poles_Clouds;
+            }
+            else if (name.Contains("metal"))
+            {
+                if (name.Contains("rich"))
+                    return EDDiscovery.Properties.Resources.metal_rich;
+                else if (nSurfaceTemperature > 400)
+                    return EDDiscovery.Properties.Resources.High_metal_content_world_Lava1;
+                else if (nSurfaceTemperature > 250)
+                    return EDDiscovery.Properties.Resources.High_metal_content_world_Mix3;
+                else
+                    return EDDiscovery.Properties.Resources.High_metal_content_world_Orange8;
+            }
+            else if (name.Contains("rocky"))
+                return EDDiscovery.Properties.Resources.Rocky_Body_Sand2;
+            else
+                return EDDiscovery.Properties.Resources.Globe;
         }
 
         static public System.Drawing.Image GetPlanetImageNotScanned()
         {
-            return EDDiscovery.Properties.Resources.Ammonia_Brown;
+            return EDDiscovery.Properties.Resources.Globe;
         }
 
         static public System.Drawing.Image GetMoonImageNotScanned()
@@ -448,7 +497,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public bool IsStarNameRelated(string starname)
         {
-            return BodyName.Length > starname.Length && starname.Equals(BodyName.Substring(0, starname.Length), StringComparison.InvariantCultureIgnoreCase);
+            return BodyName.Length >= starname.Length && starname.Equals(BodyName.Substring(0, starname.Length), StringComparison.InvariantCultureIgnoreCase);
         }
     }
 
@@ -621,7 +670,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         private void ReturnElements(string bodyname, string starname, out List<string> elements)      // 0 = star designator (MAIN if no designator), 1 = first name, etc
         {
-            bool namerelatestostar = bodyname.Length > starname.Length && starname.Equals(bodyname.Substring(0, starname.Length), StringComparison.InvariantCultureIgnoreCase);
+            bool namerelatestostar = bodyname.Length >= starname.Length && starname.Equals(bodyname.Substring(0, starname.Length), StringComparison.InvariantCultureIgnoreCase);
 
             if (namerelatestostar)
             {
