@@ -314,7 +314,6 @@ namespace EDDiscovery.UserControls
                 System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
                 colormap.OldColor = Color.White;    // this is the marker colour to replace
                 colormap.NewColor = fillc;
-                System.Diagnostics.Debug.WriteLine("Map white to " + fillc);
                 dp.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
 
                 toolTip.SetToolTip(dp, tooltip);

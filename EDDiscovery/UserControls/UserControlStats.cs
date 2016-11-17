@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
             }
             height += dataGridViewStats.ColumnHeadersHeight + 2;
             dataGridViewStats.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, height);             // all controls should be placed each time.
-            System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
+            //System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
             mostVisited.Location = new Point(0, height);
             mostVisited.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, mostVisited.Height);
         }
