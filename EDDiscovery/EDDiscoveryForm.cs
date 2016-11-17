@@ -28,6 +28,7 @@ using EDDiscovery.HTTP;
 using EDDiscovery.Forms;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery.EDDN;
 
 namespace EDDiscovery
 {
@@ -101,6 +102,7 @@ namespace EDDiscovery
         Task<bool> downloadMapsTask = null;
         Task checkInstallerTask = null;
         private string logname = "";
+        private bool themeok = true;
 
         EliteDangerous.EDJournalClass journalmonitor;
         GitHubRelease newRelease;
@@ -174,7 +176,7 @@ namespace EDDiscovery
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
-            theme.RestoreSettings();                                    // theme, remember your saved settings
+            themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
@@ -203,6 +205,9 @@ namespace EDDiscovery
 
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
         }
+
+
+
 
         // We can't prevent an unhandled exception from killing the application.
         // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
@@ -409,6 +414,12 @@ namespace EDDiscovery
         {
             _checkSystemsWorker.RunWorkerAsync();
             downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
+
+            if (!themeok)
+            {
+                LogLineHighlight("The theme stored has missing colors or other missing information");
+                LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
+            }
         }
 
         private Task CheckForNewInstallerAsync()
@@ -766,6 +777,14 @@ namespace EDDiscovery
                 panelInfo.Visible = false;
 
                 checkInstallerTask = CheckForNewInstallerAsync();
+
+                if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
+                {
+                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
+                    {
+                        LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
+                    }
+                }
             }
         }
 
@@ -1420,7 +1439,8 @@ namespace EDDiscovery
         {
             AboutForm frm = new AboutForm();
             frm.labelVersion.Text = this.Text;
-            frm.ShowDialog();
+            frm.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            frm.ShowDialog(this);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1914,6 +1934,14 @@ namespace EDDiscovery
 
         
 
+        private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EDDNSync sync = new EDDNSync(this);
+
+            EDDNClass eddn = new EDDNClass();
+            sync.StartSync(eddn, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn);
+
+        }
     }
 }
 

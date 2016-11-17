@@ -187,7 +187,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 //planet
                 scanText.AppendFormat("{0}\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                        ToTitleCase(PlanetClass.ToLower()));
+                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii", "II").Replace("Ii", "II").Replace("Iv", "IV"));
 
                 scanText.Append((TerraformState != null && TerraformState == "Terraformable") ? "Candidate for terraforming\n" : "\n");
 
@@ -270,6 +270,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             scanText.AppendFormat("  Inner Radius: {0}km\n", (ring.InnerRad / 1000).ToString("N0"));
             scanText.AppendFormat("  Outer Radius: {0}km\n", (ring.OuterRad / 1000).ToString("N0"));
             return scanText.ToNullSafeString();
+        }
+
+        internal string DisplayStringFromRingClass(string ringClass)
+        {
+            switch (ringClass)
+            {
+                case "eRingClass_Icy":
+                    return "Icy";
+                case "eRingClass_Rocky":
+                    return "Rocky";
+                case "eRingClass_MetalRich":
+                    return "Metal Rich";
+                case "eRingClass_Metalic":
+                    return "Metallic";
+                case "eRingClass_RockyIce":
+                    return "Rocky Ice";
+                default:
+                    return ringClass;
+            }
         }
 
 

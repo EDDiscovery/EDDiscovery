@@ -4,7 +4,10 @@ using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Reflection;
 using System.Text;
 
@@ -23,7 +26,7 @@ namespace EDDiscovery.EDDN
             fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
-            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
+            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
             _serverAddress = EDDNServer;
         }
@@ -48,7 +51,18 @@ namespace EDDiscovery.EDDN
                 return "http://schemas.elite-markets.net/eddn/journal/1";
         }
 
+        private JObject RemoveCommonKeys(JObject obj)
+        {
+            foreach (JProperty prop in obj.Properties().ToList())
+            {
+                if (prop.Name.EndsWith("_Localised") || prop.Name.StartsWith("EDD"))
+                {
+                    obj.Remove(prop.Name);
+                }
+            }
 
+            return obj;
+        }
 
         public JObject CreateEDDNMessage(JournalFSDJump journal)
         {
@@ -66,14 +80,11 @@ namespace EDDiscovery.EDDN
                 return null;
 
 
-            message.Remove("Economy_Localised");
-            message.Remove("Government_Localised");
-            message.Remove("Security_Localised");
+            message = RemoveCommonKeys(message);
             message.Remove("BoostUsed");
             message.Remove("JumpDist");
             message.Remove("FuelUsed");
             message.Remove("FuelLevel");
-            message.Remove("EDDMapColor");
             message.Remove("StarPosFromEDSM");
 
             msg["message"] = message;
@@ -89,9 +100,7 @@ namespace EDDiscovery.EDDN
 
             JObject message = (JObject)JObject.Parse(journal.EventDataString);
 
-            message.Remove("Economy_Localised");
-            message.Remove("Government_Localised");
-            message.Remove("Security_Localised");
+            message = RemoveCommonKeys(message);
             message.Remove("CockpitBreach");
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
@@ -112,6 +121,13 @@ namespace EDDiscovery.EDDN
             message["StarSystem"] = starSystem;
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
+            if (!journal.BodyName.StartsWith(starSystem))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
+            {
+                return null;
+            }
+
+
+            message = RemoveCommonKeys(message);
             msg["message"] = message;
             return msg;
         }
@@ -126,5 +142,86 @@ namespace EDDiscovery.EDDN
                 return true;
             else return false;
         }
+
+
+
+        static public bool CheckforEDMC()
+        {
+            string EDMCFileName = null;
+
+
+            try
+            {
+                Process[] processes32 = Process.GetProcessesByName("EDMarketConnector");
+               
+
+                Process[] processes = processes32;
+
+                if (processes == null)
+                {
+                    return  false;
+                }
+                else if (processes.Length == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    string processFilename = null;
+                    try
+                    {
+                        int id = processes[0].Id;
+                        processFilename = GetMainModuleFilepath(id);        // may return null if id not found (seen this)
+
+                        if (processFilename != null)
+                            EDMCFileName = processFilename;
+                    }
+                    catch (Win32Exception)
+                    {
+                    }
+
+                    if (EDMCFileName != null)                                 // if found..
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+            }
+            return false;
+        }
+
+        private static string GetMainModuleFilepath(int processId)
+        {
+            string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
+
+            using (var searcher = new ManagementObjectSearcher(wmiQueryString))
+            {
+                if (searcher != null)           // seen it return null
+                {
+                    using (var results = searcher.Get())
+                    {
+                        if (results != null)
+                        {
+                            foreach (ManagementObject mo in results)
+                            {
+                                if (mo != null)
+                                {
+                                    return (string)mo["ExecutablePath"];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
+
+
     }
 }
