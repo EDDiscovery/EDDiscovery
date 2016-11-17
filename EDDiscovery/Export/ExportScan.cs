@@ -122,12 +122,12 @@ namespace EDDiscovery.Export
                         JournalScan scan = je as JournalScan;
 
                         if (ShowPlanets == false)  // Then only show stars.
-                            if (scan.StarType.Equals(""))
+                            if (String.IsNullOrEmpty(scan.StarType))
                                 continue;
 
 
                         if (ShowStars == false)   // Then only show planets
-                            if (scan.PlanetClass.Equals(""))
+                            if (String.IsNullOrEmpty(scan.PlanetClass))
                                 continue;
 
 
