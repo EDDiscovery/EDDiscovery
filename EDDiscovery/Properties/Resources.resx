@@ -550,4 +550,91 @@
   <data name="DefaultStar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DefaultStar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="A3V_Blueish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\A3V_Blueish.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="A9III_White" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\A9III_White.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Ammonia_Orangeish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ammonia_Orangeish.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="B1V_Blue_SagittariusA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\B1V_Blue_SagittariusA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="B6V_Blueish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\B6V_Blueish.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="C7III" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\C7III.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Class_III_Gas_Giant_Blue3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Class_III_Gas_Giant_Blue3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Class_I_Gas_Giant_Brown2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Class_I_Gas_Giant_Brown2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DA6VII_White" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DA6VII_White.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Earth_Like_Standard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Earth_Like_Standard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="F5VAB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\F5VAB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="G1IV" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\G1IV.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="G8V_and_G9V" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\G8V_and_G9V.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Gas_giant_ammonia_based_life1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Gas_giant_ammonia_based_life1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Gas_giant_water_based_life_Brown3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Gas_giant_water_based_life_Brown3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="High_metal_content_world_Lava1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\High_metal_content_world_Lava1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="High_metal_content_world_Mix3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\High_metal_content_world_Mix3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="High_metal_content_world_Orange8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\High_metal_content_world_Orange8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K0V" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\K0V.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K1IV" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\K1IV.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="L3V" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L3V.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="M1VA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\M1VA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="M5V" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\M5V.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="metal_rich" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\metal_rich.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="O" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\O.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rocky_Body_Sand2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Rocky_Body_Sand2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="T4V" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\T4V.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Water_World_No_Poles_Clouds" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Water_World_No_Poles_Clouds.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Y2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Y2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
