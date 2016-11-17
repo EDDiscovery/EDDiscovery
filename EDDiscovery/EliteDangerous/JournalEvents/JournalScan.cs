@@ -332,9 +332,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Y2, string.Format("Brown Dwarf star", StarType));
 
                 // proto stars
-                case "aebe":
+                case "aebe":    // seen in logs
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Herbig Ae/Be");
-                case "tts":
+                case "tts":     // seen in logs
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "T Tauri");
 
                 // wolf rayet
@@ -357,8 +357,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 case "chd":
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.C7III, string.Format("Carbon {0} star", StarType));
 
-                case "ms":
-                case "s":
+                case "ms": //seen in log
+                case "s":   // seen in log
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Unknown Type {0} star", StarType));
 
                 // white dwarf
