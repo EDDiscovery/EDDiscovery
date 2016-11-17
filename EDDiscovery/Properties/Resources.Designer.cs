@@ -183,6 +183,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Black_Hole {
+            get {
+                object obj = ResourceManager.GetObject("Black_Hole", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Blackhole {
             get {
                 object obj = ResourceManager.GetObject("Blackhole", resourceCulture);
@@ -1112,6 +1122,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap nebula {
             get {
                 object obj = ResourceManager.GetObject("nebula", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Neutron_Star {
+            get {
+                object obj = ResourceManager.GetObject("Neutron_Star", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

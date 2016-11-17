@@ -767,6 +767,7 @@
     <None Include="Resources\High_metal_content_world_Lava1.png" />
     <None Include="Resources\High_metal_content_world_Mix3.png" />
     <None Include="Resources\High_metal_content_world_Orange8.png" />
+    <None Include="Resources\Black_Hole.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -867,6 +868,7 @@
     <None Include="Resources\Rocky_Body_Sand2.png" />
     <None Include="Resources\T4V.png" />
     <None Include="Resources\Water_World_No_Poles_Clouds.png" />
+    <None Include="Resources\Neutron_Star.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
