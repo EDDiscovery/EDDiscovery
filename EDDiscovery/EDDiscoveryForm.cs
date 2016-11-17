@@ -1286,7 +1286,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region ButtonsAndMouse
+#region Buttons, Mouse, Menus
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -1624,10 +1624,45 @@ namespace EDDiscovery
             }
         }
 
+        private void panelInfo_Click(object sender, EventArgs e)
+        {
+            if (newRelease != null)
+            {
+                NewReleaseForm frm = new NewReleaseForm();
+                frm.release = newRelease;
 
+                frm.ShowDialog(this);
+            }
+        }
+
+        private void labelPanelText_Click(object sender, EventArgs e)
+        {
+            if (newRelease != null)
+            {
+                NewReleaseForm frm = new NewReleaseForm();
+                frm.release = newRelease;
+
+                frm.ShowDialog(this);
+            }
+        }
+
+        public void Open3DMap(HistoryEntry he)
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            string HomeSystem = settings.MapHomeSystem;
+
+            history.FillInPositionsFSDJumps();
+
+            Map.Prepare(he?.System, settings.MapHomeSystem,
+                        settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
+                        settings.MapZoom, history.FilterByFSDAndPosition);
+            Map.Show();
+            this.Cursor = Cursors.Default;
+        }
         #endregion
 
-        #region Update Views with new commander 
+        #region Update Data
 
         protected class RefreshWorkerArgs
         {
@@ -1857,6 +1892,8 @@ namespace EDDiscovery
                     he.ProcessWithUserDb(je, last, conn);           // let some processes which need the user db to work
 
                     history.materialcommodititiesledger.Process(je, conn);
+
+                    history.starscan.Process(je, he.System);
                 }
 
                 history.Add(he);
@@ -1875,42 +1912,7 @@ namespace EDDiscovery
 
         #endregion
 
-        private void panelInfo_Click(object sender, EventArgs e)
-        {
-            if (newRelease!=null)
-            {
-                NewReleaseForm frm = new NewReleaseForm();
-                frm.release = newRelease;
-
-                frm.ShowDialog(this);
-            }
-        }
-
-        private void labelPanelText_Click(object sender, EventArgs e)
-        {
-            if (newRelease != null)
-            {
-                NewReleaseForm frm = new NewReleaseForm();
-                frm.release = newRelease;
-
-                frm.ShowDialog(this);
-            }
-        }
-
-        public void Open3DMap(HistoryEntry he)
-        {
-            this.Cursor = Cursors.WaitCursor;
-
-            string HomeSystem = settings.MapHomeSystem;
-
-            history.FillInPositionsFSDJumps();
-
-            Map.Prepare(he?.System, settings.MapHomeSystem,
-                        settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
-                        settings.MapZoom, history.FilterByFSDAndPosition);
-            Map.Show();
-            this.Cursor = Cursors.Default;
-        }
+        
 
     }
 }
