@@ -42,6 +42,7 @@ namespace EDDiscovery2
         private bool hideall = false;
 
         private List<int> columnpos;
+        private List<int> oldcolumnpos;
         private int visiblecolwidth;
         private bool bodyScanShowing = false;
         private int noScanHeight;
@@ -106,6 +107,7 @@ namespace EDDiscovery2
 
             config = (Configuration)SQLiteDBClass.GetSettingInt("SummaryPanelOptions", (int)config);
             toolStripMenuItemTargetLine.Checked = Config( Configuration.showTargetLine);
+            toolStripMenuItemTime.Checked = Config(Configuration.showTime);
             EDSMButtonToolStripMenuItem.Checked = Config( Configuration.showEDSMButton);
             showTargetToolStripMenuItem.Checked = Config( Configuration.showDistancePerStar);
             showNotesToolStripMenuItem.Checked = Config( Configuration.showNotes);
@@ -162,7 +164,7 @@ namespace EDDiscovery2
                 dividers.Add(p);
             }
         }
-
+        
         void ResetTabList()                             // work out optimum tab spacing by what is selected
         {
             columnpos = new List<int>();
@@ -242,7 +244,7 @@ namespace EDDiscovery2
                 columnpos.Add(columnpos[columnpos.Count - 1] + 100);
             
         }
-        
+
         public void SetGripperColour(Color grip)
         {
             if (grip.GetBrightness() < 0.15)       // override if its too dark..
@@ -470,24 +472,28 @@ namespace EDDiscovery2
                 }
 
                 labelBodyScanData.Height = this.ClientRectangle.Height - 8;
-                labelBodyScanData.Width = 200;
                 labelBodyScanData.Text = scan.DisplayString();
                 bodyScanShowing = true;
 
                 if (Config(Configuration.showScanLeft))
                 {
+                    oldcolumnpos = columnpos;
                     ResetTabList();
+                    columnpos[1] = labelBodyScanData.Width + 4;
                     labelBodyScanData.Left = 4;
+                    labelBodyScanData.Top = 4;
                     RequiresRefresh(this, null);
                 }
                 else if (Config(Configuration.showScanRight))
                 {
                     labelBodyScanData.Left = visiblecolwidth + 4;
+                    labelBodyScanData.Top = 4;
                 }
                 else if (Config(Configuration.showScanOnTop))
                 {
                     labelBodyScanData.Width = this.ClientRectangle.Width - 8;
                     labelBodyScanData.Left = 4;
+                    labelBodyScanData.Top = 4;
                     lt.SetDisplaySize(0);
                 }
                 else if (Config(Configuration.showScanBelow))
@@ -496,7 +502,7 @@ namespace EDDiscovery2
                     this.Height += 608;
                     labelBodyScanData.Height = 604;
                     labelBodyScanData.Top = noScanHeight + 4;
-                    labelBodyScanData.Left = (this.Width / 2) - 100;
+                    labelBodyScanData.Left = (this.Width - labelBodyScanData.Width) / 2;
                 }
                 else if (Config(Configuration.showScanAbove))
                 {
@@ -515,7 +521,7 @@ namespace EDDiscovery2
                     this.Top = noScanTop - requiredHeight - 32;
                     labelBodyScanData.Height = requiredHeight;
                     labelBodyScanData.Top = 4;
-                    labelBodyScanData.Left = (this.Width / 2) - 100;
+                    labelBodyScanData.Left = (this.Width - labelBodyScanData.Width) / 2;
                     RequiresRefresh(this, null);
                 }
 
@@ -536,7 +542,8 @@ namespace EDDiscovery2
 
             if (Config(Configuration.showScanLeft))
             {
-                ResetTabList();
+                columnpos = oldcolumnpos;
+                visiblecolwidth -= 200;
             }
             else if (Config(Configuration.showScanOnTop))
             {
@@ -609,7 +616,8 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingInt("PopOutFormLeft", this.Left);
             SQLiteDBClass.PutSettingInt("SummaryPanelOptions", (int)config);
             SQLiteDBClass.PutSettingInt("SummaryPanelLayout", toolStripComboBoxOrder.SelectedIndex);
-            string s = string.Join<int>(",", columnpos);
+            // if we've inserted a column for the surface scan then don't save it
+            string s = string.Join<int>(",", bodyScanShowing && Config(Configuration.showScanLeft) ? oldcolumnpos : columnpos);
             SQLiteDBClass.PutSettingString("SummaryPanelTabs", s);
         }
 
@@ -680,9 +688,11 @@ namespace EDDiscovery2
 
         private void MouseEnterControl(object sender, EventArgs e)
         {
-            if (resizingForScan)
+            if (resizingForScan && !Config(Configuration.showScanIndefinite))
             {
                 // stops the cursor appearing and the form fading in if we resize for a scan event and the mouse is now in the control
+                // but not if the scan shows indefinitely, otherwise it's lost until you close and re-open the S-Panel
+                // if a user wants above/below and indefinite then they can move the pointer out of the way...
                 resizingForScan = false;
                 Cursor.Hide();
                 return;

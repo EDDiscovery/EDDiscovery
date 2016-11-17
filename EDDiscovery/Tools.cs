@@ -141,6 +141,84 @@ namespace EDDiscovery
         }
 
 
+        static public bool GetBool(JToken jToken, bool def = false)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
+            return jToken.Value<bool>();
+        }
+
+        static public float GetFloat(JToken jToken, float def = 0)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
+            return jToken.Value<float>();
+        }
+
+        static public double GetDouble(JToken jToken, double def = 0)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
+            return jToken.Value<double>();
+        }
+
+        static public int GetInt(JToken jToken, int def = 0)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
+            return jToken.Value<int>();
+        }
+
+        static public long GetInt64(JToken jToken, long def = 0)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
+            return jToken.Value<long>();
+        }
+
+        static public string GetStringNull(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return null;
+            return jToken.Value<string>();
+        }
+
+        static public string GetStringDef(JToken jToken,string def = "")
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
+            return jToken.Value<string>();
+        }
+
+
+        static public string GetMultiStringDef(JObject evt, string[] names, string def = "")
+        {
+            foreach (string s in names)
+            {
+                JToken jt = evt[s];
+
+                if (!IsNullOrEmptyT(jt))
+                {
+                    try
+                    {
+                        return jt.Value<string>();
+                    }
+                    catch { }
+                }
+            }
+            return def;
+        }
+
+
+        static public  bool IsNullOrEmptyT(JToken token)
+        {
+            return (token == null) ||
+                   (token.Type == JTokenType.Array && !token.HasValues) ||
+                   (token.Type == JTokenType.Object && !token.HasValues) ||
+                   (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
+                   (token.Type == JTokenType.Null);
+        }
+
         static public string WordWrap(string input, int linelen )
         {
             String[] split = input.Split(new char[] { ' '});

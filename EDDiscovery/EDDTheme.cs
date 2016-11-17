@@ -259,23 +259,28 @@ namespace EDDiscovery2
             currentsettings = new Settings("Windows Default");  // this is our default
         }
 
-
-        public void RestoreSettings()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>true if ok.  False  Means missing colors in theme. </returns>
+        public bool RestoreSettings()
         {
-
+            bool ok = true;
             Console.WriteLine("Theme ID " + Settings.ThemeID);
 
             int themeidstored = SQLiteDBClass.GetSettingInt("ThemeID", -1);
 
             if ( themeidstored != -1 && themeidstored != Settings.ThemeID )
             {
-                DialogResult res = MessageBox.Show("The theme stored has missing colors or other missing information" + Environment.NewLine +
-                      "that this new version of EDDiscovery needs." + Environment.NewLine + Environment.NewLine +
-                      "Choose OK to use the stored theme, and then correct the missing colors or other information manually using the Theme Editor in Settings" + Environment.NewLine + Environment.NewLine +
-                      "Choose Cancel to go back to windows default, then pick a new standard theme.", "ED Discovery Theme Warning!" , MessageBoxButtons.OKCancel);
+                //DialogResult res = MessageBox.Show("The theme stored has missing colors or other missing information" + Environment.NewLine +
+                //      "that this new version of EDDiscovery needs." + Environment.NewLine + Environment.NewLine +
+                //      "Choose OK to use the stored theme, and then correct the missing colors or other information manually using the Theme Editor in Settings" + Environment.NewLine + Environment.NewLine +
+                //      "Choose Cancel to go back to windows default, then pick a new standard theme.", "ED Discovery Theme Warning!" , MessageBoxButtons.OKCancel);
 
-                if (res == DialogResult.Cancel)     // if cancel, we abort,
-                    return;
+                //if (res == DialogResult.Cancel)     // if cancel, we abort,
+                //    return;
+                ok = false;
+
             }
 
             if (SQLiteConnectionUser.keyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
@@ -295,6 +300,7 @@ namespace EDDiscovery2
                     currentsettings.colors[ck] = c;
                 }
             }
+            return ok;
         }
 
         public void SaveSettings(string filename)

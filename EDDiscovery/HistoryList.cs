@@ -45,8 +45,14 @@ namespace EDDiscovery
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
-        public bool ISEDDNMessage { get { if (EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) return true; else return false; } }
-
+        public bool ISEDDNMessage
+        {
+            get
+            {
+                DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
+                if ((EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) && EventTimeUTC>ed22 ) return true; else return false;
+            }
+        }
         public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
 
         // Calculated values, not from JE
@@ -373,11 +379,13 @@ namespace EDDiscovery
             }
         }
 
-        public List<HistoryEntry> FilterByNotEDDNSynced
+        public List<HistoryEntry> FilterByScanNotEDDNSynced
         {
             get
             {
-                return (from s in historylist where s.EDDNSync == false && s.ISEDDNMessage  orderby s.EventTimeUTC ascending select s).ToList();
+                DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
+
+                return (from s in historylist where s.EDDNSync == false && s.EntryType== JournalTypeEnum.Scan && s.EventTimeUTC>ed22  orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
 

@@ -451,8 +451,6 @@ namespace EDDiscovery
         {
             try
             {   // try is a bit old, probably do not need it.
-                StoreSystemNote();
-
                 if (he.IsFSDJump)
                 {
                     int count = _discoveryForm.history.GetVisitsCount(he.System.name, he.System.id_edsm);
