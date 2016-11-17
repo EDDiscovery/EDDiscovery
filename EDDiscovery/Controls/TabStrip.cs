@@ -24,10 +24,10 @@ namespace EDDiscovery.Controls
         public delegate void RemoveTab(TabStrip t, Control c);
         public event RemoveTab OnRemoving;
 
-        public delegate Control CreateTab(TabStrip t, int no);
+        public delegate Control CreateTab(TabStrip t, int no);          // Create the TAB, should only make it, not configure it
         public event CreateTab OnCreateTab;
 
-        public delegate void PostCreateTab(TabStrip t, int no);
+        public delegate void PostCreateTab(TabStrip t, Control ctrl , int no);  // called after TAB has been added to control, so should be sized up
         public event PostCreateTab OnPostCreateTab;
 
         public delegate void PopOut(TabStrip t, int no);
@@ -67,10 +67,12 @@ namespace EDDiscovery.Controls
 
             if ( OnCreateTab != null )
             {
-                CurrentControl = OnCreateTab(this, i);
+                CurrentControl = OnCreateTab(this, i);      // TAB should just create..
 
                 if (CurrentControl != null)
                 {
+                    si = i;
+
                     CurrentControl.Dock = DockStyle.Fill;
 
                     if (StripAtTop)
@@ -83,15 +85,13 @@ namespace EDDiscovery.Controls
                     else
                         this.Controls.Add(CurrentControl);
 
-                    si = i;
+                    OnPostCreateTab(this, CurrentControl, i);       // now tab is in control set, give it a chance to configure itself and set its name
 
                     panelSelected.BackgroundImage = Images[i];
 
-                    labelCurrent.Text = CurrentControl.Text;
                     drawnPanelPopOut.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, 3);
                     drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
-
-                    OnPostCreateTab(this, i);
+                    labelCurrent.Text = CurrentControl.Text;
                 }
             }
             else

@@ -49,7 +49,6 @@
             this.panelStars.TabIndex = 1;
             this.panelStars.VerticalScrollBarDockRight = true;
             this.panelStars.Click += new System.EventHandler(this.panelStars_Click);
-            this.panelStars.Resize += new System.EventHandler(this.panelStars_Resize);
             // 
             // richTextBoxInfo
             // 

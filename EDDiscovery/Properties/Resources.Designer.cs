@@ -113,6 +113,26 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Barycentre {
+            get {
+                object obj = ResourceManager.GetObject("Barycentre", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Belt {
+            get {
+                object obj = ResourceManager.GetObject("Belt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Blackhole {
             get {
                 object obj = ResourceManager.GetObject("Blackhole", resourceCulture);
@@ -719,6 +739,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap materialmarker {
+            get {
+                object obj = ResourceManager.GetObject("materialmarker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap missionabandoned {
             get {
                 object obj = ResourceManager.GetObject("missionabandoned", resourceCulture);
@@ -1122,6 +1152,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap ressurect {
             get {
                 object obj = ResourceManager.GetObject("ressurect", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Ring_Only_512 {
+            get {
+                object obj = ResourceManager.GetObject("Ring_Only_512", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
