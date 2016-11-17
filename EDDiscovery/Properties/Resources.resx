@@ -547,4 +547,7 @@
   <data name="Ring_Only_512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ring Only 512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DefaultStar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DefaultStar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

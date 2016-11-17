@@ -226,4 +226,14 @@ namespace ExtendedControls
         private bool mousecapture = false;
 #endregion
     }
+
+    public class DrawnPanelNoTheme : DrawnPanel     // use if you want the panel to be themed.. sometimes you do, sometimes you don't
+    {
+        public DrawnPanelNoTheme()
+        {
+
+        }
+    }
+
+
 }

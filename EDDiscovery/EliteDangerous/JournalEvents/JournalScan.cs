@@ -144,60 +144,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             if (!String.IsNullOrEmpty(StarType))
             {
-                //star
-                switch (StarType)
-                {
-                    case "N":
-                        scanText.Append("Neutron Star\n");
-                        break;
-                    case "AeBe":
-                        scanText.Append("Herbig Ae/Be\n");
-                        break;
-                    case "H":
-                        // currently speculative, not confirmed with actual data...
-                        scanText.Append("Black Hole\n");
-                        break;
-                    case "TTS":
-                        scanText.Append("T Tauri\n");
-                        break;
-                    case "CS":
-                    case "C":
-                    case "CN":
-                    case "CJ":
-                    case "CHd":
-                        scanText.AppendFormat("Carbon ({0}) star\n", StarType);
-                        break;
-                    case "W":
-                    case "WN":
-                    case "WNC":
-                    case "WC":
-                    case "WO":
-                        scanText.AppendFormat("Wolf-Rayet ({0}) star\n", StarType);
-                        break;
-                    case "D":
-                    case "DA":
-                    case "DAB":
-                    case "DAO":
-                    case "DAZ":
-                    case "DAV":
-                    case "DB":
-                    case "DBZ":
-                    case "DBV":
-                    case "DO":
-                    case "DOV":
-                    case "DQ":
-                    case "DC":
-                    case "DCV":
-                    case "DX":
-                        scanText.AppendFormat("White Dwarf ({0}) star\n", StarType);
-                        break;
-                    default:
-                        scanText.AppendFormat("Class {0} star\n", StarType.Replace("_", " ").Replace("Super", " Super").Replace("Giant", " Giant"));
-                        break;
-                }
+                scanText.AppendFormat(GetStarTypeImage().Item2 + Environment.NewLine);
 
                 if (nAge.HasValue)
-                    scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("##,####"));
+                    scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
 
                 if (nStellarMass.HasValue)
                     scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
@@ -206,12 +156,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     scanText.AppendFormat("Solar Radius: {0:0.00}\n", (nRadius.Value / solarRadius_m));
 
                 if (nSurfaceTemperature.HasValue)
-                    scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("#,###,###"));
+                    scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("N0"));
 
                 if (nOrbitalPeriod.HasValue && nOrbitalPeriod > 0)
-                    scanText.AppendFormat("Orbital Period: {0}D\n", (nOrbitalPeriod.Value / oneDay_s).ToString("###,###,##0.0"));
+                    scanText.AppendFormat("Orbital Period: {0}D\n", (nOrbitalPeriod.Value / oneDay_s).ToString("N1"));
                 if (nSemiMajorAxis.HasValue)
-                    scanText.AppendFormat("Semi Major Axis: {0}AU\n", (nSemiMajorAxis.Value / oneAU_m).ToString("#0.0#"));
+                    scanText.AppendFormat("Semi Major Axis: {0}AU\n", (nSemiMajorAxis.Value / oneAU_m).ToString("N1"));
                 if (nEccentricity.HasValue)
                     scanText.AppendFormat("Orbital Eccentricity: {0:0.00}°\n", nEccentricity.Value);
                 if (nOrbitalInclination.HasValue)
@@ -223,7 +173,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     scanText.AppendFormat("Absolute Magnitude: {0:0.00}\n", nAbsoluteMagnitude.Value);
 
                 if (nRotationPeriod.HasValue)
-                    scanText.AppendFormat("Rotation Period: {0} days\n", (nRotationPeriod.Value / oneDay_s).ToString("###,###,##0.0"));
+                    scanText.AppendFormat("Rotation Period: {0} days\n", (nRotationPeriod.Value / oneDay_s).ToString("N1"));
 
                 if (HasRings)
                 {
@@ -245,16 +195,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     scanText.AppendFormat("Earth Masses: {0:0.00}\n", nMassEM.Value);
 
                 if (nRadius.HasValue)
-                    scanText.AppendFormat("Radius: {0:0.0}km\n", (nRadius.Value / 1000).ToString("###,##0"));
+                    scanText.AppendFormat("Radius: {0:0.0}km\n", (nRadius.Value / 1000).ToString("N0"));
 
                 if (nSurfaceGravity.HasValue)
                     scanText.AppendFormat("Gravity: {0:0.0}g\n", nSurfaceGravity.Value / 9.8);
 
                 if (nSurfaceTemperature.HasValue)
-                    scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("#,###,###.0"));
+                    scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("N1"));
 
                 if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLower().Contains("gas"))
-                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (nSurfacePressure.Value / 100000).ToString("#,###,###,###,##0.00"));
+                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (nSurfacePressure.Value / 100000).ToString("N2"));
 
                 if (Volcanism != null)
                     scanText.AppendFormat("Volcanism: {0}\n", Volcanism == String.Empty ? "No Volcanism" : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
@@ -267,9 +217,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 }
 
                 if (nOrbitalPeriod.HasValue)
-                    scanText.AppendFormat("Orbital Period: {0:0.00}D\n", (nOrbitalPeriod.Value / oneDay_s).ToString("###,###,##0.0"));
+                    scanText.AppendFormat("Orbital Period: {0}D\n", (nOrbitalPeriod.Value / oneDay_s).ToString("N0"));
                 if (nSemiMajorAxis.HasValue)
-                    scanText.AppendFormat("Semi Major Axis: {0:0.00}AU\n", (nSemiMajorAxis.Value / oneAU_m).ToString("#0.0#"));
+                    scanText.AppendFormat("Semi Major Axis: {0}AU\n", (nSemiMajorAxis.Value / oneAU_m).ToString("N1"));
                 if (nEccentricity.HasValue)
                     scanText.AppendFormat("Orbital Eccentricity: {0:0.00}°\n", nEccentricity.Value);
                 if (nOrbitalInclination.HasValue)
@@ -277,7 +227,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 if (nPeriapsis.HasValue)
                     scanText.AppendFormat("Arg Of Periapsis: {0:0.00}°\n", nPeriapsis.Value);
                 if (nRotationPeriod.HasValue)
-                    scanText.AppendFormat("Rotation Period: {0:0.00} days", (nRotationPeriod.Value / oneDay_s).ToString("###,###,##0.0"));
+                    scanText.AppendFormat("Rotation Period: {0} days", (nRotationPeriod.Value / oneDay_s).ToString("N1"));
 
                 scanText.Append((nTidalLock.HasValue && nTidalLock.Value) ? " (Tidally locked)\n" : "\n");
 
@@ -323,32 +273,33 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
 
-        public System.Drawing.Image GetStarTypeImage()
+        public Tuple<System.Drawing.Image, string> GetStarTypeImage()           // give image and description to star class
         {
             System.Drawing.Image ret = EDDiscovery.Properties.Resources.Star_K1IV;
 
             switch (StarType)
             {
                 case "N":
-                    break;
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Neutron Star");
                 case "AeBe":
-                    break;
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Herbig Ae/Be");
                 case "H":
-                    break;
+                    // currently speculative, not confirmed with actual data...
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Black Hole");
                 case "TTS":
-                    break;
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "T Tauri");
                 case "CS":
                 case "C":
                 case "CN":
                 case "CJ":
                 case "CHd":
-                    break;
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Carbon ({0}) star", StarType));
                 case "W":
                 case "WN":
                 case "WNC":
                 case "WC":
                 case "WO":
-                    break;
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Wolf-Rayet ({0}) star", StarType));
                 case "D":
                 case "DA":
                 case "DAB":
@@ -364,12 +315,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 case "DC":
                 case "DCV":
                 case "DX":
-                    break;
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("White Dwarf ({0}) star", StarType));
                 default:
-                    break;
+                    string s = string.Format("Class {0} star\n", StarType.Replace("_", " ").Replace("Super", " Super").Replace("Giant", " Giant"));
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, s);
             }
-
-            return ret;
         }
 
         static public System.Drawing.Image GetStarImageNotScanned()

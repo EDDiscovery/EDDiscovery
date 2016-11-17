@@ -81,6 +81,8 @@ namespace EDDiscovery.UserControls
 
                 bool belts = false;
 
+                //System.Diagnostics.Debug.WriteLine("Star Cp " + curpos);
+
                 if (starnode.type == StarScan.ScanNodeType.star)
                 {
                     Image star;
@@ -88,7 +90,7 @@ namespace EDDiscovery.UserControls
 
                     if ( starnode.scandata != null)
                     {
-                        star = starnode.scandata.GetStarTypeImage();
+                        star = starnode.scandata.GetStarTypeImage().Item1;
                         tip = starnode.scandata.DisplayString(true);
                         belts = starnode.scandata.HasRings;
                     }
@@ -101,18 +103,25 @@ namespace EDDiscovery.UserControls
                     maxstarpos = CreateImageLabel(starcontrols, star, curpos, starsize, starnode.ownname, tip);
                 }
                 else
-                    maxstarpos = CreateImageLabel(starcontrols, EDDiscovery.Properties.Resources.Barycentre, curpos, starsize, starnode.ownname, "Orbiting barycentre of " + starnode.fullname);
+                    maxstarpos = CreateImageLabel(starcontrols, EDDiscovery.Properties.Resources.Barycentre, curpos, starsize, starnode.ownname, "Barycentre of " + starnode.fullname);
 
                 curpos = new Point(maxstarpos.X + itemsepar, curpos.Y);
 
-                Point firstcolumn = curpos;
                 Point maxitemspos = maxstarpos;
 
-                if ( belts )
+                if (belts)
                 {
-                    maxitemspos = CreateStarBelts(starcontrols, starnode.scandata, curpos, beltsize , starnode.fullname);
-                    curpos = new Point(maxitemspos.X + itemsepar, curpos.Y + (starsize.Height - planetsize.Height) / 2);   // move to the right, and down ready for planets
+                    System.Diagnostics.Debug.WriteLine("Belts Cp " + curpos);
+
+                    maxitemspos = CreateStarBelts(starcontrols, starnode.scandata, curpos, beltsize, starnode.fullname);
+                    curpos = new Point(maxitemspos.X + itemsepar, curpos.Y);   // move to the right
                 }
+                
+                curpos.Y += (starsize.Height - planetsize.Height) / 2;            // slide down for planet vs star difference in size
+
+                //System.Diagnostics.Debug.WriteLine("Moon Cp " + curpos);
+
+                Point firstcolumn = curpos;
 
                 if (starnode.children != null)
                 {
@@ -122,7 +131,7 @@ namespace EDDiscovery.UserControls
 
                         Point maxpos = CreatePlanetTree(pc, planetnode, curpos);
 
-                        System.Diagnostics.Debug.WriteLine("Planet " + planetnode.ownname + " " + curpos + " " + maxpos + " max " + (panelStars.Width - panelStars.ScrollBarWidth));
+                        //System.Diagnostics.Debug.WriteLine("Planet " + planetnode.ownname + " " + curpos + " " + maxpos + " max " + (panelStars.Width - panelStars.ScrollBarWidth));
 
                         if ( maxpos.X > panelStars.Width - panelStars.ScrollBarWidth)          // uh oh too wide..
                         {
@@ -176,7 +185,7 @@ namespace EDDiscovery.UserControls
             string tip;
             Point maxtreepos = curpos;
 
-            System.Diagnostics.Debug.WriteLine("Cp " + curpos);
+            System.Diagnostics.Debug.WriteLine("Planet Cp " + curpos);
             if (planetnode.scandata != null)
             {
                 planet = planetnode.scandata.GetPlanetClassImage();
@@ -294,7 +303,7 @@ namespace EDDiscovery.UserControls
                 }
 
                // System.Diagnostics.Debug.WriteLine("Item " + mc.name + " abv " + mc.shortname + " at "  + matpos);
-                DrawnPanel dp = new DrawnPanel();
+                DrawnPanelNoTheme dp = new DrawnPanelNoTheme();
                 dp.ImageSelected = DrawnPanel.ImageType.Text;
                 dp.DrawnImage = EDDiscovery.Properties.Resources.materialmarker;
                 dp.ImageText = abv;
@@ -302,11 +311,10 @@ namespace EDDiscovery.UserControls
                 dp.Size = matsize;
                 dp.ForeColor = Color.Black;
 
-                Why do colours screw on second go|?
-
                 System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
                 colormap.OldColor = Color.White;    // this is the marker colour to replace
                 colormap.NewColor = fillc;
+                System.Diagnostics.Debug.WriteLine("Map white to " + fillc);
                 dp.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
 
                 toolTip.SetToolTip(dp, tooltip);
@@ -336,7 +344,7 @@ namespace EDDiscovery.UserControls
             pb.Size = size;
             pb.Location = postopright;
             pb.SizeMode = PictureBoxSizeMode.StretchImage;
-            pb.BackColor = Color.Red;
+            //pb.BackColor = Color.Red;     // use to show boundaries
             pb.Tag = ttext;
             pb.Click += Pb_Click;
             c.Add(pb);

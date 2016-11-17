@@ -89,9 +89,9 @@ namespace EDDiscovery.Controls
 
                     panelSelected.BackgroundImage = Images[i];
 
+                    labelCurrent.Text = CurrentControl.Text;
                     drawnPanelPopOut.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, 3);
                     drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
-                    labelCurrent.Text = CurrentControl.Text;
                 }
             }
             else
