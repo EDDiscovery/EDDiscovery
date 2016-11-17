@@ -94,6 +94,7 @@ namespace EDDiscovery
         Task<bool> downloadMapsTask = null;
         Task checkInstallerTask = null;
         private string logname = "";
+        private bool themeok = true;
 
         EliteDangerous.EDJournalClass journalmonitor;
         GitHubRelease newRelease;
@@ -167,7 +168,7 @@ namespace EDDiscovery
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
-            theme.RestoreSettings();                                    // theme, remember your saved settings
+            themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
@@ -384,6 +385,12 @@ namespace EDDiscovery
         {
             _checkSystemsWorker.RunWorkerAsync();
             downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
+
+            if (!themeok)
+            {
+                LogLineHighlight("The theme stored has missing colors or other missing information");
+                LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
+            }
         }
 
         private Task CheckForNewInstallerAsync()
