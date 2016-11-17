@@ -160,9 +160,9 @@ namespace EDDiscovery
                     Application.ThreadException += Application_ThreadException;
                     // Redirect console to trace
                     Console.SetOut(new TraceLogWriter());
+                    // Log first-chance exceptions to help diagnose errors
+                    Register_FirstChanceException_Handler();
                 }
-                // Log first-chance exceptions to help diagnose errors
-                Register_FirstChanceException_Handler();
             }
             catch (Exception ex)
             {
