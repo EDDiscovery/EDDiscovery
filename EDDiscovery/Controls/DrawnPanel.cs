@@ -51,7 +51,7 @@ namespace ExtendedControls
                 if (DrawnImageAttributes != null)
                     e.Graphics.DrawImage(DrawnImage, new Rectangle(0, 0, DrawnImage.Width, DrawnImage.Height), 0, 0, DrawnImage.Width, DrawnImage.Height, GraphicsUnit.Pixel, DrawnImageAttributes);
                 else
-                    e.Graphics.DrawImage(DrawnImage, new Point(0, 0));
+                    e.Graphics.DrawImage(DrawnImage, new Rectangle(0, 0, DrawnImage.Width, DrawnImage.Height), 0, 0, DrawnImage.Width, DrawnImage.Height, GraphicsUnit.Pixel);
             }
 
             if (ImageSelected != ImageType.None)

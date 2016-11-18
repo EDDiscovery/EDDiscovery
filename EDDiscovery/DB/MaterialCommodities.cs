@@ -262,7 +262,7 @@ namespace EDDiscovery2.DB
                 AddNewTypeC(cn, MaterialRawCategory, Color.Yellow, "Tin", "Rare", "Sn");
                 AddNewTypeC(cn, MaterialRawCategory, Color.Yellow, "Tungsten", "Rare", "W");
 
-                AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Carbon", "Very common", "C");
+                AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Carbon", "Very Common", "C");
                 AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Iron", "Very Common", "Fe");
                 AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Nickel", "Very Common", "Ni");
                 AddNewTypeC(cn, MaterialRawCategory, Color.Cyan, "Phosphorus", "Very Common", "P");

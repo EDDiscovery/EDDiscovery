@@ -88,6 +88,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string BodyName { get; set; }
         public double DistanceFromArrivalLS { get; set; }
         public string StarType { get; set; }                            // null if no StarType
+        public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
 
         public double? nAge { get; set; }
         public double? nStellarMass { get; set; }
@@ -133,7 +134,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string DisplayString(bool printbodyname = true, int indent = 0)
         {
-            string inds = "                                         ".Substring(0, 1 + indent);
+            string inds = new string(' ' , indent);
 
             StringBuilder scanText = new StringBuilder();
 
@@ -142,118 +143,141 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (printbodyname)
                 scanText.AppendFormat("{0}\n\n", BodyName);
 
-            if (!String.IsNullOrEmpty(StarType))
+            if (IsStar)
             {
-                scanText.AppendFormat(GetStarTypeImage().Item2 + Environment.NewLine);
-
-                if (nAge.HasValue)
-                    scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
-
-                if (nStellarMass.HasValue)
-                    scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
-
-                if (nRadius.HasValue)
-                    scanText.AppendFormat("Solar Radius: {0:0.00}\n", (nRadius.Value / solarRadius_m));
-
-                if (nSurfaceTemperature.HasValue)
-                    scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("N0"));
-
-                if (nOrbitalPeriod.HasValue && nOrbitalPeriod > 0)
-                    scanText.AppendFormat("Orbital Period: {0}D\n", (nOrbitalPeriod.Value / oneDay_s).ToString("N1"));
-                if (nSemiMajorAxis.HasValue)
-                    scanText.AppendFormat("Semi Major Axis: {0}AU\n", (nSemiMajorAxis.Value / oneAU_m).ToString("N1"));
-                if (nEccentricity.HasValue)
-                    scanText.AppendFormat("Orbital Eccentricity: {0:0.00}°\n", nEccentricity.Value);
-                if (nOrbitalInclination.HasValue)
-                    scanText.AppendFormat("Orbital Inclination: {0:0.00}°\n", nOrbitalInclination.Value);
-                if (nPeriapsis.HasValue)
-                    scanText.AppendFormat("Arg Of Periapsis: {0:0.00}°\n", nPeriapsis.Value);
-
-                if (nAbsoluteMagnitude.HasValue)
-                    scanText.AppendFormat("Absolute Magnitude: {0:0.00}\n", nAbsoluteMagnitude.Value);
-
-                if (nRotationPeriod.HasValue)
-                    scanText.AppendFormat("Rotation Period: {0} days\n", (nRotationPeriod.Value / oneDay_s).ToString("N1"));
-
-                if (HasRings)
-                {
-                    scanText.Append("\n");
-                    scanText.AppendFormat("Belt{0}", Rings.Count() == 1 ? "" : "s");
-                    for (int i = 0; i < Rings.Length; i++)
-                        scanText.Append("\n" + RingInformation(i, oneMoon_MT, " Moons"));
-                }
+                scanText.AppendFormat(GetStarTypeImage().Item2);
             }
             else
             {
-                //planet
-                scanText.AppendFormat("{0}\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+                scanText.AppendFormat("{0}", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
                                         ToTitleCase(PlanetClass.ToLower()).Replace("Ii", "II").Replace("Ii", "II").Replace("Iv", "IV"));
+            }
 
-                scanText.Append((TerraformState != null && TerraformState == "Terraformable") ? "Candidate for terraforming\n" : "\n");
+            if (PlanetClass != null && !PlanetClass.ToLower().Contains("gas"))
+            {
+                scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere" : ( ", " + 
+                                                            System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Atmosphere.ToLower()) )
+                                     );
+            }
 
-                if (nMassEM.HasValue)
-                    scanText.AppendFormat("Earth Masses: {0:0.00}\n", nMassEM.Value);
+            if (nLandable.HasValue && nLandable.Value)
+                scanText.AppendFormat(", Landable");
 
-                if (nRadius.HasValue)
-                    scanText.AppendFormat("Radius: {0:0.0}km\n", (nRadius.Value / 1000).ToString("N0"));
+            scanText.AppendFormat("\n");
 
-                if (nSurfaceGravity.HasValue)
-                    scanText.AppendFormat("Gravity: {0:0.0}g\n", nSurfaceGravity.Value / 9.8);
+            if (nAge.HasValue)
+                scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
 
-                if (nSurfaceTemperature.HasValue)
-                    scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("N1"));
+            if (nStellarMass.HasValue)
+                scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
 
-                if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLower().Contains("gas"))
-                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (nSurfacePressure.Value / 100000).ToString("N2"));
+            if (nMassEM.HasValue)
+                scanText.AppendFormat("Earth Masses: {0:0.0000}\n", nMassEM.Value);
 
-                if (Volcanism != null)
-                    scanText.AppendFormat("Volcanism: {0}\n", Volcanism == String.Empty ? "No Volcanism" : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                                                                                ToTitleCase(Volcanism.ToLower()));
+            if (nRadius.HasValue)
+            {
+                if ( IsStar )
+                    scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n", (nRadius.Value / solarRadius_m));
+                else
+                    scanText.AppendFormat("Body Radius: {0:0.00}km\n", (nRadius.Value / 1000));
+            }
 
-                if (PlanetClass != null && !PlanetClass.ToLower().Contains("gas"))
-                {
-                    scanText.AppendFormat("Atmosphere Type: {0}\n", (Atmosphere == null || Atmosphere == String.Empty) ? "No Atmosphere" :
-                                                        System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Atmosphere.ToLower()));
-                }
+            if (nSurfaceTemperature.HasValue)
+                scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("N0"));
 
-                if (nOrbitalPeriod.HasValue)
-                    scanText.AppendFormat("Orbital Period: {0}D\n", (nOrbitalPeriod.Value / oneDay_s).ToString("N0"));
-                if (nSemiMajorAxis.HasValue)
+            if (nSurfaceGravity.HasValue)
+                scanText.AppendFormat("Gravity: {0:0.0}g\n", nSurfaceGravity.Value / 9.8);
+
+            if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLower().Contains("gas"))
+                scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (nSurfacePressure.Value / 100000).ToString("N2"));
+
+            if (Volcanism != null)
+                scanText.AppendFormat("Volcanism: {0}\n", Volcanism == String.Empty ? "No Volcanism" : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+                                                                                            ToTitleCase(Volcanism.ToLower()));
+
+            if (DistanceFromArrivalLS > 0)
+                scanText.AppendFormat("Distance from Arrival Point {0:N1}\n", DistanceFromArrivalLS);
+
+            if (nOrbitalPeriod.HasValue && nOrbitalPeriod > 0)
+                scanText.AppendFormat("Orbital Period: {0} days\n", (nOrbitalPeriod.Value / oneDay_s).ToString("N1"));
+
+            if (nSemiMajorAxis.HasValue)
+            {
+                if ( IsStar )
                     scanText.AppendFormat("Semi Major Axis: {0}AU\n", (nSemiMajorAxis.Value / oneAU_m).ToString("N1"));
-                if (nEccentricity.HasValue)
-                    scanText.AppendFormat("Orbital Eccentricity: {0:0.00}°\n", nEccentricity.Value);
-                if (nOrbitalInclination.HasValue)
-                    scanText.AppendFormat("Orbital Inclination: {0:0.00}°\n", nOrbitalInclination.Value);
-                if (nPeriapsis.HasValue)
-                    scanText.AppendFormat("Arg Of Periapsis: {0:0.00}°\n", nPeriapsis.Value);
-                if (nRotationPeriod.HasValue)
-                    scanText.AppendFormat("Rotation Period: {0} days", (nRotationPeriod.Value / oneDay_s).ToString("N1"));
+                else
+                    scanText.AppendFormat("Semi Major Axis: {0}km\n", (nSemiMajorAxis.Value / 1000).ToString("N1"));
+            }
 
-                scanText.Append((nTidalLock.HasValue && nTidalLock.Value) ? " (Tidally locked)\n" : "\n");
+            if (nEccentricity.HasValue)
+                scanText.AppendFormat("Orbital Eccentricity: {0:0.000}°\n", nEccentricity.Value);
 
-                if (HasRings)
+            if (nOrbitalInclination.HasValue)
+                scanText.AppendFormat("Orbital Inclination: {0:0.000}°\n", nOrbitalInclination.Value);
+
+            if (nPeriapsis.HasValue)
+                scanText.AppendFormat("Arg Of Periapsis: {0:0.000}°\n", nPeriapsis.Value);
+
+            if (nAbsoluteMagnitude.HasValue)
+                scanText.AppendFormat("Absolute Magnitude: {0:0.00}\n", nAbsoluteMagnitude.Value);
+
+            if (nRotationPeriod.HasValue)
+                scanText.AppendFormat("Rotation Period: {0} days\n", (nRotationPeriod.Value / oneDay_s).ToString("N1"));
+
+            if (nTidalLock.HasValue && nTidalLock.Value)
+                scanText.Append("Tidally locked\n");
+
+            if ( TerraformState != null && TerraformState == "Terraformable") 
+                scanText.Append("Candidate for terraforming\n");
+
+            if (HasRings)
+            {
+                scanText.Append("\n");
+                if (IsStar)
                 {
-                    scanText.Append("\n");
-                    scanText.AppendFormat("Ring{0}", Rings.Count() == 1 ? "" : "s");
+                    scanText.AppendFormat("Belt{0}", Rings.Count() == 1 ? "@" : "s:");
+                    for (int i = 0; i < Rings.Length; i++)
+                        scanText.Append("\n" + RingInformation(i, oneMoon_MT, " Moons"));
+                }
+                else
+                {
+                    scanText.AppendFormat("Ring{0}", Rings.Count() == 1 ? ":" : "s:");
                     for (int i = 0; i < Rings.Length; i++)
                         scanText.Append("\n" + RingInformation(i));
                 }
-
-                if (HasMaterials) 
-                {
-                    scanText.Append("\n");
-                    scanText.Append("Materials\n");
-                    foreach (KeyValuePair<string, double> mat in Materials)
-                    {
-                        scanText.AppendFormat("  {0} - {1}%\n",
-                                        System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
-                                        mat.Value.ToString("#0.0#"));
-                    }
-
-                }
             }
 
+            if (HasMaterials)
+            {
+                scanText.Append("\n" + DisplayMaterials(2) + "\n");
+            }
+
+            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                scanText.Remove(scanText.Length - 1, 1);
+
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
+        }
+
+        public string DisplayMaterials(int indent = 0)
+        {
+            StringBuilder scanText = new StringBuilder();
+            string indents = new string(' ', indent);
+
+            scanText.Append("Materials:\n");
+            foreach (KeyValuePair<string, double> mat in Materials)
+            {
+                EDDiscovery2.DB.MaterialCommodities mc = EDDiscovery2.DB.MaterialCommodities.GetCachedMaterial(mat.Key);
+                if (mc != null)
+                    scanText.AppendFormat(indents + "{0} ({1}) {2} {3}%\n", mc.name, mc.shortname, mc.type, mat.Value.ToString("N1"));
+                else
+                    scanText.AppendFormat(indents + "{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
+                                                                mat.Value.ToString("N1"));
+            }
+
+            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                scanText.Remove(scanText.Length - 1, 1);
+
+            return scanText.ToNullSafeString();
         }
 
         public string RingInformationMoons(int ringno)
@@ -414,7 +438,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         static public System.Drawing.Image GetStarImageNotScanned()
         {
-            return EDDiscovery.Properties.Resources.Star_K1IV;
+            return EDDiscovery.Properties.Resources.Globe_yellow;
         }
 
         public System.Drawing.Image GetPlanetClassImage()
