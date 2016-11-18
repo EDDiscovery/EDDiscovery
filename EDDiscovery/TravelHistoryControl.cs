@@ -298,7 +298,7 @@ namespace EDDiscovery
             int butoffsetx = buttonMap.Location.X - buttonMap2D.Location.X;
             int butoffsety = buttonMap2D.Location.Y - button_RefreshHistory.Location.Y;
 
-            comboBoxCommander.Width = Math.Max(width - comboBoxCommander.Location.X - 4,64);
+            comboBoxCommander.Width = Math.Min(Math.Max(width - comboBoxCommander.Location.X - 4,64),192);
 
             if ( width >= buttonMap2D.Location.X + butoffsetx * 4 + buttonSync.Width + 4)  // 2x5
             {

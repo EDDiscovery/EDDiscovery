@@ -663,6 +663,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Globe_yellow {
+            get {
+                object obj = ResourceManager.GetObject("Globe_yellow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap gotostar {
             get {
                 object obj = ResourceManager.GetObject("gotostar", resourceCulture);
@@ -1019,6 +1029,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap materialmarkerorangefilled {
+            get {
+                object obj = ResourceManager.GetObject("materialmarkerorangefilled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap metal_rich {
             get {
                 object obj = ResourceManager.GetObject("metal_rich", resourceCulture);
@@ -1122,6 +1142,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap moduleswap {
             get {
                 object obj = ResourceManager.GetObject("moduleswap", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Moon24 {
+            get {
+                object obj = ResourceManager.GetObject("Moon24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

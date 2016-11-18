@@ -829,12 +829,13 @@ namespace EDDiscovery.EliteDangerous
 
             {           // unique field names across multiple entries.  First up so later ones can override if required
 
-                jc.AddScale("MassEM", 1.0, "0.0'em'", "Mass");
+                jc.AddScale("MassEM", 1.0, "0.0000'em'", "Mass");
                 jc.AddScale("MassMT", 1.0, "0.0'mt'", "Mass");
                 jc.AddScale("SurfacePressure", 1.0, "0.0'p'");
                 jc.AddScale("Radius", 1.0 / 1000, "0.0'km'");
                 jc.AddScale("InnerRad", 1.0 / 1000, "0.0'km'", "Inner Radius");
                 jc.AddScale("OuterRad", 1.0 / 1000, "0.0'km'", "Outer Radius");
+                jc.AddScale("SemiMajorAxis", 1.0 / 1000, "0.0'km'", "Semi Major Axis");
                 jc.AddScale("OrbitalPeriod;RotationPeriod", 1.0 / 86400, "0.0' days orbit'", "");
                 jc.AddScale("SurfaceGravity", 1.0 / 9.8, "0.0'g'");
                 jc.AddScale("SurfaceTemperature", 1.0, "0.0'K'");

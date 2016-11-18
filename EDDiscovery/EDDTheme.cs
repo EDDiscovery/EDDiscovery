@@ -875,21 +875,24 @@ namespace EDDiscovery2
             {
                 CheckBoxCustom MyDgv = (CheckBoxCustom)myControl;
 
-                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
-                    MyDgv.FlatStyle = FlatStyle.System;
-                else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
-                    MyDgv.FlatStyle = FlatStyle.Flat;
-                else
-                    MyDgv.FlatStyle = FlatStyle.Popup;
+                if (MyDgv.Appearance != Appearance.Button)          // Buttons are always left in the appearance selected by the code as the
+                {                                                   // Standard type for buttons covers what we need.
+                    if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                        MyDgv.FlatStyle = FlatStyle.System;
+                    else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                        MyDgv.FlatStyle = FlatStyle.Flat;
+                    else
+                        MyDgv.FlatStyle = FlatStyle.Popup;
 
-                MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
-                MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
-                MyDgv.CheckBoxColor = currentsettings.colors[Settings.CI.checkbox];
-                MyDgv.CheckBoxInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
-                MyDgv.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
-                MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
-                MyDgv.TickBoxReductionSize = (fnt.SizeInPoints > 10) ? 10 : 6;
-                MyDgv.Font = fnt;
+                    MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
+                    MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
+                    MyDgv.CheckBoxColor = currentsettings.colors[Settings.CI.checkbox];
+                    MyDgv.CheckBoxInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
+                    MyDgv.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
+                    MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+                    MyDgv.TickBoxReductionSize = (fnt.SizeInPoints > 10) ? 10 : 6;
+                    MyDgv.Font = fnt;
+                }
             }
             else if (myControl is RadioButtonCustom)
             {

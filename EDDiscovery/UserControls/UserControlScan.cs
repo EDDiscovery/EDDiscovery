@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using ExtendedControls;
+using EDDiscovery.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -18,9 +19,11 @@ namespace EDDiscovery.UserControls
         private TravelHistoryControl travelhistorycontrol;
         private int displaynumber = 0;
         Size starsize,planetsize,moonsize,materialsize,beltsize;
-        const int itemsepar = 0;
+        Size itemsepar;
+        double labelwidthmult;
+        int labelwidththreshold;
         const int leftmargin = 30;
-
+        
         StarScan.SystemNode last_sn = null;
         Point last_maxdisplayarea;
 
@@ -40,6 +43,34 @@ namespace EDDiscovery.UserControls
             displaynumber = vn;
             travelhistorycontrol.OnTravelSelectionChanged += Display;
             SetSize(64);
+
+            checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMaterials", true);
+            checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMoons", true);
+        }
+
+        public override void LoadLayout()
+        {
+        }
+
+        public override void Closing()
+        {
+            travelhistorycontrol.OnTravelSelectionChanged -= Display;
+        }
+
+        private void UserControlScan_Resize(object sender, EventArgs e)
+        {
+            PositionInfo();
+            System.Diagnostics.Debug.WriteLine("Resize panel stars {0} {1}", DisplayRectangle, panelStars.Size);
+
+            if (last_sn != null)
+            {
+                int newspace = panelStars.Width - panelStars.ScrollBarWidth;
+
+                if (newspace < last_maxdisplayarea.X || newspace > last_maxdisplayarea.X + starsize.Width * 2)
+                {
+                    DrawSystem(last_sn);
+                }
+            }
         }
 
         #endregion
@@ -48,26 +79,24 @@ namespace EDDiscovery.UserControls
 
         public void Display(HistoryEntry he, HistoryList hl)
         {
-            panelStars.RemoveAllControls(new List<Control> { richTextBoxInfo });
-
             last_sn = null;
 
             if (he != null)
-            {
-                StarScan.SystemNode sn = hl.starscan.FindSystem(he.System);
+                  last_sn = hl.starscan.FindSystem(he.System);
 
-                if (sn != null)
-                {
-                    last_sn = sn;
-                    DrawSystem(sn);
-                }
-            }
+            DrawSystem(last_sn);
         }
-
 
         void DrawSystem(StarScan.SystemNode sn)
         {
-            
+            panelStars.RemoveAllControls(new List<Control> { richTextBoxInfo });        // clean up
+            HideInfo();
+
+            last_sn = sn;                                                               // remember in case we need to draw
+
+            if (sn == null)
+                return;
+         
             Point curpos = new Point(leftmargin, 0);
             last_maxdisplayarea = curpos;
 
@@ -105,7 +134,7 @@ namespace EDDiscovery.UserControls
                 else
                     maxstarpos = CreateImageLabel(starcontrols, EDDiscovery.Properties.Resources.Barycentre, curpos, starsize, starnode.ownname, "Barycentre of " + starnode.fullname);
 
-                curpos = new Point(maxstarpos.X + itemsepar, curpos.Y);
+                curpos = new Point(maxstarpos.X + itemsepar.Width, curpos.Y);
 
                 Point maxitemspos = maxstarpos;
 
@@ -114,7 +143,7 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("Belts Cp " + curpos);
 
                     maxitemspos = CreateStarBelts(starcontrols, starnode.scandata, curpos, beltsize, starnode.fullname);
-                    curpos = new Point(maxitemspos.X + itemsepar, curpos.Y);   // move to the right
+                    curpos = new Point(maxitemspos.X + itemsepar.Width, curpos.Y);   // move to the right
                 }
                 
                 curpos.Y += (starsize.Height - planetsize.Height) / 2;            // slide down for planet vs star difference in size
@@ -153,7 +182,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 last_maxdisplayarea = new Point(Math.Max(last_maxdisplayarea.X, maxitemspos.X), Math.Max(last_maxdisplayarea.Y, maxitemspos.Y));
-                curpos = new Point(leftmargin, maxitemspos.Y + itemsepar);
+                curpos = new Point(leftmargin, maxitemspos.Y + itemsepar.Height);
             }
 
             panelStars.Controls.AddRange(starcontrols.ToArray());
@@ -173,7 +202,7 @@ namespace EDDiscovery.UserControls
                 endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt, curpos, beltsize, name,
                                                     sc.RingInformationMoons(i));
 
-                curpos = new Point(endbelt.X + itemsepar, curpos.Y);
+                curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
             }
 
             return endbelt;
@@ -185,13 +214,14 @@ namespace EDDiscovery.UserControls
             string tip;
             Point maxtreepos = curpos;
 
-            System.Diagnostics.Debug.WriteLine("Planet Cp " + curpos);
+            int planetmiddle = moonsize.Width/2 + planetsize.Width/2;     // default planet centre..
+
             if (planetnode.scandata != null)
             {
                 planet = planetnode.scandata.GetPlanetClassImage();
-                tip = planetnode.scandata.DisplayString(true) + "\n" + planetnode.fullname + ":" + planetnode.ownname;
+                tip = planetnode.scandata.DisplayString(true);
 
-                if (planetnode.scandata.HasRings)
+                if (planetnode.scandata.HasRings)                                       // we allocate 2 x planetwidth to allow for rings
                 {
                     Bitmap bmp = new Bitmap(planetsize.Width * 2, planetsize.Height);
                     using (Graphics g = Graphics.FromImage(bmp))
@@ -201,29 +231,34 @@ namespace EDDiscovery.UserControls
                     }
 
                     maxtreepos = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), planetnode.ownname, tip);
+                    planetmiddle = planetsize.Width;        // because the image is 2 planet widths wide
                 }
                 else
-                {
-                    maxtreepos = CreateImageLabel(pc, planet, new Point(curpos.X + planetsize.Width / 2, curpos.Y), planetsize, planetnode.ownname, tip);
+                {           // okay here,we create the image at the moonwidth/2 point, to allow space for a double moon width
+                    maxtreepos = CreateImageLabel(pc, planet, new Point(curpos.X + moonsize.Width/2, curpos.Y), planetsize, planetnode.ownname, tip);
                 }
             }
             else
             {
                 planet = JournalScan.GetPlanetImageNotScanned();
-                tip = "Planet " + planetnode.fullname;
-                maxtreepos = CreateImageLabel(pc, planet, new Point(curpos.X + planetsize.Width / 2, curpos.Y), planetsize, planetnode.ownname, tip);
+                tip = planetnode.fullname;
+                // again, at moonsize.w/2, to allow for a double moon size with rings
+                maxtreepos = CreateImageLabel(pc, planet, new Point(curpos.X + moonsize.Width / 2, curpos.Y), planetsize, planetnode.ownname, tip);
             }
 
-            maxtreepos = new Point(Math.Max(curpos.X + planetsize.Width * 2, maxtreepos.X), maxtreepos.Y);      // min 2 widths
+            if (planetnode.scandata != null && planetnode.scandata.HasMaterials )
+            {
+                Point matpos = new Point(maxtreepos.X + 4, curpos.Y);
+                Point endmat = CreateMaterialNodes(pc, planetnode.scandata, matpos, materialsize);
+                int maxy = Math.Max(maxtreepos.Y, endmat.Y);        // materials may not drop below planet if on one line
+                maxtreepos = new Point(Math.Max(maxtreepos.X, endmat.X), Math.Max(maxtreepos.Y, maxy)); // record new right point..
+            }
 
-            System.Diagnostics.Debug.WriteLine("..after planet " + maxtreepos);
 
             //based on planesize-moonwidth/2, with space for a double moon width
-            Point moonpos = new Point(curpos.X + planetsize.Width - moonsize.Width/2, maxtreepos.Y + itemsepar);
+            Point moonpos = new Point(curpos.X + planetmiddle - moonsize.Width/2, maxtreepos.Y + itemsepar.Height);    // moon
 
-            System.Diagnostics.Debug.WriteLine("moonpos " + maxtreepos);
-
-            if (planetnode.children != null)
+            if (planetnode.children != null && checkBoxMoons.Checked)
             {
                 foreach (StarScan.ScanNode moonnode in planetnode.children.Values)
                 {
@@ -234,7 +269,7 @@ namespace EDDiscovery.UserControls
                     if (moonnode.scandata != null)
                     {
                         moon = moonnode.scandata.GetPlanetClassImage();
-                        mtip = moonnode.scandata.DisplayString(true) + "\n" + moonnode.fullname + ":" + moonnode.ownname;
+                        mtip = moonnode.scandata.DisplayString(true);
 
                         if ( moonnode.scandata.HasRings )
                         {
@@ -266,12 +301,12 @@ namespace EDDiscovery.UserControls
 
                         int maxy = Math.Max(moonposend.Y, endmat.Y);        // materials may not drop below moon if on one line
 
-                        moonpos = new Point(moonpos.X, maxy + itemsepar);
+                        moonpos = new Point(moonpos.X, maxy + itemsepar.Height);
                         maxtreepos = new Point(Math.Max(maxtreepos.X, endmat.X), Math.Max(maxtreepos.Y, maxy));
                     }
                     else
                     {
-                        moonpos = new Point(moonpos.X, moonposend.Y + itemsepar);
+                        moonpos = new Point(moonpos.X, moonposend.Y + itemsepar.Height);
                         maxtreepos = new Point(Math.Max(maxtreepos.X, moonposend.X), Math.Max(maxtreepos.Y, moonposend.Y));
                     }
                 }
@@ -288,56 +323,71 @@ namespace EDDiscovery.UserControls
             Point maximum = matpos;
             int noperline = 0;
 
-            foreach (KeyValuePair<string,double> sd in sn.Materials)
+            string matclicktext = sn.DisplayMaterials(2);
+
+            if (checkBoxMaterials.Checked)
             {
-                string abv = sd.Key.Substring(0, 1);
-                string tooltip = sd.Key;
-                Color fillc = Color.Yellow;
-
-                EDDiscovery2.DB.MaterialCommodities mc = EDDiscovery2.DB.MaterialCommodities.GetCachedMaterial(sd.Key);
-                if ( mc != null )
+                foreach (KeyValuePair<string, double> sd in sn.Materials)
                 {
-                    abv = mc.shortname;
-                    fillc = mc.colour;
-                    tooltip = mc.name + " (" + mc.shortname + ") " + mc.type + " " + sd.Value.ToString("0.0") + "%";
+                    string abv = sd.Key.Substring(0, 1);
+                    string tooltip = sd.Key;
+                    Color fillc = Color.Yellow;
+
+                    EDDiscovery2.DB.MaterialCommodities mc = EDDiscovery2.DB.MaterialCommodities.GetCachedMaterial(sd.Key);
+                    if (mc != null)
+                    {
+                        abv = mc.shortname;
+                        fillc = mc.colour;
+                        tooltip = mc.name + " (" + mc.shortname + ") " + mc.type + " " + sd.Value.ToString("0.0") + "%";
+                    }
+
+                    CreateMaterialImage(pc, matpos, matsize, abv, tooltip + "\n\n" + "All " + matclicktext, tooltip, fillc, Color.Black);
+
+                    maximum = new Point(Math.Max(maximum.X, matpos.X + matsize.Width), Math.Max(maximum.Y, matpos.Y + matsize.Height));
+
+                    if (++noperline == 4)
+                    {
+                        matpos = new Point(startpos.X, matpos.Y + matsize.Height + 4);
+                        noperline = 0;
+                    }
+                    else
+                        matpos.X += matsize.Width + 4;
                 }
-
-               // System.Diagnostics.Debug.WriteLine("Item " + mc.name + " abv " + mc.shortname + " at "  + matpos);
-                DrawnPanelNoTheme dp = new DrawnPanelNoTheme();
-                dp.ImageSelected = DrawnPanel.ImageType.Text;
-                dp.DrawnImage = EDDiscovery.Properties.Resources.materialmarker;
-                dp.ImageText = abv;
-                dp.Location = matpos;
-                dp.Size = matsize;
-                dp.ForeColor = Color.Black;
-
-                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
-                colormap.OldColor = Color.White;    // this is the marker colour to replace
-                colormap.NewColor = fillc;
-                dp.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
-
-                toolTip.SetToolTip(dp, tooltip);
-
-                pc.Add(dp);
-
+            }
+            else
+            {
+                CreateMaterialImage(pc, matpos, matsize, "+", "All " + matclicktext, "All " + matclicktext, Color.Black, Color.Orange);
                 maximum = new Point(Math.Max(maximum.X, matpos.X + matsize.Width), Math.Max(maximum.Y, matpos.Y + matsize.Height));
-                
-                if (++noperline == 4)
-                {
-                    matpos = new Point(startpos.X, matpos.Y + matsize.Height + 4);
-                    noperline = 0;
-                }
-                else
-                    matpos.X += matsize.Width + 4;
             }
 
             return maximum;
         }
 
+        void CreateMaterialImage(List<Control> pc, Point matpos, Size matsize, string text, string mattag, string mattip, Color matcolour , Color textcolour)
+        {
+            DrawnPanelNoTheme dp = new DrawnPanelNoTheme();
+            dp.ImageSelected = DrawnPanel.ImageType.Text;
+            dp.DrawnImage = EDDiscovery.Properties.Resources.materialmarkerorangefilled;
+            dp.ImageText = text;
+            dp.Location = matpos;
+            dp.Size = matsize;
+            dp.ForeColor = textcolour;
+            dp.Tag = mattag;
+            dp.Click += MaterialClick;
+
+            System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
+            colormap.OldColor = Color.White;    // this is the marker colour to replace
+            colormap.NewColor = matcolour;
+            dp.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
+
+            toolTip.SetToolTip(dp, mattip);
+
+            pc.Add(dp);
+        }
 
         Point CreateImageLabel(List<Control> c, Image i, Point postopright, Size size, string label, string ttext)
         {
-            System.Diagnostics.Debug.WriteLine(postopright + " " + label);
+            System.Diagnostics.Debug.WriteLine(label + " " + postopright + " size " + size);
             PictureBox pb = new PictureBox();
             pb.Image = i;
             pb.Size = size;
@@ -345,7 +395,7 @@ namespace EDDiscovery.UserControls
             pb.SizeMode = PictureBoxSizeMode.StretchImage;
             //pb.BackColor = Color.Red;     // use to show boundaries
             pb.Tag = ttext;
-            pb.Click += Pb_Click;
+            pb.Click += ImageClick;
             c.Add(pb);
 
             if ( ttext != null )
@@ -358,16 +408,17 @@ namespace EDDiscovery.UserControls
                 DrawnPanel dp = new ExtendedControls.DrawnPanel();
                 dp.ImageSelected = DrawnPanel.ImageType.Text;
                 dp.ImageText = label;
-                int labelhalfwidth = size.Width * 3 / 4;
+                int labelhalfwidth = ((size.Width<labelwidththreshold) ? ((int)(size.Width * labelwidthmult)) : size.Width)/2;
 
                 dp.Location = new Point(postopright.X + size.Width / 2 - labelhalfwidth, postopright.Y + size.Height);
-                dp.Size = new Size(labelhalfwidth * 2, 20);
+                dp.Size = new Size(labelhalfwidth*2, 20);
                 dp.ForeColor = discoveryform.theme.LabelColor;
                 c.Add(dp);
 
                 max = new Point( Math.Max(postopright.X + size.Width / 2 + labelhalfwidth, max.X), postopright.Y + size.Height + 20);
             }
 
+            System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
             return max;
         }
 
@@ -384,29 +435,38 @@ namespace EDDiscovery.UserControls
             planetsize = new Size(starsize.Width * 3 / 4, starsize.Height * 3 / 4);
             moonsize = new Size(starsize.Width * 2 / 4, starsize.Height * 2 / 4);
             materialsize = new Size(24, 24);
+            itemsepar = new Size(0, 0);
+            labelwidthmult = 1.25;
+            labelwidththreshold = 64;
         }
 
         #endregion
 
+        #region User interaction
 
-        private void Pb_Click(object sender, EventArgs e)
+        private void ImageClick(object sender, EventArgs e)
         {
             PictureBox pb = sender as PictureBox;
-            ShowInfo((string)pb.Tag, pb.Location.X < panelStars.Width/2 );
+            ShowInfo((string)pb.Tag, pb.Location.X < panelStars.Width / 2);
         }
 
-#region Layout
-
-        public override void LoadLayout()
+        private void MaterialClick(object sender, EventArgs e)
         {
+            DrawnPanelNoTheme dp = sender as DrawnPanelNoTheme;
+            ShowInfo((string)dp.Tag, dp.Location.X < panelStars.Width / 2);
         }
 
-        public override void Closing()
+        private void checkBoxMaterials_CheckedChanged(object sender, EventArgs e)
         {
-            travelhistorycontrol.OnTravelSelectionChanged -= Display;
+            SQLiteDBClass.PutSettingBool("ScanPanelMaterials", checkBoxMaterials.Checked);
+            DrawSystem(last_sn);
         }
 
-#endregion
+        private void checkBoxMoons_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool("ScanPanelMoons", checkBoxMoons.Checked);
+            DrawSystem(last_sn);
+        }
 
         void ShowInfo(string text , bool onright )
         {
@@ -431,7 +491,7 @@ namespace EDDiscovery.UserControls
                 else
                     richTextBoxInfo.Location = new Point(panelStars.Width / 16, 10);
 
-                richTextBoxInfo.Size = new Size(panelStars.Width * 6 / 16, panelStars.Height - 20);
+                richTextBoxInfo.Size = new Size(panelStars.Width * 6 / 16, Math.Min(richTextBoxInfo.EstimateVerticalSizeFromText(),panelStars.Height-20));
             }
         }
 
@@ -440,27 +500,8 @@ namespace EDDiscovery.UserControls
             HideInfo();
         }
 
-        private void UserControlScan_Resize(object sender, EventArgs e)
-        {
-            PositionInfo();
-            System.Diagnostics.Debug.WriteLine("Resize panel stars {0} {1}", DisplayRectangle, panelStars.Size);
+        #endregion
 
-            if (last_sn != null )
-            {
-                int newspace = panelStars.Width - panelStars.ScrollBarWidth;
-
-                if (newspace < last_maxdisplayarea.X || newspace > last_maxdisplayarea.X + starsize.Width * 2)
-                {
-                    panelStars.RemoveAllControls(new List<Control> { richTextBoxInfo });
-                    DrawSystem(last_sn);
-                }
-            }
-        }
     }
 }
 
-#if false
-
-
-
-#endif 
