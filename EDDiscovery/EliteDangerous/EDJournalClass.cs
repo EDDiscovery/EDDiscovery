@@ -18,16 +18,11 @@ namespace EDDiscovery.EliteDangerous
 {
     public class MonitorWatcher
     {
-        public delegate void NewJournalEntryHandler(JournalEntry je);
-        public event NewJournalEntryHandler OnNewJournalEntry;
-
         public string m_watcherfolder;
 
         Dictionary<string, EDJournalReader> netlogreaders = new Dictionary<string, EDJournalReader>();
         EDJournalReader lastnfi = null;          // last one read..
         FileSystemWatcher m_Watcher;
-        System.Windows.Forms.Timer m_scantimer;
-        System.ComponentModel.BackgroundWorker m_worker;
         private int ticksNoActivity = 0;
         ConcurrentQueue<string> m_netLogFileQueue;
 
@@ -183,16 +178,6 @@ namespace EDDiscovery.EliteDangerous
                     m_Watcher.Created += new FileSystemEventHandler(OnNewFile);
                     m_Watcher.EnableRaisingEvents = true;
 
-                    m_worker = new System.ComponentModel.BackgroundWorker();
-                    m_worker.DoWork += ScanTickWorker;
-                    m_worker.RunWorkerCompleted += ScanTickDone;
-                    m_worker.WorkerSupportsCancellation = true;
-
-                    m_scantimer = new System.Windows.Forms.Timer();
-                    m_scantimer.Interval = 2000;
-                    m_scantimer.Tick += ScanTick;
-                    m_scantimer.Start();
-
                     System.Diagnostics.Trace.WriteLine("Start Monitor on " + m_watcherfolder);
                 }
                 catch (Exception ex)
@@ -206,18 +191,6 @@ namespace EDDiscovery.EliteDangerous
 
         public void StopMonitor()
         {
-            if (m_scantimer != null)
-            {
-                m_scantimer.Stop();
-                m_scantimer = null;
-            }
-
-            if (m_worker != null)
-            {
-                m_worker.CancelAsync();
-                m_worker = null;
-            }
-
             if (m_Watcher != null)
             {
                 m_Watcher.EnableRaisingEvents = false;
@@ -228,30 +201,9 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public void StopStartMonitor() // call from owner of scanner.
+        public List<JournalEntry> ScanForNewEntries()
         {
-            if (m_Watcher != null)
-            {
-                StopMonitor();
-                StartMonitor();
-            }
-        }
-
-        private void ScanTick(object sender, EventArgs e)
-        {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
-            if (m_worker != null && !m_worker.IsBusy)
-            {
-                m_worker.RunWorkerAsync();
-            }
-        }
-
-        private void ScanTickWorker(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            var worker = sender as System.ComponentModel.BackgroundWorker;
             var entries = new List<JournalEntry>();
-            e.Result = entries;
             int netlogpos = 0;
             EDJournalReader nfi = null;
 
@@ -331,10 +283,7 @@ namespace EDDiscovery.EliteDangerous
                     nfi.TravelLogUnit.Update();
                 }
 
-                if (worker.CancellationPending)
-                {
-                    e.Cancel = true;
-                }
+                return entries;
             }
             catch (Exception ex)
             {
@@ -347,23 +296,6 @@ namespace EDDiscovery.EliteDangerous
                 System.Diagnostics.Trace.WriteLine("Net tick exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 throw;
-            }
-        }
-
-        private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
-            if (e.Error == null && !e.Cancelled)
-            {
-                List<JournalEntry> entries = (List<JournalEntry>)e.Result;
-
-                foreach (var ent in entries)                    // pass them to the handler
-                {
-                    System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
-                    if (OnNewJournalEntry != null)
-                        OnNewJournalEntry(ent);
-                }
             }
         }
 
@@ -380,6 +312,8 @@ namespace EDDiscovery.EliteDangerous
         public delegate void NewJournalEntryHandler(JournalEntry je);
         public event NewJournalEntryHandler OnNewJournalEntry;
 
+        private System.Windows.Forms.Timer m_scantimer;
+        private System.ComponentModel.BackgroundWorker m_worker;
         private List<MonitorWatcher> watchers = new List<MonitorWatcher>();
         private string frontierfolder;
 
@@ -434,7 +368,6 @@ namespace EDDiscovery.EliteDangerous
                     System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", frontierfolder));
                     MonitorWatcher mw = new MonitorWatcher(frontierfolder);
                     watchers.Add(mw);
-                    mw.OnNewJournalEntry += NewPosition;
                 }
             }
 
@@ -451,7 +384,6 @@ namespace EDDiscovery.EliteDangerous
                 System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", datapath));
                 MonitorWatcher mw = new MonitorWatcher(datapath);
                 watchers.Add(mw);
-                mw.OnNewJournalEntry += NewPosition;
             }
 
             List<int> tobedeleted = new List<int>();
@@ -481,6 +413,18 @@ namespace EDDiscovery.EliteDangerous
 
         public void StartMonitor()
         {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            m_worker = new System.ComponentModel.BackgroundWorker();
+            m_worker.DoWork += ScanTickWorker;
+            m_worker.RunWorkerCompleted += ScanTickDone;
+            m_worker.WorkerSupportsCancellation = true;
+
+            m_scantimer = new System.Windows.Forms.Timer();
+            m_scantimer.Interval = 2000;
+            m_scantimer.Tick += ScanTick;
+            m_scantimer.Start();
+
             foreach (MonitorWatcher mw in watchers)
             {
                 mw.StartMonitor();
@@ -492,6 +436,61 @@ namespace EDDiscovery.EliteDangerous
             foreach (MonitorWatcher mw in watchers)
             {
                 mw.StopMonitor();
+            }
+
+            if (m_scantimer != null)
+            {
+                m_scantimer.Stop();
+                m_scantimer = null;
+            }
+
+            if (m_worker != null)
+            {
+                m_worker.CancelAsync();
+                m_worker = null;
+            }
+        }
+
+        private void ScanTick(object sender, EventArgs e)
+        {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            if (m_worker != null && !m_worker.IsBusy)
+            {
+                m_worker.RunWorkerAsync();
+            }
+        }
+
+        private void ScanTickWorker(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            var worker = sender as System.ComponentModel.BackgroundWorker;
+            var entries = new List<JournalEntry>();
+            e.Result = entries;
+            foreach (MonitorWatcher mw in watchers)
+            {
+                entries.AddRange(mw.ScanForNewEntries());
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+        }
+
+        private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            if (e.Error == null && !e.Cancelled)
+            {
+                List<JournalEntry> entries = (List<JournalEntry>)e.Result;
+
+                foreach (var ent in entries)                    // pass them to the handler
+                {
+                    System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
+                    if (OnNewJournalEntry != null)
+                        OnNewJournalEntry(ent);
+                }
             }
         }
 
