@@ -80,13 +80,17 @@ namespace EDDiscovery.EliteDangerous
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
                     List<JournalEntry> entries = reader.ReadJournalLog().ToList();      // this may create new commanders, and may write to the TLU db
+                    ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
 
                     using (DbTransaction tn = cn.BeginTransaction())
                     {
                         foreach (JournalEntry je in entries)
                         {
-                            System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", je.EventTimeUTC, je.EventTypeStr));
-                            je.Add(cn, tn);
+                            if (!existing[je.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(je, e)))
+                            {
+                                System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", je.EventTimeUTC, je.EventTypeStr));
+                                je.Add(cn, tn);
+                            }
                         }
 
                         tn.Commit();
@@ -269,6 +273,8 @@ namespace EDDiscovery.EliteDangerous
                     {
                         using (DbTransaction txn = cn.BeginTransaction())
                         {
+                            ents = ents.Where(je => JournalEntry.FindEntry(je).Count == 0).ToList();
+
                             foreach (JournalEntry je in ents)
                             {
                                 entries.Add(je);
@@ -492,12 +498,6 @@ namespace EDDiscovery.EliteDangerous
                         OnNewJournalEntry(ent);
                 }
             }
-        }
-
-        public void NewPosition(EliteDangerous.JournalEntry je)
-        {
-            if (OnNewJournalEntry != null)
-                OnNewJournalEntry(je);
         }
 
         private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
