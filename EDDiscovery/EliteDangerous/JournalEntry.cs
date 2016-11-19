@@ -708,6 +708,70 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
+        public static void RemoveGeneratedKeys(JObject obj, bool removeLocalised)
+        {
+            foreach (JProperty prop in obj.Properties().ToList())
+            {
+                if (prop.Name.StartsWith("EDD") || (removeLocalised && prop.Name.EndsWith("_Localised")))
+                {
+                    obj.Remove(prop.Name);
+                }
+            }
+
+            obj.Remove("StarPosFromEDSM");
+        }
+
+        public static bool AreSameEntry(JournalEntry ent1, JournalEntry ent2, JObject ent1jo = null, JObject ent2jo = null)
+        {
+            if (ent1.jEventData == null || ent2.jEventData == null)
+                return false;
+
+            if (ent1jo == null)
+            {
+                ent1jo = (JObject)ent1.jEventData.DeepClone();
+                RemoveGeneratedKeys(ent1jo, false);
+            }
+
+            if (ent2jo == null)
+            {
+                ent2jo = (JObject)ent2.jEventData.DeepClone();
+                RemoveGeneratedKeys(ent2jo, false);
+            }
+
+            return JToken.DeepEquals(ent1jo, ent2jo);
+        }
+
+        public static List<JournalEntry> FindEntry(JournalEntry ent)
+        {
+            List<JournalEntry> entries = new List<JournalEntry>();
+            JObject entjo = (JObject)ent.jEventData.DeepClone();
+            RemoveGeneratedKeys(entjo, false);
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime = @time AND TravelLogId = @tluid AND EventTypeId = @evttype ORDER BY Id ASC"))
+                {
+                    cmd.AddParameterWithValue("@cmdrid", ent.CommanderId);
+                    cmd.AddParameterWithValue("@time", ent.EventTimeUTC);
+                    cmd.AddParameterWithValue("@tluid", ent.TLUId);
+                    cmd.AddParameterWithValue("@evttype", ent.EventTypeID);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            JournalEntry jent = CreateJournalEntry(reader);
+                            if (!AreSameEntry(ent, jent, entjo))
+                            {
+                                entries.Add(jent);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return entries;
+        }
+
         public static int RemoveDuplicateFSDEntries(int currentcmdrid )
         {
             // list of systems in journal, sorted by time
