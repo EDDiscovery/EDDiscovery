@@ -28,6 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonExport = new ExtendedControls.ButtonExt();
+            this.checkBoxCustomAutoOpen = new ExtendedControls.CheckBoxCustom();
             this.groupBoxCustomFormat = new ExtendedControls.GroupBoxCustom();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.labelExtDataExport = new ExtendedControls.LabelExt();
@@ -37,19 +41,90 @@
             this.labelExtSeparator = new ExtendedControls.LabelExt();
             this.radioButtonCustomUSAUK = new ExtendedControls.RadioButtonCustom();
             this.radioButtonCustomEU = new ExtendedControls.RadioButtonCustom();
-            this.buttonExport = new ExtendedControls.ButtonExt();
-            this.checkBoxCustomAutoOpen = new ExtendedControls.CheckBoxCustom();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.groupBoxCustom1 = new ExtendedControls.GroupBoxCustom();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtExportVisited = new ExtendedControls.AutoCompleteTextBox();
+            this.buttonExportToFilteredSystems = new ExtendedControls.ButtonExt();
+            this.buttonExportOpenFolder = new ExtendedControls.ButtonExt();
+            this.btnExportTravel = new ExtendedControls.ButtonExt();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonExportToGalmap = new ExtendedControls.ButtonExt();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.groupBoxCustomFormat.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.flowLayoutPanel3.SuspendLayout();
+            this.groupBoxCustom1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80.88496F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.groupBoxCustomFormat, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.groupBoxCustom1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.buttonExportToGalmap, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(571, 356);
+            this.tableLayoutPanel1.TabIndex = 7;
+            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.buttonExport);
+            this.flowLayoutPanel1.Controls.Add(this.checkBoxCustomAutoOpen);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(472, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(96, 53);
+            this.flowLayoutPanel1.TabIndex = 2;
+            // 
+            // buttonExport
+            // 
+            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExport.BorderColorScaling = 1.25F;
+            this.buttonExport.ButtonColorScaling = 0.5F;
+            this.buttonExport.ButtonDisabledScaling = 0.5F;
+            this.buttonExport.Location = new System.Drawing.Point(3, 3);
+            this.buttonExport.Name = "buttonExport";
+            this.buttonExport.Size = new System.Drawing.Size(90, 24);
+            this.buttonExport.TabIndex = 1;
+            this.buttonExport.Text = "Export";
+            this.buttonExport.UseVisualStyleBackColor = true;
+            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
+            // 
+            // checkBoxCustomAutoOpen
+            // 
+            this.checkBoxCustomAutoOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxCustomAutoOpen.AutoSize = true;
+            this.checkBoxCustomAutoOpen.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomAutoOpen.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomAutoOpen.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomAutoOpen.Checked = true;
+            this.checkBoxCustomAutoOpen.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCustomAutoOpen.FontNerfReduction = 0.5F;
+            this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(18, 33);
+            this.checkBoxCustomAutoOpen.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomAutoOpen.Name = "checkBoxCustomAutoOpen";
+            this.checkBoxCustomAutoOpen.Size = new System.Drawing.Size(75, 17);
+            this.checkBoxCustomAutoOpen.TabIndex = 5;
+            this.checkBoxCustomAutoOpen.Text = "Auto open";
+            this.checkBoxCustomAutoOpen.TickBoxReductionSize = 10;
+            this.checkBoxCustomAutoOpen.UseVisualStyleBackColor = true;
             // 
             // groupBoxCustomFormat
             // 
@@ -199,78 +274,124 @@
             this.radioButtonCustomEU.Text = ";  (EU)";
             this.radioButtonCustomEU.UseVisualStyleBackColor = true;
             // 
-            // buttonExport
+            // groupBoxCustom1
             // 
-            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExport.BorderColorScaling = 1.25F;
-            this.buttonExport.ButtonColorScaling = 0.5F;
-            this.buttonExport.ButtonDisabledScaling = 0.5F;
-            this.buttonExport.Location = new System.Drawing.Point(3, 3);
-            this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(90, 24);
-            this.buttonExport.TabIndex = 1;
-            this.buttonExport.Text = "Export";
-            this.buttonExport.UseVisualStyleBackColor = true;
-            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
+            this.groupBoxCustom1.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustom1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxCustom1.AutoSize = true;
+            this.groupBoxCustom1.BackColorScaling = 0.5F;
+            this.groupBoxCustom1.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustom1.BorderColorScaling = 0.5F;
+            this.groupBoxCustom1.Controls.Add(this.tableLayoutPanel3);
+            this.groupBoxCustom1.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustom1.Location = new System.Drawing.Point(3, 180);
+            this.groupBoxCustom1.Name = "groupBoxCustom1";
+            this.groupBoxCustom1.Size = new System.Drawing.Size(463, 138);
+            this.groupBoxCustom1.TabIndex = 11;
+            this.groupBoxCustom1.TabStop = false;
+            this.groupBoxCustom1.Text = "Visited Stars Creator";
+            this.groupBoxCustom1.TextPadding = 0;
+            this.groupBoxCustom1.TextStartPosition = -1;
             // 
-            // checkBoxCustomAutoOpen
+            // tableLayoutPanel3
             // 
-            this.checkBoxCustomAutoOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxCustomAutoOpen.AutoSize = true;
-            this.checkBoxCustomAutoOpen.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomAutoOpen.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomAutoOpen.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomAutoOpen.Checked = true;
-            this.checkBoxCustomAutoOpen.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxCustomAutoOpen.FontNerfReduction = 0.5F;
-            this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(18, 33);
-            this.checkBoxCustomAutoOpen.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomAutoOpen.Name = "checkBoxCustomAutoOpen";
-            this.checkBoxCustomAutoOpen.Size = new System.Drawing.Size(75, 17);
-            this.checkBoxCustomAutoOpen.TabIndex = 5;
-            this.checkBoxCustomAutoOpen.Text = "Auto open";
-            this.checkBoxCustomAutoOpen.TickBoxReductionSize = 10;
-            this.checkBoxCustomAutoOpen.UseVisualStyleBackColor = true;
+            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel3.ColumnCount = 3;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.txtExportVisited, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.buttonExportToFilteredSystems, 2, 0);
+            this.tableLayoutPanel3.Controls.Add(this.buttonExportOpenFolder, 2, 1);
+            this.tableLayoutPanel3.Controls.Add(this.btnExportTravel, 1, 1);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 19);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(454, 100);
+            this.tableLayoutPanel3.TabIndex = 10;
             // 
-            // tableLayoutPanel1
+            // label1
             // 
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80.88496F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.groupBoxCustomFormat, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(571, 356);
-            this.tableLayoutPanel1.TabIndex = 7;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Filter";
             // 
-            // flowLayoutPanel1
+            // txtExportVisited
             // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.buttonExport);
-            this.flowLayoutPanel1.Controls.Add(this.checkBoxCustomAutoOpen);
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(472, 3);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(96, 53);
-            this.flowLayoutPanel1.TabIndex = 2;
+            this.txtExportVisited.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExportVisited.BorderColor = System.Drawing.Color.Transparent;
+            this.txtExportVisited.BorderColorScaling = 0.5F;
+            this.txtExportVisited.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.txtExportVisited.DropDownBorderColor = System.Drawing.Color.Green;
+            this.txtExportVisited.DropDownHeight = 200;
+            this.txtExportVisited.DropDownItemHeight = 20;
+            this.txtExportVisited.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.txtExportVisited.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.txtExportVisited.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.txtExportVisited.DropDownWidth = 0;
+            this.txtExportVisited.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.txtExportVisited.Location = new System.Drawing.Point(38, 3);
+            this.txtExportVisited.Name = "txtExportVisited";
+            this.txtExportVisited.Size = new System.Drawing.Size(231, 20);
+            this.txtExportVisited.TabIndex = 8;
+            // 
+            // buttonExportToFilteredSystems
+            // 
+            this.buttonExportToFilteredSystems.BorderColorScaling = 1.25F;
+            this.buttonExportToFilteredSystems.ButtonColorScaling = 0.5F;
+            this.buttonExportToFilteredSystems.ButtonDisabledScaling = 0.5F;
+            this.buttonExportToFilteredSystems.Location = new System.Drawing.Point(275, 3);
+            this.buttonExportToFilteredSystems.Name = "buttonExportToFilteredSystems";
+            this.buttonExportToFilteredSystems.Size = new System.Drawing.Size(140, 23);
+            this.buttonExportToFilteredSystems.TabIndex = 7;
+            this.buttonExportToFilteredSystems.Text = "Export filtered systems";
+            this.buttonExportToFilteredSystems.UseVisualStyleBackColor = true;
+            this.buttonExportToFilteredSystems.Click += new System.EventHandler(this.buttonExportToFilteredSystems_Click);
+            // 
+            // buttonExportOpenFolder
+            // 
+            this.buttonExportOpenFolder.BorderColorScaling = 1.25F;
+            this.buttonExportOpenFolder.ButtonColorScaling = 0.5F;
+            this.buttonExportOpenFolder.ButtonDisabledScaling = 0.5F;
+            this.buttonExportOpenFolder.Location = new System.Drawing.Point(275, 32);
+            this.buttonExportOpenFolder.Name = "buttonExportOpenFolder";
+            this.buttonExportOpenFolder.Size = new System.Drawing.Size(140, 23);
+            this.buttonExportOpenFolder.TabIndex = 10;
+            this.buttonExportOpenFolder.Text = "Open visited stars folder";
+            this.buttonExportOpenFolder.UseVisualStyleBackColor = true;
+            this.buttonExportOpenFolder.Click += new System.EventHandler(this.buttonExportOpenFolder_Click);
+            // 
+            // btnExportTravel
+            // 
+            this.btnExportTravel.BorderColorScaling = 1.25F;
+            this.btnExportTravel.ButtonColorScaling = 0.5F;
+            this.btnExportTravel.ButtonDisabledScaling = 0.5F;
+            this.btnExportTravel.Location = new System.Drawing.Point(38, 32);
+            this.btnExportTravel.Name = "btnExportTravel";
+            this.btnExportTravel.Size = new System.Drawing.Size(75, 23);
+            this.btnExportTravel.TabIndex = 11;
+            this.btnExportTravel.Text = "Travel";
+            this.btnExportTravel.UseVisualStyleBackColor = true;
+            this.btnExportTravel.Click += new System.EventHandler(this.btnExportTravel_Click);
             // 
             // flowLayoutPanel3
             // 
+            this.flowLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel3.AutoSize = true;
-            this.flowLayoutPanel3.Controls.Add(this.buttonExportToGalmap);
-            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 150);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(472, 150);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(463, 30);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(96, 0);
             this.flowLayoutPanel3.TabIndex = 7;
             // 
             // buttonExportToGalmap
@@ -278,7 +399,7 @@
             this.buttonExportToGalmap.BorderColorScaling = 1.25F;
             this.buttonExportToGalmap.ButtonColorScaling = 0.5F;
             this.buttonExportToGalmap.ButtonDisabledScaling = 0.5F;
-            this.buttonExportToGalmap.Location = new System.Drawing.Point(3, 3);
+            this.buttonExportToGalmap.Location = new System.Drawing.Point(3, 150);
             this.buttonExportToGalmap.Name = "buttonExportToGalmap";
             this.buttonExportToGalmap.Size = new System.Drawing.Size(211, 24);
             this.buttonExportToGalmap.TabIndex = 6;
@@ -294,17 +415,19 @@
             this.Name = "ExportControl";
             this.Size = new System.Drawing.Size(571, 356);
             this.Load += new System.EventHandler(this.ExportControl_Load);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.groupBoxCustomFormat.ResumeLayout(false);
             this.groupBoxCustomFormat.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
-            this.flowLayoutPanel3.ResumeLayout(false);
+            this.groupBoxCustom1.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -327,5 +450,12 @@
         private ExtendedControls.ComboBoxCustom comboBoxCustomExportType;
         private ExtendedControls.ButtonExt buttonExportToGalmap;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private ExtendedControls.GroupBoxCustom groupBoxCustom1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Label label1;
+        private ExtendedControls.AutoCompleteTextBox txtExportVisited;
+        private ExtendedControls.ButtonExt buttonExportToFilteredSystems;
+        private ExtendedControls.ButtonExt buttonExportOpenFolder;
+        private ExtendedControls.ButtonExt btnExportTravel;
     }
 }
