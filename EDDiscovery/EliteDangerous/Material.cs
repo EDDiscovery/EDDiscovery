@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace EDDiscovery2
+namespace EDDiscovery.EliteDangerous
 {
     public enum MaterialEnum
     {
@@ -55,17 +56,13 @@ namespace EDDiscovery2
         OutcropMetallic,
     }
 
-
-
-
+   
 
 
     public class Material
     {
         public MaterialEnum material;
         public int number;
-
-     
 
 
         public Material(MaterialEnum m)
@@ -260,5 +257,10 @@ namespace EDDiscovery2
 
     }
 
+    //public class Synthesis
+    //{
+    //    public string name;
+    //    List<Material> materials;
 
+    //}
 }
