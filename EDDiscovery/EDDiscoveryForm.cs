@@ -72,6 +72,7 @@ namespace EDDiscovery
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
+        public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
         public bool option_nowindowreposition { get; set; } = false;                             // Cmd line options
