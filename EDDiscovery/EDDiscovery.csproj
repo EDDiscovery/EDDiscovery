@@ -345,6 +345,14 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalWingAdd.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingJoin.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingLeave.cs" />
+    <Compile Include="EliteDangerous\Material.cs" />
+    <Compile Include="EliteDangerous\Synthesis.cs" />
+    <Compile Include="Forms\FindMaterialsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FindMaterialsForm.Designer.cs">
+      <DependentUpon>FindMaterialsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="JSON\JSONPrettyPrint.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
@@ -660,6 +668,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TabStrip.resx">
       <DependentUpon>TabStrip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
+      <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
