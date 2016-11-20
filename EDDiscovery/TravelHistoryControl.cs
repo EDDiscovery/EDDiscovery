@@ -670,6 +670,7 @@ namespace EDDiscovery
                 HistoryEntry currentsys = userControlTravelGrid.GetCurrentHistoryEntry;
                 _discoveryForm.Map.UpdateHistorySystem(currentsys.System);
                 _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.System.name);
+                _discoveryForm.ExportControl.UpdateHistorySystem(currentsys.System.name);
             }
         }
 
