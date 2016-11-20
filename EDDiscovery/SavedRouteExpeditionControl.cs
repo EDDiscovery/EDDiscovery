@@ -97,6 +97,8 @@ namespace EDDiscovery
             }
         };
 
+        public static bool DeleteIsPermanent = true;
+
         private List<SavedRouteClass> _savedRoutes;
         private SavedRouteClass _currentRoute;
         private EDDiscoveryForm _discoveryForm;
@@ -118,12 +120,14 @@ namespace EDDiscovery
 
             foreach (var initroute in InitialRoutes)
             {
-                if (!_savedRoutes.Any(r => r.Name == initroute.Name))
+                if (!_savedRoutes.Any(r => r.Name == initroute.Name || r.Name == "\x7F" + initroute.Name))
                 {
                     initroute.Add();
                     _savedRoutes.Add(initroute);
                 }
             }
+
+            _savedRoutes = _savedRoutes.Where(r => !r.Name.StartsWith("\x7F")).ToList();
 
             UpdateComboBox();
             _currentRoute = new SavedRouteClass("");
@@ -403,8 +407,23 @@ namespace EDDiscovery
                 }
             }
 
+            ClearRoute();
+        }
+
+        private void ClearRoute()
+        {
+            toolStripComboBoxRouteSelection.Text = "";
             _currentRoute = new SavedRouteClass { Name = "" };
             dataGridViewRouteSystems.Rows.Clear();
+            dateTimePickerStartDate.Value = DateTime.Now;
+            dateTimePickerStartDate.Checked = false;
+            dateTimePickerEndDate.Value = DateTime.Now;
+            dateTimePickerEndDate.Checked = false;
+            dateTimePickerStartTime.Value = DateTime.Now;
+            dateTimePickerStartTime.Checked = false;
+            dateTimePickerEndTime.Value = DateTime.Now;
+            dateTimePickerEndTime.Checked = false;
+            textBoxRouteName.Text = "";
         }
 
         private void toolStripButtonShowOn3DMap_Click(object sender, EventArgs e)
@@ -668,6 +687,26 @@ namespace EDDiscovery
             UpdateRouteInfo(route);
             dataGridViewRouteSystems.Rows.Clear();
             InsertRows(0, route.Systems.Reverse<string>().ToArray());
+        }
+
+        private void toolStripButtonDelete_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(_discoveryForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                if (DeleteIsPermanent)
+                {
+                    _currentRoute.Delete();
+                }
+                else
+                {
+                    _currentRoute.Name = "\x7F" + _currentRoute.Name;
+                    _currentRoute.Update();
+                }
+
+                _savedRoutes.Remove(_currentRoute);
+                UpdateComboBox();
+                ClearRoute();
+            }
         }
     }
 }
