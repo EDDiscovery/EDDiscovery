@@ -55,6 +55,7 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertCopiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
@@ -66,6 +67,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
             this.toolStripButtonSave,
+            this.toolStripButtonDelete,
             this.toolStripSeparator1,
             this.toolStripButtonShowOn3DMap,
             this.toolStripComboBoxRouteSelection});
@@ -110,12 +112,24 @@
             // 
             // toolStripComboBoxRouteSelection
             // 
+            this.toolStripComboBoxRouteSelection.ArrowWidth = 1;
+            this.toolStripComboBoxRouteSelection.BorderColor = System.Drawing.Color.White;
+            this.toolStripComboBoxRouteSelection.ButtonColorScaling = 0.5F;
+            this.toolStripComboBoxRouteSelection.DataSource = null;
+            this.toolStripComboBoxRouteSelection.DisplayMember = "";
+            this.toolStripComboBoxRouteSelection.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.toolStripComboBoxRouteSelection.DropDownHeight = 200;
             this.toolStripComboBoxRouteSelection.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboBoxRouteSelection.ItemHeight = 13;
+            this.toolStripComboBoxRouteSelection.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboBoxRouteSelection.Name = "toolStripComboBoxRouteSelection";
+            this.toolStripComboBoxRouteSelection.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.toolStripComboBoxRouteSelection.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.toolStripComboBoxRouteSelection.ScrollBarWidth = 16;
             this.toolStripComboBoxRouteSelection.SelectedIndex = -1;
             this.toolStripComboBoxRouteSelection.SelectedItem = null;
             this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(150, 22);
+            this.toolStripComboBoxRouteSelection.ValueMember = "";
             this.toolStripComboBoxRouteSelection.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxRouteSelection_SelectedIndexChanged);
             // 
             // panelRouteInfo
@@ -311,6 +325,15 @@
             this.deleteRowsToolStripMenuItem.Text = "Delete Rows";
             this.deleteRowsToolStripMenuItem.Click += new System.EventHandler(this.deleteRowsToolStripMenuItem_Click);
             // 
+            // toolStripButtonDelete
+            // 
+            this.toolStripButtonDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDelete.Image")));
+            this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
+            this.toolStripButtonDelete.Size = new System.Drawing.Size(94, 22);
+            this.toolStripButtonDelete.Text = "Delete Route";
+            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
+            // 
             // SavedRouteExpeditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -358,5 +381,6 @@
         private System.Windows.Forms.ToolStripMenuItem insertCopiedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteRowsToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonReverseRoute;
+        private System.Windows.Forms.ToolStripButton toolStripButtonDelete;
     }
 }

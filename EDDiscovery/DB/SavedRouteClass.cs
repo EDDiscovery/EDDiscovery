@@ -153,6 +153,31 @@ namespace EDDiscovery.DB
             }
         }
 
+        public bool Delete()
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                return Delete(cn);
+            }
+        }
+
+        public bool Delete(SQLiteConnectionUser cn)
+        {
+            using (DbCommand cmd = cn.CreateCommand("DELETE FROM routes_expeditions WHERE id=@id"))
+            {
+                cmd.AddParameterWithValue("@id", Id);
+                cmd.ExecuteNonQuery();
+            }
+
+            using (DbCommand cmd = cn.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid"))
+            {
+                cmd.AddParameterWithValue("@routeid", Id);
+                cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
+
 
         public static List<SavedRouteClass> GetAllSavedRoutes()
         {
