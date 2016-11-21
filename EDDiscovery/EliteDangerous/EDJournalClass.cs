@@ -269,24 +269,27 @@ namespace EDDiscovery.EliteDangerous
                     netlogpos = nfi.TravelLogUnit.Size;
                     List<JournalEntry> ents = nfi.ReadJournalLog().ToList();
 
-                    using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                    if (ents.Count > 0)
                     {
-                        using (DbTransaction txn = cn.BeginTransaction())
+                        using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
                         {
-                            ents = ents.Where(je => JournalEntry.FindEntry(je).Count == 0).ToList();
-
-                            foreach (JournalEntry je in ents)
+                            using (DbTransaction txn = cn.BeginTransaction())
                             {
-                                entries.Add(je);
-                                je.Add(cn, txn);
-                                ticksNoActivity = 0;
-                            }
+                                ents = ents.Where(je => JournalEntry.FindEntry(je).Count == 0).ToList();
 
-                            txn.Commit();
+                                foreach (JournalEntry je in ents)
+                                {
+                                    entries.Add(je);
+                                    je.Add(cn, txn);
+                                    ticksNoActivity = 0;
+                                }
+
+                                nfi.TravelLogUnit.Update(cn);
+
+                                txn.Commit();
+                            }
                         }
                     }
-
-                    nfi.TravelLogUnit.Update();
                 }
 
                 return entries;
