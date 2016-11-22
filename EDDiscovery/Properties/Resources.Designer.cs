@@ -1249,6 +1249,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap planet_landing {
+            get {
+                object obj = ResourceManager.GetObject("planet_landing", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PlanetaryNebula {
             get {
                 object obj = ResourceManager.GetObject("PlanetaryNebula", resourceCulture);
