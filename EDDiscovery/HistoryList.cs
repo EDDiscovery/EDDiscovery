@@ -20,6 +20,7 @@ namespace EDDiscovery
 
         public EliteDangerous.JournalTypeEnum EntryType;
         public long Journalid;
+        public JournalEntry journalEntry;
 
         public ISystem System;         // Must be set! All entries, even if they are not FSD entries.
                                        // The Minimum is name and edsm_id 
@@ -92,7 +93,7 @@ namespace EDDiscovery
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
-
+            
             int mapcolour = 0;
             journalupdate = false;
             bool starposfromedsm = false;
@@ -166,6 +167,7 @@ namespace EDDiscovery
                 Indexno = indexno,
                 EntryType = je.EventTypeID,
                 Journalid = je.Id,
+                journalEntry = je,
                 System = isys,
                 EventTimeUTC = je.EventTimeUTC,
                 MapColour = mapcolour,
