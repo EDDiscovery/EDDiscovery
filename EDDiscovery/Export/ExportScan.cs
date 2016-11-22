@@ -12,7 +12,7 @@ namespace EDDiscovery.Export
 {
     public class ExportScan : ExportBase
     {
-        private List<JournalEntry> scans;
+        private List<JournalScan> scans;
         private bool ShowPlanets;
         private bool ShowStars;
 
@@ -36,9 +36,10 @@ namespace EDDiscovery.Export
 
             List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
 
-            scans = new List<JournalEntry>();
+            scans = new List<JournalScan>();
 
-            scans = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
+            var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
+            scans = scans.ConvertAll<JournalScan>(x => (JournalScan)x);
 
             return true;
         }
@@ -115,91 +116,90 @@ namespace EDDiscovery.Export
 
                 writer.WriteLine();
 
-                foreach (JournalEntry je in scans)
+                foreach (JournalScan je in scans)
                 {
-                    if (je.EventTypeID == JournalTypeEnum.Scan)
+
+                    JournalScan scan = je as JournalScan;
+
+                    if (ShowPlanets == false)  // Then only show stars.
+                        if (scan.StarType.Equals(""))
+                            continue;
+
+
+                    if (ShowStars == false)   // Then only show planets
+                        if (scan.PlanetClass.Equals(""))
+                            continue;
+
+
+                    writer.Write(MakeValueCsvFriendly(scan.EventTimeUTC));
+                    writer.Write(MakeValueCsvFriendly(scan.BodyName));
+                    writer.Write(MakeValueCsvFriendly(scan.DistanceFromArrivalLS));
+
+                    if (ShowStars)
                     {
-                        JournalScan scan = je as JournalScan;
-
-                        if (ShowPlanets == false)  // Then only show stars.
-                            if (scan.StarType.Equals(""))
-                                continue;
-
-
-                        if (ShowStars == false)   // Then only show planets
-                            if (scan.PlanetClass.Equals(""))
-                                continue;
-
-
-                        writer.Write(MakeValueCsvFriendly(scan.EventTimeUTC));
-                        writer.Write(MakeValueCsvFriendly(scan.BodyName));
-                        writer.Write(MakeValueCsvFriendly(scan.DistanceFromArrivalLS));
-
-                        if (ShowStars)
-                        {
-                            writer.Write(MakeValueCsvFriendly(scan.StarType));
-                            writer.Write(MakeValueCsvFriendly(scan.StellarMass));
-                            writer.Write(MakeValueCsvFriendly(scan.AbsoluteMagnitude));
-                            writer.Write(MakeValueCsvFriendly(scan.Age));
-                        }
-
-                        
-                        writer.Write(MakeValueCsvFriendly(scan.Radius));
-                        writer.Write(MakeValueCsvFriendly(scan.RotationPeriod));
-                        writer.Write(MakeValueCsvFriendly(scan.SurfaceTemperature));
-
-                        if (ShowPlanets)
-                        {
-                            writer.Write(MakeValueCsvFriendly(scan.TidalLock));
-                            writer.Write(MakeValueCsvFriendly(scan.TerraformState));
-                            writer.Write(MakeValueCsvFriendly(scan.PlanetClass));
-                            writer.Write(MakeValueCsvFriendly(scan.Atmosphere));
-                            writer.Write(MakeValueCsvFriendly(scan.Volcanism));
-                            writer.Write(MakeValueCsvFriendly(scan.SurfaceGravity));
-                            writer.Write(MakeValueCsvFriendly(scan.SurfacePressure));
-                            writer.Write(MakeValueCsvFriendly(scan.Landable));
-                        }
-                        // Common orbital param
-                        writer.Write(MakeValueCsvFriendly(scan.SemiMajorAxis));
-                        writer.Write(MakeValueCsvFriendly(scan.Eccentricity));
-                        writer.Write(MakeValueCsvFriendly(scan.OrbitalInclination));
-                        writer.Write(MakeValueCsvFriendly(scan.Periapsis));
-                        writer.Write(MakeValueCsvFriendly(scan.OrbitalPeriod));
-
-
-
-                        if (ShowPlanets)
-                        {
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Carbon")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Iron")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Nickel")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Phosphorus")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Sulphur")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Arsenic")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Chromium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Germanium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Manganese")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Selenium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Vanadium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Zinc")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Zirconium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Cadmium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Mercury")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Molybdenum")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Niobium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Tin")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Tungsten")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Antimony")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Polonium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Ruthenium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Technetium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Tellurium")));
-                            writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Yttrium")));
-                        }
-
-
-                        writer.WriteLine();
+                        writer.Write(MakeValueCsvFriendly(scan.StarType));
+                        writer.Write(MakeValueCsvFriendly(scan.StellarMass));
+                        writer.Write(MakeValueCsvFriendly(scan.AbsoluteMagnitude));
+                        writer.Write(MakeValueCsvFriendly(scan.Age));
                     }
+
+
+                    writer.Write(MakeValueCsvFriendly(scan.Radius));
+                    writer.Write(MakeValueCsvFriendly(scan.RotationPeriod));
+                    writer.Write(MakeValueCsvFriendly(scan.SurfaceTemperature));
+
+                    if (ShowPlanets)
+                    {
+                        writer.Write(MakeValueCsvFriendly(scan.TidalLock));
+                        writer.Write(MakeValueCsvFriendly(scan.TerraformState));
+                        writer.Write(MakeValueCsvFriendly(scan.PlanetClass));
+                        writer.Write(MakeValueCsvFriendly(scan.Atmosphere));
+                        writer.Write(MakeValueCsvFriendly(scan.Volcanism));
+                        writer.Write(MakeValueCsvFriendly(scan.SurfaceGravity));
+                        writer.Write(MakeValueCsvFriendly(scan.SurfacePressure));
+                        writer.Write(MakeValueCsvFriendly(scan.Landable));
+                    }
+                    // Common orbital param
+                    writer.Write(MakeValueCsvFriendly(scan.SemiMajorAxis));
+                    writer.Write(MakeValueCsvFriendly(scan.Eccentricity));
+                    writer.Write(MakeValueCsvFriendly(scan.OrbitalInclination));
+                    writer.Write(MakeValueCsvFriendly(scan.Periapsis));
+                    writer.Write(MakeValueCsvFriendly(scan.OrbitalPeriod));
+
+
+
+                    if (ShowPlanets)
+                    {
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Carbon")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Iron")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Nickel")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Phosphorus")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Sulphur")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Arsenic")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Chromium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Germanium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Manganese")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Selenium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Vanadium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Zinc")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Zirconium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Cadmium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Mercury")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Molybdenum")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Niobium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Tin")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Tungsten")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Antimony")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Polonium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Ruthenium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Technetium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Tellurium")));
+                        writer.Write(MakeValueCsvFriendly(scan.GetMaterial("Yttrium")));
+                    }
+
+
+                    writer.WriteLine();
+
                 }
             }
 
