@@ -45,10 +45,11 @@ namespace EDDiscovery.UserControls
             travelhistorycontrol = ed.TravelControl;
             displaynumber = vn;
             travelhistorycontrol.OnTravelSelectionChanged += Display;
-            SetSize(64);
 
             checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMaterials", true);
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMoons", true);
+            int size = SQLiteDBClass.GetSettingInt("ScanPanelSize", 64);
+            SetSizeCheckBoxes(size);
         }
 
         public override void LoadLayout()
@@ -252,10 +253,12 @@ namespace EDDiscovery.UserControls
 
             if (sc != null)
             {
+                bool indicatematerials = sc.HasMaterials && !checkBoxMaterials.Checked;
+
                 planet = sc.GetPlanetClassImage();
                 tip = sc.DisplayString(true);
 
-                if ( sc.IsLandable || sc.HasRings )
+                if ( sc.IsLandable || sc.HasRings || indicatematerials )
                 {
                     Bitmap bmp = new Bitmap(size.Width * 2, hoff * 6);
 
@@ -267,7 +270,14 @@ namespace EDDiscovery.UserControls
                             g.DrawImage(EDDiscovery.Properties.Resources.planet_landing, new Rectangle(hoff,0, hoff*6, hoff*6) );
 
                         if (sc.HasRings)
-                            g.DrawImage(EDDiscovery.Properties.Resources.Ring_Only_512, new Rectangle(0,hoff, size.Width * 2, size.Height));
+                            g.DrawImage(sc.Rings.Count()>1 ? EDDiscovery.Properties.Resources.RingGap512 : EDDiscovery.Properties.Resources.Ring_Only_512, 
+                                            new Rectangle(-2, hoff, size.Width * 2, size.Height));
+
+                        if (indicatematerials)
+                        {
+                            Image mm = EDDiscovery.Properties.Resources.materiamoreindicator;
+                            g.DrawImage(mm, new Rectangle(bmp.Width-mm.Width, bmp.Height-mm.Height, mm.Width, mm.Height));
+                        }
                     }
 
                     endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), ownname, tip , 0);
@@ -279,7 +289,7 @@ namespace EDDiscovery.UserControls
                     offset += size.Width / 2;
                 }
 
-                if (sc.HasMaterials)
+                if (sc.HasMaterials && checkBoxMaterials.Checked)
                 {
                     Point matpos = new Point(endpoint.X + 4, curpos.Y);
                     Point endmat = CreateMaterialNodes(pc, sc, matpos, materialsize);
@@ -307,40 +317,31 @@ namespace EDDiscovery.UserControls
 
             string matclicktext = sn.DisplayMaterials(2);
 
-            if (checkBoxMaterials.Checked)
+            foreach (KeyValuePair<string, double> sd in sn.Materials)
             {
-                foreach (KeyValuePair<string, double> sd in sn.Materials)
+                string abv = sd.Key.Substring(0, 1);
+                string tooltip = sd.Key;
+                Color fillc = Color.Yellow;
+
+                EDDiscovery2.DB.MaterialCommodities mc = EDDiscovery2.DB.MaterialCommodities.GetCachedMaterial(sd.Key);
+                if (mc != null)
                 {
-                    string abv = sd.Key.Substring(0, 1);
-                    string tooltip = sd.Key;
-                    Color fillc = Color.Yellow;
-
-                    EDDiscovery2.DB.MaterialCommodities mc = EDDiscovery2.DB.MaterialCommodities.GetCachedMaterial(sd.Key);
-                    if (mc != null)
-                    {
-                        abv = mc.shortname;
-                        fillc = mc.colour;
-                        tooltip = mc.name + " (" + mc.shortname + ") " + mc.type + " " + sd.Value.ToString("0.0") + "%";
-                    }
-
-                    CreateMaterialImage(pc, matpos, matsize, abv, tooltip + "\n\n" + "All " + matclicktext, tooltip, fillc, Color.Black);
-
-                    maximum = new Point(Math.Max(maximum.X, matpos.X + matsize.Width), Math.Max(maximum.Y, matpos.Y + matsize.Height));
-
-                    if (++noperline == 4)
-                    {
-                        matpos = new Point(startpos.X, matpos.Y + matsize.Height + materialspacer);
-                        noperline = 0;
-                    }
-                    else
-                        matpos.X += matsize.Width + materialspacer;
+                    abv = mc.shortname;
+                    fillc = mc.colour;
+                    tooltip = mc.name + " (" + mc.shortname + ") " + mc.type + " " + sd.Value.ToString("0.0") + "%";
                 }
-            }
-            else
-            {
-                maximum = CreateImageLabel(pc, EDDiscovery.Properties.Resources.material, matpos, materialsize, null, "All " + matclicktext, 0);
-             //   CreateMaterialImage(pc, matpos, matsize, "+", "All " + matclicktext, "All " + matclicktext, Color.Black, Color.Orange);
-             //   maximum = new Point(Math.Max(maximum.X, matpos.X + matsize.Width), Math.Max(maximum.Y, matpos.Y + matsize.Height));
+
+                CreateMaterialImage(pc, matpos, matsize, abv, tooltip + "\n\n" + "All " + matclicktext, tooltip, fillc, Color.Black);
+
+                maximum = new Point(Math.Max(maximum.X, matpos.X + matsize.Width), Math.Max(maximum.Y, matpos.Y + matsize.Height));
+
+                if (++noperline == 4)
+                {
+                    matpos = new Point(startpos.X, matpos.Y + matsize.Height + materialspacer);
+                    noperline = 0;
+                }
+                else
+                    matpos.X += matsize.Width + materialspacer;
             }
 
             return maximum;
@@ -450,6 +451,37 @@ namespace EDDiscovery.UserControls
         {
             SQLiteDBClass.PutSettingBool("ScanPanelMoons", checkBoxMoons.Checked);
             DrawSystem(last_sn);
+        }
+
+        bool userchangesize = true;
+        void SetSizeCheckBoxes(int size)
+        {
+            userchangesize = false;
+            checkBoxLarge.Checked = (size == 96);
+            checkBoxMedium.Checked = (size == 64);
+            checkBoxSmall.Checked = (size == 48);
+            userchangesize = true;
+            SetSize(size);
+            SQLiteDBClass.PutSettingInt("ScanPanelSize", size);
+            DrawSystem(last_sn);
+        }
+
+        private void checkBoxLarge_CheckedChanged(object sender, EventArgs e)
+        {
+            if (userchangesize)
+                SetSizeCheckBoxes(96);
+        }
+
+        private void checkBoxMedium_CheckedChanged(object sender, EventArgs e)
+        {
+            if (userchangesize)
+                SetSizeCheckBoxes(64);
+        }
+
+        private void checkBoxSmall_CheckedChanged(object sender, EventArgs e)
+        {
+            if (userchangesize)
+                SetSizeCheckBoxes(48);
         }
 
         void ShowInfo(string text , bool onright )
