@@ -112,7 +112,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public StarPlanetRing[] Rings { get; set; }
-        public bool HasRings { get { return Rings != null && Rings.Length>0; } }
+        public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
 
         public bool? nTidalLock { get; set; }
         public string TerraformState { get; set; }
@@ -125,6 +125,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nSurfacePressure { get; set; }
         public bool? nLandable { get; set; }
 
+        public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
         public Dictionary<string, double> Materials { get; set; }
 
@@ -160,7 +161,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                                      );
             }
 
-            if (nLandable.HasValue && nLandable.Value)
+            if (IsLandable)
                 scanText.AppendFormat(", Landable");
 
             scanText.AppendFormat("\n");
