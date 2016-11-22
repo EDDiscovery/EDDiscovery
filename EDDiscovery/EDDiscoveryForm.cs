@@ -1757,7 +1757,7 @@ namespace EDDiscovery
 
             worker.ReportProgress(-1, "Resolving systems");
 
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(args.CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
 
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())

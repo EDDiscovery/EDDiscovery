@@ -616,8 +616,7 @@ namespace EDDiscovery
             comboBoxCommander.ValueMember = "Nr";
             comboBoxCommander.DisplayMember = "Name";
 
-            EDCommander currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander;
-            comboBoxCommander.SelectedIndex = commanders.IndexOf(currentcmdr);
+            comboBoxCommander.SelectedIndex = _discoveryForm.DisplayedCommander + 1;        // -1 if hidden, which is entry 0, etc
             comboBoxCommander.Enabled = true;
         }
 
