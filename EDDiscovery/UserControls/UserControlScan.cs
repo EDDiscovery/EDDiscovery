@@ -23,7 +23,10 @@ namespace EDDiscovery.UserControls
         double labelwidthmult;
         int labelwidththreshold;
         const int leftmargin = 30;
-        
+        const int topmargin = 10;
+        const int materialspacer = 4;
+        const int labelnerf = 4;
+
         StarScan.SystemNode last_sn = null;
         Point last_maxdisplayarea;
 
@@ -97,7 +100,7 @@ namespace EDDiscovery.UserControls
             if (sn == null)
                 return;
          
-            Point curpos = new Point(leftmargin, 0);
+            Point curpos = new Point(leftmargin, topmargin);
             last_maxdisplayarea = curpos;
 
             List<Control> starcontrols = new List<Control>();
@@ -126,13 +129,13 @@ namespace EDDiscovery.UserControls
                     else
                     {
                         star = JournalScan.GetStarImageNotScanned();
-                        tip = "Star " + starnode.fullname;
+                        tip = starnode.fullname + "\n\nNo scan data available";
                     }
 
-                    maxstarpos = CreateImageLabel(starcontrols, star, curpos, starsize, starnode.ownname, tip);
+                    maxstarpos = CreateImageLabel(starcontrols, star, curpos, starsize, starnode.ownname, tip,0);
                 }
                 else
-                    maxstarpos = CreateImageLabel(starcontrols, EDDiscovery.Properties.Resources.Barycentre, curpos, starsize, starnode.ownname, "Barycentre of " + starnode.fullname);
+                    maxstarpos = CreateImageLabel(starcontrols, EDDiscovery.Properties.Resources.Barycentre, curpos, starsize, starnode.ownname, "Barycentre of " + starnode.fullname,0);
 
                 curpos = new Point(maxstarpos.X + itemsepar.Width, curpos.Y);
 
@@ -146,7 +149,7 @@ namespace EDDiscovery.UserControls
                     curpos = new Point(maxitemspos.X + itemsepar.Width, curpos.Y);   // move to the right
                 }
                 
-                curpos.Y += (starsize.Height - planetsize.Height) / 2;            // slide down for planet vs star difference in size
+                curpos.Y += starsize.Height/2 - planetsize.Height*3/4;            // slide down for planet vs star difference in size
 
                 //System.Diagnostics.Debug.WriteLine("Moon Cp " + curpos);
 
@@ -199,8 +202,10 @@ namespace EDDiscovery.UserControls
                 if (name.Length > starname.Length && name.Substring(0, starname.Length).Equals(starname))
                     name = name.Substring(starname.Length).Trim();
 
+                curpos.X += 4;      // a little spacing, image is tight
+
                 endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt, curpos, beltsize, name,
-                                                    sc.RingInformationMoons(i));
+                                                    sc.RingInformationMoons(i),0);
 
                 curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
             }
@@ -208,113 +213,90 @@ namespace EDDiscovery.UserControls
             return endbelt;
         }
 
-        Point CreatePlanetTree( List<Control> pc, StarScan.ScanNode planetnode , Point curpos )
+        // return right bottom of area used from curpos
+        Point CreatePlanetTree(List<Control> pc, StarScan.ScanNode planetnode , Point curpos )
         {
-            Image planet;
-            string tip;
-            Point maxtreepos = curpos;
+            int offset = planetsize.Width/2 +  moonsize.Width/2;     // pass in normal offset if not double width item (half moon half planet)
 
-            int planetmiddle = moonsize.Width/2 + planetsize.Width/2;     // default planet centre..
-
-            if (planetnode.scandata != null)
-            {
-                planet = planetnode.scandata.GetPlanetClassImage();
-                tip = planetnode.scandata.DisplayString(true);
-
-                if (planetnode.scandata.HasRings)                                       // we allocate 2 x planetwidth to allow for rings
-                {
-                    Bitmap bmp = new Bitmap(planetsize.Width * 2, planetsize.Height);
-                    using (Graphics g = Graphics.FromImage(bmp))
-                    {
-                        g.DrawImage(planet, planetsize.Width / 2, 0, planetsize.Width, planetsize.Height);
-                        g.DrawImage(EDDiscovery.Properties.Resources.Ring_Only_512, new Rectangle(-2, 0, bmp.Width, bmp.Height));
-                    }
-
-                    maxtreepos = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), planetnode.ownname, tip);
-                    planetmiddle = planetsize.Width;        // because the image is 2 planet widths wide
-                }
-                else
-                {           // okay here,we create the image at the moonwidth/2 point, to allow space for a double moon width
-                    maxtreepos = CreateImageLabel(pc, planet, new Point(curpos.X + moonsize.Width/2, curpos.Y), planetsize, planetnode.ownname, tip);
-                }
-            }
-            else
-            {
-                planet = JournalScan.GetPlanetImageNotScanned();
-                tip = planetnode.fullname;
-                // again, at moonsize.w/2, to allow for a double moon size with rings
-                maxtreepos = CreateImageLabel(pc, planet, new Point(curpos.X + moonsize.Width / 2, curpos.Y), planetsize, planetnode.ownname, tip);
-            }
-
-            if (planetnode.scandata != null && planetnode.scandata.HasMaterials )
-            {
-                Point matpos = new Point(maxtreepos.X + 4, curpos.Y);
-                Point endmat = CreateMaterialNodes(pc, planetnode.scandata, matpos, materialsize);
-                int maxy = Math.Max(maxtreepos.Y, endmat.Y);        // materials may not drop below planet if on one line
-                maxtreepos = new Point(Math.Max(maxtreepos.X, endmat.X), Math.Max(maxtreepos.Y, maxy)); // record new right point..
-            }
-
-
-            //based on planesize-moonwidth/2, with space for a double moon width
-            Point moonpos = new Point(curpos.X + planetmiddle - moonsize.Width/2, maxtreepos.Y + itemsepar.Height);    // moon
+            Point maxtreepos = CreatePlanetMoonRingLanding(pc, planetnode.scandata, JournalScan.GetPlanetImageNotScanned(), 
+                                curpos, planetsize, planetnode.ownname, ref offset , true);        // offset passes in the suggested offset, returns the centre offset
 
             if (planetnode.children != null && checkBoxMoons.Checked)
             {
+                offset -= moonsize.Width;               // offset is centre of planet image, back off by a moon width to allow for 2 moon widths centred
+
+                Point moonpos = new Point(curpos.X + offset, maxtreepos.Y + itemsepar.Height);    // moon pos
+
                 foreach (StarScan.ScanNode moonnode in planetnode.children.Values)
                 {
-                    Image moon;
-                    string mtip;
-                    Point moonposend = moonpos;
+                    int offsetm = moonsize.Width / 2;                // pass in normal offset if not double width item (half moon from moonpos.x)
 
-                    if (moonnode.scandata != null)
-                    {
-                        moon = moonnode.scandata.GetPlanetClassImage();
-                        mtip = moonnode.scandata.DisplayString(true);
+                    Point max = CreatePlanetMoonRingLanding(pc, moonnode.scandata, JournalScan.GetMoonImageNotScanned(), moonpos, moonsize, moonnode.ownname, ref offsetm , false);
 
-                        if ( moonnode.scandata.HasRings )
-                        {
-                            Bitmap bmp = new Bitmap(moonsize.Width * 2, moonsize.Height);
-                            using (Graphics g = Graphics.FromImage(bmp))
-                            {
-                                g.DrawImage(moon, moonsize.Width / 2, 0, moonsize.Width, moonsize.Height);
-                                g.DrawImage(EDDiscovery.Properties.Resources.Ring_Only_512, new Rectangle(-2, 0, bmp.Width, bmp.Height));
-                            }
-
-                            moonposend = CreateImageLabel(pc, bmp, new Point(moonpos.X - moonsize.Width/2, moonpos.Y), new Size(bmp.Width, bmp.Height), moonnode.ownname, tip);
-                        }
-                        else
-                            moonposend = CreateImageLabel(pc, moon, moonpos, moonsize, moonnode.ownname, mtip);
-
-                    }
-                    else
-                    {
-                        moon = JournalScan.GetMoonImageNotScanned();
-                        mtip = "Moon " + moonnode.fullname;
-                        moonposend = CreateImageLabel(pc, moon, moonpos, moonsize, moonnode.ownname, mtip);
-                    }
-
-                    if (moonnode.scandata != null && moonnode.scandata.HasMaterials)
-                    {
-                        Point matpos = new Point(moonposend.X + 4, moonpos.Y);
-
-                        Point endmat = CreateMaterialNodes(pc, moonnode.scandata, matpos, materialsize);
-
-                        int maxy = Math.Max(moonposend.Y, endmat.Y);        // materials may not drop below moon if on one line
-
-                        moonpos = new Point(moonpos.X, maxy + itemsepar.Height);
-                        maxtreepos = new Point(Math.Max(maxtreepos.X, endmat.X), Math.Max(maxtreepos.Y, maxy));
-                    }
-                    else
-                    {
-                        moonpos = new Point(moonpos.X, moonposend.Y + itemsepar.Height);
-                        maxtreepos = new Point(Math.Max(maxtreepos.X, moonposend.X), Math.Max(maxtreepos.Y, moonposend.Y));
-                    }
+                    moonpos = new Point(moonpos.X, max.Y + itemsepar.Height);
+                    maxtreepos = new Point(Math.Max(maxtreepos.X, max.X), Math.Max(maxtreepos.Y, max.Y));
                 }
             }
 
             return maxtreepos;
         }
 
+        // return right bottom of area used from curpos
+        Point CreatePlanetMoonRingLanding(List<Control> pc, JournalScan sc, Image notscanned, Point curpos, Size size, string ownname, ref int offset , bool alignhorz)
+        {
+            Image planet;
+            string tip;
+            Point endpoint = curpos;
+            int hoff = size.Height / 4;
+            int alignhoff = (alignhorz) ? hoff : 0;
+
+            if (sc != null)
+            {
+                planet = sc.GetPlanetClassImage();
+                tip = sc.DisplayString(true);
+
+                if ( sc.IsLandable || sc.HasRings )
+                {
+                    Bitmap bmp = new Bitmap(size.Width * 2, hoff * 6);
+
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        g.DrawImage(planet, size.Width/2, hoff, size.Width, size.Height);
+
+                        if ( sc.IsLandable)
+                            g.DrawImage(EDDiscovery.Properties.Resources.planet_landing, new Rectangle(hoff,0, hoff*6, hoff*6) );
+
+                        if (sc.HasRings)
+                            g.DrawImage(EDDiscovery.Properties.Resources.Ring_Only_512, new Rectangle(0,hoff, size.Width * 2, size.Height));
+                    }
+
+                    endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), ownname, tip , 0);
+                    offset = size.Width;                                        // return that the middle is now this
+                }
+                else
+                {        
+                    endpoint = CreateImageLabel(pc, planet, new Point(curpos.X + offset, curpos.Y + alignhoff), size, ownname, tip , alignhoff);
+                    offset += size.Width / 2;
+                }
+
+                if (sc.HasMaterials)
+                {
+                    Point matpos = new Point(endpoint.X + 4, curpos.Y);
+                    Point endmat = CreateMaterialNodes(pc, sc, matpos, materialsize);
+                    endpoint = new Point(Math.Max(endpoint.X, endmat.X), Math.Max(endpoint.Y, endmat.Y)); // record new right point..
+                }
+            }
+            else
+            {
+                planet = notscanned;
+                tip = ownname + "\n\nNo scan data available";
+                // again, at moonsize.w/2, to allow for a double moon size with rings
+                endpoint = CreateImageLabel(pc, planet, new Point(curpos.X + offset, curpos.Y + alignhoff), planetsize, ownname, tip , alignhoff);
+                offset += size.Width / 2;       // return the middle used was this..
+            }
+
+            return endpoint;
+        }
 
 
         Point CreateMaterialNodes(List<Control> pc, JournalScan sn, Point matpos, Size matsize)
@@ -347,17 +329,18 @@ namespace EDDiscovery.UserControls
 
                     if (++noperline == 4)
                     {
-                        matpos = new Point(startpos.X, matpos.Y + matsize.Height + 4);
+                        matpos = new Point(startpos.X, matpos.Y + matsize.Height + materialspacer);
                         noperline = 0;
                     }
                     else
-                        matpos.X += matsize.Width + 4;
+                        matpos.X += matsize.Width + materialspacer;
                 }
             }
             else
             {
-                CreateMaterialImage(pc, matpos, matsize, "+", "All " + matclicktext, "All " + matclicktext, Color.Black, Color.Orange);
-                maximum = new Point(Math.Max(maximum.X, matpos.X + matsize.Width), Math.Max(maximum.Y, matpos.Y + matsize.Height));
+                maximum = CreateImageLabel(pc, EDDiscovery.Properties.Resources.material, matpos, materialsize, null, "All " + matclicktext, 0);
+             //   CreateMaterialImage(pc, matpos, matsize, "+", "All " + matclicktext, "All " + matclicktext, Color.Black, Color.Orange);
+             //   maximum = new Point(Math.Max(maximum.X, matpos.X + matsize.Width), Math.Max(maximum.Y, matpos.Y + matsize.Height));
             }
 
             return maximum;
@@ -385,7 +368,7 @@ namespace EDDiscovery.UserControls
             pc.Add(dp);
         }
 
-        Point CreateImageLabel(List<Control> c, Image i, Point postopright, Size size, string label, string ttext)
+        Point CreateImageLabel(List<Control> c, Image i, Point postopright, Size size, string label, string ttext , int labelhoff)
         {
             System.Diagnostics.Debug.WriteLine(label + " " + postopright + " size " + size);
             PictureBox pb = new PictureBox();
@@ -393,7 +376,7 @@ namespace EDDiscovery.UserControls
             pb.Size = size;
             pb.Location = postopright;
             pb.SizeMode = PictureBoxSizeMode.StretchImage;
-            //pb.BackColor = Color.Red;     // use to show boundaries
+            //pb.BackColor = Color.DarkGray;     // use to show boundaries during debugging
             pb.Tag = ttext;
             pb.Click += ImageClick;
             c.Add(pb);
@@ -409,13 +392,14 @@ namespace EDDiscovery.UserControls
                 dp.ImageSelected = DrawnPanel.ImageType.Text;
                 dp.ImageText = label;
                 int labelhalfwidth = ((size.Width<labelwidththreshold) ? ((int)(size.Width * labelwidthmult)) : size.Width)/2;
-
-                dp.Location = new Point(postopright.X + size.Width / 2 - labelhalfwidth, postopright.Y + size.Height);
+                                                                                                
+                                                                                                        // 4 just nerfs it up a bit
+                dp.Location = new Point(postopright.X + size.Width / 2 - labelhalfwidth, postopright.Y + size.Height - labelnerf + labelhoff );
                 dp.Size = new Size(labelhalfwidth*2, 20);
                 dp.ForeColor = discoveryform.theme.LabelColor;
                 c.Add(dp);
 
-                max = new Point( Math.Max(postopright.X + size.Width / 2 + labelhalfwidth, max.X), postopright.Y + size.Height + 20);
+                max = new Point( Math.Max(postopright.X + size.Width / 2 + labelhalfwidth, max.X), dp.Location.Y + 20);
             }
 
             System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
