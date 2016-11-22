@@ -959,7 +959,7 @@ namespace EDDiscovery2
             {                   // selected items need VScroll controlled here. Others control it themselves
                 VScrollBarCustom MyDgv = (VScrollBarCustom)myControl;
 
-                System.Diagnostics.Debug.WriteLine("VScrollBarCustom Theme " + level + ":" + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString() + " " + parentcontroltype.Name);
+                //System.Diagnostics.Debug.WriteLine("VScrollBarCustom Theme " + level + ":" + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString() + " " + parentcontroltype.Name);
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))
                 {
                     Color c1 = currentsettings.colors[Settings.CI.grid_scrollbutton];

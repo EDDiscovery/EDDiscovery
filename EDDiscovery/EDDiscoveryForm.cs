@@ -1882,18 +1882,17 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        private void AddScanToBestSystem(StarScan starscan, JournalScan je, int startindex, List<HistoryEntry> hl)
+        private bool AddScanToBestSystem(StarScan starscan, JournalScan je, int startindex, List<HistoryEntry> hl)
         {
             for (int j = startindex; j >= 0; j--)
             {
                 if (je.IsStarNameRelated(hl[j].System.name))       // if its part of the name, use it
                 {
-                    starscan.Process(je, hl[j].System);
-                    return;
+                    return starscan.Process(je, hl[j].System);
                 }
             }
 
-            starscan.Process(je, hl[startindex].System);         // no relationship, add..
+            return starscan.Process(je, hl[startindex].System);         // no relationship, add..
         }
 
         public void RefreshDisplays()
@@ -1933,7 +1932,14 @@ namespace EDDiscovery
                 history.Add(he);
 
                 if (je.EventTypeID == JournalTypeEnum.Scan)
-                    AddScanToBestSystem(history.starscan, je as JournalScan, history.Count - 1, history.EntryOrder);
+                {
+                    JournalScan js = je as JournalScan;
+                    if (!AddScanToBestSystem(history.starscan, js, history.Count - 1, history.EntryOrder))
+                    {
+                        LogLineHighlight("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                         "Scan object " + js.BodyName + " in " + he.System.name);
+                    }
+                }
 
                 if (OnNewEntry != null)
                     OnNewEntry(he,history);

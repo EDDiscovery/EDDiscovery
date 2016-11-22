@@ -576,10 +576,10 @@ namespace EDDiscovery
             userControlTravelGrid.LoadLayout();
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
-        
-            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", 4);        
-            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", 0);
-            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", 1);
+
+            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)PopOuts.Scan);
+            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)PopOuts.Log);
+            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)PopOuts.NS);
         }
 
         public void SaveSettings()     // called by form when closing
