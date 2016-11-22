@@ -1959,6 +1959,15 @@ namespace EDDiscovery
             sync.StartSync(eddn, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn);
 
         }
+
+        private void materialSearchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FindMaterialsForm frm = new FindMaterialsForm();
+
+            frm.Show(this);
+
+
+        }
     }
 }
 

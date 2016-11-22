@@ -48,6 +48,7 @@
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rescanAllJournalFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,7 +88,7 @@
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.materialSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -122,6 +123,7 @@
             this.show3DMapsToolStripMenuItem,
             this.changeMapColorToolStripMenuItem,
             this.editThemeToolStripMenuItem,
+            this.materialSearchToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
@@ -242,6 +244,13 @@
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Text = "Delete duplicate FSD Jump entries";
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Click += new System.EventHandler(this.deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click);
+            // 
+            // sendUnsuncedEDDNEventsToolStripMenuItem
+            // 
+            this.sendUnsuncedEDDNEventsToolStripMenuItem.Name = "sendUnsuncedEDDNEventsToolStripMenuItem";
+            this.sendUnsuncedEDDNEventsToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
+            this.sendUnsuncedEDDNEventsToolStripMenuItem.Text = "Send unsynced EDDN events";
+            this.sendUnsuncedEDDNEventsToolStripMenuItem.Click += new System.EventHandler(this.sendUnsuncedEDDNEventsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -633,12 +642,12 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
-            // sendUnsuncedEDDNEventsToolStripMenuItem
+            // materialSearchToolStripMenuItem
             // 
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Name = "sendUnsuncedEDDNEventsToolStripMenuItem";
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Size = new System.Drawing.Size(340, 22);
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Text = "Send unsynced EDDN events";
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Click += new System.EventHandler(this.sendUnsuncedEDDNEventsToolStripMenuItem_Click);
+            this.materialSearchToolStripMenuItem.Name = "materialSearchToolStripMenuItem";
+            this.materialSearchToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.materialSearchToolStripMenuItem.Text = "Material Search";
+            this.materialSearchToolStripMenuItem.Click += new System.EventHandler(this.materialSearchToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -743,5 +752,6 @@
         private System.Windows.Forms.ToolStripMenuItem checkForNewReleaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteDuplicateFSDJumpEntriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendUnsuncedEDDNEventsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem materialSearchToolStripMenuItem;
     }
 }

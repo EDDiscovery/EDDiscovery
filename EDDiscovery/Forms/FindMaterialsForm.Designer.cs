@@ -28,23 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxBorder1 = new ExtendedControls.TextBoxBorder();
-            this.comboBoxMaxLy = new ExtendedControls.ComboBoxCustom();
-            this.labelExt1 = new ExtendedControls.LabelExt();
             this.buttonSearch = new ExtendedControls.ButtonExt();
+            this.labelExt1 = new ExtendedControls.LabelExt();
+            this.comboBoxMaxLy = new ExtendedControls.ComboBoxCustom();
+            this.textBoxBorder1 = new ExtendedControls.TextBoxBorder();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // textBoxBorder1
+            // buttonSearch
             // 
-            this.textBoxBorder1.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorder1.BorderColorScaling = 0.5F;
-            this.textBoxBorder1.Location = new System.Drawing.Point(283, 12);
-            this.textBoxBorder1.Multiline = true;
-            this.textBoxBorder1.Name = "textBoxBorder1";
-            this.textBoxBorder1.Size = new System.Drawing.Size(302, 49);
-            this.textBoxBorder1.TabIndex = 0;
-            this.textBoxBorder1.Text = "J1 = Germanium + 2*Vanadium\r\nJ2 = Germanium + Vanadium + 2*Cadmium + Niobium\r\nJ3 " +
-    "= Arsenic + 3*Niobium + Polonium + Yttrium";
+            this.buttonSearch.BorderColorScaling = 1.25F;
+            this.buttonSearch.ButtonColorScaling = 0.5F;
+            this.buttonSearch.ButtonDisabledScaling = 0.5F;
+            this.buttonSearch.Location = new System.Drawing.Point(134, 28);
+            this.buttonSearch.Name = "buttonSearch";
+            this.buttonSearch.Size = new System.Drawing.Size(75, 23);
+            this.buttonSearch.TabIndex = 3;
+            this.buttonSearch.Text = "Search";
+            this.buttonSearch.UseVisualStyleBackColor = true;
+            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
+            // 
+            // labelExt1
+            // 
+            this.labelExt1.AutoSize = true;
+            this.labelExt1.Location = new System.Drawing.Point(9, 9);
+            this.labelExt1.Name = "labelExt1";
+            this.labelExt1.Size = new System.Drawing.Size(84, 13);
+            this.labelExt1.TabIndex = 2;
+            this.labelExt1.Text = "Max ly to search";
             // 
             // comboBoxMaxLy
             // 
@@ -72,32 +84,32 @@
             this.comboBoxMaxLy.Text = "comboBoxCustom1";
             this.comboBoxMaxLy.ValueMember = "";
             // 
-            // labelExt1
+            // textBoxBorder1
             // 
-            this.labelExt1.AutoSize = true;
-            this.labelExt1.Location = new System.Drawing.Point(9, 9);
-            this.labelExt1.Name = "labelExt1";
-            this.labelExt1.Size = new System.Drawing.Size(84, 13);
-            this.labelExt1.TabIndex = 2;
-            this.labelExt1.Text = "Max ly to search";
+            this.textBoxBorder1.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorder1.BorderColorScaling = 0.5F;
+            this.textBoxBorder1.Location = new System.Drawing.Point(283, 12);
+            this.textBoxBorder1.Multiline = true;
+            this.textBoxBorder1.Name = "textBoxBorder1";
+            this.textBoxBorder1.Size = new System.Drawing.Size(302, 49);
+            this.textBoxBorder1.TabIndex = 0;
+            this.textBoxBorder1.Text = "J1 = Germanium + 2*Vanadium\r\nJ2 = Germanium + Vanadium + 2*Cadmium + Niobium\r\nJ3 " +
+    "= Arsenic + 3*Niobium + Polonium + Yttrium";
             // 
-            // buttonSearch
+            // dataGridView1
             // 
-            this.buttonSearch.BorderColorScaling = 1.25F;
-            this.buttonSearch.ButtonColorScaling = 0.5F;
-            this.buttonSearch.ButtonDisabledScaling = 0.5F;
-            this.buttonSearch.Location = new System.Drawing.Point(134, 28);
-            this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(75, 23);
-            this.buttonSearch.TabIndex = 3;
-            this.buttonSearch.Text = "Search";
-            this.buttonSearch.UseVisualStyleBackColor = true;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(12, 90);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(573, 301);
+            this.dataGridView1.TabIndex = 4;
             // 
             // FindMaterialsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(597, 403);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.labelExt1);
             this.Controls.Add(this.comboBoxMaxLy);
@@ -105,6 +117,7 @@
             this.Name = "FindMaterialsForm";
             this.Text = "FindJumpBoostForm";
             this.Load += new System.EventHandler(this.FindMaterialsForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -116,5 +129,6 @@
         private ExtendedControls.ComboBoxCustom comboBoxMaxLy;
         private ExtendedControls.LabelExt labelExt1;
         private ExtendedControls.ButtonExt buttonSearch;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }

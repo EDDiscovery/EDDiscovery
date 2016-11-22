@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EDDiscovery.DB;
+using EDDiscovery2.DB;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,6 +26,22 @@ namespace EDDiscovery.Forms
             comboBoxMaxLy.Items.Add("500");
             comboBoxMaxLy.Items.Add("1000");
             comboBoxMaxLy.Items.Add("2000");
+            comboBoxMaxLy.SelectedIndex = 1;
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            double MaxLy = Double.Parse(comboBoxMaxLy.SelectedItem.ToString());
+
+            EDDiscoveryForm edfrm = this.Owner as EDDiscoveryForm;
+
+            HistoryEntry hi =   edfrm.history.First<HistoryEntry>();
+
+
+            List<ISystem> distlist;
+            distlist = SystemClass.GetSystemDistancesFrom(hi.System.x, hi.System.y, hi.System.z, 1000, MaxLy);
+
+
 
         }
     }
