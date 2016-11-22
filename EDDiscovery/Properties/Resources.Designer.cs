@@ -1019,9 +1019,9 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap materialmarker {
+        internal static System.Drawing.Bitmap materialmarkerorangefilled {
             get {
-                object obj = ResourceManager.GetObject("materialmarker", resourceCulture);
+                object obj = ResourceManager.GetObject("materialmarkerorangefilled", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1029,9 +1029,9 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap materialmarkerorangefilled {
+        internal static System.Drawing.Bitmap materiamoreindicator {
             get {
-                object obj = ResourceManager.GetObject("materialmarkerorangefilled", resourceCulture);
+                object obj = ResourceManager.GetObject("materiamoreindicator", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1509,6 +1509,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap RingGap512 {
+            get {
+                object obj = ResourceManager.GetObject("RingGap512", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Rocky_Body_Sand2 {
             get {
                 object obj = ResourceManager.GetObject("Rocky_Body_Sand2", resourceCulture);
@@ -1662,6 +1672,36 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap shipyardtransfer {
             get {
                 object obj = ResourceManager.GetObject("shipyardtransfer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SizeSelectorsLarge {
+            get {
+                object obj = ResourceManager.GetObject("SizeSelectorsLarge", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SizeSelectorsMedium {
+            get {
+                object obj = ResourceManager.GetObject("SizeSelectorsMedium", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SizeSelectorsSmall {
+            get {
+                object obj = ResourceManager.GetObject("SizeSelectorsSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
