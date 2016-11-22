@@ -104,7 +104,6 @@ namespace EDDiscovery.Controls
         }
 
         int tabdisplaystart = 0;    // first tab
-        int tabtotalwidth = 0;      // width of all tabs, plus spaces
         int tabdisplayed = 0;       // number of tabs
 
         private void TabStrip_Layout(object sender, LayoutEventArgs e)
@@ -139,6 +138,12 @@ namespace EDDiscovery.Controls
                     titleon = false;
                 }
 
+                int tabtotalwidth = 0;
+                for (int ip = 0; ip < imagepanels.Length; ip++)
+                    tabtotalwidth += imagepanels[ip].Width + Spacing * 2;       // do it now due to the internal scaling due to fonts
+
+                tabtotalwidth -= Spacing * 2;           // don't count last spacing.
+
                 if ( xpos + tabtotalwidth > stoppoint )     // if total tab width (icon space icon..) too big
                 {
                     panelArrowLeft.Location = new Point(xpos, 4);
@@ -151,7 +156,7 @@ namespace EDDiscovery.Controls
                 for (; i < imagepanels.Length && xpos < stoppoint - Images[i].Width; i++)
                 {                                           // if its soo tight, may display nothing, thats okay
                     imagepanels[i].Location = new Point(xpos, 3);
-                    xpos += Images[i].Width + Spacing*2;
+                    xpos += imagepanels[i].Width + Spacing*2;
                     imagepanels[i].Visible = true;
                     tabdisplayed++;
                 }
@@ -186,7 +191,7 @@ namespace EDDiscovery.Controls
                     {
                         BackgroundImage = Images[i],
                         Tag = i,
-                        BackgroundImageLayout = ImageLayout.None,
+                        BackgroundImageLayout = ImageLayout.Stretch,
                         Visible = false
                     };
 
@@ -201,8 +206,6 @@ namespace EDDiscovery.Controls
                         imagepanels[i].Tag = i;     // remember by index
                     }
 
-                    tabtotalwidth += Images[i].Width + Spacing*2;
-
                     if (ToolTips != null)
                     {
                         toolTip1.SetToolTip(imagepanels[i], ToolTips[i]);
@@ -211,8 +214,6 @@ namespace EDDiscovery.Controls
 
                     panelBottom.Controls.Add(imagepanels[i]);
                 }
-
-                tabtotalwidth -= Spacing * 2;           // don't count last spacing.
             }
 
             autofade.Stop();

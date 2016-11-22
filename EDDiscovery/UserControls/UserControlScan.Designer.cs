@@ -39,8 +39,8 @@
             this.checkBoxMoons = new ExtendedControls.CheckBoxCustom();
             this.checkBoxMaterials = new ExtendedControls.CheckBoxCustom();
             this.checkBoxMaterialsRare = new ExtendedControls.CheckBoxCustom();
-            this.panelControls = new System.Windows.Forms.Panel();
             this.checkBoxTiny = new ExtendedControls.CheckBoxCustom();
+            this.panelControls = new System.Windows.Forms.Panel();
             this.panelStars.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
@@ -58,6 +58,7 @@
             this.panelStars.TabIndex = 1;
             this.panelStars.VerticalScrollBarDockRight = true;
             this.panelStars.Click += new System.EventHandler(this.panelStars_Click);
+            this.panelStars.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelStars_MouseClick);
             // 
             // richTextBoxInfo
             // 
@@ -250,21 +251,6 @@
             this.checkBoxMaterialsRare.UseVisualStyleBackColor = false;
             this.checkBoxMaterialsRare.CheckedChanged += new System.EventHandler(this.checkBoxMaterialsRare_CheckedChanged);
             // 
-            // panelControls
-            // 
-            this.panelControls.Controls.Add(this.checkBoxTiny);
-            this.panelControls.Controls.Add(this.checkBoxSmall);
-            this.panelControls.Controls.Add(this.checkBoxMedium);
-            this.panelControls.Controls.Add(this.checkBoxLarge);
-            this.panelControls.Controls.Add(this.checkBoxMoons);
-            this.panelControls.Controls.Add(this.checkBoxMaterialsRare);
-            this.panelControls.Controls.Add(this.checkBoxMaterials);
-            this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelControls.Location = new System.Drawing.Point(0, 0);
-            this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(748, 32);
-            this.panelControls.TabIndex = 4;
-            // 
             // checkBoxTiny
             // 
             this.checkBoxTiny.Appearance = System.Windows.Forms.Appearance.Button;
@@ -289,6 +275,23 @@
             this.toolTip.SetToolTip(this.checkBoxTiny, "Image size teeny tiny");
             this.checkBoxTiny.UseVisualStyleBackColor = false;
             this.checkBoxTiny.CheckedChanged += new System.EventHandler(this.checkBoxTiny_CheckedChanged);
+            // 
+            // panelControls
+            // 
+            this.panelControls.Controls.Add(this.checkBoxTiny);
+            this.panelControls.Controls.Add(this.checkBoxSmall);
+            this.panelControls.Controls.Add(this.checkBoxMedium);
+            this.panelControls.Controls.Add(this.checkBoxLarge);
+            this.panelControls.Controls.Add(this.checkBoxMoons);
+            this.panelControls.Controls.Add(this.checkBoxMaterialsRare);
+            this.panelControls.Controls.Add(this.checkBoxMaterials);
+            this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelControls.Location = new System.Drawing.Point(0, 0);
+            this.panelControls.Name = "panelControls";
+            this.panelControls.Size = new System.Drawing.Size(748, 32);
+            this.panelControls.TabIndex = 4;
+            this.toolTip.SetToolTip(this.panelControls, "Right click on panel to show/hide the toolbar");
+            this.panelControls.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelStars_MouseClick);
             // 
             // UserControlScan
             // 
