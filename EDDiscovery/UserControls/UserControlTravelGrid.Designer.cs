@@ -295,7 +295,7 @@
             this.toolStripMenuItemStartStop,
             this.removeJournalEntryToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 202);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 224);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -316,14 +316,14 @@
             // 
             this.hideSystemToolStripMenuItem.Name = "hideSystemToolStripMenuItem";
             this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.hideSystemToolStripMenuItem.Text = "Hide system";
+            this.hideSystemToolStripMenuItem.Text = "Hide Entries";
             this.hideSystemToolStripMenuItem.Click += new System.EventHandler(this.hideSystemToolStripMenuItem_Click);
             // 
             // moveToAnotherCommanderToolStripMenuItem
             // 
             this.moveToAnotherCommanderToolStripMenuItem.Name = "moveToAnotherCommanderToolStripMenuItem";
             this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.moveToAnotherCommanderToolStripMenuItem.Text = "Move to another Commander";
+            this.moveToAnotherCommanderToolStripMenuItem.Text = "Move Entries to another Commander";
             this.moveToAnotherCommanderToolStripMenuItem.Click += new System.EventHandler(this.moveToAnotherCommanderToolStripMenuItem_Click);
             // 
             // addToTrilaterationToolStripMenuItem
