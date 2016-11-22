@@ -37,6 +37,7 @@
             this.show3DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.materialSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,7 +89,6 @@
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.materialSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -156,6 +156,14 @@
             this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.editThemeToolStripMenuItem.Text = "Edit Theme";
             this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
+            // 
+            // materialSearchToolStripMenuItem
+            // 
+            this.materialSearchToolStripMenuItem.Name = "materialSearchToolStripMenuItem";
+            this.materialSearchToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.materialSearchToolStripMenuItem.Text = "Material Search";
+            this.materialSearchToolStripMenuItem.Visible = false;
+            this.materialSearchToolStripMenuItem.Click += new System.EventHandler(this.materialSearchToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -641,13 +649,6 @@
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
-            // 
-            // materialSearchToolStripMenuItem
-            // 
-            this.materialSearchToolStripMenuItem.Name = "materialSearchToolStripMenuItem";
-            this.materialSearchToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.materialSearchToolStripMenuItem.Text = "Material Search";
-            this.materialSearchToolStripMenuItem.Click += new System.EventHandler(this.materialSearchToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
