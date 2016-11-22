@@ -679,4 +679,10 @@
   <data name="SizeSelectorsSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SizeSelectorsSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="materialrare" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\materialrare.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SizeSelectorsTiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SizeSelectorsTiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
