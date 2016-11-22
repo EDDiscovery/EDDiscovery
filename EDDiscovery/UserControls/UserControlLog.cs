@@ -12,10 +12,23 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlLog : UserControlCommonBase
     {
+        private EDDiscoveryForm discoveryform;
+
         public UserControlLog()
         {
             InitializeComponent();
             Name = "Log";
+        }
+
+        public override void Init( EDDiscoveryForm ed, int displayno)
+        {
+            discoveryform = ed;
+            discoveryform.OnNewLogEntry += AppendText;
+        }
+
+        public override void Closing()
+        {
+            discoveryform.OnNewLogEntry -= AppendText;
         }
 
         public void AppendText(string s, Color c)
@@ -27,9 +40,5 @@ namespace EDDiscovery.UserControls
         {
             richTextBox_History.CopyFrom(other.richTextBox_History);
         }
-
-        public override void LoadLayout() { }
-        public override void SaveLayout() { }
-
     }
 }

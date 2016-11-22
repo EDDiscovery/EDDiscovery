@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.labelNoItems = new System.Windows.Forms.Label();
             this.dataGridViewMC = new System.Windows.Forms.DataGridView();
@@ -42,6 +43,7 @@
             this.comboBoxCustomAdd = new ExtendedControls.ComboBoxCustom();
             this.buttonExtApply = new ExtendedControls.ButtonExt();
             this.buttonExtModify = new ExtendedControls.ButtonExt();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -90,8 +92,6 @@
             this.dataGridViewMC.Size = new System.Drawing.Size(684, 532);
             this.dataGridViewMC.TabIndex = 1;
             this.dataGridViewMC.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellEndEdit);
-            this.dataGridViewMC.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewMC_ColumnWidthChanged);
-            this.dataGridViewMC.Resize += new System.EventHandler(this.dataGridViewMC_Resize);
             // 
             // NameCol
             // 
@@ -200,6 +200,7 @@
             this.comboBoxCustomAdd.Size = new System.Drawing.Size(147, 23);
             this.comboBoxCustomAdd.TabIndex = 1;
             this.comboBoxCustomAdd.Text = "Add new";
+            this.toolTip1.SetToolTip(this.comboBoxCustomAdd, "Select new entries to add to table");
             this.comboBoxCustomAdd.ValueMember = "";
             this.comboBoxCustomAdd.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomAdd_SelectedIndexChanged);
             // 
@@ -214,6 +215,7 @@
             this.buttonExtApply.Size = new System.Drawing.Size(75, 23);
             this.buttonExtApply.TabIndex = 0;
             this.buttonExtApply.Text = "Apply";
+            this.toolTip1.SetToolTip(this.buttonExtApply, "Apply changes entered into grid list");
             this.buttonExtApply.UseVisualStyleBackColor = true;
             this.buttonExtApply.Click += new System.EventHandler(this.buttonExtApply_Click);
             // 
@@ -227,8 +229,13 @@
             this.buttonExtModify.Size = new System.Drawing.Size(75, 23);
             this.buttonExtModify.TabIndex = 0;
             this.buttonExtModify.Text = "Modify";
+            this.toolTip1.SetToolTip(this.buttonExtModify, "Enable modification or cancel modification to entries");
             this.buttonExtModify.UseVisualStyleBackColor = true;
             this.buttonExtModify.Click += new System.EventHandler(this.buttonExtModify_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // UserControlMaterialCommodities
             // 
@@ -262,5 +269,6 @@
         private ExtendedControls.ButtonExt buttonExtApply;
         private ExtendedControls.ComboBoxCustom comboBoxCustomAdd;
         private System.Windows.Forms.Label labelNoItems;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

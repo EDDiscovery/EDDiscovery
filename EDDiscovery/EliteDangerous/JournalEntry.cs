@@ -54,7 +54,7 @@ namespace EDDiscovery.EliteDangerous
         FactionKillBond = 270,
         FSDJump = 280,
         FuelScoop = 290,
-        FileHeader = 300,
+        Fileheader = 300,
         HeatDamage = 310,
         HeatWarning = 320,
         HullDamage = 330,
@@ -471,7 +471,7 @@ namespace EDDiscovery.EliteDangerous
                         cmd2.AddParameterWithValue("@EventData", jo.ToString());
                         cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
-                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos {1}/edsmid {2} dist {3}", journalid, jsonpos, system.id_edsm, dist));
+                        //System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos {1}/edsmid {2} dist {3}", journalid, jsonpos, system.id_edsm, dist));
                         cmd2.ExecuteNonQuery();
                     }
                 }
@@ -604,10 +604,7 @@ namespace EDDiscovery.EliteDangerous
                 return Get(journalid, cn);
             }
         }
-
-
-
-
+        
         static public List<JournalEntry> GetAll(int commander = -999)
         {
             List<JournalEntry> list = new List<JournalEntry>();
@@ -711,414 +708,110 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
-        static public Type TypeOfJournalEntry(string text)
+        public static void RemoveGeneratedKeys(JObject obj, bool removeLocalised)
         {
-            switch (text)
+            foreach (JProperty prop in obj.Properties().ToList())
             {
-                case "ApproachSettlement":
-                    return typeof(JournalApproachSettlement);
-
-                case "Bounty":
-                    return typeof(JournalBounty);
-
-                case "BuyAmmo":
-                    return typeof(JournalBuyAmmo);
-
-                case "BuyDrones":
-                    return typeof(JournalBuyDrones);
-
-                case "BuyExplorationData":
-                    return typeof(JournalBuyExplorationData);
-
-                case "BuyTradeData":
-                    return typeof(JournalBuyTradeData);
-
-
-
-                case "CockpitBreached":
-                    return typeof(JournalCockpitBreached);
-
-                case "CollectCargo":
-                    return typeof(JournalCollectCargo);
-
-                case "CommitCrime":
-                    return typeof(JournalCommitCrime);
-
-                case "CommunityGoalJoin":
-                    return typeof(JournalCommunityGoalJoin);
-
-                case "CommunityGoalReward":
-                    return typeof(JournalCommunityGoalReward);
-
-                case "CrewAssign":
-                    return typeof(JournalCrewAssign);
-
-                case "CrewFire":
-                    return typeof(JournalCrewFire);
-
-                case "CrewHire":
-                    return typeof(JournalCrewHire);
-
-                case "DatalinkScan":
-                    return typeof(JournalDatalinkScan);
-
-                case "DockFighter":
-                    return typeof(JournalDockFighter);
-
-                case "DockSRV":
-                    return typeof(JournalDockSRV);
-
-
-                case "Docked":
-                    return typeof(JournalDocked);
-
-
-                case "Died":
-                    return typeof(JournalDied);
-
-
-                case "fileheader":
-                case "Fileheader":
-                    return typeof(JournalFileHeader);
-
-
-                case "FSDJump":
-                    return typeof(JournalFSDJump);
-
-
-                case "Location":
-                    return typeof(JournalLocation);
-
-
-                case "LoadGame":
-                    return typeof(JournalLoadGame);
-
-
-                case "Scan":
-                    return typeof(JournalScan);
-                    
-                case "ScientificResearch":
-                    return typeof(JournalScientificResearch);
-
-                case "SellExplorationData":
-                    return typeof(JournalSellExplorationData);
-
-
-                case "Undocked":
-                    return typeof(JournalUndocked);
-
-
-                case "DockingCancelled":
-                    return typeof(JournalDockingCancelled);
-
-
-                case "DockingDenied":
-                    return typeof(JournalDockingDenied);
-
-                case "DockingGranted":
-                    return typeof(JournalDockingGranted);
-
-
-                case "DockingRequested":
-                    return typeof(JournalDockingRequested);
-
-
-                case "DockingTimeout":
-                    return typeof(JournalDockingTimeout);
-
-
-
-                case "EngineerApply":
-                    return typeof(JournalEngineerApply);
-
-                case "EngineerCraft":
-                    return typeof(JournalEngineerCraft);
-
-                case "EngineerProgress":
-                    return typeof(JournalEngineerProgress);
-
-
-                case "EscapeInterdiction":
-                    return typeof(JournalEscapeInterdiction);
-
-                case "FactionKillBond":
-                    return typeof(JournalFactionKillBond);
-
-                case "HeatDamage":
-                    return typeof(JournalHeatDamage);
-
-                case "HeatWarning":
-                    return typeof(JournalHeatWarning);
-
-                case "HullDamage":
-                    return typeof(JournalHullDamage);
-
-                case "Interdicted":
-                    return typeof(JournalInterdicted);
-
-                case "Interdiction":
-                    return typeof(JournalInterdiction);
-
-
-
-
-                case "FuelScoop":
-                    return typeof(JournalFuelScoop);
-
-
-                case "JetConeBoost":
-                    return typeof(JournalJetConeBoost);
-
-                case "JetConeDamage":
-                    return typeof(JournalJetConeDamage);
-
-
-
-                case "LaunchSRV":
-                    return typeof(JournalLaunchSRV);
-
-                case "Liftoff":
-                    return typeof(JournalLiftoff);
-
-                case "MarketBuy":
-                    return typeof(JournalMarketBuy);
-
-                case "MarketSell":
-                    return typeof(JournalMarketSell);
-
-
-
-                case "MaterialCollected":
-                    return typeof(JournalMaterialCollected);
-
-                case "MaterialDiscarded":
-                    return typeof(JournalMaterialDiscarded);
-
-                case "MaterialDiscovered":
-                    return typeof(JournalMaterialDiscovered);
-
-                case "MiningRefined":
-                    return typeof(JournalMiningRefined);
-
-
-                case "MissionAbandoned":
-                    return typeof(JournalMissionAbandoned);
-
-                case "MissionAccepted":
-                    return typeof(JournalMissionAccepted);
-
-                case "MissionCompleted":
-                    return typeof(JournalMissionCompleted);
-
-                case "MissionFailed":
-                    return typeof(JournalMissionFailed);
-
-                case "NewCommander":
-                    return typeof(JournalNewCommander);
-
-
-                case "Continued":
-                    return typeof(JournalContinued);
-
-
-                case "Rank":
-                    return typeof(JournalRank);
-
-
-                case "Progress":
-                    return typeof(JournalProgress);
-
-
-                case "SupercruiseEntry":
-                    return typeof(JournalSupercruiseEntry);
-
-
-                case "SupercruiseExit":
-                    return typeof(JournalSupercruiseExit);
-
-
-                case "ModuleBuy":
-                    return typeof(JournalModuleBuy);
-
-
-                case "ModuleRetrieve":
-                    return typeof(JournalModuleRetrieve);
-
-
-                case "ModuleSell":
-                    return typeof(JournalModuleSell);
-
-
-                case "ModuleStore":
-                    return typeof(JournalModuleStore);
-
-
-                case "ModuleSwap":
-                    return typeof(JournalModuleSwap);
-
-
-                case "PVPKill":
-                    return typeof(JournalPVPKill);
-
-
-                case "RefuelAll":
-                    return typeof(JournalRefuelAll);
-
-                case "RefuelPartial":
-                    return typeof(JournalRefuelPartial);
-
-                case "Repair":
-                    return typeof(JournalRepair);
-
-                case "RepairAll":
-                    return typeof(JournalRepairAll);
-
-                case "RestockVehicle":
-                    return typeof(JournalRestockVehicle);
-
-
-                case "Resurrect":
-                    return typeof(JournalResurrect);
-
-
-                case "Screenshot":
-                    return typeof(JournalScreenshot);
-
-                case "SelfDestruct":
-                    return typeof(JournalSelfDestruct);
-
-                case "ShieldState":
-                    return typeof(JournalShieldState);
-
-                case "ShipyardBuy":
-                    return typeof(JournalShipyardBuy);
-
-                case "ShipyardNew":
-                    return typeof(JournalShipyardNew);
-
-                case "ShipyardSell":
-                    return typeof(JournalShipyardSell);
-
-                case "ShipyardSwap":
-                    return typeof(JournalShipyardSwap);
-
-                case "ShipyardTransfer":
-                    return typeof(JournalShipyardTransfer);
-
-
-                case "Synthesis":
-                    return typeof(JournalSynthesis);
-
-                case "Touchdown":
-                    return typeof(JournalTouchdown);
-
-                case "USSDrop":
-                    return typeof(JournalUSSDrop);
-
-                case "VehicleSwitch":
-                    return typeof(JournalVehicleSwitch);
-
-                case "WingAdd":
-                    return typeof(JournalWingAdd);
-
-                case "WingJoin":
-                    return typeof(JournalWingJoin);
-
-                case "WingLeave":
-                    return typeof(JournalWingLeave);
-
-
-                case "ReceiveText":
-                    return typeof(JournalReceiveText);
-
-                case "SendText":
-                    return typeof(JournalSendText);
-
-
-                case "PayFines":
-                    return typeof(JournalPayFines);
-
-                case "PayLegacyFines":
-                    return typeof(JournalPayLegacyFines);
-
-                case "Promotion":
-                    return typeof(JournalPromotion);
-
-                case "RebootRepair":
-                    return typeof(JournalRebootRepair);
-
-                case "RedeemVoucher":
-                    return typeof(JournalRedeemVoucher);
-
-
-
-                case "CapShipBond":
-                    return typeof(JournalCapShipBond);
-
-                case "ClearSavedGame":
-                    return typeof(JournalClearSavedGame);
-
-
-                case "EjectCargo":
-                    return typeof(JournalEjectCargo);
-
-                case "LaunchFighter":
-                    return typeof(JournalLaunchFighter);
-
-                case "SellDrones":
-                    return typeof(JournalSellDrones);
-
-
-
-                case "PowerplayCollect":
-                    return typeof(JournalPowerplayCollect);
-
-                case "PowerplayDefect":
-                    return typeof(JournalPowerplayDefect);
-
-                case "PowerplayDeliver":
-                    return typeof(JournalPowerplayDeliver);
-
-                case "PowerplayFastTrack":
-                    return typeof(JournalPowerplayFastTrack);
-
-                case "PowerplayJoin":
-                    return typeof(JournalPowerplayJoin);
-
-                case "PowerplayLeave":
-                    return typeof(JournalPowerplayLeave);
-
-                case "PowerplaySalary":
-                    return typeof(JournalPowerplaySalary);
-
-                case "PowerplayVote":
-                    return typeof(JournalPowerplayVote);
-
-                case "PowerplayVoucher":
-                    return typeof(JournalPowerplayVoucher);
-
-
-                case "ModuleSellRemote":
-                    return typeof(JournalModuleSellRemote);
-                case "FetchRemoteModule":
-                    return typeof(JournalFetchRemoteModule);
-                case "MassModuleStore":
-                    return typeof(JournalMassModuleStore);
-
-                case "DatalinkVoucher":
-                    return typeof(JournalDatalinkVoucher);
-                case "DataScanned":
-                    return typeof(JournalDataScanned);
-
-                case "CommunityGoalDiscard":
-                    return typeof(JournalCommunityGoalDiscard);
-
-                case "EDDItemSet":
-                    return typeof(JournalEDDItemSet);
-
+                if (prop.Name.StartsWith("EDD") || (removeLocalised && prop.Name.EndsWith("_Localised")))
+                {
+                    obj.Remove(prop.Name);
+                }
             }
 
-            return null;
+            obj.Remove("StarPosFromEDSM");
+        }
+
+        public static bool AreSameEntry(JournalEntry ent1, JournalEntry ent2, JObject ent1jo = null, JObject ent2jo = null)
+        {
+            if (ent1.jEventData == null || ent2.jEventData == null)
+                return false;
+
+            if (ent1jo == null)
+            {
+                ent1jo = (JObject)ent1.jEventData.DeepClone();
+                RemoveGeneratedKeys(ent1jo, false);
+            }
+
+            if (ent2jo == null)
+            {
+                ent2jo = (JObject)ent2.jEventData.DeepClone();
+                RemoveGeneratedKeys(ent2jo, false);
+            }
+
+            return JToken.DeepEquals(ent1jo, ent2jo);
+        }
+
+        public static List<JournalEntry> FindEntry(JournalEntry ent)
+        {
+            List<JournalEntry> entries = new List<JournalEntry>();
+            JObject entjo = (JObject)ent.jEventData.DeepClone();
+            RemoveGeneratedKeys(entjo, false);
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime = @time AND TravelLogId = @tluid AND EventTypeId = @evttype ORDER BY Id ASC"))
+                {
+                    cmd.AddParameterWithValue("@cmdrid", ent.CommanderId);
+                    cmd.AddParameterWithValue("@time", ent.EventTimeUTC);
+                    cmd.AddParameterWithValue("@tluid", ent.TLUId);
+                    cmd.AddParameterWithValue("@evttype", ent.EventTypeID);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            JournalEntry jent = CreateJournalEntry(reader);
+                            if (!AreSameEntry(ent, jent, entjo))
+                            {
+                                entries.Add(jent);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return entries;
+        }
+
+        public static int RemoveDuplicateFSDEntries(int currentcmdrid )
+        {
+            // list of systems in journal, sorted by time
+            List<JournalLocOrJump> vsSystemsEnts = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().OrderBy(j => j.EventTimeUTC).ToList();
+
+            int count = 0;
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                for (int ji = 1; ji < vsSystemsEnts.Count; ji++)
+                {
+                    JournalEvents.JournalFSDJump prev = vsSystemsEnts[ji - 1] as JournalEvents.JournalFSDJump;
+                    JournalEvents.JournalFSDJump current = vsSystemsEnts[ji] as JournalEvents.JournalFSDJump;
+
+                    if ( prev != null && current != null )
+                    {
+                        bool previssame = (prev.StarSystem.Equals(current.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !current.HasCoordinate || (prev.StarPos - current.StarPos).LengthSquared < 0.01));
+
+                        if ( previssame )
+                        {
+                            Delete(prev.Id, cn);
+                            count++;
+                            System.Diagnostics.Debug.WriteLine("Dup {0} {1} {2} {3}", prev.Id, current.Id, prev.StarSystem, current.StarSystem);
+                        }
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        static public Type TypeOfJournalEntry(string text)
+        {
+            //foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum))) // check code only to make sure names match
+            //{
+                //Type p = Type.GetType("EDDiscovery.EliteDangerous.JournalEvents.Journal" + jte.ToString());
+                //Debug.Assert(p != null);
+            //}
+
+            Type t = Type.GetType("EDDiscovery.EliteDangerous.JournalEvents.Journal" + text,false,true); // no exception, ignore case here
+            return t;
         }
 
         static public JournalEntry CreateJournalEntry(string text)
@@ -1200,12 +893,13 @@ namespace EDDiscovery.EliteDangerous
 
             {           // unique field names across multiple entries.  First up so later ones can override if required
 
-                jc.AddScale("MassEM", 1.0, "0.0'em'", "Mass");
+                jc.AddScale("MassEM", 1.0, "0.0000'em'", "Mass");
                 jc.AddScale("MassMT", 1.0, "0.0'mt'", "Mass");
                 jc.AddScale("SurfacePressure", 1.0, "0.0'p'");
                 jc.AddScale("Radius", 1.0 / 1000, "0.0'km'");
                 jc.AddScale("InnerRad", 1.0 / 1000, "0.0'km'", "Inner Radius");
                 jc.AddScale("OuterRad", 1.0 / 1000, "0.0'km'", "Outer Radius");
+                jc.AddScale("SemiMajorAxis", 1.0 / 1000, "0.0'km'", "Semi Major Axis");
                 jc.AddScale("OrbitalPeriod;RotationPeriod", 1.0 / 86400, "0.0' days orbit'", "");
                 jc.AddScale("SurfaceGravity", 1.0 / 9.8, "0.0'g'");
                 jc.AddScale("SurfaceTemperature", 1.0, "0.0'K'");
@@ -1338,7 +1032,7 @@ namespace EDDiscovery.EliteDangerous
             return s;
         }
 
-            static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null )
+        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null )
         {
             List<string> ret = new List<string>();
 

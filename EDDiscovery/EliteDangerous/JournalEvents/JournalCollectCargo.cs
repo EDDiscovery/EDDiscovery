@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {
             EDDiscovery2.DB.MaterialCommodities mc = mcl.GetMaterialCommodity(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, Type, conn);
-            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, mc.name + " " + mc.count.ToString());
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, mc.name );
         }
 
     }

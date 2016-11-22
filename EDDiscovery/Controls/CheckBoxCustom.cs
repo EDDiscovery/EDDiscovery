@@ -24,7 +24,7 @@ namespace ExtendedControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard)
+            if (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.Flat)
                 base.OnPaint(e);
             else
             {

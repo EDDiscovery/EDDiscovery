@@ -58,20 +58,6 @@ namespace EDDiscovery2
 
 
 
-    public enum SynthesisEnum
-    {
-        Unknown = 0,
-        FSDInjection,
-        PlasmaMunitions,
-        ExplosiveMunitions,
-        SmallCalibreMunitions,
-        HighVelocityMunitions,
-        LargeCalibreMunitions,
-        AFMRefill,
-        SRVAmmoRestock,
-        SRVRepair,
-        SRVRefuel,
-    }
 
 
     public class Material
@@ -274,10 +260,5 @@ namespace EDDiscovery2
 
     }
 
-    //public class Synthesis
-    //{
-    //    public string name;
-    //    List<Material> materials;
 
-    //}
 }

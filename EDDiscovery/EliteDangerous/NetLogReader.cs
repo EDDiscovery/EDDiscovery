@@ -410,6 +410,8 @@ namespace EDDiscovery
             JournalLocOrJump je;
             using (Stream stream = File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
+                System.Diagnostics.Debug.WriteLine("ReadData " + FileName + " from " + startpos + " to " + filePos);
+
                 while (!cancelRequested() && ReadNetLogSystem(out jo, out je, cancelRequested, stream))
                 {
                     if (last == null)
@@ -438,7 +440,7 @@ namespace EDDiscovery
             }
 
             if ( startpos != filePos )
-                Console.WriteLine("Parse ReadData " + FileName + " from " + startpos + " to " + filePos);
+                System.Diagnostics.Debug.WriteLine("Parse ReadData " + FileName + " from " + startpos + " to " + filePos);
         }
     }
 }

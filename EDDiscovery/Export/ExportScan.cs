@@ -122,12 +122,12 @@ namespace EDDiscovery.Export
                     JournalScan scan = je as JournalScan;
 
                     if (ShowPlanets == false)  // Then only show stars.
-                        if (scan.StarType.Equals(""))
+                            if (String.IsNullOrEmpty(scan.StarType))
                             continue;
 
 
                     if (ShowStars == false)   // Then only show planets
-                        if (scan.PlanetClass.Equals(""))
+                            if (String.IsNullOrEmpty(scan.PlanetClass))
                             continue;
 
 
@@ -138,33 +138,33 @@ namespace EDDiscovery.Export
                     if (ShowStars)
                     {
                         writer.Write(MakeValueCsvFriendly(scan.StarType));
-                        writer.Write(MakeValueCsvFriendly(scan.StellarMass));
-                        writer.Write(MakeValueCsvFriendly(scan.AbsoluteMagnitude));
-                        writer.Write(MakeValueCsvFriendly(scan.Age));
+                            writer.Write(MakeValueCsvFriendly((scan.nStellarMass.HasValue) ? scan.nStellarMass.Value : 0));
+                            writer.Write(MakeValueCsvFriendly((scan.nAbsoluteMagnitude.HasValue) ? scan.nAbsoluteMagnitude.Value : 0));
+                            writer.Write(MakeValueCsvFriendly((scan.nAge.HasValue) ? scan.nAge.Value : 0));
                     }
 
 
-                    writer.Write(MakeValueCsvFriendly(scan.Radius));
-                    writer.Write(MakeValueCsvFriendly(scan.RotationPeriod));
-                    writer.Write(MakeValueCsvFriendly(scan.SurfaceTemperature));
+                        writer.Write(MakeValueCsvFriendly(scan.nRadius.HasValue ? scan.nRadius.Value : 0));
+                        writer.Write(MakeValueCsvFriendly(scan.nRotationPeriod.HasValue ? scan.nRotationPeriod.Value : 0));
+                        writer.Write(MakeValueCsvFriendly(scan.nSurfaceTemperature.HasValue ? scan.nSurfaceTemperature.Value : 0));
 
                     if (ShowPlanets)
                     {
-                        writer.Write(MakeValueCsvFriendly(scan.TidalLock));
-                        writer.Write(MakeValueCsvFriendly(scan.TerraformState));
-                        writer.Write(MakeValueCsvFriendly(scan.PlanetClass));
-                        writer.Write(MakeValueCsvFriendly(scan.Atmosphere));
-                        writer.Write(MakeValueCsvFriendly(scan.Volcanism));
-                        writer.Write(MakeValueCsvFriendly(scan.SurfaceGravity));
-                        writer.Write(MakeValueCsvFriendly(scan.SurfacePressure));
-                        writer.Write(MakeValueCsvFriendly(scan.Landable));
+                            writer.Write(MakeValueCsvFriendly(scan.nTidalLock.HasValue ? scan.nTidalLock.Value : false));
+                            writer.Write(MakeValueCsvFriendly((scan.TerraformState != null )? scan.TerraformState : ""));
+                            writer.Write(MakeValueCsvFriendly((scan.PlanetClass != null )? scan.PlanetClass : ""));
+                            writer.Write(MakeValueCsvFriendly((scan.Atmosphere != null )? scan.Atmosphere : ""));
+                            writer.Write(MakeValueCsvFriendly((scan.Volcanism != null )? scan.Volcanism : ""));
+                            writer.Write(MakeValueCsvFriendly(scan.nSurfaceGravity.HasValue ? scan.nSurfaceGravity.Value : 0));
+                            writer.Write(MakeValueCsvFriendly(scan.nSurfacePressure.HasValue ? scan.nSurfacePressure.Value : 0));
+                            writer.Write(MakeValueCsvFriendly(scan.nLandable.HasValue ? scan.nLandable.Value : false));
                     }
                     // Common orbital param
-                    writer.Write(MakeValueCsvFriendly(scan.SemiMajorAxis));
-                    writer.Write(MakeValueCsvFriendly(scan.Eccentricity));
-                    writer.Write(MakeValueCsvFriendly(scan.OrbitalInclination));
-                    writer.Write(MakeValueCsvFriendly(scan.Periapsis));
-                    writer.Write(MakeValueCsvFriendly(scan.OrbitalPeriod));
+                        writer.Write(MakeValueCsvFriendly(scan.nSemiMajorAxis.HasValue ? scan.nSemiMajorAxis.Value : 0));
+                        writer.Write(MakeValueCsvFriendly(scan.nEccentricity.HasValue ? scan.nEccentricity.Value : 0));
+                        writer.Write(MakeValueCsvFriendly(scan.nOrbitalInclination.HasValue ? scan.nOrbitalInclination.Value : 0));
+                        writer.Write(MakeValueCsvFriendly(scan.nPeriapsis.HasValue ? scan.nPeriapsis.Value : 0));
+                        writer.Write(MakeValueCsvFriendly(scan.nOrbitalPeriod.HasValue ? scan.nOrbitalPeriod.Value : 0));
 
 
 

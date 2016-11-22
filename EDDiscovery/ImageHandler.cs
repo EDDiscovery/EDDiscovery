@@ -18,6 +18,9 @@ namespace EDDiscovery2.ImageHandler
         private EDDiscoveryForm _discoveryForm;
         private FileSystemWatcher watchfolder = null;
 
+        public delegate void ScreenShot(string path, Point size);
+        public event ScreenShot OnScreenShot;
+
         public ImageHandler()
         {
             InitializeComponent();
@@ -261,6 +264,8 @@ namespace EDDiscovery2.ImageHandler
                     croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Png);
                 }
 
+                Point finalsize = new Point(croppedbmp.Size);
+
                 bmp.Dispose();              // need to free the bmp before any more operations on the file..
                 croppedbmp.Dispose();       // and ensure this one is freed of handles to the file.
 
@@ -269,8 +274,16 @@ namespace EDDiscovery2.ImageHandler
 
                 if (previewinputfile)        // if preview, load in
                 {
-                    pictureBox1.ImageLocation = store_name;
-                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBox.ImageLocation = store_name;
+                    pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                }
+
+                if (OnScreenShot!=null)
+                {
+                    Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
+                    {                                                   // and fire the event
+                        OnScreenShot(store_name, finalsize);
+                    });
                 }
 
                 if (removeinputfile)         // if remove, delete original picture
@@ -393,7 +406,7 @@ namespace EDDiscovery2.ImageHandler
         private void checkBoxPreview_CheckedChanged(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("ImageHandlerPreview", checkBoxPreview.Checked);
-            pictureBox1.Image = null;
+            pictureBox.Image = null;
         }
 
         private void comboBoxFormat_SelectedIndexChanged(object sender, EventArgs e)

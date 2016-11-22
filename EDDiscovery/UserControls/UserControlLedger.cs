@@ -15,8 +15,8 @@ namespace EDDiscovery.UserControls
     public partial class UserControlLedger : UserControlCommonBase
     {
         private int displaynumber = 0;
-        EDDiscoveryForm discoveryform;
-
+        private EDDiscoveryForm discoveryform;
+        
         EventFilterSelector cfs = new EventFilterSelector();
 
         private string DbFilterSave { get { return "LedgerGridEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -33,9 +33,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(EDDiscoveryForm f , int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            discoveryform = f;
+            discoveryform = ed;
             displaynumber = vn;
 
             dataGridViewLedger.MakeDoubleBuffered();
@@ -46,6 +46,14 @@ namespace EDDiscovery.UserControls
 
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
+
+            discoveryform.OnHistoryChange += Redisplay;
+            discoveryform.OnNewEntry += NewEntry;
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList l)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -53,6 +61,16 @@ namespace EDDiscovery.UserControls
         #region Display
 
         MaterialCommoditiesLedger current_mc;
+
+        public void Redisplay(HistoryList hl)
+        {
+            Display(hl.materialcommodititiesledger);
+        }
+
+        private void NewEntry(HistoryEntry l, HistoryList hl)
+        {
+            Display(hl.materialcommodititiesledger);
+        }
 
         public void Display(MaterialCommoditiesLedger mc)
         {
@@ -121,9 +139,11 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewLedger, DbColumnSave);
         }
 
-        public override void SaveLayout()
+        public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
+            discoveryform.OnHistoryChange -= Redisplay;
+            discoveryform.OnNewEntry -= NewEntry;
         }
 
         private void dataGridViewMC_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)

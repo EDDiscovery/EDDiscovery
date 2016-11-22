@@ -39,7 +39,7 @@
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.Image = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
             this.panel_close.ImageText = null;
             this.panel_close.Location = new System.Drawing.Point(598, 3);
             this.panel_close.MarginSize = 6;
@@ -55,7 +55,7 @@
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.Image = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.ImageText = null;
             this.panel_minimize.Location = new System.Drawing.Point(568, 3);
             this.panel_minimize.MarginSize = 6;

@@ -123,10 +123,10 @@
             this.comboBoxTheme.DataSource = null;
             this.comboBoxTheme.DisplayMember = "";
             this.comboBoxTheme.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxTheme.DropDownHeight = 100;
+            this.comboBoxTheme.DropDownHeight = 150;
             this.comboBoxTheme.DropDownWidth = 267;
             this.comboBoxTheme.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxTheme.ItemHeight = 13;
+            this.comboBoxTheme.ItemHeight = 20;
             this.comboBoxTheme.Location = new System.Drawing.Point(7, 19);
             this.comboBoxTheme.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTheme.Name = "comboBoxTheme";
