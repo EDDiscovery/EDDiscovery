@@ -634,7 +634,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 };
 
                 sn.starnodes.Add(designator, star);
-                System.Diagnostics.Debug.WriteLine("Added star " + star.fullname + " '" + star.ownname + "'" + " under " + designator);
+                //System.Diagnostics.Debug.WriteLine("Added star " + star.fullname + " '" + star.ownname + "'" + " under " + designator);
             }
 
             return star;
@@ -679,12 +679,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     }
 
                     moonscan.scandata = sc;
-                    System.Diagnostics.Debug.WriteLine("Added moon scan '{0}' to {1} to {2}", elements[2], elements[1], elements[0]);
+                    //System.Diagnostics.Debug.WriteLine("Added moon scan '{0}' to {1} to {2}", elements[2], elements[1], elements[0]);
                 }
                 else
                 {
                     planetscan.scandata = sc;
-                    System.Diagnostics.Debug.WriteLine("Added planet scan '{0}' to {1}", elements[1], elements[0]);
+                    //System.Diagnostics.Debug.WriteLine("Added planet scan '{0}' to {1}", elements[1], elements[0]);
                 }
 
                 return true;
