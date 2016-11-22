@@ -34,6 +34,9 @@
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelControls = new System.Windows.Forms.Panel();
+            this.checkBoxSmall = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxMedium = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxLarge = new ExtendedControls.CheckBoxCustom();
             this.checkBoxMoons = new ExtendedControls.CheckBoxCustom();
             this.checkBoxMaterials = new ExtendedControls.CheckBoxCustom();
             this.panelStars.SuspendLayout();
@@ -97,6 +100,9 @@
             // 
             // panelControls
             // 
+            this.panelControls.Controls.Add(this.checkBoxSmall);
+            this.panelControls.Controls.Add(this.checkBoxMedium);
+            this.panelControls.Controls.Add(this.checkBoxLarge);
             this.panelControls.Controls.Add(this.checkBoxMoons);
             this.panelControls.Controls.Add(this.checkBoxMaterials);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
@@ -104,6 +110,78 @@
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(748, 32);
             this.panelControls.TabIndex = 4;
+            // 
+            // checkBoxSmall
+            // 
+            this.checkBoxSmall.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxSmall.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxSmall.BackgroundImage = global::EDDiscovery.Properties.Resources.SizeSelectorsSmall;
+            this.checkBoxSmall.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxSmall.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxSmall.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxSmall.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxSmall.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxSmall.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.checkBoxSmall.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
+            this.checkBoxSmall.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxSmall.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxSmall.FontNerfReduction = 0.5F;
+            this.checkBoxSmall.Location = new System.Drawing.Point(140, 0);
+            this.checkBoxSmall.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxSmall.Name = "checkBoxSmall";
+            this.checkBoxSmall.Size = new System.Drawing.Size(32, 32);
+            this.checkBoxSmall.TabIndex = 2;
+            this.checkBoxSmall.TickBoxReductionSize = 10;
+            this.checkBoxSmall.UseVisualStyleBackColor = false;
+            this.checkBoxSmall.CheckedChanged += new System.EventHandler(this.checkBoxSmall_CheckedChanged);
+            // 
+            // checkBoxMedium
+            // 
+            this.checkBoxMedium.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxMedium.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxMedium.BackgroundImage = global::EDDiscovery.Properties.Resources.SizeSelectorsMedium;
+            this.checkBoxMedium.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxMedium.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxMedium.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxMedium.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxMedium.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxMedium.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.checkBoxMedium.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
+            this.checkBoxMedium.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxMedium.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxMedium.FontNerfReduction = 0.5F;
+            this.checkBoxMedium.Location = new System.Drawing.Point(108, 0);
+            this.checkBoxMedium.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxMedium.Name = "checkBoxMedium";
+            this.checkBoxMedium.Size = new System.Drawing.Size(32, 32);
+            this.checkBoxMedium.TabIndex = 2;
+            this.checkBoxMedium.TickBoxReductionSize = 10;
+            this.checkBoxMedium.UseVisualStyleBackColor = false;
+            this.checkBoxMedium.CheckedChanged += new System.EventHandler(this.checkBoxMedium_CheckedChanged);
+            // 
+            // checkBoxLarge
+            // 
+            this.checkBoxLarge.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxLarge.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxLarge.BackgroundImage = global::EDDiscovery.Properties.Resources.SizeSelectorsLarge;
+            this.checkBoxLarge.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxLarge.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxLarge.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxLarge.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxLarge.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxLarge.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.checkBoxLarge.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
+            this.checkBoxLarge.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxLarge.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxLarge.FontNerfReduction = 0.5F;
+            this.checkBoxLarge.Location = new System.Drawing.Point(76, 0);
+            this.checkBoxLarge.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxLarge.Name = "checkBoxLarge";
+            this.checkBoxLarge.Size = new System.Drawing.Size(32, 32);
+            this.checkBoxLarge.TabIndex = 2;
+            this.checkBoxLarge.TickBoxReductionSize = 10;
+            this.checkBoxLarge.UseVisualStyleBackColor = false;
+            this.checkBoxLarge.CheckedChanged += new System.EventHandler(this.checkBoxLarge_CheckedChanged);
             // 
             // checkBoxMoons
             // 
@@ -176,5 +254,8 @@
         private System.Windows.Forms.Panel panelControls;
         private ExtendedControls.CheckBoxCustom checkBoxMaterials;
         private ExtendedControls.CheckBoxCustom checkBoxMoons;
+        private ExtendedControls.CheckBoxCustom checkBoxSmall;
+        private ExtendedControls.CheckBoxCustom checkBoxMedium;
+        private ExtendedControls.CheckBoxCustom checkBoxLarge;
     }
 }
