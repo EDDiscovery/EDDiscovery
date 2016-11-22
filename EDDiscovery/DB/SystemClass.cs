@@ -617,6 +617,60 @@ namespace EDDiscovery.DB
             return lasttime;
         }
 
+        public static List<ISystem>  GetSystemDistancesFrom(double x, double y, double z, int maxitems, double maxdist = 200, SQLiteConnectionSystem cn = null)
+        {
+            bool closeit = false;
+            List<ISystem> distlist = new List<ISystem>();
+
+            try
+            {
+                if (cn == null)
+                {
+                    closeit = true;
+                    cn = new SQLiteConnectionSystem();
+                }
+
+                using (DbCommand cmd = cn.CreateCommand(
+                    "SELECT EdsmId " +
+                    "FROM EdsmSystems " +
+                    "WHERE (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) < @maxsqdist " +
+                    "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
+                    "LIMIT @max"))
+                {
+                    cmd.AddParameterWithValue("@maxsqdist", (long)(maxdist* maxdist* XYZScalar* XYZScalar));
+                    cmd.AddParameterWithValue("@max", maxitems);
+                    cmd.AddParameterWithValue("xv", (long)(x * XYZScalar));
+                    cmd.AddParameterWithValue("yv", (long)(y * XYZScalar));
+                    cmd.AddParameterWithValue("zv", (long)(z * XYZScalar));
+
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read() && distlist.Count < maxitems)    
+                        {
+                            long edsmid = (long)reader[0];
+                            {
+                                    distlist.Add(GetSystem(edsmid, cn, SystemIDType.EdsmId));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                if (closeit && cn != null)
+                {
+                    cn.Dispose();
+                }
+            }
+            return distlist;
+        }
+
+
         public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar, 
                                                     double maxdist = 200 , SQLiteConnectionSystem cn = null)
         {

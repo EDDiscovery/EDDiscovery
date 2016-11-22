@@ -383,9 +383,7 @@ namespace EDDiscovery
         {
             get
             {
-                DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
-
-                return (from s in historylist where s.EDDNSync == false && s.EntryType== JournalTypeEnum.Scan && s.EventTimeUTC>ed22  orderby s.EventTimeUTC ascending select s).ToList();
+                return (from s in historylist where s.EDDNSync == false && s.EntryType== JournalTypeEnum.Scan  orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
 
