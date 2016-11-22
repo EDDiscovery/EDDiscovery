@@ -47,6 +47,7 @@ namespace EDDiscovery.UserControls
             travelhistorycontrol.OnTravelSelectionChanged += Display;
 
             checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMaterials", true);
+            checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMaterialsRare", false);
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMoons", true);
             int size = SQLiteDBClass.GetSettingInt("ScanPanelSize", 64);
             SetSizeCheckBoxes(size);
@@ -64,7 +65,7 @@ namespace EDDiscovery.UserControls
         private void UserControlScan_Resize(object sender, EventArgs e)
         {
             PositionInfo();
-            System.Diagnostics.Debug.WriteLine("Resize panel stars {0} {1}", DisplayRectangle, panelStars.Size);
+            //System.Diagnostics.Debug.WriteLine("Resize panel stars {0} {1}", DisplayRectangle, panelStars.Size);
 
             if (last_sn != null)
             {
@@ -144,7 +145,7 @@ namespace EDDiscovery.UserControls
 
                 if (belts)
                 {
-                    System.Diagnostics.Debug.WriteLine("Belts Cp " + curpos);
+                    //System.Diagnostics.Debug.WriteLine("Belts Cp " + curpos);
 
                     maxitemspos = CreateStarBelts(starcontrols, starnode.scandata, curpos, beltsize, starnode.fullname);
                     curpos = new Point(maxitemspos.X + itemsepar.Width, curpos.Y);   // move to the right
@@ -190,7 +191,7 @@ namespace EDDiscovery.UserControls
             }
 
             panelStars.Controls.AddRange(starcontrols.ToArray());
-            System.Diagnostics.Debug.WriteLine("Display area " + last_maxdisplayarea);
+            //System.Diagnostics.Debug.WriteLine("Display area " + last_maxdisplayarea);
         }
 
         Point CreateStarBelts(List<Control> pc, JournalScan sc, Point curpos, Size beltsize, string starname)
@@ -315,6 +316,8 @@ namespace EDDiscovery.UserControls
             Point maximum = matpos;
             int noperline = 0;
 
+            bool noncommon = checkBoxMaterialsRare.Checked;
+
             string matclicktext = sn.DisplayMaterials(2);
 
             foreach (KeyValuePair<string, double> sd in sn.Materials)
@@ -329,6 +332,9 @@ namespace EDDiscovery.UserControls
                     abv = mc.shortname;
                     fillc = mc.colour;
                     tooltip = mc.name + " (" + mc.shortname + ") " + mc.type + " " + sd.Value.ToString("0.0") + "%";
+
+                    if (noncommon && mc.type.IndexOf("common", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                        continue;
                 }
 
                 CreateMaterialImage(pc, matpos, matsize, abv, tooltip + "\n\n" + "All " + matclicktext, tooltip, fillc, Color.Black);
@@ -371,7 +377,8 @@ namespace EDDiscovery.UserControls
 
         Point CreateImageLabel(List<Control> c, Image i, Point postopright, Size size, string label, string ttext , int labelhoff)
         {
-            System.Diagnostics.Debug.WriteLine(label + " " + postopright + " size " + size);
+            //System.Diagnostics.Debug.WriteLine(label + " " + postopright + " size " + size);
+
             PictureBox pb = new PictureBox();
             pb.Image = i;
             pb.Size = size;
@@ -403,7 +410,7 @@ namespace EDDiscovery.UserControls
                 max = new Point( Math.Max(postopright.X + size.Width / 2 + labelhalfwidth, max.X), dp.Location.Y + 20);
             }
 
-            System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
+            //System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
             return max;
         }
 
@@ -447,6 +454,15 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sn);
         }
 
+        private void checkBoxMaterialsRare_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool("ScanPanelMaterialsRare", checkBoxMaterialsRare.Checked);
+            if (checkBoxMaterials.Checked == false)
+                checkBoxMaterials.Checked = true;       // will trigger above, and cause a redraw.
+            else
+                DrawSystem(last_sn);
+        }
+
         private void checkBoxMoons_CheckedChanged(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("ScanPanelMoons", checkBoxMoons.Checked);
@@ -457,9 +473,10 @@ namespace EDDiscovery.UserControls
         void SetSizeCheckBoxes(int size)
         {
             userchangesize = false;
-            checkBoxLarge.Checked = (size == 96);
-            checkBoxMedium.Checked = (size == 64);
-            checkBoxSmall.Checked = (size == 48);
+            checkBoxLarge.Checked = (size == 128);
+            checkBoxMedium.Checked = (size == 96);
+            checkBoxSmall.Checked = (size == 64);
+            checkBoxTiny.Checked = (size == 48);
             userchangesize = true;
             SetSize(size);
             SQLiteDBClass.PutSettingInt("ScanPanelSize", size);
@@ -469,16 +486,22 @@ namespace EDDiscovery.UserControls
         private void checkBoxLarge_CheckedChanged(object sender, EventArgs e)
         {
             if (userchangesize)
-                SetSizeCheckBoxes(96);
+                SetSizeCheckBoxes(128);
         }
 
         private void checkBoxMedium_CheckedChanged(object sender, EventArgs e)
         {
             if (userchangesize)
-                SetSizeCheckBoxes(64);
+                SetSizeCheckBoxes(96);
         }
 
         private void checkBoxSmall_CheckedChanged(object sender, EventArgs e)
+        {
+            if (userchangesize)
+                SetSizeCheckBoxes(64);
+        }
+
+        private void checkBoxTiny_CheckedChanged(object sender, EventArgs e)
         {
             if (userchangesize)
                 SetSizeCheckBoxes(48);
