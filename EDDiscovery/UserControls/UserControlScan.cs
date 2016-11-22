@@ -20,12 +20,12 @@ namespace EDDiscovery.UserControls
         private int displaynumber = 0;
         Size starsize,planetsize,moonsize,materialsize,beltsize;
         Size itemsepar;
-        double labelwidthmult;
-        int labelwidththreshold;
-        const int leftmargin = 30;
-        const int topmargin = 10;
+        int leftmargin;
+        int topmargin;
         const int materialspacer = 4;
         const int labelnerf = 4;
+
+        private string DbSave { get { return "ScanPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         StarScan.SystemNode last_sn = null;
         Point last_maxdisplayarea;
@@ -46,10 +46,10 @@ namespace EDDiscovery.UserControls
             displaynumber = vn;
             travelhistorycontrol.OnTravelSelectionChanged += Display;
 
-            checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMaterials", true);
-            checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMaterialsRare", false);
-            checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool("ScanPanelMoons", true);
-            int size = SQLiteDBClass.GetSettingInt("ScanPanelSize", 64);
+            checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Materials", true);
+            checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave+"MaterialsRare", false);
+            checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Moons", true);
+            int size = SQLiteDBClass.GetSettingInt(DbSave+"Size", 64);
             SetSizeCheckBoxes(size);
         }
 
@@ -84,12 +84,13 @@ namespace EDDiscovery.UserControls
 
         public void Display(HistoryEntry he, HistoryList hl)
         {
-            last_sn = null;
+            StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;
 
-            if (he != null)
-                  last_sn = hl.starscan.FindSystem(he.System);
-
-            DrawSystem(last_sn);
+            if (newnode != last_sn)
+            {
+                last_sn = newnode;
+                DrawSystem(last_sn);
+            }
         }
 
         void DrawSystem(StarScan.SystemNode sn)
@@ -218,7 +219,11 @@ namespace EDDiscovery.UserControls
         // return right bottom of area used from curpos
         Point CreatePlanetTree(List<Control> pc, StarScan.ScanNode planetnode , Point curpos )
         {
-            int offset = planetsize.Width/2 +  moonsize.Width/2;     // pass in normal offset if not double width item (half moon half planet)
+            // PLANETWIDTH|PLANETWIDTH  (if drawing a full planet with rings/landing)
+            // or
+            // MOONWIDTH|MOONWIDTH      (if drawing a single width planet)
+                                                                          // this offset, ONLY used if a single width planet, allows for two moons
+            int offset = moonsize.Width - planetsize.Width / 2;           // centre is moon width, back off by planetwidth/2 to place the left edge of the planet
 
             Point maxtreepos = CreatePlanetMoonRingLanding(pc, planetnode.scandata, JournalScan.GetPlanetImageNotScanned(), 
                                 curpos, planetsize, planetnode.ownname, ref offset , true);        // offset passes in the suggested offset, returns the centre offset
@@ -399,15 +404,28 @@ namespace EDDiscovery.UserControls
                 DrawnPanel dp = new ExtendedControls.DrawnPanel();
                 dp.ImageSelected = DrawnPanel.ImageType.Text;
                 dp.ImageText = label;
-                int labelhalfwidth = ((size.Width<labelwidththreshold) ? ((int)(size.Width * labelwidthmult)) : size.Width)/2;
-                                                                                                
-                                                                                                        // 4 just nerfs it up a bit
-                dp.Location = new Point(postopright.X + size.Width / 2 - labelhalfwidth, postopright.Y + size.Height - labelnerf + labelhoff );
-                dp.Size = new Size(labelhalfwidth*2, 20);
+                //dp.BackColor = Color.DarkBlue;        // use to show label areas
+                int labelwidth;
+
+                using (Graphics gr = CreateGraphics())
+                {
+                    SizeF sizef = gr.MeasureString(label, dp.Font);
+                    labelwidth = (int)(sizef.Width + 4);
+                }
+
+                dp.Location = new Point(postopright.X + size.Width / 2 - labelwidth/2, postopright.Y + size.Height - labelnerf + labelhoff );
+
+                if (dp.Location.X<0)
+                {
+                    pb.Location = new Point(pb.Location.X + -dp.Location.X, pb.Location.Y);
+                    dp.Location = new Point(0, dp.Location.Y);
+                }
+
+                dp.Size = new Size(labelwidth, 20);
                 dp.ForeColor = discoveryform.theme.LabelColor;
                 c.Add(dp);
 
-                max = new Point( Math.Max(postopright.X + size.Width / 2 + labelhalfwidth, max.X), dp.Location.Y + 20);
+                max = new Point( Math.Max(dp.Location.X + labelwidth, max.X), dp.Location.Y + 20);
             }
 
             //System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
@@ -427,9 +445,9 @@ namespace EDDiscovery.UserControls
             planetsize = new Size(starsize.Width * 3 / 4, starsize.Height * 3 / 4);
             moonsize = new Size(starsize.Width * 2 / 4, starsize.Height * 2 / 4);
             materialsize = new Size(24, 24);
-            itemsepar = new Size(0, 0);
-            labelwidthmult = 1.25;
-            labelwidththreshold = 64;
+            itemsepar = new Size(2, 2);
+            topmargin = 10;
+            leftmargin = 0;
         }
 
         #endregion
@@ -450,13 +468,13 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxMaterials_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("ScanPanelMaterials", checkBoxMaterials.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "Materials", checkBoxMaterials.Checked);
             DrawSystem(last_sn);
         }
 
         private void checkBoxMaterialsRare_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("ScanPanelMaterialsRare", checkBoxMaterialsRare.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "MaterialsRare", checkBoxMaterialsRare.Checked);
             if (checkBoxMaterials.Checked == false)
                 checkBoxMaterials.Checked = true;       // will trigger above, and cause a redraw.
             else
@@ -465,7 +483,7 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxMoons_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("ScanPanelMoons", checkBoxMoons.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "Moons", checkBoxMoons.Checked);
             DrawSystem(last_sn);
         }
 
@@ -479,7 +497,7 @@ namespace EDDiscovery.UserControls
             checkBoxTiny.Checked = (size == 48);
             userchangesize = true;
             SetSize(size);
-            SQLiteDBClass.PutSettingInt("ScanPanelSize", size);
+            SQLiteDBClass.PutSettingInt(DbSave + "Size", size);
             DrawSystem(last_sn);
         }
 
@@ -505,6 +523,13 @@ namespace EDDiscovery.UserControls
         {
             if (userchangesize)
                 SetSizeCheckBoxes(48);
+        }
+
+
+        private void panelStars_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right )
+                panelControls.Visible = !panelControls.Visible;
         }
 
         void ShowInfo(string text , bool onright )
