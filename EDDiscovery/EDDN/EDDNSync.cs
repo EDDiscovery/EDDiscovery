@@ -22,8 +22,6 @@ namespace EDDiscovery2.EDSM
         bool running = false;
         bool Exit = false;
         bool _syncTo = false;
-        bool _syncFrom = false;
-        int _defmapcolour = 0;
         private EDDiscoveryForm mainForm;
 
    
@@ -32,13 +30,11 @@ namespace EDDiscovery2.EDSM
             mainForm = frm;
         }
 
-        public bool StartSync(EDDNClass eddn, bool syncto, bool syncfrom, int defmapcolour)
+        public bool StartSync(EDDNClass eddn, bool syncto)
         {
             if (running) // Only start once.
                 return false;
             _syncTo = syncto;
-            _syncFrom = syncfrom;
-            _defmapcolour = defmapcolour;
 
             ThreadEDDNSync = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(SyncThread));
             ThreadEDDNSync.Name = "EDDN Sync";
@@ -61,17 +57,16 @@ namespace EDDiscovery2.EDSM
             running = false;
         }
 
-        private void Sync(EDDNClass edsm)
+        private void Sync(EDDNClass eddn)
         {
             try
             {
                 mainForm.LogLine("EDDN sync begin");
 
-                List<HistoryEntry> hlfsdunsyncedlist = mainForm.history.FilterByNotEDDNSynced;        // first entry is oldest
+                List<HistoryEntry> hlfsdunsyncedlist = mainForm.history.FilterByScanNotEDDNSynced;        // first entry is oldest
 
-                if (_syncTo && hlfsdunsyncedlist.Count > 0)                   // send systems to edsm (verified with dates, 29/9/2016, utc throughout)
+                if (_syncTo && hlfsdunsyncedlist.Count > 0)
                 {
-                    DateTime utcmin = hlfsdunsyncedlist[0].EventTimeUTC.AddDays(-1);        // 1 days for margin ;-)  only get them back to this date for speed..
 
                     mainForm.LogLine("EDDN: Sending " + hlfsdunsyncedlist.Count.ToString() + " events");
                     int edsmsystemssent = 0;
@@ -88,6 +83,7 @@ namespace EDDiscovery2.EDSM
                             if (EDDNSync.SendEDDNEvent(he))
                                 edsmsystemssent++;
 
+                            Thread.Sleep(1000);   // Throttling to 1 per second to not kill EDDN network
                         }
                     }
 

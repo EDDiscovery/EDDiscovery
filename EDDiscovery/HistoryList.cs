@@ -45,8 +45,14 @@ namespace EDDiscovery
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
-        public bool ISEDDNMessage { get { if (EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) return true; else return false; } }
-
+        public bool ISEDDNMessage
+        {
+            get
+            {
+                DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
+                if ((EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) && EventTimeUTC>ed22 ) return true; else return false;
+            }
+        }
         public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
 
         // Calculated values, not from JE
@@ -316,6 +322,8 @@ namespace EDDiscovery
 
         public MaterialCommoditiesLedger materialcommodititiesledger;       // and the ledger..
 
+        public EliteDangerous.JournalEvents.StarScan starscan;                                           // and the results of scanning
+
         public void Clear()
         {
             historylist.Clear();
@@ -371,11 +379,11 @@ namespace EDDiscovery
             }
         }
 
-        public List<HistoryEntry> FilterByNotEDDNSynced
+        public List<HistoryEntry> FilterByScanNotEDDNSynced
         {
             get
             {
-                return (from s in historylist where s.EDDNSync == false && s.ISEDDNMessage  orderby s.EventTimeUTC ascending select s).ToList();
+                return (from s in historylist where s.EDDNSync == false && s.EntryType== JournalTypeEnum.Scan  orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
 
@@ -447,8 +455,26 @@ namespace EDDiscovery
 
         public int GetFSDJumps( TimeSpan t )
         {
-            DateTime tme = DateTime.Now.Subtract(t);
-            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal>=tme select s).Count();
+            DateTime tme = DateTime.UtcNow.Subtract(t);
+            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC>=tme select s).Count();
+        }
+
+        public int GetFSDJumpsBeforeUTC(DateTime utc)
+        {
+            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal < utc select s).Count();
+        }
+
+        public delegate bool FurthestFund(HistoryEntry he, ref double lastv);
+        public HistoryEntry GetConditionally( double lastv, FurthestFund f )              // give a comparision function, find entry
+        {
+            HistoryEntry best = null;
+            foreach( HistoryEntry s in historylist )
+            {
+                if (f(s, ref lastv))
+                    best = s;
+            }
+
+            return best;
         }
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid

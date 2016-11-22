@@ -108,12 +108,15 @@ namespace EDDiscovery
 
             if (possiblejumps > 100)
             {
-                DialogResult res = MessageBox.Show("This will result in a large number (" + possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
-                if (res != System.Windows.Forms.DialogResult.Yes)
+                Invoke((MethodInvoker)delegate
                 {
-                    this.Invoke(new Action(() => ToggleButtons(true)));
-                    return;
-                }
+                    DialogResult res = MessageBox.Show(_discoveryForm, "This will result in a large number (" + possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
+                    if (res != System.Windows.Forms.DialogResult.Yes)
+                    {
+                        this.Invoke(new Action(() => ToggleButtons(true)));
+                        return;
+                    }
+                });
             }
 
             RouteIterative(fromsys, usingcoordsfrom, coordsfrom,            

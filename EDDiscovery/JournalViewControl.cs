@@ -22,20 +22,12 @@ namespace EDDiscovery
             InitializeComponent();
         }
 
-        public void InitControl(EDDiscoveryForm df)
+        public void InitControl(EDDiscoveryForm ed, int displaynumber)
         {
-            discoveryform = df;
-            userControlJournalGrid.Init(discoveryform, 0 , true);
-        }
-
-        public void Display()
-        {
-            userControlJournalGrid.Display(discoveryform.history);
-        }
-
-        public void AddNewEntry(HistoryEntry he)
-        {
-            userControlJournalGrid.AddNewEntry(he);
+            discoveryform = ed;
+            userControlJournalGrid.Init(ed,displaynumber);
+            userControlJournalGrid.ShowRefresh();
+            userControlJournalGrid.OnPopOut += PopOut;
         }
 
         #region Layout
@@ -47,12 +39,17 @@ namespace EDDiscovery
 
         public void SaveSettings()     // called by form when closing
         {
-            userControlJournalGrid.SaveLayout();
+            userControlJournalGrid.Closing();
         }
 
         public void RefreshButton(bool state)
         {
-            userControlJournalGrid.RefreshButton(false);
+            userControlJournalGrid.RefreshButton(state);
+        }
+
+        public void PopOut()
+        {
+            discoveryform.TravelControl.PopOut(TravelHistoryControl.PopOuts.Journal);
         }
 
         #endregion

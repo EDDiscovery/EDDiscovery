@@ -42,12 +42,14 @@ namespace EDDiscovery2
         private bool hideall = false;
 
         private List<int> columnpos;
+        private List<int> oldcolumnpos;
         private int visiblecolwidth;
         private bool bodyScanShowing = false;
         private int noScanHeight;
         private int noScanTop;
         private bool resizingForScan = false;
         List<Button> dividers;
+        private Color themeColour;
 
         public event EventHandler RequiresRefresh;
 
@@ -105,6 +107,7 @@ namespace EDDiscovery2
 
             config = (Configuration)SQLiteDBClass.GetSettingInt("SummaryPanelOptions", (int)config);
             toolStripMenuItemTargetLine.Checked = Config( Configuration.showTargetLine);
+            toolStripMenuItemTime.Checked = Config(Configuration.showTime);
             EDSMButtonToolStripMenuItem.Checked = Config( Configuration.showEDSMButton);
             showTargetToolStripMenuItem.Checked = Config( Configuration.showDistancePerStar);
             showNotesToolStripMenuItem.Checked = Config( Configuration.showNotes);
@@ -161,7 +164,7 @@ namespace EDDiscovery2
                 dividers.Add(p);
             }
         }
-
+        
         void ResetTabList()                             // work out optimum tab spacing by what is selected
         {
             columnpos = new List<int>();
@@ -241,7 +244,7 @@ namespace EDDiscovery2
                 columnpos.Add(columnpos[columnpos.Count - 1] + 100);
             
         }
-        
+
         public void SetGripperColour(Color grip)
         {
             if (grip.GetBrightness() < 0.15)       // override if its too dark..
@@ -256,6 +259,12 @@ namespace EDDiscovery2
             transparentkey = (grip == Color.Red) ? Color.Green : Color.Red;
             this.BackColor = transparentkey;
             this.TransparencyKey = transparentkey;
+        }
+
+        public void SetTextColour(Color fromTheme)
+        {
+            themeColour = fromTheme;
+            labelBodyScanData.ForeColor = fromTheme;
         }
         
         public void ResetForm(DataGridView vsc)
@@ -391,38 +400,34 @@ namespace EDDiscovery2
 
             if (!vscrow.Visible)            // may not be visible due to being turned off.. if so, reject.
                 return;
-
-            Color rowc = CSel(vsc.Rows[vscrow.Index].DefaultCellStyle.ForeColor, vsc.ForeColor);
-            if (rowc.GetBrightness() < 0.15)       // override if its too dark..
-                rowc = Color.White;
-
+            
             List<ControlEntryProperties> cep = new List<ControlEntryProperties>();
             
             HistoryEntry he = EDDiscovery.UserControls.UserControlTravelGrid.GetHistoryEntry(vscrow);
 
             // add an empty column, the scan data will go over the top
             if (bodyScanShowing && Config(Configuration.showScanLeft))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, string.Empty));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, string.Empty));
 
             if (Config( Configuration.showEDSMButton))
                 cep.Add(new ControlEntryProperties(butfont, panel_grip.ForeColor, "!!<EDSMBUT:" + (string)he.System.name));
 
             if (Config( Configuration.showTime))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, ((DateTime)vscrow.Cells[0].Value).ToString("HH:mm.ss")));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, ((DateTime)vscrow.Cells[0].Value).ToString("HH:mm.ss")));
 
             if (Config( Configuration.showDescription))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font),  rowc, (string)vscrow.Cells[2].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[2].Value));
 
             if (Config( Configuration.showInformation))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), rowc, (string)vscrow.Cells[3].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), themeColour, ((string)(vscrow.Cells[3].Value)).Replace("\r\n", " ")));
 
             if (toolStripComboBoxOrder.SelectedIndex == 0 && Config( Configuration.showNotes))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), rowc, (string)vscrow.Cells[4].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), themeColour, ((string)vscrow.Cells[4].Value).Replace("\r\n", " ")));
 
             bool showdistance = !Config( Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDJump;
 
             if (toolStripComboBoxOrder.SelectedIndex == 2 && Config( Configuration.showDistancePerStar))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), rowc, showdistance ? DistToStar(he, tpos) : "" ));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), themeColour, showdistance ? DistToStar(he, tpos) : "" ));
 
             if (Config( Configuration.showXYZ) )
             {
@@ -430,16 +435,16 @@ namespace EDDiscovery2
                 string yv = (he.System.HasCoordinate && showdistance) ? he.System.y.ToString("0.00") : "";
                 string zv = (he.System.HasCoordinate && showdistance) ? he.System.z.ToString("0.00") : "";
 
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, xv));
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, yv));
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), rowc, zv));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, xv));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, yv));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), themeColour, zv));
             }
 
             if (toolStripComboBoxOrder.SelectedIndex > 0 && Config( Configuration.showNotes))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), rowc, (string)vscrow.Cells[4].Value));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[4].DefaultCellStyle.Font, vsc.Font), themeColour, (string)vscrow.Cells[4].Value));
 
             if (toolStripComboBoxOrder.SelectedIndex < 2 && Config( Configuration.showDistancePerStar))
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), rowc, showdistance ? DistToStar(he, tpos) : ""));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), themeColour, showdistance ? DistToStar(he, tpos) : ""));
 
             if (addit)
             {
@@ -467,24 +472,28 @@ namespace EDDiscovery2
                 }
 
                 labelBodyScanData.Height = this.ClientRectangle.Height - 8;
-                labelBodyScanData.Width = 200;
                 labelBodyScanData.Text = scan.DisplayString();
                 bodyScanShowing = true;
 
                 if (Config(Configuration.showScanLeft))
                 {
+                    oldcolumnpos = columnpos;
                     ResetTabList();
+                    columnpos[1] = labelBodyScanData.Width + 4;
                     labelBodyScanData.Left = 4;
+                    labelBodyScanData.Top = 4;
                     RequiresRefresh(this, null);
                 }
                 else if (Config(Configuration.showScanRight))
                 {
                     labelBodyScanData.Left = visiblecolwidth + 4;
+                    labelBodyScanData.Top = 4;
                 }
                 else if (Config(Configuration.showScanOnTop))
                 {
                     labelBodyScanData.Width = this.ClientRectangle.Width - 8;
                     labelBodyScanData.Left = 4;
+                    labelBodyScanData.Top = 4;
                     lt.SetDisplaySize(0);
                 }
                 else if (Config(Configuration.showScanBelow))
@@ -493,7 +502,7 @@ namespace EDDiscovery2
                     this.Height += 608;
                     labelBodyScanData.Height = 604;
                     labelBodyScanData.Top = noScanHeight + 4;
-                    labelBodyScanData.Left = (this.Width / 2) - 100;
+                    labelBodyScanData.Left = (this.Width - labelBodyScanData.Width) / 2;
                 }
                 else if (Config(Configuration.showScanAbove))
                 {
@@ -512,7 +521,7 @@ namespace EDDiscovery2
                     this.Top = noScanTop - requiredHeight - 32;
                     labelBodyScanData.Height = requiredHeight;
                     labelBodyScanData.Top = 4;
-                    labelBodyScanData.Left = (this.Width / 2) - 100;
+                    labelBodyScanData.Left = (this.Width - labelBodyScanData.Width) / 2;
                     RequiresRefresh(this, null);
                 }
 
@@ -533,7 +542,8 @@ namespace EDDiscovery2
 
             if (Config(Configuration.showScanLeft))
             {
-                ResetTabList();
+                columnpos = oldcolumnpos;
+                visiblecolwidth -= 200;
             }
             else if (Config(Configuration.showScanOnTop))
             {
@@ -606,7 +616,8 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingInt("PopOutFormLeft", this.Left);
             SQLiteDBClass.PutSettingInt("SummaryPanelOptions", (int)config);
             SQLiteDBClass.PutSettingInt("SummaryPanelLayout", toolStripComboBoxOrder.SelectedIndex);
-            string s = string.Join<int>(",", columnpos);
+            // if we've inserted a column for the surface scan then don't save it
+            string s = string.Join<int>(",", bodyScanShowing && Config(Configuration.showScanLeft) ? oldcolumnpos : columnpos);
             SQLiteDBClass.PutSettingString("SummaryPanelTabs", s);
         }
 
@@ -644,7 +655,7 @@ namespace EDDiscovery2
 
         private void SummaryPopOut_Resize(object sender, EventArgs e)
         {
-            if (!bodyScanShowing) lt.SetDisplaySize(hideall ? 0 : this.ClientRectangle.Height);
+            if (!bodyScanShowing && lt != null) lt.SetDisplaySize(hideall ? 0 : this.ClientRectangle.Height);
         }
 
         void FadeOut(object sender, EventArgs e)            // hiding
@@ -677,9 +688,11 @@ namespace EDDiscovery2
 
         private void MouseEnterControl(object sender, EventArgs e)
         {
-            if (resizingForScan)
+            if (resizingForScan && !Config(Configuration.showScanIndefinite))
             {
                 // stops the cursor appearing and the form fading in if we resize for a scan event and the mouse is now in the control
+                // but not if the scan shows indefinitely, otherwise it's lost until you close and re-open the S-Panel
+                // if a user wants above/below and indefinite then they can move the pointer out of the way...
                 resizingForScan = false;
                 Cursor.Hide();
                 return;
@@ -1121,7 +1134,7 @@ namespace EDDiscovery2
                 {
                     DrawnPanel edsm = new DrawnPanel();
                     edsm.Name = cep[i].text.Substring(11);
-                    edsm.Image = DrawnPanel.ImageType.Text;
+                    edsm.ImageSelected = DrawnPanel.ImageType.InverseText;
                     edsm.ImageText = "EDSM";
                     edsm.Size = new Size(100, vsize-6);
                     edsm.MarginSize = -1;       // 0 is auto calc, -1 is zero
@@ -1135,6 +1148,7 @@ namespace EDDiscovery2
                     lab.Text = cep[i].text;
                     lab.Location = new Point(0, vpos);
                     lab.AutoSize = false;
+                    ///////lab.ClipToOneLine = true;
                     lab.Size = new Size(100, vsize-2);
                     parent.Controls.Add(lab);
                     items.Add(lab);

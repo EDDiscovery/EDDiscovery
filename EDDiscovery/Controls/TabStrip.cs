@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
 
 namespace EDDiscovery.Controls
 {
@@ -14,24 +15,34 @@ namespace EDDiscovery.Controls
     {
         public bool StripAtTop { get; set;  } = false;
         public Bitmap[] Images;     // images
+        public string[] ToolTips;
+        public bool ShowPopOut { get; set; }= true;
+        
         public int SelectedIndex { get { return si; } set { ChangePanel(value); } }
         public Control CurrentControl;
 
         public delegate void RemoveTab(TabStrip t, Control c);
         public event RemoveTab OnRemoving;
 
-        public delegate Control CreateTab(TabStrip t, int no);
+        public delegate Control CreateTab(TabStrip t, int no);          // Create the TAB, should only make it, not configure it
         public event CreateTab OnCreateTab;
+
+        public delegate void PostCreateTab(TabStrip t, Control ctrl , int no);  // called after TAB has been added to control, so should be sized up
+        public event PostCreateTab OnPostCreateTab;
+
+        public delegate void PopOut(TabStrip t, int no);
+        public event PopOut OnPopOut;
 
         private Panel[] imagepanels;
         private Timer autofade = new Timer();
-        private int si = 0;
-       
+        private int si = -1;
+
         public TabStrip()
         {
             InitializeComponent();
             labelCurrent.Text = "None";
             autofade.Tick += FadeInOut;
+            drawnPanelPopOut.Visible = false;
         }
 
         public void PanelClick(object sender , EventArgs e )
@@ -50,45 +61,130 @@ namespace EDDiscovery.Controls
                 this.Controls.Remove(CurrentControl);
                 CurrentControl.Dispose();
                 CurrentControl = null;
+                drawnPanelPopOut.Visible = false;
+                si = -1;
             }
 
             if ( OnCreateTab != null )
             {
-                CurrentControl = OnCreateTab(this,i);
-                CurrentControl.Dock = DockStyle.Fill;
+                CurrentControl = OnCreateTab(this, i);      // TAB should just create..
 
-                if (StripAtTop)
+                if (CurrentControl != null)
                 {
-                    Control p = this.Controls[0];
-                    this.Controls.Clear();
-                    this.Controls.Add(CurrentControl);
-                    this.Controls.Add(p);
-                }
-                else
-                    this.Controls.Add(CurrentControl);
-                labelCurrent.Text = CurrentControl.Text;
-                panelSelected.BackgroundImage = Images[i];
-                si = i;
+                    si = i;
 
+                    CurrentControl.Dock = DockStyle.Fill;
+
+                    if (StripAtTop)
+                    {
+                        Control p = this.Controls[0];
+                        this.Controls.Clear();
+                        this.Controls.Add(CurrentControl);
+                        this.Controls.Add(p);
+                    }
+                    else
+                        this.Controls.Add(CurrentControl);
+
+                    OnPostCreateTab(this, CurrentControl, i);       // now tab is in control set, give it a chance to configure itself and set its name
+
+                    panelSelected.BackgroundImage = Images[i];
+
+                    labelCurrent.Text = CurrentControl.Text;
+                    drawnPanelPopOut.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, 3);
+                    drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
+                }
+            }
+            else
+            {
+                labelCurrent.Text = "None";
+                drawnPanelPopOut.Visible = false;
+            }
+
+            labelCurrent.Visible = !tabstripvisible;
+        }
+
+        int tabdisplaystart = 0;    // first tab
+        int tabtotalwidth = 0;      // width of all tabs, plus spaces
+        int tabdisplayed = 0;       // number of tabs
+
+        private void TabStrip_Layout(object sender, LayoutEventArgs e)
+        {
+            if (StripAtTop && panelBottom.Dock != DockStyle.Top)
+            {
+                panelBottom.Dock = DockStyle.Top;
             }
         }
 
+        const int Spacing = 4;
+
+        void DisplayTabs( bool setvisible )
+        {
+            int i = 0;
+            for (; i < tabdisplaystart; i++)
+                imagepanels[i].Visible = false;
+
+            bool arrowson = false;
+            bool titleon = true;
+
+            if (setvisible)
+            {
+                int xpos = panelSelected.Width + Spacing*4;       // start here
+                int stoppoint = DisplayRectangle.Width - Spacing; // stop here
+
+                int spaceforarrowsandoneicon = panelArrowLeft.Width + Spacing + imagepanels[0].Width + Spacing + panelArrowRight.Width;
+
+                if ( xpos + spaceforarrowsandoneicon > stoppoint)   // no space at all !
+                {
+                    xpos = 0;                                       // turn off titles, use all the space
+                    titleon = false;
+                }
+
+                if ( xpos + tabtotalwidth > stoppoint )     // if total tab width (icon space icon..) too big
+                {
+                    panelArrowLeft.Location = new Point(xpos, 4);
+                    xpos += panelArrowLeft.Width + Spacing; // move over allowing space for left and spacing
+                    stoppoint -= panelArrowRight.Width + Spacing;     // allow space for right arrow plus padding
+                    arrowson = true;
+                }
+
+                tabdisplayed = 0;           
+                for (; i < imagepanels.Length && xpos < stoppoint - Images[i].Width; i++)
+                {                                           // if its soo tight, may display nothing, thats okay
+                    imagepanels[i].Location = new Point(xpos, 3);
+                    xpos += Images[i].Width + Spacing*2;
+                    imagepanels[i].Visible = true;
+                    tabdisplayed++;
+                }
+
+                if ( arrowson )
+                    panelArrowRight.Location = new Point(xpos, 4);
+            }
+
+            for (; i < imagepanels.Length;i++)
+                imagepanels[i].Visible = false;
+
+            panelArrowRight.Visible = panelArrowLeft.Visible = arrowson;
+            panelSelected.Visible = titleon;
+            labelCurrent.Visible = !setvisible;             // because text widths are so variable, dep on font/dialog units, turn off during selection
+            tabstripvisible = setvisible;
+
+            drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible && si != -1;
+        }
+
         bool tobevisible = false;
+        bool tabstripvisible = false;
 
         private void panelBottom_MouseEnter(object sender, EventArgs e)
         {
             if (imagepanels == null && Images != null)
             {
-                imagepanels = new Panel[Images.Length];
+                imagepanels = new Panel[Images.Length];     // set to say 4 and you can test it with arrows
 
-                int xpos = 150;
-
-                for (int i = 0; i < Images.Length; i++)
+                for (int i = 0; i < imagepanels.Length; i++)
                 {
                     imagepanels[i] = new Panel()
                     {
                         BackgroundImage = Images[i],
-                        Location = new Point(xpos, 4),
                         Tag = i,
                         BackgroundImageLayout = ImageLayout.None,
                         Visible = false
@@ -99,10 +195,24 @@ namespace EDDiscovery.Controls
                     imagepanels[i].MouseEnter += panelBottom_MouseEnter;
                     imagepanels[i].MouseLeave += panelBottom_MouseLeave;
 
-                    panelBottom.Controls.Add(imagepanels[i]);
+                    if (ShowPopOut)
+                    {
+                        imagepanels[i].ContextMenuStrip = contextMenuStrip1;
+                        imagepanels[i].Tag = i;     // remember by index
+                    }
 
-                    xpos += Images[i].Width + 8;
+                    tabtotalwidth += Images[i].Width + Spacing*2;
+
+                    if (ToolTips != null)
+                    {
+                        toolTip1.SetToolTip(imagepanels[i], ToolTips[i]);
+                        toolTip1.ShowAlways = true;      // if not, it never appears
+                    }
+
+                    panelBottom.Controls.Add(imagepanels[i]);
                 }
+
+                tabtotalwidth -= Spacing * 2;           // don't count last spacing.
             }
 
             autofade.Stop();
@@ -120,7 +230,7 @@ namespace EDDiscovery.Controls
         {
             autofade.Stop();
 
-            if (tobevisible)
+            if (tobevisible && !stripopen )
             {
                 tobevisible = false;
                 autofade.Interval = 750;
@@ -135,19 +245,61 @@ namespace EDDiscovery.Controls
 
             //System.Diagnostics.Debug.WriteLine("{0} {1} Fade {2}" , Environment.TickCount, Name, tobevisible);
 
-            if (imagepanels[0].Visible != tobevisible )
-            { 
-                for (int i = 0; i < Images.Length; i++)
-                    imagepanels[i].Visible = tobevisible;
+            if (tabstripvisible != tobevisible)
+                DisplayTabs(tobevisible);
+        }
+
+        private void panelArrowRight_Click(object sender, EventArgs e)
+        {
+            if (tabdisplaystart < imagepanels.Length - tabdisplayed)
+            {
+                tabdisplaystart++;
+                DisplayTabs(true);
             }
         }
 
-        private void TabStrip_Layout(object sender, LayoutEventArgs e)
+        private void panelArrowLeft_Click(object sender, EventArgs e)
         {
-            if (StripAtTop && panelBottom.Dock != DockStyle.Top )
+            if (tabdisplaystart > 0)
             {
-                panelBottom.Dock = DockStyle.Top;
+                tabdisplaystart--;
+                DisplayTabs(true);
             }
+
+        }
+
+        private void TabStrip_Resize(object sender, EventArgs e)
+        {
+            tabdisplaystart = 0;        // because we will display a different set next time
+        }
+
+        private void panelPopOut_Click(object sender, EventArgs e)
+        {
+            if (OnPopOut != null)
+                OnPopOut(this, si);
+        }
+
+        private void toolStripMenuItemPopOut_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            ContextMenuStrip cms = (ContextMenuStrip)tsmi.Owner;
+            Panel p = (Panel)cms.SourceControl;
+
+            if (OnPopOut != null)
+                OnPopOut(this, (int)p.Tag);
+        }
+
+        bool stripopen = false;
+
+        private void contextMenuStrip1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            stripopen = false;
+            panelBottom_MouseLeave(sender, e);      // same as a mouse leave on one of the controls
+        }
+
+        private void contextMenuStrip1_Opened(object sender, EventArgs e)
+        {
+            stripopen = true;
         }
     }
 }

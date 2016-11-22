@@ -15,13 +15,16 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlJournalGrid : UserControlCommonBase
     {
-        private static EDDiscoveryForm discoveryform;
+        private EDDiscoveryForm discoveryform;
         private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
         EventFilterSelector cfs = new EventFilterSelector();
 
         private string DbFilterSave { get { return "JournalGridControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return "JournalGrid" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "JournalEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+
+        public delegate void PopOut();
+        public PopOut OnPopOut;
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -42,9 +45,9 @@ namespace EDDiscovery.UserControls
             Name = "Journal";
         }
 
-        public void Init(EDDiscoveryForm form, int vn , bool showrefresh) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            discoveryform = form;
+            discoveryform = ed;
             displaynumber = vn;
 
             dataGridViewJournal.MakeDoubleBuffered();
@@ -55,7 +58,26 @@ namespace EDDiscovery.UserControls
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
-            buttonRefresh.Visible = showrefresh;
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += AddNewEntry;
+
+            buttonRefresh.Visible = false;
+        }
+
+        public void NoHistoryIcon()
+        {
+            panelJournalIcon.Visible = false;
+            drawnPanelPopOut.Location = new Point(panelJournalIcon.Location.X, drawnPanelPopOut.Location.Y);
+        }
+
+        public void NoPopOutIcon()
+        {
+            drawnPanelPopOut.Visible = false;
+        }
+
+        public void ShowRefresh()
+        {
+            buttonRefresh.Visible = true;
         }
 
         public override void LoadLayout()
@@ -63,19 +85,12 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewJournal, DbColumnSave);
         }
 
-        public override void SaveLayout()
+        public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
+            discoveryform.OnHistoryChange -= Display;
+            discoveryform.OnNewEntry -= AddNewEntry;
         }
-
-        private void dataGridViewJournal_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
-        {
-        }
-
-        private void dataGridViewJournal_Resize(object sender, EventArgs e)
-        {
-        }
-
 
         #endregion
 
@@ -141,7 +156,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows[rownr].Cells[JournalHistoryColumns.HistoryTag].Tag = item;
         }
 
-        public void AddNewEntry(HistoryEntry he)
+        private void AddNewEntry(HistoryEntry he, HistoryList hl)
         {
             if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")))
             {
@@ -327,5 +342,10 @@ namespace EDDiscovery.UserControls
             return -1;
         }
 
+        private void drawnPanelPopOut_Click(object sender, EventArgs e)
+        {
+            if (OnPopOut != null)
+                OnPopOut();
+        }
     }
 }
