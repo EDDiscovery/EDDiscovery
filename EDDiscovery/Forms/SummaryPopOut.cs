@@ -471,7 +471,8 @@ namespace EDDiscovery2
 
         private void SummaryPopOut_Resize(object sender, EventArgs e)
         {
-            lt.SetDisplaySize(hideall ? 0 : this.ClientRectangle.Height);
+            if (lt != null)
+                lt.SetDisplaySize(hideall ? 0 : this.ClientRectangle.Height);
         }
 
         void FadeOut(object sender, EventArgs e)            // hiding
