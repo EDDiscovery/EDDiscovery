@@ -158,7 +158,7 @@
             this.viewOnEDSMToolStripMenuItem,
             this.toolStripMenuItemStartStop});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 70);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 92);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem

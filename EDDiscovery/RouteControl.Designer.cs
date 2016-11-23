@@ -147,7 +147,7 @@
             this.buttonExtTravelTo.Name = "buttonExtTravelTo";
             this.buttonExtTravelTo.Size = new System.Drawing.Size(53, 23);
             this.buttonExtTravelTo.TabIndex = 25;
-            this.buttonExtTravelTo.Text = "Travel";
+            this.buttonExtTravelTo.Text = "History";
             this.buttonExtTravelTo.UseVisualStyleBackColor = true;
             this.buttonExtTravelTo.Click += new System.EventHandler(this.buttonExtTravelTo_Click);
             // 
@@ -160,7 +160,7 @@
             this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
             this.buttonExtTravelFrom.Size = new System.Drawing.Size(53, 23);
             this.buttonExtTravelFrom.TabIndex = 25;
-            this.buttonExtTravelFrom.Text = "Travel";
+            this.buttonExtTravelFrom.Text = "History";
             this.buttonExtTravelFrom.UseVisualStyleBackColor = true;
             this.buttonExtTravelFrom.Click += new System.EventHandler(this.buttonExtTravelFrom_Click);
             // 
@@ -209,6 +209,15 @@
             this.textBox_From.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_From.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_From.BorderColorScaling = 0.5F;
+            this.textBox_From.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.textBox_From.DropDownBorderColor = System.Drawing.Color.Green;
+            this.textBox_From.DropDownHeight = 200;
+            this.textBox_From.DropDownItemHeight = 20;
+            this.textBox_From.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.textBox_From.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.textBox_From.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.textBox_From.DropDownWidth = 0;
+            this.textBox_From.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBox_From.Location = new System.Drawing.Point(57, 19);
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.ReadOnly = true;
@@ -235,6 +244,15 @@
             this.textBox_To.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_To.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_To.BorderColorScaling = 0.5F;
+            this.textBox_To.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.textBox_To.DropDownBorderColor = System.Drawing.Color.Green;
+            this.textBox_To.DropDownHeight = 200;
+            this.textBox_To.DropDownItemHeight = 20;
+            this.textBox_To.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.textBox_To.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.textBox_To.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.textBox_To.DropDownWidth = 0;
+            this.textBox_To.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBox_To.Location = new System.Drawing.Point(326, 19);
             this.textBox_To.Name = "textBox_To";
             this.textBox_To.ReadOnly = true;

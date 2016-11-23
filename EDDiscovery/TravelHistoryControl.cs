@@ -500,7 +500,7 @@ namespace EDDiscovery
             {
                 textBoxSystem.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
-                textBoxVisits.Text = textBoxState.Text = textBoxSolDist.Text = richTextBoxNote.Text = "";
+                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
             }
             else
@@ -520,14 +520,14 @@ namespace EDDiscovery
                     textBoxY.Text = syspos.System.y.ToString(SingleCoordinateFormat);
                     textBoxZ.Text = syspos.System.z.ToString(SingleCoordinateFormat);
 
-                    textBoxSolDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
+                    textBoxHomeDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
                 }
                 else
                 {
                     textBoxX.Text = "?";
                     textBoxY.Text = "?";
                     textBoxZ.Text = "?";
-                    textBoxSolDist.Text = "";
+                    textBoxHomeDist.Text = "";
                 }
 
                 int count = _discoveryForm.history.GetVisitsCount(syspos.System.name, syspos.System.id_edsm);
@@ -568,10 +568,15 @@ namespace EDDiscovery
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
             // ORDER IMPORTANT for right outer/inner splitter, otherwise windows fixes it 
-            splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
-            splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-            splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance); 
-            splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
+
+            try
+            {
+                splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
+                splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+                splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
+                splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
+            }
+            catch { };          // so splitter can except, if values are strange, but we don't really care, so lets throw away the exception
 
             userControlTravelGrid.LoadLayout();
 

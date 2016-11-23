@@ -77,6 +77,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.SuspendLayout();
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // groupBoxTheme
             // 
             this.groupBoxTheme.AlternateClientBackColor = System.Drawing.Color.Blue;
@@ -111,6 +115,7 @@
             this.checkBoxKeepOnTop.TabIndex = 5;
             this.checkBoxKeepOnTop.Text = "Keep on Top";
             this.checkBoxKeepOnTop.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxKeepOnTop, "This window, and its children, top");
             this.checkBoxKeepOnTop.UseVisualStyleBackColor = true;
             this.checkBoxKeepOnTop.CheckedChanged += new System.EventHandler(this.checkBoxKeepOnTop_CheckedChanged);
             // 
@@ -126,7 +131,7 @@
             this.comboBoxTheme.DropDownHeight = 150;
             this.comboBoxTheme.DropDownWidth = 267;
             this.comboBoxTheme.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxTheme.ItemHeight = 20;
+            this.comboBoxTheme.ItemHeight = 13;
             this.comboBoxTheme.Location = new System.Drawing.Point(7, 19);
             this.comboBoxTheme.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTheme.Name = "comboBoxTheme";
@@ -138,6 +143,7 @@
             this.comboBoxTheme.SelectedValue = null;
             this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
             this.comboBoxTheme.TabIndex = 0;
+            this.toolTip.SetToolTip(this.comboBoxTheme, "Select the theme to use");
             this.comboBoxTheme.ValueMember = "";
             // 
             // button_edittheme
@@ -150,6 +156,7 @@
             this.button_edittheme.Size = new System.Drawing.Size(95, 23);
             this.button_edittheme.TabIndex = 10;
             this.button_edittheme.Text = "Edit Theme";
+            this.toolTip.SetToolTip(this.button_edittheme, "Edit theme and change colours fonts");
             this.button_edittheme.UseVisualStyleBackColor = true;
             this.button_edittheme.Click += new System.EventHandler(this.button_edittheme_Click);
             // 
@@ -163,6 +170,7 @@
             this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
             this.buttonSaveTheme.TabIndex = 7;
             this.buttonSaveTheme.Text = "Save Theme";
+            this.toolTip.SetToolTip(this.buttonSaveTheme, "Save theme to disk");
             this.buttonSaveTheme.UseVisualStyleBackColor = true;
             this.buttonSaveTheme.Click += new System.EventHandler(this.buttonSaveTheme_Click);
             // 
@@ -208,6 +216,7 @@
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
+            this.toolTip.SetToolTip(this.textBoxDefaultZoom, "Select default zoom of map. Use the map itself to determine this for you");
             this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
             // 
             // label5
@@ -230,10 +239,10 @@
             this.radioButtonHistorySelection.RadioButtonInnerColor = System.Drawing.Color.White;
             this.radioButtonHistorySelection.SelectedColor = System.Drawing.Color.DarkBlue;
             this.radioButtonHistorySelection.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButtonHistorySelection.Size = new System.Drawing.Size(137, 17);
+            this.radioButtonHistorySelection.Size = new System.Drawing.Size(126, 17);
             this.radioButtonHistorySelection.TabIndex = 4;
             this.radioButtonHistorySelection.TabStop = true;
-            this.radioButtonHistorySelection.Text = "Travel History Selection";
+            this.radioButtonHistorySelection.Text = "History Grid Selection";
             this.radioButtonHistorySelection.UseVisualStyleBackColor = true;
             // 
             // radioButtonCentreHome
@@ -290,6 +299,7 @@
             this.textBoxHomeSystem.Name = "textBoxHomeSystem";
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
             this.textBoxHomeSystem.TabIndex = 0;
+            this.toolTip.SetToolTip(this.textBoxHomeSystem, "Select home system for 3d Map");
             // 
             // panel_defaultmapcolor
             // 
@@ -300,6 +310,7 @@
             this.panel_defaultmapcolor.Size = new System.Drawing.Size(28, 20);
             this.panel_defaultmapcolor.TabIndex = 5;
             this.panel_defaultmapcolor.Tag = "";
+            this.toolTip.SetToolTip(this.panel_defaultmapcolor, "New travel entries get this colour on the map");
             this.panel_defaultmapcolor.Click += new System.EventHandler(this.panel_defaultmapcolor_Click);
             // 
             // groupBox3
@@ -333,10 +344,11 @@
             this.checkBoxFocusNewSystem.Location = new System.Drawing.Point(17, 69);
             this.checkBoxFocusNewSystem.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxFocusNewSystem.Name = "checkBoxFocusNewSystem";
-            this.checkBoxFocusNewSystem.Size = new System.Drawing.Size(132, 17);
+            this.checkBoxFocusNewSystem.Size = new System.Drawing.Size(253, 17);
             this.checkBoxFocusNewSystem.TabIndex = 3;
-            this.checkBoxFocusNewSystem.Text = "Focus on New System";
+            this.checkBoxFocusNewSystem.Text = "History cursor to new Journal Entry automatically";
             this.checkBoxFocusNewSystem.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxFocusNewSystem, "Move the history cursor to the new journal entry automatically when its received");
             this.checkBoxFocusNewSystem.UseVisualStyleBackColor = true;
             this.checkBoxFocusNewSystem.CheckedChanged += new System.EventHandler(this.checkBoxFocusNewSystem_CheckedChanged);
             // 
@@ -354,6 +366,7 @@
             this.checkBoxUTC.TabIndex = 0;
             this.checkBoxUTC.Text = "Display Game time instead of local time";
             this.checkBoxUTC.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxUTC, "Display game time (UTC) instead of your local time");
             this.checkBoxUTC.UseVisualStyleBackColor = true;
             this.checkBoxUTC.CheckedChanged += new System.EventHandler(this.checkBoxUTC_CheckedChanged);
             // 
@@ -371,6 +384,7 @@
             this.checkBoxOrderRowsInverted.TabIndex = 2;
             this.checkBoxOrderRowsInverted.Text = "Number Rows Lastest Entry Highest";
             this.checkBoxOrderRowsInverted.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxOrderRowsInverted, "Number oldest entry 1, latest entry highest");
             this.checkBoxOrderRowsInverted.UseVisualStyleBackColor = true;
             // 
             // checkBoxEDSMLog
@@ -387,6 +401,7 @@
             this.checkBoxEDSMLog.TabIndex = 1;
             this.checkBoxEDSMLog.Text = "Log EDSM requests";
             this.checkBoxEDSMLog.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxEDSMLog, "Store EDSM queries in a log file");
             this.checkBoxEDSMLog.UseVisualStyleBackColor = true;
             // 
             // checkboxSkipSlowUpdates
@@ -451,13 +466,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(773, 47);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(773, 23);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 122);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 146);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 3;
@@ -495,6 +510,7 @@
             this.dataGridViewCommanders.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.dataGridViewCommanders.Size = new System.Drawing.Size(773, 169);
             this.dataGridViewCommanders.TabIndex = 2;
+            this.toolTip.SetToolTip(this.dataGridViewCommanders, "Configure commanders");
             this.dataGridViewCommanders.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCommanders_CellEndEdit);
             // 
             // ColumnNr
@@ -588,6 +604,7 @@
             this.btnDeleteCommander.Size = new System.Drawing.Size(121, 23);
             this.btnDeleteCommander.TabIndex = 3;
             this.btnDeleteCommander.Text = "Delete Commander";
+            this.toolTip.SetToolTip(this.btnDeleteCommander, "Delete an existing commander");
             this.btnDeleteCommander.UseVisualStyleBackColor = true;
             this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
             // 
@@ -601,6 +618,7 @@
             this.buttonAddCommander.Size = new System.Drawing.Size(104, 23);
             this.buttonAddCommander.TabIndex = 0;
             this.buttonAddCommander.Text = "Add commander";
+            this.toolTip.SetToolTip(this.buttonAddCommander, "Add a new commander");
             this.buttonAddCommander.UseVisualStyleBackColor = true;
             this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
             // 
