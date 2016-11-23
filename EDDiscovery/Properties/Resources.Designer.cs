@@ -1939,9 +1939,9 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Water_World_No_Poles_Clouds {
+        internal static System.Drawing.Bitmap Water_World_Poles_Cloudless4 {
             get {
-                object obj = ResourceManager.GetObject("Water_World_No_Poles_Clouds", resourceCulture);
+                object obj = ResourceManager.GetObject("Water_World_Poles_Cloudless4", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
