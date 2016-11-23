@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
             travelhistorycontrol = ed.TravelControl;
             displaynumber = vn;
             travelhistorycontrol.OnTravelSelectionChanged += Display;
+            discoveryform.OnNewEntry += NewEntry;
 
             checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Materials", true);
             checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave+"MaterialsRare", false);
@@ -82,7 +83,17 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public void Display(HistoryEntry he, HistoryList hl)
+        public void NewEntry(HistoryEntry he, HistoryList hl)
+        {
+            StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;  // find node..
+
+            if ( newnode == last_sn && he.EntryType == EliteDangerous.JournalTypeEnum.Scan )  // if on same star system, and its a scan, it may have been updated..
+            {
+                DrawSystem(last_sn);
+            }
+        }
+
+        public void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;
 

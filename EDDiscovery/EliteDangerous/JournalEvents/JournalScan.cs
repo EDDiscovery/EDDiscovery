@@ -478,7 +478,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 if (name.Contains("giant"))
                     return EDDiscovery.Properties.Resources.Water_Giant1;
                 else
-                    return EDDiscovery.Properties.Resources.Water_World_No_Poles_Clouds;
+                    return EDDiscovery.Properties.Resources.Water_World_Poles_Cloudless4;
             }
             else if (name.Contains("metal"))
             {
