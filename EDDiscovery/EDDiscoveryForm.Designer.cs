@@ -112,7 +112,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(246, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(247, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -126,7 +126,7 @@
             this.materialSearchToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // show2DMapsToolStripMenuItem
@@ -264,8 +264,8 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem,
-            this.gitHubToolStripMenuItem,
             this.eDDiscoveryHomepageToolStripMenuItem,
+            this.gitHubToolStripMenuItem,
             this.frontierForumThreadToolStripMenuItem,
             this.reportIssueIdeasToolStripMenuItem,
             this.eDDiscoveryChatDiscordToolStripMenuItem,
@@ -292,7 +292,7 @@
             // 
             this.eDDiscoveryHomepageToolStripMenuItem.Name = "eDDiscoveryHomepageToolStripMenuItem";
             this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.eDDiscoveryHomepageToolStripMenuItem.Text = "EDDiscovery homepage";
+            this.eDDiscoveryHomepageToolStripMenuItem.Text = "EDDiscovery Help";
             this.eDDiscoveryHomepageToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryHomepageToolStripMenuItem_Click);
             // 
             // frontierForumThreadToolStripMenuItem
