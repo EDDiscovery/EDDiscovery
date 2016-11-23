@@ -118,6 +118,8 @@ namespace EDDiscovery
                     writer.WriteLine(system);
                 }
             }
+
+            MessageBox.Show(this,"ImportStars.txt has been created in " + exportfilename + Environment.NewLine + "Restart Elite Dangerous to have this file read into the galaxy map");
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
