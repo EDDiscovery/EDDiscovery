@@ -525,11 +525,9 @@ namespace EDDiscovery.UserControls
                 SetSizeCheckBoxes(48);
         }
 
-
-        private void panelStars_MouseClick(object sender, MouseEventArgs e)
+        private void toolStripMenuItemToolbar_Click(object sender, EventArgs e)
         {
-            if (e.Button == MouseButtons.Right )
-                panelControls.Visible = !panelControls.Visible;
+            panelControls.Visible = !panelControls.Visible;
         }
 
         void ShowInfo(string text , bool onright )
@@ -555,7 +553,10 @@ namespace EDDiscovery.UserControls
                 else
                     richTextBoxInfo.Location = new Point(panelStars.Width / 16, 10);
 
-                richTextBoxInfo.Size = new Size(panelStars.Width * 6 / 16, Math.Min(richTextBoxInfo.EstimateVerticalSizeFromText(),panelStars.Height-20));
+                int h = Math.Min(richTextBoxInfo.EstimateVerticalSizeFromText(), panelStars.Height - 20);
+
+                richTextBoxInfo.Size = new Size(panelStars.Width * 6 / 16, h);
+                richTextBoxInfo.PerformLayout();    // not sure why i need this..
             }
         }
 

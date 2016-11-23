@@ -49,6 +49,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.labelTime = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.contextMenuStripLedger.SuspendLayout();
@@ -197,6 +198,7 @@
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.labelTime);
             this.panelButtons.Controls.Add(this.buttonFilter);
             this.panelButtons.Controls.Add(this.textBoxFilter);
             this.panelButtons.Controls.Add(this.label2);
@@ -282,6 +284,15 @@
             // 
             this.toolTip1.ShowAlways = true;
             // 
+            // labelTime
+            // 
+            this.labelTime.AutoSize = true;
+            this.labelTime.Location = new System.Drawing.Point(64, 7);
+            this.labelTime.Name = "labelTime";
+            this.labelTime.Size = new System.Drawing.Size(30, 13);
+            this.labelTime.TabIndex = 26;
+            this.labelTime.Text = "Time";
+            // 
             // UserControlLedger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -322,5 +333,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Debits;
         private System.Windows.Forms.DataGridViewTextBoxColumn Balance;
         private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
+        private System.Windows.Forms.Label labelTime;
     }
 }

@@ -1675,7 +1675,7 @@ namespace EDDiscovery
 
             history.FillInPositionsFSDJumps();
 
-            Map.Prepare(he?.System, settings.MapHomeSystem,
+            Map.Prepare(he?.System, HomeSystem,
                         settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
                         settings.MapZoom, history.FilterByFSDAndPosition);
             Map.Show();

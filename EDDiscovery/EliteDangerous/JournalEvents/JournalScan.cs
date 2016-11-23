@@ -236,9 +236,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 scanText.Append("\n");
                 if (IsStar)
                 {
-                    scanText.AppendFormat("Belt{0}", Rings.Count() == 1 ? "@" : "s:");
+                    scanText.AppendFormat("Belt{0}", Rings.Count() == 1 ? ":" : "s:");
                     for (int i = 0; i < Rings.Length; i++)
-                        scanText.Append("\n" + RingInformation(i, 1 / oneMoon_MT, " Moons"));
+                        scanText.Append("\n" + RingInformation(i, 1.0/oneMoon_MT, " Moons"));
                 }
                 else
                 {

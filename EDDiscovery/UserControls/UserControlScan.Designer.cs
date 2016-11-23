@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelStars = new ExtendedControls.PanelVScroll();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemToolbar = new System.Windows.Forms.ToolStripMenuItem();
             this.richTextBoxInfo = new ExtendedControls.RichTextBoxScroll();
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -42,11 +44,13 @@
             this.checkBoxTiny = new ExtendedControls.CheckBoxCustom();
             this.panelControls = new System.Windows.Forms.Panel();
             this.panelStars.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelStars
             // 
+            this.panelStars.ContextMenuStrip = this.contextMenuStrip;
             this.panelStars.Controls.Add(this.richTextBoxInfo);
             this.panelStars.Controls.Add(this.vScrollBarCustom);
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -58,7 +62,20 @@
             this.panelStars.TabIndex = 1;
             this.panelStars.VerticalScrollBarDockRight = true;
             this.panelStars.Click += new System.EventHandler(this.panelStars_Click);
-            this.panelStars.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelStars_MouseClick);
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemToolbar});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(178, 26);
+            // 
+            // toolStripMenuItemToolbar
+            // 
+            this.toolStripMenuItemToolbar.Name = "toolStripMenuItemToolbar";
+            this.toolStripMenuItemToolbar.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemToolbar.Text = "Show/Hide Toolbar";
+            this.toolStripMenuItemToolbar.Click += new System.EventHandler(this.toolStripMenuItemToolbar_Click);
             // 
             // richTextBoxInfo
             // 
@@ -278,6 +295,7 @@
             // 
             // panelControls
             // 
+            this.panelControls.ContextMenuStrip = this.contextMenuStrip;
             this.panelControls.Controls.Add(this.checkBoxTiny);
             this.panelControls.Controls.Add(this.checkBoxSmall);
             this.panelControls.Controls.Add(this.checkBoxMedium);
@@ -291,7 +309,6 @@
             this.panelControls.Size = new System.Drawing.Size(748, 32);
             this.panelControls.TabIndex = 4;
             this.toolTip.SetToolTip(this.panelControls, "Right click on panel to show/hide the toolbar");
-            this.panelControls.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelStars_MouseClick);
             // 
             // UserControlScan
             // 
@@ -303,6 +320,7 @@
             this.Size = new System.Drawing.Size(748, 682);
             this.Resize += new System.EventHandler(this.UserControlScan_Resize);
             this.panelStars.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.panelControls.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -321,5 +339,7 @@
         private ExtendedControls.CheckBoxCustom checkBoxLarge;
         private ExtendedControls.CheckBoxCustom checkBoxTiny;
         private ExtendedControls.CheckBoxCustom checkBoxMaterialsRare;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemToolbar;
     }
 }
