@@ -197,7 +197,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                                                                                             ToTitleCase(Volcanism.ToLower()));
 
             if (DistanceFromArrivalLS > 0)
-                scanText.AppendFormat("Distance from Arrival Point {0:N1}\n", DistanceFromArrivalLS);
+                scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n", DistanceFromArrivalLS);
 
             if (nOrbitalPeriod.HasValue && nOrbitalPeriod > 0)
                 scanText.AppendFormat("Orbital Period: {0} days\n", (nOrbitalPeriod.Value / oneDay_s).ToString("N1"));
@@ -283,7 +283,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string RingInformationMoons(int ringno)
         {
-            return RingInformation(ringno, oneMoon_MT, " Moons");
+            return RingInformation(ringno, 1 / oneMoon_MT, " Moons");
         }
 
         public string RingInformation(int ringno, double scale = 1, string scaletype = " MT")
