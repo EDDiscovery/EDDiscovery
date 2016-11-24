@@ -530,7 +530,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public bool IsStarNameRelated(string starname)
         {
-            return BodyName.Length >= starname.Length && starname.Equals(BodyName.Substring(0, starname.Length), StringComparison.InvariantCultureIgnoreCase);
+            if (BodyName.Length >= starname.Length)
+            {
+                string s = BodyName.Substring(0, starname.Length);
+                return starname.Equals(s, StringComparison.InvariantCultureIgnoreCase);
+            }
+            else
+                return false;
+        }
+
+        public string IsStarNameRelatedReturnRest(string starname)          // null if not related, else rest of string
+        {
+            if (BodyName.Length >= starname.Length)
+            {
+                string s = BodyName.Substring(0, starname.Length);
+                if (starname.Equals(s, StringComparison.InvariantCultureIgnoreCase))
+                    return BodyName.Substring(starname.Length).Trim();
+            }
+
+            return null;
         }
     }
 
@@ -546,7 +564,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public SortedList<string, ScanNode> starnodes;
         };
 
-        public enum ScanNodeType { star , barycentre, planet , moon, starbelt, rings };
+        public enum ScanNodeType { star , barycentre, planet , moon, submoon, starbelt, rings };
 
         public class ScanNode
         {
@@ -602,30 +620,30 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
             else
             {
-                AddUpdatePlanetMoon(sn, sc, sys.name);
-                return true;
+                return AddUpdatePlanetMoon(sn, sc, sys.name);
             }
         }
 
         bool FindOrAddStar(SystemNode sn, JournalScan sc, string starname)
-        {                                                           // so a star line Eol Prou LW-L c8 - 306 A, it it there?
-            if (sc.IsStarNameRelated(starname))                    // must have a relationship.. otherwise we are getting scans of stuff not in our system
+        {
+            string rest = sc.IsStarNameRelatedReturnRest(starname);             // so a star line Eol Prou LW-L c8 - 306 A, it it there?
+
+            if (rest != null)           // must have a relationship.. otherwise we are getting scans of stuff not in our system
             {
-                List<string> elements;
-                ReturnElements(sc.BodyName, starname, out elements);    // elements[0] = star designator.. may be MAIN meaning there is not one..
+                string designator = (rest.Length > 0) ? rest : "MAIN";          // if no more text, its the MAIN star, else use it direct
 
-                if (elements.Count == 1)                          // 1 element, the designator, either MAIN or A,B,C etc
-                {
-                    ScanNode s = FindOrAdd(sn, starname, elements[0]);
-                    s.scandata = sc;
-                    return true;
-                }
+                ScanNode s = FindOrAdd(sn, starname, designator, ScanNodeType.star);
+                s.scandata = sc;
+                return true;
             }
-
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Failed to add star " + sc.BodyName + " name not related to " + starname);
+            }
             return false;
         }
 
-        ScanNode FindOrAdd(SystemNode sn, string starname , string designator )
+        ScanNode FindOrAdd(SystemNode sn, string starname , string designator , ScanNodeType ty)
         {
             ScanNode star;
             if (!sn.starnodes.TryGetValue(designator, out star))
@@ -638,11 +656,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     fullname = starname + (nodesignator ? "" : (" " + designator)),
                     scandata = null,
                     children = null,
-                    type = (nodesignator) ? ScanNodeType.star : ((designator.Length > 1) ? ScanNodeType.barycentre : ScanNodeType.star)
+                    type = ty
                 };
 
                 sn.starnodes.Add(designator, star);
-                //System.Diagnostics.Debug.WriteLine("Added star " + star.fullname + " '" + star.ownname + "'" + " under " + designator);
+                //System.Diagnostics.Debug.WriteLine("Added star " + star.fullname + " '" + star.ownname + "'" + " under '" + designator + "' type " + ty);
             }
 
             return star;
@@ -654,13 +672,39 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             // handle Eol Prou LW-L c8-306 A 4 a and Eol Prou LW-L c8-306
             // handle Colonia 4 , starname = Colonia, planet 4
             // handle Aurioum B A BELT
+            // Kyloasly OY-Q d5-906 13 1
 
             List<string> elements;
-            ReturnElements(sc.BodyName, starname, out elements);       // elements[0] = star designator or MAIN, 1 = planet, 2 = moon
 
-            if (elements.Count >= 2)            // must have a star, and at least a planet..
+            string rest = sc.IsStarNameRelatedReturnRest(starname);
+            ScanNodeType starscannodetype = ScanNodeType.star;          // presuming..       
+
+            if (rest != null)           // must have a relationship.. otherwise we are getting scans of stuff not in our system
             {
-                ScanNode star = FindOrAdd(sn, starname, elements[0]);  // find or add the star...
+                if ( rest.Length > 0 )
+                {
+                    elements = rest.Split(' ').ToList();
+
+                    if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
+                        elements.Insert(0, "MAIN");         // no star designator, main star, add MAIN
+                    else if (elements[0].Length > 1)        // designator, is is multiple chars.. 
+                        starscannodetype = ScanNodeType.barycentre;
+                }
+                else
+                {
+                    elements = new List<string>();          // only 1 item, will fail later..
+                    elements.Add("MAIN");
+                }
+            }
+            else
+            {
+                elements = sc.BodyName.Split(' ').ToList();     // not related in any way (earth) so assume all bodyparts, and 
+                elements.Insert(0, "MAIN");                     // insert the MAIN designator as the star designator
+            }
+
+            if (elements.Count >= 2)                            // must have a star designator, and at least a planet..
+            {
+                ScanNode star = FindOrAdd(sn, starname, elements[0] , starscannodetype );  // find or add the star...
 
                 ScanNode planetscan;
 
@@ -669,7 +713,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     if (star.children == null)
                         star.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                    planetscan = new ScanNode() { ownname = elements[1], fullname = star.fullname + " " + elements[1], scandata = null, children = null , type = ScanNodeType.planet };
+                    planetscan = new ScanNode() { ownname = elements[1], fullname = star.fullname + " " + elements[1], scandata = null, children = null, type = ScanNodeType.planet };
                     star.children.Add(elements[1], planetscan);
                 }
 
@@ -682,12 +726,36 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                         if (planetscan.children == null)
                             planetscan.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                        moonscan = new ScanNode() { ownname = elements[2] , fullname = star.fullname + " " + elements[1] + " " + elements[2], scandata = null, children = null , type = ScanNodeType.moon };
-                        planetscan.children.Add(elements[2],moonscan);
+                        moonscan = new ScanNode() { ownname = elements[2], fullname = star.fullname + " " + elements[1] + " " + elements[2], scandata = null, children = null, type = ScanNodeType.moon };
+                        planetscan.children.Add(elements[2], moonscan);
                     }
 
-                    moonscan.scandata = sc;
-                    //System.Diagnostics.Debug.WriteLine("Added moon scan '{0}' to {1} to {2}", elements[2], elements[1], elements[0]);
+                    if (elements.Count >= 4)          // star, planet, moon, moon
+                    {
+                        ScanNode submoonscan;
+
+                        if (moonscan.children == null || !moonscan.children.TryGetValue(elements[3], out submoonscan))
+                        {
+                            if (moonscan.children == null)
+                                moonscan.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+
+                            submoonscan = new ScanNode() { ownname = elements[3], fullname = star.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3], scandata = null, children = null, type = ScanNodeType.submoon };
+                            moonscan.children.Add(elements[3], submoonscan);
+                        }
+
+                        if (elements.Count == 4)            // okay, need only 4 elements now.. if not, we have not coped..
+                            submoonscan.scandata = sc;
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " too long");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        moonscan.scandata = sc;
+                        //System.Diagnostics.Debug.WriteLine("Added moon scan '{0}' to {1} to {2}", elements[2], elements[1], elements[0]);
+                    }
                 }
                 else
                 {
@@ -698,35 +766,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 return true;
             }
             else
+            {
+                System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " not enough elements");
                 return false;
-        }
-
-        private void ReturnElements(string bodyname, string starname, out List<string> elements)      // 0 = star designator (MAIN if no designator), 1 = first name, etc
-        {
-            bool namerelatestostar = bodyname.Length >= starname.Length && starname.Equals(bodyname.Substring(0, starname.Length), StringComparison.InvariantCultureIgnoreCase);
-
-            if (namerelatestostar)
-            {
-                string restname = bodyname.Substring(starname.Length);
-                restname = restname.Trim();
-
-                if (restname.Length > 0)                    // if something is left..
-                {
-                    elements = restname.Split(' ').ToList();
-
-                    if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
-                        elements.Insert(0, "MAIN");         // no star designator
-                }
-                else
-                {                                           // nothing, so just a star...
-                    elements = new List<string>();
-                    elements.Add("MAIN");
-                }
-            }
-            else
-            {
-                elements = bodyname.Split(' ').ToList();    // these are body parts (planet moon etc)
-                elements.Insert(0, "MAIN");                     
             }
         }
 
