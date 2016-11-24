@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using ExtendedControls;
 using EDDiscovery.DB;
+using System.Drawing.Drawing2D;
 
 namespace EDDiscovery.UserControls
 {
@@ -83,8 +84,8 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)
-        {
+        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        {                                                                   // affecting our system
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;  // find node..
 
             if ( newnode == last_sn && he.EntryType == EliteDangerous.JournalTypeEnum.Scan )  // if on same star system, and its a scan, it may have been updated..
@@ -124,10 +125,7 @@ namespace EDDiscovery.UserControls
             foreach (StarScan.ScanNode starnode in sn.starnodes.Values)        // always has scan nodes
             {
                 Point maxstarpos;
-
                 bool belts = false;
-
-                //System.Diagnostics.Debug.WriteLine("Star Cp " + curpos);
 
                 if (starnode.type == StarScan.ScanNodeType.star)
                 {
@@ -160,9 +158,10 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Belts Cp " + curpos);
 
                     maxitemspos = CreateStarBelts(starcontrols, starnode.scandata, curpos, beltsize, starnode.fullname);
+
                     curpos = new Point(maxitemspos.X + itemsepar.Width, curpos.Y);   // move to the right
                 }
-                
+
                 curpos.Y += starsize.Height/2 - planetsize.Height*3/4;            // slide down for planet vs star difference in size
 
                 //System.Diagnostics.Debug.WriteLine("Moon Cp " + curpos);
@@ -249,10 +248,32 @@ namespace EDDiscovery.UserControls
                 {
                     int offsetm = moonsize.Width / 2;                // pass in normal offset if not double width item (half moon from moonpos.x)
 
-                    Point max = CreatePlanetMoonRingLanding(pc, moonnode.scandata, JournalScan.GetMoonImageNotScanned(), moonpos, moonsize, moonnode.ownname, ref offsetm , false);
+                    Point mmax = CreatePlanetMoonRingLanding(pc, moonnode.scandata, JournalScan.GetMoonImageNotScanned(), moonpos, moonsize, moonnode.ownname, ref offsetm, false);
 
-                    moonpos = new Point(moonpos.X, max.Y + itemsepar.Height);
-                    maxtreepos = new Point(Math.Max(maxtreepos.X, max.X), Math.Max(maxtreepos.Y, max.Y));
+                    maxtreepos = new Point(Math.Max(maxtreepos.X, mmax.X), Math.Max(maxtreepos.Y, mmax.Y));
+
+                    if (moonnode.children != null)
+                    {
+                        Point submoonpos;
+
+                        if (mmax.X <= moonpos.X + moonsize.Width * 2)           // if we have nothing wider than the 2 moon widths, we can go with it right aligned
+                            submoonpos = new Point(moonpos.X + moonsize.Width * 2 + itemsepar.Width, moonpos.Y);    // moon pos
+                        else
+                            submoonpos = new Point(moonpos.X + moonsize.Width * 2 + itemsepar.Width, mmax.Y + itemsepar.Height);    // moon pos below and right
+
+                        foreach (StarScan.ScanNode submoonnode in moonnode.children.Values)
+                        {
+                            int offsetsm = moonsize.Width / 2;                // pass in normal offset if not double width item (half moon from moonpos.x)
+
+                            Point sbmax = CreatePlanetMoonRingLanding(pc, submoonnode.scandata, JournalScan.GetMoonImageNotScanned(), submoonpos, moonsize, submoonnode.ownname, ref offsetsm, false);
+
+                            maxtreepos = new Point(Math.Max(maxtreepos.X, sbmax.X), Math.Max(maxtreepos.Y, sbmax.Y));
+
+                            submoonpos = new Point(submoonpos.X, maxtreepos.Y + itemsepar.Height);
+                        }
+                    }
+
+                    moonpos = new Point(moonpos.X, maxtreepos.Y + itemsepar.Height);
                 }
             }
 
@@ -400,6 +421,7 @@ namespace EDDiscovery.UserControls
             pb.Size = size;
             pb.Location = postopright;
             pb.SizeMode = PictureBoxSizeMode.StretchImage;
+            pb.BackColor = Color.Transparent;
             //pb.BackColor = Color.DarkGray;     // use to show boundaries during debugging
             pb.Tag = ttext;
             pb.Click += ImageClick;
@@ -426,10 +448,11 @@ namespace EDDiscovery.UserControls
 
                 dp.Location = new Point(postopright.X + size.Width / 2 - labelwidth/2, postopright.Y + size.Height - labelnerf + labelhoff );
 
-                if (dp.Location.X<0)
+                if (dp.Location.X < postopright.X)
                 {
-                    pb.Location = new Point(pb.Location.X + -dp.Location.X, pb.Location.Y);
-                    dp.Location = new Point(0, dp.Location.Y);
+                    int offset = postopright.X - dp.Location.X;
+                    pb.Location = new Point(pb.Location.X + offset, pb.Location.Y);
+                    dp.Location = new Point(dp.Location.X + offset, dp.Location.Y);
                 }
 
                 dp.Size = new Size(labelwidth, 20);

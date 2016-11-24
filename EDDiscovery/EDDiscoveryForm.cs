@@ -1789,7 +1789,12 @@ namespace EDDiscovery
                     matcommodledger.Process(je, conn);            // update the ledger
 
                     if (je.EventTypeID == JournalTypeEnum.Scan)
-                        AddScanToBestSystem(starscan, je as JournalScan, i, history);
+                    {
+                        if (!AddScanToBestSystem(starscan, je as JournalScan, i, history))
+                        {
+                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
+                        }
+                    }
 
                     i++;
                 }
