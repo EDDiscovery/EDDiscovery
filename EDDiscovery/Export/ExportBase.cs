@@ -19,6 +19,7 @@ namespace EDDiscovery.Export
         protected string delimiter = ",";
         protected CultureInfo formatculture;
         private CSVFormat csvformat;
+        public bool IncludeHeader;
 
         public CSVFormat Csvformat
         {
