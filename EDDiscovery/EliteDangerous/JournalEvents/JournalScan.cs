@@ -197,15 +197,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                                                                                             ToTitleCase(Volcanism.ToLower()));
 
             if (DistanceFromArrivalLS > 0)
-                scanText.AppendFormat("Distance from Arrival Point {0:N1}\n", DistanceFromArrivalLS);
+                scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n", DistanceFromArrivalLS);
 
             if (nOrbitalPeriod.HasValue && nOrbitalPeriod > 0)
                 scanText.AppendFormat("Orbital Period: {0} days\n", (nOrbitalPeriod.Value / oneDay_s).ToString("N1"));
 
             if (nSemiMajorAxis.HasValue)
             {
-                if ( IsStar )
-                    scanText.AppendFormat("Semi Major Axis: {0}AU\n", (nSemiMajorAxis.Value / oneAU_m).ToString("N1"));
+                if ( IsStar || nSemiMajorAxis.Value > oneAU_m/10 )
+                    scanText.AppendFormat("Semi Major Axis: {0:0.00}AU\n", (nSemiMajorAxis.Value / oneAU_m));
                 else
                     scanText.AppendFormat("Semi Major Axis: {0}km\n", (nSemiMajorAxis.Value / 1000).ToString("N1"));
             }
@@ -283,7 +283,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string RingInformationMoons(int ringno)
         {
-            return RingInformation(ringno, 1.0 / oneMoon_MT, " Moons");
+            return RingInformation(ringno, 1 / oneMoon_MT, " Moons");
         }
 
         public string RingInformation(int ringno, double scale = 1, string scaletype = " MT")
@@ -291,9 +291,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StarPlanetRing ring = Rings[ringno];
             StringBuilder scanText = new StringBuilder();
             scanText.AppendFormat("  {0} ({1})\n", ring.Name, DisplayStringFromRingClass(ring.RingClass));
-            scanText.AppendFormat("  Mass: {0}{1}\n", (ring.MassMT*scale).ToString("N0"),scaletype );
-            scanText.AppendFormat("  Inner Radius: {0}km\n", (ring.InnerRad / 1000).ToString("N0"));
-            scanText.AppendFormat("  Outer Radius: {0}km\n", (ring.OuterRad / 1000).ToString("N0"));
+            scanText.AppendFormat("  Mass: {0}{1}\n", (ring.MassMT * scale).ToString("N4"),scaletype );
+            if (IsStar && ring.InnerRad > 3000000)
+            {
+                scanText.AppendFormat("  Inner Radius: {0:0.00}ls\n", (ring.InnerRad / 300000000));
+                scanText.AppendFormat("  Outer Radius: {0:0.00}ls\n", (ring.OuterRad / 300000000));
+            }
+            else
+            {
+                scanText.AppendFormat("  Inner Radius: {0}km\n", (ring.InnerRad / 1000).ToString("N0"));
+                scanText.AppendFormat("  Outer Radius: {0}km\n", (ring.OuterRad / 1000).ToString("N0"));
+            }
             return scanText.ToNullSafeString();
         }
 
@@ -429,11 +437,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "M Red Giant");
                 case "k orangegiant":
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "K Orange Giant");
-                case "rougeplanet":
+                case "rogueplanet":
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Rouge Planet");
 
                 default:
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Class {0} star\n", StarType));
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Class {0} star\n", StarType.Replace("_", " ")));
             }
         }
 
