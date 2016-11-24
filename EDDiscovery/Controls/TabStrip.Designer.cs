@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.labelControlText = new System.Windows.Forms.Label();
             this.panelArrowRight = new System.Windows.Forms.Panel();
             this.panelArrowLeft = new System.Windows.Forms.Panel();
             this.panelSelected = new System.Windows.Forms.Panel();
@@ -37,7 +38,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPopOut = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelControlText = new System.Windows.Forms.Label();
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelBottom.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -58,6 +58,17 @@
             this.panelBottom.TabIndex = 0;
             this.panelBottom.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.panelBottom.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            // 
+            // labelControlText
+            // 
+            this.labelControlText.AutoSize = true;
+            this.labelControlText.Location = new System.Drawing.Point(440, 8);
+            this.labelControlText.Name = "labelControlText";
+            this.labelControlText.Size = new System.Drawing.Size(98, 13);
+            this.labelControlText.TabIndex = 4;
+            this.labelControlText.Text = "Control text defined";
+            this.labelControlText.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.labelControlText.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
             // panelArrowRight
             // 
@@ -122,23 +133,12 @@
             this.toolStripMenuItemPopOut.Text = "Pop Out";
             this.toolStripMenuItemPopOut.Click += new System.EventHandler(this.toolStripMenuItemPopOut_Click);
             // 
-            // labelControlText
-            // 
-            this.labelControlText.AutoSize = true;
-            this.labelControlText.Location = new System.Drawing.Point(440, 8);
-            this.labelControlText.Name = "labelControlText";
-            this.labelControlText.Size = new System.Drawing.Size(98, 13);
-            this.labelControlText.TabIndex = 4;
-            this.labelControlText.Text = "Control text defined";
-            this.labelControlText.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.labelControlText.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
-            // 
             // drawnPanelPopOut
             // 
             this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout;
             this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
             this.drawnPanelPopOut.ImageText = null;
-            this.drawnPanelPopOut.Location = new System.Drawing.Point(387, 3);
+            this.drawnPanelPopOut.Location = new System.Drawing.Point(161, 3);
             this.drawnPanelPopOut.MarginSize = 4;
             this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
             this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
@@ -146,6 +146,8 @@
             this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
             this.drawnPanelPopOut.TabIndex = 3;
             this.drawnPanelPopOut.Click += new System.EventHandler(this.panelPopOut_Click);
+            this.drawnPanelPopOut.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.drawnPanelPopOut.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
             // TabStrip
             // 
