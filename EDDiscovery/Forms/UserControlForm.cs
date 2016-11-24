@@ -18,6 +18,7 @@ namespace EDDiscovery.Forms
         public bool isactive = false;
         public bool norepositionwindow = false;
         public string refname;
+        public string wintitle;
 
         public UserControlForm()
         {
@@ -28,16 +29,32 @@ namespace EDDiscovery.Forms
 
         public void Init(string title, bool winborder, bool topmost, string rf)
         {
-            Text = title;
+            wintitle = Text = title;
             refname = rf;
             windowsborder = winborder;
             FormBorderStyle = winborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
             panel_close.Visible = !winborder;
             panel_minimize.Visible = !winborder;
             label_index.Visible = !winborder;
+            labelControlText.Visible = false;
+            labelControlText.Text = "";
             label_index.Text = this.Text;
             TopMost = topmost;
             Invalidate();
+        }
+
+        public void SetControlText(string text)
+        {
+            if ( FormBorderStyle == FormBorderStyle.None )
+            {
+                labelControlText.Location = new Point(label_index.Location.X + label_index.Width + 16, labelControlText.Location.Y);
+                labelControlText.Visible = true;
+                labelControlText.Text = text;
+            }
+            else
+            {
+                this.Text = wintitle + " " + text;
+            }
         }
 
         public void AddUserControl(EDDiscovery.UserControls.UserControlCommonBase c)
