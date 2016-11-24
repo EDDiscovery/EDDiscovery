@@ -39,7 +39,7 @@ namespace EDDiscovery.Export
             scans = new List<JournalScan>();
 
             var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
-            scans = scans.ConvertAll<JournalScan>(x => (JournalScan)x);
+            scans = entries.ConvertAll<JournalScan>(x => (JournalScan)x);
 
             return true;
         }
@@ -49,72 +49,75 @@ namespace EDDiscovery.Export
    
             using (StreamWriter writer = new StreamWriter(filename))
             {
-                // Write header
-
-                writer.Write("Time" + delimiter);
-                writer.Write("BodyName" + delimiter);
-                writer.Write("DistanceFromArrivalLS" + delimiter);
-                if (ShowStars)
+                if (IncludeHeader)
                 {
-                    writer.Write("StarType" + delimiter);
-                    writer.Write("StellarMass" + delimiter);
-                    writer.Write("AbsoluteMagnitude" + delimiter);
-                    writer.Write("Age MY" + delimiter);
+                    // Write header
+
+                    writer.Write("Time" + delimiter);
+                    writer.Write("BodyName" + delimiter);
+                    writer.Write("DistanceFromArrivalLS" + delimiter);
+                    if (ShowStars)
+                    {
+                        writer.Write("StarType" + delimiter);
+                        writer.Write("StellarMass" + delimiter);
+                        writer.Write("AbsoluteMagnitude" + delimiter);
+                        writer.Write("Age MY" + delimiter);
+                    }
+                    writer.Write("Radius" + delimiter);
+                    writer.Write("RotationPeriod" + delimiter);
+                    writer.Write("SurfaceTemperature" + delimiter);
+
+                    if (ShowPlanets)
+                    {
+                        writer.Write("TidalLock" + delimiter);
+                        writer.Write("TerraformState" + delimiter);
+                        writer.Write("PlanetClass" + delimiter);
+                        writer.Write("Atmosphere" + delimiter);
+                        writer.Write("Volcanism" + delimiter);
+                        writer.Write("SurfaceGravity" + delimiter);
+                        writer.Write("SurfacePressure" + delimiter);
+                        writer.Write("Landable" + delimiter);
+                    }
+                    // Common orbital param
+                    writer.Write("SemiMajorAxis" + delimiter);
+                    writer.Write("Eccentricity" + delimiter);
+                    writer.Write("OrbitalInclination" + delimiter);
+                    writer.Write("Periapsis" + delimiter);
+                    writer.Write("OrbitalPeriod" + delimiter);
+
+
+                    if (ShowPlanets)
+                    {
+                        writer.Write("Carbon" + delimiter);
+                        writer.Write("Iron" + delimiter);
+                        writer.Write("Nickel" + delimiter);
+                        writer.Write("Phosphorus" + delimiter);
+                        writer.Write("Sulphur" + delimiter);
+                        writer.Write("Arsenic" + delimiter);
+                        writer.Write("Chromium" + delimiter);
+                        writer.Write("Germanium" + delimiter);
+                        writer.Write("Manganese" + delimiter);
+                        writer.Write("Selenium" + delimiter);
+                        writer.Write("Vanadium" + delimiter);
+                        writer.Write("Zinc" + delimiter);
+                        writer.Write("Zirconium" + delimiter);
+                        writer.Write("Cadmium" + delimiter);
+                        writer.Write("Mercury" + delimiter);
+                        writer.Write("Molybdenum" + delimiter);
+                        writer.Write("Niobium" + delimiter);
+                        writer.Write("Tin" + delimiter);
+                        writer.Write("Tungsten" + delimiter);
+                        writer.Write("Antimony" + delimiter);
+                        writer.Write("Polonium" + delimiter);
+                        writer.Write("Ruthenium" + delimiter);
+                        writer.Write("Technetium" + delimiter);
+                        writer.Write("Tellurium" + delimiter);
+                        writer.Write("Yttrium" + delimiter);
+                    }
+
+
+                    writer.WriteLine();
                 }
-                writer.Write("Radius" + delimiter);
-                writer.Write("RotationPeriod" + delimiter);
-                writer.Write("SurfaceTemperature" + delimiter);
-
-                if (ShowPlanets)
-                {
-                    writer.Write("TidalLock" + delimiter);
-                    writer.Write("TerraformState" + delimiter);
-                    writer.Write("PlanetClass" + delimiter);
-                    writer.Write("Atmosphere" + delimiter);
-                    writer.Write("Volcanism" + delimiter);
-                    writer.Write("SurfaceGravity" + delimiter);
-                    writer.Write("SurfacePressure" + delimiter);
-                    writer.Write("Landable" + delimiter);
-                }
-                // Common orbital param
-                writer.Write("SemiMajorAxis" + delimiter);
-                writer.Write("Eccentricity" + delimiter);
-                writer.Write("OrbitalInclination" + delimiter);
-                writer.Write("Periapsis" + delimiter);
-                writer.Write("OrbitalPeriod" + delimiter);
-
-
-                if (ShowPlanets)
-                {
-                    writer.Write("Carbon" + delimiter);
-                    writer.Write("Iron" + delimiter);
-                    writer.Write("Nickel" + delimiter);
-                    writer.Write("Phosphorus" + delimiter);
-                    writer.Write("Sulphur" + delimiter);
-                    writer.Write("Arsenic" + delimiter);
-                    writer.Write("Chromium" + delimiter);
-                    writer.Write("Germanium" + delimiter);
-                    writer.Write("Manganese" + delimiter);
-                    writer.Write("Selenium" + delimiter);
-                    writer.Write("Vanadium" + delimiter);
-                    writer.Write("Zinc" + delimiter);
-                    writer.Write("Zirconium" + delimiter);
-                    writer.Write("Cadmium" + delimiter);
-                    writer.Write("Mercury" + delimiter);
-                    writer.Write("Molybdenum" + delimiter);
-                    writer.Write("Niobium" + delimiter);
-                    writer.Write("Tin" + delimiter);
-                    writer.Write("Tungsten" + delimiter);
-                    writer.Write("Antimony" + delimiter);
-                    writer.Write("Polonium" + delimiter);
-                    writer.Write("Ruthenium" + delimiter);
-                    writer.Write("Technetium" + delimiter);
-                    writer.Write("Tellurium" + delimiter);
-                    writer.Write("Yttrium" + delimiter);
-                }
-
-
-                writer.WriteLine();
 
                 foreach (JournalScan je in scans)
                 {
