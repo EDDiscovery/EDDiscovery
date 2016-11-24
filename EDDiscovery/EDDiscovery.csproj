@@ -1095,6 +1095,7 @@
   <Target Name="AfterBuild" Condition=" '$(OS)' != 'Unix' ">
     <ItemGroup>
       <ZipFiles Include="$(OutputPath)\EDDiscovery.exe" />
+      <ZipFiles Include="$(OutputPath)\EDDiscovery.pdb" />
       <ZipFiles Include="$(ProjectDir)\App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
