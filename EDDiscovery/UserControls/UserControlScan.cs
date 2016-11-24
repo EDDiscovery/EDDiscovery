@@ -24,7 +24,8 @@ namespace EDDiscovery.UserControls
         int leftmargin;
         int topmargin;
         const int materialspacer = 4;
-        const int labelnerf = 4;
+
+        Font stdfont = new Font("Microsoft Sans Serif", 8.25F);
 
         private string DbSave { get { return "ScanPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
@@ -53,6 +54,8 @@ namespace EDDiscovery.UserControls
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Moons", true);
             int size = SQLiteDBClass.GetSettingInt(DbSave+"Size", 64);
             SetSizeCheckBoxes(size);
+
+            imagebox.ClickElement += ClickElement;
         }
 
         public override void LoadLayout()
@@ -107,18 +110,23 @@ namespace EDDiscovery.UserControls
 
         void DrawSystem(StarScan.SystemNode sn)
         {
-            panelStars.RemoveAllControls(new List<Control> { richTextBoxInfo });        // clean up
+            imagebox.Clear();
             HideInfo();
 
             last_sn = sn;                                                               // remember in case we need to draw
 
+            if (this.Parent is Controls.TabStrip)
+                ((Controls.TabStrip)(this.Parent)).SetControlText((sn == null) ? "No Scan" : sn.system.name);
+            if ( this.Parent is Forms.UserControlForm)
+                ((Forms.UserControlForm)(this.Parent)).SetControlText((sn == null) ? "No Scan" : sn.system.name);
+
             if (sn == null)
                 return;
-         
+
             Point curpos = new Point(leftmargin, topmargin);
             last_maxdisplayarea = curpos;
 
-            List<Control> starcontrols = new List<Control>();
+            List<PictureBoxHotspot.ImageElement> starcontrols = new List<PictureBoxHotspot.ImageElement>();
 
             //for( int i = 0; i < 1000; i +=100)  CreateStarPlanet(starcontrols, EDDiscovery.Properties.Resources.ImageStarDiscWhite, new Point(i, 0), new Size(24, 24), i.ToString(), "");
 
@@ -172,7 +180,7 @@ namespace EDDiscovery.UserControls
                 {
                     foreach (StarScan.ScanNode planetnode in starnode.children.Values)
                     {
-                        List<Control> pc = new List<Control>();
+                        List<PictureBoxHotspot.ImageElement> pc = new List<PictureBoxHotspot.ImageElement>();
 
                         Point maxpos = CreatePlanetTree(pc, planetnode, curpos);
 
@@ -201,11 +209,12 @@ namespace EDDiscovery.UserControls
                 curpos = new Point(leftmargin, maxitemspos.Y + itemsepar.Height);
             }
 
-            panelStars.Controls.AddRange(starcontrols.ToArray());
+            imagebox.AddRange(starcontrols);
+            imagebox.Render();
             //System.Diagnostics.Debug.WriteLine("Display area " + last_maxdisplayarea);
         }
 
-        Point CreateStarBelts(List<Control> pc, JournalScan sc, Point curpos, Size beltsize, string starname)
+        Point CreateStarBelts(List<PictureBoxHotspot.ImageElement> pc, JournalScan sc, Point curpos, Size beltsize, string starname)
         {
             Point endbelt = curpos;
 
@@ -227,7 +236,7 @@ namespace EDDiscovery.UserControls
         }
 
         // return right bottom of area used from curpos
-        Point CreatePlanetTree(List<Control> pc, StarScan.ScanNode planetnode , Point curpos )
+        Point CreatePlanetTree(List<PictureBoxHotspot.ImageElement> pc, StarScan.ScanNode planetnode , Point curpos )
         {
             // PLANETWIDTH|PLANETWIDTH  (if drawing a full planet with rings/landing)
             // or
@@ -281,7 +290,7 @@ namespace EDDiscovery.UserControls
         }
 
         // return right bottom of area used from curpos
-        Point CreatePlanetMoonRingLanding(List<Control> pc, JournalScan sc, Image notscanned, Point curpos, Size size, string ownname, ref int offset , bool alignhorz)
+        Point CreatePlanetMoonRingLanding(List<PictureBoxHotspot.ImageElement> pc, JournalScan sc, Image notscanned, Point curpos, Size size, string ownname, ref int offset , bool alignhorz)
         {
             Image planet;
             string tip;
@@ -347,7 +356,7 @@ namespace EDDiscovery.UserControls
         }
 
 
-        Point CreateMaterialNodes(List<Control> pc, JournalScan sn, Point matpos, Size matsize)
+        Point CreateMaterialNodes(List<PictureBoxHotspot.ImageElement> pc, JournalScan sn, Point matpos, Size matsize)
         {
             Point startpos = matpos;
             Point maximum = matpos;
@@ -390,86 +399,62 @@ namespace EDDiscovery.UserControls
             return maximum;
         }
 
-        void CreateMaterialImage(List<Control> pc, Point matpos, Size matsize, string text, string mattag, string mattip, Color matcolour , Color textcolour)
+        void CreateMaterialImage(List<PictureBoxHotspot.ImageElement> pc, Point matpos, Size matsize, string text, string mattag, string mattip, Color matcolour , Color textcolour)
         {
-            DrawnPanelNoTheme dp = new DrawnPanelNoTheme();
-            dp.ImageSelected = DrawnPanel.ImageType.Text;
-            dp.DrawnImage = EDDiscovery.Properties.Resources.materialmarkerorangefilled;
-            dp.ImageText = text;
-            dp.Location = matpos;
-            dp.Size = matsize;
-            dp.ForeColor = textcolour;
-            dp.Tag = mattag;
-            dp.Click += MaterialClick;
-
             System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
             colormap.OldColor = Color.White;    // this is the marker colour to replace
             colormap.NewColor = matcolour;
-            dp.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
 
-            toolTip.SetToolTip(dp, mattip);
+            Bitmap mat = ControlHelpers.ReplaceColourInBitmap(EDDiscovery.Properties.Resources.materialmarkerorangefilled, new System.Drawing.Imaging.ColorMap[] { colormap });
 
-            pc.Add(dp);
+            ControlHelpers.DrawTextCentreIntoBitmap(ref mat, text, stdfont, textcolour);
+
+            PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(  
+                            new Rectangle(matpos.X, matpos.Y, matsize.Width, matsize.Height), mat, mattag, mattip);
+
+            pc.Add(ie);
         }
 
-        Point CreateImageLabel(List<Control> c, Image i, Point postopright, Size size, string label, string ttext , int labelhoff)
+        Point CreateImageLabel(List<PictureBoxHotspot.ImageElement> c, Image i, Point postopright, Size size, string label, string ttext , int labelhoff)
         {
             //System.Diagnostics.Debug.WriteLine(label + " " + postopright + " size " + size);
 
-            PictureBox pb = new PictureBox();
-            pb.Image = i;
-            pb.Size = size;
-            pb.Location = postopright;
-            pb.SizeMode = PictureBoxSizeMode.StretchImage;
-            pb.BackColor = Color.Transparent;
-            //pb.BackColor = Color.DarkGray;     // use to show boundaries during debugging
-            pb.Tag = ttext;
-            pb.Click += ImageClick;
-            c.Add(pb);
-
-            if ( ttext != null )
-                toolTip.SetToolTip(pb, ttext);
+            PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext);
 
             Point max = new Point(postopright.X + size.Width, postopright.Y + size.Height);
 
             if (label != null)
             {
-                DrawnPanel dp = new ExtendedControls.DrawnPanel();
-                dp.ImageSelected = DrawnPanel.ImageType.Text;
-                dp.ImageText = label;
-                //dp.BackColor = Color.DarkBlue;        // use to show label areas
-                int labelwidth;
+                Point labposcenthorz = new Point(postopright.X + size.Width / 2, postopright.Y + size.Height + labelhoff);
 
                 using (Graphics gr = CreateGraphics())
                 {
-                    SizeF sizef = gr.MeasureString(label, dp.Font);
-                    labelwidth = (int)(sizef.Width + 4);
+                    PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement(gr, labposcenthorz, label,
+                                            stdfont, discoveryform.theme.LabelColor);
+
+                    if (lab.pos.X < postopright.X)
+                    {
+                        int offset = postopright.X - lab.pos.X;
+                        ie.Translate(offset, 0);
+                        lab.Translate(offset, 0);
+                    }
+
+                    c.Add(lab);
+
+                    max = new Point(Math.Max(lab.pos.X + lab.pos.Width, max.X), lab.pos.Y + lab.pos.Height);
                 }
-
-                dp.Location = new Point(postopright.X + size.Width / 2 - labelwidth/2, postopright.Y + size.Height - labelnerf + labelhoff );
-
-                if (dp.Location.X < postopright.X)
-                {
-                    int offset = postopright.X - dp.Location.X;
-                    pb.Location = new Point(pb.Location.X + offset, pb.Location.Y);
-                    dp.Location = new Point(dp.Location.X + offset, dp.Location.Y);
-                }
-
-                dp.Size = new Size(labelwidth, 20);
-                dp.ForeColor = discoveryform.theme.LabelColor;
-                c.Add(dp);
-
-                max = new Point( Math.Max(dp.Location.X + labelwidth, max.X), dp.Location.Y + 20);
             }
+            
+            c.Add(ie);
 
             //System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
             return max;
         }
 
-        void RepositionTree(List<Control> pc, int xoff, int yoff)
+        void RepositionTree(List<PictureBoxHotspot.ImageElement> pc, int xoff, int yoff)
         {
-            foreach (Control c in pc)
-                c.Location = new Point(c.Location.X + xoff, c.Location.Y + yoff);
+            foreach (PictureBoxHotspot.ImageElement c in pc)
+                c.Translate(xoff, yoff);
         }
 
         void SetSize(int stars)
@@ -484,20 +469,16 @@ namespace EDDiscovery.UserControls
             leftmargin = 0;
         }
 
-        #endregion
+#endregion
 
-        #region User interaction
+#region User interaction
 
-        private void ImageClick(object sender, EventArgs e)
+        private void ClickElement(object sender, PictureBoxHotspot.ImageElement i , object tag)
         {
-            PictureBox pb = sender as PictureBox;
-            ShowInfo((string)pb.Tag, pb.Location.X < panelStars.Width / 2);
-        }
-
-        private void MaterialClick(object sender, EventArgs e)
-        {
-            DrawnPanelNoTheme dp = sender as DrawnPanelNoTheme;
-            ShowInfo((string)dp.Tag, dp.Location.X < panelStars.Width / 2);
+            if (i != null)
+                ShowInfo((string)tag, i.pos.Location.X < panelStars.Width / 2);
+            else
+                HideInfo();
         }
 
         private void checkBoxMaterials_CheckedChanged(object sender, EventArgs e)
@@ -599,7 +580,7 @@ namespace EDDiscovery.UserControls
             HideInfo();
         }
 
-        #endregion
+#endregion
 
     }
 }

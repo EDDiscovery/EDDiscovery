@@ -32,6 +32,7 @@
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.statusStripCustom1 = new ExtendedControls.StatusStripCustom();
+            this.labelControlText = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label_index
@@ -48,6 +49,7 @@
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.DrawnImage = null;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.ImageText = null;
             this.panel_minimize.Location = new System.Drawing.Point(580, -2);
@@ -64,6 +66,7 @@
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.DrawnImage = null;
             this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
             this.panel_close.ImageText = null;
             this.panel_close.Location = new System.Drawing.Point(610, -2);
@@ -83,6 +86,15 @@
             this.statusStripCustom1.TabIndex = 26;
             this.statusStripCustom1.Text = "statusStripCustom1";
             // 
+            // labelControlText
+            // 
+            this.labelControlText.AutoSize = true;
+            this.labelControlText.Location = new System.Drawing.Point(110, 2);
+            this.labelControlText.Name = "labelControlText";
+            this.labelControlText.Size = new System.Drawing.Size(27, 13);
+            this.labelControlText.TabIndex = 23;
+            this.labelControlText.Text = "N/A";
+            // 
             // UserControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -91,6 +103,7 @@
             this.Controls.Add(this.statusStripCustom1);
             this.Controls.Add(this.panel_close);
             this.Controls.Add(this.panel_minimize);
+            this.Controls.Add(this.labelControlText);
             this.Controls.Add(this.label_index);
             this.Name = "UserControlForm";
             this.Text = "UserControlForm";
@@ -109,5 +122,6 @@
         private ExtendedControls.DrawnPanel panel_minimize;
         private ExtendedControls.DrawnPanel panel_close;
         private ExtendedControls.StatusStripCustom statusStripCustom1;
+        private System.Windows.Forms.Label labelControlText;
     }
 }
