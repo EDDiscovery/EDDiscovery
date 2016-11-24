@@ -44,6 +44,15 @@ namespace EDDiscovery.UserControls
             }
         }
 
+
+        public void SetControlText(string s)
+        {
+            if (this.Parent is Controls.TabStrip)
+                ((Controls.TabStrip)(this.Parent)).SetControlText(s);
+            else if (this.Parent is Forms.UserControlForm)
+                ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
+        }
+
         #endregion
 
     }

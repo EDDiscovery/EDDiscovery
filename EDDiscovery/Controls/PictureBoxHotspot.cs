@@ -54,6 +54,8 @@ namespace ExtendedControls
         {
             hovertimer.Interval = 250;
             hovertimer.Tick += HoverEnd;
+            this.SetStyle(ControlStyles.Selectable, true);
+            this.TabStop = true;
         }
 
         public void AddRange(List<ImageElement> list)
@@ -124,19 +126,25 @@ namespace ExtendedControls
 
             if (Math.Abs(eventargs.X - hoverpos.X) + Math.Abs(eventargs.Y - hoverpos.Y) > 8 || elementin == null)
             {
-                hovertimer.Stop();
-
-                if (hovertip != null)
-                {
-                    hovertip.Dispose();
-                    hovertip = null;
-                }
+                ClearHoverTip();
             }
 
             if ( elementin != null && !hovertimer.Enabled && hovertip == null)
             {
                 hoverpos = eventargs.Location;
                 hovertimer.Start();
+            }
+        }
+
+
+        void ClearHoverTip()
+        {
+            hovertimer.Stop();
+
+            if (hovertip != null)
+            {
+                hovertip.Dispose();
+                hovertip = null;
             }
         }
 
@@ -152,6 +160,7 @@ namespace ExtendedControls
                 hovertip.AutoPopDelay = 30000;
                 hovertip.ReshowDelay = 0;
                 hovertip.IsBalloon = true;
+                hovertip.ShowAlways = true;
                 hovertip.SetToolTip(this, elementin.tooltip);
             }
         }
@@ -159,6 +168,10 @@ namespace ExtendedControls
         protected override void OnMouseClick(MouseEventArgs e)
         {
             base.OnMouseClick(e);
+
+            Focus();
+
+            ClearHoverTip();
 
             if (ClickElement != null)                   
                 ClickElement(this, elementin, elementin?.tag);          // null if no element clicked

@@ -45,6 +45,7 @@ namespace EDDiscovery.Controls
             labelControlText.Visible = false;
             labelControlText.Text = "";
             labelCurrent.Text = "None";
+            drawnPanelPopOut.Location = panelSelected.Location;
         }
 
         void ChangePanel(int i)
@@ -58,6 +59,8 @@ namespace EDDiscovery.Controls
                 CurrentControl.Dispose();
                 CurrentControl = null;
                 si = -1;
+                labelControlText.Text = "";
+                labelCurrent.Text = "None";
             }
 
             if (OnCreateTab != null)
@@ -83,23 +86,15 @@ namespace EDDiscovery.Controls
                     OnPostCreateTab(this, CurrentControl, i);       // now tab is in control set, give it a chance to configure itself and set its name
 
                     panelSelected.BackgroundImage = Images[i];
-
                     labelCurrent.Text = CurrentControl.Text;
-                    drawnPanelPopOut.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, 3);
-                    drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible;
-                    labelControlText.Location = new Point(drawnPanelPopOut.Location.X + drawnPanelPopOut.Width + 8, labelControlText.Location.Y);
+                    labelControlText.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, labelControlText.Location.Y);
                 }
             }
 
-            if ( CurrentControl == null )
-            {
-                drawnPanelPopOut.Visible = false;
-                labelControlText.Visible = false;
-                labelControlText.Text = "";
-                labelCurrent.Text = "None";
-            }
-
-            labelCurrent.Visible = !tabstripvisible;
+            drawnPanelPopOut.Visible = tabstripvisible && ShowPopOut;
+            panelSelected.Visible = !tabstripvisible && CurrentControl != null;
+            labelCurrent.Visible = !tabstripvisible && CurrentControl != null;
+            labelControlText.Visible = false; 
         }
 
         public void SetControlText(string t)
@@ -185,8 +180,9 @@ namespace EDDiscovery.Controls
             panelSelected.Visible = titleon;
             labelCurrent.Visible = !setvisible;             // because text widths are so variable, dep on font/dialog units, turn off during selection
             labelControlText.Visible = !setvisible && labelControlText.Text.Length > 0;
+            panelSelected.Visible = !setvisible;
             tabstripvisible = setvisible;
-            drawnPanelPopOut.Visible = ShowPopOut && !tabstripvisible && si != -1;
+            drawnPanelPopOut.Visible = ShowPopOut && tabstripvisible && si != -1;
         }
 
         bool tobevisible = false;

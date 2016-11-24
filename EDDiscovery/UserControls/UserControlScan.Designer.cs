@@ -32,8 +32,8 @@
             this.panelStars = new ExtendedControls.PanelVScroll();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemToolbar = new System.Windows.Forms.ToolStripMenuItem();
-            this.imagebox = new ExtendedControls.PictureBoxHotspot();
             this.richTextBoxInfo = new ExtendedControls.RichTextBoxScroll();
+            this.imagebox = new ExtendedControls.PictureBoxHotspot();
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxSmall = new ExtendedControls.CheckBoxCustom();
@@ -80,14 +80,6 @@
             this.toolStripMenuItemToolbar.Text = "Show/Hide Toolbar";
             this.toolStripMenuItemToolbar.Click += new System.EventHandler(this.toolStripMenuItemToolbar_Click);
             // 
-            // imagebox
-            // 
-            this.imagebox.Location = new System.Drawing.Point(0, 0);
-            this.imagebox.Name = "imagebox";
-            this.imagebox.Size = new System.Drawing.Size(466, 554);
-            this.imagebox.TabIndex = 4;
-            this.imagebox.TabStop = false;
-            // 
             // richTextBoxInfo
             // 
             this.richTextBoxInfo.BorderColor = System.Drawing.Color.Transparent;
@@ -99,6 +91,14 @@
             this.richTextBoxInfo.ShowLineCount = false;
             this.richTextBoxInfo.Size = new System.Drawing.Size(200, 100);
             this.richTextBoxInfo.TabIndex = 3;
+            // 
+            // imagebox
+            // 
+            this.imagebox.Location = new System.Drawing.Point(0, 0);
+            this.imagebox.Name = "imagebox";
+            this.imagebox.Size = new System.Drawing.Size(466, 554);
+            this.imagebox.TabIndex = 4;
+            this.imagebox.TabStop = false;
             // 
             // vScrollBarCustom
             // 
@@ -128,6 +128,12 @@
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -72;
             this.vScrollBarCustom.ValueLimited = -72;
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 20000;
+            this.toolTip.InitialDelay = 250;
+            this.toolTip.ReshowDelay = 100;
             // 
             // checkBoxSmall
             // 
