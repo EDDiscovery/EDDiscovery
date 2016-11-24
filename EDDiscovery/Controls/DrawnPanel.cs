@@ -14,7 +14,7 @@ namespace ExtendedControls
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
-        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross, InverseText, Move, Text, None };
+        public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText, Move, Text, None };
 
         public ImageType ImageSelected { get; set; } = ImageType.Close;
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
@@ -82,6 +82,19 @@ namespace ExtendedControls
                 else if (ImageSelected == ImageType.Minimize)
                 {
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
+                }
+                else if (ImageSelected == ImageType.OnTop)
+                {
+                    Brush bbck = new SolidBrush(pc);
+                    Rectangle area = new Rectangle(leftmarginpx, topmarginpx, rightmarginpx - leftmarginpx+1, bottommarginpx-topmarginpx+1);
+                    e.Graphics.FillRectangle(bbck, area);
+                }
+                else if (ImageSelected == ImageType.Floating)
+                {
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, topmarginpx));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
+                    e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
                 }
                 else if (ImageSelected == ImageType.Gripper)
                 {
