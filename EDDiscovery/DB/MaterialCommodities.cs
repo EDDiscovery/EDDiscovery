@@ -383,11 +383,19 @@ namespace EDDiscovery2.DB
             list = new List<MaterialCommodities>();
         }
 
-        public MaterialCommoditiesList Clone()       // returns a new copy of this class.. all items a copy
+        public MaterialCommoditiesList Clone( bool clearzeromaterials, bool clearzerocommodities )       // returns a new copy of this class.. all items a copy
         {
             MaterialCommoditiesList mcl = new MaterialCommoditiesList();
+
             mcl.list = new List<MaterialCommodities>(list.Count);
-            list.ForEach(item => { mcl.list.Add(new MaterialCommodities(item)); });
+            list.ForEach(item => 
+            {
+                bool commodity = item.category.Equals(MaterialCommodities.CommodityCategory);
+                    // if items, or commodity and not clear zero, or material and not clear zero, add
+                if ( item.count > 0 || ( commodity && !clearzerocommodities) || ( !commodity && !clearzeromaterials ))
+                    mcl.list.Add(new MaterialCommodities(item));
+            });
+
             return mcl;
         }
 
@@ -456,7 +464,8 @@ namespace EDDiscovery2.DB
                 mc.price = price;
         }
 
-        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn)
+        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn , 
+                                                        bool clearzeromaterials, bool clearzerocommodities)
         {
             MaterialCommoditiesList newmc = (oldml == null) ? new MaterialCommoditiesList() : oldml;
 
@@ -466,9 +475,10 @@ namespace EDDiscovery2.DB
             {
                 System.Reflection.MethodInfo m = jtype.GetMethod("MaterialList"); // see if the class defines this function..
 
-                if (m != null)
+                if (m != null)                                      // event wants to change it
                 {
-                    newmc = newmc.Clone();
+                    newmc = newmc.Clone(clearzeromaterials,clearzerocommodities);          // so we need a new one
+
                     m.Invoke(Convert.ChangeType(je, jtype), new Object[] { newmc, conn });
                 }
             }
@@ -549,7 +559,7 @@ namespace EDDiscovery2.DB
         }
 
 
-        public void Process(JournalEntry je, SQLiteConnectionUser conn)
+        public void Process(JournalEntry je, SQLiteConnectionUser conn )
         {
             Type jtype = JournalEntry.TypeOfJournalEntry(je.EventTypeStr);
 
