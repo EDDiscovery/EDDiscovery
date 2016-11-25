@@ -549,7 +549,7 @@ namespace EDDiscovery.UserControls
         {
             if (richTextBoxInfo.Visible)
             {
-                if (((bool)richTextBoxInfo.Tag) == true)
+                if (richTextBoxInfo.Tag != null && ((bool)richTextBoxInfo.Tag) == true)
                     richTextBoxInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 10);
                 else
                     richTextBoxInfo.Location = new Point(panelStars.Width / 16, 10);
