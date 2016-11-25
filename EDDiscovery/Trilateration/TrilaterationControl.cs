@@ -622,7 +622,14 @@ namespace EDDiscovery
 
                     if (text != null)
                     {
-                        System.Windows.Forms.Clipboard.SetText(text);
+                        try
+                        {
+                            System.Windows.Forms.Clipboard.SetText(text);
+                        }
+                        catch
+                        {
+                            _discoveryForm.LogLineHighlight("Copying text to clipboard failed");
+                        }
                     }
                 }
             }
@@ -649,7 +656,14 @@ namespace EDDiscovery
 
                     if (text != null)
                     {
-                        System.Windows.Forms.Clipboard.SetText(text);
+                        try
+                        {
+                            System.Windows.Forms.Clipboard.SetText(text);
+                        }
+                        catch
+                        {
+                            _discoveryForm.LogLineHighlight("Copying text to clipboard failed");
+                        }
                     }
                 }
             }
@@ -736,7 +750,14 @@ namespace EDDiscovery
             if (ob != null)
                 text = (string)ob.Value;
             if (text != null)
-                System.Windows.Forms.Clipboard.SetText(text);
+                try
+                {
+                    System.Windows.Forms.Clipboard.SetText(text);
+                }
+                catch
+                {
+                    _discoveryForm.LogLineHighlight("Copying text to clipboard failed");
+                }
 
         }
 
