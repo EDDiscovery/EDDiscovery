@@ -172,6 +172,33 @@ namespace EDDiscovery2.DB
             }
         }
 
+        public static MaterialCommodities GetCatName(string cat, string name)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+            {
+                return GetCatName(cat, name, cn);
+            }
+        }
+
+        public static MaterialCommodities GetCatName(string cat, string name, SQLiteConnectionUser cn)      // by NAME and CAT
+        {
+            using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities WHERE Name=@name AND Category==@cat"))
+            {
+                cmd.AddParameterWithValue("@name", name);
+                cmd.AddParameterWithValue("@cat", cat);
+
+                using (DbDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())           // already sorted, and already limited to max items
+                    {
+                        return new MaterialCommodities((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
+                    }
+                    else
+                        return null;
+                }
+            }
+        }
+
         public static List<MaterialCommodities> GetAll(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities Order by Name"))
@@ -228,7 +255,12 @@ namespace EDDiscovery2.DB
 
         public static bool ChangeDbText(string fdname, string name, string abv, string cat, string type)
         {
-            MaterialCommodities mc = GetCatFDName(null,fdname);
+            MaterialCommodities mc = GetCatName(cat, name);             // is the name,cat duplex there?
+
+            if (mc != null && !mc.fdname.Equals(fdname))                // yes, so entry is there with name/cat, and fdname is the same, ok.  else abort
+                return false;                                           // if fdname is different to the one we want to modify, but cat/name is there, its a duplicate
+
+            mc = GetCatFDName(null, fdname);                            // now pick it up by its primary key for frontier, the fdname
 
             if (mc != null)
             {

@@ -263,7 +263,7 @@ namespace EDDiscovery.UserControls
                     pricechange = Math.Abs(last_mc[i].price - price) >= 0.01;
                 }
 
-                if (last_mc[i].count != numvalue || (materials || pricechange))
+                if (last_mc[i].count != numvalue || pricechange)
                 {
                     mcchange.Add(new MaterialCommodities(0, last_mc[i].category, last_mc[i].name, last_mc[i].fdname, "", "", Color.Red, 0, numvalue, (pricechange) ? price : 0));
                     //System.Diagnostics.Debug.WriteLine("Row " + i + " changed number");
@@ -277,9 +277,16 @@ namespace EDDiscovery.UserControls
                 string fdname = Tools.FDName(name);
 
                 int numvalue = 0;
-                if (int.TryParse((string)dataGridViewMC.Rows[i].Cells[numcol].Value, out numvalue) && cat.Length > 0 && name.Length > 0)
+                bool numok = int.TryParse((string)dataGridViewMC.Rows[i].Cells[numcol].Value, out numvalue);
+
+                double price = 0;
+
+                if (!materials)
+                    double.TryParse((string)dataGridViewMC.Rows[i].Cells[pricecol].Value, out price);
+
+                if ( numok && cat.Length > 0 && name.Length > 0)
                 {
-                    mcchange.Add(new MaterialCommodities(0, cat, name, fdname, "", "", Color.Red, 0, numvalue));
+                    mcchange.Add(new MaterialCommodities(0, cat, name, fdname, "", "", Color.Red, 0, numvalue , price));
                 }
             }
 
