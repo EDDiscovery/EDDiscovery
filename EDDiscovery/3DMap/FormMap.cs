@@ -283,6 +283,11 @@ namespace EDDiscovery2
                 //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
 
+            KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
+            glControl.KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
+            KeyUp += new KeyEventHandler(_kbdActions.KeyUp);
+            glControl.KeyUp += new KeyEventHandler(_kbdActions.KeyUp);
+
             LoadMapImages();
             FillExpeditions();
             SetCenterSystemLabel();
@@ -1895,11 +1900,9 @@ namespace EDDiscovery2
 
         private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            var kbdstate = OpenTK.Input.Keyboard.GetState();
-
             if (e.Delta != 0)
             {
-                if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+                if (_kbdActions.Ctrl)
                 {
                     if (zoomfov.ChangeFov(e.Delta < 0))
                     {
