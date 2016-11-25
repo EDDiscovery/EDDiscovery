@@ -462,6 +462,10 @@ namespace EDDiscovery2
                     zoomfov.HandleZoomAdjustmentKeys(_kbdActions, msticks);
                 }
             }
+            else
+            {
+                _kbdActions.Reset();
+            }
 
             posdir.DoCameraSlew(msticks);
             zoomfov.DoZoomSlew();

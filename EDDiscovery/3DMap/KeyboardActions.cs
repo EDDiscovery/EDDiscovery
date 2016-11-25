@@ -37,6 +37,12 @@ namespace EDDiscovery2._3DMap
             ctrlpressed = false;
         }
 
+        public void Reset()
+        {
+            keyspressed.Clear();
+            Clear();
+        }
+
         public bool Any()
         {
             return actions.Count > 0;
