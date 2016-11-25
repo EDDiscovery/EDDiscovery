@@ -15,6 +15,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
         private TravelHistoryControl travelhistorycontrol;
+        private EDDiscoveryForm discoveryform;
 
         public bool materials = false;
         private int displaynumber = 0;
@@ -38,6 +39,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
+            discoveryform = ed;
             travelhistorycontrol = ed.TravelControl;
             displaynumber = vn;
 
@@ -61,6 +63,15 @@ namespace EDDiscovery.UserControls
             pricecol = (materials) ? -1 : 3;
 
             travelhistorycontrol.OnTravelSelectionChanged += Display;
+
+            SetCheckBoxes();
+        }
+
+        void SetCheckBoxes()
+        {
+            checkBoxClear.Enabled = false;
+            checkBoxClear.Checked = (materials) ? EDDiscoveryForm.EDDConfig.ClearMaterials : EDDiscoveryForm.EDDConfig.ClearCommodities;
+            checkBoxClear.Enabled = true;
         }
 
         #endregion
@@ -73,7 +84,9 @@ namespace EDDiscovery.UserControls
         }
 
         public void Display(List<MaterialCommodities> mc)
-        { 
+        {
+            SetCheckBoxes();
+
             DisableEditing();
 
             last_mc = mc;
@@ -177,6 +190,19 @@ namespace EDDiscovery.UserControls
         }
 
         List<MaterialCommodities> mclist = new List<MaterialCommodities>();
+
+        private void checkBoxClear_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (checkBoxClear.Enabled)
+            {
+                if (materials)
+                    EDDiscoveryForm.EDDConfig.ClearMaterials = checkBoxClear.Checked;
+                else
+                    EDDiscoveryForm.EDDConfig.ClearCommodities = checkBoxClear.Checked;
+
+                discoveryform.RecalculateHistoryDBs();
+            }
+        }
 
         private void buttonExtModify_Click(object sender, EventArgs e)
         {

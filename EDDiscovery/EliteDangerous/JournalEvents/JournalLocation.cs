@@ -24,20 +24,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLocation(JObject evt ) : base(evt, JournalTypeEnum.Location)
         {
-            Body = Tools.GetStringDef(evt["Body"]);
+            Body = JSONHelper.GetStringDef(evt["Body"]);
             Docked = evt.Value < bool ?>("Docked") ?? false;
-            StationName = Tools.GetStringDef(evt["StationName"]);
-            StationType = Tools.GetStringDef(evt["StationType"]);
-            Faction = Tools.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
-            FactionState = Tools.GetStringDef(evt["FactionState"]);
-            Allegiance = Tools.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance"});
-            Economy = Tools.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
-            Economy_Localised = Tools.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
-            Government = Tools.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
-            Government_Localised = Tools.GetMultiStringDef(evt, new string[] { "SystemGovernment_Localised", "Government_Localised" });
-            Security = Tools.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
-            Security_Localised = Tools.GetMultiStringDef(evt, new string[] { "SystemSecurity_Localised", "Security_Localised" });
-            BodyType = Tools.GetStringDef(evt["BodyType"]);
+            StationName = JSONHelper.GetStringDef(evt["StationName"]);
+            StationType = JSONHelper.GetStringDef(evt["StationType"]);
+            Faction = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
+            FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
+            Allegiance = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance"});
+            Economy = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
+            Economy_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
+            Government = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
+            Government_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemGovernment_Localised", "Government_Localised" });
+            Security = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
+            Security_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemSecurity_Localised", "Security_Localised" });
+            BodyType = JSONHelper.GetStringDef(evt["BodyType"]);
 
             PowerplayState = JSONHelper.GetStringDef(evt["PowerplayState"]);
 

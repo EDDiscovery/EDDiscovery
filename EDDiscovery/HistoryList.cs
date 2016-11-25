@@ -67,9 +67,11 @@ namespace EDDiscovery
 
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
+        private string wheredocked = "";            // empty if in space, else where docked
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
+        public string WhereAmI { get { return wheredocked; } }
 
         #endregion
 
@@ -93,7 +95,7 @@ namespace EDDiscovery
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
-            
+
             int mapcolour = 0;
             journalupdate = false;
             bool starposfromedsm = false;
@@ -206,8 +208,8 @@ namespace EDDiscovery
                 if (he.StopMarker || he.StartMarker)
                 {
                     he.travelling = false;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") + 
-                                        ((he.travelled_missingjump>0) ? " LY(" + he.travelled_missingjump + " unknown distance jumps)" : " LY") + 
+                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") +
+                                        ((he.travelled_missingjump > 0) ? " LY(" + he.travelled_missingjump + " unknown distance jumps)" : " LY") +
                                         " time " + he.travelled_seconds;
 
                     he.travelled_distance = 0;
@@ -219,11 +221,11 @@ namespace EDDiscovery
                     he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling";
 
                     if (he.IsFSDJump)
-                        he.EventDetailedInfo += " distance " + he.travelled_distance.ToString("0.0") + ((he.travelled_missingjump>0) ? " LY (*)" : " LY");
+                        he.EventDetailedInfo += " distance " + he.travelled_distance.ToString("0.0") + ((he.travelled_missingjump > 0) ? " LY (*)" : " LY");
 
                     he.EventDetailedInfo += " time " + he.travelled_seconds;
                 }
-                    
+
             }
 
             if (he.StartMarker)
@@ -237,16 +239,30 @@ namespace EDDiscovery
                     he.docked = prev.docked;
                 if (prev.landed.HasValue)
                     he.landed = prev.landed;
+
+                he.wheredocked = prev.wheredocked;
             }
 
             if (je.EventTypeID == JournalTypeEnum.Location)
-                he.docked = (je as EliteDangerous.JournalEvents.JournalLocation).Docked;
+            {
+                EliteDangerous.JournalEvents.JournalLocation jl = je as EliteDangerous.JournalEvents.JournalLocation;
+                he.docked = jl.Docked;
+                he.wheredocked = jl.Docked ? jl.StationName : "";
+            }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
+            {
+                EliteDangerous.JournalEvents.JournalDocked jl = je as EliteDangerous.JournalEvents.JournalDocked;
                 he.docked = true;
+                he.wheredocked = jl.StationName;
+            }
             else if (je.EventTypeID == JournalTypeEnum.Undocked)
+            {
                 he.docked = false;
+            }
             else if (je.EventTypeID == JournalTypeEnum.Touchdown)
+            {
                 he.landed = true;
+            }   
             else if (je.EventTypeID == JournalTypeEnum.Liftoff)
                 he.landed = false;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
@@ -257,7 +273,7 @@ namespace EDDiscovery
 
         public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, SQLiteConnectionUser conn )      // called after above with a USER connection
         {
-            materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn);
+            materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
         }
 
         #endregion
