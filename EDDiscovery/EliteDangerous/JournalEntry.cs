@@ -547,7 +547,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public static void AddEDDItemSet(int cmdrid, DateTime dt, long jidofitemset, List<MaterialCommodities> changelist )
+        public static long AddEDDItemSet(int cmdrid, DateTime dt, long jidofitemset, List<MaterialCommodities> changelist )     // add item, return journal ID
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
@@ -576,6 +576,8 @@ namespace EDDiscovery.EliteDangerous
                     jis.Update(cn);
                 else
                     jis.Add(cn);
+
+                return jis.Id;
             }
         }
 
