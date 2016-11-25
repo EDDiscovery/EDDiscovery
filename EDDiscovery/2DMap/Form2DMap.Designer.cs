@@ -37,9 +37,9 @@
             this.toolStripButtonZoomtoFit = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStars = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
             this.buttonSave = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -120,7 +120,7 @@
             // 
             this.toolStripButtonStars.CheckOnClick = true;
             this.toolStripButtonStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonStars.Image")));
+            this.toolStripButtonStars.Image = global::EDDiscovery.Properties.Resources.star;
             this.toolStripButtonStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStars.Name = "toolStripButtonStars";
             this.toolStripButtonStars.Size = new System.Drawing.Size(26, 26);
@@ -130,26 +130,14 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel1.Controls.Add(this.imageViewer1);
-            this.panel1.Location = new System.Drawing.Point(0, 28);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 29);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(984, 739);
+            this.panel1.Size = new System.Drawing.Size(984, 733);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
-            // imageViewer1
-            // 
-            this.imageViewer1.AutoScroll = true;
-            this.imageViewer1.AutoSize = false;
-            this.imageViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageViewer1.Location = new System.Drawing.Point(0, 0);
-            this.imageViewer1.Name = "imageViewer1";
-            this.imageViewer1.Size = new System.Drawing.Size(984, 739);
-            this.imageViewer1.TabIndex = 0;
             // 
             // buttonSave
             // 
@@ -165,6 +153,16 @@
             // saveFileDialog1
             // 
             this.saveFileDialog1.Filter = "PNG Image|*.png|Bitmap Image|*.bmp|JPEG Image|*.jpg";
+            // 
+            // imageViewer1
+            // 
+            this.imageViewer1.AutoScroll = true;
+            this.imageViewer1.AutoSize = false;
+            this.imageViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageViewer1.Location = new System.Drawing.Point(0, 0);
+            this.imageViewer1.Name = "imageViewer1";
+            this.imageViewer1.Size = new System.Drawing.Size(984, 733);
+            this.imageViewer1.TabIndex = 0;
             // 
             // FormSagCarinaMission
             // 
