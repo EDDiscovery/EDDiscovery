@@ -243,7 +243,14 @@ namespace EDDiscovery2.ImageHandler
                 {
                     Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
                     {                                                   // I've tested that this is required..    
-                        Clipboard.SetImage(croppedbmp);
+                        try
+                        {
+                            Clipboard.SetImage(croppedbmp);
+                        }
+                        catch
+                        {
+                            _discoveryForm.LogLineHighlight("Copying image to clipboard failed");
+                        }
                     });
                 }
 
