@@ -72,7 +72,9 @@ namespace EDDiscovery2.EDSM
 
             query += "] } ";
 
-            var response = RequestPost("{ \"data\": " + query + " }", "api-v1/submit-distances");
+            var response = RequestPost("{ \"data\": " + query + " }", "api-v1/submit-distances", handleException: true);
+            if (response.Error)
+                return null;
             var data = response.Body;
             return response.Body;
         }
@@ -147,8 +149,8 @@ namespace EDDiscovery2.EDSM
                 "?startdatetime=" + HttpUtility.UrlEncode(startdate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&enddatetime=" + HttpUtility.UrlEncode(enddate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&coords=1&submitted=1&known=1&showId=1";
-            var response = RequestGet(query);
-            if ((int)response.StatusCode >= 400)
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
                 return null;
 
             return response.Body;
@@ -162,7 +164,9 @@ namespace EDDiscovery2.EDSM
                 date = "2015-05-10 00:00:00";
 
             string query = "api-v1/systems" + "?startdatetime=" + HttpUtility.UrlEncode(date) + "&coords=1&submitted=1&known=1&showId=1";
-            var response = RequestGet(query);
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return null;
             return response.Body;
         }
 
@@ -171,7 +175,9 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "?showId=1 & submitted=1 & startdatetime=" + HttpUtility.UrlEncode(date);
 
-            var response = RequestGet("api-v1/distances" + query );
+            var response = RequestGet("api-v1/distances" + query, handleException: true);
+            if (response.Error)
+                return null;
             return response.Body;
         }
 
@@ -305,9 +311,9 @@ namespace EDDiscovery2.EDSM
 
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&showId=1";
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            var response = RequestGet("api-logs-v1/" + query);
+            var response = RequestGet("api-logs-v1/" + query, handleException: true);
 
-            if ((int)response.StatusCode >= 400)
+            if (response.Error)
                 return null;
 
             return response.Body;
@@ -324,9 +330,9 @@ namespace EDDiscovery2.EDSM
             if (edsmid > 0)
                 query += "&systemId=" + edsmid;
 
-            var response = RequestGet("api-logs-v1/" + query);
+            var response = RequestGet("api-logs-v1/" + query, handleException: true);
 
-            if ((int)response.StatusCode >= 400)
+            if (response.Error)
                 return null;
 
             return response.Body;
@@ -346,9 +352,9 @@ namespace EDDiscovery2.EDSM
                 query += "&systemId=" + edsmid;
             }
 
-            var response = RequestGet("api-logs-v1/" + query);
+            var response = RequestGet("api-logs-v1/" + query, handleException: true);
 
-            if ((int)response.StatusCode >= 400)
+            if (response.Error)
                 return null;
 
             return response.Body;
@@ -363,9 +369,9 @@ namespace EDDiscovery2.EDSM
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            var response = RequestGet("api-logs-v1/" + query);
+            var response = RequestGet("api-logs-v1/" + query, handleException: true);
 
-            if ((int)response.StatusCode >= 400)
+            if (response.Error)
                 return null;
 
             return response.Body;
@@ -382,9 +388,9 @@ namespace EDDiscovery2.EDSM
                  "&x=" + HttpUtility.UrlEncode(x.ToString(CultureInfo.InvariantCulture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(CultureInfo.InvariantCulture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(CultureInfo.InvariantCulture)) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
-            var response = RequestGet("api-logs-v1/" + query);
+            var response = RequestGet("api-logs-v1/" + query, handleException: true);
 
-            if ((int)response.StatusCode >= 400)
+            if (response.Error)
                 return null;
 
             return response.Body;
@@ -445,9 +451,10 @@ namespace EDDiscovery2.EDSM
 
             string query = "get-logs?showId=1&startdatetime=" + HttpUtility.UrlEncode(starttimeutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            var response = RequestGet("api-logs-v1/" + query);
 
-            if ((int)response.StatusCode >= 400)
+            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+
+            if (response.Error)
                 return 0;
 
             var json = response.Body;
@@ -491,8 +498,12 @@ namespace EDDiscovery2.EDSM
         public bool IsKnownSystem(string sysName)
         {
             string query = "system?sysname=" + HttpUtility.UrlEncode(sysName);
-            var response = RequestGet("api-v1/" + query);
-            var json = response.Body;
+            string json = null;
+            var response = RequestGet("api-v1/" + query, handleException: true);
+            if (response.Error)
+                return false;
+            json = response.Body;
+
             if (json == null)
                 return false;
 
@@ -504,10 +515,9 @@ namespace EDDiscovery2.EDSM
             List<String> systems = new List<string>();
             string query = "api-v1/systems?pushed=1";
 
-            var response = RequestGet(query);
-            if ((int)response.StatusCode >= 400)
-                return null;
-
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return systems;
 
             var json = response.Body;
             if (json == null)
@@ -552,7 +562,10 @@ namespace EDDiscovery2.EDSM
             else
             {
                 string query = "system?sysname=" + encodedSys + "&showId=1";
-                var response = RequestGet("api-v1/" + query);
+                var response = RequestGet("api-v1/" + query, handleException: true);
+                if (response.Error)
+                    return "";
+
                 var json = response.Body;
                 if (json == null || json.ToString() == "[]")
                     return "";
