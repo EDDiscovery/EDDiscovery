@@ -190,7 +190,7 @@ namespace EDDiscovery
                 UserControlLog sc = ctrl as UserControlLog;
                 sc.Text = "Log";
                 sc.Init(_discoveryForm, displaynumber);
-                sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
+                sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBlockColor);
             }
             else if (ctrl is UserControlStarDistance)
             {
@@ -583,9 +583,9 @@ namespace EDDiscovery
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)PopOuts.Scan);
-            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)PopOuts.Log);
-            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)PopOuts.NS);
+            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)PopOuts.Scan - 1);
+            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)PopOuts.Log - 1);
+            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)PopOuts.NS - 1);
         }
 
         public void SaveSettings()     // called by form when closing
