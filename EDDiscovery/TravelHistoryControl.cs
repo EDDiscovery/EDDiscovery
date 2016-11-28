@@ -190,7 +190,7 @@ namespace EDDiscovery
                 UserControlLog sc = ctrl as UserControlLog;
                 sc.Text = "Log";
                 sc.Init(_discoveryForm, displaynumber);
-                sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
+                sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBlockColor);
             }
             else if (ctrl is UserControlStarDistance)
             {
