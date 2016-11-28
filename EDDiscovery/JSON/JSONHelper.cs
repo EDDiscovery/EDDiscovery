@@ -118,6 +118,24 @@ namespace EDDiscovery
             catch { return def; }
         }
 
+        static public string GetMultiStringDef(JObject evt, string[] names, string def = "")
+        {
+            foreach (string s in names)
+            {
+                JToken jt = evt[s];
+
+                if (!IsNullOrEmptyT(jt))
+                {
+                    try
+                    {
+                        return jt.Value<string>();
+                    }
+                    catch { }
+                }
+            }
+            return def;
+        }
+
         static public bool IsNullOrEmptyT(JToken token)
         {
             return (token == null) ||

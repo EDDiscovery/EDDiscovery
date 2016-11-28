@@ -57,7 +57,10 @@ namespace EDDiscovery2
         private bool _orderrowsinverted = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
-        private bool _displayUTC = false; 
+        private bool _displayUTC = false;
+        private bool _clearMaterials = false;
+        private bool _clearCommodities = false;
+
         private List<EDCommander> _ListOfCommanders;
         public List<EDCommander> ListOfCommanders { get { if (_ListOfCommanders == null) Update();  return _ListOfCommanders;  } }
         
@@ -223,6 +226,32 @@ namespace EDDiscovery2
             }
         }
 
+        public bool ClearCommodities
+        {
+            get
+            {
+                return _clearCommodities;
+            }
+            set
+            {
+                _clearCommodities = value;
+                SQLiteDBClass.PutSettingBool("ClearCommodities", value);
+            }
+        }
+
+        public bool ClearMaterials
+        {
+            get
+            {
+                return _clearMaterials;
+            }
+            set
+            {
+                _clearMaterials = value;
+                SQLiteDBClass.PutSettingBool("ClearMaterials", value);
+            }
+        }
+
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
 
@@ -307,6 +336,8 @@ namespace EDDiscovery2
                 _focusOnNewSystem = SQLiteDBClass.GetSettingBool("FocusOnNewSystem", false);
                 _keepOnTop = SQLiteDBClass.GetSettingBool("KeepOnTop", false);
                 _displayUTC = SQLiteDBClass.GetSettingBool("DisplayUTC", false);
+                _clearCommodities = SQLiteDBClass.GetSettingBool("ClearCommodities", false);
+                _clearMaterials = SQLiteDBClass.GetSettingBool("ClearMaterials", false);
 
                 LoadCommanders();
 

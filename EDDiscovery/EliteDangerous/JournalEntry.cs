@@ -547,7 +547,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public static void AddEDDItemSet(int cmdrid, DateTime dt, long jidofitemset, List<MaterialCommodities> changelist )
+        public static long AddEDDItemSet(int cmdrid, DateTime dt, long jidofitemset, List<MaterialCommodities> changelist )     // add item, return journal ID
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
@@ -576,6 +576,8 @@ namespace EDDiscovery.EliteDangerous
                     jis.Update(cn);
                 else
                     jis.Add(cn);
+
+                return jis.Id;
             }
         }
 
@@ -905,7 +907,8 @@ namespace EDDiscovery.EliteDangerous
                 jc.AddScale("SurfaceTemperature", 1.0, "0.0'K'");
                 jc.AddScale("Scooped", 1.0, "'Scooped '0.0't'", "", "FuelScoop");
                 jc.AddScale("Total", 1.0, "'Fuel Level '0.0't'", "", "FuelScoop");
-                jc.AddScale("Fuel Level", 1.0, "Fuel Level Left '0.0't'", "");
+                jc.AddScale("FuelUsed", 1.0, "'Fuel Used '0.0't'", "");
+                jc.AddScale("FuelLevel", 1.0, "'Fuel Level Left '0.0't'", "");
                 jc.AddScale("Amount", 1.0, "'Fuel Bought '0.0't'", "", "RefuelAll");
                 jc.AddScale("BoostValue", 1.0, "0.0' boost'", "", "JetConeBoost");
                 jc.AddScale("StarPos", 1.0, "0.0", "");          // any entry StarPos loses it name (inside arrays). StarPos as an array name gets printed sep.

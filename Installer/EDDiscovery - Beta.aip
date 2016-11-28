@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="13.1" version="13.3" Modules="professional" RootPath="." Language="sv" Id="{3E112C9F-FDC6-4FBA-9559-84D94C4949C4}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="13.1" version="13.4" Modules="professional" RootPath="." Language="sv" Id="{3E112C9F-FDC6-4FBA-9559-84D94C4949C4}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
     <ROW Name="HiddenItems" Value="MsiJavaComponent;MsiDriverPackagesComponent;UserAccountsComponent;ScheduledTasksComponent;SqlConnectionComponent;AutorunComponent;FirewallExceptionComponent;GameUxComponent;MsiDirectEditorComponent;SharePointSlnComponent;SilverlightSlnComponent;MultipleInstancesComponent;SccmComponent;ActSyncAppComponent;AppXAppDetailsComponent;AppXCapabilitiesComponent;AppXDependenciesComponent;AppXProductDetailsComponent;AppXVisualAssetsComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent"/>
   </COMPONENT>
@@ -19,10 +19,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{486579B3-87EB-4AEA-BC1B-A58BF9CAA537} 1053:{8B0240E5-BC29-4C39-92E1-2E7B8E71E4C2} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{15B0CE33-BE00-4981-ADDB-09FBF781C437} 1053:{1BDFF30B-1C44-41ED-AA57-1E06CDB2ED66} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscoveryBeta"/>
-    <ROW Property="ProductVersion" Value="5.1.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="5.1.2" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{AD68D028-2E27-4E6B-BECD-C3410D056357}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>

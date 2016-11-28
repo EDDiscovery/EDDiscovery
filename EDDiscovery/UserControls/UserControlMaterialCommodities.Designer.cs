@@ -44,6 +44,7 @@
             this.buttonExtApply = new ExtendedControls.ButtonExt();
             this.buttonExtModify = new ExtendedControls.ButtonExt();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxClear = new ExtendedControls.CheckBoxCustom();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -166,6 +167,7 @@
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.checkBoxClear);
             this.panelButtons.Controls.Add(this.comboBoxCustomAdd);
             this.panelButtons.Controls.Add(this.buttonExtApply);
             this.panelButtons.Controls.Add(this.buttonExtModify);
@@ -237,6 +239,23 @@
             // 
             this.toolTip1.ShowAlways = true;
             // 
+            // checkBoxClear
+            // 
+            this.checkBoxClear.AutoSize = true;
+            this.checkBoxClear.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxClear.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxClear.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxClear.FontNerfReduction = 0.5F;
+            this.checkBoxClear.Location = new System.Drawing.Point(355, 8);
+            this.checkBoxClear.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxClear.Name = "checkBoxClear";
+            this.checkBoxClear.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxClear.TabIndex = 2;
+            this.checkBoxClear.Text = "Remove zero items";
+            this.checkBoxClear.TickBoxReductionSize = 10;
+            this.checkBoxClear.UseVisualStyleBackColor = true;
+            this.checkBoxClear.CheckStateChanged += new System.EventHandler(this.checkBoxClear_CheckStateChanged);
+            // 
             // UserControlMaterialCommodities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -249,6 +268,7 @@
             this.dataViewScrollerPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).EndInit();
             this.panelButtons.ResumeLayout(false);
+            this.panelButtons.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -270,5 +290,6 @@
         private ExtendedControls.ComboBoxCustom comboBoxCustomAdd;
         private System.Windows.Forms.Label labelNoItems;
         private System.Windows.Forms.ToolTip toolTip1;
+        private ExtendedControls.CheckBoxCustom checkBoxClear;
     }
 }

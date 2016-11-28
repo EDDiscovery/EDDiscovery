@@ -7,24 +7,19 @@ namespace EDDiscovery2.HTTP
 {
     public struct ResponseData
     {
-        public ResponseData(HttpStatusCode statusCode)
-        {
-            StatusCode = statusCode;
-            Body = null;
-            Headers = null;
-        }
-
-        public ResponseData(HttpStatusCode statusCode, string content, NameValueCollection headers)
+        public ResponseData(HttpStatusCode statusCode, string content = null, NameValueCollection headers = null, bool? error = null)
         {
             StatusCode = statusCode;
             Body = content;
             Headers = headers;
+            Error = error ?? ((int)statusCode >= 400);
         }
 
         public HttpStatusCode StatusCode; // Sometimes you need the status code if you're in a
                                           // converstation with the server
         public string Body;
         public NameValueCollection Headers;
+        public bool Error;
 
         // Uses knowledge of the error object structure in JSON API to
         // output all the errors for human consumption. 

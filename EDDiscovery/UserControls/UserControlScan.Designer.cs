@@ -33,6 +33,7 @@
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemToolbar = new System.Windows.Forms.ToolStripMenuItem();
             this.richTextBoxInfo = new ExtendedControls.RichTextBoxScroll();
+            this.imagebox = new ExtendedControls.PictureBoxHotspot();
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxSmall = new ExtendedControls.CheckBoxCustom();
@@ -45,6 +46,7 @@
             this.panelControls = new System.Windows.Forms.Panel();
             this.panelStars.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,6 +54,7 @@
             // 
             this.panelStars.ContextMenuStrip = this.contextMenuStrip;
             this.panelStars.Controls.Add(this.richTextBoxInfo);
+            this.panelStars.Controls.Add(this.imagebox);
             this.panelStars.Controls.Add(this.vScrollBarCustom);
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelStars.InternalMargin = new System.Windows.Forms.Padding(0);
@@ -89,6 +92,14 @@
             this.richTextBoxInfo.Size = new System.Drawing.Size(200, 100);
             this.richTextBoxInfo.TabIndex = 3;
             // 
+            // imagebox
+            // 
+            this.imagebox.Location = new System.Drawing.Point(0, 0);
+            this.imagebox.Name = "imagebox";
+            this.imagebox.Size = new System.Drawing.Size(466, 554);
+            this.imagebox.TabIndex = 4;
+            this.imagebox.TabStop = false;
+            // 
             // vScrollBarCustom
             // 
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -98,10 +109,10 @@
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom.HideScrollBar = false;
+            this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 20;
             this.vScrollBarCustom.Location = new System.Drawing.Point(728, 0);
-            this.vScrollBarCustom.Maximum = -427;
+            this.vScrollBarCustom.Maximum = -72;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -115,8 +126,14 @@
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -427;
-            this.vScrollBarCustom.ValueLimited = -427;
+            this.vScrollBarCustom.Value = -72;
+            this.vScrollBarCustom.ValueLimited = -72;
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 20000;
+            this.toolTip.InitialDelay = 250;
+            this.toolTip.ReshowDelay = 100;
             // 
             // checkBoxSmall
             // 
@@ -321,6 +338,7 @@
             this.Resize += new System.EventHandler(this.UserControlScan_Resize);
             this.panelStars.ResumeLayout(false);
             this.contextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.imagebox)).EndInit();
             this.panelControls.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -341,5 +359,6 @@
         private ExtendedControls.CheckBoxCustom checkBoxMaterialsRare;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemToolbar;
+        private ExtendedControls.PictureBoxHotspot imagebox;
     }
 }

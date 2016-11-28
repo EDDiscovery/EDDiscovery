@@ -32,6 +32,8 @@ namespace ExtendedControls
                 vsc.Scroll += new System.Windows.Forms.ScrollEventHandler(OnScrollBarChanged);
                 vsc.Name = "VScrollPanel";
             }
+
+            e.Control.MouseWheel += Control_MouseWheel;         // grab the controls mouse wheel and direct to our scroll
         }
 
         protected override void OnLayout(LayoutEventArgs levent)
@@ -54,6 +56,16 @@ namespace ExtendedControls
             }
 
             ScrollTo(scrollpos);
+        }
+
+        private void Control_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+                vsc.ValueLimited -= vsc.LargeChange;
+            else
+                vsc.ValueLimited += vsc.LargeChange;
+
+            ScrollTo(vsc.Value);
         }
 
         protected virtual void OnScrollBarChanged(object sender, ScrollEventArgs e)

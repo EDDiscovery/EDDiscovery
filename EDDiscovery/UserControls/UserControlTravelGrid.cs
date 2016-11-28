@@ -73,6 +73,8 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
+        private long preferred_jid = -1;                        // use Preferred to say, i'm about to refresh you, go here..
+
         EventFilterSelector cfs = new EventFilterSelector();
 
         public UserControlTravelGrid()
@@ -143,7 +145,8 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
 
-            int rowno = FindGridPosByJID(pos.Item1);
+            int rowno = FindGridPosByJID(preferred_jid>=0 ? preferred_jid : pos.Item1);     // either go back to preferred, or to remembered above
+            preferred_jid = -1;                                                             // 1 shot at this
 
             if (rowno >= 0)
             {
@@ -224,6 +227,11 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows[rownr].Cells[2].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[3].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[4].ToolTipText = tip;
+        }
+
+        public void SetPreferredJIDAfterRefresh(long jid)           // call if after the next Display refresh you would like to go to this jid
+        {
+            preferred_jid = jid;
         }
 
         public bool WouldAddEntry(HistoryEntry he)

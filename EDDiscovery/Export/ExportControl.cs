@@ -11,6 +11,7 @@ using EDDiscovery.EliteDangerous;
 using System.Diagnostics;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using System.IO;
+using System.Globalization;
 
 namespace EDDiscovery
 {
@@ -47,6 +48,12 @@ namespace EDDiscovery
         {
             comboBoxCustomExportType.Items.Clear();
 
+            if (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Equals("."))
+                radioButtonCustomUSAUK.Checked = true;
+            else
+                radioButtonCustomEU.Checked = true;
+
+
             foreach (ExportTypeClass exp in exportTypeList)
                 comboBoxCustomExportType.Items.Add(exp.Name);
 
@@ -72,6 +79,7 @@ namespace EDDiscovery
                 else
                     exptype.export.Csvformat = CSVFormat.USA_UK;
 
+                exptype.export.IncludeHeader = checkBoxCustomIncludeHeader.Checked;
                 exptype.export.GetData(_discoveryForm);
                 exptype.export.ToCSV(dlg.FileName);
                 if (checkBoxCustomAutoOpen.Checked)

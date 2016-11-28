@@ -31,12 +31,12 @@ namespace EDDiscovery.UserControls
 
         public void FillGrid(string name, SortedList<double, ISystem> csl)
         {
-            labelclosests.Text = "";
+            SetControlText("");
             dataGridViewNearest.Rows.Clear();
 
             if (csl.Count() > 0)
             {
-                labelclosests.Text = "Closest systems from " + name;
+                SetControlText("Closest systems from " + name);
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
