@@ -64,7 +64,7 @@ namespace EDDiscovery
         string[] popouttooltips = new string[] { "Display the program log",
                                                "Display the nearest stars to the currently selected entry",
                                                "Display the material count at the currently selected entry",
-                                               "Display the commoditity count at the currently selected entry",
+                                               "Display the commodity count at the currently selected entry",
                                                "Display a ledger of cash related entries",
                                                "Display the journal grid view",
                                                "Display the history grid view",

@@ -565,7 +565,7 @@
             // 
             this.ColumnSyncFromEDSM.DataPropertyName = "SyncFromEdsm";
             this.ColumnSyncFromEDSM.FillWeight = 15F;
-            this.ColumnSyncFromEDSM.HeaderText = "Sync From Edsm";
+            this.ColumnSyncFromEDSM.HeaderText = "Sync From EDSM";
             this.ColumnSyncFromEDSM.MinimumWidth = 45;
             this.ColumnSyncFromEDSM.Name = "ColumnSyncFromEDSM";
             // 
@@ -573,7 +573,7 @@
             // 
             this.ColumnSyncToEddn.DataPropertyName = "SyncToEddn";
             this.ColumnSyncToEddn.FillWeight = 15F;
-            this.ColumnSyncToEddn.HeaderText = "Sync to Eddn";
+            this.ColumnSyncToEddn.HeaderText = "Sync to EDDN";
             this.ColumnSyncToEddn.MinimumWidth = 45;
             this.ColumnSyncToEddn.Name = "ColumnSyncToEddn";
             // 
