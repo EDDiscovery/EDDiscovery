@@ -363,6 +363,7 @@ namespace EDDiscovery2.HTTP
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
                         var data = getResponseData(httpResponse);
+                        data.Error = true;
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
                         System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
@@ -394,7 +395,7 @@ namespace EDDiscovery2.HTTP
                 }
 
 
-                return new ResponseData(HttpStatusCode.BadRequest);
+                return new ResponseData(HttpStatusCode.BadRequest, error: true);
             }
 
         }
@@ -430,7 +431,7 @@ namespace EDDiscovery2.HTTP
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
         }
-        private ResponseData getResponseData(HttpWebResponse response)
+        private ResponseData getResponseData(HttpWebResponse response, bool? error = null)
         {
             if (response == null)
                 return new ResponseData(HttpStatusCode.NotFound);

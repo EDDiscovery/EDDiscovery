@@ -283,6 +283,11 @@ namespace EDDiscovery2
                 //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
 
+            KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
+            glControl.KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
+            KeyUp += new KeyEventHandler(_kbdActions.KeyUp);
+            glControl.KeyUp += new KeyEventHandler(_kbdActions.KeyUp);
+
             LoadMapImages();
             FillExpeditions();
             SetCenterSystemLabel();
@@ -456,6 +461,10 @@ namespace EDDiscovery2
 
                     zoomfov.HandleZoomAdjustmentKeys(_kbdActions, msticks);
                 }
+            }
+            else
+            {
+                _kbdActions.Reset();
             }
 
             posdir.DoCameraSlew(msticks);
@@ -1523,7 +1532,14 @@ namespace EDDiscovery2
                     _clickedurl = edsm.GetUrlToEDSMSystem(name, _clickedSystem.id_edsm);
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
-                    System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
+                    try
+                    {
+                        System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
+                    }
+                    catch
+                    {
+                        Trace.WriteLine("Copying text to clipboard failed");
+                    }
                 }
                 else if (curbookmark != null)                                   // region bookmark..
                 {
@@ -1888,11 +1904,9 @@ namespace EDDiscovery2
 
         private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            var kbdstate = OpenTK.Input.Keyboard.GetState();
-
             if (e.Delta != 0)
             {
-                if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+                if (_kbdActions.Ctrl)
                 {
                     if (zoomfov.ChangeFov(e.Delta < 0))
                     {

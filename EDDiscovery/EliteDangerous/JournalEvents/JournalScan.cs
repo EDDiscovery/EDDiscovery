@@ -614,60 +614,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
             }
 
-            if (!String.IsNullOrEmpty(sc.StarType))
-            {
-                return FindOrAddStar(sn, sc, sys.name);
-            }
-            else
-            {
-                return AddUpdatePlanetMoon(sn, sc, sys.name);
-            }
-        }
-
-        bool FindOrAddStar(SystemNode sn, JournalScan sc, string starname)
-        {
-            string rest = sc.IsStarNameRelatedReturnRest(starname);             // so a star line Eol Prou LW-L c8 - 306 A, it it there?
-
-            if (rest != null)           // must have a relationship.. otherwise we are getting scans of stuff not in our system
-            {
-                string designator = (rest.Length > 0) ? rest : "MAIN";          // if no more text, its the MAIN star, else use it direct
-
-                ScanNode s = FindOrAdd(sn, starname, designator, ScanNodeType.star);
-                s.scandata = sc;
-                return true;
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("Failed to add star " + sc.BodyName + " name not related to " + starname);
-            }
-            return false;
-        }
-
-        ScanNode FindOrAdd(SystemNode sn, string starname , string designator , ScanNodeType ty)
-        {
-            ScanNode star;
-            if (!sn.starnodes.TryGetValue(designator, out star))
-            {
-                bool nodesignator = designator.Equals("MAIN");          // MAIN is used as the key name for stars without designators..  but is not stored in ownname or fullname
-
-                star = new ScanNode()
-                {
-                    ownname = nodesignator ? starname : designator,
-                    fullname = starname + (nodesignator ? "" : (" " + designator)),
-                    scandata = null,
-                    children = null,
-                    type = ty
-                };
-
-                sn.starnodes.Add(designator, star);
-                //System.Diagnostics.Debug.WriteLine("Added star " + star.fullname + " '" + star.ownname + "'" + " under '" + designator + "' type " + ty);
-            }
-
-            return star;
-        }
-
-        bool AddUpdatePlanetMoon(SystemNode sn, JournalScan sc, string starname)
-        {
             // handle Earth, starname = Sol
             // handle Eol Prou LW-L c8-306 A 4 a and Eol Prou LW-L c8-306
             // handle Colonia 4 , starname = Colonia, planet 4
@@ -676,91 +622,111 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             List<string> elements;
 
-            string rest = sc.IsStarNameRelatedReturnRest(starname);
-            ScanNodeType starscannodetype = ScanNodeType.star;          // presuming..       
+            ScanNodeType starscannodetype = ScanNodeType.star;          // presuming.. 
 
-            if (rest != null)           // must have a relationship.. otherwise we are getting scans of stuff not in our system
+            string rest = sc.IsStarNameRelatedReturnRest(sys.name);
+            if (rest != null)                                   // if we have a relationship..
             {
-                if ( rest.Length > 0 )
+                if (rest.Length > 0)
                 {
                     elements = rest.Split(' ').ToList();
 
                     if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
-                        elements.Insert(0, "MAIN");         // no star designator, main star, add MAIN
-                    else if (elements[0].Length > 1)        // designator, is is multiple chars.. 
+                        elements.Insert(0, "Main Star");         // no star designator, main star, add MAIN
+                    else if (elements[0].Length > 1)        // designator, is it multiple chars.. 
                         starscannodetype = ScanNodeType.barycentre;
                 }
                 else
                 {
-                    elements = new List<string>();          // only 1 item, will fail later..
-                    elements.Add("MAIN");
+                    elements = new List<string>();          // only 1 item, the star, which is the same as the system name..
+                    elements.Add("Main Star");              // Sol / SN:Sol should come thru here
                 }
             }
             else
-            {
+            {                                               // so not part of starname        
                 elements = sc.BodyName.Split(' ').ToList();     // not related in any way (earth) so assume all bodyparts, and 
-                elements.Insert(0, "MAIN");                     // insert the MAIN designator as the star designator
+                elements.Insert(0, "Main Star");                     // insert the MAIN designator as the star designator
             }
 
-            if (elements.Count >= 2)                            // must have a star designator, and at least a planet..
+            if (elements.Count >= 1)                          // okay, we have an element.. first is the star..
             {
-                ScanNode star = FindOrAdd(sn, starname, elements[0] , starscannodetype );  // find or add the star...
+                ScanNode sublv0;
 
-                ScanNode planetscan;
-
-                if (star.children == null || !star.children.TryGetValue(elements[1], out planetscan))
+                if (!sn.starnodes.TryGetValue(elements[0], out sublv0))     // not found this node, add..
                 {
-                    if (star.children == null)
-                        star.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+                    sublv0 = new ScanNode()
+                    {
+                        ownname = elements[0],
+                        fullname = sys.name + (elements[0].Contains("Main") ? "" : (" " + elements[0])),
+                        scandata = null,
+                        children = null,
+                        type = starscannodetype
+                    };
 
-                    planetscan = new ScanNode() { ownname = elements[1], fullname = star.fullname + " " + elements[1], scandata = null, children = null, type = ScanNodeType.planet };
-                    star.children.Add(elements[1], planetscan);
+                    sn.starnodes.Add(elements[0], sublv0);
+                    //System.Diagnostics.Debug.WriteLine("Added star " + star.fullname + " '" + star.ownname + "'" + " under '" + designator + "' type " + ty);
                 }
 
-                if (elements.Count >= 3)          // star, planet, moon
+                if (elements.Count >= 2)                        // we have a sub designator..
                 {
-                    ScanNode moonscan;
+                    ScanNode sublv1;
 
-                    if (planetscan.children == null || !planetscan.children.TryGetValue(elements[2], out moonscan))
+                    if (sublv0.children == null || !sublv0.children.TryGetValue(elements[1], out sublv1))
                     {
-                        if (planetscan.children == null)
-                            planetscan.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+                        if (sublv0.children == null)
+                            sublv0.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                        moonscan = new ScanNode() { ownname = elements[2], fullname = star.fullname + " " + elements[1] + " " + elements[2], scandata = null, children = null, type = ScanNodeType.moon };
-                        planetscan.children.Add(elements[2], moonscan);
+                        sublv1 = new ScanNode() { ownname = elements[1], fullname = sublv0.fullname + " " + elements[1], scandata = null, children = null, type = ScanNodeType.planet };
+                        sublv0.children.Add(elements[1], sublv1);
                     }
 
-                    if (elements.Count >= 4)          // star, planet, moon, moon
+                    if (elements.Count >= 3)          
                     {
-                        ScanNode submoonscan;
+                        ScanNode sublv2;
 
-                        if (moonscan.children == null || !moonscan.children.TryGetValue(elements[3], out submoonscan))
+                        if (sublv1.children == null || !sublv1.children.TryGetValue(elements[2], out sublv2))
                         {
-                            if (moonscan.children == null)
-                                moonscan.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+                            if (sublv1.children == null)
+                                sublv1.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                            submoonscan = new ScanNode() { ownname = elements[3], fullname = star.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3], scandata = null, children = null, type = ScanNodeType.submoon };
-                            moonscan.children.Add(elements[3], submoonscan);
+                            sublv2 = new ScanNode() { ownname = elements[2], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2], scandata = null, children = null, type = ScanNodeType.moon };
+                            sublv1.children.Add(elements[2], sublv2);
                         }
 
-                        if (elements.Count == 4)            // okay, need only 4 elements now.. if not, we have not coped..
-                            submoonscan.scandata = sc;
+                        if (elements.Count >= 4)      
+                        {
+                            ScanNode sublv3;
+
+                            if (sublv2.children == null || !sublv2.children.TryGetValue(elements[3], out sublv3))
+                            {
+                                if (sublv2.children == null)
+                                    sublv2.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+
+                                sublv3 = new ScanNode() { ownname = elements[3], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3], scandata = null, children = null, type = ScanNodeType.submoon };
+                                sublv2.children.Add(elements[3], sublv3);
+                            }
+
+                            if (elements.Count == 4)            // okay, need only 4 elements now.. if not, we have not coped..
+                                sublv3.scandata = sc;
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " too long");
+                                return false;
+                            }
+                        }
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " too long");
-                            return false;
+                            sublv2.scandata = sc;
                         }
                     }
                     else
                     {
-                        moonscan.scandata = sc;
-                        //System.Diagnostics.Debug.WriteLine("Added moon scan '{0}' to {1} to {2}", elements[2], elements[1], elements[0]);
+                        sublv1.scandata = sc;
                     }
                 }
                 else
                 {
-                    planetscan.scandata = sc;
-                    //System.Diagnostics.Debug.WriteLine("Added planet scan '{0}' to {1}", elements[1], elements[0]);
+                    sublv0.scandata = sc;
                 }
 
                 return true;
@@ -772,57 +738,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-        public string SystemDescription(EDDiscovery2.DB.ISystem sys)
-        {
-            SystemNode sn = FindSystem(sys);
-            string ret = null;
-
-            if (sn != null)
-            {
-                ret = "";
-
-                foreach (StarScan.ScanNode starnode in sn.starnodes.Values)        // always has scan nodes
-                {
-                    ret += string.Format("Star Name " + starnode.fullname) + Environment.NewLine;
-
-                    if (starnode.scandata != null)
-                        ret += starnode.scandata.DisplayString(false, 4);
-
-                    if (starnode.children != null)
-                    {
-                        foreach (StarScan.ScanNode planetnode in starnode.children.Values)
-                        {
-                            ret += string.Format("    Planet " + planetnode.fullname) + Environment.NewLine;
-                            if (planetnode.scandata != null)
-                                ret += planetnode.scandata.DisplayString(false, 8);
-
-                            if (planetnode.children != null)
-                            {
-                                foreach (StarScan.ScanNode moonnode in planetnode.children.Values)
-                                {
-                                    ret += string.Format("        Moon " + moonnode.fullname) + Environment.NewLine;
-                                    if (moonnode.scandata != null)
-                                        ret += moonnode.scandata.DisplayString(false, 12);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return ret;
-        }
-
         private class DuplicateKeyComparer<TKey> : IComparer<string> where TKey : IComparable      // special compare for sortedlist
         {
             public int Compare(string x, string y)
             {
-                if (x.Length < y.Length)
-                    return -1;
-                else if (x.Length > y.Length)
-                    return 1;
-                else
-                    return x.CompareTo(y);
+                if ( x.Length>0 && Char.IsDigit(x[0]))      // numbers..
+                {
+                    if (x.Length < y.Length)
+                        return -1;
+                    else if (x.Length > y.Length)
+                        return 1;
+
+                }
+
+                return x.CompareTo(y);
             }
         }
 

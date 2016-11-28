@@ -295,7 +295,7 @@
             this.toolStripMenuItemStartStop,
             this.removeJournalEntryToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 224);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 202);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -395,6 +395,9 @@
             // 
             // toolTip1
             // 
+            this.toolTip1.AutoPopDelay = 20000;
+            this.toolTip1.InitialDelay = 250;
+            this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ShowAlways = true;
             // 
             // UserControlTravelGrid

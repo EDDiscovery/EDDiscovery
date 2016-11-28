@@ -189,6 +189,7 @@
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Controls\ControlHelpers.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\AutoCompleteTextBox.cs">
       <SubType>Component</SubType>
@@ -197,6 +198,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\PanelVScroll.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PictureBoxHotspot.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\TabStrip.cs">

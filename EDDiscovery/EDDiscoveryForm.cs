@@ -1737,9 +1737,7 @@ namespace EDDiscovery
             RefreshWorkerArgs args = e.Argument as RefreshWorkerArgs;
             var worker = (BackgroundWorker)sender;
 
-            List<HistoryEntry> history = new List<HistoryEntry>();
-            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
-            StarScan starscan = new StarScan();
+            List<HistoryEntry> hl = new List<HistoryEntry>();
 
             if (args.CurrentCommander >= 0)
             {
@@ -1769,7 +1767,7 @@ namespace EDDiscovery
                     HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn);
                     prev = he;
 
-                    history.Add(he);                        // add to the history list here..
+                    hl.Add(he);                        // add to the history list here..
 
                     if (journalupdate)
                     {
@@ -1778,27 +1776,10 @@ namespace EDDiscovery
                 }
             }
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
-            {
-                int i = 0;
-                foreach (EliteDangerous.JournalEntry je in jlist)
-                {
-                    HistoryEntry he = history[i];
-                    he.ProcessWithUserDb(je, (i > 0) ? history[i - 1] : null, conn);        // let the HE do what it wants to with the user db
+            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
+            StarScan starscan = new StarScan();
 
-                    matcommodledger.Process(je, conn);            // update the ledger
-
-                    if (je.EventTypeID == JournalTypeEnum.Scan)
-                    {
-                        if (!AddScanToBestSystem(starscan, je as JournalScan, i, history))
-                        {
-                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
-                        }
-                    }
-
-                    i++;
-                }
-            }
+            ProcessUserHistoryListEntries(hl, matcommodledger, starscan);      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 
             if (worker.CancellationPending)
             {
@@ -1836,7 +1817,7 @@ namespace EDDiscovery
             }
             else
             {
-                e.Result = new RefreshWorkerResults { rethistory = history, retledger = matcommodledger, retstarscan = starscan };
+                e.Result = new RefreshWorkerResults { rethistory = hl, retledger = matcommodledger, retstarscan = starscan };
             }
         }
 
@@ -1858,10 +1839,10 @@ namespace EDDiscovery
                     foreach (var ent in ((RefreshWorkerResults)e.Result).rethistory)
                     {
                         history.Add(ent);
+                        Debug.Assert(ent.MaterialCommodity != null);
                     }
 
                     history.materialcommodititiesledger = ((RefreshWorkerResults)e.Result).retledger;
-
                     history.starscan = ((RefreshWorkerResults)e.Result).retstarscan;
 
                     ReportProgress(-1, "");
@@ -1885,6 +1866,32 @@ namespace EDDiscovery
         {
             string name = (string)e.UserState;
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
+        }
+
+        // go thru the hisotry list and reworkout the materials ledge and the materials count
+        private void ProcessUserHistoryListEntries(List<HistoryEntry> hl, MaterialCommoditiesLedger ledger, StarScan scan)
+        {
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
+            {
+                for (int i = 0; i < hl.Count; i++)
+                {
+                    HistoryEntry he = hl[i];
+                    JournalEntry je = he.journalEntry;
+                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, conn);        // let the HE do what it wants to with the user db
+
+                    Debug.Assert(he.MaterialCommodity != null);
+
+                    ledger.Process(je, conn);            // update the ledger
+
+                    if (je.EventTypeID == JournalTypeEnum.Scan)
+                    {
+                        if (!AddScanToBestSystem(scan, je as JournalScan, i, hl))
+                        {
+                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
+                        }
+                    }
+                }
+            }
         }
 
         private bool AddScanToBestSystem(StarScan starscan, JournalScan je, int startindex, List<HistoryEntry> hl)
@@ -1957,10 +1964,24 @@ namespace EDDiscovery
             settings.UpdateCommandersListBox();
         }
 
+        public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
+        {
+            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
+            StarScan starscan = new StarScan();
+
+            ProcessUserHistoryListEntries(history.EntryOrder, matcommodledger, starscan);
+
+            history.materialcommodititiesledger = matcommodledger; ;
+            history.starscan = starscan;
+
+            if (OnHistoryChange != null)
+                OnHistoryChange(history);
+        }
+
 
         #endregion
 
-        
+
 
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {

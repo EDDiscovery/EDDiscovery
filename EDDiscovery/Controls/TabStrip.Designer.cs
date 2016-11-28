@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelBottom = new System.Windows.Forms.Panel();
-            this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
+            this.labelControlText = new System.Windows.Forms.Label();
             this.panelArrowRight = new System.Windows.Forms.Panel();
             this.panelArrowLeft = new System.Windows.Forms.Panel();
             this.panelSelected = new System.Windows.Forms.Panel();
@@ -38,12 +38,14 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPopOut = new System.Windows.Forms.ToolStripMenuItem();
+            this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelBottom.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.labelControlText);
             this.panelBottom.Controls.Add(this.drawnPanelPopOut);
             this.panelBottom.Controls.Add(this.panelArrowRight);
             this.panelBottom.Controls.Add(this.panelArrowLeft);
@@ -57,19 +59,16 @@
             this.panelBottom.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.panelBottom.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
-            // drawnPanelPopOut
+            // labelControlText
             // 
-            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout;
-            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
-            this.drawnPanelPopOut.ImageText = null;
-            this.drawnPanelPopOut.Location = new System.Drawing.Point(387, 3);
-            this.drawnPanelPopOut.MarginSize = 4;
-            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
-            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
-            this.drawnPanelPopOut.Name = "drawnPanelPopOut";
-            this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
-            this.drawnPanelPopOut.TabIndex = 3;
-            this.drawnPanelPopOut.Click += new System.EventHandler(this.panelPopOut_Click);
+            this.labelControlText.AutoSize = true;
+            this.labelControlText.Location = new System.Drawing.Point(440, 8);
+            this.labelControlText.Name = "labelControlText";
+            this.labelControlText.Size = new System.Drawing.Size(98, 13);
+            this.labelControlText.TabIndex = 4;
+            this.labelControlText.Text = "Control text defined";
+            this.labelControlText.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.labelControlText.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
             // panelArrowRight
             // 
@@ -123,16 +122,32 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemPopOut});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 26);
             this.contextMenuStrip1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
             this.contextMenuStrip1.Opened += new System.EventHandler(this.contextMenuStrip1_Opened);
             // 
             // toolStripMenuItemPopOut
             // 
             this.toolStripMenuItemPopOut.Name = "toolStripMenuItemPopOut";
-            this.toolStripMenuItemPopOut.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemPopOut.Size = new System.Drawing.Size(118, 22);
             this.toolStripMenuItemPopOut.Text = "Pop Out";
             this.toolStripMenuItemPopOut.Click += new System.EventHandler(this.toolStripMenuItemPopOut_Click);
+            // 
+            // drawnPanelPopOut
+            // 
+            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout;
+            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
+            this.drawnPanelPopOut.ImageText = null;
+            this.drawnPanelPopOut.Location = new System.Drawing.Point(161, 3);
+            this.drawnPanelPopOut.MarginSize = 4;
+            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
+            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
+            this.drawnPanelPopOut.Name = "drawnPanelPopOut";
+            this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
+            this.drawnPanelPopOut.TabIndex = 3;
+            this.drawnPanelPopOut.Click += new System.EventHandler(this.panelPopOut_Click);
+            this.drawnPanelPopOut.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.drawnPanelPopOut.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
             // TabStrip
             // 
@@ -159,5 +174,6 @@
         private ExtendedControls.DrawnPanel drawnPanelPopOut;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPopOut;
+        private System.Windows.Forms.Label labelControlText;
     }
 }

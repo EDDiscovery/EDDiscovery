@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery2._3DMap
 {
@@ -27,12 +28,19 @@ namespace EDDiscovery2._3DMap
         private List<ActionType> pressed = new List<ActionType>();
         private bool shiftpressed = false;
         private bool ctrlpressed = false;
+        private HashSet<Keys> keyspressed = new HashSet<Keys>();
 
         public void Clear()
         {
             actions.Clear();
             shiftpressed = false;
             ctrlpressed = false;
+        }
+
+        public void Reset()
+        {
+            keyspressed.Clear();
+            Clear();
         }
 
         public bool Any()
@@ -54,57 +62,69 @@ namespace EDDiscovery2._3DMap
                 pressed.Remove(v);                          // not pressed.
         }
 
+        public void KeyDown(object sender, KeyEventArgs e)
+        {
+            ctrlpressed = e.Control;
+            shiftpressed = e.Shift;
+            keyspressed.Add(e.KeyCode);
+        }
+
+        public void KeyUp(object sender, KeyEventArgs e)
+        {
+            ctrlpressed = e.Control;
+            shiftpressed = e.Shift;
+            keyspressed.Remove(e.KeyCode);
+        }
+
         public void ReceiveKeyboardActions()
         {
             Clear();
 
             try
             {
-                var state = OpenTK.Input.Keyboard.GetState();
-
-                shiftpressed = state[Key.LShift] || state[Key.RShift];
-                ctrlpressed = state[Key.ControlLeft] || state[Key.ControlRight];
+                shiftpressed = keyspressed.Contains(Keys.LShiftKey) || keyspressed.Contains(Keys.RShiftKey) || keyspressed.Contains(Keys.ShiftKey);
+                ctrlpressed = keyspressed.Contains(Keys.LControlKey) || keyspressed.Contains(Keys.RControlKey) || keyspressed.Contains(Keys.ControlKey);
 
                 if (ctrlpressed)
                 {
-                    Add(ActionType.FPS, state[Key.F], true);            // ctrl+f
+                    Add(ActionType.FPS, keyspressed.Contains(Keys.F), true);            // ctrl+f
                 }
                 else
                 {                                                       // shift/noshift + keys
-                    Add(ActionType.Help, state[Key.Slash] || state[Key.F1], true);           // certain keys are press down only once, release before next trigger  
-                    Add(ActionType.IncrStar, state[Key.F3]);
-                    Add(ActionType.DecrStar, state[Key.F4]);
-                    Add(ActionType.Record, state[Key.F5], true);
-                    Add(ActionType.RecordStep, state[Key.F6], true);
-                    Add(ActionType.RecordNewStep, state[Key.F7], true);
-                    Add(ActionType.RecordPause, state[Key.F8], true);
-                    Add(ActionType.Playback, state[Key.F9], true);
+                    Add(ActionType.Help, keyspressed.Contains(Keys.Divide) || keyspressed.Contains(Keys.F1), true);           // certain keys are press down only once, release before next trigger  
+                    Add(ActionType.IncrStar, keyspressed.Contains(Keys.F3));
+                    Add(ActionType.DecrStar, keyspressed.Contains(Keys.F4));
+                    Add(ActionType.Record, keyspressed.Contains(Keys.F5), true);
+                    Add(ActionType.RecordStep, keyspressed.Contains(Keys.F6), true);
+                    Add(ActionType.RecordNewStep, keyspressed.Contains(Keys.F7), true);
+                    Add(ActionType.RecordPause, keyspressed.Contains(Keys.F8), true);
+                    Add(ActionType.Playback, keyspressed.Contains(Keys.F9), true);
 
-                    Add(ActionType.Left, state[Key.Left] || state[Key.A]);
-                    Add(ActionType.Right, state[Key.Right] || state[Key.D]);
-                    Add(ActionType.Up, state[Key.W] || state[Key.Up]);
-                    Add(ActionType.Down, state[Key.S] || state[Key.Down]);
-                    Add(ActionType.PgUp, state[Key.PageUp] || state[Key.R]);                    // WASD is fore/back/left/right, R/F is up down
-                    Add(ActionType.PgDown, state[Key.PageDown] || state[Key.F]);
+                    Add(ActionType.Left, keyspressed.Contains(Keys.Left) || keyspressed.Contains(Keys.A));
+                    Add(ActionType.Right, keyspressed.Contains(Keys.Right) || keyspressed.Contains(Keys.D));
+                    Add(ActionType.Up, keyspressed.Contains(Keys.W) || keyspressed.Contains(Keys.Up));
+                    Add(ActionType.Down, keyspressed.Contains(Keys.S) || keyspressed.Contains(Keys.Down));
+                    Add(ActionType.PgUp, keyspressed.Contains(Keys.PageUp) || keyspressed.Contains(Keys.R));                    // WASD is fore/back/left/right, R/F is up down
+                    Add(ActionType.PgDown, keyspressed.Contains(Keys.PageDown) || keyspressed.Contains(Keys.F));
 
-                    Add(ActionType.ZoomIn, state[Key.Plus] || state[Key.Z]);                 // additional Useful keys
-                    Add(ActionType.ZoomOut, state[Key.Minus] || state[Key.X]);
-                    Add(ActionType.YawLeft, state[Key.Keypad4]);
-                    Add(ActionType.YawRight, state[Key.Keypad6]);
-                    Add(ActionType.Pitch, state[Key.Keypad8]);
-                    Add(ActionType.Dive, state[Key.Keypad5] || state[Key.Keypad2]);
-                    Add(ActionType.RollLeft, state[Key.Keypad7] || state[Key.Q]);
-                    Add(ActionType.RollRight, state[Key.Keypad9] || state[Key.E]);
+                    Add(ActionType.ZoomIn, keyspressed.Contains(Keys.Add) || keyspressed.Contains(Keys.Z));                 // additional Useful keys
+                    Add(ActionType.ZoomOut, keyspressed.Contains(Keys.Subtract) || keyspressed.Contains(Keys.X));
+                    Add(ActionType.YawLeft, keyspressed.Contains(Keys.NumPad4));
+                    Add(ActionType.YawRight, keyspressed.Contains(Keys.NumPad6));
+                    Add(ActionType.Pitch, keyspressed.Contains(Keys.NumPad8));
+                    Add(ActionType.Dive, keyspressed.Contains(Keys.NumPad5) || keyspressed.Contains(Keys.NumPad2));
+                    Add(ActionType.RollLeft, keyspressed.Contains(Keys.NumPad7) || keyspressed.Contains(Keys.Q));
+                    Add(ActionType.RollRight, keyspressed.Contains(Keys.NumPad9) || keyspressed.Contains(Keys.E));
 
-                    Add(ActionType.Zoom1, state[Key.Number1], true);
-                    Add(ActionType.Zoom2, state[Key.Number2], true);
-                    Add(ActionType.Zoom3, state[Key.Number3], true);
-                    Add(ActionType.Zoom4, state[Key.Number4], true);
-                    Add(ActionType.Zoom5, state[Key.Number5], true);
-                    Add(ActionType.Zoom6, state[Key.Number6], true);
-                    Add(ActionType.Zoom7, state[Key.Number7], true);
-                    Add(ActionType.Zoom8, state[Key.Number8], true);
-                    Add(ActionType.Zoom9, state[Key.Number9], true);
+                    Add(ActionType.Zoom1, keyspressed.Contains(Keys.D1), true);
+                    Add(ActionType.Zoom2, keyspressed.Contains(Keys.D2), true);
+                    Add(ActionType.Zoom3, keyspressed.Contains(Keys.D3), true);
+                    Add(ActionType.Zoom4, keyspressed.Contains(Keys.D4), true);
+                    Add(ActionType.Zoom5, keyspressed.Contains(Keys.D5), true);
+                    Add(ActionType.Zoom6, keyspressed.Contains(Keys.D6), true);
+                    Add(ActionType.Zoom7, keyspressed.Contains(Keys.D7), true);
+                    Add(ActionType.Zoom8, keyspressed.Contains(Keys.D8), true);
+                    Add(ActionType.Zoom9, keyspressed.Contains(Keys.D9), true);
                 }
             }
             catch (Exception ex)
