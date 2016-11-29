@@ -138,7 +138,8 @@ namespace EDDiscovery
         {
             double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
             routeSystems = new List<SystemClass>();
-            routeSystems.Add(SystemClass.GetSystem(textBox_From.Text));
+            System.Diagnostics.Debug.WriteLine("From " + textBox_From.Text + " to  " + textBox_To.Text);
+            routeSystems.Add(new SystemClass(fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
 
             AppendText("Searching route from " + fromsys + " to " + tosys + " using " + metric_options[routemethod] + " metric" + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
@@ -195,7 +196,7 @@ namespace EDDiscovery
 
             } while (true);
 
-            routeSystems.Add(SystemClass.GetSystem(textBox_To.Text));
+            routeSystems.Add(new SystemClass(tosys, coordsto.X, coordsto.Y, coordsto.Z));
             actualdistance += Point3D.DistanceBetween(curpos, coordsto);
             AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
             AppendText(Environment.NewLine);

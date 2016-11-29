@@ -62,6 +62,7 @@ namespace EDDiscovery
         private TimeSpan travelled_seconds;
         bool travelling;
         int travelled_missingjump;
+        int travelled_jumps;
 
         MaterialCommoditiesList materialscommodities;
 
@@ -187,6 +188,7 @@ namespace EDDiscovery
             {
                 he.travelled_distance = prev.travelled_distance;
                 he.travelled_missingjump = prev.travelled_missingjump;
+                he.travelled_jumps = prev.travelled_jumps;
 
                 if (he.IsFSDJump)
                 {
@@ -194,7 +196,10 @@ namespace EDDiscovery
                     if (dist <= 0)
                         he.travelled_missingjump++;
                     else
+                    {
                         he.travelled_distance += dist;
+                        he.travelled_jumps++;
+                    }
                 }
 
                 he.travelled_seconds = prev.travelled_seconds;
@@ -208,9 +213,10 @@ namespace EDDiscovery
                 if (he.StopMarker || he.StartMarker)
                 {
                     he.travelling = false;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") +
-                                        ((he.travelled_missingjump > 0) ? " LY(" + he.travelled_missingjump + " unknown distance jumps)" : " LY") +
-                                        " time " + he.travelled_seconds;
+                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") + " LY"
+                                        + ", " + he.travelled_jumps + " jumps"
+                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
+                                        ", time " + he.travelled_seconds;
 
                     he.travelled_distance = 0;
                     he.travelled_seconds = new TimeSpan(0);
@@ -221,9 +227,12 @@ namespace EDDiscovery
                     he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling";
 
                     if (he.IsFSDJump)
-                        he.EventDetailedInfo += " distance " + he.travelled_distance.ToString("0.0") + ((he.travelled_missingjump > 0) ? " LY (*)" : " LY");
-
-                    he.EventDetailedInfo += " time " + he.travelled_seconds;
+                    {
+                        he.EventDetailedInfo += " distance " + he.travelled_distance.ToString("0.0") + " LY"
+                                        + ", " + he.travelled_jumps + " jumps"
+                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
+                                        ", time " + he.travelled_seconds;
+                    }
                 }
 
             }
