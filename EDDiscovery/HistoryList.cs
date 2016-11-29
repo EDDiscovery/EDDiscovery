@@ -59,9 +59,14 @@ namespace EDDiscovery
         // Calculated values, not from JE
 
         private double travelled_distance;  // start/stop distance and time computation
+        public double TravelledDistance { get { return travelled_distance; } }
+
         private TimeSpan travelled_seconds;
+        public TimeSpan TravelledSeconds { get { return travelled_seconds; } }
+
         bool travelling;
         int travelled_missingjump;
+        public int TravelledMissingjump { get { return travelled_missingjump; } }
 
         MaterialCommoditiesList materialscommodities;
 
