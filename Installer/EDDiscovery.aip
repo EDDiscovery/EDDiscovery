@@ -17,10 +17,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{15A77E86-4D22-4707-8741-2B7DBDEF69FD} 1053:{C97890A5-EDB1-4646-9C13-BE3F62679DDC} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{69CFC565-E64A-4251-B938-7EA5031BC7D2} 1053:{F5496CEB-6D54-4967-841A-1615B5AB6FB9} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="5.1.4" Type="32"/>
+    <ROW Property="ProductVersion" Value="5.1.5" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -71,7 +71,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="EDDiscovery.exe" Component_="EDDiscovery.exe" FileName="EDDISC~1.EXE|EDDiscovery.exe" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe" SelfReg="false" NextFile="EUROCAPS.TTF" DigSign="true"/>
-    <ROW File="EDDiscovery.exe.config" Component_="EDDiscovery.exe.config" FileName="EDDISC~1.CON|EDDiscovery.exe.config" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe.config" SelfReg="false"/>
+    <ROW File="EDDiscovery.exe.config" Component_="EDDiscovery.exe.config" FileName="EDDISC~1.CON|EDDiscovery.exe.config" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe.config" SelfReg="false"/>
     <ROW File="EUROCAPS.TTF" Component_="EUROCAPS.TTF" FileName="EUROCAPS.TTF" Attributes="0" SourcePath="ExtraFiles\EUROCAPS.TTF" SelfReg="false" NextFile="EDDiscovery.exe.config"/>
     <ROW File="Installer.txt" Component_="fround.js" FileName="INSTAL~1.TXT|Installer.txt" Attributes="0" SourcePath="Installer.txt" SelfReg="false" NextFile="System.Data.SQLite.dll"/>
     <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Newtonsoft.Json.dll" SelfReg="false" NextFile="OpenTK.GLControl.dll"/>
