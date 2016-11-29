@@ -238,6 +238,16 @@ namespace EDDiscovery
                    @"[-\s]", " ");
         }
 
+        public static string[] SplitCapsWord(string[] capslower)
+        {
+            string[] rep = new string[capslower.Count()];
+
+            for (int i = 0; i < capslower.Count(); i++)
+                rep[i] = SplitCapsWord(capslower[i]);
+
+            return rep;
+        }
+
         public static string FDName(string normal)
         {
             string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());

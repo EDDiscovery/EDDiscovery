@@ -581,6 +581,14 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        static public JournalEntry Get(long journalid)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                return Get(journalid, cn);
+            }
+        }
+
         static public JournalEntry Get(long journalid, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid", tn))
@@ -599,14 +607,34 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
-        static public JournalEntry Get(long journalid)
+        static public List<JournalEntry> Get(string eventtype)            // any commander, find me an event of this type..
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
-                return Get(journalid, cn);
+                return Get(eventtype, cn);
             }
         }
-        
+
+        static public List<JournalEntry> Get(string eventtype, SQLiteConnectionUser cn, DbTransaction tn = null)
+        {
+            using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where EventType=@ev", tn))
+            {
+                cmd.AddParameterWithValue("@ev", eventtype);
+
+                using (DbDataReader reader = cmd.ExecuteReader())
+                {
+                    List<JournalEntry> entries = new List<JournalEntry>();
+
+                    while (reader.Read())
+                    {
+                        entries.Add(CreateJournalEntry(reader));
+                    }
+
+                    return entries;
+                }
+            }
+        }
+
         static public List<JournalEntry> GetAll(int commander = -999)
         {
             List<JournalEntry> list = new List<JournalEntry>();
@@ -1035,7 +1063,7 @@ namespace EDDiscovery.EliteDangerous
             return s;
         }
 
-        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null )
+        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
         {
             List<string> ret = new List<string>();
 

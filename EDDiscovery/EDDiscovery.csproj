@@ -364,6 +364,19 @@
     <Compile Include="Forms\TripPanelPopOut.Designer.cs">
       <DependentUpon>TripPanelPopOut.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\JSONFiltersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\JSONFiltersForm.Designer.cs">
+      <DependentUpon>JSONFiltersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TextBoxEntry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TextBoxEntry.Designer.cs">
+      <DependentUpon>TextBoxEntry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JSON\JSONFilter.cs" />
     <Compile Include="JSON\JSONPrettyPrint.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
@@ -686,8 +699,14 @@
     <EmbeddedResource Include="Forms\TripPanelPopOut.resx">
       <DependentUpon>TripPanelPopOut.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\JSONFiltersForm.resx">
+      <DependentUpon>JSONFiltersForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TextBoxEntry.resx">
+      <DependentUpon>TextBoxEntry.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>

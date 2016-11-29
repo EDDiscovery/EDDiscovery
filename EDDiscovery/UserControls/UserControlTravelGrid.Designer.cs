@@ -32,6 +32,7 @@
             this.TopPanel = new System.Windows.Forms.Panel();
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelHistoryIcon = new System.Windows.Forms.Panel();
+            this.buttonField = new ExtendedControls.ButtonExt();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.labelSearch = new System.Windows.Forms.Label();
@@ -70,6 +71,7 @@
             // 
             this.TopPanel.Controls.Add(this.drawnPanelPopOut);
             this.TopPanel.Controls.Add(this.panelHistoryIcon);
+            this.TopPanel.Controls.Add(this.buttonField);
             this.TopPanel.Controls.Add(this.buttonFilter);
             this.TopPanel.Controls.Add(this.textBoxFilter);
             this.TopPanel.Controls.Add(this.labelSearch);
@@ -104,6 +106,20 @@
             this.panelHistoryIcon.Size = new System.Drawing.Size(24, 24);
             this.panelHistoryIcon.TabIndex = 26;
             // 
+            // buttonField
+            // 
+            this.buttonField.BorderColorScaling = 1.25F;
+            this.buttonField.ButtonColorScaling = 0.5F;
+            this.buttonField.ButtonDisabledScaling = 0.5F;
+            this.buttonField.Location = new System.Drawing.Point(525, 3);
+            this.buttonField.Name = "buttonField";
+            this.buttonField.Size = new System.Drawing.Size(75, 23);
+            this.buttonField.TabIndex = 25;
+            this.buttonField.Text = "Field Filter";
+            this.toolTip1.SetToolTip(this.buttonField, "Filter out entries matching the field selection");
+            this.buttonField.UseVisualStyleBackColor = true;
+            this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
+            // 
             // buttonFilter
             // 
             this.buttonFilter.BorderColorScaling = 1.25F;
@@ -114,7 +130,7 @@
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 25;
             this.buttonFilter.Text = "Event Filter";
-            this.toolTip1.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
+            this.toolTip1.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
@@ -159,7 +175,7 @@
             this.comboBoxHistoryWindow.SelectedIndex = -1;
             this.comboBoxHistoryWindow.SelectedItem = null;
             this.comboBoxHistoryWindow.SelectedValue = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 20);
+            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 22);
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.toolTip1.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
@@ -450,5 +466,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private ExtendedControls.DrawnPanel drawnPanelPopOut;
+        private ExtendedControls.ButtonExt buttonField;
     }
 }
