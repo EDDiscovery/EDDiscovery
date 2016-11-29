@@ -12,6 +12,7 @@ using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery2.EDSM;
+using EDDiscovery2;
 
 namespace EDDiscovery.UserControls
 {
@@ -32,6 +33,8 @@ namespace EDDiscovery.UserControls
         public DataGridView TravelGrid { get { return dataGridViewTravel; } }
 
         public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
+
+        private JSONFilter fieldfilter = new JSONFilter();
 
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick , bool note);
         public event ChangedSelection OnChangedSelection;
@@ -70,6 +73,7 @@ namespace EDDiscovery.UserControls
         private string DbFilterSave { get { return "TravelHistoryControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return "TravelControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "EDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbFieldFilter { get { return "TravelHistoryControlFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -95,6 +99,10 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.MakeDoubleBuffered();
             dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
+
+            string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
+            if (filter.Length>0)
+                fieldfilter.FromJSON(filter);        // load filter
         }
 
         public void NoHistoryIcon()
@@ -134,7 +142,12 @@ namespace EDDiscovery.UserControls
 
             List<HistoryEntry> result = filter.Filter(hl);
 
-            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+            int ftotal;
+            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
+            toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
+
+            result = fieldfilter.FilterOutHistory(result,out ftotal);
+            toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewTravel.Rows.Clear();
 
@@ -234,9 +247,9 @@ namespace EDDiscovery.UserControls
             preferred_jid = jid;
         }
 
-        public bool WouldAddEntry(HistoryEntry he)
+        public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && !fieldfilter.FilterOutHistory(he);
         }
         
         public void SelectTopRow()
@@ -815,6 +828,18 @@ namespace EDDiscovery.UserControls
             Display(current_historylist);
         }
 
+        private void buttonField_Click(object sender, EventArgs e)
+        {
+            EDDiscovery2.JSONFiltersForm frm = new JSONFiltersForm();
+            frm.Init("History: Filter out fields", "Filter Out", true, discoveryform.theme, fieldfilter);
+            if ( frm.ShowDialog() == DialogResult.OK )
+            {
+                fieldfilter = frm.result;
+                SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
+                Display(current_historylist);
+            }
+        }
+
         #endregion
 
         private void drawnPanelPopOut_Click(object sender, EventArgs e)
@@ -822,6 +847,7 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
+
     }
 
 }

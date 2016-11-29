@@ -60,12 +60,15 @@ namespace ExtendedControls
 
         private void Control_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (e.Delta > 0)
-                vsc.ValueLimited -= vsc.LargeChange;
-            else
-                vsc.ValueLimited += vsc.LargeChange;
+            if (vsc != null)
+            {
+                if (e.Delta > 0)
+                    vsc.ValueLimited -= vsc.LargeChange;
+                else
+                    vsc.ValueLimited += vsc.LargeChange;
 
-            ScrollTo(vsc.Value);
+                ScrollTo(vsc.Value);
+            }
         }
 
         protected virtual void OnScrollBarChanged(object sender, ScrollEventArgs e)
@@ -108,9 +111,12 @@ namespace ExtendedControls
                 PerformLayout();
             }
 
-            vsc.Maximum = maxy - ClientRectangle.Height + vsc.LargeChange;
-            vsc.Minimum = 0;
-            //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
+            if (vsc != null)
+            {
+                vsc.Maximum = maxy - ClientRectangle.Height + vsc.LargeChange;
+                vsc.Minimum = 0;
+                //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
+            }
 
             scrollpos = newscrollpos;
 

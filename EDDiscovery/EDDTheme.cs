@@ -609,19 +609,27 @@ namespace EDDiscovery2
         public void SetCustom()
         { currentsettings.name = "Custom"; }                                // set so custom..
 
-        public void ApplyToForm(Form form)                                  // we apply the form.Font, so it does not autoscale items directly on the form.
+        public bool ApplyToForm(Form form, Font fnt= null )                 
         {
+            if (fnt == null)
+                fnt = GetFont;                                          // do not apply to Form, only to sub controls
+
+            form.FormBorderStyle = WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
             form.Opacity = currentsettings.formopacity / 100;
             form.BackColor = currentsettings.colors[Settings.CI.form];
   
-            ApplyToControls(form);        // form is the parent of form!
+            ApplyToControls(form,fnt);        // form is the parent of form!
 
             UpdateToolsTripRenderer();
+
+            return WindowsFrame;
         }
 
-        public void ApplyToControls(Control parent)
+        public void ApplyToControls(Control parent, Font fnt = null)
         {
-            Font fnt = GetFont;
+            if (fnt == null)
+                fnt = GetFont;                                          // do not apply to Form, only to sub controls
+
             foreach (Control c in parent.Controls)
                 UpdateColorControls(parent, c, fnt, 0);
         }

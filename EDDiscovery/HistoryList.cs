@@ -760,14 +760,17 @@ namespace EDDiscovery
                                             Math.Abs(x.System.z - p.Z) < limit);
         }
 
-        public static List<HistoryEntry> FilterByJournalEvent(List<HistoryEntry> he , string eventstring)
+        public static List<HistoryEntry> FilterByJournalEvent(List<HistoryEntry> he , string eventstring , out int count)
         {
+            count = 0;
             if (eventstring.Equals("All"))
                 return he;
             else
             {
                 string[] events = eventstring.Split(';');
-                return (from systems in he where systems.IsJournalEventInEventFilter(events) select systems).ToList();
+                List<HistoryEntry> ret = (from systems in he where systems.IsJournalEventInEventFilter(events) select systems).ToList();
+                count = he.Count - ret.Count;
+                return ret;
             }
         }
 
