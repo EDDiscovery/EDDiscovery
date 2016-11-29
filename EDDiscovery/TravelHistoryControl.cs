@@ -446,7 +446,9 @@ namespace EDDiscovery
             RefreshTargetInfo();
             UpdateDependentsWithSelection();
             _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map
+            RedrawTripPanel(hl);
         }
+
 
         public void UpdatedWithAddNewEntry(HistoryEntry he, HistoryList hl, bool accepted)     // main travel grid calls after getting a new entry
         {
@@ -791,11 +793,11 @@ namespace EDDiscovery
             }
         }
 
-        private void buttonEDSM_Click(object sender, EventArgs e)
+        void gotoEDSM()
         {
             HistoryEntry sys = userControlTravelGrid.GetCurrentHistoryEntry;
 
-            if ( sys != null )
+            if (sys != null)
                 _discoveryForm.history.FillEDSM(sys, reload: true);
 
             if (sys != null && sys.System != null) // solve a possible exception
@@ -817,6 +819,11 @@ namespace EDDiscovery
                         MessageBox.Show("System unknown to EDSM");
                 }
             }
+        }
+
+        private void buttonEDSM_Click(object sender, EventArgs e)
+        {
+            gotoEDSM();
         }
 
         public void RefreshButton(bool state)
@@ -1083,6 +1090,9 @@ namespace EDDiscovery
 
             if (IsSummaryPopOutReady)
                 summaryPopOut.RefreshTarget(userControlTravelGrid.TravelGrid, _discoveryForm.history.GetLastWithPosition);
+
+            if (IsTripPanelPopOutReady)
+                tripPanelPopOut.displayLastFSD(_discoveryForm.history.GetLastFSD);
         }
 
 #endregion
@@ -1151,8 +1161,47 @@ namespace EDDiscovery
         #endregion
 
         #region LogOut
- 
 
-#endregion
+
+        #endregion
+
+
+        #region Trip computer Pop out
+
+        private void btnTripPanel_Click(object sender, EventArgs e)
+        {
+            ToggleTripPanelPopOut();
+        }
+
+        TripPanelPopOut tripPanelPopOut = null;
+
+        public bool IsTripPanelPopOutReady { get { return tripPanelPopOut != null && !tripPanelPopOut.IsFormClosed; } }
+
+        public bool ToggleTripPanelPopOut()
+        {
+            if (tripPanelPopOut == null || tripPanelPopOut.IsFormClosed)
+            {
+                TripPanelPopOut p = new TripPanelPopOut(_discoveryForm);
+                p.SetGripperColour(_discoveryForm.theme.LabelColor);
+                p.SetTextColour(_discoveryForm.theme.SPanelColor);
+                p.displayLastFSD(_discoveryForm.history.GetLastFSD);
+                p.Show();
+                tripPanelPopOut = p;          // do it like this in case of race conditions 
+                return true;
+            }
+            else
+            {
+                tripPanelPopOut.Close();      // there is no point null it, as if the user closes it, it never gets the chance to be nulled
+                return false;
+            }
+        }
+
+        void RedrawTripPanel(HistoryList hl)
+        {
+            if (IsTripPanelPopOutReady)
+                tripPanelPopOut.displayLastFSD(hl.GetLastFSD);
+        }
+    
+        #endregion
     }
 }
