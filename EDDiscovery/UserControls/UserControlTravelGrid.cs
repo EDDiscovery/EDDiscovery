@@ -832,7 +832,8 @@ namespace EDDiscovery.UserControls
         {
             EDDiscovery2.JSONFiltersForm frm = new JSONFiltersForm();
             frm.Init("History: Filter out fields", "Filter Out", true, discoveryform.theme, fieldfilter);
-            if ( frm.ShowDialog() == DialogResult.OK )
+            frm.TopMost = this.FindForm().TopMost;
+            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;
                 SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
