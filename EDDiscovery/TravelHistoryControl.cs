@@ -46,7 +46,7 @@ namespace EDDiscovery
         public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);
         public event TravelSelectionChanged OnTravelSelectionChanged;
 
-        string[] popoutlist = new string[] { "Pop Out", "Log", "Nearest Stars" , "Materials",
+        string[] popoutlist = new string[] { "S-Panel", "Trip-Panel", "Log", "Nearest Stars" , "Materials",
                                             "Commodities" , "Ledger" , "Journal", "Travel Grid" , "Screen Shot", "Statistics" , "Scan" };
 
         Bitmap[] popoutbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts
@@ -298,25 +298,24 @@ namespace EDDiscovery
             int butoffsetx = buttonMap.Location.X - buttonMap2D.Location.X;
             int butoffsety = buttonMap2D.Location.Y - button_RefreshHistory.Location.Y;
 
+            // always 2dmap, 3dmap
+
             comboBoxCommander.Width = Math.Min(Math.Max(width - comboBoxCommander.Location.X - 4,64),192);
 
-            if ( width >= buttonMap2D.Location.X + butoffsetx * 4 + buttonSync.Width + 4)  // 2x5
+            if ( width >= buttonMap2D.Location.X + butoffsetx * 3 + buttonSync.Width + 4)  // other two buttons beside (2, 4)
             {
                 comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 2, buttonMap2D.Location.Y);
-                buttonExtSummaryPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 3, buttonMap2D.Location.Y);
-                buttonSync.Location = new Point(buttonMap2D.Location.X + butoffsetx * 4, buttonMap2D.Location.Y);
+                buttonSync.Location = new Point(buttonMap2D.Location.X + butoffsetx * 3, buttonMap2D.Location.Y);
             }
-            else if (width >= buttonMap2D.Location.X + butoffsetx * 3 + buttonExtSummaryPopOut.Width + 4)   // 2x4x1
+            else if (width >= buttonMap2D.Location.X + butoffsetx *2 + comboBoxCustomPopOut.Width + 4)   // one button beside, on below (2,3,1)
             {
                 comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 2, buttonMap2D.Location.Y);
-                buttonExtSummaryPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 3, buttonMap2D.Location.Y);
                 buttonSync.Location = new Point(buttonMap2D.Location.X, buttonMap2D.Location.Y + butoffsety);
             }
-            else  //2x2x2x1
+            else  // 2,2,2
             {
                 comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X, buttonMap2D.Location.Y + butoffsety);
-                buttonExtSummaryPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx, comboBoxCustomPopOut.Location.Y);
-                buttonSync.Location = new Point(buttonMap2D.Location.X, buttonExtSummaryPopOut.Location.Y + butoffsety);
+                buttonSync.Location = new Point(buttonMap2D.Location.X + butoffsetx , comboBoxCustomPopOut.Location.Y);
             }
             
             panel_topright.Size = new Size(panel_topright.Width, buttonSync.Location.Y + buttonSync.Height + 6);
@@ -925,8 +924,12 @@ namespace EDDiscovery
             if (!comboBoxCustomPopOut.Enabled)
                 return;
 
-            if (comboBoxCustomPopOut.SelectedIndex>0)
-                PopOut((PopOuts)comboBoxCustomPopOut.SelectedIndex);
+            if (comboBoxCustomPopOut.SelectedIndex == 0)
+                ToggleSummaryPopOut();
+            else if (comboBoxCustomPopOut.SelectedIndex == 1)
+                ToggleTripPanelPopOut();
+            else
+                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex-1));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;
@@ -1142,11 +1145,6 @@ namespace EDDiscovery
                 summaryPopOut.RefreshRow(userControlTravelGrid.TravelGrid, row, add);
         }
 
-        private void buttonExtSummaryPopOut_Click(object sender, EventArgs e)
-        {
-            ToggleSummaryPopOut();
-        }
-
         public void NewBodyScan(JournalScan js)
         {
             if (IsSummaryPopOutReady)
@@ -1167,11 +1165,6 @@ namespace EDDiscovery
 
 
         #region Trip computer Pop out
-
-        private void btnTripPanel_Click(object sender, EventArgs e)
-        {
-            ToggleTripPanelPopOut();
-        }
 
         TripPanelPopOut tripPanelPopOut = null;
 

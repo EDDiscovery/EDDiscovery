@@ -41,7 +41,6 @@
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
             this.buttonMap2D = new ExtendedControls.ButtonExt();
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
-            this.buttonExtSummaryPopOut = new ExtendedControls.ButtonExt();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
@@ -74,7 +73,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.panel_topright = new System.Windows.Forms.Panel();
-            this.btnTripPanel = new ExtendedControls.ButtonExt();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
             this.tabStripMiddleRight = new EDDiscovery.Controls.TabStrip();
@@ -298,21 +296,6 @@
         "rs");
             this.comboBoxCommander.ValueMember = "";
             this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
-            // 
-            // buttonExtSummaryPopOut
-            // 
-            this.buttonExtSummaryPopOut.BorderColorScaling = 1.25F;
-            this.buttonExtSummaryPopOut.ButtonColorScaling = 0.5F;
-            this.buttonExtSummaryPopOut.ButtonDisabledScaling = 0.5F;
-            this.buttonExtSummaryPopOut.Location = new System.Drawing.Point(222, 36);
-            this.buttonExtSummaryPopOut.Name = "buttonExtSummaryPopOut";
-            this.buttonExtSummaryPopOut.Size = new System.Drawing.Size(65, 23);
-            this.buttonExtSummaryPopOut.TabIndex = 4;
-            this.buttonExtSummaryPopOut.Text = "S-Panel";
-            this.toolTipEddb.SetToolTip(this.buttonExtSummaryPopOut, "Turn on and off the Status Panel Pop Out. Right click on it to set its format. Dr" +
-        "ag this popout over your Elite Dangerous window");
-            this.buttonExtSummaryPopOut.UseVisualStyleBackColor = true;
-            this.buttonExtSummaryPopOut.Click += new System.EventHandler(this.buttonExtSummaryPopOut_Click);
             // 
             // buttonMap
             // 
@@ -696,13 +679,11 @@
             // 
             // panel_topright
             // 
-            this.panel_topright.Controls.Add(this.btnTripPanel);
             this.panel_topright.Controls.Add(this.comboBoxCustomPopOut);
             this.panel_topright.Controls.Add(this.button_RefreshHistory);
             this.panel_topright.Controls.Add(this.buttonMap2D);
             this.panel_topright.Controls.Add(this.comboBoxCommander);
             this.panel_topright.Controls.Add(this.labelCMDR);
-            this.panel_topright.Controls.Add(this.buttonExtSummaryPopOut);
             this.panel_topright.Controls.Add(this.buttonMap);
             this.panel_topright.Controls.Add(this.buttonSync);
             this.panel_topright.Dock = System.Windows.Forms.DockStyle.Top;
@@ -711,19 +692,6 @@
             this.panel_topright.Size = new System.Drawing.Size(337, 100);
             this.panel_topright.TabIndex = 26;
             this.panel_topright.Resize += new System.EventHandler(this.panel_topright_Resize);
-            // 
-            // btnTripPanel
-            // 
-            this.btnTripPanel.BorderColorScaling = 1.25F;
-            this.btnTripPanel.ButtonColorScaling = 0.5F;
-            this.btnTripPanel.ButtonDisabledScaling = 0.5F;
-            this.btnTripPanel.Location = new System.Drawing.Point(222, 65);
-            this.btnTripPanel.Name = "btnTripPanel";
-            this.btnTripPanel.Size = new System.Drawing.Size(65, 23);
-            this.btnTripPanel.TabIndex = 19;
-            this.btnTripPanel.Text = "Trip Panel";
-            this.btnTripPanel.UseVisualStyleBackColor = true;
-            this.btnTripPanel.Click += new System.EventHandler(this.btnTripPanel_Click);
             // 
             // labelCMDR
             // 
@@ -849,7 +817,6 @@
         private System.Windows.Forms.Label labelTarget;
         private ExtendedControls.TextBoxBorder textBoxTargetDist;
         private ExtendedControls.AutoCompleteTextBox textBoxTarget;
-        private ExtendedControls.ButtonExt buttonExtSummaryPopOut;
         private System.Windows.Forms.SplitContainer splitContainerLeft;
         private System.Windows.Forms.SplitContainer splitContainerLeftRight;
         private System.Windows.Forms.SplitContainer splitContainerRightInner;
@@ -861,6 +828,5 @@
         private Controls.TabStrip tabStripBottom;
         private Controls.TabStrip tabStripMiddleRight;
         private Controls.TabStrip tabStripBottomRight;
-        private ExtendedControls.ButtonExt btnTripPanel;
     }
 }

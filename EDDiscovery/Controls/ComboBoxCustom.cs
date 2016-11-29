@@ -518,7 +518,10 @@ namespace ExtendedControls
             _cbdropdown.Close();
             isActivated = false;
             this.Invalidate(true);
-            _cbsystem.SelectedIndex = selectedindex;            // triggers _cbsystem_SelectedIndexChanged
+            if (_cbsystem.SelectedIndex != selectedindex)
+                _cbsystem.SelectedIndex = selectedindex; // triggers _cbsystem_SelectedIndexChanged, but only if we change the index..
+            else
+                _cbsystem_SelectedIndexChanged(sender, e);      // otherwise, fire it off manually.. this is what the system box does, if the user clicks on it, fires it off
             Focus();
         }
 
