@@ -65,8 +65,7 @@ namespace EDDiscovery2
             showNotes = 16,
             showXYZ = 32,
             showDistancePerStar = 64,
-            showScanAbove = 128,
-
+            
             showDoesNotAffectTabs = 1024,        // above this, tab positions are not changed by changes in these values
 
             showDistancesOnFSDJumpsOnly = 1024,
@@ -81,13 +80,14 @@ namespace EDDiscovery2
             showScanRight = 524288,
             showScanLeft = 1048576,
             showScanOnTop = 2097152,
-            showScanBelow = 4194304
+            showScanBelow = 4194304,
+            showScanAbove = 8388608
         };
 
         Configuration config = (Configuration)(Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showTime | Configuration.showDescription | 
                                                Configuration.showInformation | Configuration.showNotes | Configuration.showXYZ | Configuration.showDistancePerStar |
                                                Configuration.showScan15s | Configuration.showScan30s | Configuration.showScan60s | Configuration.showScanIndefinite |
-                                               Configuration.showScanRight | Configuration.showScanLeft | Configuration.showScanOnTop | Configuration.showScanBelow);
+                                               Configuration.showScanRight | Configuration.showScanLeft | Configuration.showScanOnTop | Configuration.showScanBelow | Configuration.showScanAbove);
 
         bool Config(Configuration c) { return ( config & c ) != 0; }
         
@@ -463,8 +463,7 @@ namespace EDDiscovery2
             if (Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite))
             {
                 SuspendLayout();
-
-                if (!Config(Configuration.showScanIndefinite)) scanhide.Stop();
+                
                 if (!bodyScanShowing)
                 {
                     noScanHeight = this.Height;
@@ -475,67 +474,81 @@ namespace EDDiscovery2
                 labelBodyScanData.Text = scan.DisplayString();
                 bodyScanShowing = true;
 
-                if (Config(Configuration.showScanLeft))
-                {
-                    oldcolumnpos = columnpos;
-                    ResetTabList();
-                    columnpos[1] = labelBodyScanData.Width + 4;
-                    labelBodyScanData.Left = 4;
-                    labelBodyScanData.Top = 4;
-                    RequiresRefresh(this, null);
-                }
-                else if (Config(Configuration.showScanRight))
-                {
-                    labelBodyScanData.Left = visiblecolwidth + 4;
-                    labelBodyScanData.Top = 4;
-                }
-                else if (Config(Configuration.showScanOnTop))
-                {
-                    labelBodyScanData.Width = this.ClientRectangle.Width - 8;
-                    labelBodyScanData.Left = 4;
-                    labelBodyScanData.Top = 4;
-                    lt.SetDisplaySize(0);
-                }
-                else if (Config(Configuration.showScanBelow))
-                {
-                    resizingForScan = true;
-                    this.Height += 608;
-                    labelBodyScanData.Height = 604;
-                    labelBodyScanData.Top = noScanHeight + 4;
-                    labelBodyScanData.Left = (this.Width - labelBodyScanData.Width) / 2;
-                }
-                else if (Config(Configuration.showScanAbove))
-                {
-                    resizingForScan = true;
-                    int count = 0;
-                    int i = 0;
-                    string pattern = "\n";
-                    while ((i = labelBodyScanData.Text.IndexOf("\n", i)) != -1)
-                    {
-                        i += pattern.Length;
-                        count++;
-                    }
-                    // this is a lot of magic numbers, works for me but I remain a bit worried that other resolutions will see odd behaviour...
-                    int requiredHeight = (count * (int)(labelBodyScanData.Font.SizeInPoints + 2.3)) + 16;
-                    this.Height += (requiredHeight + 32);
-                    this.Top = noScanTop - requiredHeight - 32;
-                    labelBodyScanData.Height = requiredHeight;
-                    labelBodyScanData.Top = 4;
-                    labelBodyScanData.Left = (this.Width - labelBodyScanData.Width) / 2;
-                    RequiresRefresh(this, null);
-                }
-
-                labelBodyScanData.Visible = true;
+                PositionScanData();
                 
                 ResumeLayout();
-                if (!Config(Configuration.showScanIndefinite)) scanhide.Start();
 
             }
             
         }
 
+        private void PositionScanData()
+        {
+            if (!Config(Configuration.showScanIndefinite)) scanhide.Stop();
+
+            if (Config(Configuration.showScanLeft))
+            {
+                oldcolumnpos = columnpos;
+                ResetTabList();
+                columnpos[1] = labelBodyScanData.Width + 4;
+                labelBodyScanData.Left = 4;
+                labelBodyScanData.Top = 4;
+                RequiresRefresh(this, null);
+            }
+            else if (Config(Configuration.showScanRight))
+            {
+                labelBodyScanData.Left = visiblecolwidth + 8;
+                labelBodyScanData.Top = 4;
+            }
+            else if (Config(Configuration.showScanOnTop))
+            {
+                labelBodyScanData.Width = this.ClientRectangle.Width - 8;
+                labelBodyScanData.Left = 4;
+                labelBodyScanData.Top = 4;
+                lt.SetDisplaySize(0);
+            }
+            else if (Config(Configuration.showScanBelow))
+            {
+                resizingForScan = true;
+                int requiredHeight = RequiredScanHeight();
+                this.Height += (requiredHeight + 32);
+                labelBodyScanData.Height = requiredHeight;
+                labelBodyScanData.Top = noScanHeight + 4;
+                labelBodyScanData.Left = (this.Width - labelBodyScanData.Width) / 2;
+            }
+            else if (Config(Configuration.showScanAbove))
+            {
+                resizingForScan = true;
+                int requiredHeight = RequiredScanHeight();
+                this.Height += (requiredHeight + 32);
+                this.Top = noScanTop - requiredHeight - 32;
+                labelBodyScanData.Height = requiredHeight;
+                labelBodyScanData.Top = 4;
+                labelBodyScanData.Left = (this.Width - labelBodyScanData.Width) / 2;
+                RequiresRefresh(this, null);
+            }
+
+            labelBodyScanData.Visible = true;
+            if (!Config(Configuration.showScanIndefinite)) scanhide.Start();
+        }
+
+        private int RequiredScanHeight()
+        {
+            int count = 0;
+            int i = 0;
+            string pattern = "\n";
+            while ((i = labelBodyScanData.Text.IndexOf("\n", i)) != -1)
+            {
+                i += pattern.Length;
+                count++;
+            }
+            // this is a lot of magic numbers, works for me but I remain a bit worried that other resolutions will see odd behaviour...
+            return (count * (int)(labelBodyScanData.Font.SizeInPoints + 2.3)) + 16;
+        }
+
         private void HideScanData(object sender, EventArgs e)
         {
+            if (!bodyScanShowing) return;
             labelBodyScanData.Visible = false;
             resizingForScan = false;
             bodyScanShowing = false;
@@ -911,6 +924,11 @@ namespace EDDiscovery2
                         scanhide.Interval = 60000;
                         break;
                 }
+                if (bodyScanShowing)
+                {
+                    if (Config(Configuration.showScanIndefinite)) scanhide.Stop();
+                    else scanhide.Start();
+                }
                 //default a position if there isn't one selected
                 if (!Config(Configuration.showScanLeft) && !Config(Configuration.showScanRight) && !!Config(Configuration.showScanOnTop)) FlipConfig(Configuration.showScanRight, true);
             }
@@ -926,6 +944,7 @@ namespace EDDiscovery2
                 scan30sToolStripMenuItem.Checked = false;
                 scan60sToolStripMenuItem.Checked = false;
                 scanUntilNextToolStripMenuItem.Checked = false;
+                if (bodyScanShowing) HideScanData(null, null);
             }
 
             RequiresRefresh(this, null);
@@ -984,6 +1003,11 @@ namespace EDDiscovery2
 
         private void SetScanPosition(Configuration? position)
         {
+            SuspendLayout();
+
+            bool wasVisible = bodyScanShowing;
+            HideScanData(null, null);
+
             FlipConfig(Configuration.showScanLeft, position.HasValue && position.Value == Configuration.showScanLeft);
             FlipConfig(Configuration.showScanRight, position.HasValue && position.Value == Configuration.showScanRight);
             FlipConfig(Configuration.showScanOnTop, position.HasValue && position.Value == Configuration.showScanOnTop);
@@ -994,6 +1018,14 @@ namespace EDDiscovery2
             scanOnTopMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanOnTop;
             scanBelowMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanBelow;
             scanAboveMenuItem.Checked = position.HasValue && position.Value == Configuration.showScanAbove;
+
+            if (wasVisible)
+            {
+                bodyScanShowing = true;
+                PositionScanData();
+            }
+
+            ResumeLayout();
         }
 
         private void scanBelowMenuItem_Click(object sender, EventArgs e)
