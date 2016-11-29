@@ -43,6 +43,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panelJournalIcon = new System.Windows.Forms.Panel();
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
+            this.buttonField = new ExtendedControls.ButtonExt();
             this.buttonRefresh = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
@@ -186,6 +187,7 @@
             // 
             this.panel1.Controls.Add(this.panelJournalIcon);
             this.panel1.Controls.Add(this.drawnPanelPopOut);
+            this.panel1.Controls.Add(this.buttonField);
             this.panel1.Controls.Add(this.buttonRefresh);
             this.panel1.Controls.Add(this.textBoxFilter);
             this.panel1.Controls.Add(this.label1);
@@ -221,12 +223,25 @@
             this.drawnPanelPopOut.TabIndex = 28;
             this.drawnPanelPopOut.Click += new System.EventHandler(this.drawnPanelPopOut_Click);
             // 
+            // buttonField
+            // 
+            this.buttonField.BorderColorScaling = 1.25F;
+            this.buttonField.ButtonColorScaling = 0.5F;
+            this.buttonField.ButtonDisabledScaling = 0.5F;
+            this.buttonField.Location = new System.Drawing.Point(525, 3);
+            this.buttonField.Name = "buttonField";
+            this.buttonField.Size = new System.Drawing.Size(75, 23);
+            this.buttonField.TabIndex = 25;
+            this.buttonField.Text = "Field Filter";
+            this.buttonField.UseVisualStyleBackColor = true;
+            this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
+            // 
             // buttonRefresh
             // 
             this.buttonRefresh.BorderColorScaling = 1.25F;
             this.buttonRefresh.ButtonColorScaling = 0.5F;
             this.buttonRefresh.ButtonDisabledScaling = 0.5F;
-            this.buttonRefresh.Location = new System.Drawing.Point(532, 4);
+            this.buttonRefresh.Location = new System.Drawing.Point(606, 3);
             this.buttonRefresh.Name = "buttonRefresh";
             this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
             this.buttonRefresh.TabIndex = 3;
@@ -260,12 +275,12 @@
             this.buttonFilter.BorderColorScaling = 1.25F;
             this.buttonFilter.ButtonColorScaling = 0.5F;
             this.buttonFilter.ButtonDisabledScaling = 0.5F;
-            this.buttonFilter.Location = new System.Drawing.Point(444, 4);
+            this.buttonFilter.Location = new System.Drawing.Point(444, 3);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 4;
             this.buttonFilter.Text = "Event Filter";
-            this.toolTip1.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
+            this.toolTip1.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
@@ -352,5 +367,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnText;
         private ExtendedControls.DrawnPanel drawnPanelPopOut;
         private System.Windows.Forms.Panel panelJournalIcon;
+        private ExtendedControls.ButtonExt buttonField;
     }
 }

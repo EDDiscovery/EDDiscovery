@@ -145,5 +145,42 @@ namespace EDDiscovery
                    (token.Type == JTokenType.Null);
         }
 
+        static public void GetJSONFieldNames(string json, HashSet<string> fields )
+        {
+            JObject jo = JObject.Parse(json);  // Create a clone
+
+//            IList<string> keys = jo.Properties().Select(p => p.Name).ToList();
+
+            foreach (JToken jc in jo.Children())
+            {
+                ExpandTokens(jc, fields);
+            }
+        }
+
+        static private void ExpandTokens(JToken jt, HashSet<string> fields)
+        {
+            if (jt.HasValues)
+            {
+                JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
+
+                foreach (JToken jc in jt.Children())
+                {
+                    if (jc.HasValues)
+                    {
+                        ExpandTokens(jc, fields);
+                    }
+                    else if (Array.FindIndex(decodeable, x => x == jc.Type) != -1)
+                    {
+                        string name = jc.Path;
+
+                        if ( !fields.Contains(name))
+                            fields.Add(name);
+                    }
+                }
+            }
+        }
+
     }
+
 }
+
