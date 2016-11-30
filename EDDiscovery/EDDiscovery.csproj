@@ -211,6 +211,7 @@
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DB\MaterialCommodities.cs" />
+    <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
     <Compile Include="DB\SqLiteDBSchema.cs" />
     <Compile Include="DB\SQLiteDBSystemClass.cs" />
