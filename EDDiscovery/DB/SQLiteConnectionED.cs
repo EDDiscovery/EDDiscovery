@@ -275,10 +275,14 @@ namespace EDDiscovery.DB
             return da;
         }
 
-        public override DbCommand CreateCommand(string cmd, DbTransaction tn = null)
+        public override DbCommand CreateCommand(string query, DbTransaction tn = null)
         {
             AssertThreadOwner();
-            return new SQLiteCommandED<TConn>(_cn.CreateCommand(cmd), this, _transactionLock, tn);
+            DbCommand cmd = _cn.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandTimeout = 30;
+            cmd.CommandText = query;
+            return new SQLiteCommandED<TConn>(cmd, this, _transactionLock, tn);
         }
 
         public override DbTransaction BeginTransaction(IsolationLevel isolevel)
@@ -469,7 +473,7 @@ namespace EDDiscovery.DB
         protected void AttachDatabase(EDDSqlDbSelection dbflag, string name)
         {
             // Check if the connection is already connected to the selected database
-            using (DbCommand cmd = _cn.CreateCommand("PRAGMA database_list"))
+            using (DbCommand cmd = CreateCommand("PRAGMA database_list"))
             {
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
@@ -485,7 +489,7 @@ namespace EDDiscovery.DB
             }
 
             // Attach to the selected database under the given schema name
-            using (DbCommand cmd = _cn.CreateCommand("ATTACH DATABASE @dbfile AS @dbname"))
+            using (DbCommand cmd = CreateCommand("ATTACH DATABASE @dbfile AS @dbname"))
             {
                 cmd.AddParameterWithValue("@dbfile", GetSQLiteDBFile(dbflag));
                 cmd.AddParameterWithValue("@dbname", name);
