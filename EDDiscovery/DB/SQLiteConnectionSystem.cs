@@ -22,9 +22,12 @@ namespace EDDiscovery.DB
         {
         }
 
-        protected override void InitializeDatabase()
+        public static void Initialize()
         {
-            UpgradeSystemsDB();
+            InitializeIfNeeded(() =>
+            {
+                UpgradeSystemsDB();
+            });
         }
 
         protected static bool UpgradeSystemsDB()

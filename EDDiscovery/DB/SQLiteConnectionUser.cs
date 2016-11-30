@@ -24,20 +24,23 @@ namespace EDDiscovery.DB
         {
         }
 
-        protected override void InitializeDatabase()
+        public static void Initialize()
         {
-            string dbv4file = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
-            string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
-
-            if (File.Exists(dbv4file) && !File.Exists(dbuserfile))
+            InitializeIfNeeded(() =>
             {
-                File.Copy(dbv4file, dbuserfile);
-            }
+                string dbv4file = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+                string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Writer))
-            {
-                UpgradeUserDB(conn);
-            }
+                if (File.Exists(dbv4file) && !File.Exists(dbuserfile))
+                {
+                    File.Copy(dbv4file, dbuserfile);
+                }
+
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Writer))
+                {
+                    UpgradeUserDB(conn);
+                }
+            });
         }
 
         protected static bool UpgradeUserDB(SQLiteConnectionUser conn)
@@ -582,6 +585,11 @@ namespace EDDiscovery.DB
             {
                 return SQLiteConnectionOld.EarlyGetRegister();
             }
+        }
+
+        public static void EarlyReadRegister()
+        {
+            EarlyRegister = EarlyGetRegister();
         }
     }
 }
