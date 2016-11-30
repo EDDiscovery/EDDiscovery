@@ -116,6 +116,13 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
+            edsm = new EDSMClass();
+            _currentRoute = new SavedRouteClass("");
+            _savedRoutes = new List<SavedRouteClass>();
+        }
+
+        public void LoadControl()
+        {
             _savedRoutes = SavedRouteClass.GetAllSavedRoutes();
 
             foreach (var initroute in InitialRoutes)
@@ -130,8 +137,6 @@ namespace EDDiscovery
             _savedRoutes = _savedRoutes.Where(r => !r.Name.StartsWith("\x7F")).ToList();
 
             UpdateComboBox();
-            _currentRoute = new SavedRouteClass("");
-            edsm = new EDSMClass();
         }
 
         private void UpdateComboBox()
