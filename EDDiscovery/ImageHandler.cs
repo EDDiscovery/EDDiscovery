@@ -17,6 +17,7 @@ namespace EDDiscovery2.ImageHandler
     {
         private EDDiscoveryForm _discoveryForm;
         private FileSystemWatcher watchfolder = null;
+        private bool initialized = false;
 
         public delegate void ScreenShot(string path, Point size);
         public event ScreenShot OnScreenShot;
@@ -100,6 +101,8 @@ namespace EDDiscovery2.ImageHandler
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
 
             numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
+
+            this.initialized = true;
         }
 
         public bool StartWatcher()
@@ -425,18 +428,27 @@ namespace EDDiscovery2.ImageHandler
 
         private void checkBoxRemove_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("checkBoxRemove", checkBoxRemove.Checked);
+            if (initialized)
+            {
+                SQLiteDBClass.PutSettingBool("checkBoxRemove", checkBoxRemove.Checked);
+            }
         }
 
         private void checkBox_hires_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("checkBoxHires", checkBoxHires.Checked);
+            if (initialized)
+            {
+                SQLiteDBClass.PutSettingBool("checkBoxHires", checkBoxHires.Checked);
+            }
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
         }
 
         private void comboBoxFileNameFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
+            if (initialized)
+            {
+                SQLiteDBClass.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
+            }
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
         }
 
@@ -444,7 +456,10 @@ namespace EDDiscovery2.ImageHandler
         {
             CheckBox cb = sender as CheckBox;
             numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = cb.Checked;
-            SQLiteDBClass.PutSettingBool("ImageHandlerCropImage", cb.Checked);
+            if (initialized)
+            {
+                SQLiteDBClass.PutSettingBool("ImageHandlerCropImage", cb.Checked);
+            }
         }
 
         private void numericUpDownTop_Leave(object sender, EventArgs e)
@@ -473,18 +488,27 @@ namespace EDDiscovery2.ImageHandler
 
         private void checkBoxPreview_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("ImageHandlerPreview", checkBoxPreview.Checked);
+            if (initialized)
+            {
+                SQLiteDBClass.PutSettingBool("ImageHandlerPreview", checkBoxPreview.Checked);
+            }
             pictureBox.Image = null;
         }
 
         private void comboBoxFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt("ImageHandlerFormatNr", comboBoxFormat.SelectedIndex);
+            if (initialized)
+            {
+                SQLiteDBClass.PutSettingInt("ImageHandlerFormatNr", comboBoxFormat.SelectedIndex);
+            }
         }
 
         private void checkBoxAutoConvert_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("ImageHandlerAutoconvert", checkBoxAutoConvert.Checked);
+            if (initialized)
+            {
+                SQLiteDBClass.PutSettingBool("ImageHandlerAutoconvert", checkBoxAutoConvert.Checked);
+            }
         }
 
         private void buttonChnageEDScreenshot_Click(object sender, EventArgs e)
@@ -550,7 +574,7 @@ namespace EDDiscovery2.ImageHandler
 
         private void comboBoxScanFor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxScanFor.Enabled)            // BUG: stop StarWatcher starting too soon
+            if (this.initialized && comboBoxScanFor.Enabled)            // BUG: stop StarWatcher starting too soon
             {
                 SQLiteDBClass.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
                 StartWatcher();
@@ -559,12 +583,18 @@ namespace EDDiscovery2.ImageHandler
 
         private void checkBoxCopyClipboard_CheckedChanged(object sender, EventArgs e)
         {
-             SQLiteDBClass.PutSettingBool("ImageHandlerClipboard", checkBoxCopyClipboard.Checked);
+            if (this.initialized)
+            {
+                SQLiteDBClass.PutSettingBool("ImageHandlerClipboard", checkBoxCopyClipboard.Checked);
+            }
         }
 
         private void comboBoxSubFolder_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt("comboBoxSubFolder", comboBoxSubFolder.SelectedIndex);
+            if (this.initialized)
+            {
+                SQLiteDBClass.PutSettingInt("comboBoxSubFolder", comboBoxSubFolder.SelectedIndex);
+            }
         }
     }
 }
