@@ -41,44 +41,6 @@ namespace EDDiscovery.DB
                 command.ExecuteNonQuery();
         }
 
-        public static void PerformUpgrade(SQLiteConnectionED conn, int newVersion, bool catchErrors, bool backupDbFile, string[] queries, Action doAfterQueries = null)
-        {
-            if (backupDbFile)
-            {
-                string dbfile = conn.DBFile;
-
-                try
-                {
-                    File.Copy(dbfile, dbfile.Replace(".sqlite", $"{newVersion - 1}.sqlite"));
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                    System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                }
-            }
-
-            try
-            {
-                foreach (var query in queries)
-                {
-                    ExecuteQuery(conn, query);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (!catchErrors)
-                    throw;
-
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show($"UpgradeDB{newVersion} error: " + ex.Message);
-            }
-
-            doAfterQueries?.Invoke();
-
-            conn.PutSettingIntCN("DBVer", newVersion);
-        }
 
 
 
