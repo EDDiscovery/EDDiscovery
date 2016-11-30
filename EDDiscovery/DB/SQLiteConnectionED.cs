@@ -106,6 +106,7 @@ namespace EDDiscovery.DB
         private static int _initsem = 0;
         private static ManualResetEvent _initbarrier = new ManualResetEvent(false);
         private SQLiteTxnLockED<TConn> _transactionLock;
+        private DbProviderFactory DbFactory = GetSqliteProviderFactory();
 
         public class SchemaLock : IDisposable
         {
@@ -160,7 +161,7 @@ namespace EDDiscovery.DB
                 // System.Threading.Monitor.Enter(monitor);
                 //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
                 DBFile = GetSQLiteDBFile(maindb ?? SQLiteDBClass.DefaultMainDatabase);
-                _cn = SQLiteDBClass.CreateCN();
+                _cn = DbFactory.CreateConnection();
 
                 // Use the database selected by maindb as the 'main' database
                 _cn.ConnectionString = "Data Source=" + DBFile + ";Pooling=true;";
@@ -184,6 +185,94 @@ namespace EDDiscovery.DB
                 }
                 throw;
             }
+        }
+
+        private static DbProviderFactory GetSqliteProviderFactory()
+        {
+            if (WindowsSqliteProviderWorks())
+            {
+                return GetWindowsSqliteProviderFactory();
+            }
+
+            var factory = GetMonoSqliteProviderFactory();
+
+            if (DbFactoryWorks(factory))
+            {
+                return factory;
+            }
+
+            throw new InvalidOperationException("Unable to get a working Sqlite driver");
+        }
+
+        private static bool WindowsSqliteProviderWorks()
+        {
+            try
+            {
+                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
+                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool DbFactoryWorks(DbProviderFactory factory)
+        {
+            if (factory != null)
+            {
+                try
+                {
+                    using (var conn = factory.CreateConnection())
+                    {
+                        conn.ConnectionString = "Data Source=:memory:;Pooling=true;";
+                        conn.Open();
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
+        }
+
+        private static DbProviderFactory GetMonoSqliteProviderFactory()
+        {
+            try
+            {
+                // Disable CS0618 warning for LoadWithPartialName
+#pragma warning disable 618
+                var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
+#pragma warning restore 618
+                var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
+                return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static DbProviderFactory GetWindowsSqliteProviderFactory()
+        {
+            try
+            {
+                return new System.Data.SQLite.SQLiteFactory();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public override DbDataAdapter CreateDataAdapter(DbCommand cmd)
+        {
+            DbDataAdapter da = DbFactory.CreateDataAdapter();
+            da.SelectCommand = cmd;
+            return da;
         }
 
         public override DbCommand CreateCommand(string cmd, DbTransaction tn = null)
@@ -408,6 +497,7 @@ namespace EDDiscovery.DB
         public abstract DbTransaction BeginTransaction(IsolationLevel isolevel);
         public abstract DbTransaction BeginTransaction();
         public abstract void Dispose();
+        public abstract DbDataAdapter CreateDataAdapter(DbCommand cmd);
         protected abstract void InitializeDatabase();
 
         protected virtual void Dispose(bool disposing)
