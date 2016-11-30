@@ -399,19 +399,19 @@ namespace EDDiscovery
             return null;        // no result either way
         }
 
-        public bool CheckNoneFalse(string json, string eventname, ref List<FilterEvent> passed)            // null nothing trigged, false/true otherwise. 
-        {
+        public bool CheckFilterTrueOut(string json, string eventname, ref List<FilterEvent> passed)      // if none, true, if false, true.. 
+        {                                                                                         // only if the filter passes do we get a false..
             bool? v = Check(json, eventname, ref passed);
             return !v.HasValue || v.Value == false;
         }
 
-        public bool FilterOutHistory(HistoryEntry he)
+        public bool FilterHistory(HistoryEntry he)                // true if it should be included
         {
             List<FilterEvent> list = null;    // don't want it
-            return CheckNoneFalse(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, ref list);
+            return CheckFilterTrueOut(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, ref list);     // true it should be included
         }
 
-        public List<HistoryEntry> FilterOutHistory(List<HistoryEntry> he, out int count)        // count of out filtered entries
+        public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, out int count)    // filter in all entries
         {
             count = 0;
             if (Count == 0)       // no filters, all in
@@ -419,7 +419,7 @@ namespace EDDiscovery
             else
             {
                 List<FilterEvent> list = null;    // don't want it
-                List<HistoryEntry> ret = (from s in he where CheckNoneFalse(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, ref list) select s).ToList();
+                List<HistoryEntry> ret = (from s in he where CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, ref list) select s).ToList();
 
                 count = he.Count - ret.Count;
                 return ret;
@@ -439,7 +439,7 @@ namespace EDDiscovery
                 {
                     List<FilterEvent> list = new List<FilterEvent>();    // don't want it
 
-                    if ( !CheckNoneFalse(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, ref list))
+                    if ( !CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, ref list))
                     {
                         System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
                         s.EventDescription = "!" + list[0].eventname + ":::" + s.EventDescription;
