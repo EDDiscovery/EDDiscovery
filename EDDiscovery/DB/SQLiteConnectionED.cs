@@ -239,8 +239,13 @@ namespace EDDiscovery.DB
         ///----------------------------
         /// STATIC functions for discrete values
 
-        protected static T RegisterGet<T>(string key, T defval, Func<RegisterEntry, T> early, Func<TConn, T> normal)
+        protected static T RegisterGet<T>(string key, T defval, Func<RegisterEntry, T> early, Func<TConn, T> normal, TConn conn)
         {
+            if (conn != null)
+            {
+                return normal(conn);
+            }
+
             if (!_initialized && EarlyRegister != null)
             {
                 return EarlyRegister.ContainsKey(key) ? early(EarlyRegister[key]) : defval;
@@ -259,8 +264,13 @@ namespace EDDiscovery.DB
             }
         }
 
-        protected static bool RegisterPut(Func<TConn, bool> action)
+        protected static bool RegisterPut(Func<TConn, bool> action, TConn conn)
         {
+            if (conn != null)
+            {
+                return action(conn);
+            }
+
             if (!_initialized && !_schemaLock.IsWriteLockHeld)
             {
                 System.Diagnostics.Trace.WriteLine("Write to register before Initialize()");
@@ -272,49 +282,49 @@ namespace EDDiscovery.DB
             }
         }
 
-        static public bool keyExists(string sKey)
+        static public bool keyExists(string sKey, TConn conn = null)
         {
-            return RegisterGet(sKey, false, r => true, cn => cn.keyExistsCN(sKey));
+            return RegisterGet(sKey, false, r => true, cn => cn.keyExistsCN(sKey), conn);
         }
 
-        static public int GetSettingInt(string key, int defaultvalue)
+        static public int GetSettingInt(string key, int defaultvalue, TConn conn = null)
         {
-            return (int)RegisterGet(key, defaultvalue, r => r.ValueInt, cn => cn.GetSettingIntCN(key, defaultvalue));
+            return (int)RegisterGet(key, defaultvalue, r => r.ValueInt, cn => cn.GetSettingIntCN(key, defaultvalue), conn);
         }
 
-        static public bool PutSettingInt(string key, int intvalue)
+        static public bool PutSettingInt(string key, int intvalue, TConn conn = null)
         {
-            return RegisterPut(cn => cn.PutSettingIntCN(key, intvalue));
+            return RegisterPut(cn => cn.PutSettingIntCN(key, intvalue), conn);
         }
 
-        static public double GetSettingDouble(string key, double defaultvalue)
+        static public double GetSettingDouble(string key, double defaultvalue, TConn conn = null)
         {
-            return RegisterGet(key, defaultvalue, r => r.ValueDouble, cn => cn.GetSettingDoubleCN(key, defaultvalue));
+            return RegisterGet(key, defaultvalue, r => r.ValueDouble, cn => cn.GetSettingDoubleCN(key, defaultvalue), conn);
         }
 
-        static public bool PutSettingDouble(string key, double doublevalue)
+        static public bool PutSettingDouble(string key, double doublevalue, TConn conn = null)
         {
-            return RegisterPut(cn => cn.PutSettingDoubleCN(key, doublevalue));
+            return RegisterPut(cn => cn.PutSettingDoubleCN(key, doublevalue), conn);
         }
 
-        static public bool GetSettingBool(string key, bool defaultvalue)
+        static public bool GetSettingBool(string key, bool defaultvalue, TConn conn = null)
         {
-            return RegisterGet(key, defaultvalue, r => r.ValueInt != 0, cn => cn.GetSettingBoolCN(key, defaultvalue));
+            return RegisterGet(key, defaultvalue, r => r.ValueInt != 0, cn => cn.GetSettingBoolCN(key, defaultvalue), conn);
         }
 
-        static public bool PutSettingBool(string key, bool boolvalue)
+        static public bool PutSettingBool(string key, bool boolvalue, TConn conn = null)
         {
-            return RegisterPut(cn => cn.PutSettingBoolCN(key, boolvalue));
+            return RegisterPut(cn => cn.PutSettingBoolCN(key, boolvalue), conn);
         }
 
-        static public string GetSettingString(string key, string defaultvalue)
+        static public string GetSettingString(string key, string defaultvalue, TConn conn = null)
         {
-            return RegisterGet(key, defaultvalue, r => r.ValueString, cn => cn.GetSettingStringCN(key, defaultvalue));
+            return RegisterGet(key, defaultvalue, r => r.ValueString, cn => cn.GetSettingStringCN(key, defaultvalue), conn);
         }
 
-        static public bool PutSettingString(string key, string strvalue)        // public IF
+        static public bool PutSettingString(string key, string strvalue, TConn conn = null)        // public IF
         {
-            return RegisterPut(cn => cn.PutSettingStringCN(key, strvalue));
+            return RegisterPut(cn => cn.PutSettingStringCN(key, strvalue), conn);
         }
 
         protected void GetRegister(Dictionary<string, RegisterEntry> regs)
@@ -339,6 +349,31 @@ namespace EDDiscovery.DB
                     }
                 }
             }
+        }
+
+        public static List<EDDiscovery2.EDCommander> GetCommandersFromRegister(TConn conn = null)
+        {
+            List<EDDiscovery2.EDCommander> commanders = new List<EDDiscovery2.EDCommander>();
+
+            string apikey = GetSettingString("EDSMApiKey", "", conn);
+            string commanderName = GetSettingString("CommanderName", "", conn);
+
+            for (int i = 0; i < 100; i++)
+            {
+                EDDiscovery2.EDCommander cmdr = new EDDiscovery2.EDCommander(i,
+                    GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
+                    GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn), true, false, true);
+                cmdr.NetLogDir = GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
+                cmdr.Deleted = GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
+
+
+                if (cmdr.Name != "")
+                {
+                    commanders.Add(cmdr);
+                }
+            }
+
+            return commanders;
         }
         #endregion
     }
