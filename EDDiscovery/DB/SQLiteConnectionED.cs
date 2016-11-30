@@ -21,10 +21,6 @@ namespace EDDiscovery.DB
         {
         }
 
-        protected override void InitializeDatabase()
-        {
-        }
-
         public static Dictionary<string, RegisterEntry> EarlyGetRegister()
         {
             Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
@@ -73,6 +69,7 @@ namespace EDDiscovery.DB
         private static ManualResetEvent _initbarrier = new ManualResetEvent(false);
         private SQLiteTxnLockED<TConn> _transactionLock;
         private DbProviderFactory DbFactory = GetSqliteProviderFactory();
+        protected static Dictionary<string, RegisterEntry> EarlyRegister;
 
         public class SchemaLock : IDisposable
         {
@@ -95,6 +92,29 @@ namespace EDDiscovery.DB
             }
         }
 
+        protected static void InitializeIfNeeded(Action initializer)
+        {
+            if (!_initialized)
+            {
+                int cur = Interlocked.Increment(ref _initsem);
+
+                if (cur == 0)
+                {
+                    using (var slock = new SchemaLock())
+                    {
+                        _initbarrier.Set();
+                        initializer();
+                        _initialized = true;
+                    }
+                }
+
+                if (!_initialized)
+                {
+                    _initbarrier.WaitOne();
+                }
+            }
+        }
+
         public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, bool utctimeindicator = false, bool initializing = false, bool shortlived = true)
             : base(initializing)
         {
@@ -103,22 +123,17 @@ namespace EDDiscovery.DB
             {
                 if (!initializing && !_initialized)
                 {
-                    int cur = Interlocked.Increment(ref _initsem);
+                    System.Diagnostics.Trace.WriteLine($"Database {typeof(TConn).Name} initialized before Initialize()");
+                    System.Diagnostics.Trace.WriteLine(new System.Diagnostics.StackTrace(true).ToString());
 
-                    if (cur == 0)
+                    if (typeof(TConn) == typeof(SQLiteConnectionUser))
                     {
-                        using (var slock = new SchemaLock())
-                        {
-                            _initbarrier.Set();
-                            InitializeDatabase();
-                            _initialized = true;
-                        }
+                        SQLiteConnectionUser.Initialize();
                     }
-                }
-
-                if (!_initialized)
-                {
-                    _initbarrier.WaitOne();
+                    else if (typeof(TConn) == typeof(SQLiteConnectionSystem))
+                    {
+                        SQLiteConnectionSystem.Initialize();
+                    }
                 }
 
                 _schemaLock.EnterReadLock();
@@ -306,81 +321,82 @@ namespace EDDiscovery.DB
         ///----------------------------
         /// STATIC functions for discrete values
 
-        static public bool keyExists(string sKey)
+        protected static T RegisterGet<T>(string key, T defval, Func<RegisterEntry, T> early, Func<TConn, T> normal)
         {
+            if (!_initialized && EarlyRegister != null)
+            {
+                return EarlyRegister.ContainsKey(key) ? early(EarlyRegister[key]) : defval;
+            }
+            else
+            {
+                if (!_initialized && !_schemaLock.IsWriteLockHeld)
+                {
+                    System.Diagnostics.Trace.WriteLine("Read from register before EarlyReadRegister()");
+                }
+
+                using (TConn cn = new TConn())
+                {
+                    return normal(cn);
+                }
+            }
+        }
+
+        protected static bool RegisterPut(Func<TConn, bool> action)
+        {
+            if (!_initialized && !_schemaLock.IsWriteLockHeld)
+            {
+                System.Diagnostics.Trace.WriteLine("Write to register before Initialize()");
+            }
+
             using (TConn cn = new TConn())
             {
-                return cn.keyExistsCN(sKey);
+                return action(cn);
             }
+        }
+
+        static public bool keyExists(string sKey)
+        {
+            return RegisterGet(sKey, false, r => true, cn => cn.keyExistsCN(sKey));
         }
 
         static public int GetSettingInt(string key, int defaultvalue)
         {
-            using (TConn cn = new TConn())
-            {
-                return cn.GetSettingIntCN(key, defaultvalue);
-            }
+            return (int)RegisterGet(key, defaultvalue, r => r.ValueInt, cn => cn.GetSettingIntCN(key, defaultvalue));
         }
 
         static public bool PutSettingInt(string key, int intvalue)
         {
-            using (TConn cn = new TConn())
-            {
-                bool ret = cn.PutSettingIntCN(key, intvalue);
-                return ret;
-            }
+            return RegisterPut(cn => cn.PutSettingIntCN(key, intvalue));
         }
 
         static public double GetSettingDouble(string key, double defaultvalue)
         {
-            using (TConn cn = new TConn())
-            {
-                return cn.GetSettingDoubleCN(key, defaultvalue);
-            }
+            return RegisterGet(key, defaultvalue, r => r.ValueDouble, cn => cn.GetSettingDoubleCN(key, defaultvalue));
         }
 
         static public bool PutSettingDouble(string key, double doublevalue)
         {
-            using (TConn cn = new TConn())
-            {
-                bool ret = cn.PutSettingDoubleCN(key, doublevalue);
-                return ret;
-            }
+            return RegisterPut(cn => cn.PutSettingDoubleCN(key, doublevalue));
         }
 
         static public bool GetSettingBool(string key, bool defaultvalue)
         {
-            using (TConn cn = new TConn())
-            {
-                return cn.GetSettingBoolCN(key, defaultvalue);
-            }
+            return RegisterGet(key, defaultvalue, r => r.ValueInt != 0, cn => cn.GetSettingBoolCN(key, defaultvalue));
         }
-
 
         static public bool PutSettingBool(string key, bool boolvalue)
         {
-            using (TConn cn = new TConn())
-            {
-                bool ret = cn.PutSettingBoolCN(key, boolvalue);
-                return ret;
-            }
+            return RegisterPut(cn => cn.PutSettingBoolCN(key, boolvalue));
         }
 
         static public string GetSettingString(string key, string defaultvalue)
         {
-            using (TConn cn = new TConn())
-            {
-                return cn.GetSettingStringCN(key, defaultvalue);
-            }
+            return RegisterGet(key, defaultvalue, r => r.ValueString, cn => cn.GetSettingStringCN(key, defaultvalue));
         }
 
         static public bool PutSettingString(string key, string strvalue)        // public IF
         {
-            using (TConn cn = new TConn())
-            {
-                bool ret = cn.PutSettingStringCN(key, strvalue);
-                return ret;
-            }
+            return RegisterPut(cn => cn.PutSettingStringCN(key, strvalue));
         }
 
         protected void GetRegister(Dictionary<string, RegisterEntry> regs)
@@ -539,7 +555,6 @@ namespace EDDiscovery.DB
         public abstract DbTransaction BeginTransaction();
         public abstract void Dispose();
         public abstract DbDataAdapter CreateDataAdapter(DbCommand cmd);
-        protected abstract void InitializeDatabase();
 
         protected virtual void Dispose(bool disposing)
         {

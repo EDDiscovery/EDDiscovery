@@ -170,6 +170,9 @@ namespace EDDiscovery
                 Trace.WriteLine($"Unable to create the folder '{logpath}'");
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
+
+            SQLiteConnectionUser.EarlyReadRegister();
+
             theme = new EDDTheme();
 
             EDDConfig = EDDConfig.Instance;
@@ -198,6 +201,9 @@ namespace EDDiscovery
             this.TopMost = EDDConfig.KeepOnTop;
 
             ApplyTheme();
+
+            SQLiteConnectionUser.Initialize();
+            SQLiteConnectionSystem.Initialize();
 
             if (splashform != null)
             {
