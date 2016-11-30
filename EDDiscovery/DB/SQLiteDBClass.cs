@@ -569,7 +569,6 @@ namespace EDDiscovery.DB
         EDDSystem = 4
     }
 
-
     public static partial class SQLiteDBClass
     {
         #region Private properties / fields
@@ -583,7 +582,6 @@ namespace EDDiscovery.DB
         public static EDDSqlDbSelection SystemDatabase { get { return EDDSqlDbSelection.EDDSystem;  } }
         #endregion
 
-
         #region Database Initialization
         private static void InitializeDatabase()
         {
@@ -594,11 +592,6 @@ namespace EDDiscovery.DB
 
             try
             {
-                if (File.Exists(dbv4file))
-                {
-                    SplitDataBase();
-                }
-
                 SQLiteConnectionUser.Initialize();
                 SQLiteConnectionSystem.Initialize();
             }
@@ -614,31 +607,6 @@ namespace EDDiscovery.DB
                 command.ExecuteNonQuery();
         }
 
-
-        private static bool SplitDataBase()
-        {
-            string dbfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
-            string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
-            string dbsystemsfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
-
-            try
-            {
-                if (!File.Exists(dbuserfile))
-                {
-                    File.Copy(dbfile, dbuserfile);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("SplitDatabase error: " + ex.Message);
-                MessageBox.Show(ex.StackTrace);
-                return false;
-            }
-            return true;
-        }
-
-        
-     
         public static void PerformUpgrade(SQLiteConnectionED conn, int newVersion, bool catchErrors, bool backupDbFile, string[] queries, Action doAfterQueries = null)
         {
             if (backupDbFile)
