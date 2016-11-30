@@ -178,7 +178,7 @@ namespace EDDiscovery2.EDSM
                     edsm.GetLogs(new DateTime(2011, 1, 1), out edsmsystemlog);        // get the full list of systems
                     edsmsystemlog = edsmsystemlog.OrderBy(s => s.EventTimeUTC).ToList();
 
-                    List<HistoryEntry> hlfsdlist = mainForm.history.FilterByFSD.OrderBy(h => h.EventTimeUTC).ToList();  // FSD jumps only
+                    List<HistoryEntry> hlfsdlist = mainForm.history.FilterByTravel.Where(h => h.IsLocOrJump).OrderBy(h => h.EventTimeUTC).ToList();  // FSD jumps only
                     
                     List<HistoryEntry> toadd = new List<HistoryEntry>();
 

@@ -599,7 +599,7 @@ namespace EDDiscovery
             var map = _discoveryForm.Map;
 
             map.Prepare(centerSystem, _discoveryForm.settings.MapHomeSystem, centerSystem,
-                        _discoveryForm.settings.MapZoom, _discoveryForm.history.FilterByFSDAndPosition);
+                        _discoveryForm.settings.MapZoom, _discoveryForm.history.FilterByTravel);
 
             map.Show();
         }

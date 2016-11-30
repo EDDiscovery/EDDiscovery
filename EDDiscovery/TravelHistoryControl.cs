@@ -444,7 +444,7 @@ namespace EDDiscovery
             RedrawSummary();
             RefreshTargetInfo();
             UpdateDependentsWithSelection();
-            _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map
+            _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByTravel);           // update map
             RedrawTripPanel(hl);
         }
 
@@ -470,8 +470,8 @@ namespace EDDiscovery
                         EDDNSync.SendEDDNEvent(he);
                 }
 
-                if (he.IsFSDJump)
-                    _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map - only cares about FSD changes
+                if (he.IsFSDJump || he.EntryType == JournalTypeEnum.Location)
+                    _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByTravel);           // update map - only cares about FSD changes
 
                 if ( accepted )                                                 // if accepted it on main grid..
                 {
