@@ -34,20 +34,6 @@ namespace EDDiscovery.DB
         public static EDDSqlDbSelection SystemDatabase { get { return EDDSqlDbSelection.EDDSystem;  } }
         #endregion
 
-        #region Database Initialization
-        public static void ExecuteQuery(SQLiteConnectionED conn, string query)
-        {
-            using (DbCommand command = conn.CreateCommand(query))
-                command.ExecuteNonQuery();
-        }
-
-
-
-
-
-
-        #endregion
-
         #region Database access
         ///----------------------------
         /// STATIC code helpers for other DB classes

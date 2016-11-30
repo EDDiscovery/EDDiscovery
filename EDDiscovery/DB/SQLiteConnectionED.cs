@@ -465,7 +465,7 @@ namespace EDDiscovery.DB
             {
                 foreach (var query in queries)
                 {
-                    conn.ExecuteQuery(query);
+                    ExecuteQuery(conn, query);
                 }
             }
             catch (Exception ex)
@@ -481,6 +481,11 @@ namespace EDDiscovery.DB
             doAfterQueries?.Invoke();
 
             conn.PutSettingIntCN("DBVer", newVersion);
+        }
+
+        protected static void ExecuteQuery(SQLiteConnectionED conn, string query)
+        {
+            conn.ExecuteQuery(query);
         }
 
         public void ExecuteQuery(string query)
