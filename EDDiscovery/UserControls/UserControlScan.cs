@@ -65,6 +65,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             travelhistorycontrol.OnTravelSelectionChanged -= Display;
+            discoveryform.OnNewEntry -= NewEntry;
         }
 
         private void UserControlScan_Resize(object sender, EventArgs e)
