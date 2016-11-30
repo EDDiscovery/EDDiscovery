@@ -214,7 +214,7 @@
     <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
     <Compile Include="DB\SqLiteDBSchema.cs" />
-    <Compile Include="DB\SQLiteDBSystemClass.cs" />
+    <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DistanceParser.cs" />
