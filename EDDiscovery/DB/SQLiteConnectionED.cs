@@ -405,17 +405,20 @@ namespace EDDiscovery.DB
             {
                 using (DbDataReader rdr = cmd.ExecuteReader())
                 {
-                    string id = (string)rdr["Id"];
-                    object valint = rdr["ValueInt"];
-                    object valdbl = rdr["ValueDouble"];
-                    object valblob = rdr["ValueBlob"];
-                    object valstr = rdr["ValueString"];
-                    regs[id] = new RegisterEntry(
-                        valstr as string,
-                        valblob as byte[],
-                        (valint as long?) ?? 0L,
-                        (valdbl as double?) ?? Double.NaN
-                    );
+                    while (rdr.Read())
+                    {
+                        string id = (string)rdr["Id"];
+                        object valint = rdr["ValueInt"];
+                        object valdbl = rdr["ValueDouble"];
+                        object valblob = rdr["ValueBlob"];
+                        object valstr = rdr["ValueString"];
+                        regs[id] = new RegisterEntry(
+                            valstr as string,
+                            valblob as byte[],
+                            (valint as long?) ?? 0L,
+                            (valdbl as double?) ?? Double.NaN
+                        );
+                    }
                 }
             }
         }
