@@ -403,6 +403,7 @@ namespace EDDiscovery
                 RepositionForm();
                 InitFormControls();
                 settings.InitSettingsTab();
+                savedRouteExpeditionControl1.LoadControl();
 
                 CheckIfEliteDangerousIsRunning();
 
