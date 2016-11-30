@@ -24,16 +24,6 @@ namespace EDDiscovery.DB
 
     public static partial class SQLiteDBClass
     {
-        #region Private properties / fields
-        private static Object lockDBInit = new Object();                    // lock to sequence construction
-        #endregion
-
-        #region Transitional properties
-        public static EDDSqlDbSelection DefaultMainDatabase { get { return  EDDSqlDbSelection.EDDUser; } }
-        public static EDDSqlDbSelection UserDatabase { get { return EDDSqlDbSelection.EDDUser; } }
-        public static EDDSqlDbSelection SystemDatabase { get { return EDDSqlDbSelection.EDDSystem;  } }
-        #endregion
-
         #region Database access
         ///----------------------------
         /// STATIC code helpers for other DB classes

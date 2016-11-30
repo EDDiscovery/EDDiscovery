@@ -107,7 +107,7 @@ namespace EDDiscovery.DB
 
                 // System.Threading.Monitor.Enter(monitor);
                 //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
-                DBFile = GetSQLiteDBFile(maindb ?? SQLiteDBClass.DefaultMainDatabase);
+                DBFile = GetSQLiteDBFile(maindb ?? EDDSqlDbSelection.EDDUser);
                 _cn = DbFactory.CreateConnection();
 
                 // Use the database selected by maindb as the 'main' database
