@@ -139,24 +139,6 @@ namespace EDDiscovery.DB
         }
         #endregion
 
-        #region Extension Methods
-        public static DbCommand CreateCommand(this DbConnection conn, string query)
-        {
-            DbCommand cmd = conn.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandTimeout = 30;
-            cmd.CommandText = query;
-            return cmd;
-        }
-
-        public static DbCommand CreateCommand(this DbConnection conn, string query, DbTransaction transaction)
-        {
-            DbCommand cmd = conn.CreateCommand(query);
-            cmd.Transaction = transaction;
-            return cmd;
-        }
-        #endregion
-
         #region Settings
         ///----------------------------
         /// STATIC functions for discrete values
