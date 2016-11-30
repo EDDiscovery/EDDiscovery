@@ -46,6 +46,7 @@ namespace EDDiscovery
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
+        public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location; } }
         public bool ISEDDNMessage
         {
             get
@@ -428,6 +429,30 @@ namespace EDDiscovery
             }
         }
 
+        public List<HistoryEntry> FilterByTravel
+        {
+            get
+            {
+                List<HistoryEntry> ents = new List<HistoryEntry>();
+                bool resurrect = true;
+                foreach (HistoryEntry he in historylist)
+                {
+                    if (he.EntryType == JournalTypeEnum.Resurrect || he.EntryType == JournalTypeEnum.Died)
+                    {
+                        resurrect = true;
+                        ents.Add(he);
+                    }
+                    else if ((resurrect && he.EntryType == JournalTypeEnum.Location) || he.EntryType == JournalTypeEnum.FSDJump)
+                    {
+                        resurrect = false;
+                        ents.Add(he);
+                    }
+                }
+
+                return ents;
+            }
+        }
+
         public List<HistoryEntry> FilterByFSD
         {
             get
@@ -763,7 +788,7 @@ namespace EDDiscovery
 
         public static HistoryEntry FindLastFSDKnownPosition(List<HistoryEntry> syslist)
         {
-            return syslist.FindLast(x => x.System.HasCoordinate && x.IsFSDJump);
+            return syslist.FindLast(x => x.System.HasCoordinate && x.IsLocOrJump);
         }
 
         public static HistoryEntry FindByPos(List<HistoryEntry> syslist, Vector3 p, double limit)     // go thru setting the lastknowsystem

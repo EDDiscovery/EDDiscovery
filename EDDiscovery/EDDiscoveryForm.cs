@@ -1676,7 +1676,7 @@ namespace EDDiscovery
 
             Map.Prepare(he?.System, HomeSystem,
                         settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
-                        settings.MapZoom, history.FilterByFSDAndPosition);
+                        settings.MapZoom, history.FilterByTravel);
             Map.Show();
             this.Cursor = Cursors.Default;
         }

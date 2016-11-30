@@ -435,7 +435,7 @@ namespace EDDiscovery
             if (route.Count >= 2)
             {
                 _discoveryForm.history.FillInPositionsFSDJumps();
-                map.Prepare(route[0], _discoveryForm.settings.MapHomeSystem, route[0], 400 / CalculateRouteMaxDistFromOrigin(), _discoveryForm.history.FilterByFSDAndPosition);
+                map.Prepare(route[0], _discoveryForm.settings.MapHomeSystem, route[0], 400 / CalculateRouteMaxDistFromOrigin(), _discoveryForm.history.FilterByTravel);
                 map.SetPlanned(route);
                 map.Show();
             }
