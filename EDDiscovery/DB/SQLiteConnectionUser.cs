@@ -12,15 +12,15 @@ namespace EDDiscovery.DB
 {
     public class SQLiteConnectionUser : SQLiteConnectionED<SQLiteConnectionUser>
     {
-        public SQLiteConnectionUser() : base(SQLiteDBClass.UserDatabase)
+        public SQLiteConnectionUser() : base(EDDSqlDbSelection.EDDUser)
         {
         }
 
-        public SQLiteConnectionUser(bool utc = true, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc)
+        public SQLiteConnectionUser(bool utc = true, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDUser, utctimeindicator: utc)
         {
         }
 
-        protected SQLiteConnectionUser(bool initializing, bool utc, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc, initializing: initializing)
+        protected SQLiteConnectionUser(bool initializing, bool utc, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDUser, utctimeindicator: utc, initializing: initializing)
         {
         }
 

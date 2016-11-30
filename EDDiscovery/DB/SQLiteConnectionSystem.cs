@@ -9,15 +9,15 @@ namespace EDDiscovery.DB
 {
     public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
     {
-        public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
+        public SQLiteConnectionSystem() : base(EDDSqlDbSelection.EDDSystem)
         {
         }
 
-        public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase)
+        public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDSystem)
         {
         }
 
-        public SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase, initializing: initializing)
+        protected SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDSystem, initializing: initializing)
         {
         }
 
