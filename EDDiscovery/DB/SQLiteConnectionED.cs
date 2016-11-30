@@ -17,8 +17,27 @@ namespace EDDiscovery.DB
         {
         }
 
+        protected SQLiteConnectionOld(bool initializing) : base(EDDSqlDbSelection.EDDiscovery, initializing: initializing)
+        {
+        }
+
         protected override void InitializeDatabase()
         {
+        }
+
+        public static Dictionary<string, RegisterEntry> EarlyGetRegister()
+        {
+            Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
+
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
+            {
+                using (SQLiteConnectionOld conn = new SQLiteConnectionOld(true))
+                {
+                    conn.GetRegister(reg);
+                }
+            }
+
+            return reg;
         }
     }
 
@@ -361,6 +380,27 @@ namespace EDDiscovery.DB
             {
                 bool ret = cn.PutSettingStringCN(key, strvalue);
                 return ret;
+            }
+        }
+
+        protected void GetRegister(Dictionary<string, RegisterEntry> regs)
+        {
+            using (DbCommand cmd = CreateCommand("SELECT Id, ValueInt, ValueDouble, ValueBlob, ValueString FROM register"))
+            {
+                using (DbDataReader rdr = cmd.ExecuteReader())
+                {
+                    string id = (string)rdr["Id"];
+                    object valint = rdr["ValueInt"];
+                    object valdbl = rdr["ValueDouble"];
+                    object valblob = rdr["ValueBlob"];
+                    object valstr = rdr["ValueString"];
+                    regs[id] = new RegisterEntry(
+                        valstr as string,
+                        valblob as byte[],
+                        (valint as long?) ?? 0L,
+                        (valdbl as double?) ?? Double.NaN
+                    );
+                }
             }
         }
         #endregion
