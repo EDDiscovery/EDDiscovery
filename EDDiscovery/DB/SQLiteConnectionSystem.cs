@@ -7,9 +7,29 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.DB
 {
-    public class SQLiteDBSystemClass
+    public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
     {
-        public static bool UpgradeSystemsDB(SQLiteConnectionSystem conn)
+        public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
+        {
+        }
+
+        public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase)
+        {
+        }
+
+        public SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase, initializing: initializing)
+        {
+        }
+
+        protected override void InitializeDatabase()
+        {
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, EDDbAccessMode.Writer))
+            {
+                UpgradeSystemsDB(conn);
+            }
+        }
+
+        protected static bool UpgradeSystemsDB(SQLiteConnectionSystem conn)
         {
             int dbver;
             try

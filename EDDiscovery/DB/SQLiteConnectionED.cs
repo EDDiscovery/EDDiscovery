@@ -21,29 +21,6 @@ namespace EDDiscovery.DB
         }
     }
 
-    public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
-    {
-        public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
-        {
-        }
-
-        public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase)
-        {
-        }
-
-        public SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase, initializing: initializing)
-        {
-        }
-
-        protected override void InitializeDatabase()
-        {
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, EDDbAccessMode.Writer))
-            {
-                SQLiteDBSystemClass.UpgradeSystemsDB(conn);
-            }
-        }
-    }
-
     /*
     public class SQLiteConnectionCombined : SQLiteConnectionED<SQLiteConnectionCombined>
     {

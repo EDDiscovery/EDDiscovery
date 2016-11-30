@@ -731,7 +731,7 @@ namespace EDDiscovery
             if (!cancelRequested())
             {
                 SQLiteConnectionUser.TranferVisitedSystemstoJournalTableIfRequired();
-                SQLiteDBSystemClass.CreateSystemsTableIndexes();
+                SQLiteConnectionSystem.CreateSystemsTableIndexes();
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
@@ -886,7 +886,7 @@ namespace EDDiscovery
                 if (!cancelRequested())
                 {
                     LogLine("Indexing systems table");
-                    SQLiteDBSystemClass.CreateSystemsTableIndexes();
+                    SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
                     PerformEDDBFullSync(cancelRequested, reportProgress);
                     performhistoryrefresh = true;
@@ -896,7 +896,7 @@ namespace EDDiscovery
             if (!cancelRequested())
             {
                 LogLine("Indexing systems table");
-                SQLiteDBSystemClass.CreateSystemsTableIndexes();
+                SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
                 if (CanSkipSlowUpdates())
                 {
@@ -1003,7 +1003,7 @@ namespace EDDiscovery
                 bool newfile;
                 bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
-                    SQLiteDBSystemClass.CreateTempSystemsTable();
+                    SQLiteConnectionSystem.CreateTempSystemsTable();
 
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     bool outoforder = false;
@@ -1014,7 +1014,7 @@ namespace EDDiscovery
                         SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
                         LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
-                        SQLiteDBSystemClass.ReplaceSystemsTable();
+                        SQLiteConnectionSystem.ReplaceSystemsTable();
                         SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
                         reportProgress(-1, "");
                     }
