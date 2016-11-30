@@ -68,7 +68,6 @@ namespace EDDiscovery.DB
         private static int _initsem = 0;
         private static ManualResetEvent _initbarrier = new ManualResetEvent(false);
         private SQLiteTxnLockED<TConn> _transactionLock;
-        private DbProviderFactory DbFactory = GetSqliteProviderFactory();
         protected static Dictionary<string, RegisterEntry> EarlyRegister;
 
         public class SchemaLock : IDisposable
@@ -98,7 +97,7 @@ namespace EDDiscovery.DB
             {
                 int cur = Interlocked.Increment(ref _initsem);
 
-                if (cur == 0)
+                if (cur == 1)
                 {
                     using (var slock = new SchemaLock())
                     {
@@ -124,7 +123,7 @@ namespace EDDiscovery.DB
                 if (!initializing && !_initialized)
                 {
                     System.Diagnostics.Trace.WriteLine($"Database {typeof(TConn).Name} initialized before Initialize()");
-                    System.Diagnostics.Trace.WriteLine(new System.Diagnostics.StackTrace(true).ToString());
+                    System.Diagnostics.Trace.WriteLine(new System.Diagnostics.StackTrace(2, true).ToString());
 
                     if (typeof(TConn) == typeof(SQLiteConnectionUser))
                     {
@@ -165,87 +164,6 @@ namespace EDDiscovery.DB
                     _schemaLock.ExitReadLock();
                 }
                 throw;
-            }
-        }
-
-        private static DbProviderFactory GetSqliteProviderFactory()
-        {
-            if (WindowsSqliteProviderWorks())
-            {
-                return GetWindowsSqliteProviderFactory();
-            }
-
-            var factory = GetMonoSqliteProviderFactory();
-
-            if (DbFactoryWorks(factory))
-            {
-                return factory;
-            }
-
-            throw new InvalidOperationException("Unable to get a working Sqlite driver");
-        }
-
-        private static bool WindowsSqliteProviderWorks()
-        {
-            try
-            {
-                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
-                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static bool DbFactoryWorks(DbProviderFactory factory)
-        {
-            if (factory != null)
-            {
-                try
-                {
-                    using (var conn = factory.CreateConnection())
-                    {
-                        conn.ConnectionString = "Data Source=:memory:;Pooling=true;";
-                        conn.Open();
-                        return true;
-                    }
-                }
-                catch
-                {
-                }
-            }
-
-            return false;
-        }
-
-        private static DbProviderFactory GetMonoSqliteProviderFactory()
-        {
-            try
-            {
-                // Disable CS0618 warning for LoadWithPartialName
-#pragma warning disable 618
-                var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
-#pragma warning restore 618
-                var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
-                return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private static DbProviderFactory GetWindowsSqliteProviderFactory()
-        {
-            try
-            {
-                return new System.Data.SQLite.SQLiteFactory();
-            }
-            catch
-            {
-                return null;
             }
         }
 
@@ -331,7 +249,7 @@ namespace EDDiscovery.DB
             {
                 if (!_initialized && !_schemaLock.IsWriteLockHeld)
                 {
-                    System.Diagnostics.Trace.WriteLine("Read from register before EarlyReadRegister()");
+                    throw new InvalidOperationException("Read from register before EarlyReadRegister()");
                 }
 
                 using (TConn cn = new TConn())
@@ -432,6 +350,7 @@ namespace EDDiscovery.DB
         protected DbConnection _cn;
         protected Thread _owningThread;
         protected static List<SQLiteConnectionED> _openConnections = new List<SQLiteConnectionED>();
+        protected static DbProviderFactory DbFactory = GetSqliteProviderFactory();
 
         protected SQLiteConnectionED(bool initializing)
         {
@@ -440,6 +359,87 @@ namespace EDDiscovery.DB
                 _openConnections.Add(this);
             }
             _owningThread = Thread.CurrentThread;
+        }
+
+        private static DbProviderFactory GetSqliteProviderFactory()
+        {
+            if (WindowsSqliteProviderWorks())
+            {
+                return GetWindowsSqliteProviderFactory();
+            }
+
+            var factory = GetMonoSqliteProviderFactory();
+
+            if (DbFactoryWorks(factory))
+            {
+                return factory;
+            }
+
+            throw new InvalidOperationException("Unable to get a working Sqlite driver");
+        }
+
+        private static bool WindowsSqliteProviderWorks()
+        {
+            try
+            {
+                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
+                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool DbFactoryWorks(DbProviderFactory factory)
+        {
+            if (factory != null)
+            {
+                try
+                {
+                    using (var conn = factory.CreateConnection())
+                    {
+                        conn.ConnectionString = "Data Source=:memory:;Pooling=true;";
+                        conn.Open();
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
+        }
+
+        private static DbProviderFactory GetMonoSqliteProviderFactory()
+        {
+            try
+            {
+                // Disable CS0618 warning for LoadWithPartialName
+#pragma warning disable 618
+                var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
+#pragma warning restore 618
+                var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
+                return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static DbProviderFactory GetWindowsSqliteProviderFactory()
+        {
+            try
+            {
+                return new System.Data.SQLite.SQLiteFactory();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         protected void AssertThreadOwner()
