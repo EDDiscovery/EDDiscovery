@@ -12,6 +12,8 @@ namespace EDDiscovery.DB
 {
     public class SQLiteConnectionUser : SQLiteConnectionED<SQLiteConnectionUser>
     {
+        protected static List<EDDiscovery2.EDCommander> EarlyCommanders;
+
         public SQLiteConnectionUser() : base(EDDSqlDbSelection.EDDUser)
         {
         }
@@ -396,6 +398,78 @@ namespace EDDiscovery.DB
             }
         }
 
+        public List<EDDiscovery2.EDCommander> GetCommanders()
+        {
+            List<EDDiscovery2.EDCommander> commanders = new List<EDDiscovery2.EDCommander>();
+
+            if (GetSettingInt("DBVer", 1) >= 102)
+            {
+                using (DbCommand cmd = CreateCommand("SELECT * FROM Commanders"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            EDDiscovery2.EDCommander edcmdr = new EDDiscovery2.EDCommander(reader);
+
+                            string name = Convert.ToString(reader["Name"]);
+                            string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
+
+                            commanders.Add(edcmdr);
+                        }
+                    }
+                }
+            }
+
+            return commanders;
+        }
+
+        public static List<EDDiscovery2.EDCommander> GetCommanders(SQLiteConnectionUser conn = null)
+        {
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
+            {
+                bool closeconn = false;
+
+                try
+                {
+                    if (conn == null)
+                    {
+                        closeconn = true;
+                        conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Reader);
+                    }
+
+                    return conn.GetCommanders();
+                }
+                finally
+                {
+                    if (closeconn && conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
+            }
+            else
+            {
+                return new List<EDDiscovery2.EDCommander>();
+            }
+        }
+
+        public static new List<EDDiscovery2.EDCommander> GetCommandersFromRegister(SQLiteConnectionUser conn = null)
+        {
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
+            {
+                return SQLiteConnectionED<SQLiteConnectionUser>.GetCommandersFromRegister(conn);
+            }
+            else if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
+            {
+                return SQLiteConnectionOld.GetCommandersFromRegister(null);
+            }
+            else
+            {
+                return new List<EDDiscovery2.EDCommander>();
+            }
+        }
+
         public static void TranferVisitedSystemstoJournalTableIfRequired()
         {
             if (System.IO.File.Exists(SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
@@ -572,19 +646,19 @@ namespace EDDiscovery.DB
         {
             Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
 
-            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem)))
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
             {
                 using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Reader))
                 {
                     conn.GetRegister(reg);
                 }
-
-                return reg;
             }
             else
             {
-                return SQLiteConnectionOld.EarlyGetRegister();
+                reg = SQLiteConnectionOld.EarlyGetRegister();
             }
+
+            return reg;
         }
 
         public static void EarlyReadRegister()

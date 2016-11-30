@@ -172,6 +172,7 @@ namespace EDDiscovery
             }
 
             SQLiteConnectionUser.EarlyReadRegister();
+            EDDConfig.Instance.Update(write: false);
 
             theme = new EDDTheme();
 
@@ -201,9 +202,6 @@ namespace EDDiscovery
             this.TopMost = EDDConfig.KeepOnTop;
 
             ApplyTheme();
-
-            SQLiteConnectionUser.Initialize();
-            SQLiteConnectionSystem.Initialize();
 
             if (splashform != null)
             {
@@ -398,6 +396,8 @@ namespace EDDiscovery
         {
             try
             {
+                SQLiteConnectionUser.Initialize();
+                SQLiteConnectionSystem.Initialize();
                 EliteDangerousClass.CheckED();
                 EDDConfig.Update();
                 RepositionForm();
