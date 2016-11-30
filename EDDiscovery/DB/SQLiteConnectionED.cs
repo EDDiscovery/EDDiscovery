@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.IO;
 
 namespace EDDiscovery.DB
 {
@@ -32,6 +33,14 @@ namespace EDDiscovery.DB
 
         public static void Initialize()
         {
+            string dbv4file = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
+
+            if (File.Exists(dbv4file) && !File.Exists(dbuserfile))
+            {
+                File.Copy(dbv4file, dbuserfile);
+            }
+
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Writer))
             {
                 SQLiteDBUserClass.UpgradeUserDB(conn);
