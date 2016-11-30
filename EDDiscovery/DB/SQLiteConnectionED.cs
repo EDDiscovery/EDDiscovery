@@ -15,6 +15,10 @@ namespace EDDiscovery.DB
         public SQLiteConnectionOld() : base(EDDSqlDbSelection.EDDiscovery)
         {
         }
+
+        protected override void InitializeDatabase()
+        {
+        }
     }
 
     public class SQLiteConnectionUser : SQLiteConnectionED<SQLiteConnectionUser>
@@ -31,7 +35,7 @@ namespace EDDiscovery.DB
         {
         }
 
-        public static void Initialize()
+        protected override void InitializeDatabase()
         {
             string dbv4file = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
             string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
@@ -62,7 +66,7 @@ namespace EDDiscovery.DB
         {
         }
 
-        public static void Initialize()
+        protected override void InitializeDatabase()
         {
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, EDDbAccessMode.Writer))
             {
@@ -98,6 +102,9 @@ namespace EDDiscovery.DB
             }
         }
         private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private static bool _initialized = false;
+        private static int _initsem = 0;
+        private static ManualResetEvent _initbarrier = new ManualResetEvent(false);
         private SQLiteTxnLockED<TConn> _transactionLock;
 
         public class SchemaLock : IDisposable
@@ -127,6 +134,26 @@ namespace EDDiscovery.DB
             bool locktaken = false;
             try
             {
+                if (!initializing && !_initialized)
+                {
+                    int cur = Interlocked.Increment(ref _initsem);
+
+                    if (cur == 0)
+                    {
+                        using (var slock = new SchemaLock())
+                        {
+                            _initbarrier.Set();
+                            InitializeDatabase();
+                            _initialized = true;
+                        }
+                    }
+                }
+
+                if (!_initialized)
+                {
+                    _initbarrier.WaitOne();
+                }
+
                 _schemaLock.EnterReadLock();
                 locktaken = true;
 
@@ -381,6 +408,7 @@ namespace EDDiscovery.DB
         public abstract DbTransaction BeginTransaction(IsolationLevel isolevel);
         public abstract DbTransaction BeginTransaction();
         public abstract void Dispose();
+        protected abstract void InitializeDatabase();
 
         protected virtual void Dispose(bool disposing)
         {

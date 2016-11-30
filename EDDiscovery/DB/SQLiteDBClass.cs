@@ -26,7 +26,7 @@ namespace EDDiscovery.DB
     {
         #region Private properties / fields
         private static Object lockDBInit = new Object();                    // lock to sequence construction
-        private static DbProviderFactory DbFactory;
+        private static DbProviderFactory DbFactory = GetSqliteProviderFactory();
         #endregion
 
         #region Transitional properties
@@ -36,24 +36,6 @@ namespace EDDiscovery.DB
         #endregion
 
         #region Database Initialization
-        private static void InitializeDatabase()
-        {
-            string dbv4file = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
-            string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
-            string dbsystemsfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
-            DbFactory = GetSqliteProviderFactory();
-
-            try
-            {
-                SQLiteConnectionUser.Initialize();
-                SQLiteConnectionSystem.Initialize();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message, "Error creating data base file, Exception", System.Windows.Forms.MessageBoxButtons.OK);
-            }
-        }
-
         public static void ExecuteQuery(SQLiteConnectionED conn, string query)
         {
             using (DbCommand command = conn.CreateCommand(query))
@@ -188,14 +170,6 @@ namespace EDDiscovery.DB
         #region Database access
         public static DbConnection CreateCN()
         {
-            lock (lockDBInit)                                           // one at a time chaps
-            {
-                if (DbFactory == null)                                        // first one to ask for a connection sets the db up
-                {
-                    InitializeDatabase();
-                }
-            }
-
             return DbFactory.CreateConnection();
         }
 
