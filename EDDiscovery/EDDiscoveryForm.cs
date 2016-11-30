@@ -730,7 +730,7 @@ namespace EDDiscovery
 
             if (!cancelRequested())
             {
-                SQLiteDBUserClass.TranferVisitedSystemstoJournalTableIfRequired();
+                SQLiteConnectionUser.TranferVisitedSystemstoJournalTableIfRequired();
                 SQLiteDBSystemClass.CreateSystemsTableIndexes();
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();

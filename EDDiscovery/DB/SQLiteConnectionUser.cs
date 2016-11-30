@@ -6,12 +6,41 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
+using System.IO;
 
 namespace EDDiscovery.DB
 {
-    static public class SQLiteDBUserClass   //: SQLiteDBClass
+    public class SQLiteConnectionUser : SQLiteConnectionED<SQLiteConnectionUser>
     {
-        public static bool UpgradeUserDB(SQLiteConnectionUser conn)
+        public SQLiteConnectionUser() : base(SQLiteDBClass.UserDatabase)
+        {
+        }
+
+        public SQLiteConnectionUser(bool utc = true, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc)
+        {
+        }
+
+        protected SQLiteConnectionUser(bool initializing, bool utc, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc, initializing: initializing)
+        {
+        }
+
+        protected override void InitializeDatabase()
+        {
+            string dbv4file = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
+
+            if (File.Exists(dbv4file) && !File.Exists(dbuserfile))
+            {
+                File.Copy(dbv4file, dbuserfile);
+            }
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Writer))
+            {
+                UpgradeUserDB(conn);
+            }
+        }
+
+        protected static bool UpgradeUserDB(SQLiteConnectionUser conn)
         {
             int dbver;
             try
