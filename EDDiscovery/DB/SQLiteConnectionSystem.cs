@@ -33,7 +33,7 @@ namespace EDDiscovery.DB
                 int dbver;
                 try
                 {
-                    SQLiteDBClass.ExecuteQuery(conn, "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
+                    ExecuteQuery(conn, "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
                     dbver = conn.GetSettingIntCN("DBVer", 1);        // use the constring one, as don't want to go back into ConnectionString code
 
                     DropOldSystemTables(conn);
@@ -325,14 +325,14 @@ namespace EDDiscovery.DB
         {
             using (var conn = new SQLiteConnectionSystem())
             {
-                SQLiteDBClass.ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems_temp");
-                SQLiteDBClass.ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames_temp");
-                SQLiteDBClass.ExecuteQuery(conn,
+                ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems_temp");
+                ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames_temp");
+                ExecuteQuery(conn,
                     "CREATE TABLE SystemNames_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "Name TEXT NOT NULL COLLATE NOCASE, " +
                         "EdsmId INTEGER NOT NULL)");
-                SQLiteDBClass.ExecuteQuery(conn,
+                ExecuteQuery(conn,
                     "CREATE TABLE EdsmSystems_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "EdsmId INTEGER NOT NULL, " +
@@ -357,14 +357,14 @@ namespace EDDiscovery.DB
                     DropSystemsTableIndexes();
                     using (var txn = conn.BeginTransaction())
                     {
-                        SQLiteDBClass.ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
-                        SQLiteDBClass.ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems");
-                        SQLiteDBClass.ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames");
-                        SQLiteDBClass.ExecuteQuery(conn, "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
-                        SQLiteDBClass.ExecuteQuery(conn, "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
+                        ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
+                        ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems");
+                        ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames");
+                        ExecuteQuery(conn, "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
+                        ExecuteQuery(conn, "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
                         txn.Commit();
                     }
-                    SQLiteDBClass.ExecuteQuery(conn, "VACUUM");
+                    ExecuteQuery(conn, "VACUUM");
                     CreateSystemsTableIndexes();
                 }
             }
