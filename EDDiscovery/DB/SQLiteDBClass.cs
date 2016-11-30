@@ -26,7 +26,6 @@ namespace EDDiscovery.DB
     {
         #region Private properties / fields
         private static Object lockDBInit = new Object();                    // lock to sequence construction
-        private static DbProviderFactory DbFactory = GetSqliteProviderFactory();
         #endregion
 
         #region Transitional properties
@@ -83,96 +82,11 @@ namespace EDDiscovery.DB
 
 
 
-        private static DbProviderFactory GetSqliteProviderFactory()
-        {
-            if (WindowsSqliteProviderWorks())
-            {
-                return GetWindowsSqliteProviderFactory();
-            }
-
-            var factory = GetMonoSqliteProviderFactory();
-
-            if (DbFactoryWorks(factory))
-            {
-                return factory;
-            }
-
-            throw new InvalidOperationException("Unable to get a working Sqlite driver");
-        }
-
-        private static bool WindowsSqliteProviderWorks()
-        {
-            try
-            {
-                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
-                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static bool DbFactoryWorks(DbProviderFactory factory)
-        {
-            if (factory != null)
-            {
-                try
-                {
-                    using (var conn = factory.CreateConnection())
-                    {
-                        conn.ConnectionString = "Data Source=:memory:;Pooling=true;";
-                        conn.Open();
-                        return true;
-                    }
-                }
-                catch
-                {
-                }
-            }
-
-            return false;
-        }
-
-        private static DbProviderFactory GetMonoSqliteProviderFactory()
-        {
-            try
-            {
-                // Disable CS0618 warning for LoadWithPartialName
-                #pragma warning disable CS0618
-                var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
-                #pragma warning restore CS0618
-                var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
-                return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private static DbProviderFactory GetWindowsSqliteProviderFactory()
-        {
-            try
-            {
-                return new System.Data.SQLite.SQLiteFactory();
-            }
-            catch
-            {
-                return null;
-            }
-        }
 
 
         #endregion
 
         #region Database access
-        public static DbConnection CreateCN()
-        {
-            return DbFactory.CreateConnection();
-        }
-
         ///----------------------------
         /// STATIC code helpers for other DB classes
 
@@ -181,7 +95,7 @@ namespace EDDiscovery.DB
             try
             {
                 DataSet ds = new DataSet();
-                DbDataAdapter da = cmd.CreateDataAdapter();
+                DbDataAdapter da = cn.CreateDataAdapter(cmd);
                 da.Fill(ds);
                 return ds;
             }
@@ -226,13 +140,6 @@ namespace EDDiscovery.DB
         #endregion
 
         #region Extension Methods
-        public static DbDataAdapter CreateDataAdapter(DbCommand cmd)
-        {
-            DbDataAdapter da = DbFactory.CreateDataAdapter();
-            da.SelectCommand = cmd;
-            return da;
-        }
-
         public static DbCommand CreateCommand(this DbConnection conn, string query)
         {
             DbCommand cmd = conn.CreateCommand();

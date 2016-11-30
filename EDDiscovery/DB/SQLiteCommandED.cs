@@ -579,10 +579,5 @@ namespace EDDiscovery.DB
         {
             cmd.Parameters[name].Value = val;
         }
-
-        public static DbDataAdapter CreateDataAdapter(this DbCommand cmd)
-        {
-            return SQLiteDBClass.CreateDataAdapter(cmd);
-        }
     }
 }
