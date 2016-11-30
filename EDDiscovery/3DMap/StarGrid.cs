@@ -85,16 +85,22 @@ namespace EDDiscovery2
 
             carray = new uint[cls.Count];
             array = new Vector3[cls.Count];     // can't have any more than this 
+            HashSet<Vector3> ents = new HashSet<Vector3>();
             int total = 0;
 
             uint cx = BitConverter.ToUInt32(new byte[] { basecolour.R, basecolour.G, basecolour.B, basecolour.A }, 0);
 
             foreach (HistoryEntry vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
-                if (vs.System.status != SystemStatusEnum.EDSC && vs.System.HasCoordinate )
+                if (vs.IsLocOrJump && vs.System.status != SystemStatusEnum.EDSC && vs.System.HasCoordinate )
                 {
-                    carray[total] = cx;
-                    array[total++] = new Vector3((float)vs.System.x, (float)vs.System.y, (float)vs.System.z);
+                    Vector3 ent = new Vector3((float)vs.System.x, (float)vs.System.y, (float)vs.System.z);
+                    if (!ents.Contains(ent))
+                    {
+                        carray[total] = cx;
+                        array[total++] = ent;
+                        ents.Add(ent);
+                    }
                     //Console.WriteLine("Added {0} due to not being in star database", vs.Name);
                 }
             }

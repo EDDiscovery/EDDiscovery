@@ -103,7 +103,7 @@ namespace EDDiscovery2._3DMap
 
             if (syslists != null)
             {
-                foreach (HistoryEntry vs in syslists)
+                foreach (HistoryEntry vs in syslists.Where(s => s.IsLocOrJump))
                 {
                     SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.name, vs.System.id_edsm);
 
@@ -551,7 +551,11 @@ namespace EDDiscovery2._3DMap
 
                     foreach (HistoryEntry sp in syslists)
                     {
-                        if ( sp.System.HasCoordinate )
+                        if (sp.EntryType == EDDiscovery.EliteDangerous.JournalTypeEnum.Resurrect || sp.EntryType == EDDiscovery.EliteDangerous.JournalTypeEnum.Died)
+                        {
+                            lastpos = null;
+                        }
+                        else if (sp.IsLocOrJump && sp.System.HasCoordinate)
                         {
                             if (lastpos.HasValue)
                             {
