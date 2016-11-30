@@ -599,7 +599,7 @@ namespace EDDiscovery
             if (routeSystems != null && routeSystems.Any())
             {
                 _discoveryForm.history.FillInPositionsFSDJumps();
-                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), 400 / float.Parse(textBox_Distance.Text) , _discoveryForm.history.FilterByFSDAndPosition);
+                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), 400 / float.Parse(textBox_Distance.Text) , _discoveryForm.history.FilterByTravel);
                 map.SetPlanned(routeSystems);
                 map.Show();
             }
