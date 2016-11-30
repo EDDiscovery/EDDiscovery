@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -370,6 +371,19 @@ namespace EDDiscovery.DB
             }
         }
 
+        public static Dictionary<string, RegisterEntry> EarlyGetRegister()
+        {
+            Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
 
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem)))
+            {
+                using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, EDDbAccessMode.Reader))
+                {
+                    conn.GetRegister(reg);
+                }
+            }
+
+            return reg;
+        }
     }
 }

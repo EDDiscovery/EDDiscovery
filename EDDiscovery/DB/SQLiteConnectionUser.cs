@@ -564,5 +564,24 @@ namespace EDDiscovery.DB
             }
 
         }
+
+        public static Dictionary<string, RegisterEntry> EarlyGetRegister()
+        {
+            Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
+
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem)))
+            {
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Reader))
+                {
+                    conn.GetRegister(reg);
+                }
+
+                return reg;
+            }
+            else
+            {
+                return SQLiteConnectionOld.EarlyGetRegister();
+            }
+        }
     }
 }
