@@ -178,6 +178,7 @@ namespace EDDiscovery2.EDDB
 
         }
         return commodity;
+    }
        static public long ParseEDDBUpdateSystems(string filename, Action<string> logline)
         {
             StreamReader sr = new StreamReader(filename);         // read directly from file..

@@ -116,7 +116,7 @@ namespace EDDiscovery.DB
 
                     id_eddb = jo["id"].Value<int>();
 
-                    faction = jo["faction"].Value<string>();
+                    faction = jo["controlling_minor_faction"].Value<string>();
 
                     if (jo["population"].Type == JTokenType.Integer)
                         population = jo["population"].Value<long>();
@@ -134,7 +134,7 @@ namespace EDDiscovery.DB
 
                     eddb_updated_at = jo["updated_at"].Value<int>();
 
-                    id_edsm = (long)jo["edsm_id"];                         // pick up its edsm ID
+                    id_edsm = JSONHelper.GetLong(jo["edsm_id"]);                         // pick up its edsm ID
 
                     status = SystemStatusEnum.EDDB;
                 }
@@ -1542,16 +1542,12 @@ namespace EDDiscovery.DB
             if (sr == null)
                 return 0;
 
-            JsonTextReader jr = new JsonTextReader(sr);
-
-            if (jr == null)
-                return 0;
+            string line;
 
             int updated = 0;
             int inserted = 0;
-            bool jr_eof = false;
 
-            while (!jr_eof)
+            while (!sr.EndOfStream)
             {
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
                 {
@@ -1606,15 +1602,14 @@ namespace EDDiscovery.DB
 
                             while (!SQLiteConnectionSystem.IsReadWaiting)
                             {
-                                if (!jr.Read())
+                                line = sr.ReadLine();
+                                if (line == null)  // End of stream
                                 {
-                                    jr_eof = true;
                                     break;
                                 }
 
-                                if (jr.TokenType == JsonToken.StartObject)
                                 {
-                                    JObject jo = JObject.Load(jr);
+                                    JObject jo = JObject.Parse(line);
 
                                     SystemClass system = new SystemClass(jo, SystemInfoSource.EDDB);
 
