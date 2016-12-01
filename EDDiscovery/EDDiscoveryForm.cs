@@ -1058,8 +1058,13 @@ namespace EDDiscovery
             {
                 LogLine("Get systems from EDDB.");
 
-                string systemFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems.json");
-                bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v4/systems_populated.json", systemFileName);
+                string eddbdir = Path.Combine(Tools.GetAppDataDirectory(), "eddb");
+                if (!Directory.Exists(eddbdir))
+                    Directory.CreateDirectory(eddbdir);
+
+                string systemFileName = Path.Combine(eddbdir, "systems_populated.jsonl");
+
+                bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl", systemFileName);
 
                 if (success)
                 {
