@@ -11,6 +11,7 @@ using EDDiscovery.EliteDangerous.JournalEvents;
 using ExtendedControls;
 using EDDiscovery.DB;
 using System.Drawing.Drawing2D;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {

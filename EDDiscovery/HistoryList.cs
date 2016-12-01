@@ -355,7 +355,7 @@ namespace EDDiscovery
 
         public MaterialCommoditiesLedger materialcommodititiesledger;       // and the ledger..
 
-        public EliteDangerous.JournalEvents.StarScan starscan;                                           // and the results of scanning
+        public EliteDangerous.StarScan starscan;                                           // and the results of scanning
 
         public void Clear()
         {
