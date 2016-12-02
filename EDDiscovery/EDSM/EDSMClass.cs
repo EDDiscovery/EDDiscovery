@@ -578,5 +578,45 @@ namespace EDDiscovery2.EDSM
             return url;
         }
 
+        // https://www.edsm.net/api-system-v1/bodies?systemName=Colonia
+        // https://www.edsm.net/api-system-v1/bodies?systemId=27
+
+
+        public JObject GetBodies(string sysName)
+        {
+            string encodedSys = HttpUtility.UrlEncode(sysName);
+
+            string query = "bodies?systemName=" + sysName;
+            var response = RequestGet("api-v1/" + query, handleException: true);
+            if (response.Error)
+                return null;
+
+            var json = response.Body;
+            if (json == null || json.ToString() == "[]")
+                return null;
+
+            JObject msg = JObject.Parse(json);
+            return msg;
+        }
+
+        public JObject GetBodies(int edsmID)
+        {
+            string query = "bodies?systemId=" + edsmID.ToString();
+            var response = RequestGet("api-v1/" + query, handleException: true);
+            if (response.Error)
+                return null;
+
+            var json = response.Body;
+            if (json == null || json.ToString() == "[]")
+                return null;
+
+            JObject msg = JObject.Parse(json);
+            return msg;
+        }
+
+
     }
+
+
+
 }
