@@ -231,12 +231,13 @@ namespace EDDiscovery.Forms
             String output = "";
             output += " distance " + he.TravelledDistance.ToString("0.0") + ((he.TravelledMissingjump > 0) ? " LY (*)" : " LY");
             output += " time " + he.TravelledSeconds;
-            if (he.FuelTotal > 0)
+            HistoryEntry lastFuelScoop = _discoveryform.history.GetLastFuelScoop;
+            if (lastFuelScoop!=null && lastFuelScoop.FuelTotal > 0)
             {
-                if ((he.FuelLevel / he.FuelTotal) < 0.25)
+                if ((he.FuelLevel / lastFuelScoop.FuelTotal) < 0.25)
                     output += " fuel < 25%";
                 else
-                    output += " fuel " + String.Format("{0}/{1}", he.FuelLevel.ToString("0.0"), he.FuelTotal.ToString("0.0"));
+                    output += " fuel " + String.Format("{0}/{1}", he.FuelLevel.ToString("0.0"), lastFuelScoop.FuelTotal.ToString("0.0"));
             }
             lblOutput.Text = output;
             dpEDSM.Name = he.System.name;
