@@ -71,8 +71,8 @@ namespace EDDiscovery
         public int TravelledMissingjump { get { return travelled_missingjump; } }
         int travelled_jumps;
 
-        private static double last_fuelscooptotal = 0.0;
-        public double FuelTotal { get { return last_fuelscooptotal; } }
+        private double fuelTotal = 0.0;
+        public double FuelTotal { get { return fuelTotal; } }
         private double fuelLevel;
         public double FuelLevel { get { return fuelLevel; } set { fuelLevel = value; } }
 
@@ -113,11 +113,7 @@ namespace EDDiscovery
             journalupdate = false;
             bool starposfromedsm = false;
 
-            if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FuelScoop)
-            {
-                EDDiscovery.EliteDangerous.JournalEvents.JournalFuelScoop fs = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFuelScoop;
-                last_fuelscooptotal = fs.Total;
-            }
+
 
             if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
             {
@@ -202,12 +198,15 @@ namespace EDDiscovery
                 IsStarPosFromEDSM = starposfromedsm
             };
 
-            if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
+            if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FuelScoop)
+            {
+                EDDiscovery.EliteDangerous.JournalEvents.JournalFuelScoop fs = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFuelScoop;
+                he.fuelTotal = fs.Total;
+            }
+            else if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
             {
                 EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump fj = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
                 he.fuelLevel = fj.FuelLevel;
-                
-
             }
 
             if (prev != null && prev.travelling)      // if we are travelling..
@@ -498,6 +497,14 @@ namespace EDDiscovery
             get
             {
                 return historylist.FindLast(x => x.IsFSDJump);
+            }
+        }
+
+        public HistoryEntry GetLastFuelScoop
+        {
+            get
+            {
+                return historylist.FindLast(x => x.IsFuelScoop);
             }
         }
 
