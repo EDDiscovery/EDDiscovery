@@ -47,6 +47,7 @@ namespace EDDiscovery
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
         public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location; } }
+        public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
         public bool ISEDDNMessage
         {
             get
@@ -69,6 +70,11 @@ namespace EDDiscovery
         int travelled_missingjump;
         public int TravelledMissingjump { get { return travelled_missingjump; } }
         int travelled_jumps;
+
+        private static double last_fuelscooptotal = 0.0;
+        public double FuelTotal { get { return last_fuelscooptotal; } }
+        private double fuelLevel;
+        public double FuelLevel { get { return fuelLevel; } set { fuelLevel = value; } }
 
         MaterialCommoditiesList materialscommodities;
 
@@ -106,6 +112,12 @@ namespace EDDiscovery
             int mapcolour = 0;
             journalupdate = false;
             bool starposfromedsm = false;
+
+            if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FuelScoop)
+            {
+                EDDiscovery.EliteDangerous.JournalEvents.JournalFuelScoop fs = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFuelScoop;
+                last_fuelscooptotal = fs.Total;
+            }
 
             if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
             {
@@ -189,6 +201,14 @@ namespace EDDiscovery
                 EventDetailedInfo = detailed,
                 IsStarPosFromEDSM = starposfromedsm
             };
+
+            if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
+            {
+                EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump fj = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
+                he.fuelLevel = fj.FuelLevel;
+                
+
+            }
 
             if (prev != null && prev.travelling)      // if we are travelling..
             {

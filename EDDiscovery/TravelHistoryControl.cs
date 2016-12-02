@@ -463,6 +463,12 @@ namespace EDDiscovery
                     if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm == true)
                         EDSMSync.SendTravelLog(he);
                 }
+                if (he.IsFuelScoop)
+                {
+                    HistoryEntry lastFSD = hl.GetLastFSD;
+                    if(lastFSD!=null)
+                        lastFSD.FuelLevel= he.FuelTotal;
+                }
 
                 if (he.ISEDDNMessage)
                 {
@@ -1192,7 +1198,10 @@ namespace EDDiscovery
         void RedrawTripPanel(HistoryList hl)
         {
             if (IsTripPanelPopOutReady)
+            {
+                
                 tripPanelPopOut.displayLastFSD(hl.GetLastFSD);
+            }
         }
     
         #endregion
