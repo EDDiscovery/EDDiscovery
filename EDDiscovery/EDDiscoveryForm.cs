@@ -214,8 +214,11 @@ namespace EDDiscovery
 
         private void Dbinitworker_DoWork(object sender, DoWorkEventArgs e)
         {
+            Trace.WriteLine("Initializing database");
+            SQLiteConnectionOld.Initialize();
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
+            Trace.WriteLine("Database initialization complete");
         }
 
         private void Dbinitworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -420,6 +423,7 @@ namespace EDDiscovery
                 InitFormControls();
                 settings.InitSettingsTab();
                 savedRouteExpeditionControl1.LoadControl();
+                travelHistoryControl1.LoadControl();
 
                 CheckIfEliteDangerousIsRunning();
 
