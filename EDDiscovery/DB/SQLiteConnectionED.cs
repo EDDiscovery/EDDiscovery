@@ -6,6 +6,8 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.IO;
+using System.Windows.Forms;
 
 namespace EDDiscovery.DB
 {
@@ -13,51 +15,59 @@ namespace EDDiscovery.DB
     {
         public SQLiteConnectionOld() : base(EDDSqlDbSelection.EDDiscovery)
         {
-        }
-    }
-
-    public class SQLiteConnectionUser : SQLiteConnectionED<SQLiteConnectionUser>
-    {
-        public SQLiteConnectionUser() : base(SQLiteDBClass.UserDatabase)
-        {
+            
         }
 
-        public SQLiteConnectionUser(bool utc = true, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc)
-        {
-        }
-
-        protected SQLiteConnectionUser(bool initializing, bool utc, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.UserDatabase, utctimeindicator: utc, initializing: initializing)
+        protected SQLiteConnectionOld(bool initializing) : base(EDDSqlDbSelection.EDDiscovery, initializing: initializing)
         {
         }
 
         public static void Initialize()
         {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Writer))
+            InitializeIfNeeded(() => { });
+        }
+
+        public static Dictionary<string, RegisterEntry> EarlyGetRegister()
+        {
+            Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
+
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
             {
-                SQLiteDBUserClass.UpgradeUserDB(conn);
+                using (SQLiteConnectionOld conn = new SQLiteConnectionOld(true))
+                {
+                    conn.GetRegister(reg);
+                }
             }
-        }
-    }
 
-    public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
-    {
-        public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
-        {
+            return reg;
         }
 
-        public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase)
+        public static new List<EDDiscovery2.EDCommander> GetCommandersFromRegister(SQLiteConnectionOld conn = null)
         {
-        }
-
-        public SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(SQLiteDBClass.SystemDatabase, initializing: initializing)
-        {
-        }
-
-        public static void Initialize()
-        {
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, EDDbAccessMode.Writer))
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
             {
-                SQLiteDBSystemClass.UpgradeSystemsDB(conn);
+                bool closeconn = false;
+
+                try
+                {
+                    if (conn == null)
+                    {
+                        closeconn = true;
+                        conn = new SQLiteConnectionOld(true);
+                    }
+                    return SQLiteConnectionED<SQLiteConnectionOld>.GetCommandersFromRegister(conn);
+                }
+                finally
+                {
+                    if (closeconn && conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
+            }
+            else
+            {
+                return new List<EDDiscovery2.EDCommander>();
             }
         }
     }
@@ -88,8 +98,15 @@ namespace EDDiscovery.DB
                 return SQLiteTxnLockED<TConn>.IsReadWaiting;
             }
         }
+
+        public static bool IsInitialized { get { return _initialized; } }
+
         private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private static bool _initialized = false;
+        private static int _initsem = 0;
+        private static ManualResetEvent _initbarrier = new ManualResetEvent(false);
         private SQLiteTxnLockED<TConn> _transactionLock;
+        protected static Dictionary<string, RegisterEntry> EarlyRegister;
 
         public class SchemaLock : IDisposable
         {
@@ -112,19 +129,57 @@ namespace EDDiscovery.DB
             }
         }
 
+        protected static void InitializeIfNeeded(Action initializer)
+        {
+            if (!_initialized)
+            {
+                int cur = Interlocked.Increment(ref _initsem);
+
+                if (cur == 1)
+                {
+                    using (var slock = new SchemaLock())
+                    {
+                        _initbarrier.Set();
+                        initializer();
+                        _initialized = true;
+                    }
+                }
+
+                if (!_initialized)
+                {
+                    _initbarrier.WaitOne();
+                }
+            }
+        }
+
         public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, bool utctimeindicator = false, bool initializing = false, bool shortlived = true)
             : base(initializing)
         {
             bool locktaken = false;
             try
             {
+                if (!initializing && !_initialized)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Database {typeof(TConn).Name} initialized before Initialize()");
+                    System.Diagnostics.Trace.WriteLine(new System.Diagnostics.StackTrace(2, true).ToString());
+
+                    if (typeof(TConn) == typeof(SQLiteConnectionUser))
+                    {
+                        SQLiteConnectionUser.Initialize();
+                    }
+                    else if (typeof(TConn) == typeof(SQLiteConnectionSystem))
+                    {
+                        SQLiteConnectionSystem.Initialize();
+                    }
+                }
+
                 _schemaLock.EnterReadLock();
                 locktaken = true;
 
                 // System.Threading.Monitor.Enter(monitor);
                 //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
-                DBFile = GetSQLiteDBFile(maindb ?? SQLiteDBClass.DefaultMainDatabase);
-                _cn = SQLiteDBClass.CreateCN();
+                DBFile = GetSQLiteDBFile(maindb ?? EDDSqlDbSelection.EDDUser);
+                _cn = DbFactory.CreateConnection();
 
                 // Use the database selected by maindb as the 'main' database
                 _cn.ConnectionString = "Data Source=" + DBFile + ";Pooling=true;";
@@ -150,10 +205,21 @@ namespace EDDiscovery.DB
             }
         }
 
-        public override DbCommand CreateCommand(string cmd, DbTransaction tn = null)
+        public override DbDataAdapter CreateDataAdapter(DbCommand cmd)
+        {
+            DbDataAdapter da = DbFactory.CreateDataAdapter();
+            da.SelectCommand = cmd;
+            return da;
+        }
+
+        public override DbCommand CreateCommand(string query, DbTransaction tn = null)
         {
             AssertThreadOwner();
-            return new SQLiteCommandED<TConn>(_cn.CreateCommand(cmd), this, _transactionLock, tn);
+            DbCommand cmd = _cn.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandTimeout = 30;
+            cmd.CommandText = query;
+            return new SQLiteCommandED<TConn>(cmd, this, _transactionLock, tn);
         }
 
         public override DbTransaction BeginTransaction(IsolationLevel isolevel)
@@ -211,81 +277,143 @@ namespace EDDiscovery.DB
         ///----------------------------
         /// STATIC functions for discrete values
 
-        static public bool keyExists(string sKey)
+        protected static T RegisterGet<T>(string key, T defval, Func<RegisterEntry, T> early, Func<TConn, T> normal, TConn conn)
         {
-            using (TConn cn = new TConn())
+            if (conn != null)
             {
-                return cn.keyExistsCN(sKey);
+                return normal(conn);
+            }
+
+            if (!_initialized && EarlyRegister != null)
+            {
+                return EarlyRegister.ContainsKey(key) ? early(EarlyRegister[key]) : defval;
+            }
+            else
+            {
+                if (!_initialized && !_schemaLock.IsWriteLockHeld)
+                {
+                    throw new InvalidOperationException("Read from register before EarlyReadRegister()");
+                }
+
+                using (TConn cn = new TConn())
+                {
+                    return normal(cn);
+                }
             }
         }
 
-        static public int GetSettingInt(string key, int defaultvalue)
+        protected static bool RegisterPut(Func<TConn, bool> action, TConn conn)
         {
+            if (conn != null)
+            {
+                return action(conn);
+            }
+
+            if (!_initialized && !_schemaLock.IsWriteLockHeld)
+            {
+                System.Diagnostics.Trace.WriteLine("Write to register before Initialize()");
+            }
+
             using (TConn cn = new TConn())
             {
-                return cn.GetSettingIntCN(key, defaultvalue);
+                return action(cn);
             }
         }
 
-        static public bool PutSettingInt(string key, int intvalue)
+        static public bool keyExists(string sKey, TConn conn = null)
         {
-            using (TConn cn = new TConn())
+            return RegisterGet(sKey, false, r => true, cn => cn.keyExistsCN(sKey), conn);
+        }
+
+        static public int GetSettingInt(string key, int defaultvalue, TConn conn = null)
+        {
+            return (int)RegisterGet(key, defaultvalue, r => r.ValueInt, cn => cn.GetSettingIntCN(key, defaultvalue), conn);
+        }
+
+        static public bool PutSettingInt(string key, int intvalue, TConn conn = null)
+        {
+            return RegisterPut(cn => cn.PutSettingIntCN(key, intvalue), conn);
+        }
+
+        static public double GetSettingDouble(string key, double defaultvalue, TConn conn = null)
+        {
+            return RegisterGet(key, defaultvalue, r => r.ValueDouble, cn => cn.GetSettingDoubleCN(key, defaultvalue), conn);
+        }
+
+        static public bool PutSettingDouble(string key, double doublevalue, TConn conn = null)
+        {
+            return RegisterPut(cn => cn.PutSettingDoubleCN(key, doublevalue), conn);
+        }
+
+        static public bool GetSettingBool(string key, bool defaultvalue, TConn conn = null)
+        {
+            return RegisterGet(key, defaultvalue, r => r.ValueInt != 0, cn => cn.GetSettingBoolCN(key, defaultvalue), conn);
+        }
+
+        static public bool PutSettingBool(string key, bool boolvalue, TConn conn = null)
+        {
+            return RegisterPut(cn => cn.PutSettingBoolCN(key, boolvalue), conn);
+        }
+
+        static public string GetSettingString(string key, string defaultvalue, TConn conn = null)
+        {
+            return RegisterGet(key, defaultvalue, r => r.ValueString, cn => cn.GetSettingStringCN(key, defaultvalue), conn);
+        }
+
+        static public bool PutSettingString(string key, string strvalue, TConn conn = null)        // public IF
+        {
+            return RegisterPut(cn => cn.PutSettingStringCN(key, strvalue), conn);
+        }
+
+        protected void GetRegister(Dictionary<string, RegisterEntry> regs)
+        {
+            using (DbCommand cmd = CreateCommand("SELECT Id, ValueInt, ValueDouble, ValueBlob, ValueString FROM register"))
             {
-                bool ret = cn.PutSettingIntCN(key, intvalue);
-                return ret;
+                using (DbDataReader rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        string id = (string)rdr["Id"];
+                        object valint = rdr["ValueInt"];
+                        object valdbl = rdr["ValueDouble"];
+                        object valblob = rdr["ValueBlob"];
+                        object valstr = rdr["ValueString"];
+                        regs[id] = new RegisterEntry(
+                            valstr as string,
+                            valblob as byte[],
+                            (valint as long?) ?? 0L,
+                            (valdbl as double?) ?? Double.NaN
+                        );
+                    }
+                }
             }
         }
 
-        static public double GetSettingDouble(string key, double defaultvalue)
+        public static List<EDDiscovery2.EDCommander> GetCommandersFromRegister(TConn conn = null)
         {
-            using (TConn cn = new TConn())
-            {
-                return cn.GetSettingDoubleCN(key, defaultvalue);
-            }
-        }
+            List<EDDiscovery2.EDCommander> commanders = new List<EDDiscovery2.EDCommander>();
 
-        static public bool PutSettingDouble(string key, double doublevalue)
-        {
-            using (TConn cn = new TConn())
-            {
-                bool ret = cn.PutSettingDoubleCN(key, doublevalue);
-                return ret;
-            }
-        }
+            string apikey = GetSettingString("EDSMApiKey", "", conn);
+            string commanderName = GetSettingString("CommanderName", "", conn);
 
-        static public bool GetSettingBool(string key, bool defaultvalue)
-        {
-            using (TConn cn = new TConn())
+            for (int i = 0; i < 100; i++)
             {
-                return cn.GetSettingBoolCN(key, defaultvalue);
-            }
-        }
+                EDDiscovery2.EDCommander cmdr = new EDDiscovery2.EDCommander(i,
+                    GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
+                    GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn), true, false, true);
+                cmdr.NetLogDir = GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
+                cmdr.Deleted = GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
 
+                commanderName = "";
+                apikey = "";
 
-        static public bool PutSettingBool(string key, bool boolvalue)
-        {
-            using (TConn cn = new TConn())
-            {
-                bool ret = cn.PutSettingBoolCN(key, boolvalue);
-                return ret;
+                if (cmdr.Name != "" && cmdr.Name != null)
+                {
+                    commanders.Add(cmdr);
+                }
             }
-        }
 
-        static public string GetSettingString(string key, string defaultvalue)
-        {
-            using (TConn cn = new TConn())
-            {
-                return cn.GetSettingStringCN(key, defaultvalue);
-            }
-        }
-
-        static public bool PutSettingString(string key, string strvalue)        // public IF
-        {
-            using (TConn cn = new TConn())
-            {
-                bool ret = cn.PutSettingStringCN(key, strvalue);
-                return ret;
-            }
+            return commanders;
         }
         #endregion
     }
@@ -297,6 +425,7 @@ namespace EDDiscovery.DB
         protected DbConnection _cn;
         protected Thread _owningThread;
         protected static List<SQLiteConnectionED> _openConnections = new List<SQLiteConnectionED>();
+        protected static DbProviderFactory DbFactory = GetSqliteProviderFactory();
 
         protected SQLiteConnectionED(bool initializing)
         {
@@ -305,6 +434,87 @@ namespace EDDiscovery.DB
                 _openConnections.Add(this);
             }
             _owningThread = Thread.CurrentThread;
+        }
+
+        private static DbProviderFactory GetSqliteProviderFactory()
+        {
+            if (WindowsSqliteProviderWorks())
+            {
+                return GetWindowsSqliteProviderFactory();
+            }
+
+            var factory = GetMonoSqliteProviderFactory();
+
+            if (DbFactoryWorks(factory))
+            {
+                return factory;
+            }
+
+            throw new InvalidOperationException("Unable to get a working Sqlite driver");
+        }
+
+        private static bool WindowsSqliteProviderWorks()
+        {
+            try
+            {
+                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
+                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool DbFactoryWorks(DbProviderFactory factory)
+        {
+            if (factory != null)
+            {
+                try
+                {
+                    using (var conn = factory.CreateConnection())
+                    {
+                        conn.ConnectionString = "Data Source=:memory:;Pooling=true;";
+                        conn.Open();
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
+        }
+
+        private static DbProviderFactory GetMonoSqliteProviderFactory()
+        {
+            try
+            {
+                // Disable CS0618 warning for LoadWithPartialName
+#pragma warning disable 618
+                var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
+#pragma warning restore 618
+                var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
+                return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static DbProviderFactory GetWindowsSqliteProviderFactory()
+        {
+            try
+            {
+                return new System.Data.SQLite.SQLiteFactory();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         protected void AssertThreadOwner()
@@ -344,7 +554,7 @@ namespace EDDiscovery.DB
         protected void AttachDatabase(EDDSqlDbSelection dbflag, string name)
         {
             // Check if the connection is already connected to the selected database
-            using (DbCommand cmd = _cn.CreateCommand("PRAGMA database_list"))
+            using (DbCommand cmd = CreateCommand("PRAGMA database_list"))
             {
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
@@ -360,7 +570,7 @@ namespace EDDiscovery.DB
             }
 
             // Attach to the selected database under the given schema name
-            using (DbCommand cmd = _cn.CreateCommand("ATTACH DATABASE @dbfile AS @dbname"))
+            using (DbCommand cmd = CreateCommand("ATTACH DATABASE @dbfile AS @dbname"))
             {
                 cmd.AddParameterWithValue("@dbfile", GetSQLiteDBFile(dbflag));
                 cmd.AddParameterWithValue("@dbname", name);
@@ -368,10 +578,61 @@ namespace EDDiscovery.DB
             }
         }
 
+        protected static void PerformUpgrade(SQLiteConnectionED conn, int newVersion, bool catchErrors, bool backupDbFile, string[] queries, Action doAfterQueries = null)
+        {
+            if (backupDbFile)
+            {
+                string dbfile = conn.DBFile;
+
+                try
+                {
+                    File.Copy(dbfile, dbfile.Replace(".sqlite", $"{newVersion - 1}.sqlite"));
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                    System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                }
+            }
+
+            try
+            {
+                foreach (var query in queries)
+                {
+                    ExecuteQuery(conn, query);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!catchErrors)
+                    throw;
+
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show($"UpgradeDB{newVersion} error: " + ex.Message);
+            }
+
+            doAfterQueries?.Invoke();
+
+            conn.PutSettingIntCN("DBVer", newVersion);
+        }
+
+        protected static void ExecuteQuery(SQLiteConnectionED conn, string query)
+        {
+            conn.ExecuteQuery(query);
+        }
+
+        public void ExecuteQuery(string query)
+        {
+            using (DbCommand command = CreateCommand(query))
+                command.ExecuteNonQuery();
+        }
+
         public abstract DbCommand CreateCommand(string cmd, DbTransaction tn = null);
         public abstract DbTransaction BeginTransaction(IsolationLevel isolevel);
         public abstract DbTransaction BeginTransaction();
         public abstract void Dispose();
+        public abstract DbDataAdapter CreateDataAdapter(DbCommand cmd);
 
         protected virtual void Dispose(bool disposing)
         {

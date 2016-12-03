@@ -104,6 +104,8 @@ namespace EDDiscovery
         Task checkInstallerTask = null;
         private string logname = "";
         private bool themeok = true;
+        private Forms.SplashForm splashform = null;
+        BackgroundWorker dbinitworker = null;
 
         EliteDangerous.EDJournalClass journalmonitor;
         GitHubRelease newRelease;
@@ -132,7 +134,6 @@ namespace EDDiscovery
 
         public EDDiscoveryForm()
         {
-            var splashform = Forms.SplashForm.ShowAsync();
             InitializeComponent();
 
             label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
@@ -170,6 +171,15 @@ namespace EDDiscovery
                 Trace.WriteLine($"Unable to create the folder '{logpath}'");
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
+
+            SQLiteConnectionUser.EarlyReadRegister();
+            EDDConfig.Instance.Update(write: false);
+
+            dbinitworker = new BackgroundWorker();
+            dbinitworker.DoWork += Dbinitworker_DoWork;
+            dbinitworker.RunWorkerCompleted += Dbinitworker_RunWorkerCompleted;
+            dbinitworker.RunWorkerAsync();
+
             theme = new EDDTheme();
 
             EDDConfig = EDDConfig.Instance;
@@ -199,16 +209,25 @@ namespace EDDiscovery
 
             ApplyTheme();
 
-            if (splashform != null)
-            {
-                splashform.CloseForm();
-            }
-
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
         }
 
+        private void Dbinitworker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Trace.WriteLine("Initializing database");
+            SQLiteConnectionOld.Initialize();
+            SQLiteConnectionUser.Initialize();
+            SQLiteConnectionSystem.Initialize();
+            Trace.WriteLine("Database initialization complete");
+        }
 
-
+        private void Dbinitworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (splashform != null)
+            {
+                splashform.Close();
+            }
+        }
 
         // We can't prevent an unhandled exception from killing the application.
         // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
@@ -392,11 +411,19 @@ namespace EDDiscovery
         {
             try
             {
+                if (!(SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized))
+                {
+                    splashform = new SplashForm();
+                    splashform.ShowDialog(this);
+                }
+
                 EliteDangerousClass.CheckED();
                 EDDConfig.Update();
                 RepositionForm();
                 InitFormControls();
                 settings.InitSettingsTab();
+                savedRouteExpeditionControl1.LoadControl();
+                travelHistoryControl1.LoadControl();
 
                 CheckIfEliteDangerousIsRunning();
 
@@ -730,8 +757,8 @@ namespace EDDiscovery
 
             if (!cancelRequested())
             {
-                SQLiteDBUserClass.TranferVisitedSystemstoJournalTableIfRequired();
-                SQLiteDBSystemClass.CreateSystemsTableIndexes();
+                SQLiteConnectionUser.TranferVisitedSystemstoJournalTableIfRequired();
+                SQLiteConnectionSystem.CreateSystemsTableIndexes();
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
@@ -886,7 +913,7 @@ namespace EDDiscovery
                 if (!cancelRequested())
                 {
                     LogLine("Indexing systems table");
-                    SQLiteDBSystemClass.CreateSystemsTableIndexes();
+                    SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
                     PerformEDDBFullSync(cancelRequested, reportProgress);
                     performhistoryrefresh = true;
@@ -896,7 +923,7 @@ namespace EDDiscovery
             if (!cancelRequested())
             {
                 LogLine("Indexing systems table");
-                SQLiteDBSystemClass.CreateSystemsTableIndexes();
+                SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
                 if (CanSkipSlowUpdates())
                 {
@@ -1003,7 +1030,7 @@ namespace EDDiscovery
                 bool newfile;
                 bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
-                    SQLiteDBSystemClass.CreateTempSystemsTable();
+                    SQLiteConnectionSystem.CreateTempSystemsTable();
 
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     bool outoforder = false;
@@ -1014,7 +1041,7 @@ namespace EDDiscovery
                         SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
                         LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
-                        SQLiteDBSystemClass.ReplaceSystemsTable();
+                        SQLiteConnectionSystem.ReplaceSystemsTable();
                         SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
                         reportProgress(-1, "");
                     }
