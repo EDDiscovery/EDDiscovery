@@ -458,7 +458,24 @@ namespace EDDiscovery.DB
         {
             if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
             {
-                return SQLiteConnectionED<SQLiteConnectionUser>.GetCommandersFromRegister(conn);
+                bool closeconn = false;
+
+                try
+                {
+                    if (conn == null)
+                    {
+                        closeconn = true;
+                        conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Reader);
+                    }
+                    return SQLiteConnectionED<SQLiteConnectionUser>.GetCommandersFromRegister(conn);
+                }
+                finally
+                {
+                    if (closeconn && conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
             }
             else if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
             {

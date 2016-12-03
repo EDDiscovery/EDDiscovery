@@ -35,6 +35,35 @@ namespace EDDiscovery.DB
 
             return reg;
         }
+
+        public static new List<EDDiscovery2.EDCommander> GetCommandersFromRegister(SQLiteConnectionOld conn = null)
+        {
+            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
+            {
+                bool closeconn = false;
+
+                try
+                {
+                    if (conn == null)
+                    {
+                        closeconn = true;
+                        conn = new SQLiteConnectionOld(true);
+                    }
+                    return SQLiteConnectionED<SQLiteConnectionOld>.GetCommandersFromRegister(conn);
+                }
+                finally
+                {
+                    if (closeconn && conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
+            }
+            else
+            {
+                return new List<EDDiscovery2.EDCommander>();
+            }
+        }
     }
 
     /*
@@ -369,8 +398,10 @@ namespace EDDiscovery.DB
                 cmdr.NetLogDir = GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
                 cmdr.Deleted = GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
 
+                commanderName = "";
+                apikey = "";
 
-                if (cmdr.Name != "")
+                if (cmdr.Name != "" && cmdr.Name != null)
                 {
                     commanders.Add(cmdr);
                 }
