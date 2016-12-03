@@ -63,6 +63,9 @@ namespace EDDiscovery.DB
                 return SQLiteTxnLockED<TConn>.IsReadWaiting;
             }
         }
+
+        public static bool IsInitialized { get { return _initialized; } }
+
         private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private static bool _initialized = false;
         private static int _initsem = 0;

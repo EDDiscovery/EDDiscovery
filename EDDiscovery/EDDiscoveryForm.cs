@@ -104,6 +104,8 @@ namespace EDDiscovery
         Task checkInstallerTask = null;
         private string logname = "";
         private bool themeok = true;
+        private Forms.SplashForm splashform = null;
+        BackgroundWorker dbinitworker = null;
 
         EliteDangerous.EDJournalClass journalmonitor;
         GitHubRelease newRelease;
@@ -132,7 +134,6 @@ namespace EDDiscovery
 
         public EDDiscoveryForm()
         {
-            var splashform = Forms.SplashForm.ShowAsync();
             InitializeComponent();
 
             label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
@@ -174,6 +175,11 @@ namespace EDDiscovery
             SQLiteConnectionUser.EarlyReadRegister();
             EDDConfig.Instance.Update(write: false);
 
+            dbinitworker = new BackgroundWorker();
+            dbinitworker.DoWork += Dbinitworker_DoWork;
+            dbinitworker.RunWorkerCompleted += Dbinitworker_RunWorkerCompleted;
+            dbinitworker.RunWorkerAsync();
+
             theme = new EDDTheme();
 
             EDDConfig = EDDConfig.Instance;
@@ -203,16 +209,22 @@ namespace EDDiscovery
 
             ApplyTheme();
 
-            if (splashform != null)
-            {
-                splashform.CloseForm();
-            }
-
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
         }
 
+        private void Dbinitworker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            SQLiteConnectionUser.Initialize();
+            SQLiteConnectionSystem.Initialize();
+        }
 
-
+        private void Dbinitworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (splashform != null)
+            {
+                splashform.Close();
+            }
+        }
 
         // We can't prevent an unhandled exception from killing the application.
         // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
@@ -396,8 +408,12 @@ namespace EDDiscovery
         {
             try
             {
-                SQLiteConnectionUser.Initialize();
-                SQLiteConnectionSystem.Initialize();
+                if (!(SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized))
+                {
+                    splashform = new SplashForm();
+                    splashform.ShowDialog(this);
+                }
+
                 EliteDangerousClass.CheckED();
                 EDDConfig.Update();
                 RepositionForm();
