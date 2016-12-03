@@ -225,6 +225,7 @@
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
+    <Compile Include="EliteDangerous\Bodies.cs" />
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
