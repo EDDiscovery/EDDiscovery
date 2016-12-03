@@ -15,10 +15,16 @@ namespace EDDiscovery.DB
     {
         public SQLiteConnectionOld() : base(EDDSqlDbSelection.EDDiscovery)
         {
+            
         }
 
         protected SQLiteConnectionOld(bool initializing) : base(EDDSqlDbSelection.EDDiscovery, initializing: initializing)
         {
+        }
+
+        public static void Initialize()
+        {
+            InitializeIfNeeded(() => { });
         }
 
         public static Dictionary<string, RegisterEntry> EarlyGetRegister()

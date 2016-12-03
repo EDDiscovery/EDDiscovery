@@ -125,11 +125,15 @@ namespace EDDiscovery
             csd.Init(_discoveryForm);
             csd.OnOtherStarDistances += OtherStarDistances;
             csd.OnNewStarList += NewStarListComputed;
-            csd.StartComputeThread();
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
+        }
+
+        public void LoadControl()
+        {
+            csd.StartComputeThread();
         }
 
         #endregion
