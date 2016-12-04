@@ -55,6 +55,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             BodyName = JSONHelper.GetStringDef(evt["BodyName"]);
             StarType = JSONHelper.GetStringNull(evt["StarType"]);
+
             DistanceFromArrivalLS = JSONHelper.GetDouble(evt["DistanceFromArrivalLS"]);
 
             nAge = JSONHelper.GetDoubleNull(evt["Age_MY"]);
@@ -83,6 +84,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             nLandable = JSONHelper.GetBoolNull(evt["Landable"]);
 
             Materials = evt["Materials"]?.ToObject<Dictionary<string, double>>();
+
+            if (IsStar)
+                StarTypeID = Bodies.StarStr2Enum(StarType);
+            else
+                PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
+
+
+            AthmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere);
+            VolcanismID = Bodies.VolcanismStr2Enum(Volcanism);
         }
 
         public string BodyName { get; set; }
@@ -101,6 +111,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nEccentricity;
         public double? nOrbitalInclination;
         public double? nPeriapsis;
+
+        public EDStar StarTypeID { get; }
+        public EDPlanet PlanetTypeID { get; }
+
+        public EDAtmospehere AthmosphereID { get; }
+        public EDVolcanism VolcanismID { get; }
+
 
         public class StarPlanetRing
         {

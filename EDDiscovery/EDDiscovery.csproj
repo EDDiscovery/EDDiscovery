@@ -211,10 +211,12 @@
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DB\MaterialCommodities.cs" />
+    <Compile Include="DB\RegisterEntry.cs" />
+    <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
     <Compile Include="DB\SqLiteDBSchema.cs" />
-    <Compile Include="DB\SQLiteDBSystemClass.cs" />
-    <Compile Include="DB\SQLiteDBUserClass.cs" />
+    <Compile Include="DB\SQLiteConnectionSystem.cs" />
+    <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
@@ -225,6 +227,7 @@
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
+    <Compile Include="EliteDangerous\Bodies.cs" />
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
