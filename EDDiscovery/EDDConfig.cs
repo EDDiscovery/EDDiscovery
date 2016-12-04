@@ -100,7 +100,7 @@ namespace EDDiscovery2
             set
             {
                 _useDistances = value;
-                SQLiteDBClass.PutSettingBool("EDSMDistances", value);
+                SQLiteConnectionUser.PutSettingBool("EDSMDistances", value);
             }
         }
 
@@ -117,7 +117,7 @@ namespace EDDiscovery2
                 if (cmdr != null)
                 {
                     currentCmdrID = cmdr.index;
-                    SQLiteDBClass.PutSettingInt("ActiveCommander", value);
+                    SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
                 }
             }
         }
@@ -159,7 +159,7 @@ namespace EDDiscovery2
             set
             {
                 _EDSMLog = value;
-                SQLiteDBClass.PutSettingBool("EDSMLog", value);
+                SQLiteConnectionUser.PutSettingBool("EDSMLog", value);
             }
         }
 
@@ -172,7 +172,7 @@ namespace EDDiscovery2
             set
             {
                 _canSkipSlowUpdates = value;
-                SQLiteDBClass.PutSettingBool("CanSkipSlowUpdates", value);
+                SQLiteConnectionUser.PutSettingBool("CanSkipSlowUpdates", value);
             }
         }
 
@@ -184,7 +184,7 @@ namespace EDDiscovery2
             set
             {
                 _orderrowsinverted = value;
-                SQLiteDBClass.PutSettingBool("OrderRowsInverted", value);
+                SQLiteConnectionUser.PutSettingBool("OrderRowsInverted", value);
             }
         }
 
@@ -196,7 +196,7 @@ namespace EDDiscovery2
             set
             {
                 _focusOnNewSystem = value;
-                SQLiteDBClass.PutSettingBool("FocusOnNewSystem", value);
+                SQLiteConnectionUser.PutSettingBool("FocusOnNewSystem", value);
             }
         }
 
@@ -209,7 +209,7 @@ namespace EDDiscovery2
             set
             {
                 _keepOnTop = value;
-                SQLiteDBClass.PutSettingBool("KeepOnTop", value);
+                SQLiteConnectionUser.PutSettingBool("KeepOnTop", value);
             }
         }
 
@@ -222,7 +222,7 @@ namespace EDDiscovery2
             set
             {
                 _displayUTC = value;
-                SQLiteDBClass.PutSettingBool("DisplayUTC", value);
+                SQLiteConnectionUser.PutSettingBool("DisplayUTC", value);
             }
         }
 
@@ -235,7 +235,7 @@ namespace EDDiscovery2
             set
             {
                 _clearCommodities = value;
-                SQLiteDBClass.PutSettingBool("ClearCommodities", value);
+                SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
             }
         }
 
@@ -248,7 +248,7 @@ namespace EDDiscovery2
             set
             {
                 _clearMaterials = value;
-                SQLiteDBClass.PutSettingBool("ClearMaterials", value);
+                SQLiteConnectionUser.PutSettingBool("ClearMaterials", value);
             }
         }
 
@@ -257,22 +257,22 @@ namespace EDDiscovery2
 
         private bool GetSettingBool(string key)
         {
-            return GetSetting<bool>(key, SQLiteDBClass.GetSettingBool);
+            return GetSetting<bool>(key, (k, d) => SQLiteConnectionUser.GetSettingBool(k, d));
         }
 
         private int GetSettingInt(string key)
         {
-            return GetSetting<int>(key, SQLiteDBClass.GetSettingInt);
+            return GetSetting<int>(key, (k, d) => SQLiteConnectionUser.GetSettingInt(k, d));
         }
 
         private double GetSettingDouble(string key)
         {
-            return GetSetting<double>(key, SQLiteDBClass.GetSettingDouble);
+            return GetSetting<double>(key, (k, d) => SQLiteConnectionUser.GetSettingDouble(k, d));
         }
 
         private string GetSettingString(string key)
         {
-            return GetSetting<string>(key, SQLiteDBClass.GetSettingString);
+            return GetSetting<string>(key, (k, d) => SQLiteConnectionUser.GetSettingString(k, d));
         }
 
         private T GetSetting<T>(string key, Func<string,T,T> getter)
@@ -293,22 +293,22 @@ namespace EDDiscovery2
 
         private bool PutSettingBool(string key, bool value)
         {
-            return PutSetting<bool>(key, value, SQLiteDBClass.PutSettingBool);
+            return PutSetting<bool>(key, value, (k, v) => SQLiteConnectionUser.PutSettingBool(k, v));
         }
 
         private bool PutSettingInt(string key, int value)
         {
-            return PutSetting<int>(key, value, SQLiteDBClass.PutSettingInt);
+            return PutSetting<int>(key, value, (k, v) => SQLiteConnectionUser.PutSettingInt(k, v));
         }
 
         private bool PutSettingDouble(string key, double value)
         {
-            return PutSetting<double>(key, value, SQLiteDBClass.PutSettingDouble);
+            return PutSetting<double>(key, value, (k, v) => SQLiteConnectionUser.PutSettingDouble(k, v));
         }
 
         private bool PutSettingString(string key, string value)
         {
-            return PutSetting<string>(key, value, SQLiteDBClass.PutSettingString);
+            return PutSetting<string>(key, value, (k, v) => SQLiteConnectionUser.PutSettingString(k, v));
         }
 
         private bool PutSetting<T>(string key, T value, Func<string,T,bool> setter)
@@ -325,26 +325,23 @@ namespace EDDiscovery2
             }
         }
 
-        public void Update()
+        public void Update(bool write = true, SQLiteConnectionUser conn = null)
         {
             try
             {
-                _useDistances = SQLiteDBClass.GetSettingBool("EDSMDistances", false);
-                _EDSMLog = SQLiteDBClass.GetSettingBool("EDSMLog", false);
-                _canSkipSlowUpdates = SQLiteDBClass.GetSettingBool("CanSkipSlowUpdates", false);
-                _orderrowsinverted = SQLiteDBClass.GetSettingBool("OrderRowsInverted", false);
-                _focusOnNewSystem = SQLiteDBClass.GetSettingBool("FocusOnNewSystem", false);
-                _keepOnTop = SQLiteDBClass.GetSettingBool("KeepOnTop", false);
-                _displayUTC = SQLiteDBClass.GetSettingBool("DisplayUTC", false);
-                _clearCommodities = SQLiteDBClass.GetSettingBool("ClearCommodities", false);
-                _clearMaterials = SQLiteDBClass.GetSettingBool("ClearMaterials", false);
+                _useDistances = SQLiteConnectionUser.GetSettingBool("EDSMDistances", false, conn);
+                _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
+                _canSkipSlowUpdates = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", false, conn);
+                _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
+                _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
+                _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
+                _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
+                _clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
+                _clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
 
-                LoadCommanders();
+                LoadCommanders(write, conn);
 
-                if (ListOfCommanders.Count == 0 )
-                    GetNewCommander("Jameson (Default)");
-
-                int activecommander = SQLiteDBClass.GetSettingInt("ActiveCommander", 0);
+                int activecommander = SQLiteConnectionUser.GetSettingInt("ActiveCommander", 0, conn);
 
                 var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
 
@@ -361,7 +358,7 @@ namespace EDDiscovery2
 
         }
 
-        private void LoadCommanders()
+        private void LoadCommanders(bool write = true, SQLiteConnectionUser conn = null)
         {
             if ( _ListOfCommanders == null )
                 _ListOfCommanders = new List<EDCommander>();
@@ -370,37 +367,49 @@ namespace EDDiscovery2
             {
                 _ListOfCommanders.Clear();
 
-                int maxnr = -1;
+                bool migrate = false;
 
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+                var cmdrs = SQLiteConnectionUser.GetCommanders(conn);
+
+                if (cmdrs.Count == 0)
                 {
-                    using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders"))
+                    cmdrs = SQLiteConnectionUser.GetCommandersFromRegister(conn);
+                    if (cmdrs.Count != 0)
                     {
-                        using (DbDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                EDCommander edcmdr = new EDCommander(reader);
-
-                                string name = Convert.ToString(reader["Name"]);
-                                string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
-
-                                if (edcmdr.Nr > maxnr)
-                                    maxnr = edcmdr.Nr;
-
-                                if (edcmdr.Deleted == false)
-                                {
-                                    _ListOfCommanders.Add(edcmdr);
-                                }
-                            }
-                        }
+                        migrate = true;
                     }
                 }
 
-                if (maxnr == -1)        // migrate from really old code
+                int maxnr = cmdrs.Count == 0 ? 0 : cmdrs.Max(c => c.Nr);
+
+                _ListOfCommanders = cmdrs.Where(c => c.Deleted == false).ToList();
+
+                if (_ListOfCommanders.Count == 0)
                 {
-                    using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+                    if (write)
                     {
+                        GetNewCommander("Jameson (Default)");
+                    }
+                    else
+                    {
+                        _ListOfCommanders = new List<EDCommander>
+                        {
+                            new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false)
+                        };
+                    }
+                }
+
+                if (migrate && write)
+                {
+                    bool closeconn = false;
+                    try
+                    {
+                        if (conn == null)
+                        {
+                            conn = new SQLiteConnectionUser();
+                            closeconn = true;
+                        }
+
                         using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmName, EdsmApiKey, NetLogDir, Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Id, @Name, @EdsmName, @EdsmApiKey, @NetLogDir, @Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
                         {
                             cmd.AddParameter("@Id", DbType.Int32);
@@ -413,39 +422,27 @@ namespace EDDiscovery2
                             cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
                             cmd.AddParameter("@SyncToEddn", DbType.Boolean);
 
-                            // Migrate old settigns.
-                            string apikey = conn.GetSettingStringCN("EDSMApiKey", "");
-                            string commanderName = conn.GetSettingStringCN("CommanderName", "");
-
-                            for (int i = 0; i < 100; i++)
+                            foreach (var cmdr in cmdrs)
                             {
-                                EDCommander cmdr = new EDCommander(i,
-                                    conn.GetSettingStringCN("EDCommanderName" + i.ToString(), commanderName),
-                                    conn.GetSettingStringCN("EDCommanderApiKey" + i.ToString(), apikey) ,true, false, true);
-                                cmdr.NetLogDir = conn.GetSettingStringCN("EDCommanderNetLogPath" + i.ToString(), null);
-                                bool deleted = conn.GetSettingBoolCN("EDCommanderDeleted" + i.ToString(), false);
+                                cmd.Parameters["@Id"].Value = cmdr.Nr;
+                                cmd.Parameters["@Name"].Value = cmdr.Name;
+                                cmd.Parameters["@EdsmName"].Value = cmdr.EdsmName;
+                                cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
+                                cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
+                                cmd.Parameters["@Deleted"].Value = cmdr.Deleted;
+                                cmd.Parameters["@SyncToEdsm"].Value = cmdr.SyncToEdsm;
+                                cmd.Parameters["@SyncFromEdsm"].Value = cmdr.SyncFromEdsm;
+                                cmd.Parameters["@SyncToEddn"].Value = cmdr.SyncToEddn;
 
-
-                                if (cmdr.Name != "")
-                                {
-                                    cmd.Parameters["@Id"].Value = cmdr.Nr;
-                                    cmd.Parameters["@Name"].Value = cmdr.Name;
-                                    cmd.Parameters["@EdsmName"].Value = cmdr.EdsmName;
-                                    cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
-                                    cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
-                                    cmd.Parameters["@Deleted"].Value = deleted;
-                                    cmd.Parameters["@SyncToEdsm"].Value = cmdr.SyncToEdsm;
-                                    cmd.Parameters["@SyncFromEdsm"].Value = cmdr.SyncFromEdsm;
-                                    cmd.Parameters["@SyncToEddn"].Value = cmdr.SyncToEddn;
-
-                                    cmd.ExecuteNonQuery();
-
-                                    _ListOfCommanders.Add(cmdr);
-                                }
-
-                                commanderName = "";
-                                apikey = "";
+                                cmd.ExecuteNonQuery();
                             }
+                        }
+                    }
+                    finally
+                    {
+                        if (closeconn && conn != null)
+                        {
+                            conn.Dispose();
                         }
                     }
                 }
