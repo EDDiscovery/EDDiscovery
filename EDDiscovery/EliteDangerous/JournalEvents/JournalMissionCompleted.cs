@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
             TargetFaction = JSONHelper.GetStringDef(evt["TargetFaction"]);
             Reward = JSONHelper.GetLongNull(evt["Reward"]) ?? 0;
-            Donation = JSONHelper.GetLongNull(evt["Donation"]);
+            Donation = JSONHelper.GetLongNull(evt["Donation"]) ?? 0;
             MissionId = JSONHelper.GetInt(evt["MissionID"]);
 
             if (!JSONHelper.IsNullOrEmptyT(evt["PermitsAwarded"]))
@@ -84,7 +84,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, Reward , 0);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (Reward - Donation) , 0);
         }
 
     }
