@@ -271,6 +271,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 scanText.Append("\n" + DisplayMaterials(2) + "\n");
             }
 
+            if (IsStar)
+            {
+                scanText.Append("\n");
+                scanText.Append(HabitableZone());
+            }
+
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
@@ -568,6 +574,29 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             return null;
         }
+
+        // Habitable zone calculations, formulae cribbed from JackieSilver's HabZone Calculator with permission
+        private double DistanceForBlackBodyTemperature(double targetTemp)
+        {
+            double top = Math.Pow(nRadius.Value, 2.0) * Math.Pow(nSurfaceTemperature.Value, 4.0);
+            double bottom = 4.0 * Math.Pow(targetTemp, 4.0);
+            double radius_metres = Math.Pow(top / bottom, 0.5);
+            return radius_metres / 300000000;
+        }
+        
+        private string HabitableZone()
+        {
+            StringBuilder habZone = new StringBuilder();
+            habZone.AppendFormat("Habitable Zone Approx. {0}ls to {1}ls\n", 
+                DistanceForBlackBodyTemperature(315).ToString("N0"), 
+                DistanceForBlackBodyTemperature(223).ToString("N0"));
+            if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+            {
+                habZone.AppendFormat(" (This star only, others not considered)\n");
+            }                                
+            return habZone.ToNullSafeString(); 
+        }
+
     }
 
 
