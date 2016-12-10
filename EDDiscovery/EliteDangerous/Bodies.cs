@@ -105,123 +105,65 @@ namespace EDDiscovery.EliteDangerous
         Helium_gas_giant,
     }
 
-    public enum EDAtmospehere
+    [Flags]
+    public enum EDAtmosphereProperty
+    {
+        None = 0,
+        Rich = 1,
+        Thick = 2,
+        Thin = 4,
+        Hot = 8,
+    }
+
+    public enum EDAtmosphereType
     {
         Unknown = 0,
         No_atmosphere,
         Suitable_for_water_based_life,
         Ammonia_and_oxygen,
 
-        Ammonia,
-        Ammonia_rich,
-
-        Water,
-        Water_rich,
-        Hot_Water,
-        Hot_thick_water,
-
-        Carbon_dioxide,
-        Thin_carbon_dioxide,
-        Carbon_dioxide_rich,
-        Hot_thick_carbon_dioxide,
-
-
-
-        Methane,
-        Methane_rich,
-        Thin_methane,
-        Thick_methane,
-        Thick_methane_rich,
-        Hot_thick_methane_rich,
-
-        Helium,
-        Thin_helium,
-
-        Argon,
-        Argon_rich,
-        Thick_argon_rich,
-
-        Neon,
-        Neon_rich,
-        Thin_neon_rich,
-
-        Sulphur_dioxide,
-        Thin_sulphur_dioxide,
-
-        Nitrogen,
-
-        Silicate_vapour,
-        Hot_thick_silicate_vapour,
-
-        Metallic_vapour,
-
-        Oxygen,
+        Ammonia = 1000,
+        Water = 2000,
+        Carbon_dioxide = 3000,
+        Methane = 4000,
+        Helium = 5000,
+        Argon = 6000,
+        Neon = 7000,
+        Sulphur_dioxide = 8000,
+        Nitrogen = 9000,
+        Silicate_vapour = 10000,
+        Metallic_vapour = 11000,
+        Oxygen = 12000,
     }
 
+
+    [Flags]
+    public enum EDVolcanismProperty
+    {
+        None = 0,
+        Minor = 1,
+        Major = 2,
+    }
 
     public enum EDVolcanism
     {
         Unknown = 0,
         None,
         Water_Magma = 100,
-        Minor_Water_Magma,
-        Major_Water_Magma,
-
         Sulphur_Dioxide_Magma = 200,
-        Minor_Sulphur_Dioxide_Magma,
-        Major_Sulphur_Dioxide_Magma,
-
         Ammonia_Magma = 300,
-        Minor_Ammonia_Magma,
-        Major_Ammonia_Magma,
-
         Methane_Magma = 400,
-        Minor_Methane_Magma,
-        Major_Methane_Magma,
-
         Nitrogen_Magma = 500,
-        Minor_Nitrogen_Magma,
-        Major_Nitrogen_Magma,
-
         Silicate_Magma = 600,
-        Minor_Silicate_Magma,
-        Major_Silicate_Magma,
-
         Metallic_Magma = 700,
-        Minor_Metallic_Magma,
-        Major_Metallic_Magma,
-
         Water_Geysers = 800,
-        Minor_Water_Geysers,
-        Major_Water_Geysers,
-
         Carbon_Dioxide_Geysers = 900,
-        Minor_Carbon_Dioxide_Geysers,
-        Major_Carbon_Dioxide_Geysers,
-
         Ammonia_Geysers = 1000,
-        Minor_Ammonia_Geysers,
-        Major_Ammonia_Geysers,
-
         Methane_Geysers = 1100,
-        Minor_Methane_Geysers,
-        Major_Methane_Geysers,
-
         Nitrogen_Geysers = 1200,
-        Minor_Nitrogen_Geysers,
-        Major_Nitrogen_Geysers,
-
         Helium_Geysers = 1300,
-        Minor_Helium_Geysers,
-        Major_Helium_Geysers,
-
         Silicate_Vapour_Geysers = 1400,
-        Minor_Silicate_Vapour_Geysers,
-        Major_Silicate_Vapour_Geysers,
-
         Rocky_Magma = 1500,
-        Minor_Rocky_Magma,
-        Major_Rocky_Magma,
     }
 
 
@@ -265,14 +207,40 @@ namespace EDDiscovery.EliteDangerous
             return EDPlanet.Unknown;
         }
 
-        public static EDAtmospehere AtmosphereStr2Enum(string v)
+
+
+        public static EDAtmosphereType AtmosphereStr2Enum(string v, out EDAtmosphereProperty atmprop)
         {
+            atmprop = EDAtmosphereProperty.None;
+
             if (v == null)
-                return EDAtmospehere.Unknown;
+                return EDAtmosphereType.Unknown;
 
             var searchstr = v.ToLower().Replace("_", "").Replace(" ", "").Replace("-", "").Replace("atmosphere", "");
 
-            foreach (EDAtmospehere atm in Enum.GetValues(typeof(EDAtmospehere)))
+            if (searchstr.Contains("rich"))
+            {
+                atmprop |= EDAtmosphereProperty.Rich;
+                searchstr = searchstr.Replace("rich", "");
+            }
+            if (searchstr.Contains("thick"))
+            {
+                atmprop |= EDAtmosphereProperty.Thick;
+                searchstr = searchstr.Replace("thick", "");
+            }
+            if (searchstr.Contains("thin"))
+            {
+                atmprop |= EDAtmosphereProperty.Thin;
+                searchstr = searchstr.Replace("thin", "");
+            }
+            if (searchstr.Contains("hot"))
+            {
+                atmprop |= EDAtmosphereProperty.Thin;
+                searchstr = searchstr.Replace("hot", "");
+            }
+
+
+            foreach (EDAtmosphereType atm in Enum.GetValues(typeof(EDAtmosphereType)))
             {
                 string str = atm.ToString().Replace("_", "").ToLower();
 
@@ -282,15 +250,29 @@ namespace EDDiscovery.EliteDangerous
 
             System.Diagnostics.Trace.WriteLine("atm: " + v);
 
-            return EDAtmospehere.Unknown;
+            return EDAtmosphereType.Unknown;
         }
 
-        public static EDVolcanism VolcanismStr2Enum(string v)
+        public static EDVolcanism VolcanismStr2Enum(string v, out EDVolcanismProperty vprop )
         {
+            vprop = EDVolcanismProperty.None;
             if (v == null)
                 return EDVolcanism.Unknown;
 
             string searchstr = v.ToLower().Replace("_", "").Replace(" ", "").Replace("-", "").Replace("volcanism", "");
+
+
+
+            if (searchstr.Contains("minor"))
+            {
+                vprop |= EDVolcanismProperty.Minor;
+                searchstr = searchstr.Replace("minor", "");
+            }
+            if (searchstr.Contains("major"))
+            {
+                vprop |= EDVolcanismProperty.Major;
+                searchstr = searchstr.Replace("major", "");
+            }
 
             foreach (EDVolcanism atm in Enum.GetValues(typeof(EDVolcanism)))
             {
