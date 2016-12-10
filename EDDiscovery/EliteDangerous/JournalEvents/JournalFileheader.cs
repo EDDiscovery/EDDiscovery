@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 if (GameVersion.Contains("Beta"))
                     return true;
 
-                if (GameVersion.Equals("2.2") && Build.Contains("r121645/r0"))
+                if (GameVersion.Equals("2.2") && (Build.Contains("r121645/r0") || Build.Contains("r129516/r0")))
                     return true;
 
                 return false;
