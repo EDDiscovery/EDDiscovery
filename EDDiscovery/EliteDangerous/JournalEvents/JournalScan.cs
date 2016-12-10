@@ -91,8 +91,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
 
 
-            AthmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere);
-            VolcanismID = Bodies.VolcanismStr2Enum(Volcanism);
+            AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
+            VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
         }
 
         public string BodyName { get; set; }
@@ -115,9 +115,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public EDStar StarTypeID { get; }
         public EDPlanet PlanetTypeID { get; }
 
-        public EDAtmospehere AthmosphereID { get; }
+        public EDAtmosphereType AtmosphereID { get; }
+        public EDAtmosphereProperty AtmosphereProperty;
         public EDVolcanism VolcanismID { get; }
-
+        public EDVolcanismProperty VolcanismProperty;
 
         public class StarPlanetRing
         {
