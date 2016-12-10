@@ -347,115 +347,111 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             System.Drawing.Image ret = EDDiscovery.Properties.Resources.Star_K1IV;
 
-            switch (StarType.ToLower())       // see journal, section 11.2
+            switch (StarTypeID)       // see journal, section 11.2
             {
-                case "o":
+                case EDStar.O:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.O, string.Format("Luminous Hot Main Sequence star", StarType));
 
-                case "b":
+                case EDStar.B:
                     // also have an B1V
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.B6V_Blueish, string.Format("Luminous Blue Main Sequence star", StarType));
 
-                case "a":
+                case EDStar.A:
                     // also have an A3V..
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.A9III_White, string.Format("Bluish-White Main Sequence star", StarType));
 
-                case "f":
+                case EDStar.F:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.F5VAB, string.Format("White Main Sequence star", StarType));
 
-                case "g":
+                case EDStar.G:
                     // also have a G8V
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.G1IV, string.Format("Yellow Main Sequence star", StarType));
 
-                case "k":
+                case EDStar.K:
                     // also have a K0V
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Star_K1IV, string.Format("Orange Main Sequence {0} star", StarType));
-                case "m":
+                case EDStar.M:
                     // also have a M1VA
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.M5V, string.Format("Red Main Sequence {0} star", StarType));
 
                 // dwarfs
-                case "l":
+                case EDStar.L:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.L3V, string.Format("Dark Red Non Main Sequence {0} star", StarType));
-                case "t":
+                case EDStar.T:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.T4V, string.Format("Methane Dwarf star", StarType));
-                case "y":
+                case EDStar.Y:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Y2, string.Format("Brown Dwarf star", StarType));
 
                 // proto stars
-                case "aebe":    // seen in logs
+                case EDStar.AeBe:    // Herbig
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Herbig Ae/Be");
-                case "tts":     // seen in logs
+                case EDStar.TTS:     // seen in logs
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "T Tauri");
 
                 // wolf rayet
-                case "w":
-                case "wn":
-                case "wne": // wiki not journal may not be in game
-                case "wnl": // wiki not journal may not be in game
-                case "wnc":
-                case "wc":
-                case "wce": // wiki not journal may not be in game
-                case "wcl": // wiki not journal may not be in game
-                case "wo":
+                case EDStar.W:
+                case EDStar.WN:
+                case EDStar.WNC:
+                case EDStar.WC:
+                case EDStar.WO:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Wolf-Rayet {0} star", StarType));
 
                 // Carbon
-                case "cs":
-                case "c":
-                case "cn":
-                case "cj":
-                case "chd":
+                case EDStar.CS:
+                case EDStar.C:
+                case EDStar.CN:
+                case EDStar.CJ:
+                case EDStar.CHd:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.C7III, string.Format("Carbon {0} star", StarType));
 
-                case "ms": //seen in log
-                case "s":   // seen in log
+                case EDStar.MS: //seen in log
+                case EDStar.S:   // seen in log
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Unknown Type {0} star", StarType));
 
                 // white dwarf
-                case "d":
-                case "da":
-                case "dab":
-                case "dao":
-                case "daz":
-                case "dav":
-                case "db":
-                case "dbz":
-                case "dbv":
-                case "do":
-                case "dov":
-                case "dq":
-                case "dc":
-                case "dcv":
-                case "dx":
+                case EDStar.D:
+                case EDStar.DA:
+                case EDStar.DAB:
+                case EDStar.DAO:
+                case EDStar.DAZ:
+                case EDStar.DAV:
+                case EDStar.DB:
+                case EDStar.DBZ:
+                case EDStar.DBV:
+                case EDStar.DO:
+                case EDStar.DOV:
+                case EDStar.DQ:
+                case EDStar.DC:
+                case EDStar.DCV:
+                case EDStar.DX:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DA6VII_White, string.Format("White Dwarf ({0}) star", StarType));
 
-                case "n":
+                case EDStar.N:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Neutron_Star, "Neutron Star");
 
-                case "h":
-                    // currently speculative, not confirmed with actual data...
+                case EDStar.H:
+                    
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Black Hole");
 
-                case "x":
+                case EDStar.X:
                     // currently speculative, not confirmed with actual data... in journal
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Exotic");
 
                 // Journal.. really?  need evidence these actually are formatted like this.
 
-                case "supermassiveblackhole":
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Super Massive Black Hole");
-                case "a bluewhitesupergiant":   
+                //case EDStar.b"supermassiveblackhole":
+                 //   return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Super Massive Black Hole");
+                case EDStar.A_BlueWhiteSuperGiant:   
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Blue White Giant");
-                case "f whitesupergiant":
+                case EDStar.F_WhiteSuperGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "F White Super Giant");
-                case "m redsupergiant":
+                case EDStar.M_RedSuperGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "M Red Super Giant");
-                case "m redgiant":
+                case EDStar.M_RedGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "M Red Giant");
-                case "k orangegiant":
+                case EDStar.K_OrangeGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "K Orange Giant");
-                case "rogueplanet":
+                case EDStar.RoguePlanet:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Rouge Planet");
 
                 default:
