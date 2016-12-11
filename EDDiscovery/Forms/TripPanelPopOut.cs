@@ -22,6 +22,8 @@ namespace EDDiscovery.Forms
         private Color themeColour;
         private Color transparentkey = Color.Red;
         private static EDDiscoveryForm _discoveryform;
+        private Color defaultColour;
+        private Color warningColour = Color.Orange;
 
         public void SetGripperColour(Color grip)
         {
@@ -139,7 +141,7 @@ namespace EDDiscovery.Forms
             //   dpEDSM.Size = new Size(100, vsize - 6);
 
             //..  FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), panel_grip.ForeColor
-
+            defaultColour =  lblOutput.ForeColor;
 
             panel_grip.Visible = false;
         }
@@ -225,7 +227,7 @@ namespace EDDiscovery.Forms
                 SendMessage(WM_NCL_RESIZE, (IntPtr)HT_RESIZE, IntPtr.Zero);
             }
         }
-
+        
         internal void displayLastFSD(HistoryEntry he)
         {
             if (he == null)
@@ -239,10 +241,16 @@ namespace EDDiscovery.Forms
             {
                 double tankSize = SQLiteDBClass.GetSettingDouble("TripPopOutTankSize", 32);
                 double tankWarning = SQLiteDBClass.GetSettingDouble("TripPopOutTankWarning", 25);
-                if ((he.FuelLevel / lastFuelScoop.FuelTotal) <  (tankWarning / 100.0))
+                if ((he.FuelLevel / tankSize) < (tankWarning / 100.0))
+                {
                     output += String.Format(" fuel < {0}%", tankWarning.ToString("0.0"));
+                    lblOutput.ForeColor = warningColour;
+                }
                 else
+                {
                     output += " fuel " + String.Format("{0}/{1}", he.FuelLevel.ToString("0.0"), tankSize.ToString("0.0"));
+                    lblOutput.ForeColor = defaultColour;
+                }
             }
             lblOutput.Text = output;
             dpEDSM.Name = he.System.name;
