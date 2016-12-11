@@ -31,6 +31,8 @@ namespace EDDiscovery
             exportTypeList.Add(new ExportTypeClass("Exploration scans (Stars)", new ExportScan(true, false)));
             exportTypeList.Add(new ExportTypeClass("Exploration scans (Planets)", new ExportScan(false, true)));
             exportTypeList.Add(new ExportTypeClass("Travel history", new ExportFSDJump()));
+            exportTypeList.Add(new ExportTypeClass("Sold exploration data (all)", new ExportExplorationData(false)));
+            exportTypeList.Add(new ExportTypeClass("Sold exploration data (By date)", new ExportExplorationData(true)));
 
             txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
@@ -201,5 +203,6 @@ namespace EDDiscovery
         {
                 txtExportVisited.Text = lastsys;
         }
+
     }
 }
