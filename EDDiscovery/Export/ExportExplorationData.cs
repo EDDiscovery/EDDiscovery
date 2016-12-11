@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using System.Windows.Forms;
 using System.IO;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.Export
 {
@@ -21,6 +22,8 @@ namespace EDDiscovery.Export
         }
 
         private List<HistoryEntry> data;
+        private List<HistoryEntry> scans;
+
 
         public override bool GetData(EDDiscoveryForm _discoveryForm)
         {
@@ -52,6 +55,8 @@ namespace EDDiscovery.Export
 
             int count = 0;
             data = HistoryList.FilterByJournalEvent(_discoveryForm.history.ToList(), "Sell Exploration Data", out count);
+
+            scans = HistoryList.FilterByJournalEvent(_discoveryForm.history.ToList(), "Scan", out count);
             if (datepicked)
             {
                 data = (from he in data where he.EventTimeUTC >= picker.Value.Date.ToUniversalTime() orderby he.EventTimeUTC descending select he).ToList();
@@ -63,12 +68,15 @@ namespace EDDiscovery.Export
         {
             try
             {
+
                 using (StreamWriter writer = new StreamWriter(filename))
                 {
                     if (IncludeHeader)
                     {
                         writer.Write("Time" + delimiter);
                         writer.Write("System" + delimiter);
+                        writer.Write("Star type" + delimiter);
+                        writer.Write("Planet type" + delimiter);
                         writer.WriteLine();
                     }
 
@@ -81,6 +89,22 @@ namespace EDDiscovery.Export
                         {
                             writer.Write(MakeValueCsvFriendly(jsed.EventTimeLocal));
                             writer.Write(MakeValueCsvFriendly(system));
+
+                            EDStar star = EDStar.Unknown;
+                            EDPlanet planet = EDPlanet.Unknown;
+
+                            foreach (HistoryEntry scanhe in scans)
+                            {
+                                JournalScan scan = scanhe.journalEntry as JournalScan;
+                                if (scan.BodyName.Equals(system, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    star = scan.StarTypeID;
+                                    planet = scan.PlanetTypeID;
+                                    break;
+                                }
+                            }
+                            writer.Write(MakeValueCsvFriendly((star != EDStar.Unknown) ? Enum.GetName(typeof(EDStar), star) : ""));
+                            writer.Write(MakeValueCsvFriendly((planet != EDPlanet.Unknown) ? Enum.GetName(typeof(EDPlanet), planet) : ""));
                             writer.WriteLine();
                         }
                     }
