@@ -355,6 +355,7 @@
     <Compile Include="EliteDangerous\Material.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
     <Compile Include="EliteDangerous\Synthesis.cs" />
+    <Compile Include="Export\ExportExplorationData.cs" />
     <Compile Include="Export\ExportFilteredSystems.cs" />
     <Compile Include="Forms\FindMaterialsForm.cs">
       <SubType>Form</SubType>
