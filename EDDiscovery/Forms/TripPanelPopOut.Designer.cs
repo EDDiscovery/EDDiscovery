@@ -28,12 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TripPanelPopOut));
             this.lblOutput = new ExtendedControls.LabelExt();
             this.panel_grip = new ExtendedControls.DrawnPanel();
             this.lblSystemName = new ExtendedControls.LabelExt();
             this.dpEDSM = new ExtendedControls.DrawnPanel();
             this.dpReset = new ExtendedControls.DrawnPanel();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setFuelTankToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setFuelWarningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblOutput
@@ -101,6 +106,28 @@
             this.dpReset.Size = new System.Drawing.Size(50, 19);
             this.dpReset.TabIndex = 21;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setFuelTankToolStripMenuItem,
+            this.setFuelWarningToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(160, 70);
+            // 
+            // setFuelTankToolStripMenuItem
+            // 
+            this.setFuelTankToolStripMenuItem.Name = "setFuelTankToolStripMenuItem";
+            this.setFuelTankToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.setFuelTankToolStripMenuItem.Text = "Set fuel tank";
+            this.setFuelTankToolStripMenuItem.Click += new System.EventHandler(this.setFuelTankToolStripMenuItem_Click);
+            // 
+            // setFuelWarningToolStripMenuItem
+            // 
+            this.setFuelWarningToolStripMenuItem.Name = "setFuelWarningToolStripMenuItem";
+            this.setFuelWarningToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.setFuelWarningToolStripMenuItem.Text = "Set fuel warning";
+            this.setFuelWarningToolStripMenuItem.Click += new System.EventHandler(this.setFuelWarningToolStripMenuItem_Click);
+            // 
             // TripPanelPopOut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -120,6 +147,7 @@
             this.Load += new System.EventHandler(this.TripPanelPopOut_Load);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.TripPanelPopOut_Layout);
             this.Resize += new System.EventHandler(this.TripPanelPopOut_Resize);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,5 +160,8 @@
         private ExtendedControls.LabelExt lblSystemName;
         private ExtendedControls.DrawnPanel dpEDSM;
         private ExtendedControls.DrawnPanel dpReset;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem setFuelTankToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setFuelWarningToolStripMenuItem;
     }
 }
