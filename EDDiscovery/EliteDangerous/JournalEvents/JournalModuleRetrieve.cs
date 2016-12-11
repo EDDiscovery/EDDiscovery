@@ -20,7 +20,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Ship = JSONHelper.GetStringDef(evt["Ship"]);
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             RetrievedItem = JSONHelper.GetStringDef(evt["RetrievedItem"]);
-            RetrievedItemLocalised = JSONHelper.GetStringDef(evt["RetrievedItemLocalised"]);
+            RetrievedItemLocalised = JSONHelper.GetStringDef(evt["RetrievedItem_Localised"]);
             EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]);
             SwapOutItem = JSONHelper.GetStringDef(evt["SwapOutItem"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
