@@ -77,6 +77,7 @@ namespace EDDiscovery.Export
                         writer.Write("SurfaceGravity" + delimiter);
                         writer.Write("SurfacePressure" + delimiter);
                         writer.Write("Landable" + delimiter);
+                        writer.Write("EarthMasses" + delimiter);
                     }
                     // Common orbital param
                     writer.Write("SemiMajorAxis" + delimiter);
@@ -161,6 +162,7 @@ namespace EDDiscovery.Export
                             writer.Write(MakeValueCsvFriendly(scan.nSurfaceGravity.HasValue ? scan.nSurfaceGravity.Value : 0));
                             writer.Write(MakeValueCsvFriendly(scan.nSurfacePressure.HasValue ? scan.nSurfacePressure.Value : 0));
                             writer.Write(MakeValueCsvFriendly(scan.nLandable.HasValue ? scan.nLandable.Value : false));
+                            writer.Write(MakeValueCsvFriendly((scan.nMassEM.HasValue) ? scan.nMassEM.Value : 0));
                     }
                     // Common orbital param
                         writer.Write(MakeValueCsvFriendly(scan.nSemiMajorAxis.HasValue ? scan.nSemiMajorAxis.Value : 0));
