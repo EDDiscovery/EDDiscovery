@@ -32,7 +32,7 @@ namespace ExtendedControls
         public bool HideScrollBar { get; set; } = true;                   // hide if no scroll needed
 
         public override string Text { get { return TextBox.Text; } set { TextBox.Text = value; UpdateScrollBar(); } }                // return only textbox text
-        public int LineCount { get { return TextBox.Lines.Count(); } }
+        public int LineCount { get { return TextBox.GetLineFromCharIndex(TextBox.Text.Length) + 1; } }
 
         public RichTextBoxBack TextBox;                 // Use these with caution.
         public VScrollBarCustom ScrollBar;
