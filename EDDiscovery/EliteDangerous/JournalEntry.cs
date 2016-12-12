@@ -671,7 +671,7 @@ namespace EDDiscovery.EliteDangerous
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE EventTypeID = @eventtype and  CommanderID=@commander and  EventTime >@start and EventTime<@Stop ORDER BY EventTime ASC"))
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE EventTypeID = @eventtype and  CommanderID=@commander and  EventTime >=@start and EventTime<=@Stop ORDER BY EventTime ASC"))
                 {
                     cmd.AddParameterWithValue("@eventtype", (int)eventtype);
                     cmd.AddParameterWithValue("@commander", (int)commanderid);
