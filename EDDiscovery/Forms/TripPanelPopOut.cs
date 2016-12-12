@@ -235,6 +235,7 @@ namespace EDDiscovery.Forms
             lastHE = he;
             String output = "";
             output += " distance " + he.TravelledDistance.ToString("0.0") + ((he.TravelledMissingjump > 0) ? " LY (*)" : " LY");
+            output += " jumps " + he.Travelledjumps;
             output += " time " + he.TravelledSeconds;
             HistoryEntry lastFuelScoop = _discoveryform.history.GetLastFuelScoop;
             if (lastFuelScoop!=null && lastFuelScoop.FuelTotal > 0)
