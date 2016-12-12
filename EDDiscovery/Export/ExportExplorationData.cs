@@ -47,7 +47,7 @@ namespace EDDiscovery.Export
                 f.Controls.Add(tlp);
                 f.AutoSize = true;
                 var result = f.ShowDialog();
-                if (result != DialogResult.OK)
+                if (result == DialogResult.OK)
                 {
                     datepicked = true;
                 }
@@ -109,13 +109,14 @@ namespace EDDiscovery.Export
                         }
                     }
                 }
+                return true;
             }
             catch (IOException exx)
             {
                 MessageBox.Show(String.Format("Is file {0} open?", filename), TITLE,
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            return true;
         }
     }
 }
