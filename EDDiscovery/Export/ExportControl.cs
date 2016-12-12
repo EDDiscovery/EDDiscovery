@@ -82,10 +82,16 @@ namespace EDDiscovery
                     exptype.export.Csvformat = CSVFormat.USA_UK;
 
                 exptype.export.IncludeHeader = checkBoxCustomIncludeHeader.Checked;
-                exptype.export.GetData(_discoveryForm);
-                exptype.export.ToCSV(dlg.FileName);
+
+                //Check for failed getdata or failed CSV
+                if (!exptype.export.GetData(_discoveryForm))
+                    return;
+                if (!exptype.export.ToCSV(dlg.FileName))
+                    return;
+
                 if (checkBoxCustomAutoOpen.Checked)
-                    Process.Start(dlg.FileName);
+                        Process.Start(dlg.FileName);
+                
             }
 
         }

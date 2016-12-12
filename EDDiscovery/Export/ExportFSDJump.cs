@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery.Export
 {
@@ -29,7 +30,7 @@ namespace EDDiscovery.Export
 
         override public bool ToCSV(string filename )
         {
-
+            try { 
             using (StreamWriter writer = new StreamWriter(filename))
             {
                 // Write header
@@ -68,7 +69,14 @@ namespace EDDiscovery.Export
                 }
             }
 
-            return true;
+                return true;
+            }
+            catch (IOException exx)
+            {
+                MessageBox.Show(String.Format("Is file {0} open?", filename), "Export Scan",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
         }
 
 
