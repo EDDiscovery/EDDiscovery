@@ -320,7 +320,7 @@ namespace EDDiscovery
             return worked;
         }
 
-        private bool GetCoordsTo(out Point3D pos)
+        public bool GetCoordsTo(out Point3D pos)
         {
             double x = 0, y = 0, z = 0;
 
