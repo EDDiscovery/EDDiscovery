@@ -69,6 +69,7 @@ namespace EDDiscovery
         bool travelling;
         int travelled_missingjump;
         public int TravelledMissingjump { get { return travelled_missingjump; } }
+        public int Travelledjumps { get { return travelled_jumps; } }
         int travelled_jumps;
 
         private double fuelTotal = 0.0;
