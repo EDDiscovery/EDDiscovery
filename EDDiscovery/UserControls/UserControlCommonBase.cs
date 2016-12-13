@@ -14,8 +14,20 @@ namespace EDDiscovery.UserControls
     public class UserControlCommonBase : UserControl
     {
         public virtual void Init( EDDiscoveryForm ed, int displayno) { }
+
         public virtual void LoadLayout() { }
         public virtual void Closing() { }
+
+        public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.
+        public virtual void SetTransparency(bool on, Color curcol) { }                                    // set on/off transparency of components.
+
+        public void SetControlText(string s)            // used to set heading text in either the form of the tabstrip
+        {
+            if (this.Parent is Controls.TabStrip)
+                ((Controls.TabStrip)(this.Parent)).SetControlText(s);
+            else if (this.Parent is Forms.UserControlForm)
+                ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
+        }
 
         #region DGV Column helpers - used to save/size the DGV of user controls dynamically.
 
@@ -44,16 +56,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
-        public void SetControlText(string s)
-        {
-            if (this.Parent is Controls.TabStrip)
-                ((Controls.TabStrip)(this.Parent)).SetControlText(s);
-            else if (this.Parent is Forms.UserControlForm)
-                ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
-        }
-
         #endregion
-
     }
 }

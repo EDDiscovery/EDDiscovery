@@ -14,7 +14,7 @@ namespace ExtendedControls
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
-        public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText, Move, Text, None };
+        public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText, Move, Text, None , Transparent, NotTransparent };
 
         public ImageType ImageSelected { get; set; } = ImageType.Close;
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
@@ -95,6 +95,21 @@ namespace ExtendedControls
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
                     e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
+                }
+                else if (ImageSelected == ImageType.NotTransparent)
+                {
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, topmarginpx));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
+                    e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
+
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 2), new Point(centrehorzpx, bottommarginpx - 2));
+                }
+                else if (ImageSelected == ImageType.Transparent)
+                {
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 2), new Point(centrehorzpx, bottommarginpx - 2));
                 }
                 else if (ImageSelected == ImageType.Gripper)
                 {

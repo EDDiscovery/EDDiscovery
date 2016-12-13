@@ -18,15 +18,16 @@ namespace EDDiscovery.Forms
         public UserControlCommonBase UserControl;
         public bool isactive = false;
         public bool norepositionwindow = false;
+        public bool windowsborder = true;
         public string refname;
         public string wintitle;
+        public Color transparencycolor = Color.Transparent;
+        public bool istransparent = false;  
 
         public UserControlForm()
         {
             InitializeComponent();
         }
-
-        public bool windowsborder = true;
 
         public void Init(string title, bool winborder, bool topmost, string rf)
         {
@@ -43,6 +44,7 @@ namespace EDDiscovery.Forms
             label_index.Text = this.Text;
             TopMost = topmost;
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
+            panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.NotTransparent;
             Invalidate();
         }
 
@@ -58,6 +60,34 @@ namespace EDDiscovery.Forms
             {
                 this.Text = wintitle + " " + text;
             }
+
+        }
+
+        Color beforetransparency = Color.Transparent;
+        Color tkey = Color.Transparent;
+
+        public void SetTransparency(bool t )
+        {
+            istransparent = t;
+
+            Color togo;
+
+            if (beforetransparency == Color.Transparent)
+            {
+                beforetransparency = this.BackColor;
+                tkey = this.TransparencyKey;
+            }
+
+            togo = (istransparent) ? transparencycolor : beforetransparency;
+
+            this.TransparencyKey = (istransparent) ? transparencycolor : tkey;
+             
+            this.BackColor = statusStripCustom1.BackColor = panel_transparent.BackColor =
+            panel_close.BackColor = panel_minimize.BackColor = panel_ontop.BackColor = togo;
+
+            UserControl.SetTransparency(istransparent,togo);
+
+            panel_transparent.ImageSelected = (istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent;
         }
 
         public void AddUserControl(EDDiscovery.UserControls.UserControlCommonBase c)
@@ -67,6 +97,9 @@ namespace EDDiscovery.Forms
             c.Location = new Point(0, 10);
             c.Size = new Size(200, 200);
             this.Controls.Add(c);
+
+            transparencycolor = c.ColorTransparency;
+            panel_transparent.Visible = transparencycolor != Color.Transparent;
         }
 
         private void UserControlForm_Activated(object sender, EventArgs e)
@@ -145,6 +178,11 @@ namespace EDDiscovery.Forms
         {
             TopMost = !TopMost;
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
+        }
+
+        private void panel_transparency_Click(object sender, EventArgs e)
+        {
+            SetTransparency(!istransparent);
         }
 
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)

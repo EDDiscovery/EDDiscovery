@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label_index = new System.Windows.Forms.Label();
             this.labelControlText = new System.Windows.Forms.Label();
             this.statusStripCustom1 = new ExtendedControls.StatusStripCustom();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_ontop = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panel_transparent = new ExtendedControls.DrawnPanel();
             this.SuspendLayout();
             // 
             // label_index
@@ -77,6 +80,7 @@
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 25;
+            this.toolTip1.SetToolTip(this.panel_close, "Close");
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // panel_ontop
@@ -94,6 +98,7 @@
             this.panel_ontop.Name = "panel_ontop";
             this.panel_ontop.Size = new System.Drawing.Size(24, 24);
             this.panel_ontop.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.panel_ontop, "Toggle window on top of others");
             this.panel_ontop.Click += new System.EventHandler(this.panel_ontop_Click);
             // 
             // panel_minimize
@@ -111,7 +116,26 @@
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.panel_minimize, "Minimise");
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            // 
+            // panel_transparent
+            // 
+            this.panel_transparent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_transparent.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_transparent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_transparent.DrawnImage = null;
+            this.panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Floating;
+            this.panel_transparent.ImageText = null;
+            this.panel_transparent.Location = new System.Drawing.Point(520, -2);
+            this.panel_transparent.MarginSize = 6;
+            this.panel_transparent.MouseOverColor = System.Drawing.Color.White;
+            this.panel_transparent.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_transparent.Name = "panel_transparent";
+            this.panel_transparent.Size = new System.Drawing.Size(24, 24);
+            this.panel_transparent.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.panel_transparent, "Toggle window transparency");
+            this.panel_transparent.Click += new System.EventHandler(this.panel_transparency_Click);
             // 
             // UserControlForm
             // 
@@ -120,6 +144,7 @@
             this.ClientSize = new System.Drawing.Size(634, 558);
             this.Controls.Add(this.statusStripCustom1);
             this.Controls.Add(this.panel_close);
+            this.Controls.Add(this.panel_transparent);
             this.Controls.Add(this.panel_ontop);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.labelControlText);
@@ -143,5 +168,7 @@
         private ExtendedControls.StatusStripCustom statusStripCustom1;
         private System.Windows.Forms.Label labelControlText;
         private ExtendedControls.DrawnPanel panel_ontop;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private ExtendedControls.DrawnPanel panel_transparent;
     }
 }
