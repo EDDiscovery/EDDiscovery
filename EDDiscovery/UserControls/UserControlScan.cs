@@ -73,7 +73,7 @@ namespace EDDiscovery.UserControls
         public override Color ColorTransparency {  get { return transparencycolor; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.BackColor = panelControls.BackColor = curcol;
+            imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelControls.BackColor = curcol;
         }
 
         private void UserControlScan_Resize(object sender, EventArgs e)
