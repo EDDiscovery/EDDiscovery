@@ -71,7 +71,7 @@ namespace EDDiscovery.Export
 
                 return true;
             }
-            catch (IOException exx)
+            catch (IOException)
             {
                 MessageBox.Show(String.Format("Is file {0} open?", filename), "Export Scan",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
