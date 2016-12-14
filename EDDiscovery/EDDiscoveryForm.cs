@@ -2018,11 +2018,8 @@ namespace EDDiscovery
 
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EDDNSync sync = new EDDNSync(this);
-
-            EDDNClass eddn = new EDDNClass();
-            sync.StartSync(eddn, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn);
-
+            List<HistoryEntry> hlsyncunsyncedlist = history.FilterByScanNotEDDNSynced;        // first entry is oldest
+            EDDNSync.SendEDDNEvents(this, hlsyncunsyncedlist);
         }
 
         private void materialSearchToolStripMenuItem_Click(object sender, EventArgs e)

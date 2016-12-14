@@ -347,7 +347,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
             {
-                EDDNSync.SendEDDNEvent(rightclicksystem);
+                EDDNSync.SendEDDNEvent(discoveryform, rightclicksystem);
             }
         }
 
