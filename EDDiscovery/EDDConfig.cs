@@ -135,10 +135,7 @@ namespace EDDiscovery2
 
         public EDCommander Commander( int i )
         {
-            if (i >= ListOfCommanders.Count)
-                i = ListOfCommanders.Count - 1;
-
-            return ListOfCommanders[i];
+            return i < 0 ? null : ListOfCommanders.FirstOrDefault(c => c.Nr == i);
         }
 
         public bool CheckCommanderEDSMAPI
