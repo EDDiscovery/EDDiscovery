@@ -1769,9 +1769,11 @@ namespace EDDiscovery
             var worker = (BackgroundWorker)sender;
 
             List<HistoryEntry> hl = new List<HistoryEntry>();
+            EDCommander cmdr = null;
 
             if (args.CurrentCommander >= 0)
             {
+                cmdr = EDDConfig.Commander(args.CurrentCommander);
                 journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), forceReload: args.ForceJournalReload);   // Parse files stop monitor..
 
                 if (args != null)
@@ -1795,7 +1797,7 @@ namespace EDDiscovery
                 foreach (EliteDangerous.JournalEntry je in jlist)
                 {
                     bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn, cmdr);
                     prev = he;
 
                     hl.Add(he);                        // add to the history list here..
