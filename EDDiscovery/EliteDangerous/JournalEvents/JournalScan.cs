@@ -149,7 +149,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         //public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
 
-        
+        public override void FillInformation(out string summary, out string info, out string detailed)
+        {
+            base.FillInformation(out summary, out info, out detailed);
+            summary = $"Scan of {BodyName}";
+        }
 
         public string DisplayString(bool printbodyname = true, int indent = 0)
         {
