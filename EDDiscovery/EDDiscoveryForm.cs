@@ -1269,6 +1269,7 @@ namespace EDDiscovery
                 edsmRefreshTimer.Enabled = false;
                 CancellationTokenSource.Cancel();
                 CancelHistoryRefresh();
+                EDDNSync.StopSync();
                 _syncWorker.CancelAsync();
                 _checkSystemsWorker.CancelAsync();
                 if (cancelDownloadMaps != null)
