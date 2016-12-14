@@ -55,5 +55,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
 
+        public override void FillInformation(out string summary, out string info, out string detailed)
+        {
+            base.FillInformation(out summary, out info, out detailed);
+            summary = $"Docked at {StationName}";
+        }
+
     }
 }
