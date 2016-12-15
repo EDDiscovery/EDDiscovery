@@ -61,6 +61,7 @@
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -309,9 +310,10 @@
             this.viewOnEDSMToolStripMenuItem,
             this.selectCorrectSystemToolStripMenuItem,
             this.toolStripMenuItemStartStop,
-            this.removeJournalEntryToolStripMenuItem});
+            this.removeJournalEntryToolStripMenuItem,
+            this.sendUnsyncedScanToEDDNToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 202);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 246);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -416,6 +418,13 @@
             this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ShowAlways = true;
             // 
+            // sendUnsyncedScanToEDDNToolStripMenuItem
+            // 
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
+            // 
             // UserControlTravelGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -467,5 +476,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private ExtendedControls.DrawnPanel drawnPanelPopOut;
         private ExtendedControls.ButtonExt buttonField;
+        private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
     }
 }

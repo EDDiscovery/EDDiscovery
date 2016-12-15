@@ -1269,6 +1269,7 @@ namespace EDDiscovery
                 edsmRefreshTimer.Enabled = false;
                 CancellationTokenSource.Cancel();
                 CancelHistoryRefresh();
+                EDDNSync.StopSync();
                 _syncWorker.CancelAsync();
                 _checkSystemsWorker.CancelAsync();
                 if (cancelDownloadMaps != null)
@@ -1769,9 +1770,11 @@ namespace EDDiscovery
             var worker = (BackgroundWorker)sender;
 
             List<HistoryEntry> hl = new List<HistoryEntry>();
+            EDCommander cmdr = null;
 
             if (args.CurrentCommander >= 0)
             {
+                cmdr = EDDConfig.Commander(args.CurrentCommander);
                 journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), forceReload: args.ForceJournalReload);   // Parse files stop monitor..
 
                 if (args != null)
@@ -1795,7 +1798,7 @@ namespace EDDiscovery
                 foreach (EliteDangerous.JournalEntry je in jlist)
                 {
                     bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn, cmdr);
                     prev = he;
 
                     hl.Add(he);                        // add to the history list here..
@@ -2016,11 +2019,8 @@ namespace EDDiscovery
 
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EDDNSync sync = new EDDNSync(this);
-
-            EDDNClass eddn = new EDDNClass();
-            sync.StartSync(eddn, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn);
-
+            List<HistoryEntry> hlsyncunsyncedlist = history.FilterByScanNotEDDNSynced;        // first entry is oldest
+            EDDNSync.SendEDDNEvents(this, hlsyncunsyncedlist);
         }
 
         private void materialSearchToolStripMenuItem_Click(object sender, EventArgs e)
