@@ -1105,7 +1105,7 @@ namespace EDDiscovery
                 summaryPopOut.RefreshTarget(userControlTravelGrid.TravelGrid, _discoveryForm.history.GetLastWithPosition);
 
             if (IsTripPanelPopOutReady)
-                tripPanelPopOut.displayLastFSD(_discoveryForm.history.GetLastFSD);
+                tripPanelPopOut.displayLastFSDOrFuel();
         }
 
 #endregion
@@ -1187,7 +1187,7 @@ namespace EDDiscovery
                 TripPanelPopOut p = new TripPanelPopOut(_discoveryForm);
                 p.SetGripperColour(_discoveryForm.theme.LabelColor);
                 p.SetTextColour(_discoveryForm.theme.SPanelColor);
-                p.displayLastFSD(_discoveryForm.history.GetLastFSD);
+                p.displayLastFSDOrFuel();
                 p.Show();
                 tripPanelPopOut = p;          // do it like this in case of race conditions 
                 return true;
@@ -1203,8 +1203,7 @@ namespace EDDiscovery
         {
             if (IsTripPanelPopOutReady)
             {
-                
-                tripPanelPopOut.displayLastFSD(hl.GetLastFSD);
+                tripPanelPopOut.displayLastFSDOrFuel();
             }
         }
     
