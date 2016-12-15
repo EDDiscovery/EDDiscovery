@@ -16,42 +16,63 @@ namespace EDDiscovery.Forms
     public partial class UserControlForm : Form
     {
         public UserControlCommonBase UserControl;
-        public bool isactive = false;
+        public bool isloaded = false;
         public bool norepositionwindow = false;
-        public string refname;
-        public string wintitle;
+
+        private bool istransparent = false;
+        private bool inpanelshow = false;       // if we are in a panel show when we were transparent
+        private bool defwindowsborder;
+        private bool curwindowsborder;          // applied setting
+        private string dbrefname;
+        private string wintitle;
+        private Color transparencycolor = Color.Transparent;
+        private Color beforetransparency = Color.Transparent;
+        private Color tkey = Color.Transparent;
+        private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
+        private bool deftopmost, deftransparent;
+
+        public bool IsTransparencySupported { get { return transparencycolor != Color.Transparent; } }
 
         public UserControlForm()
         {
             InitializeComponent();
+
+            timer.Interval = 500;
+            timer.Tick += CheckMouse;
         }
 
-        public bool windowsborder = true;
-
-        public void Init(string title, bool winborder, bool topmost, string rf)
+        public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf , bool deftopmostp, bool deftransparentp)
         {
+            UserControl = c;
+            c.Dock = DockStyle.None;
+            c.Location = new Point(0, 10);
+            c.Size = new Size(200, 200);
+            this.Controls.Add(c);
+
+            transparencycolor = c.ColorTransparency;
+
             wintitle = Text = title;
-            refname = rf;
-            windowsborder = winborder;
-            FormBorderStyle = winborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
-            panel_close.Visible = !winborder;
-            panel_minimize.Visible = !winborder;
-            panel_ontop.Visible = !winborder;
-            label_index.Visible = !winborder;
-            labelControlText.Visible = false;
+            curwindowsborder = defwindowsborder = winborder;
+            dbrefname = "PopUpForm" + rf;
+            deftopmost = deftopmostp;
+            deftransparent = deftransparentp;
+
             labelControlText.Text = "";
             label_index.Text = this.Text;
-            TopMost = topmost;
+
+            SetVisibility(false);
+
+
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
+
             Invalidate();
         }
 
         public void SetControlText(string text)
         {
-            if ( FormBorderStyle == FormBorderStyle.None )
+            if (FormBorderStyle == FormBorderStyle.None)
             {
                 labelControlText.Location = new Point(label_index.Location.X + label_index.Width + 16, labelControlText.Location.Y);
-                labelControlText.Visible = true;
                 labelControlText.Text = text;
             }
             else
@@ -60,33 +81,79 @@ namespace EDDiscovery.Forms
             }
         }
 
-        public void AddUserControl(EDDiscovery.UserControls.UserControlCommonBase c)
+        public UserControlCommonBase FindUserControl(Type c)
         {
-            UserControl = c;
-            c.Dock = DockStyle.None;
-            c.Location = new Point(0, 10);
-            c.Size = new Size(200, 200);
-            this.Controls.Add(c);
+            if (UserControl != null && UserControl.GetType().Equals(c))
+                return UserControl;
+            else
+                return null;
         }
 
-        private void UserControlForm_Activated(object sender, EventArgs e)
+        public void SetTransparency(bool t)
         {
-            isactive = true;
-            if (UserControl != null)
-                UserControl.LoadLayout();
+            if (IsTransparencySupported)
+            {
+                istransparent = t;
+                UpdateTransparency();
+            }
+        }
+
+        public void SetTopMost(bool t)
+        {
+            TopMost = t;
+            panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
+        }
+
+        private void UpdateTransparency()
+        {
+            curwindowsborder = (!istransparent && defwindowsborder);
+            bool transparent = istransparent && !inpanelshow;           // are we transparent..
+
+            Color togo;
+
+            if (beforetransparency == Color.Transparent)
+            {
+                beforetransparency = this.BackColor;
+                tkey = this.TransparencyKey;
+            }
+
+            SetVisibility(transparent);
+
+            this.TransparencyKey = (transparent) ? transparencycolor : tkey;
+            togo = (transparent) ? transparencycolor : beforetransparency;
+
+            this.BackColor = togo;
+            statusStripCustom1.BackColor = togo;
+            panel_transparent.BackColor = panel_close.BackColor = panel_minimize.BackColor = panel_ontop.BackColor =  panelTop.BackColor = togo;
+
+            UserControl.SetTransparency(transparent,togo);
+
+            if (transparent || inpanelshow)
+                timer.Start();
+            else
+                timer.Stop();
+        }
+
+        private void SetVisibility(bool transparent)
+        {
+            FormBorderStyle = curwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
+            panelTop.Visible = !curwindowsborder;
+
+            statusStripCustom1.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = !transparent;
+
+            panel_transparent.Visible = IsTransparencySupported && !transparent;
+            panel_transparent.ImageSelected = (istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent;
         }
 
         private void UserControlForm_Load(object sender, EventArgs e)
         {
-            string root = "PopUpForm" + refname;
-
-            var top = SQLiteDBClass.GetSettingInt(root + "Top", -1);
+            var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -1);
 
             if (top >= 0 && norepositionwindow == false)
             {
-                var left = SQLiteDBClass.GetSettingInt(root + "Left", 0);
-                var height = SQLiteDBClass.GetSettingInt(root + "Height", 800);
-                var width = SQLiteDBClass.GetSettingInt(root + "Width", 800);
+                var left = SQLiteDBClass.GetSettingInt(dbrefname + "Left", 0);
+                var height = SQLiteDBClass.GetSettingInt(dbrefname + "Height", 800);
+                var width = SQLiteDBClass.GetSettingInt(dbrefname + "Width", 800);
 
                 // Adjust so window fits on screen; just in case user unplugged a monitor or something
 
@@ -107,28 +174,37 @@ namespace EDDiscovery.Forms
                 this.CreateParams.Y = this.Top;
                 this.StartPosition = FormStartPosition.Manual;
             }
+
+            if (UserControl != null)
+                UserControl.LoadLayout();
+
+            isloaded = true;
         }
 
-        private void TabControlForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void UserControlForm_Shown(object sender, EventArgs e)          // as launched, it may not be in front (as its launched from a control).. bring to front
         {
-            isactive = false;
+            this.BringToFront();
+
+            SetTransparency(SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent)); // only works if transparency is supported
+            SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+        }
+
+        private void UserControlForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            isloaded = false;
 
             if (UserControl != null)
                 UserControl.Closing();
 
-            string root = "PopUpForm" + refname;
-            SQLiteDBClass.PutSettingInt(root + "Width", this.Width);
-            SQLiteDBClass.PutSettingInt(root + "Height", this.Height);
-            SQLiteDBClass.PutSettingInt(root + "Top", this.Top);
-            SQLiteDBClass.PutSettingInt(root + "Left", this.Left);
-        }
-
-        public UserControlCommonBase FindUserControl(Type c)
-        {
-            if (UserControl.GetType().Equals(c))
-                return UserControl;
-            else
-                return null;
+            SQLiteDBClass.PutSettingInt(dbrefname + "Width", this.Width);
+            SQLiteDBClass.PutSettingInt(dbrefname + "Height", this.Height);
+            SQLiteDBClass.PutSettingInt(dbrefname + "Top", this.Top);
+            SQLiteDBClass.PutSettingInt(dbrefname + "Left", this.Left);
         }
 
         private void panel_close_Click(object sender, EventArgs e)
@@ -143,23 +219,58 @@ namespace EDDiscovery.Forms
 
         private void panel_ontop_Click(object sender, EventArgs e)
         {
-            TopMost = !TopMost;
-            panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
+            SetTopMost(!TopMost);
+            SQLiteDBClass.PutSettingBool(dbrefname + "TopMost", TopMost);
+        }
+
+        private void panel_transparency_Click(object sender, EventArgs e)       // only works if transparency is supported
+        {
+            istransparent = !istransparent;
+            inpanelshow = true;
+            UpdateTransparency();
+
+            SQLiteDBClass.PutSettingBool(dbrefname + "Transparent", istransparent);
         }
 
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
         {
             if (UserControl != null)
             {
-                UserControl.Location = new Point(3, windowsborder ? 2 : panel_close.Location.Y+panel_close.Height);
+                UserControl.Location = new Point(3, curwindowsborder ? 2 : panelTop.Location.Y+panelTop.Height);
                 UserControl.Size = new Size(ClientRectangle.Width - 6, ClientRectangle.Height - UserControl.Location.Y - statusStripCustom1.Height);
             }
         }
 
+        private void CheckMouse(object sender, EventArgs e)     // best way of knowing your inside the client.. using mouseleave/enter with transparency does not work..
+        {
+            if (isloaded)
+            {
+                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick" + istransparent + " " + inpanelshow);
+                if (ClientRectangle.Contains(this.PointToClient(MousePosition)))
+                {
+                    if (!inpanelshow)
+                    {
+                        inpanelshow = true;
+                        UpdateTransparency();
+                    }
+                }
+                else
+                {
+                    if (inpanelshow)
+                    {
+                        inpanelshow = false;
+                        UpdateTransparency();
+                    }
+                }
+            }
+        }
+
+        #region Low level Wndproc
 
         private const int MF_SEPARATOR = 0x800;
         private const int MF_STRING = 0x0;
         private int SYSMENU_ONTOP = 0x1;
+        private int SYSMENU_TRANSPARENT = 0x2;
         private const int WM_SYSCOMMAND = 0x112;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -183,6 +294,7 @@ namespace EDDiscovery.Forms
 
             // Add the About menu item
             AppendMenu(hSysMenu, MF_STRING, SYSMENU_ONTOP, "&On Top");
+            AppendMenu(hSysMenu, MF_STRING, SYSMENU_TRANSPARENT, "&Transparent");
         }
 
 
@@ -219,13 +331,26 @@ namespace EDDiscovery.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if ((m.Msg == WM_SYSCOMMAND) && ((int)m.WParam == SYSMENU_ONTOP))
+            if (m.Msg == WM_SYSCOMMAND )
             {
-                TopMost = !TopMost;
+                int cmd = (int)m.WParam;
+                if (cmd == SYSMENU_ONTOP)
+                    TopMost = !TopMost;
+                else if (cmd == SYSMENU_TRANSPARENT)
+                {
+                    if (IsTransparencySupported)
+                    {
+                        istransparent = !istransparent;
+                        UpdateTransparency();
+                    }
+                    else
+                        MessageBox.Show("This panel does not support transparency");
+                }
+                else
+                    base.WndProc(ref m);
             }
-
             // Compatibility movement for Mono
-            else if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
+            else if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !curwindowsborder)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -280,10 +405,11 @@ namespace EDDiscovery.Forms
                     {
                         m.Result = (IntPtr)HT_LEFT;
                     }
-                    else if (!windowsborder)
+                    else if (!curwindowsborder)
                     {
                         m.Result = (IntPtr)HT_CAPTION;
                     }
+
                 }
             }
             else
@@ -292,6 +418,13 @@ namespace EDDiscovery.Forms
             }
         }
 
+        private void panelTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            ((Control)sender).Capture = false;
+            SendMessage(WM_NCLBUTTONDOWN, (System.IntPtr)HT_CAPTION, (System.IntPtr)0);
+        }
+
+        #endregion
     }
 
     public class UserControlFormList
@@ -327,7 +460,7 @@ namespace EDDiscovery.Forms
 
             foreach (UserControlForm tcf in tabforms)
             {
-                if (tcf.isactive)
+                if (tcf.isloaded)
                 {
                     UserControlCommonBase uc = tcf.FindUserControl(c);
                     if (uc != null)

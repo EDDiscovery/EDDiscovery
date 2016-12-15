@@ -69,6 +69,13 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= NewEntry;
         }
 
+        Color transparencycolor = Color.Green;
+        public override Color ColorTransparency {  get { return transparencycolor; } }
+        public override void SetTransparency(bool on, Color curcol)
+        {
+            imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelStars.vsc.BackColor = panelControls.BackColor = curcol;
+        }
+
         private void UserControlScan_Resize(object sender, EventArgs e)
         {
             PositionInfo();
