@@ -246,9 +246,11 @@ namespace EDDiscovery.Forms
 
             double tankSize = SQLiteDBClass.GetSettingDouble("TripPopOutTankSize", 32);
             double tankWarning = SQLiteDBClass.GetSettingDouble("TripPopOutTankWarning", 25);
-
-            output += String.Format(" | {0}t / {1}t", he.FuelLevel.ToString("0.0"), tankSize.ToString("0.0"));
-            if ((he.FuelLevel / tankSize) < (tankWarning / 100.0))
+            double fuel = he.FuelLevel;
+            if (he.IsFuelScoop)
+                fuel = he.FuelTotal;
+            output += String.Format(" | {0}t / {1}t",fuel.ToString("0.0"), tankSize.ToString("0.0"));
+            if ((fuel / tankSize) < (tankWarning / 100.0))
             {
                 lblOutput.ForeColor = warningColour;
                 output += String.Format(" < {0}%", tankWarning.ToString("0.0"));
@@ -270,10 +272,16 @@ namespace EDDiscovery.Forms
              if(  ds1 != null && _discoveryform.RouteControl.GetCoordsTo(out to))
                 {
                     from = new Point3D(ds1.x, ds1.y, ds1.z);
+                    var jumpRange = SQLiteDBClass.GetSettingDouble("TripPopOutJumpRange", -1.0);
+                    double dist = Point3D.DistanceBetween(from, to);
+                    string mesg = "Left";
+                    if (jumpRange > 0)
+                        mesg =  "@ " + ((int)(dist / jumpRange)).ToString() ;
                     distanceLeft =
-                        String.Format("{0} | {1:n}ly Left",
+                        String.Format("{0} | {1:n}ly {2}",
                         _discoveryform.RouteControl.textBox_To.Text,
-                        Point3D.DistanceBetween(from, to));
+                        dist,
+                        mesg);
                 }
             }
 
@@ -329,7 +337,7 @@ namespace EDDiscovery.Forms
                     Text = caption,
                     StartPosition = FormStartPosition.CenterScreen
                 };
-                Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+                Label textLabel = new Label() { Left = 50, Top = 20, Width = 400, Text = text };
                 TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
                 textBox.Text = defaultValue;
                 Button confirmation = new Button() { Text = "Ok", Left = 245, Width = 100, Top = 70, DialogResult = DialogResult.OK };
@@ -390,6 +398,33 @@ namespace EDDiscovery.Forms
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RefreshDisplay();
+        }
+
+        private void setShipDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var jumpRange = SQLiteDBClass.GetSettingDouble("TripPopOutJumpRange", 10.0);
+            string promptValue = Prompt.ShowDialog("Set your estimated jump range", "" + jumpRange, TITLE);
+            if (String.IsNullOrEmpty(promptValue))
+                return;
+            double value = 0;
+            if (double.TryParse(promptValue, out value) && value >= 0 )
+            {
+                SQLiteDBClass.PutSettingDouble("TripPopOutJumpRange", value);
+                RefreshDisplay();
+            }
+            else
+            {
+                MessageBox.Show("Please enter a numeric value", TITLE);
+            }
+        }
+
+        internal void displayLastFSDOrFuel()
+        {
+            HistoryEntry lfs = _discoveryform.history.GetLastFuelScoop;
+            HistoryEntry hex = _discoveryform.history.GetLastFSD;
+            if (lfs != null && lfs.EventTimeUTC >= hex.EventTimeUTC)
+                hex = lfs;
+            displayLastFSD(hex);
         }
     }
 }
