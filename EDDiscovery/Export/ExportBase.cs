@@ -59,7 +59,7 @@ namespace EDDiscovery.Export
                     return ((DateTime)value).ToString("yyyy-MM-dd") + delimiter; ;
                 return ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss") + delimiter; ;
             }
-            string output = value.ToString();
+            string output = Convert.ToString(value, CultureInfo.InvariantCulture);
 
             if (output.Contains(",") || output.Contains("\""))
                 output = '"' + output.Replace("\"", "\"\"") + '"';
