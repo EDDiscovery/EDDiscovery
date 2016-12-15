@@ -59,6 +59,10 @@
             this.labelControlText.TabIndex = 23;
             this.labelControlText.Text = "N/A";
             // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));

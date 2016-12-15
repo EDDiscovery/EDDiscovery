@@ -633,6 +633,12 @@
     <Compile Include="UserControls\UserControlScan.Designer.cs">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlSpanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlSpanel.Designer.cs">
+      <DependentUpon>UserControlSpanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlStats.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -733,6 +739,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlScreenshot.resx">
       <DependentUpon>UserControlScreenshot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlSpanel.resx">
+      <DependentUpon>UserControlSpanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
