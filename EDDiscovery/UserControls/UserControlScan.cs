@@ -426,7 +426,7 @@ namespace EDDiscovery.UserControls
                 using (Graphics gr = CreateGraphics())
                 {
                     PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement(gr, labposcenthorz, label,
-                                            stdfont, discoveryform.theme.LabelColor);
+                                            stdfont, discoveryform.theme.LabelColor, Color.Transparent );
 
                     if (lab.pos.X < postopright.X)
                     {

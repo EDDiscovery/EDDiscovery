@@ -24,7 +24,7 @@ namespace ExtendedControls
             return newmap;
         }
 
-        public static void DrawTextCentreIntoBitmap(ref Bitmap img, string text, Font dp, Color c)
+        public static void DrawTextCentreIntoBitmap(ref Bitmap img, string text, Font dp, Color c )
         {
             using (Graphics bgr = Graphics.FromImage(img))
             {
@@ -37,7 +37,8 @@ namespace ExtendedControls
             }
         }
 
-        public static Bitmap DrawTextIntoAutoSizedBitmap(string text, Font dp, Color c)
+
+        public static Bitmap DrawTextIntoAutoSizedBitmap(string text, Font dp, Color c , Color b, float backscale = 1.0F)
         {
             Bitmap t = new Bitmap(1, 1);
 
@@ -49,12 +50,42 @@ namespace ExtendedControls
 
                 using (Graphics dgr = Graphics.FromImage(img))
                 {
+                    if (b != Color.Transparent && text.Length > 0)
+                    {
+                        Rectangle backarea = new Rectangle(0, 0, img.Width, img.Height);
+                        Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90);
+                        dgr.FillRectangle(bb, backarea);
+                    }
+
                     using (Brush textb = new SolidBrush(c))
                     {
                         dgr.DrawString(text, dp, textb, 0, 0);
 
                         return img;
                     }
+                }
+            }
+        }
+
+        public static Bitmap DrawTextIntoFixedSizeBitmap(string text, Size size, Font dp, Color c, Color b, float backscale = 1.0F)
+        {
+            Bitmap img = new Bitmap(size.Width, size.Height);
+
+            using (Graphics dgr = Graphics.FromImage(img))
+            {
+                if (b != Color.Transparent && text.Length > 0)
+                {
+                    SizeF sizef = dgr.MeasureString(text, dp);
+
+                    Rectangle backarea = new Rectangle(0, 0, (int)(sizef.Width + 1), (int)(sizef.Height + 1));
+                    Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90);
+                    dgr.FillRectangle(bb, backarea);
+                }
+
+                using (Brush textb = new SolidBrush(c))
+                {
+                    dgr.DrawString(text, dp, textb, 0, 0);
+                    return img;
                 }
             }
         }

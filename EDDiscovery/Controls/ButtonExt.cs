@@ -104,15 +104,24 @@ namespace ExtendedControls
                     p1.Dispose();
                 }
 
-                SizeF sz = pe.Graphics.MeasureString(this.Text, this.Font);
+                if (BackgroundImage != null)
+                {
+                    pe.Graphics.DrawImage(BackgroundImage, new Rectangle(ClientRectangle.Width / 2 - BackgroundImage.Width / 2, ClientRectangle.Height / 2 - BackgroundImage.Height / 2, BackgroundImage.Width, BackgroundImage.Height), 
+                                    0,0, BackgroundImage.Width, BackgroundImage.Height, GraphicsUnit.Pixel);
+                }
+                else
+                {
+                    SizeF sz = pe.Graphics.MeasureString(this.Text, this.Font);
 
-                Brush textb = new SolidBrush((Enabled)?this.ForeColor:Multiply(this.ForeColor,0.5F));
+                    Brush textb = new SolidBrush((Enabled) ? this.ForeColor : Multiply(this.ForeColor, 0.5F));
 
-                pe.Graphics.DrawString(this.Text, this.Font, textb,
-                    buttonarea.Left + (buttonarea.Width - sz.Width) / 2,
-                    buttonarea.Top + (buttonarea.Height - sz.Height) / 2);
+                    pe.Graphics.DrawString(this.Text, this.Font, textb,
+                        buttonarea.Left + (buttonarea.Width - sz.Width) / 2,
+                        buttonarea.Top + (buttonarea.Height - sz.Height) / 2);
 
-                textb.Dispose();
+                    textb.Dispose();
+                }
+
                 p.Dispose();
                 b.Dispose();
             }

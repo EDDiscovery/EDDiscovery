@@ -21,10 +21,19 @@ namespace ExtendedControls
                 pos = p; img = i; tag = t; tooltip = tt;
             }
 
-            public ImageElement(Graphics gr , Point poscentrehorz, string text, Font dp , Color c, Object t = null , string tt = null)
+            public ImageElement(Graphics gr , Point poscentrehorz, string text, Font dp , Color c, Color backcolour, float backscale = 1.0F , Object t = null , string tt = null)
             {
-                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, dp, c);
-                pos = new Rectangle(poscentrehorz.X - img.Width/2, poscentrehorz.Y, img.Width, img.Height);
+                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, dp, c, backcolour , backscale);
+                pos = new Rectangle(poscentrehorz.X - img.Width / 2, poscentrehorz.Y, img.Width, img.Height);
+                tag = t;
+                tooltip = tt;
+            }
+
+            public ImageElement(Graphics gr, Point topleft, Size size, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F,
+                                    Object t = null, string tt = null )
+            {
+                img = ControlHelpers.DrawTextIntoFixedSizeBitmap(text, size, dp, c, backcolour, backscale );
+                pos = new Rectangle(topleft.X, topleft.Y, img.Width, img.Height);
                 tag = t;
                 tooltip = tt;
             }
@@ -58,9 +67,38 @@ namespace ExtendedControls
             this.TabStop = true;
         }
 
+        public void Add(ImageElement i)
+        {
+            elements.Add(i);
+        }
+
         public void AddRange(List<ImageElement> list)
         {
             elements.AddRange(list);
+        }
+
+        public void AddText(Point topleft, Size size, string label, Font fnt, Color c, Color backcolour, float backscale, string tiptext)
+        {
+            using (Graphics gr = CreateGraphics())
+            {
+                ImageElement lab = new PictureBoxHotspot.ImageElement(gr, topleft, size, label, fnt, c, backcolour, backscale, label, tiptext);
+                elements.Add(lab);
+            }
+        }
+
+        public void AddTextCentred(Point poscentrehorz, string label, Font fnt, Color c, Color backcolour, float backscale , string tiptext)
+        {
+            using (Graphics gr = CreateGraphics())
+            {
+                ImageElement lab = new PictureBoxHotspot.ImageElement(gr, poscentrehorz, label, fnt, c, backcolour, backscale, label, tiptext);
+                elements.Add(lab);
+            }
+        }
+
+        public void AddImage(Rectangle p, Image img , string tiptext)
+        {
+            ImageElement lab = new PictureBoxHotspot.ImageElement(p,img,null,tiptext);
+            elements.Add(lab);
         }
 
         public void Clear()
@@ -80,16 +118,19 @@ namespace ExtendedControls
                     maxh = i.pos.Y + i.pos.Height;
             }
 
-            Image = new Bitmap(maxw,maxh);                      // size bitmap to contents
-
-            if ( resizecontrol )
-                this.Size = new Size(maxw, maxh);
-
-            using (Graphics gr = Graphics.FromImage(Image))
+            if (maxw > 0 && maxh > 0)
             {
-                foreach (ImageElement i in elements)
+                Image = new Bitmap(maxw, maxh);                      // size bitmap to contents
+
+                if (resizecontrol)
+                    this.Size = new Size(maxw, maxh);
+
+                using (Graphics gr = Graphics.FromImage(Image))
                 {
-                    gr.DrawImage(i.img, i.pos);
+                    foreach (ImageElement i in elements)
+                    {
+                        gr.DrawImage(i.img, i.pos);
+                    }
                 }
             }
         }
@@ -152,7 +193,7 @@ namespace ExtendedControls
         {
             hovertimer.Stop();
 
-            if (elementin != null)
+            if (elementin != null && elementin.tooltip != null && elementin.tooltip.Length>0)
             {
                 hovertip = new ToolTip();
 
@@ -176,6 +217,7 @@ namespace ExtendedControls
             if (ClickElement != null)                   
                 ClickElement(this, elementin, elementin?.tag);          // null if no element clicked
         }
+
 
     }
 }

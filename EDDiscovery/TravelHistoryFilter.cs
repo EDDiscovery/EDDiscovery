@@ -132,7 +132,17 @@ namespace EDDiscovery
             FilterButton(db, ctr, back, fore, parent, JournalEntry.GetListOfEventsWithOptMethod(true));
         }
 
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent, List<string> list )
+        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent, List<string> list)
+        {
+            FilterButton(db, ctr.PointToScreen(new Point(0, ctr.Size.Height)), new Size(ctr.Width * 2, 400), back, fore, parent, list);
+        }
+
+        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Form parent)
+        {
+            FilterButton(db, p, s, back, fore, parent, JournalEntry.GetListOfEventsWithOptMethod(true));
+        }
+
+        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Form parent, List<string> list)
         {
             if (cc == null)
             {
@@ -151,7 +161,7 @@ namespace EDDiscovery
 
                 cc.FormClosed += FilterClosed;
                 cc.CheckedChanged += FilterCheckChanged;
-                cc.PositionBelow(ctr, new Size(ctr.Width*2, 400));
+                cc.PositionSize(p,s);
                 cc.SetColour(back,fore);
                 cc.Show(parent);
             }
