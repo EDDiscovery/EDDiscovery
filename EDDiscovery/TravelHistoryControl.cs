@@ -46,6 +46,9 @@ namespace EDDiscovery
         public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);
         public event TravelSelectionChanged OnTravelSelectionChanged;
 
+        public delegate void NearestStarList(string name, SortedList<double, ISystem> csl);
+        public event NearestStarList OnNearestStarListChanged;
+
         string[] popoutbuttonlist = new string[] 
         {
             "S-Panel", "Trip-Panel", "S-Panel2",        // not in tabs
@@ -411,14 +414,9 @@ namespace EDDiscovery
             {
                 lastclosestname = name;
                 lastclosestsystems = csl;
-                if (tabStripBottom.CurrentControl is UserControlStarDistance)
-                    ((UserControlStarDistance)tabStripBottom.CurrentControl).FillGrid(name, csl);
-                if (tabStripBottomRight.CurrentControl is UserControlStarDistance)
-                    ((UserControlStarDistance)tabStripBottomRight.CurrentControl).FillGrid(name, csl);
-                if (tabStripMiddleRight.CurrentControl is UserControlStarDistance)
-                    ((UserControlStarDistance)tabStripMiddleRight.CurrentControl).FillGrid(name, csl);
-                foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlStarDistance)))
-                    ((UserControlStarDistance)uc).FillGrid(name, csl);
+
+                if (OnNearestStarListChanged != null)
+                    OnNearestStarListChanged(name, csl);
             });
         }
 
@@ -1066,7 +1064,7 @@ namespace EDDiscovery
                 UserControlSpanel ucm = new UserControlSpanel();
                 tcf.Init(ucm, "Summary Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Spanel" + numopened, true,true);
                 ucm.Init(_discoveryForm, numopened);
-                ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
+                ucm.Display(_discoveryForm.history);
             }
 
             tcf.Show();

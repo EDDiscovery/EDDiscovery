@@ -101,13 +101,13 @@
             this.showDistancesOnFSDJumpsOnlyToolStripMenuItem,
             this.expandTextOverEmptyColumnsToolStripMenuItem,
             this.showNothingWhenDockedtoolStripMenuItem,
+            this.OrdertoolStripMenuItem,
             this.configureEventFilterToolStripMenuItem,
             this.configureFieldFilterToolStripMenuItem,
-            this.OrdertoolStripMenuItem,
             this.surfaceScanDetailsToolStripMenuItem,
             this.showInPositionToolStripMenuItem});
             this.contextMenuStripConfig.Name = "contextMenuStripConfig";
-            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 378);
+            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 400);
             // 
             // toolStripMenuItemTargetLine
             // 
@@ -284,7 +284,7 @@
             this.scanUntilNextToolStripMenuItem});
             this.surfaceScanDetailsToolStripMenuItem.Name = "surfaceScanDetailsToolStripMenuItem";
             this.surfaceScanDetailsToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.surfaceScanDetailsToolStripMenuItem.Text = "Show Surface Scan..";
+            this.surfaceScanDetailsToolStripMenuItem.Text = "Configure Surface Scan..";
             // 
             // scanNoToolStripMenuItem
             // 
@@ -338,37 +338,37 @@
             this.scanOnTopMenuItem});
             this.showInPositionToolStripMenuItem.Name = "showInPositionToolStripMenuItem";
             this.showInPositionToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.showInPositionToolStripMenuItem.Text = "Surface Scan Position..";
+            this.showInPositionToolStripMenuItem.Text = "Set Surface Scan Position..";
             // 
             // scanRightMenuItem
             // 
             this.scanRightMenuItem.Name = "scanRightMenuItem";
-            this.scanRightMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.scanRightMenuItem.Size = new System.Drawing.Size(152, 22);
             this.scanRightMenuItem.Text = "To right";
             // 
             // scanLeftMenuItem
             // 
             this.scanLeftMenuItem.Name = "scanLeftMenuItem";
-            this.scanLeftMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.scanLeftMenuItem.Size = new System.Drawing.Size(152, 22);
             this.scanLeftMenuItem.Text = "To left";
             // 
             // scanAboveMenuItem
             // 
             this.scanAboveMenuItem.DoubleClickEnabled = true;
             this.scanAboveMenuItem.Name = "scanAboveMenuItem";
-            this.scanAboveMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.scanAboveMenuItem.Size = new System.Drawing.Size(152, 22);
             this.scanAboveMenuItem.Text = "Above";
             // 
             // scanBelowMenuItem
             // 
             this.scanBelowMenuItem.Name = "scanBelowMenuItem";
-            this.scanBelowMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.scanBelowMenuItem.Size = new System.Drawing.Size(152, 22);
             this.scanBelowMenuItem.Text = "Below";
             // 
             // scanOnTopMenuItem
             // 
             this.scanOnTopMenuItem.Name = "scanOnTopMenuItem";
-            this.scanOnTopMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.scanOnTopMenuItem.Size = new System.Drawing.Size(152, 22);
             this.scanOnTopMenuItem.Text = "On top";
             // 
             // buttonExt0

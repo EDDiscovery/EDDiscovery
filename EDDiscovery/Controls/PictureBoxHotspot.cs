@@ -21,14 +21,25 @@ namespace ExtendedControls
                 pos = p; img = i; tag = t; tooltip = tt;
             }
 
-            public ImageElement(Graphics gr , Point poscentrehorz, string text, Font dp , Color c, Color backcolour, float backscale = 1.0F , Object t = null , string tt = null)
+            // centred, autosized
+            public ImageElement(Graphics gr, Point poscentrehorz, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F, Object t = null, string tt = null)
             {
-                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, dp, c, backcolour , backscale);
+                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, dp, c, backcolour, backscale);
                 pos = new Rectangle(poscentrehorz.X - img.Width / 2, poscentrehorz.Y, img.Width, img.Height);
                 tag = t;
                 tooltip = tt;
             }
 
+            // top left, autosized
+            public ImageElement(Graphics gr, string text, Point topleft, Font dp, Color c, Color backcolour, float backscale = 1.0F, Object t = null, string tt = null)
+            {
+                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, dp, c, backcolour, backscale);
+                pos = new Rectangle(topleft.X, topleft.Y, img.Width, img.Height);
+                tag = t;
+                tooltip = tt;
+            }
+
+            // top left, sized
             public ImageElement(Graphics gr, Point topleft, Size size, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F,
                                     Object t = null, string tt = null )
             {
@@ -46,6 +57,11 @@ namespace ExtendedControls
             public void Translate(int x,int y)
             {
                 pos = new Rectangle(pos.X + x, pos.Y + y, pos.Width, pos.Height);
+            }
+
+            public void Position(int x, int y)
+            {
+                pos = new Rectangle(x, y, pos.Width, pos.Height);
             }
         }
 
@@ -77,28 +93,44 @@ namespace ExtendedControls
             elements.AddRange(list);
         }
 
-        public void AddText(Point topleft, Size size, string label, Font fnt, Color c, Color backcolour, float backscale, string tiptext)
+        // topleft, autosized
+        public ImageElement AddText(Point topleft, string label, Font fnt, Color c, Color backcolour, float backscale, string tiptext)
+        {
+            using (Graphics gr = CreateGraphics())
+            {
+                ImageElement lab = new PictureBoxHotspot.ImageElement(gr, label, topleft, fnt, c, backcolour, backscale, label, tiptext);
+                elements.Add(lab);
+                return lab;
+            }
+        }
+
+        // topleft, sized
+        public ImageElement AddText(Point topleft, Size size, string label, Font fnt, Color c, Color backcolour, float backscale, string tiptext)
         {
             using (Graphics gr = CreateGraphics())
             {
                 ImageElement lab = new PictureBoxHotspot.ImageElement(gr, topleft, size, label, fnt, c, backcolour, backscale, label, tiptext);
                 elements.Add(lab);
+                return lab;
             }
         }
 
-        public void AddTextCentred(Point poscentrehorz, string label, Font fnt, Color c, Color backcolour, float backscale , string tiptext)
+        // centre pos, autosized
+        public ImageElement AddTextCentred(Point poscentrehorz, string label, Font fnt, Color c, Color backcolour, float backscale , string tiptext)
         {
             using (Graphics gr = CreateGraphics())
             {
                 ImageElement lab = new PictureBoxHotspot.ImageElement(gr, poscentrehorz, label, fnt, c, backcolour, backscale, label, tiptext);
                 elements.Add(lab);
+                return lab;
             }
         }
 
-        public void AddImage(Rectangle p, Image img , string tiptext)
+        public ImageElement AddImage(Rectangle p, Image img , string tiptext)
         {
             ImageElement lab = new PictureBoxHotspot.ImageElement(p,img,null,tiptext);
             elements.Add(lab);
+            return lab;
         }
 
         public void Clear()

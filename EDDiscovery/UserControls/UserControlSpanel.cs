@@ -42,6 +42,9 @@ namespace EDDiscovery.UserControls
 
         ButtonExt[] dividers;
 
+        string scantext = null;             // if set, display this text at the right place.
+        Point scanpostextoffset = new Point(0, 0); // left/ top used by scan display
+
         [Flags]
         enum Configuration
         {
@@ -90,7 +93,7 @@ namespace EDDiscovery.UserControls
             discoveryform = ed;
             travelhistorycontrol = ed.TravelControl;
             displaynumber = vn;
-            travelhistorycontrol.OnTravelSelectionChanged += Display;
+            discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
 
             config = (Configuration)SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config);
@@ -149,6 +152,17 @@ namespace EDDiscovery.UserControls
             cfs.Changed += EventFilterChanged;
 
             dividers = new ButtonExt[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10 };
+
+            travelhistorycontrol.OnTravelSelectionChanged += Travelhistorycontrol_OnTravelSelectionChanged;
+        }
+
+        //DEBUG
+        private void Travelhistorycontrol_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        {
+            if (he.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed
+            {
+                ShowScanData(he.journalEntry as EliteDangerous.JournalEvents.JournalScan);
+            }
         }
 
         public override void LoadLayout()
@@ -157,8 +171,10 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            travelhistorycontrol.OnTravelSelectionChanged -= Display;
+            discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+            //DEBUG
+            travelhistorycontrol.OnTravelSelectionChanged -= Travelhistorycontrol_OnTravelSelectionChanged;
 
             SQLiteDBClass.PutSettingInt(DbSave+"Config", (int)config);
             SQLiteDBClass.PutSettingInt(DbSave + "Layout", layoutorder);
@@ -173,7 +189,7 @@ namespace EDDiscovery.UserControls
 
         private void UserControlSpanel_Resize(object sender, EventArgs e)
         {
-            Display(null, current_historylist);
+            Display(current_historylist);
         }
 
 
@@ -184,10 +200,15 @@ namespace EDDiscovery.UserControls
             bool add = WouldAddEntry(he);
 
             if (add)
-                Display(he, hl);
+                Display(hl);
+
+            if ( he.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.Scan )       // if scan, see if it needs to be displayed
+            {
+                ShowScanData(he.journalEntry as EliteDangerous.JournalEvents.JournalScan);
+            }
         }
 
-        public void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..  HE may be null here
+        public void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
             if (hl == null)     // just for safety
                 return;
@@ -203,7 +224,18 @@ namespace EDDiscovery.UserControls
 
             pictureBox.Clear();
 
-            int rowpos = 0;
+            if (scantext != null )
+            {
+                PictureBoxHotspot.ImageElement e = pictureBox.AddText(new Point(0, 0), scantext, displayfont, textcolour, Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent, 1.0F, null);
+
+                if ( Config(Configuration.showScanLeft))
+                {
+                    e.Position(4, 0);
+                    scanpostextoffset = new Point(4 + e.img.Width + 4, 0);
+                }
+            }
+
+            int rowpos = scanpostextoffset.Y;
 
             if (Config(Configuration.showNothingWhenDocked) && (hl.GetLast.IsDocked || hl.GetLast.IsLanded))
             {
@@ -239,14 +271,6 @@ namespace EDDiscovery.UserControls
 
         void DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos)
         {
-            int colnum = 0;
-
-            if (Config(Configuration.showEDSMButton))
-            {
-                Image edsm = EDDiscovery.Properties.Resources.star;
-                pictureBox.AddImage(new Rectangle(columnpos[colnum++], rowpos, edsm.Width, edsm.Height), edsm, "Click to view information on EDSM");
-            }
-
             List<string> coldata = new List<string>();
             List<int> tooltipattach = new List<int>();
 
@@ -298,23 +322,25 @@ namespace EDDiscovery.UserControls
             if (layoutorder < 2 && Config(Configuration.showDistancePerStar))
                 coldata.Add(showdistance ? DistToStar(he, tpos) : "");
 
+            // Now, draw data..
+
+            int colnum = 0;
+
+            if (Config(Configuration.showEDSMButton))
+            {
+                Image edsm = EDDiscovery.Properties.Resources.star;
+                pictureBox.AddImage(new Rectangle(scanpostextoffset.X+columnpos[colnum++], rowpos, edsm.Width, edsm.Height), edsm, "Click to view information on EDSM");
+            }
+
             string tooltip = he.EventSummary + Environment.NewLine + he.EventDescription + Environment.NewLine + he.EventDetailedInfo;
 
-            if (Config(Configuration.showExpandOverColumns))
+            for (int i = 0; i < coldata.Count; i++)
             {
-                for (int i = 0; i < coldata.Count; i++)
-                {
-                    int nextfull = i+1;
-                    for (; nextfull < coldata.Count && coldata[nextfull].Length == 0; nextfull++)
-                    { }
+                int nextfull = i+1;
+                for (; nextfull < coldata.Count && Config(Configuration.showExpandOverColumns) && coldata[nextfull].Length == 0; nextfull++)
+                { }
 
-                    AddColText(i + 1, nextfull + 1 , rowpos, coldata[i], tooltipattach.Contains(i) ? tooltip : null);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < coldata.Count; i++)
-                    AddColText(i + 1, i + 2, rowpos, coldata[i], tooltipattach.Contains(i) ? tooltip : null);
+                AddColText(colnum + i, colnum + nextfull , rowpos, coldata[i], tooltipattach.Contains(i) ? tooltip : null);
             }
         }
 
@@ -325,10 +351,10 @@ namespace EDDiscovery.UserControls
 
         void AddColText(int coli, int nextcol , int rowpos, string text, string tooltip)
         {
-            pictureBox.AddText( new Point(columnpos[coli], rowpos), 
-                                new Size(columnpos[nextcol] - columnpos[coli] - 4, rowheight), 
-                                text, displayfont, textcolour, 
-                                Config(Configuration.showBlackBoxAroundText) ? Color.Black: Color.Transparent , 1.0F, 
+            pictureBox.AddText(new Point(scanpostextoffset.X + columnpos[coli], rowpos),
+                                new Size(columnpos[nextcol] - columnpos[coli] - 4, rowheight),
+                                text, displayfont, textcolour,
+                                Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent, 1.0F,
                                 tooltip);
         }
 
@@ -480,7 +506,7 @@ namespace EDDiscovery.UserControls
             Button b = sender as Button;
             dividercapture = -1;
             b.Capture = false;
-            Display(null, current_historylist);
+            Display(current_historylist);
         }
 
         private void divider_MouseMove(object sender, MouseEventArgs e)
@@ -511,10 +537,18 @@ namespace EDDiscovery.UserControls
 
         public void ShowScanData(EDDiscovery.EliteDangerous.JournalEvents.JournalScan scan)
         {
+            if (Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite))
+            {
+                scantext = scan.DisplayString();
+                Display(current_historylist);
+            }
         }
 
         private void HideScanData(object sender, EventArgs e)
         {
+            scantext = null;
+            scanpostextoffset = new Point(0, 0); // left/ top used by scan display
+            Display(current_historylist);
         }
 
         #endregion
@@ -656,7 +690,7 @@ namespace EDDiscovery.UserControls
 
         private void EventFilterChanged(object sender, EventArgs e)
         {
-            Display(null,current_historylist);
+            Display(current_historylist);
         }
 
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -668,7 +702,7 @@ namespace EDDiscovery.UserControls
             {
                 fieldfilter = frm.result;
                 SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
-                Display(null,current_historylist);
+                Display(current_historylist);
             }
         }
 
@@ -684,7 +718,7 @@ namespace EDDiscovery.UserControls
 
             //         ShowDividers(false);
 
-            Display(null, current_historylist);
+            Display(current_historylist);
         }
 
         void SetLayoutOrder(int n , bool refresh = false)
@@ -697,7 +731,7 @@ namespace EDDiscovery.UserControls
             ResetTabList();
 
             if ( refresh )
-                Display(null, current_historylist);
+                Display(current_historylist);
         }
 
         private void SetSurfaceScanBehaviour(Configuration? itemClicked, bool newState)
@@ -753,7 +787,7 @@ namespace EDDiscovery.UserControls
                     HideScanData(null, null);
             }
 
-            Display(null, current_historylist);
+            Display(current_historylist);
         }
 
         private void SetScanPosition(Configuration? position)
