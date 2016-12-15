@@ -477,7 +477,9 @@ namespace EDDiscovery
                 if (he.ISEDDNMessage)
                 {
                     if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn == true)
-                        EDDNSync.SendEDDNEvent(he);
+                    {
+                        EDDNSync.SendEDDNEvents(_discoveryForm, he);
+                    }
                 }
 
                 if (he.IsFSDJump || he.EntryType == JournalTypeEnum.Location)

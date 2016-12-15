@@ -533,6 +533,7 @@ namespace EDDiscovery.UserControls
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
             removeJournalEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
+            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
@@ -812,6 +813,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void sendUnsyncedScanToEDDNToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
+            {
+                EDDNSync.SendEDDNEvent(discoveryform, rightclicksystem);
+            }
+        }
+
         #endregion
 
         #region Event Filter
@@ -848,7 +857,6 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
-
     }
 
 }

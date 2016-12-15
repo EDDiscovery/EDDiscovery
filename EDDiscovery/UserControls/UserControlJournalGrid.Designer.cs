@@ -51,6 +51,7 @@
             this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
             this.historyContextMenu.SuspendLayout();
@@ -157,9 +158,10 @@
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mapGotoStartoolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
-            this.toolStripMenuItemStartStop});
+            this.toolStripMenuItemStartStop,
+            this.sendUnsyncedScanToEDDNToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 70);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 114);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -327,6 +329,13 @@
             this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ShowAlways = true;
             // 
+            // sendUnsyncedScanToEDDNToolStripMenuItem
+            // 
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
+            // 
             // UserControlJournalGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -368,5 +377,6 @@
         private ExtendedControls.DrawnPanel drawnPanelPopOut;
         private System.Windows.Forms.Panel panelJournalIcon;
         private ExtendedControls.ButtonExt buttonField;
+        private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
     }
 }
