@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
-    class JSONHelper
+    public  static class JSONHelper
     {
         static public bool GetBool(JToken jToken, bool def = false)
         {
@@ -155,6 +155,18 @@ namespace EDDiscovery
             {
                 ExpandTokens(jc, fields);
             }
+        }
+
+        public static void Rename(this JToken token, string newName)
+        {
+            if (token == null)
+                return;
+
+            var parent = token.Parent;
+            if (parent == null)
+                throw new InvalidOperationException("The parent is missing.");
+            var newToken = new JProperty(newName, token);
+            parent.Replace(newToken);
         }
 
         static private void ExpandTokens(JToken jt, HashSet<string> fields)
