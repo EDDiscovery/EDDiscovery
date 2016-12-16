@@ -79,6 +79,8 @@ namespace ExtendedControls
         public event OnElement LeaveElement;
         public event OnElement ClickElement;
 
+        public Color FillColor = Color.Transparent;         // fill the bitmap with this colour before pasting the bitmaps in
+
         private Timer hovertimer = new Timer();
         ToolTip hovertip = null;
         Point hoverpos;
@@ -172,6 +174,11 @@ namespace ExtendedControls
             if (max.Width > 0 && max.Height > 0 ) // will be zero if no elements
             {
                 Bitmap newrender = new Bitmap(max.Width, max.Height);   // size bitmap to contents
+
+                if (FillColor != Color.Transparent)
+                {
+                    ControlHelpers.FillBitmap(newrender, FillColor);
+                }
 
                 using (Graphics gr = Graphics.FromImage(newrender))
                 {

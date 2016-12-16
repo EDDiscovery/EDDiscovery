@@ -29,6 +29,17 @@ namespace EDDiscovery.UserControls
                 ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
         }
 
+        public bool IsTransparent
+        {
+            get
+            {
+                if (this.Parent is Forms.UserControlForm)
+                    return ((Forms.UserControlForm)(this.Parent)).istransparent;
+                else
+                    return false;
+            }
+        }
+
         #region Resize
 
         public bool inresizeduetoexpand = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels

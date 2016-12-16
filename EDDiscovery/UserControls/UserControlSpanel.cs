@@ -35,7 +35,6 @@ namespace EDDiscovery.UserControls
 
         private List<int> columnpos;
 
-        private Color textcolour;
         private Font displayfont;
         private int rowheight = 20;
 
@@ -137,7 +136,6 @@ namespace EDDiscovery.UserControls
             }
             catch { }
 
-            textcolour = discoveryform.theme.SPanelColor;
             displayfont = discoveryform.theme.GetFont;
 
             pictureBox.ContextMenuStrip = contextMenuStripConfig;
@@ -170,6 +168,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            dividercheck.Stop();
+
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
@@ -184,11 +184,11 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingString("SummaryPanelTabs", s);
         }
 
-        Color transparencycolor = Color.Green;
-        public override Color ColorTransparency { get { return transparencycolor; } }
+        public override Color ColorTransparency { get { return Color.Green; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
+            Display(current_historylist);
         }
 
         private void UserControlSpanel_Resize(object sender, EventArgs e)
@@ -198,7 +198,8 @@ namespace EDDiscovery.UserControls
         }
 
 
-#region Display
+        #region Display
+
         public void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
             if (hl == null)     // just for safety
@@ -218,7 +219,10 @@ namespace EDDiscovery.UserControls
             RevertToNormalSize();                                           // ensure size is back to normal..
             scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
 
-            bool drawnnootherstuff = DrawScanText(true);                    // go 1 for some of the scan positions
+            Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            Color backcolour = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
+
+            bool drawnnootherstuff = DrawScanText(true , textcolour , backcolour);                    // go 1 for some of the scan positions
 
             if (!drawnnootherstuff)                                         // and it may indicate its overwriting all stuff, which is fine
             {
@@ -226,7 +230,7 @@ namespace EDDiscovery.UserControls
 
                 if (Config(Configuration.showNothingWhenDocked) && (hl.GetLast.IsDocked || hl.GetLast.IsLanded))
                 {
-                    AddColText(0, 1, rowpos, (hl.GetLast.IsDocked) ? "Docked" : "Landed", null);
+                    AddColText(0, 1, rowpos, (hl.GetLast.IsDocked) ? "Docked" : "Landed", textcolour, backcolour , null);
                 }
                 else
                 {
@@ -236,16 +240,16 @@ namespace EDDiscovery.UserControls
 
                     if (targetpresent && Config(Configuration.showTargetLine))
                     {
-                        AddColText(0, 1, rowpos, "Target", null);
-                        AddColText(1, 2, rowpos, name, null);
+                        AddColText(0, 1, rowpos, "Target", textcolour, backcolour, null);
+                        AddColText(1, 2, rowpos, name, textcolour, backcolour, null);
                         string dist = (hl.GetLast.System.HasCoordinate) ? SystemClass.Distance(hl.GetLast.System, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
-                        AddColText(2, 3, rowpos, dist, null);
+                        AddColText(2, 3, rowpos, dist, textcolour, backcolour, null);
                         rowpos += rowheight;
                     }
 
                     foreach (HistoryEntry rhe in result)
                     {
-                        DrawHistoryEntry(rhe, rowpos, tpos);
+                        DrawHistoryEntry(rhe, rowpos, tpos , textcolour, backcolour);
                         rowpos += rowheight;
 
                         if (rowpos > ClientRectangle.Height)                // stop when off of screen
@@ -254,12 +258,12 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            DrawScanText(false);     // go 2
+            DrawScanText(false, textcolour , backcolour);     // go 2
             
             pictureBox.Render();
         }
 
-        void DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos)
+        void DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour )
         {
             List<string> coldata = new List<string>();                      // First we accumulate the strings
             List<int> tooltipattach = new List<int>();
@@ -328,11 +332,11 @@ namespace EDDiscovery.UserControls
                 for (; nextfull < coldata.Count && Config(Configuration.showExpandOverColumns) && coldata[nextfull].Length == 0; nextfull++)
                 { }
 
-                AddColText(colnum + i, colnum + nextfull , rowpos, coldata[i], tooltipattach.Contains(i) ? tooltip : null);
+                AddColText(colnum + i, colnum + nextfull , rowpos, coldata[i], textcolour, backcolour, tooltipattach.Contains(i) ? tooltip : null);
             }
         }
 
-        public bool DrawScanText(bool attop)
+        public bool DrawScanText(bool attop, Color textcolour , Color backcolour)
         {
             Size maxscansize = new Size(1920, 1080);            // set arbitary large.. not important for this.
 
@@ -342,19 +346,19 @@ namespace EDDiscovery.UserControls
                 {
                     if (Config(Configuration.showScanLeft))
                     {
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent, 1.0F, "SCAN");
+                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
                         scanpostextoffset = new Point(4 + scanimg.img.Width + 4, 0);
                         RequestTemporaryMinimumSize(new Size(scanimg.img.Width + 8, scanimg.img.Height + 4));
                     }
                     else if (Config(Configuration.showScanAbove))
                     {
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent, 1.0F, "SCAN");
+                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
                         scanpostextoffset = new Point(0, scanimg.img.Height + 4);
                         RequestTemporaryResizeExpand(new Size(0, scanimg.img.Height + 4));
                     }
                     else if (Config(Configuration.showScanOnTop))
                     {
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent, 1.0F, "SCAN");
+                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
                         RequestTemporaryResize(new Size(scanimg.img.Width + 8, scanimg.img.Height + 4));        // match exactly to use minimum space
                         return true;
                     }
@@ -364,13 +368,13 @@ namespace EDDiscovery.UserControls
                     if (Config(Configuration.showScanRight))
                     {
                         Size s = pictureBox.DisplaySize();
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, displayfont, textcolour, Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent, 1.0F, "SCAN");
+                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
                         RequestTemporaryMinimumSize(new Size(s.Width+4+scanimg.img.Width + 8, scanimg.img.Height + 4));
                     }
                     else if (Config(Configuration.showScanBelow))
                     {
                         Size s = pictureBox.DisplaySize();
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, displayfont, textcolour, Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent, 1.0F, "SCAN");
+                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
                         RequestTemporaryResizeExpand(new Size(0, scanimg.img.Height + 4));
                     }
                 }
@@ -379,15 +383,13 @@ namespace EDDiscovery.UserControls
             return false;
         }
 
-        void AddColText(int coli, int nextcol , int rowpos, string text, string tooltip)
+        void AddColText(int coli, int nextcol , int rowpos, string text, Color textcolour, Color backcolour, string tooltip)
         {
             if (text.Length > 0)            // don't place empty text, do not want image handling to work on blank screen
             {
                 pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[coli], rowpos),
                                 new Size(columnpos[nextcol] - columnpos[coli] - 4, rowheight),
-                                text, displayfont, textcolour,
-                                Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent, 1.0F,
-                                null, tooltip);
+                                text, displayfont, textcolour,backcolour, 1.0F, null, tooltip);
             }
         }
 
@@ -555,7 +557,8 @@ namespace EDDiscovery.UserControls
                     ButtonExt b = dividers[i - 1];
                     b.Location = new Point(scanpostextoffset.X + columnpos[i] - b.Width/2, 0);
                     b.ButtonColorScaling = 1.0F;
-                    b.FlatAppearance.BorderColor = dividers[i - 1].BackColor;
+                    if ( b.FlatStyle != FlatStyle.System)
+                        b.FlatAppearance.BorderColor = dividers[i - 1].BackColor;
                     b.Visible = true;
                 }
 
