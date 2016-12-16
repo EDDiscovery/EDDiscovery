@@ -18,6 +18,7 @@ namespace EDDiscovery.Forms
         public UserControlCommonBase UserControl;
         public bool isloaded = false;
         public bool norepositionwindow = false;
+        public bool istemporaryresized = false;
 
         private bool istransparent = false;
         private bool inpanelshow = false;       // if we are in a panel show when we were transparent
@@ -30,6 +31,7 @@ namespace EDDiscovery.Forms
         private Color tkey = Color.Transparent;
         private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost, deftransparent;
+        private Size normalsize;
 
         public bool IsTransparencySupported { get { return transparencycolor != Color.Transparent; } }
 
@@ -201,8 +203,9 @@ namespace EDDiscovery.Forms
             if (UserControl != null)
                 UserControl.Closing();
 
-            SQLiteDBClass.PutSettingInt(dbrefname + "Width", this.Width);
-            SQLiteDBClass.PutSettingInt(dbrefname + "Height", this.Height);
+            Size winsize = (istemporaryresized) ? normalsize : this.Size;
+            SQLiteDBClass.PutSettingInt(dbrefname + "Width", winsize.Width);
+            SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height);
             SQLiteDBClass.PutSettingInt(dbrefname + "Top", this.Top);
             SQLiteDBClass.PutSettingInt(dbrefname + "Left", this.Left);
         }
@@ -264,6 +267,43 @@ namespace EDDiscovery.Forms
                 }
             }
         }
+
+        #region Resizing
+
+        public void RequestTemporaryMinimiumSize(Size w)
+        {
+            int width = ClientRectangle.Width < w.Width ? (w.Width - ClientRectangle.Width) : 0;
+            int height = ClientRectangle.Height < w.Height ? (w.Height - ClientRectangle.Height) : 0;
+
+            RequestTemporaryResizeExpand(new Size(width, height));
+        }
+
+        public void RequestTemporaryResizeExpand(Size w)
+        {
+            if ( w.Width != 0 || w.Height != 0 )
+                RequestTemporaryResize(new Size(Bounds.Size.Width + w.Width, Bounds.Size.Height + w.Height));
+        }
+
+        public void RequestTemporaryResize(Size w)
+        {
+            if (!istemporaryresized)
+            {
+                normalsize = this.Size;
+                istemporaryresized = true;
+                this.Size = w;
+            }
+        }
+
+        public void RevertToNormalSize()
+        {
+            if (istemporaryresized)
+            {
+                this.Size = normalsize;
+                istemporaryresized = false;
+            }
+        }
+
+        #endregion
 
         #region Low level Wndproc
 

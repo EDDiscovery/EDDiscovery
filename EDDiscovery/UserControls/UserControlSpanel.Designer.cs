@@ -44,12 +44,12 @@
             this.showDistancesOnFSDJumpsOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandTextOverEmptyColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showNothingWhenDockedtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.configureEventFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.configureFieldFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OrdertoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orderDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orderNotesAfterXYZToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orderTargetDistanceXYZNotesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configureEventFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configureFieldFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.surfaceScanDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scanNoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scan15sToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,6 +84,7 @@
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(892, 680);
             this.pictureBox.TabIndex = 0;
+            this.pictureBox.ClickElement += new ExtendedControls.PictureBoxHotspot.OnElement(this.pictureBox_ClickElement);
             this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             // 
             // contextMenuStripConfig
@@ -107,7 +108,7 @@
             this.surfaceScanDetailsToolStripMenuItem,
             this.showInPositionToolStripMenuItem});
             this.contextMenuStripConfig.Name = "contextMenuStripConfig";
-            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 400);
+            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 378);
             // 
             // toolStripMenuItemTargetLine
             // 
@@ -229,20 +230,6 @@
             this.showNothingWhenDockedtoolStripMenuItem.Text = "Don\'t show information when docked or landed";
             this.showNothingWhenDockedtoolStripMenuItem.Click += new System.EventHandler(this.showNothingWhenDockedtoolStripMenuItem_Click);
             // 
-            // configureEventFilterToolStripMenuItem
-            // 
-            this.configureEventFilterToolStripMenuItem.Name = "configureEventFilterToolStripMenuItem";
-            this.configureEventFilterToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.configureEventFilterToolStripMenuItem.Text = "Configure Event Filter..";
-            this.configureEventFilterToolStripMenuItem.Click += new System.EventHandler(this.configureEventFilterToolStripMenuItem_Click);
-            // 
-            // configureFieldFilterToolStripMenuItem
-            // 
-            this.configureFieldFilterToolStripMenuItem.Name = "configureFieldFilterToolStripMenuItem";
-            this.configureFieldFilterToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.configureFieldFilterToolStripMenuItem.Text = "Configure Field Filter..";
-            this.configureFieldFilterToolStripMenuItem.Click += new System.EventHandler(this.configureFieldFilterToolStripMenuItem_Click);
-            // 
             // OrdertoolStripMenuItem
             // 
             this.OrdertoolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -274,6 +261,20 @@
             this.orderTargetDistanceXYZNotesToolStripMenuItem.Text = "Target Distance,XYZ,Notes";
             this.orderTargetDistanceXYZNotesToolStripMenuItem.Click += new System.EventHandler(this.targetDistanceXYZNotesToolStripMenuItem_Click);
             // 
+            // configureEventFilterToolStripMenuItem
+            // 
+            this.configureEventFilterToolStripMenuItem.Name = "configureEventFilterToolStripMenuItem";
+            this.configureEventFilterToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.configureEventFilterToolStripMenuItem.Text = "Configure Event Filter..";
+            this.configureEventFilterToolStripMenuItem.Click += new System.EventHandler(this.configureEventFilterToolStripMenuItem_Click);
+            // 
+            // configureFieldFilterToolStripMenuItem
+            // 
+            this.configureFieldFilterToolStripMenuItem.Name = "configureFieldFilterToolStripMenuItem";
+            this.configureFieldFilterToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.configureFieldFilterToolStripMenuItem.Text = "Configure Field Filter..";
+            this.configureFieldFilterToolStripMenuItem.Click += new System.EventHandler(this.configureFieldFilterToolStripMenuItem_Click);
+            // 
             // surfaceScanDetailsToolStripMenuItem
             // 
             this.surfaceScanDetailsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -284,7 +285,7 @@
             this.scanUntilNextToolStripMenuItem});
             this.surfaceScanDetailsToolStripMenuItem.Name = "surfaceScanDetailsToolStripMenuItem";
             this.surfaceScanDetailsToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.surfaceScanDetailsToolStripMenuItem.Text = "Configure Surface Scan..";
+            this.surfaceScanDetailsToolStripMenuItem.Text = "Configure Scan Display..";
             // 
             // scanNoToolStripMenuItem
             // 
@@ -338,38 +339,43 @@
             this.scanOnTopMenuItem});
             this.showInPositionToolStripMenuItem.Name = "showInPositionToolStripMenuItem";
             this.showInPositionToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.showInPositionToolStripMenuItem.Text = "Set Surface Scan Position..";
+            this.showInPositionToolStripMenuItem.Text = "Set Scan Position..";
             // 
             // scanRightMenuItem
             // 
             this.scanRightMenuItem.Name = "scanRightMenuItem";
-            this.scanRightMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanRightMenuItem.Size = new System.Drawing.Size(116, 22);
             this.scanRightMenuItem.Text = "To right";
+            this.scanRightMenuItem.Click += new System.EventHandler(this.scanRightMenuItem_Click);
             // 
             // scanLeftMenuItem
             // 
             this.scanLeftMenuItem.Name = "scanLeftMenuItem";
-            this.scanLeftMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanLeftMenuItem.Size = new System.Drawing.Size(116, 22);
             this.scanLeftMenuItem.Text = "To left";
+            this.scanLeftMenuItem.Click += new System.EventHandler(this.scanLeftMenuItem_Click);
             // 
             // scanAboveMenuItem
             // 
             this.scanAboveMenuItem.DoubleClickEnabled = true;
             this.scanAboveMenuItem.Name = "scanAboveMenuItem";
-            this.scanAboveMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanAboveMenuItem.Size = new System.Drawing.Size(116, 22);
             this.scanAboveMenuItem.Text = "Above";
+            this.scanAboveMenuItem.Click += new System.EventHandler(this.scanAboveMenuItem_Click);
             // 
             // scanBelowMenuItem
             // 
             this.scanBelowMenuItem.Name = "scanBelowMenuItem";
-            this.scanBelowMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanBelowMenuItem.Size = new System.Drawing.Size(116, 22);
             this.scanBelowMenuItem.Text = "Below";
+            this.scanBelowMenuItem.Click += new System.EventHandler(this.scanBelowMenuItem_Click);
             // 
             // scanOnTopMenuItem
             // 
             this.scanOnTopMenuItem.Name = "scanOnTopMenuItem";
-            this.scanOnTopMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scanOnTopMenuItem.Size = new System.Drawing.Size(116, 22);
             this.scanOnTopMenuItem.Text = "On top";
+            this.scanOnTopMenuItem.Click += new System.EventHandler(this.scanOnTopMenuItem_Click);
             // 
             // buttonExt0
             // 

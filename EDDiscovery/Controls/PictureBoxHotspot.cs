@@ -16,31 +16,40 @@ namespace ExtendedControls
 
         public class ImageElement
         {
-            public ImageElement(Rectangle p, Image i, Object t=  null, string tt = null )
+            public ImageElement()
+            {
+            }
+
+            public ImageElement(Rectangle p, Image i, Object t = null, string tt = null)
+            {
+                pos = p; img = i; tag = t; tooltip = tt;
+            }
+
+            public void Image(Rectangle p, Image i, Object t = null, string tt = null)
             {
                 pos = p; img = i; tag = t; tooltip = tt;
             }
 
             // centred, autosized
-            public ImageElement(Graphics gr, Point poscentrehorz, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F, Object t = null, string tt = null)
+            public void TextCentreAutosize(Graphics gr, Point poscentrehorz, Size max, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F, Object t = null, string tt = null)
             {
-                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, dp, c, backcolour, backscale);
+                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, max, dp, c, backcolour, backscale);
                 pos = new Rectangle(poscentrehorz.X - img.Width / 2, poscentrehorz.Y, img.Width, img.Height);
                 tag = t;
                 tooltip = tt;
             }
 
             // top left, autosized
-            public ImageElement(Graphics gr, string text, Point topleft, Font dp, Color c, Color backcolour, float backscale = 1.0F, Object t = null, string tt = null)
+            public void TextAutosize(Graphics gr, Point topleft, Size max, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F, Object t = null, string tt = null)
             {
-                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, dp, c, backcolour, backscale);
+                img = ControlHelpers.DrawTextIntoAutoSizedBitmap(text, max, dp, c, backcolour, backscale);
                 pos = new Rectangle(topleft.X, topleft.Y, img.Width, img.Height);
                 tag = t;
                 tooltip = tt;
             }
 
             // top left, sized
-            public ImageElement(Graphics gr, Point topleft, Size size, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F,
+            public void TextFixedSize(Graphics gr, Point topleft, Size size, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F,
                                     Object t = null, string tt = null )
             {
                 img = ControlHelpers.DrawTextIntoFixedSizeBitmap(text, size, dp, c, backcolour, backscale );
@@ -65,7 +74,7 @@ namespace ExtendedControls
             }
         }
 
-        public delegate void OnElement(object sender, ImageElement i, object tag);
+        public delegate void OnElement(object sender, MouseEventArgs eventargs, ImageElement i, object tag );
         public event OnElement EnterElement;
         public event OnElement LeaveElement;
         public event OnElement ClickElement;
@@ -94,55 +103,58 @@ namespace ExtendedControls
         }
 
         // topleft, autosized
-        public ImageElement AddText(Point topleft, string label, Font fnt, Color c, Color backcolour, float backscale, string tiptext)
+        public ImageElement AddTextAutoSize(Point topleft, Size max, string label, Font fnt, Color c, Color backcolour, float backscale, Object tag = null, string tiptext = null)
         {
             using (Graphics gr = CreateGraphics())
             {
-                ImageElement lab = new PictureBoxHotspot.ImageElement(gr, label, topleft, fnt, c, backcolour, backscale, label, tiptext);
+                ImageElement lab = new ImageElement();
+                lab.TextAutosize(gr, topleft, max, label, fnt, c, backcolour, backscale, tag, tiptext);
                 elements.Add(lab);
                 return lab;
             }
         }
 
         // topleft, sized
-        public ImageElement AddText(Point topleft, Size size, string label, Font fnt, Color c, Color backcolour, float backscale, string tiptext)
+        public ImageElement AddTextFixedSize(Point topleft, Size size, string label, Font fnt, Color c, Color backcolour, float backscale, Object tag = null, string tiptext = null)
         {
             using (Graphics gr = CreateGraphics())
             {
-                ImageElement lab = new PictureBoxHotspot.ImageElement(gr, topleft, size, label, fnt, c, backcolour, backscale, label, tiptext);
+                ImageElement lab = new ImageElement();
+                lab.TextFixedSize(gr, topleft, size, label, fnt, c, backcolour, backscale, tag, tiptext);
                 elements.Add(lab);
                 return lab;
             }
         }
 
         // centre pos, autosized
-        public ImageElement AddTextCentred(Point poscentrehorz, string label, Font fnt, Color c, Color backcolour, float backscale , string tiptext)
+        public ImageElement AddTextCentred(Point poscentrehorz, Size max, string label, Font fnt, Color c, Color backcolour, float backscale, Object tag = null, string tiptext = null)
         {
             using (Graphics gr = CreateGraphics())
             {
-                ImageElement lab = new PictureBoxHotspot.ImageElement(gr, poscentrehorz, label, fnt, c, backcolour, backscale, label, tiptext);
+                ImageElement lab = new ImageElement();
+                lab.TextCentreAutosize(gr, poscentrehorz, max, label, fnt, c, backcolour, backscale, tag, tiptext);
                 elements.Add(lab);
                 return lab;
             }
         }
 
-        public ImageElement AddImage(Rectangle p, Image img , string tiptext)
+        public ImageElement AddImage(Rectangle p, Image img , Object tag = null, string tiptext = null)
         {
-            ImageElement lab = new PictureBoxHotspot.ImageElement(p,img,null,tiptext);
+            ImageElement lab = new ImageElement();
+            lab.Image(p,img,tag,tiptext);
             elements.Add(lab);
             return lab;
         }
 
-        public void Clear()
+        public void ClearImageList()        // clears the element list, not the image.  call render to do this
         {
             elements.Clear();
-            Image = null;
         }
 
-        public void Render( bool resizecontrol = true )         // taking image elements, draw to main bitmap
+        public Size DisplaySize()
         {
             int maxh = 0, maxw = 0;
-            foreach( ImageElement i in elements)
+            foreach (ImageElement i in elements)
             {
                 if (i.pos.X + i.pos.Width > maxw)
                     maxw = i.pos.X + i.pos.Width;
@@ -150,21 +162,32 @@ namespace ExtendedControls
                     maxh = i.pos.Y + i.pos.Height;
             }
 
-            if (maxw > 0 && maxh > 0)
+            return new Size(maxw, maxh);
+        }
+
+        public void Render( bool resizecontrol = true )         // taking image elements, draw to main bitmap
+        {
+            Size max = DisplaySize();
+
+            if (max.Width > 0 && max.Height > 0 ) // will be zero if no elements
             {
-                Image = new Bitmap(maxw, maxh);                      // size bitmap to contents
+                Bitmap newrender = new Bitmap(max.Width, max.Height);   // size bitmap to contents
 
-                if (resizecontrol)
-                    this.Size = new Size(maxw, maxh);
-
-                using (Graphics gr = Graphics.FromImage(Image))
+                using (Graphics gr = Graphics.FromImage(newrender))
                 {
                     foreach (ImageElement i in elements)
                     {
                         gr.DrawImage(i.img, i.pos);
                     }
                 }
+
+                Image = newrender;      // and replace the image
+
+                if (resizecontrol)
+                    this.Size = new Size(max.Width, max.Height);
             }
+            else
+                Image = null;       // nothing, null image
         }
 
 
@@ -181,8 +204,11 @@ namespace ExtendedControls
                     if (i.pos.Contains(eventargs.Location))
                     {
                         elementin = i;
+
+                        //System.Diagnostics.Debug.WriteLine("Enter element " + elements.FindIndex(x=>x==i));
+
                         if (EnterElement != null)
-                            EnterElement(this, elementin, elementin.tag);
+                            EnterElement(this, eventargs, elementin, elementin.tag );
                     }
                 }
             }
@@ -190,8 +216,10 @@ namespace ExtendedControls
             {
                 if (!elementin.pos.Contains(eventargs.Location))
                 {
+                    //System.Diagnostics.Debug.WriteLine("Leave element ");
+
                     if (LeaveElement != null)
-                        LeaveElement(this, elementin, elementin.tag);
+                        LeaveElement(this, eventargs, elementin, elementin.tag);
 
                     elementin = null;
                 }
@@ -247,7 +275,7 @@ namespace ExtendedControls
             ClearHoverTip();
 
             if (ClickElement != null)                   
-                ClickElement(this, elementin, elementin?.tag);          // null if no element clicked
+                ClickElement(this, e , elementin, elementin?.tag);          // null if no element clicked
         }
 
 
