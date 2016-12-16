@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.label_index = new System.Windows.Forms.Label();
-            this.labelControlText = new System.Windows.Forms.Label();
+            this.label_index = new ExtendedControls.LabelExt();
+            this.labelControlText = new ExtendedControls.LabelExt();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_ontop = new ExtendedControls.DrawnPanel();
@@ -184,11 +184,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label_index;
+        private ExtendedControls.LabelExt label_index;
         private ExtendedControls.DrawnPanel panel_minimize;
         private ExtendedControls.DrawnPanel panel_close;
         private ExtendedControls.StatusStripCustom statusStripCustom1;
-        private System.Windows.Forms.Label labelControlText;
+        private ExtendedControls.LabelExt labelControlText;
         private ExtendedControls.DrawnPanel panel_ontop;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.DrawnPanel panel_transparent;

@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,
                                 (starnode.type == StarScan.ScanNodeType.barycentre) ? EDDiscovery.Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
-                                curpos, starsize, ref offset, false);
+                                curpos, starsize, ref offset , false, (planetsize.Height*6/4-starsize.Height)/2);       // the last part nerfs the label down to the right position
 
                     Point maxitemspos = maxstarpos;
 
@@ -199,7 +199,7 @@ namespace EDDiscovery.UserControls
             int offset = moonsize.Width - planetsize.Width / 2;           // centre is moon width, back off by planetwidth/2 to place the left edge of the planet
 
             Point maxtreepos = DrawNode(pc, planetnode, JournalScan.GetPlanetImageNotScanned(), 
-                                curpos, planetsize, ref offset , true);        // offset passes in the suggested offset, returns the centre offset
+                                curpos, planetsize, ref offset, true);        // offset passes in the suggested offset, returns the centre offset
 
             if (planetnode.children != null && checkBoxMoons.Checked)
             {
@@ -211,7 +211,7 @@ namespace EDDiscovery.UserControls
                 {
                     int offsetm = moonsize.Width / 2;                // pass in normal offset if not double width item (half moon from moonpos.x)
 
-                    Point mmax = DrawNode(pc, moonnode, JournalScan.GetMoonImageNotScanned(), moonpos, moonsize, ref offsetm, false);
+                    Point mmax = DrawNode(pc, moonnode, JournalScan.GetMoonImageNotScanned(), moonpos, moonsize, ref offsetm);
 
                     maxtreepos = new Point(Math.Max(maxtreepos.X, mmax.X), Math.Max(maxtreepos.Y, mmax.Y));
 
@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
                         {
                             int offsetsm = moonsize.Width / 2;                // pass in normal offset if not double width item (half moon from moonpos.x)
 
-                            Point sbmax = DrawNode(pc, submoonnode, JournalScan.GetMoonImageNotScanned(), submoonpos, moonsize, ref offsetsm, false);
+                            Point sbmax = DrawNode(pc, submoonnode, JournalScan.GetMoonImageNotScanned(), submoonpos, moonsize, ref offsetsm);
 
                             maxtreepos = new Point(Math.Max(maxtreepos.X, sbmax.X), Math.Max(maxtreepos.Y, sbmax.Y));
 
@@ -243,15 +243,22 @@ namespace EDDiscovery.UserControls
             return maxtreepos;
         }
 
+        // Width:  Nodes are allowed 2 widths 
+        // Height: Nodes are allowed 1.5 Heights.  0 = top, 1/2/3/4 = image, 5 = bottom.  
+        // offset: pass in horizonal offset, return back middle of image
+        // aligndown : if true, compensate for drawing normal size images and ones 1.5 by shifting down the image and the label by the right amounts
+        // labelvoff : any additional compensation for label pos
 
         // return right bottom of area used from curpos
         Point DrawNode(List<PictureBoxHotspot.ImageElement> pc, StarScan.ScanNode sn, Image notscanned, Point curpos, 
-                                    Size size, ref int offset, bool alignhorz)
+                                    Size size, ref int offset , bool aligndown = false , int labelvoff = 0 )
         {
+            //System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + curpos + " " + size + " hoff " + offset );
+
             string tip;
             Point endpoint = curpos;
-            int hoff = size.Height / 4;
-            int alignhoff = (alignhorz) ? hoff : 0;
+            int quarterheight = size.Height / 4;
+            int alignv = aligndown ? quarterheight : 0;
 
             JournalScan sc = sn.scandata;
 
@@ -262,8 +269,8 @@ namespace EDDiscovery.UserControls
                 if (sc.IsStar)
                 {
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1, 
-                                                new Point(curpos.X+offset, curpos.Y + alignhoff) ,
-                                                size, sn.ownname, tip, alignhoff);
+                                                new Point(curpos.X+offset, curpos.Y + alignv) ,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
+                                                size, sn.ownname, tip, alignv + labelvoff);          // and the label needs to be a quarter height below it..
 
                     if ( sc.HasRings )
                     {
@@ -280,8 +287,8 @@ namespace EDDiscovery.UserControls
                             curpos.X += 4;      // a little spacing, image is tight
 
                             endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt, 
-                                new Point( curpos.X, curpos.Y + alignhoff ), new Size(size.Width/2,size.Height), name,
-                                                                sc.RingInformationMoons(i), alignhoff);
+                                new Point( curpos.X, curpos.Y + alignv ), new Size(size.Width/2,size.Height), name,
+                                                                sc.RingInformationMoons(i), alignv + labelvoff);
 
                             curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
                         }
@@ -299,18 +306,18 @@ namespace EDDiscovery.UserControls
 
                     if (sc.IsLandable || sc.HasRings || indicatematerials)
                     {
-                        Bitmap bmp = new Bitmap(size.Width * 2, hoff * 6);
+                        Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);          
 
                         using (Graphics g = Graphics.FromImage(bmp))
                         {
-                            g.DrawImage(nodeimage, size.Width / 2, hoff, size.Width, size.Height);
+                            g.DrawImage(nodeimage, size.Width / 2, quarterheight, size.Width, size.Height);
 
                             if (sc.IsLandable)
-                                g.DrawImage(EDDiscovery.Properties.Resources.planet_landing, new Rectangle(hoff, 0, hoff * 6, hoff * 6));
+                                g.DrawImage(EDDiscovery.Properties.Resources.planet_landing, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
 
                             if (sc.HasRings)
                                 g.DrawImage(sc.Rings.Count() > 1 ? EDDiscovery.Properties.Resources.RingGap512 : EDDiscovery.Properties.Resources.Ring_Only_512,
-                                                new Rectangle(-2, hoff, size.Width * 2, size.Height));
+                                                new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
 
                             if (indicatematerials)
                             {
@@ -319,13 +326,13 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.ownname, tip, 0);
+                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.ownname, tip, labelvoff);
                         offset = size.Width;                                        // return that the middle is now this
                     }
                     else
                     {
-                        endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignhoff), size, 
-                                                    sn.ownname, tip, alignhoff);
+                        endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size, 
+                                                    sn.ownname, tip, alignv + labelvoff);
                         offset += size.Width / 2;
                     }
 
@@ -344,7 +351,7 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + "\n\nNo scan data available";
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignhoff), size, sn.ownname, tip , alignhoff);
+                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff);
                 offset += size.Width / 2;       // return the middle used was this..
             }
 
@@ -414,7 +421,7 @@ namespace EDDiscovery.UserControls
         Point CreateImageLabel(List<PictureBoxHotspot.ImageElement> c, Image i, Point postopright, Size size, string label,
                                     string ttext , int labelhoff)
         {
-            //System.Diagnostics.Debug.WriteLine(label + " " + postopright + " size " + size);
+            //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
 
             PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext);
 
@@ -429,7 +436,7 @@ namespace EDDiscovery.UserControls
                     PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement();
                     Size maxsize = new Size(300, 20);
 
-                    lab.TextCentreAutosize(gr, labposcenthorz, maxsize, label, stdfont, discoveryform.theme.LabelColor, Color.Transparent );
+                    lab.TextCentreAutosize(gr, labposcenthorz, maxsize, label, stdfont, discoveryform.theme.LabelColor, this.BackColor );
 
                     if (lab.pos.X < postopright.X)
                     {
@@ -462,7 +469,7 @@ namespace EDDiscovery.UserControls
             planetsize = new Size(starsize.Width * 3 / 4, starsize.Height * 3 / 4);
             moonsize = new Size(starsize.Width * 2 / 4, starsize.Height * 2 / 4);
             materialsize = new Size(24, 24);
-            itemsepar = new Size(2, 2);
+            itemsepar = new Size(stars/16, stars/16);
             topmargin = 10;
             leftmargin = 0;
         }

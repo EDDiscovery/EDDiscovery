@@ -17,29 +17,29 @@ namespace ExtendedControls
             ia.SetRemapTable(remap, System.Drawing.Imaging.ColorAdjustType.Bitmap);
 
             using (Graphics gr = Graphics.FromImage(newmap))
-            {
                 gr.DrawImage(source, new Rectangle(0, 0, source.Width, source.Height), 0, 0, source.Width, source.Height, GraphicsUnit.Pixel, ia);
-            }
 
             return newmap;
         }
 
-        public static void DrawTextCentreIntoBitmap(ref Bitmap img, string text, Font dp, Color c )
+        public static void DrawTextCentreIntoBitmap(ref Bitmap img, string text, Font dp, Color c)
         {
             using (Graphics bgr = Graphics.FromImage(img))
             {
                 SizeF sizef = bgr.MeasureString(text, dp);
 
+                bgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
                 using (Brush textb = new SolidBrush(c))
-                {
-                    bgr.DrawString(text, dp, textb, img.Width/2 - (int)(sizef.Width / 2) , img.Height/2 - (int)(sizef.Height / 2));
-                }
+                    bgr.DrawString(text, dp, textb, img.Width / 2 - (int)((sizef.Width+1) / 2 ), img.Height / 2 - (int)((sizef.Height+1) / 2 ) );
+
+                bgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
             }
         }
 
         // you set the maxsize, which the text is clipped to.  if b != Transparent, a back box is drawn.
 
-        public static Bitmap DrawTextIntoAutoSizedBitmap(string text, Size maxsize, Font dp, Color c , Color b, float backscale = 1.0F)
+        public static Bitmap DrawTextIntoAutoSizedBitmap(string text, Size maxsize, Font dp, Color c, Color b, float backscale = 1.0F)
         {
             Bitmap t = new Bitmap(1, 1);
 
@@ -48,23 +48,25 @@ namespace ExtendedControls
                 SizeF sizef = bgr.MeasureString(text, dp);
                 int width = Math.Min((int)(sizef.Width + 1), maxsize.Width);
                 int height = Math.Min((int)(sizef.Height + 1), maxsize.Height);
-                Bitmap img = new Bitmap(width,height);
+                Bitmap img = new Bitmap(width, height);
 
                 using (Graphics dgr = Graphics.FromImage(img))
                 {
                     if (b != Color.Transparent && text.Length > 0)
                     {
                         Rectangle backarea = new Rectangle(0, 0, img.Width, img.Height);
-                        Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90);
-                        dgr.FillRectangle(bb, backarea);
+                        using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90))
+                            dgr.FillRectangle(bb, backarea);
+
+                        dgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;   // only worth doing this if we have filled it.. if transparent, antialias does not work
                     }
 
                     using (Brush textb = new SolidBrush(c))
-                    {
                         dgr.DrawString(text, dp, textb, 0, 0);
 
-                        return img;
-                    }
+                    dgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+
+                    return img;
                 }
             }
         }
@@ -80,15 +82,28 @@ namespace ExtendedControls
                     SizeF sizef = dgr.MeasureString(text, dp);
 
                     Rectangle backarea = new Rectangle(0, 0, (int)(sizef.Width + 1), (int)(sizef.Height + 1));
-                    Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90);
-                    dgr.FillRectangle(bb, backarea);
+                    using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90))
+                        dgr.FillRectangle(bb, backarea);
+
+                    dgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias; // only if filled
                 }
 
                 using (Brush textb = new SolidBrush(c))
-                {
                     dgr.DrawString(text, dp, textb, 0, 0);
-                    return img;
-                }
+
+                dgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+
+                return img;
+            }
+        }
+
+        public static void FillBitmap(Bitmap img, Color c, float backscale = 1.0F)
+        {
+            using (Graphics dgr = Graphics.FromImage(img))
+            {
+                Rectangle backarea = new Rectangle(0, 0, img.Width, img.Height);
+                using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, c, ButtonExt.Multiply(c, backscale), 90))
+                    dgr.FillRectangle(bb, backarea);
             }
         }
     }
