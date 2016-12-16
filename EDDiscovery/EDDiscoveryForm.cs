@@ -89,8 +89,10 @@ namespace EDDiscovery
         public event NewEntry OnNewEntry;
         public delegate void NewLogEntry(string txt, Color c);
         public event NewLogEntry OnNewLogEntry;
-
-        static public GalacticMapping galacticMapping;
+        public delegate void NewTarget();
+        public event NewTarget OnNewTarget;
+        
+        public GalacticMapping galacticMapping;
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
@@ -201,7 +203,7 @@ namespace EDDiscovery
 
             EdsmSync = new EDSMSync(this);
 
-            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, travelHistoryControl1);
+            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, this);
 
             journalmonitor = new EliteDangerous.EDJournalClass();
 
@@ -574,8 +576,6 @@ namespace EDDiscovery
 
             if (OnHistoryChange!=null)
                 OnHistoryChange(history);
-
-            TravelControl.RedrawSummary();
         }
 
 #endregion
@@ -1986,9 +1986,6 @@ namespace EDDiscovery
 
                 if (OnNewEntry != null)
                     OnNewEntry(he,history);
-
-                if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
-                    travelHistoryControl1.NewBodyScan(je as EliteDangerous.JournalEvents.JournalScan);
             }
 
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
@@ -2028,9 +2025,18 @@ namespace EDDiscovery
             FindMaterialsForm frm = new FindMaterialsForm();
 
             frm.Show(this);
-
-
         }
+
+        #region Targets
+
+        public void NewTargetSet()
+        {
+            System.Diagnostics.Debug.WriteLine("New target set");
+            if (OnNewTarget != null)
+                OnNewTarget();
+        }
+
+        #endregion
     }
 }
 
