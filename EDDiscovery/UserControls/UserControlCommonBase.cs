@@ -19,7 +19,7 @@ namespace EDDiscovery.UserControls
         public virtual void Closing() { }
 
         public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.
-        public virtual void SetTransparency(bool on, Color curcol) { }                                    // set on/off transparency of components.
+        public virtual void SetTransparency(bool on, Color curcol) { }                      // set on/off transparency of components.
 
         public void SetControlText(string s)            // used to set heading text in either the form of the tabstrip
         {
@@ -28,6 +28,59 @@ namespace EDDiscovery.UserControls
             else if (this.Parent is Forms.UserControlForm)
                 ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
         }
+
+        #region Resize
+
+        public bool inresizeduetoexpand = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
+
+        public void RequestTemporaryMinimumSize(Size w)
+        {
+            if (this.Parent is Forms.UserControlForm)
+            {
+                inresizeduetoexpand = true;
+                ((Forms.UserControlForm)(this.Parent)).RequestTemporaryMinimiumSize(w);
+                inresizeduetoexpand = false;
+            }
+        }
+
+        public void RequestTemporaryResizeExpand(Size w)        // request a form to grow..
+        {
+            if (this.Parent is Forms.UserControlForm)
+            {
+                inresizeduetoexpand = true;
+                ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResizeExpand(w);
+                inresizeduetoexpand = false;
+            }
+        }
+
+        public void RequestTemporaryResize(Size w)
+        {
+            if (this.Parent is Forms.UserControlForm)
+            {
+                inresizeduetoexpand = true;
+                ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResize(w);
+                inresizeduetoexpand = false;
+            }
+        }
+
+        public void RevertToNormalSize()                        // and to revert
+        {
+            if (this.Parent is Forms.UserControlForm)
+            {
+                inresizeduetoexpand = true;
+                ((Forms.UserControlForm)(this.Parent)).RevertToNormalSize();
+                inresizeduetoexpand = false;
+            }
+        }
+
+        public bool IsInTemporaryResize                         // have we grown?
+        { get
+            {
+                return (this.Parent is Forms.UserControlForm) ? ((Forms.UserControlForm)(this.Parent)).istemporaryresized : false;
+            }
+        }
+
+        #endregion
 
         #region DGV Column helpers - used to save/size the DGV of user controls dynamically.
 

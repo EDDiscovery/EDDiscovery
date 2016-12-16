@@ -119,73 +119,74 @@ namespace EDDiscovery.UserControls
 
         void DrawSystem(StarScan.SystemNode sn)
         {
-            imagebox.Clear();
             HideInfo();
 
             last_sn = sn;                                                               // remember in case we need to draw
 
             SetControlText((sn == null) ? "No Scan" : sn.system.name);
 
-            if (sn == null)
-                return;
+            imagebox.ClearImageList();  // does not clear the image, render will do that
 
-            Point curpos = new Point(leftmargin, topmargin);
-            last_maxdisplayarea = curpos;
-
-            List<PictureBoxHotspot.ImageElement> starcontrols = new List<PictureBoxHotspot.ImageElement>();
-
-            //for( int i = 0; i < 1000; i +=100)  CreateStarPlanet(starcontrols, EDDiscovery.Properties.Resources.ImageStarDiscWhite, new Point(i, 0), new Size(24, 24), i.ToString(), "");
-
-            foreach (StarScan.ScanNode starnode in sn.starnodes.Values)        // always has scan nodes
+            if (sn != null)     // 
             {
-                int offset = 0;
-                Point maxstarpos = DrawNode(starcontrols, starnode, 
-                            (starnode.type == StarScan.ScanNodeType.barycentre ) ? EDDiscovery.Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned() , 
-                            curpos , starsize, ref offset, false);
+                Point curpos = new Point(leftmargin, topmargin);
+                last_maxdisplayarea = curpos;
 
-                Point maxitemspos = maxstarpos;
+                List<PictureBoxHotspot.ImageElement> starcontrols = new List<PictureBoxHotspot.ImageElement>();
 
-                curpos = new Point(maxitemspos.X + itemsepar.Width, curpos.Y);   // move to the right
-                curpos.Y += starsize.Height / 2 - planetsize.Height * 3 / 4;     // slide down for planet vs star difference in size
+                //for( int i = 0; i < 1000; i +=100)  CreateStarPlanet(starcontrols, EDDiscovery.Properties.Resources.ImageStarDiscWhite, new Point(i, 0), new Size(24, 24), i.ToString(), "");
 
-                Point firstcolumn = curpos;
-
-                if (starnode.children != null)
+                foreach (StarScan.ScanNode starnode in sn.starnodes.Values)        // always has scan nodes
                 {
-                    foreach (StarScan.ScanNode planetnode in starnode.children.Values)
+                    int offset = 0;
+                    Point maxstarpos = DrawNode(starcontrols, starnode,
+                                (starnode.type == StarScan.ScanNodeType.barycentre) ? EDDiscovery.Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
+                                curpos, starsize, ref offset, false);
+
+                    Point maxitemspos = maxstarpos;
+
+                    curpos = new Point(maxitemspos.X + itemsepar.Width, curpos.Y);   // move to the right
+                    curpos.Y += starsize.Height / 2 - planetsize.Height * 3 / 4;     // slide down for planet vs star difference in size
+
+                    Point firstcolumn = curpos;
+
+                    if (starnode.children != null)
                     {
-                        List<PictureBoxHotspot.ImageElement> pc = new List<PictureBoxHotspot.ImageElement>();
-
-                        Point maxpos = CreatePlanetTree(pc, planetnode, curpos);
-
-                        //System.Diagnostics.Debug.WriteLine("Planet " + planetnode.ownname + " " + curpos + " " + maxpos + " max " + (panelStars.Width - panelStars.ScrollBarWidth));
-
-                        if ( maxpos.X > panelStars.Width - panelStars.ScrollBarWidth)          // uh oh too wide..
+                        foreach (StarScan.ScanNode planetnode in starnode.children.Values)
                         {
-                            int xoffset = firstcolumn.X - curpos.X;
-                            int yoffset = maxitemspos.Y - curpos.Y;
+                            List<PictureBoxHotspot.ImageElement> pc = new List<PictureBoxHotspot.ImageElement>();
 
-                            RepositionTree(pc, xoffset, yoffset);        // shift co-ords of all you've drawn
+                            Point maxpos = CreatePlanetTree(pc, planetnode, curpos);
 
-                            maxpos = new Point(maxpos.X + xoffset, maxpos.Y + yoffset);
-                            curpos = new Point(maxpos.X, curpos.Y + yoffset);
+                            //System.Diagnostics.Debug.WriteLine("Planet " + planetnode.ownname + " " + curpos + " " + maxpos + " max " + (panelStars.Width - panelStars.ScrollBarWidth));
+
+                            if (maxpos.X > panelStars.Width - panelStars.ScrollBarWidth)          // uh oh too wide..
+                            {
+                                int xoffset = firstcolumn.X - curpos.X;
+                                int yoffset = maxitemspos.Y - curpos.Y;
+
+                                RepositionTree(pc, xoffset, yoffset);        // shift co-ords of all you've drawn
+
+                                maxpos = new Point(maxpos.X + xoffset, maxpos.Y + yoffset);
+                                curpos = new Point(maxpos.X, curpos.Y + yoffset);
+                            }
+                            else
+                                curpos = new Point(maxpos.X, curpos.Y);
+
+                            maxitemspos = new Point(Math.Max(maxitemspos.X, maxpos.X), Math.Max(maxitemspos.Y, maxpos.Y));
+
+                            starcontrols.AddRange(pc.ToArray());
                         }
-                        else
-                            curpos = new Point(maxpos.X, curpos.Y);
-
-                        maxitemspos = new Point(Math.Max(maxitemspos.X, maxpos.X), Math.Max(maxitemspos.Y, maxpos.Y));
-                        
-                        starcontrols.AddRange(pc.ToArray());
                     }
+
+                    last_maxdisplayarea = new Point(Math.Max(last_maxdisplayarea.X, maxitemspos.X), Math.Max(last_maxdisplayarea.Y, maxitemspos.Y));
+                    curpos = new Point(leftmargin, maxitemspos.Y + itemsepar.Height);
                 }
 
-                last_maxdisplayarea = new Point(Math.Max(last_maxdisplayarea.X, maxitemspos.X), Math.Max(last_maxdisplayarea.Y, maxitemspos.Y));
-                curpos = new Point(leftmargin, maxitemspos.Y + itemsepar.Height);
+                imagebox.AddRange(starcontrols);
             }
 
-            imagebox.AddRange(starcontrols);
-            imagebox.Render();
-            //System.Diagnostics.Debug.WriteLine("Display area " + last_maxdisplayarea);
+            imagebox.Render();      // replaces image..
         }
 
         // return right bottom of area used from curpos
@@ -425,8 +426,10 @@ namespace EDDiscovery.UserControls
 
                 using (Graphics gr = CreateGraphics())
                 {
-                    PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement(gr, labposcenthorz, label,
-                                            stdfont, discoveryform.theme.LabelColor, Color.Transparent );
+                    PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement();
+                    Size maxsize = new Size(300, 20);
+
+                    lab.TextCentreAutosize(gr, labposcenthorz, maxsize, label, stdfont, discoveryform.theme.LabelColor, Color.Transparent );
 
                     if (lab.pos.X < postopright.X)
                     {
@@ -468,7 +471,7 @@ namespace EDDiscovery.UserControls
 
 #region User interaction
 
-        private void ClickElement(object sender, PictureBoxHotspot.ImageElement i , object tag)
+        private void ClickElement(object sender, MouseEventArgs e, PictureBoxHotspot.ImageElement i , object tag)
         {
             if (i != null)
                 ShowInfo((string)tag, i.pos.Location.X < panelStars.Width / 2);

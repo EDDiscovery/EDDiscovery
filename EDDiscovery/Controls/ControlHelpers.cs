@@ -37,16 +37,18 @@ namespace ExtendedControls
             }
         }
 
+        // you set the maxsize, which the text is clipped to.  if b != Transparent, a back box is drawn.
 
-        public static Bitmap DrawTextIntoAutoSizedBitmap(string text, Font dp, Color c , Color b, float backscale = 1.0F)
+        public static Bitmap DrawTextIntoAutoSizedBitmap(string text, Size maxsize, Font dp, Color c , Color b, float backscale = 1.0F)
         {
             Bitmap t = new Bitmap(1, 1);
 
             using (Graphics bgr = Graphics.FromImage(t))
             {
                 SizeF sizef = bgr.MeasureString(text, dp);
-
-                Bitmap img = new Bitmap((int)(sizef.Width + 1), (int)(sizef.Height + 1));
+                int width = Math.Min((int)(sizef.Width + 1), maxsize.Width);
+                int height = Math.Min((int)(sizef.Height + 1), maxsize.Height);
+                Bitmap img = new Bitmap(width,height);
 
                 using (Graphics dgr = Graphics.FromImage(img))
                 {
