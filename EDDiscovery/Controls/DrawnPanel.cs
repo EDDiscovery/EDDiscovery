@@ -13,8 +13,9 @@ namespace ExtendedControls
         // Back, Fore color used
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
+        public bool MouseSelectedColorEnable { get; set; } = true;      // set to disable selected colour in some crazy windows situations where clicks are lost
 
-        public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText, Move, Text, None };
+        public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText, Move, Text, None , Transparent, NotTransparent };
 
         public ImageType ImageSelected { get; set; } = ImageType.Close;
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
@@ -46,6 +47,7 @@ namespace ExtendedControls
         {
             base.OnPaint(e);
 
+            //System.Diagnostics.Debug.WriteLine("DP Paint " + this.Name + " MD " + mousedown + " MO "  + mouseover);
             if ( DrawnImage != null )
             {
                 if (DrawnImageAttributes != null)
@@ -95,6 +97,21 @@ namespace ExtendedControls
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
                     e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
+                }
+                else if (ImageSelected == ImageType.NotTransparent)
+                {
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, topmarginpx));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
+                    e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
+
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 2), new Point(centrehorzpx, bottommarginpx - 2));
+                }
+                else if (ImageSelected == ImageType.Transparent)
+                {
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 2), new Point(centrehorzpx, bottommarginpx - 2));
                 }
                 else if (ImageSelected == ImageType.Gripper)
                 {
@@ -207,7 +224,6 @@ namespace ExtendedControls
             mouseover = true;
             mousedown = false;
             mousecapture = false;                   // mouse enter called after capture finished, so clear it
-            //Console.WriteLine("DP ME");
             Invalidate();
         }
 
@@ -215,25 +231,27 @@ namespace ExtendedControls
         {
             base.OnMouseLeave(eventargs);
             mouseover = false;
-            mousedown = false;   
-            //Console.WriteLine("DP ML");
+            mousedown = false;
             Invalidate();
         }
 
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
-            base.OnMouseDown(mevent);
+            //System.Diagnostics.Debug.WriteLine("DP MD");
             mousedown = true;
-            //Console.WriteLine("DP MD");
-            Invalidate();
+
+            if (MouseSelectedColorEnable) // only invalidate if req.
+                Invalidate();
+            base.OnMouseDown(mevent);
         }
 
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            base.OnMouseUp(mevent);
+            //System.Diagnostics.Debug.WriteLine("DP MU");
             mousedown = false;
-            //Console.WriteLine("DP MU");
-            Invalidate();
+            if (MouseSelectedColorEnable) // only invalidate if req.
+                Invalidate();
+            base.OnMouseUp(mevent);
         }
 
         private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
