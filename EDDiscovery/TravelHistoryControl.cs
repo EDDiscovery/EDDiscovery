@@ -30,7 +30,6 @@ namespace EDDiscovery
 
         public EDDiscoveryForm _discoveryForm;
 
-        SummaryPopOut summaryPopOut = null;
         List<EDCommander> commanders = null;
 
         Forms.UserControlFormList usercontrolsforms;
@@ -43,15 +42,15 @@ namespace EDDiscovery
 
         // Subscribe to these to get various events - layout controls via their Init function do this.
 
-        public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);
+        public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);       // called when current travel sel changed
         public event TravelSelectionChanged OnTravelSelectionChanged;
 
-        public delegate void NearestStarList(string name, SortedList<double, ISystem> csl);
+        public delegate void NearestStarList(string name, SortedList<double, ISystem> csl); // called when star computation has a new list
         public event NearestStarList OnNearestStarListChanged;
 
         string[] popoutbuttonlist = new string[] 
         {
-            "S-Panel", "Trip-Panel", "S-Panel2",        // not in tabs
+            "S-Panel", "Trip-Panel",         // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
             "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
         };
@@ -108,6 +107,7 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
+            _discoveryForm.OnNewTarget += RefreshTargetDisplay;
 
             usercontrolsforms = new UserControlFormList();
 
@@ -451,13 +451,11 @@ namespace EDDiscovery
         public void UpdatedDisplay(HistoryList hl)                      // called from main travelgrid when refreshed display
         {
             ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
-            RedrawSummary();
-            RefreshTargetInfo();
+            RefreshTargetDisplay();
             UpdateDependentsWithSelection();
             _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByTravel);           // update map
             RedrawTripPanel(hl);
         }
-
 
         public void UpdatedWithAddNewEntry(HistoryEntry he, HistoryList hl, bool accepted)     // main travel grid calls after getting a new entry
         {
@@ -491,8 +489,7 @@ namespace EDDiscovery
 
                 if ( accepted )                                                 // if accepted it on main grid..
                 {
-                    RefreshSummaryRow(userControlTravelGrid.GetRow(0), true);   // Tell the summary new row has been added
-                    RefreshTargetInfo();                                        // tell the target system its changed the latest system
+                    RefreshTargetDisplay();                                     // tell the target system its changed the latest system
 
                     if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)   // Move focus to new row
                     {
@@ -669,7 +666,6 @@ namespace EDDiscovery
 
         private void Resort()       // user travel grid to say it resorted
         {
-            RedrawSummary();
             UpdateDependentsWithSelection();
         }
 
@@ -755,7 +751,6 @@ namespace EDDiscovery
                         EDSMSync.SendComments(sn.Name,sn.Note,sn.EdsmId);
 
                     _discoveryForm.Map.UpdateNote();
-                    RefreshSummaryRow(userControlTravelGrid.GetCurrentRow);    // tell it this row was changed
                 }
             }
             catch (Exception ex)
@@ -863,77 +858,6 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
         
-        private void textBoxTarget_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                string sn = textBoxTarget.Text;
-                ISystem sc = _discoveryForm.history.FindSystem(sn);
-                string msgboxtext = null;
-
-                if (sc != null && sc.HasCoordinate)
-                {
-                    SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sc.name, sc.id_edsm);        // has it got a note?
-
-                    if (nc != null)
-                    {
-                        TargetClass.SetTargetNotedSystem(sc.name, nc.id, sc.x, sc.y, sc.z);
-                        msgboxtext = "Target set on system with note " + sc.name;
-                    }
-                    else
-                    {
-                        BookmarkClass bk = BookmarkClass.FindBookmarkOnSystem(textBoxTarget.Text);    // has it been bookmarked?
-
-                        if (bk != null)
-                        {
-                            TargetClass.SetTargetBookmark(sc.name, bk.id, bk.x, bk.y, bk.z);
-                            msgboxtext = "Target set on booked marked system " + sc.name;
-                        }
-                        else
-                        {
-                            if (MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                            {
-                                BookmarkClass newbk = new BookmarkClass();
-                                newbk.StarName = sn;
-                                newbk.x = sc.x;
-                                newbk.y = sc.y;
-                                newbk.z = sc.z;
-                                newbk.Time = DateTime.Now;
-                                newbk.Note = "";
-                                newbk.Add();
-                                TargetClass.SetTargetBookmark(sc.name, newbk.id, newbk.x, newbk.y, newbk.z);
-                            }
-                        }
-                    }
-
-                }
-                else
-                {
-                    if (sn.Length > 2 && sn.Substring(0, 2).Equals("G:"))
-                        sn = sn.Substring(2, sn.Length - 2);
-
-                    GalacticMapObject gmo = EDDiscoveryForm.galacticMapping.Find(sn, true, true);    // ignore if its off, find any part of string, find if disabled
-
-                    if (gmo != null)
-                    {
-                        TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
-                        msgboxtext = "Target set on galaxy object " + gmo.name;
-                    }
-                    else
-                    {
-                        msgboxtext = "Unknown system, system is without co-ordinates or galaxy object not found";
-                    }
-                }
-
-                RefreshTargetInfo();
-                if (_discoveryForm.Map != null)
-                    _discoveryForm.Map.UpdateBookmarksGMO(true);
-
-                if ( msgboxtext != null)
-                    MessageBox.Show(msgboxtext,"Create a target", MessageBoxButtons.OK);
-            }
-        }
-
 
         private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -941,13 +865,11 @@ namespace EDDiscovery
                 return;
 
             if (comboBoxCustomPopOut.SelectedIndex == 0)
-                ToggleSummaryPopOut();
+                PopOut(PopOuts.Spanel2);
             else if (comboBoxCustomPopOut.SelectedIndex == 1)
                 ToggleTripPanelPopOut();
-            else if (comboBoxCustomPopOut.SelectedIndex == 2)
-                PopOut(PopOuts.Spanel2);
             else
-                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 3));
+                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 2));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;
@@ -1082,10 +1004,81 @@ namespace EDDiscovery
 
         #region Target System
 
-        public void RefreshTargetInfo()
+        private void textBoxTarget_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string sn = textBoxTarget.Text;
+                ISystem sc = _discoveryForm.history.FindSystem(sn);
+                string msgboxtext = null;
+
+                if (sc != null && sc.HasCoordinate)
+                {
+                    SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sc.name, sc.id_edsm);        // has it got a note?
+
+                    if (nc != null)
+                    {
+                        TargetClass.SetTargetNotedSystem(sc.name, nc.id, sc.x, sc.y, sc.z);
+                        msgboxtext = "Target set on system with note " + sc.name;
+                    }
+                    else
+                    {
+                        BookmarkClass bk = BookmarkClass.FindBookmarkOnSystem(textBoxTarget.Text);    // has it been bookmarked?
+
+                        if (bk != null)
+                        {
+                            TargetClass.SetTargetBookmark(sc.name, bk.id, bk.x, bk.y, bk.z);
+                            msgboxtext = "Target set on booked marked system " + sc.name;
+                        }
+                        else
+                        {
+                            if (MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                            {
+                                BookmarkClass newbk = new BookmarkClass();
+                                newbk.StarName = sn;
+                                newbk.x = sc.x;
+                                newbk.y = sc.y;
+                                newbk.z = sc.z;
+                                newbk.Time = DateTime.Now;
+                                newbk.Note = "";
+                                newbk.Add();
+                                TargetClass.SetTargetBookmark(sc.name, newbk.id, newbk.x, newbk.y, newbk.z);
+                            }
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (sn.Length > 2 && sn.Substring(0, 2).Equals("G:"))
+                        sn = sn.Substring(2, sn.Length - 2);
+
+                    GalacticMapObject gmo = _discoveryForm.galacticMapping.Find(sn, true, true);    // ignore if its off, find any part of string, find if disabled
+
+                    if (gmo != null)
+                    {
+                        TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
+                        msgboxtext = "Target set on galaxy object " + gmo.name;
+                    }
+                    else
+                    {
+                        msgboxtext = "Unknown system, system is without co-ordinates or galaxy object not found";
+                    }
+                }
+
+                _discoveryForm.NewTargetSet();          // tells everyone who cares a new target was set
+
+                if (msgboxtext != null)
+                    MessageBox.Show(msgboxtext, "Create a target", MessageBoxButtons.OK);
+            }
+        }
+
+        public void RefreshTargetDisplay()              // called when a target has been changed.. via EDDiscoveryform
         {
             string name;
             double x, y, z;
+
+            System.Diagnostics.Debug.WriteLine("Refresh target display");
 
             if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
@@ -1105,77 +1098,16 @@ namespace EDDiscovery
                 toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
             }
 
-            if (IsSummaryPopOutReady)
-                summaryPopOut.RefreshTarget(userControlTravelGrid.TravelGrid, _discoveryForm.history.GetLastWithPosition);
-
             if (IsTripPanelPopOutReady)
                 tripPanelPopOut.displayLastFSD(_discoveryForm.history.GetLastFSD);
         }
 
 #endregion
 
-#region Summary Pop out
-        
-        public bool IsSummaryPopOutReady { get { return summaryPopOut != null && !summaryPopOut.IsFormClosed; } }
-
-        public bool ToggleSummaryPopOut()
-        {
-            if (summaryPopOut == null || summaryPopOut.IsFormClosed)
-            {
-                SummaryPopOut p = new SummaryPopOut();
-                p.RequiresRefresh += SummaryRefreshRequested;
-                p.SetGripperColour(_discoveryForm.theme.LabelColor);
-                p.SetTextColour(_discoveryForm.theme.SPanelColor);
-                p.ResetForm(userControlTravelGrid.TravelGrid);
-                p.RefreshTarget(userControlTravelGrid.TravelGrid, _discoveryForm.history.GetLastWithPosition); 
-                p.Show();
-                summaryPopOut = p;          // do it like this in case of race conditions 
-                return true;
-            }
-            else
-            { 
-                summaryPopOut.Close();      // there is no point null it, as if the user closes it, it never gets the chance to be nulled
-                return false;
-            }
-        }
-
-        public void RedrawSummary()
-        {
-            if (IsSummaryPopOutReady)
-            {
-                summaryPopOut.ResetForm(userControlTravelGrid.TravelGrid);
-                summaryPopOut.RefreshTarget(userControlTravelGrid.TravelGrid, _discoveryForm.history.GetLastWithPosition);
-            }
-        }
-
-        public void SummaryRefreshRequested(Object o, EventArgs e)
-        {
-            RedrawSummary();
-        }
-
-        public void RefreshSummaryRow(DataGridViewRow row , bool add = false )
-        {
-            if (IsSummaryPopOutReady)
-                summaryPopOut.RefreshRow(userControlTravelGrid.TravelGrid, row, add);
-        }
-
-        public void NewBodyScan(JournalScan js)
-        {
-            if (IsSummaryPopOutReady)
-                summaryPopOut.ShowScanData(js);
-        }
-
         void TGPopOut()
         {
             PopOut(PopOuts.TravelGrid);
         }
-
-        #endregion
-
-        #region LogOut
-
-
-        #endregion
 
 
         #region Trip computer Pop out

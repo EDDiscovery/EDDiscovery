@@ -102,6 +102,7 @@ namespace EDDiscovery.UserControls
             displaynumber = vn;
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnNewTarget += NewTarget;
 
             config = (Configuration)SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config);
             toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
@@ -171,6 +172,7 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+            discoveryform.OnNewTarget -= NewTarget;
 
 #if TH
             travelhistorycontrol.OnTravelSelectionChanged -= Travelhistorycontrol_OnTravelSelectionChanged;
@@ -197,25 +199,6 @@ namespace EDDiscovery.UserControls
 
 
 #region Display
-
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
-        {
-            bool add = WouldAddEntry(he);
-
-            if (add)
-                Display(hl);
-
-            if ( he.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.Scan )       // if scan, see if it needs to be displayed
-            {
-                ShowScanData(he.journalEntry as EliteDangerous.JournalEvents.JournalScan);
-            }
-        }
-
-        public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
-        {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he);
-        }
-
         public void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
             if (hl == null)     // just for safety
@@ -421,9 +404,33 @@ namespace EDDiscovery.UserControls
             return res;
         }
 
-#endregion
+        public void NewTarget()
+        {
+            System.Diagnostics.Debug.WriteLine("spanel Refresh target display");
+            Display(current_historylist);
+        }
 
-#region Clicks
+        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
+        {
+            bool add = WouldAddEntry(he);
+
+            if (add)
+                Display(hl);
+
+            if (he.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed
+            {
+                ShowScanData(he.journalEntry as EliteDangerous.JournalEvents.JournalScan);
+            }
+        }
+
+        public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
+        {
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he);
+        }
+
+        #endregion
+
+        #region Clicks
 
         private void pictureBox_ClickElement(object sender, MouseEventArgs e, PictureBoxHotspot.ImageElement i, object tag)
         {
