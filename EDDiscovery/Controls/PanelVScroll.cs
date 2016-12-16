@@ -17,7 +17,7 @@ namespace ExtendedControls
         public int ScrollBarWidth { get; set; } = 20;
         public bool VerticalScrollBarDockRight { get; set; } = true;        // true for dock right
         public Padding InternalMargin { get; set; }            // allows spacing around controls
-        VScrollBarCustom vsc;
+        public VScrollBarCustom vsc;
 
         public PanelVScroll()
         {
