@@ -51,11 +51,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         private const double oneDay_s = 86400;
         private const double oneMoon_MT = 73420000000000;
 
-        public JournalScan(JObject evt, bool fromEDSMBodies = false) : base(evt, JournalTypeEnum.Scan)
+        public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
-            if (fromEDSMBodies)
-                ConvertFromEDSMBodies();
-
             BodyName = JSONHelper.GetStringDef(evt["BodyName"]);
             StarType = JSONHelper.GetStringNull(evt["StarType"]);
 
@@ -97,6 +94,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
             VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
         }
+
+
 
         private void ConvertFromEDSMBodies()
         {
