@@ -628,8 +628,7 @@ namespace EDDiscovery
                     "Formidine trans.png",
                     "Formidine trans.json"
                 },
-                (s) => LogLine("Map check complete."),
-                registerCancelCallback);
+                (s) => LogLine("Map check complete."));
             }
             catch (Exception ex)
             {
@@ -640,24 +639,21 @@ namespace EDDiscovery
             }
         }
 
-        private Task<bool> DownloadMapFiles(string[] files, Action<bool> callback, Action<Action> registerCancelCallback)
+        private Task<bool> DownloadMapFiles(string[] files, Action<bool> callback)
         {
             List<Task<bool>> tasks = new List<Task<bool>>();
-            List<Action> cancelCallbacks = new List<Action>();
 
             foreach (string file in files)
             {
-                var task = EDDiscovery2.HTTP.DownloadFileHandler.BeginDownloadFile(
+                var task = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFileAsync(
                     "http://eddiscovery.astronet.se/Maps/" + file,
                     Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
                     (n) =>
                     {
                         if (n) LogLine("Downloaded map: " + file);
-                    }, cb => cancelCallbacks.Add(cb));
+                    }, () => PendingClose);
                 tasks.Add(task);
             }
-
-            registerCancelCallback(() => { foreach (var cb in cancelCallbacks) cb(); });
 
             return Task<bool>.Factory.ContinueWhenAll<bool>(tasks.ToArray(), (ta) =>
             {
