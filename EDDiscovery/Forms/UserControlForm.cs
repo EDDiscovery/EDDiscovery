@@ -46,7 +46,7 @@ namespace EDDiscovery.Forms
             timer.Tick += CheckMouse;
         }
 
-        public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf , bool deftopmostp )
+        public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf , bool deftopmostp = false , bool defwindowintaskbar = true )
         {
             UserControl = c;
             c.Dock = DockStyle.None;
@@ -68,6 +68,9 @@ namespace EDDiscovery.Forms
             SetVisibility(false);
 
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
+
+            this.ShowInTaskbar = SQLiteDBClass.GetSettingBool(dbrefname + "Taskbar", defwindowintaskbar);
+            panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar : ExtendedControls.DrawnPanel.ImageType.WindowNotInTaskBar;
 
             Invalidate();
         }
@@ -135,7 +138,7 @@ namespace EDDiscovery.Forms
 
             this.BackColor = togo;
             statusStripCustom1.BackColor = togo;
-            panel_transparent.BackColor = panel_close.BackColor = panel_minimize.BackColor = panel_ontop.BackColor =  panelTop.BackColor = togo;
+            panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor = panel_minimize.BackColor = panel_ontop.BackColor =  panelTop.BackColor = togo;
 
             System.Diagnostics.Debug.Assert(labeltransparentcolour != Color.Transparent);
             label_index.ForeColor = labelControlText.ForeColor = (istransparent) ? labeltransparentcolour : labelnormalcolour;
@@ -153,7 +156,7 @@ namespace EDDiscovery.Forms
             FormBorderStyle = curwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
             panelTop.Visible = !curwindowsborder;
 
-            statusStripCustom1.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = !transparent;
+            statusStripCustom1.Visible = panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = !transparent;
 
             panel_transparent.Visible = IsTransparencySupported && !transparent;
             panel_transparent.ImageSelected = (istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent;
@@ -250,6 +253,14 @@ namespace EDDiscovery.Forms
             SQLiteDBClass.PutSettingBool(dbrefname + "Transparent", istransparent);
         }
 
+        private void panel_taskbaricon_Click(object sender, EventArgs e)
+        {
+            this.ShowInTaskbar = !this.ShowInTaskbar;
+            panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar : ExtendedControls.DrawnPanel.ImageType.WindowNotInTaskBar;
+            SQLiteDBClass.PutSettingBool(dbrefname + "Taskbar", this.ShowInTaskbar);
+        }
+
+
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
         {
             if (UserControl != null)
@@ -265,7 +276,7 @@ namespace EDDiscovery.Forms
             {
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick" + istransparent + " " + inpanelshow);
                 if (ClientRectangle.Contains(this.PointToClient(MousePosition)))
-                {
+                {                                                                                                                                
                     if (!inpanelshow)
                     {
                         inpanelshow = true;
@@ -326,6 +337,7 @@ namespace EDDiscovery.Forms
         private const int MF_STRING = 0x0;
         private int SYSMENU_ONTOP = 0x1;
         private int SYSMENU_TRANSPARENT = 0x2;
+        private int SYSMENU_TASKBAR = 0x3;
         private const int WM_SYSCOMMAND = 0x112;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -350,6 +362,7 @@ namespace EDDiscovery.Forms
             // Add the About menu item
             AppendMenu(hSysMenu, MF_STRING, SYSMENU_ONTOP, "&On Top");
             AppendMenu(hSysMenu, MF_STRING, SYSMENU_TRANSPARENT, "&Transparent");
+            AppendMenu(hSysMenu, MF_STRING, SYSMENU_TASKBAR, "Show icon in Task&Bar for window");
         }
 
 
@@ -400,6 +413,10 @@ namespace EDDiscovery.Forms
                     }
                     else
                         MessageBox.Show("This panel does not support transparency");
+                }
+                else if (cmd == SYSMENU_TASKBAR)
+                {
+                    panel_taskbaricon_Click(null, null);
                 }
                 else
                     base.WndProc(ref m);
