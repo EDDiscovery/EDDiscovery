@@ -2037,6 +2037,16 @@ namespace EDDiscovery
         }
 
         #endregion
+
+        private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.ShowAllPopOutsInTaskBar();
+        }
+
+        private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.MakeAllPopoutsOpaque();
+        }
     }
 }
 
