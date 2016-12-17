@@ -1,5 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2.DB;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
@@ -613,6 +614,30 @@ namespace EDDiscovery2.EDSM
             JObject msg = JObject.Parse(json);
             return msg;
         }
+
+        public  static List<JournalScan> GetBodiesList(int edsmid)
+        {
+            List<JournalScan> bodies = new List<JournalScan>();
+
+            EDSMClass edsm = new EDSMClass();
+
+            JObject jo = edsm.GetBodies(edsmid);  // Colonia 
+
+            if (jo != null)
+            {
+                foreach (JObject bodie in jo["bodies"])
+                {
+                    EDSMClass.ConvertFromEDSMBodies(bodie);
+                    JournalScan js = new JournalScan(bodie);
+                    js.EdsmID = edsmid;
+                    
+                    bodies.Add(js);
+                }
+                return bodies;
+            }
+            return null;
+        }
+
 
         public static JObject ConvertFromEDSMBodies(JObject jo)
         {
