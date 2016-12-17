@@ -64,7 +64,6 @@
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this._syncWorker = new System.ComponentModel.BackgroundWorker();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
-            this._refreshWorker = new System.ComponentModel.BackgroundWorker();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
@@ -377,14 +376,6 @@
             // 
             this.edsmRefreshTimer.Interval = 3600000;
             this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
-            // 
-            // _refreshWorker
-            // 
-            this._refreshWorker.WorkerReportsProgress = true;
-            this._refreshWorker.WorkerSupportsCancellation = true;
-            this._refreshWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RefreshHistoryWorker);
-            this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
-            this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
             // 
             // tabControl1
             // 
@@ -732,7 +723,6 @@
         private System.Windows.Forms.Timer edsmRefreshTimer;
         private System.Windows.Forms.TabPage tabPageJournal;
         private JournalViewControl journalViewControl1;
-        private System.ComponentModel.BackgroundWorker _refreshWorker;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openEliteDangerousDirectoryToolStripMenuItem;

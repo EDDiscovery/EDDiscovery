@@ -576,7 +576,7 @@ namespace EDDiscovery
         protected override Color GetLogHighlightColour() { return theme.TextBlockHighlightColor; }
         protected override Color GetLogSuccessColour() { return theme.TextBlockSuccessColor; }
 
-        public override void ReportProgress(int percentComplete, string message)
+        protected override void OnReportProgress(int percentComplete, string message)
         {
             if (!PendingClose)
             {
@@ -646,8 +646,8 @@ namespace EDDiscovery
             if (safeClose == null)                  // so a close is a request now, and it launches a thread which cleans up the system..
             {
                 e.Cancel = true;
+                closeRequested.Set();
                 edsmRefreshTimer.Enabled = false;
-                CancelHistoryRefresh();
                 EDDNSync.StopSync();
                 _syncWorker.CancelAsync();
                 labelPanelText.Text = "Closing, please wait!";
@@ -1088,280 +1088,31 @@ namespace EDDiscovery
 
         #region Update Data
 
-        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        protected override void OnRefreshHistoryRequested()
         {
-            if (PendingClose)
-            {
-                return;
-            }
+            travelHistoryControl1.RefreshButton(false);
+            journalViewControl1.RefreshButton(false);
 
-            if (!_refreshWorker.IsBusy)
-            {
-                travelHistoryControl1.RefreshButton(false);
-                journalViewControl1.RefreshButton(false);
-
-                journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-
-                RefreshWorkerArgs args = new RefreshWorkerArgs
-                {
-                    NetLogPath = netlogpath,
-                    ForceNetLogReload = forcenetlogreload,
-                    ForceJournalReload = forcejournalreload,
-                    CheckEdsm = checkedsm,
-                    CurrentCommander = currentcmdr ?? DisplayedCommander
-                };
-                _refreshWorker.RunWorkerAsync(args);
-            }
+            journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
         }
 
-        public void CancelHistoryRefresh()
+
+        protected override void OnRefreshHistoryWorkerCompleted(RefreshWorkerResults res)
         {
-            _refreshWorker.CancelAsync();
+            travelHistoryControl1.RefreshButton(true);
+            journalViewControl1.RefreshButton(true);
         }
 
-        private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
+        protected override void OnNewBodyScan(JournalScan scan)
         {
-            RefreshWorkerArgs args = e.Argument as RefreshWorkerArgs;
-            var worker = (BackgroundWorker)sender;
-
-            List<HistoryEntry> hl = new List<HistoryEntry>();
-            EDCommander cmdr = null;
-
-            if (args.CurrentCommander >= 0)
-            {
-                cmdr = EDDConfig.Commander(args.CurrentCommander);
-                journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), forceReload: args.ForceJournalReload);   // Parse files stop monitor..
-
-                if (args != null)
-                {
-                    if (args.NetLogPath != null)
-                    {
-                        string errstr = null;
-                        NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload, currentcmdrid: args.CurrentCommander);
-                    }
-                }
-            }
-
-            worker.ReportProgress(-1, "Resolving systems");
-
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(args.CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
-            List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
-
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
-            {
-                HistoryEntry prev = null;
-                foreach (EliteDangerous.JournalEntry je in jlist)
-                {
-                    bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn, cmdr);
-                    prev = he;
-
-                    hl.Add(he);                        // add to the history list here..
-
-                    if (journalupdate)
-                    {
-                        jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
-                    }
-                }
-            }
-
-            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
-            StarScan starscan = new StarScan();
-
-            ProcessUserHistoryListEntries(hl, matcommodledger, starscan);      // here, we update the DBs in HistoryEntry and any global DBs in historylist
-
-            if (worker.CancellationPending)
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            if (jlistUpdated.Count > 0)
-            {
-                worker.ReportProgress(-1, "Updating journal entries");
-
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
-                {
-                    using (DbTransaction txn = conn.BeginTransaction())
-                    {
-                        foreach (Tuple<EliteDangerous.JournalEntry, HistoryEntry> jehe in jlistUpdated)
-                        {
-                            EliteDangerous.JournalEntry je = jehe.Item1;
-                            HistoryEntry he = jehe.Item2;
-                            EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
-                            if (jfsd != null)
-                            {
-                                EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, conn, txn);
-                            }
-                        }
-
-                        txn.Commit();
-                    }
-                }
-            }
-
-            if (worker.CancellationPending)
-            {
-                e.Cancel = true;
-            }
-            else
-            {
-                e.Result = new RefreshWorkerResults { rethistory = hl, retledger = matcommodledger, retstarscan = starscan };
-            }
+            travelHistoryControl1.NewBodyScan(scan);
         }
 
-        private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        protected override void OnRefreshCommanders()
         {
-            if (!e.Cancelled && !PendingClose)
-            {
-                if (e.Error != null)
-                {
-                    LogLineHighlight("History Refresh Error: " + e.Error.Message);
-                }
-                else
-                {
-                    travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
-                    settings.UpdateCommandersListBox();
-
-                    history.Clear();
-
-                    foreach (var ent in ((RefreshWorkerResults)e.Result).rethistory)
-                    {
-                        history.Add(ent);
-                        Debug.Assert(ent.MaterialCommodity != null);
-                    }
-
-                    history.materialcommodititiesledger = ((RefreshWorkerResults)e.Result).retledger;
-                    history.starscan = ((RefreshWorkerResults)e.Result).retstarscan;
-
-                    ReportProgress(-1, "");
-                    LogLine("Refresh Complete." );
-
-                    InvokeOnHistoryChange(history);
-                }
-
-                travelHistoryControl1.RefreshButton(true);
-                journalViewControl1.RefreshButton(true);
-
-                InvokeHistoryRefreshed();
-
-                journalmonitor.StartMonitor();
-            }
-        }
-
-        private void RefreshHistoryWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            string name = (string)e.UserState;
-            ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
-        }
-
-        // go thru the hisotry list and reworkout the materials ledge and the materials count
-        private void ProcessUserHistoryListEntries(List<HistoryEntry> hl, MaterialCommoditiesLedger ledger, StarScan scan)
-        {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
-            {
-                for (int i = 0; i < hl.Count; i++)
-                {
-                    HistoryEntry he = hl[i];
-                    JournalEntry je = he.journalEntry;
-                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, conn);        // let the HE do what it wants to with the user db
-
-                    Debug.Assert(he.MaterialCommodity != null);
-
-                    ledger.Process(je, conn);            // update the ledger
-
-                    if (je.EventTypeID == JournalTypeEnum.Scan)
-                    {
-                        if (!AddScanToBestSystem(scan, je as JournalScan, i, hl))
-                        {
-                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
-                        }
-                    }
-                }
-            }
-        }
-
-        private bool AddScanToBestSystem(StarScan starscan, JournalScan je, int startindex, List<HistoryEntry> hl)
-        {
-            for (int j = startindex; j >= 0; j--)
-            {
-                if (je.IsStarNameRelated(hl[j].System.name))       // if its part of the name, use it
-                {
-                    return starscan.Process(je, hl[j].System);
-                }
-            }
-
-            return starscan.Process(je, hl[startindex].System);         // no relationship, add..
-        }
-
-        public void RefreshDisplays()
-        {
-            InvokeOnHistoryChange(history);
-        }
-
-        public void NewPosition(EliteDangerous.JournalEntry je)
-        {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
-            if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
-            {
-                HistoryEntry last = history.GetLast;
-
-                bool journalupdate = false;
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
-
-                if (journalupdate)
-                {
-                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
-
-                    if (jfsd != null)
-                    {
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
-                    }
-                }
-
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-                {
-                    he.ProcessWithUserDb(je, last, conn);           // let some processes which need the user db to work
-
-                    history.materialcommodititiesledger.Process(je, conn);
-                }
-
-                history.Add(he);
-
-                if (je.EventTypeID == JournalTypeEnum.Scan)
-                {
-                    JournalScan js = je as JournalScan;
-                    if (!AddScanToBestSystem(history.starscan, js, history.Count - 1, history.EntryOrder))
-                    {
-                        LogLineHighlight("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                         "Scan object " + js.BodyName + " in " + he.System.name);
-                    }
-                }
-
-                InvokeOnNewEntry(he, history);
-
-                if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
-                    travelHistoryControl1.NewBodyScan(je as EliteDangerous.JournalEvents.JournalScan);
-            }
-
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
             settings.UpdateCommandersListBox();
         }
-
-        public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
-        {
-            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
-            StarScan starscan = new StarScan();
-
-            ProcessUserHistoryListEntries(history.EntryOrder, matcommodledger, starscan);
-
-            history.materialcommodititiesledger = matcommodledger; ;
-            history.starscan = starscan;
-
-            InvokeOnHistoryChange(history);
-        }
-
 
         #endregion
 
