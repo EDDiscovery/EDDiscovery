@@ -1,10 +1,12 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery.EDSM;
 using EDDiscovery.EliteDangerous;
+using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.HTTP;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +15,8 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,6 +61,7 @@ namespace EDDiscovery
         public EDSMSync EdsmSync { get; protected set; }
         public string LogText { get { return logtext; } }
         public bool PendingClose { get { return safeClose != null; } }           // we want to close boys!
+        public string VersionDisplayString { get; protected set; }
 
         public static EDDConfig EDDConfig { get; protected set; }
         public static GalacticMapping galacticMapping { get; protected set; }
@@ -137,6 +142,11 @@ namespace EDDiscovery
 
         protected void Init()
         {
+            VersionDisplayString = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+
+            ProcessCommandLineOptions();
+            InitLogging();
+
             SQLiteConnectionUser.EarlyReadRegister();
             EDDConfig.Instance.Update(write: false);
 
@@ -150,6 +160,217 @@ namespace EDDiscovery
             EdsmSync = new EDSMSync((EDDiscoveryForm)this);
             journalmonitor = new EDJournalClass();
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+        }
+
+        private void InitLogging()
+        {
+            string logpath = "";
+            try
+            {
+                logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
+                if (!Directory.Exists(logpath))
+                {
+                    Directory.CreateDirectory(logpath);
+                }
+
+                if (!Debugger.IsAttached)
+                {
+                    logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
+
+                    System.Diagnostics.Trace.AutoFlush = true;
+                    // Log trace events to the above file
+                    System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(logname));
+                    // Log unhandled exceptions
+                    AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                    // Log unhandled UI exceptions
+                    Application.ThreadException += Application_ThreadException;
+                    // Redirect console to trace
+                    Console.SetOut(new TraceLogWriter());
+                    // Log first-chance exceptions to help diagnose errors
+                    Register_FirstChanceException_Handler();
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Unable to create the folder '{logpath}'");
+                Trace.WriteLine($"Exception: {ex.Message}");
+            }
+        }
+
+        private void ProcessCommandLineOptions()
+        {
+            List<string> parts = Environment.GetCommandLineArgs().ToList();
+
+            option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
+                parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
+
+            int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
+            if (ai != -1 && ai < parts.Count - 1)
+            {
+                Tools.appfolder = parts[ai + 1];
+                VersionDisplayString += " (Using " + Tools.appfolder + ")";
+            }
+
+            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
+
+            if (parts.FindIndex(x => x.Equals("-EDSMBeta", StringComparison.InvariantCultureIgnoreCase)) != -1)
+            {
+                EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
+                VersionDisplayString += " (EDSMBeta)";
+            }
+
+            if (parts.FindIndex(x => x.Equals("-EDSMNull", StringComparison.InvariantCultureIgnoreCase)) != -1)
+            {
+                EDSMClass.ServerAddress = "";
+                VersionDisplayString += " (EDSM No server)";
+            }
+
+            if (parts.FindIndex(x => x.Equals("-DISABLEBETACHECK", StringComparison.InvariantCultureIgnoreCase)) != -1)
+            {
+                EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
+                VersionDisplayString += " (no BETA detect)";
+            }
+
+            int jr = parts.FindIndex(x => x.Equals("-READJOURNAL", StringComparison.InvariantCultureIgnoreCase));   // use this so much to check journal decoding
+            if (jr != -1)
+            {
+                string file = parts[jr + 1];
+                System.IO.StreamReader filejr = new System.IO.StreamReader(file);
+                string line;
+                string system = "";
+                StarScan ss = new StarScan();
+
+                while ((line = filejr.ReadLine()) != null)
+                {
+                    if (line.Equals("END"))
+                        break;
+                    //System.Diagnostics.Trace.WriteLine(line);
+                    if (line.Length > 0)
+                    {
+                        JObject jo = (JObject)JObject.Parse(line);
+                        JSONPrettyPrint jpp = new JSONPrettyPrint(EliteDangerous.JournalEntry.StandardConverters(), "event;timestamp", "_Localised", (string)jo["event"]);
+                        string s = jpp.PrettyPrint(line, 80);
+                        //System.Diagnostics.Trace.WriteLine(s);
+
+                        EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
+                        //System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
+
+                        if (je.EventTypeID == JournalTypeEnum.Location)
+                        {
+                            EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
+                            system = jl.StarSystem;
+                        }
+                        else if (je.EventTypeID == JournalTypeEnum.FSDJump)
+                        {
+                            EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
+                            system = jfsd.StarSystem;
+
+                        }
+                        else if (je.EventTypeID == JournalTypeEnum.Scan)
+                        {
+                            ss.Process(je as JournalScan, new SystemClass(system));
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Unexpected exception handling
+        // We can't prevent an unhandled exception from killing the application.
+        // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
+        // Log the exception info if we can, and ask the user to report it.
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        [System.Runtime.ConstrainedExecution.ReliabilityContract(
+            System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState,
+            System.Runtime.ConstrainedExecution.Cer.Success)]
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Trace.WriteLine($"\n==== UNHANDLED EXCEPTION ====\n{e.ExceptionObject.ToString()}\n==== cut ====");
+                MessageBox.Show($"There was an unhandled exception.\nPlease report this at https://github.com/EDDiscovery/EDDiscovery/issues and attach {logname}\nException: {e.ExceptionObject.ToString()}\n\nThis application must now close", "Unhandled Exception");
+            }
+            catch
+            {
+            }
+
+            Environment.Exit(1);
+        }
+
+        // Handling a ThreadException leaves the application in an undefined state.
+        // See https://msdn.microsoft.com/en-us/library/system.windows.forms.application.threadexception(v=vs.100).aspx
+        // Log the exception, ask the user to report it, and exit.
+        private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Trace.WriteLine($"\n==== UNHANDLED EXCEPTION ON {Thread.CurrentThread.Name} THREAD ====\n{e.Exception.ToString()}\n==== cut ====");
+                MessageBox.Show($"There was an unhandled exception.\nPlease report this at https://github.com/EDDiscovery/EDDiscovery/issues and attach {logname}\nException: {e.Exception.Message}\n{e.Exception.StackTrace}\n\nThis application must now close", "Unhandled Exception");
+            }
+            catch
+            {
+            }
+
+            Environment.Exit(1);
+        }
+
+        // Mono does not implement AppDomain.CurrentDomain.FirstChanceException
+        private static void Register_FirstChanceException_Handler()
+        {
+            try
+            {
+                Type adtype = AppDomain.CurrentDomain.GetType();
+                EventInfo fcexevent = adtype.GetEvent("FirstChanceException");
+                if (fcexevent != null)
+                {
+                    fcexevent.AddEventHandler(AppDomain.CurrentDomain, new EventHandler<System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs>(CurrentDomain_FirstChanceException));
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        // Log exceptions were they occur so we can try to  some
+        // hard to debug issues.
+        private static void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+        {
+            // Ignore HTTP NotModified exceptions
+            if (e.Exception is System.Net.WebException)
+            {
+                var webex = (WebException)e.Exception;
+                if (webex.Response != null && webex.Response is HttpWebResponse)
+                {
+                    var resp = (HttpWebResponse)webex.Response;
+                    if (resp.StatusCode == HttpStatusCode.NotModified)
+                    {
+                        return;
+                    }
+                }
+            }
+            // Ignore DLL Not Found exceptions from OpenTK
+            else if (e.Exception is DllNotFoundException && e.Exception.Source == "OpenTK")
+            {
+                return;
+            }
+
+            var trace = new StackTrace(1, true);
+
+            // Ignore first-chance exceptions in threads outside our code
+            bool ourcode = false;
+            foreach (var frame in trace.GetFrames())
+            {
+                if (frame.GetMethod().DeclaringType.Assembly == Assembly.GetExecutingAssembly())
+                {
+                    ourcode = true;
+                    break;
+                }
+            }
+
+            if (ourcode)
+                System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.Message}\n{trace.ToString()}");
         }
         #endregion
 
