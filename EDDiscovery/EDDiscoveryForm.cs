@@ -307,20 +307,15 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (safeClose == null)                  // so a close is a request now, and it launches a thread which cleans up the system..
+            if (!PendingClose)                  // so a close is a request now, and it launches a thread which cleans up the system..
             {
                 e.Cancel = true;
-                closeRequested.Set();
+                Shutdown();
                 edsmRefreshTimer.Enabled = false;
-                EDDNSync.StopSync();
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
-                LogLineHighlight("Closing down, please wait..");
-                Console.WriteLine("Close.. safe close launched");
-                safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
-                safeClose.Start();
             }
-            else if (safeClose.IsAlive)   // still working, cancel again..
+            else if (!readyForClose)   // still working, cancel again..
             {
                 e.Cancel = true;
             }
@@ -330,40 +325,16 @@ namespace EDDiscovery
             }
         }
 
-        private void SafeClose()        // ASYNC thread..
+        protected override void OnSafeClose()        // ASYNC thread..
         {
-            Thread.Sleep(1000);
-
-            Console.WriteLine("Stopping discrete threads");
-            journalmonitor.StopMonitor();
-
-            if (EdsmSync != null)
-                EdsmSync.StopSync();
-
             travelHistoryControl1.CloseClosestSystemThread();
-
-            Console.WriteLine("Go for close timer!");
-
-            Invoke((MethodInvoker)delegate          // we need this thread to die so close will work, so kick off a timer
-            {
-                closeTimer = new System.Windows.Forms.Timer();
-                closeTimer.Interval = 100;
-                closeTimer.Tick += new EventHandler(CloseItFinally);
-                closeTimer.Start();
-            });
         }
 
-        void CloseItFinally(Object sender, EventArgs e)
+        protected override void OnFinalClose()
         {
-            if (safeClose.IsAlive)      // still alive, try again
-                closeTimer.Start();
-            else
-            {
-                closeTimer.Stop();      // stop timer now. So it won't try to save it multiple times during close down if it takes a while - this caused a bug in saving some settings
-                SaveSettings();         // do close now
-                Close();
-                Application.Exit();
-            }
+            SaveSettings();         // do close now
+            Close();
+            Application.Exit();
         }
 
 #endregion

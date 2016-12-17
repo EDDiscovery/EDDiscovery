@@ -90,6 +90,7 @@ namespace EDDiscovery
         protected bool performhistoryrefresh = false;
         protected bool syncwasfirstrun = false;
         protected bool syncwaseddboredsm = false;
+        protected bool readyForClose = false;
         protected Thread safeClose;
         protected System.Windows.Forms.Timer closeTimer;
         protected Thread backgroundWorker;
@@ -1261,6 +1262,35 @@ namespace EDDiscovery
 
             return json;
         }
+        #endregion
+
+        #region Shutdown
+        protected void Shutdown()
+        {
+            closeRequested.Set();
+            EDDNSync.StopSync();
+            journalmonitor.StopMonitor();
+            EdsmSync.StopSync();
+
+            LogLineHighlight("Closing down, please wait..");
+            Console.WriteLine("Close.. safe close launched");
+            safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
+            safeClose.Start();
+        }
+
+        private void SafeClose()
+        {
+            OnSafeClose();
+            backgroundWorker.Join();
+            readyForClose = true;
+            InvokeAsyncOnUIThread(() =>
+            {
+                OnFinalClose();
+            });
+        }
+
+        protected virtual void OnSafeClose() { }
+        protected virtual void OnFinalClose() { }
         #endregion
     }
 }
