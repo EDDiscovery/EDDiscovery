@@ -36,8 +36,9 @@
             this.panel_ontop = new ExtendedControls.DrawnPanel();
             this.panel_transparent = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panelTop = new System.Windows.Forms.Panel();
             this.panel_taskbaricon = new ExtendedControls.DrawnPanel();
+            this.panel_showtitle = new ExtendedControls.DrawnPanel();
+            this.panelTop = new System.Windows.Forms.Panel();
             this.statusStripCustom1 = new ExtendedControls.StatusStripCustom();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
@@ -110,7 +111,7 @@
             this.panel_transparent.DrawnImage = null;
             this.panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Transparent;
             this.panel_transparent.ImageText = null;
-            this.panel_transparent.Location = new System.Drawing.Point(514, -2);
+            this.panel_transparent.Location = new System.Drawing.Point(490, -2);
             this.panel_transparent.MarginSize = 6;
             this.panel_transparent.MouseOverColor = System.Drawing.Color.White;
             this.panel_transparent.MouseSelectedColor = System.Drawing.Color.Green;
@@ -140,22 +141,6 @@
             this.toolTip1.SetToolTip(this.panel_close, "Close");
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
-            // panelTop
-            // 
-            this.panelTop.Controls.Add(this.label_index);
-            this.panelTop.Controls.Add(this.labelControlText);
-            this.panelTop.Controls.Add(this.panel_minimize);
-            this.panelTop.Controls.Add(this.panel_ontop);
-            this.panelTop.Controls.Add(this.panel_taskbaricon);
-            this.panelTop.Controls.Add(this.panel_transparent);
-            this.panelTop.Controls.Add(this.panel_close);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(634, 22);
-            this.panelTop.TabIndex = 27;
-            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
-            // 
             // panel_taskbaricon
             // 
             this.panel_taskbaricon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -174,6 +159,40 @@
             this.panel_taskbaricon.TabIndex = 24;
             this.toolTip1.SetToolTip(this.panel_taskbaricon, "Toggle show taskbar icon for this window");
             this.panel_taskbaricon.Click += new System.EventHandler(this.panel_taskbaricon_Click);
+            // 
+            // panel_showtitle
+            // 
+            this.panel_showtitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_showtitle.DrawnImage = null;
+            this.panel_showtitle.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Captioned;
+            this.panel_showtitle.ImageText = "";
+            this.panel_showtitle.Location = new System.Drawing.Point(514, -2);
+            this.panel_showtitle.MarginSize = 6;
+            this.panel_showtitle.MouseOverColor = System.Drawing.Color.White;
+            this.panel_showtitle.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_showtitle.MouseSelectedColorEnable = true;
+            this.panel_showtitle.Name = "panel_showtitle";
+            this.panel_showtitle.Size = new System.Drawing.Size(24, 24);
+            this.panel_showtitle.TabIndex = 26;
+            this.toolTip1.SetToolTip(this.panel_showtitle, "Toggle title visibility for this window");
+            this.panel_showtitle.Click += new System.EventHandler(this.panel_showtitle_Click);
+            // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.panel_showtitle);
+            this.panelTop.Controls.Add(this.label_index);
+            this.panelTop.Controls.Add(this.labelControlText);
+            this.panelTop.Controls.Add(this.panel_minimize);
+            this.panelTop.Controls.Add(this.panel_ontop);
+            this.panelTop.Controls.Add(this.panel_taskbaricon);
+            this.panelTop.Controls.Add(this.panel_transparent);
+            this.panelTop.Controls.Add(this.panel_close);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(634, 22);
+            this.panelTop.TabIndex = 27;
+            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
             // 
             // statusStripCustom1
             // 
@@ -215,5 +234,6 @@
         private ExtendedControls.DrawnPanel panel_transparent;
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.DrawnPanel panel_taskbaricon;
+        private ExtendedControls.DrawnPanel panel_showtitle;
     }
 }

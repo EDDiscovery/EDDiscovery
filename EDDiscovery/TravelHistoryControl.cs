@@ -664,6 +664,16 @@ namespace EDDiscovery
             _discoveryForm.Open3DMap(userControlTravelGrid.GetCurrentHistoryEntry);
         }
 
+        public void ShowAllPopOutsInTaskBar()
+        {
+            usercontrolsforms.ShowAllInTaskBar();
+        }
+
+        public void MakeAllPopoutsOpaque()
+        {
+            usercontrolsforms.MakeAllOpaque();
+        }
+
         private void Resort()       // user travel grid to say it resorted
         {
             UpdateDependentsWithSelection();
