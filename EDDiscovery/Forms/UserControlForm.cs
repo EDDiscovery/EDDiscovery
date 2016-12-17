@@ -75,7 +75,7 @@ namespace EDDiscovery.Forms
 
             displayTitle = SQLiteDBClass.GetSettingBool(dbrefname + "ShowTitle", true);
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
-            label_index.Text = displayTitle ? Text : String.Empty;
+            label_index.Text = displayTitle || !istransparent ? Text : String.Empty;
 
             Invalidate();
         }
@@ -93,11 +93,11 @@ namespace EDDiscovery.Forms
             if (FormBorderStyle == FormBorderStyle.None)
             {
                 labelControlText.Location = new Point(label_index.Location.X + label_index.Width + 16, labelControlText.Location.Y);
-                labelControlText.Text = displayTitle ? text : String.Empty;
+                labelControlText.Text = displayTitle || !istransparent ? text : String.Empty;
             }
             else
             {
-                this.Text = displayTitle ? (wintitle + " " + text) : String.Empty;
+                this.Text = displayTitle || !istransparent ? (wintitle + " " + text) : String.Empty;
             }
         }
 
@@ -109,10 +109,24 @@ namespace EDDiscovery.Forms
                 return null;
         }
 
-        public void SetTransparency(bool t)
+        public void SetTransparency(bool t, bool toggleTitle)
         {
             if (IsTransparencySupported)
             {
+                if (toggleTitle)
+                {
+                    if (!t)
+                    {
+                        displayTitle = true;
+                        panel_showtitle.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Captioned;
+                        panel_showtitle.Enabled = false;
+                        SQLiteDBClass.PutSettingBool(dbrefname + "ShowTitle", true);
+                    }
+                    else
+                    {
+                        panel_showtitle.Enabled = true;
+                    }
+                }
                 istransparent = t;
                 UpdateTransparency();
             }
@@ -173,6 +187,9 @@ namespace EDDiscovery.Forms
 
             panel_transparent.Visible = IsTransparencySupported && !transparent;
             panel_transparent.ImageSelected = (istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent;
+
+            label_index.Text = (transparent && !displayTitle) ? String.Empty : this.Text;
+            SetControlText(control_text);
         }
 
         private void UserControlForm_Load(object sender, EventArgs e)
@@ -217,7 +234,7 @@ namespace EDDiscovery.Forms
 
             bool tr = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent);
             if ( tr )
-                SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
+                SetTransparency(true, false);      // only call if transparent.. may not be fully set up so don't merge with above
 
             SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
         }
@@ -261,9 +278,9 @@ namespace EDDiscovery.Forms
         {
             istransparent = !istransparent;
             inpanelshow = true;
-            UpdateTransparency();
+            SetTransparency(istransparent, true);
 
-            SQLiteDBClass.PutSettingBool(dbrefname + "Transparent", istransparent);
+            SQLiteDBClass.PutSettingBool(dbrefname + "Transparent", istransparent);            
         }
 
         private void panel_taskbaricon_Click(object sender, EventArgs e)
@@ -413,8 +430,6 @@ namespace EDDiscovery.Forms
         private void panel_showtitle_Click(object sender, EventArgs e)
         {
             displayTitle = !displayTitle;
-            SetControlText(control_text);
-            label_index.Text = displayTitle ? this.Text : String.Empty;
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
             SQLiteDBClass.PutSettingBool(dbrefname + "ShowTitle", displayTitle);
         }
@@ -590,7 +605,7 @@ namespace EDDiscovery.Forms
         {
             foreach (UserControlForm ucf in tabforms)
             {
-                if (ucf.isloaded) ucf.SetTransparency(false);
+                if (ucf.isloaded) ucf.SetTransparency(false, true);
             }
         }
 
