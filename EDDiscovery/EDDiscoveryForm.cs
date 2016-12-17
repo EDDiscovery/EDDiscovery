@@ -112,7 +112,6 @@ namespace EDDiscovery
             {
                 splashform.Close();
             }
-            base.DatabaseInitializationComplete();
         }
 
 
@@ -124,21 +123,20 @@ namespace EDDiscovery
         {
             try
             {
-                if (!(SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized))
+                if (!IsDatabaseInitialized)
                 {
                     splashform = new SplashForm();
                     splashform.ShowDialog(this);
                 }
 
-                EliteDangerousClass.CheckED();
-                EDDConfig.Update();
+                PostInit_Load();
+
                 RepositionForm();
                 InitFormControls();
                 settings.InitSettingsTab();
                 savedRouteExpeditionControl1.LoadControl();
                 travelHistoryControl1.LoadControl();
 
-                CheckIfEliteDangerousIsRunning();
 
                 if (option_debugoptions)
                 {
@@ -153,9 +151,7 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            readyForInitialLoad.Set();
-            _checkSystemsWorker.RunWorkerAsync();
-            downloadMapsTask = DownloadMaps();
+            PostInit_Shown();
 
             if (!themeok)
             {
@@ -164,48 +160,9 @@ namespace EDDiscovery
             }
         }
 
-        private Task CheckForNewInstallerAsync()
+        protected override void OnNewReleaseAvailable()
         {
-            return Task.Factory.StartNew(() =>
-            {
-                CheckForNewinstaller();
-            });
-        }
-
-        private bool CheckForNewinstaller()
-        {
-                try
-                {
-
-                    GitHubClass github = new GitHubClass();
-
-                    GitHubRelease rel = github.GetLatestRelease();
-
-                    if (rel != null)
-                    {
-                        //string newInstaller = jo["Filename"].Value<string>();
-
-                        var currentVersion = Application.ProductVersion;
-
-                        Version v1, v2;
-                        v1 = new Version(rel.ReleaseVersion);
-                        v2 = new Version(currentVersion);
-
-                        if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
-                        {
-                            newRelease = rel;
-                            this.BeginInvoke(new Action(() => LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
-                            this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
-                        return true;
-                        }
-                    }
-                }
-                catch (Exception )
-                {
-
-                }
-
-            return false;
+            PanelInfoNewRelease();
         }
 
         private void PanelInfoNewRelease()
@@ -259,18 +216,6 @@ namespace EDDiscovery
             journalViewControl1.LoadLayoutSettings();
         }
 
-        private void CheckIfEliteDangerousIsRunning()
-        {
-            if (EliteDangerousClass.EDRunning)
-            {
-                LogLine("EliteDangerous is running.");
-            }
-            else
-            {
-                LogLine("EliteDangerous is not running.");
-            }
-        }
-
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
         }
@@ -296,113 +241,29 @@ namespace EDDiscovery
 #region Initial Check Systems
 
 
-        private void _checkSystemsWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        protected override void OnCheckSystemsCompleted()
         {
-            try
-            {
-                var worker = (System.ComponentModel.BackgroundWorker)sender;
-
-                CheckSystems(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
-
-                if (worker.CancellationPending)
-                    e.Cancel = true;
-            }
-            catch (Exception ex) { e.Result = ex; }       // any exceptions, ignore
-            finally
-            {
-                _checkSystemsWorkerCompletedEvent.Set();
-            }
-        }
-
-        private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
-        {
-            reportProgress(-1, "");
-
-            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-            DateTime edsmdate;
-
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
-            {
-                edsmdate = new DateTime(2000, 1, 1);
-            }
-
-            if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
-            {
-                // Also update galactic mapping from EDSM 
-                LogLine("Get galactic mapping from EDSM.");
-                galacticMapping.DownloadFromEDSM();
-
-                // Skip EDSM full update if update has been performed in last 4 days
-                bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
-                DateTime lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
-
-                if (DateTime.UtcNow.Subtract(lastmod).TotalDays > 4 ||
-                    DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
-                {
-                    performedsmsync = true;
-                }
-                else
-                {
-                    SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", DateTime.Now.ToString(CultureInfo.InvariantCulture));
-                }
-            }
-
-            if (!cancelRequested())
-            {
-                SQLiteConnectionUser.TranferVisitedSystemstoJournalTableIfRequired();
-                SQLiteConnectionSystem.CreateSystemsTableIndexes();
-                SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
-                BookmarkClass.GetAllBookmarks();
-                galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
-                SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
-                EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
-
-                LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
-
-                string timestr = SQLiteConnectionSystem.GetSettingString("EDDBSystemsTime", "0");
-                DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
-                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
-                    performeddbsync = true;
-            }
-        }
-
-        private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            Exception ex = e.Cancelled ? null : (e.Error ?? e.Result as Exception);
             ReportProgress(-1, "");
-            if (!e.Cancelled && !PendingClose)
+            imageHandler1.StartWatcher();
+            routeControl1.EnableRouteTab(); // now we have systems, we can update this..
+
+            routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+            journalmonitor.OnNewJournalEntry += NewPosition;
+            EdsmSync.OnDownloadedSystems += RefreshDueToEDSMDownloadedSystems;
+
+
+            LogLine("Reading travel history");
+            HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
+
+            RefreshHistoryAsync();
+
+            panelInfo.Visible = false;
+
+            if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
             {
-                if (ex != null)
+                if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
                 {
-                    LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
-                }
-
-                imageHandler1.StartWatcher();
-                routeControl1.EnableRouteTab(); // now we have systems, we can update this..
-
-                routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                journalmonitor.OnNewJournalEntry += NewPosition;
-                EdsmSync.OnDownloadedSystems += RefreshDueToEDSMDownloadedSystems;
-
-
-                LogLine("Reading travel history");
-                HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
-
-                RefreshHistoryAsync();
-
-                DeleteOldLogFiles();
-
-
-                panelInfo.Visible = false;
-
-                checkInstallerTask = CheckForNewInstallerAsync();
-
-                if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
-                {
-                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
-                    {
-                        LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
-                    }
+                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
                 }
             }
         }
@@ -789,7 +650,6 @@ namespace EDDiscovery
                 CancelHistoryRefresh();
                 EDDNSync.StopSync();
                 _syncWorker.CancelAsync();
-                _checkSystemsWorker.CancelAsync();
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
                 LogLineHighlight("Closing down, please wait..");
@@ -810,9 +670,6 @@ namespace EDDiscovery
         private void SafeClose()        // ASYNC thread..
         {
             Thread.Sleep(1000);
-            Console.WriteLine("Waiting for check systems to close");
-            if (_checkSystemsWorker.IsBusy)
-                _checkSystemsWorkerCompletedEvent.WaitOne();
 
             Console.WriteLine("Waiting for full sync to close");
             if (_syncWorker.IsBusy)

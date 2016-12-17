@@ -78,7 +78,6 @@ namespace EDDiscovery
         protected ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
         protected ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
         protected Task<bool> downloadMapsTask = null;
-        protected Task checkInstallerTask = null;
         protected string logname = "";
         protected BackgroundWorker dbinitworker = null;
         protected EDJournalClass journalmonitor;
@@ -96,7 +95,7 @@ namespace EDDiscovery
         protected AutoResetEvent refreshRequested;
         protected RefreshWorkerArgs refreshWorkerArgs;
         protected AutoResetEvent resyncRequested;
-
+        protected bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
         protected bool CanSkipSlowUpdates
         {
             get
@@ -160,6 +159,19 @@ namespace EDDiscovery
             EdsmSync = new EDSMSync((EDDiscoveryForm)this);
             journalmonitor = new EDJournalClass();
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+        }
+
+        protected void PostInit_Load()
+        {
+            EliteDangerousClass.CheckED();
+            EDDConfig.Update();
+            CheckIfEliteDangerousIsRunning();
+        }
+
+        protected void PostInit_Shown()
+        {
+            readyForInitialLoad.Set();
+            downloadMapsTask = DownloadMaps();
         }
 
         private void InitLogging()
@@ -274,6 +286,20 @@ namespace EDDiscovery
                 }
             }
         }
+
+        private void CheckIfEliteDangerousIsRunning()
+        {
+            if (EliteDangerousClass.EDRunning)
+            {
+                LogLine("EliteDangerous is running.");
+            }
+            else
+            {
+                LogLine("EliteDangerous is not running.");
+            }
+        }
+
+
         #endregion
 
         #region Unexpected exception handling
@@ -378,7 +404,12 @@ namespace EDDiscovery
         private void BackgroundWorkerThread()
         {
             InitializeDatabases();
+            InvokeAsyncOnUIThread(() => DatabaseInitializationComplete());
             readyForInitialLoad.WaitOne();
+            CheckSystems(() => PendingClose, (p, s) => InvokeAsyncOnUIThread(() => ReportProgress(p, s)));
+            InvokeSyncOnUIThread(() => OnCheckSystemsCompleted());
+            DeleteOldLogFiles();
+            CheckForNewinstaller();
         }
 
         protected void InvokeAsyncOnUIThread(Action a)
@@ -398,10 +429,47 @@ namespace EDDiscovery
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
             Trace.WriteLine("Database initialization complete");
-            InvokeAsyncOnUIThread(() => DatabaseInitializationComplete());
         }
 
         protected abstract void DatabaseInitializationComplete();
+
+        protected bool CheckForNewinstaller()
+        {
+            try
+            {
+
+                GitHubClass github = new GitHubClass();
+
+                GitHubRelease rel = github.GetLatestRelease();
+
+                if (rel != null)
+                {
+                    //string newInstaller = jo["Filename"].Value<string>();
+
+                    var currentVersion = Application.ProductVersion;
+
+                    Version v1, v2;
+                    v1 = new Version(rel.ReleaseVersion);
+                    v2 = new Version(currentVersion);
+
+                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                    {
+                        newRelease = rel;
+                        LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName);
+                        InvokeAsyncOnUIThread(() => OnNewReleaseAvailable());
+                        return true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return false;
+        }
+
+        protected abstract void OnNewReleaseAvailable();
         #endregion
 
         #region Logging
@@ -585,6 +653,65 @@ namespace EDDiscovery
             {
                 LogLine("Exception in DeleteMapFile:" + ex.Message);
             }
+        }
+        #endregion
+
+        #region Initial Data Load
+        private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
+        {
+            reportProgress(-1, "");
+
+            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+            DateTime edsmdate;
+
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
+            {
+                edsmdate = new DateTime(2000, 1, 1);
+            }
+
+            if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
+            {
+                // Also update galactic mapping from EDSM 
+                LogLine("Get galactic mapping from EDSM.");
+                galacticMapping.DownloadFromEDSM();
+
+                // Skip EDSM full update if update has been performed in last 4 days
+                bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
+                DateTime lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+
+                if (DateTime.UtcNow.Subtract(lastmod).TotalDays > 4 ||
+                    DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
+                {
+                    performedsmsync = true;
+                }
+                else
+                {
+                    SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", DateTime.Now.ToString(CultureInfo.InvariantCulture));
+                }
+            }
+
+            if (!cancelRequested())
+            {
+                SQLiteConnectionUser.TranferVisitedSystemstoJournalTableIfRequired();
+                SQLiteConnectionSystem.CreateSystemsTableIndexes();
+                SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
+                BookmarkClass.GetAllBookmarks();
+                galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
+                SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
+                EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
+
+                LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
+
+                string timestr = SQLiteConnectionSystem.GetSettingString("EDDBSystemsTime", "0");
+                DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
+                    performeddbsync = true;
+            }
+        }
+
+        protected virtual void OnCheckSystemsCompleted()
+        {
+
         }
         #endregion
     }

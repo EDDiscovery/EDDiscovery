@@ -63,7 +63,6 @@
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this._syncWorker = new System.ComponentModel.BackgroundWorker();
-            this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this._refreshWorker = new System.ComponentModel.BackgroundWorker();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
@@ -373,14 +372,6 @@
             this._syncWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._syncWorker_DoWork);
             this._syncWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._syncWorker_ProgressChanged);
             this._syncWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._syncWorker_RunWorkerCompleted);
-            // 
-            // _checkSystemsWorker
-            // 
-            this._checkSystemsWorker.WorkerReportsProgress = true;
-            this._checkSystemsWorker.WorkerSupportsCancellation = true;
-            this._checkSystemsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._checkSystemsWorker_DoWork);
-            this._checkSystemsWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._checkSystemsWorker_ProgressChanged);
-            this._checkSystemsWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._checkSystemsWorker_RunWorkerCompleted);
             // 
             // edsmRefreshTimer
             // 
@@ -738,7 +729,6 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.ComponentModel.BackgroundWorker _syncWorker;
-        private System.ComponentModel.BackgroundWorker _checkSystemsWorker;
         private System.Windows.Forms.Timer edsmRefreshTimer;
         private System.Windows.Forms.TabPage tabPageJournal;
         private JournalViewControl journalViewControl1;
