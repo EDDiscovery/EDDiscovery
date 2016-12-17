@@ -76,15 +76,6 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        private class TraceLogWriter : TextWriter
-        {
-            public override Encoding Encoding { get { return Encoding.UTF8; } }
-            public override IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
-            public override void Write(string value) { Trace.Write(value); }
-            public override void WriteLine(string value) { Trace.WriteLine(value); }
-            public override void WriteLine() { Trace.WriteLine(""); }
-        }
-
         public EDDiscoveryForm()
         {
             InitializeComponent();
@@ -125,18 +116,10 @@ namespace EDDiscovery
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
 
-            SQLiteConnectionUser.EarlyReadRegister();
-            EDDConfig.Instance.Update(write: false);
 
-            dbinitworker = new BackgroundWorker();
-            dbinitworker.DoWork += Dbinitworker_DoWork;
-            dbinitworker.RunWorkerCompleted += Dbinitworker_RunWorkerCompleted;
-            dbinitworker.RunWorkerAsync();
+            base.Init();
 
             theme = new EDDTheme();
-
-            EDDConfig = EDDConfig.Instance;
-            galacticMapping = new GalacticMapping();
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
@@ -152,34 +135,20 @@ namespace EDDiscovery
             exportControl1.InitControl(this);
 
 
-            EdsmSync = new EDSMSync(this);
-
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, travelHistoryControl1);
-
-            journalmonitor = new EliteDangerous.EDJournalClass();
 
             this.TopMost = EDDConfig.KeepOnTop;
 
             ApplyTheme();
-
-            DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
         }
 
-        private void Dbinitworker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Trace.WriteLine("Initializing database");
-            SQLiteConnectionOld.Initialize();
-            SQLiteConnectionUser.Initialize();
-            SQLiteConnectionSystem.Initialize();
-            Trace.WriteLine("Database initialization complete");
-        }
-
-        private void Dbinitworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        protected override void DatabaseInitializationComplete()
         {
             if (splashform != null)
             {
                 splashform.Close();
             }
+            base.DatabaseInitializationComplete();
         }
 
         // We can't prevent an unhandled exception from killing the application.
@@ -1642,22 +1611,6 @@ namespace EDDiscovery
         #endregion
 
         #region Update Data
-
-        protected class RefreshWorkerArgs
-        {
-            public string NetLogPath;
-            public bool ForceNetLogReload;
-            public bool ForceJournalReload;
-            public bool CheckEdsm;
-            public int CurrentCommander;
-        }
-
-        protected class RefreshWorkerResults
-        {
-            public List<HistoryEntry> rethistory;
-            public MaterialCommoditiesLedger retledger;
-            public StarScan retstarscan;
-        }
 
         public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
         {

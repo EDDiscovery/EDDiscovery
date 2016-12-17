@@ -1,12 +1,17 @@
-﻿using EDDiscovery.EDSM;
+﻿using EDDiscovery.DB;
+using EDDiscovery.EDSM;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.HTTP;
 using EDDiscovery2;
+using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,6 +22,31 @@ namespace EDDiscovery
 {
     public class EDDiscoveryFormBase : Form
     {
+        protected class RefreshWorkerArgs
+        {
+            public string NetLogPath;
+            public bool ForceNetLogReload;
+            public bool ForceJournalReload;
+            public bool CheckEdsm;
+            public int CurrentCommander;
+        }
+
+        protected class RefreshWorkerResults
+        {
+            public List<HistoryEntry> rethistory;
+            public MaterialCommoditiesLedger retledger;
+            public StarScan retstarscan;
+        }
+
+        protected class TraceLogWriter : TextWriter
+        {
+            public override Encoding Encoding { get { return Encoding.UTF8; } }
+            public override IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
+            public override void Write(string value) { Trace.Write(value); }
+            public override void WriteLine(string value) { Trace.WriteLine(value); }
+            public override void WriteLine() { Trace.WriteLine(""); }
+        }
+
         #region Properties, Fields and Events
 
         #region Public Properties
@@ -56,7 +86,11 @@ namespace EDDiscovery
         protected bool syncwaseddboredsm = false;
         protected Thread safeClose;
         protected System.Windows.Forms.Timer closeTimer;
-
+        protected Thread backgroundWorker;
+        protected AutoResetEvent readyForInitialLoad;
+        protected AutoResetEvent refreshRequested;
+        protected RefreshWorkerArgs refreshWorkerArgs;
+        protected AutoResetEvent resyncRequested;
 
         protected bool CanSkipSlowUpdates
         {
@@ -92,6 +126,63 @@ namespace EDDiscovery
         protected void InvokeHistoryRefreshed()
         {
             HistoryRefreshed?.Invoke();
+        }
+        #endregion
+
+        #region Initialization
+        public EDDiscoveryFormBase()
+        {
+
+        }
+
+        protected void Init()
+        {
+            SQLiteConnectionUser.EarlyReadRegister();
+            EDDConfig.Instance.Update(write: false);
+
+            backgroundWorker = new Thread(BackgroundWorkerThread);
+            backgroundWorker.IsBackground = true;
+            backgroundWorker.Name = "Background Worker Thread";
+            backgroundWorker.Start();
+
+            EDDConfig = EDDConfig.Instance;
+            galacticMapping = new GalacticMapping();
+            EdsmSync = new EDSMSync((EDDiscoveryForm)this);
+            journalmonitor = new EDJournalClass();
+            DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+        }
+        #endregion
+
+        #region Background Worker Thread
+        private void BackgroundWorkerThread()
+        {
+            InitializeDatabases();
+            readyForInitialLoad.WaitOne();
+        }
+
+        protected void InvokeAsyncOnUIThread(Action a)
+        {
+            BeginInvoke(a);
+        }
+
+        protected void InvokeSyncOnUIThread(Action a)
+        {
+            Invoke(a);
+        }
+
+        private void InitializeDatabases()
+        {
+            Trace.WriteLine("Initializing database");
+            SQLiteConnectionOld.Initialize();
+            SQLiteConnectionUser.Initialize();
+            SQLiteConnectionSystem.Initialize();
+            Trace.WriteLine("Database initialization complete");
+            InvokeAsyncOnUIThread(() => DatabaseInitializationComplete());
+        }
+
+        protected virtual void DatabaseInitializationComplete()
+        {
+
         }
         #endregion
     }
