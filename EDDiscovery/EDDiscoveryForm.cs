@@ -35,7 +35,7 @@ namespace EDDiscovery
 
     public delegate void DistancesLoaded();
 
-    public partial class EDDiscoveryForm : Form
+    public partial class EDDiscoveryForm : EDDiscoveryFormBase
     {
         #region Variables
 
@@ -63,62 +63,15 @@ namespace EDDiscovery
         private Point _window_dragWindowPos = Point.Empty;
         public EDDTheme theme;
 
-        public string CommanderName { get; private set; }
-        public int DisplayedCommander = 0;
-
-        public HistoryList history = new HistoryList();
-
-        static public EDDConfig EDDConfig { get; private set; }
-
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
-        public bool option_nowindowreposition { get; set; } = false;                             // Cmd line options
-        public bool option_debugoptions { get; set; } = false;
-
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
-        public event EventHandler HistoryRefreshed; // this is an internal hook
-
-
-        public delegate void HistoryChange(HistoryList l);          // subscribe to get events
-        public event HistoryChange OnHistoryChange;
-        public delegate void NewEntry(HistoryEntry l, HistoryList hl);
-        public event NewEntry OnNewEntry;
-        public delegate void NewLogEntry(string txt, Color c);
-        public event NewLogEntry OnNewLogEntry;
-
-        static public GalacticMapping galacticMapping;
-
-        public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
-
-        private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
-        private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
-
-        public EDSMSync EdsmSync;
-
-        Action cancelDownloadMaps = null;
-        Task<bool> downloadMapsTask = null;
-        Task checkInstallerTask = null;
-        private string logname = "";
         private bool themeok = true;
         private Forms.SplashForm splashform = null;
-        BackgroundWorker dbinitworker = null;
-
-        EliteDangerous.EDJournalClass journalmonitor;
-        GitHubRelease newRelease;
-
-        private bool CanSkipSlowUpdates()
-        {
-#if DEBUG
-            return EDDConfig.CanSkipSlowUpdates;
-#else
-            return false;
-#endif
-        }
-
         #endregion
 
         #region Initialisation
@@ -441,7 +394,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
             _checkSystemsWorker.RunWorkerAsync();
-            downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
+            downloadMapsTask = DownloadMaps();
 
             if (!themeok)
             {
@@ -572,8 +525,7 @@ namespace EDDiscovery
 
             theme.ApplyToForm(this);
 
-            if (OnHistoryChange!=null)
-                OnHistoryChange(history);
+            InvokeOnHistoryChange(history);
 
             TravelControl.RedrawSummary();
         }
@@ -582,9 +534,9 @@ namespace EDDiscovery
 
 #region Information Downloads
 
-        public Task<bool> DownloadMaps(Action<Action> registerCancelCallback)          // ASYNC process
+        public Task<bool> DownloadMaps()          // ASYNC process
         {
-            if (CanSkipSlowUpdates())
+            if (CanSkipSlowUpdates)
             {
                 LogLine("Skipping checking for new maps (DEBUG option).");
                 var tcs = new TaskCompletionSource<bool>();
@@ -695,8 +647,6 @@ namespace EDDiscovery
 
 #region Initial Check Systems
 
-        bool performedsmsync = false;
-        bool performeddbsync = false;
 
         private void _checkSystemsWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -719,8 +669,6 @@ namespace EDDiscovery
         private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
             reportProgress(-1, "");
-
-            CommanderName = EDDConfig.CurrentCommander.Name;
 
             string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate;
@@ -820,7 +768,7 @@ namespace EDDiscovery
         }
 
 
-        private void _travelHistoryControl1_InitialRefreshDone(object sender, EventArgs e)
+        private void _travelHistoryControl1_InitialRefreshDone()
         {
             HistoryRefreshed -= _travelHistoryControl1_InitialRefreshDone;
 
@@ -875,9 +823,6 @@ namespace EDDiscovery
             }
         }
 
-        bool performhistoryrefresh = false;
-        bool syncwasfirstrun = false;
-        bool syncwaseddboredsm = false;
 
         private void PerformSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
         {
@@ -921,7 +866,7 @@ namespace EDDiscovery
                 LogLine("Indexing systems table");
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
-                if (CanSkipSlowUpdates())
+                if (CanSkipSlowUpdates)
                 {
                     LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
                 }
@@ -968,7 +913,7 @@ namespace EDDiscovery
             }
         }
 
-        private void HistoryFinishedRefreshing(object sender, EventArgs e)
+        private void HistoryFinishedRefreshing()
         {
             HistoryRefreshed -= HistoryFinishedRefreshing;
             LogLine("Refreshing complete.");
@@ -1118,10 +1063,6 @@ namespace EDDiscovery
 
         #region Logging
 
-        private string logtext = "";     // to keep in case of no logs..
-
-        public string LogText { get { return logtext; } }
-
         public void LogLine(string text)
         {
             LogLineColor(text, theme.TextBlockColor);
@@ -1144,9 +1085,7 @@ namespace EDDiscovery
                 Invoke((MethodInvoker)delegate
                 {
                     logtext += text + Environment.NewLine;      // keep this, may be the only log showing
-
-                    if (OnNewLogEntry != null)
-                        OnNewLogEntry(text + Environment.NewLine, color);
+                    InvokeOnNewLogEntry(text + Environment.NewLine, color);
                 });
             }
             catch { }
@@ -1252,10 +1191,6 @@ namespace EDDiscovery
 
         }
 
-        Thread safeClose;
-        System.Windows.Forms.Timer closeTimer;
-
-        public bool PendingClose { get { return safeClose != null; } }           // we want to close boys!
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -1263,15 +1198,10 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
                 edsmRefreshTimer.Enabled = false;
-                CancellationTokenSource.Cancel();
                 CancelHistoryRefresh();
                 EDDNSync.StopSync();
                 _syncWorker.CancelAsync();
                 _checkSystemsWorker.CancelAsync();
-                if (cancelDownloadMaps != null)
-                {
-                    cancelDownloadMaps();
-                }
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
                 LogLineHighlight("Closing down, please wait..");
@@ -1878,15 +1808,13 @@ namespace EDDiscovery
                     ReportProgress(-1, "");
                     LogLine("Refresh Complete." );
 
-                    if (OnHistoryChange != null)
-                        OnHistoryChange(history);
+                    InvokeOnHistoryChange(history);
                 }
 
                 travelHistoryControl1.RefreshButton(true);
                 journalViewControl1.RefreshButton(true);
 
-                if (HistoryRefreshed != null)
-                    HistoryRefreshed(this, EventArgs.Empty);
+                InvokeHistoryRefreshed();
 
                 journalmonitor.StartMonitor();
             }
@@ -1939,8 +1867,7 @@ namespace EDDiscovery
 
         public void RefreshDisplays()
         {
-            if (OnHistoryChange != null)
-                OnHistoryChange(history);
+            InvokeOnHistoryChange(history);
         }
 
         public void NewPosition(EliteDangerous.JournalEntry je)
@@ -1983,8 +1910,7 @@ namespace EDDiscovery
                     }
                 }
 
-                if (OnNewEntry != null)
-                    OnNewEntry(he,history);
+                InvokeOnNewEntry(he, history);
 
                 if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
                     travelHistoryControl1.NewBodyScan(je as EliteDangerous.JournalEvents.JournalScan);
@@ -2004,8 +1930,7 @@ namespace EDDiscovery
             history.materialcommodititiesledger = matcommodledger; ;
             history.starscan = starscan;
 
-            if (OnHistoryChange != null)
-                OnHistoryChange(history);
+            InvokeOnHistoryChange(history);
         }
 
 
