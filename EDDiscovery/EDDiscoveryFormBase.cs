@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public class EDDiscoveryFormBase : Form
+    public abstract class EDDiscoveryFormBase : Form
     {
         protected class RefreshWorkerArgs
         {
@@ -401,9 +401,190 @@ namespace EDDiscovery
             InvokeAsyncOnUIThread(() => DatabaseInitializationComplete());
         }
 
-        protected virtual void DatabaseInitializationComplete()
-        {
+        protected abstract void DatabaseInitializationComplete();
+        #endregion
 
+        #region Logging
+        public void LogLine(string text)
+        {
+            LogLineColor(text, GetLogNormalColour());
+        }
+
+        public void LogLineHighlight(string text)
+        {
+            LogLineColor(text, GetLogHighlightColour());
+        }
+
+        public void LogLineSuccess(string text)
+        {
+            LogLineColor(text, GetLogSuccessColour());
+        }
+
+        public void LogLineColor(string text, Color color)
+        {
+            try
+            {
+                InvokeAsyncOnUIThread(() =>
+                {
+                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
+                    InvokeOnNewLogEntry(text + Environment.NewLine, color);
+                });
+            }
+            catch { }
+        }
+
+        protected abstract Color GetLogNormalColour();
+        protected abstract Color GetLogHighlightColour();
+        protected abstract Color GetLogSuccessColour();
+
+        public abstract void ReportProgress(int percentComplete, string message);
+
+        protected void DeleteOldLogFiles()
+        {
+            try
+            {
+                // Create a reference to the Log directory.
+                DirectoryInfo di = new DirectoryInfo(Path.Combine(Tools.GetAppDataDirectory(), "Log"));
+
+                Trace.WriteLine("Running logfile age check");
+                // Create an array representing the files in the current directory.
+                FileInfo[] fi = di.GetFiles("*.log");
+
+                System.Collections.IEnumerator myEnum = fi.GetEnumerator();
+
+                while (myEnum.MoveNext())
+                {
+                    FileInfo fiTemp = (FileInfo)(myEnum.Current);
+
+                    DateTime time = fiTemp.CreationTime;
+
+                    //Trace.WriteLine(String.Format("File {0}  time {1}", fiTemp.Name, __box(time)));
+
+                    TimeSpan maxage = new TimeSpan(30, 0, 0, 0);
+                    TimeSpan fileage = DateTime.Now - time;
+
+                    if (fileage > maxage)
+                    {
+                        Trace.WriteLine(String.Format("File {0} is older then maximum age. Removing file from Logs.", fiTemp.Name));
+                        fiTemp.Delete();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        #endregion
+
+        #region Map Download
+        public Task<bool> DownloadMaps()          // ASYNC process
+        {
+            if (CanSkipSlowUpdates)
+            {
+                LogLine("Skipping checking for new maps (DEBUG option).");
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetResult(false);
+                return tcs.Task;
+            }
+
+            try
+            {
+                if (!Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
+                    Directory.CreateDirectory(Path.Combine(Tools.GetAppDataDirectory(), "Maps"));
+
+                LogLine("Checking for new EDDiscovery maps");
+
+                DeleteMapFile("DW4.png");
+                DeleteMapFile("SC-00.jpg");
+                return DownloadMapFiles(new[]
+                {
+                    "SC-01.jpg",
+                    "SC-02.jpg",
+                    "SC-03.jpg",
+                    "SC-04.jpg",
+                    "SC-L4.jpg",
+                    "SC-U4.jpg",
+                    "SC-00.png",
+                    "SC-00.json",
+                    "Galaxy_L.jpg",
+                    "Galaxy_L.json",
+                    "Galaxy_L_Grid.jpg",
+                    "Galaxy_L_Grid.json",
+                    "DW1.jpg",
+                    "DW1.json",
+                    "DW2.jpg",
+                    "DW2.json",
+                    "DW3.jpg",
+                    "DW3.json",
+                    "DW4.jpg",
+                    "DW4.json",
+                    "Formidine.png",
+                    "Formidine.json",
+                    "Formidine trans.png",
+                    "Formidine trans.json"
+                },
+                (s) => LogLine("Map check complete."));
+            }
+            catch (Exception ex)
+            {
+                LogLineHighlight("DownloadImages exception: " + ex.Message);
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetException(ex);
+                return tcs.Task;
+            }
+        }
+
+        private Task<bool> DownloadMapFiles(string[] files, Action<bool> callback)
+        {
+            List<Task<bool>> tasks = new List<Task<bool>>();
+
+            foreach (string file in files)
+            {
+                var task = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFileAsync(
+                    "http://eddiscovery.astronet.se/Maps/" + file,
+                    Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
+                    (n) =>
+                    {
+                        if (n) LogLine("Downloaded map: " + file);
+                    }, () => PendingClose);
+                tasks.Add(task);
+            }
+
+            return Task<bool>.Factory.ContinueWhenAll<bool>(tasks.ToArray(), (ta) =>
+            {
+                bool success = ta.All(t => t.IsCompleted && t.Result);
+                callback(success);
+                return success;
+            });
+        }
+
+        private bool DownloadMapFile(string file)
+        {
+            bool newfile = false;
+            if (EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
+            {
+                if (newfile)
+                    LogLine("Downloaded map: " + file);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private void DeleteMapFile(string file)
+        {
+            string filename = Path.Combine(Tools.GetAppDataDirectory(), "Maps", file);
+
+            try
+            {
+                if (File.Exists(filename))
+                    File.Delete(filename);
+            }
+            catch (Exception ex)
+            {
+                LogLine("Exception in DeleteMapFile:" + ex.Message);
+            }
         }
         #endregion
     }
