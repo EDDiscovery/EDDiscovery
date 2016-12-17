@@ -174,7 +174,7 @@
             this.panel_showtitle.Name = "panel_showtitle";
             this.panel_showtitle.Size = new System.Drawing.Size(24, 24);
             this.panel_showtitle.TabIndex = 26;
-            this.toolTip1.SetToolTip(this.panel_showtitle, "Toggle title visibility for this window");
+            this.toolTip1.SetToolTip(this.panel_showtitle, "Toggle title visibility for this window when transparent");
             this.panel_showtitle.Click += new System.EventHandler(this.panel_showtitle_Click);
             // 
             // panelTop
