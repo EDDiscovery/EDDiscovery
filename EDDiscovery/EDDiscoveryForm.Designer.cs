@@ -62,7 +62,6 @@
             this.labelPanelText = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this._syncWorker = new System.ComponentModel.BackgroundWorker();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
@@ -363,14 +362,6 @@
             this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
-            // 
-            // _syncWorker
-            // 
-            this._syncWorker.WorkerReportsProgress = true;
-            this._syncWorker.WorkerSupportsCancellation = true;
-            this._syncWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._syncWorker_DoWork);
-            this._syncWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._syncWorker_ProgressChanged);
-            this._syncWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._syncWorker_RunWorkerCompleted);
             // 
             // edsmRefreshTimer
             // 
@@ -719,7 +710,6 @@
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.ComponentModel.BackgroundWorker _syncWorker;
         private System.Windows.Forms.Timer edsmRefreshTimer;
         private System.Windows.Forms.TabPage tabPageJournal;
         private JournalViewControl journalViewControl1;
