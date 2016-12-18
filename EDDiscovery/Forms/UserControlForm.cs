@@ -25,8 +25,10 @@ namespace EDDiscovery.Forms
         private bool inpanelshow = false;       // if we are in a panel show when we were transparent
         private bool defwindowsborder;
         private bool curwindowsborder;          // applied setting
+        private bool displayTitle = true;
         private string dbrefname;
         private string wintitle;
+        private string control_text;
         private Color transparencycolor = Color.Transparent;
         private Color beforetransparency = Color.Transparent;
         private Color tkey = Color.Transparent;
@@ -63,14 +65,17 @@ namespace EDDiscovery.Forms
             deftransparent = false;
 
             labelControlText.Text = "";
-            label_index.Text = this.Text;
-
+            
             SetVisibility(false);
 
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
 
             this.ShowInTaskbar = SQLiteDBClass.GetSettingBool(dbrefname + "Taskbar", defwindowintaskbar);
             panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar : ExtendedControls.DrawnPanel.ImageType.WindowNotInTaskBar;
+
+            displayTitle = SQLiteDBClass.GetSettingBool(dbrefname + "ShowTitle", true);
+            panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
+            label_index.Text = displayTitle || !istransparent ? Text : String.Empty;
 
             Invalidate();
         }
@@ -84,14 +89,15 @@ namespace EDDiscovery.Forms
 
         public void SetControlText(string text)
         {
+            control_text = text;
             if (FormBorderStyle == FormBorderStyle.None)
             {
                 labelControlText.Location = new Point(label_index.Location.X + label_index.Width + 16, labelControlText.Location.Y);
-                labelControlText.Text = text;
+                labelControlText.Text = displayTitle || !istransparent ? text : String.Empty;
             }
             else
             {
-                this.Text = wintitle + " " + text;
+                this.Text = displayTitle || !istransparent ? (wintitle + " " + text) : String.Empty;
             }
         }
 
@@ -103,10 +109,24 @@ namespace EDDiscovery.Forms
                 return null;
         }
 
-        public void SetTransparency(bool t)
+        public void SetTransparency(bool t, bool toggleTitle)
         {
             if (IsTransparencySupported)
             {
+                if (toggleTitle)
+                {
+                    if (!t)
+                    {
+                        displayTitle = true;
+                        panel_showtitle.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Captioned;
+                        panel_showtitle.Enabled = false;
+                        SQLiteDBClass.PutSettingBool(dbrefname + "ShowTitle", true);
+                    }
+                    else
+                    {
+                        panel_showtitle.Enabled = true;
+                    }
+                }
                 istransparent = t;
                 UpdateTransparency();
             }
@@ -118,6 +138,13 @@ namespace EDDiscovery.Forms
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
         }
 
+        public void ForceShowInTaskBar()
+        {
+            this.ShowInTaskbar = true;
+            panel_taskbaricon.ImageSelected = ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar;
+            SQLiteDBClass.PutSettingBool(dbrefname + "Taskbar", true);
+        }
+        
         private void UpdateTransparency()
         {
             curwindowsborder = (!istransparent && defwindowsborder);
@@ -138,7 +165,7 @@ namespace EDDiscovery.Forms
 
             this.BackColor = togo;
             statusStripCustom1.BackColor = togo;
-            panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor = panel_minimize.BackColor = panel_ontop.BackColor =  panelTop.BackColor = togo;
+            panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor = panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor =  panelTop.BackColor = togo;
 
             System.Diagnostics.Debug.Assert(labeltransparentcolour != Color.Transparent);
             label_index.ForeColor = labelControlText.ForeColor = (istransparent) ? labeltransparentcolour : labelnormalcolour;
@@ -156,10 +183,13 @@ namespace EDDiscovery.Forms
             FormBorderStyle = curwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
             panelTop.Visible = !curwindowsborder;
 
-            statusStripCustom1.Visible = panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = !transparent;
+            statusStripCustom1.Visible = panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = !transparent;
 
             panel_transparent.Visible = IsTransparencySupported && !transparent;
             panel_transparent.ImageSelected = (istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent;
+
+            label_index.Text = (transparent && !displayTitle) ? String.Empty : this.Text;
+            SetControlText(control_text);
         }
 
         private void UserControlForm_Load(object sender, EventArgs e)
@@ -204,7 +234,7 @@ namespace EDDiscovery.Forms
 
             bool tr = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent);
             if ( tr )
-                SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
+                SetTransparency(true, false);      // only call if transparent.. may not be fully set up so don't merge with above
 
             SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
         }
@@ -248,9 +278,9 @@ namespace EDDiscovery.Forms
         {
             istransparent = !istransparent;
             inpanelshow = true;
-            UpdateTransparency();
+            SetTransparency(istransparent, true);
 
-            SQLiteDBClass.PutSettingBool(dbrefname + "Transparent", istransparent);
+            SQLiteDBClass.PutSettingBool(dbrefname + "Transparent", istransparent);            
         }
 
         private void panel_taskbaricon_Click(object sender, EventArgs e)
@@ -396,6 +426,13 @@ namespace EDDiscovery.Forms
         private bool _window_dragging = false;
         private Point _window_dragMousePos = Point.Empty;
         private Point _window_dragWindowPos = Point.Empty;
+
+        private void panel_showtitle_Click(object sender, EventArgs e)
+        {
+            displayTitle = !displayTitle;
+            panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
+            SQLiteDBClass.PutSettingBool(dbrefname + "ShowTitle", displayTitle);
+        }
 
         protected override void WndProc(ref Message m)
         {
@@ -554,6 +591,22 @@ namespace EDDiscovery.Forms
             }
 
             return count;
+        }
+
+        public void ShowAllInTaskBar()
+        {
+            foreach (UserControlForm ucf in tabforms)
+            {
+                if (ucf.isloaded) ucf.ForceShowInTaskBar();
+            }
+        }
+
+        public void MakeAllOpaque()
+        {
+            foreach (UserControlForm ucf in tabforms)
+            {
+                if (ucf.isloaded) ucf.SetTransparency(false, true);
+            }
         }
 
     }
