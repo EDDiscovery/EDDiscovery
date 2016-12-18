@@ -229,7 +229,7 @@ namespace EDDiscovery
             {
                 InvokeSyncOnUIThread(() =>
                 {
-                    OnRefreshHistoryRequested();
+                    OnRefreshHistoryRequested?.Invoke();
                     journalmonitor.StopMonitor();
                 });
 
@@ -298,11 +298,11 @@ namespace EDDiscovery
                 OnNewEntry?.Invoke(he, history);
 
                 if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
-                    OnNewBodyScan(je as JournalScan);
+                    OnNewBodyScan?.Invoke(je as JournalScan);
             }
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
-                OnRefreshCommanders();
+                OnRefreshCommanders?.Invoke();
             }
         }
 
@@ -642,11 +642,11 @@ namespace EDDiscovery
 
             closeRequested.WaitOne();
 
-            OnBgSafeClose();
+            OnBgSafeClose?.Invoke();
             ReadyForClose = true;
             InvokeAsyncOnUIThread(() =>
             {
-                OnFinalClose();
+                OnFinalClose?.Invoke();
             });
         }
 
@@ -673,11 +673,11 @@ namespace EDDiscovery
         {
             InitializeDatabases();
             readyForUiInvoke.WaitOne();
-            InvokeAsyncOnUIThread(() => OnDatabaseInitializationComplete());
+            InvokeAsyncOnUIThread(() => OnDatabaseInitializationComplete?.Invoke());
             readyForInitialLoad.WaitOne();
             CheckSystems(() => PendingClose, (p, s) => InvokeAsyncOnUIThread(() => ReportProgress(p, s)));
             ReportProgress(-1, "");
-            InvokeSyncOnUIThread(() => OnCheckSystemsCompleted());
+            InvokeSyncOnUIThread(() => OnCheckSystemsCompleted?.Invoke());
             if (PendingClose) return;
 
             if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
@@ -693,7 +693,7 @@ namespace EDDiscovery
             GitHubRelease rel;
             if (CheckForNewinstaller(out rel))
             {
-                InvokeAsyncOnUIThread(() => OnNewReleaseAvailable(rel));
+                InvokeAsyncOnUIThread(() => OnNewReleaseAvailable?.Invoke(rel));
             }
 
             if (PendingClose) return;
@@ -725,7 +725,7 @@ namespace EDDiscovery
         #region Logging
         private void ReportProgress(int percentComplete, string message)
         {
-            InvokeAsyncOnUIThread(() => OnReportProgress(percentComplete, message));
+            InvokeAsyncOnUIThread(() => OnReportProgress?.Invoke(percentComplete, message));
         }
 
         private void DeleteOldLogFiles()
@@ -1022,25 +1022,28 @@ namespace EDDiscovery
 
         private void RefreshHistoryWorkerCompleted(RefreshWorkerResults res)
         {
-            OnRefreshCommanders();
+            OnRefreshCommanders?.Invoke();
 
-            history.Clear();
-
-            foreach (var ent in res.rethistory)
+            if (res != null)
             {
-                history.Add(ent);
-                Debug.Assert(ent.MaterialCommodity != null);
-            }
+                history.Clear();
 
-            history.materialcommodititiesledger = res.retledger;
-            history.starscan = res.retstarscan;
+                foreach (var ent in res.rethistory)
+                {
+                    history.Add(ent);
+                    Debug.Assert(ent.MaterialCommodity != null);
+                }
+
+                history.materialcommodititiesledger = res.retledger;
+                history.starscan = res.retstarscan;
+            }
 
             ReportProgress(-1, "");
             LogLine("Refresh Complete.");
 
             OnHistoryChange?.Invoke(history);
 
-            OnRefreshHistoryWorkerCompleted(res.rethistory, res.retledger, res.retstarscan);
+            OnRefreshHistoryWorkerCompleted?.Invoke(res.rethistory, res.retledger, res.retstarscan);
 
             HistoryRefreshed?.Invoke();
 
@@ -1170,7 +1173,7 @@ namespace EDDiscovery
                 RefreshHistoryAsync();
             }
 
-            OnPerformSyncCompleted();
+            OnPerformSyncCompleted?.Invoke();
             resyncRequestedFlag = 0;
         }
 

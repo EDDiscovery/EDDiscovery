@@ -175,7 +175,7 @@ namespace EDDiscovery2.HTTP
                         success = doProcess(() => (HttpWebResponse)ar.Result, cancelRequested);
                     }
                     return success;
-                }, null);
+                });
             });
         }
 
@@ -195,7 +195,7 @@ namespace EDDiscovery2.HTTP
                 return DownloadFileAsync(u, f, (n, s, c) =>
                 {
                     _newfile = n;
-                    p(n, s, c);
+                    p?.Invoke(n, s, c);
                     callback(_newfile);
                 }, cancelRequested);
             });
@@ -216,7 +216,7 @@ namespace EDDiscovery2.HTTP
                 return DownloadFile(u, f, (n, s, c) =>
                 {
                     _newfile = n;
-                    p(n, s, c);
+                    p?.Invoke(n, s, c);
                 });
             });
 
