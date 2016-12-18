@@ -327,13 +327,13 @@ namespace EDDiscovery
         protected void Shutdown()
         {
             PendingClose = true;
-            closeRequested.Set();
             EDDNSync.StopSync();
             journalmonitor.StopMonitor();
             EdsmSync.StopSync();
 
             LogLineHighlight("Closing down, please wait..");
             Console.WriteLine("Close.. safe close launched");
+            closeRequested.Set();
             safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
             safeClose.Start();
         }
@@ -356,6 +356,7 @@ namespace EDDiscovery
         private bool syncwaseddboredsm = false;
         private Thread safeClose;
         private Thread backgroundWorker;
+        private Thread backgroundRefreshWorker;
         private AutoResetEvent readyForInitialLoad = new AutoResetEvent(false);
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
         private int refreshRequestedFlag = 0;
@@ -606,21 +607,40 @@ namespace EDDiscovery
             BackgroundInit();
             if (!PendingClose)
             {
+                backgroundRefreshWorker = new Thread(BackgroundRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
+                backgroundRefreshWorker.Start();
+
                 DoPerformSync();
 
                 while (!PendingClose)
                 {
-                    switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested, resyncRequestedEvent }))
+                    switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent }))
                     {
                         case 0:  // Close Requested
                             break;
-                        case 1:  // Refresh Requested
-                            DoRefreshHistory();
-                            break;
-                        case 2:  // Resync Requested
+                        case 1:  // Resync Requested
                             DoPerformSync();
                             break;
                     }
+                }
+
+                backgroundRefreshWorker.Join();
+            }
+
+            closeRequested.WaitOne();
+        }
+
+        private void BackgroundRefreshWorkerThread()
+        {
+            while (!PendingClose)
+            {
+                switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested }))
+                {
+                    case 0:  // Close Requested
+                        break;
+                    case 1:  // Refresh Requested
+                        DoRefreshHistory();
+                        break;
                 }
             }
         }
