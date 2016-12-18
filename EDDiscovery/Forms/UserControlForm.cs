@@ -326,7 +326,7 @@ namespace EDDiscovery.Forms
 
         #region Resizing
 
-        public void RequestTemporaryMinimiumSize(Size w)
+        public void RequestTemporaryMinimiumSize(Size w)            // Size w is the client area used by the UserControl..
         {
             int width = ClientRectangle.Width < w.Width ? (w.Width - ClientRectangle.Width) : 0;
             int height = ClientRectangle.Height < w.Height ? (w.Height - ClientRectangle.Height) : 0;
@@ -334,19 +334,22 @@ namespace EDDiscovery.Forms
             RequestTemporaryResizeExpand(new Size(width, height));
         }
 
-        public void RequestTemporaryResizeExpand(Size w)
+        public void RequestTemporaryResizeExpand(Size w)            // Size w is the client area above
         {
-            if ( w.Width != 0 || w.Height != 0 )
-                RequestTemporaryResize(new Size(Bounds.Size.Width + w.Width, Bounds.Size.Height + w.Height));
+            if (w.Width != 0 && w.Height != 0)
+                RequestTemporaryResize(new Size(ClientRectangle.Width + w.Width, ClientRectangle.Height + w.Height));
         }
 
-        public void RequestTemporaryResize(Size w)
+        public void RequestTemporaryResize(Size w)                  // Size w is the client area above
         {
             if (!istemporaryresized)
             {
                 normalsize = this.Size;
-                istemporaryresized = true;
-                this.Size = w;
+                istemporaryresized = true;                          // we are setting window size, so we need to consider the bounds around the window
+                int widthoutsideclient = (Bounds.Size.Width - ClientRectangle.Width);
+                int heightoutsideclient = (Bounds.Size.Height - ClientRectangle.Height);
+                int heightlosttoothercontrols = UserControl.Location.Y + statusStripCustom1.Height; // and the area used by the other bits of the window outside the user control
+                this.Size = new Size(w.Width + widthoutsideclient, w.Height + heightlosttoothercontrols + heightoutsideclient);
             }
         }
 

@@ -359,7 +359,18 @@ namespace EDDiscovery.UserControls
                     else if (Config(Configuration.showScanOnTop))
                     {
                         PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        RequestTemporaryResize(new Size(scanimg.img.Width + 8, scanimg.img.Height + 4));        // match exactly to use minimum space
+#if false
+
+                        using (Graphics gr = Graphics.FromImage(scanimg.img))
+                        {
+                            using (Pen p1 = new Pen(Color.Red, 1.0F))
+                            {
+                                for (int i = 0; i < 1000; i += 50)
+                                    gr.DrawLine(p1, new Point(0, i), new Point(100, i));
+                            }
+                        }
+#endif
+                        RequestTemporaryResize(new Size(scanimg.img.Width + 8, scanimg.img.Height + 4 ));        // match exactly to use minimum space
                         return true;
                     }
                 }
@@ -430,9 +441,9 @@ namespace EDDiscovery.UserControls
             return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he);
         }
 
-        #endregion
+#endregion
 
-        #region Clicks
+#region Clicks
 
         private void pictureBox_ClickElement(object sender, MouseEventArgs e, PictureBoxHotspot.ImageElement i, object tag)
         {
