@@ -274,7 +274,12 @@ namespace EDDiscovery
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
         }
 
-        protected void PostInit_Load()
+        protected void PostInit_Loading()
+        {
+            readyForUiInvoke.Set();
+        }
+
+        protected void PostInit_Loaded()
         {
             EliteDangerousClass.CheckED();
             EDDConfig.Update();
@@ -343,6 +348,8 @@ namespace EDDiscovery
         private static EDDiscoveryFormBase Instance;
 
         private ManualResetEvent closeRequested = new ManualResetEvent(false);
+        private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
+        private ManualResetEvent readyForUiInvoke = new ManualResetEvent(false);
         private Task<bool> downloadMapsTask = null;
         private string logname = "";
         private EDJournalClass journalmonitor;
@@ -355,7 +362,6 @@ namespace EDDiscovery
         private Thread safeClose;
         private Thread backgroundWorker;
         private Thread backgroundRefreshWorker;
-        private AutoResetEvent readyForInitialLoad = new AutoResetEvent(false);
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
         private int refreshRequestedFlag = 0;
         private RefreshWorkerArgs refreshWorkerArgs;
@@ -671,6 +677,7 @@ namespace EDDiscovery
         private void BackgroundInit()
         {
             InitializeDatabases();
+            readyForUiInvoke.WaitOne();
             InvokeAsyncOnUIThread(() => OnDatabaseInitializationComplete());
             readyForInitialLoad.WaitOne();
             CheckSystems(() => PendingClose, (p, s) => InvokeAsyncOnUIThread(() => ReportProgress(p, s)));

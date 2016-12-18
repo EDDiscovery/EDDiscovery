@@ -117,13 +117,14 @@ namespace EDDiscovery
         {
             try
             {
+                PostInit_Loading();
                 if (!IsDatabaseInitialized)
                 {
                     splashform = new SplashForm();
                     splashform.ShowDialog(this);
                 }
 
-                PostInit_Load();
+                PostInit_Loaded();
 
                 RepositionForm();
                 InitFormControls();
