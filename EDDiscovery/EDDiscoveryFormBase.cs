@@ -53,7 +53,6 @@ namespace EDDiscovery
         }
 
         #region Properties, Fields and Events
-
         #region Public Properties
         public int DisplayedCommander { get; set; } = 0;
         public HistoryList history { get; protected set; } = new HistoryList();
@@ -63,9 +62,10 @@ namespace EDDiscovery
         public string LogText { get { return logtext; } }
         public bool PendingClose { get { return safeClose != null; } }           // we want to close boys!
         public string VersionDisplayString { get; protected set; }
+        public GalacticMapping GalacticMapping { get; protected set; }
 
-        public static EDDConfig EDDConfig { get; protected set; }
-        public static GalacticMapping galacticMapping { get; protected set; }
+        public static EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
+        public static GalacticMapping galacticMapping { get { return Instance.GalacticMapping; } }
         #endregion
 
         #region Events
@@ -76,31 +76,32 @@ namespace EDDiscovery
         #endregion
 
         #region Protected Properties or Fields
-        protected ManualResetEvent closeRequested = new ManualResetEvent(false);
-        protected ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
-        protected ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
-        protected Task<bool> downloadMapsTask = null;
-        protected string logname = "";
-        protected EDJournalClass journalmonitor;
-        protected GitHubRelease newRelease;
-        protected bool performedsmsync = false;
-        protected bool performeddbsync = false;
-        protected string logtext = "";     // to keep in case of no logs..
-        protected bool performhistoryrefresh = false;
-        protected bool syncwasfirstrun = false;
-        protected bool syncwaseddboredsm = false;
-        protected bool readyForClose = false;
-        protected Thread safeClose;
-        protected System.Windows.Forms.Timer closeTimer;
-        protected Thread backgroundWorker;
-        protected AutoResetEvent readyForInitialLoad = new AutoResetEvent(false);
-        protected AutoResetEvent refreshRequested = new AutoResetEvent(false);
-        protected int refreshRequestedFlag = 0;
-        protected RefreshWorkerArgs refreshWorkerArgs;
-        protected AutoResetEvent resyncRequested = new AutoResetEvent(false);
-        protected int resyncRequestedFlag = 0;
+        protected bool ReadyForClose = false;
         protected bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
-        protected bool CanSkipSlowUpdates
+        #endregion
+
+        #region Private Properties of Fields
+        private static EDDiscoveryFormBase Instance;
+
+        private ManualResetEvent closeRequested = new ManualResetEvent(false);
+        private Task<bool> downloadMapsTask = null;
+        private string logname = "";
+        private EDJournalClass journalmonitor;
+        private bool performedsmsync = false;
+        private bool performeddbsync = false;
+        private string logtext = "";     // to keep in case of no logs..
+        private bool performhistoryrefresh = false;
+        private bool syncwasfirstrun = false;
+        private bool syncwaseddboredsm = false;
+        private Thread safeClose;
+        private Thread backgroundWorker;
+        private AutoResetEvent readyForInitialLoad = new AutoResetEvent(false);
+        private AutoResetEvent refreshRequested = new AutoResetEvent(false);
+        private int refreshRequestedFlag = 0;
+        private RefreshWorkerArgs refreshWorkerArgs;
+        private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
+        private int resyncRequestedFlag = 0;
+        private bool CanSkipSlowUpdates
         {
             get
             {
@@ -122,7 +123,7 @@ namespace EDDiscovery
         protected virtual void OnFinalClose() { }
         protected virtual void OnNewBodyScan(JournalScan scan) { }
         protected virtual void OnRefreshCommanders() { }
-        protected virtual void OnNewReleaseAvailable() { }
+        protected virtual void OnNewReleaseAvailable(GitHubRelease rel) { }
         protected virtual void OnPerformSyncCompleted() { }
         protected virtual void OnRefreshHistoryRequested() { }
         protected virtual void OnRefreshHistoryWorkerCompleted(RefreshWorkerResults res) { }
@@ -132,7 +133,7 @@ namespace EDDiscovery
         #region Initialization
         public EDDiscoveryFormBase()
         {
-
+            Instance = this;
         }
 
         protected void Init()
@@ -150,8 +151,7 @@ namespace EDDiscovery
             backgroundWorker.Name = "Background Worker Thread";
             backgroundWorker.Start();
 
-            EDDConfig = EDDConfig.Instance;
-            galacticMapping = new GalacticMapping();
+            GalacticMapping = new GalacticMapping();
             EdsmSync = new EDSMSync((EDDiscoveryForm)this);
             EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
             journalmonitor = new EDJournalClass();
@@ -415,7 +415,11 @@ namespace EDDiscovery
             }
 
             DeleteOldLogFiles();
-            CheckForNewinstaller();
+            GitHubRelease rel;
+            if (CheckForNewinstaller(out rel))
+            {
+                InvokeAsyncOnUIThread(() => OnNewReleaseAvailable(rel));
+            }
 
             LogLine("Reading travel history");
             refreshWorkerArgs = new RefreshWorkerArgs();
@@ -434,7 +438,7 @@ namespace EDDiscovery
 
             while (true)
             {
-                switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested, resyncRequested }))
+                switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested, resyncRequestedEvent }))
                 {
                     case 0:  // Close Requested
                         return;
@@ -448,12 +452,12 @@ namespace EDDiscovery
             }
         }
 
-        protected void InvokeAsyncOnUIThread(Action a)
+        private void InvokeAsyncOnUIThread(Action a)
         {
             BeginInvoke(a);
         }
 
-        protected void InvokeSyncOnUIThread(Action a)
+        private void InvokeSyncOnUIThread(Action a)
         {
             Invoke(a);
         }
@@ -467,8 +471,10 @@ namespace EDDiscovery
             Trace.WriteLine("Database initialization complete");
         }
 
-        protected bool CheckForNewinstaller()
+        protected bool CheckForNewinstaller(out GitHubRelease newRelease)
         {
+            newRelease = null;
+
             try
             {
 
@@ -490,7 +496,6 @@ namespace EDDiscovery
                     {
                         newRelease = rel;
                         LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName);
-                        InvokeAsyncOnUIThread(() => OnNewReleaseAvailable());
                         return true;
                     }
                 }
@@ -542,7 +547,7 @@ namespace EDDiscovery
             InvokeAsyncOnUIThread(() => OnReportProgress(percentComplete, message));
         }
 
-        protected void DeleteOldLogFiles()
+        private void DeleteOldLogFiles()
         {
             try
             {
@@ -707,7 +712,7 @@ namespace EDDiscovery
             {
                 // Also update galactic mapping from EDSM 
                 LogLine("Get galactic mapping from EDSM.");
-                galacticMapping.DownloadFromEDSM();
+                GalacticMapping.DownloadFromEDSM();
 
                 // Skip EDSM full update if update has been performed in last 4 days
                 bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
@@ -730,8 +735,8 @@ namespace EDDiscovery
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
-                galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
-                SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
+                GalacticMapping.ParseData();                            // at this point, EDSM data is loaded..
+                SystemClass.AddToAutoComplete(GalacticMapping.GetGMONames());
                 EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
@@ -745,7 +750,7 @@ namespace EDDiscovery
         #endregion
 
         #region History Refresh
-        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
         {
             if (Interlocked.CompareExchange(ref refreshRequestedFlag, 1, 0) == 0)
             {
@@ -764,6 +769,11 @@ namespace EDDiscovery
                     CurrentCommander = currentcmdr ?? DisplayedCommander
                 };
                 refreshRequested.Set();
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -994,11 +1004,18 @@ namespace EDDiscovery
         #endregion
 
         #region EDSM / EDDB sync
-        protected void AsyncPerformSync()
+        public bool AsyncPerformSync(bool edsmsync = false, bool eddbsync = false)
         {
             if (Interlocked.CompareExchange(ref resyncRequestedFlag, 1, 0) == 0)
             {
-                resyncRequested.Set();
+                performeddbsync |= eddbsync;
+                performedsmsync |= edsmsync;
+                resyncRequestedEvent.Set();
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -1219,27 +1236,6 @@ namespace EDDiscovery
         }
         #endregion
 
-        #region JSON and Misc
-        static public string LoadJsonFile(string filename)
-        {
-            string json = null;
-            try
-            {
-                if (!File.Exists(filename))
-                    return null;
-
-                StreamReader reader = new StreamReader(filename);
-                json = reader.ReadToEnd();
-                reader.Close();
-            }
-            catch
-            {
-            }
-
-            return json;
-        }
-        #endregion
-
         #region Shutdown
         protected void Shutdown()
         {
@@ -1258,7 +1254,7 @@ namespace EDDiscovery
         {
             OnSafeClose();
             backgroundWorker.Join();
-            readyForClose = true;
+            ReadyForClose = true;
             InvokeAsyncOnUIThread(() =>
             {
                 OnFinalClose();

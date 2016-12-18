@@ -72,6 +72,7 @@ namespace EDDiscovery
 
         private bool themeok = true;
         private Forms.SplashForm splashform = null;
+        private GitHubRelease latestRelease = null;
         #endregion
 
         #region Initialisation
@@ -235,8 +236,9 @@ namespace EDDiscovery
             }
         }
 
-        protected override void OnNewReleaseAvailable()
+        protected override void OnNewReleaseAvailable(GitHubRelease rel)
         {
+            latestRelease = rel;
             PanelInfoNewRelease();
         }
 
@@ -344,7 +346,7 @@ namespace EDDiscovery
                 panelInfo.Visible = true;
                 Shutdown();
             }
-            else if (!readyForClose)   // still working, cancel again..
+            else if (!ReadyForClose)   // still working, cancel again..
             {
                 e.Cancel = true;
             }
@@ -431,23 +433,13 @@ namespace EDDiscovery
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (resyncRequestedFlag == 0)      // we want it to have run, to completion, to allow another go..
-            {
-                performeddbsync = true;
-                AsyncPerformSync();
-            }
-            else
+            if (!AsyncPerformSync(eddbsync: true))
                 MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (resyncRequestedFlag == 0)      // we want it to have run, to completion, to allow another go..
-            {
-                performedsmsync = true;
-                AsyncPerformSync();
-            }
-            else
+            if (!AsyncPerformSync(edsmsync: true))
                 MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
@@ -669,10 +661,12 @@ namespace EDDiscovery
 
         private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (CheckForNewinstaller())
+            GitHubRelease newRelease = null;
+            if (CheckForNewinstaller(out newRelease))
             {
                 if (newRelease != null)
                 {
+                    latestRelease = newRelease;
                     NewReleaseForm frm = new NewReleaseForm();
                     frm.release = newRelease;
 
@@ -697,10 +691,10 @@ namespace EDDiscovery
 
         private void panelInfo_Click(object sender, EventArgs e)
         {
-            if (newRelease != null)
+            if (latestRelease != null)
             {
                 NewReleaseForm frm = new NewReleaseForm();
-                frm.release = newRelease;
+                frm.release = latestRelease;
 
                 frm.ShowDialog(this);
             }
@@ -708,10 +702,10 @@ namespace EDDiscovery
 
         private void labelPanelText_Click(object sender, EventArgs e)
         {
-            if (newRelease != null)
+            if (latestRelease != null)
             {
                 NewReleaseForm frm = new NewReleaseForm();
-                frm.release = newRelease;
+                frm.release = latestRelease;
 
                 frm.ShowDialog(this);
             }
