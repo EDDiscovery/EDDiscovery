@@ -60,7 +60,7 @@ namespace EDDiscovery
         public bool option_debugoptions { get; protected set; } = false;
         public EDSMSync EdsmSync { get; protected set; }
         public string LogText { get { return logtext; } }
-        public bool PendingClose { get { return safeClose != null; } }           // we want to close boys!
+        public bool PendingClose { get; private set; }           // we want to close boys!
         public string VersionDisplayString { get; protected set; }
         public GalacticMapping GalacticMapping { get; protected set; }
 
@@ -326,6 +326,7 @@ namespace EDDiscovery
 
         protected void Shutdown()
         {
+            PendingClose = true;
             closeRequested.Set();
             EDDNSync.StopSync();
             journalmonitor.StopMonitor();
@@ -602,55 +603,24 @@ namespace EDDiscovery
         #region Background Worker Thread
         private void BackgroundWorkerThread()
         {
-            InitializeDatabases();
-            InvokeAsyncOnUIThread(() => OnDatabaseInitializationComplete());
-            readyForInitialLoad.WaitOne();
-            CheckSystems(() => PendingClose, (p, s) => InvokeAsyncOnUIThread(() => ReportProgress(p, s)));
-            ReportProgress(-1, "");
-            InvokeSyncOnUIThread(() => OnCheckSystemsCompleted());
-
-            if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
+            BackgroundInit();
+            if (!PendingClose)
             {
-                if (EDDConfig.Instance.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
+                DoPerformSync();
+
+                while (!PendingClose)
                 {
-                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
-                }
-            }
-
-            DeleteOldLogFiles();
-            GitHubRelease rel;
-            if (CheckForNewinstaller(out rel))
-            {
-                InvokeAsyncOnUIThread(() => OnNewReleaseAvailable(rel));
-            }
-
-            LogLine("Reading travel history");
-            refreshWorkerArgs = new RefreshWorkerArgs();
-            DoRefreshHistory();
-
-            if (performeddbsync || performedsmsync)
-            {
-                string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
-
-                LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
-                                "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
-                                "Please continue running ED Discovery until refresh is complete.");
-            }
-
-            DoPerformSync();
-
-            while (true)
-            {
-                switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested, resyncRequestedEvent }))
-                {
-                    case 0:  // Close Requested
-                        return;
-                    case 1:  // Refresh Requested
-                        DoRefreshHistory();
-                        break;
-                    case 2:  // Resync Requested
-                        DoPerformSync();
-                        break;
+                    switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested, resyncRequestedEvent }))
+                    {
+                        case 0:  // Close Requested
+                            break;
+                        case 1:  // Refresh Requested
+                            DoRefreshHistory();
+                            break;
+                        case 2:  // Resync Requested
+                            DoPerformSync();
+                            break;
+                    }
                 }
             }
         }
@@ -663,6 +633,48 @@ namespace EDDiscovery
         private void InvokeSyncOnUIThread(Action a)
         {
             Invoke(a);
+        }
+
+        private void BackgroundInit()
+        {
+            InitializeDatabases();
+            InvokeAsyncOnUIThread(() => OnDatabaseInitializationComplete());
+            readyForInitialLoad.WaitOne();
+            CheckSystems(() => PendingClose, (p, s) => InvokeAsyncOnUIThread(() => ReportProgress(p, s)));
+            ReportProgress(-1, "");
+            InvokeSyncOnUIThread(() => OnCheckSystemsCompleted());
+            if (PendingClose) return;
+
+            if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
+            {
+                if (EDDConfig.Instance.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
+                {
+                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
+                }
+            }
+
+            DeleteOldLogFiles();
+            if (PendingClose) return;
+            GitHubRelease rel;
+            if (CheckForNewinstaller(out rel))
+            {
+                InvokeAsyncOnUIThread(() => OnNewReleaseAvailable(rel));
+            }
+
+            if (PendingClose) return;
+            LogLine("Reading travel history");
+            refreshWorkerArgs = new RefreshWorkerArgs();
+            DoRefreshHistory();
+
+            if (PendingClose) return;
+            if (performeddbsync || performedsmsync)
+            {
+                string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
+
+                LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
+                                "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
+                                "Please continue running ED Discovery until refresh is complete.");
+            }
         }
 
         private void InitializeDatabases()
