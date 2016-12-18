@@ -115,28 +115,6 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Event Callers
-        protected void InvokeOnNewLogEntry(string text, Color color)
-        {
-            OnNewLogEntry?.Invoke(text, color);
-        }
-
-        protected void InvokeOnNewEntry(HistoryEntry l, HistoryList hl)
-        {
-            OnNewEntry?.Invoke(l, hl);
-        }
-
-        protected void InvokeOnHistoryChange(HistoryList hl)
-        {
-            OnHistoryChange?.Invoke(hl);
-        }
-
-        protected void InvokeHistoryRefreshed()
-        {
-            HistoryRefreshed?.Invoke();
-        }
-        #endregion
-
         #region Event handlers to be overridden by subclasses
         protected virtual void OnCheckSystemsCompleted() { }
         protected virtual void OnDatabaseInitializationComplete() { }
@@ -549,7 +527,7 @@ namespace EDDiscovery
                 InvokeAsyncOnUIThread(() =>
                 {
                     logtext += text + Environment.NewLine;      // keep this, may be the only log showing
-                    InvokeOnNewLogEntry(text + Environment.NewLine, color);
+                    OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
                 });
             }
             catch { }
@@ -896,11 +874,11 @@ namespace EDDiscovery
             ReportProgress(-1, "");
             LogLine("Refresh Complete.");
 
-            InvokeOnHistoryChange(history);
+            OnHistoryChange?.Invoke(history);
 
             OnRefreshHistoryWorkerCompleted(res);
 
-            InvokeHistoryRefreshed();
+            HistoryRefreshed?.Invoke();
 
             journalmonitor.StartMonitor();
             refreshRequestedFlag = 0;
@@ -947,7 +925,7 @@ namespace EDDiscovery
 
         public void RefreshDisplays()
         {
-            InvokeOnHistoryChange(history);
+            OnHistoryChange?.Invoke(history);
         }
 
         public void NewPosition(EliteDangerous.JournalEntry je)
@@ -990,7 +968,7 @@ namespace EDDiscovery
                     }
                 }
 
-                InvokeOnNewEntry(he, history);
+                OnNewEntry?.Invoke(he, history);
 
                 if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
                     OnNewBodyScan(je as JournalScan);
@@ -1011,7 +989,7 @@ namespace EDDiscovery
             history.materialcommodititiesledger = matcommodledger; ;
             history.starscan = starscan;
 
-            InvokeOnHistoryChange(history);
+            OnHistoryChange?.Invoke(history);
         }
         #endregion
 

@@ -219,7 +219,7 @@ namespace EDDiscovery
 
             theme.ApplyToForm(this);
 
-            InvokeOnHistoryChange(history);
+            RefreshDisplays();
 
             TravelControl.RedrawSummary();
         }
