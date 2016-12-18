@@ -52,7 +52,7 @@ namespace EDDiscovery
             public override void WriteLine() { Trace.WriteLine(""); }
         }
 
-        #region Properties, Fields and Events
+        #region Public Interface
         #region Public Properties
         public int DisplayedCommander { get; set; } = 0;
         public HistoryList history { get; protected set; } = new HistoryList();
@@ -75,45 +75,158 @@ namespace EDDiscovery
         public event Action<string, Color> OnNewLogEntry;
         #endregion
 
-        #region Protected Properties or Fields
-        protected bool ReadyForClose = false;
-        protected bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
-        #endregion
-
-        #region Private Properties of Fields
-        private static EDDiscoveryFormBase Instance;
-
-        private ManualResetEvent closeRequested = new ManualResetEvent(false);
-        private Task<bool> downloadMapsTask = null;
-        private string logname = "";
-        private EDJournalClass journalmonitor;
-        private bool performedsmsync = false;
-        private bool performeddbsync = false;
-        private string logtext = "";     // to keep in case of no logs..
-        private bool performhistoryrefresh = false;
-        private bool syncwasfirstrun = false;
-        private bool syncwaseddboredsm = false;
-        private Thread safeClose;
-        private Thread backgroundWorker;
-        private AutoResetEvent readyForInitialLoad = new AutoResetEvent(false);
-        private AutoResetEvent refreshRequested = new AutoResetEvent(false);
-        private int refreshRequestedFlag = 0;
-        private RefreshWorkerArgs refreshWorkerArgs;
-        private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
-        private int resyncRequestedFlag = 0;
-        private bool CanSkipSlowUpdates
+        #region Methods
+        #region Logging
+        public void LogLine(string text)
         {
-            get
+            LogLineColor(text, GetLogNormalColour());
+        }
+
+        public void LogLineHighlight(string text)
+        {
+            LogLineColor(text, GetLogHighlightColour());
+        }
+
+        public void LogLineSuccess(string text)
+        {
+            LogLineColor(text, GetLogSuccessColour());
+        }
+
+        public void LogLineColor(string text, Color color)
+        {
+            try
             {
-#if DEBUG
-                return EDDConfig.CanSkipSlowUpdates;
-#else
-                return false;
-#endif
+                InvokeAsyncOnUIThread(() =>
+                {
+                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
+                    OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
+                });
             }
+            catch { }
         }
         #endregion
 
+        #region History
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        {
+            if (Interlocked.CompareExchange(ref refreshRequestedFlag, 1, 0) == 0)
+            {
+                InvokeSyncOnUIThread(() =>
+                {
+                    OnRefreshHistoryRequested();
+                    journalmonitor.StopMonitor();
+                });
+
+                refreshWorkerArgs = new RefreshWorkerArgs
+                {
+                    NetLogPath = netlogpath,
+                    ForceNetLogReload = forcenetlogreload,
+                    ForceJournalReload = forcejournalreload,
+                    CheckEdsm = checkedsm,
+                    CurrentCommander = currentcmdr ?? DisplayedCommander
+                };
+                refreshRequested.Set();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void RefreshDisplays()
+        {
+            OnHistoryChange?.Invoke(history);
+        }
+
+        public void NewPosition(EliteDangerous.JournalEntry je)
+        {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
+            {
+                HistoryEntry last = history.GetLast;
+
+                bool journalupdate = false;
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
+
+                if (journalupdate)
+                {
+                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+
+                    if (jfsd != null)
+                    {
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
+                    }
+                }
+
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+                {
+                    he.ProcessWithUserDb(je, last, conn);           // let some processes which need the user db to work
+
+                    history.materialcommodititiesledger.Process(je, conn);
+                }
+
+                history.Add(he);
+
+                if (je.EventTypeID == JournalTypeEnum.Scan)
+                {
+                    JournalScan js = je as JournalScan;
+                    if (!AddScanToBestSystem(history.starscan, js, history.Count - 1, history.EntryOrder))
+                    {
+                        LogLineHighlight("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                         "Scan object " + js.BodyName + " in " + he.System.name);
+                    }
+                }
+
+                OnNewEntry?.Invoke(he, history);
+
+                if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
+                    OnNewBodyScan(je as JournalScan);
+            }
+            else if (je.EventTypeID == JournalTypeEnum.LoadGame)
+            {
+                OnRefreshCommanders();
+            }
+        }
+
+        public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
+        {
+            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
+            StarScan starscan = new StarScan();
+
+            ProcessUserHistoryListEntries(history.EntryOrder, matcommodledger, starscan);
+
+            history.materialcommodititiesledger = matcommodledger; ;
+            history.starscan = starscan;
+
+            OnHistoryChange?.Invoke(history);
+        }
+        #endregion
+
+        #region Sync
+        public bool AsyncPerformSync(bool edsmsync = false, bool eddbsync = false)
+        {
+            if (Interlocked.CompareExchange(ref resyncRequestedFlag, 1, 0) == 0)
+            {
+                performeddbsync |= eddbsync;
+                performedsmsync |= edsmsync;
+                resyncRequestedEvent.Set();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+        #endregion
+        #endregion
+
+        #region Protected Interface
+        #region Protected Properties or Fields
+        protected bool ReadyForClose = false;
+        protected bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
         #endregion
 
         #region Event handlers to be overridden by subclasses
@@ -130,14 +243,16 @@ namespace EDDiscovery
         protected virtual void OnReportProgress(int percentComplete, string message) { }
         #endregion
 
-        #region Initialization
-        public EDDiscoveryFormBase()
-        {
-            Instance = this;
-        }
+        #region Methods requesting information from subclasses
+        protected abstract Color GetLogNormalColour();
+        protected abstract Color GetLogHighlightColour();
+        protected abstract Color GetLogSuccessColour();
+        #endregion
 
+        #region Methods called by subclasses
         protected void Init()
         {
+            Instance = this;
             VersionDisplayString = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
 
             ProcessCommandLineOptions();
@@ -172,6 +287,94 @@ namespace EDDiscovery
             downloadMapsTask = DownloadMaps();
         }
 
+        protected bool CheckForNewinstaller(out GitHubRelease newRelease)
+        {
+            newRelease = null;
+
+            try
+            {
+
+                GitHubClass github = new GitHubClass();
+
+                GitHubRelease rel = github.GetLatestRelease();
+
+                if (rel != null)
+                {
+                    //string newInstaller = jo["Filename"].Value<string>();
+
+                    var currentVersion = Application.ProductVersion;
+
+                    Version v1, v2;
+                    v1 = new Version(rel.ReleaseVersion);
+                    v2 = new Version(currentVersion);
+
+                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                    {
+                        newRelease = rel;
+                        LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return false;
+        }
+
+        protected void Shutdown()
+        {
+            closeRequested.Set();
+            EDDNSync.StopSync();
+            journalmonitor.StopMonitor();
+            EdsmSync.StopSync();
+
+            LogLineHighlight("Closing down, please wait..");
+            Console.WriteLine("Close.. safe close launched");
+            safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
+            safeClose.Start();
+        }
+        #endregion
+        #endregion
+
+        #region Implementation
+        #region Private Properties of Fields
+        private static EDDiscoveryFormBase Instance;
+
+        private ManualResetEvent closeRequested = new ManualResetEvent(false);
+        private Task<bool> downloadMapsTask = null;
+        private string logname = "";
+        private EDJournalClass journalmonitor;
+        private bool performedsmsync = false;
+        private bool performeddbsync = false;
+        private string logtext = "";     // to keep in case of no logs..
+        private bool performhistoryrefresh = false;
+        private bool syncwasfirstrun = false;
+        private bool syncwaseddboredsm = false;
+        private Thread safeClose;
+        private Thread backgroundWorker;
+        private AutoResetEvent readyForInitialLoad = new AutoResetEvent(false);
+        private AutoResetEvent refreshRequested = new AutoResetEvent(false);
+        private int refreshRequestedFlag = 0;
+        private RefreshWorkerArgs refreshWorkerArgs;
+        private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
+        private int resyncRequestedFlag = 0;
+        private bool CanSkipSlowUpdates
+        {
+            get
+            {
+#if DEBUG
+                return EDDConfig.CanSkipSlowUpdates;
+#else
+                return false;
+#endif
+            }
+        }
+        #endregion
+
+        #region Initialization
         private void InitLogging()
         {
             string logpath = "";
@@ -470,79 +673,10 @@ namespace EDDiscovery
             SQLiteConnectionSystem.Initialize();
             Trace.WriteLine("Database initialization complete");
         }
-
-        protected bool CheckForNewinstaller(out GitHubRelease newRelease)
-        {
-            newRelease = null;
-
-            try
-            {
-
-                GitHubClass github = new GitHubClass();
-
-                GitHubRelease rel = github.GetLatestRelease();
-
-                if (rel != null)
-                {
-                    //string newInstaller = jo["Filename"].Value<string>();
-
-                    var currentVersion = Application.ProductVersion;
-
-                    Version v1, v2;
-                    v1 = new Version(rel.ReleaseVersion);
-                    v2 = new Version(currentVersion);
-
-                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
-                    {
-                        newRelease = rel;
-                        LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName);
-                        return true;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-
-            return false;
-        }
         #endregion
 
         #region Logging
-        public void LogLine(string text)
-        {
-            LogLineColor(text, GetLogNormalColour());
-        }
-
-        public void LogLineHighlight(string text)
-        {
-            LogLineColor(text, GetLogHighlightColour());
-        }
-
-        public void LogLineSuccess(string text)
-        {
-            LogLineColor(text, GetLogSuccessColour());
-        }
-
-        public void LogLineColor(string text, Color color)
-        {
-            try
-            {
-                InvokeAsyncOnUIThread(() =>
-                {
-                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
-                    OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
-                });
-            }
-            catch { }
-        }
-
-        protected abstract Color GetLogNormalColour();
-        protected abstract Color GetLogHighlightColour();
-        protected abstract Color GetLogSuccessColour();
-
-        public void ReportProgress(int percentComplete, string message)
+        private void ReportProgress(int percentComplete, string message)
         {
             InvokeAsyncOnUIThread(() => OnReportProgress(percentComplete, message));
         }
@@ -585,7 +719,7 @@ namespace EDDiscovery
         #endregion
 
         #region Map Download
-        public Task<bool> DownloadMaps()          // ASYNC process
+        private Task<bool> DownloadMaps()          // ASYNC process
         {
             if (CanSkipSlowUpdates)
             {
@@ -750,33 +884,6 @@ namespace EDDiscovery
         #endregion
 
         #region History Refresh
-        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
-        {
-            if (Interlocked.CompareExchange(ref refreshRequestedFlag, 1, 0) == 0)
-            {
-                InvokeSyncOnUIThread(() =>
-                {
-                    OnRefreshHistoryRequested();
-                    journalmonitor.StopMonitor();
-                });
-
-                refreshWorkerArgs = new RefreshWorkerArgs
-                {
-                    NetLogPath = netlogpath,
-                    ForceNetLogReload = forcenetlogreload,
-                    ForceJournalReload = forcejournalreload,
-                    CheckEdsm = checkedsm,
-                    CurrentCommander = currentcmdr ?? DisplayedCommander
-                };
-                refreshRequested.Set();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         private void DoRefreshHistory()
         {
             RefreshWorkerResults res = RefreshHistoryWorker(refreshWorkerArgs);
@@ -932,93 +1039,9 @@ namespace EDDiscovery
 
             return starscan.Process(je, hl[startindex].System);         // no relationship, add..
         }
-
-        public void RefreshDisplays()
-        {
-            OnHistoryChange?.Invoke(history);
-        }
-
-        public void NewPosition(EliteDangerous.JournalEntry je)
-        {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
-            if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
-            {
-                HistoryEntry last = history.GetLast;
-
-                bool journalupdate = false;
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
-
-                if (journalupdate)
-                {
-                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
-
-                    if (jfsd != null)
-                    {
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
-                    }
-                }
-
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-                {
-                    he.ProcessWithUserDb(je, last, conn);           // let some processes which need the user db to work
-
-                    history.materialcommodititiesledger.Process(je, conn);
-                }
-
-                history.Add(he);
-
-                if (je.EventTypeID == JournalTypeEnum.Scan)
-                {
-                    JournalScan js = je as JournalScan;
-                    if (!AddScanToBestSystem(history.starscan, js, history.Count - 1, history.EntryOrder))
-                    {
-                        LogLineHighlight("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                         "Scan object " + js.BodyName + " in " + he.System.name);
-                    }
-                }
-
-                OnNewEntry?.Invoke(he, history);
-
-                if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
-                    OnNewBodyScan(je as JournalScan);
-            }
-            else if (je.EventTypeID == JournalTypeEnum.LoadGame)
-            {
-                OnRefreshCommanders();
-            }
-        }
-
-        public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
-        {
-            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
-            StarScan starscan = new StarScan();
-
-            ProcessUserHistoryListEntries(history.EntryOrder, matcommodledger, starscan);
-
-            history.materialcommodititiesledger = matcommodledger; ;
-            history.starscan = starscan;
-
-            OnHistoryChange?.Invoke(history);
-        }
         #endregion
 
         #region EDSM / EDDB sync
-        public bool AsyncPerformSync(bool edsmsync = false, bool eddbsync = false)
-        {
-            if (Interlocked.CompareExchange(ref resyncRequestedFlag, 1, 0) == 0)
-            {
-                performeddbsync |= eddbsync;
-                performedsmsync |= edsmsync;
-                resyncRequestedEvent.Set();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         private void DoPerformSync()
         {
             PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s));
@@ -1237,19 +1260,6 @@ namespace EDDiscovery
         #endregion
 
         #region Shutdown
-        protected void Shutdown()
-        {
-            closeRequested.Set();
-            EDDNSync.StopSync();
-            journalmonitor.StopMonitor();
-            EdsmSync.StopSync();
-
-            LogLineHighlight("Closing down, please wait..");
-            Console.WriteLine("Close.. safe close launched");
-            safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
-            safeClose.Start();
-        }
-
         private void SafeClose()
         {
             OnSafeClose();
@@ -1260,6 +1270,7 @@ namespace EDDiscovery
                 OnFinalClose();
             });
         }
+        #endregion
         #endregion
     }
 }
