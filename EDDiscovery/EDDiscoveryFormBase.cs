@@ -334,8 +334,6 @@ namespace EDDiscovery
             LogLineHighlight("Closing down, please wait..");
             Console.WriteLine("Close.. safe close launched");
             closeRequested.Set();
-            safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
-            safeClose.Start();
         }
         #endregion
         #endregion
@@ -614,7 +612,11 @@ namespace EDDiscovery
 
                 while (!PendingClose)
                 {
-                    switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent }))
+                    int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
+
+                    if (PendingClose) break;
+
+                    switch (wh)
                     {
                         case 0:  // Close Requested
                             break;
@@ -628,13 +630,24 @@ namespace EDDiscovery
             }
 
             closeRequested.WaitOne();
+
+            OnSafeClose();
+            ReadyForClose = true;
+            InvokeAsyncOnUIThread(() =>
+            {
+                OnFinalClose();
+            });
         }
 
         private void BackgroundRefreshWorkerThread()
         {
             while (!PendingClose)
             {
-                switch (WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested }))
+                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested });
+
+                if (PendingClose) break;
+
+                switch (wh)
                 {
                     case 0:  // Close Requested
                         break;
@@ -1288,19 +1301,6 @@ namespace EDDiscovery
             {
                 LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
             }
-        }
-        #endregion
-
-        #region Shutdown
-        private void SafeClose()
-        {
-            OnSafeClose();
-            backgroundWorker.Join();
-            ReadyForClose = true;
-            InvokeAsyncOnUIThread(() =>
-            {
-                OnFinalClose();
-            });
         }
         #endregion
         #endregion
