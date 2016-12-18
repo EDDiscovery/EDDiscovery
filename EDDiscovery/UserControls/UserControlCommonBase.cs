@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
         public bool inresizeduetoexpand = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
 
-        public void RequestTemporaryMinimumSize(Size w)
+        public void RequestTemporaryMinimumSize(Size w)         // w is client area
         {
             if (this.Parent is Forms.UserControlForm)
             {
@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void RequestTemporaryResizeExpand(Size w)        // request a form to grow..
+        public void RequestTemporaryResizeExpand(Size w)        // by this client size
         {
             if (this.Parent is Forms.UserControlForm)
             {
@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void RequestTemporaryResize(Size w)
+        public void RequestTemporaryResize(Size w)              // w is client area
         {
             if (this.Parent is Forms.UserControlForm)
             {

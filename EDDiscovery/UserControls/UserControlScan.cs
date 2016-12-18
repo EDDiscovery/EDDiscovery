@@ -431,24 +431,21 @@ namespace EDDiscovery.UserControls
             {
                 Point labposcenthorz = new Point(postopright.X + size.Width / 2, postopright.Y + size.Height + labelhoff);
 
-                using (Graphics gr = CreateGraphics())
+                PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement();
+                Size maxsize = new Size(300, 20);
+
+                lab.TextCentreAutosize(labposcenthorz, maxsize, label, stdfont, discoveryform.theme.LabelColor, this.BackColor );
+
+                if (lab.pos.X < postopright.X)
                 {
-                    PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement();
-                    Size maxsize = new Size(300, 20);
-
-                    lab.TextCentreAutosize(gr, labposcenthorz, maxsize, label, stdfont, discoveryform.theme.LabelColor, this.BackColor );
-
-                    if (lab.pos.X < postopright.X)
-                    {
-                        int offset = postopright.X - lab.pos.X;
-                        ie.Translate(offset, 0);
-                        lab.Translate(offset, 0);
-                    }
-
-                    c.Add(lab);
-
-                    max = new Point(Math.Max(lab.pos.X + lab.pos.Width, max.X), lab.pos.Y + lab.pos.Height);
+                    int offset = postopright.X - lab.pos.X;
+                    ie.Translate(offset, 0);
+                    lab.Translate(offset, 0);
                 }
+
+                c.Add(lab);
+
+                max = new Point(Math.Max(lab.pos.X + lab.pos.Width, max.X), lab.pos.Y + lab.pos.Height);
             }
             
             c.Add(ie);
