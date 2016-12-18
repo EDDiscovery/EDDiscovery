@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public abstract class EDDiscoveryFormBase : Form
+    public class EDDiscoveryController
     {
         protected class RefreshWorkerArgs
         {
@@ -55,17 +55,16 @@ namespace EDDiscovery
         #region Public Interface
         #region Public Properties
         public int DisplayedCommander { get; set; } = 0;
-        public HistoryList history { get; protected set; } = new HistoryList();
-        public bool option_nowindowreposition { get; protected set; } = false;                             // Cmd line options
-        public bool option_debugoptions { get; protected set; } = false;
-        public EDSMSync EdsmSync { get; protected set; }
+        public HistoryList history { get; private set; } = new HistoryList();
+        public bool option_nowindowreposition { get; private set; } = false;                             // Cmd line options
+        public bool option_debugoptions { get; private set; } = false;
+        public EDSMSync EdsmSync { get; private set; }
         public string LogText { get { return logtext; } }
         public bool PendingClose { get; private set; }           // we want to close boys!
-        public string VersionDisplayString { get; protected set; }
-        public GalacticMapping GalacticMapping { get; protected set; }
-
-        public static EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
-        public static GalacticMapping galacticMapping { get { return Instance.GalacticMapping; } }
+        public string VersionDisplayString { get; private set; }
+        public GalacticMapping GalacticMapping { get; private set; }
+        public bool ReadyForClose { get; private set; } = false;
+        public bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
         #endregion
 
         #region Events
@@ -73,9 +72,126 @@ namespace EDDiscovery
         public event Action<HistoryList> OnHistoryChange;
         public event Action<HistoryEntry, HistoryList> OnNewEntry;
         public event Action<string, Color> OnNewLogEntry;
+        public event Action OnCheckSystemsCompleted;
+        public event Action OnDatabaseInitializationComplete;
+        public event Action OnBgSafeClose;
+        public event Action OnFinalClose;
+        public event Action<JournalScan> OnNewBodyScan;
+        public event Action OnRefreshCommanders;
+        public event Action<GitHubRelease> OnNewReleaseAvailable;
+        public event Action OnPerformSyncCompleted;
+        public event Action OnRefreshHistoryRequested;
+        public event Action<List<HistoryEntry>, MaterialCommoditiesLedger, StarScan> OnRefreshHistoryWorkerCompleted;
+        public event Action<int, string> OnReportProgress;
         #endregion
 
         #region Methods
+        #region Init
+        public EDDiscoveryController(Func<Color> getNormalColor, Func<Color> getHighlightColor, Func<Color> getSuccessColor, Action<Action> asyncInvoker, Action<Action> syncInvoker)
+        {
+            GetLogNormalColour = getNormalColor;
+            GetLogHighlightColour = getHighlightColor;
+            GetLogSuccessColour = getSuccessColor;
+            InvokeAsyncOnUIThread = asyncInvoker;
+            InvokeSyncOnUIThread = syncInvoker;
+        }
+
+        public void Init(EDDiscoveryForm form)
+        {
+            this.form = form;
+            VersionDisplayString = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+
+            ProcessCommandLineOptions();
+            InitLogging();
+
+            SQLiteConnectionUser.EarlyReadRegister();
+            EDDConfig.Instance.Update(write: false);
+
+            backgroundWorker = new Thread(BackgroundWorkerThread);
+            backgroundWorker.IsBackground = true;
+            backgroundWorker.Name = "Background Worker Thread";
+            backgroundWorker.Start();
+
+            GalacticMapping = new GalacticMapping();
+            EdsmSync = new EDSMSync(form);
+            EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
+            journalmonitor = new EDJournalClass();
+            journalmonitor.OnNewJournalEntry += NewPosition;
+            DisplayedCommander = EDDConfig.Instance.CurrentCommander.Nr;
+        }
+
+        public void PostInit_Loading()
+        {
+            readyForUiInvoke.Set();
+        }
+
+        public void PostInit_Loaded()
+        {
+            EliteDangerousClass.CheckED();
+            EDDConfig.Instance.Update();
+            CheckIfEliteDangerousIsRunning();
+        }
+
+        public void PostInit_Shown()
+        {
+            readyForInitialLoad.Set();
+            downloadMapsTask = DownloadMaps();
+        }
+        #endregion
+
+        #region Version Check
+        public bool CheckForNewinstaller(out GitHubRelease newRelease)
+        {
+            newRelease = null;
+
+            try
+            {
+
+                GitHubClass github = new GitHubClass();
+
+                GitHubRelease rel = github.GetLatestRelease();
+
+                if (rel != null)
+                {
+                    //string newInstaller = jo["Filename"].Value<string>();
+
+                    var currentVersion = Application.ProductVersion;
+
+                    Version v1, v2;
+                    v1 = new Version(rel.ReleaseVersion);
+                    v2 = new Version(currentVersion);
+
+                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                    {
+                        newRelease = rel;
+                        LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return false;
+        }
+        #endregion
+
+        #region Shutdown
+        public void Shutdown()
+        {
+            PendingClose = true;
+            EDDNSync.StopSync();
+            journalmonitor.StopMonitor();
+            EdsmSync.StopSync();
+
+            LogLineHighlight("Closing down, please wait..");
+            Console.WriteLine("Close.. safe close launched");
+            closeRequested.Set();
+        }
+        #endregion
+
         #region Logging
         public void LogLine(string text)
         {
@@ -223,130 +339,8 @@ namespace EDDiscovery
         #endregion
         #endregion
 
-        #region Protected Interface
-        #region Protected Properties or Fields
-        protected bool ReadyForClose = false;
-        protected bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
-        #endregion
-
-        #region Event handlers to be overridden by subclasses
-        protected virtual void OnCheckSystemsCompleted() { }
-        protected virtual void OnDatabaseInitializationComplete() { }
-        protected virtual void OnSafeClose() { }
-        protected virtual void OnFinalClose() { }
-        protected virtual void OnNewBodyScan(JournalScan scan) { }
-        protected virtual void OnRefreshCommanders() { }
-        protected virtual void OnNewReleaseAvailable(GitHubRelease rel) { }
-        protected virtual void OnPerformSyncCompleted() { }
-        protected virtual void OnRefreshHistoryRequested() { }
-        protected virtual void OnRefreshHistoryWorkerCompleted(RefreshWorkerResults res) { }
-        protected virtual void OnReportProgress(int percentComplete, string message) { }
-        #endregion
-
-        #region Methods requesting information from subclasses
-        protected abstract Color GetLogNormalColour();
-        protected abstract Color GetLogHighlightColour();
-        protected abstract Color GetLogSuccessColour();
-        #endregion
-
-        #region Methods called by subclasses
-        protected void Init()
-        {
-            Instance = this;
-            VersionDisplayString = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
-
-            ProcessCommandLineOptions();
-            InitLogging();
-
-            SQLiteConnectionUser.EarlyReadRegister();
-            EDDConfig.Instance.Update(write: false);
-
-            backgroundWorker = new Thread(BackgroundWorkerThread);
-            backgroundWorker.IsBackground = true;
-            backgroundWorker.Name = "Background Worker Thread";
-            backgroundWorker.Start();
-
-            GalacticMapping = new GalacticMapping();
-            EdsmSync = new EDSMSync((EDDiscoveryForm)this);
-            EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
-            journalmonitor = new EDJournalClass();
-            journalmonitor.OnNewJournalEntry += NewPosition;
-            DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
-        }
-
-        protected void PostInit_Loading()
-        {
-            readyForUiInvoke.Set();
-        }
-
-        protected void PostInit_Loaded()
-        {
-            EliteDangerousClass.CheckED();
-            EDDConfig.Update();
-            CheckIfEliteDangerousIsRunning();
-        }
-
-        protected void PostInit_Shown()
-        {
-            readyForInitialLoad.Set();
-            downloadMapsTask = DownloadMaps();
-        }
-
-        protected bool CheckForNewinstaller(out GitHubRelease newRelease)
-        {
-            newRelease = null;
-
-            try
-            {
-
-                GitHubClass github = new GitHubClass();
-
-                GitHubRelease rel = github.GetLatestRelease();
-
-                if (rel != null)
-                {
-                    //string newInstaller = jo["Filename"].Value<string>();
-
-                    var currentVersion = Application.ProductVersion;
-
-                    Version v1, v2;
-                    v1 = new Version(rel.ReleaseVersion);
-                    v2 = new Version(currentVersion);
-
-                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
-                    {
-                        newRelease = rel;
-                        LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName);
-                        return true;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-
-            return false;
-        }
-
-        protected void Shutdown()
-        {
-            PendingClose = true;
-            EDDNSync.StopSync();
-            journalmonitor.StopMonitor();
-            EdsmSync.StopSync();
-
-            LogLineHighlight("Closing down, please wait..");
-            Console.WriteLine("Close.. safe close launched");
-            closeRequested.Set();
-        }
-        #endregion
-        #endregion
-
         #region Implementation
         #region Private Properties of Fields
-        private static EDDiscoveryFormBase Instance;
-
         private ManualResetEvent closeRequested = new ManualResetEvent(false);
         private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
         private ManualResetEvent readyForUiInvoke = new ManualResetEvent(false);
@@ -359,7 +353,6 @@ namespace EDDiscovery
         private bool performhistoryrefresh = false;
         private bool syncwasfirstrun = false;
         private bool syncwaseddboredsm = false;
-        private Thread safeClose;
         private Thread backgroundWorker;
         private Thread backgroundRefreshWorker;
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
@@ -367,17 +360,29 @@ namespace EDDiscovery
         private RefreshWorkerArgs refreshWorkerArgs;
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
         private int resyncRequestedFlag = 0;
+        private EDDiscoveryForm form;
         private bool CanSkipSlowUpdates
         {
             get
             {
 #if DEBUG
-                return EDDConfig.CanSkipSlowUpdates;
+                return EDDConfig.Instance.CanSkipSlowUpdates;
 #else
                 return false;
 #endif
             }
         }
+        #endregion
+
+        #region Methods requesting information from consumer
+        private Func<Color> GetLogNormalColour;
+        private Func<Color> GetLogHighlightColour;
+        private Func<Color> GetLogSuccessColour;
+        #endregion
+
+        #region Methods invoking actions in consumer thread
+        private Action<Action> InvokeAsyncOnUIThread;
+        private Action<Action> InvokeSyncOnUIThread;
         #endregion
 
         #region Initialization
@@ -637,7 +642,7 @@ namespace EDDiscovery
 
             closeRequested.WaitOne();
 
-            OnSafeClose();
+            OnBgSafeClose();
             ReadyForClose = true;
             InvokeAsyncOnUIThread(() =>
             {
@@ -662,16 +667,6 @@ namespace EDDiscovery
                         break;
                 }
             }
-        }
-
-        private void InvokeAsyncOnUIThread(Action a)
-        {
-            BeginInvoke(a);
-        }
-
-        private void InvokeSyncOnUIThread(Action a)
-        {
-            Invoke(a);
         }
 
         private void BackgroundInit()
@@ -952,7 +947,7 @@ namespace EDDiscovery
 
             if (args.CurrentCommander >= 0)
             {
-                cmdr = EDDConfig.Commander(args.CurrentCommander);
+                cmdr = EDDConfig.Instance.Commander(args.CurrentCommander);
                 journalmonitor.ParseJournalFiles(() => PendingClose, (p, s) => ReportProgress(p, s), forceReload: args.ForceJournalReload);   // Parse files stop monitor..
 
                 if (args != null)
@@ -1045,7 +1040,7 @@ namespace EDDiscovery
 
             OnHistoryChange?.Invoke(history);
 
-            OnRefreshHistoryWorkerCompleted(res);
+            OnRefreshHistoryWorkerCompleted(res.rethistory, res.retledger, res.retstarscan);
 
             HistoryRefreshed?.Invoke();
 
@@ -1153,7 +1148,7 @@ namespace EDDiscovery
                     {
                         LogLine("Checking for new EDSM systems (may take a few moments).");
                         EDSMClass edsm = new EDSMClass();
-                        long updates = edsm.GetNewSystems((EDDiscoveryForm)this, cancelRequested, reportProgress);
+                        long updates = edsm.GetNewSystems(form, cancelRequested, reportProgress);
                         LogLine("EDSM updated " + updates + " systems.");
                         performhistoryrefresh |= (updates > 0);
                     }
@@ -1233,7 +1228,7 @@ namespace EDDiscovery
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     bool outoforder = false;
                     using (var reader = new StreamReader(s))
-                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, (EDDiscoveryForm)this, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
+                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, form, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
                     if (!cancelRequested())       // abort, without saving time, to make it do it again
                     {
                         SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);

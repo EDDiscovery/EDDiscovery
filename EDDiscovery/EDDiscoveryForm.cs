@@ -35,7 +35,7 @@ namespace EDDiscovery
 
     public delegate void DistancesLoaded();
 
-    public partial class EDDiscoveryForm : EDDiscoveryFormBase
+    public partial class EDDiscoveryForm : Form
     {
         #region Variables
 
@@ -62,6 +62,7 @@ namespace EDDiscovery
         private Point _window_dragMousePos = Point.Empty;
         private Point _window_dragWindowPos = Point.Empty;
         public EDDTheme theme;
+        public EDDiscoveryController Controller;
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
@@ -73,16 +74,48 @@ namespace EDDiscovery
         private bool themeok = true;
         private Forms.SplashForm splashform = null;
         private GitHubRelease latestRelease = null;
+
+        public int DisplayedCommander { get { return Controller.DisplayedCommander; } set { Controller.DisplayedCommander = value; } }
+        public HistoryList history { get { return Controller.history; } }
+        public bool option_nowindowreposition { get { return Controller.option_nowindowreposition; } }
+        public bool option_debugoptions { get { return Controller.option_debugoptions; } }
+        public EDSMSync EdsmSync { get { return Controller.EdsmSync; } }
+        public string LogText { get { return Controller.LogText; } }
+        public bool PendingClose { get { return Controller.PendingClose; } }
+        public string VersionDisplayString { get { return Controller.VersionDisplayString; } }
+        public GalacticMapping GalacticMapping { get { return Controller.GalacticMapping; } }
+        public bool ReadyForClose { get { return Controller.ReadyForClose; } }
+        public bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
+
+        public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
+        public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
+        public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
+
+        public static EDDiscoveryForm Instance { get; private set; }
+        public static EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
+        public static GalacticMapping galacticMapping { get { return Instance.GalacticMapping; } }
         #endregion
 
         #region Initialisation
 
         public EDDiscoveryForm()
         {
+            Instance = this;
             InitializeComponent();
 
-            base.Init();
-            label_version.Text = VersionDisplayString;
+            Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a), a => Invoke(a));
+            Controller.OnBgSafeClose += BgOnSafeClose;
+            Controller.OnCheckSystemsCompleted += OnCheckSystemsCompleted;
+            Controller.OnDatabaseInitializationComplete += OnDatabaseInitializationComplete;
+            Controller.OnFinalClose += OnFinalClose;
+            Controller.OnNewBodyScan += OnNewBodyScan;
+            Controller.OnNewReleaseAvailable += OnNewReleaseAvailable;
+            Controller.OnRefreshCommanders += OnRefreshCommanders;
+            Controller.OnRefreshHistoryRequested += OnRefreshHistoryRequested;
+            Controller.OnRefreshHistoryWorkerCompleted += (h, m, s) => OnRefreshHistoryWorkerCompleted();
+            Controller.OnReportProgress += OnReportProgress;
+            Controller.Init(this);
+            label_version.Text = Controller.VersionDisplayString;
 
             theme = new EDDTheme();
 
@@ -94,7 +127,7 @@ namespace EDDiscovery
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
-            journalViewControl1.InitControl(this,0);
+            journalViewControl1.InitControl(this, 0);
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
             exportControl1.InitControl(this);
@@ -102,7 +135,7 @@ namespace EDDiscovery
 
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, travelHistoryControl1);
 
-            this.TopMost = EDDConfig.KeepOnTop;
+            this.TopMost = EDDConfig.Instance.KeepOnTop;
 
             ApplyTheme();
         }
@@ -117,14 +150,14 @@ namespace EDDiscovery
         {
             try
             {
-                PostInit_Loading();
+                Controller.PostInit_Loading();
                 if (!IsDatabaseInitialized)
                 {
                     splashform = new SplashForm();
                     splashform.ShowDialog(this);
                 }
 
-                PostInit_Loaded();
+                Controller.PostInit_Loaded();
 
                 RepositionForm();
                 InitFormControls();
@@ -146,12 +179,12 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            PostInit_Shown();
+            Controller.PostInit_Shown();
 
             if (!themeok)
             {
-                LogLineHighlight("The theme stored has missing colors or other missing information");
-                LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
+                Controller.LogLineHighlight("The theme stored has missing colors or other missing information");
+                Controller.LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
         }
 
@@ -221,7 +254,7 @@ namespace EDDiscovery
 
             theme.ApplyToForm(this);
 
-            RefreshDisplays();
+            Controller.RefreshDisplays();
 
             TravelControl.RedrawSummary();
         }
@@ -229,7 +262,7 @@ namespace EDDiscovery
         #endregion
 
         #region Events from controller
-        protected override void OnDatabaseInitializationComplete()
+        protected void OnDatabaseInitializationComplete()
         {
             if (splashform != null)
             {
@@ -237,13 +270,13 @@ namespace EDDiscovery
             }
         }
 
-        protected override void OnNewReleaseAvailable(GitHubRelease rel)
+        protected void OnNewReleaseAvailable(GitHubRelease rel)
         {
             latestRelease = rel;
             PanelInfoNewRelease();
         }
 
-        protected override void OnCheckSystemsCompleted()
+        protected void OnCheckSystemsCompleted()
         {
             imageHandler1.StartWatcher();
             routeControl1.EnableRouteTab(); // now we have systems, we can update this..
@@ -253,7 +286,7 @@ namespace EDDiscovery
             panelInfo.Visible = false;
         }
 
-        protected override void OnReportProgress(int percentComplete, string message)
+        protected void OnReportProgress(int percentComplete, string message)
         {
             if (!PendingClose)
             {
@@ -271,36 +304,36 @@ namespace EDDiscovery
             }
         }
 
-        protected override void OnSafeClose()        // ASYNC thread..
+        protected void BgOnSafeClose()        // ASYNC thread..
         {
             travelHistoryControl1.CloseClosestSystemThread();
         }
 
-        protected override void OnFinalClose()
+        protected void OnFinalClose()
         {
             SaveSettings();         // do close now
             Close();
             Application.Exit();
         }
 
-        protected override void OnRefreshHistoryRequested()
+        protected void OnRefreshHistoryRequested()
         {
             travelHistoryControl1.RefreshButton(false);
             journalViewControl1.RefreshButton(false);
         }
 
-        protected override void OnRefreshHistoryWorkerCompleted(RefreshWorkerResults res)
+        protected void OnRefreshHistoryWorkerCompleted()
         {
             travelHistoryControl1.RefreshButton(true);
             journalViewControl1.RefreshButton(true);
         }
 
-        protected override void OnNewBodyScan(JournalScan scan)
+        protected void OnNewBodyScan(JournalScan scan)
         {
             travelHistoryControl1.NewBodyScan(scan);
         }
 
-        protected override void OnRefreshCommanders()
+        protected void OnRefreshCommanders()
         {
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
             settings.UpdateCommandersListBox();
@@ -309,14 +342,33 @@ namespace EDDiscovery
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
-            AsyncPerformSync();
+            Controller.AsyncPerformSync();
         }
 
         #region Logging
+        //[Obsolete("Use 'Controller.LogLine'")]
+        public void LogLine(string text) { Controller.LogLine(text); }
+        //[Obsolete("Use 'Controller.LogLineHighlight'")]
+        public void LogLineHighlight(string text) { Controller.LogLineHighlight(text); }
+        //[Obsolete("Use 'Controller.LogLineSuccess'")]
+        public void LogLineSuccess(string text) { Controller.LogLineSuccess(text); }
+        //[Obsolete("Use 'Controller.LogLineColor'")]
+        public void LogLineColor(string text, Color color) { Controller.LogLineColor(text, color); }
+        #endregion
 
-        protected override Color GetLogNormalColour() { return theme.TextBlockColor; }
-        protected override Color GetLogHighlightColour() { return theme.TextBlockHighlightColor; }
-        protected override Color GetLogSuccessColour() { return theme.TextBlockSuccessColor; }
+        #region History
+        //[Obsolete("Use 'Controller.RefreshHistoryAsync'")]
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        {
+            return Controller.RefreshHistoryAsync(netlogpath, forcenetlogreload, forcejournalreload, checkedsm, currentcmdr);
+        }
+
+        //[Obsolete("Use 'Controller.RefreshDisplays'")]
+        public void RefreshDisplays() { Controller.RefreshDisplays(); }
+        //[Obsolete("Use 'Controller.NewPosition'")]
+        public void NewPosition(EliteDangerous.JournalEntry je) { Controller.NewPosition(je); }
+        //[Obsolete("Use 'Controller.RecalculateHistoryDBs'")]
+        public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
         #endregion
 
         #region Closing
@@ -345,7 +397,7 @@ namespace EDDiscovery
                 edsmRefreshTimer.Enabled = false;
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
-                Shutdown();
+                Controller.Shutdown();
             }
             else if (!ReadyForClose)   // still working, cancel again..
             {
@@ -434,13 +486,13 @@ namespace EDDiscovery
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!AsyncPerformSync(eddbsync: true))
+            if (!Controller.AsyncPerformSync(eddbsync: true))
                 MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!AsyncPerformSync(edsmsync: true))
+            if (!Controller.AsyncPerformSync(edsmsync: true))
                 MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
@@ -606,7 +658,7 @@ namespace EDDiscovery
                         }
 
                         //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false, currentcmdr: cmdr.Nr);
+                        Controller.RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false, currentcmdr: cmdr.Nr);
                     }
                 }
             }
@@ -639,7 +691,7 @@ namespace EDDiscovery
                         }
 
                         //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true, currentcmdr: cmdr.Nr);
+                        Controller.RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true, currentcmdr: cmdr.Nr);
                     }
                 }
             }
@@ -650,20 +702,20 @@ namespace EDDiscovery
             if (MessageBox.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 EliteDangerous.JournalEntry.ResetCommanderID(-1, EDDConfig.CurrentCommander.Nr);
-                RefreshHistoryAsync();
+                Controller.RefreshHistoryAsync();
             }
         }
 
 
         private void rescanAllJournalFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RefreshHistoryAsync(forcejournalreload: true, checkedsm: true);
+            Controller.RefreshHistoryAsync(forcejournalreload: true, checkedsm: true);
         }
 
         private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GitHubRelease newRelease = null;
-            if (CheckForNewinstaller(out newRelease))
+            if (Controller.CheckForNewinstaller(out newRelease))
             {
                 if (newRelease != null)
                 {
@@ -685,8 +737,8 @@ namespace EDDiscovery
             if (MessageBox.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 int n = EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDDConfig.CurrentCommander.Nr);
-                LogLine("Removed " + n + " FSD entries");
-                RefreshHistoryAsync();
+                Controller.LogLine("Removed " + n + " FSD entries");
+                Controller.RefreshHistoryAsync();
             }
         }
 

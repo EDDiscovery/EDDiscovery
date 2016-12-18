@@ -222,9 +222,7 @@
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EDDiscoveryFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
     <Compile Include="EDSM\GalacticMapObject.cs" />
