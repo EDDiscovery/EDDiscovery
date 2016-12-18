@@ -290,7 +290,7 @@ namespace EDDiscovery2.EDSM
                 bool newfile = false;
                 DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
-                string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
+                string json = Tools.TryReadAllTextFromFile(edsmhiddensystems);
 
                 return json;
             }

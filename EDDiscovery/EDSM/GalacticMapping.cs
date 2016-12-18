@@ -53,7 +53,7 @@ namespace EDDiscovery.EDSM
 
             try
             {
-                string json = EDDiscoveryForm.LoadJsonFile(GalacticMappingFile);
+                string json = Tools.TryReadAllTextFromFile(GalacticMappingFile);
 
                 if (json != null)
                 {

@@ -279,7 +279,7 @@ namespace EDDiscovery2
                 foreach (FileInfo fi in allFiles)
                 {
                     JObject pfile = null;
-                    string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(fi.FullName);
+                    string json = Tools.TryReadAllTextFromFile(fi.FullName);
 
                     if (json != null)
                     {
