@@ -106,13 +106,6 @@ namespace EDDiscovery
             ApplyTheme();
         }
 
-        protected override void DatabaseInitializationComplete()
-        {
-            if (splashform != null)
-            {
-                splashform.Close();
-            }
-        }
 
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
@@ -158,11 +151,6 @@ namespace EDDiscovery
                 LogLineHighlight("The theme stored has missing colors or other missing information");
                 LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
-        }
-
-        protected override void OnNewReleaseAvailable()
-        {
-            PanelInfoNewRelease();
         }
 
         private void PanelInfoNewRelease()
@@ -236,10 +224,21 @@ namespace EDDiscovery
             TravelControl.RedrawSummary();
         }
 
-#endregion
+        #endregion
 
-        #region Initial Check Systems
+        #region Events from controller
+        protected override void OnDatabaseInitializationComplete()
+        {
+            if (splashform != null)
+            {
+                splashform.Close();
+            }
+        }
 
+        protected override void OnNewReleaseAvailable()
+        {
+            PanelInfoNewRelease();
+        }
 
         protected override void OnCheckSystemsCompleted()
         {
@@ -250,22 +249,6 @@ namespace EDDiscovery
 
             panelInfo.Visible = false;
         }
-
-        #endregion
-
-        #region EDSM and EDDB syncs code
-
-        private void edsmRefreshTimer_Tick(object sender, EventArgs e)
-        {
-            AsyncPerformSync();
-        }
-        #endregion
-
-        #region Logging
-
-        protected override Color GetLogNormalColour() { return theme.TextBlockColor; }
-        protected override Color GetLogHighlightColour() { return theme.TextBlockHighlightColor; }
-        protected override Color GetLogSuccessColour() { return theme.TextBlockSuccessColor; }
 
         protected override void OnReportProgress(int percentComplete, string message)
         {
@@ -285,9 +268,55 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        protected override void OnSafeClose()        // ASYNC thread..
+        {
+            travelHistoryControl1.CloseClosestSystemThread();
+        }
 
-#region Closing
+        protected override void OnFinalClose()
+        {
+            SaveSettings();         // do close now
+            Close();
+            Application.Exit();
+        }
+
+        protected override void OnRefreshHistoryRequested()
+        {
+            travelHistoryControl1.RefreshButton(false);
+            journalViewControl1.RefreshButton(false);
+        }
+
+        protected override void OnRefreshHistoryWorkerCompleted(RefreshWorkerResults res)
+        {
+            travelHistoryControl1.RefreshButton(true);
+            journalViewControl1.RefreshButton(true);
+        }
+
+        protected override void OnNewBodyScan(JournalScan scan)
+        {
+            travelHistoryControl1.NewBodyScan(scan);
+        }
+
+        protected override void OnRefreshCommanders()
+        {
+            travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
+            settings.UpdateCommandersListBox();
+        }
+        #endregion
+
+        private void edsmRefreshTimer_Tick(object sender, EventArgs e)
+        {
+            AsyncPerformSync();
+        }
+
+        #region Logging
+
+        protected override Color GetLogNormalColour() { return theme.TextBlockColor; }
+        protected override Color GetLogHighlightColour() { return theme.TextBlockHighlightColor; }
+        protected override Color GetLogSuccessColour() { return theme.TextBlockSuccessColor; }
+        #endregion
+
+        #region Closing
 
         private void SaveSettings()
         {
@@ -310,10 +339,10 @@ namespace EDDiscovery
             if (!PendingClose)                  // so a close is a request now, and it launches a thread which cleans up the system..
             {
                 e.Cancel = true;
-                Shutdown();
                 edsmRefreshTimer.Enabled = false;
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
+                Shutdown();
             }
             else if (!readyForClose)   // still working, cancel again..
             {
@@ -323,18 +352,6 @@ namespace EDDiscovery
             {
                 Console.WriteLine("go for close");
             }
-        }
-
-        protected override void OnSafeClose()        // ASYNC thread..
-        {
-            travelHistoryControl1.CloseClosestSystemThread();
-        }
-
-        protected override void OnFinalClose()
-        {
-            SaveSettings();         // do close now
-            Close();
-            Application.Exit();
         }
 
 #endregion
@@ -715,38 +732,6 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
         #endregion
-
-        #region Update Data
-
-        protected override void OnRefreshHistoryRequested()
-        {
-            travelHistoryControl1.RefreshButton(false);
-            journalViewControl1.RefreshButton(false);
-
-            journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-        }
-
-
-        protected override void OnRefreshHistoryWorkerCompleted(RefreshWorkerResults res)
-        {
-            travelHistoryControl1.RefreshButton(true);
-            journalViewControl1.RefreshButton(true);
-        }
-
-        protected override void OnNewBodyScan(JournalScan scan)
-        {
-            travelHistoryControl1.NewBodyScan(scan);
-        }
-
-        protected override void OnRefreshCommanders()
-        {
-            travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
-            settings.UpdateCommandersListBox();
-        }
-
-        #endregion
-
-
 
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {

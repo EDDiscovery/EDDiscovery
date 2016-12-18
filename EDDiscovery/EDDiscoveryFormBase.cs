@@ -81,7 +81,6 @@ namespace EDDiscovery
         protected ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
         protected Task<bool> downloadMapsTask = null;
         protected string logname = "";
-        protected BackgroundWorker dbinitworker = null;
         protected EDJournalClass journalmonitor;
         protected GitHubRelease newRelease;
         protected bool performedsmsync = false;
@@ -136,6 +135,20 @@ namespace EDDiscovery
         {
             HistoryRefreshed?.Invoke();
         }
+        #endregion
+
+        #region Event handlers to be overridden by subclasses
+        protected virtual void OnCheckSystemsCompleted() { }
+        protected virtual void OnDatabaseInitializationComplete() { }
+        protected virtual void OnSafeClose() { }
+        protected virtual void OnFinalClose() { }
+        protected virtual void OnNewBodyScan(JournalScan scan) { }
+        protected virtual void OnRefreshCommanders() { }
+        protected virtual void OnNewReleaseAvailable() { }
+        protected virtual void OnPerformSyncCompleted() { }
+        protected virtual void OnRefreshHistoryRequested() { }
+        protected virtual void OnRefreshHistoryWorkerCompleted(RefreshWorkerResults res) { }
+        protected virtual void OnReportProgress(int percentComplete, string message) { }
         #endregion
 
         #region Initialization
@@ -305,8 +318,6 @@ namespace EDDiscovery
                 LogLine("EliteDangerous is not running.");
             }
         }
-
-
         #endregion
 
         #region Unexpected exception handling
@@ -411,7 +422,7 @@ namespace EDDiscovery
         private void BackgroundWorkerThread()
         {
             InitializeDatabases();
-            InvokeAsyncOnUIThread(() => DatabaseInitializationComplete());
+            InvokeAsyncOnUIThread(() => OnDatabaseInitializationComplete());
             readyForInitialLoad.WaitOne();
             CheckSystems(() => PendingClose, (p, s) => InvokeAsyncOnUIThread(() => ReportProgress(p, s)));
             ReportProgress(-1, "");
@@ -478,8 +489,6 @@ namespace EDDiscovery
             Trace.WriteLine("Database initialization complete");
         }
 
-        protected abstract void DatabaseInitializationComplete();
-
         protected bool CheckForNewinstaller()
         {
             try
@@ -515,8 +524,6 @@ namespace EDDiscovery
 
             return false;
         }
-
-        protected abstract void OnNewReleaseAvailable();
         #endregion
 
         #region Logging
@@ -552,7 +559,6 @@ namespace EDDiscovery
         protected abstract Color GetLogHighlightColour();
         protected abstract Color GetLogSuccessColour();
 
-        protected abstract void OnReportProgress(int percentComplete, string message);
         public void ReportProgress(int percentComplete, string message)
         {
             InvokeAsyncOnUIThread(() => OnReportProgress(percentComplete, message));
@@ -593,7 +599,6 @@ namespace EDDiscovery
             {
             }
         }
-
         #endregion
 
         #region Map Download
@@ -759,19 +764,19 @@ namespace EDDiscovery
                     performeddbsync = true;
             }
         }
-
-        protected virtual void OnCheckSystemsCompleted()
-        {
-
-        }
         #endregion
 
         #region History Refresh
-        protected void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
         {
             if (Interlocked.CompareExchange(ref refreshRequestedFlag, 1, 0) == 0)
             {
-                InvokeSyncOnUIThread(() => OnRefreshHistoryRequested());
+                InvokeSyncOnUIThread(() =>
+                {
+                    OnRefreshHistoryRequested();
+                    journalmonitor.StopMonitor();
+                });
+
                 refreshWorkerArgs = new RefreshWorkerArgs
                 {
                     NetLogPath = netlogpath,
@@ -784,12 +789,13 @@ namespace EDDiscovery
             }
         }
 
-        protected abstract void OnRefreshHistoryRequested();
-
         private void DoRefreshHistory()
         {
             RefreshWorkerResults res = RefreshHistoryWorker(refreshWorkerArgs);
-            InvokeAsyncOnUIThread(() => OnRefreshHistoryWorkerCompleted(res));
+            InvokeAsyncOnUIThread(() =>
+            {
+                RefreshHistoryWorkerCompleted(res);
+            });
         }
 
         private RefreshWorkerResults RefreshHistoryWorker(RefreshWorkerArgs args)
@@ -900,8 +906,6 @@ namespace EDDiscovery
             refreshRequestedFlag = 0;
         }
 
-        protected abstract void OnRefreshHistoryWorkerCompleted(RefreshWorkerResults res);
-
         // go thru the hisotry list and reworkout the materials ledge and the materials count
         private void ProcessUserHistoryListEntries(List<HistoryEntry> hl, MaterialCommoditiesLedger ledger, StarScan scan)
         {
@@ -997,9 +1001,6 @@ namespace EDDiscovery
             }
         }
 
-        protected abstract void OnNewBodyScan(JournalScan scan);
-        protected abstract void OnRefreshCommanders();
-
         public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
         {
             MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
@@ -1012,7 +1013,6 @@ namespace EDDiscovery
 
             InvokeOnHistoryChange(history);
         }
-
         #endregion
 
         #region EDSM / EDDB sync
@@ -1108,8 +1108,6 @@ namespace EDDiscovery
             OnPerformSyncCompleted();
             resyncRequestedFlag = 0;
         }
-
-        protected virtual void OnPerformSyncCompleted() { }
 
         private void HistoryFinishedRefreshing()
         {
@@ -1288,9 +1286,6 @@ namespace EDDiscovery
                 OnFinalClose();
             });
         }
-
-        protected virtual void OnSafeClose() { }
-        protected virtual void OnFinalClose() { }
         #endregion
     }
 }
