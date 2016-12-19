@@ -39,7 +39,7 @@
             this.panel_taskbaricon = new ExtendedControls.DrawnPanel();
             this.panel_showtitle = new ExtendedControls.DrawnPanel();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.statusStripCustom1 = new ExtendedControls.StatusStripCustom();
+            this.statusStripBottom = new ExtendedControls.StatusStripCustom();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -194,20 +194,20 @@
             this.panelTop.TabIndex = 27;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
             // 
-            // statusStripCustom1
+            // statusStripBottom
             // 
-            this.statusStripCustom1.Location = new System.Drawing.Point(0, 536);
-            this.statusStripCustom1.Name = "statusStripCustom1";
-            this.statusStripCustom1.Size = new System.Drawing.Size(634, 22);
-            this.statusStripCustom1.TabIndex = 26;
-            this.statusStripCustom1.Text = "statusStripCustom1";
+            this.statusStripBottom.Location = new System.Drawing.Point(0, 536);
+            this.statusStripBottom.Name = "statusStripBottom";
+            this.statusStripBottom.Size = new System.Drawing.Size(634, 22);
+            this.statusStripBottom.TabIndex = 26;
+            this.statusStripBottom.Text = "statusStripCustom1";
             // 
             // UserControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 558);
-            this.Controls.Add(this.statusStripCustom1);
+            this.Controls.Add(this.statusStripBottom);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlForm";
             this.Text = "UserControlForm";
@@ -227,7 +227,7 @@
         private ExtendedControls.LabelExt label_index;
         private ExtendedControls.DrawnPanel panel_minimize;
         private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.StatusStripCustom statusStripCustom1;
+        private ExtendedControls.StatusStripCustom statusStripBottom;
         private ExtendedControls.LabelExt labelControlText;
         private ExtendedControls.DrawnPanel panel_ontop;
         private System.Windows.Forms.ToolTip toolTip1;

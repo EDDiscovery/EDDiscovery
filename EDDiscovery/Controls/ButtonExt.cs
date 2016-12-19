@@ -104,10 +104,12 @@ namespace ExtendedControls
                     p1.Dispose();
                 }
 
-                if (BackgroundImage != null)
+                System.Diagnostics.Debug.Assert(BackgroundImage == null);      // because i've used this and its incorrect
+
+                if (Image != null)
                 {
-                    pe.Graphics.DrawImage(BackgroundImage, new Rectangle(ClientRectangle.Width / 2 - BackgroundImage.Width / 2, ClientRectangle.Height / 2 - BackgroundImage.Height / 2, BackgroundImage.Width, BackgroundImage.Height), 
-                                    0,0, BackgroundImage.Width, BackgroundImage.Height, GraphicsUnit.Pixel);
+                    pe.Graphics.DrawImage(Image, new Rectangle(ClientRectangle.Width / 2 - Image.Width / 2, ClientRectangle.Height / 2 - Image.Height / 2, Image.Width, Image.Height), 
+                                    0,0, Image.Width, Image.Height, GraphicsUnit.Pixel);
                 }
                 else
                 {

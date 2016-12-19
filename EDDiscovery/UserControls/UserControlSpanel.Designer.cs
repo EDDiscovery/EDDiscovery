@@ -380,13 +380,12 @@
             // buttonExt0
             // 
             this.buttonExt0.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt0.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt0.BackgroundImage")));
-            this.buttonExt0.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt0.BorderColorScaling = 1.25F;
             this.buttonExt0.ButtonColorScaling = 0.5F;
             this.buttonExt0.ButtonDisabledScaling = 0.5F;
             this.buttonExt0.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt0.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt0.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt0.Image")));
             this.buttonExt0.Location = new System.Drawing.Point(17, 26);
             this.buttonExt0.Name = "buttonExt0";
             this.buttonExt0.Size = new System.Drawing.Size(24, 24);
@@ -401,13 +400,12 @@
             // buttonExt1
             // 
             this.buttonExt1.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt1.BackgroundImage")));
-            this.buttonExt1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt1.BorderColorScaling = 1.25F;
             this.buttonExt1.ButtonColorScaling = 0.5F;
             this.buttonExt1.ButtonDisabledScaling = 0.5F;
             this.buttonExt1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt1.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt1.Image")));
             this.buttonExt1.Location = new System.Drawing.Point(43, 48);
             this.buttonExt1.Name = "buttonExt1";
             this.buttonExt1.Size = new System.Drawing.Size(24, 24);
@@ -422,13 +420,12 @@
             // buttonExt2
             // 
             this.buttonExt2.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt2.BackgroundImage")));
-            this.buttonExt2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt2.BorderColorScaling = 1.25F;
             this.buttonExt2.ButtonColorScaling = 0.5F;
             this.buttonExt2.ButtonDisabledScaling = 0.5F;
             this.buttonExt2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt2.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt2.Image")));
             this.buttonExt2.Location = new System.Drawing.Point(69, 70);
             this.buttonExt2.Name = "buttonExt2";
             this.buttonExt2.Size = new System.Drawing.Size(24, 24);
@@ -443,13 +440,12 @@
             // buttonExt3
             // 
             this.buttonExt3.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt3.BackgroundImage")));
-            this.buttonExt3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt3.BorderColorScaling = 1.25F;
             this.buttonExt3.ButtonColorScaling = 0.5F;
             this.buttonExt3.ButtonDisabledScaling = 0.5F;
             this.buttonExt3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt3.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt3.Image")));
             this.buttonExt3.Location = new System.Drawing.Point(95, 92);
             this.buttonExt3.Name = "buttonExt3";
             this.buttonExt3.Size = new System.Drawing.Size(24, 24);
@@ -464,13 +460,12 @@
             // buttonExt4
             // 
             this.buttonExt4.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt4.BackgroundImage")));
-            this.buttonExt4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt4.BorderColorScaling = 1.25F;
             this.buttonExt4.ButtonColorScaling = 0.5F;
             this.buttonExt4.ButtonDisabledScaling = 0.5F;
             this.buttonExt4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt4.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt4.Image")));
             this.buttonExt4.Location = new System.Drawing.Point(121, 122);
             this.buttonExt4.Name = "buttonExt4";
             this.buttonExt4.Size = new System.Drawing.Size(24, 24);
@@ -485,13 +480,12 @@
             // buttonExt5
             // 
             this.buttonExt5.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt5.BackgroundImage")));
-            this.buttonExt5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt5.BorderColorScaling = 1.25F;
             this.buttonExt5.ButtonColorScaling = 0.5F;
             this.buttonExt5.ButtonDisabledScaling = 0.5F;
             this.buttonExt5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt5.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt5.Image")));
             this.buttonExt5.Location = new System.Drawing.Point(147, 144);
             this.buttonExt5.Name = "buttonExt5";
             this.buttonExt5.Size = new System.Drawing.Size(24, 24);
@@ -506,13 +500,12 @@
             // buttonExt6
             // 
             this.buttonExt6.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt6.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt6.BackgroundImage")));
-            this.buttonExt6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt6.BorderColorScaling = 1.25F;
             this.buttonExt6.ButtonColorScaling = 0.5F;
             this.buttonExt6.ButtonDisabledScaling = 0.5F;
             this.buttonExt6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt6.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt6.Image")));
             this.buttonExt6.Location = new System.Drawing.Point(121, 172);
             this.buttonExt6.Name = "buttonExt6";
             this.buttonExt6.Size = new System.Drawing.Size(24, 24);
@@ -527,13 +520,12 @@
             // buttonExt7
             // 
             this.buttonExt7.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt7.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt7.BackgroundImage")));
-            this.buttonExt7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt7.BorderColorScaling = 1.25F;
             this.buttonExt7.ButtonColorScaling = 0.5F;
             this.buttonExt7.ButtonDisabledScaling = 0.5F;
             this.buttonExt7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt7.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt7.Image")));
             this.buttonExt7.Location = new System.Drawing.Point(95, 196);
             this.buttonExt7.Name = "buttonExt7";
             this.buttonExt7.Size = new System.Drawing.Size(24, 24);
@@ -548,13 +540,12 @@
             // buttonExt8
             // 
             this.buttonExt8.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt8.BackgroundImage")));
-            this.buttonExt8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt8.BorderColorScaling = 1.25F;
             this.buttonExt8.ButtonColorScaling = 0.5F;
             this.buttonExt8.ButtonDisabledScaling = 0.5F;
             this.buttonExt8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt8.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt8.Image")));
             this.buttonExt8.Location = new System.Drawing.Point(69, 226);
             this.buttonExt8.Name = "buttonExt8";
             this.buttonExt8.Size = new System.Drawing.Size(24, 24);
@@ -569,13 +560,12 @@
             // buttonExt9
             // 
             this.buttonExt9.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt9.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt9.BackgroundImage")));
-            this.buttonExt9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt9.BorderColorScaling = 1.25F;
             this.buttonExt9.ButtonColorScaling = 0.5F;
             this.buttonExt9.ButtonDisabledScaling = 0.5F;
             this.buttonExt9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt9.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt9.Image")));
             this.buttonExt9.Location = new System.Drawing.Point(43, 250);
             this.buttonExt9.Name = "buttonExt9";
             this.buttonExt9.Size = new System.Drawing.Size(24, 24);
@@ -590,13 +580,12 @@
             // buttonExt10
             // 
             this.buttonExt10.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt10.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonExt10.BackgroundImage")));
-            this.buttonExt10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonExt10.BorderColorScaling = 1.25F;
             this.buttonExt10.ButtonColorScaling = 0.5F;
             this.buttonExt10.ButtonDisabledScaling = 0.5F;
             this.buttonExt10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt10.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt10.Image")));
             this.buttonExt10.Location = new System.Drawing.Point(17, 272);
             this.buttonExt10.Name = "buttonExt10";
             this.buttonExt10.Size = new System.Drawing.Size(24, 24);
