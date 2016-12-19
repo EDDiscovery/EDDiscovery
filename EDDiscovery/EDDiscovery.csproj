@@ -685,6 +685,12 @@
     <Compile Include="UserControls\UserControlTravelGrid.Designer.cs">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlTrippanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlTrippanel.Designer.cs">
+      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
+    </Compile>
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -746,6 +752,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlTrippanel.resx">
+      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.Portable.config" />
     <None Include="OpenTK.dll.config" />
