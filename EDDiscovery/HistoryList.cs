@@ -1,5 +1,6 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
+using EDDiscovery2;
 using EDDiscovery2.DB;
 using OpenTK;
 using System;
@@ -21,6 +22,7 @@ namespace EDDiscovery
         public EliteDangerous.JournalTypeEnum EntryType;
         public long Journalid;
         public JournalEntry journalEntry;
+        public EDCommander Commander;
 
         public ISystem System;         // Must be set! All entries, even if they are not FSD entries.
                                        // The Minimum is name and edsm_id 
@@ -105,7 +107,7 @@ namespace EDDiscovery
             EdsmSync = true; 
         }
 
-        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null)
+        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -196,7 +198,8 @@ namespace EDDiscovery
                 EventSummary = summary,
                 EventDescription = info,
                 EventDetailedInfo = detailed,
-                IsStarPosFromEDSM = starposfromedsm
+                IsStarPosFromEDSM = starposfromedsm,
+                Commander = cmdr ?? EDDConfig.Instance.Commander(je.CommanderId)
             };
 
             if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FuelScoop)

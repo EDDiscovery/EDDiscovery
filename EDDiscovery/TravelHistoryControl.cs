@@ -481,7 +481,9 @@ namespace EDDiscovery
                 if (he.ISEDDNMessage)
                 {
                     if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn == true)
-                        EDDNSync.SendEDDNEvent(he);
+                    {
+                        EDDNSync.SendEDDNEvents(_discoveryForm, he);
+                    }
                 }
 
                 if (he.IsFSDJump || he.EntryType == JournalTypeEnum.Location)
@@ -1114,7 +1116,7 @@ namespace EDDiscovery
             }
 
             if (IsTripPanelPopOutReady)
-                tripPanelPopOut.displayLastFSD(_discoveryForm.history.GetLastFSD);
+                tripPanelPopOut.displayLastFSDOrFuel();
         }
 
 #endregion
@@ -1138,7 +1140,7 @@ namespace EDDiscovery
                 TripPanelPopOut p = new TripPanelPopOut(_discoveryForm);
                 p.SetGripperColour(_discoveryForm.theme.LabelColor);
                 p.SetTextColour(_discoveryForm.theme.SPanelColor);
-                p.displayLastFSD(_discoveryForm.history.GetLastFSD);
+                p.displayLastFSDOrFuel();
                 p.Show();
                 tripPanelPopOut = p;          // do it like this in case of race conditions 
                 return true;
@@ -1154,8 +1156,7 @@ namespace EDDiscovery
         {
             if (IsTripPanelPopOutReady)
             {
-                
-                tripPanelPopOut.displayLastFSD(hl.GetLastFSD);
+                tripPanelPopOut.displayLastFSDOrFuel();
             }
         }
     

@@ -1,5 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2.DB;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
@@ -602,7 +603,7 @@ namespace EDDiscovery2.EDSM
         public JObject GetBodies(int edsmID)
         {
             string query = "bodies?systemId=" + edsmID.ToString();
-            var response = RequestGet("api-v1/" + query, handleException: true);
+            var response = RequestGet("api-system-v1/" + query, handleException: true);
             if (response.Error)
                 return null;
 
@@ -614,6 +615,101 @@ namespace EDDiscovery2.EDSM
             return msg;
         }
 
+        public  static List<JournalScan> GetBodiesList(int edsmid)
+        {
+            List<JournalScan> bodies = new List<JournalScan>();
+
+            EDSMClass edsm = new EDSMClass();
+
+            JObject jo = edsm.GetBodies(edsmid);  // Colonia 
+
+            if (jo != null)
+            {
+                foreach (JObject bodie in jo["bodies"])
+                {
+                    EDSMClass.ConvertFromEDSMBodies(bodie);
+                    JournalScan js = new JournalScan(bodie);
+                    js.EdsmID = edsmid;
+                    
+                    bodies.Add(js);
+                }
+                return bodies;
+            }
+            return null;
+        }
+
+
+        public static JObject ConvertFromEDSMBodies(JObject jo)
+        {
+            jo["timestamp"] = DateTime.UtcNow.ToString("yyyy -MM-ddTHH:mm:ssZ");
+            jo["EDDFromEDSMBodie"] = true;
+
+            JSONHelper.Rename(jo["name"], "BodyName");
+            if (jo["type"].Value<string>().Equals("Star"))
+            {
+                JSONHelper.Rename(jo["subType"], "StarType");   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
+                string startype = jo["StarType"].Value<string>();
+                int index = startype.IndexOf("(");
+                if (index > 0)
+                    startype = startype.Substring(0, index).Trim();
+                jo["StarType"] = startype;
+
+                JSONHelper.Rename(jo["age"], "Age_MY");
+                JSONHelper.Rename(jo["solarMasses"], "StellarMass");
+                JSONHelper.Rename(jo["solarRadius"], "Radius");
+                JSONHelper.Rename(jo["orbitalEccentricity"], "Eccentricity");
+                JSONHelper.Rename(jo["argOfPeriapsis"], "Periapsis");
+                JSONHelper.Rename(jo["rotationalPeriod"], "RotationPeriod");
+                JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
+            }
+
+            if (jo["type"].Value<string>().Equals("Planet"))
+            {
+                JSONHelper.Rename(jo["isLandable"], "Landable");
+                JSONHelper.Rename(jo["earthMasses"], "MassEM");
+                JSONHelper.Rename(jo["volcanismType"], "Volcanism");
+                JSONHelper.Rename(jo["atmosphereType"], "Atmosphere");
+                JSONHelper.Rename(jo["orbitalEccentricity"], "Eccentricity");
+                JSONHelper.Rename(jo["argOfPeriapsis"], "Periapsis");
+                JSONHelper.Rename(jo["rotationalPeriod"], "RotationPeriod");
+                JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
+                JSONHelper.Rename(jo["subType"], "PlanetClass");
+                JSONHelper.Rename(jo["radius"], "Radius");
+            }
+
+            JSONHelper.Rename(jo["belts"], "Rings");
+            JSONHelper.Rename(jo["rings"], "Rings");
+            JSONHelper.Rename(jo["semiMajorAxis"], "SemiMajorAxis");
+            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
+            JSONHelper.Rename(jo["orbitalPeriod"], "OrbitalPeriod");
+            JSONHelper.Rename(jo["semiMajorAxis"], "SemiMajorAxis");
+            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
+            JSONHelper.Rename(jo["surfacePressure"], "SurfacePressure");
+            JSONHelper.Rename(jo["orbitalInclination"], "OrbitalInclination");
+            JSONHelper.Rename(jo["materials"], "Materials");
+            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
+            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
+            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
+            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
+            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
+
+
+
+            if (!JSONHelper.IsNullOrEmptyT(jo["Rings"]))
+            {
+                foreach (JObject ring in jo["Rings"])
+                {
+                    JSONHelper.Rename(ring["innerRadius"], "InnerRad");
+                    JSONHelper.Rename(ring["outerRadius"], "OuterRad");
+                    JSONHelper.Rename(ring["mass"], "MassMT");
+                    JSONHelper.Rename(ring["type"], "RingClass");
+                }
+            }
+
+
+            return jo;
+
+        }
 
     }
 

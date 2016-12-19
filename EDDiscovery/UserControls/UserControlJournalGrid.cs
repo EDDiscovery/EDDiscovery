@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EDDiscovery.DB;
 using EDDiscovery2.EDSM;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {
@@ -256,6 +257,7 @@ namespace EDDiscovery.UserControls
         {
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
         }
 
         HistoryEntry rightclicksystem = null;
@@ -341,6 +343,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void sendUnsyncedScanToEDDNToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
+            {
+                EDDNSync.SendEDDNEvent(discoveryform, rightclicksystem);
+            }
+        }
+
         #endregion
 
         Tuple<long, int> CurrentGridPosByJID()
@@ -371,6 +381,5 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
-
     }
 }
