@@ -18,6 +18,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlStarDistance : UserControlCommonBase
     {
         EDDiscoveryForm _discoveryForm;
+        TravelHistoryControl _travelcontrol;
 
         public UserControlStarDistance()
         {
@@ -27,6 +28,13 @@ namespace EDDiscovery.UserControls
         public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
             _discoveryForm = ed;
+            _travelcontrol = _discoveryForm.TravelControl;
+            _travelcontrol.OnNearestStarListChanged += FillGrid;
+        }
+
+        public override void Closing()
+        {
+            _travelcontrol.OnNearestStarListChanged -= FillGrid;
         }
 
         public void FillGrid(string name, SortedList<double, ISystem> csl)

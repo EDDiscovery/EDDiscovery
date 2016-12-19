@@ -340,7 +340,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (_discoveryForm.history.FindSystem(SystemNameOnly(textBox_From.Text), EDDiscoveryForm.galacticMapping) == null)
+                if (_discoveryForm.history.FindSystem(SystemNameOnly(textBox_From.Text), _discoveryForm.galacticMapping) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -350,7 +350,7 @@ namespace EDDiscovery
             }
             if (textBox_To.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (_discoveryForm.history.FindSystem(SystemNameOnly(textBox_To.Text), EDDiscoveryForm.galacticMapping) == null)
+                if (_discoveryForm.history.FindSystem(SystemNameOnly(textBox_To.Text), _discoveryForm.galacticMapping) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -382,7 +382,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)                // if entering system name..
             {
-                ISystem ds1 = _discoveryForm.history.FindSystem(SystemNameOnly(textBox_From.Text), EDDiscoveryForm.galacticMapping);
+                ISystem ds1 = _discoveryForm.history.FindSystem(SystemNameOnly(textBox_From.Text), _discoveryForm.galacticMapping);
 
                 if (ds1 != null)
                 {
@@ -515,7 +515,7 @@ namespace EDDiscovery
 
             if (textBox_To.ReadOnly == false)                // if entering system name..
             {
-                ISystem ds1 = _discoveryForm.history.FindSystem(SystemNameOnly(textBox_To.Text), EDDiscoveryForm.galacticMapping);
+                ISystem ds1 = _discoveryForm.history.FindSystem(SystemNameOnly(textBox_To.Text), _discoveryForm.galacticMapping);
 
                 if (ds1 != null)
                 {
