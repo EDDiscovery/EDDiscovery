@@ -134,7 +134,7 @@ namespace EDDiscovery2
                 colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText); colors.Add(CI.group_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.tabcontrol_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.toolstrip_back, SystemColors.Window); colors.Add(CI.toolstrip_border, SystemColors.Menu); colors.Add(CI.toolstrip_buttonchecked, SystemColors.MenuText);
-                colors.Add(CI.s_panel, SystemColors.ControlLightLight);
+                colors.Add(CI.s_panel, Color.Orange);
                 buttonstyle = buttonstyle_system;
                 textboxborderstyle = textboxborderstyle_fixed3D;
                 windowsframe = true;

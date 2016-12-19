@@ -15,7 +15,8 @@ namespace ExtendedControls
         public Color MouseSelectedColor { get; set; } = Color.Green;
         public bool MouseSelectedColorEnable { get; set; } = true;      // set to disable selected colour in some crazy windows situations where clicks are lost
 
-        public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText, Move, Text, None , Transparent, NotTransparent };
+        public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText,
+                                Move, Text, None , Transparent, NotTransparent , WindowInTaskBar, WindowNotInTaskBar, Captioned, NotCaptioned };
 
         public ImageType ImageSelected { get; set; } = ImageType.Close;
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
@@ -76,6 +77,9 @@ namespace ExtendedControls
                 int topmarginpx = msize;
                 int bottommarginpx = bottompx - msize;
 
+                int marginwidth = rightmarginpx - leftmarginpx + 1;
+                int marginheight = bottommarginpx - topmarginpx + 1;
+
                 if (ImageSelected == ImageType.Close)
                 {
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, bottommarginpx));
@@ -88,7 +92,7 @@ namespace ExtendedControls
                 else if (ImageSelected == ImageType.OnTop)
                 {
                     Brush bbck = new SolidBrush(pc);
-                    Rectangle area = new Rectangle(leftmarginpx, topmarginpx, rightmarginpx - leftmarginpx+1, bottommarginpx-topmarginpx+1);
+                    Rectangle area = new Rectangle(leftmarginpx, topmarginpx, rightmarginpx - leftmarginpx + 1, bottommarginpx - topmarginpx + 1);
                     e.Graphics.FillRectangle(bbck, area);
                 }
                 else if (ImageSelected == ImageType.Floating)
@@ -98,7 +102,7 @@ namespace ExtendedControls
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
                     e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
                 }
-                else if (ImageSelected == ImageType.NotTransparent)
+                else if (ImageSelected == ImageType.Transparent)
                 {
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, topmarginpx));
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
@@ -108,10 +112,27 @@ namespace ExtendedControls
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
                     e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 2), new Point(centrehorzpx, bottommarginpx - 2));
                 }
-                else if (ImageSelected == ImageType.Transparent)
+                else if (ImageSelected == ImageType.NotTransparent)
                 {
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
                     e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 2), new Point(centrehorzpx, bottommarginpx - 2));
+                }
+                else if (ImageSelected == ImageType.Captioned)
+                {
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, topmarginpx));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
+                    e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
+
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, bottommarginpx - 2), new Point(rightmarginpx - 2, bottommarginpx - 2));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(leftmarginpx + 2, bottommarginpx - 2));
+                }
+                else if (ImageSelected == ImageType.NotCaptioned)
+                {
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, bottommarginpx - 2), new Point(rightmarginpx - 2, bottommarginpx -2));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(leftmarginpx + 2, bottommarginpx - 2));
                 }
                 else if (ImageSelected == ImageType.Gripper)
                 {
@@ -209,6 +230,23 @@ namespace ExtendedControls
                     e.Graphics.DrawLine(p1, new Point(leftmarginpx + o, centrevertpx + o), new Point(leftmarginpx, centrevertpx));
                     e.Graphics.DrawLine(p1, new Point(rightmarginpx - o, centrevertpx - o), new Point(rightmarginpx, centrevertpx));
                     e.Graphics.DrawLine(p1, new Point(rightmarginpx - o, centrevertpx + o), new Point(rightmarginpx, centrevertpx));
+                }
+                else if (ImageSelected == ImageType.WindowInTaskBar || ImageSelected == ImageType.WindowNotInTaskBar )
+                {
+                    int o = 4;
+                    int w = 3;
+                    int top = centrevertpx - o + 1;
+
+                    e.Graphics.DrawRectangle(p1, new Rectangle(leftmarginpx, top, marginwidth, o * 2));
+
+                    if (ImageSelected == ImageType.WindowInTaskBar)
+                    {
+                        using (Brush bbck = new SolidBrush(pc))
+                        {
+                            e.Graphics.FillRectangle(bbck, new Rectangle(leftmarginpx + 2, top + 2, w, o));
+                            e.Graphics.FillRectangle(bbck, new Rectangle(leftmarginpx + 2 + w + 2, top + 2, w, o));
+                        }
+                    }
                 }
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;

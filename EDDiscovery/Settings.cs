@@ -36,6 +36,7 @@ namespace EDDiscovery2
             SetEntryThemeComboBox();
 
             textBoxHomeSystem.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+            comboBoxTheme.ItemHeight = 20;
         }
 
         void SetEntryThemeComboBox()

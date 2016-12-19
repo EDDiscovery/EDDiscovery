@@ -36,6 +36,12 @@ namespace ExtendedControls
             IsOpen = true;
         }
 
+        public void PositionSize( Point p , Size s )
+        {
+            SetPosition =p;
+            SetSize = s;
+        }
+
         public void PositionBelow( Control b , Size s )
         {
             Point p = b.PointToScreen(new Point(0, b.Size.Height));
