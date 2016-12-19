@@ -50,7 +50,7 @@ namespace EDDiscovery
 
         string[] popoutbuttonlist = new string[] 
         {
-            "S-Panel", "Trip-Panel",         // not in tabs
+            "S-Panel", "Trip-Panel","Trip2",          // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
             "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
         };
@@ -70,6 +70,7 @@ namespace EDDiscovery
             Scan,
             // Not in TABS
             Spanel2,
+            Trippanel
         };
 
         Bitmap[] popoutbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
@@ -880,8 +881,10 @@ namespace EDDiscovery
                 PopOut(PopOuts.Spanel2);
             else if (comboBoxCustomPopOut.SelectedIndex == 1)
                 ToggleTripPanelPopOut();
+            else if (comboBoxCustomPopOut.SelectedIndex == 2)
+                PopOut(PopOuts.Trippanel);
             else
-                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 2));
+                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 3));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;
@@ -1000,6 +1003,14 @@ namespace EDDiscovery
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
+            else if (selected == PopOuts.Trippanel)
+            {
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlTrippanel)) + 1;  // used to determine name and also key for DB
+                UserControlTrippanel ucm = new UserControlTrippanel();
+                tcf.Init(ucm, "Trip Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Trippanel" + numopened, true);
+                tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
+                ucm.Init(_discoveryForm, numopened);
+            }
 
             tcf.Show();
 
@@ -1013,8 +1024,10 @@ namespace EDDiscovery
 
             if (selected == PopOuts.Spanel2)                            // need to theme, before draw, as it needs the theme colours set up
                 ((UserControlSpanel)tcf.UserControl).Display(_discoveryForm.history);
-            if (selected == PopOuts.Scan)                            // need to theme, before draw, as it needs the theme colours set up
+            else if (selected == PopOuts.Scan)                            // need to theme, before draw, as it needs the theme colours set up
                 ((UserControlScan)tcf.UserControl).Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
+            else if (selected == PopOuts.Trippanel)                            // need to theme, before draw, as it needs the theme colours set up
+                ((UserControlTrippanel)tcf.UserControl).Display(_discoveryForm.history);
         }
 
         #endregion
