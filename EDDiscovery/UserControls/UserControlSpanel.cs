@@ -202,64 +202,65 @@ namespace EDDiscovery.UserControls
 
         public void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            if (hl == null)     // just for safety
-                return;
+            pictureBox.ClearImageList();
 
             current_historylist = hl;
 
-            int ftotal;         // event filter
-            List<HistoryEntry> result = current_historylist.LastFirst;      // Standard filtering
-
-            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-            
-            result = fieldfilter.FilterHistory(result, out ftotal); // and the field filter..
-
-            pictureBox.ClearImageList();
-
-            RevertToNormalSize();                                           // ensure size is back to normal..
-            scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
-
-            Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
-            Color backcolour = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
-
-            bool drawnnootherstuff = DrawScanText(true , textcolour , backcolour);                    // go 1 for some of the scan positions
-
-            if (!drawnnootherstuff)                                         // and it may indicate its overwriting all stuff, which is fine
+            if (hl != null && hl.Count > 0)     // just for safety
             {
-                int rowpos = scanpostextoffset.Y;
+                int ftotal;         // event filter
+                List<HistoryEntry> result = current_historylist.LastFirst;      // Standard filtering
 
-                if (Config(Configuration.showNothingWhenDocked) && (hl.GetLast.IsDocked || hl.GetLast.IsLanded))
+                result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
+
+                result = fieldfilter.FilterHistory(result, out ftotal); // and the field filter..
+
+
+                RevertToNormalSize();                                           // ensure size is back to normal..
+                scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
+
+                Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                Color backcolour = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
+
+                bool drawnnootherstuff = DrawScanText(true, textcolour, backcolour);                    // go 1 for some of the scan positions
+
+                if (!drawnnootherstuff)                                         // and it may indicate its overwriting all stuff, which is fine
                 {
-                    AddColText(0, 1, rowpos, (hl.GetLast.IsDocked) ? "Docked" : "Landed", textcolour, backcolour , null);
-                }
-                else
-                {
-                    string name;
-                    Point3D tpos;
-                    bool targetpresent = TargetClass.GetTargetPosition(out name, out tpos);
+                    int rowpos = scanpostextoffset.Y;
 
-                    if (targetpresent && Config(Configuration.showTargetLine))
+                    if (Config(Configuration.showNothingWhenDocked) && (hl.GetLast.IsDocked || hl.GetLast.IsLanded))
                     {
-                        AddColText(0, 1, rowpos, "Target", textcolour, backcolour, null);
-                        AddColText(1, 2, rowpos, name, textcolour, backcolour, null);
-                        string dist = (hl.GetLast.System.HasCoordinate) ? SystemClass.Distance(hl.GetLast.System, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
-                        AddColText(2, 3, rowpos, dist, textcolour, backcolour, null);
-                        rowpos += rowheight;
+                        AddColText(0, 1, rowpos, (hl.GetLast.IsDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
                     }
-
-                    foreach (HistoryEntry rhe in result)
+                    else
                     {
-                        DrawHistoryEntry(rhe, rowpos, tpos , textcolour, backcolour);
-                        rowpos += rowheight;
+                        string name;
+                        Point3D tpos;
+                        bool targetpresent = TargetClass.GetTargetPosition(out name, out tpos);
 
-                        if (rowpos > ClientRectangle.Height)                // stop when off of screen
-                            break;
+                        if (targetpresent && Config(Configuration.showTargetLine) && hl.GetLast != null)
+                        {
+                            AddColText(0, 1, rowpos, "Target", textcolour, backcolour, null);
+                            AddColText(1, 2, rowpos, name, textcolour, backcolour, null);
+                            string dist = (hl.GetLast.System.HasCoordinate) ? SystemClass.Distance(hl.GetLast.System, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
+                            AddColText(2, 3, rowpos, dist, textcolour, backcolour, null);
+                            rowpos += rowheight;
+                        }
+
+                        foreach (HistoryEntry rhe in result)
+                        {
+                            DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour);
+                            rowpos += rowheight;
+
+                            if (rowpos > ClientRectangle.Height)                // stop when off of screen
+                                break;
+                        }
                     }
                 }
+
+                DrawScanText(false, textcolour, backcolour);     // go 2
             }
 
-            DrawScanText(false, textcolour , backcolour);     // go 2
-            
             pictureBox.Render();
         }
 
@@ -568,7 +569,9 @@ namespace EDDiscovery.UserControls
                     ButtonExt b = dividers[i - 1];
                     b.Location = new Point(scanpostextoffset.X + columnpos[i] - b.Width/2, 0);
                     b.ButtonColorScaling = 1.0F;
-                    if ( b.FlatStyle != FlatStyle.System)
+                    if (b.FlatStyle == FlatStyle.System)            // System can't do bitmaps.. we need standard.
+                        b.FlatStyle = FlatStyle.Standard;
+                    else if ( b.FlatStyle == FlatStyle.Popup )      // if in Popup (ours) we can adjust the look further.
                         b.FlatAppearance.BorderColor = dividers[i - 1].BackColor;
                     b.Visible = true;
                 }
