@@ -22,12 +22,16 @@ namespace EDDiscovery2
 {
     public partial class FormMap : Form
     {
+
+//TBD subscribe to new target
+
+
         #region Variables
 
         public bool Is3DMapsRunning { get { return _stargrids != null; } }
 
         public bool noWindowReposition { get; set; } = false;                       // set externally
-        public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
+        public EDDiscoveryForm discoveryForm { get; set; } = null;      // set externally
 
         const int HELP_VERSION = 5;         // increment this to force help onto the screen of users first time.
 
@@ -157,9 +161,9 @@ namespace EDDiscovery2
 
             if (toolStripDropDownButtonGalObjects.DropDownItems.Count == 0)
             {
-                Debug.Assert(EDDiscoveryForm.galacticMapping.galacticMapTypes != null);
+                Debug.Assert(discoveryForm.galacticMapping.galacticMapTypes != null);
 
-                foreach (GalMapType tp in EDDiscoveryForm.galacticMapping.galacticMapTypes)
+                foreach (GalMapType tp in discoveryForm.galacticMapping.galacticMapTypes)
                 {
                     if (tp.Group == GalMapType.GalMapGroup.Markers || tp.Group == GalMapType.GalMapGroup.Regions)       // only markers for now..
                     {
@@ -179,6 +183,9 @@ namespace EDDiscovery2
             }
 
             maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
+
+            discoveryForm.OnNewTarget -= UpdateTarget;  // in case called multi times
+            discoveryForm.OnNewTarget += UpdateTarget;
         }
 
         public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)
@@ -240,21 +247,13 @@ namespace EDDiscovery2
             }
         }
 
-        public void UpdateBookmarksGMO(bool gototarget )
-        {
+        public void UpdateTarget()
+        { 
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
+                System.Diagnostics.Debug.WriteLine("3dmap Refresh target");
+
                 GenerateDataSetsBNG();
-
-                if (gototarget)
-                {
-                    string name;
-                    double x, y, z;
-
-                    if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
-                        posdir.StartCameraSlew(new Vector3((float)x, (float)y, (float)z),-1F);
-                }
-
                 RequestPaint();
             }
         }
@@ -402,7 +401,7 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
             SQLiteDBClass.PutSettingBool("Map3DGMONaming", _toolstripToggleNamingButton.Checked);
             SQLiteDBClass.PutSettingBool("Map3DGMORegionColouring", _toolstripToggleRegionColouringButton.Checked);
-            EDDiscoveryForm.galacticMapping.SaveSettings();
+            discoveryForm.galacticMapping.SaveSettings();
 
             _stargrids.Stop();
 
@@ -937,12 +936,12 @@ namespace EDDiscovery2
 
             DatasetBuilder builder3 = new DatasetBuilder();
             List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
-            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked, enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange );
+            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(discoveryForm.galacticMapping, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked, enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange );
             DeleteDataset(ref oldgalmaps);
 
             DatasetBuilder builder4 = new DatasetBuilder();
             List<IData3DSet> oldgalreg = _datasets_galmapregions;
-            _datasets_galmapregions = builder4.AddGalMapRegionsToDataset(_toolstripToggleRegionColouringButton.Checked);
+            _datasets_galmapregions = builder4.AddGalMapRegionsToDataset(discoveryForm.galacticMapping, _toolstripToggleRegionColouringButton.Checked);
             DeleteDataset(ref oldgalreg);
 
             if (_clickedGMO != null)              // if GMO marked.
@@ -1196,7 +1195,7 @@ namespace EDDiscovery2
                 int v = (int)tmsi.Tag;
                 if ( v == 0 )
                 {
-                    EDDiscoveryForm.galacticMapping.ToggleEnable();
+                    discoveryForm.galacticMapping.ToggleEnable();
                     
                     foreach (ToolStripMenuItem ti in toolStripDropDownButtonGalObjects.DropDownItems)
                     {
@@ -1207,7 +1206,7 @@ namespace EDDiscovery2
             }
             else
             {
-                EDDiscoveryForm.galacticMapping.ToggleEnable((GalMapType)tmsi.Tag);
+                discoveryForm.galacticMapping.ToggleEnable((GalMapType)tmsi.Tag);
             }
 
             GenerateDataSetsBNG();
@@ -1291,7 +1290,7 @@ namespace EDDiscovery2
                 if (frm.IsTarget)          // asked for targetchanged..
                 {
                     TargetClass.SetTargetBookmark("RM:" + newcls.Heading, newcls.id, newcls.x, newcls.y, newcls.z);
-                    travelHistoryControl.RefreshTargetInfo();
+                    discoveryForm.NewTargetSet();
                 }
 
                 GenerateDataSetsBNG();
@@ -1667,7 +1666,7 @@ namespace EDDiscovery2
                         }
                     }
 
-                    travelHistoryControl.RefreshTargetInfo();       // because of all the ways it may have changed
+                    discoveryForm.NewTargetSet();
                     GenerateDataSetsBNG();      // in case target changed, do all..
                     RequestPaint();
                 }
@@ -1693,7 +1692,7 @@ namespace EDDiscovery2
 
                             GenerateDataSetsBNG();
                             RequestPaint();
-                            travelHistoryControl.RefreshTargetInfo();
+                            discoveryForm.NewTargetSet();
                         }
                     }
                 }
@@ -2081,9 +2080,9 @@ namespace EDDiscovery2
             Matrix4 resmat = posdir.GetResMat;
             GalacticMapObject curobj = null;
 
-            if (EDDiscoveryForm.galacticMapping != null)
+            if (discoveryForm.galacticMapping != null)
             {
-                foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
+                foreach (GalacticMapObject gmo in discoveryForm.galacticMapping.galacticMapObjects)
                 {
                     if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && gmo.points.Count > 0)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
@@ -2252,7 +2251,7 @@ namespace EDDiscovery2
                 return sys.name;
             }
 
-            gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled
+            gmo = discoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled
 
             if (gmo != null)
             {

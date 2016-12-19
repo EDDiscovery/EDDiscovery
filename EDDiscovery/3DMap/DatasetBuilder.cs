@@ -168,18 +168,18 @@ namespace EDDiscovery2._3DMap
         float gmoselonly = 0.75F;
         float gmoseltarget = 1.75F;
 
-        public List<IData3DSet> AddGalMapRegionsToDataset( bool colourregions)
+        public List<IData3DSet> AddGalMapRegionsToDataset(GalacticMapping galmap, bool colourregions)
         {
             var polydataset = new PolygonCollection("regpolys", Color.White, 1f, OpenTK.Graphics.OpenGL.PrimitiveType.Triangles);      // ORDER AND NUMBER v.Important
             var outlinedataset = new PolygonCollection("reglines", Color.White, 1f , OpenTK.Graphics.OpenGL.PrimitiveType.LineLoop);   // DrawStars picks them out in a particular order
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("regtext", Color.White, 1f);
 
-            if (EDDiscoveryForm.galacticMapping != null)
+            if (galmap != null)
             {
                 long gmotarget = TargetClass.GetTargetGMO();
 
                 int cindex = 0;
-                foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
+                foreach (GalacticMapObject gmo in galmap.galacticMapObjects)
                 {
                     if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )
                     {
@@ -262,15 +262,15 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem , Color textc)
+        public List<IData3DSet> AddGalMapObjectsToDataset(GalacticMapping galmap, Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem , Color textc)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
 
-            if (EDDiscoveryForm.galacticMapping != null)
+            if (galmap != null)
             {
                 long gmotarget = TargetClass.GetTargetGMO();
 
-                foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
+                foreach (GalacticMapObject gmo in galmap.galacticMapObjects)
                 {
                     if (gmo.galMapType.Enabled)
                     {

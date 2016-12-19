@@ -444,12 +444,6 @@
     <Compile Include="Forms\RecordStep.Designer.cs">
       <DependentUpon>RecordStep.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SummaryPopOut.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SummaryPopOut.Designer.cs">
-      <DependentUpon>SummaryPopOut.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\UserControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -635,6 +629,12 @@
     <Compile Include="UserControls\UserControlScan.Designer.cs">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlSpanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlSpanel.Designer.cs">
+      <DependentUpon>UserControlSpanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlStats.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -736,6 +736,9 @@
     <EmbeddedResource Include="UserControls\UserControlScreenshot.resx">
       <DependentUpon>UserControlScreenshot.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlSpanel.resx">
+      <DependentUpon>UserControlSpanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
     </EmbeddedResource>
@@ -825,6 +828,8 @@
     <None Include="Resources\Helium_Rich_Gas_Giant1.png" />
     <None Include="Resources\Globe.png" />
     <None Include="Resources\Globe_yellow.png" />
+    <None Include="Resources\edsm.png" />
+    <None Include="Resources\edlogo24.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -996,9 +1001,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RecordStep.resx">
       <DependentUpon>RecordStep.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SummaryPopOut.resx">
-      <DependentUpon>SummaryPopOut.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThemeEditor.resx">
       <DependentUpon>ThemeEditor.cs</DependentUpon>

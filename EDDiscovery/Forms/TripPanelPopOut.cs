@@ -266,7 +266,7 @@ namespace EDDiscovery.Forms
             if (!String.IsNullOrEmpty(_discoveryform.RouteControl.textBox_To.Text))
                 {
                 Point3D from, to;
-                ISystem ds1 = _discoveryform.history.FindSystem(he.System.name, EDDiscoveryForm.galacticMapping);
+                ISystem ds1 = _discoveryform.history.FindSystem(he.System.name, _discoveryform.galacticMapping);
 
 
              if(  ds1 != null && _discoveryform.RouteControl.GetCoordsTo(out to))

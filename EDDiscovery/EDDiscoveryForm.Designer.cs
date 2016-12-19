@@ -38,6 +38,9 @@
             this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAllPopoutsInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAllInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.turnOffAllTransparencyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,8 +55,8 @@
             this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryChatDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -109,7 +112,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(247, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(246, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -121,9 +124,10 @@
             this.changeMapColorToolStripMenuItem,
             this.editThemeToolStripMenuItem,
             this.materialSearchToolStripMenuItem,
+            this.showAllPopoutsInTaskBarToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // show2DMapsToolStripMenuItem
@@ -161,6 +165,29 @@
             this.materialSearchToolStripMenuItem.Text = "Material Search";
             this.materialSearchToolStripMenuItem.Visible = false;
             this.materialSearchToolStripMenuItem.Click += new System.EventHandler(this.materialSearchToolStripMenuItem_Click);
+            // 
+            // showAllPopoutsInTaskBarToolStripMenuItem
+            // 
+            this.showAllPopoutsInTaskBarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAllInTaskBarToolStripMenuItem,
+            this.turnOffAllTransparencyToolStripMenuItem});
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "Pop-outs";
+            // 
+            // showAllInTaskBarToolStripMenuItem
+            // 
+            this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
+            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.showAllInTaskBarToolStripMenuItem.Text = "Show All In Task Bar";
+            this.showAllInTaskBarToolStripMenuItem.Click += new System.EventHandler(this.showAllInTaskBarToolStripMenuItem_Click);
+            // 
+            // turnOffAllTransparencyToolStripMenuItem
+            // 
+            this.turnOffAllTransparencyToolStripMenuItem.Name = "turnOffAllTransparencyToolStripMenuItem";
+            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.turnOffAllTransparencyToolStripMenuItem.Text = "Turn off all transparency";
+            this.turnOffAllTransparencyToolStripMenuItem.Click += new System.EventHandler(this.turnOffAllTransparencyToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -278,19 +305,19 @@
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // gitHubToolStripMenuItem
-            // 
-            this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
-            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.gitHubToolStripMenuItem.Text = "Github";
-            this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.gitHubToolStripMenuItem_Click);
-            // 
             // eDDiscoveryHomepageToolStripMenuItem
             // 
             this.eDDiscoveryHomepageToolStripMenuItem.Name = "eDDiscoveryHomepageToolStripMenuItem";
             this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.eDDiscoveryHomepageToolStripMenuItem.Text = "EDDiscovery Help";
             this.eDDiscoveryHomepageToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryHomepageToolStripMenuItem_Click);
+            // 
+            // gitHubToolStripMenuItem
+            // 
+            this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.gitHubToolStripMenuItem.Text = "Github";
+            this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.gitHubToolStripMenuItem_Click);
             // 
             // frontierForumThreadToolStripMenuItem
             // 
@@ -578,6 +605,7 @@
             this.panel_minimize.MarginSize = 6;
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 20;
@@ -595,6 +623,7 @@
             this.panel_close.MarginSize = 6;
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 19;
@@ -724,5 +753,8 @@
         private System.Windows.Forms.ToolStripMenuItem deleteDuplicateFSDJumpEntriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendUnsuncedEDDNEventsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem materialSearchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showAllPopoutsInTaskBarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showAllInTaskBarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem turnOffAllTransparencyToolStripMenuItem;
     }
 }

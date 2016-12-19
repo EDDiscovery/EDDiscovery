@@ -104,15 +104,26 @@ namespace ExtendedControls
                     p1.Dispose();
                 }
 
-                SizeF sz = pe.Graphics.MeasureString(this.Text, this.Font);
+                System.Diagnostics.Debug.Assert(BackgroundImage == null);      // because i've used this and its incorrect
 
-                Brush textb = new SolidBrush((Enabled)?this.ForeColor:Multiply(this.ForeColor,0.5F));
+                if (Image != null)
+                {
+                    pe.Graphics.DrawImage(Image, new Rectangle(ClientRectangle.Width / 2 - Image.Width / 2, ClientRectangle.Height / 2 - Image.Height / 2, Image.Width, Image.Height), 
+                                    0,0, Image.Width, Image.Height, GraphicsUnit.Pixel);
+                }
+                else
+                {
+                    SizeF sz = pe.Graphics.MeasureString(this.Text, this.Font);
 
-                pe.Graphics.DrawString(this.Text, this.Font, textb,
-                    buttonarea.Left + (buttonarea.Width - sz.Width) / 2,
-                    buttonarea.Top + (buttonarea.Height - sz.Height) / 2);
+                    Brush textb = new SolidBrush((Enabled) ? this.ForeColor : Multiply(this.ForeColor, 0.5F));
 
-                textb.Dispose();
+                    pe.Graphics.DrawString(this.Text, this.Font, textb,
+                        buttonarea.Left + (buttonarea.Width - sz.Width) / 2,
+                        buttonarea.Top + (buttonarea.Height - sz.Height) / 2);
+
+                    textb.Dispose();
+                }
+
                 p.Dispose();
                 b.Dispose();
             }

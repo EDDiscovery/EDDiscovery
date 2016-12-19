@@ -83,17 +83,17 @@ namespace EDDiscovery
         public string LogText { get { return Controller.LogText; } }
         public bool PendingClose { get { return Controller.PendingClose; } }
         public string VersionDisplayString { get { return Controller.VersionDisplayString; } }
-        public GalacticMapping GalacticMapping { get { return Controller.GalacticMapping; } }
+        public GalacticMapping galacticMapping { get { return Controller.GalacticMapping; } }
         public bool ReadyForClose { get { return Controller.ReadyForClose; } }
         public bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
 
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
+        public event Action OnNewTarget { add { Controller.OnNewTarget += value; } remove { Controller.OnNewTarget -= value; } }
 
         public static EDDiscoveryForm Instance { get; private set; }
         public static EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
-        public static GalacticMapping galacticMapping { get { return Instance.GalacticMapping; } }
         #endregion
 
         #region Initialisation
@@ -108,7 +108,6 @@ namespace EDDiscovery
             Controller.OnCheckSystemsCompleted += OnCheckSystemsCompleted;
             Controller.OnDatabaseInitializationComplete += OnDatabaseInitializationComplete;
             Controller.OnFinalClose += OnFinalClose;
-            Controller.OnNewBodyScan += OnNewBodyScan;
             Controller.OnNewReleaseAvailable += OnNewReleaseAvailable;
             Controller.OnRefreshCommanders += OnRefreshCommanders;
             Controller.OnRefreshHistoryRequested += OnRefreshHistoryRequested;
@@ -133,7 +132,7 @@ namespace EDDiscovery
             exportControl1.InitControl(this);
 
 
-            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, travelHistoryControl1);
+            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, this);
 
             this.TopMost = EDDConfig.Instance.KeepOnTop;
 
@@ -255,8 +254,6 @@ namespace EDDiscovery
             theme.ApplyToForm(this);
 
             Controller.RefreshDisplays();
-
-            TravelControl.RedrawSummary();
         }
 
         #endregion
@@ -326,11 +323,6 @@ namespace EDDiscovery
         {
             travelHistoryControl1.RefreshButton(true);
             journalViewControl1.RefreshButton(true);
-        }
-
-        protected void OnNewBodyScan(JournalScan scan)
-        {
-            travelHistoryControl1.NewBodyScan(scan);
         }
 
         protected void OnRefreshCommanders()
@@ -409,9 +401,13 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        #endregion
 
-#region Buttons, Mouse, Menus
+        #region Target
+        public void NewTargetSet() { Controller.NewTargetSet(); }
+        #endregion
+
+        #region Buttons, Mouse, Menus
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -780,7 +776,17 @@ namespace EDDiscovery
         }
         #endregion
 
-        private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.ShowAllPopOutsInTaskBar();
+        }
+
+        private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.MakeAllPopoutsOpaque();
+        }
+
+	private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = history.FilterByScanNotEDDNSynced;        // first entry is oldest
             EDDNSync.SendEDDNEvents(this, hlsyncunsyncedlist);

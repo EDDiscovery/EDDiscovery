@@ -76,13 +76,13 @@ namespace EDDiscovery
         public event Action OnDatabaseInitializationComplete;
         public event Action OnBgSafeClose;
         public event Action OnFinalClose;
-        public event Action<JournalScan> OnNewBodyScan;
         public event Action OnRefreshCommanders;
         public event Action<GitHubRelease> OnNewReleaseAvailable;
         public event Action OnPerformSyncCompleted;
         public event Action OnRefreshHistoryRequested;
         public event Action<List<HistoryEntry>, MaterialCommoditiesLedger, StarScan> OnRefreshHistoryWorkerCompleted;
         public event Action<int, string> OnReportProgress;
+	public event Action OnNewTarget;
         #endregion
 
         #region Methods
@@ -296,9 +296,6 @@ namespace EDDiscovery
                 }
 
                 OnNewEntry?.Invoke(he, history);
-
-                if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)
-                    OnNewBodyScan?.Invoke(je as JournalScan);
             }
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
@@ -334,6 +331,14 @@ namespace EDDiscovery
             {
                 return false;
             }
+        }
+        #endregion
+
+        #region Targets
+        public void NewTargetSet()
+        {
+            System.Diagnostics.Debug.WriteLine("New target set");
+            OnNewTarget?.Invoke();
         }
         #endregion
         #endregion
