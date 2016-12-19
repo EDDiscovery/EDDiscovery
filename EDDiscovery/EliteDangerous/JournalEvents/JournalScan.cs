@@ -95,6 +95,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
         }
 
+
+
+        private void ConvertFromEDSMBodies()
+        {
+            EventTimeUTC = DateTime.UtcNow;
+            throw new NotImplementedException();
+        }
+
         public string BodyName { get; set; }
         public double DistanceFromArrivalLS { get; set; }
         public string StarType { get; set; }                            // null if no StarType
@@ -149,7 +157,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         //public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
 
-        
+        public override void FillInformation(out string summary, out string info, out string detailed)
+        {
+            base.FillInformation(out summary, out info, out detailed);
+            summary = $"Scan of {BodyName}";
+        }
 
         public string DisplayString(bool printbodyname = true, int indent = 0)
         {
