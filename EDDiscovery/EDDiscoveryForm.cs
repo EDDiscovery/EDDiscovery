@@ -32,10 +32,19 @@ using EDDiscovery.EDDN;
 
 namespace EDDiscovery
 {
+    public interface IDiscoveryForm : IDiscoveryController
+    {
+        EDDTheme theme { get; }
+        TravelHistoryControl TravelControl { get; }
+        RouteControl RouteControl { get; }
+        ExportControl ExportControl { get; }
+        EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get; }
+        EDDiscovery2._3DMap.MapManager Map { get; }
+    }
 
     public delegate void DistancesLoaded();
 
-    public partial class EDDiscoveryForm : Form
+    public partial class EDDiscoveryForm : Form, IDiscoveryForm
     {
         #region Variables
 
@@ -61,8 +70,8 @@ namespace EDDiscovery
         private bool _window_dragging = false;
         private Point _window_dragMousePos = Point.Empty;
         private Point _window_dragWindowPos = Point.Empty;
-        public EDDTheme theme;
-        public EDDiscoveryController Controller;
+        public EDDTheme theme { get; private set; }
+        public EDDiscoveryController Controller { get; private set; }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
@@ -83,16 +92,15 @@ namespace EDDiscovery
         public string LogText { get { return Controller.LogText; } }
         public bool PendingClose { get { return Controller.PendingClose; } }
         public string VersionDisplayString { get { return Controller.VersionDisplayString; } }
-        public GalacticMapping galacticMapping { get { return Controller.GalacticMapping; } }
+        public GalacticMapping galacticMapping { get { return Controller.galacticMapping; } }
         public bool ReadyForClose { get { return Controller.ReadyForClose; } }
-        public bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
+        public bool IsDatabaseInitialized { get { return Controller.IsDatabaseInitialized; } }
 
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnNewTarget { add { Controller.OnNewTarget += value; } remove { Controller.OnNewTarget -= value; } }
 
-        public static EDDiscoveryForm Instance { get; private set; }
         public static EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         #endregion
 
@@ -100,7 +108,6 @@ namespace EDDiscovery
 
         public EDDiscoveryForm()
         {
-            Instance = this;
             InitializeComponent();
 
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a), a => Invoke(a));

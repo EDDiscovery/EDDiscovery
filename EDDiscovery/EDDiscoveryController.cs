@@ -25,7 +25,49 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public class EDDiscoveryController
+    public interface IDiscoveryController
+    {
+        #region Properties
+        int DisplayedCommander { get; set; }
+        HistoryList history { get; }
+        bool option_nowindowreposition { get; }
+        bool option_debugoptions { get; }
+        EDSMSync EdsmSync { get; }
+        string LogText { get; }
+        bool PendingClose { get; }
+        string VersionDisplayString { get; }
+        GalacticMapping galacticMapping { get; }
+        bool ReadyForClose { get; }
+        bool IsDatabaseInitialized { get; }
+        #endregion
+
+        #region Events
+        event Action<HistoryList> OnHistoryChange;
+        event Action<HistoryEntry, HistoryList> OnNewEntry;
+        event Action<string, Color> OnNewLogEntry;
+        event Action OnNewTarget;
+        #endregion
+
+        #region Logging
+        void LogLine(string text);
+        void LogLineHighlight(string text);
+        void LogLineSuccess(string text);
+        void LogLineColor(string text, Color color);
+        #endregion
+
+        #region History
+        bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null);
+        void RefreshDisplays();
+        void NewPosition(EliteDangerous.JournalEntry je);
+        void RecalculateHistoryDBs();
+        #endregion
+
+        #region Target
+        void NewTargetSet();
+        #endregion
+    }
+
+    public class EDDiscoveryController : IDiscoveryController
     {
         protected class RefreshWorkerArgs
         {
@@ -62,7 +104,7 @@ namespace EDDiscovery
         public string LogText { get { return logtext; } }
         public bool PendingClose { get; private set; }           // we want to close boys!
         public string VersionDisplayString { get; private set; }
-        public GalacticMapping GalacticMapping { get; private set; }
+        public GalacticMapping galacticMapping { get; private set; }
         public bool ReadyForClose { get; private set; } = false;
         public bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
         #endregion
@@ -112,7 +154,7 @@ namespace EDDiscovery
             backgroundWorker.Name = "Background Worker Thread";
             backgroundWorker.Start();
 
-            GalacticMapping = new GalacticMapping();
+            galacticMapping = new GalacticMapping();
             EdsmSync = new EDSMSync(form);
             EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
             journalmonitor = new EDJournalClass();
@@ -898,7 +940,7 @@ namespace EDDiscovery
             {
                 // Also update galactic mapping from EDSM 
                 LogLine("Get galactic mapping from EDSM.");
-                GalacticMapping.DownloadFromEDSM();
+                galacticMapping.DownloadFromEDSM();
 
                 // Skip EDSM full update if update has been performed in last 4 days
                 bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
@@ -921,8 +963,8 @@ namespace EDDiscovery
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
-                GalacticMapping.ParseData();                            // at this point, EDSM data is loaded..
-                SystemClass.AddToAutoComplete(GalacticMapping.GetGMONames());
+                galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
+                SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
                 EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
