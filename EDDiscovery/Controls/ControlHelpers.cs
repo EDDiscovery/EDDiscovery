@@ -71,7 +71,7 @@ namespace ExtendedControls
             }
         }
 
-        public static Bitmap DrawTextIntoFixedSizeBitmap(string text, Size size, Font dp, Color c, Color b, float backscale = 1.0F)
+        public static Bitmap DrawTextIntoFixedSizeBitmapC(string text, Size size, Font dp, Color c, Color b, float backscale = 1.0F , bool centertext = false)
         {
             Bitmap img = new Bitmap(size.Width, size.Height);
 
@@ -79,9 +79,7 @@ namespace ExtendedControls
             {
                 if (b != Color.Transparent && text.Length > 0)
                 {
-                    SizeF sizef = dgr.MeasureString(text, dp);
-
-                    Rectangle backarea = new Rectangle(0, 0, (int)(sizef.Width + 1), (int)(sizef.Height + 1));
+                    Rectangle backarea = new Rectangle(0, 0, img.Width,img.Height);
                     using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90))
                         dgr.FillRectangle(bb, backarea);
 
@@ -89,7 +87,17 @@ namespace ExtendedControls
                 }
 
                 using (Brush textb = new SolidBrush(c))
-                    dgr.DrawString(text, dp, textb, 0, 0);
+                {
+                    if (centertext)
+                    {
+                        SizeF sizef = dgr.MeasureString(text, dp);
+                        int w = (int)(sizef.Width + 1);
+                        int h = (int)(sizef.Height + 1);
+                        dgr.DrawString(text, dp, textb, size.Width / 2 - w / 2, size.Height / 2 - h / 2);
+                    }
+                    else
+                        dgr.DrawString(text, dp, textb, 0, 0);
+                }
 
                 dgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
