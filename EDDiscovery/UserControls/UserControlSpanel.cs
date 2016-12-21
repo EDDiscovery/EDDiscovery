@@ -1,4 +1,5 @@
-﻿#define TH
+﻿// DEFINE this, allows you to click on an entry to make the scan change
+// #define TH 
 
 using System;
 using System.Collections.Generic;
