@@ -37,6 +37,8 @@ namespace EDDiscovery
 
             txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
+            comboBoxCustomExportType.ItemHeight = 20;
+
         }
 
 

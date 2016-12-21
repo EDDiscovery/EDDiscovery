@@ -34,6 +34,7 @@
             this.contextMenuStripConfig = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemTargetLine = new System.Windows.Forms.ToolStripMenuItem();
             this.EDSMButtonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.iconToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTime = new System.Windows.Forms.ToolStripMenuItem();
             this.showDescriptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +74,8 @@
             this.buttonExt8 = new ExtendedControls.ButtonExt();
             this.buttonExt9 = new ExtendedControls.ButtonExt();
             this.buttonExt10 = new ExtendedControls.ButtonExt();
+            this.buttonExt11 = new ExtendedControls.ButtonExt();
+            this.buttonExt12 = new ExtendedControls.ButtonExt();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.contextMenuStripConfig.SuspendLayout();
             this.SuspendLayout();
@@ -93,6 +96,7 @@
             this.toolStripMenuItemTargetLine,
             this.EDSMButtonToolStripMenuItem,
             this.toolStripMenuItemTime,
+            this.iconToolStripMenuItem,
             this.showDescriptionToolStripMenuItem,
             this.showInformationToolStripMenuItem,
             this.showNotesToolStripMenuItem,
@@ -108,7 +112,7 @@
             this.surfaceScanDetailsToolStripMenuItem,
             this.showInPositionToolStripMenuItem});
             this.contextMenuStripConfig.Name = "contextMenuStripConfig";
-            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 378);
+            this.contextMenuStripConfig.Size = new System.Drawing.Size(328, 422);
             // 
             // toolStripMenuItemTargetLine
             // 
@@ -129,6 +133,16 @@
             this.EDSMButtonToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
             this.EDSMButtonToolStripMenuItem.Text = "EDSM Button";
             this.EDSMButtonToolStripMenuItem.Click += new System.EventHandler(this.EDSMButtonToolStripMenuItem_Click);
+            // 
+            // iconToolStripMenuItem
+            // 
+            this.iconToolStripMenuItem.Checked = true;
+            this.iconToolStripMenuItem.CheckOnClick = true;
+            this.iconToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.iconToolStripMenuItem.Name = "iconToolStripMenuItem";
+            this.iconToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.iconToolStripMenuItem.Text = "Show Event Icon";
+            this.iconToolStripMenuItem.Click += new System.EventHandler(this.iconToolStripMenuItem_Click);
             // 
             // toolStripMenuItemTime
             // 
@@ -197,7 +211,7 @@
             this.blackBoxAroundTextToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.blackBoxAroundTextToolStripMenuItem.Name = "blackBoxAroundTextToolStripMenuItem";
             this.blackBoxAroundTextToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.blackBoxAroundTextToolStripMenuItem.Text = "Black box around text";
+            this.blackBoxAroundTextToolStripMenuItem.Text = "Show black box around text";
             this.blackBoxAroundTextToolStripMenuItem.Click += new System.EventHandler(this.blackBoxAroundTextToolStripMenuItem_Click);
             // 
             // showDistancesOnFSDJumpsOnlyToolStripMenuItem
@@ -597,10 +611,52 @@
             this.buttonExt10.MouseMove += new System.Windows.Forms.MouseEventHandler(this.divider_MouseMove);
             this.buttonExt10.MouseUp += new System.Windows.Forms.MouseEventHandler(this.divider_MouseUp);
             // 
+            // buttonExt11
+            // 
+            this.buttonExt11.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExt11.BorderColorScaling = 1.25F;
+            this.buttonExt11.ButtonColorScaling = 0.5F;
+            this.buttonExt11.ButtonDisabledScaling = 0.5F;
+            this.buttonExt11.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt11.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt11.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt11.Image")));
+            this.buttonExt11.Location = new System.Drawing.Point(43, 302);
+            this.buttonExt11.Name = "buttonExt11";
+            this.buttonExt11.Size = new System.Drawing.Size(24, 24);
+            this.buttonExt11.TabIndex = 1;
+            this.buttonExt11.Tag = "10";
+            this.buttonExt11.UseVisualStyleBackColor = false;
+            this.buttonExt11.Visible = false;
+            this.buttonExt11.MouseDown += new System.Windows.Forms.MouseEventHandler(this.divider_MouseDown);
+            this.buttonExt11.MouseMove += new System.Windows.Forms.MouseEventHandler(this.divider_MouseMove);
+            this.buttonExt11.MouseUp += new System.Windows.Forms.MouseEventHandler(this.divider_MouseUp);
+            // 
+            // buttonExt12
+            // 
+            this.buttonExt12.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExt12.BorderColorScaling = 1.25F;
+            this.buttonExt12.ButtonColorScaling = 0.5F;
+            this.buttonExt12.ButtonDisabledScaling = 0.5F;
+            this.buttonExt12.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt12.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonExt12.Image = ((System.Drawing.Image)(resources.GetObject("buttonExt12.Image")));
+            this.buttonExt12.Location = new System.Drawing.Point(69, 330);
+            this.buttonExt12.Name = "buttonExt12";
+            this.buttonExt12.Size = new System.Drawing.Size(24, 24);
+            this.buttonExt12.TabIndex = 1;
+            this.buttonExt12.Tag = "10";
+            this.buttonExt12.UseVisualStyleBackColor = false;
+            this.buttonExt12.Visible = false;
+            this.buttonExt12.MouseDown += new System.Windows.Forms.MouseEventHandler(this.divider_MouseDown);
+            this.buttonExt12.MouseMove += new System.Windows.Forms.MouseEventHandler(this.divider_MouseMove);
+            this.buttonExt12.MouseUp += new System.Windows.Forms.MouseEventHandler(this.divider_MouseUp);
+            // 
             // UserControlSpanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonExt12);
+            this.Controls.Add(this.buttonExt11);
             this.Controls.Add(this.buttonExt10);
             this.Controls.Add(this.buttonExt9);
             this.Controls.Add(this.buttonExt8);
@@ -667,5 +723,8 @@
         private ExtendedControls.ButtonExt buttonExt8;
         private ExtendedControls.ButtonExt buttonExt9;
         private ExtendedControls.ButtonExt buttonExt10;
+        private ExtendedControls.ButtonExt buttonExt11;
+        private ExtendedControls.ButtonExt buttonExt12;
+        private System.Windows.Forms.ToolStripMenuItem iconToolStripMenuItem;
     }
 }

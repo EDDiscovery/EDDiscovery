@@ -218,7 +218,7 @@
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
-    <Compile Include="DistanceParser.cs" />
+    <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -363,12 +363,6 @@
     </Compile>
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\TripPanelPopOut.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TripPanelPopOut.Designer.cs">
-      <DependentUpon>TripPanelPopOut.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\JSONFiltersForm.cs">
       <SubType>Form</SubType>
@@ -530,7 +524,7 @@
     <Compile Include="3DMap\FormMap.Designer.cs">
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataGridViewSorter.cs" />
+    <Compile Include="UserControls\DataGridViewSorter.cs" />
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
@@ -609,7 +603,7 @@
     <Compile Include="TravelHistoryControl.Designer.cs">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="TravelHistoryFilter.cs" />
+    <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -685,6 +679,12 @@
     <Compile Include="UserControls\UserControlTravelGrid.Designer.cs">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlTrippanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlTrippanel.Designer.cs">
+      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
+    </Compile>
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -701,9 +701,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TripPanelPopOut.resx">
-      <DependentUpon>TripPanelPopOut.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\JSONFiltersForm.resx">
       <DependentUpon>JSONFiltersForm.cs</DependentUpon>
@@ -746,6 +743,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlTrippanel.resx">
+      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.Portable.config" />
     <None Include="OpenTK.dll.config" />

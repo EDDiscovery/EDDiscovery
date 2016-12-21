@@ -50,7 +50,7 @@ namespace EDDiscovery
 
         string[] popoutbuttonlist = new string[] 
         {
-            "S-Panel", "Trip-Panel",         // not in tabs
+            "S-Panel", "Trip-Panel",          // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
             "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
         };
@@ -69,7 +69,8 @@ namespace EDDiscovery
             Statistics,
             Scan,
             // Not in TABS
-            Spanel2,
+            Spanel,
+            Trippanel
         };
 
         Bitmap[] popoutbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
@@ -453,8 +454,6 @@ namespace EDDiscovery
             ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
             RefreshTargetDisplay();
             UpdateDependentsWithSelection();
-            _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByTravel);           // update map
-            RedrawTripPanel(hl);
         }
 
         public void UpdatedWithAddNewEntry(HistoryEntry he, HistoryList hl, bool accepted)     // main travel grid calls after getting a new entry
@@ -485,9 +484,6 @@ namespace EDDiscovery
                         EDDNSync.SendEDDNEvents(_discoveryForm, he);
                     }
                 }
-
-                if (he.IsFSDJump || he.EntryType == JournalTypeEnum.Location)
-                    _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByTravel);           // update map - only cares about FSD changes
 
                 if ( accepted )                                                 // if accepted it on main grid..
                 {
@@ -877,9 +873,9 @@ namespace EDDiscovery
                 return;
 
             if (comboBoxCustomPopOut.SelectedIndex == 0)
-                PopOut(PopOuts.Spanel2);
+                PopOut(PopOuts.Spanel);
             else if (comboBoxCustomPopOut.SelectedIndex == 1)
-                ToggleTripPanelPopOut();
+                PopOut(PopOuts.Trippanel);
             else
                 PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 2));
 
@@ -992,11 +988,19 @@ namespace EDDiscovery
                 tcf.InitForTransparency(false, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
-            else if (selected == PopOuts.Spanel2)
+            else if (selected == PopOuts.Spanel)
             {
                 int numopened = usercontrolsforms.CountOf(typeof(UserControlSpanel)) + 1;  // used to determine name and also key for DB
                 UserControlSpanel ucm = new UserControlSpanel();
                 tcf.Init(ucm, "Summary Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Spanel" + numopened, true);
+                tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
+                ucm.Init(_discoveryForm, numopened);
+            }
+            else if (selected == PopOuts.Trippanel)
+            {
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlTrippanel)) + 1;  // used to determine name and also key for DB
+                UserControlTrippanel ucm = new UserControlTrippanel();
+                tcf.Init(ucm, "Trip Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Trippanel" + numopened, true);
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
@@ -1011,10 +1015,17 @@ namespace EDDiscovery
 
             _discoveryForm.theme.ApplyToForm(tcf);
 
-            if (selected == PopOuts.Spanel2)                            // need to theme, before draw, as it needs the theme colours set up
+            if (selected == PopOuts.Spanel)                            // need to theme, before draw, as it needs the theme colours set up
                 ((UserControlSpanel)tcf.UserControl).Display(_discoveryForm.history);
-            if (selected == PopOuts.Scan)                            // need to theme, before draw, as it needs the theme colours set up
+            else if (selected == PopOuts.Scan)                            // need to theme, before draw, as it needs the theme colours set up
                 ((UserControlScan)tcf.UserControl).Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
+            else if (selected == PopOuts.Trippanel)                            // need to theme, before draw, as it needs the theme colours set up
+                ((UserControlTrippanel)tcf.UserControl).Display(_discoveryForm.history);
+        }
+
+        void TGPopOut()
+        {
+            PopOut(PopOuts.TravelGrid);
         }
 
         #endregion
@@ -1114,52 +1125,9 @@ namespace EDDiscovery
                 textBoxTargetDist.Text = "";
                 toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
             }
-
-            if (IsTripPanelPopOutReady)
-                tripPanelPopOut.displayLastFSDOrFuel();
         }
 
-#endregion
-
-        void TGPopOut()
-        {
-            PopOut(PopOuts.TravelGrid);
-        }
-
-
-        #region Trip computer Pop out
-
-        TripPanelPopOut tripPanelPopOut = null;
-
-        public bool IsTripPanelPopOutReady { get { return tripPanelPopOut != null && !tripPanelPopOut.IsFormClosed; } }
-
-        public bool ToggleTripPanelPopOut()
-        {
-            if (tripPanelPopOut == null || tripPanelPopOut.IsFormClosed)
-            {
-                TripPanelPopOut p = new TripPanelPopOut(_discoveryForm);
-                p.SetGripperColour(_discoveryForm.theme.LabelColor);
-                p.SetTextColour(_discoveryForm.theme.SPanelColor);
-                p.displayLastFSDOrFuel();
-                p.Show();
-                tripPanelPopOut = p;          // do it like this in case of race conditions 
-                return true;
-            }
-            else
-            {
-                tripPanelPopOut.Close();      // there is no point null it, as if the user closes it, it never gets the chance to be nulled
-                return false;
-            }
-        }
-
-        void RedrawTripPanel(HistoryList hl)
-        {
-            if (IsTripPanelPopOutReady)
-            {
-                tripPanelPopOut.displayLastFSDOrFuel();
-            }
-        }
-    
         #endregion
+
     }
 }
