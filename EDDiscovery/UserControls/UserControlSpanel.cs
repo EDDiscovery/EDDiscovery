@@ -36,7 +36,6 @@ namespace EDDiscovery.UserControls
         private List<int> columnpos;
 
         private Font displayfont;
-        private int rowheight = 20;
 
         HistoryList current_historylist;
 
@@ -55,6 +54,7 @@ namespace EDDiscovery.UserControls
             showNotes = 16,
             showXYZ = 32,
             showDistancePerStar = 64,
+            showIcon = 128,
 
             showDoesNotAffectTabs = 1024,        // above this, tab positions are not changed by changes in these values
 
@@ -77,8 +77,10 @@ namespace EDDiscovery.UserControls
             showScanAbove = 8388608
         };
 
-        Configuration config = (Configuration)(Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showTime | Configuration.showDescription |
-                                               Configuration.showInformation | Configuration.showNotes | Configuration.showXYZ | Configuration.showDistancePerStar |
+        Configuration config = (Configuration)(Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
+                                                Configuration.showTime | Configuration.showDescription |
+                                               Configuration.showInformation | Configuration.showNotes | 
+                                                Configuration.showXYZ | Configuration.showDistancePerStar |
                                                Configuration.showScan15s |
                                                Configuration.showScanRight );
 
@@ -86,8 +88,6 @@ namespace EDDiscovery.UserControls
         bool IsSurfaceScanOn { get { return Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite); } }
 
         int layoutorder = 0;
-
-
 
         public UserControlSpanel()
         {
@@ -107,6 +107,7 @@ namespace EDDiscovery.UserControls
             toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
             toolStripMenuItemTime.Checked = Config(Configuration.showTime);
             EDSMButtonToolStripMenuItem.Checked = Config(Configuration.showEDSMButton);
+            iconToolStripMenuItem.Checked = Config(Configuration.showIcon);
             showTargetToolStripMenuItem.Checked = Config(Configuration.showDistancePerStar);
             showNotesToolStripMenuItem.Checked = Config(Configuration.showNotes);
             showXYZToolStripMenuItem.Checked = Config(Configuration.showXYZ);
@@ -147,7 +148,7 @@ namespace EDDiscovery.UserControls
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
 
-            dividers = new ButtonExt[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10 };
+            dividers = new ButtonExt[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 
 #if TH
             travelhistorycontrol.OnTravelSelectionChanged += Travelhistorycontrol_OnTravelSelectionChanged;
@@ -208,13 +209,11 @@ namespace EDDiscovery.UserControls
 
             if (hl != null && hl.Count > 0)     // just for safety
             {
-                int ftotal;         // event filter
                 List<HistoryEntry> result = current_historylist.LastFirst;      // Standard filtering
 
+                int ftotal;         // event filter
                 result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-
                 result = fieldfilter.FilterHistory(result, out ftotal); // and the field filter..
-
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
@@ -227,10 +226,11 @@ namespace EDDiscovery.UserControls
                 if (!drawnnootherstuff)                                         // and it may indicate its overwriting all stuff, which is fine
                 {
                     int rowpos = scanpostextoffset.Y;
+                    int rowheight = Config(Configuration.showIcon) ? 26 : 20;
 
                     if (Config(Configuration.showNothingWhenDocked) && (hl.GetLast.IsDocked || hl.GetLast.IsLanded))
                     {
-                        AddColText(0, 1, rowpos, (hl.GetLast.IsDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
+                        AddColText(0, 0, rowpos, rowheight , (hl.GetLast.IsDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
                     }
                     else
                     {
@@ -240,16 +240,14 @@ namespace EDDiscovery.UserControls
 
                         if (targetpresent && Config(Configuration.showTargetLine) && hl.GetLast != null)
                         {
-                            AddColText(0, 1, rowpos, "Target", textcolour, backcolour, null);
-                            AddColText(1, 2, rowpos, name, textcolour, backcolour, null);
                             string dist = (hl.GetLast.System.HasCoordinate) ? SystemClass.Distance(hl.GetLast.System, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
-                            AddColText(2, 3, rowpos, dist, textcolour, backcolour, null);
+                            AddColText(0, 0, rowpos, rowheight, "Target: " + name + " @ " + dist +" ly", textcolour, backcolour, null);
                             rowpos += rowheight;
                         }
 
                         foreach (HistoryEntry rhe in result)
                         {
-                            DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour);
+                            DrawHistoryEntry(rhe, rowpos, rowheight, tpos, textcolour, backcolour);
                             rowpos += rowheight;
 
                             if (rowpos > ClientRectangle.Height)                // stop when off of screen
@@ -264,13 +262,16 @@ namespace EDDiscovery.UserControls
             pictureBox.Render();
         }
 
-        void DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour )
+        void DrawHistoryEntry(HistoryEntry he, int rowpos, int rowheight, Point3D tpos , Color textcolour , Color backcolour )
         {
             List<string> coldata = new List<string>();                      // First we accumulate the strings
             List<int> tooltipattach = new List<int>();
 
             if (Config(Configuration.showTime))
                 coldata.Add((EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal).ToString("HH:mm.ss"));
+
+            if (Config(Configuration.showIcon))
+                coldata.Add("`!!ICON!!");                // dummy place holder..
 
             if (Config(Configuration.showDescription))
             {
@@ -321,8 +322,11 @@ namespace EDDiscovery.UserControls
 
             if (Config(Configuration.showEDSMButton))
             {
-                Image edsm = EDDiscovery.Properties.Resources.edsm;
-                pictureBox.AddImage(new Rectangle(scanpostextoffset.X+columnpos[colnum++], rowpos, edsm.Width, edsm.Height), edsm, he, "Click to view information on EDSM");
+                Color backtext = (backcolour == Color.Transparent) ? Color.Black : backcolour;
+                ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(45, 14), 
+                                            "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM");
+                edsm.Translate(0, (rowheight - edsm.img.Height) / 2);          // align to centre of rowh..
+                edsm.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, ExtendedControls.ButtonExt.Multiply(textcolour, 1.2F), 0.5F, true), edsm.pos, true);
             }
 
             string tooltip = he.EventSummary + Environment.NewLine + he.EventDescription + Environment.NewLine + he.EventDetailedInfo;
@@ -333,7 +337,14 @@ namespace EDDiscovery.UserControls
                 for (; nextfull < coldata.Count && Config(Configuration.showExpandOverColumns) && coldata[nextfull].Length == 0; nextfull++)
                 { }
 
-                AddColText(colnum + i, colnum + nextfull , rowpos, coldata[i], textcolour, backcolour, tooltipattach.Contains(i) ? tooltip : null);
+                if ( coldata[i].Equals("`!!ICON!!") )            // marker for ICON..
+                {
+                    Bitmap img = he.GetIcon;
+                    ExtendedControls.PictureBoxHotspot.ImageElement e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum+i], rowpos, img.Width, img.Height), img, null, null);
+                    e.Translate(0, (rowheight - e.img.Height) / 2);          // align to centre of rowh..
+                }
+                else
+                    AddColText(colnum + i, colnum + nextfull, rowpos, rowheight, coldata[i], textcolour, backcolour, tooltipattach.Contains(i) ? tooltip : null);
             }
         }
 
@@ -395,13 +406,18 @@ namespace EDDiscovery.UserControls
             return false;
         }
 
-        void AddColText(int coli, int nextcol , int rowpos, string text, Color textcolour, Color backcolour, string tooltip)
+        void AddColText(int coli, int nextcol , int rowpos, int rowh, string text, Color textcolour, Color backcolour, string tooltip)
         {
             if (text.Length > 0)            // don't place empty text, do not want image handling to work on blank screen
             {
-                pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[coli], rowpos),
-                                new Size(columnpos[nextcol] - columnpos[coli] - 4, rowheight),
-                                text, displayfont, textcolour,backcolour, 1.0F, null, tooltip);
+                int endpos = (nextcol == 0) ? 1920 : (columnpos[nextcol] - columnpos[coli] - 4);
+
+                ExtendedControls.PictureBoxHotspot.ImageElement e =
+                                pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[coli], rowpos),
+                                new Size(endpos, rowh),
+                                text, displayfont, textcolour, backcolour, 1.0F, null, tooltip);
+
+                e.Translate(0, (rowh - e.img.Height) / 2);          // align to centre of rowh..
             }
         }
 
@@ -469,8 +485,6 @@ namespace EDDiscovery.UserControls
                         MessageBox.Show("System " + he.System.name + " unknown to EDSM");
                 }
             }
-            else
-                System.Diagnostics.Debug.WriteLine("Clicked at " + e.X + " " + e.Y );
         }
 
 #endregion
@@ -495,6 +509,12 @@ namespace EDDiscovery.UserControls
             {
                 columnpos.Add(pos += 80);
                 visiblecolwidth += 80;
+            }
+
+            if (Config(Configuration.showIcon))
+            {
+                columnpos.Add(pos += 40);
+                visiblecolwidth += 40;
             }
 
             if (Config(Configuration.showDescription))
@@ -669,6 +689,11 @@ namespace EDDiscovery.UserControls
         private void EDSMButtonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FlipConfig(Configuration.showEDSMButton, ((ToolStripMenuItem)sender).Checked, true);
+        }
+
+        private void iconToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showIcon, ((ToolStripMenuItem)sender).Checked, true);
         }
 
         private void toolStripMenuItemTime_Click(object sender, EventArgs e)
@@ -899,7 +924,7 @@ namespace EDDiscovery.UserControls
         }
 
 
-#endregion
+        #endregion
 
     }
 }
