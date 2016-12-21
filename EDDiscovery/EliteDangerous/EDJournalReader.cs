@@ -90,7 +90,7 @@ namespace EDDiscovery.EliteDangerous
                     {
                         EDDiscovery2.EDDConfig.Instance.ListOfCommanders[0].Name = newname;
                         EDDiscovery2.EDDConfig.Instance.ListOfCommanders[0].EdsmName = newname;
-                        EDDiscovery2.EDDConfig.Instance.UpdateCommanders(EDDiscovery2.EDDConfig.Instance.ListOfCommanders); // replaces it
+                        EDDiscovery2.EDDConfig.Instance.UpdateCommanders(EDDiscovery2.EDDConfig.Instance.ListOfCommanders,false); // store back to DB, no need to reload..
                     }
                     else
                         _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);

@@ -446,7 +446,7 @@ namespace EDDiscovery2
             }
         }
 
-        public void UpdateCommanders(List<EDCommander> cmdrlist)
+        public void UpdateCommanders(List<EDCommander> cmdrlist, bool reload)
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
@@ -476,7 +476,8 @@ namespace EDDiscovery2
                         cmd.ExecuteNonQuery();
                     }
 
-                    LoadCommanders();       // refresh in-memory copy
+                    if (reload)
+                        LoadCommanders();       // refresh in-memory copy
                 }
             }
         }
