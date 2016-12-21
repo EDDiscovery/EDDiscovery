@@ -193,17 +193,18 @@ namespace EDDiscovery.UserControls
             {
                 Form prompt = new Form()
                 {
-                    Width = 500,
-                    Height = 200,
+                    Width = 440,
+                    Height = 160,
                     FormBorderStyle = FormBorderStyle.FixedDialog,
                     Text = caption,
                     StartPosition = FormStartPosition.CenterScreen,
                 };
-                Label textLabel = new Label() { Left = 50, Top = 20, Width = 400, Text = text };
-                TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
+
+                Label textLabel = new Label() { Left = 10, Top = 20, Width = 400, Text = text };
+                TextBox textBox = new TextBox() { Left = 10, Top = 50, Width = 400 };
                 textBox.Text = defaultValue;
-                Button confirmation = new Button() { Text = "Ok", Left = 245, Width = 100, Top = 70, DialogResult = DialogResult.OK };
-                Button cancel = new Button() { Text = "Cancel", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.Cancel };
+                Button confirmation = new Button() { Text = "Ok", Left = 245, Width = 80, Top = 90, DialogResult = DialogResult.OK };
+                Button cancel = new Button() { Text = "Cancel", Left = 330, Width = 80, Top = 90, DialogResult = DialogResult.Cancel };
                 confirmation.Click += (sender, e) => { prompt.Close(); };
                 cancel.Click += (sender, e) => { prompt.Close(); };
                 prompt.Controls.Add(textBox);
