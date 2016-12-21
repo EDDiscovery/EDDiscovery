@@ -49,19 +49,65 @@ namespace ExtendedControls
             }
 
             // top left, sized
-            public void TextFixedSize(Point topleft, Size size, string text, Font dp, Color c, Color backcolour, float backscale = 1.0F,
-                                    Object t = null, string tt = null )
+            public void TextFixedSizeC(Point topleft, Size size, string text, Font dp, Color c, Color backcolour, 
+                                    float backscale = 1.0F, bool centertext = false,
+                                    Object t = null, string tt = null)
             {
-                img = ControlHelpers.DrawTextIntoFixedSizeBitmap(text, size, dp, c, backcolour, backscale );
+                img = ControlHelpers.DrawTextIntoFixedSizeBitmapC(text, size, dp, c, backcolour, backscale, centertext );
                 pos = new Rectangle(topleft.X, topleft.Y, img.Width, img.Height);
                 tag = t;
                 tooltip = tt;
+            }
+
+            public void SetAlternateImage(Image i, Rectangle p, bool mo = false)
+            {
+                altimg = i;
+                altpos = p;
+                mouseover = mo;
+            }
+
+            public bool SwapImages(Image surface)           // swap to alternative, optionally, draw to surface
+            {
+                if (altimg != null)
+                {
+                    Rectangle r = pos;
+                    pos = altpos;
+                    altpos = r;
+
+                    Image i = img;
+                    img = altimg;
+                    altimg = i;
+
+                    //System.Diagnostics.Debug.WriteLine("Element @ " + pos + " " + inaltimg);
+                    if (surface != null)
+                    {
+                        using (Graphics gr = Graphics.FromImage(surface)) //restore
+                        {
+                            gr.Clip = new Region(altpos);       // remove former
+                            gr.Clear(Color.FromArgb(0, Color.Black));       // set area back to transparent before paint..
+                        }
+
+                        using (Graphics gr = Graphics.FromImage(surface)) //restore
+                            gr.DrawImage(img, pos);
+                    }
+
+                    inaltimg = !inaltimg;
+                    return true;
+                }
+                else
+                    return false;
             }
 
             public Rectangle pos;
             public Image img;
             public Object tag;
             public string tooltip;
+
+            public Image altimg;
+            public Rectangle altpos;
+            public bool inaltimg = false;
+
+            public bool mouseover;
 
             public void Translate(int x,int y)
             {
@@ -74,10 +120,12 @@ namespace ExtendedControls
             }
         }
 
-        public delegate void OnElement(object sender, MouseEventArgs eventargs, ImageElement i, object tag );
+        public delegate void OnElement(object sender, MouseEventArgs eventargs, ImageElement i, object tag);
         public event OnElement EnterElement;
         public event OnElement LeaveElement;
         public event OnElement ClickElement;
+
+        ImageElement elementin = null;
 
         public Color FillColor = Color.Transparent;         // fill the bitmap with this colour before pasting the bitmaps in
 
@@ -85,6 +133,8 @@ namespace ExtendedControls
         ToolTip hovertip = null;
         Point hoverpos;
         private List<ImageElement> elements = new List<ImageElement>();
+
+        #region Interface
 
         public PictureBoxHotspot()
         {
@@ -114,10 +164,10 @@ namespace ExtendedControls
         }
 
         // topleft, sized
-        public ImageElement AddTextFixedSize(Point topleft, Size size, string label, Font fnt, Color c, Color backcolour, float backscale, Object tag = null, string tiptext = null)
+        public ImageElement AddTextFixedSizeC(Point topleft, Size size, string label, Font fnt, Color c, Color backcolour, float backscale, bool centered , Object tag = null, string tiptext = null)
         {
             ImageElement lab = new ImageElement();
-            lab.TextFixedSize(topleft, size, label, fnt, c, backcolour, backscale, tag, tiptext);
+            lab.TextFixedSizeC(topleft, size, label, fnt, c, backcolour, backscale, centered, tag, tiptext);
             elements.Add(lab);
             return lab;
         }
@@ -158,12 +208,27 @@ namespace ExtendedControls
             return new Size(maxw, maxh);
         }
 
-        public void Render( bool resizecontrol = true )         // taking image elements, draw to main bitmap
+        // taking image elements, draw to main bitmap. set if resize control, and if we have a min size of bitmap, or a margin
+        public void Render( bool resizecontrol = true , Size? minsize = null , Size? margin = null )          
         {
             Size max = DisplaySize();
 
             if (max.Width > 0 && max.Height > 0 ) // will be zero if no elements
             {
+                elementin = null;
+
+                if (minsize.HasValue)           // minimum map size
+                {
+                    max.Width = Math.Min(max.Width, minsize.Value.Width);
+                    max.Height = Math.Min(max.Height, minsize.Value.Height);
+                }
+
+                if (margin.HasValue)            // and any margin to allow for control growth
+                {
+                    max.Width += margin.Value.Width;
+                    max.Height += margin.Value.Height;
+                }
+
                 Bitmap newrender = new Bitmap(max.Width, max.Height);   // size bitmap to contents
 
                 if (FillColor != Color.Transparent)
@@ -188,14 +253,40 @@ namespace ExtendedControls
                 Image = null;       // nothing, null image
         }
 
+        public void SwapToAlternateImage(ImageElement i)
+        {
+            if (i.SwapImages(Image))
+                Invalidate();
+        }
 
-        ImageElement elementin = null;
+        public void LeaveCurrentElement()
+        {
+            if ( elementin != null )
+            {
+                if (elementin.altimg != null && elementin.mouseover && elementin.inaltimg)
+                {
+                    elementin.SwapImages(Image);
+                    Invalidate();
+                }
+
+                elementin = null;
+            }
+        }
+
+        #endregion
 
         protected override void OnMouseMove(MouseEventArgs eventargs)
         {
             base.OnMouseMove(eventargs);
 
-            if (elementin == null)
+            if (elementin != null && !elementin.pos.Contains(eventargs.Location))       // go out..
+            {
+                LeaveCurrentElement();
+                if (LeaveElement != null)
+                    LeaveElement(this, eventargs, elementin, elementin.tag);
+            }
+
+            if (elementin == null)      // is in?
             {
                 foreach (ImageElement i in elements)
                 {
@@ -205,21 +296,15 @@ namespace ExtendedControls
 
                         //System.Diagnostics.Debug.WriteLine("Enter element " + elements.FindIndex(x=>x==i));
 
+                        if (elementin.altimg != null && elementin.mouseover && !elementin.inaltimg)
+                        { 
+                            elementin.SwapImages(Image);
+                            Invalidate();
+                        }
+
                         if (EnterElement != null)
                             EnterElement(this, eventargs, elementin, elementin.tag );
                     }
-                }
-            }
-            else
-            {
-                if (!elementin.pos.Contains(eventargs.Location))
-                {
-                    //System.Diagnostics.Debug.WriteLine("Leave element ");
-
-                    if (LeaveElement != null)
-                        LeaveElement(this, eventargs, elementin, elementin.tag);
-
-                    elementin = null;
                 }
             }
 
@@ -234,7 +319,6 @@ namespace ExtendedControls
                 hovertimer.Start();
             }
         }
-
 
         void ClearHoverTip()
         {
@@ -275,7 +359,6 @@ namespace ExtendedControls
             if (ClickElement != null)                   
                 ClickElement(this, e , elementin, elementin?.tag);          // null if no element clicked
         }
-
 
     }
 }

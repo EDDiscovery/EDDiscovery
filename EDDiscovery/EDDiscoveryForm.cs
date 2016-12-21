@@ -1569,40 +1569,16 @@ namespace EDDiscovery
 
         private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            adminToolStripMenuItem.DropDown.Close();
-            if (DisplayedCommander >= 0)
-            {
-                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
-                if (cmdr != null)
-                {
-                    string netlogpath = cmdr.NetLogDir;
-                    FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-                    if (netlogpath != null && Directory.Exists(netlogpath))
-                    {
-                        dirdlg.SelectedPath = netlogpath;
-                    }
-
-                    DialogResult dlgResult = dirdlg.ShowDialog();
-
-                    if (dlgResult == DialogResult.OK)
-                    {
-                        string logpath = dirdlg.SelectedPath;
-
-                        if (logpath != netlogpath)
-                        {
-                            cmdr.NetLogDir = logpath;
-                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr });
-                        }
-
-                        //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false, currentcmdr: cmdr.Nr);
-                    }
-                }
-            }
+            Read21Folders(false);
         }
 
         private void read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Read21Folders(true);
+        }
+
+        private void Read21Folders(bool force)
+        { 
             if (DisplayedCommander >= 0)
             {
                 EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
@@ -1624,11 +1600,11 @@ namespace EDDiscovery
                         if (logpath != netlogpath)
                         {
                             cmdr.NetLogDir = logpath;
-                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr });
+                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr }, true);
                         }
 
                         //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true, currentcmdr: cmdr.Nr);
+                        RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: force, currentcmdr: cmdr.Nr);
                     }
                 }
             }

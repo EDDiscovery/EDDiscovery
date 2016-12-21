@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonExport = new ExtendedControls.ButtonExt();
@@ -49,6 +50,7 @@
             this.btnExportTravel = new ExtendedControls.ButtonExt();
             this.buttonExportToFilteredSystems = new ExtendedControls.ButtonExt();
             this.buttonExportToGalmap = new ExtendedControls.ButtonExt();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBoxCustomFormat.SuspendLayout();
@@ -83,7 +85,7 @@
             this.flowLayoutPanel1.Controls.Add(this.buttonExport);
             this.flowLayoutPanel1.Controls.Add(this.checkBoxCustomAutoOpen);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(472, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(484, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(96, 53);
             this.flowLayoutPanel1.TabIndex = 2;
@@ -99,6 +101,7 @@
             this.buttonExport.Size = new System.Drawing.Size(90, 24);
             this.buttonExport.TabIndex = 1;
             this.buttonExport.Text = "Export";
+            this.toolTip.SetToolTip(this.buttonExport, "Export selected data");
             this.buttonExport.UseVisualStyleBackColor = true;
             this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
             // 
@@ -119,6 +122,7 @@
             this.checkBoxCustomAutoOpen.TabIndex = 5;
             this.checkBoxCustomAutoOpen.Text = "Auto open";
             this.checkBoxCustomAutoOpen.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomAutoOpen, "Open the CSV file in your default application");
             this.checkBoxCustomAutoOpen.UseVisualStyleBackColor = true;
             // 
             // groupBoxCustomFormat
@@ -135,7 +139,7 @@
             this.groupBoxCustomFormat.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomFormat.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCustomFormat.Name = "groupBoxCustomFormat";
-            this.groupBoxCustomFormat.Size = new System.Drawing.Size(463, 141);
+            this.groupBoxCustomFormat.Size = new System.Drawing.Size(475, 141);
             this.groupBoxCustomFormat.TabIndex = 0;
             this.groupBoxCustomFormat.TabStop = false;
             this.groupBoxCustomFormat.Text = "Excel/CSV format export";
@@ -170,8 +174,8 @@
             this.comboBoxCustomExportType.DataSource = null;
             this.comboBoxCustomExportType.DisplayMember = "";
             this.comboBoxCustomExportType.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomExportType.DropDownHeight = 106;
-            this.comboBoxCustomExportType.DropDownWidth = 151;
+            this.comboBoxCustomExportType.DropDownHeight = 200;
+            this.comboBoxCustomExportType.DropDownWidth = 300;
             this.comboBoxCustomExportType.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomExportType.ItemHeight = 13;
             this.comboBoxCustomExportType.Location = new System.Drawing.Point(3, 16);
@@ -186,6 +190,7 @@
             this.comboBoxCustomExportType.Size = new System.Drawing.Size(151, 19);
             this.comboBoxCustomExportType.TabIndex = 6;
             this.comboBoxCustomExportType.Text = "comboBoxCustom1";
+            this.toolTip.SetToolTip(this.comboBoxCustomExportType, "Pick the data to export");
             this.comboBoxCustomExportType.ValueMember = "";
             // 
             // tableLayoutPanel2
@@ -223,6 +228,7 @@
             this.checkBoxCustomIncludeHeader.TabIndex = 4;
             this.checkBoxCustomIncludeHeader.Text = "Include header";
             this.checkBoxCustomIncludeHeader.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomIncludeHeader, "Row 1 has column names");
             this.checkBoxCustomIncludeHeader.UseVisualStyleBackColor = true;
             // 
             // labelExtSeparator
@@ -251,6 +257,7 @@
             this.radioButtonCustomUSAUK.TabIndex = 1;
             this.radioButtonCustomUSAUK.TabStop = true;
             this.radioButtonCustomUSAUK.Text = ",   (USA/UK)";
+            this.toolTip.SetToolTip(this.radioButtonCustomUSAUK, "Comma - Standard");
             this.radioButtonCustomUSAUK.UseVisualStyleBackColor = true;
             // 
             // radioButtonCustomEU
@@ -267,6 +274,7 @@
             this.radioButtonCustomEU.Size = new System.Drawing.Size(55, 17);
             this.radioButtonCustomEU.TabIndex = 2;
             this.radioButtonCustomEU.Text = ";  (EU)";
+            this.toolTip.SetToolTip(this.radioButtonCustomEU, "SemiColon");
             this.radioButtonCustomEU.UseVisualStyleBackColor = true;
             // 
             // groupBoxCustom1
@@ -280,9 +288,9 @@
             this.groupBoxCustom1.BorderColorScaling = 0.5F;
             this.groupBoxCustom1.Controls.Add(this.tableLayoutPanel3);
             this.groupBoxCustom1.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom1.Location = new System.Drawing.Point(3, 180);
+            this.groupBoxCustom1.Location = new System.Drawing.Point(3, 150);
             this.groupBoxCustom1.Name = "groupBoxCustom1";
-            this.groupBoxCustom1.Size = new System.Drawing.Size(463, 138);
+            this.groupBoxCustom1.Size = new System.Drawing.Size(475, 138);
             this.groupBoxCustom1.TabIndex = 11;
             this.groupBoxCustom1.TabStop = false;
             this.groupBoxCustom1.Text = "Elite Dangerous Visited Stars Creator";
@@ -309,7 +317,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(454, 100);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(466, 100);
             this.tableLayoutPanel3.TabIndex = 10;
             // 
             // label1
@@ -340,6 +348,7 @@
             this.txtExportVisited.Name = "txtExportVisited";
             this.txtExportVisited.Size = new System.Drawing.Size(231, 20);
             this.txtExportVisited.TabIndex = 8;
+            this.toolTip.SetToolTip(this.txtExportVisited, "Set to filter stars with this text");
             // 
             // buttonExportOpenFolder
             // 
@@ -351,6 +360,7 @@
             this.buttonExportOpenFolder.Size = new System.Drawing.Size(140, 23);
             this.buttonExportOpenFolder.TabIndex = 10;
             this.buttonExportOpenFolder.Text = "Open visited stars folder";
+            this.toolTip.SetToolTip(this.buttonExportOpenFolder, "Open the visited stars folder where ED wants the output file to be stored");
             this.buttonExportOpenFolder.UseVisualStyleBackColor = true;
             this.buttonExportOpenFolder.Click += new System.EventHandler(this.buttonExportOpenFolder_Click);
             // 
@@ -364,6 +374,7 @@
             this.btnExportTravel.Size = new System.Drawing.Size(75, 23);
             this.btnExportTravel.TabIndex = 11;
             this.btnExportTravel.Text = "Travel";
+            this.toolTip.SetToolTip(this.btnExportTravel, "Fill in the current system");
             this.btnExportTravel.UseVisualStyleBackColor = true;
             this.btnExportTravel.Click += new System.EventHandler(this.btnExportTravel_Click);
             // 
@@ -377,6 +388,7 @@
             this.buttonExportToFilteredSystems.Size = new System.Drawing.Size(184, 23);
             this.buttonExportToFilteredSystems.TabIndex = 7;
             this.buttonExportToFilteredSystems.Text = "Export filtered systems";
+            this.toolTip.SetToolTip(this.buttonExportToFilteredSystems, "Export filtered system, filter determined by the filter text box");
             this.buttonExportToFilteredSystems.UseVisualStyleBackColor = true;
             this.buttonExportToFilteredSystems.Click += new System.EventHandler(this.buttonExportToFilteredSystems_Click);
             // 
@@ -390,8 +402,13 @@
             this.buttonExportToGalmap.Size = new System.Drawing.Size(184, 24);
             this.buttonExportToGalmap.TabIndex = 6;
             this.buttonExportToGalmap.Text = "Export commanders visited stars";
+            this.toolTip.SetToolTip(this.buttonExportToGalmap, "Export all visited stars");
             this.buttonExportToGalmap.UseVisualStyleBackColor = true;
             this.buttonExportToGalmap.Click += new System.EventHandler(this.buttonExportToGalmap_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // ExportControl
             // 
@@ -441,5 +458,6 @@
         private ExtendedControls.ButtonExt btnExportTravel;
         private ExtendedControls.ButtonExt buttonExportToFilteredSystems;
         private ExtendedControls.ButtonExt buttonExportToGalmap;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
