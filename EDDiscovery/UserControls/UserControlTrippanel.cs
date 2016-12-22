@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
                         if(jumps>0)
                             mesg = "@ " + jumps.ToString() + ( (jumps == 1) ? " jump" : " jumps");
                     }
-                    topline = String.Format("{0} | {1:N1}ly {2}", name, dist, mesg);
+                    topline = String.Format("{0} | {1:N2}ly {2}", name, dist, mesg);
                 }
 
                 topline = String.Format("{0} | {1}", he.System.name, topline);
