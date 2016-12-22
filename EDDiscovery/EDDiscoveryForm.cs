@@ -1786,17 +1786,6 @@ namespace EDDiscovery
                 }
             }
 
-            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
-            StarScan starscan = new StarScan();
-
-            ProcessUserHistoryListEntries(hl, matcommodledger, starscan);      // here, we update the DBs in HistoryEntry and any global DBs in historylist
-
-            if (worker.CancellationPending)
-            {
-                e.Cancel = true;
-                return;
-            }
-
             if (jlistUpdated.Count > 0)
             {
                 worker.ReportProgress(-1, "Updating journal entries");
@@ -1820,6 +1809,13 @@ namespace EDDiscovery
                     }
                 }
             }
+
+            // now database has been updated due to initial fill, now fill in stuff which needs the user database
+
+            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
+            StarScan starscan = new StarScan();
+                             
+            ProcessUserHistoryListEntries(hl, matcommodledger, starscan);      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 
             if (worker.CancellationPending)
             {
@@ -1878,7 +1874,7 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        // go thru the hisotry list and reworkout the materials ledge and the materials count
+        // go thru the hisotry list and reworkout the materials ledge and the materials count, plus any other stuff..
         private void ProcessUserHistoryListEntries(List<HistoryEntry> hl, MaterialCommoditiesLedger ledger, StarScan scan)
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
@@ -1887,7 +1883,7 @@ namespace EDDiscovery
                 {
                     HistoryEntry he = hl[i];
                     JournalEntry je = he.journalEntry;
-                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, conn);        // let the HE do what it wants to with the user db
+                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, history, conn);        // let the HE do what it wants to with the user db
 
                     Debug.Assert(he.MaterialCommodity != null);
 
@@ -1946,7 +1942,7 @@ namespace EDDiscovery
 
                 using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
                 {
-                    he.ProcessWithUserDb(je, last, conn);           // let some processes which need the user db to work
+                    he.ProcessWithUserDb(je, last, history, conn);           // let some processes which need the user db to work
 
                     history.materialcommodititiesledger.Process(je, conn);
                 }

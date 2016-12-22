@@ -288,11 +288,7 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder == 0 && Config(Configuration.showNotes))
             {
-                SystemNoteClass snc = SystemNoteClass.GetNoteOnJournalEntry(he.Journalid);
-                if (snc == null && he.IsFSDJump)
-                    snc = SystemNoteClass.GetNoteOnSystem(he.System.name, he.System.id_edsm);
-
-                coldata.Add((snc != null) ? snc.Note.Replace("\r\n", " ") : "");
+                coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
             }
 
             bool showdistance = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDJump;
@@ -309,11 +305,7 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder > 0 && Config(Configuration.showNotes))
             {
-                SystemNoteClass snc = SystemNoteClass.GetNoteOnJournalEntry(he.Journalid);
-                if (snc == null && he.IsFSDJump)
-                    snc = SystemNoteClass.GetNoteOnSystem(he.System.name, he.System.id_edsm);
-
-                coldata.Add((snc != null) ? snc.Note.Replace("\r\n", " ") : "");
+                coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
             }
 
             if (layoutorder < 2 && Config(Configuration.showDistancePerStar))

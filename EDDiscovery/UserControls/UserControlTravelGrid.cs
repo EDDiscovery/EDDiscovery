@@ -21,10 +21,8 @@ namespace EDDiscovery.UserControls
         public int currentGridRow { get; set; } = -1;
         public DataGridViewRow GetCurrentRow { get { return currentGridRow >= 0 ? dataGridViewTravel.Rows[currentGridRow] : null; } }
         public HistoryEntry GetCurrentHistoryEntry { get { return currentGridRow >= 0 ? dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
-        public SystemNoteClass GetCurrentSystemNoteClass { get { return currentGridRow >= 0 ? dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass : null; } }
 
         public HistoryEntry GetHistoryEntry(int r) { return dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
-        public SystemNoteClass GetSystemNoteClass(int r) { return dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass; }
 
         public static HistoryEntry GetHistoryEntry( DataGridViewRow rw) { return rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
 
@@ -62,7 +60,6 @@ namespace EDDiscovery.UserControls
             public const int Note = 4;
 
             public const int HistoryTag = Description;      // where the tags are used
-            public const int NoteTag = Note;
         }
 
         private const int DefaultRowHeight = 26;
@@ -193,29 +190,9 @@ namespace EDDiscovery.UserControls
 
         private void AddNewHistoryRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
         {
-            SystemNoteClass snc = SystemNoteClass.GetNoteOnJournalEntry(item.Journalid);
-            if (snc == null && item.IsFSDJump)
-                snc = SystemNoteClass.GetNoteOnSystem(item.System.name, item.System.id_edsm);
-
-            // Try to fill EDSM ID where a system note is set but journal item EDSM ID is not set
-            if (snc != null && snc.Name != null && snc.EdsmId > 0 && item.System.id_edsm <= 0)
-            {
-                item.System.id_edsm = 0;
-                discoveryform.history.FillEDSM(item);
-
-                if (snc.Journalid != item.Journalid && item.System.id_edsm > 0 && snc.EdsmId != item.System.id_edsm)
-                    snc = null;
-            }
-
-            if (snc != null && snc.Name != null && snc.Journalid == item.Journalid && item.System.id_edsm > 0 && snc.EdsmId != item.System.id_edsm)
-            {
-                snc.EdsmId = item.System.id_edsm;
-                snc.Update();
-            }
-
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (snc != null) ? snc.Note : "" };
+            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (item.snc != null) ? item.snc.Note : "" };
 
             int rownr;
             if (insert)
@@ -230,7 +207,6 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.HistoryTag].Tag = item;
-            dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.NoteTag].Tag = snc;
 
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
