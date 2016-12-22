@@ -61,7 +61,7 @@ namespace EDDiscovery.Export
                         writer.Write(MakeValueCsvFriendly(ev.JumpDist));
                         writer.Write(MakeValueCsvFriendly(ev.FuelUsed));
                         writer.Write(MakeValueCsvFriendly(ev.FuelLevel));
-                        writer.Write(MakeValueCsvFriendly(ev.BoostUsed));
+                        writer.Write(MakeValueCsvFriendly(ev.BoostUsed,false));
 //                        writer.Write(MakeValueCsvFriendly(je.System.SystemNote));
 
                         writer.WriteLine();

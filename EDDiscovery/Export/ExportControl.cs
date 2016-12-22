@@ -34,11 +34,11 @@ namespace EDDiscovery
             exportTypeList.Add(new ExportTypeClass("Sold exploration data (all)", new ExportExplorationData(false)));
             exportTypeList.Add(new ExportTypeClass("Sold exploration data (By date)", new ExportExplorationData(true)));
             exportTypeList.Add(new ExportTypeClass("Route plan", new ExportRoute()));
+            exportTypeList.Add(new ExportTypeClass("All Notes from All Commanders", new ExportNotes()));
 
             txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             comboBoxCustomExportType.ItemHeight = 20;
-
         }
 
 

@@ -832,6 +832,23 @@ namespace EDDiscovery.EliteDangerous
             return count;
         }
 
+        public static void ClearEDSMID(int currentcmdrid = -2)      // -2 is all
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("UPDATE JournalEntries SET EdsmId=0"))
+                {
+                    if (currentcmdrid != -2)
+                    {
+                        cmd.CommandText = "UPDATE JournalEntries SET EdsmId=0 WHERE CommanderId==@cmd";
+                        cmd.AddParameterWithValue("@cmd", currentcmdrid);
+                    }
+
+                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                }
+            }
+        }
+
         static public Type TypeOfJournalEntry(string text)
         {
             //foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum))) // check code only to make sure names match

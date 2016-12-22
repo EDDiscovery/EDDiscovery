@@ -302,28 +302,19 @@ namespace EDDiscovery
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
 
             snc = SystemNoteClass.GetNoteOnJournalEntry(Journalid);
+
             if (snc == null && IsFSDJump)
+            {
                 snc = SystemNoteClass.GetNoteOnSystem(System.name, System.id_edsm);
 
-            if (snc != null)
-            {
-                Debug.WriteLine("Note {0} {1} {2}", snc.Name, snc.Journalid, snc.Note);
-            }
-
-            // Try to fill EDSM ID where a system note is set but journal item EDSM ID is not set
-            if (snc != null && snc.Name != null && snc.EdsmId > 0 && System.id_edsm <= 0)
-            {
-                System.id_edsm = 0;
-                hl.FillEDSM(this, uconn:conn);
-
-                if (snc.Journalid != Journalid && System.id_edsm > 0 && snc.EdsmId != System.id_edsm)
-                    snc = null;
-            }
-
-            if (snc != null && snc.Name != null && snc.Journalid == Journalid && System.id_edsm > 0 && snc.EdsmId != System.id_edsm)
-            {
-                snc.EdsmId = System.id_edsm;
-                snc.Update(conn);
+                if ( snc != null )      // if found..
+                {
+                    if ( System.id_edsm > 0 && snc.EdsmId <= 0 )    // if we have a system id, but snc not set, update it for next time.
+                    {
+                        snc.EdsmId = System.id_edsm;
+                        snc.Update(conn);
+                    }
+                }
             }
         }
 
@@ -625,11 +616,11 @@ namespace EDDiscovery
 
             foreach (Tuple<HistoryEntry, SystemClass> he in updatesystems)
             {
-                FillEDSM(he.Item1, edsmsys: he.Item2, findsys: false);
+                FillEDSM(he.Item1, edsmsys: he.Item2);  // fill, we already have an EDSM system to use
             }
         }
 
-        public SystemClass FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
+        private SystemClass FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return null;
@@ -655,7 +646,7 @@ namespace EDDiscovery
             }
         }
 
-        public void FillEDSM(HistoryEntry syspos, SystemClass edsmsys = null, bool findsys = true, bool reload = false, SQLiteConnectionUser uconn = null )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, SystemClass edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1) )  // if set already, or we tried and failed..
                 return;
@@ -668,7 +659,7 @@ namespace EDDiscovery
                     alsomatching.Add(he);
             }
 
-            if (findsys)
+            if (edsmsys==null)                              // if we found it externally, do not find again
                 edsmsys = FindEDSM(syspos, reload: reload);
 
             if (edsmsys != null)

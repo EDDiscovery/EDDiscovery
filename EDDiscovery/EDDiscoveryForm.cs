@@ -1486,77 +1486,32 @@ namespace EDDiscovery
             Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
         }
 
-        protected override void WndProc(ref Message m)
+        private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Compatibility movement for Mono
-            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !theme.WindowsFrame)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                _window_dragMousePos = new Point(x, y);
-                _window_dragWindowPos = this.Location;
-                _window_dragging = true;
-                m.Result = IntPtr.Zero;
-                this.Capture = true;
-            }
-            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
-                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
-                this.Location = _window_dragWindowPos;
-                this.Update();
-                m.Result = IntPtr.Zero;
-            }
-            else if (m.Msg == WM_LBUTTONUP)
-            {
-                _window_dragging = false;
-                _window_dragMousePos = Point.Empty;
-                _window_dragWindowPos = Point.Empty;
-                m.Result = IntPtr.Zero;
-                this.Capture = false;
-            }
-            // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM_NCHITTEST)
-            {
-                base.WndProc(ref m);
-                //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
-
-                if ((int)m.Result == HT_CLIENT)
-                {
-                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                    int y = unchecked((short)((uint)m.LParam >> 16));
-                    Point p = PointToClient(new Point(x, y));
-
-                    if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
-                    {
-                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
-                    }
-                    else if ( p.Y > this.ClientSize.Height - statusStrip1.Height )
-                    {
-                        m.Result = (IntPtr)HT_BOTTOM;
-                    }
-                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
-                    {
-                        m.Result = (IntPtr)HT_RIGHT;
-                    }
-                    else if (p.X < 5)
-                    {
-                        m.Result = (IntPtr)HT_LEFT;
-                    }
-                    else if (!theme.WindowsFrame)
-                    {
-                        m.Result = (IntPtr)HT_CAPTION;
-                    }
-                }
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
+            travelHistoryControl1.ShowAllPopOutsInTaskBar();
         }
-        
+
+        private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.MakeAllPopoutsOpaque();
+        }
+
+        private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," + 
+                                " and clear all the assigned EDSM IDs to all your notes\r\n" +
+                                "This will not affect your history, but when you next refresh, it will try and reassign EDSM systems to " +
+                                "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong\r\n" +
+                                "You can manually change one EDSM assigned system by right clicking on the travel history and selecting the option"
+                                , "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                EliteDangerous.JournalEntry.ClearEDSMID(EDDConfig.CurrentCommander.Nr);
+                SystemNoteClass.ClearEDSMID();
+            }
+
+        }
+
+
         private void paneleddiscovery_Click(object sender, EventArgs e)
         {
             AboutBox();
@@ -1689,6 +1644,95 @@ namespace EDDiscovery
             Map.Show();
             this.Cursor = Cursors.Default;
         }
+
+        private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<HistoryEntry> hlsyncunsyncedlist = history.FilterByScanNotEDDNSynced;        // first entry is oldest
+            EDDNSync.SendEDDNEvents(this, hlsyncunsyncedlist);
+        }
+
+        private void materialSearchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FindMaterialsForm frm = new FindMaterialsForm();
+
+            frm.Show(this);
+        }
+
+        #endregion
+
+        #region Window Control
+
+        protected override void WndProc(ref Message m)
+        {
+            // Compatibility movement for Mono
+            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !theme.WindowsFrame)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                _window_dragMousePos = new Point(x, y);
+                _window_dragWindowPos = this.Location;
+                _window_dragging = true;
+                m.Result = IntPtr.Zero;
+                this.Capture = true;
+            }
+            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
+                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
+                this.Location = _window_dragWindowPos;
+                this.Update();
+                m.Result = IntPtr.Zero;
+            }
+            else if (m.Msg == WM_LBUTTONUP)
+            {
+                _window_dragging = false;
+                _window_dragMousePos = Point.Empty;
+                _window_dragWindowPos = Point.Empty;
+                m.Result = IntPtr.Zero;
+                this.Capture = false;
+            }
+            // Windows honours NCHITTEST; Mono does not
+            else if (m.Msg == WM_NCHITTEST)
+            {
+                base.WndProc(ref m);
+                //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
+
+                if ((int)m.Result == HT_CLIENT)
+                {
+                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                    int y = unchecked((short)((uint)m.LParam >> 16));
+                    Point p = PointToClient(new Point(x, y));
+
+                    if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
+                    {
+                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                    }
+                    else if (p.Y > this.ClientSize.Height - statusStrip1.Height)
+                    {
+                        m.Result = (IntPtr)HT_BOTTOM;
+                    }
+                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
+                    {
+                        m.Result = (IntPtr)HT_RIGHT;
+                    }
+                    else if (p.X < 5)
+                    {
+                        m.Result = (IntPtr)HT_LEFT;
+                    }
+                    else if (!theme.WindowsFrame)
+                    {
+                        m.Result = (IntPtr)HT_CAPTION;
+                    }
+                }
+            }
+            else
+            {
+                base.WndProc(ref m);
+            }
+        }
+
         #endregion
 
         #region Update Data
@@ -1984,21 +2028,6 @@ namespace EDDiscovery
 
         #endregion
 
-
-
-        private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<HistoryEntry> hlsyncunsyncedlist = history.FilterByScanNotEDDNSynced;        // first entry is oldest
-            EDDNSync.SendEDDNEvents(this, hlsyncunsyncedlist);
-        }
-
-        private void materialSearchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FindMaterialsForm frm = new FindMaterialsForm();
-
-            frm.Show(this);
-        }
-
         #region Targets
 
         public void NewTargetSet()
@@ -2010,15 +2039,6 @@ namespace EDDiscovery
 
         #endregion
 
-        private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            travelHistoryControl1.ShowAllPopOutsInTaskBar();
-        }
-
-        private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            travelHistoryControl1.MakeAllPopoutsOpaque();
-        }
     }
 }
 
