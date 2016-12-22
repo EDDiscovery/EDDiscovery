@@ -69,6 +69,8 @@ namespace EDDiscovery
         public TimeSpan TravelledSeconds { get { return travelled_seconds; } }
 
         bool travelling;
+        public bool isTravelling { get { return travelling; } }
+
         int travelled_missingjump;
         public int TravelledMissingjump { get { return travelled_missingjump; } }
         public int Travelledjumps { get { return travelled_jumps; } }
