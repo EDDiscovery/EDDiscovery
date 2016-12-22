@@ -1499,9 +1499,11 @@ namespace EDDiscovery
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," + 
-                                " and clear all the assigned EDSM IDs to all your notes\r\n" +
-                                "This will not affect your history, but when you next refresh, it will try and reassign EDSM systems to " +
-                                "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong\r\n" +
+                                " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
+                                "This will not change your history, but when you next refresh, it will try and reassign EDSM systems to " +
+                                "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
+                                "or notes are going missing\r\n" + 
+                                "\r\n" +
                                 "You can manually change one EDSM assigned system by right clicking on the travel history and selecting the option"
                                 , "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
