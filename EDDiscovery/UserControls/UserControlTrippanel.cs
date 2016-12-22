@@ -113,9 +113,12 @@ namespace EDDiscovery.UserControls
                     var jumpRange = SQLiteDBClass.GetSettingDouble(DbSave + "JumpRange", -1.0);
                     string mesg = "Left";
                     if (jumpRange > 0)
-                        mesg = "@ " + ((int)(dist / jumpRange)).ToString();
-
-                    topline = String.Format("{0} | {1:N1}ly {2} jumps", name, dist, mesg);
+                    {
+                        int jumps =(int) Math.Ceiling(dist / jumpRange);
+                        if(jumps>0)
+                            mesg = "@ " + jumps.ToString() + ( (jumps == 1) ? " jump" : " jumps");
+                    }
+                    topline = String.Format("{0} | {1:N1}ly {2}", name, dist, mesg);
                 }
 
                 topline = String.Format("{0} | {1}", he.System.name, topline);
