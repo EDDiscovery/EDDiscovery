@@ -260,7 +260,7 @@ namespace EDDiscovery.UserControls
             int quarterheight = size.Height / 4;
             int alignv = aligndown ? quarterheight : 0;
 
-            JournalScan sc = sn.scandata;
+            JournalScan sc = sn.ScanData;
 
             if (sc != null)
             {
