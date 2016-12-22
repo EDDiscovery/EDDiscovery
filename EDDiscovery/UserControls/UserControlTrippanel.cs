@@ -172,14 +172,21 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    HistoryEntry lastFSD = discoveryform.history.GetLastFSD;            // set start point.. really should not be clearing down all the start/end points..
-                                                                                        // i'll leave it like this for you to consider
-                    if (lastFSD != null)
-                    {
-                        lastFSD.StartMarker = true;
-                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(lastFSD.Journalid, EliteDangerous.SyncFlags.StartMarker, true);
-                    }
+                    var list = discoveryform.history.Where(p => p.IsFSDJump).OrderByDescending(p => p.EventTimeUTC).Take(2);
+                    if (list.Count() == 0)
+                        return;
+                    he = list.ToArray()[0];
+                    if (he.StartMarker)
+                        return;
 
+                    he.StartMarker = true;
+                    EliteDangerous.JournalEntry.UpdateSyncFlagBit(he.Journalid, EliteDangerous.SyncFlags.StartMarker, he.StartMarker);
+                    if (list.Count() > 1 && he.isTravelling)
+                    {
+                        he = list.ToArray()[1];
+                        he.StopMarker = true;
+                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(he.Journalid, EliteDangerous.SyncFlags.StopMarker, he.StopMarker);
+                    }
                     discoveryform.RefreshHistoryAsync();
                 }
             }
