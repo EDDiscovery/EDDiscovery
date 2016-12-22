@@ -12,6 +12,7 @@ using ExtendedControls;
 using EDDiscovery.DB;
 using System.Drawing.Drawing2D;
 using EDDiscovery.EliteDangerous;
+using EDDiscovery2.EDSM;
 
 namespace EDDiscovery.UserControls
 {
@@ -31,6 +32,8 @@ namespace EDDiscovery.UserControls
         private string DbSave { get { return "ScanPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         StarScan.SystemNode last_sn = null;
+        HistoryList hl = null;
+        HistoryEntry last_he = null;
         Point last_maxdisplayarea;
 
         #region Init
@@ -53,6 +56,8 @@ namespace EDDiscovery.UserControls
             checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Materials", true);
             checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave+"MaterialsRare", false);
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Moons", true);
+            checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
+
             int size = SQLiteDBClass.GetSettingInt(DbSave+"Size", 64);
             SetSizeCheckBoxes(size);
 
@@ -99,6 +104,7 @@ namespace EDDiscovery.UserControls
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {                                                                   // affecting our system
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;  // find node..
+            last_he = he;
 
             if ( newnode == last_sn && he.EntryType == EliteDangerous.JournalTypeEnum.Scan )  // if on same star system, and its a scan, it may have been updated..
             {
@@ -109,6 +115,8 @@ namespace EDDiscovery.UserControls
         public void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;
+            last_he = he;
+            this.hl = hl;
 
             if (newnode != last_sn)
             {
@@ -121,12 +129,32 @@ namespace EDDiscovery.UserControls
         {
             HideInfo();
 
-            last_sn = sn;                                                               // remember in case we need to draw
+                                                                 // remember in case we need to draw
 
             SetControlText((sn == null) ? "No Scan" : sn.system.name);
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
 
+            if (checkBoxEDSM.Checked && last_he!=null)
+            {
+                if (last_he.System.id_edsm > 0)  // If system has edsmid get bodies
+                {
+                    List<JournalScan> jl = EDSMClass.GetBodiesList((int)last_he.System.id_edsm);
+
+
+                    if (jl != null)
+                        foreach (JournalScan js in jl)
+                            hl.starscan.Process(js, last_he.System);
+
+
+                    if (sn==null)
+                        sn = hl.starscan.FindSystem(last_he.System);
+
+                }
+            }
+
+
+            last_sn = sn;
             if (sn != null)     // 
             {
                 Point curpos = new Point(leftmargin, topmargin);
@@ -512,6 +540,12 @@ namespace EDDiscovery.UserControls
             checkBoxMedium.Checked = (size == 96);
             checkBoxSmall.Checked = (size == 64);
             checkBoxTiny.Checked = (size == 48);
+
+            if (!checkBoxLarge.Checked && !checkBoxMedium.Checked && !checkBoxSmall.Checked && !checkBoxTiny.Checked)
+            {
+                checkBoxSmall.Checked = true;
+                size = 64;
+            }
             userchangesize = true;
             SetSize(size);
             SQLiteDBClass.PutSettingInt(DbSave + "Size", size);
@@ -554,6 +588,12 @@ namespace EDDiscovery.UserControls
             richTextBoxInfo.Visible = true;
             richTextBoxInfo.Show();
             PositionInfo();
+        }
+
+        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "EDSM", checkBoxEDSM.Checked);
+            DrawSystem(last_sn);
         }
 
         void HideInfo()

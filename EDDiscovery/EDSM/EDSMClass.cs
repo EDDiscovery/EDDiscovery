@@ -649,6 +649,8 @@ namespace EDDiscovery2.EDSM
             {
                 JSONHelper.Rename(jo["subType"], "StarType");   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
                 string startype = jo["StarType"].Value<string>();
+                if (startype == null)
+                    startype = "unknown";
                 int index = startype.IndexOf("(");
                 if (index > 0)
                     startype = startype.Substring(0, index).Trim();
@@ -704,6 +706,23 @@ namespace EDDiscovery2.EDSM
                     JSONHelper.Rename(ring["mass"], "MassMT");
                     JSONHelper.Rename(ring["type"], "RingClass");
                 }
+            }
+
+
+            if (!JSONHelper.IsNullOrEmptyT(jo["Materials"]))  // Check if matieals has null
+            {
+                Dictionary<string, double?> mats;
+                Dictionary<string, double> mats2;
+                mats = jo["Materials"]?.ToObject<Dictionary<string, double?>>();
+                mats2 = new Dictionary<string, double>();
+
+                foreach (string key in mats.Keys)
+                    if (mats[key] == null)
+                        mats2[key] = 0.0;
+                    else
+                        mats2[key] = mats[key].Value;
+
+                jo["Materials"] = JObject.FromObject(mats2);
             }
 
 

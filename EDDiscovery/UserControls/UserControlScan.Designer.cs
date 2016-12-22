@@ -44,6 +44,7 @@
             this.checkBoxMaterialsRare = new ExtendedControls.CheckBoxCustom();
             this.checkBoxTiny = new ExtendedControls.CheckBoxCustom();
             this.panelControls = new System.Windows.Forms.Panel();
+            this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
             this.panelStars.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
@@ -71,12 +72,12 @@
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemToolbar});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(178, 26);
+            this.contextMenuStrip.Size = new System.Drawing.Size(177, 26);
             // 
             // toolStripMenuItemToolbar
             // 
             this.toolStripMenuItemToolbar.Name = "toolStripMenuItemToolbar";
-            this.toolStripMenuItemToolbar.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemToolbar.Size = new System.Drawing.Size(176, 22);
             this.toolStripMenuItemToolbar.Text = "Show/Hide Toolbar";
             this.toolStripMenuItemToolbar.Click += new System.EventHandler(this.toolStripMenuItemToolbar_Click);
             // 
@@ -313,6 +314,7 @@
             // panelControls
             // 
             this.panelControls.ContextMenuStrip = this.contextMenuStrip;
+            this.panelControls.Controls.Add(this.checkBoxEDSM);
             this.panelControls.Controls.Add(this.checkBoxTiny);
             this.panelControls.Controls.Add(this.checkBoxSmall);
             this.panelControls.Controls.Add(this.checkBoxMedium);
@@ -326,6 +328,31 @@
             this.panelControls.Size = new System.Drawing.Size(748, 32);
             this.panelControls.TabIndex = 4;
             this.toolTip.SetToolTip(this.panelControls, "Right click on panel to show/hide the toolbar");
+            // 
+            // checkBoxEDSM
+            // 
+            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEDSM.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxEDSM.BackgroundImage = global::EDDiscovery.Properties.Resources.edsm32x32;
+            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
+            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxEDSM.FontNerfReduction = 0.5F;
+            this.checkBoxEDSM.Location = new System.Drawing.Point(263, 0);
+            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSM.Name = "checkBoxEDSM";
+            this.checkBoxEDSM.Size = new System.Drawing.Size(32, 32);
+            this.checkBoxEDSM.TabIndex = 3;
+            this.checkBoxEDSM.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM");
+            this.checkBoxEDSM.UseVisualStyleBackColor = false;
+            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
             // 
             // UserControlScan
             // 
@@ -360,5 +387,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemToolbar;
         private ExtendedControls.PictureBoxHotspot imagebox;
+        private ExtendedControls.CheckBoxCustom checkBoxEDSM;
     }
 }
