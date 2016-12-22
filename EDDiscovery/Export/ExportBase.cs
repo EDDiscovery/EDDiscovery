@@ -62,7 +62,7 @@ namespace EDDiscovery.Export
                 }
                 else
                 {
-                    output = Convert.ToString(value, CultureInfo.InvariantCulture);
+                    output = Convert.ToString(value, formatculture);
 
                     if (output.Contains(",") || output.Contains("\"") || output.Contains("\r") || output.Contains("\n"))
                     {
