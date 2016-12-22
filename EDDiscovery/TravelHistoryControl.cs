@@ -38,6 +38,8 @@ namespace EDDiscovery
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
 
+        HistoryEntry notedisplayedhe = null;            // remember the particulars of the note displayed, so we can save it later
+
         public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
         // Subscribe to these to get various events - layout controls via their Init function do this.
@@ -124,7 +126,7 @@ namespace EDDiscovery
 
             userControlTravelGrid.Init(_discoveryForm, 0);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
-            userControlTravelGrid.OnRedisplay += UpdatedDisplay;        // call back when you've added a new entry..
+            userControlTravelGrid.OnRedisplay += UpdatedDisplay;        // after the TG has redisplayed..
             userControlTravelGrid.OnAddedNewEntry += UpdatedWithAddNewEntry;        // call back when you've added a new entry..
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
             userControlTravelGrid.OnResort += Resort;   // and if he or she resorts
@@ -470,12 +472,6 @@ namespace EDDiscovery
                     if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm == true)
                         EDSMSync.SendTravelLog(he);
                 }
-                if (he.IsFuelScoop)
-                {
-                    HistoryEntry lastFSD = hl.GetLastFSD;
-                    if(lastFSD!=null)
-                        lastFSD.FuelLevel= he.FuelTotal;
-                }
 
                 if (he.ISEDDNMessage)
                 {
@@ -502,11 +498,13 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Exception NewPosition: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
-
         }
+
 
         public void ShowSystemInformation(DataGridViewRow rw)
         {
+            StoreSystemNote();      // save any previous note
+
             HistoryEntry syspos = null;
 
             if (rw == null)
@@ -523,7 +521,7 @@ namespace EDDiscovery
 
                 _discoveryForm.history.FillEDSM(syspos, reload: true); // Fill in any EDSM info we have
 
-                SystemNoteClass note = userControlTravelGrid.GetSystemNoteClass(rw.Index);
+                notedisplayedhe = syspos;
 
                 textBoxSystem.Text = syspos.System.name;
 
@@ -554,7 +552,7 @@ namespace EDDiscovery
                 textBoxEconomy.Text = EnumStringFormat(syspos.System.primary_economy.ToString());
                 textBoxGovernment.Text = EnumStringFormat(syspos.System.government.ToString());
                 textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
-                richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
+                richTextBoxNote.Text = syspos.snc != null ? syspos.snc.Note : "";
 
                 csd.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
             }
@@ -719,55 +717,19 @@ namespace EDDiscovery
 
         private void StoreSystemNote()
         {
-            if (userControlTravelGrid.currentGridRow < 0)
-                return;
-
-            try
+            if (this.notedisplayedhe != null)
             {
-                HistoryEntry sys = userControlTravelGrid.GetCurrentHistoryEntry;
-                SystemNoteClass sn = userControlTravelGrid.GetCurrentSystemNoteClass;
-
                 string txt = richTextBoxNote.Text.Trim();
 
-                if ( (sn == null && txt.Length>0) || (sn!=null && !sn.Note.Equals(txt))) // if no system note, and text,  or system not is not text
-                {
-                    if ( sn != null && (sn.Journalid == sys.Journalid || sn.Journalid == 0 || (sn.Name.Equals(sys.System.name, StringComparison.InvariantCultureIgnoreCase) && sn.EdsmId <= 0) || (sn.EdsmId > 0 && sn.EdsmId == sys.System.id_edsm)) )           // already there, update
-                    { 
-                        sn.Note = txt;
-                        sn.Time = DateTime.Now;
-                        sn.Name = (sys.IsFSDJump) ? sys.System.name : "";
-                        sn.Journalid = sys.Journalid;
-                        sn.EdsmId = sys.IsFSDJump ? sys.System.id_edsm : 0;
-                        sn.Update();
-                    }
-                    else
-                    {
-                        sn = new SystemNoteClass();
-                        sn.Note = txt;
-                        sn.Time = DateTime.Now;
-                        sn.Name = (sys.IsFSDJump) ? sys.System.name : "";
-                        sn.Journalid = sys.Journalid;
-                        sn.EdsmId = sys.IsFSDJump ? sys.System.id_edsm : 0;
-                        sn.Add();
-
-                        userControlTravelGrid.UpdateCurrentNoteTag(sn);
-                    }
-
-                    userControlTravelGrid.UpdateCurrentNote(txt);
-
-                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm && sys.IsFSDJump )       // only send on FSD jumps
-                        EDSMSync.SendComments(sn.Name,sn.Note,sn.EdsmId);
+                if ( notedisplayedhe.UpdateSystemNote(txt) )
+                { 
+                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm && notedisplayedhe.IsFSDJump)       // only send on FSD jumps
+                        EDSMSync.SendComments(notedisplayedhe.snc.Name, notedisplayedhe.snc.Note, notedisplayedhe.snc.EdsmId);
 
                     _discoveryForm.Map.UpdateNote();
                 }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                _discoveryForm.LogLineHighlight("Exception : " + ex.Message);
-                _discoveryForm.LogLineHighlight(ex.StackTrace);
+                notedisplayedhe = null; // now not longer need to remember, note has been updated
             }
         }
 
@@ -811,7 +773,7 @@ namespace EDDiscovery
             }
         }
 
-        void gotoEDSM()
+        private void buttonEDSM_Click(object sender, EventArgs e)
         {
             HistoryEntry sys = userControlTravelGrid.GetCurrentHistoryEntry;
 
@@ -837,11 +799,6 @@ namespace EDDiscovery
                         MessageBox.Show("System unknown to EDSM");
                 }
             }
-        }
-
-        private void buttonEDSM_Click(object sender, EventArgs e)
-        {
-            gotoEDSM();
         }
 
         public void RefreshButton(bool state)

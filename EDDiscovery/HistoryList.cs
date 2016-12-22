@@ -62,6 +62,8 @@ namespace EDDiscovery
 
         // Calculated values, not from JE
 
+        public SystemNoteClass snc;     // system note class found attached to this entry
+
         private double travelled_distance;  // start/stop distance and time computation
         public double TravelledDistance { get { return travelled_distance; } }
 
@@ -75,11 +77,6 @@ namespace EDDiscovery
         public int TravelledMissingjump { get { return travelled_missingjump; } }
         public int Travelledjumps { get { return travelled_jumps; } }
         int travelled_jumps;
-
-        private double fuelTotal = 0.0;
-        public double FuelTotal { get { return fuelTotal; } }
-        private double fuelLevel;
-        public double FuelLevel { get { return fuelLevel; } set { fuelLevel = value; } }
 
         MaterialCommoditiesList materialscommodities;
 
@@ -132,7 +129,7 @@ namespace EDDiscovery
                     newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
                     newsys.id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID;       // pass across the EDSMID for the lazy load process.
 
-                    if (jfsd != null && jfsd.JumpDist <= 0 && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
+                    if (jfsd != null && jfsd.JumpDist <= 0 && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does have pos, we can compute distance and update entry
                     {
                         jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here
                         journalupdate = true;
@@ -203,17 +200,6 @@ namespace EDDiscovery
                 IsStarPosFromEDSM = starposfromedsm,
                 Commander = cmdr ?? EDDConfig.Instance.Commander(je.CommanderId)
             };
-
-            if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FuelScoop)
-            {
-                EDDiscovery.EliteDangerous.JournalEvents.JournalFuelScoop fs = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFuelScoop;
-                he.fuelTotal = fs.Total;
-            }
-            else if (je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
-            {
-                EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump fj = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
-                he.fuelLevel = fj.FuelLevel;
-            }
 
             if (prev != null && prev.travelling)      // if we are travelling..
             {
@@ -311,9 +297,34 @@ namespace EDDiscovery
             return he;
         }
 
-        public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, SQLiteConnectionUser conn )      // called after above with a USER connection
+        public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl , SQLiteConnectionUser conn )      // called after above with a USER connection
         {
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
+
+            snc = SystemNoteClass.GetNoteOnJournalEntry(Journalid);
+            if (snc == null && IsFSDJump)
+                snc = SystemNoteClass.GetNoteOnSystem(System.name, System.id_edsm);
+
+            if (snc != null)
+            {
+                Debug.WriteLine("Note {0} {1} {2}", snc.Name, snc.Journalid, snc.Note);
+            }
+
+            // Try to fill EDSM ID where a system note is set but journal item EDSM ID is not set
+            if (snc != null && snc.Name != null && snc.EdsmId > 0 && System.id_edsm <= 0)
+            {
+                System.id_edsm = 0;
+                hl.FillEDSM(this, uconn:conn);
+
+                if (snc.Journalid != Journalid && System.id_edsm > 0 && snc.EdsmId != System.id_edsm)
+                    snc = null;
+            }
+
+            if (snc != null && snc.Name != null && snc.Journalid == Journalid && System.id_edsm > 0 && snc.EdsmId != System.id_edsm)
+            {
+                snc.EdsmId = System.id_edsm;
+                snc.Update(conn);
+            }
         }
 
         #endregion
@@ -370,6 +381,38 @@ namespace EDDiscovery
         public bool IsJournalEventInEventFilter(string eventstr)
         {
             return eventstr == "All" || IsJournalEventInEventFilter(eventstr.Split(';'));
+        }
+
+        public bool UpdateSystemNote(string txt)
+        {
+            if ((snc == null && txt.Length > 0) || (snc != null && !snc.Note.Equals(txt))) // if no system note, and text,  or system not is not text
+            {
+                if (snc != null && (snc.Journalid == Journalid || snc.Journalid == 0 || (snc.Name.Equals(System.name, StringComparison.InvariantCultureIgnoreCase) && snc.EdsmId <= 0) || (snc.EdsmId > 0 && snc.EdsmId == System.id_edsm)))           // already there, update
+                {
+                    snc.Note = txt;
+                    snc.Time = DateTime.Now;
+                    snc.Name = (IsFSDJump) ? System.name : "";
+                    snc.Journalid = Journalid;
+                    snc.EdsmId = IsFSDJump ? System.id_edsm : 0;
+                    snc.Update();
+                }
+                else
+                {
+                    snc = new SystemNoteClass();
+                    snc.Note = txt;
+                    snc.Time = DateTime.Now;
+                    snc.Name = IsFSDJump ? System.name : "";
+                    snc.Journalid = Journalid;
+                    snc.EdsmId = IsFSDJump ? System.id_edsm : 0;
+                    snc.Add();
+                }
+
+                Debug.WriteLine("Store note {0} {1}", snc.Name, snc.EdsmId);
+
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -612,7 +655,7 @@ namespace EDDiscovery
             }
         }
 
-        public void FillEDSM(HistoryEntry syspos, SystemClass edsmsys = null, bool findsys = true, bool reload = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, SystemClass edsmsys = null, bool findsys = true, bool reload = false, SQLiteConnectionUser uconn = null )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1) )  // if set already, or we tried and failed..
                 return;
@@ -636,7 +679,7 @@ namespace EDDiscovery
                     bool updatepos = (he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump || he.EntryType == EliteDangerous.JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
 
                     if (updatepos || updateedsmid)
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1);  // update pos and edsmid, jdist not updated
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1 , uconn);  // update pos and edsmid, jdist not updated
 
                     he.System = edsmsys;
                 }

@@ -135,9 +135,11 @@ namespace EDDiscovery.UserControls
 
                 double tankSize = SQLiteDBClass.GetSettingDouble(DbSave + "TankSize", 32);
                 double tankWarning = SQLiteDBClass.GetSettingDouble(DbSave + "TankWarning", 25);
-                double fuel = he.FuelLevel;
-                if (he.IsFuelScoop)
-                    fuel = he.FuelTotal;
+                double fuel;
+                if (he.journalEntry is EliteDangerous.JournalEvents.JournalFuelScoop)
+                    fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
+                else
+                    fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
 
                 botline = String.Format("{0}t / {1}t", fuel.ToString("N1"), tankSize.ToString("N1"));
 
