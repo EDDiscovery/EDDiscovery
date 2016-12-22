@@ -830,6 +830,7 @@
     <None Include="Resources\Globe_yellow.png" />
     <None Include="Resources\edsm.png" />
     <None Include="Resources\edlogo24.png" />
+    <None Include="Resources\edsm32x32.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
