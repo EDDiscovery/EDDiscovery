@@ -59,7 +59,7 @@ namespace EDDiscovery.Export
                         writer.Write(MakeValueCsvFriendly(item.Key));
                         writer.Write(MakeValueCsvFriendly(item.Value.ToString("0.00")));
                         totalDist += item.Value;
-                        writer.Write(MakeValueCsvFriendly(totalDist.ToString("0.00")));
+                        writer.Write(MakeValueCsvFriendly(totalDist.ToString("0.00"),false));
                         writer.WriteLine();
                     }
                 }

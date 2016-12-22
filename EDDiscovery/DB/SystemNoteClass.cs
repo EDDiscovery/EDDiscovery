@@ -90,6 +90,19 @@ namespace EDDiscovery2.DB
             return true;
         }
 
+        public static void ClearEDSMID()
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("UPDATE SystemNote SET EdsmId=0"))
+                {
+                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                }
+            }
+        }
+
+
+
         public static List<SystemNoteClass> globalSystemNotes = new List<SystemNoteClass>();
 
         public static bool GetAllSystemNotes()

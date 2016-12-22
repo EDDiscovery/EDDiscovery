@@ -154,7 +154,7 @@
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 84);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(157, 38);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(222, 38);
             this.flowLayoutPanel2.TabIndex = 5;
             // 
             // labelExtDataExport
@@ -187,7 +187,7 @@
             this.comboBoxCustomExportType.SelectedIndex = -1;
             this.comboBoxCustomExportType.SelectedItem = null;
             this.comboBoxCustomExportType.SelectedValue = null;
-            this.comboBoxCustomExportType.Size = new System.Drawing.Size(151, 19);
+            this.comboBoxCustomExportType.Size = new System.Drawing.Size(216, 19);
             this.comboBoxCustomExportType.TabIndex = 6;
             this.comboBoxCustomExportType.Text = "comboBoxCustom1";
             this.toolTip.SetToolTip(this.comboBoxCustomExportType, "Pick the data to export");

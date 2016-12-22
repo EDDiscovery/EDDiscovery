@@ -519,7 +519,7 @@ namespace EDDiscovery
                 syspos = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
                 Debug.Assert(syspos != null);
 
-                _discoveryForm.history.FillEDSM(syspos, reload: true); // Fill in any EDSM info we have
+                _discoveryForm.history.FillEDSM(syspos, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
 
                 notedisplayedhe = syspos;
 
