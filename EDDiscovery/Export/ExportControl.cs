@@ -154,8 +154,16 @@ namespace EDDiscovery
 
         String findVisitedStarsCacheDirectory()
         {
-            string EDimportstarsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous");
-            var allFiles = Directory.GetFiles(EDimportstarsDir, "VisitedStarsCache.dat", SearchOption.AllDirectories);
+            string[] allFiles;
+            try
+            {
+                string EDimportstarsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous");
+                allFiles = Directory.GetFiles(EDimportstarsDir, "VisitedStarsCache.dat", SearchOption.AllDirectories);
+            }
+            catch (IOException)
+            {
+                return null;
+            }
 
             if (allFiles.Count<string>() == 0)
             {
