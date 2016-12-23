@@ -139,17 +139,22 @@ namespace EDDiscovery.UserControls
             {
                 if (last_he.System.id_edsm > 0)  // If system has edsmid get bodies
                 {
-                    List<JournalScan> jl = EDSMClass.GetBodiesList((int)last_he.System.id_edsm);
+                    if (sn==null  || (sn != null && sn.EDSMAdded == false))
+                    {
+                        List<JournalScan> jl = EDSMClass.GetBodiesList((int)last_he.System.id_edsm);
 
 
-                    if (jl != null)
-                        foreach (JournalScan js in jl)
-                            hl.starscan.Process(js, last_he.System);
+                        if (jl != null)
+                            foreach (JournalScan js in jl)
+                                hl.starscan.Process(js, last_he.System);
 
 
-                    if (sn==null)
-                        sn = hl.starscan.FindSystem(last_he.System);
+                        if (sn == null)
+                            sn = hl.starscan.FindSystem(last_he.System);
 
+                        if (sn!=null)
+                            sn.EDSMAdded = true;  // So we dont add it anymore this runtime.
+                    }
                 }
             }
 
