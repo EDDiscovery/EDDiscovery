@@ -287,7 +287,7 @@ namespace EDDiscovery.UserControls
                                     Size size, ref int offset , bool aligndown = false , int labelvoff = 0 )
         {
             //System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + curpos + " " + size + " hoff " + offset );
-
+            bool eddnvisible = true;
             string tip;
             Point endpoint = curpos;
             int quarterheight = size.Height / 4;
@@ -295,17 +295,21 @@ namespace EDDiscovery.UserControls
 
             JournalScan sc = sn.ScanData;
 
+
             if (sc != null)
             {
+                if (!checkBoxEDSM.Checked && sc.IsEDSMBody)  // Dont draw if EDDN  is loaded and npot shown
+                    eddnvisible = false;
+
                 tip = sc.DisplayString(true);
 
                 if (sc.IsStar)
                 {
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1, 
                                                 new Point(curpos.X+offset, curpos.Y + alignv) ,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, sn.ownname, tip, alignv + labelvoff);          // and the label needs to be a quarter height below it..
+                                                size, sn.ownname, tip, alignv + labelvoff, eddnvisible);          // and the label needs to be a quarter height below it..
 
-                    if ( sc.HasRings )
+                    if ( sc.HasRings && eddnvisible )
                     {
                         curpos = new Point(endpoint.X + itemsepar.Width, curpos.Y);
 
@@ -321,7 +325,7 @@ namespace EDDiscovery.UserControls
 
                             endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt, 
                                 new Point( curpos.X, curpos.Y + alignv ), new Size(size.Width/2,size.Height), name,
-                                                                sc.RingInformationMoons(i), alignv + labelvoff);
+                                                                sc.RingInformationMoons(i), alignv + labelvoff, eddnvisible);
 
                             curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
                         }
@@ -337,7 +341,7 @@ namespace EDDiscovery.UserControls
 
                     Image nodeimage = sc.GetPlanetClassImage();
 
-                    if (sc.IsLandable || sc.HasRings || indicatematerials)
+                    if ((sc.IsLandable || sc.HasRings || indicatematerials) && eddnvisible)
                     {
                         Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);          
 
@@ -359,17 +363,17 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.ownname, tip, labelvoff);
+                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.ownname, tip, labelvoff, eddnvisible);
                         offset = size.Width;                                        // return that the middle is now this
                     }
                     else
                     {
                         endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size, 
-                                                    sn.ownname, tip, alignv + labelvoff);
+                                                    sn.ownname, tip, alignv + labelvoff, eddnvisible);
                         offset += size.Width / 2;
                     }
 
-                    if (sc.HasMaterials && checkBoxMaterials.Checked)
+                    if (sc.HasMaterials && checkBoxMaterials.Checked && eddnvisible)
                     {
                         Point matpos = new Point(endpoint.X + 4, curpos.Y);
                         Point endmat = CreateMaterialNodes(pc, sc, matpos, materialsize);
@@ -384,7 +388,7 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + "\n\nNo scan data available";
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff);
+                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff, eddnvisible);
                 offset += size.Width / 2;       // return the middle used was this..
             }
 
@@ -452,7 +456,7 @@ namespace EDDiscovery.UserControls
         }
 
         Point CreateImageLabel(List<PictureBoxHotspot.ImageElement> c, Image i, Point postopright, Size size, string label,
-                                    string ttext , int labelhoff)
+                                    string ttext , int labelhoff, bool visible)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
 
@@ -476,12 +480,14 @@ namespace EDDiscovery.UserControls
                     lab.Translate(offset, 0);
                 }
 
-                c.Add(lab);
+                if (visible)
+                    c.Add(lab);
 
                 max = new Point(Math.Max(lab.pos.X + lab.pos.Width, max.X), lab.pos.Y + lab.pos.Height);
             }
             
-            c.Add(ie);
+            if (visible)
+                c.Add(ie);
 
             //System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
             return max;
