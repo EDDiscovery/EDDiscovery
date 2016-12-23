@@ -30,16 +30,18 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JSONFiltersForm));
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
+            this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonMore = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panelTop.SuspendLayout();
+            this.panelOuter.SuspendLayout();
             this.panelVScroll.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,40 +57,6 @@
             this.panelTop.TabIndex = 4;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
-            // panel_close
-            // 
-            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.DrawnImage = null;
-            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
-            this.panel_close.ImageText = null;
-            this.panel_close.Location = new System.Drawing.Point(813, 0);
-            this.panel_close.MarginSize = 6;
-            this.panel_close.MouseOverColor = System.Drawing.Color.White;
-            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_close.Name = "panel_close";
-            this.panel_close.Size = new System.Drawing.Size(24, 24);
-            this.panel_close.TabIndex = 27;
-            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
-            // 
-            // panel_minimize
-            // 
-            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.DrawnImage = null;
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.ImageText = null;
-            this.panel_minimize.Location = new System.Drawing.Point(783, 0);
-            this.panel_minimize.MarginSize = 6;
-            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
-            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_minimize.Name = "panel_minimize";
-            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
-            this.panel_minimize.TabIndex = 26;
-            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
-            // 
             // label_index
             // 
             this.label_index.AutoSize = true;
@@ -99,17 +67,29 @@
             this.label_index.Text = "N/A";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
+            // panelOuter
+            // 
+            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.panelVScroll);
+            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelOuter.Location = new System.Drawing.Point(0, 24);
+            this.panelOuter.Name = "panelOuter";
+            this.panelOuter.Padding = new System.Windows.Forms.Padding(3);
+            this.panelOuter.Size = new System.Drawing.Size(836, 344);
+            this.panelOuter.TabIndex = 8;
+            // 
             // panelVScroll
             // 
             this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
             this.panelVScroll.Controls.Add(this.buttonOK);
             this.panelVScroll.Controls.Add(this.buttonCancel);
             this.panelVScroll.Controls.Add(this.buttonMore);
+            this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelVScroll.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.panelVScroll.Location = new System.Drawing.Point(0, 24);
+            this.panelVScroll.Location = new System.Drawing.Point(3, 3);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.ScrollBarWidth = 20;
-            this.panelVScroll.Size = new System.Drawing.Size(836, 344);
+            this.panelVScroll.Size = new System.Drawing.Size(828, 336);
             this.panelVScroll.TabIndex = 8;
             this.panelVScroll.VerticalScrollBarDockRight = true;
             // 
@@ -124,13 +104,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(816, 0);
-            this.vScrollBarCustom1.Maximum = -300;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(808, 0);
+            this.vScrollBarCustom1.Maximum = -292;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 344);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 336);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
@@ -139,8 +119,8 @@
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -300;
-            this.vScrollBarCustom1.ValueLimited = -300;
+            this.vScrollBarCustom1.Value = -292;
+            this.vScrollBarCustom1.ValueLimited = -292;
             // 
             // buttonOK
             // 
@@ -189,12 +169,48 @@
             this.statusStripCustom.TabIndex = 27;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
+            // panel_close
+            // 
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.DrawnImage = null;
+            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.panel_close.ImageText = null;
+            this.panel_close.Location = new System.Drawing.Point(813, 0);
+            this.panel_close.MarginSize = 6;
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Size = new System.Drawing.Size(24, 24);
+            this.panel_close.TabIndex = 27;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            // 
+            // panel_minimize
+            // 
+            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.DrawnImage = null;
+            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageText = null;
+            this.panel_minimize.Location = new System.Drawing.Point(783, 0);
+            this.panel_minimize.MarginSize = 6;
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
+            this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
+            this.panel_minimize.TabIndex = 26;
+            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            // 
             // JSONFiltersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(836, 390);
-            this.Controls.Add(this.panelVScroll);
+            this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.statusStripCustom);
             this.Controls.Add(this.panelTop);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -206,6 +222,7 @@
             this.Resize += new System.EventHandler(this.JSONFiltersForm_Resize);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            this.panelOuter.ResumeLayout(false);
             this.panelVScroll.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -224,5 +241,6 @@
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private ExtendedControls.PanelVScroll panelVScroll;
         private ExtendedControls.StatusStripCustom statusStripCustom;
+        private System.Windows.Forms.Panel panelOuter;
     }
 }

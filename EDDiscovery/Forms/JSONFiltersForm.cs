@@ -244,6 +244,9 @@ namespace EDDiscovery2
 
             g.panel.Controls.Add(value);         // must be next
 
+            cond.Tag = value;                   // let condition know about value..
+            cond.SelectedIndexChanged += Cond_SelectedIndexChanged; // and turn on handler
+
             ExtendedControls.ButtonExt del = new ExtendedControls.ButtonExt();
             del.Size = new Size(24, 24);
             del.Text = "X";
@@ -279,6 +282,20 @@ namespace EDDiscovery2
                     fname.Enabled = true;
                 }
             }
+        }
+
+        private void Cond_SelectedIndexChanged(object sender, EventArgs e)          // on condition changing, see if value is needed 
+        {
+            ExtendedControls.ComboBoxCustom cond = sender as ExtendedControls.ComboBoxCustom;
+            ExtendedControls.TextBoxBorder tbb = cond.Tag as ExtendedControls.TextBoxBorder;
+
+            if (cond.Text.Contains("Present"))      // present does not need data..
+            {
+                tbb.Text = "";
+                tbb.Enabled = false;
+            }
+            else
+                tbb.Enabled = true;
         }
 
         int RepositionGroup(Group g)
@@ -514,7 +531,7 @@ namespace EDDiscovery2
 
                                     if (ok)
                                     {
-                                        if (valuen.Length == 0)
+                                        if (valuen.Length == 0 && !condn.Contains("Present") )      // no value, and not present type
                                             errorlist += "Do you want filter '" + fieldn + "' in group '" + fe.eventname + "' to have an empty value" + Environment.NewLine;
 
                                         fe.Add(f);
@@ -574,6 +591,8 @@ namespace EDDiscovery2
         {
             Close();
         }
+
+        #region Window Control
 
         public const int WM_MOVE = 3;
         public const int WM_SIZE = 5;
@@ -681,6 +700,8 @@ namespace EDDiscovery2
             ((Control)sender).Capture = false;
             SendMessage(WM_NCLBUTTONDOWN,(System.IntPtr)HT_CAPTION, (System.IntPtr)0);
         }
+
+        #endregion
 
     }
 }

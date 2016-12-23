@@ -19,15 +19,23 @@ namespace EDDiscovery
             DoesNotContainCaseSensitive,     // doesnotcontain
             EqualsCaseSensitive,             // ==
             NotEqualCaseSensitive,           // !=
+
             NumericEquals,      // numeric =
             NumericNotEquals,   // numeric !=
             NumericGreater,            // numeric >
             NumericGreaterEqual,       // numeric >=
             NumericLessThan,           // numeric <
             NumericLessThanEqual,      // numeric <=
+
             DateAfter,          // Date compare
             DateBefore,         // Date compare.
+
+            IsPresent,          // field is present
+            IsNotPresent,       // field is not present
         };
+
+        private bool IsDateComparision(MatchType mt) { return mt == MatchType.DateAfter || mt == MatchType.DateBefore; }
+        private bool IsNumberComparision(MatchType mt) { return mt >= MatchType.NumericEquals && mt <= MatchType.NumericLessThanEqual; }
 
         static public string[] MatchNames = { "Contains",
                                        "Not Contains",
@@ -45,6 +53,8 @@ namespace EDDiscovery
                                        "<= (Num)",
                                        ">= (Date)",
                                        "< (Date)",
+                                       "Is Present",
+                                       "Not Present"
                                     };
 
         public enum FilterType
@@ -123,6 +133,20 @@ namespace EDDiscovery
                     fields = new List<Fields>();
                 fields.Add(f);
             }
+        }
+
+        private class ValuesReturned
+        {
+            public ValuesReturned(bool d, bool v) { needdate = d; neednumber = v; }
+            public string value;
+
+            public DateTime datetime;
+            public bool needdate;
+            public bool datetimegood;
+
+            public double number;
+            public bool neednumber;
+            public bool numbergood;
         }
 
         public List<FilterEvent> filters = new List<FilterEvent>();
@@ -244,28 +268,153 @@ namespace EDDiscovery
             FilterEvent[] fel = (from fil in filters where 
                                         (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase)) select fil).ToArray();
 
-            bool? outerres = null;
+            if (fel.Length == 0)            // no filters match, null
+                return null;
 
-            foreach (FilterEvent fe in fel)        // its an OR between them
+            Dictionary<string, ValuesReturned> valuesneeded = new Dictionary<string, ValuesReturned>();
+
+            foreach (FilterEvent fe in fel)        // find all values needed
             {
-                bool? innerres = null;
-
-                try
+                foreach (Fields fd in fe.fields)
                 {
-                    JObject jo = JObject.Parse(json);  // Create a clone
-
-                    foreach (JToken jc in jo.Children())
+                    if (valuesneeded.ContainsKey(fd.itemname))
                     {
-                        bool? r = ExpandTokens(jc, fe);
+                        valuesneeded[fd.itemname].needdate |= IsDateComparision(fd.matchtype);
+                        valuesneeded[fd.itemname].neednumber |= IsNumberComparision(fd.matchtype);
+                    }
+                    else
+                        valuesneeded[fd.itemname] = new ValuesReturned(IsDateComparision(fd.matchtype), IsNumberComparision(fd.matchtype));
 
-                        if (r.HasValue)
+                    //System.Diagnostics.Debug.WriteLine("Need " + fd.itemname + " with "  + fd.matchtype);
+                }
+            }
+
+            try
+            {
+                JObject jo = JObject.Parse(json);  // Create a clone
+
+                int togo = valuesneeded.Count;
+
+                foreach (JToken jc in jo.Children())
+                {
+                    ExpandTokens(jc, valuesneeded, ref togo);
+                    if (togo == 0)
+                        break;
+                }
+
+                bool? outerres = null;
+
+                foreach (FilterEvent fe in fel)        // find all values needed
+                {
+                    bool? innerres = null;
+
+                    foreach (Fields f in fe.fields)
+                    {
+                        ValuesReturned vr = valuesneeded[f.itemname];
+
+                        bool matched = false;
+
+                        if (f.matchtype == MatchType.IsPresent)
                         {
-                            innerres = r.Value;
-                            break;
+                            if (vr.value != null)
+                                matched = true;
+                        }
+                        else if (f.matchtype == MatchType.IsNotPresent)
+                        {
+                            if (vr.value == null)
+                                matched = true;
+                        }
+                        else if (vr.value == null)      // if item name not found
+                        {
+                            innerres = false;
+                            break;                       // stop the loop, its a false
+                        }
+                        else if (f.matchtype == MatchType.DateBefore)
+                        {
+                            matched = vr.datetimegood && vr.datetime.CompareTo(f.contentdate) < 0;
+                        }
+                        else if (f.matchtype == MatchType.DateAfter)
+                        {
+                            matched = vr.datetimegood && vr.datetime.CompareTo(f.contentdate) >= 0;
+                        }
+                        else
+                        {
+                            if (f.matchtype == MatchType.Equals)
+                                matched = vr.value.Equals(f.contentmatch, StringComparison.InvariantCultureIgnoreCase);
+                            if (f.matchtype == MatchType.EqualsCaseSensitive)
+                                matched = vr.value.Equals(f.contentmatch);
+
+                            else if (f.matchtype == MatchType.NotEqual)
+                                matched = !vr.value.Equals(f.contentmatch, StringComparison.InvariantCultureIgnoreCase);
+                            else if (f.matchtype == MatchType.NotEqualCaseSensitive)
+                                matched = !vr.value.Equals(f.contentmatch);
+
+                            else if (f.matchtype == MatchType.Contains)
+                                matched = vr.value.IndexOf(f.contentmatch, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                            else if (f.matchtype == MatchType.ContainsCaseSensitive)
+                                matched = vr.value.Contains(f.contentmatch);
+
+                            else if (f.matchtype == MatchType.DoesNotContain)
+                                matched = vr.value.IndexOf(f.contentmatch, StringComparison.InvariantCultureIgnoreCase) < 0;
+                            else if (f.matchtype == MatchType.DoesNotContainCaseSensitive)
+                                matched = !vr.value.Contains(f.contentmatch);
+
+                            else if (f.matchtype == MatchType.NumericEquals)
+                                matched = vr.numbergood && Math.Abs(vr.number - f.contentvalue) < 0.0000000001;  // allow for rounding
+
+                            else if (f.matchtype == MatchType.NumericNotEquals)
+                                matched = vr.numbergood && Math.Abs(vr.number - f.contentvalue) >= 0.0000000001;
+
+                            else if (f.matchtype == MatchType.NumericGreater)
+                                matched = vr.numbergood && vr.number > f.contentvalue;
+
+                            else if (f.matchtype == MatchType.NumericGreaterEqual)
+                                matched = vr.numbergood && vr.number >= f.contentvalue;
+
+                            else if (f.matchtype == MatchType.NumericLessThan)
+                                matched = vr.numbergood && vr.number < f.contentvalue;
+
+                            else if (f.matchtype == MatchType.NumericLessThanEqual)
+                                matched = vr.numbergood && vr.number <= f.contentvalue;
+
+                          //  System.Diagnostics.Debug.WriteLine(fe.eventname + ":Compare " + f.matchtype + " '" + f.contentmatch + "' with '" + vr.value + "' res " + matched + " IC " + fe.innercondition);
+                        }
+
+                        if (fe.innercondition == FilterType.And )       // Short cut, if AND, all must pass, and it did not
+                        {
+                            if (!matched)
+                            {
+                                innerres = false;                       
+                                break;
+                            }
+                        }
+                        else if (fe.innercondition == FilterType.Nand)  // Short cut, if NAND, and not matched
+                        {
+                            if (!matched)
+                            {
+                                innerres = true;                        // positive non match - NAND produces a true
+                                break;
+                            }
+                        }
+                        else if (fe.innercondition == FilterType.Or)    // Short cut, if OR, and matched
+                        {
+                            if (matched)
+                            {
+                                innerres = true;                        
+                                break;
+                            }
+                        }
+                        else
+                        {                                               // short cut, if NOR, and matched, its false
+                            if (matched)
+                            {
+                                innerres = false;                              
+                                break;
+                            }
                         }
                     }
 
-                    if (!innerres.HasValue)                             // if not set, we set it to a definitive state
+                    if (!innerres.HasValue)                             // All tests executed, without a short cut, we set it to a definitive state
                     {
                         if (fe.innercondition == FilterType.And)        // none did not match, producing a false, so therefore AND is true
                             innerres = true;
@@ -277,127 +426,79 @@ namespace EDDiscovery
                             innerres = false;
                     }
 
-                    if ( innerres.Value && passed != null )             // if want a list of passes, do it
+                    if (innerres.Value && passed != null)               // if want a list of passes, do it
                         passed.Add(fe);
-                }
-                catch (Exception)
-                {
-                    return false;
+
+                    if (!outerres.HasValue)                                 // if first time, its just the value
+                        outerres = innerres.Value;
+                    else if (fe.outercondition == FilterType.Or)
+                        outerres |= innerres.Value;
+                    else if (fe.outercondition == FilterType.And)
+                        outerres &= innerres.Value;
+                    else if (fe.outercondition == FilterType.Nor)
+                        outerres = !(outerres | innerres.Value);
+                    else if (fe.outercondition == FilterType.Nand)
+                        outerres = !(outerres & innerres.Value);
                 }
 
-                if (!outerres.HasValue)                                 // if first time, its just the value
-                    outerres = innerres.Value;
-                else if (fe.outercondition == FilterType.Or)
-                    outerres |= innerres.Value;
-                else if (fe.outercondition == FilterType.And)
-                    outerres &= innerres.Value;
-                else if (fe.outercondition == FilterType.Nor)
-                    outerres = !(outerres | innerres.Value);
-                else if (fe.outercondition == FilterType.Nand)
-                    outerres = !(outerres & innerres.Value);
+                return outerres;
             }
-
-            return outerres;
-        }
-
-        private bool? ExpandTokens(JToken jt, FilterEvent fe)
-        {
-            if (jt.HasValues)
+            catch (Exception)
             {
-                JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
+                return false;
+            }
+        }
+            
 
+        private void ExpandTokens(JToken jt, Dictionary<string, ValuesReturned> valuesneeded , ref int togo )
+        {
+            JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
+
+            if (jt.HasValues && togo > 0 )
+            {
                 foreach (JToken jc in jt.Children())
                 {
-                    //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} : {1} {2}", cno, jc.Path, jc.Type.ToString()));
                     if (jc.HasValues)
                     {
-                        bool? r = ExpandTokens(jc, fe);
-
-                        if (r.HasValue)
-                            return r.Value;
+                        ExpandTokens(jc, valuesneeded , ref togo);
                     }
-                    else if (Array.FindIndex(decodeable, x => x == jc.Type) != -1)
+                    else 
                     {
                         string name = jc.Path;
-                        string value = jc.Value<string>();
 
-                        Fields f = fe.fields.Find(x => x.itemname.Equals(name));    // unique match against field names and name, can't do two here
-                                                                                // which would imply that the JSON has two identical field names..
-                        if (f!=null)
+                        if (valuesneeded.ContainsKey(name) && Array.FindIndex(decodeable, x => x == jc.Type) != -1  )
                         {
-                            bool matched = false;
-                            double valued;
+                            ValuesReturned vr = valuesneeded[name];
+                            vr.value = jc.Value<string>();
 
-                            if (f.matchtype == MatchType.Equals)
-                                matched = value.Equals(f.contentmatch,StringComparison.InvariantCultureIgnoreCase);
-                            if (f.matchtype == MatchType.EqualsCaseSensitive)
-                                matched = value.Equals(f.contentmatch);
-
-                            else if (f.matchtype == MatchType.NotEqual)
-                                matched = !value.Equals(f.contentmatch, StringComparison.InvariantCultureIgnoreCase);
-                            else if (f.matchtype == MatchType.NotEqualCaseSensitive)
-                                matched = !value.Equals(f.contentmatch);
-
-                            else if (f.matchtype == MatchType.Contains)
-                                matched = value.IndexOf(f.contentmatch, StringComparison.InvariantCultureIgnoreCase) >= 0;
-                            else if (f.matchtype == MatchType.ContainsCaseSensitive)
-                                matched = value.Contains(f.contentmatch);
-
-                            else if (f.matchtype == MatchType.DoesNotContain)
-                                matched = value.IndexOf(f.contentmatch, StringComparison.InvariantCultureIgnoreCase) < 0;
-                            else if (f.matchtype == MatchType.DoesNotContainCaseSensitive)
-                                matched = !value.Contains(f.contentmatch);
-
-                            else if (f.matchtype == MatchType.NumericEquals)
-                                matched = double.TryParse(value, out valued) && Math.Abs(valued - f.contentvalue) < 0.0000000001;  // allow for rounding
-
-                            else if (f.matchtype == MatchType.NumericNotEquals)
-                                matched = double.TryParse(value, out valued) && Math.Abs(valued - f.contentvalue) >= 0.0000000001;
-
-                            else if (f.matchtype == MatchType.NumericGreater)
-                                matched = double.TryParse(value, out valued) && valued > f.contentvalue;
-
-                            else if (f.matchtype == MatchType.NumericGreaterEqual)
-                                matched = double.TryParse(value, out valued) && valued >= f.contentvalue;
-
-                            else if (f.matchtype == MatchType.NumericLessThan)
-                                matched = double.TryParse(value, out valued) && valued < f.contentvalue;
-
-                            else if (f.matchtype == MatchType.NumericLessThanEqual)
-                                matched = double.TryParse(value, out valued) && valued <= f.contentvalue;
-
-                            else if (f.matchtype == MatchType.DateBefore)
+                            if (vr.needdate)
                             {
-                                DateTime dt = jc.Value<DateTime>();
-                                matched = dt.CompareTo(f.contentdate) < 0;
-                            }
-                            else if (f.matchtype == MatchType.DateAfter)
-                            {
-                                DateTime dt = jc.Value<DateTime>();
-                                matched = dt.CompareTo(f.contentdate) >= 0;
+                                try
+                                {
+                                    vr.datetime = jc.Value<DateTime>();     // if it fails, it excepts, accept this, 
+                                    vr.datetimegood = true;
+                                }
+                                catch
+                                {
+                                    vr.datetimegood = false;
+                                }
                             }
 
-                        //    System.Diagnostics.Debug.WriteLine(fe.eventname + ":Compare " + f.matchtype + " '" + f.contentmatch + "' with '" + value + "' res " + matched + " IC " + fe.innercondition);
+                            if (vr.neednumber)
+                                vr.numbergood = double.TryParse(vr.value, out vr.number);
 
-                            if (fe.innercondition == FilterType.And && !matched)     // Short cut, if AND, all must pass, and it did not
-                                return false;                               // positive non match
+                            togo--;
 
-                            if (fe.innercondition == FilterType.Nand && !matched)    // Short cut, if NAND, and not matched
-                                return true;                                // positive non match - NAND produces a true
-
-                            if (fe.innercondition == FilterType.Or && matched)       // Short cut, if NOR, and matched
-                                return true;                                // positive match
-
-                            if (fe.innercondition == FilterType.Nor && matched)      // Short cut, if NOR, and matched
-                                return false;                               // positive non match - any matches produce a false.
-
+                           // System.Diagnostics.Debug.WriteLine("Found "+ name);
                         }
                     }
+
+                    if (togo == 0)  // if we have all values, stop
+                        break;
                 }
             }
-
-            return null;        // no result either way
         }
+
 
         public bool CheckFilterTrueOut(string json, string eventname, ref List<FilterEvent> passed)      // if none, true, if false, true.. 
         {                                                                                         // only if the filter passes do we get a false..
@@ -427,8 +528,10 @@ namespace EDDiscovery
         }
 
 
-        public List<HistoryEntry> MarkHistory(List<HistoryEntry> he)       // Used for debugging it..
+        public List<HistoryEntry> MarkHistory(List<HistoryEntry> he, out int count )       // Used for debugging it..
         {
+            count = 0;
+
             if (Count == 0)       // no filters, all in
                 return he;
             else
@@ -439,16 +542,15 @@ namespace EDDiscovery
                 {
                     List<FilterEvent> list = new List<FilterEvent>();    // don't want it
 
+                    int mrk = s.EventDescription.IndexOf(":::");
+                    if (mrk >= 0)
+                        s.EventDescription = s.EventDescription.Substring(mrk + 3);
+
                     if ( !CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, ref list))
                     {
                         System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
                         s.EventDescription = "!" + list[0].eventname + ":::" + s.EventDescription;
-                    }
-                    else
-                    {
-                        int mrk = s.EventDescription.IndexOf(":::");
-                        if (mrk >= 0)
-                            s.EventDescription = s.EventDescription.Substring(mrk + 3);
+                        count++;
                     }
 
                     ret.Add(s);
