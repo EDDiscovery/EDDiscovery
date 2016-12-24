@@ -28,6 +28,7 @@ namespace EDDiscovery2.EDSM
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
         private string EDSMDistancesFileName;
+        static private Dictionary<int, List<JournalScan>> DictEDSMBodies = new Dictionary<int, List<JournalScan>>();
 
         public EDSMClass()
         {
@@ -617,6 +618,9 @@ namespace EDDiscovery2.EDSM
 
         public  static List<JournalScan> GetBodiesList(int edsmid)
         {
+            if (DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
+                return DictEDSMBodies[edsmid];
+
             List<JournalScan> bodies = new List<JournalScan>();
 
             EDSMClass edsm = new EDSMClass();
@@ -633,8 +637,11 @@ namespace EDDiscovery2.EDSM
                     
                     bodies.Add(js);
                 }
+                DictEDSMBodies[edsmid] = bodies;
                 return bodies;
             }
+
+            DictEDSMBodies[edsmid] = null;
             return null;
         }
 
