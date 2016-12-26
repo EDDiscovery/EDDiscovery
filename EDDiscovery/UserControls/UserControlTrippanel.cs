@@ -65,9 +65,11 @@ namespace EDDiscovery.UserControls
         {
             HistoryEntry lfs = hl.GetLastFuelScoop;
             HistoryEntry hex = hl.GetLastFSD;
+            HistoryEntry fuel = hl.GetLastRefuel;
             if (lfs != null && lfs.EventTimeUTC >= hex.EventTimeUTC)
                 hex = lfs;
-
+            if (fuel != null && fuel.EventTimeUTC >= hex.EventTimeUTC)
+                hex = fuel;
             displayLastFSDOrScoop(hex);
         }
 
@@ -80,6 +82,7 @@ namespace EDDiscovery.UserControls
         {
             Display(hl);
         }
+
 
         void displayLastFSDOrScoop(HistoryEntry he)
         {
@@ -135,11 +138,40 @@ namespace EDDiscovery.UserControls
 
                 double tankSize = SQLiteDBClass.GetSettingDouble(DbSave + "TankSize", 32);
                 double tankWarning = SQLiteDBClass.GetSettingDouble(DbSave + "TankWarning", 25);
-                double fuel;
-                if (he.journalEntry is EliteDangerous.JournalEvents.JournalFuelScoop)
-                    fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
-                else
-                    fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
+                double fuel=0.0;
+                HistoryEntry fuelhe;
+
+
+                switch (he.journalEntry.EventTypeID)
+                { 
+                    case EliteDangerous.JournalTypeEnum.FuelScoop:
+                       fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
+                        break;
+                    case EliteDangerous.JournalTypeEnum.FSDJump:
+                        fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
+                        break;
+                    case EliteDangerous.JournalTypeEnum.RefuelAll:
+                         fuelhe = discoveryform.history.GetLastFSDOrFuelScoop;
+                        if(fuelhe.journalEntry.EventTypeID==EliteDangerous.JournalTypeEnum.FSDJump)
+                            fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
+                        else
+                            fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
+                        fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelAll).Amount;
+                        break;
+                    case EliteDangerous.JournalTypeEnum.RefuelPartial:
+                         fuelhe = discoveryform.history.GetLastFSDOrFuelScoop;
+                        if (fuelhe.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
+                            fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
+                        else
+                            fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
+                        fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelPartial).Amount;
+                        break;
+                    //fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelAll).Amount;
+                    //case EliteDangerous.JournalTypeEnum.RefuelPartial:
+                    ////fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelPartial).Amount;
+                    default:
+                        break;
+                }
 
                 botline = String.Format("{0}t / {1}t", fuel.ToString("N1"), tankSize.ToString("N1"));
 
