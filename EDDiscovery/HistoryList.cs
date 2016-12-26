@@ -548,6 +548,24 @@ namespace EDDiscovery
             }
         }
 
+
+        public HistoryEntry GetLastRefuel
+        {
+            get
+            {
+                return historylist.FindLast(x => x.journalEntry.EventTypeID==JournalTypeEnum.RefuelAll
+                    || x.journalEntry.EventTypeID == JournalTypeEnum.RefuelPartial);
+            }
+        }
+        public HistoryEntry GetLastFSDOrFuelScoop
+        {
+            get
+            {
+                return historylist.FindLast(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump
+                    || x.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop);
+            }
+        }
+
         public HistoryEntry GetLastWithPosition
         {
             get
