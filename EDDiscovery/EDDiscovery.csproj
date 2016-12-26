@@ -617,6 +617,12 @@
     <Compile Include="JournalViewControl.Designer.cs">
       <DependentUpon>JournalViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlNotePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlNotePanel.Designer.cs">
+      <DependentUpon>UserControlNotePanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlScan.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -726,6 +732,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlMaterialCommodities.resx">
       <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlNotePanel.resx">
+      <DependentUpon>UserControlNotePanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlScan.resx">
       <DependentUpon>UserControlScan.cs</DependentUpon>
