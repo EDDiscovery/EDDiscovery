@@ -10,6 +10,7 @@ using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using System.IO;
+using EMK.LightGeometry;
 
 namespace EDDiscovery
 {
@@ -254,12 +255,37 @@ namespace EDDiscovery
             }
         }
 
+
         private void UpdateSystemRows()
         {
             for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
             {
+                dataGridViewRouteSystems[1, i].ReadOnly = true;
+                dataGridViewRouteSystems[2, i].ReadOnly = true;
                 UpdateSystemRow(i);
             }
+            UpdateTotalDistances();
+        }
+        private void UpdateTotalDistances()
+        {
+            SystemClass firstSC = null;
+            SystemClass lastSC = null;
+            double distance = 0;
+            for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
+            {
+                if (firstSC == null && dataGridViewRouteSystems[0, i].Tag != null)
+                    firstSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
+                if (dataGridViewRouteSystems[0, i].Tag != null)
+                    lastSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
+                String value = dataGridViewRouteSystems[1, i].Value as string;
+                if(!String.IsNullOrWhiteSpace(value))
+                    distance += Double.Parse(value);
+            }
+            txtCmlDistance.Text = distance.ToString("0.00") + "LY";
+            Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
+            Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
+            distance = Point3D.DistanceBetween(first, last);
+            txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
         }
 
         private void UpdateRouteInfo(SavedRouteClass route)
@@ -374,12 +400,7 @@ namespace EDDiscovery
                 dataGridViewRouteSystems.Rows.Add(rowobj);
             }
 
-            for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
-            {
-                dataGridViewRouteSystems[1, i].ReadOnly = true;
-                dataGridViewRouteSystems[2, i].ReadOnly = true;
-                UpdateSystemRow(i);
-            }
+            UpdateSystemRows();
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
@@ -430,6 +451,8 @@ namespace EDDiscovery
             dateTimePickerEndTime.Value = DateTime.Now;
             dateTimePickerEndTime.Checked = false;
             textBoxRouteName.Text = "";
+            txtCmlDistance.Text = "";
+            txtP2PDIstance.Text = "";
         }
 
         private void toolStripButtonShowOn3DMap_Click(object sender, EventArgs e)
@@ -477,8 +500,10 @@ namespace EDDiscovery
         {
             if (e.ColumnIndex == 0)
             {
-                UpdateSystemRow(e.RowIndex);
-                UpdateSystemRow(e.RowIndex + 1);
+                //UpdateSystemRow(e.RowIndex);
+                //UpdateSystemRow(e.RowIndex + 1);
+                //Force the totals to update
+                UpdateSystemRows();
             }
         }
 
