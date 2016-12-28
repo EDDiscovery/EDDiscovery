@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
         {
         }
 
-        public void Init(EDDiscoveryForm form)
+        public void Init(IDiscoveryController form)
         {
             _discoveryForm = form;
         }
@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
         public delegate void NewStarList(string name, SortedList<double, ISystem> csl);
         public event NewStarList OnNewStarList;
 
-        EDDiscoveryForm _discoveryForm;
+        IDiscoveryController _discoveryForm;
         bool ShutdownEDD = false;
         Thread closestthread = null;
         BlockingCollection<ISystem> closestsystem_queue = new BlockingCollection<ISystem>();

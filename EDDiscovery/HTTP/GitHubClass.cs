@@ -15,6 +15,7 @@
  */
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.HTTP;
+using EDDiscovery2;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
@@ -31,19 +32,19 @@ namespace EDDiscovery
 {
     public class GitHubClass : HttpCom
     {
-        private EDDiscoveryForm discoveryform;
+        private IDiscoveryController discoveryform;
         public string commanderName;
 
         private readonly string fromSoftwareVersion;
         //        private readonly string fromSoftware;
         private readonly string githubServer = "https://api.github.com/repos/EDDiscovery/EDDiscovery/";
 
-        public GitHubClass(EDDiscoveryForm eddiscoveryform)
+        public GitHubClass(IDiscoveryController eddiscoveryform)
         {
             discoveryform = eddiscoveryform;
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
-            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
+            commanderName = EDDConfig.Instance.CurrentCommander.EdsmName;
 
             _serverAddress = githubServer;
         }
