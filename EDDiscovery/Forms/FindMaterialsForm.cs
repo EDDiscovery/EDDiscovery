@@ -33,7 +33,7 @@ namespace EDDiscovery.Forms
         {
             double MaxLy = Double.Parse(comboBoxMaxLy.SelectedItem.ToString());
 
-            EDDiscoveryForm edfrm = this.Owner as EDDiscoveryForm;
+            IDiscoveryController edfrm = this.Owner as IDiscoveryController;
 
             HistoryEntry hi =   edfrm.history.First<HistoryEntry>();
 

@@ -196,7 +196,7 @@ namespace EDDiscovery2.EDSM
                 return null;
         }
         
-        internal long GetNewSystems(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        internal long GetNewSystems(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             string lstsyst;
 

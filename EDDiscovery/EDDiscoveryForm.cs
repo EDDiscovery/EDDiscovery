@@ -120,7 +120,7 @@ namespace EDDiscovery
             Controller.OnRefreshHistoryRequested += OnRefreshHistoryRequested;
             Controller.OnRefreshHistoryWorkerCompleted += (h, m, s) => OnRefreshHistoryWorkerCompleted();
             Controller.OnReportProgress += OnReportProgress;
-            Controller.Init(this);
+            Controller.Init();
             label_version.Text = Controller.VersionDisplayString;
 
             theme = new EDDTheme();

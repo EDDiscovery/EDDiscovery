@@ -24,19 +24,19 @@ namespace EDDiscovery2.EDSM
         private static bool Exit = false;
         private static ConcurrentQueue<HistoryEntry> hlscanunsyncedlist = new ConcurrentQueue<HistoryEntry>();
         private static AutoResetEvent hlscanevent = new AutoResetEvent(false);
-        private static EDDiscoveryForm mainForm;
+        private static IDiscoveryController mainForm;
 
-        public static bool SendEDDNEvent(EDDiscoveryForm frm, HistoryEntry helist)
+        public static bool SendEDDNEvent(IDiscoveryController frm, HistoryEntry helist)
         {
             return SendEDDNEvents(frm, new[] { helist });
         }
 
-        public static bool SendEDDNEvents(EDDiscoveryForm frm, params HistoryEntry[] helist)
+        public static bool SendEDDNEvents(IDiscoveryController frm, params HistoryEntry[] helist)
         {
             return SendEDDNEvents(frm, (IEnumerable<HistoryEntry>)helist);
         }
 
-        public static bool SendEDDNEvents(EDDiscoveryForm frm, IEnumerable<HistoryEntry> helist)
+        public static bool SendEDDNEvents(IDiscoveryController frm, IEnumerable<HistoryEntry> helist)
         {
             foreach (HistoryEntry he in helist)
             {

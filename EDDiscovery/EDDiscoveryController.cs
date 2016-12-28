@@ -138,9 +138,8 @@ namespace EDDiscovery
             InvokeSyncOnUIThread = syncInvoker;
         }
 
-        public void Init(EDDiscoveryForm form)
+        public void Init()
         {
-            this.form = form;
             VersionDisplayString = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
 
             ProcessCommandLineOptions();
@@ -155,7 +154,7 @@ namespace EDDiscovery
             backgroundWorker.Start();
 
             galacticMapping = new GalacticMapping();
-            EdsmSync = new EDSMSync(form);
+            EdsmSync = new EDSMSync(this);
             EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
             journalmonitor = new EDJournalClass();
             journalmonitor.OnNewJournalEntry += NewPosition;
@@ -407,7 +406,6 @@ namespace EDDiscovery
         private RefreshWorkerArgs refreshWorkerArgs;
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
         private int resyncRequestedFlag = 0;
-        private EDDiscoveryForm form;
         private bool CanSkipSlowUpdates
         {
             get
@@ -1200,7 +1198,7 @@ namespace EDDiscovery
                     {
                         LogLine("Checking for new EDSM systems (may take a few moments).");
                         EDSMClass edsm = new EDSMClass();
-                        long updates = edsm.GetNewSystems(form, cancelRequested, reportProgress);
+                        long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
                         LogLine("EDSM updated " + updates + " systems.");
                         performhistoryrefresh |= (updates > 0);
                     }
@@ -1280,7 +1278,7 @@ namespace EDDiscovery
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     bool outoforder = false;
                     using (var reader = new StreamReader(s))
-                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, form, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
+                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, this, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
                     if (!cancelRequested())       // abort, without saving time, to make it do it again
                     {
                         SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);

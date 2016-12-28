@@ -1112,19 +1112,19 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static long ParseEDSMUpdateSystemsString(string json, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsString(string json, ref string date, ref bool outoforder, bool removenonedsmids, IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StringReader sr = new StringReader(json))
                 return ParseEDSMUpdateSystemsStream(sr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, ref bool outoforder, bool removenonedsmids, IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
                 return ParseEDSMUpdateSystemsStream(sr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsStream(TextReader sr, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        public static long ParseEDSMUpdateSystemsStream(TextReader sr, ref string date, ref bool outoforder, bool removenonedsmids, IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             using (JsonTextReader jr = new JsonTextReader(sr))
                 return ParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
@@ -1175,7 +1175,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             DateTime maxdate;
 
@@ -1443,7 +1443,7 @@ namespace EDDiscovery.DB
             return updatecount + insertcount;
         }
 
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, bool removenonedsmids, IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             return DoParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
         }
