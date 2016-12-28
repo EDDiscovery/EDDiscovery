@@ -32,11 +32,6 @@ namespace EDDiscovery2._3DMap
             _formMap.SetPlannedRoute(plannedr);
         }
 
-        public void UpdateSystemList(List<HistoryEntry> visited)
-        {
-            _formMap.UpdateSystemList(visited);
-        }
-
         public void UpdateHistorySystem(ISystem historysel)
         {
             _formMap.UpdateHistorySystem(historysel);

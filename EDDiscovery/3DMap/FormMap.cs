@@ -186,6 +186,10 @@ namespace EDDiscovery2
 
             discoveryForm.OnNewTarget -= UpdateTarget;  // in case called multi times
             discoveryForm.OnNewTarget += UpdateTarget;
+            discoveryForm.OnHistoryChange -= UpdateSystemListHC;   // refresh, update the system list..
+            discoveryForm.OnHistoryChange += UpdateSystemListHC;   // refresh, update the system list..
+            discoveryForm.OnNewEntry -= UpdateSystemList;   // any new entries, update the system list..
+            discoveryForm.OnNewEntry += UpdateSystemList;
         }
 
         public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)
@@ -209,25 +213,6 @@ namespace EDDiscovery2
             _plannedRoute = plannedr;
             GenerateDataSetsRouteTri();
             RequestPaint();
-        }
-
-        public void UpdateSystemList(List<HistoryEntry> visited)
-        {
-            if (Is3DMapsRunning && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
-            {
-                _systemlist = visited;
-                _stargrids.FillSystemListGrid(_systemlist);          // update visited systems, will be displayed on next update of star grids
-                GenerateDataSetsSystemList();
-                RequestPaint();
-
-                if (toolStripButtonAutoForward.Checked)             // auto forward?
-                {
-                    HistoryEntry vs = _systemlist.FindLast(x => x.System.HasCoordinate );
-
-                    if ( vs != null )
-                        SetCenterSystemTo(vs.System.name);
-                }
-            }
         }
 
         public void UpdateHistorySystem(ISystem historysel)
@@ -257,6 +242,36 @@ namespace EDDiscovery2
                 RequestPaint();
             }
         }
+
+        public void UpdateSystemListHC(HistoryList hl)
+        {
+            UpdateSystemList(null, hl);
+        }
+
+        public void UpdateSystemList(HistoryEntry notused, HistoryList hl)
+        {
+            if (Is3DMapsRunning )
+            {
+                List<HistoryEntry> hfsd = hl.FilterByTravel;
+
+                if (hfsd.Count > 0)
+                {
+                    _systemlist = hfsd;
+                    _stargrids.FillSystemListGrid(_systemlist);          // update visited systems, will be displayed on next update of star grids
+                    GenerateDataSetsSystemList();
+                    RequestPaint();
+
+                    if (toolStripButtonAutoForward.Checked)             // auto forward?
+                    {
+                        HistoryEntry vs = _systemlist.FindLast(x => x.System.HasCoordinate);
+
+                        if (vs != null)
+                            SetCenterSystemTo(vs.System.name);
+                    }
+                }
+            }
+        }
+
 
         #endregion
 
