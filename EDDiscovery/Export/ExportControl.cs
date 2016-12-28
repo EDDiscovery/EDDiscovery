@@ -34,11 +34,11 @@ namespace EDDiscovery
             exportTypeList.Add(new ExportTypeClass("Sold exploration data (all)", new ExportExplorationData(false)));
             exportTypeList.Add(new ExportTypeClass("Sold exploration data (By date)", new ExportExplorationData(true)));
             exportTypeList.Add(new ExportTypeClass("Route plan", new ExportRoute()));
+            exportTypeList.Add(new ExportTypeClass("All Notes from All Commanders", new ExportNotes()));
 
             txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             comboBoxCustomExportType.ItemHeight = 20;
-
         }
 
 
@@ -154,8 +154,16 @@ namespace EDDiscovery
 
         String findVisitedStarsCacheDirectory()
         {
-            string EDimportstarsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous");
-            var allFiles = Directory.GetFiles(EDimportstarsDir, "VisitedStarsCache.dat", SearchOption.AllDirectories);
+            string[] allFiles;
+            try
+            {
+                string EDimportstarsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous");
+                allFiles = Directory.GetFiles(EDimportstarsDir, "VisitedStarsCache.dat", SearchOption.AllDirectories);
+            }
+            catch (IOException)
+            {
+                return null;
+            }
 
             if (allFiles.Count<string>() == 0)
             {

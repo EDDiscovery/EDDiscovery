@@ -47,27 +47,36 @@ namespace EDDiscovery.Export
         abstract public bool ToCSV(string filename);
         abstract public bool GetData(EDDiscoveryForm _discoveryForm);
 
-
-        protected string MakeValueCsvFriendly(object value)
+        protected string MakeValueCsvFriendly(object value, bool delimit = true)
         {
-            if (value == null) return delimiter;
-            if (value is INullable && ((INullable)value).IsNull) return delimiter;
+            string output = "";
 
-            if (value is DateTime)
+            if ( value != null && !(value is INullable && ((INullable)value).IsNull) )  // if not null
             {
-                if (((DateTime)value).TimeOfDay.TotalSeconds == 0)
-                    return ((DateTime)value).ToString("yyyy-MM-dd") + delimiter; ;
-                return ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss") + delimiter; ;
+                if (value is DateTime)
+                {
+                    if (((DateTime)value).TimeOfDay.TotalSeconds == 0)
+                        return ((DateTime)value).ToString("yyyy-MM-dd") + delimiter;
+
+                    output = ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss");
+                }
+                else
+                {
+                    output = Convert.ToString(value, formatculture);
+
+                    if (output.Contains(",") || output.Contains("\"") || output.Contains("\r") || output.Contains("\n"))
+                    {
+                        output = output.Replace("\r\n", "\n");
+                        output = output.Replace("\"", "\"\"");
+                        output = "\"" + output + "\"";
+                    }
+                }
             }
-            string output = Convert.ToString(value, CultureInfo.InvariantCulture);
 
-            if (output.Contains(",") || output.Contains("\""))
-                output = '"' + output.Replace("\"", "\"\"") + '"';
-
-            return output + delimiter;
-
+            if (delimit)
+                return output + delimiter;
+            else
+                return output;
         }
-
-
     }
 }

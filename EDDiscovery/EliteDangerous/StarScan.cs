@@ -16,6 +16,7 @@ namespace EDDiscovery.EliteDangerous
         {
             public EDDiscovery2.DB.ISystem system;
             public SortedList<string, ScanNode> starnodes;
+            public bool EDSMAdded = false;
         };
 
         public enum ScanNodeType { star, barycentre, planet, moon, submoon, starbelt, rings };
@@ -27,7 +28,26 @@ namespace EDDiscovery.EliteDangerous
             public string ownname;                  // own name              
             public SortedList<string, ScanNode> children;         // kids
 
-            public JournalScan scandata;            // can be null if no scan, its a place holder.
+            private JournalScan scandata;            // can be null if no scan, its a place holder.
+
+            public JournalScan ScanData
+            {
+                get
+                {
+                    return scandata;
+                }
+
+                set
+                {
+                    if (value == null)
+                        return;
+
+                    if (scandata == null)
+                        scandata = value;
+                    else if (!value.IsEDSMBody) // Always overwrtite if its a journalscan.
+                        scandata = value;
+                }
+            }
         };
 
         public SystemNode FindSystem(EDDiscovery2.DB.ISystem sys)
@@ -112,7 +132,7 @@ namespace EDDiscovery.EliteDangerous
                     {
                         ownname = elements[0],
                         fullname = sys.name + (elements[0].Contains("Main") ? "" : (" " + elements[0])),
-                        scandata = null,
+                        ScanData = null,
                         children = null,
                         type = starscannodetype
                     };
@@ -130,7 +150,7 @@ namespace EDDiscovery.EliteDangerous
                         if (sublv0.children == null)
                             sublv0.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                        sublv1 = new ScanNode() { ownname = elements[1], fullname = sublv0.fullname + " " + elements[1], scandata = null, children = null, type = ScanNodeType.planet };
+                        sublv1 = new ScanNode() { ownname = elements[1], fullname = sublv0.fullname + " " + elements[1], ScanData = null, children = null, type = ScanNodeType.planet };
                         sublv0.children.Add(elements[1], sublv1);
                     }
 
@@ -143,7 +163,7 @@ namespace EDDiscovery.EliteDangerous
                             if (sublv1.children == null)
                                 sublv1.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                            sublv2 = new ScanNode() { ownname = elements[2], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2], scandata = null, children = null, type = ScanNodeType.moon };
+                            sublv2 = new ScanNode() { ownname = elements[2], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2], ScanData = null, children = null, type = ScanNodeType.moon };
                             sublv1.children.Add(elements[2], sublv2);
                         }
 
@@ -156,12 +176,12 @@ namespace EDDiscovery.EliteDangerous
                                 if (sublv2.children == null)
                                     sublv2.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                                sublv3 = new ScanNode() { ownname = elements[3], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3], scandata = null, children = null, type = ScanNodeType.submoon };
+                                sublv3 = new ScanNode() { ownname = elements[3], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3], ScanData = null, children = null, type = ScanNodeType.submoon };
                                 sublv2.children.Add(elements[3], sublv3);
                             }
 
                             if (elements.Count == 4)            // okay, need only 4 elements now.. if not, we have not coped..
-                                sublv3.scandata = sc;
+                                sublv3.ScanData = sc;
                             else
                             {
                                 System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " too long");
@@ -170,17 +190,17 @@ namespace EDDiscovery.EliteDangerous
                         }
                         else
                         {
-                            sublv2.scandata = sc;
+                            sublv2.ScanData = sc;
                         }
                     }
                     else
                     {
-                        sublv1.scandata = sc;
+                        sublv1.ScanData = sc;
                     }
                 }
                 else
                 {
-                    sublv0.scandata = sc;
+                    sublv0.ScanData = sc;
                 }
 
                 return true;

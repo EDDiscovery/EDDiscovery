@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
+using System.IO;
+using EMK.LightGeometry;
 
 namespace EDDiscovery
 {
@@ -253,12 +255,37 @@ namespace EDDiscovery
             }
         }
 
+
         private void UpdateSystemRows()
         {
             for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
             {
+                dataGridViewRouteSystems[1, i].ReadOnly = true;
+                dataGridViewRouteSystems[2, i].ReadOnly = true;
                 UpdateSystemRow(i);
             }
+            UpdateTotalDistances();
+        }
+        private void UpdateTotalDistances()
+        {
+            SystemClass firstSC = null;
+            SystemClass lastSC = null;
+            double distance = 0;
+            for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
+            {
+                if (firstSC == null && dataGridViewRouteSystems[0, i].Tag != null)
+                    firstSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
+                if (dataGridViewRouteSystems[0, i].Tag != null)
+                    lastSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
+                String value = dataGridViewRouteSystems[1, i].Value as string;
+                if(!String.IsNullOrWhiteSpace(value))
+                    distance += Double.Parse(value);
+            }
+            txtCmlDistance.Text = distance.ToString("0.00") + "LY";
+            Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
+            Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
+            distance = Point3D.DistanceBetween(first, last);
+            txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
         }
 
         private void UpdateRouteInfo(SavedRouteClass route)
@@ -373,12 +400,7 @@ namespace EDDiscovery
                 dataGridViewRouteSystems.Rows.Add(rowobj);
             }
 
-            for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
-            {
-                dataGridViewRouteSystems[1, i].ReadOnly = true;
-                dataGridViewRouteSystems[2, i].ReadOnly = true;
-                UpdateSystemRow(i);
-            }
+            UpdateSystemRows();
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
@@ -429,6 +451,8 @@ namespace EDDiscovery
             dateTimePickerEndTime.Value = DateTime.Now;
             dateTimePickerEndTime.Checked = false;
             textBoxRouteName.Text = "";
+            txtCmlDistance.Text = "";
+            txtP2PDIstance.Text = "";
         }
 
         private void toolStripButtonShowOn3DMap_Click(object sender, EventArgs e)
@@ -476,8 +500,10 @@ namespace EDDiscovery
         {
             if (e.ColumnIndex == 0)
             {
-                UpdateSystemRow(e.RowIndex);
-                UpdateSystemRow(e.RowIndex + 1);
+                //UpdateSystemRow(e.RowIndex);
+                //UpdateSystemRow(e.RowIndex + 1);
+                //Force the totals to update
+                UpdateSystemRows();
             }
         }
 
@@ -711,6 +737,157 @@ namespace EDDiscovery
                 _savedRoutes.Remove(_currentRoute);
                 UpdateComboBox();
                 ClearRoute();
+            }
+        }
+        
+        private void toolStripButtonImportFile_Click(object sender, EventArgs e)
+        {
+            SavedRouteClass newroute = new SavedRouteClass();
+            UpdateRouteInfo(newroute);
+            if (!newroute.Equals(_currentRoute))
+            {
+                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
+                    + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.No)
+                    return;
+            }
+
+            ClearRoute();
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Text Files|*.txt";
+            ofd.Title = "Select a route file";
+
+            if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+            string[] sysnames;
+
+            try
+            {
+                sysnames = System.IO.File.ReadAllLines(ofd.FileName);
+            }
+            catch (IOException)
+            {
+                MessageBox.Show(String.Format("There has been an error openning file {0}", ofd.FileName), "Import file",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            List<String> systems = new List<String>();
+            int countbad = 0;
+            foreach (String name in sysnames)
+            {
+                String sysname = name;
+                if (sysname.Contains(","))
+                {
+                    String[] values = sysname.Split(',');
+                    sysname = values[0];
+                }
+                SystemClass sc = GetSystem(sysname);
+                if (sc != null)
+                    systems.Add(sysname);
+                else
+                    countbad++;
+            }
+            if (systems.Count == 0)
+            {
+                MessageBox.Show(_discoveryForm,
+                String.Format("There are no known system names in the file import", countbad),
+                "Unsaved route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            if (countbad > 0)
+            {
+                var result = MessageBox.Show(_discoveryForm,
+                    String.Format("There are {0} unknown system names do you wish to conitune with the good ones", countbad),
+                    "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.No)
+                    return;
+            }
+            foreach (var sysname in systems)
+            {
+                dataGridViewRouteSystems.Rows.Add(sysname, "", "");
+            }
+            UpdateSystemRows();
+        }
+
+        private void toolStripButtonImportRoute_Click(object sender, EventArgs e)
+        {
+            SavedRouteClass newroute = new SavedRouteClass();
+            UpdateRouteInfo(newroute);
+            if (!newroute.Equals(_currentRoute))
+            {
+                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
+                    + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.No)
+                    return;
+            }
+
+            ClearRoute();
+
+            if (_discoveryForm.RouteControl.RouteSystems == null
+                || _discoveryForm.RouteControl.RouteSystems.Count == 0)
+            {
+                MessageBox.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
+                return;
+            }
+
+            foreach (SystemClass s in _discoveryForm.RouteControl.RouteSystems)
+            {
+                dataGridViewRouteSystems.Rows.Add(s.name, "", "");
+            }
+            UpdateSystemRows();
+        }
+
+        private void toolStripButtonExport_Click(object sender, EventArgs e)
+        {
+            string filename = "";
+            try
+            {
+
+                if (dataGridViewRouteSystems.Rows.Count == 0
+                    || (dataGridViewRouteSystems.Rows.Count == 1 && dataGridViewRouteSystems[0, 0].Value == null))
+                {
+                    MessageBox.Show(_discoveryForm,
+                    "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.Filter = "Route export| *.txt";
+                dlg.Title = "Export route";
+                if (_currentRoute != null && !String.IsNullOrWhiteSpace(_currentRoute.Name))
+                    dlg.FileName = _currentRoute.Name + ".txt";
+                else
+                    dlg.FileName = "route.txt";
+
+                string fileName = dlg.FileName;
+                foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+                {
+                    fileName = fileName.Replace(c, '_');
+                }
+                dlg.FileName = fileName;
+
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+                filename = dlg.FileName;
+                using (StreamWriter writer = new StreamWriter(filename, false))
+                {
+                    for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
+                    {
+                        String sysname = (String)dataGridViewRouteSystems[0, i].Value;
+                        if (!String.IsNullOrWhiteSpace(sysname))
+                            writer.WriteLine(sysname);
+                    }
+                }
+                MessageBox.Show(String.Format("Export complete {0}", filename), "Export route");
+            }
+            catch (IOException)
+            {
+                MessageBox.Show(String.Format("Is file {0} open?", filename), "Export route",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
         }
     }

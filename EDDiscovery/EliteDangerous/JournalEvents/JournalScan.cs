@@ -157,6 +157,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         //public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
 
+
+         public bool IsEDSMBody
+        {
+            get
+            {
+                return JSONHelper.GetBool(jEventData["EDDFromEDSMBodie"], false);
+            }
+        }
+
         public override void FillInformation(out string summary, out string info, out string detailed)
         {
             base.FillInformation(out summary, out info, out detailed);

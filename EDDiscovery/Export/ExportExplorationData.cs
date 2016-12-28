@@ -104,7 +104,7 @@ namespace EDDiscovery.Export
                                 }
                             }
                             writer.Write(MakeValueCsvFriendly((star != EDStar.Unknown) ? Enum.GetName(typeof(EDStar), star) : ""));
-                            writer.Write(MakeValueCsvFriendly((planet != EDPlanet.Unknown) ? Enum.GetName(typeof(EDPlanet), planet) : ""));
+                            writer.Write(MakeValueCsvFriendly((planet != EDPlanet.Unknown) ? Enum.GetName(typeof(EDPlanet), planet) : "",false));
                             writer.WriteLine();
                         }
                     }

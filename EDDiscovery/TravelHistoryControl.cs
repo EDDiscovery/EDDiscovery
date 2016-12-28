@@ -52,7 +52,7 @@ namespace EDDiscovery
 
         string[] popoutbuttonlist = new string[] 
         {
-            "S-Panel", "Trip-Panel",          // not in tabs
+            "S-Panel", "Trip-Panel", "Note Panel", // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
             "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
         };
@@ -72,7 +72,8 @@ namespace EDDiscovery
             Scan,
             // Not in TABS
             Spanel,
-            Trippanel
+            Trippanel,
+            NotePanel
         };
 
         Bitmap[] popoutbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
@@ -519,7 +520,7 @@ namespace EDDiscovery
                 syspos = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
                 Debug.Assert(syspos != null);
 
-                _discoveryForm.history.FillEDSM(syspos, reload: true); // Fill in any EDSM info we have
+                _discoveryForm.history.FillEDSM(syspos, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
 
                 notedisplayedhe = syspos;
 
@@ -833,8 +834,10 @@ namespace EDDiscovery
                 PopOut(PopOuts.Spanel);
             else if (comboBoxCustomPopOut.SelectedIndex == 1)
                 PopOut(PopOuts.Trippanel);
+            else if (comboBoxCustomPopOut.SelectedIndex == 2)
+                PopOut(PopOuts.NotePanel);
             else
-                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 2));
+                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 3));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;
@@ -961,6 +964,14 @@ namespace EDDiscovery
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
+            else if (selected == PopOuts.NotePanel)
+            {
+                int numopened = usercontrolsforms.CountOf(typeof(UserControlNotePanel)) + 1;  // used to determine name and also key for DB
+                UserControlNotePanel ucm = new UserControlNotePanel();
+                tcf.Init(ucm, "Note Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "NotePanel" + numopened, true);
+                tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
+                ucm.Init(_discoveryForm, numopened);
+            }
 
             tcf.Show();
 
@@ -978,6 +989,8 @@ namespace EDDiscovery
                 ((UserControlScan)tcf.UserControl).Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             else if (selected == PopOuts.Trippanel)                            // need to theme, before draw, as it needs the theme colours set up
                 ((UserControlTrippanel)tcf.UserControl).Display(_discoveryForm.history);
+            else if( selected==PopOuts.NotePanel)
+                ((UserControlNotePanel)tcf.UserControl).Display( _discoveryForm.history);
         }
 
         void TGPopOut()
