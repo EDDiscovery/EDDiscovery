@@ -1884,6 +1884,7 @@ namespace EDDiscovery
                 else
                 {
                     travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
+                    exportControl1.PopulateCommanders();
                     settings.UpdateCommandersListBox();
 
                     history.Clear();
@@ -2011,6 +2012,7 @@ namespace EDDiscovery
 
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
             settings.UpdateCommandersListBox();
+            exportControl1.PopulateCommanders();
         }
 
         public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
