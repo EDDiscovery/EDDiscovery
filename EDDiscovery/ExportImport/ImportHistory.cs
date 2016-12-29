@@ -42,7 +42,7 @@ namespace EDDiscovery.Import
         {
             if (!ReadFile())
             {
-                result = "The import file could not be read.";
+                result = "The import file could not be read with specified settings.";
                 return false;
             }
             if (DateCol.HasValue)
@@ -77,31 +77,37 @@ namespace EDDiscovery.Import
             SystemsForImport = new List<ImportSystem>();
             using (StreamReader sr = new StreamReader(FileName))
             {
+
                 if (HeaderRow) sr.ReadLine();
-                do
+                try
                 {
-                    string aLine = sr.ReadLine();
-                    string[] values = aLine.Split(new string[] { Delimiter }, StringSplitOptions.None);
-
-                    ImportSystem thisSys = new ImportSystem();
-
-                    if (DateCol.HasValue)
+                    do
                     {
-                        string dateTimeInFile = values[DateCol.Value - 1];
-                        if (TimeCol.HasValue)
+                        string aLine = sr.ReadLine();
+                        string[] values = aLine.Split(new string[] { Delimiter }, StringSplitOptions.None);
+
+                        ImportSystem thisSys = new ImportSystem();
+
+                        if (DateCol.HasValue)
                         {
-                            dateTimeInFile = dateTimeInFile + " " + values[TimeCol.Value - 1];
+                            string dateTimeInFile = values[DateCol.Value - 1];
+                            if (TimeCol.HasValue)
+                            {
+                                dateTimeInFile = dateTimeInFile + " " + values[TimeCol.Value - 1];
+                            }
+                            if (!DateTime.TryParse(dateTimeInFile, out thisSys.Timestamp)) return false;
                         }
-                        if (!DateTime.TryParse(dateTimeInFile, out thisSys.Timestamp)) return false;
-                    }
 
-                    thisSys.SysName = values[SysNameCol.Value - 1];
-                    if (SysNoteCol.HasValue)
-                    { thisSys.Notes = values[SysNoteCol.Value - 1].Trim(); }
-                    else { thisSys.Notes = null; }
+                        thisSys.SysName = values[SysNameCol.Value - 1];
+                        if (SysNoteCol.HasValue)
+                        { thisSys.Notes = values[SysNoteCol.Value - 1].Trim(); }
+                        else { thisSys.Notes = null; }
 
-                    SystemsForImport.Add(thisSys);
-                } while (!sr.EndOfStream);
+                        SystemsForImport.Add(thisSys);
+                    } while (!sr.EndOfStream);
+                }
+                catch
+                { return false; }
             }
             return true;
         }
