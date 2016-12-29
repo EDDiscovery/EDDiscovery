@@ -252,13 +252,13 @@ namespace EDDiscovery
             long cmdrID = long.Parse(comboBoxCommander.SelectedValue.ToString());
             if (string.IsNullOrEmpty(importFile) || ! File.Exists(importFile))
             {
-                MessageBox.Show("An import file must be specified.");
+                MessageBox.Show("An import file must be specified.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             string delim = radioButtonTab.Checked ? "\t" : textBoxDelimiter.Text;
             if (string.IsNullOrEmpty(delim))
             {
-                MessageBox.Show("A delimiter must be defined.");
+                MessageBox.Show("A delimiter must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             int? datecol = string.IsNullOrEmpty(textBoxArrivalDate.Text) ? null : (int?)int.Parse(textBoxArrivalDate.Text);
@@ -267,24 +267,24 @@ namespace EDDiscovery
             int? notecol = string.IsNullOrEmpty(textBoxSysNotes.Text) ? null : (int?)int.Parse(textBoxSysNotes.Text);
             if (!namecol.HasValue)
             {
-                MessageBox.Show("System Name column must be defined.");
+                MessageBox.Show("System Name column must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (!datecol.HasValue && !notecol.HasValue)
             {
-                MessageBox.Show("At least one of arrival date and system note columns must be defined.");
+                MessageBox.Show("At least one of arrival date and system note columns must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             ImportHistory ih = new ImportHistory(importFile, delim, datecol, timecol, namecol, notecol, checkBoxImpHeader.Checked, cmdrID);
             string result;
             if (ih.Import(out result))
             {
-                MessageBox.Show("Import successful.");
+                MessageBox.Show("Import successful.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.None);
                 _discoveryForm.RefreshHistoryAsync();
             }
             else
             {
-                MessageBox.Show("Import failed: " + result);
+                MessageBox.Show("Import failed: " + result, "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             ih = null;
         }
