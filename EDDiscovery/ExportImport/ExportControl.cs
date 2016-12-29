@@ -58,6 +58,8 @@ namespace EDDiscovery
             comboBoxCommander.ValueMember = "Nr";
             comboBoxCommander.DisplayMember = "Name";
 
+            Application.DoEvents();
+
             if (_discoveryForm.DisplayedCommander == -1)
                 comboBoxCommander.SelectedIndex = 0;
             else
@@ -276,6 +278,7 @@ namespace EDDiscovery
                 return;
             }
             ImportHistory ih = new ImportHistory(importFile, delim, datecol, timecol, namecol, notecol, checkBoxImpHeader.Checked, cmdrID);
+            _discoveryForm.ShowInfoPanel("Importing, please wait...", true, Color.Gold);
             string result;
             if (ih.Import(out result))
             {
@@ -286,6 +289,7 @@ namespace EDDiscovery
             {
                 MessageBox.Show("Import failed: " + result, "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            _discoveryForm.ShowInfoPanel("", false);
             ih = null;
         }
 

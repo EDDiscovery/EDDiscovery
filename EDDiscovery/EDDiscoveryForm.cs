@@ -498,18 +498,14 @@ namespace EDDiscovery
 
         private void PanelInfoNewRelease()
         {
-            panelInfo.BackColor = Color.Green;
-            labelPanelText.Text = "Download new release!";
-            panelInfo.Visible = true;
+            ShowInfoPanel("Download new release!", true, Color.Green);
         }
 
 
         private void InitFormControls()
         {
-            labelPanelText.Text = "Loading. Please wait!";
-            panelInfo.Visible = true;
-            panelInfo.BackColor = Color.Gold;
-
+            ShowInfoPanel("Loading. Please wait!", true, Color.Gold);
+            
             routeControl1.travelhistorycontrol1 = travelHistoryControl1;
         }
 
@@ -801,7 +797,7 @@ namespace EDDiscovery
                 DeleteOldLogFiles();
 
 
-                panelInfo.Visible = false;
+                ShowInfoPanel("", false);
 
                 checkInstallerTask = CheckForNewInstallerAsync();
 
@@ -1261,6 +1257,13 @@ namespace EDDiscovery
 
         public bool PendingClose { get { return safeClose != null; } }           // we want to close boys!
 
+        public void ShowInfoPanel(string message, bool visible, Color? backColour = null)
+        {
+            labelPanelText.Text = message;
+            panelInfo.Visible = visible;
+            if (backColour.HasValue) panelInfo.BackColor = backColour.Value;
+        }
+
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (safeClose == null)                  // so a close is a request now, and it launches a thread which cleans up the system..
@@ -1276,8 +1279,7 @@ namespace EDDiscovery
                 {
                     cancelDownloadMaps();
                 }
-                labelPanelText.Text = "Closing, please wait!";
-                panelInfo.Visible = true;
+                ShowInfoPanel("Closing, please wait!", true);
                 LogLineHighlight("Closing down, please wait..");
                 Console.WriteLine("Close.. safe close launched");
                 safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
