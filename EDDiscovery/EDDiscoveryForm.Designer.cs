@@ -578,7 +578,7 @@
             this.tabPageExport.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageExport.Size = new System.Drawing.Size(985, 671);
             this.tabPageExport.TabIndex = 8;
-            this.tabPageExport.Text = "Export";
+            this.tabPageExport.Text = "Export/Import";
             this.tabPageExport.UseVisualStyleBackColor = true;
             // 
             // exportControl1
