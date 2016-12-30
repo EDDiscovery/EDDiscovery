@@ -219,6 +219,7 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="Export\ExportNotes.cs" />
+    <Compile Include="RoutingUtils.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
