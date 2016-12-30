@@ -11,6 +11,8 @@ using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using System.IO;
 using EMK.LightGeometry;
+using EDDiscovery.EDSM;
+using EDDiscovery2;
 
 namespace EDDiscovery
 {
@@ -890,5 +892,19 @@ namespace EDDiscovery
                 return;
             }
         }
+
+        private void setTargetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+
+            if (selectedRows.Length == 0)
+                return;
+            var obj = dataGridViewRouteSystems[0, selectedRows[0]].Value;
+
+            if (obj == null)
+                return;
+            RoutingUtils.setTargetSystem(_discoveryForm, (string)obj);
+        }
+
     }
 }

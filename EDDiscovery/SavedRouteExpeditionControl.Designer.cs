@@ -63,6 +63,7 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertCopiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
@@ -382,9 +383,10 @@
             this.copyToolStripMenuItem,
             this.pasteToolStripMenuItem,
             this.insertCopiedToolStripMenuItem,
-            this.deleteRowsToolStripMenuItem});
+            this.deleteRowsToolStripMenuItem,
+            this.setTargetToolStripMenuItem});
             this.contextMenuCopyPaste.Name = "contextMenuCopyPaste";
-            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 92);
+            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 158);
             this.contextMenuCopyPaste.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCopyPaste_Opening);
             // 
             // copyToolStripMenuItem
@@ -414,6 +416,13 @@
             this.deleteRowsToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.deleteRowsToolStripMenuItem.Text = "Delete Rows";
             this.deleteRowsToolStripMenuItem.Click += new System.EventHandler(this.deleteRowsToolStripMenuItem_Click);
+            // 
+            // setTargetToolStripMenuItem
+            // 
+            this.setTargetToolStripMenuItem.Name = "setTargetToolStripMenuItem";
+            this.setTargetToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.setTargetToolStripMenuItem.Text = "Set Target";
+            this.setTargetToolStripMenuItem.Click += new System.EventHandler(this.setTargetToolStripMenuItem_Click);
             // 
             // SavedRouteExpeditionControl
             // 
@@ -470,5 +479,6 @@
         private System.Windows.Forms.Label label1;
         private ExtendedControls.TextBoxBorder txtP2PDIstance;
         private ExtendedControls.TextBoxBorder txtCmlDistance;
+        private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
     }
 }
