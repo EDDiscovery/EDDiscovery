@@ -12,6 +12,8 @@ using System.Diagnostics;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using System.IO;
 using System.Globalization;
+using EDDiscovery2;
+using EDDiscovery.Import;
 
 namespace EDDiscovery
 {
@@ -20,6 +22,8 @@ namespace EDDiscovery
         private EDDiscoveryForm _discoveryForm;
 
         private List<ExportTypeClass> exportTypeList;
+        private List<EDCommander> commanders;
+        private string importFile = string.Empty;
 
         public ExportControl()
         {
@@ -39,9 +43,30 @@ namespace EDDiscovery
             txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             comboBoxCustomExportType.ItemHeight = 20;
+            
         }
 
+        public void PopulateCommanders()
+        {
+            comboBoxCommander.Enabled = false;
+            commanders = new List<EDCommander>();
+            
+            commanders.AddRange(EDDConfig.Instance.ListOfCommanders);
 
+            comboBoxCommander.DataSource = null;
+            comboBoxCommander.DataSource = commanders;
+            comboBoxCommander.ValueMember = "Nr";
+            comboBoxCommander.DisplayMember = "Name";
+
+            Application.DoEvents();
+
+            if (_discoveryForm.DisplayedCommander == -1)
+                comboBoxCommander.SelectedIndex = 0;
+            else
+                comboBoxCommander.SelectedItem = EDDiscoveryForm.EDDConfig.CurrentCommander;
+
+            comboBoxCommander.Enabled = true;
+        }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
@@ -140,12 +165,7 @@ namespace EDDiscovery
 
             MessageBox.Show(this,"ImportStars.txt has been created in " + exportfilename + Environment.NewLine + "Restart Elite Dangerous to have this file read into the galaxy map");
         }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
+        
         private void buttonExportToFilteredSystems_Click(object sender, EventArgs e)
         {
             new ExportFilteredSystems().Execute(txtExportVisited.Text);
@@ -221,5 +241,93 @@ namespace EDDiscovery
                 txtExportVisited.Text = lastsys;
         }
 
+        private void buttonImportHelp_Click(object sender, EventArgs e)
+        {
+            InfoForm dl = new InfoForm();
+            string text = EDDiscovery.Properties.Resources.ImportHelp;
+            dl.Info("Import Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
+            dl.Show();
+        }
+        
+        private void buttonImport_Click(object sender, EventArgs e)
+        {
+            long cmdrID = long.Parse(comboBoxCommander.SelectedValue.ToString());
+            if (string.IsNullOrEmpty(importFile) || ! File.Exists(importFile))
+            {
+                MessageBox.Show("An import file must be specified.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string delim = radioButtonTab.Checked ? "\t" : textBoxDelimiter.Text;
+            if (string.IsNullOrEmpty(delim))
+            {
+                MessageBox.Show("A delimiter must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            int? datecol = string.IsNullOrEmpty(textBoxArrivalDate.Text) ? null : (int?)int.Parse(textBoxArrivalDate.Text);
+            int? timecol = string.IsNullOrEmpty(textBoxArrivalTime.Text) ? null : (int?)int.Parse(textBoxArrivalTime.Text);
+            int? namecol = string.IsNullOrEmpty(textBoxSysName.Text) ? null : (int?)int.Parse(textBoxSysName.Text);
+            int? notecol = string.IsNullOrEmpty(textBoxSysNotes.Text) ? null : (int?)int.Parse(textBoxSysNotes.Text);
+            if (!namecol.HasValue)
+            {
+                MessageBox.Show("System Name column must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!datecol.HasValue && !notecol.HasValue)
+            {
+                MessageBox.Show("At least one of arrival date and system note columns must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            ImportHistory ih = new ImportHistory(importFile, delim, datecol, timecol, namecol, notecol, checkBoxImpHeader.Checked, cmdrID);
+            _discoveryForm.ShowInfoPanel("Importing, please wait...", true, Color.Gold);
+            string result;
+            if (ih.Import(out result))
+            {
+                MessageBox.Show("Import successful.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.None);
+                _discoveryForm.RefreshHistoryAsync();
+            }
+            else
+            {
+                MessageBox.Show("Import failed: " + result, "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            _discoveryForm.ShowInfoPanel("", false);
+            ih = null;
+        }
+
+        private void buttonImportFile_Click_1(object sender, EventArgs e)
+        {
+            DialogResult dr = selectImportFileDialog.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                importFile = selectImportFileDialog.FileName;
+                labelExt2.Text = "File: " + importFile.Substring(importFile.LastIndexOf("\\") + 1);
+            }
+        }
+
+        private void ValidateColumnInput(ExtendedControls.TextBoxBorder txtBox)
+        {
+            int dummy;
+            if (!(string.IsNullOrEmpty(txtBox.Text) || int.TryParse(txtBox.Text, out dummy)))
+            { txtBox.Text = ""; }
+        }
+
+        private void textBoxArrivalDate_Validating(object sender, CancelEventArgs e)
+        {
+            ValidateColumnInput(textBoxArrivalDate);
+        }
+
+        private void textBoxSysName_Validating(object sender, CancelEventArgs e)
+        {
+            ValidateColumnInput(textBoxSysName);
+        }
+
+        private void textBoxArrivalTime_TextChanged(object sender, EventArgs e)
+        {
+            ValidateColumnInput(textBoxArrivalTime);
+        }
+
+        private void textBoxSysNotes_TextChanged(object sender, EventArgs e)
+        {
+            ValidateColumnInput(textBoxSysNotes);
+        }
     }
 }
