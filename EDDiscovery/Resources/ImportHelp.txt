@@ -1,0 +1,21 @@
+History Import Help
+
+Cmdr - select the commander to import the history against.
+File - the Select button will open a file browser dialog to allow the source file to be selected.
+Header? - check this box if your import file has a header row.
+Delimiter - use the radio buttons to select 'Tab' or 'Other', if 'Other' then enter the delimiter character in the box.
+
+Arrival Date - the column in the file containing the date of arrival in a system.
+Arrival Time - the column in the file containing the time of arrival in a system, if the arrival date column includes time then leave this blank.  Leaving both Arrival Date and Arrival Time blank will cause only system notes to be imported.
+System Name - the column in the file containing the system name.
+System Notes - the column in the file containing any notes, these will be imported against the system in ED Discovery's travel history.  Leave blank if there are no notes in your import file.
+
+System Name plus at least one of Arrival Date and System Notes must be specified.
+
+*NB - count columns starting from 1 (not zero).  The default values match the required numbers for a Captain's Log export.
+
+Import - press this button to start the import process.  This can take quite a long time for a large file.
+
+If Arrival Date and Time are specified then the import process will create an FSD Jump journal entry for each line in your import file provided the history for the selected commander does not already contain an FSD Jump journal within 10 seconds of the supplied arrival date and time
+
+If a System Notes column is specified these will be imported against the systems in ED Discovery provided they exist.  If a note already exists for a column the imported value will be appended, with "|" separating the new value and the existing value.

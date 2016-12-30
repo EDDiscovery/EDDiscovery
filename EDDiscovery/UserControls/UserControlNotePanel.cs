@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
                 config = (Configuration)((int)config & ~(int)item);
         }
 
-            void Display(HistoryEntry he)
+        void Display(HistoryEntry he)
         {
             pictureBox.ClearImageList();
 
