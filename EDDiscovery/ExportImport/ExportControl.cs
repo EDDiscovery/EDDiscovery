@@ -142,30 +142,49 @@ namespace EDDiscovery
         {
             List<JournalEntry> scans = new List<JournalEntry>();
             String folder = findVisitedStarsCacheDirectory();
-            if (folder == null)
+            String exportfilename;
+            Boolean found = false;
+            if (folder != null)
             {
-                MessageBox.Show("Could not find VisitedStarsCache.dat file");
-                return;
+                found = true;
+                exportfilename = Path.Combine(folder, "ImportStars.txt");
             }
-           String exportfilename = Path.Combine(folder, "ImportStars.txt");
+            else
+            {
+                SaveFileDialog dlg = new SaveFileDialog();
 
+                dlg.Filter = "ImportedStars export| *.txt";
+                dlg.Title = "Could not find VisitedStarsCache.dat file";
+                dlg.FileName = "ImportStars.txt";
+
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+                exportfilename = dlg.FileName;
+            }
 
             scans = JournalEntry.GetByEventType(JournalTypeEnum.FSDJump, EDDiscoveryForm.EDDConfig.CurrentCmdrID, new DateTime (2014, 1,1), DateTime.UtcNow) ;
 
             var tscans = scans.ConvertAll<JournalFSDJump>(x=>(JournalFSDJump)x);
-
-            using (StreamWriter writer = new StreamWriter(exportfilename, false))
+            try
             {
-
-                foreach (var system in tscans.Select(o => o.StarSystem).Distinct())
+                using (StreamWriter writer = new StreamWriter(exportfilename, false))
                 {
-                    writer.WriteLine(system);
+
+                    foreach (var system in tscans.Select(o => o.StarSystem).Distinct())
+                    {
+                        writer.WriteLine(system);
+                    }
                 }
+                MessageBox.Show(this, "ImportStars.txt has been created in " + exportfilename + Environment.NewLine
+                    + (found ? "Restart Elite Dangerous to have this file read into the galaxy map" : ""), "Export visited stars");
+            }
+            catch (IOException)
+            {
+                MessageBox.Show(String.Format("Is file {0} open?", exportfilename), "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            MessageBox.Show(this,"ImportStars.txt has been created in " + exportfilename + Environment.NewLine + "Restart Elite Dangerous to have this file read into the galaxy map");
         }
-        
+
         private void buttonExportToFilteredSystems_Click(object sender, EventArgs e)
         {
             new ExportFilteredSystems().Execute(txtExportVisited.Text);
@@ -223,7 +242,7 @@ namespace EDDiscovery
             String folder = findVisitedStarsCacheDirectory();
             if (folder == null)
             {
-                MessageBox.Show("Could not find VisitedStarsCache.dat file");
+                MessageBox.Show("Could not find VisitedStarsCache.dat file, in commander folder","Open folder");
                 return;
             }
             Process.Start(folder);
