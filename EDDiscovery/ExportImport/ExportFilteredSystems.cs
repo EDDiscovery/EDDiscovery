@@ -64,16 +64,22 @@ namespace EDDiscovery.Export
 
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
-
-            using (StreamWriter writer = new StreamWriter(dlg.FileName, false))
+            try
             {
-                systems.Sort();
-                foreach (String system in systems)
+                using (StreamWriter writer = new StreamWriter(dlg.FileName, false))
                 {
-                    writer.WriteLine(system);
+                    systems.Sort();
+                    foreach (String system in systems)
+                    {
+                        writer.WriteLine(system);
+                    }
                 }
+                MessageBox.Show(String.Format("Export complete {0}", dlg.FileName), TITLE);
             }
-            MessageBox.Show(String.Format("Export complete {0}", dlg.FileName), TITLE);
+            catch (IOException)
+            {
+                MessageBox.Show(String.Format("Is file {0} open?", dlg.FileName), TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
