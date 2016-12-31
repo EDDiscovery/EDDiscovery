@@ -64,6 +64,7 @@
             this.insertCopiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
@@ -384,7 +385,8 @@
             this.pasteToolStripMenuItem,
             this.insertCopiedToolStripMenuItem,
             this.deleteRowsToolStripMenuItem,
-            this.setTargetToolStripMenuItem});
+            this.setTargetToolStripMenuItem,
+            this.editBookmarkToolStripMenuItem});
             this.contextMenuCopyPaste.Name = "contextMenuCopyPaste";
             this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 158);
             this.contextMenuCopyPaste.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCopyPaste_Opening);
@@ -423,6 +425,13 @@
             this.setTargetToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.setTargetToolStripMenuItem.Text = "Set Target";
             this.setTargetToolStripMenuItem.Click += new System.EventHandler(this.setTargetToolStripMenuItem_Click);
+            // 
+            // editBookmarkToolStripMenuItem
+            // 
+            this.editBookmarkToolStripMenuItem.Name = "editBookmarkToolStripMenuItem";
+            this.editBookmarkToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.editBookmarkToolStripMenuItem.Text = "Edit bookmark";
+            this.editBookmarkToolStripMenuItem.Click += new System.EventHandler(this.editBookmarkToolStripMenuItem_Click);
             // 
             // SavedRouteExpeditionControl
             // 
@@ -480,5 +489,6 @@
         private ExtendedControls.TextBoxBorder txtP2PDIstance;
         private ExtendedControls.TextBoxBorder txtCmlDistance;
         private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
     }
 }

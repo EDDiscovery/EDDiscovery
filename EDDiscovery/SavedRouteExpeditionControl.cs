@@ -906,5 +906,18 @@ namespace EDDiscovery
             RoutingUtils.setTargetSystem(_discoveryForm, (string)obj);
         }
 
+        private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+
+            if (selectedRows.Length == 0)
+                return;
+            var obj = dataGridViewRouteSystems[0, selectedRows[0]].Value;
+
+            if (obj == null)
+                return;
+
+            RoutingUtils.showBookmarkForm(_discoveryForm, SystemClass.GetSystem((string)obj), null, false);
+        }
     }
 }
