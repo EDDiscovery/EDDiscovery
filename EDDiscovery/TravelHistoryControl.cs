@@ -823,98 +823,11 @@ namespace EDDiscovery
                 string windowtitle = poi.WindowTitlePrefix + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
                 tcf.Init(ctrl, windowtitle, _discoveryForm.theme.WindowsFrame, refname, _discoveryForm.TopMost);
-            }
-
-            if (selected == PopOuts.Log)
-            {
-                UserControlLog uclog = ctrl as UserControlLog; // Add a log
-                uclog.Init(_discoveryForm, numopened);
-                uclog.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
-            }
-            else if (selected == PopOuts.NS)
-            {
-                UserControlStarDistance ucsd = ctrl as UserControlStarDistance; // Add a closest distance tab
-
-                ucsd.Init(_discoveryForm, numopened);
-                if (lastclosestsystems != null)           // if we have some, fill in this grid
-                    ucsd.FillGrid(lastclosestname, lastclosestsystems);
-            }
-            else if (selected == PopOuts.Materials)
-            {
-                UserControlMaterials ucmc = ctrl as UserControlMaterials; // Add a closest distance tab
-
-                ucmc.Init(_discoveryForm, numopened);
-                HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
-                if (curpos != null)
-                    ucmc.Display(curpos.MaterialCommodity.Sort(false));
-            }
-            else if (selected == PopOuts.Commodities)
-            {
-                UserControlCommodities ucmc = ctrl as UserControlCommodities; // Add a closest distance tab
-
-                ucmc.Init(_discoveryForm, numopened);
-                HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
-                if (curpos != null)
-                    ucmc.Display(curpos.MaterialCommodity.Sort(true));
-            }
-            else if (selected == PopOuts.Ledger)
-            {
-                UserControlLedger ucmc = ctrl as UserControlLedger; // Add a closest distance tab
-
-                ucmc.Init(_discoveryForm, numopened);
-                ucmc.Display(_discoveryForm.history.materialcommodititiesledger);
-                ucmc.OnGotoJID += GotoJID;
-            }
-            else if (selected == PopOuts.Journal)
-            {
-                UserControlJournalGrid uctg = ctrl as UserControlJournalGrid;
-                uctg.Init(_discoveryForm, numopened);
-                uctg.Display(_discoveryForm.history);
-                uctg.NoPopOutIcon();
-                uctg.NoHistoryIcon();
-            }
-            else if (selected == PopOuts.TravelGrid)    // match order in bitmap mp and comboBoxCustomPopOut
-            {
-                UserControlTravelGrid uctg = ctrl as UserControlTravelGrid;
-                uctg.Init(_discoveryForm, numopened);
-                uctg.Display(_discoveryForm.history);
-                uctg.NoPopOutIcon();
-                uctg.NoHistoryIcon();
-            }
-            else if (selected == PopOuts.ScreenShot)    // match order in bitmap mp and comboBoxCustomPopOut
-            {
-                UserControlScreenshot ucm = ctrl as UserControlScreenshot;
-                ucm.Init(_discoveryForm, numopened);
-            }
-            else if (selected == PopOuts.Statistics)    // match order in bitmap mp and comboBoxCustomPopOut
-            {
-                UserControlStats ucm = ctrl as UserControlStats;
-                ucm.Init(_discoveryForm, numopened);
-                ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
-            }
-            else if (selected == PopOuts.Scan)
-            {
-                UserControlScan ucm = ctrl as UserControlScan;
-                tcf.InitForTransparency(false, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
-                ucm.Init(_discoveryForm, numopened);
-            }
-            else if (selected == PopOuts.Spanel)
-            {
-                UserControlSpanel ucm = ctrl as UserControlSpanel;
-                tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
-                ucm.Init(_discoveryForm, numopened);
-            }
-            else if (selected == PopOuts.Trippanel)
-            {
-                UserControlTrippanel ucm = ctrl as UserControlTrippanel;
-                tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
-                ucm.Init(_discoveryForm, numopened);
-            }
-            else if (selected == PopOuts.NotePanel)
-            {
-                UserControlNotePanel ucm = ctrl as UserControlNotePanel;
-                tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
-                ucm.Init(_discoveryForm, numopened);
+                if (poi.SupportsTransparency)
+                {
+                    tcf.InitForTransparency(poi.DefaultTransparent, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
+                }
+                UserControlPostCreate(numopened, ctrl);
             }
 
             tcf.Show();
@@ -927,14 +840,7 @@ namespace EDDiscovery
 
             _discoveryForm.theme.ApplyToForm(tcf);
 
-            if (selected == PopOuts.Spanel)                            // need to theme, before draw, as it needs the theme colours set up
-                ((UserControlSpanel)tcf.UserControl).Display(_discoveryForm.history);
-            else if (selected == PopOuts.Scan)                            // need to theme, before draw, as it needs the theme colours set up
-                ((UserControlScan)tcf.UserControl).Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
-            else if (selected == PopOuts.Trippanel)                            // need to theme, before draw, as it needs the theme colours set up
-                ((UserControlTrippanel)tcf.UserControl).Display(_discoveryForm.history);
-            else if( selected==PopOuts.NotePanel)
-                ((UserControlNotePanel)tcf.UserControl).Display( _discoveryForm.history);
+            ctrl.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
         }
 
         void TGPopOut()
