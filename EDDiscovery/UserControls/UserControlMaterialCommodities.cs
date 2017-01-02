@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public void Display(HistoryEntry he, HistoryList hl)
+        public override void Display(HistoryEntry he, HistoryList hl)
         {
             Display(he?.MaterialCommodity.Sort(!materials));
         }
@@ -344,6 +344,7 @@ namespace EDDiscovery.UserControls
         public UserControlMaterials()
         {
             materials = true;
+            Name = "Materials";
         }
     }
 
@@ -352,6 +353,7 @@ namespace EDDiscovery.UserControls
         public UserControlCommodities()
         {
             materials = false;
+            Name = "Commodities";
         }
     }
 }

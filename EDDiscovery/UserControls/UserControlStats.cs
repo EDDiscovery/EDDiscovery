@@ -20,6 +20,7 @@ namespace EDDiscovery.UserControls
         public UserControlStats()
         {
             InitializeComponent();
+            Name = "Statistics";
         }
 
         public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
@@ -40,6 +41,11 @@ namespace EDDiscovery.UserControls
         private void AddNewEntry(HistoryEntry he, HistoryList hl)
         {
             Stats(he,hl);
+        }
+
+        public override void Display(HistoryEntry current, HistoryList history)
+        {
+            SelectionChanged(current, history);
         }
 
         public void SelectionChanged(HistoryEntry he, HistoryList hl)
