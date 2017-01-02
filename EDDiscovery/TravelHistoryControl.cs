@@ -205,6 +205,19 @@ namespace EDDiscovery
         {                                                           // now we can do the configure of it, with the knowledge the tab has the right size
             int displaynumber = (int)t.Tag;                         // tab strip - use tag to remember display id which helps us save context.
 
+            UserControlCommonBase uc = ctrl as UserControlCommonBase;
+
+            if (uc != null)
+            {
+                UserControlPostCreate(displaynumber, uc);
+            }
+
+            System.Diagnostics.Debug.WriteLine("And theme {0}", i);
+            _discoveryForm.theme.ApplyToControls(t);
+        }
+
+        void UserControlPostCreate(int displaynumber, UserControlCommonBase ctrl)
+        {
             if (ctrl is UserControlLog)
             {
                 UserControlLog sc = ctrl as UserControlLog;
@@ -296,9 +309,6 @@ namespace EDDiscovery
                 ucm.Text = "Scan";
                 ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
-
-            System.Diagnostics.Debug.WriteLine("And theme {0}", i);
-            _discoveryForm.theme.ApplyToControls(t);
         }
 
         void TabPopOut(TabStrip t, int i)        // pop out clicked
