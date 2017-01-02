@@ -49,6 +49,19 @@ namespace EDDiscovery.UserControls
 
         private void Stats(HistoryEntry he, HistoryList hl)
         {
+            if (tabControlCustomStats.SelectedIndex == 0)
+            {
+                StatsGeneral(he, hl);
+            }
+            if (tabControlCustomStats.SelectedIndex == 1)
+            {
+                StatsTravel(he, hl);
+            }
+
+        }
+
+        private void StatsGeneral(HistoryEntry he, HistoryList hl)
+        {
             dataGridViewStats.Rows.Clear();
 
             if (he != null)
@@ -143,6 +156,64 @@ namespace EDDiscovery.UserControls
             SizeControls();
         }
 
+        void StatsTravel(HistoryEntry he, HistoryList hl)
+        {
+            if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary)
+            {
+                dataGridViewTravel.Rows.Clear();
+                dataGridViewTravel.Columns.Clear();
+                dataGridViewTravel.Dock = DockStyle.Fill;
+                dataGridViewTravel.Visible = true;
+                    
+
+                var Col1 = new DataGridViewTextBoxColumn();
+                Col1.HeaderText = "Last";
+
+                var Col2 = new DataGridViewTextBoxColumn();
+                Col2.HeaderText = "24 hours";
+
+                var Col3 = new DataGridViewTextBoxColumn();
+                Col3.HeaderText = "week";
+
+                var Col4 = new DataGridViewTextBoxColumn();
+                Col4.HeaderText = "month";
+
+                var Col5 = new DataGridViewTextBoxColumn();
+                Col5.HeaderText = "all";
+
+                dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5 });
+
+
+                int[] intar = new int[4];
+                string[] strarr = new string[4];
+
+
+                intar[0] = hl.GetFSDJumps(new TimeSpan(1, 0, 0, 0));
+                intar[1] = hl.GetFSDJumps(new TimeSpan(7, 0, 0, 0));
+                intar[2] = hl.GetFSDJumps(new TimeSpan(30, 0, 0, 0));
+                intar[3] = hl.GetFSDJumps(new TimeSpan(36500, 0, 0, 0));
+                StatToDGV(dataGridViewTravel, "Jumps", intar);
+
+
+                intar[0] = hl.GetDocked(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetDocked(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetDocked(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetDocked(new DateTime(2012,1,1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Docked", intar);
+
+                intar[0] = hl.GetTouchDown(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetTouchDown(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetTouchDown(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetTouchDown(new DateTime(2012, 1, 1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Landed", intar);
+
+
+
+
+
+            }
+        }
+
         void SizeControls()
         { 
             int height = 0;
@@ -175,5 +246,42 @@ namespace EDDiscovery.UserControls
             dataGridViewStats.Rows.Add(rowobj);
         }
 
+        void StatToDGV(DataGridView datagrid,  string title, string[] data)
+        {
+            object[] rowobj = new object[data.Length + 1];
+
+            rowobj[0] = title;
+            for (int ii = 0; ii < data.Length; ii++)
+                rowobj[ii + 1] = data[ii];
+
+            datagrid.Rows.Add(rowobj);
+        }
+
+        void StatToDGV(DataGridView datagrid, string title, int[] data)
+        {
+            object[] rowobj = new object[data.Length + 1];
+
+            rowobj[0] = title;
+            for (int ii = 0; ii < data.Length; ii++)
+                rowobj[ii + 1] = data[ii].ToString();
+
+            datagrid.Rows.Add(rowobj);
+        }
+
+
+        private void panelData_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void userControlStatsTimeTravel_TimeModeChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void userControlStatsTimeTravel_DrawModeChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

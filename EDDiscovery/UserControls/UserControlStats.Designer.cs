@@ -30,15 +30,30 @@
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.dataGridViewStats = new System.Windows.Forms.DataGridView();
             this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mostVisited = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panelData = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
+            this.tabControlCustomStats = new ExtendedControls.TabControlCustom();
+            this.tabPageGeneral = new System.Windows.Forms.TabPage();
+            this.tabPageTravel = new System.Windows.Forms.TabPage();
+            this.userControlStatsTimeTravel = new EDDiscovery.UserControls.UserControlStatsTime();
+            this.tabPageScan = new System.Windows.Forms.TabPage();
+            this.tabPageMaterials = new System.Windows.Forms.TabPage();
+            this.tabPageCombat = new System.Windows.Forms.TabPage();
+            this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelData.SuspendLayout();
+            this.tabControlCustomStats.SuspendLayout();
+            this.tabPageGeneral.SuspendLayout();
+            this.tabPageTravel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridViewStats
@@ -93,12 +108,13 @@
             this.panelData.Controls.Add(this.dataGridViewStats);
             this.panelData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelData.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.panelData.Location = new System.Drawing.Point(0, 0);
+            this.panelData.Location = new System.Drawing.Point(3, 3);
             this.panelData.Name = "panelData";
             this.panelData.ScrollBarWidth = 20;
-            this.panelData.Size = new System.Drawing.Size(798, 752);
+            this.panelData.Size = new System.Drawing.Size(784, 720);
             this.panelData.TabIndex = 4;
             this.panelData.VerticalScrollBarDockRight = true;
+            this.panelData.Paint += new System.Windows.Forms.PaintEventHandler(this.panelData_Paint);
             // 
             // vScrollBarCustom
             // 
@@ -112,13 +128,13 @@
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 10;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(754, 0);
-            this.vScrollBarCustom.Maximum = -244;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(764, 0);
+            this.vScrollBarCustom.Maximum = -202;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(24, 752);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 720);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 8;
@@ -127,19 +143,143 @@
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -244;
-            this.vScrollBarCustom.ValueLimited = -244;
+            this.vScrollBarCustom.Value = -202;
+            this.vScrollBarCustom.ValueLimited = -202;
+            // 
+            // tabControlCustomStats
+            // 
+            this.tabControlCustomStats.Controls.Add(this.tabPageGeneral);
+            this.tabControlCustomStats.Controls.Add(this.tabPageTravel);
+            this.tabControlCustomStats.Controls.Add(this.tabPageScan);
+            this.tabControlCustomStats.Controls.Add(this.tabPageMaterials);
+            this.tabControlCustomStats.Controls.Add(this.tabPageCombat);
+            this.tabControlCustomStats.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlCustomStats.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.tabControlCustomStats.Location = new System.Drawing.Point(0, 0);
+            this.tabControlCustomStats.Name = "tabControlCustomStats";
+            this.tabControlCustomStats.SelectedIndex = 0;
+            this.tabControlCustomStats.Size = new System.Drawing.Size(798, 752);
+            this.tabControlCustomStats.TabColorScaling = 0.5F;
+            this.tabControlCustomStats.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
+            this.tabControlCustomStats.TabControlBorderColor = System.Drawing.Color.DarkGray;
+            this.tabControlCustomStats.TabDisabledScaling = 0.5F;
+            this.tabControlCustomStats.TabIndex = 5;
+            this.tabControlCustomStats.TabMouseOverColor = System.Drawing.Color.White;
+            this.tabControlCustomStats.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
+            this.tabControlCustomStats.TabNotSelectedColor = System.Drawing.Color.Gray;
+            this.tabControlCustomStats.TabOpaque = 100F;
+            this.tabControlCustomStats.TabSelectedColor = System.Drawing.Color.LightGray;
+            this.tabControlCustomStats.TabStyle = tabStyleSquare1;
+            this.tabControlCustomStats.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
+            this.tabControlCustomStats.TextSelectedColor = System.Drawing.SystemColors.ControlText;
+            // 
+            // tabPageGeneral
+            // 
+            this.tabPageGeneral.Controls.Add(this.panelData);
+            this.tabPageGeneral.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGeneral.Name = "tabPageGeneral";
+            this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageGeneral.Size = new System.Drawing.Size(790, 726);
+            this.tabPageGeneral.TabIndex = 0;
+            this.tabPageGeneral.Text = "General";
+            this.tabPageGeneral.UseVisualStyleBackColor = true;
+            // 
+            // tabPageTravel
+            // 
+            this.tabPageTravel.Controls.Add(this.dataGridViewTravel);
+            this.tabPageTravel.Controls.Add(this.userControlStatsTimeTravel);
+            this.tabPageTravel.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTravel.Name = "tabPageTravel";
+            this.tabPageTravel.Size = new System.Drawing.Size(790, 726);
+            this.tabPageTravel.TabIndex = 4;
+            this.tabPageTravel.Text = "Travel";
+            this.tabPageTravel.UseVisualStyleBackColor = true;
+            // 
+            // userControlStatsTimeTravel
+            // 
+            this.userControlStatsTimeTravel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.userControlStatsTimeTravel.DrawMode = EDDiscovery.UserControls.UserControlStatsDrawModeEnum.Graph;
+            this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
+            this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
+            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 27);
+            this.userControlStatsTimeTravel.TabIndex = 0;
+            this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
+            this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
+            this.userControlStatsTimeTravel.DrawModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_DrawModeChanged);
+            // 
+            // tabPageScan
+            // 
+            this.tabPageScan.Location = new System.Drawing.Point(4, 22);
+            this.tabPageScan.Name = "tabPageScan";
+            this.tabPageScan.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageScan.Size = new System.Drawing.Size(790, 726);
+            this.tabPageScan.TabIndex = 1;
+            this.tabPageScan.Text = "Scan";
+            this.tabPageScan.UseVisualStyleBackColor = true;
+            // 
+            // tabPageMaterials
+            // 
+            this.tabPageMaterials.Location = new System.Drawing.Point(4, 22);
+            this.tabPageMaterials.Name = "tabPageMaterials";
+            this.tabPageMaterials.Size = new System.Drawing.Size(790, 726);
+            this.tabPageMaterials.TabIndex = 2;
+            this.tabPageMaterials.Text = "Materials";
+            this.tabPageMaterials.UseVisualStyleBackColor = true;
+            // 
+            // tabPageCombat
+            // 
+            this.tabPageCombat.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCombat.Name = "tabPageCombat";
+            this.tabPageCombat.Size = new System.Drawing.Size(790, 726);
+            this.tabPageCombat.TabIndex = 3;
+            this.tabPageCombat.Text = "Combat";
+            this.tabPageCombat.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewTravel
+            // 
+            this.dataGridViewTravel.AllowUserToAddRows = false;
+            this.dataGridViewTravel.AllowUserToDeleteRows = false;
+            this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+            this.dataGridViewTravel.Location = new System.Drawing.Point(19, 46);
+            this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.RowHeadersVisible = false;
+            this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTravel.Size = new System.Drawing.Size(156, 336);
+            this.dataGridViewTravel.TabIndex = 3;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Item";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.FillWeight = 400F;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Information";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
             // UserControlStats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelData);
+            this.Controls.Add(this.tabControlCustomStats);
             this.Name = "UserControlStats";
             this.Size = new System.Drawing.Size(798, 752);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).EndInit();
             this.panelData.ResumeLayout(false);
+            this.tabControlCustomStats.ResumeLayout(false);
+            this.tabPageGeneral.ResumeLayout(false);
+            this.tabPageTravel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -152,5 +292,15 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Information;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom;
+        private ExtendedControls.TabControlCustom tabControlCustomStats;
+        private System.Windows.Forms.TabPage tabPageGeneral;
+        private System.Windows.Forms.TabPage tabPageTravel;
+        private System.Windows.Forms.TabPage tabPageScan;
+        private System.Windows.Forms.TabPage tabPageMaterials;
+        private System.Windows.Forms.TabPage tabPageCombat;
+        private UserControlStatsTime userControlStatsTimeTravel;
+        private System.Windows.Forms.DataGridView dataGridViewTravel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     }
 }
