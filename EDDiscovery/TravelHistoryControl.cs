@@ -57,25 +57,6 @@ namespace EDDiscovery
             "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
         };
 
-        public enum PopOuts        // id's.. used in tab controls, and in button pop outs button
-        {
-            // IN TABS
-            Log,
-            NS,
-            Materials,
-            Commodities,
-            Ledger,
-            Journal,
-            TravelGrid,
-            ScreenShot,
-            Statistics,
-            Scan,
-            // Not in TABS
-            Spanel,
-            Trippanel,
-            NotePanel
-        };
-
         Bitmap[] popoutbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
                                         EDDiscovery.Properties.Resources.star,      
                                         EDDiscovery.Properties.Resources.material , 
@@ -175,29 +156,7 @@ namespace EDDiscovery
         Control TabCreate(TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
             PopOuts i = (PopOuts)si;
-
-            if (i == PopOuts.Log)
-                return new UserControlLog();
-            else if (i == PopOuts.NS)
-                return new UserControlStarDistance();
-            else if (i == PopOuts.Materials)
-                return new UserControlMaterials();
-            else if (i == PopOuts.Commodities)
-                return new UserControlCommodities();
-            else if (i == PopOuts.Ledger)
-                return new UserControlLedger();
-            else if (i == PopOuts.Journal)
-                return new UserControlJournalGrid();
-            else if (i == PopOuts.TravelGrid)
-                return new UserControlTravelGrid();
-            else if (i == PopOuts.ScreenShot)
-                return new UserControlScreenshot();
-            else if (i == PopOuts.Statistics)
-                return new UserControlStats();
-            else if (i == PopOuts.Scan)
-                return new UserControlScan();
-            else
-                return null;
+            return UserControlCommonBase.Create(i);
         }
 
         void TabPostCreate(TabStrip t, Control ctrl , int i)        // called by tab strip after control has been added..

@@ -11,6 +11,25 @@ using EDDiscovery.DB;
 
 namespace EDDiscovery.UserControls
 {
+    public enum PopOuts        // id's.. used in tab controls, and in button pop outs button
+    {
+        // IN TABS
+        Log,
+        NS,
+        Materials,
+        Commodities,
+        Ledger,
+        Journal,
+        TravelGrid,
+        ScreenShot,
+        Statistics,
+        Scan,
+        // Not in TABS
+        Spanel,
+        Trippanel,
+        NotePanel
+    };
+
     public class UserControlCommonBase : UserControl
     {
         public virtual void Init( EDDiscoveryForm ed, int displayno) { }
@@ -39,6 +58,28 @@ namespace EDDiscovery.UserControls
                     return false;
             }
         }
+
+        public static UserControlCommonBase Create(PopOuts i)
+        {
+            switch (i)
+            {
+                case PopOuts.Log: return new UserControlLog();
+                case PopOuts.NS: return new UserControlStarDistance();
+                case PopOuts.Materials: return new UserControlMaterials();
+                case PopOuts.Commodities: return new UserControlCommodities();
+                case PopOuts.Ledger: return new UserControlLedger();
+                case PopOuts.Journal: return new UserControlJournalGrid();
+                case PopOuts.TravelGrid: return new UserControlTravelGrid();
+                case PopOuts.ScreenShot: return new UserControlScreenshot();
+                case PopOuts.Statistics: return new UserControlStats();
+                case PopOuts.Scan: return new UserControlScan();
+                case PopOuts.Spanel: return new UserControlSpanel();
+                case PopOuts.Trippanel: return new UserControlTrippanel();
+                case PopOuts.NotePanel: return new UserControlNotePanel();
+                default: return null;
+            }
+        }
+
 
         #region Resize
 
