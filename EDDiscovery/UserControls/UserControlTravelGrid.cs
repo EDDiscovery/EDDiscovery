@@ -81,6 +81,7 @@ namespace EDDiscovery.UserControls
         public UserControlTravelGrid()
         {
             InitializeComponent();
+            Name = "History";
         }
 
         public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc

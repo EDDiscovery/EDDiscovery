@@ -40,6 +40,7 @@ namespace EDDiscovery.UserControls
         public UserControlScan()
         {
             InitializeComponent();
+            Name = "Scan";
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
             richTextBoxInfo.Visible = false;
             toolTip.ShowAlways = true;

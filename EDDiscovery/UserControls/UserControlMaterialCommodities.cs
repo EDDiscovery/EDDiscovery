@@ -344,6 +344,7 @@ namespace EDDiscovery.UserControls
         public UserControlMaterials()
         {
             materials = true;
+            Name = "Materials";
         }
     }
 
@@ -352,6 +353,7 @@ namespace EDDiscovery.UserControls
         public UserControlCommodities()
         {
             materials = false;
+            Name = "Commodities";
         }
     }
 }

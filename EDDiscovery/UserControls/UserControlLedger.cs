@@ -31,6 +31,7 @@ namespace EDDiscovery.UserControls
         public UserControlLedger()
         {
             InitializeComponent();
+            Name = "Ledger";
         }
 
         public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
