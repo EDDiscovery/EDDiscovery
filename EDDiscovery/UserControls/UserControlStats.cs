@@ -42,6 +42,11 @@ namespace EDDiscovery.UserControls
             Stats(he,hl);
         }
 
+        public override void Display(HistoryEntry current, HistoryList history)
+        {
+            SelectionChanged(current, history);
+        }
+
         public void SelectionChanged(HistoryEntry he, HistoryList hl)
         {
             Stats(he, hl);

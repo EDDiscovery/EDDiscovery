@@ -72,6 +72,11 @@ namespace EDDiscovery.UserControls
             Display(hl.materialcommodititiesledger);
         }
 
+        public override void Display(HistoryEntry current, HistoryList history)
+        {
+            Display(history.materialcommodititiesledger);
+        }
+
         public void Display(MaterialCommoditiesLedger mc)
         {
             dataGridViewLedger.Rows.Clear();

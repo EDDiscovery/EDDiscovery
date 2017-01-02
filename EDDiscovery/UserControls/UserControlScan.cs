@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        public override void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;
             last_he = he;
