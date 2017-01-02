@@ -221,14 +221,12 @@ namespace EDDiscovery
             if (ctrl is UserControlLog)
             {
                 UserControlLog sc = ctrl as UserControlLog;
-                sc.Text = "Log";
                 sc.Init(_discoveryForm, displaynumber);
                 sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBlockColor);
             }
             else if (ctrl is UserControlStarDistance)
             {
                 UserControlStarDistance sc = ctrl as UserControlStarDistance;
-                sc.Text = "Stars";
                 sc.Init(_discoveryForm, displaynumber);
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
                     sc.FillGrid(lastclosestname, lastclosestsystems);
@@ -240,7 +238,6 @@ namespace EDDiscovery
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
                 ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
-                ucm.Text = "Materials";
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)
                     ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(false));
             }
@@ -251,7 +248,6 @@ namespace EDDiscovery
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
                 ucm.LoadLayout();
-                ucm.Text = "Commodities";
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)
                     ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(true));
             }
@@ -260,7 +256,6 @@ namespace EDDiscovery
                 UserControlLedger ucm = ctrl as UserControlLedger;
                 ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
-                ucm.Text = "Ledger";
                 ucm.OnGotoJID += GotoJID;
                 ucm.Display(_discoveryForm.history.materialcommodititiesledger);
             }
@@ -269,7 +264,6 @@ namespace EDDiscovery
                 UserControlJournalGrid ucm = ctrl as UserControlJournalGrid;
                 ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
-                ucm.Text = "Journal";
                 ucm.Display(_discoveryForm.history);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
@@ -281,7 +275,6 @@ namespace EDDiscovery
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
                 ucm.LoadLayout();
-                ucm.Text = "History";
                 ucm.Display(_discoveryForm.history);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
@@ -291,14 +284,12 @@ namespace EDDiscovery
                 UserControlScreenshot ucm = ctrl as UserControlScreenshot;
                 ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
-                ucm.Text = "Screen Shot";
             }
             else if (ctrl is UserControlStats)
             {
                 UserControlStats ucm = ctrl as UserControlStats;
                 ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
-                ucm.Text = "Statistics";
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
             else if (ctrl is UserControlScan)
@@ -306,7 +297,6 @@ namespace EDDiscovery
                 UserControlScan ucm = ctrl as UserControlScan;
                 ucm.Init(_discoveryForm, displaynumber);
                 ucm.LoadLayout();
-                ucm.Text = "Scan";
                 ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
         }
