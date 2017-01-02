@@ -33,6 +33,7 @@ namespace EDDiscovery.UserControls
     public class UserControlCommonBase : UserControl
     {
         public virtual void Init( EDDiscoveryForm ed, int displayno) { }
+        public virtual void Display(HistoryEntry current, HistoryList history) { }
 
         public virtual void LoadLayout() { }
         public virtual void Closing() { }

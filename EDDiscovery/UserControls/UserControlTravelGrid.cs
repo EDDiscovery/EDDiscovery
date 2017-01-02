@@ -127,6 +127,11 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        public override void Display(HistoryEntry current, HistoryList history)
+        {
+            Display(history);
+        }
+
         public void Display( HistoryList hl )           // rowno current.. -1 if nothing
         {
             if (hl == null)     // just for safety
