@@ -218,16 +218,17 @@ namespace EDDiscovery
 
         void UserControlPostCreate(int displaynumber, UserControlCommonBase ctrl)
         {
+            ctrl.Init(_discoveryForm, displaynumber);
+            ctrl.LoadLayout();
+
             if (ctrl is UserControlLog)
             {
                 UserControlLog sc = ctrl as UserControlLog;
-                sc.Init(_discoveryForm, displaynumber);
                 sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBlockColor);
             }
             else if (ctrl is UserControlStarDistance)
             {
                 UserControlStarDistance sc = ctrl as UserControlStarDistance;
-                sc.Init(_discoveryForm, displaynumber);
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
                     sc.FillGrid(lastclosestname, lastclosestsystems);
             }
@@ -236,67 +237,49 @@ namespace EDDiscovery
                 UserControlMaterials ucm = ctrl as UserControlMaterials;
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)
                     ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(false));
             }
             else if (ctrl is UserControlCommodities)
             {
                 UserControlCommodities ucm = ctrl as UserControlCommodities;
-                ucm.Init(_discoveryForm, displaynumber);
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
-                ucm.LoadLayout();
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)
                     ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(true));
             }
             else if (ctrl is UserControlLedger)
             {
                 UserControlLedger ucm = ctrl as UserControlLedger;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
                 ucm.OnGotoJID += GotoJID;
                 ucm.Display(_discoveryForm.history.materialcommodititiesledger);
             }
             else if (ctrl is UserControlJournalGrid)
             {
                 UserControlJournalGrid ucm = ctrl as UserControlJournalGrid;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
-                ucm.Display(_discoveryForm.history);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
+                ucm.Display(_discoveryForm.history);
             }
             else if (ctrl is UserControlTravelGrid)
             {
                 UserControlTravelGrid ucm = ctrl as UserControlTravelGrid;
-                ucm.Init(_discoveryForm, displaynumber);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
-                ucm.LoadLayout();
                 ucm.Display(_discoveryForm.history);
-                ucm.NoHistoryIcon();
-                ucm.NoPopOutIcon();
             }
             else if (ctrl is UserControlScreenshot)
             {
                 UserControlScreenshot ucm = ctrl as UserControlScreenshot;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
             }
             else if (ctrl is UserControlStats)
             {
                 UserControlStats ucm = ctrl as UserControlStats;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
             else if (ctrl is UserControlScan)
             {
                 UserControlScan ucm = ctrl as UserControlScan;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
                 ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
         }
