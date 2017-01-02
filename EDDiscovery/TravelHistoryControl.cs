@@ -210,6 +210,7 @@ namespace EDDiscovery
             if (uc != null)
             {
                 UserControlPostCreate(displaynumber, uc);
+                uc.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
 
             System.Diagnostics.Debug.WriteLine("And theme {0}", i);
@@ -237,36 +238,29 @@ namespace EDDiscovery
                 UserControlMaterials ucm = ctrl as UserControlMaterials;
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
-                if (userControlTravelGrid.GetCurrentHistoryEntry != null)
-                    ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(false));
             }
             else if (ctrl is UserControlCommodities)
             {
                 UserControlCommodities ucm = ctrl as UserControlCommodities;
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
-                if (userControlTravelGrid.GetCurrentHistoryEntry != null)
-                    ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(true));
             }
             else if (ctrl is UserControlLedger)
             {
                 UserControlLedger ucm = ctrl as UserControlLedger;
                 ucm.OnGotoJID += GotoJID;
-                ucm.Display(_discoveryForm.history.materialcommodititiesledger);
             }
             else if (ctrl is UserControlJournalGrid)
             {
                 UserControlJournalGrid ucm = ctrl as UserControlJournalGrid;
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
-                ucm.Display(_discoveryForm.history);
             }
             else if (ctrl is UserControlTravelGrid)
             {
                 UserControlTravelGrid ucm = ctrl as UserControlTravelGrid;
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
-                ucm.Display(_discoveryForm.history);
             }
             else if (ctrl is UserControlScreenshot)
             {
@@ -275,12 +269,10 @@ namespace EDDiscovery
             else if (ctrl is UserControlStats)
             {
                 UserControlStats ucm = ctrl as UserControlStats;
-                ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
             else if (ctrl is UserControlScan)
             {
                 UserControlScan ucm = ctrl as UserControlScan;
-                ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
         }
 
