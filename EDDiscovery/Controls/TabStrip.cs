@@ -86,7 +86,7 @@ namespace EDDiscovery.Controls
                     OnPostCreateTab(this, CurrentControl, i);       // now tab is in control set, give it a chance to configure itself and set its name
 
                     panelSelected.BackgroundImage = Images[i];
-                    labelCurrent.Text = CurrentControl.Text;
+                    labelCurrent.Text = CurrentControl.Name;
                     labelControlText.Location = new Point(labelCurrent.Location.X + labelCurrent.Width + 16, labelControlText.Location.Y);
                 }
             }
