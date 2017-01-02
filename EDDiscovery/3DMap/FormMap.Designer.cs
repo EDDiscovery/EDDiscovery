@@ -37,7 +37,7 @@ namespace EDDiscovery2
             {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMap));
-            this.glControl = new OpenTK.GLControl();
+            this.glControlContainer = new Panel();
             this.textboxFrom = new ExtendedControls.AutoCompleteTextBox();
             this.labelSystemCoords = new System.Windows.Forms.Label();
             this.toolStripShowAllStars = new System.Windows.Forms.ToolStrip();
@@ -107,24 +107,16 @@ namespace EDDiscovery2
             this.panelRight.SuspendLayout();
             this.SuspendLayout();
             // 
-            // glControl
+            // glControlContainer
             // 
-            this.glControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.glControlContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.glControl.BackColor = System.Drawing.Color.Black;
-            this.glControl.Location = new System.Drawing.Point(0, 44);
-            this.glControl.Name = "glControl";
-            this.glControl.Size = new System.Drawing.Size(1114, 753);
-            this.glControl.TabIndex = 0;
-            this.glControl.VSync = true;
-            this.glControl.Load += new System.EventHandler(this.glControl_Load);
-            this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
-            this.glControl.DoubleClick += new System.EventHandler(this.glControl_DoubleClick);
-            this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
-            this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
-            this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
-            this.glControl.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl_OnMouseWheel);
+            this.glControlContainer.BackColor = System.Drawing.Color.Black;
+            this.glControlContainer.Location = new System.Drawing.Point(0, 44);
+            this.glControlContainer.Name = "glControlContainer";
+            this.glControlContainer.Size = new System.Drawing.Size(1114, 753);
+            this.glControlContainer.TabIndex = 0;
             // 
             // textboxFrom
             // 
@@ -760,7 +752,7 @@ namespace EDDiscovery2
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1114, 822);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.glControl);
+            this.Controls.Add(this.glControlContainer);
             this.Controls.Add(this.toolStripShowAllStars);
             this.Controls.Add(this.panelRight);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -790,7 +782,7 @@ namespace EDDiscovery2
 
             #endregion
 
-            private OpenTK.GLControl glControl;
+            private Panel glControlContainer;
             internal ExtendedControls.AutoCompleteTextBox textboxFrom;
             private Label labelSystemCoords;
         private ToolStrip toolStripShowAllStars;
