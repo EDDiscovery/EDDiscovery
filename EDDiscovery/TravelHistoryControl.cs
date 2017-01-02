@@ -809,20 +809,19 @@ namespace EDDiscovery
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
             tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 
+            UserControlCommonBase ctrl = UserControlCommonBase.Create(selected);
+            int numopened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType()) + 1;
+
             if (selected == PopOuts.Log)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlLog)) + 1;
-
-                UserControlLog uclog = new UserControlLog(); // Add a log
+                UserControlLog uclog = ctrl as UserControlLog; // Add a log
                 tcf.Init(uclog, "Log " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Log" + numopened, _discoveryForm.TopMost);
                 uclog.Init(_discoveryForm, numopened);
                 uclog.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
             }
             else if (selected == PopOuts.NS)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlStarDistance)) + 1;
-
-                UserControlStarDistance ucsd = new UserControlStarDistance(); // Add a closest distance tab
+                UserControlStarDistance ucsd = ctrl as UserControlStarDistance; // Add a closest distance tab
                 tcf.Init(ucsd, "Nearest Stars " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame,  "StarDistance" + numopened, _discoveryForm.TopMost);
 
                 ucsd.Init(_discoveryForm, numopened);
@@ -831,9 +830,7 @@ namespace EDDiscovery
             }
             else if (selected == PopOuts.Materials)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlMaterials)) + 1;
-
-                UserControlMaterials ucmc = new UserControlMaterials(); // Add a closest distance tab
+                UserControlMaterials ucmc = ctrl as UserControlMaterials; // Add a closest distance tab
                 tcf.Init(ucmc, "Materials " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Materials" + numopened, _discoveryForm.TopMost);
 
                 ucmc.Init(_discoveryForm, numopened);
@@ -843,9 +840,7 @@ namespace EDDiscovery
             }
             else if (selected == PopOuts.Commodities)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlCommodities)) + 1;
-
-                UserControlCommodities ucmc = new UserControlCommodities(); // Add a closest distance tab
+                UserControlCommodities ucmc = ctrl as UserControlCommodities; // Add a closest distance tab
                 tcf.Init(ucmc, "Commodities " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Commodities" + numopened, _discoveryForm.TopMost);
 
                 ucmc.Init(_discoveryForm, numopened);
@@ -855,9 +850,7 @@ namespace EDDiscovery
             }
             else if (selected == PopOuts.Ledger)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlLedger)) + 1;
-
-                UserControlLedger ucmc = new UserControlLedger(); // Add a closest distance tab
+                UserControlLedger ucmc = ctrl as UserControlLedger; // Add a closest distance tab
                 tcf.Init(ucmc, "Ledger " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Ledger" + numopened, _discoveryForm.TopMost);
 
                 ucmc.Init(_discoveryForm, numopened);
@@ -866,8 +859,7 @@ namespace EDDiscovery
             }
             else if (selected == PopOuts.Journal)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlJournalGrid)) + 1;  // used to determine name and also key for DB
-                UserControlJournalGrid uctg = new UserControlJournalGrid();
+                UserControlJournalGrid uctg = ctrl as UserControlJournalGrid;
                 tcf.Init(uctg, "Journal History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "JournalHistory" + numopened, _discoveryForm.TopMost);
                 uctg.Init(_discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
@@ -876,8 +868,7 @@ namespace EDDiscovery
             }
             else if (selected == PopOuts.TravelGrid)    // match order in bitmap mp and comboBoxCustomPopOut
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlTravelGrid)) + 1;  // used to determine name and also key for DB
-                UserControlTravelGrid uctg = new UserControlTravelGrid();
+                UserControlTravelGrid uctg = ctrl as UserControlTravelGrid;
                 tcf.Init(uctg,"Travel History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "TravelHistory" + numopened, _discoveryForm.TopMost);
                 uctg.Init(_discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
@@ -886,47 +877,41 @@ namespace EDDiscovery
             }
             else if (selected == PopOuts.ScreenShot)    // match order in bitmap mp and comboBoxCustomPopOut
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlScreenshot)) + 1;  // used to determine name and also key for DB
-                UserControlScreenshot ucm = new UserControlScreenshot();
+                UserControlScreenshot ucm = ctrl as UserControlScreenshot;
                 tcf.Init(ucm, "ScreenShot " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "ScreenShot" + numopened, _discoveryForm.TopMost);
                 ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.Statistics)    // match order in bitmap mp and comboBoxCustomPopOut
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlStats)) + 1;  // used to determine name and also key for DB
-                UserControlStats ucm = new UserControlStats();
+                UserControlStats ucm = ctrl as UserControlStats;
                 tcf.Init(ucm,"Statistics " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Stats" + numopened, _discoveryForm.TopMost);
                 ucm.Init(_discoveryForm, numopened);
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
             else if (selected == PopOuts.Scan)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlScan)) + 1;  // used to determine name and also key for DB
-                UserControlScan ucm = new UserControlScan();
+                UserControlScan ucm = ctrl as UserControlScan;
                 tcf.Init(ucm, "Scan " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Scan" + numopened, _discoveryForm.TopMost);
                 tcf.InitForTransparency(false, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.Spanel)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlSpanel)) + 1;  // used to determine name and also key for DB
-                UserControlSpanel ucm = new UserControlSpanel();
+                UserControlSpanel ucm = ctrl as UserControlSpanel;
                 tcf.Init(ucm, "Summary Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Spanel" + numopened, true);
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.Trippanel)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlTrippanel)) + 1;  // used to determine name and also key for DB
-                UserControlTrippanel ucm = new UserControlTrippanel();
+                UserControlTrippanel ucm = ctrl as UserControlTrippanel;
                 tcf.Init(ucm, "Trip Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Trippanel" + numopened, true);
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.NotePanel)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlNotePanel)) + 1;  // used to determine name and also key for DB
-                UserControlNotePanel ucm = new UserControlNotePanel();
+                UserControlNotePanel ucm = ctrl as UserControlNotePanel;
                 tcf.Init(ucm, "Note Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "NotePanel" + numopened, true);
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
