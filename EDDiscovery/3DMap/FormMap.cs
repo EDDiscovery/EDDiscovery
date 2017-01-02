@@ -111,6 +111,7 @@ namespace EDDiscovery2
         KeyboardActions _kbdActions = new KeyboardActions();        // needed to be held because it remembers key downs
 
         bool _allowresizematrixchange = false;           // prevent resize causing matrix calc before paint
+        private OpenTK.GLControl glControl;
 
         #endregion
 
@@ -281,6 +282,25 @@ namespace EDDiscovery2
         {
             InitializeComponent();
             OpenTK.Toolkit.Init();
+            // 
+            // glControl
+            // 
+            this.glControlContainer.SuspendLayout();
+            this.glControl = new GLControl();
+            this.glControl.Dock = DockStyle.Fill;
+            this.glControl.BackColor = System.Drawing.Color.Black;
+            this.glControl.Name = "glControl";
+            this.glControl.TabIndex = 0;
+            this.glControl.VSync = true;
+            this.glControl.Load += new System.EventHandler(this.glControl_Load);
+            this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
+            this.glControl.DoubleClick += new System.EventHandler(this.glControl_DoubleClick);
+            this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
+            this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
+            this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
+            this.glControl.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl_OnMouseWheel);
+            this.glControlContainer.Controls.Add(this.glControl);
+            this.glControlContainer.ResumeLayout();
         }
 
         private void FormMap_Load(object sender, EventArgs e)
