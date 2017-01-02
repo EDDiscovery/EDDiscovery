@@ -639,6 +639,14 @@ namespace EDDiscovery
             return (from s in list select s.Scooped).Sum();
         }
 
+        public double GetTraveledLy(DateTime start, DateTime to)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
+
+            return (from s in list select s.JumpDist).Sum();
+        }
+
+
 
         public int GetFSDJumpsBeforeUTC(DateTime utc)
         {

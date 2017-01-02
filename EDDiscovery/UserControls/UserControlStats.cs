@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Columns.Clear();
                 dataGridViewTravel.Dock = DockStyle.Fill;
                 dataGridViewTravel.Visible = true;
-                    
+
 
                 var Col1 = new DataGridViewTextBoxColumn();
                 Col1.HeaderText = "Last";
@@ -194,17 +194,24 @@ namespace EDDiscovery.UserControls
                 string[] strarr = new string[4];
 
 
-                intar[0] = hl.GetFSDJumps(new TimeSpan(1, 0, 0, 0));
-                intar[1] = hl.GetFSDJumps(new TimeSpan(7, 0, 0, 0));
-                intar[2] = hl.GetFSDJumps(new TimeSpan(30, 0, 0, 0));
-                intar[3] = hl.GetFSDJumps(new TimeSpan(36500, 0, 0, 0));
+                intar[0] = hl.GetFSDJumps(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetFSDJumps(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetFSDJumps(DateTime.Now.AddMonths(-1), DateTime.Now);
+                intar[3] = hl.GetFSDJumps(new DateTime(2012, 1, 1), DateTime.Now);
                 StatToDGV(dataGridViewTravel, "Jumps", intar);
+
+                strarr[0] = hl.GetTraveledLy(DateTime.Now.AddDays(-1), DateTime.Now).ToString("0.00");
+                strarr[1] = hl.GetTraveledLy(DateTime.Now.AddDays(-7), DateTime.Now).ToString("0.00");
+                strarr[2] = hl.GetTraveledLy(DateTime.Now.AddDays(-30), DateTime.Now).ToString("0.00");
+                strarr[3] = hl.GetTraveledLy(new DateTime(2012, 1, 1), DateTime.Now).ToString("0.00");
+                StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
+
 
 
                 intar[0] = hl.GetDocked(DateTime.Now.AddDays(-1), DateTime.Now);
                 intar[1] = hl.GetDocked(DateTime.Now.AddDays(-7), DateTime.Now);
                 intar[2] = hl.GetDocked(DateTime.Now.AddDays(-30), DateTime.Now);
-                intar[3] = hl.GetDocked(new DateTime(2012,1,1), DateTime.Now);
+                intar[3] = hl.GetDocked(new DateTime(2012, 1, 1), DateTime.Now);
                 StatToDGV(dataGridViewTravel, "Docked", intar);
 
                 intar[0] = hl.GetTouchDown(DateTime.Now.AddDays(-1), DateTime.Now);
@@ -214,11 +221,122 @@ namespace EDDiscovery.UserControls
                 StatToDGV(dataGridViewTravel, "Landed", intar);
 
 
+                intar[0] = hl.GetHeatWarning(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetHeatWarning(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetHeatWarning(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetHeatWarning(new DateTime(2012, 1, 1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Heat Warning", intar);
+
+                intar[0] = hl.GetHeatDamage(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetHeatDamage(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetHeatDamage(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetHeatDamage(new DateTime(2012, 1, 1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Heat damage", intar);
+
+                intar[0] = hl.GetFuelScooped(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetFuelScooped(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetFuelScooped(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetFuelScooped(new DateTime(2012, 1, 1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Fuel Scooped", intar);
+
+                strarr[0] = hl.GetFuelScoopedTons(DateTime.Now.AddDays(-1), DateTime.Now).ToString("0.00");
+                strarr[1] = hl.GetFuelScoopedTons(DateTime.Now.AddDays(-7), DateTime.Now).ToString("0.00");
+                strarr[2] = hl.GetFuelScoopedTons(DateTime.Now.AddDays(-30), DateTime.Now).ToString("0.00");
+                strarr[3] = hl.GetFuelScoopedTons(new DateTime(2012, 1, 1), DateTime.Now).ToString("0.00");
+                StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
+            }
+            else
+            {
+                int intervals = 10;
+                DateTime[] timeintervals = new DateTime[intervals + 1];
+                DateTime currentday = DateTime.Today;
+
+
+                if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Day)
+                {
+                    timeintervals[0] = currentday.AddDays(1);
+                    for (int ii = 0; ii < intervals; ii++)
+                        timeintervals[ii + 1] = timeintervals[ii].AddDays(-1);
+
+                }
+                else if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Week)
+                {
+                    DateTime startOfWeek = currentday.AddDays(-1 * (int)(DateTime.Today.DayOfWeek -1));
+                    timeintervals[0] = startOfWeek.AddDays(7);
+                    for (int ii = 0; ii < intervals; ii++)
+                        timeintervals[ii + 1] = timeintervals[ii].AddDays(-7);
+
+                }
+                else  // month
+                {
+                    DateTime startOfMonth = new DateTime(currentday.Year, currentday.Month, 1);
+                    timeintervals[0] = startOfMonth.AddMonths(1);
+                    for (int ii = 0; ii < intervals; ii++)
+                        timeintervals[ii + 1] = timeintervals[ii].AddMonths(-1);
+                }
+                string[] strarr = new string[intervals];
+
+                dataGridViewTravel.Rows.Clear();
+                dataGridViewTravel.Columns.Clear();
+                dataGridViewTravel.Dock = DockStyle.Fill;
+                dataGridViewTravel.Visible = true;
+
+
+                var Col1 = new DataGridViewTextBoxColumn();
+                Col1.HeaderText = "";
+
+                dataGridViewTravel.Columns.Add(Col1);
+
+                for (int ii = 0; ii < intervals; ii++)
+                {
+                    var Col2 = new DataGridViewTextBoxColumn();
+                    Col2.HeaderText = timeintervals[ii+1].ToShortDateString();
+                    dataGridViewTravel.Columns.Add(Col2);
+                }
+
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDJumps(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                StatToDGV(dataGridViewTravel, "Jumps", strarr);
+
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00");
+                StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
+
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetDocked(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                    StatToDGV(dataGridViewTravel, "Docked", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetTouchDown(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                StatToDGV(dataGridViewTravel, "Landed", strarr);
+
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetHeatWarning(timeintervals[ii + 1], timeintervals[ii]).ToString(); 
+                StatToDGV(dataGridViewTravel, "Heat Warning", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetHeatDamage(timeintervals[ii + 1], timeintervals[ii]).ToString(); 
+                StatToDGV(dataGridViewTravel, "Heat damage", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFuelScooped(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                StatToDGV(dataGridViewTravel, "Fuel Scooped", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFuelScoopedTons(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00"); 
+                StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
+
 
 
 
             }
         }
+
+        
 
         void SizeControls()
         { 
