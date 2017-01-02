@@ -262,18 +262,6 @@ namespace EDDiscovery
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
             }
-            else if (ctrl is UserControlScreenshot)
-            {
-                UserControlScreenshot ucm = ctrl as UserControlScreenshot;
-            }
-            else if (ctrl is UserControlStats)
-            {
-                UserControlStats ucm = ctrl as UserControlStats;
-            }
-            else if (ctrl is UserControlScan)
-            {
-                UserControlScan ucm = ctrl as UserControlScan;
-            }
         }
 
         void TabPopOut(TabStrip t, int i)        // pop out clicked
