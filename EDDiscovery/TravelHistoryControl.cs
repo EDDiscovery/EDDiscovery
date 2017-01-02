@@ -81,7 +81,49 @@ namespace EDDiscovery
                                                "Display scan data"
                                             };
 
-        
+        class PopOutInfo
+        {
+            public string WindowTitlePrefix;
+            public string WindowRefName;
+            public Bitmap TabIcon;
+            public string ToolTip;
+            public bool SupportsTransparency;
+            public bool DefaultTransparent;
+
+            public PopOutInfo()
+            {
+                WindowTitlePrefix = "";
+                WindowRefName = "Unknown";
+            }
+
+            public PopOutInfo(string prefix, string rf, Bitmap icon = null, string tooltip = null, bool? transparent = null)
+            {
+                WindowTitlePrefix = prefix;
+                WindowRefName = rf;
+                TabIcon = icon;
+                ToolTip = tooltip;
+                SupportsTransparency = transparent != null;
+                DefaultTransparent = transparent ?? false;
+            }
+        }
+
+        Dictionary<PopOuts, PopOutInfo> popoutinfo = new Dictionary<PopOuts, PopOutInfo>
+        {
+            { PopOuts.Log, new PopOutInfo("Log", "Log", EDDiscovery.Properties.Resources.Log, "Display the program log") },
+            { PopOuts.NS, new PopOutInfo("Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star, "Display the nearest stars to the currently selected entry") },
+            { PopOuts.Materials, new PopOutInfo("Materials", "Materials", EDDiscovery.Properties.Resources.material, "Display the material count at the currently selected entry") },
+            { PopOuts.Commodities, new PopOutInfo("Commodities", "Commodities", EDDiscovery.Properties.Resources.commodities, "Display the commodity count at the currently selected entry") },
+            { PopOuts.Ledger, new PopOutInfo("Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger, "Display a ledger of cash related entries") },
+            { PopOuts.Journal, new PopOutInfo("Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal, "Display the journal grid view") },
+            { PopOuts.TravelGrid, new PopOutInfo("Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "Display the history grid view") },
+            { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EDDiscovery.Properties.Resources.screenshot, "Display the screen shot view") },
+            { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
+            { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, "Display scan data", transparent: false) },
+            { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
+            { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
+            { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
+        };
+
         #region Initialisation
 
         public TravelHistoryControl()
@@ -812,17 +854,23 @@ namespace EDDiscovery
             UserControlCommonBase ctrl = UserControlCommonBase.Create(selected);
             int numopened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType()) + 1;
 
+            if (ctrl != null)
+            {
+                PopOutInfo poi = popoutinfo.ContainsKey(selected) ? popoutinfo[selected] : new PopOutInfo();
+                string windowtitle = poi.WindowTitlePrefix + " " + ((numopened > 1) ? numopened.ToString() : "");
+                string refname = poi.WindowRefName + numopened.ToString();
+                tcf.Init(ctrl, windowtitle, _discoveryForm.theme.WindowsFrame, refname, _discoveryForm.TopMost);
+            }
+
             if (selected == PopOuts.Log)
             {
                 UserControlLog uclog = ctrl as UserControlLog; // Add a log
-                tcf.Init(uclog, "Log " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Log" + numopened, _discoveryForm.TopMost);
                 uclog.Init(_discoveryForm, numopened);
                 uclog.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
             }
             else if (selected == PopOuts.NS)
             {
                 UserControlStarDistance ucsd = ctrl as UserControlStarDistance; // Add a closest distance tab
-                tcf.Init(ucsd, "Nearest Stars " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame,  "StarDistance" + numopened, _discoveryForm.TopMost);
 
                 ucsd.Init(_discoveryForm, numopened);
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
@@ -831,7 +879,6 @@ namespace EDDiscovery
             else if (selected == PopOuts.Materials)
             {
                 UserControlMaterials ucmc = ctrl as UserControlMaterials; // Add a closest distance tab
-                tcf.Init(ucmc, "Materials " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Materials" + numopened, _discoveryForm.TopMost);
 
                 ucmc.Init(_discoveryForm, numopened);
                 HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
@@ -841,7 +888,6 @@ namespace EDDiscovery
             else if (selected == PopOuts.Commodities)
             {
                 UserControlCommodities ucmc = ctrl as UserControlCommodities; // Add a closest distance tab
-                tcf.Init(ucmc, "Commodities " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Commodities" + numopened, _discoveryForm.TopMost);
 
                 ucmc.Init(_discoveryForm, numopened);
                 HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
@@ -851,7 +897,6 @@ namespace EDDiscovery
             else if (selected == PopOuts.Ledger)
             {
                 UserControlLedger ucmc = ctrl as UserControlLedger; // Add a closest distance tab
-                tcf.Init(ucmc, "Ledger " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Ledger" + numopened, _discoveryForm.TopMost);
 
                 ucmc.Init(_discoveryForm, numopened);
                 ucmc.Display(_discoveryForm.history.materialcommodititiesledger);
@@ -860,7 +905,6 @@ namespace EDDiscovery
             else if (selected == PopOuts.Journal)
             {
                 UserControlJournalGrid uctg = ctrl as UserControlJournalGrid;
-                tcf.Init(uctg, "Journal History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "JournalHistory" + numopened, _discoveryForm.TopMost);
                 uctg.Init(_discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
                 uctg.NoPopOutIcon();
@@ -869,7 +913,6 @@ namespace EDDiscovery
             else if (selected == PopOuts.TravelGrid)    // match order in bitmap mp and comboBoxCustomPopOut
             {
                 UserControlTravelGrid uctg = ctrl as UserControlTravelGrid;
-                tcf.Init(uctg,"Travel History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "TravelHistory" + numopened, _discoveryForm.TopMost);
                 uctg.Init(_discoveryForm, numopened);
                 uctg.Display(_discoveryForm.history);
                 uctg.NoPopOutIcon();
@@ -878,41 +921,35 @@ namespace EDDiscovery
             else if (selected == PopOuts.ScreenShot)    // match order in bitmap mp and comboBoxCustomPopOut
             {
                 UserControlScreenshot ucm = ctrl as UserControlScreenshot;
-                tcf.Init(ucm, "ScreenShot " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "ScreenShot" + numopened, _discoveryForm.TopMost);
                 ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.Statistics)    // match order in bitmap mp and comboBoxCustomPopOut
             {
                 UserControlStats ucm = ctrl as UserControlStats;
-                tcf.Init(ucm,"Statistics " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Stats" + numopened, _discoveryForm.TopMost);
                 ucm.Init(_discoveryForm, numopened);
                 ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
             else if (selected == PopOuts.Scan)
             {
                 UserControlScan ucm = ctrl as UserControlScan;
-                tcf.Init(ucm, "Scan " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Scan" + numopened, _discoveryForm.TopMost);
                 tcf.InitForTransparency(false, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.Spanel)
             {
                 UserControlSpanel ucm = ctrl as UserControlSpanel;
-                tcf.Init(ucm, "Summary Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Spanel" + numopened, true);
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.Trippanel)
             {
                 UserControlTrippanel ucm = ctrl as UserControlTrippanel;
-                tcf.Init(ucm, "Trip Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Trippanel" + numopened, true);
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
             else if (selected == PopOuts.NotePanel)
             {
                 UserControlNotePanel ucm = ctrl as UserControlNotePanel;
-                tcf.Init(ucm, "Note Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "NotePanel" + numopened, true);
                 tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 ucm.Init(_discoveryForm, numopened);
             }
