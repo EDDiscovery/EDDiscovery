@@ -21,6 +21,7 @@ namespace EDDiscovery.UserControls
         public UserControlScreenshot()
         {
             InitializeComponent();
+            Name = "Screen Shot";
             pictureBox.Visible = false;
         }
 

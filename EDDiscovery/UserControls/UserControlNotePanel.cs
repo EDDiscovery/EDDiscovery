@@ -89,6 +89,11 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
+        public override void Display(HistoryEntry current, HistoryList history)
+        {
+            Display(history);
+        }
+
         public void Display( HistoryList hl)            // when user clicks around..  HE may be null here
         {
             Display(hl.GetLastFSD);

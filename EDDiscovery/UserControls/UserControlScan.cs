@@ -40,6 +40,7 @@ namespace EDDiscovery.UserControls
         public UserControlScan()
         {
             InitializeComponent();
+            Name = "Scan";
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
             richTextBoxInfo.Visible = false;
             toolTip.ShowAlways = true;
@@ -112,7 +113,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        public override void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;
             last_he = he;

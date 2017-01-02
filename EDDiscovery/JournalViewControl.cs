@@ -10,6 +10,7 @@ using EDDiscovery.EliteDangerous;
 using EDDiscovery.DB;
 using EDDiscovery.Controls;
 using EDDiscovery2.EDSM;
+using EDDiscovery.UserControls;
 
 namespace EDDiscovery
 {
@@ -49,7 +50,7 @@ namespace EDDiscovery
 
         public void PopOut()
         {
-            discoveryform.TravelControl.PopOut(TravelHistoryControl.PopOuts.Journal);
+            discoveryform.TravelControl.PopOut(PopOuts.Journal);
         }
 
         #endregion
