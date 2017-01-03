@@ -1086,5 +1086,12 @@ namespace EDDiscovery
 
         #endregion
 
+        private JSONFilter fieldfilter = new JSONFilter();
+
+        private void buttonAction_Click(object sender, EventArgs e)
+        {
+            _discoveryForm.ConfigureActions();
+        }
+
     }
 }

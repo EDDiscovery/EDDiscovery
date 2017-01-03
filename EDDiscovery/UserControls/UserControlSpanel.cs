@@ -821,7 +821,7 @@ namespace EDDiscovery.UserControls
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EDDiscovery2.JSONFiltersForm frm = new EDDiscovery2.JSONFiltersForm();
-            frm.Init("Summary Panel: Filter out fields", "Filter Out", true, discoveryform.theme, fieldfilter);
+            frm.InitFilter("Summary Panel: Filter out fields", discoveryform.theme, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

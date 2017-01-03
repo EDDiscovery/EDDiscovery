@@ -816,7 +816,7 @@ namespace EDDiscovery.UserControls
         private void buttonField_Click(object sender, EventArgs e)
         {
             EDDiscovery2.JSONFiltersForm frm = new JSONFiltersForm();
-            frm.Init("History: Filter out fields", "Filter Out", true, discoveryform.theme, fieldfilter);
+            frm.InitFilter("History: Filter out fields", discoveryform.theme, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

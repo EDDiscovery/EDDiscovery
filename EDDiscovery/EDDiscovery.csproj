@@ -186,6 +186,18 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Actions\Action.cs" />
+    <Compile Include="Actions\ActionLog.cs" />
+    <Compile Include="Actions\ActionIf.cs" />
+    <Compile Include="Actions\ActionPlay.cs" />
+    <Compile Include="Actions\ActionProgramForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ActionProgramForm.Designer.cs">
+      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\ActionSay.cs" />
+    <Compile Include="Actions\ActionCmd.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -365,10 +377,10 @@
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\JSONFiltersForm.cs">
+    <Compile Include="JSON\JSONFiltersForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\JSONFiltersForm.Designer.cs">
+    <Compile Include="JSON\JSONFiltersForm.Designer.cs">
       <DependentUpon>JSONFiltersForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TextBoxEntry.cs">
@@ -694,6 +706,9 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Actions\ActionProgramForm.resx">
+      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\RichTextBoxScroll.resx">
       <DependentUpon>RichTextBoxScroll.cs</DependentUpon>
     </EmbeddedResource>
@@ -703,7 +718,7 @@
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\JSONFiltersForm.resx">
+    <EmbeddedResource Include="JSON\JSONFiltersForm.resx">
       <DependentUpon>JSONFiltersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
