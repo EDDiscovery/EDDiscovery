@@ -1,4 +1,5 @@
 ﻿using EDDiscovery;
+using EDDiscovery.Actions;
 using EDDiscovery.DB;
 using EDDiscovery2;
 using System;
@@ -17,6 +18,9 @@ namespace EDDiscovery2
     public partial class JSONFiltersForm : Form
     {
         public JSONFilter result;
+        EDDiscovery.Actions.ActionProgramList actionprogs;
+        List<string> eventlist;
+        List<string> fieldnames; // null means look up dynamically
 
         class Group
         {
@@ -25,16 +29,18 @@ namespace EDDiscovery2
             public ExtendedControls.ButtonExt upbutton;
             public ExtendedControls.ComboBoxCustom evlist;
             public ExtendedControls.ComboBoxCustom actionlist;
+            public ExtendedControls.ButtonExt actionconfig;
             public ExtendedControls.ComboBoxCustom innercond;
             public ExtendedControls.ComboBoxCustom outercond;
             public Label outerlabel;
+
+            public string actiondata;
         };
 
         List<Group> groups;
-        string actionlist;
         bool allowoutercond;
         public int panelwidth;
-        public int hoffset;
+        public int condxoffset;
         EDDiscovery2.EDDTheme theme;
         const int vscrollmargin = 10;
         const int panelmargin = 3;
@@ -46,20 +52,50 @@ namespace EDDiscovery2
             groups = new List<Group>();
         }
 
-        public void Init(string t, string aclist, bool outc, EDDiscovery2.EDDTheme th, JSONFilter j = null)  // if aclist has one action, action selector not shown. 
+        public void InitFilter(string t,  EDDiscovery2.EDDTheme th, JSONFilter j = null)
+        {
+            List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
+            events.Add("All");
+            Init(t, events, null, null, true, th, j);
+        }
+
+        public void InitAction(string t, EDDiscovery.Actions.ActionProgramList aclist, EDDiscovery2.EDDTheme th, JSONFilter j = null)
+        {
+            List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
+            events.Add("All");
+            Init(t, events, null, aclist, false, th, j);
+        }
+
+        public void InitCondition(string t, List<string> fields, EDDiscovery2.EDDTheme th, JSONFilter j = null)
+        {
+            Init(t, null, fields, null, true, th, j);
+        }
+
+        public void Init(string t, List<string> el,                             // list of event types or null if event types not used
+                                   List<string> flist,                          // list of field names, or null for lookup
+                                   EDDiscovery.Actions.ActionProgramList aclist,// if aclist is null no action list
+                                   bool outerconditions,
+                                   EDDiscovery2.EDDTheme th, JSONFilter j = null)  
         {                                                                        // outc selects if group outer action can be selected, else its OR
             theme = th;
-            actionlist = aclist;
-            allowoutercond = outc;
-            hoffset = (actionlist.Split(';').Count()>1) ? (288) : (160);
-            panelwidth = hoffset + 620;
+            eventlist = el;
+            actionprogs = aclist;
+            fieldnames = flist;
+            allowoutercond = outerconditions;
             result = j;
+
+            condxoffset = ((eventlist!= null) ? 148 : 0) + ((actionprogs!= null) ? (140+8+24+8) : 0) + panelmargin;
+            panelwidth = condxoffset + 620;
+
+            bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
+            statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
+            this.Text = label_index.Text = t;
 
             if (result != null)
             {
                 foreach (JSONFilter.FilterEvent fe in result.filters)
                 {
-                    Group g = CreateGroup(fe.eventname, fe.action, fe.innercondition.ToString(), fe.outercondition.ToString());
+                    Group g = CreateGroup(fe.eventname, fe.action, fe.actiondata , fe.innercondition.ToString(), fe.outercondition.ToString());
 
                     foreach (JSONFilter.Fields f in fe.fields)
                     {
@@ -67,73 +103,70 @@ namespace EDDiscovery2
                     }
                 }
             }
-
-            bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
-            statusStripCustom.Visible = panelTop.Visible = !winborder;
-            this.Text = label_index.Text = t;
         }
 
-        private void JSONFiltersForm_Load(object sender, EventArgs e)
+        #region Groups
+
+        private void buttonMore_Click(object sender, EventArgs e)       // main + button
         {
+            Group g = CreateGroup();
+
+            if (eventlist == null)      // if we don't have any event list, auto create a condition
+                CreateCondition(g);
         }
 
-        private void JSONFiltersForm_Resize(object sender, EventArgs e)
-        {
-//            this.Size = new Size(panelwidth + margin * 2 + panelVScroll.ScrollBarWidth + (this.Bounds.Width - this.ClientRectangle.Width), this.Height);
-        }
-
-        private void JSONFiltersForm_Layout(object sender, LayoutEventArgs e)
-        {
-            bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
-
-            if (windowsborder)
-            {
-                panelVScroll.Location = new Point(0, 0);
-                panelVScroll.Size = new Size(ClientRectangle.Width, ClientRectangle.Height);
-            }
-            else
-            {
-                panelVScroll.Location = new Point(vscrollmargin, panelTop.Height);
-                panelVScroll.Size = new Size(ClientRectangle.Width - vscrollmargin * 2, ClientRectangle.Height - panelTop.Height - statusStripCustom.Height);
-            }
-
-            panelVScroll.PerformLayout();
-        }
-
-
-
-        Group CreateGroup(string initialev = null, string initialaction = null, 
+        Group CreateGroup(string initialev = null, string initialaction = null,  string initialactiondatastring = null, 
                                 string initialcondinner = null , string initialcondouter = null )
         {
             Panel p = new Panel();
             p.BorderStyle = BorderStyle.FixedSingle;
 
-            ExtendedControls.ComboBoxCustom evliste = new ExtendedControls.ComboBoxCustom();
-            evliste.Items.AddRange(EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false).ToArray());
-            evliste.Items.Add("All");
-            evliste.Location = new Point(panelmargin, panelmargin);
-            evliste.Size = new Size(140, 24);
-            evliste.DropDownHeight = 400;
-            evliste.Name = "EVList";
-            if (initialev != null)
-                evliste.Text = initialev;
-            evliste.SelectedIndexChanged += Evlist_SelectedIndexChanged;
-            p.Controls.Add(evliste);
+            ExtendedControls.ComboBoxCustom evliste = null;
 
-            ExtendedControls.ComboBoxCustom aclist = new ExtendedControls.ComboBoxCustom();
-            string[] actions = actionlist.Split(';');
-            aclist.Items.AddRange(actions);
-            aclist.Location = new Point(evliste.Location.X+evliste.Width+8, panelmargin);
-            aclist.DropDownHeight = 400;
-            aclist.Size = new Size(120, 24);
-            aclist.Name = "ActionList";
-            aclist.Enabled = actions.Count() > 1;           // 1 item, indicate disabled.. won't be displayed
-            if (initialaction != null)
-                aclist.Text = initialaction;
-            else
-                aclist.SelectedIndex = 0;
-            aclist.Visible = false;
-            p.Controls.Add(aclist);
+            if (eventlist != null)
+            {
+                evliste = new ExtendedControls.ComboBoxCustom();
+                evliste.Items.AddRange(eventlist);
+                evliste.Location = new Point(panelmargin, panelmargin);
+                evliste.Size = new Size(140, 24);
+                evliste.DropDownHeight = 400;
+                evliste.Name = "EVList";
+                if (initialev != null && initialev.Length > 0)
+                    evliste.Text = initialev;
+                evliste.SelectedIndexChanged += Evlist_SelectedIndexChanged;
+                p.Controls.Add(evliste);
+            }
+
+            ExtendedControls.ComboBoxCustom aclist = null;
+            ExtendedControls.ButtonExt acconfig = null;
+
+            if (actionprogs != null)
+            {
+                aclist = new ExtendedControls.ComboBoxCustom();
+                aclist.Location = new Point(evliste.Location.X + evliste.Width + 8, panelmargin);
+                aclist.DropDownHeight = 400;
+                aclist.Size = new Size(140, 24);
+                aclist.Name = "ActionList";
+                aclist.Items.Add("New");
+                aclist.Items.AddRange(actionprogs.GetActionProgramList());
+                if (initialaction != null)
+                    aclist.Text = initialaction;
+                else
+                    aclist.SelectedIndex = 0;
+
+                aclist.Visible = false;
+                aclist.SelectedIndexChanged += ActionList_SelectedIndexChanged;
+                p.Controls.Add(aclist);
+
+                acconfig = new ExtendedControls.ButtonExt();
+                acconfig.Text = "C";
+                acconfig.Location = new Point(aclist.Location.X + aclist.Width + 8, panelmargin);
+                acconfig.Size = new Size(24, 24);
+                acconfig.Click += ActionListConfig_Clicked;
+                acconfig.Enabled = aclist.SelectedIndex != 0;
+                acconfig.Visible = false;
+                p.Controls.Add(acconfig);
+            }
 
             ExtendedControls.ComboBoxCustom cond = new ExtendedControls.ComboBoxCustom();
             cond.Items.AddRange(Enum.GetNames(typeof(JSONFilter.FilterType)));
@@ -148,7 +181,7 @@ namespace EDDiscovery2
             ExtendedControls.ComboBoxCustom condouter = new ExtendedControls.ComboBoxCustom();
             condouter.Items.AddRange(Enum.GetNames(typeof(JSONFilter.FilterType)));
             condouter.SelectedIndex = 0;
-            condouter.Location = new Point(evliste.Location.X , panelmargin + conditionhoff);
+            condouter.Location = new Point(panelmargin , panelmargin + conditionhoff);     
             condouter.Size = new Size(60, 24);
             condouter.Enabled = condouter.Visible = false;
             if (initialcondouter != null)
@@ -164,12 +197,11 @@ namespace EDDiscovery2
             p.Controls.Add(lab);
 
             ExtendedControls.ButtonExt up = new ExtendedControls.ButtonExt();
+            up.Location = new Point(panelwidth - 20 - panelmargin - 4, panelmargin);
             up.Size = new Size(24, 24);
             up.Text = "^";
             up.Click += Up_Click;
             p.Controls.Add(up);
-
-            int hoff = (aclist.Enabled) ? (aclist.Location.X + aclist.Width + 50) : (evliste.Location.X + evliste.Width + 50);
 
             Group g = new Group()
             {
@@ -177,31 +209,164 @@ namespace EDDiscovery2
                 evlist = evliste,
                 upbutton = up,
                 actionlist = aclist,
+                actionconfig = acconfig,
                 outercond = condouter,
                 innercond = cond,
-                outerlabel = lab
+                outerlabel = lab,
+                actiondata = initialactiondatastring
             };
 
+            if ( fieldnames != null ) // if a defined set of field names..
+                g.fieldnames = fieldnames.ToArray();        // use these..
+
             p.Size = new Size(panelwidth, panelmargin + conditionhoff);
-            up.Location = new Point(panelwidth - 20 - panelmargin - 4, panelmargin);
 
             groups.Add(g);
 
-            if (initialev != null)
-            {
-                ChangeEventTypes(g);
-            }
-
             up.Tag = g;
-            evliste.Tag = g;
+
             panelVScroll.Controls.Add(p);
 
-            theme.ApplyToControls(g.panel);
+            if (evliste != null)
+            {
+                evliste.Tag = g;
+
+                if (evliste.Text.Length > 0)      // events on, and set..
+                    SetFieldNames(g);
+            }
+
+            if (g.actionconfig != null)
+            {
+                aclist.Tag = acconfig.Tag = g;
+                g.actionconfig.Visible = g.actionlist.Visible = (g.actionlist.Enabled && (eventlist == null || evliste.Text.Length > 0));        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
+            }
+
+            theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             RepositionGroup(g);
             PositionPanels();
 
             return g;
         }
+
+        private void Evlist_SelectedIndexChanged(object sender, EventArgs e)                // EVENT list changed
+        {
+            ExtendedControls.ComboBoxCustom b = sender as ExtendedControls.ComboBoxCustom;
+            Group g = (Group)b.Tag;
+
+            bool onefieldpresent = false;
+            foreach (Control c in g.panel.Controls)
+            {
+                if (c.Name.Equals("Field"))                 // find if any conditions are on screen..
+                {
+                    onefieldpresent = true;
+                    break;
+                }
+            }
+
+            if (!onefieldpresent)                           // if not, display one
+                CreateCondition(g);
+
+            if ( g.actionconfig != null )
+                g.actionconfig.Visible = g.actionlist.Visible = g.actionlist.Enabled;        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
+
+            SetFieldNames(g);
+            PositionPanels();
+        }
+
+        private void SetFieldNames(Group g)
+        {
+            if (fieldnames == null && eventlist != null )       // fieldnames are null, and we have an event list, try and find the field names
+            {
+                string evtype = g.evlist.Text;
+
+                List<EDDiscovery.EliteDangerous.JournalEntry> jel = EDDiscovery.EliteDangerous.JournalEntry.Get(evtype);        // get all events of this type
+
+                if (jel != null)            // may not find it, if event is not in history
+                {
+                    HashSet<string> fields = new HashSet<string>();             // Hash set prevents duplication
+                    foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
+                        JSONHelper.GetJSONFieldNames(ev.EventDataString, fields);        // for all events, add to field list
+
+                    g.fieldnames = fields.ToArray();        // keep in group in case more items are to be added
+                }
+                else
+                    g.fieldnames = null;
+            }
+
+            foreach (Control c in g.panel.Controls)
+            {
+                if (c.Name.Equals("Field"))         // update all the field controls to have an up to date field name list for this event
+                {
+                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
+                    cb.Items.Clear();
+                    if (g.fieldnames != null)
+                        cb.Items.AddRange(g.fieldnames);
+                    cb.Items.Add("User Defined");
+                    cb.SelectedIndex = -1;
+                    cb.Text = "";
+                }
+            }
+        }
+
+        private void ActionList_SelectedIndexChanged(object sender, EventArgs e)          // on action changing, do its configuration menu
+        {
+            ExtendedControls.ComboBoxCustom aclist = sender as ExtendedControls.ComboBoxCustom;
+            Group g = (Group)aclist.Tag;
+
+            if (aclist.Enabled && aclist.SelectedIndex == 0 )   // if selected NEW.
+            {
+                ActionListConfig_Clicked(g.actionconfig, null);
+            }
+        }
+
+        private void ActionListConfig_Clicked(object sender, EventArgs e)
+        {
+            ExtendedControls.ButtonExt config = sender as ExtendedControls.ButtonExt;
+            Group g = (Group)config.Tag;
+
+            ActionProgram p = null;
+            string suggestedname = null;
+
+            if (g.actionlist.SelectedIndex > 0)     // exclude NEW from checking for program
+                p = actionprogs.Get(g.actionlist.Text);
+
+            if ( p == null )        // if no program, create a new suggested name and clear any action data
+            {
+                suggestedname = g.evlist.Text;
+                int n = 2;
+                while (actionprogs.GetActionProgramList().Contains(suggestedname))
+                {
+                    suggestedname = g.evlist.Text + "_" + n.ToString();
+                    n++;
+                }
+
+                g.actiondata = null;
+            }
+
+            ActionProgramForm apf = new ActionProgramForm();
+            apf.Init("Define new action program", theme, g.fieldnames?.ToList(), p, g.actiondata , actionprogs.GetActionProgramList(), suggestedname);
+
+            if (apf.ShowDialog() == DialogResult.OK)
+            {
+                g.actiondata = apf.GetProgramData();
+                ActionProgram np = apf.GetProgram();
+                actionprogs.AddOrChange(np);
+
+                if (p == null )
+                {
+                    g.actionlist.Enabled = false;
+                    g.actionlist.Items.Add(np.Name);
+                    g.actionlist.SelectedIndex = g.actionlist.Items.Count - 1;
+                    g.actionlist.Enabled = true;
+                }
+
+                g.actionconfig.Enabled = true;
+            }
+        }
+
+        #endregion
+
+        #region Condition
 
         void CreateCondition( Group g , string initialfname = null , string initialcond = null, string initialvalue = null )
         {
@@ -257,11 +422,11 @@ namespace EDDiscovery2
             ExtendedControls.ButtonExt more = new ExtendedControls.ButtonExt();
             more.Size = new Size(24, 24);
             more.Text = "+";
-            more.Click += ConditionClick;
+            more.Click += NewConditionClick;
             more.Tag = g;
             g.panel.Controls.Add(more);
 
-            theme.ApplyToControls(g.panel);
+            theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             RepositionGroup(g);
             PositionPanels();
         }
@@ -298,96 +463,11 @@ namespace EDDiscovery2
                 tbb.Enabled = true;
         }
 
-        int RepositionGroup(Group g)
-        {
-            int vnextcond = panelmargin;
-            int numcond = 0;
-            Control lastadd = null;
-
-            g.innercond.Visible = false;
-
-            for (int i = 0; i < g.panel.Controls.Count; i++)        // position, enable controls
-            {
-                if (g.panel.Controls[i].Name.Equals("Field"))
-                {
-                    g.panel.Controls[i].Location = new Point(hoffset, vnextcond);
-                    g.panel.Controls[i + 1].Location = new Point(g.panel.Controls[i].Location.X + g.panel.Controls[i].Width + 8, vnextcond);
-                    g.panel.Controls[i + 2].Location = new Point(g.panel.Controls[i + 1].Location.X + g.panel.Controls[i + 1].Width + 8, vnextcond+4);
-                    g.panel.Controls[i + 3].Location = new Point(g.panel.Controls[i + 2].Location.X + g.panel.Controls[i + 2].Width + 8, vnextcond);
-                    g.panel.Controls[i + 4].Location = new Point(g.panel.Controls[i + 3].Location.X + g.panel.Controls[i + 3].Width + 8, vnextcond);
-                    g.panel.Controls[i + 4].Visible = true;
-
-                    if (lastadd != null)
-                    {
-                        lastadd.Visible = false;
-
-                        if (numcond == 1)
-                        {
-                            g.innercond.Location = lastadd.Location;
-                            g.innercond.Visible = true;
-                        }
-                    }
-
-                    lastadd = g.panel.Controls[i + 4];
-
-                    numcond++;
-                    vnextcond += conditionhoff;
-                }
-            }
-
-            int minh = panelmargin + conditionhoff + ((g.outercond.Enabled) ? (g.outercond.Height + 8) : 0);
-            g.panel.Size = new Size(g.panel.Width, Math.Max(vnextcond, minh));
-
-            return numcond;
-        }
-
-        void PositionPanels()
-        {
-            int y = 0;
-            bool showup = false;
-
-            foreach (Group g in groups)
-            {
-                g.upbutton.Visible = showup;
-                showup = true;
-                g.panel.Location = new Point(0, y);
-                y += g.panel.Height + 6;
-            }
-
-            buttonMore.Location = new Point(0, y);
-            buttonOK.Location = new Point(panelwidth- 75, y);
-            buttonCancel.Location = new Point(panelwidth - 75-75-10, y);
-
-            Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
-            int titleHeight = screenRectangle.Top - this.Top;
-
-            y += buttonMore.Height + titleHeight + ((panelTop.Visible) ? (panelTop.Height + statusStripCustom.Height) : 8) + 8;
-
-            this.MinimumSize = new Size(panelwidth+vscrollmargin*2+panelVScroll.ScrollBarWidth + 8, y );
-            this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width, Screen.FromControl(this).WorkingArea.Height);
-        }
-
-
-        private void buttonMore_Click(object sender, EventArgs e)
-        {
-            CreateGroup();
-        }
-
-        private void ConditionClick(object sender, EventArgs e)
+        private void NewConditionClick(object sender, EventArgs e)
         {
             ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
             CreateCondition(g);
-        }
-
-        private void Up_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
-            Group g = (Group)b.Tag;
-            int indexof = groups.IndexOf(g);
-            groups.Remove(g);
-            groups.Insert(indexof - 1,g);
-            PositionPanels();
         }
 
         private void ConditionDelClick(object sender, EventArgs e)
@@ -420,70 +500,114 @@ namespace EDDiscovery2
             PositionPanels();
         }
 
-        private void Evlist_SelectedIndexChanged(object sender, EventArgs e)
+        private void Up_Click(object sender, EventArgs e)
         {
-            ExtendedControls.ComboBoxCustom b = sender as ExtendedControls.ComboBoxCustom;
+            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
-
-            bool onefieldpresent = false;
-            foreach (Control c in g.panel.Controls)
-            {
-                if (c.Name.Equals("Field"))
-                    onefieldpresent = true;
-            }
-
-            if (!onefieldpresent)
-                CreateCondition(g);
-
-            ChangeEventTypes(g);
-        }
-
-        private void ChangeEventTypes(Group g)
-        {
-            g.actionlist.Visible = g.actionlist.Enabled;
-            string evtype = g.evlist.Text;
-            List<EDDiscovery.EliteDangerous.JournalEntry> jel = EDDiscovery.EliteDangerous.JournalEntry.Get(evtype);        // get all events of this type
-
-            if (jel != null)
-            {
-                HashSet<string> fields = new HashSet<string>();             // Hash set prevents duplication
-                foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
-                    JSONHelper.GetJSONFieldNames(ev.EventDataString, fields);        // for all events, add to field list
-
-                g.fieldnames = fields.ToArray();        // keep in group in case more items are to be added
-
-                foreach (Control c in g.panel.Controls)
-                {
-                    if (c.Name.Equals("Field"))
-                    {
-                        ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
-                        cb.Items.Clear();
-                        cb.Items.AddRange(g.fieldnames);
-                        cb.Items.Add("User Defined");
-                        cb.SelectedIndex = -1;
-                        cb.Text = "";
-                    }
-                }
-            }
-
-            for (int i = 0; i < groups.Count; i++)
-            {
-                bool showouter = false;
-                for (int j = i - 1; j >= 0; j--)
-                {
-                    if (groups[j].evlist.Text.Equals(groups[i].evlist.Text) && groups[i].evlist.Text.Length > 0)
-                        showouter = true;
-                }
-
-                showouter &= allowoutercond;
-
-                groups[i].outercond.Enabled = groups[i].outercond.Visible = groups[i].outerlabel.Visible = showouter;
-                RepositionGroup(groups[i]);
-            }
-
+            int indexof = groups.IndexOf(g);
+            groups.Remove(g);
+            groups.Insert(indexof - 1, g);
             PositionPanels();
         }
 
+        #endregion
+
+        #region Positioning
+
+        int RepositionGroup(Group g)
+        {
+            int vnextcond = panelmargin;
+            int numcond = 0;
+            Control lastadd = null;
+
+            g.innercond.Visible = false;
+
+            for (int i = 0; i < g.panel.Controls.Count; i++)        // position, enable controls
+            {
+                if (g.panel.Controls[i].Name.Equals("Field"))           // FIELD starts FIELD | Condition | Value | Delete | More
+                {
+                    g.panel.Controls[i].Location = new Point(condxoffset, vnextcond);
+                    g.panel.Controls[i + 1].Location = new Point(g.panel.Controls[i].Location.X + g.panel.Controls[i].Width + 8, vnextcond);
+                    g.panel.Controls[i + 2].Location = new Point(g.panel.Controls[i + 1].Location.X + g.panel.Controls[i + 1].Width + 8, vnextcond + 4);
+                    g.panel.Controls[i + 3].Location = new Point(g.panel.Controls[i + 2].Location.X + g.panel.Controls[i + 2].Width + 8, vnextcond);
+                    g.panel.Controls[i + 4].Location = new Point(g.panel.Controls[i + 3].Location.X + g.panel.Controls[i + 3].Width + 8, vnextcond);
+                    g.panel.Controls[i + 4].Visible = true;
+
+                    if (lastadd != null)
+                    {
+                        lastadd.Visible = false;
+
+                        if (numcond == 1)
+                        {
+                            g.innercond.Location = lastadd.Location;
+                            g.innercond.Visible = true;
+                        }
+                    }
+
+                    lastadd = g.panel.Controls[i + 4];
+
+                    numcond++;
+                    vnextcond += conditionhoff;
+                }
+            }
+
+            int minh = panelmargin + conditionhoff + ((g.outercond.Enabled) ? (g.outercond.Height + 8) : 0);
+            g.panel.Size = new Size(g.panel.Width, Math.Max(vnextcond, minh));
+
+            return numcond;
+        }
+
+        void PositionPanels()
+        {
+            for (int i = 0; i < groups.Count; i++)
+            {
+                bool showouter = false;                     // for all groups, see if another group below it has the same event selected as ours
+
+                if (eventlist != null)
+                {
+                    for (int j = i - 1; j >= 0; j--)
+                    {
+                        if (groups[j].evlist.Text.Equals(groups[i].evlist.Text) && groups[i].evlist.Text.Length > 0)
+                            showouter = true;
+                    }
+
+                    showouter &= allowoutercond;                // qualify with outer condition switch
+                }
+                else
+                    showouter = (i > 0) && allowoutercond;       // and enabled/disable the outer condition switch
+
+                if (groups[i].outercond.Enabled != showouter)
+                {
+                    groups[i].outercond.Enabled = groups[i].outercond.Visible = groups[i].outerlabel.Visible = showouter;       // and enabled/disable the outer condition switch
+                    RepositionGroup(groups[i]);
+                }
+            }
+
+            int y = 0;
+            bool showup = false;
+
+            foreach (Group g in groups)
+            {
+                g.upbutton.Visible = showup;
+                showup = true;
+                g.panel.Location = new Point(0, y);
+                y += g.panel.Height + 6;
+            }
+
+            buttonMore.Location = new Point(panelmargin, y);
+
+            Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
+            int titleHeight = screenRectangle.Top - this.Top;
+
+            y += buttonMore.Height + titleHeight + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
+
+            this.MinimumSize = new Size(panelwidth+vscrollmargin*2+panelVScroll.ScrollBarWidth + 8, y );
+            this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width, Screen.FromControl(this).WorkingArea.Height);
+        }
+
+        #endregion
+
+        #region OK Cancel
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
@@ -501,15 +625,21 @@ namespace EDDiscovery2
             {
                 string innerc = g.innercond.Text;
                 string outerc = g.outercond.Text;
-                string action = g.actionlist.Text;
-                string evt = g.evlist.Text;
-                System.Diagnostics.Debug.WriteLine("Event {0} inner {1} outer {2}", evt, innerc, outerc);
+                string actionname = (actionprogs!= null) ? g.actionlist.Text : "Default";
+                string actiondata = (actionprogs!=null && g.actiondata != null ) ? g.actiondata : "Default"; // any associated data from the program
+                string evt = (eventlist!=null) ? g.evlist.Text : "Default";
+
+                System.Diagnostics.Debug.WriteLine("Event {0} inner {1} outer {2} action {3} data '{4}'", evt, innerc, outerc, actionname, actiondata );
 
                 JSONFilter.FilterEvent fe = new JSONFilter.FilterEvent();
 
-                if (evt.Length > 0)
+                if ( actionprogs != null && actionname.Equals("New") )        // actions, but not selected one..
                 {
-                    if (fe.Create(evt, action, "", innerc, outerc))
+                    errorlist += "Event " + evt + " does not have an action program defined" + Environment.NewLine;
+                }
+                else if (evt.Length > 0)        // must have name
+                {
+                    if (fe.Create(evt, actionname,actiondata, innerc, outerc)) // create must work
                     {
                         bool ok = true;
 
@@ -553,7 +683,7 @@ namespace EDDiscovery2
                         }
                     }
                     else
-                        errorlist += "Should not happen create failed" + Environment.NewLine;
+                        errorlist += "Cannot create " + evt + " not a normal error please report" + Environment.NewLine;
                 }
                 else
                     errorlist += "Ignored group with empty name" + Environment.NewLine;
@@ -582,15 +712,7 @@ namespace EDDiscovery2
             Close();
         }
 
-        private void panel_minimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void panel_close_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        #endregion
 
         #region Window Control
 
@@ -699,6 +821,16 @@ namespace EDDiscovery2
         {
             ((Control)sender).Capture = false;
             SendMessage(WM_NCLBUTTONDOWN,(System.IntPtr)HT_CAPTION, (System.IntPtr)0);
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         #endregion

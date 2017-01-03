@@ -32,16 +32,18 @@
             this.panelTop = new System.Windows.Forms.Panel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.panelOK = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.buttonOK = new ExtendedControls.ButtonExt();
-            this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.buttonCancel = new ExtendedControls.ButtonExt();
+            this.buttonOK = new ExtendedControls.ButtonExt();
+            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panelTop.SuspendLayout();
             this.panelOuter.SuspendLayout();
+            this.panelOK.SuspendLayout();
             this.panelVScroll.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,9 +53,9 @@
             this.panelTop.Controls.Add(this.panel_minimize);
             this.panelTop.Controls.Add(this.label_index);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Location = new System.Drawing.Point(3, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(836, 24);
+            this.panelTop.Size = new System.Drawing.Size(890, 24);
             this.panelTop.TabIndex = 4;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
@@ -72,24 +74,31 @@
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelOuter.Controls.Add(this.panelVScroll);
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 24);
+            this.panelOuter.Location = new System.Drawing.Point(3, 24);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Padding = new System.Windows.Forms.Padding(3);
-            this.panelOuter.Size = new System.Drawing.Size(836, 344);
+            this.panelOuter.Size = new System.Drawing.Size(890, 400);
             this.panelOuter.TabIndex = 8;
+            // 
+            // panelOK
+            // 
+            this.panelOK.Controls.Add(this.buttonCancel);
+            this.panelOK.Controls.Add(this.buttonOK);
+            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelOK.Location = new System.Drawing.Point(3, 424);
+            this.panelOK.Name = "panelOK";
+            this.panelOK.Size = new System.Drawing.Size(890, 30);
+            this.panelOK.TabIndex = 8;
             // 
             // panelVScroll
             // 
             this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
-            this.panelVScroll.Controls.Add(this.buttonOK);
-            this.panelVScroll.Controls.Add(this.buttonCancel);
             this.panelVScroll.Controls.Add(this.buttonMore);
             this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelVScroll.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.panelVScroll.Location = new System.Drawing.Point(3, 3);
+            this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.ScrollBarWidth = 20;
-            this.panelVScroll.Size = new System.Drawing.Size(828, 336);
+            this.panelVScroll.Size = new System.Drawing.Size(888, 398);
             this.panelVScroll.TabIndex = 8;
             this.panelVScroll.VerticalScrollBarDockRight = true;
             // 
@@ -104,13 +113,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(808, 0);
-            this.vScrollBarCustom1.Maximum = -292;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(868, 0);
+            this.vScrollBarCustom1.Maximum = -354;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 336);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 398);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
@@ -119,34 +128,8 @@
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -292;
-            this.vScrollBarCustom1.ValueLimited = -292;
-            // 
-            // buttonOK
-            // 
-            this.buttonOK.BorderColorScaling = 1.25F;
-            this.buttonOK.ButtonColorScaling = 0.5F;
-            this.buttonOK.ButtonDisabledScaling = 0.5F;
-            this.buttonOK.Location = new System.Drawing.Point(713, 7);
-            this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonOK.TabIndex = 7;
-            this.buttonOK.Text = "OK";
-            this.buttonOK.UseVisualStyleBackColor = true;
-            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonCancel.Location = new System.Drawing.Point(621, 7);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 6;
-            this.buttonCancel.Text = "Cancel";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.vScrollBarCustom1.Value = -354;
+            this.vScrollBarCustom1.ValueLimited = -354;
             // 
             // buttonMore
             // 
@@ -161,14 +144,6 @@
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
-            // statusStripCustom
-            // 
-            this.statusStripCustom.Location = new System.Drawing.Point(0, 368);
-            this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(836, 22);
-            this.statusStripCustom.TabIndex = 27;
-            this.statusStripCustom.Text = "statusStripCustom1";
-            // 
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -177,7 +152,7 @@
             this.panel_close.DrawnImage = null;
             this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
             this.panel_close.ImageText = null;
-            this.panel_close.Location = new System.Drawing.Point(813, 0);
+            this.panel_close.Location = new System.Drawing.Point(867, 0);
             this.panel_close.MarginSize = 6;
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
@@ -195,7 +170,7 @@
             this.panel_minimize.DrawnImage = null;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.ImageText = null;
-            this.panel_minimize.Location = new System.Drawing.Point(783, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(837, 0);
             this.panel_minimize.MarginSize = 6;
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
@@ -205,24 +180,60 @@
             this.panel_minimize.TabIndex = 26;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
+            // buttonCancel
+            // 
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.BorderColorScaling = 1.25F;
+            this.buttonCancel.ButtonColorScaling = 0.5F;
+            this.buttonCancel.ButtonDisabledScaling = 0.5F;
+            this.buttonCancel.Location = new System.Drawing.Point(714, 4);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 6;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // buttonOK
+            // 
+            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOK.BorderColorScaling = 1.25F;
+            this.buttonOK.ButtonColorScaling = 0.5F;
+            this.buttonOK.ButtonDisabledScaling = 0.5F;
+            this.buttonOK.Location = new System.Drawing.Point(811, 4);
+            this.buttonOK.Name = "buttonOK";
+            this.buttonOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonOK.TabIndex = 7;
+            this.buttonOK.Text = "OK";
+            this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
+            // 
+            // statusStripCustom
+            // 
+            this.statusStripCustom.Location = new System.Drawing.Point(3, 454);
+            this.statusStripCustom.Name = "statusStripCustom";
+            this.statusStripCustom.Size = new System.Drawing.Size(890, 22);
+            this.statusStripCustom.TabIndex = 27;
+            this.statusStripCustom.Text = "statusStripCustom1";
+            // 
             // JSONFiltersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(836, 390);
+            this.ClientSize = new System.Drawing.Size(896, 476);
             this.Controls.Add(this.panelOuter);
-            this.Controls.Add(this.statusStripCustom);
             this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.panelOK);
+            this.Controls.Add(this.statusStripCustom);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "JSONFiltersForm";
+            this.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "JSONFiltersForm";
-            this.Load += new System.EventHandler(this.JSONFiltersForm_Load);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.JSONFiltersForm_Layout);
-            this.Resize += new System.EventHandler(this.JSONFiltersForm_Resize);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelOuter.ResumeLayout(false);
+            this.panelOK.ResumeLayout(false);
             this.panelVScroll.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -242,5 +253,6 @@
         private ExtendedControls.PanelVScroll panelVScroll;
         private ExtendedControls.StatusStripCustom statusStripCustom;
         private System.Windows.Forms.Panel panelOuter;
+        private System.Windows.Forms.Panel panelOK;
     }
 }

@@ -91,8 +91,11 @@ namespace EDDiscovery
         public event NewLogEntry OnNewLogEntry;
         public delegate void NewTarget();
         public event NewTarget OnNewTarget;
-        
+
         public GalacticMapping galacticMapping;
+
+        private JSONFilter actionfieldfilter = new JSONFilter();
+        private Actions.ActionProgramList actionprogramlist = new Actions.ActionProgramList();
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
@@ -195,7 +198,7 @@ namespace EDDiscovery
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
-            journalViewControl1.InitControl(this,0);
+            journalViewControl1.InitControl(this, 0);
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
             exportControl1.InitControl(this);
@@ -339,7 +342,7 @@ namespace EDDiscovery
                 parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
 
             int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
-            if ( ai != -1 && ai < parts.Count - 1)
+            if (ai != -1 && ai < parts.Count - 1)
             {
                 Tools.appfolder = parts[ai + 1];
                 label_version.Text += " (Using " + Tools.appfolder + ")";
@@ -433,6 +436,14 @@ namespace EDDiscovery
                 {
                     button_test.Visible = true;
                 }
+
+                string filter = SQLiteDBClass.GetSettingString("ActionFilter", "");
+                if (filter.Length > 0)
+                    actionfieldfilter.FromJSON(filter);        // load filter
+
+                string programs = SQLiteDBClass.GetSettingString("ActionPrograms", "");
+                if (programs.Length > 0)
+                    actionprogramlist.FromJSON(programs);
             }
             catch (Exception ex)
             {
@@ -462,36 +473,36 @@ namespace EDDiscovery
 
         private bool CheckForNewinstaller()
         {
-                try
+            try
+            {
+
+                GitHubClass github = new GitHubClass();
+
+                GitHubRelease rel = github.GetLatestRelease();
+
+                if (rel != null)
                 {
+                    //string newInstaller = jo["Filename"].Value<string>();
 
-                    GitHubClass github = new GitHubClass();
+                    var currentVersion = Application.ProductVersion;
 
-                    GitHubRelease rel = github.GetLatestRelease();
+                    Version v1, v2;
+                    v1 = new Version(rel.ReleaseVersion);
+                    v2 = new Version(currentVersion);
 
-                    if (rel != null)
+                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
                     {
-                        //string newInstaller = jo["Filename"].Value<string>();
-
-                        var currentVersion = Application.ProductVersion;
-
-                        Version v1, v2;
-                        v1 = new Version(rel.ReleaseVersion);
-                        v2 = new Version(currentVersion);
-
-                        if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
-                        {
-                            newRelease = rel;
-                            this.BeginInvoke(new Action(() => LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
-                            this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
+                        newRelease = rel;
+                        this.BeginInvoke(new Action(() => LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
+                        this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
                         return true;
-                        }
                     }
                 }
-                catch (Exception )
-                {
+            }
+            catch (Exception)
+            {
 
-                }
+            }
 
             return false;
         }
@@ -574,13 +585,13 @@ namespace EDDiscovery
 
             theme.ApplyToForm(this);
 
-            if (OnHistoryChange!=null)
+            if (OnHistoryChange != null)
                 OnHistoryChange(history);
         }
 
-#endregion
+        #endregion
 
-#region Information Downloads
+        #region Information Downloads
 
         public Task<bool> DownloadMaps(Action<Action> registerCancelCallback)          // ASYNC process
         {
@@ -695,9 +706,9 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        #endregion
 
-#region Initial Check Systems
+        #region Initial Check Systems
 
         bool performedsmsync = false;
         bool performeddbsync = false;
@@ -990,9 +1001,9 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
-#endregion
+        #endregion
 
-#region EDSM and EDDB syncs code
+        #region EDSM and EDDB syncs code
 
         private bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
@@ -1210,9 +1221,9 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        #endregion
 
-#region JSONandMisc
+        #region JSONandMisc
         static public string LoadJsonFile(string filename)
         {
             string json = null;
@@ -1237,9 +1248,9 @@ namespace EDDiscovery
             tabControl1.SelectedIndex = 1;
         }
 
-#endregion
+        #endregion
 
-#region Closing
+        #region Closing
 
         private void SaveSettings()
         {
@@ -1336,9 +1347,9 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        #endregion
 
-#region Buttons, Mouse, Menus
+        #region Buttons, Mouse, Menus
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -1498,11 +1509,11 @@ namespace EDDiscovery
 
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," + 
+            if (MessageBox.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
                                 " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
                                 "This will not change your history, but when you next refresh, it will try and reassign EDSM systems to " +
                                 "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
-                                "or notes are going missing\r\n" + 
+                                "or notes are going missing\r\n" +
                                 "\r\n" +
                                 "You can manually change one EDSM assigned system by right clicking on the travel history and selecting the option"
                                 , "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
@@ -1535,7 +1546,7 @@ namespace EDDiscovery
         }
 
         private void Read21Folders(bool force)
-        { 
+        {
             if (DisplayedCommander >= 0)
             {
                 EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
@@ -1860,7 +1871,7 @@ namespace EDDiscovery
 
             MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
             StarScan starscan = new StarScan();
-                             
+
             ProcessUserHistoryListEntries(hl, matcommodledger, starscan);      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 
             if (worker.CancellationPending)
@@ -1898,7 +1909,7 @@ namespace EDDiscovery
                     history.starscan = ((RefreshWorkerResults)e.Result).retstarscan;
 
                     ReportProgress(-1, "");
-                    LogLine("Refresh Complete." );
+                    LogLine("Refresh Complete.");
 
                     if (OnHistoryChange != null)
                         OnHistoryChange(history);
@@ -2006,7 +2017,7 @@ namespace EDDiscovery
                 }
 
                 if (OnNewEntry != null)
-                    OnNewEntry(he,history);
+                    OnNewEntry(he, history);
             }
 
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
@@ -2041,6 +2052,30 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Actions
+
+        public void ConfigureActions()
+        {
+            EDDiscovery2.JSONFiltersForm frm = new JSONFiltersForm();
+            frm.InitAction("Actions: Define actions", actionprogramlist, theme, actionfieldfilter );
+
+            //List<string> f = new List<string>();
+            //f.Add("one");
+            //f.Add("two");
+            //f.Add("three");
+
+            //frm.Init("Test", null, f, null, true, theme);
+
+            frm.TopMost = this.FindForm().TopMost;
+            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
+            {
+                actionfieldfilter = frm.result;
+                SQLiteDBClass.PutSettingString("ActionFilter", actionfieldfilter.GetJSON());
+                SQLiteDBClass.PutSettingString("ActionPrograms", actionprogramlist.GetJSON());
+            }
+        }
+
+        #endregion
     }
 }
 

@@ -203,6 +203,36 @@ namespace EDDiscovery
             return evt.ToString();
         }
 
+        public string GetString()
+        {
+            string ret = "";
+
+            for (int j = 0; j < filters.Count; j++)
+            {
+                FilterEvent f = filters[j];
+
+                if (j > 0 )
+                    ret += " " + f.outercondition.ToString() + " ";
+
+                if (f.fields.Count > 1)
+                    ret += "(";
+
+                for (int i = 0; i < f.fields.Count; i++)
+                {
+                    if (i > 0)
+                        ret += " " + f.innercondition.ToString() + " ";
+
+                    ret += f.fields[i].itemname + " " + f.fields[i].matchtype.ToString() + " " + f.fields[i].contentmatch;
+                }
+
+                if (f.fields.Count > 1)
+                    ret += ")";
+            }
+
+            return ret;
+        }
+
+
         public bool FromJSON( string s )
         {
             Clear();
@@ -448,8 +478,7 @@ namespace EDDiscovery
                 return false;
             }
         }
-            
-
+          
         private void ExpandTokens(JToken jt, Dictionary<string, ValuesReturned> valuesneeded , ref int togo )
         {
             JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
