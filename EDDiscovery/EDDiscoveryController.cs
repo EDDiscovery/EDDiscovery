@@ -124,7 +124,7 @@ namespace EDDiscovery
         public event Action OnRefreshHistoryRequested;
         public event Action<List<HistoryEntry>, MaterialCommoditiesLedger, StarScan> OnRefreshHistoryWorkerCompleted;
         public event Action<int, string> OnReportProgress;
-	public event Action OnNewTarget;
+        public event Action OnNewTarget;
         #endregion
 
         #region Methods
@@ -298,8 +298,6 @@ namespace EDDiscovery
 
         public void NewPosition(EliteDangerous.JournalEntry je)
         {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
             if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
             {
                 HistoryEntry last = history.GetLast;
