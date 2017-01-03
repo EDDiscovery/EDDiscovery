@@ -31,6 +31,7 @@ namespace EDDiscovery.UserControls
         public UserControlLedger()
         {
             InitializeComponent();
+            Name = "Ledger";
         }
 
         public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
@@ -70,6 +71,11 @@ namespace EDDiscovery.UserControls
         private void NewEntry(HistoryEntry l, HistoryList hl)
         {
             Display(hl.materialcommodititiesledger);
+        }
+
+        public override void Display(HistoryEntry current, HistoryList history)
+        {
+            Display(history.materialcommodititiesledger);
         }
 
         public void Display(MaterialCommoditiesLedger mc)

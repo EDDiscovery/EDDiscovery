@@ -111,6 +111,7 @@ namespace EDDiscovery2
         KeyboardActions _kbdActions = new KeyboardActions();        // needed to be held because it remembers key downs
 
         bool _allowresizematrixchange = false;           // prevent resize causing matrix calc before paint
+        private OpenTK.GLControl glControl;
 
         #endregion
 
@@ -281,6 +282,25 @@ namespace EDDiscovery2
         {
             InitializeComponent();
             OpenTK.Toolkit.Init();
+            // 
+            // glControl
+            // 
+            this.glControlContainer.SuspendLayout();
+            this.glControl = new GLControl();
+            this.glControl.Dock = DockStyle.Fill;
+            this.glControl.BackColor = System.Drawing.Color.Black;
+            this.glControl.Name = "glControl";
+            this.glControl.TabIndex = 0;
+            this.glControl.VSync = true;
+            this.glControl.Load += new System.EventHandler(this.glControl_Load);
+            this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
+            this.glControl.DoubleClick += new System.EventHandler(this.glControl_DoubleClick);
+            this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
+            this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
+            this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
+            this.glControl.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl_OnMouseWheel);
+            this.glControlContainer.Controls.Add(this.glControl);
+            this.glControlContainer.ResumeLayout();
         }
 
         private void FormMap_Load(object sender, EventArgs e)
@@ -1590,98 +1610,10 @@ namespace EDDiscovery2
                 _mouseStartTranslateXY = new Point(int.MinValue, int.MinValue);         // indicate rotation is finished.
                 _mouseStartTranslateXZ = new Point(int.MinValue, int.MinValue);
 
-                if (cursystem != null || curbookmark != null)      // if we have a system or a bookmark..
-                {                                                   // try and find the associated bookmark..
-                    BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
-
-                    SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.name, cursystem.id_edsm) : null;
-                    string note = (sn != null) ? sn.Note : "";
-
-                    BookmarkForm frm = new BookmarkForm();
-
-                    if (notedsystem && bkmark == null)              // note on a system
-                    {
-                        long targetid = TargetClass.GetTargetNotedSystem();      // who is the target of a noted system (0=none)
-                        long noteid = sn.id;
-
-                        frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
-                        frm.NotedSystem(cursystem.name, note, noteid == targetid);       // note may be passed in null
-                        frm.ShowDialog();
-
-                        if ((frm.IsTarget && targetid != noteid) || (!frm.IsTarget && targetid == noteid)) // changed..
-                        {
-                            if (frm.IsTarget)
-                                TargetClass.SetTargetNotedSystem(cursystem.name, noteid, cursystem.x, cursystem.y, cursystem.z);
-                            else
-                                TargetClass.ClearTarget();
-                        }
-                    }
-                    else
-                    {
-                        bool regionmarker = false;
-                        DateTime tme;
-
-                        long targetid = TargetClass.GetTargetBookmark();      // who is the target of a bookmark (0=none)
-
-                        if (bkmark == null)                         // new bookmark
-                        {
-                            frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
-                            tme = DateTime.Now;
-                            frm.NewSystemBookmark(cursystem.name, note, tme.ToString());
-                        }
-                        else                                        // update bookmark
-                        {
-                            frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
-                            regionmarker = bkmark.isRegion;
-                            tme = bkmark.Time;
-                            frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker, targetid == bkmark.id);
-                        }
-
-                        DialogResult res = frm.ShowDialog();
-
-                        if (res == DialogResult.OK)
-                        {
-                            BookmarkClass newcls = new BookmarkClass();
-
-                            if (regionmarker)
-                                newcls.Heading = frm.StarHeading;
-                            else
-                                newcls.StarName = frm.StarHeading;
-
-                            newcls.x = double.Parse(frm.x);
-                            newcls.y = double.Parse(frm.y);
-                            newcls.z = double.Parse(frm.z);
-                            newcls.Time = tme;
-                            newcls.Note = frm.Notes;
-
-                            if (bkmark != null)
-                            {
-                                newcls.id = bkmark.id;
-                                newcls.Update();
-                            }
-                            else
-                                newcls.Add();
-
-                            if ((frm.IsTarget && targetid != newcls.id) || (!frm.IsTarget && targetid == newcls.id)) // changed..
-                            {
-                                if (frm.IsTarget)
-                                    TargetClass.SetTargetBookmark(regionmarker ? ("RM:" + newcls.Heading) : newcls.StarName, newcls.id, newcls.x, newcls.y, newcls.z);
-                                else
-                                    TargetClass.ClearTarget();
-                            }
-                        }
-                        else if (res == DialogResult.Abort && bkmark != null)
-                        {
-                            if (targetid == bkmark.id)
-                            {
-                                TargetClass.ClearTarget();
-                            }
-
-                            bkmark.Delete();
-                        }
-                    }
-
-                    discoveryForm.NewTargetSet();
+                if (cursystem != null || curbookmark != null)      // if we have a system or a bookmark...
+                {
+                    //Moved the code so that it could be shared with SavedRouteExpeditionControl
+                    RoutingUtils.showBookmarkForm(discoveryForm , cursystem, curbookmark, notedsystem);
                     GenerateDataSetsBNG();      // in case target changed, do all..
                     RequestPaint();
                 }
@@ -1713,6 +1645,8 @@ namespace EDDiscovery2
                 }
             }
         }
+
+   
 
         private void glControl_DoubleClick(object sender, EventArgs e)
         {

@@ -1,5 +1,6 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
+using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using OpenTK;
@@ -600,6 +601,59 @@ namespace EDDiscovery
             DateTime tme = DateTime.UtcNow.Subtract(t);
             return (from s in historylist where s.IsFSDJump && s.EventTimeUTC>=tme select s).Count();
         }
+
+        public int GetFSDJumps(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal<to  select s).Count();
+        }
+
+        public int GetDocked(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Docked && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+        public int GetTouchDown(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+
+        public int GetHeatWarning(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.HeatWarning && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+
+
+        public int GetHeatDamage(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.HeatDamage && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+
+        public int GetFuelScooped(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.FuelScoop && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+
+        public double GetFuelScoopedTons(DateTime start, DateTime to)
+        {
+             var list = (from s in historylist where s.EntryType == JournalTypeEnum.FuelScoop && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalFuelScoop).ToList<JournalFuelScoop>();
+
+            return (from s in list select s.Scooped).Sum();
+        }
+
+        public double GetTraveledLy(DateTime start, DateTime to)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
+
+            return (from s in list select s.JumpDist).Sum();
+        }
+
+
+        public List<JournalScan> GetScanList(DateTime start, DateTime to)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
+            return list;
+        }
+
+
 
         public int GetFSDJumpsBeforeUTC(DateTime utc)
         {

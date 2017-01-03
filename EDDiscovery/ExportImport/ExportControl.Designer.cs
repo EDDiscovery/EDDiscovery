@@ -201,6 +201,7 @@
             this.comboBoxCommander.SelectedValue = null;
             this.comboBoxCommander.Size = new System.Drawing.Size(140, 23);
             this.comboBoxCommander.TabIndex = 1;
+            this.toolTip.SetToolTip(this.comboBoxCommander, "Commander to import history against");
             this.comboBoxCommander.ValueMember = "";
             // 
             // labelExt2
@@ -238,6 +239,7 @@
             this.radioButtonTab.Size = new System.Drawing.Size(44, 17);
             this.radioButtonTab.TabIndex = 5;
             this.radioButtonTab.Text = "Tab";
+            this.toolTip.SetToolTip(this.radioButtonTab, "Tab Delimited import file");
             this.radioButtonTab.UseVisualStyleBackColor = true;
             // 
             // radioButtonOther
@@ -256,6 +258,7 @@
             this.radioButtonOther.TabIndex = 6;
             this.radioButtonOther.TabStop = true;
             this.radioButtonOther.Text = "Other";
+            this.toolTip.SetToolTip(this.radioButtonOther, "Character delimited import file");
             this.radioButtonOther.UseVisualStyleBackColor = true;
             // 
             // labelExt4
@@ -278,6 +281,7 @@
             this.textBoxArrivalDate.Size = new System.Drawing.Size(100, 20);
             this.textBoxArrivalDate.TabIndex = 9;
             this.textBoxArrivalDate.Text = "1";
+            this.toolTip.SetToolTip(this.textBoxArrivalDate, "Column containing the arrival date");
             this.textBoxArrivalDate.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxArrivalDate_Validating);
             // 
             // labelExt5
@@ -322,6 +326,7 @@
             this.textBoxSysName.Size = new System.Drawing.Size(100, 20);
             this.textBoxSysName.TabIndex = 14;
             this.textBoxSysName.Text = "3";
+            this.toolTip.SetToolTip(this.textBoxSysName, "Column containing the system name");
             this.textBoxSysName.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxSysName_Validating);
             // 
             // textBoxSysNotes
@@ -333,6 +338,7 @@
             this.textBoxSysNotes.Size = new System.Drawing.Size(100, 20);
             this.textBoxSysNotes.TabIndex = 15;
             this.textBoxSysNotes.Text = "6";
+            this.toolTip.SetToolTip(this.textBoxSysNotes, "Column containing any system notes");
             this.textBoxSysNotes.TextChanged += new System.EventHandler(this.textBoxSysNotes_TextChanged);
             // 
             // tableLayoutPanel6
@@ -358,7 +364,8 @@
             this.buttonImportFile.Name = "buttonImportFile";
             this.buttonImportFile.Size = new System.Drawing.Size(64, 20);
             this.buttonImportFile.TabIndex = 5;
-            this.buttonImportFile.Text = "Select";
+            this.buttonImportFile.Text = "Browse...";
+            this.toolTip.SetToolTip(this.buttonImportFile, "Click to select file for import");
             this.buttonImportFile.UseVisualStyleBackColor = true;
             this.buttonImportFile.Click += new System.EventHandler(this.buttonImportFile_Click_1);
             // 
@@ -379,6 +386,7 @@
             this.checkBoxImpHeader.TabIndex = 6;
             this.checkBoxImpHeader.Text = "Header?";
             this.checkBoxImpHeader.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxImpHeader, "Indicate if the file to import has a header row");
             this.checkBoxImpHeader.UseVisualStyleBackColor = true;
             // 
             // textBoxArrivalTime
@@ -390,6 +398,7 @@
             this.textBoxArrivalTime.Size = new System.Drawing.Size(100, 20);
             this.textBoxArrivalTime.TabIndex = 10;
             this.textBoxArrivalTime.Text = "2";
+            this.toolTip.SetToolTip(this.textBoxArrivalTime, "Column containing the arrival time");
             this.textBoxArrivalTime.TextChanged += new System.EventHandler(this.textBoxArrivalTime_TextChanged);
             // 
             // textBoxDelimiter
@@ -401,6 +410,7 @@
             this.textBoxDelimiter.Size = new System.Drawing.Size(100, 20);
             this.textBoxDelimiter.TabIndex = 7;
             this.textBoxDelimiter.Text = ",";
+            this.toolTip.SetToolTip(this.textBoxDelimiter, "Delimiting character");
             // 
             // flowLayoutPanel1
             // 
@@ -753,6 +763,7 @@
             this.buttonImport.Size = new System.Drawing.Size(75, 22);
             this.buttonImport.TabIndex = 0;
             this.buttonImport.Text = "Import";
+            this.toolTip.SetToolTip(this.buttonImport, "Run import using defined parameters (may take several minutes)");
             this.buttonImport.UseVisualStyleBackColor = true;
             this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
             // 
@@ -766,6 +777,7 @@
             this.buttonImportHelp.Size = new System.Drawing.Size(75, 23);
             this.buttonImportHelp.TabIndex = 1;
             this.buttonImportHelp.Text = "Help";
+            this.toolTip.SetToolTip(this.buttonImportHelp, "Display Help file for History Import settings");
             this.buttonImportHelp.UseVisualStyleBackColor = true;
             this.buttonImportHelp.Click += new System.EventHandler(this.buttonImportHelp_Click);
             // 

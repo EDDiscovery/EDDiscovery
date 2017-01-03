@@ -11,6 +11,8 @@ using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using System.IO;
 using EMK.LightGeometry;
+using EDDiscovery.EDSM;
+using EDDiscovery2;
 
 namespace EDDiscovery
 {
@@ -343,6 +345,10 @@ namespace EDDiscovery
             }
 
             _currentRouteIndex = toolStripComboBoxRouteSelection.SelectedIndex;
+            if (_currentRouteIndex == -1)
+                return;
+
+
             _currentRoute = _savedRoutes[toolStripComboBoxRouteSelection.SelectedIndex];
 
             dataGridViewRouteSystems.Rows.Clear();
@@ -435,6 +441,7 @@ namespace EDDiscovery
             }
 
             ClearRoute();
+            toolStripComboBoxRouteSelection.SelectedItem = null;
         }
 
         private void ClearRoute()
@@ -753,6 +760,7 @@ namespace EDDiscovery
             }
 
             ClearRoute();
+            toolStripComboBoxRouteSelection.SelectedItem = null;
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Text Files|*.txt";
@@ -814,6 +822,13 @@ namespace EDDiscovery
 
         private void toolStripButtonImportRoute_Click(object sender, EventArgs e)
         {
+            if (_discoveryForm.RouteControl.RouteSystems == null
+                || _discoveryForm.RouteControl.RouteSystems.Count == 0)
+            {
+                MessageBox.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
+                return;
+            }
+
             SavedRouteClass newroute = new SavedRouteClass();
             UpdateRouteInfo(newroute);
             if (!newroute.Equals(_currentRoute))
@@ -825,13 +840,7 @@ namespace EDDiscovery
             }
 
             ClearRoute();
-
-            if (_discoveryForm.RouteControl.RouteSystems == null
-                || _discoveryForm.RouteControl.RouteSystems.Count == 0)
-            {
-                MessageBox.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
-                return;
-            }
+            toolStripComboBoxRouteSelection.SelectedItem = null;
 
             foreach (SystemClass s in _discoveryForm.RouteControl.RouteSystems)
             {
@@ -889,6 +898,33 @@ namespace EDDiscovery
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+        }
+
+        private void setTargetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+
+            if (selectedRows.Length == 0)
+                return;
+            var obj = dataGridViewRouteSystems[0, selectedRows[0]].Value;
+
+            if (obj == null)
+                return;
+            RoutingUtils.setTargetSystem(_discoveryForm, (string)obj);
+        }
+
+        private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+
+            if (selectedRows.Length == 0)
+                return;
+            var obj = dataGridViewRouteSystems[0, selectedRows[0]].Value;
+
+            if (obj == null)
+                return;
+
+            RoutingUtils.showBookmarkForm(_discoveryForm, SystemClass.GetSystem((string)obj), null, false);
         }
     }
 }

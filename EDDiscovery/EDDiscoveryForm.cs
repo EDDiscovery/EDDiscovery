@@ -196,17 +196,13 @@ namespace EDDiscovery
 
         private void PanelInfoNewRelease()
         {
-            panelInfo.BackColor = Color.Green;
-            labelPanelText.Text = "Download new release!";
-            panelInfo.Visible = true;
+            ShowInfoPanel("Download new release!", true, Color.Green);
         }
 
 
         private void InitFormControls()
         {
-            labelPanelText.Text = "Loading. Please wait!";
-            panelInfo.Visible = true;
-            panelInfo.BackColor = Color.Gold;
+            ShowInfoPanel("Loading. Please wait!", true, Color.Gold);
 
             routeControl1.travelhistorycontrol1 = travelHistoryControl1;
         }
@@ -388,6 +384,12 @@ namespace EDDiscovery
 
         }
 
+        public void ShowInfoPanel(string message, bool visible, Color? backColour = null)
+        {
+            labelPanelText.Text = message;
+            panelInfo.Visible = visible;
+            if (backColour.HasValue) panelInfo.BackColor = backColour.Value;
+        }
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -395,8 +397,7 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
                 edsmRefreshTimer.Enabled = false;
-                labelPanelText.Text = "Closing, please wait!";
-                panelInfo.Visible = true;
+                ShowInfoPanel("Closing, please wait!", true);
                 Controller.Shutdown();
             }
             else if (!ReadyForClose)   // still working, cancel again..
