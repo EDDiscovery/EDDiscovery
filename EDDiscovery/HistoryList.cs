@@ -647,6 +647,13 @@ namespace EDDiscovery
         }
 
 
+        public List<JournalScan> GetScanList(DateTime start, DateTime to)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
+            return list;
+        }
+
+
 
         public int GetFSDJumpsBeforeUTC(DateTime utc)
         {

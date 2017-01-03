@@ -103,6 +103,43 @@ namespace EDDiscovery.UserControls
         }
 
 
+        public bool Stars
+        {
+            get
+            {
+                if (checkBoxCustomStars.Checked)
+                    return true;
+                else
+                    return false;
+            }
+            set
+            {
+                if (value == true)
+                    checkBoxCustomStars.Checked = true;
+                else
+                    checkBoxCustomPlanets.Checked = true;
+            }
+
+        }
+
+        public bool ScanMode
+        {
+            set
+            {
+                if (value == true)
+                {
+                    checkBoxCustomStars.Visible = true;
+                    checkBoxCustomPlanets.Visible = true;
+                }
+                else
+                {
+                    checkBoxCustomStars.Visible = false;
+                    checkBoxCustomPlanets.Visible = false;
+
+                }
+            }
+        }
+
         #endregion
 
 
@@ -148,6 +185,27 @@ namespace EDDiscovery.UserControls
                     DrawModeChanged(this, e);
             }
 
+        }
+
+        private void checkBoxCustomPlanets_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCustomPlanets.Checked == true)
+            {
+                checkBoxCustomStars.Checked = false;
+                if (this.DrawModeChanged != null)
+                    DrawModeChanged(this, e);
+            }
+
+        }
+
+        private void checkBoxCustomStars_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCustomStars.Checked == true)
+            {
+                checkBoxCustomPlanets.Checked = false;
+                if (this.DrawModeChanged != null)
+                    DrawModeChanged(this, e);
+            }
         }
     }
 }

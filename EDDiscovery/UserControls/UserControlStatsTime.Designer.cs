@@ -34,11 +34,15 @@
             this.checkBoxCustomText = new ExtendedControls.CheckBoxCustom();
             this.comboBoxTimeMode = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
+            this.checkBoxCustomStars = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomPlanets = new ExtendedControls.CheckBoxCustom();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelControls
             // 
+            this.panelControls.Controls.Add(this.checkBoxCustomStars);
+            this.panelControls.Controls.Add(this.checkBoxCustomPlanets);
             this.panelControls.Controls.Add(this.checkBoxCustomGraph);
             this.panelControls.Controls.Add(this.checkBoxCustomText);
             this.panelControls.Controls.Add(this.comboBoxTimeMode);
@@ -59,13 +63,14 @@
             this.checkBoxCustomGraph.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomGraph.FontNerfReduction = 0.5F;
             this.checkBoxCustomGraph.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomGraph.Image")));
-            this.checkBoxCustomGraph.Location = new System.Drawing.Point(207, 0);
+            this.checkBoxCustomGraph.Location = new System.Drawing.Point(761, 0);
             this.checkBoxCustomGraph.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomGraph.Name = "checkBoxCustomGraph";
             this.checkBoxCustomGraph.Size = new System.Drawing.Size(26, 26);
             this.checkBoxCustomGraph.TabIndex = 4;
             this.checkBoxCustomGraph.TickBoxReductionSize = 10;
             this.checkBoxCustomGraph.UseVisualStyleBackColor = true;
+            this.checkBoxCustomGraph.Visible = false;
             this.checkBoxCustomGraph.CheckedChanged += new System.EventHandler(this.checkBoxCustomGraph_CheckedChanged);
             // 
             // checkBoxCustomText
@@ -77,13 +82,14 @@
             this.checkBoxCustomText.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomText.FontNerfReduction = 0.5F;
             this.checkBoxCustomText.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomText.Image")));
-            this.checkBoxCustomText.Location = new System.Drawing.Point(175, 0);
+            this.checkBoxCustomText.Location = new System.Drawing.Point(729, 0);
             this.checkBoxCustomText.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomText.Name = "checkBoxCustomText";
             this.checkBoxCustomText.Size = new System.Drawing.Size(26, 26);
             this.checkBoxCustomText.TabIndex = 3;
             this.checkBoxCustomText.TickBoxReductionSize = 10;
             this.checkBoxCustomText.UseVisualStyleBackColor = true;
+            this.checkBoxCustomText.Visible = false;
             this.checkBoxCustomText.CheckedChanged += new System.EventHandler(this.checkBoxCustomText_CheckedChanged);
             // 
             // comboBoxTimeMode
@@ -121,6 +127,43 @@
             this.labelTime.TabIndex = 2;
             this.labelTime.Text = "Time";
             // 
+            // checkBoxCustomStars
+            // 
+            this.checkBoxCustomStars.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxCustomStars.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomStars.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomStars.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomStars.FontNerfReduction = 0.5F;
+            this.checkBoxCustomStars.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomStars.Image")));
+            this.checkBoxCustomStars.Location = new System.Drawing.Point(191, 0);
+            this.checkBoxCustomStars.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomStars.Name = "checkBoxCustomStars";
+            this.checkBoxCustomStars.Size = new System.Drawing.Size(26, 26);
+            this.checkBoxCustomStars.TabIndex = 6;
+            this.checkBoxCustomStars.TickBoxReductionSize = 10;
+            this.checkBoxCustomStars.UseVisualStyleBackColor = true;
+            this.checkBoxCustomStars.Visible = false;
+            this.checkBoxCustomStars.CheckedChanged += new System.EventHandler(this.checkBoxCustomStars_CheckedChanged);
+            // 
+            // checkBoxCustomPlanets
+            // 
+            this.checkBoxCustomPlanets.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxCustomPlanets.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBoxCustomPlanets.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomPlanets.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomPlanets.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomPlanets.FontNerfReduction = 0.5F;
+            this.checkBoxCustomPlanets.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomPlanets.Image")));
+            this.checkBoxCustomPlanets.Location = new System.Drawing.Point(159, 0);
+            this.checkBoxCustomPlanets.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomPlanets.Name = "checkBoxCustomPlanets";
+            this.checkBoxCustomPlanets.Size = new System.Drawing.Size(26, 26);
+            this.checkBoxCustomPlanets.TabIndex = 5;
+            this.checkBoxCustomPlanets.TickBoxReductionSize = 10;
+            this.checkBoxCustomPlanets.UseVisualStyleBackColor = true;
+            this.checkBoxCustomPlanets.Visible = false;
+            this.checkBoxCustomPlanets.CheckedChanged += new System.EventHandler(this.checkBoxCustomPlanets_CheckedChanged);
+            // 
             // UserControlStatsTime
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -142,5 +185,7 @@
         private System.Windows.Forms.Label labelTime;
         private ExtendedControls.CheckBoxCustom checkBoxCustomGraph;
         private ExtendedControls.CheckBoxCustom checkBoxCustomText;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomStars;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomPlanets;
     }
 }
