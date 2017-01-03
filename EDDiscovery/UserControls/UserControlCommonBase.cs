@@ -27,7 +27,8 @@ namespace EDDiscovery.UserControls
         // Not in TABS
         Spanel,
         Trippanel,
-        NotePanel
+        NotePanel,
+        RouteTracker
     };
 
     public class UserControlCommonBase : UserControl
@@ -77,6 +78,7 @@ namespace EDDiscovery.UserControls
                 case PopOuts.Spanel: return new UserControlSpanel();
                 case PopOuts.Trippanel: return new UserControlTrippanel();
                 case PopOuts.NotePanel: return new UserControlNotePanel();
+                case PopOuts.RouteTracker: return new UserControlRouteTracker();
                 default: return null;
             }
         }
