@@ -192,8 +192,8 @@ namespace EDDiscovery.UserControls
             if (checkBoxCustomPlanets.Checked == true)
             {
                 checkBoxCustomStars.Checked = false;
-                if (this.DrawModeChanged != null)
-                    DrawModeChanged(this, e);
+                if (this.TimeModeChanged != null)
+                    TimeModeChanged(this, e);
             }
 
         }
@@ -203,8 +203,8 @@ namespace EDDiscovery.UserControls
             if (checkBoxCustomStars.Checked == true)
             {
                 checkBoxCustomPlanets.Checked = false;
-                if (this.DrawModeChanged != null)
-                    DrawModeChanged(this, e);
+                if (this.TimeModeChanged != null)
+                    TimeModeChanged(this, e);
             }
         }
     }

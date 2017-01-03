@@ -49,8 +49,6 @@
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.userControlStatsTimeScan = new EDDiscovery.UserControls.UserControlStatsTime();
-            this.tabPageMaterials = new System.Windows.Forms.TabPage();
-            this.tabPageCombat = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelData.SuspendLayout();
@@ -157,8 +155,6 @@
             this.tabControlCustomStats.Controls.Add(this.tabPageGeneral);
             this.tabControlCustomStats.Controls.Add(this.tabPageTravel);
             this.tabControlCustomStats.Controls.Add(this.tabPageScan);
-            this.tabControlCustomStats.Controls.Add(this.tabPageMaterials);
-            this.tabControlCustomStats.Controls.Add(this.tabPageCombat);
             this.tabControlCustomStats.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlCustomStats.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlCustomStats.Location = new System.Drawing.Point(0, 0);
@@ -239,6 +235,7 @@
             this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
             this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 27);
+            this.userControlStatsTimeTravel.Stars = false;
             this.userControlStatsTimeTravel.TabIndex = 0;
             this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
             this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
@@ -294,27 +291,10 @@
             this.userControlStatsTimeScan.Location = new System.Drawing.Point(3, 3);
             this.userControlStatsTimeScan.Name = "userControlStatsTimeScan";
             this.userControlStatsTimeScan.Size = new System.Drawing.Size(784, 27);
+            this.userControlStatsTimeScan.Stars = false;
             this.userControlStatsTimeScan.TabIndex = 1;
             this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
             this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
-            // 
-            // tabPageMaterials
-            // 
-            this.tabPageMaterials.Location = new System.Drawing.Point(4, 22);
-            this.tabPageMaterials.Name = "tabPageMaterials";
-            this.tabPageMaterials.Size = new System.Drawing.Size(790, 726);
-            this.tabPageMaterials.TabIndex = 2;
-            this.tabPageMaterials.Text = "Materials";
-            this.tabPageMaterials.UseVisualStyleBackColor = true;
-            // 
-            // tabPageCombat
-            // 
-            this.tabPageCombat.Location = new System.Drawing.Point(4, 22);
-            this.tabPageCombat.Name = "tabPageCombat";
-            this.tabPageCombat.Size = new System.Drawing.Size(790, 726);
-            this.tabPageCombat.TabIndex = 3;
-            this.tabPageCombat.Text = "Combat";
-            this.tabPageCombat.UseVisualStyleBackColor = true;
             // 
             // UserControlStats
             // 
@@ -348,8 +328,6 @@
         private System.Windows.Forms.TabPage tabPageGeneral;
         private System.Windows.Forms.TabPage tabPageTravel;
         private System.Windows.Forms.TabPage tabPageScan;
-        private System.Windows.Forms.TabPage tabPageMaterials;
-        private System.Windows.Forms.TabPage tabPageCombat;
         private UserControlStatsTime userControlStatsTimeTravel;
         private System.Windows.Forms.DataGridView dataGridViewTravel;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
