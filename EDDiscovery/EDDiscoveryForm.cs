@@ -335,6 +335,7 @@ namespace EDDiscovery
         protected void OnRefreshCommanders()
         {
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
+            exportControl1.PopulateCommanders();
             settings.UpdateCommandersListBox();
         }
         #endregion

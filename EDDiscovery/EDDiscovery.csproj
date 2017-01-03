@@ -218,7 +218,8 @@
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
-    <Compile Include="Export\ExportNotes.cs" />
+    <Compile Include="ExportImport\ExportNotes.cs" />
+    <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
@@ -357,9 +358,9 @@
     <Compile Include="EliteDangerous\Material.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
     <Compile Include="EliteDangerous\Synthesis.cs" />
-    <Compile Include="Export\ExportExplorationData.cs" />
-    <Compile Include="Export\ExportFilteredSystems.cs" />
-    <Compile Include="Export\ExportRoute.cs" />
+    <Compile Include="ExportImport\ExportExplorationData.cs" />
+    <Compile Include="ExportImport\ExportFilteredSystems.cs" />
+    <Compile Include="ExportImport\ExportRoute.cs" />
     <Compile Include="Forms\FindMaterialsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -382,15 +383,15 @@
     <Compile Include="JSON\JSONPrettyPrint.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
-    <Compile Include="Export\ExportBase.cs" />
-    <Compile Include="Export\ExportControl.cs">
+    <Compile Include="ExportImport\ExportBase.cs" />
+    <Compile Include="ExportImport\ExportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Export\ExportControl.Designer.cs">
+    <Compile Include="ExportImport\ExportControl.Designer.cs">
       <DependentUpon>ExportControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Export\ExportFSDJump.cs" />
-    <Compile Include="Export\ExportScan.cs" />
+    <Compile Include="ExportImport\ExportFSDJump.cs" />
+    <Compile Include="ExportImport\ExportScan.cs" />
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -957,6 +958,7 @@
     <None Include="Resources\SizeSelectorsTiny.png" />
     <None Include="Resources\materialrare.png" />
     <None Include="Resources\Water_World_Poles_Cloudless4.png" />
+    <None Include="Resources\ImportHelp.txt" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
@@ -986,7 +988,7 @@
     <EmbeddedResource Include="3DMap\FormMap.resx">
       <DependentUpon>FormMap.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Export\ExportControl.resx">
+    <EmbeddedResource Include="ExportImport\ExportControl.resx">
       <DependentUpon>ExportControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
