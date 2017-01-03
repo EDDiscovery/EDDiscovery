@@ -53,8 +53,22 @@ namespace EDDiscovery.UserControls
             Stats(he, hl);
         }
 
+        private HistoryEntry last_he=null;
+        private HistoryList last_hl=null;
         private void Stats(HistoryEntry he, HistoryList hl)
         {
+            // Cache old History entry and list to use for events inside control.
+            if (he == null)
+                he = last_he;
+            if (hl == null)
+                hl = last_hl;
+
+            if (he == null || hl == null)
+                return;
+
+            last_hl = hl;
+            last_he = he;
+
             if (tabControlCustomStats.SelectedIndex == 0)
             {
                 StatsGeneral(he, hl);
@@ -400,7 +414,7 @@ namespace EDDiscovery.UserControls
 
         private void userControlStatsTimeTravel_TimeModeChanged(object sender, EventArgs e)
         {
-
+            Stats(null, null);
         }
 
         private void userControlStatsTimeTravel_DrawModeChanged(object sender, EventArgs e)

@@ -117,6 +117,7 @@ namespace EDDiscovery.UserControls
             comboBoxTimeMode.Items.Add("Day");
             comboBoxTimeMode.Items.Add("Week");
             comboBoxTimeMode.Items.Add("Month");
+            comboBoxTimeMode.SelectedIndex = 0;
         }
 
 
