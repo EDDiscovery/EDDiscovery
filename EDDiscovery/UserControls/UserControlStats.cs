@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {
@@ -30,6 +32,9 @@ namespace EDDiscovery.UserControls
             displaynumber = vn;
             discoveryform.OnNewEntry += AddNewEntry;
             travelhistorycontrol.OnTravelSelectionChanged += SelectionChanged;
+
+            userControlStatsTimeScan.ScanMode = true;
+
         }
 
         public override void Closing()
@@ -77,7 +82,10 @@ namespace EDDiscovery.UserControls
             {
                 StatsTravel(he, hl);
             }
-
+            if (tabControlCustomStats.SelectedIndex == 2)
+            {
+                StatsScan(he, hl);
+            }
         }
 
         private void StatsGeneral(HistoryEntry he, HistoryList hl)
@@ -178,6 +186,9 @@ namespace EDDiscovery.UserControls
 
         void StatsTravel(HistoryEntry he, HistoryList hl)
         {
+            int[] intar = null;
+            string[] strarr = null;
+
             if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary)
             {
                 dataGridViewTravel.Rows.Clear();
@@ -204,8 +215,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5 });
 
 
-                int[] intar = new int[4];
-                string[] strarr = new string[4];
+                intar = new int[4];
+                strarr = new string[4];
 
 
                 intar[0] = hl.GetFSDJumps(DateTime.Now.AddDays(-1), DateTime.Now);
@@ -288,7 +299,8 @@ namespace EDDiscovery.UserControls
                     for (int ii = 0; ii < intervals; ii++)
                         timeintervals[ii + 1] = timeintervals[ii].AddMonths(-1);
                 }
-                string[] strarr = new string[intervals];
+
+                strarr = new string[intervals];
 
                 dataGridViewTravel.Rows.Clear();
                 dataGridViewTravel.Columns.Clear();
@@ -350,7 +362,152 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        
+        void StatsScan(HistoryEntry he, HistoryList hl)
+        {
+            int[] intar = null;
+            string[] strarr = null;
+            int intervals;
+            List<JournalScan>[] scanlists = null;
+
+            if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Summary)
+            {
+                dataGridViewScan.Rows.Clear();
+                dataGridViewScan.Columns.Clear();
+                dataGridViewScan.Dock = DockStyle.Fill;
+                dataGridViewScan.Visible = true;
+
+
+                var Col1 = new DataGridViewTextBoxColumn();
+                Col1.HeaderText = "Last";
+
+                var Col2 = new DataGridViewTextBoxColumn();
+                Col2.HeaderText = "24 hours";
+
+                var Col3 = new DataGridViewTextBoxColumn();
+                Col3.HeaderText = "week";
+
+                var Col4 = new DataGridViewTextBoxColumn();
+                Col4.HeaderText = "month";
+
+                var Col5 = new DataGridViewTextBoxColumn();
+                Col5.HeaderText = "all";
+
+                dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5 });
+
+
+                intar = new int[4];
+                strarr = new string[4];
+
+                intervals = 4;
+                scanlists = new List<JournalScan>[intervals];
+
+
+                scanlists[0] = hl.GetScanList(DateTime.Now.AddDays(-1), DateTime.Now);
+                scanlists[1] = hl.GetScanList(DateTime.Now.AddDays(-7), DateTime.Now);
+                scanlists[2] = hl.GetScanList(DateTime.Now.AddMonths(-1), DateTime.Now);
+                scanlists[3] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+
+
+
+            }
+            else
+            {
+                intervals = 10;
+                DateTime[] timeintervals = new DateTime[intervals + 1];
+                DateTime currentday = DateTime.Today;
+
+
+                if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Day)
+                {
+                    timeintervals[0] = currentday.AddDays(1);
+                    for (int ii = 0; ii < intervals; ii++)
+                        timeintervals[ii + 1] = timeintervals[ii].AddDays(-1);
+
+                }
+                else if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Week)
+                {
+                    DateTime startOfWeek = currentday.AddDays(-1 * (int)(DateTime.Today.DayOfWeek - 1));
+                    timeintervals[0] = startOfWeek.AddDays(7);
+                    for (int ii = 0; ii < intervals; ii++)
+                        timeintervals[ii + 1] = timeintervals[ii].AddDays(-7);
+
+                }
+                else  // month
+                {
+                    DateTime startOfMonth = new DateTime(currentday.Year, currentday.Month, 1);
+                    timeintervals[0] = startOfMonth.AddMonths(1);
+                    for (int ii = 0; ii < intervals; ii++)
+                        timeintervals[ii + 1] = timeintervals[ii].AddMonths(-1);
+                }
+
+                strarr = new string[intervals];
+
+                dataGridViewScan.Rows.Clear();
+                dataGridViewScan.Columns.Clear();
+                dataGridViewScan.Dock = DockStyle.Fill;
+                dataGridViewScan.Visible = true;
+
+
+                var Col1 = new DataGridViewTextBoxColumn();
+                Col1.HeaderText = "";
+
+                dataGridViewScan.Columns.Add(Col1);
+
+                for (int ii = 0; ii < intervals; ii++)
+                {
+                    var Col2 = new DataGridViewTextBoxColumn();
+                    Col2.HeaderText = timeintervals[ii + 1].ToShortDateString();
+                    dataGridViewScan.Columns.Add(Col2);
+                }
+
+
+                scanlists = new List<JournalScan>[intervals];
+                for (int ii = 0; ii < intervals; ii++)
+                    scanlists[ii] = hl.GetScanList(timeintervals[ii + 1], timeintervals[ii]);
+            }
+
+
+            if (userControlStatsTimeScan.Stars)
+            {
+                foreach (EDStar obj in Enum.GetValues(typeof(EDStar)))
+                {
+                    for (int ii = 0; ii < intervals; ii++)
+                    {
+                        int nr = 0;
+                        for (int jj = 0; jj < scanlists[ii].Count; jj++)
+                        {
+                            if (scanlists[ii][jj].StarTypeID == obj && scanlists[ii][jj].IsStar)
+                                nr++;
+                        }
+
+                        strarr[ii] = nr.ToString();
+
+                    }
+                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr);
+                }
+            }
+            else
+            {
+                foreach (EDPlanet obj in Enum.GetValues(typeof(EDPlanet)))
+                {
+                    for (int ii = 0; ii < intervals; ii++)
+                    {
+                        int nr = 0;
+                        for (int jj = 0; jj < scanlists[ii].Count; jj++)
+                        {
+                            if (scanlists[ii][jj].PlanetTypeID == obj && scanlists[ii][jj].IsStar == false)
+                                nr++;
+                        }
+
+                        strarr[ii] = nr.ToString();
+
+                    }
+                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr);
+                }
+            }
+
+        }
+
 
         void SizeControls()
         { 
@@ -419,7 +576,12 @@ namespace EDDiscovery.UserControls
 
         private void userControlStatsTimeTravel_DrawModeChanged(object sender, EventArgs e)
         {
+            Stats(null, null);
+        }
 
+        private void userControlStatsTimeScan_TimeModeChanged(object sender, EventArgs e)
+        {
+            Stats(null, null);
         }
     }
 }

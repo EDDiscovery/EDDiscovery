@@ -40,13 +40,17 @@
             this.tabControlCustomStats = new ExtendedControls.TabControlCustom();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.tabPageTravel = new System.Windows.Forms.TabPage();
-            this.userControlStatsTimeTravel = new EDDiscovery.UserControls.UserControlStatsTime();
-            this.tabPageScan = new System.Windows.Forms.TabPage();
-            this.tabPageMaterials = new System.Windows.Forms.TabPage();
-            this.tabPageCombat = new System.Windows.Forms.TabPage();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.userControlStatsTimeTravel = new EDDiscovery.UserControls.UserControlStatsTime();
+            this.tabPageScan = new System.Windows.Forms.TabPage();
+            this.dataGridViewScan = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.userControlStatsTimeScan = new EDDiscovery.UserControls.UserControlStatsTime();
+            this.tabPageMaterials = new System.Windows.Forms.TabPage();
+            this.tabPageCombat = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelData.SuspendLayout();
@@ -54,6 +58,8 @@
             this.tabPageGeneral.SuspendLayout();
             this.tabPageTravel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
+            this.tabPageScan.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridViewStats
@@ -195,46 +201,6 @@
             this.tabPageTravel.Text = "Travel";
             this.tabPageTravel.UseVisualStyleBackColor = true;
             // 
-            // userControlStatsTimeTravel
-            // 
-            this.userControlStatsTimeTravel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.userControlStatsTimeTravel.DrawMode = EDDiscovery.UserControls.UserControlStatsDrawModeEnum.Graph;
-            this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
-            this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
-            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 27);
-            this.userControlStatsTimeTravel.TabIndex = 0;
-            this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
-            this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
-            this.userControlStatsTimeTravel.DrawModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_DrawModeChanged);
-            // 
-            // tabPageScan
-            // 
-            this.tabPageScan.Location = new System.Drawing.Point(4, 22);
-            this.tabPageScan.Name = "tabPageScan";
-            this.tabPageScan.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageScan.Size = new System.Drawing.Size(790, 726);
-            this.tabPageScan.TabIndex = 1;
-            this.tabPageScan.Text = "Scan";
-            this.tabPageScan.UseVisualStyleBackColor = true;
-            // 
-            // tabPageMaterials
-            // 
-            this.tabPageMaterials.Location = new System.Drawing.Point(4, 22);
-            this.tabPageMaterials.Name = "tabPageMaterials";
-            this.tabPageMaterials.Size = new System.Drawing.Size(790, 726);
-            this.tabPageMaterials.TabIndex = 2;
-            this.tabPageMaterials.Text = "Materials";
-            this.tabPageMaterials.UseVisualStyleBackColor = true;
-            // 
-            // tabPageCombat
-            // 
-            this.tabPageCombat.Location = new System.Drawing.Point(4, 22);
-            this.tabPageCombat.Name = "tabPageCombat";
-            this.tabPageCombat.Size = new System.Drawing.Size(790, 726);
-            this.tabPageCombat.TabIndex = 3;
-            this.tabPageCombat.Text = "Combat";
-            this.tabPageCombat.UseVisualStyleBackColor = true;
-            // 
             // dataGridViewTravel
             // 
             this.dataGridViewTravel.AllowUserToAddRows = false;
@@ -266,6 +232,90 @@
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
+            // userControlStatsTimeTravel
+            // 
+            this.userControlStatsTimeTravel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.userControlStatsTimeTravel.DrawMode = EDDiscovery.UserControls.UserControlStatsDrawModeEnum.Graph;
+            this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
+            this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
+            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 27);
+            this.userControlStatsTimeTravel.TabIndex = 0;
+            this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
+            this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
+            this.userControlStatsTimeTravel.DrawModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_DrawModeChanged);
+            // 
+            // tabPageScan
+            // 
+            this.tabPageScan.Controls.Add(this.dataGridViewScan);
+            this.tabPageScan.Controls.Add(this.userControlStatsTimeScan);
+            this.tabPageScan.Location = new System.Drawing.Point(4, 22);
+            this.tabPageScan.Name = "tabPageScan";
+            this.tabPageScan.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageScan.Size = new System.Drawing.Size(790, 726);
+            this.tabPageScan.TabIndex = 1;
+            this.tabPageScan.Text = "Scan";
+            this.tabPageScan.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewScan
+            // 
+            this.dataGridViewScan.AllowUserToAddRows = false;
+            this.dataGridViewScan.AllowUserToDeleteRows = false;
+            this.dataGridViewScan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewScan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewScan.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4});
+            this.dataGridViewScan.Location = new System.Drawing.Point(6, 50);
+            this.dataGridViewScan.Name = "dataGridViewScan";
+            this.dataGridViewScan.RowHeadersVisible = false;
+            this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridViewScan.Size = new System.Drawing.Size(551, 367);
+            this.dataGridViewScan.TabIndex = 4;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "Item";
+            this.dataGridViewTextBoxColumn3.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.FillWeight = 400F;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Information";
+            this.dataGridViewTextBoxColumn4.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // userControlStatsTimeScan
+            // 
+            this.userControlStatsTimeScan.Dock = System.Windows.Forms.DockStyle.Top;
+            this.userControlStatsTimeScan.DrawMode = EDDiscovery.UserControls.UserControlStatsDrawModeEnum.Graph;
+            this.userControlStatsTimeScan.Location = new System.Drawing.Point(3, 3);
+            this.userControlStatsTimeScan.Name = "userControlStatsTimeScan";
+            this.userControlStatsTimeScan.Size = new System.Drawing.Size(784, 27);
+            this.userControlStatsTimeScan.TabIndex = 1;
+            this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
+            this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
+            // 
+            // tabPageMaterials
+            // 
+            this.tabPageMaterials.Location = new System.Drawing.Point(4, 22);
+            this.tabPageMaterials.Name = "tabPageMaterials";
+            this.tabPageMaterials.Size = new System.Drawing.Size(790, 726);
+            this.tabPageMaterials.TabIndex = 2;
+            this.tabPageMaterials.Text = "Materials";
+            this.tabPageMaterials.UseVisualStyleBackColor = true;
+            // 
+            // tabPageCombat
+            // 
+            this.tabPageCombat.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCombat.Name = "tabPageCombat";
+            this.tabPageCombat.Size = new System.Drawing.Size(790, 726);
+            this.tabPageCombat.TabIndex = 3;
+            this.tabPageCombat.Text = "Combat";
+            this.tabPageCombat.UseVisualStyleBackColor = true;
+            // 
             // UserControlStats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -280,6 +330,8 @@
             this.tabPageGeneral.ResumeLayout(false);
             this.tabPageTravel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
+            this.tabPageScan.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -302,5 +354,9 @@
         private System.Windows.Forms.DataGridView dataGridViewTravel;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private UserControlStatsTime userControlStatsTimeScan;
+        private System.Windows.Forms.DataGridView dataGridViewScan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     }
 }
