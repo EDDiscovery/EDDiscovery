@@ -345,6 +345,10 @@ namespace EDDiscovery
             }
 
             _currentRouteIndex = toolStripComboBoxRouteSelection.SelectedIndex;
+            if (_currentRouteIndex == -1)
+                return;
+
+
             _currentRoute = _savedRoutes[toolStripComboBoxRouteSelection.SelectedIndex];
 
             dataGridViewRouteSystems.Rows.Clear();
@@ -437,6 +441,7 @@ namespace EDDiscovery
             }
 
             ClearRoute();
+            toolStripComboBoxRouteSelection.SelectedItem = null;
         }
 
         private void ClearRoute()
@@ -755,6 +760,7 @@ namespace EDDiscovery
             }
 
             ClearRoute();
+            toolStripComboBoxRouteSelection.SelectedItem = null;
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Text Files|*.txt";
@@ -816,6 +822,13 @@ namespace EDDiscovery
 
         private void toolStripButtonImportRoute_Click(object sender, EventArgs e)
         {
+            if (_discoveryForm.RouteControl.RouteSystems == null
+                || _discoveryForm.RouteControl.RouteSystems.Count == 0)
+            {
+                MessageBox.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
+                return;
+            }
+
             SavedRouteClass newroute = new SavedRouteClass();
             UpdateRouteInfo(newroute);
             if (!newroute.Equals(_currentRoute))
@@ -827,13 +840,7 @@ namespace EDDiscovery
             }
 
             ClearRoute();
-
-            if (_discoveryForm.RouteControl.RouteSystems == null
-                || _discoveryForm.RouteControl.RouteSystems.Count == 0)
-            {
-                MessageBox.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
-                return;
-            }
+            toolStripComboBoxRouteSelection.SelectedItem = null;
 
             foreach (SystemClass s in _discoveryForm.RouteControl.RouteSystems)
             {
