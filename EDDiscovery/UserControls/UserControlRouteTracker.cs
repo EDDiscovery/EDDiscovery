@@ -155,6 +155,24 @@ namespace EDDiscovery.UserControls
             if (_currentRoute != null)
             {
                 topline = _currentRoute.Name;
+                if (_currentRoute.Systems.Count == 0)
+                    return;
+                SystemClass scX = SystemClass.GetSystem(_currentRoute.Systems[_currentRoute.Systems.Count -1]);
+                if (scX != null)
+                {
+                    double distX = SystemClass.Distance(lastHE.System, scX);
+                    //Small hack to pull the jump range from TripPanel1
+                    var jumpRange = SQLiteDBClass.GetSettingDouble("TripPanel1" + "JumpRange", -1.0);
+                    string mesg = "remain";
+                    if (jumpRange > 0)
+                    {
+                        int jumps = (int)Math.Ceiling(distX / jumpRange);
+                        if (jumps > 0)
+                            mesg = "@ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
+                    }
+
+                    topline += String.Format(" {0} WPs {1:N2}ly {2}", _currentRoute.Systems.Count, distX, mesg);
+                }
                 //topline += " ," + lastHE.System.name;
                 //String nearestSystem = "";
                 double minDist = double.MaxValue;
