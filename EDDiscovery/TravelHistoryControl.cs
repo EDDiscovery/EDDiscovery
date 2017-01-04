@@ -52,27 +52,9 @@ namespace EDDiscovery
 
         string[] popoutbuttonlist = new string[] 
         {
-            "S-Panel", "Trip-Panel",          // not in tabs
+            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker",  // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
             "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
-        };
-
-        public enum PopOuts        // id's.. used in tab controls, and in button pop outs button
-        {
-            // IN TABS
-            Log,
-            NS,
-            Materials,
-            Commodities,
-            Ledger,
-            Journal,
-            TravelGrid,
-            ScreenShot,
-            Statistics,
-            Scan,
-            // Not in TABS
-            Spanel,
-            Trippanel
         };
 
         Bitmap[] popoutbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
@@ -99,7 +81,50 @@ namespace EDDiscovery
                                                "Display scan data"
                                             };
 
-        
+        class PopOutInfo
+        {
+            public string WindowTitlePrefix;
+            public string WindowRefName;
+            public Bitmap TabIcon;
+            public string ToolTip;
+            public bool SupportsTransparency;
+            public bool DefaultTransparent;
+
+            public PopOutInfo()
+            {
+                WindowTitlePrefix = "";
+                WindowRefName = "Unknown";
+            }
+
+            public PopOutInfo(string prefix, string rf, Bitmap icon = null, string tooltip = null, bool? transparent = null)
+            {
+                WindowTitlePrefix = prefix;
+                WindowRefName = rf;
+                TabIcon = icon;
+                ToolTip = tooltip;
+                SupportsTransparency = transparent != null;
+                DefaultTransparent = transparent ?? false;
+            }
+        }
+
+        Dictionary<PopOuts, PopOutInfo> popoutinfo = new Dictionary<PopOuts, PopOutInfo>
+        {
+            { PopOuts.Log, new PopOutInfo("Log", "Log", EDDiscovery.Properties.Resources.Log, "Display the program log") },
+            { PopOuts.NS, new PopOutInfo("Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star, "Display the nearest stars to the currently selected entry") },
+            { PopOuts.Materials, new PopOutInfo("Materials", "Materials", EDDiscovery.Properties.Resources.material, "Display the material count at the currently selected entry") },
+            { PopOuts.Commodities, new PopOutInfo("Commodities", "Commodities", EDDiscovery.Properties.Resources.commodities, "Display the commodity count at the currently selected entry") },
+            { PopOuts.Ledger, new PopOutInfo("Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger, "Display a ledger of cash related entries") },
+            { PopOuts.Journal, new PopOutInfo("Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal, "Display the journal grid view") },
+            { PopOuts.TravelGrid, new PopOutInfo("Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "Display the history grid view") },
+            { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EDDiscovery.Properties.Resources.screenshot, "Display the screen shot view") },
+            { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
+            { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, "Display scan data", transparent: false) },
+            { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
+            { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
+            { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
+            { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
+        };
+
         #region Initialisation
 
         public TravelHistoryControl()
@@ -174,47 +199,38 @@ namespace EDDiscovery
         Control TabCreate(TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
             PopOuts i = (PopOuts)si;
-
-            if (i == PopOuts.Log)
-                return new UserControlLog();
-            else if (i == PopOuts.NS)
-                return new UserControlStarDistance();
-            else if (i == PopOuts.Materials)
-                return new UserControlMaterials();
-            else if (i == PopOuts.Commodities)
-                return new UserControlCommodities();
-            else if (i == PopOuts.Ledger)
-                return new UserControlLedger();
-            else if (i == PopOuts.Journal)
-                return new UserControlJournalGrid();
-            else if (i == PopOuts.TravelGrid)
-                return new UserControlTravelGrid();
-            else if (i == PopOuts.ScreenShot)
-                return new UserControlScreenshot();
-            else if (i == PopOuts.Statistics)
-                return new UserControlStats();
-            else if (i == PopOuts.Scan)
-                return new UserControlScan();
-            else
-                return null;
+            return UserControlCommonBase.Create(i);
         }
 
         void TabPostCreate(TabStrip t, Control ctrl , int i)        // called by tab strip after control has been added..
         {                                                           // now we can do the configure of it, with the knowledge the tab has the right size
             int displaynumber = (int)t.Tag;                         // tab strip - use tag to remember display id which helps us save context.
 
+            UserControlCommonBase uc = ctrl as UserControlCommonBase;
+
+            if (uc != null)
+            {
+                UserControlPostCreate(displaynumber, uc);
+                uc.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
+            }
+
+            System.Diagnostics.Debug.WriteLine("And theme {0}", i);
+            _discoveryForm.theme.ApplyToControls(t);
+        }
+
+        void UserControlPostCreate(int displaynumber, UserControlCommonBase ctrl)
+        {
+            ctrl.Init(_discoveryForm, displaynumber);
+            ctrl.LoadLayout();
+
             if (ctrl is UserControlLog)
             {
                 UserControlLog sc = ctrl as UserControlLog;
-                sc.Text = "Log";
-                sc.Init(_discoveryForm, displaynumber);
                 sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBlockColor);
             }
             else if (ctrl is UserControlStarDistance)
             {
                 UserControlStarDistance sc = ctrl as UserControlStarDistance;
-                sc.Text = "Stars";
-                sc.Init(_discoveryForm, displaynumber);
                 if (lastclosestsystems != null)           // if we have some, fill in this grid
                     sc.FillGrid(lastclosestname, lastclosestsystems);
             }
@@ -223,80 +239,30 @@ namespace EDDiscovery
                 UserControlMaterials ucm = ctrl as UserControlMaterials;
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
-                ucm.Text = "Materials";
-                if (userControlTravelGrid.GetCurrentHistoryEntry != null)
-                    ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(false));
             }
             else if (ctrl is UserControlCommodities)
             {
                 UserControlCommodities ucm = ctrl as UserControlCommodities;
-                ucm.Init(_discoveryForm, displaynumber);
                 ucm.OnChangedCount += MaterialCommodityChangeCount;
                 ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
-                ucm.LoadLayout();
-                ucm.Text = "Commodities";
-                if (userControlTravelGrid.GetCurrentHistoryEntry != null)
-                    ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry.MaterialCommodity.Sort(true));
             }
             else if (ctrl is UserControlLedger)
             {
                 UserControlLedger ucm = ctrl as UserControlLedger;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
-                ucm.Text = "Ledger";
                 ucm.OnGotoJID += GotoJID;
-                ucm.Display(_discoveryForm.history.materialcommodititiesledger);
             }
             else if (ctrl is UserControlJournalGrid)
             {
                 UserControlJournalGrid ucm = ctrl as UserControlJournalGrid;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
-                ucm.Text = "Journal";
-                ucm.Display(_discoveryForm.history);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
             }
             else if (ctrl is UserControlTravelGrid)
             {
                 UserControlTravelGrid ucm = ctrl as UserControlTravelGrid;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.NoHistoryIcon();
-                ucm.NoPopOutIcon();
-                ucm.LoadLayout();
-                ucm.Text = "History";
-                ucm.Display(_discoveryForm.history);
                 ucm.NoHistoryIcon();
                 ucm.NoPopOutIcon();
             }
-            else if (ctrl is UserControlScreenshot)
-            {
-                UserControlScreenshot ucm = ctrl as UserControlScreenshot;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
-                ucm.Text = "Screen Shot";
-            }
-            else if (ctrl is UserControlStats)
-            {
-                UserControlStats ucm = ctrl as UserControlStats;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
-                ucm.Text = "Statistics";
-                ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
-            }
-            else if (ctrl is UserControlScan)
-            {
-                UserControlScan ucm = ctrl as UserControlScan;
-                ucm.Init(_discoveryForm, displaynumber);
-                ucm.LoadLayout();
-                ucm.Text = "Scan";
-                ucm.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
-            }
-
-            System.Diagnostics.Debug.WriteLine("And theme {0}", i);
-            _discoveryForm.theme.ApplyToControls(t);
         }
 
         void TabPopOut(TabStrip t, int i)        // pop out clicked
@@ -833,8 +799,12 @@ namespace EDDiscovery
                 PopOut(PopOuts.Spanel);
             else if (comboBoxCustomPopOut.SelectedIndex == 1)
                 PopOut(PopOuts.Trippanel);
+            else if (comboBoxCustomPopOut.SelectedIndex == 2)
+                PopOut(PopOuts.NotePanel);
+            else if (comboBoxCustomPopOut.SelectedIndex == 3)
+                PopOut(PopOuts.RouteTracker);
             else
-                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 2));
+                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 4));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;
@@ -847,119 +817,20 @@ namespace EDDiscovery
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
             tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 
-            if (selected == PopOuts.Log)
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlLog)) + 1;
+            UserControlCommonBase ctrl = UserControlCommonBase.Create(selected);
+            int numopened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType()) + 1;
 
-                UserControlLog uclog = new UserControlLog(); // Add a log
-                tcf.Init(uclog, "Log " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Log" + numopened, _discoveryForm.TopMost);
-                uclog.Init(_discoveryForm, numopened);
-                uclog.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBackColor);
-            }
-            else if (selected == PopOuts.NS)
+            if (ctrl != null)
             {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlStarDistance)) + 1;
-
-                UserControlStarDistance ucsd = new UserControlStarDistance(); // Add a closest distance tab
-                tcf.Init(ucsd, "Nearest Stars " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame,  "StarDistance" + numopened, _discoveryForm.TopMost);
-
-                ucsd.Init(_discoveryForm, numopened);
-                if (lastclosestsystems != null)           // if we have some, fill in this grid
-                    ucsd.FillGrid(lastclosestname, lastclosestsystems);
-            }
-            else if (selected == PopOuts.Materials)
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlMaterials)) + 1;
-
-                UserControlMaterials ucmc = new UserControlMaterials(); // Add a closest distance tab
-                tcf.Init(ucmc, "Materials " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Materials" + numopened, _discoveryForm.TopMost);
-
-                ucmc.Init(_discoveryForm, numopened);
-                HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
-                if (curpos != null)
-                    ucmc.Display(curpos.MaterialCommodity.Sort(false));
-            }
-            else if (selected == PopOuts.Commodities)
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlCommodities)) + 1;
-
-                UserControlCommodities ucmc = new UserControlCommodities(); // Add a closest distance tab
-                tcf.Init(ucmc, "Commodities " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Commodities" + numopened, _discoveryForm.TopMost);
-
-                ucmc.Init(_discoveryForm, numopened);
-                HistoryEntry curpos = userControlTravelGrid.GetCurrentHistoryEntry;
-                if (curpos != null)
-                    ucmc.Display(curpos.MaterialCommodity.Sort(true));
-            }
-            else if (selected == PopOuts.Ledger)
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlLedger)) + 1;
-
-                UserControlLedger ucmc = new UserControlLedger(); // Add a closest distance tab
-                tcf.Init(ucmc, "Ledger " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Ledger" + numopened, _discoveryForm.TopMost);
-
-                ucmc.Init(_discoveryForm, numopened);
-                ucmc.Display(_discoveryForm.history.materialcommodititiesledger);
-                ucmc.OnGotoJID += GotoJID;
-            }
-            else if (selected == PopOuts.Journal)
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlJournalGrid)) + 1;  // used to determine name and also key for DB
-                UserControlJournalGrid uctg = new UserControlJournalGrid();
-                tcf.Init(uctg, "Journal History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "JournalHistory" + numopened, _discoveryForm.TopMost);
-                uctg.Init(_discoveryForm, numopened);
-                uctg.Display(_discoveryForm.history);
-                uctg.NoPopOutIcon();
-                uctg.NoHistoryIcon();
-            }
-            else if (selected == PopOuts.TravelGrid)    // match order in bitmap mp and comboBoxCustomPopOut
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlTravelGrid)) + 1;  // used to determine name and also key for DB
-                UserControlTravelGrid uctg = new UserControlTravelGrid();
-                tcf.Init(uctg,"Travel History " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "TravelHistory" + numopened, _discoveryForm.TopMost);
-                uctg.Init(_discoveryForm, numopened);
-                uctg.Display(_discoveryForm.history);
-                uctg.NoPopOutIcon();
-                uctg.NoHistoryIcon();
-            }
-            else if (selected == PopOuts.ScreenShot)    // match order in bitmap mp and comboBoxCustomPopOut
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlScreenshot)) + 1;  // used to determine name and also key for DB
-                UserControlScreenshot ucm = new UserControlScreenshot();
-                tcf.Init(ucm, "ScreenShot " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "ScreenShot" + numopened, _discoveryForm.TopMost);
-                ucm.Init(_discoveryForm, numopened);
-            }
-            else if (selected == PopOuts.Statistics)    // match order in bitmap mp and comboBoxCustomPopOut
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlStats)) + 1;  // used to determine name and also key for DB
-                UserControlStats ucm = new UserControlStats();
-                tcf.Init(ucm,"Statistics " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Stats" + numopened, _discoveryForm.TopMost);
-                ucm.Init(_discoveryForm, numopened);
-                ucm.SelectionChanged(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
-            }
-            else if (selected == PopOuts.Scan)
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlScan)) + 1;  // used to determine name and also key for DB
-                UserControlScan ucm = new UserControlScan();
-                tcf.Init(ucm, "Scan " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Scan" + numopened, _discoveryForm.TopMost);
-                tcf.InitForTransparency(false, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
-                ucm.Init(_discoveryForm, numopened);
-            }
-            else if (selected == PopOuts.Spanel)
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlSpanel)) + 1;  // used to determine name and also key for DB
-                UserControlSpanel ucm = new UserControlSpanel();
-                tcf.Init(ucm, "Summary Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Spanel" + numopened, true);
-                tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
-                ucm.Init(_discoveryForm, numopened);
-            }
-            else if (selected == PopOuts.Trippanel)
-            {
-                int numopened = usercontrolsforms.CountOf(typeof(UserControlTrippanel)) + 1;  // used to determine name and also key for DB
-                UserControlTrippanel ucm = new UserControlTrippanel();
-                tcf.Init(ucm, "Trip Panel " + ((numopened > 1) ? numopened.ToString() : ""), _discoveryForm.theme.WindowsFrame, "Trippanel" + numopened, true);
-                tcf.InitForTransparency(true, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
-                ucm.Init(_discoveryForm, numopened);
+                PopOutInfo poi = popoutinfo.ContainsKey(selected) ? popoutinfo[selected] : new PopOutInfo();
+                string windowtitle = poi.WindowTitlePrefix + " " + ((numopened > 1) ? numopened.ToString() : "");
+                string refname = poi.WindowRefName + numopened.ToString();
+                tcf.Init(ctrl, windowtitle, _discoveryForm.theme.WindowsFrame, refname, _discoveryForm.TopMost);
+                if (poi.SupportsTransparency)
+                {
+                    tcf.InitForTransparency(poi.DefaultTransparent, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
+                }
+                UserControlPostCreate(numopened, ctrl);
             }
 
             tcf.Show();
@@ -972,12 +843,7 @@ namespace EDDiscovery
 
             _discoveryForm.theme.ApplyToForm(tcf);
 
-            if (selected == PopOuts.Spanel)                            // need to theme, before draw, as it needs the theme colours set up
-                ((UserControlSpanel)tcf.UserControl).Display(_discoveryForm.history);
-            else if (selected == PopOuts.Scan)                            // need to theme, before draw, as it needs the theme colours set up
-                ((UserControlScan)tcf.UserControl).Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
-            else if (selected == PopOuts.Trippanel)                            // need to theme, before draw, as it needs the theme colours set up
-                ((UserControlTrippanel)tcf.UserControl).Display(_discoveryForm.history);
+            ctrl.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
         }
 
         void TGPopOut()
@@ -993,68 +859,7 @@ namespace EDDiscovery
         {
             if (e.KeyCode == Keys.Enter)
             {
-                string sn = textBoxTarget.Text;
-                ISystem sc = _discoveryForm.history.FindSystem(sn);
-                string msgboxtext = null;
-
-                if (sc != null && sc.HasCoordinate)
-                {
-                    SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sc.name, sc.id_edsm);        // has it got a note?
-
-                    if (nc != null)
-                    {
-                        TargetClass.SetTargetNotedSystem(sc.name, nc.id, sc.x, sc.y, sc.z);
-                        msgboxtext = "Target set on system with note " + sc.name;
-                    }
-                    else
-                    {
-                        BookmarkClass bk = BookmarkClass.FindBookmarkOnSystem(textBoxTarget.Text);    // has it been bookmarked?
-
-                        if (bk != null)
-                        {
-                            TargetClass.SetTargetBookmark(sc.name, bk.id, bk.x, bk.y, bk.z);
-                            msgboxtext = "Target set on booked marked system " + sc.name;
-                        }
-                        else
-                        {
-                            if (MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                            {
-                                BookmarkClass newbk = new BookmarkClass();
-                                newbk.StarName = sn;
-                                newbk.x = sc.x;
-                                newbk.y = sc.y;
-                                newbk.z = sc.z;
-                                newbk.Time = DateTime.Now;
-                                newbk.Note = "";
-                                newbk.Add();
-                                TargetClass.SetTargetBookmark(sc.name, newbk.id, newbk.x, newbk.y, newbk.z);
-                            }
-                        }
-                    }
-
-                }
-                else
-                {
-                    if (sn.Length > 2 && sn.Substring(0, 2).Equals("G:"))
-                        sn = sn.Substring(2, sn.Length - 2);
-
-                    GalacticMapObject gmo = _discoveryForm.galacticMapping.Find(sn, true, true);    // ignore if its off, find any part of string, find if disabled
-
-                    if (gmo != null)
-                    {
-                        TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
-                        msgboxtext = "Target set on galaxy object " + gmo.name;
-                    }
-                    else
-                    {
-                        msgboxtext = "Unknown system, system is without co-ordinates or galaxy object not found";
-                    }
-                }
-
-                _discoveryForm.NewTargetSet();          // tells everyone who cares a new target was set
-
-                if (msgboxtext != null)
-                    MessageBox.Show(msgboxtext, "Create a target", MessageBoxButtons.OK);
+                RoutingUtils.setTargetSystem(_discoveryForm, textBoxTarget.Text);
             }
         }
 

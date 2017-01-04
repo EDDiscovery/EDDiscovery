@@ -103,6 +103,11 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
+        public override void Display(HistoryEntry current, HistoryList history)
+        {
+            Display(history);
+        }
+
         public void Display(HistoryList hl )
         {
             if (hl == null)     // just for safety

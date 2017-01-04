@@ -81,6 +81,7 @@ namespace EDDiscovery.UserControls
         public UserControlTravelGrid()
         {
             InitializeComponent();
+            Name = "History";
         }
 
         public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
@@ -126,6 +127,11 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        public override void Display(HistoryEntry current, HistoryList history)
+        {
+            Display(history);
+        }
 
         public void Display( HistoryList hl )           // rowno current.. -1 if nothing
         {

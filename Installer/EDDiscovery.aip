@@ -17,10 +17,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{69CFC565-E64A-4251-B938-7EA5031BC7D2} 1053:{F5496CEB-6D54-4967-841A-1615B5AB6FB9} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{A49EA97B-732A-4E40-B247-1BF02CD8FAB3} 1053:{F9E4874D-BD62-437D-83F1-912E94382806} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="5.1.5" Type="32"/>
+    <ROW Property="ProductVersion" Value="5.2.1" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -37,7 +37,6 @@
     <ROW Directory="EDDiscovery_Dir" Directory_Parent="ProgramMenuFolder" DefaultDir="EDDISC~1|EDDiscovery"/>
     <ROW Directory="FontsFolder" Directory_Parent="TARGETDIR" DefaultDir="FONTSF~1|FontsFolder" IsPseudoRoot="1"/>
     <ROW Directory="Microsoft.VC100.CRT_Dir" Directory_Parent="x86_Dir" DefaultDir="MICROS~1.CRT|Microsoft.VC100.CRT"/>
-    <ROW Directory="Nymapp_Dir" Directory_Parent="APPDIR" DefaultDir="NYMAPP~1|Ny mapp"/>
     <ROW Directory="ProgramMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="PROGRA~1|ProgramMenuFolder" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="x64_Dir" Directory_Parent="APPDIR" DefaultDir="x64"/>
@@ -52,7 +51,6 @@
     <ROW Component="EUROCAPS.TTF" ComponentId="{6BDDE9AC-722A-44A4-8A95-9D3D98C24D62}" Directory_="FontsFolder" Attributes="0" Type="0"/>
     <ROW Component="InstallLanguage" ComponentId="{E9F59FD4-B1B3-479F-858E-68E75683B873}" Directory_="APPDIR" Attributes="4" KeyPath="InstallLanguage" Options="1"/>
     <ROW Component="Newtonsoft.Json.dll" ComponentId="{11EF4895-473E-435D-A749-C1CCC6462BF8}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
-    <ROW Component="Nymapp" ComponentId="{D24B1301-59A5-4A5D-829F-12E472FA278B}" Directory_="Nymapp_Dir" Attributes="0"/>
     <ROW Component="OpenTK.GLControl.dll" ComponentId="{027B3AD2-A990-44DE-A920-B19144770C02}" Directory_="APPDIR" Attributes="0" KeyPath="OpenTK.GLControl.dll"/>
     <ROW Component="OpenTK.dll" ComponentId="{C4594C03-283B-485A-B97C-6E3B4D128D73}" Directory_="APPDIR" Attributes="0" KeyPath="OpenTK.dll"/>
     <ROW Component="ProductInformation" ComponentId="{2052CDE1-E8AB-4307-885D-DB1B4C223C03}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
@@ -68,7 +66,7 @@
     <ROW Feature="AI32BitFiles" Title="32-bit" Description="32-bit Executables and Libraries" Display="5" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage Newtonsoft.Json.dll OpenTK.GLControl.dll OpenTK.dll SQLite.Interop.dll System.Data.SQLite.Linq.dll System.Data.SQLite.dll msvcp100.dll msvcr100.dll"/>
     <ROW Feature="AI64BitFiles" Title="64-bit" Description="64-bit Executables and Libraries" Display="3" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage SQLite.Interop.dll_1"/>
     <ROW Feature="AIOtherFiles" Title="Common" Description="Shared Resource and Regular Files" Display="7" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage fround.js"/>
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage EDDiscovery EDDiscovery.exe EDDiscovery.exe.config EUROCAPS.TTF InstallLanguage Nymapp ProductInformation"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage EDDiscovery EDDiscovery.exe EDDiscovery.exe.config EUROCAPS.TTF InstallLanguage ProductInformation"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
@@ -156,7 +154,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="EDDiscovery_Dir" Component_="EDDiscovery" ManualDelete="false"/>
-    <ROW Directory_="Nymapp_Dir" Component_="Nymapp" ManualDelete="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_AppSearchEx" Type="1" Source="Prereq.dll" Target="DoAppSearchEx"/>

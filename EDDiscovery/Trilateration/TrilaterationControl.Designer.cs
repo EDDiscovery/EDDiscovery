@@ -78,6 +78,7 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deleteAllWithKnownPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trilatContextMenu.SuspendLayout();
             this.panelImplementation.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
@@ -225,9 +226,10 @@ namespace EDDiscovery
             // 
             this.wantedContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeFromWantedSystemsToolStripMenuItem,
-            this.viewOnEDSMToolStripMenuItem1});
+            this.viewOnEDSMToolStripMenuItem1,
+            this.deleteAllWithKnownPositionToolStripMenuItem});
             this.wantedContextMenu.Name = "wantedContextMenu";
-            this.wantedContextMenu.Size = new System.Drawing.Size(234, 48);
+            this.wantedContextMenu.Size = new System.Drawing.Size(234, 92);
             // 
             // removeFromWantedSystemsToolStripMenuItem
             // 
@@ -634,6 +636,13 @@ namespace EDDiscovery
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
             // 
+            // deleteAllWithKnownPositionToolStripMenuItem
+            // 
+            this.deleteAllWithKnownPositionToolStripMenuItem.Name = "deleteAllWithKnownPositionToolStripMenuItem";
+            this.deleteAllWithKnownPositionToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.deleteAllWithKnownPositionToolStripMenuItem.Text = "Delete all with known position";
+            this.deleteAllWithKnownPositionToolStripMenuItem.Click += new System.EventHandler(this.deleteAllWithKnownPositionToolStripMenuItem_Click);
+            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -714,5 +723,6 @@ namespace EDDiscovery
         private DataViewScrollerPanel dataViewScroller_Wanted;
         private VScrollBarCustom vScrollBarCustom1;
         private VScrollBarCustom vScrollBarCustom2;
+        private System.Windows.Forms.ToolStripMenuItem deleteAllWithKnownPositionToolStripMenuItem;
     }
 }
