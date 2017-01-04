@@ -85,21 +85,14 @@ namespace EDDiscovery
             public StarScan retstarscan;
         }
 
-        protected class TraceLogWriter : TextWriter
-        {
-            public override Encoding Encoding { get { return Encoding.UTF8; } }
-            public override IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
-            public override void Write(string value) { Trace.Write(value); }
-            public override void WriteLine(string value) { Trace.WriteLine(value); }
-            public override void WriteLine() { Trace.WriteLine(""); }
-        }
-
         #region Public Interface
         #region Public Properties
         public int DisplayedCommander { get; set; } = 0;
         public HistoryList history { get; private set; } = new HistoryList();
         public bool option_nowindowreposition { get; private set; } = false;                             // Cmd line options
         public bool option_debugoptions { get; private set; } = false;
+        public bool option_tracelog { get; private set; } = false;
+        public bool option_fcexcept { get; private set; } = false;
         public EDSMSync EdsmSync { get; private set; }
         public string LogText { get { return logtext; } }
         public bool PendingClose { get; private set; }           // we want to close boys!
@@ -440,21 +433,13 @@ namespace EDDiscovery
                     Directory.CreateDirectory(logpath);
                 }
 
-                if (!Debugger.IsAttached)
+                if (!Debugger.IsAttached || option_tracelog)
                 {
-                    logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
-
-                    System.Diagnostics.Trace.AutoFlush = true;
-                    // Log trace events to the above file
-                    System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(logname));
-                    // Log unhandled exceptions
-                    AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                    // Log unhandled UI exceptions
-                    Application.ThreadException += Application_ThreadException;
-                    // Redirect console to trace
-                    Console.SetOut(new TraceLogWriter());
-                    // Log first-chance exceptions to help diagnose errors
-                    Register_FirstChanceException_Handler();
+                    TraceLog.LogFileWriterException += ex =>
+                    {
+                        LogLineHighlight($"Log Writer Exception: {ex}");
+                    };
+                    TraceLog.Init(option_fcexcept);
                 }
             }
             catch (Exception ex)
@@ -479,6 +464,8 @@ namespace EDDiscovery
             }
 
             option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
+            option_tracelog = parts.FindIndex(x => x.Equals("-TraceLog", StringComparison.InvariantCultureIgnoreCase)) != -1;
+            option_fcexcept = parts.FindIndex(x => x.Equals("-LogExceptions", StringComparison.InvariantCultureIgnoreCase)) != -1;
 
             if (parts.FindIndex(x => x.Equals("-EDSMBeta", StringComparison.InvariantCultureIgnoreCase)) != -1)
             {
@@ -552,104 +539,6 @@ namespace EDDiscovery
             {
                 LogLine("EliteDangerous is not running.");
             }
-        }
-        #endregion
-
-        #region Unexpected exception handling
-        // We can't prevent an unhandled exception from killing the application.
-        // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
-        // Log the exception info if we can, and ask the user to report it.
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        [System.Runtime.ConstrainedExecution.ReliabilityContract(
-            System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState,
-            System.Runtime.ConstrainedExecution.Cer.Success)]
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Trace.WriteLine($"\n==== UNHANDLED EXCEPTION ====\n{e.ExceptionObject.ToString()}\n==== cut ====");
-                MessageBox.Show($"There was an unhandled exception.\nPlease report this at https://github.com/EDDiscovery/EDDiscovery/issues and attach {logname}\nException: {e.ExceptionObject.ToString()}\n\nThis application must now close", "Unhandled Exception");
-            }
-            catch
-            {
-            }
-
-            Environment.Exit(1);
-        }
-
-        // Handling a ThreadException leaves the application in an undefined state.
-        // See https://msdn.microsoft.com/en-us/library/system.windows.forms.application.threadexception(v=vs.100).aspx
-        // Log the exception, ask the user to report it, and exit.
-        private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Trace.WriteLine($"\n==== UNHANDLED EXCEPTION ON {Thread.CurrentThread.Name} THREAD ====\n{e.Exception.ToString()}\n==== cut ====");
-                MessageBox.Show($"There was an unhandled exception.\nPlease report this at https://github.com/EDDiscovery/EDDiscovery/issues and attach {logname}\nException: {e.Exception.Message}\n{e.Exception.StackTrace}\n\nThis application must now close", "Unhandled Exception");
-            }
-            catch
-            {
-            }
-
-            Environment.Exit(1);
-        }
-
-        // Mono does not implement AppDomain.CurrentDomain.FirstChanceException
-        private static void Register_FirstChanceException_Handler()
-        {
-            try
-            {
-                Type adtype = AppDomain.CurrentDomain.GetType();
-                EventInfo fcexevent = adtype.GetEvent("FirstChanceException");
-                if (fcexevent != null)
-                {
-                    fcexevent.AddEventHandler(AppDomain.CurrentDomain, new EventHandler<System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs>(CurrentDomain_FirstChanceException));
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        // Log exceptions were they occur so we can try to  some
-        // hard to debug issues.
-        private static void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
-        {
-            // Ignore HTTP NotModified exceptions
-            if (e.Exception is System.Net.WebException)
-            {
-                var webex = (WebException)e.Exception;
-                if (webex.Response != null && webex.Response is HttpWebResponse)
-                {
-                    var resp = (HttpWebResponse)webex.Response;
-                    if (resp.StatusCode == HttpStatusCode.NotModified)
-                    {
-                        return;
-                    }
-                }
-            }
-            // Ignore DLL Not Found exceptions from OpenTK
-            else if (e.Exception is DllNotFoundException && e.Exception.Source == "OpenTK")
-            {
-                return;
-            }
-
-            var trace = new StackTrace(1, true);
-
-            // Ignore first-chance exceptions in threads outside our code
-            bool ourcode = false;
-            foreach (var frame in trace.GetFrames())
-            {
-                if (frame.GetMethod().DeclaringType.Assembly == Assembly.GetExecutingAssembly())
-                {
-                    ourcode = true;
-                    break;
-                }
-            }
-
-            if (ourcode)
-                System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.Message}\n{trace.ToString()}");
         }
         #endregion
 
@@ -731,7 +620,6 @@ namespace EDDiscovery
                 }
             }
 
-            DeleteOldLogFiles();
             if (PendingClose) return;
             GitHubRelease rel;
             if (CheckForNewinstaller(out rel))
@@ -769,42 +657,6 @@ namespace EDDiscovery
         private void ReportProgress(int percentComplete, string message)
         {
             InvokeAsyncOnUIThread(() => OnReportProgress?.Invoke(percentComplete, message));
-        }
-
-        private void DeleteOldLogFiles()
-        {
-            try
-            {
-                // Create a reference to the Log directory.
-                DirectoryInfo di = new DirectoryInfo(Path.Combine(Tools.GetAppDataDirectory(), "Log"));
-
-                Trace.WriteLine("Running logfile age check");
-                // Create an array representing the files in the current directory.
-                FileInfo[] fi = di.GetFiles("*.log");
-
-                System.Collections.IEnumerator myEnum = fi.GetEnumerator();
-
-                while (myEnum.MoveNext())
-                {
-                    FileInfo fiTemp = (FileInfo)(myEnum.Current);
-
-                    DateTime time = fiTemp.CreationTime;
-
-                    //Trace.WriteLine(String.Format("File {0}  time {1}", fiTemp.Name, __box(time)));
-
-                    TimeSpan maxage = new TimeSpan(30, 0, 0, 0);
-                    TimeSpan fileage = DateTime.Now - time;
-
-                    if (fileage > maxage)
-                    {
-                        Trace.WriteLine(String.Format("File {0} is older then maximum age. Removing file from Logs.", fiTemp.Name));
-                        fiTemp.Delete();
-                    }
-                }
-            }
-            catch
-            {
-            }
         }
         #endregion
 
