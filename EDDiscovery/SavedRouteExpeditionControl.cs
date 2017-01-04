@@ -791,9 +791,11 @@ namespace EDDiscovery
                     String[] values = sysname.Split(',');
                     sysname = values[0];
                 }
-                SystemClass sc = GetSystem(sysname);
+                if (String.IsNullOrWhiteSpace(sysname))
+                    continue;
+                SystemClass sc = GetSystem(sysname.Trim());
                 if (sc != null)
-                    systems.Add(sysname);
+                    systems.Add(sc.name);
                 else
                     countbad++;
             }
