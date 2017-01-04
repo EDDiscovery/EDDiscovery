@@ -24,7 +24,7 @@ namespace EDDiscovery.Actions
             return (promptValue != null);
         }
 
-        public override bool ExecuteAction()
+        public override bool ExecuteAction(HistoryEntry he, EDDiscoveryForm df, bool nopause)
         {
             return true;
         }

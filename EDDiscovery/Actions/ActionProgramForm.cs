@@ -68,7 +68,9 @@ namespace EDDiscovery.Actions
             {
                 initialprogname = textBoxBorderName.Text = prog.Name;
 
-                foreach (Action ac in prog.programsteps)
+                Action ac;
+                int step = 0;
+                while( (ac = prog.GetStep(step++)) != null )
                     CreateStep(ac);
             }
             else if (suggestedname != null )
@@ -439,8 +441,8 @@ namespace EDDiscovery.Actions
 
         public ActionProgram GetProgram()      // call only when OK returned
         {
-            ActionProgram ap = new ActionProgram();
-            ap.Name = textBoxBorderName.Text;
+            ActionProgram ap = new ActionProgram(textBoxBorderName.Text);
+
             foreach (Group g in groups)
             {
                 if ( g.programstep!= null )    // don't include ones not set..

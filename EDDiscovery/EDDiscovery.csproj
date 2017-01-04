@@ -196,6 +196,7 @@
     <Compile Include="Actions\ActionProgramForm.Designer.cs">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\ActionRun.cs" />
     <Compile Include="Actions\ActionSay.cs" />
     <Compile Include="Actions\ActionCmd.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">

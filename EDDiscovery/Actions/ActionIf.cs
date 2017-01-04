@@ -58,7 +58,7 @@ namespace EDDiscovery.Actions
 
         public override bool IsControlStructureStart { get { return true; } }
 
-        public override bool ExecuteAction()
+        public override bool ExecuteAction(HistoryEntry he, EDDiscoveryForm df, bool nopause)
         {
             return true;
         }
@@ -72,7 +72,7 @@ namespace EDDiscovery.Actions
 
         public override bool IsControlElse { get { return true; } }
 
-        public override bool ExecuteAction()
+        public override bool ExecuteAction(HistoryEntry he, EDDiscoveryForm df, bool nopause)
         {
             return true;
         }
@@ -91,7 +91,7 @@ namespace EDDiscovery.Actions
             return (true);
         }
 
-        public override bool ExecuteAction()
+        public override bool ExecuteAction(HistoryEntry he , EDDiscoveryForm df, bool nopause )
         {
             return true;
         }

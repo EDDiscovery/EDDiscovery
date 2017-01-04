@@ -94,8 +94,9 @@ namespace EDDiscovery
 
         public GalacticMapping galacticMapping;
 
-        private JSONFilter actionfieldfilter = new JSONFilter();
-        private Actions.ActionProgramList actionprogramlist = new Actions.ActionProgramList();
+        private JSONFilter actionfieldfilter;
+        private Actions.ActionProgramList actionprogramlist;
+        public Actions.ActionRun actionrunasync;
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
@@ -437,13 +438,19 @@ namespace EDDiscovery
                     button_test.Visible = true;
                 }
 
+                actionfieldfilter = new JSONFilter();
+
                 string filter = SQLiteDBClass.GetSettingString("ActionFilter", "");
                 if (filter.Length > 0)
                     actionfieldfilter.FromJSON(filter);        // load filter
 
+                actionprogramlist = new Actions.ActionProgramList();
+
                 string programs = SQLiteDBClass.GetSettingString("ActionPrograms", "");
                 if (programs.Length > 0)
                     actionprogramlist.FromJSON(programs);
+
+                actionrunasync = new Actions.ActionRun(this);        // this is the guy who runs programs asynchronously
             }
             catch (Exception ex)
             {
@@ -2062,20 +2069,39 @@ namespace EDDiscovery
         {
             EDDiscovery2.JSONFiltersForm frm = new JSONFiltersForm();
             frm.InitAction("Actions: Define actions", actionprogramlist, theme, actionfieldfilter );
-
-            //List<string> f = new List<string>();
-            //f.Add("one");
-            //f.Add("two");
-            //f.Add("three");
-
-            //frm.Init("Test", null, f, null, true, theme);
-
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 actionfieldfilter = frm.result;
                 SQLiteDBClass.PutSettingString("ActionFilter", actionfieldfilter.GetJSON());
                 SQLiteDBClass.PutSettingString("ActionPrograms", actionprogramlist.GetJSON());
+            }
+        }
+
+        public void ActionRunOnEntry(HistoryEntry he)
+        {
+            List<JSONFilter.FilterEvent> passed = new List<JSONFilter.FilterEvent>();
+            actionfieldfilter.Check(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, ref passed);
+
+            if (passed.Count > 0)
+            {
+                foreach( JSONFilter.FilterEvent fe in passed)
+                {
+                    string prog = fe.action;
+                    string progdata = fe.actiondata;
+
+                    Actions.ActionProgram ap = actionprogramlist.Get(prog);
+
+                    if (ap != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Run " + prog + "(" + progdata + ") on " + he.journalEntry.EventTypeStr + " " + he.Journalid);
+                        actionrunasync.Add(ap, he);
+                    }
+                    else
+                        LogLine("Action program " + prog + " not found for event " + he.journalEntry.EventTypeStr);
+                }
+
+                actionrunasync.ExecuteAsynchronous();
             }
         }
 

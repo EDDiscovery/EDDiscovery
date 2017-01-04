@@ -344,6 +344,9 @@ namespace EDDiscovery2
             }
 
             ActionProgramForm apf = new ActionProgramForm();
+
+            // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames
+            // pass in the program if found, and its action data.
             apf.Init("Define new action program", theme, g.fieldnames?.ToList(), p, g.actiondata , actionprogs.GetActionProgramList(), suggestedname);
 
             if (apf.ShowDialog() == DialogResult.OK)
@@ -352,7 +355,7 @@ namespace EDDiscovery2
                 ActionProgram np = apf.GetProgram();
                 actionprogs.AddOrChange(np);
 
-                if (p == null )
+                if (p == null )     // if new program, add it to the list and set it as the active one
                 {
                     g.actionlist.Enabled = false;
                     g.actionlist.Items.Add(np.Name);
