@@ -242,8 +242,25 @@ namespace EDDiscovery
 
                 if (sys != null)
                 {
+                    string note = "";
                     SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.name, sys.id_edsm);
-                    dataGridViewRouteSystems[2, rowindex].Value = sn != null ? sn.Note : "";
+                    if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
+                    {
+                        note = sn.Note;
+                    }
+                    else
+                    {
+                        BookmarkClass bkmark =BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(sys.name));
+                        if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
+                            note = bkmark.Note;
+                        else
+                        {
+                            var gmo = _discoveryForm.galacticMapping.Find(sys.name);
+                            if (gmo != null && !string.IsNullOrWhiteSpace(gmo.description))
+                                note = gmo.description;
+                        }
+                    }
+                   dataGridViewRouteSystems[2, rowindex].Value = Tools.WordWrap(note, 60);
                 }
 
                 if (sys == null && sysname != "")
@@ -791,9 +808,11 @@ namespace EDDiscovery
                     String[] values = sysname.Split(',');
                     sysname = values[0];
                 }
-                SystemClass sc = GetSystem(sysname);
+                if (String.IsNullOrWhiteSpace(sysname))
+                    continue;
+                SystemClass sc = GetSystem(sysname.Trim());
                 if (sc != null)
-                    systems.Add(sysname);
+                    systems.Add(sc.name);
                 else
                     countbad++;
             }
