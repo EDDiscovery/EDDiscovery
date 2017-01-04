@@ -77,6 +77,8 @@ namespace EDDiscovery
 
         public bool option_nowindowreposition { get; set; } = false;                             // Cmd line options
         public bool option_debugoptions { get; set; } = false;
+        public bool option_tracelog { get; set; } = false;
+        public bool option_fcexcept { get; set; } = false;
 
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
@@ -142,9 +144,13 @@ namespace EDDiscovery
                     Directory.CreateDirectory(logpath);
                 }
 
-                if (!Debugger.IsAttached)
+                if (!Debugger.IsAttached || option_tracelog)
                 {
-                    TraceLog.Init();
+                    TraceLog.LogFileWriterException += ex =>
+                    {
+                        LogLineHighlight($"Log Writer Exception: {ex}");
+                    };
+                    TraceLog.Init(option_fcexcept);
                 }
             }
             catch (Exception ex)
@@ -229,6 +235,8 @@ namespace EDDiscovery
             }
 
             option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
+            option_tracelog = parts.FindIndex(x => x.Equals("-TraceLog", StringComparison.InvariantCultureIgnoreCase)) != -1;
+            option_fcexcept = parts.FindIndex(x => x.Equals("-LogExceptions", StringComparison.InvariantCultureIgnoreCase)) != -1;
 
             if (parts.FindIndex(x => x.Equals("-EDSMBeta", StringComparison.InvariantCultureIgnoreCase)) != -1)
             {
