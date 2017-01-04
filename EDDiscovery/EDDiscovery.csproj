@@ -625,6 +625,12 @@
     <Compile Include="UserControls\UserControlNotePanel.Designer.cs">
       <DependentUpon>UserControlNotePanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlRouteTracker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlRouteTracker.Designer.cs">
+      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlScan.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -743,6 +749,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlNotePanel.resx">
       <DependentUpon>UserControlNotePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlRouteTracker.resx">
+      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlScan.resx">
       <DependentUpon>UserControlScan.cs</DependentUpon>
