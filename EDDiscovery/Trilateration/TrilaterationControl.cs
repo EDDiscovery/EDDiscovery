@@ -899,6 +899,29 @@ namespace EDDiscovery
 
             this.Cursor = Cursors.Default;
         }
-        
+
+        private void deleteAllWithKnownPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string sysName = "";
+            for (int i = dataGridViewClosestSystems.RowCount - 1; i>=0; i--)
+            {
+                DataGridViewRow r = dataGridViewClosestSystems.Rows[i];
+                sysName = r.Cells[1].Value.ToString();
+                if (r.Cells[0].Value.ToString() == "Local")
+                {
+                    SystemClass sys = getSystemForTrilateration(sysName);
+                    if (sys.HasCoordinate)
+                    {
+                        WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
+                        if (entry != null)
+                        {
+                            entry.Delete();
+                            dataGridViewClosestSystems.Rows.Remove(r);
+                            wanted.Remove(entry);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

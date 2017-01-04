@@ -32,11 +32,19 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SavedRouteExpeditionControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImportRoute = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonShowOn3DMap = new System.Windows.Forms.ToolStripButton();
             this.toolStripComboBoxRouteSelection = new ExtendedControls.ToolStripComboBoxCustom();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtP2PDIstance = new ExtendedControls.TextBoxBorder();
+            this.txtCmlDistance = new ExtendedControls.TextBoxBorder();
             this.buttonReverseRoute = new ExtendedControls.ButtonExt();
             this.dateTimePickerEndTime = new System.Windows.Forms.DateTimePicker();
             this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
@@ -55,7 +63,8 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertCopiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
+            this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
@@ -66,7 +75,10 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
+            this.toolStripButtonImportFile,
+            this.toolStripButtonImportRoute,
             this.toolStripButtonSave,
+            this.toolStripButtonExport,
             this.toolStripButtonDelete,
             this.toolStripSeparator1,
             this.toolStripButtonShowOn3DMap,
@@ -86,6 +98,25 @@
             this.toolStripButtonNew.Text = "New Route";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
             // 
+            // toolStripButtonImportFile
+            // 
+            this.toolStripButtonImportFile.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImportFile.Image")));
+            this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
+            this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
+            this.toolStripButtonImportFile.Text = "Import file";
+            this.toolStripButtonImportFile.Click += new System.EventHandler(this.toolStripButtonImportFile_Click);
+            // 
+            // toolStripButtonImportRoute
+            // 
+            this.toolStripButtonImportRoute.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImportRoute.Image")));
+            this.toolStripButtonImportRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImportRoute.Name = "toolStripButtonImportRoute";
+            this.toolStripButtonImportRoute.Size = new System.Drawing.Size(94, 22);
+            this.toolStripButtonImportRoute.Text = "Import route";
+            this.toolStripButtonImportRoute.ToolTipText = "Import from route tab";
+            this.toolStripButtonImportRoute.Click += new System.EventHandler(this.toolStripButtonImportRoute_Click);
+            // 
             // toolStripButtonSave
             // 
             this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
@@ -94,6 +125,25 @@
             this.toolStripButtonSave.Size = new System.Drawing.Size(85, 22);
             this.toolStripButtonSave.Text = "Save Route";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
+            // 
+            // toolStripButtonExport
+            // 
+            this.toolStripButtonExport.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExport.Image")));
+            this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonExport.Name = "toolStripButtonExport";
+            this.toolStripButtonExport.Size = new System.Drawing.Size(60, 22);
+            this.toolStripButtonExport.Text = "Export";
+            this.toolStripButtonExport.ToolTipText = "Export to file";
+            this.toolStripButtonExport.Click += new System.EventHandler(this.toolStripButtonExport_Click);
+            // 
+            // toolStripButtonDelete
+            // 
+            this.toolStripButtonDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDelete.Image")));
+            this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
+            this.toolStripButtonDelete.Size = new System.Drawing.Size(94, 22);
+            this.toolStripButtonDelete.Text = "Delete Route";
+            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
             // toolStripSeparator1
             // 
@@ -134,6 +184,10 @@
             // 
             // panelRouteInfo
             // 
+            this.panelRouteInfo.Controls.Add(this.label2);
+            this.panelRouteInfo.Controls.Add(this.label1);
+            this.panelRouteInfo.Controls.Add(this.txtP2PDIstance);
+            this.panelRouteInfo.Controls.Add(this.txtCmlDistance);
             this.panelRouteInfo.Controls.Add(this.buttonReverseRoute);
             this.panelRouteInfo.Controls.Add(this.dateTimePickerEndTime);
             this.panelRouteInfo.Controls.Add(this.dateTimePickerEndDate);
@@ -148,6 +202,44 @@
             this.panelRouteInfo.Name = "panelRouteInfo";
             this.panelRouteInfo.Size = new System.Drawing.Size(787, 89);
             this.panelRouteInfo.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(439, 64);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(72, 13);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "Cml Distance:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(439, 37);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(75, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "P2P Distance:";
+            // 
+            // txtP2PDIstance
+            // 
+            this.txtP2PDIstance.BorderColor = System.Drawing.Color.Transparent;
+            this.txtP2PDIstance.BorderColorScaling = 0.5F;
+            this.txtP2PDIstance.Location = new System.Drawing.Point(517, 32);
+            this.txtP2PDIstance.Name = "txtP2PDIstance";
+            this.txtP2PDIstance.ReadOnly = true;
+            this.txtP2PDIstance.Size = new System.Drawing.Size(100, 20);
+            this.txtP2PDIstance.TabIndex = 10;
+            // 
+            // txtCmlDistance
+            // 
+            this.txtCmlDistance.BorderColor = System.Drawing.Color.Transparent;
+            this.txtCmlDistance.BorderColorScaling = 0.5F;
+            this.txtCmlDistance.Location = new System.Drawing.Point(517, 58);
+            this.txtCmlDistance.Name = "txtCmlDistance";
+            this.txtCmlDistance.ReadOnly = true;
+            this.txtCmlDistance.Size = new System.Drawing.Size(100, 20);
+            this.txtCmlDistance.TabIndex = 9;
             // 
             // buttonReverseRoute
             // 
@@ -292,9 +384,11 @@
             this.copyToolStripMenuItem,
             this.pasteToolStripMenuItem,
             this.insertCopiedToolStripMenuItem,
-            this.deleteRowsToolStripMenuItem});
+            this.deleteRowsToolStripMenuItem,
+            this.setTargetToolStripMenuItem,
+            this.editBookmarkToolStripMenuItem});
             this.contextMenuCopyPaste.Name = "contextMenuCopyPaste";
-            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 92);
+            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 158);
             this.contextMenuCopyPaste.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCopyPaste_Opening);
             // 
             // copyToolStripMenuItem
@@ -325,14 +419,19 @@
             this.deleteRowsToolStripMenuItem.Text = "Delete Rows";
             this.deleteRowsToolStripMenuItem.Click += new System.EventHandler(this.deleteRowsToolStripMenuItem_Click);
             // 
-            // toolStripButtonDelete
+            // setTargetToolStripMenuItem
             // 
-            this.toolStripButtonDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDelete.Image")));
-            this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(94, 22);
-            this.toolStripButtonDelete.Text = "Delete Route";
-            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
+            this.setTargetToolStripMenuItem.Name = "setTargetToolStripMenuItem";
+            this.setTargetToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.setTargetToolStripMenuItem.Text = "Set Target";
+            this.setTargetToolStripMenuItem.Click += new System.EventHandler(this.setTargetToolStripMenuItem_Click);
+            // 
+            // editBookmarkToolStripMenuItem
+            // 
+            this.editBookmarkToolStripMenuItem.Name = "editBookmarkToolStripMenuItem";
+            this.editBookmarkToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.editBookmarkToolStripMenuItem.Text = "Edit bookmark";
+            this.editBookmarkToolStripMenuItem.Click += new System.EventHandler(this.editBookmarkToolStripMenuItem_Click);
             // 
             // SavedRouteExpeditionControl
             // 
@@ -382,5 +481,14 @@
         private System.Windows.Forms.ToolStripMenuItem deleteRowsToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonReverseRoute;
         private System.Windows.Forms.ToolStripButton toolStripButtonDelete;
+        private System.Windows.Forms.ToolStripButton toolStripButtonImportFile;
+        private System.Windows.Forms.ToolStripButton toolStripButtonImportRoute;
+        private System.Windows.Forms.ToolStripButton toolStripButtonExport;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private ExtendedControls.TextBoxBorder txtP2PDIstance;
+        private ExtendedControls.TextBoxBorder txtCmlDistance;
+        private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
     }
 }

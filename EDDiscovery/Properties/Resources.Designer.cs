@@ -513,6 +513,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap edsm32x32 {
+            get {
+                object obj = ResourceManager.GetObject("edsm32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ejectcargo {
             get {
                 object obj = ResourceManager.GetObject("ejectcargo", resourceCulture);
@@ -817,6 +827,22 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("imgCheck", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to History Import Help
+        ///
+        ///Cmdr - select the commander to import the history against
+        ///File - the Select button will open a file browser dialog to allow the source file to be selected
+        ///Delimiter - use the radio buttons to select &apos;Tab&apos; or &apos;Other&apos;, if &apos;Other&apos; then enter the delimiter character in the box.
+        ///
+        ///Arrival Date - the column in the file containing the date of arrival in a system.
+        ///Arrival Time - the column in the file containing the time of arrival in a system, if the arrival date column includes time the [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ImportHelp {
+            get {
+                return ResourceManager.GetString("ImportHelp", resourceCulture);
             }
         }
         

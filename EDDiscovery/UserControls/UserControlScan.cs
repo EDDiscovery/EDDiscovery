@@ -12,6 +12,7 @@ using ExtendedControls;
 using EDDiscovery.DB;
 using System.Drawing.Drawing2D;
 using EDDiscovery.EliteDangerous;
+using EDDiscovery2.EDSM;
 
 namespace EDDiscovery.UserControls
 {
@@ -31,12 +32,15 @@ namespace EDDiscovery.UserControls
         private string DbSave { get { return "ScanPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         StarScan.SystemNode last_sn = null;
+        HistoryList hl = null;
+        HistoryEntry last_he = null;
         Point last_maxdisplayarea;
 
         #region Init
         public UserControlScan()
         {
             InitializeComponent();
+            Name = "Scan";
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
             richTextBoxInfo.Visible = false;
             toolTip.ShowAlways = true;
@@ -53,6 +57,8 @@ namespace EDDiscovery.UserControls
             checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Materials", true);
             checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave+"MaterialsRare", false);
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Moons", true);
+            checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
+
             int size = SQLiteDBClass.GetSettingInt(DbSave+"Size", 64);
             SetSizeCheckBoxes(size);
 
@@ -99,6 +105,7 @@ namespace EDDiscovery.UserControls
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {                                                                   // affecting our system
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;  // find node..
+            last_he = he;
 
             if ( newnode == last_sn && he.EntryType == EliteDangerous.JournalTypeEnum.Scan )  // if on same star system, and its a scan, it may have been updated..
             {
@@ -106,9 +113,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        public override void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;
+            last_he = he;
+            this.hl = hl;
 
             if (newnode != last_sn)
             {
@@ -121,12 +130,37 @@ namespace EDDiscovery.UserControls
         {
             HideInfo();
 
-            last_sn = sn;                                                               // remember in case we need to draw
+                                                                 // remember in case we need to draw
 
             SetControlText((sn == null) ? "No Scan" : sn.system.name);
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
 
+            if (checkBoxEDSM.Checked && last_he!=null)
+            {
+                if (last_he.System.id_edsm > 0)  // If system has edsmid get bodies
+                {
+                    if (sn==null  || (sn != null && sn.EDSMAdded == false))
+                    {
+                        List<JournalScan> jl = EDSMClass.GetBodiesList((int)last_he.System.id_edsm);
+
+
+                        if (jl != null)
+                            foreach (JournalScan js in jl)
+                                hl.starscan.Process(js, last_he.System);
+
+
+                        if (sn == null)
+                            sn = hl.starscan.FindSystem(last_he.System);
+
+                        if (sn!=null)
+                            sn.EDSMAdded = true;  // So we dont add it anymore this runtime.
+                    }
+                }
+            }
+
+
+            last_sn = sn;
             if (sn != null)     // 
             {
                 Point curpos = new Point(leftmargin, topmargin);
@@ -254,7 +288,7 @@ namespace EDDiscovery.UserControls
                                     Size size, ref int offset , bool aligndown = false , int labelvoff = 0 )
         {
             //System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + curpos + " " + size + " hoff " + offset );
-
+            bool eddnvisible = true;
             string tip;
             Point endpoint = curpos;
             int quarterheight = size.Height / 4;
@@ -262,17 +296,21 @@ namespace EDDiscovery.UserControls
 
             JournalScan sc = sn.ScanData;
 
+
             if (sc != null)
             {
+                if (!checkBoxEDSM.Checked && sc.IsEDSMBody)  // Dont draw if EDDN  is loaded and npot shown
+                    eddnvisible = false;
+
                 tip = sc.DisplayString(true);
 
                 if (sc.IsStar)
                 {
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1, 
                                                 new Point(curpos.X+offset, curpos.Y + alignv) ,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, sn.ownname, tip, alignv + labelvoff);          // and the label needs to be a quarter height below it..
+                                                size, sn.ownname, tip, alignv + labelvoff, eddnvisible);          // and the label needs to be a quarter height below it..
 
-                    if ( sc.HasRings )
+                    if ( sc.HasRings && eddnvisible )
                     {
                         curpos = new Point(endpoint.X + itemsepar.Width, curpos.Y);
 
@@ -288,7 +326,7 @@ namespace EDDiscovery.UserControls
 
                             endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt, 
                                 new Point( curpos.X, curpos.Y + alignv ), new Size(size.Width/2,size.Height), name,
-                                                                sc.RingInformationMoons(i), alignv + labelvoff);
+                                                                sc.RingInformationMoons(i), alignv + labelvoff, eddnvisible);
 
                             curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
                         }
@@ -304,7 +342,7 @@ namespace EDDiscovery.UserControls
 
                     Image nodeimage = sc.GetPlanetClassImage();
 
-                    if (sc.IsLandable || sc.HasRings || indicatematerials)
+                    if ((sc.IsLandable || sc.HasRings || indicatematerials) && eddnvisible)
                     {
                         Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);          
 
@@ -326,17 +364,17 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.ownname, tip, labelvoff);
+                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.ownname, tip, labelvoff, eddnvisible);
                         offset = size.Width;                                        // return that the middle is now this
                     }
                     else
                     {
                         endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size, 
-                                                    sn.ownname, tip, alignv + labelvoff);
+                                                    sn.ownname, tip, alignv + labelvoff, eddnvisible);
                         offset += size.Width / 2;
                     }
 
-                    if (sc.HasMaterials && checkBoxMaterials.Checked)
+                    if (sc.HasMaterials && checkBoxMaterials.Checked && eddnvisible)
                     {
                         Point matpos = new Point(endpoint.X + 4, curpos.Y);
                         Point endmat = CreateMaterialNodes(pc, sc, matpos, materialsize);
@@ -351,7 +389,7 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + "\n\nNo scan data available";
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff);
+                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff, eddnvisible);
                 offset += size.Width / 2;       // return the middle used was this..
             }
 
@@ -419,7 +457,7 @@ namespace EDDiscovery.UserControls
         }
 
         Point CreateImageLabel(List<PictureBoxHotspot.ImageElement> c, Image i, Point postopright, Size size, string label,
-                                    string ttext , int labelhoff)
+                                    string ttext , int labelhoff, bool visible)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
 
@@ -443,12 +481,14 @@ namespace EDDiscovery.UserControls
                     lab.Translate(offset, 0);
                 }
 
-                c.Add(lab);
+                if (visible)
+                    c.Add(lab);
 
                 max = new Point(Math.Max(lab.pos.X + lab.pos.Width, max.X), lab.pos.Y + lab.pos.Height);
             }
             
-            c.Add(ie);
+            if (visible)
+                c.Add(ie);
 
             //System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
             return max;
@@ -512,6 +552,12 @@ namespace EDDiscovery.UserControls
             checkBoxMedium.Checked = (size == 96);
             checkBoxSmall.Checked = (size == 64);
             checkBoxTiny.Checked = (size == 48);
+
+            if (!checkBoxLarge.Checked && !checkBoxMedium.Checked && !checkBoxSmall.Checked && !checkBoxTiny.Checked)
+            {
+                checkBoxSmall.Checked = true;
+                size = 64;
+            }
             userchangesize = true;
             SetSize(size);
             SQLiteDBClass.PutSettingInt(DbSave + "Size", size);
@@ -554,6 +600,12 @@ namespace EDDiscovery.UserControls
             richTextBoxInfo.Visible = true;
             richTextBoxInfo.Show();
             PositionInfo();
+        }
+
+        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "EDSM", checkBoxEDSM.Checked);
+            DrawSystem(last_sn);
         }
 
         void HideInfo()

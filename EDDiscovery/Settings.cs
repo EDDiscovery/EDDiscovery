@@ -135,6 +135,7 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.GetNewCommander();
             UpdateCommandersListBox();
             _discoveryForm.TravelControl.LoadCommandersListBox();
+            _discoveryForm.ExportControl.PopulateCommanders();
             _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
         }
 
@@ -160,6 +161,7 @@ namespace EDDiscovery2
                 {
                     EDDConfig.Instance.DeleteCommander(row);
                     _discoveryForm.TravelControl.LoadCommandersListBox();
+                    _discoveryForm.ExportControl.PopulateCommanders();
                     UpdateCommandersListBox();
                     _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
                 }

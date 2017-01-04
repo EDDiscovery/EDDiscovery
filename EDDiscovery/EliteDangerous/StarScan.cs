@@ -16,6 +16,7 @@ namespace EDDiscovery.EliteDangerous
         {
             public EDDiscovery2.DB.ISystem system;
             public SortedList<string, ScanNode> starnodes;
+            public bool EDSMAdded = false;
         };
 
         public enum ScanNodeType { star, barycentre, planet, moon, submoon, starbelt, rings };
