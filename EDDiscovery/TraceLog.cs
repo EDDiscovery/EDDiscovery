@@ -53,7 +53,7 @@ namespace EDDiscovery
             public override void WriteLine() { Write("\n"); }
         }
 
-        public static void Init()
+        public static void Init(bool logfcexcept)
         {
             string logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
             LogFileBaseName = logname;
@@ -71,7 +71,10 @@ namespace EDDiscovery
             // Redirect console to trace
             Console.SetOut(new TraceLogWriter());
             // Log first-chance exceptions to help diagnose errors
-            Register_FirstChanceException_Handler();
+            if (logfcexcept)
+            {
+                Register_FirstChanceException_Handler();
+            }
         }
 
         public static void WriteLine(string msg)
@@ -246,7 +249,7 @@ namespace EDDiscovery
             }
         }
 
-        // Log exceptions were they occur so we can try to  some
+        // Log exceptions were they occur so we can try to diagnose some
         // hard to debug issues.
         private static void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
         {
