@@ -52,7 +52,7 @@ namespace EDDiscovery
 
         string[] popoutbuttonlist = new string[] 
         {
-            "S-Panel", "Trip-Panel", "Note Panel", // not in tabs
+            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker",  // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
             "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
         };
@@ -122,6 +122,7 @@ namespace EDDiscovery
             { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
             { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
+            { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
         };
 
         #region Initialisation
@@ -800,8 +801,10 @@ namespace EDDiscovery
                 PopOut(PopOuts.Trippanel);
             else if (comboBoxCustomPopOut.SelectedIndex == 2)
                 PopOut(PopOuts.NotePanel);
+            else if (comboBoxCustomPopOut.SelectedIndex == 3)
+                PopOut(PopOuts.RouteTracker);
             else
-                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 3));
+                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 4));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;
