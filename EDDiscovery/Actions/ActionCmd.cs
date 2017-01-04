@@ -9,10 +9,48 @@ namespace EDDiscovery.Actions
 {
     public class ActionProgram
     {
-        public string Name;
-        public List<Action> programsteps;
+        private string name;
+        private List<Action> programsteps;
 
-        static public string flagRunAtRefresh = "RunAtRefresh;";            // ACTION DATA Flag
+        public ActionProgram(string n)
+        {
+            name = n;
+            programsteps = new List<Action>();
+        }
+
+        public ActionProgram( ActionProgram r )        // make a copy of the program..
+        {
+            name = r.name;
+            programsteps = new List<Action>();
+            foreach ( Action ap in r.programsteps )
+            {
+                programsteps.Add(Action.CreateCopy(ap));
+            }
+        }
+
+        public string Name { get { return name; } }
+
+        static public string flagRunAtRefresh = "RunAtRefresh;";            // ACTION DATA Flags, stored with action program name in events to configure it
+
+        public void Add(Action ap)
+        {
+            programsteps.Add(ap);
+        }
+
+        public void Clear()
+        {
+            programsteps.Clear();
+        }
+
+        public int Count { get { return programsteps.Count; } }
+
+        public Action GetStep(int a )
+        {
+            if (a < programsteps.Count)
+                return programsteps[a];
+            else
+                return null;
+        }
 
         public JObject GetJSON()
         {
@@ -43,10 +81,7 @@ namespace EDDiscovery.Actions
 
         static public ActionProgram FromJSON(JObject j )
         {
-            ActionProgram ap = new ActionProgram();
-            ap.Name = (string)j["Name"];
-
-            ap.programsteps = new List<Action>();
+            ActionProgram ap = new ActionProgram((string)j["Name"]);
 
             JArray steps = (JArray)j["Steps"];
 
@@ -74,14 +109,6 @@ namespace EDDiscovery.Actions
             }
 
             return ap;
-        }
-
-        public void Add(Action ap)
-        {
-            if ( programsteps == null )
-                programsteps = new List<Action>();
-
-            programsteps.Add(ap);
         }
     }
 

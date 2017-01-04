@@ -167,132 +167,6 @@ namespace EDDiscovery
 
         public int Count { get { return filters.Count; } }
         
-        public string GetJSON()
-        {
-            JObject evt = new JObject();
-
-            JArray jf = new JArray();
-
-            foreach (FilterEvent f in filters)
-            {
-                JObject j1 = new JObject();
-                j1["EventName"] = f.eventname;
-                j1["ICond"] = f.innercondition.ToString();
-                j1["OCond"] = f.outercondition.ToString();
-                j1["Actions"] = f.action;
-                j1["ActionData"] = f.actiondata;
-
-                JArray jfields = new JArray();
-
-                foreach (Fields fd in f.fields)
-                {
-                    JObject j2 = new JObject();
-                    j2["Item"] = fd.itemname;
-                    j2["Content"] = fd.contentmatch;
-                    j2["Matchtype"] = fd.matchtype.ToString();
-                    jfields.Add(j2);
-                }
-
-                j1["Filters"] = jfields;
-
-                jf.Add(j1);
-            }
-
-            evt["FilterSet"] = jf;
-
-            return evt.ToString();
-        }
-
-        public string GetString()
-        {
-            string ret = "";
-
-            for (int j = 0; j < filters.Count; j++)
-            {
-                FilterEvent f = filters[j];
-
-                if (j > 0 )
-                    ret += " " + f.outercondition.ToString() + " ";
-
-                if (f.fields.Count > 1)
-                    ret += "(";
-
-                for (int i = 0; i < f.fields.Count; i++)
-                {
-                    if (i > 0)
-                        ret += " " + f.innercondition.ToString() + " ";
-
-                    ret += f.fields[i].itemname + " " + f.fields[i].matchtype.ToString() + " " + f.fields[i].contentmatch;
-                }
-
-                if (f.fields.Count > 1)
-                    ret += ")";
-            }
-
-            return ret;
-        }
-
-
-        public bool FromJSON( string s )
-        {
-            Clear();
-
-            try
-            {
-                JObject jo = (JObject)JObject.Parse(s);
-
-                JArray jf = (JArray)jo["FilterSet"];
-
-                foreach( JObject j in jf )
-                {
-                    string evname = (string)j["EventName"];
-                    FilterType ftinner = (FilterType)Enum.Parse(typeof(FilterType), (string)j["ICond"]);
-                    FilterType ftouter = (FilterType)Enum.Parse(typeof(FilterType), (string)j["OCond"]);
-                    string act = (string)j["Actions"];
-                    string actd = (string)j["ActionData"];
-
-                    JArray filset = (JArray)j["Filters"];
-
-                    List<Fields> fieldlist = new List<Fields>();
-
-                    foreach( JObject j2 in filset)
-                    {
-                        string item = (string)j2["Item"];
-                        string content = (string)j2["Content"];
-                        string matchtype = (string)j2["Matchtype"];
-                        double cdouble = 0;
-                        double.TryParse(content, out cdouble);
-                        DateTime dt;
-                        DateTime.TryParse(content, out dt);
-
-                        fieldlist.Add(new Fields()
-                        {
-                            itemname = item,
-                            contentmatch = content,
-                            contentvalue = cdouble,
-                            contentdate = dt,
-                            matchtype = (MatchType)Enum.Parse(typeof(MatchType), matchtype)
-                        });
-                    }
-
-                    filters.Add(new FilterEvent()
-                    {
-                        eventname = evname,
-                        innercondition = ftinner,
-                        outercondition = ftouter,
-                        fields = fieldlist,
-                        action = act,
-                        actiondata = actd
-                    });
-                }
-
-                return true;
-            }
-            catch { }
-
-            return false;
-        }
-
         public bool? Check(string json, string eventname, ref List<FilterEvent> passed)            // null nothing trigged, false/true otherwise. 
         {
             FilterEvent[] fel = (from fil in filters where 
@@ -587,6 +461,133 @@ namespace EDDiscovery
 
                 return ret;
             }
+        }
+
+
+        public string GetJSON()
+        {
+            JObject evt = new JObject();
+
+            JArray jf = new JArray();
+
+            foreach (FilterEvent f in filters)
+            {
+                JObject j1 = new JObject();
+                j1["EventName"] = f.eventname;
+                j1["ICond"] = f.innercondition.ToString();
+                j1["OCond"] = f.outercondition.ToString();
+                j1["Actions"] = f.action;
+                j1["ActionData"] = f.actiondata;
+
+                JArray jfields = new JArray();
+
+                foreach (Fields fd in f.fields)
+                {
+                    JObject j2 = new JObject();
+                    j2["Item"] = fd.itemname;
+                    j2["Content"] = fd.contentmatch;
+                    j2["Matchtype"] = fd.matchtype.ToString();
+                    jfields.Add(j2);
+                }
+
+                j1["Filters"] = jfields;
+
+                jf.Add(j1);
+            }
+
+            evt["FilterSet"] = jf;
+
+            return evt.ToString();
+        }
+
+        public string GetString()
+        {
+            string ret = "";
+
+            for (int j = 0; j < filters.Count; j++)
+            {
+                FilterEvent f = filters[j];
+
+                if (j > 0)
+                    ret += " " + f.outercondition.ToString() + " ";
+
+                if (f.fields.Count > 1)
+                    ret += "(";
+
+                for (int i = 0; i < f.fields.Count; i++)
+                {
+                    if (i > 0)
+                        ret += " " + f.innercondition.ToString() + " ";
+
+                    ret += f.fields[i].itemname + " " + f.fields[i].matchtype.ToString() + " " + f.fields[i].contentmatch;
+                }
+
+                if (f.fields.Count > 1)
+                    ret += ")";
+            }
+
+            return ret;
+        }
+
+
+        public bool FromJSON(string s)
+        {
+            Clear();
+
+            try
+            {
+                JObject jo = (JObject)JObject.Parse(s);
+
+                JArray jf = (JArray)jo["FilterSet"];
+
+                foreach (JObject j in jf)
+                {
+                    string evname = (string)j["EventName"];
+                    FilterType ftinner = (FilterType)Enum.Parse(typeof(FilterType), (string)j["ICond"]);
+                    FilterType ftouter = (FilterType)Enum.Parse(typeof(FilterType), (string)j["OCond"]);
+                    string act = (string)j["Actions"];
+                    string actd = (string)j["ActionData"];
+
+                    JArray filset = (JArray)j["Filters"];
+
+                    List<Fields> fieldlist = new List<Fields>();
+
+                    foreach (JObject j2 in filset)
+                    {
+                        string item = (string)j2["Item"];
+                        string content = (string)j2["Content"];
+                        string matchtype = (string)j2["Matchtype"];
+                        double cdouble = 0;
+                        double.TryParse(content, out cdouble);
+                        DateTime dt;
+                        DateTime.TryParse(content, out dt);
+
+                        fieldlist.Add(new Fields()
+                        {
+                            itemname = item,
+                            contentmatch = content,
+                            contentvalue = cdouble,
+                            contentdate = dt,
+                            matchtype = (MatchType)Enum.Parse(typeof(MatchType), matchtype)
+                        });
+                    }
+
+                    filters.Add(new FilterEvent()
+                    {
+                        eventname = evname,
+                        innercondition = ftinner,
+                        outercondition = ftouter,
+                        fields = fieldlist,
+                        action = act,
+                        actiondata = actd
+                    });
+                }
+
+                return true;
+            }
+            catch { }
+
+            return false;
         }
 
     }

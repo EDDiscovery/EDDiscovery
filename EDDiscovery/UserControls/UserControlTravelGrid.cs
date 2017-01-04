@@ -803,6 +803,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            discoveryform.ActionRunOnEntry(rightclicksystem);
+        }
+
         #endregion
 
         #region Event Filter
@@ -839,6 +844,8 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
+
+        
     }
 
 }

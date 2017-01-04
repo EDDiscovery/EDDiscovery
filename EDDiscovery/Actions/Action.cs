@@ -54,7 +54,7 @@ namespace EDDiscovery.Actions
         public virtual bool IsControlStructureStart { get { return false; } }
         public virtual bool IsControlElse { get { return false; } }
 
-        public virtual bool ExecuteAction()
+        public virtual bool ExecuteAction(HistoryEntry he , EDDiscoveryForm df, bool nopause )
         {
             return false;
         }
@@ -106,6 +106,15 @@ namespace EDDiscovery.Actions
             }
 
             return null;
+        }
+
+        public static Action CreateCopy( Action r)       // FACTORY make the correct class..
+        {
+            Type ty = r.GetType();                      // get its actual type, not the base type..
+
+            List<string> newaf = new List<string>(r.actionflags);   // make a copy of the flags, not a direct reference.
+
+            return (Action)Activator.CreateInstance(ty, new Object[] { r.actionname, newaf, r.userdata, r.levelup });
         }
     }
 }

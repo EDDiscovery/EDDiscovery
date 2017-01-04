@@ -20,8 +20,9 @@ namespace EDDiscovery.Actions
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
-        public override bool ExecuteAction()
+        public override bool ExecuteAction(HistoryEntry he, EDDiscoveryForm df, bool nopause)
         {
+            df.LogLine(UserData);
             return true;
         }
     }

@@ -145,18 +145,6 @@ namespace EDDiscovery
                    (token.Type == JTokenType.Null);
         }
 
-        static public void GetJSONFieldNames(string json, HashSet<string> fields )
-        {
-            JObject jo = JObject.Parse(json);  // Create a clone
-
-//            IList<string> keys = jo.Properties().Select(p => p.Name).ToList();
-
-            foreach (JToken jc in jo.Children())
-            {
-                ExpandTokens(jc, fields);
-            }
-        }
-
         public static void Rename(this JToken token, string newName)
         {
             if (token == null)
@@ -167,6 +155,17 @@ namespace EDDiscovery
                 throw new InvalidOperationException("The parent is missing.");
             var newToken = new JProperty(newName, token);
             parent.Replace(newToken);
+        }
+
+
+        static public void GetJSONFieldNames(string json, HashSet<string> fields)
+        {
+            JObject jo = JObject.Parse(json);  // Create a clone
+
+            foreach (JToken jc in jo.Children())
+            {
+                ExpandTokens(jc, fields);
+            }
         }
 
         static private void ExpandTokens(JToken jt, HashSet<string> fields)
