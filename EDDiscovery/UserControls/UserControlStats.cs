@@ -231,13 +231,11 @@ namespace EDDiscovery.UserControls
                 strarr[3] = hl.GetTraveledLy(new DateTime(2012, 1, 1), DateTime.Now).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
-
-
-                intar[0] = hl.GetDocked(DateTime.Now.AddDays(-1), DateTime.Now);
-                intar[1] = hl.GetDocked(DateTime.Now.AddDays(-7), DateTime.Now);
-                intar[2] = hl.GetDocked(DateTime.Now.AddDays(-30), DateTime.Now);
-                intar[3] = hl.GetDocked(new DateTime(2012, 1, 1), DateTime.Now);
-                StatToDGV(dataGridViewTravel, "Docked", intar);
+                intar[0] = hl.GetJetConeBoost(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetJetConeBoost(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetJetConeBoost(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetJetConeBoost(new DateTime(2012, 1, 1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Jet Cone Boost", intar);
 
                 intar[0] = hl.GetTouchDown(DateTime.Now.AddDays(-1), DateTime.Now);
                 intar[1] = hl.GetTouchDown(DateTime.Now.AddDays(-7), DateTime.Now);
@@ -330,6 +328,10 @@ namespace EDDiscovery.UserControls
                     strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
+                
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetJetConeBoost(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                StatToDGV(dataGridViewTravel, "Jet Cone Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetDocked(timeintervals[ii + 1], timeintervals[ii]).ToString();
