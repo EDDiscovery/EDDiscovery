@@ -231,6 +231,14 @@ namespace EDDiscovery.UserControls
                 strarr[3] = hl.GetTraveledLy(new DateTime(2012, 1, 1), DateTime.Now).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
+                intar[0] = hl.GetFSDBoostUsed(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetFSDBoostUsed(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetFSDBoostUsed(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetFSDBoostUsed(new DateTime(2012, 1, 1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Boost used", intar);
+
+
+
                 intar[0] = hl.GetJetConeBoost(DateTime.Now.AddDays(-1), DateTime.Now);
                 intar[1] = hl.GetJetConeBoost(DateTime.Now.AddDays(-7), DateTime.Now);
                 intar[2] = hl.GetJetConeBoost(DateTime.Now.AddDays(-30), DateTime.Now);
@@ -328,7 +336,12 @@ namespace EDDiscovery.UserControls
                     strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
-                
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                StatToDGV(dataGridViewTravel, "Boost used", strarr);
+
+
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetJetConeBoost(timeintervals[ii + 1], timeintervals[ii]).ToString();
                 StatToDGV(dataGridViewTravel, "Jet Cone Boost", strarr);
