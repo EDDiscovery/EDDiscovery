@@ -17,10 +17,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{A49EA97B-732A-4E40-B247-1BF02CD8FAB3} 1053:{F9E4874D-BD62-437D-83F1-912E94382806} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{BAE70C2F-0B82-4542-87A8-992A0A5E87AC} 1053:{F862C58E-2485-476E-924B-769CE5B0B173} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="5.2.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="5.2.2" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
