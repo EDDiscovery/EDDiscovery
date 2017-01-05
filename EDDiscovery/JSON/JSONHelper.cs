@@ -157,18 +157,33 @@ namespace EDDiscovery
             parent.Replace(newToken);
         }
 
+        public class JSONFields
+        {
+            public HashSet<string> fields = new HashSet<string>();             // Hash set prevents duplication
+            public HashSet<string> values = new HashSet<string>();             // Hash set prevents duplication
 
-        static public void GetJSONFieldNames(string json, HashSet<string> fields)
+            public JSONFields(string json )
+            {
+                Fill(json);
+            }
+
+            public void Fill(string json )
+            {
+                GetJSONFieldNamesValues(json, fields, values);
+            }
+        }
+
+        static public void GetJSONFieldNamesValues(string json, HashSet<string> fields, HashSet<string> values )
         {
             JObject jo = JObject.Parse(json);  // Create a clone
 
             foreach (JToken jc in jo.Children())
             {
-                ExpandTokens(jc, fields);
+                ExpandTokens(jc, fields , values);
             }
         }
 
-        static private void ExpandTokens(JToken jt, HashSet<string> fields)
+        static private void ExpandTokens(JToken jt, HashSet<string> fields, HashSet<string> values)
         {
             if (jt.HasValues)
             {
@@ -178,14 +193,19 @@ namespace EDDiscovery
                 {
                     if (jc.HasValues)
                     {
-                        ExpandTokens(jc, fields);
+                        ExpandTokens(jc, fields , values);
                     }
                     else if (Array.FindIndex(decodeable, x => x == jc.Type) != -1)
                     {
                         string name = jc.Path;
 
                         if ( !fields.Contains(name))
+                        {
                             fields.Add(name);
+
+                            if ( values != null )
+                                values.Add( jc.Value<string>() );
+                        }
                     }
                 }
             }

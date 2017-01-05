@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionLog : Action
     {
-        public ActionLog(string n, List<string> c, string ud, int lu) : base(n, c, ud, lu)
+        public ActionLog(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud,lu)
         {
         }
 
@@ -20,9 +20,9 @@ namespace EDDiscovery.Actions
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
-        public override bool ExecuteAction(HistoryEntry he, EDDiscoveryForm df, bool nopause)
+        public override bool ExecuteAction(ActionProgram ap)
         {
-            df.LogLine(UserData);
+            ap.discoveryform.LogLine(UserData);
             return true;
         }
     }

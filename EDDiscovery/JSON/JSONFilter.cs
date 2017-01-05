@@ -34,8 +34,8 @@ namespace EDDiscovery
             IsNotPresent,       // field is not present
         };
 
-        private bool IsDateComparision(MatchType mt) { return mt == MatchType.DateAfter || mt == MatchType.DateBefore; }
-        private bool IsNumberComparision(MatchType mt) { return mt >= MatchType.NumericEquals && mt <= MatchType.NumericLessThanEqual; }
+        static public bool IsDateComparision(MatchType mt) { return mt == MatchType.DateAfter || mt == MatchType.DateBefore; }
+        static public bool IsNumberComparision(MatchType mt) { return mt >= MatchType.NumericEquals && mt <= MatchType.NumericLessThanEqual; }
 
         static public string[] MatchNames = { "Contains",
                                        "Not Contains",
@@ -102,6 +102,20 @@ namespace EDDiscovery
             }
         };
 
+        public class ValueList
+        {
+            public ValueList(bool d, bool v) { needdate = d; neednumber = v; }
+            public string value;
+
+            public DateTime datetime;
+            public bool needdate;
+            public bool datetimegood;
+
+            public double number;
+            public bool neednumber;
+            public bool numbergood;
+        }
+
         public class FilterEvent
         {
             public string eventname;
@@ -133,21 +147,22 @@ namespace EDDiscovery
                     fields = new List<Fields>();
                 fields.Add(f);
             }
+
+            public void FillValuesNeeded( ref Dictionary<string, ValueList> vr)
+            {
+                foreach (Fields fd in fields)
+                {
+                    if (vr.ContainsKey(fd.itemname))
+                    {
+                        vr[fd.itemname].needdate |= IsDateComparision(fd.matchtype);
+                        vr[fd.itemname].neednumber |= IsNumberComparision(fd.matchtype);
+                    }
+                    else
+                        vr[fd.itemname] = new ValueList(IsDateComparision(fd.matchtype), IsNumberComparision(fd.matchtype));
+                }
+            }
         }
 
-        private class ValuesReturned
-        {
-            public ValuesReturned(bool d, bool v) { needdate = d; neednumber = v; }
-            public string value;
-
-            public DateTime datetime;
-            public bool needdate;
-            public bool datetimegood;
-
-            public double number;
-            public bool neednumber;
-            public bool numbergood;
-        }
 
         public List<FilterEvent> filters = new List<FilterEvent>();
 
@@ -166,8 +181,9 @@ namespace EDDiscovery
         }
 
         public int Count { get { return filters.Count; } }
+
         
-        public bool? Check(string json, string eventname, ref List<FilterEvent> passed)            // null nothing trigged, false/true otherwise. 
+        public bool? Check(string eventjson, string eventname, ref List<FilterEvent> passed)            // null nothing trigged, false/true otherwise. 
         {
             FilterEvent[] fel = (from fil in filters where 
                                         (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase)) select fil).ToArray();
@@ -175,27 +191,14 @@ namespace EDDiscovery
             if (fel.Length == 0)            // no filters match, null
                 return null;
 
-            Dictionary<string, ValuesReturned> valuesneeded = new Dictionary<string, ValuesReturned>();
+            Dictionary<string, ValueList> valuesneeded = new Dictionary<string, ValueList>();
 
             foreach (FilterEvent fe in fel)        // find all values needed
-            {
-                foreach (Fields fd in fe.fields)
-                {
-                    if (valuesneeded.ContainsKey(fd.itemname))
-                    {
-                        valuesneeded[fd.itemname].needdate |= IsDateComparision(fd.matchtype);
-                        valuesneeded[fd.itemname].neednumber |= IsNumberComparision(fd.matchtype);
-                    }
-                    else
-                        valuesneeded[fd.itemname] = new ValuesReturned(IsDateComparision(fd.matchtype), IsNumberComparision(fd.matchtype));
-
-                    //System.Diagnostics.Debug.WriteLine("Need " + fd.itemname + " with "  + fd.matchtype);
-                }
-            }
+                fe.FillValuesNeeded(ref valuesneeded);
 
             try
             {
-                JObject jo = JObject.Parse(json);  // Create a clone
+                JObject jo = JObject.Parse(eventjson);  // Create a clone
 
                 int togo = valuesneeded.Count;
 
@@ -205,7 +208,7 @@ namespace EDDiscovery
                     if (togo == 0)
                         break;
                 }
-
+           
                 bool? outerres = null;
 
                 foreach (FilterEvent fe in fel)        // find all values needed
@@ -214,7 +217,7 @@ namespace EDDiscovery
 
                     foreach (Fields f in fe.fields)
                     {
-                        ValuesReturned vr = valuesneeded[f.itemname];
+                        ValueList vr = valuesneeded[f.itemname];
 
                         bool matched = false;
 
@@ -353,7 +356,7 @@ namespace EDDiscovery
             }
         }
           
-        private void ExpandTokens(JToken jt, Dictionary<string, ValuesReturned> valuesneeded , ref int togo )
+        private void ExpandTokens(JToken jt, Dictionary<string, ValueList> valuesneeded , ref int togo )
         {
             JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
 
@@ -371,7 +374,7 @@ namespace EDDiscovery
 
                         if (valuesneeded.ContainsKey(name) && Array.FindIndex(decodeable, x => x == jc.Type) != -1  )
                         {
-                            ValuesReturned vr = valuesneeded[name];
+                            ValueList vr = valuesneeded[name];
                             vr.value = jc.Value<string>();
 
                             if (vr.needdate)

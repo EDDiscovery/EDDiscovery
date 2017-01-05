@@ -94,7 +94,7 @@ namespace EDDiscovery.Actions
             stepname.DropDownHeight = 400;
             stepname.Name = "StepName";
             if (step != null)
-                stepname.Text = step.ActionName;
+                stepname.Text = step.Name;
             stepname.SelectedIndexChanged += Stepname_SelectedIndexChanged;
             p.Controls.Add(stepname);
 
@@ -232,7 +232,7 @@ namespace EDDiscovery.Actions
 
                 if (g.programstep != null)
                 {
-                    if (g.programstep.IsControlElse)
+                    if (g.programstep.Type == Action.ActionType.ElseIf)
                     {
                         if (structif[structlevel] == false)
                             errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " Else or ElseIf without IF found" + Environment.NewLine;
@@ -246,13 +246,13 @@ namespace EDDiscovery.Actions
                             level--;
 
                         structcount[structlevel] = 0;   // restart count so we don't allow a left on next one..
-                        structelse[structlevel] |= g.programstep.ActionName.Equals("Else");
+                        structelse[structlevel] |= g.programstep.Name.Equals("Else");
                     }
-                    else if (g.programstep.IsControlStructureStart)
+                    else if (g.programstep.Type == Action.ActionType.If)
                     {
                         structlevel++;
                         structcount[structlevel] = 0;
-                        structif[structlevel] = g.programstep.ActionName.Equals("If");
+                        structif[structlevel] = true;
                         structelse[structlevel] = false;
                     }
                 }
@@ -268,14 +268,14 @@ namespace EDDiscovery.Actions
                 g.config.Visible = g.programstep != null;
 
                 //DEBUG
-//                if (g.programstep != null)
-  ///              {
-     //               g.value.Enabled = false;
-       //             g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData + "  PS: " + g.programstep.GetFlagList();
-         //           g.value.Enabled = true;
-           //     }
+                if (g.programstep != null)
+                {
+                    g.value.Enabled = false;
+                    g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData + "  PS: " + g.programstep.GetFlagList();
+                    g.value.Enabled = true;
+                }
 
-                    first = false;
+                first = false;
                 voff += g.panel.Height + 4;
             }
 
@@ -302,7 +302,7 @@ namespace EDDiscovery.Actions
 
             if (b.Enabled)
             {
-                if (g.programstep == null || !g.programstep.ActionName.Equals(b.Text))
+                if (g.programstep == null || !g.programstep.Name.Equals(b.Text))
                 {
                     Action a = Action.CreateAction(b.Text);
 
@@ -464,6 +464,15 @@ namespace EDDiscovery.Actions
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void buttonExtDelete_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(this, "Do you want to delete this program?", "Delete program", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                DialogResult = DialogResult.Abort;
+                Close();
+            }
         }
 
         #endregion

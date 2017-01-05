@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionIfElseBase : Action
     {
-        public ActionIfElseBase(string n, List<string> c, string ud, int lu) : base(n, c, ud, lu)
+        public ActionIfElseBase(string n, ActionType type, List<string> c, string ud, int lu) : base(n, type, c, ud, lu)
         {
         }
 
@@ -52,47 +52,73 @@ namespace EDDiscovery.Actions
 
     public class ActionIf : ActionIfElseBase
     {
-        public ActionIf(string n, List<string> c, string ud, int lu) : base(n, c, ud, lu)
+        JSONFilter condition;
+
+        public ActionIf(string n, ActionType type, List<string> c, string ud, int lu) : base(n, type, c, ud, lu)
         {
         }
 
-        public override bool IsControlStructureStart { get { return true; } }
-
-        public override bool ExecuteAction(HistoryEntry he, EDDiscoveryForm df, bool nopause)
+        public override bool ExecuteAction(ActionProgram ap)
         {
+            if (condition == null)
+            {
+                condition = new JSONFilter();
+                if (!condition.FromJSON(UserData))
+                {
+                    ap.ReportError("IF condition is not correctly formed");
+                    return true;
+                }
+            }
+
+            //bool? condres = condition.Check()
+            bool condres = false;
+            ap.PushIf(condres);
             return true;
         }
     }
 
     public class ActionElseIf : ActionIfElseBase
     {
-        public ActionElseIf(string n, List<string> c, string ud, int lu) : base(n, c, ud, lu)
+        public ActionElseIf(string n, ActionType type, List<string> c, string ud, int lu) : base(n, type, c, ud, lu)
         {
         }
 
-        public override bool IsControlElse { get { return true; } }
-
-        public override bool ExecuteAction(HistoryEntry he, EDDiscoveryForm df, bool nopause)
+        public override bool ExecuteAction(ActionProgram ap)
         {
+            if (ap.IsLevelOff)       // if not executing, check condition
+            {
+                bool condres = true;
+                ap.ElseIf(condres); // set ON or off
+            }
+            else
+            {                       
+                ap.ElseIfOff();     // was not off, so now off for good
+            }
+
             return true;
         }
     }
 
     public class ActionElse : Action
     {
-        public ActionElse(string n, List<string> c, string ud, int lu) : base(n, c, ud,lu)
+        public ActionElse(string n, ActionType type, List<string> c, string ud, int lu) : base(n, type, c, ud, lu)
         {
         }
-
-        public override bool IsControlElse { get { return true; } }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme)
         {
             return (true);
         }
 
-        public override bool ExecuteAction(HistoryEntry he , EDDiscoveryForm df, bool nopause )
+        public override bool ConfigurationMenuInUse { get { return false; } }
+
+        public override bool ExecuteAction(ActionProgram ap)
         {
+            if (ap.IsLevelOff)       // if not executing, we can turn on
+                ap.ElseIf(true);        // Set ON 
+            else
+                ap.ElseIfOff();     // was not off, so now off for good
+
             return true;
         }
     }
