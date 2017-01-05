@@ -617,6 +617,13 @@ namespace EDDiscovery
             return (from s in historylist where s.EntryType == JournalTypeEnum.JetConeBoost && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
 
+        public int GetFSDBoostUsed(DateTime start, DateTime to)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal   < to select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
+            return (from s in list where s.BoostUsed == true select s  ).Count();
+        }
+
+
 
         public int GetTouchDown(DateTime start, DateTime to)
         {
