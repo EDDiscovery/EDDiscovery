@@ -498,7 +498,7 @@ namespace EDDiscovery.UserControls
                         strarr[ii] = nr.ToString();
 
                     }
-                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr);
+                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr, false);
                 }
             }
             else
@@ -517,7 +517,7 @@ namespace EDDiscovery.UserControls
                         strarr[ii] = nr.ToString();
 
                     }
-                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr);
+                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr, false);
                 }
             }
 
@@ -556,15 +556,21 @@ namespace EDDiscovery.UserControls
             dataGridViewStats.Rows.Add(rowobj);
         }
 
-        void StatToDGV(DataGridView datagrid,  string title, string[] data)
+        void StatToDGV(DataGridView datagrid,  string title, string[] data, bool showEmptyLines = true)
         {
             object[] rowobj = new object[data.Length + 1];
+            bool empty = true;
 
             rowobj[0] = title;
             for (int ii = 0; ii < data.Length; ii++)
+            {
                 rowobj[ii + 1] = data[ii];
+                if (!data[ii].Equals("0") && !data[ii].Equals("0.00"))
+                    empty = false;
+            }
 
-            datagrid.Rows.Add(rowobj);
+            if (showEmptyLines ||empty ==false)
+                datagrid.Rows.Add(rowobj);
         }
 
         void StatToDGV(DataGridView datagrid, string title, int[] data)
