@@ -611,6 +611,13 @@ namespace EDDiscovery
         {
             return (from s in historylist where s.EntryType == JournalTypeEnum.Docked && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
+
+        public int GetJetConeBoost(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.JetConeBoost && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+
+
         public int GetTouchDown(DateTime start, DateTime to)
         {
             return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
