@@ -450,7 +450,7 @@ namespace EDDiscovery
                 if (programs.Length > 0)
                     actionprogramlist.FromJSON(programs);
 
-                actionrunasync = new Actions.ActionRun(this);        // this is the guy who runs programs asynchronously
+                actionrunasync = new Actions.ActionRun(this,true);        // this is the guy who runs programs asynchronously
             }
             catch (Exception ex)
             {
@@ -2085,23 +2085,25 @@ namespace EDDiscovery
 
             if (passed.Count > 0)
             {
-                foreach( JSONFilter.FilterEvent fe in passed)
+                JSONHelper.JSONFields jfv = new JSONHelper.JSONFields(he.journalEntry.EventDataString);     // from the JSON string, add in all fields and values it has
+
+                foreach ( JSONFilter.FilterEvent fe in passed)
                 {
                     string prog = fe.action;
                     string progdata = fe.actiondata;
 
                     Actions.ActionProgram ap = actionprogramlist.Get(prog);
-
+                    
                     if (ap != null)
                     {
                         System.Diagnostics.Debug.WriteLine("Run " + prog + "(" + progdata + ") on " + he.journalEntry.EventTypeStr + " " + he.Journalid);
-                        actionrunasync.Add(ap, he);
+                        actionrunasync.Add(ap, he , jfv);
                     }
                     else
                         LogLine("Action program " + prog + " not found for event " + he.journalEntry.EventTypeStr);
                 }
 
-                actionrunasync.ExecuteAsynchronous();
+                actionrunasync.Execute();       // will execute async if required..
             }
         }
 

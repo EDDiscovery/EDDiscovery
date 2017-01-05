@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionPlay : Action
     {
-        public ActionPlay(string n, List<string> c, string ud, int lu) : base(n,c,ud,lu)
+        public ActionPlay(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
         {
         }
 
@@ -24,7 +24,7 @@ namespace EDDiscovery.Actions
             return (promptValue != null);
         }
 
-        public override bool ExecuteAction(HistoryEntry he, EDDiscoveryForm df, bool nopause)
+        public override bool ExecuteAction(ActionProgram ap)
         {
             return true;
         }

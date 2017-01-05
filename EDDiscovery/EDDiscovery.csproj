@@ -198,7 +198,7 @@
     </Compile>
     <Compile Include="Actions\ActionRun.cs" />
     <Compile Include="Actions\ActionSay.cs" />
-    <Compile Include="Actions\ActionCmd.cs" />
+    <Compile Include="Actions\ActionProgram.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>

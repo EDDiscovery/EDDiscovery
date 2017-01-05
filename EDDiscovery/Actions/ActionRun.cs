@@ -12,7 +12,6 @@ namespace EDDiscovery.Actions
         class ProgramQueue
         {
             public ActionProgram ap;
-            public HistoryEntry he;
             public int stepnumber;
         };
            
@@ -22,20 +21,22 @@ namespace EDDiscovery.Actions
 
         private EDDiscoveryForm discoveryform = null;
 
+        bool async = false;             // if this Action is an asynchoronous object
         bool executing = false;         // because Execute can be reentrant, stop it running on top of itself.
       
         Timer restarttick = new Timer();
 
-        public ActionRun(EDDiscoveryForm ed)
+        public ActionRun(EDDiscoveryForm ed, bool asy)
         {
             restarttick.Interval = 100;
             restarttick.Tick += Tick_Tick;
             discoveryform = ed;
+            async = asy;
         }
 
-        public void Add( ActionProgram r , HistoryEntry h = null )          // WE take a copy of each program, so each invocation of program action has a unique instance in case
+        public void Add( ActionProgram r , HistoryEntry h = null , JSONHelper.JSONFields v = null )          // WE take a copy of each program, so each invocation of program action has a unique instance in case
         {                                                                   // it has private variables in either action or program.
-            progqueue.Enqueue( new ProgramQueue() { ap = new ActionProgram(r), he = h, stepnumber = 0 } );
+            progqueue.Enqueue( new ProgramQueue() { ap = new ActionProgram(r,discoveryform,h,v,async), stepnumber = 0 } );
         }
 
         public Action GetNextAction()
@@ -53,7 +54,7 @@ namespace EDDiscovery.Actions
             return (progcurrent != null) ? progcurrent.ap.GetStep(progcurrent.stepnumber++) : null;
         }
 
-        private void Execute(bool dontpause, bool notimeout )       // MAIN thread only..     if nopausing, actions won't pause until complete. 
+        public void Execute()    // MAIN thread only..     
         {
             executing = true;
 
@@ -64,12 +65,19 @@ namespace EDDiscovery.Actions
 
             while ((ac = GetNextAction()) != null)
             {
-                if (!ac.ExecuteAction(progcurrent.he, discoveryform, dontpause))          // if execute says, stop, i'm waiting for something
+                progcurrent.ap.LevelUp(ac.LevelUp);     // change any level if required.. this stops an IF for instance.
+
+                System.Diagnostics.Debug.WriteLine("Exec Lv" + progcurrent.ap.IfLevel + " e " + progcurrent.ap.DoExecute(ac) + ": " + ac.Name);
+
+                if (progcurrent.ap.DoExecute(ac))       // execute is on.. 
                 {
-                    return;     // exit, with executing set true.  ResumeAfterPause will restart it.
+                    if (!ac.ExecuteAction(progcurrent.ap))      // if execute says, stop, i'm waiting for something
+                    {
+                        return;     // exit, with executing set true.  ResumeAfterPause will restart it.
+                    }
                 }
 
-                if ( !notimeout && timetaken.ElapsedMilliseconds > 100 )  // no more than 100ms per go to stop the main thread being blocked
+                if ( async && timetaken.ElapsedMilliseconds > 10000000000000 )  // no more than 100ms per go to stop the main thread being blocked
                 {
                     restarttick.Start();
                     break;
@@ -79,27 +87,16 @@ namespace EDDiscovery.Actions
             executing = false;
         }
 
-        public void ExecuteSynchronous()        // excute list until complete. do not timeout, do not allow pauses in actions to hold the queue
-        {
-            Execute(true, true);
-        }
-
-        public void ExecuteAsynchronous()       // async, may exit before completion.. either timer or pause will start it again
-        {
-            //Execute(false, false);
-            Execute(false, true);
-        }
-
         public void ResumeAfterPause()          // used when async..
         {
             if (executing)
-                Execute(false,false);
+                Execute();
         }
 
         private void Tick_Tick(object sender, EventArgs e) // used when async
         {
             restarttick.Stop();
-            Execute(false,false);
+            Execute();
         }
     }
 }

@@ -242,8 +242,8 @@ namespace EDDiscovery2
             }
 
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
-            RepositionGroup(g);
-            PositionPanels();
+            RepositionGroupInternals(g);
+            FixUpGroups();
 
             return g;
         }
@@ -270,7 +270,7 @@ namespace EDDiscovery2
                 g.actionconfig.Visible = g.actionlist.Visible = g.actionlist.Enabled;        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
 
             SetFieldNames(g);
-            PositionPanels();
+            FixUpGroups();
         }
 
         private void SetFieldNames(Group g)
@@ -285,7 +285,7 @@ namespace EDDiscovery2
                 {
                     HashSet<string> fields = new HashSet<string>();             // Hash set prevents duplication
                     foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
-                        JSONHelper.GetJSONFieldNames(ev.EventDataString, fields);        // for all events, add to field list
+                        JSONHelper.GetJSONFieldNamesValues(ev.EventDataString, fields, null);        // for all events, add to field list
 
                     g.fieldnames = fields.ToArray();        // keep in group in case more items are to be added
                 }
@@ -317,6 +317,8 @@ namespace EDDiscovery2
             {
                 ActionListConfig_Clicked(g.actionconfig, null);
             }
+
+            g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
         }
 
         private void ActionListConfig_Clicked(object sender, EventArgs e)
@@ -349,22 +351,26 @@ namespace EDDiscovery2
             // pass in the program if found, and its action data.
             apf.Init("Define new action program", theme, g.fieldnames?.ToList(), p, g.actiondata , actionprogs.GetActionProgramList(), suggestedname);
 
-            if (apf.ShowDialog() == DialogResult.OK)
+            DialogResult res = apf.ShowDialog();
+
+            if (res == DialogResult.OK)
             {
                 g.actiondata = apf.GetProgramData();
+
                 ActionProgram np = apf.GetProgram();
-                actionprogs.AddOrChange(np);
 
-                if (p == null )     // if new program, add it to the list and set it as the active one
-                {
-                    g.actionlist.Enabled = false;
-                    g.actionlist.Items.Add(np.Name);
-                    g.actionlist.SelectedIndex = g.actionlist.Items.Count - 1;
-                    g.actionlist.Enabled = true;
-                }
-
-                g.actionconfig.Enabled = true;
+                actionprogs.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                g.actionlist.Enabled = false;
+                g.actionlist.Text = np.Name;
+                g.actionlist.Enabled = true;
             }
+            else if (res == DialogResult.Abort)   // delete
+            {
+                ActionProgram np2 = apf.GetProgram();
+                actionprogs.Delete(np2.Name);
+            }
+
+            FixUpGroups();       // run  this, it sorts out the group names
         }
 
         #endregion
@@ -430,8 +436,8 @@ namespace EDDiscovery2
             g.panel.Controls.Add(more);
 
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
-            RepositionGroup(g);
-            PositionPanels();
+            RepositionGroupInternals(g);
+            FixUpGroups();
         }
 
         private void Fname_SelectedIndexChanged(object sender, EventArgs e)
@@ -491,7 +497,7 @@ namespace EDDiscovery2
             g.panel.Controls.Remove(c4);
             g.panel.Controls.Remove(c5);
 
-            int numcond = RepositionGroup(g);
+            int numcond = RepositionGroupInternals(g);
 
             if (numcond == 0)
             {
@@ -500,7 +506,7 @@ namespace EDDiscovery2
                 groups.Remove(g);
             }
 
-            PositionPanels();
+            FixUpGroups();
         }
 
         private void Up_Click(object sender, EventArgs e)
@@ -510,14 +516,14 @@ namespace EDDiscovery2
             int indexof = groups.IndexOf(g);
             groups.Remove(g);
             groups.Insert(indexof - 1, g);
-            PositionPanels();
+            FixUpGroups();
         }
 
         #endregion
 
         #region Positioning
 
-        int RepositionGroup(Group g)
+        int RepositionGroupInternals(Group g)
         {
             int vnextcond = panelmargin;
             int numcond = 0;
@@ -560,7 +566,7 @@ namespace EDDiscovery2
             return numcond;
         }
 
-        void PositionPanels()
+        void FixUpGroups()      // fixes and positions groups.
         {
             for (int i = 0; i < groups.Count; i++)
             {
@@ -582,7 +588,7 @@ namespace EDDiscovery2
                 if (groups[i].outercond.Enabled != showouter)
                 {
                     groups[i].outercond.Enabled = groups[i].outercond.Visible = groups[i].outerlabel.Visible = showouter;       // and enabled/disable the outer condition switch
-                    RepositionGroup(groups[i]);
+                    RepositionGroupInternals(groups[i]);
                 }
             }
 
@@ -595,6 +601,23 @@ namespace EDDiscovery2
                 showup = true;
                 g.panel.Location = new Point(0, y);
                 y += g.panel.Height + 6;
+
+                if ( g.actionlist != null )     // rework the action list in case something is changed
+                { 
+                    string name = g.actionlist.Text;
+                    g.actionlist.Enabled = false;
+                    g.actionlist.Items.Clear();
+                    g.actionlist.Items.Add("New");
+                    g.actionlist.Items.AddRange(actionprogs.GetActionProgramList());
+
+                    if (g.actionlist.Items.Contains(name))
+                        g.actionlist.SelectedItem = name;
+                    else
+                        g.actionlist.SelectedIndex = 0;
+
+                    g.actionlist.Enabled = true;
+                    g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
+                }
             }
 
             buttonMore.Location = new Point(panelmargin, y);
