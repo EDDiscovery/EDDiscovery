@@ -528,6 +528,12 @@
     <Compile Include="3DMap\FormMap.Designer.cs">
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Trilateration\SysWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Trilateration\SysWarning.Designer.cs">
+      <DependentUpon>SysWarning.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\DataGridViewSorter.cs" />
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
@@ -735,6 +741,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Trilateration\SysWarning.resx">
+      <DependentUpon>SysWarning.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
