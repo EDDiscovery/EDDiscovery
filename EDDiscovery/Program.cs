@@ -32,7 +32,7 @@ namespace EDDiscovery
         /// </summary>
         /// <param name="hWnd">A handle to the window.</param>
         /// <param name="nCmdShow">Controls how the window is to be shown. See ShowWindow on MSDN for reference.</param>
-        /// <returns>If the operation was successfully started, the return value is true.</returns>
+        /// <returns>If the operation was successfully started, the return value is <c>true</c>.</returns>
         [DllImport("user32.dll")]
         private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
 
@@ -40,7 +40,7 @@ namespace EDDiscovery
         /// WIN32: Determines whether the specified window is minimized (iconic).
         /// </summary>
         /// <param name="hWnd">A handle to the window to be tested.</param>
-        /// <returns>true if the window is minimized, false otherwise</returns>
+        /// <returns><c>true</c> if the window is minimized, <c>false</c> otherwise</returns>
         [DllImport("user32.dll")]
         private static extern bool IsIconic(IntPtr hWnd);
         #endregion
@@ -78,7 +78,7 @@ namespace EDDiscovery
         /// This is really only useful if we are being launched twice because the user
         /// was not aware that the application was already running.
         /// </summary>
-        /// <returns><c>true</c> if the other application windw was raised. <c>false</c> otherwise</returns>
+        /// <returns><c>true</c> if the other application window was raised. <c>false</c> otherwise</returns>
         static bool RaiseOtherProcess()
         {
             bool retval = false;
