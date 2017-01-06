@@ -525,17 +525,26 @@ namespace EDDiscovery.UserControls
 
 
         void SizeControls()
-        { 
-            int height = 0;
-            foreach (DataGridViewRow row in dataGridViewStats.Rows)
+        {
+            try
             {
-                height += row.Height + 1;
+                int height = 0;
+                foreach (DataGridViewRow row in dataGridViewStats.Rows)
+                {
+                    height += row.Height + 1;
+                }
+                height += dataGridViewStats.ColumnHeadersHeight + 2;
+                dataGridViewStats.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, height);             // all controls should be placed each time.
+                                                                                                                                    //System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
+                mostVisited.Location = new Point(0, height);
+                mostVisited.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, mostVisited.Height);
             }
-            height += dataGridViewStats.ColumnHeadersHeight + 2;
-            dataGridViewStats.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, height);             // all controls should be placed each time.
-            //System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
-            mostVisited.Location = new Point(0, height);
-            mostVisited.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, mostVisited.Height);
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"UserControlStats::SizeControls Exception: {ex.Message}");
+                return;
+            }
+
         }
 
         protected override void OnLayout(LayoutEventArgs e)
