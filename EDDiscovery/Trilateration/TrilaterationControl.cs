@@ -17,6 +17,7 @@ namespace EDDiscovery
         private Thread EDSMSubmissionThread;
         private EDSMClass edsm;
         private List<WantedSystemClass> wanted;
+        private List<string> pushed;
 
         /** This global should be set if the next CurrentCellChanged() event should skip to the next editable cell.
          * This should be the case whenver a keyboard event causes cells to change, but not on mouse-initiated events */
@@ -45,6 +46,20 @@ namespace EDDiscovery
                 ClearDataGridViewDistancesRows();
             }
 
+            SetTargetSystemUI();
+
+            UnfreezeTrilaterationUI();
+            dataGridViewDistances.Focus();
+
+            dataGridViewClosestSystems.Rows.Clear();
+            PopulateLocalWantedSystems();
+            Thread ViewPushedSystemsThread = new Thread(ViewPushedSystems) { Name = "EDSM get pushed systems" };
+            ViewPushedSystemsThread.Start();
+
+        }
+
+        private void SetTargetSystemUI()
+        {
             if (TargetSystem == null)
                 return;
 
@@ -62,15 +77,6 @@ namespace EDDiscovery
             {
                 SetTriStatusError("Enter Distances");
             }
-
-            UnfreezeTrilaterationUI();
-            dataGridViewDistances.Focus();
-
-            dataGridViewClosestSystems.Rows.Clear();
-            PopulateLocalWantedSystems();
-            Thread ViewPushedSystemsThread = new Thread(ViewPushedSystems) { Name = "EDSM get pushed systems" };
-            ViewPushedSystemsThread.Start();
-
         }
 
         private List<SystemClass> GetEnteredSystems()
@@ -350,9 +356,9 @@ namespace EDDiscovery
         {
             try
             {
-                List<String> systems = edsm.GetPushedSystems();
+                pushed = edsm.GetPushedSystems();
 
-                foreach (String system in systems)
+                foreach (String system in pushed)
                 {
                     SystemClass star = SystemClass.GetSystem(system);
                     if (star == null)
@@ -416,6 +422,23 @@ namespace EDDiscovery
         {
             try
             {
+                HistoryEntry he = _discoveryForm.history.GetLastFSD;
+                if (he != null && !he.System.name.Equals(TargetSystem.name, StringComparison.OrdinalIgnoreCase))
+                {
+                    SysWarning warn = new SysWarning();
+                    _discoveryForm.theme.ApplyToForm(warn);
+                    warn.SetLabel(TargetSystem.name, he.System.name);
+                    warn.ShowDialog();
+                    switch (warn.Result)
+                    {
+                        case SysWarningResult.eCancel:
+                            return;
+                        case SysWarningResult.eUpdateAndSubmit:
+                            TargetSystem = he.System;
+                            SetTargetSystemUI();
+                            break;
+                    }
+                }
                 LogText("Submitting system to EDSM, please wait..." + Environment.NewLine);
                 FreezeTrilaterationUI();
 
@@ -439,7 +462,7 @@ namespace EDDiscovery
             {
                 edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
                 edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
-
+                
                 var travelHistoryControl = _discoveryForm.TravelControl;
                 if (string.IsNullOrEmpty(edsm.commanderName))
                 {
@@ -920,6 +943,28 @@ namespace EDDiscovery
                             wanted.Remove(entry);
                         }
                     }
+                }
+            }
+        }
+
+        private void addAllLocalSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (wanted != null && wanted.Any())
+            {
+                foreach (WantedSystemClass sys in wanted)
+                {
+                    AddSystemToDataGridViewDistances(sys.system);
+                }
+            }
+        }
+
+        private void addAllEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (pushed != null && pushed.Any())
+            {
+                foreach (string sys in pushed)
+                {
+                    AddSystemToDataGridViewDistances(sys);
                 }
             }
         }

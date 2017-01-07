@@ -236,6 +236,11 @@ namespace EDDiscovery
                 this.StartPosition = FormStartPosition.Manual;
 
             }
+            else
+            {
+                var Max = SQLiteDBClass.GetSettingBool("FormMax", false);
+                if (Max) this.WindowState = FormWindowState.Maximized;
+            }
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
@@ -373,6 +378,7 @@ namespace EDDiscovery
         {
             settings.SaveSettings();
 
+            SQLiteDBClass.PutSettingBool("FormMax", this.WindowState == FormWindowState.Maximized);
             SQLiteDBClass.PutSettingInt("FormWidth", this.Width);
             SQLiteDBClass.PutSettingInt("FormHeight", this.Height);
             SQLiteDBClass.PutSettingInt("FormTop", this.Top);
