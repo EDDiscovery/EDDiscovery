@@ -260,10 +260,7 @@ namespace EDDiscovery.Forms
 
             Size winsize = (istemporaryresized) ? normalsize : this.Size;
             SQLiteDBClass.PutSettingInt(dbrefname + "Width", winsize.Width);
-            if (defwindowsborder && !curwindowsborder)  // need to save the height it would have if the border was showing or else it gets shorter with every close...
-            { SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height); }
-            else
-            { SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height); }
+            SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height);
             SQLiteDBClass.PutSettingInt(dbrefname + "Top", this.Top);
             SQLiteDBClass.PutSettingInt(dbrefname + "Left", this.Left);
         }
@@ -341,7 +338,7 @@ namespace EDDiscovery.Forms
 
         public void RequestTemporaryResizeExpand(Size w)            // Size w is the client area above
         {
-            if (w.Width != 0 && w.Height != 0)
+            if (w.Width != 0 || w.Height != 0)
                 RequestTemporaryResize(new Size(ClientRectangle.Width + w.Width, ClientRectangle.Height + w.Height));
         }
 
