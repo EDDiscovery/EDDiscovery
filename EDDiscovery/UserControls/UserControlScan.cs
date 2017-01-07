@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + "\n\nNo scan data available";
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff, eddnvisible, sc.IsEDSMBody);
+                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff, eddnvisible, false);
                 offset += size.Width / 2;       // return the middle used was this..
             }
 
