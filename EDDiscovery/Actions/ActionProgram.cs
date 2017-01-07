@@ -10,42 +10,13 @@ namespace EDDiscovery.Actions
     public class ActionProgram
     {
         // name and program stored in memory.
-        private string name;
-        private List<Action> programsteps;
-
-        // used during execution.. filled in on program objects associated with an execution
-        public EDDiscoveryForm discoveryform;
-        public HistoryEntry historyentry;
-        public JSONHelper.JSONFields vars;
-        public bool allowpause;
-
-        private enum IfState { On, Off, OffForGood }
-        private IfState[] ifstate = new IfState[50];
-        private int iflevel = 0;
-
-        private string errlist = "";
+        protected string name;
+        protected List<Action> programsteps;
 
         public ActionProgram(string n)
         {
             name = n;
             programsteps = new List<Action>();
-        }
-
-        public ActionProgram( ActionProgram r, EDDiscoveryForm ed = null, HistoryEntry h = null , JSONHelper.JSONFields v = null , bool allowp = false )        // make a copy of the program..
-        {
-            name = r.name;
-            discoveryform = ed;
-            historyentry = h;
-            vars = v;
-            allowpause = allowp;
-            iflevel = 0;
-            ifstate[iflevel] = IfState.On;
-
-            programsteps = new List<Action>();
-            foreach ( Action ap in r.programsteps )
-            {
-                programsteps.Add(Action.CreateCopy(ap));
-            }
         }
 
         public string Name { get { return name; } }
@@ -64,59 +35,13 @@ namespace EDDiscovery.Actions
 
         public int Count { get { return programsteps.Count; } }
 
-        public Action GetStep(int a )
+        public Action GetStep(int a)
         {
             if (a < programsteps.Count)
                 return programsteps[a];
             else
                 return null;
         }
-
-        #region Conditional control
-
-        public bool DoExecute(Action ac)      // execute if control state
-        {
-            return ifstate[iflevel] == IfState.On || ac.Type == Action.ActionType.If || ac.Type == Action.ActionType.ElseIf;
-        }
-
-        public bool IsLevelOff { get { return ifstate[iflevel] == IfState.Off; } }
-
-        public void PushIf(bool execstate)
-        {
-            iflevel++;
-            ifstate[iflevel] = execstate ? IfState.On : IfState.Off;
-        }
-
-        public void ElseIf(bool execstate)
-        {
-            ifstate[iflevel] = execstate ? IfState.On : IfState.Off;
-        }
-
-        public void ElseIfOff()
-        {
-            ifstate[iflevel] = IfState.OffForGood;
-        }
-
-        public void LevelUp(int n)
-        {
-            iflevel = Math.Max(iflevel - n, 0);
-        }
-
-        public int IfLevel { get { return iflevel;  } }
-
-        #endregion
-
-        #region Run time errors
-        public void ReportError(string s)
-        {
-            if ( errlist.Length>0)
-                errlist += Environment.NewLine;
-            errlist += s;
-        }
-
-        public string GetErrorList { get { return errlist; } }
-
-        #endregion
 
         #region JSON in and out
 
@@ -182,6 +107,187 @@ namespace EDDiscovery.Actions
         #endregion
     }
 
+    // this is the run time context of a program, holding run time data
+
+    public class ActionProgramRun : ActionProgram
+    {
+        // used during execution.. filled in on program objects associated with an execution
+        public EDDiscoveryForm discoveryform;
+        public HistoryList historylist;                     // may ne 
+        public HistoryEntry historyentry;   
+        public Dictionary<string, string> currentvars;      // these may be freely modified, they are local to this APR
+        public bool allowpause;
+
+        private int nextstepnumber;     // the next step to execute, 0 based
+
+        public enum ExecState { On, Off, OffForGood }
+        private ExecState[] execstate = new ExecState[50];
+        Action.ActionType[] exectype = new Action.ActionType[50];   // type of level
+        private int[] execlooppos = new int[50];            // if not -1, on level down, go back to this step.
+        private int execlevel = 0;
+
+        private string errlist = null;
+
+        public ActionProgramRun(ActionProgram r, EDDiscoveryForm ed , HistoryList hl , HistoryEntry h,
+                                Dictionary<string, string> gvars , bool allowp = false) : base(r.Name)      // make a copy of the program..
+        {
+            discoveryform = ed;
+            historyentry = h;
+            historylist = hl;
+            allowpause = allowp;
+            execlevel = 0;
+            execstate[execlevel] = ExecState.On;
+            nextstepnumber = 0;
+
+            currentvars = new Dictionary<string,string>(gvars); // copy of.. we can modify to hearts content
+
+            List<Action> psteps = new List<Action>();
+            Action ac;
+            for (int i = 0; (ac = r.GetStep(i)) != null; i++)
+                psteps.Add(Action.CreateCopy(ac));
+
+            programsteps = psteps;
+        }
+
+        #region Exec control
+
+        public Action GetNextStep()
+        {
+            if (nextstepnumber < Count)
+                return programsteps[nextstepnumber++];      
+            else
+                return null;
+        }
+
+        public string Location { get { return Name + " Step " + nextstepnumber; } }
+
+        public int ExecLevel { get { return execlevel; } }
+
+        public bool IsProgramFinished { get { return nextstepnumber >= Count; } }
+
+        public bool IsExecuteOn { get { return execstate[execlevel] == ExecState.On; } }
+        public bool IsExecuteOff { get { return execstate[execlevel] == ExecState.Off; } }
+        public bool IsExecutingType(Action.ActionType ty) { return exectype[execlevel] == ty;  }
+
+        public int PushPos { get { return execlooppos[execlevel]; } }
+        public void CancelPushPos() { execlooppos[execlevel] = -1;  }
+
+        public int StepNumber { get { return nextstepnumber; } }
+        public void Goto( int pos ) { nextstepnumber = pos; }
+
+        public bool DoExecute(Action ac)      // execute if control state
+        {
+            return execstate[execlevel] == ExecState.On || ac.Type != Action.ActionType.Cmd;
+        }
+
+        public void PushState(Action.ActionType ty, bool res, bool pushpos = false)
+        {
+            PushState(ty, res ? ExecState.On : ExecState.Off, pushpos);
+        }
+
+        public void PushState(Action.ActionType ty, ExecState ex, bool pushpos = false)
+        {
+            execlevel++;
+            exectype[execlevel] = ty;
+            execstate[execlevel] = ex;
+            execlooppos[execlevel] = (pushpos) ? (nextstepnumber-1) : -1;
+        }
+
+        public void ChangeState(bool v)
+        {
+            this.execstate[execlevel] = v ? ExecState.On : ExecState.Off;
+        }
+
+        public void ChangeState(ExecState ex)
+        {
+            this.execstate[execlevel] = ex;
+        }
+
+        public void RemoveLevel()
+        {
+            execlevel = Math.Max(execlevel-1,0);
+        }
+
+        public bool LevelUp(Action ac)
+        {
+            int up = ac.LevelUp;
+
+            while (up-- > 0)
+            {
+                if (IsExecutingType(Action.ActionType.Do))                // DO needs a while at level -1..
+                {
+                    if (ac.Type == Action.ActionType.While)
+                    {
+                        if (ac.LevelUp == 1)                // only 1, otherwise its incorrectly nested
+                        {
+                            ActionWhile w = ac as ActionWhile;
+                            if (w.ExecuteEndDo(this))    // if this indicates (due to true) we need to fetch next instruction
+                            {
+                                return true;
+                            }
+                            else
+                                RemoveLevel();      // else, just remove level.. 
+                        }
+                        else
+                        {
+                            ReportError("While incorrectly nested under Do");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        ReportError("While missing after Do");
+                        return false;
+                    }
+                }
+                else if (IsExecutingType(Action.ActionType.Loop))        // loop, when needs to make a decision if to change back pos..
+                {
+                    if (IsExecuteOn)          // if executing, the loop is active.. If not, we can just continue on.
+                    {
+                        ActionLoop l = GetStep(PushPos) as ActionLoop;  // go back and get the Loop position
+                        if (l.ExecuteEndLoop(this))      // if true, it wants to move back, so go back and get next value.
+                        {
+                            return true;
+                        }
+                        else
+                            RemoveLevel();      // else, just remove level.. 
+                    }
+                }
+                else
+                {                                               // normal, just see if need to loop back
+                    int stepback = PushPos;
+
+                    RemoveLevel();
+
+                    if (stepback >= 0)
+                    {
+                        Goto(stepback);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region Run time errors
+        public void ReportError(string s)
+        {
+            if (errlist != null)
+                errlist += Environment.NewLine;
+            errlist += s;
+        }
+
+        public string GetErrorList { get { return errlist; } }
+
+        #endregion
+
+    }
+
+    // holder of programs
+
     public class ActionProgramList
     {
         public ActionProgramList()
@@ -214,6 +320,11 @@ namespace EDDiscovery.Actions
 
         public string GetJSON()
         {
+            return GetJSONObject().ToString();
+        }
+
+        public JObject GetJSONObject()
+        {
             JObject evt = new JObject();
 
             JArray jf = new JArray();
@@ -226,16 +337,27 @@ namespace EDDiscovery.Actions
 
             evt["ProgramSet"] = jf;
 
-            return evt.ToString();
+            return evt;
         }
 
         public bool FromJSON(string s)
         {
-            Clear();
-
             try
             {
                 JObject jo = (JObject)JObject.Parse(s);
+                return FromJSON(jo);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool FromJSON(JObject jo)
+        {
+            try
+            {
+                Clear();
 
                 JArray jf = (JArray)jo["ProgramSet"];
 

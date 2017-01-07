@@ -13,8 +13,9 @@ namespace EDDiscovery.Actions
     public partial class ActionProgramForm : Form
     {
         string initialprogname;
-        string[] definedprograms;
-        List<string> variables;
+        string[] definedprograms;                                   // list of programs already defined, to detect rename over..
+        List<string> variables;                                     // variables available to use..
+        Dictionary<string, string> inputparas;                      // input parameters to configure for this program
 
         class Group
         {
@@ -30,7 +31,6 @@ namespace EDDiscovery.Actions
         };
 
         List<Group> groups;
-
         int panelwidth = 800;
         int valuewidth = 350;
 
@@ -45,7 +45,7 @@ namespace EDDiscovery.Actions
         const int panelmargin = 3;
 
         public void Init(string t, EDDiscovery2.EDDTheme th , 
-                            List<string> vbs = null ,       // list any variables you want in condition statements
+                            List<string> vbs ,              // list any variables you want in condition statements - passed to config menu, passed back up to condition, not null
                             ActionProgram prog = null ,     // give the program to display
                             string progdata = null,         // give any associated program data
                             string[] defprogs = null ,      // list any default program names
@@ -55,11 +55,18 @@ namespace EDDiscovery.Actions
 
             variables = vbs;
 
-            checkBoxCustomRefresh.Checked = progdata != null && progdata.Contains(ActionProgram.flagRunAtRefresh);
-
             bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
+
+            if (progdata != null)
+            {
+                List<string> flaglist;
+                ActionData.DecodeActionData(progdata, out flaglist, out inputparas);
+                checkBoxCustomRefresh.Checked = flaglist.Contains(ActionProgram.flagRunAtRefresh);
+            }
+            else
+                checkBoxCustomRefresh.Visible = buttonVars.Visible = false;
 
             if (defprogs != null)
                 definedprograms = defprogs;
@@ -203,8 +210,9 @@ namespace EDDiscovery.Actions
 
             int structlevel = 0;
             int[] structcount = new int[50];
-            bool[] structif = new bool[50];
-            bool[] structelse = new bool[50];
+            Action.ActionType[] structtype = new Action.ActionType[50];
+            //bool[] structif = new bool[50];
+            //bool[] structelse = new bool[50];
 
             bool first = true;
 
@@ -228,32 +236,44 @@ namespace EDDiscovery.Actions
                 if (structlevel > 0 && structcount[structlevel] > 1)        // second further on can be moved back..
                     g.left.Enabled = true;
 
-                int level = structlevel;        // displayed level..
+                int displaylevel = structlevel;        // displayed level..
 
                 if (g.programstep != null)
                 {
                     if (g.programstep.Type == Action.ActionType.ElseIf)
                     {
-                        if (structif[structlevel] == false)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " Else or ElseIf without IF found" + Environment.NewLine;
-                        else if (structelse[structlevel] == true)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " Else is repeated multiple times or ElseIf after else" + Environment.NewLine;
+                        if (structtype[structlevel] == Action.ActionType.Else)
+                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " ElseIf after Else found" + Environment.NewLine;
+                        else if (structtype[structlevel] != Action.ActionType.If)
+                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " ElseIf without IF found" + Environment.NewLine;
+                    }
+                    else if (g.programstep.Type == Action.ActionType.Else)
+                    {
+                        if (structtype[structlevel] == Action.ActionType.Else)
+                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " Else after Else found" + Environment.NewLine;
+                        else if (structtype[structlevel] != Action.ActionType.If && structtype[structlevel] != Action.ActionType.ElseIf)
+                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " Else without IF found" + Environment.NewLine;
 
-                        if (level == 1)
+                    }
+
+                    if (g.programstep.Type == Action.ActionType.ElseIf || g.programstep.Type == Action.ActionType.Else )
+                    {
+                        structtype[structlevel] = g.programstep.Type;
+
+                        if (structlevel == 1)
                             g.left.Enabled = false;         // can't move an ELSE back to level 0
 
-                        if (level > 0)      // display else artifically indented.. display only
-                            level--;
+                        if (structlevel > 0)      // display else artifically indented.. display only
+                            displaylevel--;
 
                         structcount[structlevel] = 0;   // restart count so we don't allow a left on next one..
-                        structelse[structlevel] |= g.programstep.Name.Equals("Else");
                     }
-                    else if (g.programstep.Type == Action.ActionType.If)
+                    else if (g.programstep.Type == Action.ActionType.If || g.programstep.Type == Action.ActionType.While || 
+                                g.programstep.Type == Action.ActionType.Do || g.programstep.Type == Action.ActionType.Loop)
                     {
                         structlevel++;
                         structcount[structlevel] = 0;
-                        structif[structlevel] = true;
-                        structelse[structlevel] = false;
+                        structtype[structlevel] = g.programstep.Type;
                     }
                 }
                 else
@@ -262,10 +282,10 @@ namespace EDDiscovery.Actions
                 }
 
                 g.panel.Location = new Point(0, voff);
-                g.stepname.Location = new Point(panelmargin + 8 * level, panelmargin);
-                g.stepname.Size = new Size(140-Math.Max((level-4)*8,0), 24);
+                g.stepname.Location = new Point(panelmargin + 8 * displaylevel, panelmargin);
+                g.stepname.Size = new Size(140-Math.Max((displaylevel-4)*8,0), 24);
                 g.up.Visible = !first;
-                g.config.Visible = g.programstep != null;
+                g.config.Visible = g.programstep != null && g.programstep.ConfigurationMenuInUse;
 
                 //DEBUG
                 if (g.programstep != null)
@@ -306,10 +326,7 @@ namespace EDDiscovery.Actions
                 {
                     Action a = Action.CreateAction(b.Text);
 
-                    if (a is ActionIf)
-                        (a as ActionIf).variables = variables;
-
-                    if (a.ConfigurationMenu(this, theme))
+                    if (!a.ConfigurationMenuInUse || a.ConfigurationMenu(this, theme, variables))
                     {
                         g.programstep = a;
                         SetValue(g.value, a);
@@ -332,10 +349,7 @@ namespace EDDiscovery.Actions
 
             if (g.programstep != null)
             {
-                if (g.programstep is ActionIf)
-                    (g.programstep as ActionIf).variables = variables;
-
-                if (g.programstep.ConfigurationMenu(this, theme))
+                if (g.programstep.ConfigurationMenu(this, theme, variables))
                     SetValue(g.value, g.programstep);
             }
         }
@@ -455,9 +469,24 @@ namespace EDDiscovery.Actions
             return ap;
         }
 
-        public string GetProgramData()
+        public string GetActionData()         // called on OK to get the actiondata string
         {
-            return checkBoxCustomRefresh.Checked ? ActionProgram.flagRunAtRefresh : "None";
+            List<string> flags = new List<string>();
+            if (checkBoxCustomRefresh.Checked)
+                flags.Add(ActionProgram.flagRunAtRefresh);
+
+            return ActionData.EncodeActionData(flags, inputparas);
+        }
+
+        private void buttonVars_Click(object sender, EventArgs e)
+        {
+            ActionVariableForm avf = new ActionVariableForm();
+            avf.Init("Input variables to program on run", theme, inputparas);
+
+            if ( avf.ShowDialog() == DialogResult.OK )
+            {
+                inputparas = avf.result;
+            }
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -598,5 +627,6 @@ namespace EDDiscovery.Actions
 
         #endregion
 
+        
     }
 }

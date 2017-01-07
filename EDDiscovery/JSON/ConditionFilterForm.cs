@@ -15,17 +15,17 @@ using System.Windows.Forms;
 
 namespace EDDiscovery2
 {
-    public partial class JSONFiltersForm : Form
+    public partial class ConditionFilterForm : Form
     {
-        public JSONFilter result;
+        public ConditionLists result;
         EDDiscovery.Actions.ActionProgramList actionprogs;
         List<string> eventlist;
-        List<string> fieldnames; // null means look up dynamically
+        List<string> additionalfieldnames; // null not have any
 
         class Group
         {
             public Control panel;
-            public string[] fieldnames;
+            public List<string> varnames;
             public ExtendedControls.ButtonExt upbutton;
             public ExtendedControls.ComboBoxCustom evlist;
             public ExtendedControls.ComboBoxCustom actionlist;
@@ -46,41 +46,40 @@ namespace EDDiscovery2
         const int panelmargin = 3;
         const int conditionhoff = 30;
 
-        public JSONFiltersForm()
+        public ConditionFilterForm()
         {
             InitializeComponent();
             groups = new List<Group>();
         }
 
-        public void InitFilter(string t,  EDDiscovery2.EDDTheme th, JSONFilter j = null)
+        // used to start when just filtering.. uses a fixed event list
+
+        public void InitFilter(string t, List<string> varfields, EDDiscovery2.EDDTheme th, ConditionLists j = null)
         {
             List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
             events.Add("All");
-            Init(t, events, null, null, true, th, j);
+            Init(t, events, varfields, null, true, th, j);
         }
 
-        public void InitAction(string t, EDDiscovery.Actions.ActionProgramList aclist, EDDiscovery2.EDDTheme th, JSONFilter j = null)
+        // used to start when inside a condition of an IF of a program action
+
+        public void InitCondition(string t, List<string> varfields, EDDiscovery2.EDDTheme th, ConditionLists j = null)
         {
-            List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
-            events.Add("All");
-            Init(t, events, null, aclist, false, th, j);
+            Init(t, null, varfields, null, true, th, j);
         }
 
-        public void InitCondition(string t, List<string> fields, EDDiscovery2.EDDTheme th, JSONFilter j = null)
-        {
-            Init(t, null, fields, null, true, th, j);
-        }
+        // Full start
 
         public void Init(string t, List<string> el,                             // list of event types or null if event types not used
-                                   List<string> flist,                          // list of field names, or null for lookup
+                                   List<string> varfields,                      // list of additional variable/field names (must be set)
                                    EDDiscovery.Actions.ActionProgramList aclist,// if aclist is null no action list
                                    bool outerconditions,
-                                   EDDiscovery2.EDDTheme th, JSONFilter j = null)  
+                                   EDDiscovery2.EDDTheme th, ConditionLists j = null)  
         {                                                                        // outc selects if group outer action can be selected, else its OR
             theme = th;
             eventlist = el;
             actionprogs = aclist;
-            fieldnames = flist;
+            additionalfieldnames = varfields;
             allowoutercond = outerconditions;
             result = j;
 
@@ -91,15 +90,20 @@ namespace EDDiscovery2
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
+            if (actionprogs == null)        // turn off these if not in use..
+                labelEditProg.Visible = comboBoxCustomEditProg.Visible = false;
+            else
+                comboBoxCustomEditProg.Items.AddRange(actionprogs.GetActionProgramList());
+
             if (result != null)
             {
-                foreach (JSONFilter.FilterEvent fe in result.filters)
+                foreach (ConditionLists.Condition fe in result.conditionlist)
                 {
                     Group g = CreateGroup(fe.eventname, fe.action, fe.actiondata , fe.innercondition.ToString(), fe.outercondition.ToString());
 
-                    foreach (JSONFilter.Fields f in fe.fields)
+                    foreach (ConditionLists.ConditionEntry f in fe.fields)
                     {
-                        CreateCondition(g, f.itemname, JSONFilter.MatchNames[(int)f.matchtype], f.contentmatch);
+                        CreateCondition(g, f.itemname, ConditionLists.MatchNames[(int)f.matchtype], f.contentmatch);
                     }
                 }
             }
@@ -169,7 +173,7 @@ namespace EDDiscovery2
             }
 
             ExtendedControls.ComboBoxCustom cond = new ExtendedControls.ComboBoxCustom();
-            cond.Items.AddRange(Enum.GetNames(typeof(JSONFilter.FilterType)));
+            cond.Items.AddRange(Enum.GetNames(typeof(ConditionLists.LogicalCondition)));
             cond.SelectedIndex = 0;
             cond.Size = new Size(60, 24);
             cond.Visible = false;
@@ -179,7 +183,7 @@ namespace EDDiscovery2
             p.Controls.Add(cond);
 
             ExtendedControls.ComboBoxCustom condouter = new ExtendedControls.ComboBoxCustom();
-            condouter.Items.AddRange(Enum.GetNames(typeof(JSONFilter.FilterType)));
+            condouter.Items.AddRange(Enum.GetNames(typeof(ConditionLists.LogicalCondition)));
             condouter.SelectedIndex = 0;
             condouter.Location = new Point(panelmargin , panelmargin + conditionhoff);     
             condouter.Size = new Size(60, 24);
@@ -216,9 +220,6 @@ namespace EDDiscovery2
                 actiondata = initialactiondatastring
             };
 
-            if ( fieldnames != null ) // if a defined set of field names..
-                g.fieldnames = fieldnames.ToArray();        // use these..
-
             p.Size = new Size(panelwidth, panelmargin + conditionhoff);
 
             groups.Add(g);
@@ -228,12 +229,9 @@ namespace EDDiscovery2
             panelVScroll.Controls.Add(p);
 
             if (evliste != null)
-            {
                 evliste.Tag = g;
 
-                if (evliste.Text.Length > 0)      // events on, and set..
-                    SetFieldNames(g);
-            }
+            SetFieldNames(g);
 
             if (g.actionconfig != null)
             {
@@ -275,7 +273,9 @@ namespace EDDiscovery2
 
         private void SetFieldNames(Group g)
         {
-            if (fieldnames == null && eventlist != null )       // fieldnames are null, and we have an event list, try and find the field names
+            g.varnames = new List<string>();
+
+            if (eventlist != null )       // fieldnames are null, and we have an event list, try and find the field names
             {
                 string evtype = g.evlist.Text;
 
@@ -283,15 +283,15 @@ namespace EDDiscovery2
 
                 if (jel != null)            // may not find it, if event is not in history
                 {
-                    HashSet<string> fields = new HashSet<string>();             // Hash set prevents duplication
+                    Dictionary<string, string> vars = new Dictionary<string, string>();
                     foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
-                        JSONHelper.GetJSONFieldNamesValues(ev.EventDataString, fields, null);        // for all events, add to field list
-
-                    g.fieldnames = fields.ToArray();        // keep in group in case more items are to be added
+                        JSONHelper.GetJSONFieldNamesValues(ev.EventDataString, vars);        // for all events, add to field list
+                    g.varnames.AddRange(vars.Keys.ToList());
                 }
-                else
-                    g.fieldnames = null;
             }
+
+            if (additionalfieldnames != null)
+                g.varnames.AddRange(additionalfieldnames);
 
             foreach (Control c in g.panel.Controls)
             {
@@ -299,8 +299,8 @@ namespace EDDiscovery2
                 {
                     ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
                     cb.Items.Clear();
-                    if (g.fieldnames != null)
-                        cb.Items.AddRange(g.fieldnames);
+                    if (g.varnames != null)
+                        cb.Items.AddRange(g.varnames);
                     cb.Items.Add("User Defined");
                     cb.SelectedIndex = -1;
                     cb.Text = "";
@@ -349,7 +349,7 @@ namespace EDDiscovery2
 
             // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames
             // pass in the program if found, and its action data.
-            apf.Init("Define new action program", theme, g.fieldnames?.ToList(), p, g.actiondata , actionprogs.GetActionProgramList(), suggestedname);
+            apf.Init("Action program", theme, g.varnames, p, g.actiondata , actionprogs.GetActionProgramList(), suggestedname);
 
             DialogResult res = apf.ShowDialog();
 
@@ -373,6 +373,38 @@ namespace EDDiscovery2
             FixUpGroups();       // run  this, it sorts out the group names
         }
 
+        private void comboBoxCustomEditProg_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxCustomEditProg.Enabled)
+            {
+                string progname = comboBoxCustomEditProg.Text;
+                System.Diagnostics.Debug.WriteLine("Edit" + progname);
+                ActionProgramForm apf = new ActionProgramForm();
+
+                ActionProgram p = actionprogs.Get(comboBoxCustomEditProg.Text);
+
+                if (p != null)
+                {
+                    List<string> vars = new List<string>();
+                    if (additionalfieldnames != null)
+                        vars.AddRange(additionalfieldnames);
+
+                    apf.Init("Action program", theme, vars, p, null, actionprogs.GetActionProgramList(), "");
+
+                    DialogResult res = apf.ShowDialog();
+
+                    if (res == DialogResult.OK)
+                    {
+                        ActionProgram np = apf.GetProgram();
+                        actionprogs.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                    }
+
+                    FixUpGroups();       // run  this, it sorts out the group names
+                }
+            }
+        }
+
+
         #endregion
 
         #region Condition
@@ -383,8 +415,8 @@ namespace EDDiscovery2
             fname.Size = new Size(140, 24);
             fname.DropDownHeight = 400;
             fname.Name = "Field";
-            if (g.fieldnames != null)
-                fname.Items.AddRange(g.fieldnames);
+            if (g.varnames != null)
+                fname.Items.AddRange(g.varnames);
             fname.Items.Add("User Defined");
 
             if (initialfname != null)
@@ -400,7 +432,7 @@ namespace EDDiscovery2
             g.panel.Controls.Add(fname);                                                // 1st control
 
             ExtendedControls.ComboBoxCustom cond = new ExtendedControls.ComboBoxCustom();
-            cond.Items.AddRange(JSONFilter.MatchNames);
+            cond.Items.AddRange(ConditionLists.MatchNames);
             cond.SelectedIndex = 0;
             cond.Size = new Size(130, 24);
             cond.DropDownHeight = 400;
@@ -602,8 +634,8 @@ namespace EDDiscovery2
                 g.panel.Location = new Point(0, y);
                 y += g.panel.Height + 6;
 
-                if ( g.actionlist != null )     // rework the action list in case something is changed
-                { 
+                if (g.actionlist != null)     // rework the action list in case something is changed
+                {
                     string name = g.actionlist.Text;
                     g.actionlist.Enabled = false;
                     g.actionlist.Items.Clear();
@@ -617,6 +649,12 @@ namespace EDDiscovery2
 
                     g.actionlist.Enabled = true;
                     g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
+
+                    comboBoxCustomEditProg.Enabled = false;
+                    comboBoxCustomEditProg.Items.Clear();
+                    comboBoxCustomEditProg.Items.AddRange(actionprogs.GetActionProgramList());
+                    comboBoxCustomEditProg.Text = "";
+                    comboBoxCustomEditProg.Enabled = true;
                 }
             }
 
@@ -643,7 +681,7 @@ namespace EDDiscovery2
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            JSONFilter jf = new JSONFilter();
+            ConditionLists jf = new ConditionLists();
 
             string errorlist = "";
 
@@ -657,7 +695,7 @@ namespace EDDiscovery2
 
                 System.Diagnostics.Debug.WriteLine("Event {0} inner {1} outer {2} action {3} data '{4}'", evt, innerc, outerc, actionname, actiondata );
 
-                JSONFilter.FilterEvent fe = new JSONFilter.FilterEvent();
+                ConditionLists.Condition fe = new ConditionLists.Condition();
 
                 if ( actionprogs != null && actionname.Equals("New") )        // actions, but not selected one..
                 {
@@ -682,7 +720,7 @@ namespace EDDiscovery2
 
                                 if (fieldn.Length > 0)
                                 {
-                                    JSONFilter.Fields f = new JSONFilter.Fields();
+                                    ConditionLists.ConditionEntry f = new ConditionLists.ConditionEntry();
                                     ok = (fieldn.Length > 0 && f.Create(fieldn, condn, valuen));
 
                                     if (ok)
@@ -860,6 +898,16 @@ namespace EDDiscovery2
         }
 
         #endregion
+
+        private void buttonExtLoad_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonExtSave_Click(object sender, EventArgs e)
+        {
+
+        }
 
     }
 }

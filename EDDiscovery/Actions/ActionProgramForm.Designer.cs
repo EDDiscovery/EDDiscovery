@@ -29,27 +29,28 @@
         private void InitializeComponent()
         {
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.panelName = new System.Windows.Forms.Panel();
+            this.labelName = new System.Windows.Forms.Label();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.label_index = new System.Windows.Forms.Label();
+            this.panelOK = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.panelName = new System.Windows.Forms.Panel();
+            this.buttonExtDelete = new ExtendedControls.ButtonExt();
             this.checkBoxCustomRefresh = new ExtendedControls.CheckBoxCustom();
             this.textBoxBorderName = new ExtendedControls.TextBoxBorder();
-            this.labelName = new System.Windows.Forms.Label();
-            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
-            this.panelTop = new System.Windows.Forms.Panel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
-            this.label_index = new System.Windows.Forms.Label();
-            this.panelOK = new System.Windows.Forms.Panel();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
-            this.buttonExtDelete = new ExtendedControls.ButtonExt();
+            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.buttonVars = new ExtendedControls.ButtonExt();
             this.panelOuter.SuspendLayout();
-            this.panelVScroll.SuspendLayout();
             this.panelName.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
+            this.panelVScroll.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelOuter
@@ -62,6 +63,58 @@
             this.panelOuter.Padding = new System.Windows.Forms.Padding(3);
             this.panelOuter.Size = new System.Drawing.Size(862, 388);
             this.panelOuter.TabIndex = 9;
+            // 
+            // panelName
+            // 
+            this.panelName.Controls.Add(this.buttonVars);
+            this.panelName.Controls.Add(this.buttonExtDelete);
+            this.panelName.Controls.Add(this.checkBoxCustomRefresh);
+            this.panelName.Controls.Add(this.textBoxBorderName);
+            this.panelName.Controls.Add(this.labelName);
+            this.panelName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelName.Location = new System.Drawing.Point(3, 24);
+            this.panelName.Name = "panelName";
+            this.panelName.Size = new System.Drawing.Size(862, 36);
+            this.panelName.TabIndex = 8;
+            // 
+            // labelName
+            // 
+            this.labelName.AutoSize = true;
+            this.labelName.Location = new System.Drawing.Point(3, 7);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(35, 13);
+            this.labelName.TabIndex = 23;
+            this.labelName.Text = "Name";
+            // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.panel_close);
+            this.panelTop.Controls.Add(this.panel_minimize);
+            this.panelTop.Controls.Add(this.label_index);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(3, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(862, 24);
+            this.panelTop.TabIndex = 29;
+            // 
+            // label_index
+            // 
+            this.label_index.AutoSize = true;
+            this.label_index.Location = new System.Drawing.Point(3, 8);
+            this.label_index.Name = "label_index";
+            this.label_index.Size = new System.Drawing.Size(27, 13);
+            this.label_index.TabIndex = 23;
+            this.label_index.Text = "N/A";
+            // 
+            // panelOK
+            // 
+            this.panelOK.Controls.Add(this.buttonCancel);
+            this.panelOK.Controls.Add(this.buttonOK);
+            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelOK.Location = new System.Drawing.Point(3, 448);
+            this.panelOK.Name = "panelOK";
+            this.panelOK.Size = new System.Drawing.Size(862, 30);
+            this.panelOK.TabIndex = 9;
             // 
             // panelVScroll
             // 
@@ -118,17 +171,19 @@
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
-            // panelName
+            // buttonExtDelete
             // 
-            this.panelName.Controls.Add(this.buttonExtDelete);
-            this.panelName.Controls.Add(this.checkBoxCustomRefresh);
-            this.panelName.Controls.Add(this.textBoxBorderName);
-            this.panelName.Controls.Add(this.labelName);
-            this.panelName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelName.Location = new System.Drawing.Point(3, 24);
-            this.panelName.Name = "panelName";
-            this.panelName.Size = new System.Drawing.Size(862, 36);
-            this.panelName.TabIndex = 8;
+            this.buttonExtDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExtDelete.BorderColorScaling = 1.25F;
+            this.buttonExtDelete.ButtonColorScaling = 0.5F;
+            this.buttonExtDelete.ButtonDisabledScaling = 0.5F;
+            this.buttonExtDelete.Location = new System.Drawing.Point(833, 4);
+            this.buttonExtDelete.Name = "buttonExtDelete";
+            this.buttonExtDelete.Size = new System.Drawing.Size(25, 23);
+            this.buttonExtDelete.TabIndex = 25;
+            this.buttonExtDelete.Text = "X";
+            this.buttonExtDelete.UseVisualStyleBackColor = true;
+            this.buttonExtDelete.Click += new System.EventHandler(this.buttonExtDelete_Click);
             // 
             // checkBoxCustomRefresh
             // 
@@ -154,34 +209,6 @@
             this.textBoxBorderName.Name = "textBoxBorderName";
             this.textBoxBorderName.Size = new System.Drawing.Size(154, 20);
             this.textBoxBorderName.TabIndex = 0;
-            // 
-            // labelName
-            // 
-            this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(3, 7);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(35, 13);
-            this.labelName.TabIndex = 23;
-            this.labelName.Text = "Name";
-            // 
-            // statusStripCustom
-            // 
-            this.statusStripCustom.Location = new System.Drawing.Point(3, 478);
-            this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(862, 22);
-            this.statusStripCustom.TabIndex = 28;
-            this.statusStripCustom.Text = "statusStripCustom1";
-            // 
-            // panelTop
-            // 
-            this.panelTop.Controls.Add(this.panel_close);
-            this.panelTop.Controls.Add(this.panel_minimize);
-            this.panelTop.Controls.Add(this.label_index);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(3, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(862, 24);
-            this.panelTop.TabIndex = 29;
             // 
             // panel_close
             // 
@@ -219,25 +246,6 @@
             this.panel_minimize.TabIndex = 26;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
-            // label_index
-            // 
-            this.label_index.AutoSize = true;
-            this.label_index.Location = new System.Drawing.Point(3, 8);
-            this.label_index.Name = "label_index";
-            this.label_index.Size = new System.Drawing.Size(27, 13);
-            this.label_index.TabIndex = 23;
-            this.label_index.Text = "N/A";
-            // 
-            // panelOK
-            // 
-            this.panelOK.Controls.Add(this.buttonCancel);
-            this.panelOK.Controls.Add(this.buttonOK);
-            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(3, 448);
-            this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(862, 30);
-            this.panelOK.TabIndex = 9;
-            // 
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -266,19 +274,26 @@
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
-            // buttonExtDelete
+            // statusStripCustom
             // 
-            this.buttonExtDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtDelete.BorderColorScaling = 1.25F;
-            this.buttonExtDelete.ButtonColorScaling = 0.5F;
-            this.buttonExtDelete.ButtonDisabledScaling = 0.5F;
-            this.buttonExtDelete.Location = new System.Drawing.Point(833, 4);
-            this.buttonExtDelete.Name = "buttonExtDelete";
-            this.buttonExtDelete.Size = new System.Drawing.Size(25, 23);
-            this.buttonExtDelete.TabIndex = 25;
-            this.buttonExtDelete.Text = "X";
-            this.buttonExtDelete.UseVisualStyleBackColor = true;
-            this.buttonExtDelete.Click += new System.EventHandler(this.buttonExtDelete_Click);
+            this.statusStripCustom.Location = new System.Drawing.Point(3, 478);
+            this.statusStripCustom.Name = "statusStripCustom";
+            this.statusStripCustom.Size = new System.Drawing.Size(862, 22);
+            this.statusStripCustom.TabIndex = 28;
+            this.statusStripCustom.Text = "statusStripCustom1";
+            // 
+            // buttonVars
+            // 
+            this.buttonVars.BorderColorScaling = 1.25F;
+            this.buttonVars.ButtonColorScaling = 0.5F;
+            this.buttonVars.ButtonDisabledScaling = 0.5F;
+            this.buttonVars.Location = new System.Drawing.Point(360, 4);
+            this.buttonVars.Name = "buttonVars";
+            this.buttonVars.Size = new System.Drawing.Size(75, 23);
+            this.buttonVars.TabIndex = 26;
+            this.buttonVars.Text = "Paras";
+            this.buttonVars.UseVisualStyleBackColor = true;
+            this.buttonVars.Click += new System.EventHandler(this.buttonVars_Click);
             // 
             // ActionProgramForm
             // 
@@ -295,12 +310,12 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionProgramForm";
             this.panelOuter.ResumeLayout(false);
-            this.panelVScroll.ResumeLayout(false);
             this.panelName.ResumeLayout(false);
             this.panelName.PerformLayout();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelOK.ResumeLayout(false);
+            this.panelVScroll.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -325,5 +340,6 @@
         private ExtendedControls.ButtonExt buttonOK;
         private ExtendedControls.CheckBoxCustom checkBoxCustomRefresh;
         private ExtendedControls.ButtonExt buttonExtDelete;
+        private ExtendedControls.ButtonExt buttonVars;
     }
 }

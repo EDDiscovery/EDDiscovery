@@ -17,7 +17,7 @@ namespace EDDiscovery.Actions
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme)
+        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
             Tuple<string,bool> promptValue = Prompt.ShowDialog(parent, "Set Text to say (use ; to separate randomly selectable phrases)", UserData, IsFlag(flagOnWaitComplete) , "Configure Say Command" , theme);
 
@@ -30,7 +30,7 @@ namespace EDDiscovery.Actions
             return (promptValue != null);
         }
 
-        public override bool ExecuteAction(ActionProgram ap)
+        public override bool ExecuteAction(ActionProgramRun ap)
         {
             return true;
         }

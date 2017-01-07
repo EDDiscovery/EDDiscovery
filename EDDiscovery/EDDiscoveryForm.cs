@@ -94,9 +94,10 @@ namespace EDDiscovery
 
         public GalacticMapping galacticMapping;
 
-        private JSONFilter actionfieldfilter;
+        private ConditionLists actionfieldfilter;
         private Actions.ActionProgramList actionprogramlist;
         public Actions.ActionRun actionrunasync;
+        public Dictionary<string, string> standardvariables = new Dictionary<string, string>();
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
@@ -438,7 +439,7 @@ namespace EDDiscovery
                     button_test.Visible = true;
                 }
 
-                actionfieldfilter = new JSONFilter();
+                actionfieldfilter = new ConditionLists();
 
                 string filter = SQLiteDBClass.GetSettingString("ActionFilter", "");
                 if (filter.Length > 0)
@@ -450,7 +451,7 @@ namespace EDDiscovery
                 if (programs.Length > 0)
                     actionprogramlist.FromJSON(programs);
 
-                actionrunasync = new Actions.ActionRun(this,true);        // this is the guy who runs programs asynchronously
+                actionrunasync = new Actions.ActionRun(this,actionprogramlist,true);        // this is the guy who runs programs asynchronously
             }
             catch (Exception ex)
             {
@@ -1903,6 +1904,8 @@ namespace EDDiscovery
                 }
                 else
                 {
+                    standardvariables["Commander"] = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
+
                     travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
                     exportControl1.PopulateCommanders();
                     settings.UpdateCommandersListBox();
@@ -2065,10 +2068,17 @@ namespace EDDiscovery
 
         #region Actions
 
+
         public void ConfigureActions()
         {
-            EDDiscovery2.JSONFiltersForm frm = new JSONFiltersForm();
-            frm.InitAction("Actions: Define actions", actionprogramlist, theme, actionfieldfilter );
+            EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
+
+            List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
+            events.Add("All");
+            events.Add("RefreshStart");
+            events.Add("RefreshEnd");
+
+            frm.Init("Actions: Define actions", events, standardvariables.Keys.ToList(), actionprogramlist, false, theme, actionfieldfilter );
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
@@ -2080,24 +2090,31 @@ namespace EDDiscovery
 
         public void ActionRunOnEntry(HistoryEntry he)
         {
-            List<JSONFilter.FilterEvent> passed = new List<JSONFilter.FilterEvent>();
-            actionfieldfilter.Check(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, ref passed);
+            List<ConditionLists.Condition> passed = new List<ConditionLists.Condition>();
+            actionfieldfilter.Check(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, standardvariables, passed);
 
             if (passed.Count > 0)
             {
-                JSONHelper.JSONFields jfv = new JSONHelper.JSONFields(he.journalEntry.EventDataString);     // from the JSON string, add in all fields and values it has
+                Dictionary<string, string> eventvars = new Dictionary<string, string>();
+                JSONHelper.GetJSONFieldNamesValues(he.journalEntry.EventDataString, eventvars);        // for all events, add to field list
 
-                foreach ( JSONFilter.FilterEvent fe in passed)
+                foreach ( ConditionLists.Condition fe in passed)
                 {
                     string prog = fe.action;
                     string progdata = fe.actiondata;
+                    Dictionary<string, string> vars = new Dictionary<string, string>(standardvariables);
+
+                    foreach (KeyValuePair<string, string> v in eventvars)
+                        vars[v.Key] = v.Value;
+
+                    // TBD vars for this from progdata..
 
                     Actions.ActionProgram ap = actionprogramlist.Get(prog);
                     
                     if (ap != null)
                     {
                         System.Diagnostics.Debug.WriteLine("Run " + prog + "(" + progdata + ") on " + he.journalEntry.EventTypeStr + " " + he.Journalid);
-                        actionrunasync.Add(ap, he , jfv);
+                        actionrunasync.Add(ap, history, he , vars);
                     }
                     else
                         LogLine("Action program " + prog + " not found for event " + he.journalEntry.EventTypeStr);

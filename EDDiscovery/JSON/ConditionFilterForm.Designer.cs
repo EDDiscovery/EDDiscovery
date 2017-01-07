@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery2
 {
-    partial class JSONFiltersForm
+    partial class ConditionFilterForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,23 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JSONFiltersForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConditionFilterForm));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
-            this.panelOK = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panelOK = new System.Windows.Forms.Panel();
+            this.comboBoxCustomEditProg = new ExtendedControls.ComboBoxCustom();
+            this.labelEditProg = new System.Windows.Forms.Label();
+            this.buttonExtSave = new ExtendedControls.ButtonExt();
+            this.buttonExtLoad = new ExtendedControls.ButtonExt();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panelTop.SuspendLayout();
             this.panelOuter.SuspendLayout();
-            this.panelOK.SuspendLayout();
             this.panelVScroll.SuspendLayout();
+            this.panelOK.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -58,6 +62,42 @@
             this.panelTop.Size = new System.Drawing.Size(890, 24);
             this.panelTop.TabIndex = 4;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            // 
+            // panel_close
+            // 
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.DrawnImage = null;
+            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.panel_close.ImageText = null;
+            this.panel_close.Location = new System.Drawing.Point(867, 0);
+            this.panel_close.MarginSize = 6;
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Size = new System.Drawing.Size(24, 24);
+            this.panel_close.TabIndex = 27;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            // 
+            // panel_minimize
+            // 
+            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.DrawnImage = null;
+            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageText = null;
+            this.panel_minimize.Location = new System.Drawing.Point(837, 0);
+            this.panel_minimize.MarginSize = 6;
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
+            this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
+            this.panel_minimize.TabIndex = 26;
+            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // label_index
             // 
@@ -78,16 +118,6 @@
             this.panelOuter.Name = "panelOuter";
             this.panelOuter.Size = new System.Drawing.Size(890, 400);
             this.panelOuter.TabIndex = 8;
-            // 
-            // panelOK
-            // 
-            this.panelOK.Controls.Add(this.buttonCancel);
-            this.panelOK.Controls.Add(this.buttonOK);
-            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(3, 424);
-            this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(890, 30);
-            this.panelOK.TabIndex = 8;
             // 
             // panelVScroll
             // 
@@ -144,41 +174,81 @@
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
-            // panel_close
+            // panelOK
             // 
-            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.DrawnImage = null;
-            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
-            this.panel_close.ImageText = null;
-            this.panel_close.Location = new System.Drawing.Point(867, 0);
-            this.panel_close.MarginSize = 6;
-            this.panel_close.MouseOverColor = System.Drawing.Color.White;
-            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_close.MouseSelectedColorEnable = true;
-            this.panel_close.Name = "panel_close";
-            this.panel_close.Size = new System.Drawing.Size(24, 24);
-            this.panel_close.TabIndex = 27;
-            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            this.panelOK.Controls.Add(this.comboBoxCustomEditProg);
+            this.panelOK.Controls.Add(this.labelEditProg);
+            this.panelOK.Controls.Add(this.buttonExtSave);
+            this.panelOK.Controls.Add(this.buttonExtLoad);
+            this.panelOK.Controls.Add(this.buttonCancel);
+            this.panelOK.Controls.Add(this.buttonOK);
+            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelOK.Location = new System.Drawing.Point(3, 424);
+            this.panelOK.Name = "panelOK";
+            this.panelOK.Size = new System.Drawing.Size(890, 30);
+            this.panelOK.TabIndex = 8;
             // 
-            // panel_minimize
+            // comboBoxCustomEditProg
             // 
-            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.DrawnImage = null;
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.ImageText = null;
-            this.panel_minimize.Location = new System.Drawing.Point(837, 0);
-            this.panel_minimize.MarginSize = 6;
-            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
-            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_minimize.MouseSelectedColorEnable = true;
-            this.panel_minimize.Name = "panel_minimize";
-            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
-            this.panel_minimize.TabIndex = 26;
-            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            this.comboBoxCustomEditProg.ArrowWidth = 1;
+            this.comboBoxCustomEditProg.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomEditProg.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomEditProg.DataSource = null;
+            this.comboBoxCustomEditProg.DisplayMember = "";
+            this.comboBoxCustomEditProg.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomEditProg.DropDownHeight = 200;
+            this.comboBoxCustomEditProg.DropDownWidth = 200;
+            this.comboBoxCustomEditProg.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomEditProg.ItemHeight = 13;
+            this.comboBoxCustomEditProg.Location = new System.Drawing.Point(259, 5);
+            this.comboBoxCustomEditProg.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomEditProg.Name = "comboBoxCustomEditProg";
+            this.comboBoxCustomEditProg.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomEditProg.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomEditProg.ScrollBarWidth = 16;
+            this.comboBoxCustomEditProg.SelectedIndex = -1;
+            this.comboBoxCustomEditProg.SelectedItem = null;
+            this.comboBoxCustomEditProg.SelectedValue = null;
+            this.comboBoxCustomEditProg.Size = new System.Drawing.Size(145, 23);
+            this.comboBoxCustomEditProg.TabIndex = 9;
+            this.comboBoxCustomEditProg.Text = "comboBoxCustom1";
+            this.comboBoxCustomEditProg.ValueMember = "";
+            this.comboBoxCustomEditProg.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomEditProg_SelectedIndexChanged);
+            // 
+            // labelEditProg
+            // 
+            this.labelEditProg.AutoSize = true;
+            this.labelEditProg.Location = new System.Drawing.Point(188, 7);
+            this.labelEditProg.Name = "labelEditProg";
+            this.labelEditProg.Size = new System.Drawing.Size(50, 13);
+            this.labelEditProg.TabIndex = 8;
+            this.labelEditProg.Text = "Edit Prog";
+            // 
+            // buttonExtSave
+            // 
+            this.buttonExtSave.BorderColorScaling = 1.25F;
+            this.buttonExtSave.ButtonColorScaling = 0.5F;
+            this.buttonExtSave.ButtonDisabledScaling = 0.5F;
+            this.buttonExtSave.Location = new System.Drawing.Point(93, 4);
+            this.buttonExtSave.Name = "buttonExtSave";
+            this.buttonExtSave.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtSave.TabIndex = 6;
+            this.buttonExtSave.Text = "Save";
+            this.buttonExtSave.UseVisualStyleBackColor = true;
+            this.buttonExtSave.Click += new System.EventHandler(this.buttonExtSave_Click);
+            // 
+            // buttonExtLoad
+            // 
+            this.buttonExtLoad.BorderColorScaling = 1.25F;
+            this.buttonExtLoad.ButtonColorScaling = 0.5F;
+            this.buttonExtLoad.ButtonDisabledScaling = 0.5F;
+            this.buttonExtLoad.Location = new System.Drawing.Point(3, 4);
+            this.buttonExtLoad.Name = "buttonExtLoad";
+            this.buttonExtLoad.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtLoad.TabIndex = 6;
+            this.buttonExtLoad.Text = "Load";
+            this.buttonExtLoad.UseVisualStyleBackColor = true;
+            this.buttonExtLoad.Click += new System.EventHandler(this.buttonExtLoad_Click);
             // 
             // buttonCancel
             // 
@@ -216,7 +286,7 @@
             this.statusStripCustom.TabIndex = 27;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
-            // JSONFiltersForm
+            // ConditionFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -226,15 +296,16 @@
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "JSONFiltersForm";
+            this.Name = "ConditionFilterForm";
             this.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "JSONFiltersForm";
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelOuter.ResumeLayout(false);
-            this.panelOK.ResumeLayout(false);
             this.panelVScroll.ResumeLayout(false);
+            this.panelOK.ResumeLayout(false);
+            this.panelOK.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -254,5 +325,9 @@
         private ExtendedControls.StatusStripCustom statusStripCustom;
         private System.Windows.Forms.Panel panelOuter;
         private System.Windows.Forms.Panel panelOK;
+        private ExtendedControls.ButtonExt buttonExtLoad;
+        private ExtendedControls.ButtonExt buttonExtSave;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomEditProg;
+        private System.Windows.Forms.Label labelEditProg;
     }
 }

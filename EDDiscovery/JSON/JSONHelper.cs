@@ -157,33 +157,17 @@ namespace EDDiscovery
             parent.Replace(newToken);
         }
 
-        public class JSONFields
-        {
-            public HashSet<string> fields = new HashSet<string>();             // Hash set prevents duplication
-            public HashSet<string> values = new HashSet<string>();             // Hash set prevents duplication
-
-            public JSONFields(string json )
-            {
-                Fill(json);
-            }
-
-            public void Fill(string json )
-            {
-                GetJSONFieldNamesValues(json, fields, values);
-            }
-        }
-
-        static public void GetJSONFieldNamesValues(string json, HashSet<string> fields, HashSet<string> values )
+        static public void GetJSONFieldNamesValues(string json, Dictionary<string, string> values)
         {
             JObject jo = JObject.Parse(json);  // Create a clone
 
             foreach (JToken jc in jo.Children())
             {
-                ExpandTokens(jc, fields , values);
+                ExpandTokens(jc, values);
             }
         }
 
-        static private void ExpandTokens(JToken jt, HashSet<string> fields, HashSet<string> values)
+        static private void ExpandTokens(JToken jt, Dictionary<string, string> values)
         {
             if (jt.HasValues)
             {
@@ -193,19 +177,11 @@ namespace EDDiscovery
                 {
                     if (jc.HasValues)
                     {
-                        ExpandTokens(jc, fields , values);
+                        ExpandTokens(jc, values);
                     }
                     else if (Array.FindIndex(decodeable, x => x == jc.Type) != -1)
                     {
-                        string name = jc.Path;
-
-                        if ( !fields.Contains(name))
-                        {
-                            fields.Add(name);
-
-                            if ( values != null )
-                                values.Add( jc.Value<string>() );
-                        }
+                        values[jc.Path] = jc.Value<string>();
                     }
                 }
             }

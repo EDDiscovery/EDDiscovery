@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
 
         public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
 
-        private JSONFilter fieldfilter = new JSONFilter();
+        private ConditionLists fieldfilter = new ConditionLists();
 
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick , bool note);
         public event ChangedSelection OnChangedSelection;
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
             toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
 
-            result = fieldfilter.FilterHistory(result,out ftotal);
+            result = fieldfilter.FilterHistory(result, discoveryform.standardvariables, out ftotal);
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewTravel.Rows.Clear();
@@ -231,7 +231,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he);
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.standardvariables);
         }
         
         public void SelectTopRow()
@@ -826,8 +826,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            EDDiscovery2.JSONFiltersForm frm = new JSONFiltersForm();
-            frm.InitFilter("History: Filter out fields", discoveryform.theme, fieldfilter);
+            EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
+            frm.InitFilter("History: Filter out fields", discoveryform.standardvariables.Keys.ToList(), discoveryform.theme, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
