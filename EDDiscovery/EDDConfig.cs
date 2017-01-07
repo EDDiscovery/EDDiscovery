@@ -57,6 +57,7 @@ namespace EDDiscovery2
         private bool _orderrowsinverted = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
+        private bool _useSystray = false; /**< Whether to utilize the system notification area icon */
         private bool _displayUTC = false;
         private bool _clearMaterials = false;
         private bool _clearCommodities = false;
@@ -210,6 +211,19 @@ namespace EDDiscovery2
             }
         }
 
+        public bool UseSystray
+        {
+            get
+            {
+                return _useSystray;
+            }
+            set
+            {
+                _useSystray = value;
+                SQLiteConnectionUser.PutSettingBool("UseSystray", value);
+            }
+        }
+
         public bool DisplayUTC
         {
             get
@@ -332,6 +346,7 @@ namespace EDDiscovery2
                 _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
                 _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
                 _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
+                _useSystray = SQLiteConnectionUser.GetSettingBool("UseSystray", false, conn);
                 _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
                 _clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
                 _clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);

@@ -61,6 +61,7 @@ namespace EDDiscovery2
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxFocusNewSystem.Checked = EDDiscoveryForm.EDDConfig.FocusOnNewSystem;
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            checkBoxUseSystray.Checked = EDDiscoveryForm.EDDConfig.UseSystray;
             checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
 
 #if DEBUG
@@ -100,6 +101,7 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
             EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
+            EDDiscoveryForm.EDDConfig.UseSystray = checkBoxUseSystray.Checked;
             EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
         }
 
@@ -267,6 +269,11 @@ namespace EDDiscovery2
             EDDConfig.Instance.KeepOnTop = checkBoxKeepOnTop.Checked;
             this.FindForm().TopMost = checkBoxKeepOnTop.Checked;
             _discoveryForm.keepOnTopChanged(checkBoxKeepOnTop.Checked);
+        }
+
+        private void checkBoxUseSystray_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.UseSystray = checkBoxUseSystray.Checked;
         }
 
         private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
