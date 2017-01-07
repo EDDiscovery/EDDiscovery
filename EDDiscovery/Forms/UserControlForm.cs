@@ -261,7 +261,7 @@ namespace EDDiscovery.Forms
             Size winsize = (istemporaryresized) ? normalsize : this.Size;
             SQLiteDBClass.PutSettingInt(dbrefname + "Width", winsize.Width);
             if (defwindowsborder && !curwindowsborder)  // need to save the height it would have if the border was showing or else it gets shorter with every close...
-            { SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height + statusStripBottom.Height + UserControl.Location.Y - 5); }
+            { SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height); }
             else
             { SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height); }
             SQLiteDBClass.PutSettingInt(dbrefname + "Top", this.Top);
