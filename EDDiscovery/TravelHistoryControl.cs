@@ -891,7 +891,7 @@ namespace EDDiscovery
 
         #endregion
 
-        private JSONFilter fieldfilter = new JSONFilter();
+        private ConditionLists fieldfilter = new ConditionLists();
 
         private void buttonAction_Click(object sender, EventArgs e)
         {

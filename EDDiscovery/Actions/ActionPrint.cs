@@ -7,15 +7,17 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionPlay : Action
+    public class ActionPrint : Action
     {
-        public ActionPlay(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionPrint(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud,lu)
         {
         }
 
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "File to play", UserData, "Configure Play Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, "Line to display", UserData, "Configure Print Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -26,9 +28,11 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
+            ap.discoveryform.LogLine(UserData);
+            System.Diagnostics.Debug.WriteLine(UserData);
             return true;
         }
 
     }
-
+   
 }
