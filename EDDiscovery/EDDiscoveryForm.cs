@@ -1554,6 +1554,18 @@ namespace EDDiscovery
             frm.Show(this);
         }
 
+        internal void useSystrayChanged(bool useSystray)
+        {
+            if (useSystray)
+            {
+                notifyIcon1.Visible = true;
+            }
+            else
+            {
+                notifyIcon1.Visible = false;
+            }
+        }
+
         private void exitContextStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EDDConfig.UseSystray)

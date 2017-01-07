@@ -274,6 +274,7 @@ namespace EDDiscovery2
         private void checkBoxUseSystray_CheckedChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.UseSystray = checkBoxUseSystray.Checked;
+            _discoveryForm.useSystrayChanged(checkBoxUseSystray.Checked);
         }
 
         private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
