@@ -212,7 +212,6 @@
             this.Name = "UserControlForm";
             this.Text = "UserControlForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UserControlForm_FormClosing);
-            this.Load += new System.EventHandler(this.UserControlForm_Load);
             this.Shown += new System.EventHandler(this.UserControlForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.UserControlForm_Layout);
             this.panelTop.ResumeLayout(false);

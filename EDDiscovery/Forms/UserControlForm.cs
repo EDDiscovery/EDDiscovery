@@ -188,7 +188,7 @@ namespace EDDiscovery.Forms
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
         }
 
-        private void UserControlForm_Load(object sender, EventArgs e)
+        public void SetFormSize()
         {
             var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -1);
 
@@ -242,6 +242,8 @@ namespace EDDiscovery.Forms
                 SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
 
             SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
+
+            SetFormSize();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
