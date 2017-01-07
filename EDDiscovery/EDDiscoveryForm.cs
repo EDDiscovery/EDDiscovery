@@ -63,6 +63,8 @@ namespace EDDiscovery
         private Point _window_dragWindowPos = Point.Empty;
         public EDDTheme theme;
 
+        private FormWindowState _lastWindowState = FormWindowState.Normal;
+
         public string CommanderName { get; private set; }
         public int DisplayedCommander = 0;
 
@@ -197,6 +199,12 @@ namespace EDDiscovery
             ApplyTheme();
 
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+
+            if (EDDConfig.UseSystray)
+            {
+                notifyIcon1.Visible = true;
+                restoreContextStripMenuItem.Enabled = (WindowState == FormWindowState.Minimized);
+            }
         }
 
         private void Dbinitworker_DoWork(object sender, DoWorkEventArgs e)
@@ -328,6 +336,22 @@ namespace EDDiscovery
             catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message + "\n" + "Trace: " + ex.StackTrace);
+            }
+        }
+
+        private void EDDiscoveryForm_Resize(object sender, EventArgs e)
+        {
+            if (EDDConfig.UseSystray)
+            {
+                if (FormWindowState.Minimized == WindowState)
+                {
+                    Hide();
+                }
+                else
+                {
+                    _lastWindowState = WindowState;
+                }
+                restoreContextStripMenuItem.Enabled = (WindowState == FormWindowState.Minimized);
             }
         }
 
@@ -1199,7 +1223,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Buttons, Mouse, Menus
+#region Buttons, Mouse, Menus, Notification icon
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -1311,7 +1335,16 @@ namespace EDDiscovery
 
         private void panel_minimize_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
+            if (EDDConfig.UseSystray)
+            {
+                _lastWindowState = WindowState;
+                restoreContextStripMenuItem.Enabled = true;
+            }
+            WindowState = FormWindowState.Minimized;
+            if (EDDConfig.UseSystray)
+            {
+                Hide();
+            }
         }
 
         private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1521,6 +1554,56 @@ namespace EDDiscovery
             frm.Show(this);
         }
 
+        private void exitContextStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EDDConfig.UseSystray)
+            {
+                Close();
+            }
+        }
+
+        private void restoreContextStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EDDConfig.UseSystray && WindowState == FormWindowState.Minimized)
+            {
+                Show();
+                WindowState = _lastWindowState;
+                restoreContextStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void syncContextStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EDDConfig.UseSystray)
+            {
+                if (!_syncWorker.IsBusy)      // we want it to have run, to completion, to allow another go..
+                {
+                    performedsmsync = true;
+                    AsyncPerformSync();
+                }
+                else
+                    MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
+            }
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            if (EDDConfig.UseSystray)
+            {
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    Show();
+                    WindowState = _lastWindowState;
+                }
+                else
+                {
+                    _lastWindowState = WindowState;
+                    WindowState = FormWindowState.Minimized;
+                    Hide();
+                }
+                restoreContextStripMenuItem.Enabled = (WindowState == FormWindowState.Minimized);
+            }
+        }
         #endregion
 
         #region Window Control

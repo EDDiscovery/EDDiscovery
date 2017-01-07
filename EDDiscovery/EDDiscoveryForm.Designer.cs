@@ -69,6 +69,11 @@
             this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this._refreshWorker = new System.ComponentModel.BackgroundWorker();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.notifyContextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.restoreContextStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.syncContextStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitContextStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
@@ -95,6 +100,7 @@
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
+            this.notifyContextMenuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageJournal.SuspendLayout();
@@ -424,6 +430,44 @@
             this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
             this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.ContextMenuStrip = this.notifyContextMenuStrip1;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.notifyIcon1.Text = "EDDiscovery";
+            this.notifyIcon1.Visible = false;
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            // 
+            // notifyContextMenuStrip1
+            // 
+            this.notifyContextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.restoreContextStripMenuItem,
+            this.syncContextStripMenuItem,
+            this.exitContextStripMenuItem});
+            this.notifyContextMenuStrip1.Name = "contextMenuStrip1";
+            this.notifyContextMenuStrip1.Size = new System.Drawing.Size(160, 92);
+            // 
+            // restoreContextStripMenuItem
+            // 
+            this.restoreContextStripMenuItem.Name = "restoreContextStripMenuItem";
+            this.restoreContextStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.restoreContextStripMenuItem.Text = "&Restore";
+            this.restoreContextStripMenuItem.Click += new System.EventHandler(this.restoreContextStripMenuItem_Click);
+            // 
+            // syncContextStripMenuItem
+            // 
+            this.syncContextStripMenuItem.Name = "syncContextStripMenuItem";
+            this.syncContextStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.syncContextStripMenuItem.Text = "&Sync with EDSM";
+            this.syncContextStripMenuItem.Click += new System.EventHandler(this.syncContextStripMenuItem_Click);
+            // 
+            // exitContextStripMenuItem
+            // 
+            this.exitContextStripMenuItem.Name = "exitContextStripMenuItem";
+            this.exitContextStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.exitContextStripMenuItem.Text = "E&xit";
+            this.exitContextStripMenuItem.Click += new System.EventHandler(this.exitContextStripMenuItem_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -712,10 +756,12 @@
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.EDDiscoveryForm_Layout);
+            this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
+            this.notifyContextMenuStrip1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
             this.tabPageJournal.ResumeLayout(false);
@@ -762,6 +808,11 @@
         private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
         private System.Windows.Forms.TabPage tabPageTriletaration;
         public TrilaterationControl trilaterationControl;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ContextMenuStrip notifyContextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem restoreContextStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem syncContextStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitContextStripMenuItem;
         private ExtendedControls.TabControlCustom tabControl1;
         private System.Windows.Forms.TabPage tabPageTravelHistory;
         private TravelHistoryControl travelHistoryControl1;
