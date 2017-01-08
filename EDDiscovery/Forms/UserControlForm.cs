@@ -188,7 +188,7 @@ namespace EDDiscovery.Forms
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
         }
 
-        private void UserControlForm_Load(object sender, EventArgs e)
+        public void SetFormSize()
         {
             var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -1);
 
@@ -242,6 +242,8 @@ namespace EDDiscovery.Forms
                 SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
 
             SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
+
+            SetFormSize();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -336,7 +338,7 @@ namespace EDDiscovery.Forms
 
         public void RequestTemporaryResizeExpand(Size w)            // Size w is the client area above
         {
-            if (w.Width != 0 && w.Height != 0)
+            if (w.Width != 0 || w.Height != 0)
                 RequestTemporaryResize(new Size(ClientRectangle.Width + w.Width, ClientRectangle.Height + w.Height));
         }
 
