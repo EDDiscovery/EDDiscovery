@@ -33,6 +33,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCopyWPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoSetTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -50,9 +51,10 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setRouteToolStripMenuItem,
-            this.autoCopyWPToolStripMenuItem});
+            this.autoCopyWPToolStripMenuItem,
+            this.autoSetTargetToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 92);
             // 
             // setRouteToolStripMenuItem
             // 
@@ -68,6 +70,13 @@
             this.autoCopyWPToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.autoCopyWPToolStripMenuItem.Text = "Auto copy waypoint";
             this.autoCopyWPToolStripMenuItem.CheckedChanged += new System.EventHandler(this.autoCopyWPToolStripMenuItem_CheckedChanged);
+            // 
+            // autoSetTargetToolStripMenuItem
+            // 
+            this.autoSetTargetToolStripMenuItem.CheckOnClick = true;
+            this.autoSetTargetToolStripMenuItem.Name = "autoSetTargetToolStripMenuItem";
+            this.autoSetTargetToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.autoSetTargetToolStripMenuItem.Text = "Auto set target";
             // 
             // UserControlRouteTracker
             // 
@@ -87,5 +96,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem setRouteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoCopyWPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoSetTargetToolStripMenuItem;
     }
 }
