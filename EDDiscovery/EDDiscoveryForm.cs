@@ -403,7 +403,7 @@ namespace EDDiscovery
         private void RepositionForm()
         {
             var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
-            if (top >= 0 && option_nowindowreposition == false)
+            if (top != -1 && option_nowindowreposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
@@ -428,9 +428,6 @@ namespace EDDiscovery
                 this.CreateParams.Y = this.Top;
                 this.StartPosition = FormStartPosition.Manual;
 
-            }
-            else
-            {
                 var Max = SQLiteDBClass.GetSettingBool("FormMax", false);
                 if (Max) this.WindowState = FormWindowState.Maximized;
             }
