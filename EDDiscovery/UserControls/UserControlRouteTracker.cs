@@ -31,6 +31,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             SQLiteDBClass.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
@@ -55,6 +56,7 @@ namespace EDDiscovery.UserControls
             displayfont = discoveryform.theme.GetFont;
 
             autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
+            autoSetTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoSetTarget", false);
 
             _savedRoutes = SavedRouteClass.GetAllSavedRoutes();
             String selRoute = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute" ,"-1");
@@ -236,6 +238,16 @@ namespace EDDiscovery.UserControls
                     {
                         if (autoCopyWPToolStripMenuItem.Checked)
                             Clipboard.SetText(name);
+                        if (autoSetTargetToolStripMenuItem.Checked)
+                        {
+                            string targetName;
+                            double x, y, z;
+                            TargetClass.GetTargetPosition(out targetName, out x, out y, out z);
+                            if (name.CompareTo(targetName) != 0)
+                            {
+                                RoutingUtils.setTargetSystem(discoveryform, name, false);
+                            }
+                        }
                     }
                     lastsystem = name;
                 }
