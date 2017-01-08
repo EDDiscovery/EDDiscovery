@@ -551,22 +551,27 @@ namespace EDDiscovery
                 backgroundRefreshWorker = new Thread(BackgroundRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
                 backgroundRefreshWorker.Start();
 
-                DoPerformSync();
-
-                while (!PendingClose)
+                try
                 {
-                    int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
-
-                    if (PendingClose) break;
-
-                    switch (wh)
+                    DoPerformSync();
+                    while (!PendingClose)
                     {
-                        case 0:  // Close Requested
-                            break;
-                        case 1:  // Resync Requested
-                            DoPerformSync();
-                            break;
+                        int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
+
+                        if (PendingClose) break;
+
+                        switch (wh)
+                        {
+                            case 0:  // Close Requested
+                                break;
+                            case 1:  // Resync Requested
+                                DoPerformSync();
+                                break;
+                        }
                     }
+                }
+                catch (OperationCanceledException)
+                {
                 }
 
                 backgroundRefreshWorker.Join();
