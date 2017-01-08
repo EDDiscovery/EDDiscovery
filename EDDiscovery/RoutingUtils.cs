@@ -11,6 +11,11 @@ namespace EDDiscovery
     {
         public static void setTargetSystem(EDDiscoveryForm _discoveryForm, String sn)
         {
+            setTargetSystem(_discoveryForm, sn, true);
+
+        }
+    public static void setTargetSystem(EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
+        {
             if (string.IsNullOrWhiteSpace(sn))
                 return;
 
@@ -37,7 +42,12 @@ namespace EDDiscovery
                     }
                     else
                     {
-                        if (MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                        bool createbookmark = false;
+                        if ((prompt && MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK) || !prompt)
+                        {
+                            createbookmark = true;
+                        }
+                        if (createbookmark)
                         {
                             BookmarkClass newbk = new BookmarkClass();
                             newbk.StarName = sn;
@@ -73,7 +83,7 @@ namespace EDDiscovery
 
             _discoveryForm.NewTargetSet();          // tells everyone who cares a new target was set
 
-            if (msgboxtext != null)
+            if (msgboxtext != null && prompt)
                 MessageBox.Show(msgboxtext, "Create a target", MessageBoxButtons.OK);
 
         }

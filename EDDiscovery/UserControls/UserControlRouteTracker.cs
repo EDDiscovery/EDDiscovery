@@ -20,7 +20,9 @@ namespace EDDiscovery.UserControls
         private string DbSave { get { return "RouteTracker" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private SavedRouteClass _currentRoute;
         private List<SavedRouteClass> _savedRoutes = new List<SavedRouteClass>();
-        private  HistoryEntry lastHE; 
+        private  HistoryEntry lastHE;
+        private string lastsystem;
+
         public UserControlRouteTracker()
         {
             InitializeComponent();
@@ -28,6 +30,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            SQLiteDBClass.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
@@ -51,6 +55,8 @@ namespace EDDiscovery.UserControls
 
             displayfont = discoveryform.theme.GetFont;
 
+            autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
+            autoSetTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoSetTarget", false);
 
             _savedRoutes = SavedRouteClass.GetAllSavedRoutes();
             String selRoute = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute" ,"-1");
@@ -143,7 +149,7 @@ namespace EDDiscovery.UserControls
         private void updateScreen()
         {
             if (lastHE == null)
-                return                    ;
+                return;
 
             pictureBox.ClearImageList();
             Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
@@ -197,6 +203,10 @@ namespace EDDiscovery.UserControls
                 }
                 if (nearest!=null )
                 {
+                    string name = null;
+                    double dist = 0.0;
+                    int wp = 0;
+                   
                     if (nearestidx < _currentRoute.Systems.Count -1)
                     {
                         SystemClass next = SystemClass.GetSystem(_currentRoute.Systems[nearestidx + 1]);
@@ -204,22 +214,52 @@ namespace EDDiscovery.UserControls
                         double nearest2next = SystemClass.Distance(nearest, next);
                         if(me2next > nearest2next)
                         {
-                            bottomLine = String.Format("{0:N2}ly to WP{1}: {2} ", minDist, nearestidx + 1, nearest.name);
+                            dist = minDist;
+                            wp = nearestidx + 1;
+                            name = nearest.name;
                         }
                         else
                         {
-                            bottomLine = String.Format("{0:N2}ly to WP{1}: {2} ", me2next, nearestidx + 2, next.name);
+                            dist = me2next;
+                            wp = nearestidx + 2;
+                            name = next.name;
                         }
                     }
                     else
                     {
-                        bottomLine = String.Format("{0:N2}ly to WP{1}: {2} ", minDist, nearestidx + 1, nearest.name);
+                        dist = minDist;
+                        wp = nearestidx + 1;
+                        name = nearest.name;
                     }
+                    bottomLine = String.Format("{0:N2}ly to WP{1}: {2} {3}", 
+                        dist, wp, name, 
+                        autoCopyWPToolStripMenuItem.Checked?" (AUTO)":"");
+                    if (name.CompareTo(lastsystem) != 0)
+                    {
+                        if (autoCopyWPToolStripMenuItem.Checked)
+                            Clipboard.SetText(name);
+                        if (autoSetTargetToolStripMenuItem.Checked)
+                        {
+                            string targetName;
+                            double x, y, z;
+                            TargetClass.GetTargetPosition(out targetName, out x, out y, out z);
+                            if (name.CompareTo(targetName) != 0)
+                            {
+                                RoutingUtils.setTargetSystem(discoveryform, name, false);
+                            }
+                        }
+                    }
+                    lastsystem = name;
                 }
             }
             pictureBox.AddTextAutoSize(new Point(10, 5), new Size(1000, 35), topline, displayfont, textcolour, backcolour, 1.0F);
             pictureBox.AddTextAutoSize(new Point(10, 35), new Size(1000, 35), bottomLine, displayfont, textcolour, backcolour, 1.0F);
             pictureBox.Render();
+        }
+
+        private void autoCopyWPToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            updateScreen();
         }
     }
 }
