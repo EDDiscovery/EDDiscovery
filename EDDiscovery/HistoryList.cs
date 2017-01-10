@@ -148,6 +148,13 @@ namespace EDDiscovery
 
                         if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
                         {                                                       // so next time we don't have to do this again..
+                            if (jl.HasCoordinate)
+                            {
+                                s.x = Math.Round(jl.StarPos.X * 32.0) / 32.0;
+                                s.y = Math.Round(jl.StarPos.Y * 32.0) / 32.0;
+                                s.z = Math.Round(jl.StarPos.Z * 32.0) / 32.0;
+                            }
+
                             newsys = s;
 
                             if (jfsd != null && jfsd.JumpDist <= 0 && newsys.HasCoordinate && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
