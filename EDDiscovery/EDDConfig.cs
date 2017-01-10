@@ -60,6 +60,8 @@ namespace EDDiscovery2
         private bool _displayUTC = false;
         private bool _clearMaterials = false;
         private bool _clearCommodities = false;
+        private bool _autoLoadPopouts = false;
+        private bool _autoSavePopouts = false;
 
         private List<EDCommander> _ListOfCommanders;
         public List<EDCommander> ListOfCommanders { get { if (_ListOfCommanders == null) Update();  return _ListOfCommanders;  } }
@@ -249,6 +251,32 @@ namespace EDDiscovery2
             }
         }
 
+        public bool AutoLoadPopOuts
+        {
+            get
+            {
+                return _autoLoadPopouts;
+            }
+            set
+            {
+                _autoLoadPopouts = value;
+                SQLiteConnectionUser.PutSettingBool("AutoLoadPopouts", value);
+            }
+        }
+
+        public bool AutoSavePopOuts
+        {
+            get
+            {
+                return _autoSavePopouts;
+            }
+            set
+            {
+                _autoSavePopouts = value;
+                SQLiteConnectionUser.PutSettingBool("AutoSavePopouts", value);
+            }
+        }
+
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
 
@@ -335,6 +363,8 @@ namespace EDDiscovery2
                 _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
                 _clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
                 _clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
+                _autoLoadPopouts = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", false, conn);
+                _autoSavePopouts = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", false, conn);
 
                 LoadCommanders(write, conn);
 
