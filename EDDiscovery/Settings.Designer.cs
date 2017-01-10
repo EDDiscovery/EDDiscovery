@@ -47,6 +47,7 @@
             this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.groupBox3 = new ExtendedControls.GroupBoxCustom();
             this.checkBoxFocusNewSystem = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxUseSystray = new ExtendedControls.CheckBoxCustom();
             this.checkBoxUTC = new ExtendedControls.CheckBoxCustom();
             this.checkBoxOrderRowsInverted = new ExtendedControls.CheckBoxCustom();
             this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
@@ -92,7 +93,7 @@
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 382);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 405);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 108);
             this.groupBoxTheme.TabIndex = 18;
@@ -319,6 +320,7 @@
             this.groupBox3.BackColorScaling = 0.5F;
             this.groupBox3.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox3.BorderColorScaling = 0.5F;
+            this.groupBox3.Controls.Add(this.checkBoxUseSystray);
             this.groupBox3.Controls.Add(this.checkBoxFocusNewSystem);
             this.groupBox3.Controls.Add(this.checkBoxUTC);
             this.groupBox3.Controls.Add(this.checkBoxOrderRowsInverted);
@@ -327,7 +329,7 @@
             this.groupBox3.FillClientAreaWithAlternateColor = false;
             this.groupBox3.Location = new System.Drawing.Point(3, 254);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 122);
+            this.groupBox3.Size = new System.Drawing.Size(426, 145);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
@@ -345,12 +347,30 @@
             this.checkBoxFocusNewSystem.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxFocusNewSystem.Name = "checkBoxFocusNewSystem";
             this.checkBoxFocusNewSystem.Size = new System.Drawing.Size(253, 17);
-            this.checkBoxFocusNewSystem.TabIndex = 3;
+            this.checkBoxFocusNewSystem.TabIndex = 2;
             this.checkBoxFocusNewSystem.Text = "History cursor to new Journal Entry automatically";
             this.checkBoxFocusNewSystem.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxFocusNewSystem, "Move the history cursor to the new journal entry automatically when its received");
             this.checkBoxFocusNewSystem.UseVisualStyleBackColor = true;
             this.checkBoxFocusNewSystem.CheckedChanged += new System.EventHandler(this.checkBoxFocusNewSystem_CheckedChanged);
+            // 
+            // checkBoxUseSystray
+            // 
+            this.checkBoxUseSystray.AutoSize = true;
+            this.checkBoxUseSystray.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxUseSystray.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxUseSystray.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxUseSystray.FontNerfReduction = 0.5F;
+            this.checkBoxUseSystray.Location = new System.Drawing.Point(17, 115);
+            this.checkBoxUseSystray.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxUseSystray.Name = "checkBoxUseSystray";
+            this.checkBoxUseSystray.Size = new System.Drawing.Size(198, 17);
+            this.checkBoxUseSystray.TabIndex = 4;
+            this.checkBoxUseSystray.Text = "Use the system tray/notification area";
+            this.checkBoxUseSystray.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxUseSystray, "Maintain a system tray/notification area icon. Minimize program to this icon.");
+            this.checkBoxUseSystray.UseVisualStyleBackColor = true;
+            this.checkBoxUseSystray.CheckedChanged += new System.EventHandler(this.checkBoxUseSystray_CheckedChanged);
             // 
             // checkBoxUTC
             // 
@@ -363,7 +383,7 @@
             this.checkBoxUTC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUTC.Name = "checkBoxUTC";
             this.checkBoxUTC.Size = new System.Drawing.Size(209, 17);
-            this.checkBoxUTC.TabIndex = 0;
+            this.checkBoxUTC.TabIndex = 3;
             this.checkBoxUTC.Text = "Display Game time instead of local time";
             this.checkBoxUTC.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxUTC, "Display game time (UTC) instead of your local time");
@@ -381,7 +401,7 @@
             this.checkBoxOrderRowsInverted.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxOrderRowsInverted.Name = "checkBoxOrderRowsInverted";
             this.checkBoxOrderRowsInverted.Size = new System.Drawing.Size(196, 17);
-            this.checkBoxOrderRowsInverted.TabIndex = 2;
+            this.checkBoxOrderRowsInverted.TabIndex = 1;
             this.checkBoxOrderRowsInverted.Text = "Number Rows Lastest Entry Highest";
             this.checkBoxOrderRowsInverted.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxOrderRowsInverted, "Number oldest entry 1, latest entry highest");
@@ -398,7 +418,7 @@
             this.checkBoxEDSMLog.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
             this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
-            this.checkBoxEDSMLog.TabIndex = 1;
+            this.checkBoxEDSMLog.TabIndex = 0;
             this.checkBoxEDSMLog.Text = "Log EDSM requests";
             this.checkBoxEDSMLog.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxEDSMLog, "Store EDSM queries in a log file");
@@ -416,7 +436,7 @@
             this.checkboxSkipSlowUpdates.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
             this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
-            this.checkboxSkipSlowUpdates.TabIndex = 4;
+            this.checkboxSkipSlowUpdates.TabIndex = 5;
             this.checkboxSkipSlowUpdates.Text = "DEBUG ONLY: Skip slow updates on startup";
             this.checkboxSkipSlowUpdates.TickBoxReductionSize = 10;
             this.checkboxSkipSlowUpdates.UseVisualStyleBackColor = false;
@@ -691,6 +711,7 @@
         private ExtendedControls.CheckBoxCustom checkBoxOrderRowsInverted;
         private ExtendedControls.CheckBoxCustom checkBoxFocusNewSystem;
         private ExtendedControls.CheckBoxCustom checkBoxKeepOnTop;
+        private ExtendedControls.CheckBoxCustom checkBoxUseSystray;
         private ExtendedControls.ButtonExt btnDeleteCommander;
         private System.Windows.Forms.Label label1;
         private ExtendedControls.CheckBoxCustom checkBoxUTC;
