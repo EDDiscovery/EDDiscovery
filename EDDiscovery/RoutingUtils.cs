@@ -91,6 +91,10 @@ namespace EDDiscovery
         public static void showBookmarkForm(
             EDDiscoveryForm discoveryForm, ISystem cursystem, BookmarkClass curbookmark, bool notedsystem)
         {
+            // is it worth popping up a messagebox or something? I don't believe so.
+            if (cursystem == null)
+                return;
+
             // try and find the associated bookmark..
             BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
 
