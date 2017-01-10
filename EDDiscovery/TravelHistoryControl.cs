@@ -636,6 +636,36 @@ namespace EDDiscovery
             usercontrolsforms.MakeAllOpaque();
         }
 
+        internal void SaveCurrentPopouts()
+        {
+            foreach (int i in Enum.GetValues(typeof(PopOuts)))
+            {
+                UserControlCommonBase ctrl = UserControlCommonBase.Create((PopOuts)i);
+                int numopened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType());
+                SQLiteConnectionUser.PutSettingInt("SavedPopouts:" + ((PopOuts)i).ToString(), numopened);
+            }
+        }
+
+        internal void LoadSavedPopouts()
+        {
+            foreach (int popout in Enum.GetValues(typeof(PopOuts)))
+            {
+                int numToOpen = SQLiteConnectionUser.GetSettingInt("SavedPopouts:" + ((PopOuts)popout).ToString(), 0);
+                if (numToOpen > 0)
+                {
+                    UserControlCommonBase ctrl = UserControlCommonBase.Create((PopOuts)popout);
+                    int numOpened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType());
+                    if (numOpened < numToOpen)
+                    {
+                        for (int i = numOpened + 1; i <= numToOpen; i++)
+                        {
+                            PopOut((PopOuts)popout);
+                        }
+                    }
+                }
+            }
+        }
+
         private void Resort()       // user travel grid to say it resorted
         {
             UpdateDependentsWithSelection();
