@@ -287,23 +287,26 @@ namespace EDDiscovery
         }
         private void UpdateTotalDistances()
         {
-            SystemClass firstSC = null;
-            SystemClass lastSC = null;
             double distance = 0;
-            for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
+            if (dataGridViewRouteSystems.Rows.Count > 1)
             {
-                if (firstSC == null && dataGridViewRouteSystems[0, i].Tag != null)
-                    firstSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
-                if (dataGridViewRouteSystems[0, i].Tag != null)
-                    lastSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
-                String value = dataGridViewRouteSystems[1, i].Value as string;
-                if(!String.IsNullOrWhiteSpace(value))
-                    distance += Double.Parse(value);
+                SystemClass firstSC = null;
+                SystemClass lastSC = null;
+                for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
+                {
+                    if (firstSC == null && dataGridViewRouteSystems[0, i].Tag != null)
+                        firstSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
+                    if (dataGridViewRouteSystems[0, i].Tag != null)
+                        lastSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
+                    String value = dataGridViewRouteSystems[1, i].Value as string;
+                    if (!String.IsNullOrWhiteSpace(value))
+                        distance += Double.Parse(value);
+                }
+                txtCmlDistance.Text = distance.ToString("0.00") + "LY";
+                Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
+                Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
+                distance = Point3D.DistanceBetween(first, last);
             }
-            txtCmlDistance.Text = distance.ToString("0.00") + "LY";
-            Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
-            Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
-            distance = Point3D.DistanceBetween(first, last);
             txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
         }
 
