@@ -444,7 +444,7 @@ namespace EDDiscovery
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
-            if (EDDConfig.AutoLoadPopOuts) travelHistoryControl1.LoadSavedPopouts();
+            if (EDDConfig.AutoLoadPopOuts && option_nowindowreposition == false) travelHistoryControl1.LoadSavedPopouts();
         }
 
         private void CheckIfEliteDangerousIsRunning()
