@@ -288,6 +288,8 @@ namespace EDDiscovery
         private void UpdateTotalDistances()
         {
             double distance = 0;
+            txtCmlDistance.Text = distance.ToString("0.00") + "LY";
+            txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
             if (dataGridViewRouteSystems.Rows.Count > 1)
             {
                 SystemClass firstSC = null;
@@ -308,9 +310,9 @@ namespace EDDiscovery
                     Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
                     Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
                     distance = Point3D.DistanceBetween(first, last);
+                    txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
                 }
             }
-            txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
         }
 
         private void UpdateRouteInfo(SavedRouteClass route)
