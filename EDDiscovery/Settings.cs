@@ -62,6 +62,8 @@ namespace EDDiscovery2
             checkBoxFocusNewSystem.Checked = EDDiscoveryForm.EDDConfig.FocusOnNewSystem;
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
             checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
+            checkBoxAutoLoad.Checked = EDDiscoveryForm.EDDConfig.AutoLoadPopOuts;
+            checkBoxAutoSave.Checked = EDDiscoveryForm.EDDConfig.AutoSavePopOuts;
 
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
@@ -101,6 +103,8 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
             EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
             EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
+            EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
+            EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
         }
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -275,6 +279,15 @@ namespace EDDiscovery2
             _discoveryForm.RefreshDisplays();
         }
 
+        private void buttonSaveSetup_Click(object sender, EventArgs e)
+        {
+            _discoveryForm.SaveCurrentPopOuts();
+        }
+
+        private void buttonReloadSaved_Click(object sender, EventArgs e)
+        {
+            _discoveryForm.LoadSavedPopouts();
+        }
     }
 }
 

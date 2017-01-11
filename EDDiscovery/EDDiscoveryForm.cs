@@ -183,6 +183,16 @@ namespace EDDiscovery
             }
         }
 
+        internal void SaveCurrentPopOuts()
+        {
+            travelHistoryControl1.SaveCurrentPopouts();
+        }
+
+        internal void LoadSavedPopouts()
+        {
+            travelHistoryControl1.LoadSavedPopouts();
+        }
+
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
             Controller.PostInit_Shown();
@@ -241,6 +251,7 @@ namespace EDDiscovery
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
+            if (EDDConfig.AutoLoadPopOuts) travelHistoryControl1.LoadSavedPopouts();
         }
 
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
@@ -384,7 +395,7 @@ namespace EDDiscovery
             theme.SaveSettings(null);
             travelHistoryControl1.SaveSettings();
             journalViewControl1.SaveSettings();
-
+            if (EDDConfig.AutoSavePopOuts) travelHistoryControl1.SaveCurrentPopouts();
         }
 
         public void ShowInfoPanel(string message, bool visible, Color? backColour = null)
