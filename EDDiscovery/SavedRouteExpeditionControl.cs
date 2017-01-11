@@ -303,9 +303,12 @@ namespace EDDiscovery
                         distance += Double.Parse(value);
                 }
                 txtCmlDistance.Text = distance.ToString("0.00") + "LY";
-                Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
-                Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
-                distance = Point3D.DistanceBetween(first, last);
+                distance = 0;
+                if (firstSC != null && lastSC != null) { 
+                    Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
+                    Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
+                    distance = Point3D.DistanceBetween(first, last);
+                }
             }
             txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
         }
@@ -945,8 +948,12 @@ namespace EDDiscovery
 
             if (obj == null)
                 return;
-
-            RoutingUtils.showBookmarkForm(_discoveryForm, SystemClass.GetSystem((string)obj), null, false);
+            SystemClass sc = SystemClass.GetSystem((string)obj);
+            if (sc == null) {
+                MessageBox.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                return;
+            }
+            RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
         }
     }
 }
