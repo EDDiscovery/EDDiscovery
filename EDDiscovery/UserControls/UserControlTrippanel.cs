@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.DB;
 using EMK.LightGeometry;
+using System.Collections.ObjectModel;
+using EDDiscovery.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -42,8 +44,32 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += NewTarget;
 
             displayfont = discoveryform.theme.GetFont;
+
+            jumpRange = SQLiteDBClass.GetSettingDouble(DbSave + "JumpRange", -1.0);
+            tankSize = SQLiteDBClass.GetSettingDouble(DbSave + "TankSize", -1);
+            currentCargo = SQLiteDBClass.GetSettingDouble(DbSave + "currentCargo", 0);
+            unladenMass = SQLiteDBClass.GetSettingDouble(DbSave + "unladenMass", -1);
+
+            linearConstant = SQLiteDBClass.GetSettingDouble(DbSave + "linearConstant", -1);
+            powerConstant = SQLiteDBClass.GetSettingDouble(DbSave + "powerConstant", -1);
+            optimalMass = SQLiteDBClass.GetSettingDouble(DbSave + "optimalMass", -1);
+            maxFuelPerJump = SQLiteDBClass.GetSettingDouble(DbSave + "maxFuelPerJump", -1);
+            fsdDrive = SQLiteDBClass.GetSettingString(DbSave + "fsdDrive", null);
+            tankWarning = SQLiteDBClass.GetSettingDouble(DbSave + "TankWarning", -1);
+
+
         }
 
+        private double jumpRange = -1;
+        private double tankSize = -1;
+        private double currentCargo = -1;
+        private double linearConstant = -1;
+        private double unladenMass = -1;
+        private double optimalMass = -1;
+        private double powerConstant = -1;
+        private double maxFuelPerJump = -1;
+        private string fsdDrive = null;
+        private double tankWarning = -1;
 
         public override void Closing()
         {
@@ -104,7 +130,7 @@ namespace EDDiscovery.UserControls
                 edsm.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backcolour, ExtendedControls.ButtonExt.Multiply(textcolour, 1.2F), 0.5F, true), edsm.pos, true);
 
                 ExtendedControls.PictureBoxHotspot.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(5, 35), new Size(80, 20), "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
-                start.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("Start", edsm.img.Size, displayfont, backcolour, ExtendedControls.ButtonExt.Multiply(textcolour, 1.2F), 0.5F, true), start.pos , true);
+                start.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("Start", edsm.img.Size, displayfont, backcolour, ExtendedControls.ButtonExt.Multiply(textcolour, 1.2F), 0.5F, true), start.pos, true);
 
                 backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
@@ -118,13 +144,12 @@ namespace EDDiscovery.UserControls
                 {
                     double dist = SystemClass.Distance(he.System, tpos.X, tpos.Y, tpos.Z);
 
-                    var jumpRange = SQLiteDBClass.GetSettingDouble(DbSave + "JumpRange", -1.0);
                     string mesg = "Left";
                     if (jumpRange > 0)
                     {
-                        int jumps =(int) Math.Ceiling(dist / jumpRange);
-                        if(jumps>0)
-                            mesg = "@ " + jumps.ToString() + ( (jumps == 1) ? " jump" : " jumps");
+                        int jumps = (int)Math.Ceiling(dist / jumpRange);
+                        if (jumps > 0)
+                            mesg = "@ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
                     }
                     topline = String.Format("{0} | {1:N2}ly {2}", name, dist, mesg);
                 }
@@ -141,30 +166,29 @@ namespace EDDiscovery.UserControls
 
                 ExtendedControls.PictureBoxHotspot.ImageElement botlineleft = pictureBox.AddTextAutoSize(new Point(100, 35), new Size(1000, 40), botline, displayfont, textcolour, backcolour, 1.0F);
 
-                double tankSize = SQLiteDBClass.GetSettingDouble(DbSave + "TankSize", 32);
-                double tankWarning = SQLiteDBClass.GetSettingDouble(DbSave + "TankWarning", 25);
-                double fuel=0.0;
+
+                double fuel = 0.0;
                 HistoryEntry fuelhe;
 
 
                 switch (he.journalEntry.EventTypeID)
-                { 
+                {
                     case EliteDangerous.JournalTypeEnum.FuelScoop:
-                       fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
+                        fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
                         break;
                     case EliteDangerous.JournalTypeEnum.FSDJump:
                         fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
                         break;
                     case EliteDangerous.JournalTypeEnum.RefuelAll:
-                         fuelhe = discoveryform.history.GetLastFSDOrFuelScoop;
-                        if(fuelhe.journalEntry.EventTypeID==EliteDangerous.JournalTypeEnum.FSDJump)
+                        fuelhe = discoveryform.history.GetLastFSDOrFuelScoop;
+                        if (fuelhe.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
                             fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
                         else
                             fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
                         fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelAll).Amount;
                         break;
                     case EliteDangerous.JournalTypeEnum.RefuelPartial:
-                         fuelhe = discoveryform.history.GetLastFSDOrFuelScoop;
+                        fuelhe = discoveryform.history.GetLastFSDOrFuelScoop;
                         if (fuelhe.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
                             fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
                         else
@@ -177,20 +201,37 @@ namespace EDDiscovery.UserControls
                     default:
                         break;
                 }
-
-                botline = String.Format("{0}t / {1}t", fuel.ToString("N1"), tankSize.ToString("N1"));
-
-                if ((fuel / tankSize) < (tankWarning / 100.0))
+                if (tankSize == -1||tankWarning==-1)
                 {
-                    textcolour = discoveryform.theme.TextBlockHighlightColor;
-                    botline += String.Format(" < {0}%", tankWarning.ToString("N1"));
+                    botline = "Please set ships details";
                 }
+                else
+                {
+                    botline = String.Format("{0}t / {1}t", fuel.ToString("N1"), tankSize.ToString("N1"));
 
+                    if ((fuel / tankSize) < (tankWarning / 100.0))
+                    {
+                        textcolour = discoveryform.theme.TextBlockHighlightColor;
+                        botline += String.Format(" < {0}%", tankWarning.ToString("N1"));
+                    }
+                }
+                if (currentCargo >= 0 && linearConstant > 0 && unladenMass > 0 && optimalMass > 0
+                    && powerConstant > 0 && maxFuelPerJump > 0)
+                {
+                    double maxJumps = 0;
+                    double maxJumpDistance = RoutingUtils.maxJumpDistance(fuel,
+                        currentCargo, linearConstant, unladenMass,
+                        optimalMass, powerConstant,
+                        maxFuelPerJump, out maxJumps);
+                    double JumpRange = Math.Pow(maxFuelPerJump / (linearConstant * 0.001), 1 / powerConstant) * optimalMass / (currentCargo + unladenMass + fuel);
+                    botline += String.Format(" [{1:0.00}ly @ {0:N2}ly / {2:0}]", maxJumpDistance, JumpRange, maxJumps);
+                }
                 pictureBox.AddTextAutoSize(new Point(botlineleft.pos.Right, 35), new Size(1000, 40), botline, displayfont, textcolour, backcolour, 1.0F);
+                pictureBox.Render();
             }
-
-            pictureBox.Render();
         }
+
+
 
         #endregion
 
@@ -236,90 +277,46 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        static class Prompt
-        {
-            public static string ShowDialog(Form p, string text, String defaultValue, string caption)
-            {
-                Form prompt = new Form()
-                {
-                    Width = 440,
-                    Height = 160,
-                    FormBorderStyle = FormBorderStyle.FixedDialog,
-                    Text = caption,
-                    StartPosition = FormStartPosition.CenterScreen,
-                };
-
-                Label textLabel = new Label() { Left = 10, Top = 20, Width = 400, Text = text };
-                TextBox textBox = new TextBox() { Left = 10, Top = 50, Width = 400 };
-                textBox.Text = defaultValue;
-                Button confirmation = new Button() { Text = "Ok", Left = 245, Width = 80, Top = 90, DialogResult = DialogResult.OK };
-                Button cancel = new Button() { Text = "Cancel", Left = 330, Width = 80, Top = 90, DialogResult = DialogResult.Cancel };
-                confirmation.Click += (sender, e) => { prompt.Close(); };
-                cancel.Click += (sender, e) => { prompt.Close(); };
-                prompt.Controls.Add(textBox);
-                prompt.Controls.Add(confirmation);
-                prompt.Controls.Add(cancel);
-                prompt.Controls.Add(textLabel);
-                prompt.AcceptButton = confirmation;
-
-                return prompt.ShowDialog(p) == DialogResult.OK ? textBox.Text : null;
-            }
-        }
-
-        private void setFuelTankToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var tankSize = SQLiteDBClass.GetSettingDouble(DbSave+"TankSize", 32.0);
-            string promptValue = Prompt.ShowDialog(this.FindForm(), "Set fuel tank size", "" + tankSize, TITLE);
-            if (String.IsNullOrEmpty(promptValue))
-                return;
-            double value = 0;
-            if (double.TryParse(promptValue, out value))
-            {
-                SQLiteDBClass.PutSettingDouble(DbSave+"TankSize", value);
-                displayLastFSDOrScoop(lastHE);
-            }
-            else
-            {
-                MessageBox.Show("Please enter a numeric value", TITLE);
-            }
-
-        }
-
-        private void setFuelWarningToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var tankWarning = SQLiteDBClass.GetSettingDouble(DbSave+"TankWarning", 25.0);
-            string promptValue = Prompt.ShowDialog(this.FindForm(), "Set fuel tank warning percentage", "" + tankWarning, TITLE);
-            if (String.IsNullOrEmpty(promptValue))
-                return;
-            double value = 0;
-            if (double.TryParse(promptValue, out value) && value >= 0 && value <= 100)
-            {
-                SQLiteDBClass.PutSettingDouble(DbSave+"TankWarning", value);
-                displayLastFSDOrScoop(lastHE);
-            }
-            else
-            {
-                MessageBox.Show("Please enter a numeric value between 1-100", TITLE);
-            }
-        }
-
         private void setShipDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var jumpRange = SQLiteDBClass.GetSettingDouble(DbSave+"JumpRange", 10.0);
-            string promptValue = Prompt.ShowDialog(this.FindForm(), "Set your estimated jump range", "" + jumpRange, TITLE);
-            if (String.IsNullOrEmpty(promptValue))
-                return;
-            double value = 0;
-            if (double.TryParse(promptValue, out value) && value >= 0)
-            {
-                SQLiteDBClass.PutSettingDouble(DbSave+"JumpRange", value);
+            ShipDetails form =    new ShipDetails();
+            form.JumpRange = jumpRange;
+            form.TankSize = tankSize;
+            form.CurrentCargo = currentCargo;
+            form.UnladenMass = unladenMass;
+            form.LinearConstant = linearConstant;
+            form.PowerConstant = powerConstant;
+            form.OptimalMass = optimalMass;
+            form.maxFuelPerJump = maxFuelPerJump;
+            form.FSDDrive = "5A";
+            form.tankWarning = tankWarning;
+
+            if (form.ShowDialog(this.FindForm() )== DialogResult.OK){
+
+                jumpRange = form.JumpRange;
+                tankSize = form.TankSize;
+                currentCargo = form.CurrentCargo;
+                unladenMass = form.UnladenMass;
+                powerConstant = form.PowerConstant;
+                optimalMass = form.OptimalMass;
+                maxFuelPerJump = form.maxFuelPerJump;
+                fsdDrive = form.FSDDrive;
+                linearConstant = form.LinearConstant;
+                tankWarning = form.tankWarning;
+
+                SQLiteDBClass.PutSettingDouble(DbSave + "JumpRange", jumpRange);
+                SQLiteDBClass.PutSettingDouble(DbSave + "TankSize", tankSize);
+                SQLiteDBClass.PutSettingDouble(DbSave + "currentCargo", currentCargo);
+                SQLiteDBClass.PutSettingDouble(DbSave + "unladenMass", unladenMass);
+                SQLiteDBClass.PutSettingDouble(DbSave + "linearConstant", linearConstant);
+                SQLiteDBClass.PutSettingDouble(DbSave + "powerConstant", powerConstant);
+                SQLiteDBClass.PutSettingDouble(DbSave + "optimalMass", optimalMass);
+                SQLiteDBClass.PutSettingDouble(DbSave + "maxFuelPerJump", maxFuelPerJump);
+                SQLiteDBClass.PutSettingDouble(DbSave + "TankWarning", tankWarning);
+                SQLiteDBClass.PutSettingString(DbSave + "fsdDrive", fsdDrive);
+
                 displayLastFSDOrScoop(lastHE);
             }
-            else
-            {
-                MessageBox.Show("Please enter a numeric value", TITLE);
-            }
-
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
