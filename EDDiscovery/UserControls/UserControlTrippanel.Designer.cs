@@ -31,8 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.pictureBox = new ExtendedControls.PictureBoxHotspot();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.setFuelTankToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setFuelWarningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setJumpRangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -52,38 +50,22 @@
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setFuelTankToolStripMenuItem,
-            this.setFuelWarningToolStripMenuItem,
             this.setJumpRangeToolStripMenuItem,
             this.refreshToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(160, 114);
-            // 
-            // setFuelTankToolStripMenuItem
-            // 
-            this.setFuelTankToolStripMenuItem.Name = "setFuelTankToolStripMenuItem";
-            this.setFuelTankToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.setFuelTankToolStripMenuItem.Text = "Set fuel tank";
-            this.setFuelTankToolStripMenuItem.Click += new System.EventHandler(this.setFuelTankToolStripMenuItem_Click);
-            // 
-            // setFuelWarningToolStripMenuItem
-            // 
-            this.setFuelWarningToolStripMenuItem.Name = "setFuelWarningToolStripMenuItem";
-            this.setFuelWarningToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.setFuelWarningToolStripMenuItem.Text = "Set fuel warning";
-            this.setFuelWarningToolStripMenuItem.Click += new System.EventHandler(this.setFuelWarningToolStripMenuItem_Click);
+            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
             // 
             // setJumpRangeToolStripMenuItem
             // 
             this.setJumpRangeToolStripMenuItem.Name = "setJumpRangeToolStripMenuItem";
-            this.setJumpRangeToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.setJumpRangeToolStripMenuItem.Text = "Set Jump Range";
+            this.setJumpRangeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setJumpRangeToolStripMenuItem.Text = "Set ship details";
             this.setJumpRangeToolStripMenuItem.Click += new System.EventHandler(this.setShipDetailsToolStripMenuItem_Click);
             // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.refreshToolStripMenuItem.Text = "Refresh";
             this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
@@ -104,8 +86,6 @@
 
         private ExtendedControls.PictureBoxHotspot pictureBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem setFuelTankToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem setFuelWarningToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setJumpRangeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
     }

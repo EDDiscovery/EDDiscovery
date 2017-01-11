@@ -218,6 +218,12 @@
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
+    <Compile Include="Forms\ShipDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShipDetails.Designer.cs">
+      <DependentUpon>ShipDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
@@ -732,6 +738,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\JSONFiltersForm.resx">
       <DependentUpon>JSONFiltersForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ShipDetails.resx">
+      <DependentUpon>ShipDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
