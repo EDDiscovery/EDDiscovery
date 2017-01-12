@@ -13,20 +13,29 @@ using System.IO;
 using EMK.LightGeometry;
 using EDDiscovery.EDSM;
 using EDDiscovery2;
+using EDDiscovery.UserControls;
+using EDDiscovery.EliteDangerous.JournalEvents;
 
 namespace EDDiscovery
 {
-    public partial class UserControlExploration : UserControl
+    public partial class UserControlExploration :  UserControlCommonBase
     {
+        private int displaynumber = 0;
+
         public static bool DeleteIsPermanent = true;
 
         private List<ExplorationSetClass> _savedExplorationSets;
         private ExplorationSetClass _currentExplorationSet;
         private EDDiscoveryForm _discoveryForm;
+        private TravelHistoryControl travelhistorycontrol;
         private EDSMClass edsm;
         private int _currentExploreIndex;
         private Rectangle _dragBox;
         private int _dragRowIndex;
+        HistoryList hl = null;
+        HistoryEntry last_he = null;
+
+        public int JounalScan { get; private set; }
 
         public UserControlExploration()
         {
@@ -34,12 +43,33 @@ namespace EDDiscovery
             _currentExplorationSet = new ExplorationSetClass();
         }
 
-        public void InitControl(EDDiscoveryForm discoveryForm)
+        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
-            _discoveryForm = discoveryForm;
+            _discoveryForm = ed;
+            travelhistorycontrol = ed.TravelControl;
+            displaynumber = vn;
             edsm = new EDSMClass();
             _currentExplorationSet = new ExplorationSetClass();
             _savedExplorationSets = new List<ExplorationSetClass>();
+            _discoveryForm.OnNewEntry += NewEntry;
+            travelhistorycontrol.OnTravelSelectionChanged += Display;
+        }
+
+        public override void Closing()
+        {
+            travelhistorycontrol.OnTravelSelectionChanged -= Display;
+            _discoveryForm.OnNewEntry -= NewEntry;
+        }
+
+        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        {
+            if (he.EntryType == EliteDangerous.JournalTypeEnum.Scan || he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump)
+                UpdateSystemRows();
+        }
+
+        public override void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        {
+            UpdateSystemRows();
         }
 
         public void LoadControl()
@@ -57,18 +87,9 @@ namespace EDDiscovery
 
             //_savedRoutes = _savedRoutes.Where(r => !r.Name.StartsWith("\x7F")).ToList();
 
-            UpdateComboBox();
+
         }
 
-        private void UpdateComboBox()
-        {
-            //toolStripComboBoxRouteSelection.Items.Clear();
-
-            //foreach (var route in _savedRoutes)
-            //{
-            //    toolStripComboBoxRouteSelection.Items.Add(route.Name);
-            //}
-        }
 
         public void InsertRows(int insertIndex, params string[] sysnames)
         {
@@ -97,10 +118,10 @@ namespace EDDiscovery
 
             if (sys == null)
             {
-                if (edsm.IsKnownSystem(sysname))
-                {
-                    sys = new SystemClass(sysname);
-                }
+                //if (edsm.IsKnownSystem(sysname))
+                //{
+                //    sys = new SystemClass(sysname);
+                //}
             }
 
             return sys;
@@ -108,33 +129,57 @@ namespace EDDiscovery
 
         private void UpdateSystemRow(int rowindex)
         {
-            if (rowindex < dataGridViewExplore.Rows.Count &&
-                dataGridViewExplore[0, rowindex].Value != null)
+            const int idxNote = 8;
+            const int idxScans = 6;
+            const int idxVisits = 5;
+
+            if (hl == null)
+                hl = _discoveryForm.history;
+
+            if (hl.GetLast == null)
+                return;
+            ISystem currentSystem = hl.GetLast.System;
+
+            
+
+            if (rowindex < dataGridViewExplore.Rows.Count && dataGridViewExplore[0, rowindex].Value != null)
             {
                 string sysname = dataGridViewExplore[0, rowindex].Value.ToString();
-                var sys = GetSystem(sysname);
-                dataGridViewExplore[1, rowindex].Value = "";
+                ISystem sys = (ISystem)dataGridViewExplore[0, rowindex].Tag;
 
-                if (rowindex > 0 && rowindex < dataGridViewExplore.Rows.Count &&
-                    dataGridViewExplore[0, rowindex - 1].Value != null &&
-                    dataGridViewExplore[0, rowindex].Value != null)
+                if (sys == null)
                 {
-                    string prevsysname = dataGridViewExplore[0, rowindex - 1].Value.ToString();
-                    var prevsys = GetSystem(prevsysname);
+                    
+                    sys = GetSystem(sysname);
+                }
 
-                    if (sys != null && prevsys != null)
-                    {
-                        double dist = SystemClass.Distance(sys, prevsys);
-                        string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
-                        dataGridViewExplore[1, rowindex].Value = strdist;
-                    }
+                if (sys != null && currentSystem != null)
+                {
+                    double dist = SystemClass.Distance(sys, currentSystem);
+                    string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
+                    dataGridViewExplore[1, rowindex].Value = strdist;
                 }
 
                 dataGridViewExplore[0, rowindex].Tag = sys;
                 dataGridViewExplore.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
+
                 if (sys != null)
                 {
+                    if (sys.HasCoordinate)
+                    {
+                        dataGridViewExplore[2, rowindex].Value = sys.x.ToString("0.00");
+                        dataGridViewExplore[3, rowindex].Value = sys.y.ToString("0.00");
+                        dataGridViewExplore[4, rowindex].Value = sys.z.ToString("0.00");
+                    }
+
+
+                    dataGridViewExplore[idxVisits, rowindex].Value = hl.GetVisitsCount(sysname).ToString();
+
+                    List<JournalScan> scans = hl.GetScans(sysname);
+                    dataGridViewExplore[idxScans, rowindex].Value = scans.Count.ToString();
+
+
                     string note = "";
                     SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.name, sys.id_edsm);
                     if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
@@ -153,12 +198,12 @@ namespace EDDiscovery
                                 note = gmo.description;
                         }
                     }
-                    dataGridViewExplore[2, rowindex].Value = Tools.WordWrap(note, 60);
+                    dataGridViewExplore[idxNote, rowindex].Value = Tools.WordWrap(note, 60);
                 }
 
                 if (sys == null && sysname != "")
                 {
-                    dataGridViewExplore.Rows[rowindex].ErrorText = "System not known to EDSM";
+                    dataGridViewExplore.Rows[rowindex].ErrorText = "System not known";
                 }
                 else
                 {
@@ -481,7 +526,7 @@ namespace EDDiscovery
                 }
 
                 _savedExplorationSets.Remove(_currentExplorationSet);
-                UpdateComboBox();
+
                 ClearExplorationSet();
             }
         }
@@ -521,7 +566,7 @@ namespace EDDiscovery
             }
 
             List<String> systems = new List<String>();
-            int countbad = 0;
+            int countunknown = 0;
             foreach (String name in sysnames)
             {
                 String sysname = name;
@@ -533,27 +578,23 @@ namespace EDDiscovery
                 if (String.IsNullOrWhiteSpace(sysname))
                     continue;
                 SystemClass sc = GetSystem(sysname.Trim());
-                if (sc != null)
-                    systems.Add(sc.name);
-                else
-                    countbad++;
+                if (sc == null)
+                {
+                    sc = new SystemClass(sysname.Trim());
+                    countunknown++;
+                }
+                systems.Add(sc.name);
+
             }
             if (systems.Count == 0)
             {
                 MessageBox.Show(_discoveryForm,
-                String.Format("There are no known system names in the file import", countbad),
+                String.Format("There are no known system names in the file import", countunknown),
                 "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if (countbad > 0)
-            {
-                var result = MessageBox.Show(_discoveryForm,
-                    String.Format("There are {0} unknown system names do you wish to conitune with the good ones", countbad),
-                    "Unsaved", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                    return;
-            }
+      
             foreach (var sysname in systems)
             {
                 dataGridViewExplore.Rows.Add(sysname, "", "");
