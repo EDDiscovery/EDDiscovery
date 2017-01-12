@@ -157,17 +157,19 @@ namespace EDDiscovery
             parent.Replace(newToken);
         }
 
+        // return all JSON items as name/value pairs
+
         static public void GetJSONFieldNamesValues(string json, Dictionary<string, string> values)
         {
             JObject jo = JObject.Parse(json);  // Create a clone
 
             foreach (JToken jc in jo.Children())
             {
-                ExpandTokens(jc, values);
+                ExpandTokensA(jc, values);
             }
         }
 
-        static private void ExpandTokens(JToken jt, Dictionary<string, string> values)
+        static private void ExpandTokensA(JToken jt, Dictionary<string, string> values)
         {
             if (jt.HasValues)
             {
@@ -177,7 +179,7 @@ namespace EDDiscovery
                 {
                     if (jc.HasValues)
                     {
-                        ExpandTokens(jc, values);
+                        ExpandTokensA(jc, values);
                     }
                     else if (Array.FindIndex(decodeable, x => x == jc.Type) != -1)
                     {
@@ -187,6 +189,52 @@ namespace EDDiscovery
             }
         }
 
+        // given a set of valuesneeded, fill in the values.. only fills in the ones in valuesneeded
+
+        static public void GetJSONFieldValues( string json, Dictionary<string, string> valuesneeded)
+        {
+            JObject jo = JObject.Parse(json);
+
+            int togo = valuesneeded.Count;
+
+            foreach (JToken jc in jo.Children())
+            {
+                ExpandTokensB(jc, valuesneeded, ref togo);
+                if (togo == 0)
+                    break;
+            }
+        }
+
+        static private void ExpandTokensB(JToken jt, Dictionary<string, string> valuesneeded, ref int togo)
+        {
+            JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
+
+            if (jt.HasValues && togo > 0)
+            {
+                foreach (JToken jc in jt.Children())
+                {
+                    if (jc.HasValues)
+                    {
+                        ExpandTokensB(jc, valuesneeded, ref togo);
+                    }
+                    else
+                    {
+                        string name = jc.Path;
+
+                        if (valuesneeded.ContainsKey(name) && Array.FindIndex(decodeable, x => x == jc.Type) != -1)
+                        {
+                            valuesneeded[name] = jc.Value<string>();
+                            togo--;
+
+                            // System.Diagnostics.Debug.WriteLine("Found "+ name);
+                        }
+                    }
+
+                    if (togo == 0)  // if we have all values, stop
+                        break;
+                }
+            }
+        }
     }
 
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionVariableForm));
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
@@ -52,7 +53,7 @@
             this.buttonCancel.BorderColorScaling = 1.25F;
             this.buttonCancel.ButtonColorScaling = 0.5F;
             this.buttonCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonCancel.Location = new System.Drawing.Point(474, 4);
+            this.buttonCancel.Location = new System.Drawing.Point(468, 4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 9;
@@ -66,7 +67,7 @@
             this.buttonOK.BorderColorScaling = 1.25F;
             this.buttonOK.ButtonColorScaling = 0.5F;
             this.buttonOK.ButtonDisabledScaling = 0.5F;
-            this.buttonOK.Location = new System.Drawing.Point(568, 4);
+            this.buttonOK.Location = new System.Drawing.Point(562, 4);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 10;
@@ -76,9 +77,9 @@
             // 
             // statusStripCustom
             // 
-            this.statusStripCustom.Location = new System.Drawing.Point(0, 349);
+            this.statusStripCustom.Location = new System.Drawing.Point(3, 349);
             this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(649, 22);
+            this.statusStripCustom.Size = new System.Drawing.Size(643, 22);
             this.statusStripCustom.TabIndex = 28;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
@@ -88,10 +89,11 @@
             this.panelTop.Controls.Add(this.panel_minimize);
             this.panelTop.Controls.Add(this.label_index);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Location = new System.Drawing.Point(3, 3);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(649, 24);
+            this.panelTop.Size = new System.Drawing.Size(643, 24);
             this.panelTop.TabIndex = 29;
+            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // panel_close
             // 
@@ -101,7 +103,7 @@
             this.panel_close.DrawnImage = null;
             this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
             this.panel_close.ImageText = null;
-            this.panel_close.Location = new System.Drawing.Point(626, 0);
+            this.panel_close.Location = new System.Drawing.Point(620, 0);
             this.panel_close.MarginSize = 6;
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
@@ -119,7 +121,7 @@
             this.panel_minimize.DrawnImage = null;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.ImageText = null;
-            this.panel_minimize.Location = new System.Drawing.Point(596, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(590, 0);
             this.panel_minimize.MarginSize = 6;
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
@@ -137,15 +139,16 @@
             this.label_index.Size = new System.Drawing.Size(27, 13);
             this.label_index.TabIndex = 23;
             this.label_index.Text = "N/A";
+            this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // panelOK
             // 
             this.panelOK.Controls.Add(this.buttonCancel);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(0, 319);
+            this.panelOK.Location = new System.Drawing.Point(3, 319);
             this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(649, 30);
+            this.panelOK.Size = new System.Drawing.Size(643, 30);
             this.panelOK.TabIndex = 31;
             // 
             // panelOuter
@@ -153,9 +156,9 @@
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelOuter.Controls.Add(this.panelVScroll1);
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 24);
+            this.panelOuter.Location = new System.Drawing.Point(3, 27);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(649, 295);
+            this.panelOuter.Size = new System.Drawing.Size(643, 292);
             this.panelOuter.TabIndex = 32;
             // 
             // panelVScroll1
@@ -167,7 +170,7 @@
             this.panelVScroll1.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll1.Name = "panelVScroll1";
             this.panelVScroll1.ScrollBarWidth = 20;
-            this.panelVScroll1.Size = new System.Drawing.Size(647, 293);
+            this.panelVScroll1.Size = new System.Drawing.Size(641, 290);
             this.panelVScroll1.TabIndex = 8;
             this.panelVScroll1.VerticalScrollBarDockRight = true;
             // 
@@ -182,13 +185,13 @@
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 10;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(627, 0);
-            this.vScrollBarCustom2.Maximum = -249;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(621, 0);
+            this.vScrollBarCustom2.Maximum = -246;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 293);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 290);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 0;
@@ -197,8 +200,8 @@
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -249;
-            this.vScrollBarCustom2.ValueLimited = -249;
+            this.vScrollBarCustom2.Value = -246;
+            this.vScrollBarCustom2.ValueLimited = -246;
             // 
             // buttonMore
             // 
@@ -215,6 +218,7 @@
             // 
             // ActionVariableForm
             // 
+            this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(649, 371);
@@ -222,7 +226,10 @@
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ActionVariableForm";
+            this.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionVariableForm";
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();

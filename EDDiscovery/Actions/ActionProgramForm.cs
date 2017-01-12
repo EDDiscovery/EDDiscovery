@@ -14,12 +14,14 @@ namespace EDDiscovery.Actions
     {
         string initialprogname;
         string[] definedprograms;                                   // list of programs already defined, to detect rename over..
-        List<string> variables;                                     // variables available to use..
+
         Dictionary<string, string> inputparas;                      // input parameters to configure for this program
+        List<string> startvarlist;                                  // starting vars
+        List<string> currentvarlist;                                // variables available to use.. combination of above
 
         class Group
         {
-            public Control panel;
+            public Panel panel;
             public Action programstep;
             public ExtendedControls.ComboBoxCustom stepname;
             public ExtendedControls.ButtonExt config;
@@ -33,19 +35,26 @@ namespace EDDiscovery.Actions
         List<Group> groups;
         int panelwidth = 800;
         int valuewidth = 350;
+        int panelheightmargin = 1;
+        int panelleftmargin = 3;
+        int controlsize = 22;
+        int panelheight = 24;
 
         public ActionProgramForm()
         {
             InitializeComponent();
             groups = new List<Group>();
+            CancelButton = buttonCancel;
+            AcceptButton = buttonOK;
         }
 
         EDDiscovery2.EDDTheme theme;
         const int vscrollmargin = 10;
-        const int panelmargin = 3;
+        const int xpanelmargin = 3;
 
         public void Init(string t, EDDiscovery2.EDDTheme th , 
                             List<string> vbs ,              // list any variables you want in condition statements - passed to config menu, passed back up to condition, not null
+                            string filesetname,             // file set name
                             ActionProgram prog = null ,     // give the program to display
                             string progdata = null,         // give any associated program data
                             string[] defprogs = null ,      // list any default program names
@@ -53,17 +62,22 @@ namespace EDDiscovery.Actions
         {
             theme = th;
 
-            variables = vbs;
+            startvarlist = vbs;
+            currentvarlist = new List<string>(startvarlist);
 
             bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
+
+            labelSet.Text = filesetname + "::";
+            textBoxBorderName.Location = new Point(labelSet.Location.X + labelSet.Width + 8, textBoxBorderName.Location.Y);
 
             if (progdata != null)
             {
                 List<string> flaglist;
                 ActionData.DecodeActionData(progdata, out flaglist, out inputparas);
                 checkBoxCustomRefresh.Checked = flaglist.Contains(ActionProgram.flagRunAtRefresh);
+                currentvarlist.AddRange(inputparas.Keys.ToList());
             }
             else
                 checkBoxCustomRefresh.Visible = buttonVars.Visible = false;
@@ -93,87 +107,77 @@ namespace EDDiscovery.Actions
 
         Group CreateStep(Action step = null, int insertpos = -1 )
         {
-            Panel p = new Panel();
-            p.Size = new Size(panelwidth, 32);
+            Group g = new Group();
+            g.programstep = step;
+            g.levelup = (step != null) ? step.LevelUp : 0;
 
-            ExtendedControls.ComboBoxCustom stepname = new ExtendedControls.ComboBoxCustom();
-            stepname.Items.AddRange(Action.GetActionNameList());
-            stepname.DropDownHeight = 400;
-            stepname.Name = "StepName";
+            g.panel = new Panel();
+            g.panel.Size = new Size(panelwidth, panelheight);
+
+            g.stepname = new ExtendedControls.ComboBoxCustom();
+            g.stepname.Items.AddRange(Action.GetActionNameList());
+            g.stepname.DropDownHeight = 400;
+            g.stepname.Name = "g.stepname";
             if (step != null)
-                stepname.Text = step.Name;
-            stepname.SelectedIndexChanged += Stepname_SelectedIndexChanged;
-            p.Controls.Add(stepname);
+                g.stepname.Text = step.Name;
+            g.stepname.SelectedIndexChanged += Stepname_SelectedIndexChanged;
+            g.panel.Controls.Add(g.stepname);
 
-            ExtendedControls.ButtonExt left = new ExtendedControls.ButtonExt();
-            left.Location = new Point(panelmargin + 140 + 8 + 8 * 4, panelmargin);      // 8 spacing, allow 8*4 to indent
-            left.Size = new Size(24, 24);
-            left.Text = "<";
-            left.Click += Left_Clicked;
-            p.Controls.Add(left);
+            g.value = new ExtendedControls.TextBoxBorder();
+            g.value.Location = new Point(panelleftmargin + 140 + 8 + 8 * 4, panelheightmargin*2);      // 8 spacing, allow 8*4 to indent
+            g.value.Size = new Size(valuewidth, controlsize);
+            SetValue(g.value, step);
+            g.value.TextChanged += Value_TextChanged;
+            g.value.Click += Value_Click;
+            g.panel.Controls.Add(g.value);         // must be next
 
-            ExtendedControls.ButtonExt right = new ExtendedControls.ButtonExt();
-            right.Location = new Point(left.Location.X + left.Width + 2, panelmargin);
-            right.Size = new Size(24, 24);
-            right.Text = ">";
-            right.Click += Right_Clicked;
-            p.Controls.Add(right);
+            g.config = new ExtendedControls.ButtonExt();
+            g.config.Location = new Point(g.value.Right + 8, panelheightmargin);      // 8 spacing, allow 8*4 to indent
+            g.config.Text = "C";
+            g.config.Size = new Size(controlsize, controlsize);
+            g.config.Click += ActionConfig_Clicked;
+            g.panel.Controls.Add(g.config);         // must be next
 
-            ExtendedControls.ButtonExt acconfig = new ExtendedControls.ButtonExt();
-            acconfig.Text = "C";
-            acconfig.Location = new Point(right.Location.X + right.Width + 8, panelmargin);
-            acconfig.Size = new Size(24, 24);
-            acconfig.Click += ActionConfig_Clicked;
-            p.Controls.Add(acconfig);         // must be next
+            g.left = new ExtendedControls.ButtonExt();
+            g.left.Location = new Point(g.config.Right + 8, panelheightmargin);      // 8 spacing, allow 8*4 to indent
+            g.left.Size = new Size(controlsize, controlsize);
+            g.left.Text = "<";
+            g.left.Click += Left_Clicked;
+            g.panel.Controls.Add(g.left);
 
-            ExtendedControls.TextBoxBorder value = new ExtendedControls.TextBoxBorder();
-            value.Size = new Size(valuewidth, 24);
-            value.Location = new Point(acconfig.Location.X + acconfig.Width + 8, panelmargin + 4);
-            SetValue(value,step);
-            value.TextChanged += Value_TextChanged;
-
-            p.Controls.Add(value);         // must be next
+            g.right = new ExtendedControls.ButtonExt();
+            g.right.Location = new Point(g.left.Right + 8, panelheightmargin);      // 8 spacing, allow 8*4 to indent
+            g.right.Size = new Size(controlsize, controlsize);
+            g.right.Text = ">";
+            g.right.Click += Right_Clicked;
+            g.panel.Controls.Add(g.right);
 
             ExtendedControls.ButtonExt ins = new ExtendedControls.ButtonExt();
-            ins.Size = new Size(24, 24);
-            ins.Location = new Point(value.Location.X + value.Width + 8, panelmargin);
+            ins.Size = new Size(controlsize, controlsize);
+            ins.Location = new Point(g.right.Right + 8, panelheightmargin);
             ins.Text = "+";
             ins.Click += Ins_Clicked;
-            p.Controls.Add(ins);
+            g.panel.Controls.Add(ins);
 
             ExtendedControls.ButtonExt del = new ExtendedControls.ButtonExt();
-            del.Size = new Size(24, 24);
-            del.Location = new Point(ins.Location.X + ins.Width + 8, panelmargin);
+            del.Size = new Size(controlsize, controlsize);
+            del.Location = new Point(ins.Right + 8, panelheightmargin);
             del.Text = "X";
             del.Click += Del_Clicked;
-            p.Controls.Add(del);
+            g.panel.Controls.Add(del);
 
-            ExtendedControls.ButtonExt up = new ExtendedControls.ButtonExt();
-            up.Location = new Point(del.Location.X + del.Width + 8, panelmargin);
-            up.Size = new Size(24, 24);
-            up.Text = "^";
-            up.Click += Up_Clicked;
-            p.Controls.Add(up);
+            g.up = new ExtendedControls.ButtonExt();
+            g.up.Location = new Point(del.Right + 8, panelheightmargin);
+            g.up.Size = new Size(controlsize, controlsize);
+            g.up.Text = "^";
+            g.up.Click += Up_Clicked;
+            g.panel.Controls.Add(g.up);
 
-            Group g = new Group()
-            {
-                panel = p,
-                stepname = stepname,
-                programstep = step,
-                config = acconfig,
-                value = value,
-                up = up,
-                left = left,
-                right = right,
-                levelup = (step != null) ? step.LevelUp : 0
-            };
-
-
-            del.Tag = acconfig.Tag = stepname.Tag = up.Tag = ins.Tag = value.Tag = left.Tag = right.Tag = g;
+            del.Tag = g.config.Tag = g.stepname.Tag = g.up.Tag = ins.Tag = g.value.Tag = g.left.Tag = g.right.Tag = g;
 
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
-            panelVScroll.Controls.Add(p);
+            panelVScroll.Controls.Add(g.panel);
 
             if (insertpos == -1)
                 groups.Add(g);
@@ -206,13 +210,11 @@ namespace EDDiscovery.Actions
         {
             string errlist = "";
 
-            int voff = panelmargin;
+            int voff = panelheightmargin;
 
             int structlevel = 0;
             int[] structcount = new int[50];
             Action.ActionType[] structtype = new Action.ActionType[50];
-            //bool[] structif = new bool[50];
-            //bool[] structelse = new bool[50];
 
             bool first = true;
 
@@ -221,6 +223,8 @@ namespace EDDiscovery.Actions
             foreach( Group g in groups )
             {
                 g.left.Enabled = g.right.Enabled = false;
+
+                bool indo = structtype[structlevel] == Action.ActionType.Do;        // if in a DO..WHILE, and we are a WHILE, we don't indent.
 
                 if ( g.levelup > 0 )
                 {
@@ -268,7 +272,7 @@ namespace EDDiscovery.Actions
 
                         structcount[structlevel] = 0;   // restart count so we don't allow a left on next one..
                     }
-                    else if (g.programstep.Type == Action.ActionType.If || g.programstep.Type == Action.ActionType.While || 
+                    else if (g.programstep.Type == Action.ActionType.If || (g.programstep.Type == Action.ActionType.While && !indo) ||
                                 g.programstep.Type == Action.ActionType.Do || g.programstep.Type == Action.ActionType.Loop)
                     {
                         structlevel++;
@@ -281,9 +285,9 @@ namespace EDDiscovery.Actions
                     errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " not defined" + Environment.NewLine;
                 }
 
-                g.panel.Location = new Point(0, voff);
-                g.stepname.Location = new Point(panelmargin + 8 * displaylevel, panelmargin);
-                g.stepname.Size = new Size(140-Math.Max((displaylevel-4)*8,0), 24);
+                g.panel.Location = new Point(panelleftmargin, voff);
+                g.stepname.Location = new Point(panelleftmargin + 8 * displaylevel, panelheightmargin);
+                g.stepname.Size = new Size(140-Math.Max((displaylevel-4)*8,0), controlsize);
                 g.up.Visible = !first;
                 g.config.Visible = g.programstep != null && g.programstep.ConfigurationMenuInUse;
 
@@ -296,10 +300,11 @@ namespace EDDiscovery.Actions
                 }
 
                 first = false;
-                voff += g.panel.Height + 4;
+                voff += g.panel.Height;
             }
 
-            buttonMore.Location = new Point(panelmargin, voff);
+            buttonMore.Location = new Point(panelleftmargin, voff);
+            buttonMore.Size = new Size(controlsize, controlsize);
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;
@@ -326,7 +331,7 @@ namespace EDDiscovery.Actions
                 {
                     Action a = Action.CreateAction(b.Text);
 
-                    if (!a.ConfigurationMenuInUse || a.ConfigurationMenu(this, theme, variables))
+                    if (!a.ConfigurationMenuInUse || a.ConfigurationMenu(this, theme, currentvarlist))
                     {
                         g.programstep = a;
                         SetValue(g.value, a);
@@ -349,9 +354,17 @@ namespace EDDiscovery.Actions
 
             if (g.programstep != null)
             {
-                if (g.programstep.ConfigurationMenu(this, theme, variables))
+                if (g.programstep.ConfigurationMenu(this, theme, currentvarlist))
                     SetValue(g.value, g.programstep);
             }
+        }
+
+        private void Value_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.TextBoxBorder b = sender as ExtendedControls.TextBoxBorder;
+            Group g = (Group)b.Tag;
+            if (b.ReadOnly)
+                ActionConfig_Clicked(g.config, null);
         }
 
         private void Ins_Clicked(object sender, EventArgs e)
@@ -481,11 +494,14 @@ namespace EDDiscovery.Actions
         private void buttonVars_Click(object sender, EventArgs e)
         {
             ActionVariableForm avf = new ActionVariableForm();
-            avf.Init("Input variables to program on run", theme, inputparas);
+            avf.Init("Input Parameter variables to pass to program on run", theme, inputparas);
 
-            if ( avf.ShowDialog() == DialogResult.OK )
+            if ( avf.ShowDialog(this) == DialogResult.OK )
             {
                 inputparas = avf.result;
+
+                currentvarlist = new List<string>(startvarlist);
+                currentvarlist.AddRange(inputparas.Keys.ToList());
             }
         }
 

@@ -112,10 +112,14 @@ namespace EDDiscovery.Actions
     public class ActionProgramRun : ActionProgram
     {
         // used during execution.. filled in on program objects associated with an execution
+        public ActionFile actionfile;                       // what file it came from..
+        public ActionRun actionrun;                         // who is running it..
         public EDDiscoveryForm discoveryform;
-        public HistoryList historylist;                     // may ne 
-        public HistoryEntry historyentry;   
+        public HistoryList historylist;                     
+        public HistoryEntry historyentry;                   // may be null, if the execute uses this, check.
+        public Dictionary<string, string> startvars;        // the vars passed in at start (and used to pass to any callers)
         public Dictionary<string, string> currentvars;      // these may be freely modified, they are local to this APR
+        public ActionFunctions functions;                   // function handler
         public bool allowpause;
 
         private int nextstepnumber;     // the next step to execute, 0 based
@@ -128,18 +132,26 @@ namespace EDDiscovery.Actions
 
         private string errlist = null;
 
-        public ActionProgramRun(ActionProgram r, EDDiscoveryForm ed , HistoryList hl , HistoryEntry h,
+        public ActionProgramRun(ActionFile af, ActionProgram r, ActionRun runner , 
+                                EDDiscoveryForm ed , HistoryList hl , HistoryEntry h,
                                 Dictionary<string, string> gvars , bool allowp = false) : base(r.Name)      // make a copy of the program..
         {
+            actionfile = af;
+            actionrun = runner;
             discoveryform = ed;
             historyentry = h;
             historylist = hl;
+            functions = new ActionFunctions(ed, hl, h);
             allowpause = allowp;
             execlevel = 0;
             execstate[execlevel] = ExecState.On;
             nextstepnumber = 0;
 
-            currentvars = new Dictionary<string,string>(gvars); // copy of.. we can modify to hearts content
+            System.Diagnostics.Debug.WriteLine("Run " + actionfile.name + "::" + r.Name );
+            ActionData.DumpVars(gvars, " Func Var:");
+
+            startvars = new Dictionary<string, string>(gvars); // keep this, used by call to pass clean set to called program without locals
+            currentvars = new Dictionary<string, string>(startvars); // copy of.. we can modify to hearts content
 
             List<Action> psteps = new List<Action>();
             Action ac;
@@ -159,7 +171,7 @@ namespace EDDiscovery.Actions
                 return null;
         }
 
-        public string Location { get { return Name + " Step " + nextstepnumber; } }
+        public string Location { get { return actionfile.name + "::" + Name + " Step " + nextstepnumber; } }
 
         public int ExecLevel { get { return execlevel; } }
 
@@ -268,6 +280,12 @@ namespace EDDiscovery.Actions
             }
 
             return false;
+        }
+
+        public void ResumeAfterPause()          // used when async..
+        {
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Resume code " + this.name);
+            actionrun.ResumeAfterPause();
         }
 
         #endregion

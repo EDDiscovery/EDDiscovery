@@ -20,6 +20,9 @@ namespace EDDiscovery
             EqualsCaseSensitive,             // ==
             NotEqualCaseSensitive,           // !=
 
+            IsTrue,             // numeric !=0
+            IsFalse,            // numeric == 0
+
             NumericEquals,      // numeric =
             NumericNotEquals,   // numeric !=
             NumericGreater,            // numeric >
@@ -32,10 +35,12 @@ namespace EDDiscovery
 
             IsPresent,          // field is present
             IsNotPresent,       // field is not present
+
+            AlwaysTrue,       // Always true
         };
 
-        static public bool IsDateComparision(MatchType mt) { return mt == MatchType.DateAfter || mt == MatchType.DateBefore; }
-        static public bool IsNumberComparision(MatchType mt) { return mt >= MatchType.NumericEquals && mt <= MatchType.NumericLessThanEqual; }
+        public static bool IsNullOperation(string matchname) { return matchname.Contains("Always"); }
+        public static bool IsUnaryOperation(string matchname) { return matchname.Contains("Present") || matchname.Contains("Is True") || matchname.Contains("Is False"); }
 
         static public string[] MatchNames = { "Contains",
                                        "Not Contains",
@@ -45,6 +50,8 @@ namespace EDDiscovery
                                        "Not Contains(CS)",
                                        "== (CS)",
                                        "!= (CS)",
+                                       "Is True (Int)",
+                                       "Is False (Int)",
                                        "== (Num)",
                                        "!= (Num)",
                                        "> (Num)",
@@ -54,7 +61,8 @@ namespace EDDiscovery
                                        ">= (Date)",
                                        "< (Date)",
                                        "Is Present",
-                                       "Not Present"
+                                       "Not Present",
+                                       "Always True"
                                     };
 
         public enum LogicalCondition
@@ -68,11 +76,8 @@ namespace EDDiscovery
         public class ConditionEntry
         {
             public string itemname;
-            public string contentmatch;                     // always set
+            public string matchstring;                     // always set
             public MatchType matchtype;                     // true: Contents match for true, else contents dont match for true
-
-            public double contentvalue;                     // internal speed only
-            public DateTime contentdate;                    // internal speed only
 
             public bool Create(string i, string ms, string v)     // ms can have spaces inserted into enum
             {
@@ -87,14 +92,9 @@ namespace EDDiscovery
                     else
                         matchtype = (MatchType)Enum.Parse(typeof(MatchType), ms.Replace(" ", ""));       // must work, exception otherwise
 
-                    contentmatch = v;
+                    matchstring = v;
 
-                    if (matchtype.ToString().Contains("Date"))      // if Date..
-                        return DateTime.TryParse(contentmatch, out contentdate);
-                    if (!matchtype.ToString().Contains("Numeric"))      // if not Numeric, its a string, okay
-                        return true;
-                    else if (double.TryParse(v, out contentvalue))     // else check it evals a number
-                        return true;
+                    return true;
                 }
                 catch { }
 
@@ -134,11 +134,12 @@ namespace EDDiscovery
                 fields.Add(f);
             }
 
-            public void FillValuesNeeded(ref Dictionary<string, string> vr)
+            public void IndicateValuesNeeded(ref Dictionary<string, string> vr)
             {
                 foreach (ConditionEntry fd in fields)
                 {
-                    vr[fd.itemname] = null;
+                    if ( !IsNullOperation(fd.matchtype.ToString()) && !fd.itemname.Contains("%"))     // nulls need no data..  nor does anything with expand in
+                        vr[fd.itemname] = null;
                 }
             }
         }
@@ -161,28 +162,38 @@ namespace EDDiscovery
 
         public int Count { get { return conditionlist.Count; } }
 
-        public bool? Check(string eventname, Dictionary<string, string> values, List<Condition> passed) // check conditions matching eventname
+        public enum ExpandResult { Failed, NoExpansion, Expansion };
+        public delegate ExpandResult ExpandString(string input, Dictionary<string, string> vars, out string result);    // callback, if we want to expand the content string
+
+        //errlist = null if no errors found
+
+        public List<Condition> GetConditionListByEventName( string eventname )       // Event name.. give me conditions which match that name or ALL
         {
             List<Condition> fel = (from fil in conditionlist
-                                   where (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase))
+                                   where
+                      (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase))
                                    select fil).ToList();
 
-            if (fel.Count == 0)            // no filters match, null
-                return null;
-
-            return Check(fel, values, passed);
+            return (fel.Count == 0) ? null : fel;
         }
 
-        public bool? Check(Dictionary<string, string> values, List<Condition> passed)            // Check all conditions..
+        // check all conditions against these values.
+        public bool? CheckAll(Dictionary<string, string> values, out string errlist , List<Condition> passed = null , ExpandString se = null )            // Check all conditions..
         {
             if (conditionlist.Count == 0)            // no filters match, null
+            {
+                errlist = null;
                 return null;
+            }
 
-            return Check(conditionlist, values, passed);
+            return CheckConditions(conditionlist, values, out errlist, passed, se);
         }
 
-        public bool? Check(List<Condition> fel, Dictionary<string, string> values, List<Condition> passed)            // null nothing trigged, false/true otherwise. 
+        public bool? CheckConditions(List<Condition> fel, Dictionary<string, string> values, out string errlist, List<Condition> passed = null,
+                                        ExpandString se = null)            // null nothing trigged, false/true otherwise. 
         {
+            errlist = null;
+
             bool? outerres = null;
 
             foreach (Condition fe in fel)        // find all values needed
@@ -191,85 +202,165 @@ namespace EDDiscovery
 
                 foreach (ConditionEntry f in fe.fields)
                 {
-                    bool ispresent = values.ContainsKey(f.itemname);
-                    string value = (ispresent) ? values[f.itemname] : null;
-
                     bool matched = false;
-                    double num = 0;
 
-                    if (f.matchtype == MatchType.IsPresent)
+                    if (f.matchtype == MatchType.IsPresent)         // these use f.itemname without any expansion
                     {
-                        if (value != null)
+                        if (values.ContainsKey(f.itemname))
                             matched = true;
                     }
                     else if (f.matchtype == MatchType.IsNotPresent)
                     {
-                        if (value == null)
+                        if (!values.ContainsKey(f.itemname))
                             matched = true;
                     }
-                    else if (value == null)      // if item name not found
+                    else if (f.matchtype == MatchType.AlwaysTrue)
                     {
-                        innerres = false;
-                        break;                       // stop the loop, its a false
-                    }
-                    else if (f.matchtype == MatchType.DateBefore)
-                    {
-                        DateTime tme;
-                        if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tme))
-                        {
-                            matched = tme.CompareTo(f.contentdate) < 0;
-                        }
-                    }
-                    else if (f.matchtype == MatchType.DateAfter)
-                    {
-                        DateTime tme;
-                        if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tme))
-                        {
-                            matched = tme.CompareTo(f.contentdate) >= 0;
-                        }
+                        matched = true;         // does not matter what the item or value contains
                     }
                     else
                     {
-                        if (f.matchtype == MatchType.Equals)
-                            matched = value.Equals(f.contentmatch, StringComparison.InvariantCultureIgnoreCase);
-                        if (f.matchtype == MatchType.EqualsCaseSensitive)
-                            matched = value.Equals(f.contentmatch);
+                        string leftside = null;
+                        ExpandResult er = ExpandResult.NoExpansion;
+
+                        if (se != null)     // if we have a string expander, try the left side
+                        {
+                            er = se(f.itemname, values, out leftside);
+
+                            if (er == ExpandResult.Failed)        // stop on error
+                            {
+                                errlist += leftside;     // add on errors..
+                                innerres = false;   // stop loop, false
+                                break;
+                            }
+                        }
+
+                        if (er == ExpandResult.NoExpansion)     // no expansion, must be a variable name
+                        {
+                            leftside = values.ContainsKey(f.itemname) ? values[f.itemname] : null;
+                            if (leftside == null)
+                            {
+                                errlist += "Item " + f.itemname + " is not available" + Environment.NewLine;
+                                innerres = false;
+                                break;                       // stop the loop, its a false
+                            }
+                        }
+
+                        string rightside;
+
+                        if (se != null)         // if we have a string expander, pass it thru
+                        {
+                            er = se(f.matchstring, values, out rightside);
+
+                            if (er == ExpandResult.Failed )        //  if error, abort
+                            {
+                                errlist += rightside;     // add on errors..
+                                innerres = false;   // stop loop, false
+                                break;
+                            }
+                        }
+                        else
+                            rightside = f.matchstring;
+
+                        if (f.matchtype == MatchType.DateBefore || f.matchtype == MatchType.DateAfter)
+                        {
+                            DateTime tmevalue, tmecontent;
+                            if (!DateTime.TryParse(leftside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmevalue) )
+                            {
+                                errlist += "Date time not in correct format on left side" + Environment.NewLine;
+                                innerres = false;
+                                break;
+
+                            }
+                            else if ( !DateTime.TryParse(rightside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmecontent))
+                            {
+                                errlist += "Date time not in correct format on right side" + Environment.NewLine;
+                                innerres = false;
+                                break;
+                            }
+                            else
+                            {
+                                if (f.matchtype == MatchType.DateBefore)
+                                    matched = tmevalue.CompareTo(tmecontent) < 0;
+                                else
+                                    matched = tmevalue.CompareTo(tmecontent) >= 0;
+                            }
+                        }
+                        else if (f.matchtype == MatchType.Equals)
+                            matched = leftside.Equals(rightside, StringComparison.InvariantCultureIgnoreCase);
+                        else if (f.matchtype == MatchType.EqualsCaseSensitive)
+                            matched = leftside.Equals(rightside);
 
                         else if (f.matchtype == MatchType.NotEqual)
-                            matched = !value.Equals(f.contentmatch, StringComparison.InvariantCultureIgnoreCase);
+                            matched = !leftside.Equals(rightside, StringComparison.InvariantCultureIgnoreCase);
                         else if (f.matchtype == MatchType.NotEqualCaseSensitive)
-                            matched = !value.Equals(f.contentmatch);
+                            matched = !leftside.Equals(rightside);
 
                         else if (f.matchtype == MatchType.Contains)
-                            matched = value.IndexOf(f.contentmatch, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                            matched = leftside.IndexOf(rightside, StringComparison.InvariantCultureIgnoreCase) >= 0;
                         else if (f.matchtype == MatchType.ContainsCaseSensitive)
-                            matched = value.Contains(f.contentmatch);
+                            matched = leftside.Contains(rightside);
 
                         else if (f.matchtype == MatchType.DoesNotContain)
-                            matched = value.IndexOf(f.contentmatch, StringComparison.InvariantCultureIgnoreCase) < 0;
+                            matched = leftside.IndexOf(rightside, StringComparison.InvariantCultureIgnoreCase) < 0;
                         else if (f.matchtype == MatchType.DoesNotContainCaseSensitive)
-                            matched = !value.Contains(f.contentmatch);
+                            matched = !leftside.Contains(rightside);
 
-                        else if (f.matchtype == MatchType.NumericEquals)
-                            matched = double.TryParse(value, out num) && Math.Abs(num - f.contentvalue) < 0.0000000001;  // allow for rounding
+                        else if (f.matchtype == MatchType.IsTrue || f.matchtype == MatchType.IsFalse)
+                        {
+                            int inum = 0;
 
-                        else if (f.matchtype == MatchType.NumericNotEquals)
-                            matched = double.TryParse(value, out num) && Math.Abs(num - f.contentvalue) >= 0.0000000001;
+                            if (int.TryParse(leftside, out inum))
+                                matched = (f.matchtype == MatchType.IsTrue) ? (inum != 0) : (inum == 0);
+                            else
+                            {
+                                errlist += "True/False value is not an integer on left side" + Environment.NewLine;
+                                innerres = false;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            double fnum = 0, num = 0;
 
-                        else if (f.matchtype == MatchType.NumericGreater)
-                            matched = double.TryParse(value, out num) && num > f.contentvalue;
+                            if (!double.TryParse(leftside, out num))
+                            {
+                                errlist += "Number not in correct format on left side" + Environment.NewLine;
+                                innerres = false;
+                                break;
+                            }
+                            else if (!double.TryParse(rightside, out fnum) )
+                            {
+                                errlist += "Number not in correct format on right side" + Environment.NewLine;
+                                innerres = false;
+                                break;
+                            }
+                            else
+                            {
+                                if (f.matchtype == MatchType.NumericEquals)
+                                    matched = Math.Abs(num - fnum) < 0.0000000001;  // allow for rounding
 
-                        else if (f.matchtype == MatchType.NumericGreaterEqual)
-                            matched = double.TryParse(value, out num) && num >= f.contentvalue;
+                                else if (f.matchtype == MatchType.NumericNotEquals)
+                                    matched = Math.Abs(num - fnum) >= 0.0000000001;
 
-                        else if (f.matchtype == MatchType.NumericLessThan)
-                            matched = double.TryParse(value, out num) && num < f.contentvalue;
+                                else if (f.matchtype == MatchType.NumericGreater)
+                                    matched = num > fnum;
 
-                        else if (f.matchtype == MatchType.NumericLessThanEqual)
-                            matched = double.TryParse(value, out num) && num <= f.contentvalue;
+                                else if (f.matchtype == MatchType.NumericGreaterEqual)
+                                    matched = num >= fnum;
 
-                        //  System.Diagnostics.Debug.WriteLine(fe.eventname + ":Compare " + f.matchtype + " '" + f.contentmatch + "' with '" + vr.value + "' res " + matched + " IC " + fe.innercondition);
+                                else if (f.matchtype == MatchType.NumericLessThan)
+                                    matched = num < fnum;
+
+                                else if (f.matchtype == MatchType.NumericLessThanEqual)
+                                    matched = num <= fnum;
+                                else
+                                    System.Diagnostics.Debug.Assert(false);
+                            }
+                        }
                     }
+
+                    //  System.Diagnostics.Debug.WriteLine(fe.eventname + ":Compare " + f.matchtype + " '" + f.contentmatch + "' with '" + vr.value + "' res " + matched + " IC " + fe.innercondition);
 
                     if (fe.innercondition == LogicalCondition.And)       // Short cut, if AND, all must pass, and it did not
                     {
@@ -361,7 +452,7 @@ namespace EDDiscovery
                 {
                     JObject j2 = new JObject();
                     j2["Item"] = fd.itemname;
-                    j2["Content"] = fd.contentmatch;
+                    j2["Content"] = fd.matchstring;
                     j2["Matchtype"] = fd.matchtype.ToString();
                     jfields.Add(j2);
                 }
@@ -395,7 +486,7 @@ namespace EDDiscovery
                     if (i > 0)
                         ret += " " + f.innercondition.ToString() + " ";
 
-                    ret += f.fields[i].itemname + " " + MatchNames[(int)f.fields[i].matchtype] + " " + f.fields[i].contentmatch;
+                    ret += f.fields[i].itemname + " " + MatchNames[(int)f.fields[i].matchtype] + " " + f.fields[i].matchstring;
                 }
 
                 if (f.fields.Count > 1)
@@ -445,17 +536,11 @@ namespace EDDiscovery
                         string item = (string)j2["Item"];
                         string content = (string)j2["Content"];
                         string matchtype = (string)j2["Matchtype"];
-                        double cdouble = 0;
-                        double.TryParse(content, out cdouble);
-                        DateTime dt;
-                        DateTime.TryParse(content, out dt);
 
                         fieldlist.Add(new ConditionEntry()
                         {
                             itemname = item,
-                            contentmatch = content,
-                            contentvalue = cdouble,
-                            contentdate = dt,
+                            matchstring = content,
                             matchtype = (MatchType)Enum.Parse(typeof(MatchType), matchtype)
                         });
                     }
@@ -478,59 +563,53 @@ namespace EDDiscovery
             return false;
         }
 
-        #region JSON as the vars
+        #region JSON as the vars - used for the filter out system..
 
-        public bool? Check(string eventjson,        // JSON of the event 
+        private bool? CheckJSON(string eventjson,        // JSON of the event 
                             string eventname,       // Event name..
-                            Dictionary<string,string> othervars ,   // any other variables to present to the condition, in addition to the JSON variables
+                            Dictionary<string, string> othervars,   // any other variables to present to the condition, in addition to the JSON variables
+                            out string errlist,     // null if okay..
                             List<Condition> passed)            // null or conditions passed
         {
-            List<Condition> fel = (from fil in conditionlist
-                                   where
-                      (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase))
-                                   select fil).ToList();
+            errlist = null;
 
-            if (fel.Count == 0)            // no filters match, null
-                return null;
+            List<Condition> fel = GetConditionListByEventName(eventname);
 
-            Dictionary<string, string> valuesneeded = new Dictionary<string, string>();
-
-            foreach (Condition fe in fel)        // find all values needed
-                fe.FillValuesNeeded(ref valuesneeded);
-
-            foreach (KeyValuePair<string, string> v in othervars)       // store other vars to values needed
-                valuesneeded[v.Key] = v.Value;
-
-            try
+            if ( fel != null )
             {
-                JObject jo = JObject.Parse(eventjson);  // Create a clone
+                Dictionary<string, string> valuesneeded = new Dictionary<string, string>();
 
-                int togo = valuesneeded.Count;
+                foreach (Condition fe in fel)        // find all values needed
+                    fe.IndicateValuesNeeded(ref valuesneeded);
 
-                foreach (JToken jc in jo.Children())
+                try
                 {
-                    ExpandTokens(jc, valuesneeded, ref togo);
-                    if (togo == 0)
-                        break;
+                    JSONHelper.GetJSONFieldValues(eventjson, valuesneeded);
+
+                    foreach (KeyValuePair<string, string> v in othervars)       // store other vars to values needed
+                        valuesneeded[v.Key] = v.Value;
+
+                    return CheckConditions(fel, valuesneeded, out errlist, passed);    // and check, passing in the values collected against the conditions to test.
                 }
+                catch (Exception)
+                {
+                    errlist = "JSON failed to parse!";
+                }
+            }
 
-                return Check(fel, valuesneeded, passed);    // and check, passing in the values collected against the conditions to test.
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return null;
         }
-
-        public bool CheckFilterTrueOut(string json, string eventname, Dictionary<string, string> othervars,  List<Condition> passed)      // if none, true, if false, true.. 
+    
+        private bool CheckFilterTrueOut(string json, string eventname, Dictionary<string, string> othervars,  out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
         {                                                                                         // only if the filter passes do we get a false..
-            bool? v = Check(json, eventname, othervars, passed);
+            bool? v = CheckJSON(json, eventname, othervars, out errlist, passed);
             return !v.HasValue || v.Value == false;
         }
 
         public bool FilterHistory(HistoryEntry he, Dictionary<string, string> othervars)                // true if it should be included
         {
-            return CheckFilterTrueOut(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, othervars, null);     // true it should be included
+            string er;
+            return CheckFilterTrueOut(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, othervars, out er, null);     // true it should be included
         }
 
         public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, Dictionary<string, string> othervars , out int count)    // filter in all entries
@@ -540,7 +619,8 @@ namespace EDDiscovery
                 return he;
             else
             {
-                List<HistoryEntry> ret = (from s in he where CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, othervars, null) select s).ToList();
+                string er;
+                List<HistoryEntry> ret = (from s in he where CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, othervars, out er, null) select s).ToList();
 
                 count = he.Count - ret.Count;
                 return ret;
@@ -565,9 +645,11 @@ namespace EDDiscovery
                     if (mrk >= 0)
                         s.EventDescription = s.EventDescription.Substring(mrk + 3);
 
-                    if (!CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, othervars, list))
+                    string er;
+
+                    if (!CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, othervars, out er, list))
                     {
-                        System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
+                        //System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
                         s.EventDescription = "!" + list[0].eventname + ":::" + s.EventDescription;
                         count++;
                     }
@@ -576,37 +658,6 @@ namespace EDDiscovery
                 }
 
                 return ret;
-            }
-        }
-
-        private void ExpandTokens(JToken jt, Dictionary<string, string> valuesneeded, ref int togo)
-        {
-            JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
-
-            if (jt.HasValues && togo > 0)
-            {
-                foreach (JToken jc in jt.Children())
-                {
-                    if (jc.HasValues)
-                    {
-                        ExpandTokens(jc, valuesneeded, ref togo);
-                    }
-                    else
-                    {
-                        string name = jc.Path;
-
-                        if (valuesneeded.ContainsKey(name) && Array.FindIndex(decodeable, x => x == jc.Type) != -1)
-                        {
-                            valuesneeded[name] = jc.Value<string>();
-                            togo--;
-
-                            // System.Diagnostics.Debug.WriteLine("Found "+ name);
-                        }
-                    }
-
-                    if (togo == 0)  // if we have all values, stop
-                        break;
-                }
             }
         }
 

@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class Action
     {
-        public enum ActionType { Cmd, If, Else, ElseIf, Do, While, Loop };
+        public enum ActionType { Cmd, If, Else, ElseIf, Do, While, Loop , Call };
 
         private string actionname;
         private ActionType actiontype;
@@ -49,7 +49,7 @@ namespace EDDiscovery.Actions
                     actionflags.RemoveAt(pos);
             }
         }
-        public string GetFlagAuxData( string flag )
+        public string GetFlagAuxData( string flag , string def = null )
         {
             int pos = actionflags.FindIndex(x => x.StartsWith(flag));
             if (pos >= 0)
@@ -59,13 +59,14 @@ namespace EDDiscovery.Actions
                 if ( colon >= 0)
                     return actionflags[pos].Substring(colon+1);
             }
-            return null;
+            return def;
         }
 
         public string GetFlagList()
         {
             return string.Join("-", actionflags);
         }
+
 
         public virtual string DisplayedUserData { get { return userdata; } }        // what to display, null if you don't want to.
         public virtual bool AllowDirectEditingOfUserData { get { return false; } }    // and allow editing?
@@ -82,7 +83,7 @@ namespace EDDiscovery.Actions
             return false;
         }
 
-        public struct Commands
+       private struct Commands
         {
             public Commands(string s, Type t , ActionType a) { name = s;  type = t; at = a; }
             public string name;
@@ -90,7 +91,7 @@ namespace EDDiscovery.Actions
             public ActionType at;
         }
 
-        static public Commands[] cmdlist = new Commands[]
+        static private Commands[] cmdlist = new Commands[]
         {
             new Commands("Say", typeof(ActionSay), ActionType.Cmd ),
             new Commands("Play", typeof(ActionPlay) , ActionType.Cmd),
@@ -103,7 +104,10 @@ namespace EDDiscovery.Actions
             new Commands("Else If", typeof(ActionElseIf) , ActionType.ElseIf),
             new Commands("While", typeof(ActionWhile) , ActionType.While),
             new Commands("Do", typeof(ActionDo) , ActionType.Do),
-            new Commands("Loop", typeof(ActionLoop) , ActionType.Loop)
+            new Commands("Loop", typeof(ActionLoop) , ActionType.Loop),
+            new Commands("Call", typeof(ActionCall) , ActionType.Call),
+            new Commands("Pragma", typeof(ActionPragma) , ActionType.Cmd),
+            new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd)
         };
 
         public static string[] GetActionNameList()
@@ -172,6 +176,8 @@ namespace EDDiscovery.Actions
                 prompt.Controls.Add(cancel);
                 prompt.Controls.Add(textLabel);
                 prompt.AcceptButton = confirmation;
+                prompt.CancelButton = cancel;
+                prompt.ShowInTaskbar = false;
 
                 return prompt.ShowDialog(p) == DialogResult.OK ? textBox.Text : null;
             }
@@ -209,6 +215,8 @@ namespace EDDiscovery.Actions
                 prompt.Controls.Add(confirmation);
                 prompt.Controls.Add(cancel);
                 prompt.AcceptButton = confirmation;
+                prompt.CancelButton = cancel;
+                prompt.ShowInTaskbar = false;
 
                 return prompt.ShowDialog(p) == DialogResult.OK ? new Tuple<string,string>(textBox1.Text,textBox2.Text) : null;
             }

@@ -28,8 +28,15 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            ap.discoveryform.LogLine(UserData);
-            System.Diagnostics.Debug.WriteLine(UserData);
+            string res;
+            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            {
+                ap.discoveryform.LogLine(res);
+                System.Diagnostics.Debug.WriteLine("PRINT " + res);
+            }
+            else
+                ap.ReportError(res);
+
             return true;
         }
 

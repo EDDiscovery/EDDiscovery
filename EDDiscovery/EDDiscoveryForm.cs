@@ -94,10 +94,12 @@ namespace EDDiscovery
 
         public GalacticMapping galacticMapping;
 
-        private ConditionLists actionfieldfilter;
-        private Actions.ActionProgramList actionprogramlist;
+        public Actions.ActionFileList actionfiles;
+
         public Actions.ActionRun actionrunasync;
-        public Dictionary<string, string> standardvariables = new Dictionary<string, string>();
+        private Dictionary<string, string> internalglobalvariables;         // this is the main list, includes user global variables..
+        private Dictionary<string, string> usercontrolledglobalvariables;     // user specific ones.  fed back into global on change
+        public Dictionary<string, string> standardvariables;               // combo of above.
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
@@ -418,6 +420,13 @@ namespace EDDiscovery
         {
             try
             {
+                List<string> flags;
+                Actions.ActionData.DecodeActionData(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), out flags, out usercontrolledglobalvariables);
+                internalglobalvariables = new Dictionary<string, string>();
+                standardvariables = new Dictionary<string, string>(internalglobalvariables);
+                foreach (KeyValuePair<string, string> v in usercontrolledglobalvariables)
+                    standardvariables[v.Key] = v.Value;
+
                 if (!(SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized))
                 {
                     splashform = new SplashForm();
@@ -439,19 +448,11 @@ namespace EDDiscovery
                     button_test.Visible = true;
                 }
 
-                actionfieldfilter = new ConditionLists();
+                actionfiles = new Actions.ActionFileList();
+                actionfiles.LoadAllActionFiles();
 
-                string filter = SQLiteDBClass.GetSettingString("ActionFilter", "");
-                if (filter.Length > 0)
-                    actionfieldfilter.FromJSON(filter);        // load filter
+                actionrunasync = new Actions.ActionRun(this,actionfiles,true);        // this is the guy who runs programs asynchronously
 
-                actionprogramlist = new Actions.ActionProgramList();
-
-                string programs = SQLiteDBClass.GetSettingString("ActionPrograms", "");
-                if (programs.Length > 0)
-                    actionprogramlist.FromJSON(programs);
-
-                actionrunasync = new Actions.ActionRun(this,actionprogramlist,true);        // this is the guy who runs programs asynchronously
             }
             catch (Exception ex)
             {
@@ -1363,6 +1364,7 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
+            ActionRunOnEvent("onStartup");
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1904,7 +1906,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    standardvariables["Commander"] = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
+                    standardvariables["Commander"] = internalglobalvariables["Commander"] = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
 
                     travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
                     exportControl1.PopulateCommanders();
@@ -2075,56 +2077,66 @@ namespace EDDiscovery
 
             List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
             events.Add("All");
-            events.Add("RefreshStart");
-            events.Add("RefreshEnd");
+            events.Add("onRefreshStart");
+            events.Add("onRefreshEnd");
+            events.Add("onStartup");
+            events.Add("onClosedown");
 
-            frm.Init("Actions: Define actions", events, standardvariables.Keys.ToList(), actionprogramlist, false, theme, actionfieldfilter );
+            frm.InitAction("Actions: Define actions", events, internalglobalvariables.Keys.ToList(), usercontrolledglobalvariables, actionfiles, theme);
             frm.TopMost = this.FindForm().TopMost;
-            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
-            {
-                actionfieldfilter = frm.result;
-                SQLiteDBClass.PutSettingString("ActionFilter", actionfieldfilter.GetJSON());
-                SQLiteDBClass.PutSettingString("ActionPrograms", actionprogramlist.GetJSON());
-            }
+
+            frm.ShowDialog(this.FindForm()); // don't care about the result, the form does all the saving
+
+            usercontrolledglobalvariables = frm.userglobalvariables;
+            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", Actions.ActionData.EncodeActionData(null, usercontrolledglobalvariables));
+
+            standardvariables = new Dictionary<string, string>(internalglobalvariables);
+            foreach (KeyValuePair<string, string> v in usercontrolledglobalvariables)
+                standardvariables[v.Key] = v.Value;
         }
 
         public void ActionRunOnEntry(HistoryEntry he)
         {
-            List<ConditionLists.Condition> passed = new List<ConditionLists.Condition>();
-            actionfieldfilter.Check(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, standardvariables, passed);
+            Dictionary<string, string> testvars = new Dictionary<string, string>(standardvariables);
+            Actions.ActionRun.StandardVars(he.journalEntry.EventTypeStr,testvars, he);
 
-            if (passed.Count > 0)
+            Actions.ActionFunctions functions = new Actions.ActionFunctions(this, history, he);                   // function handler
+
+            List<Actions.ActionFileList.MatchingSets> ale = new List<Actions.ActionFileList.MatchingSets>();
+            ale = actionfiles.GetActions(he.journalEntry.EventTypeStr, he.journalEntry.EventDataString, testvars , functions.ExpandString);
+
+            if ( ale != null )
             {
                 Dictionary<string, string> eventvars = new Dictionary<string, string>();
                 JSONHelper.GetJSONFieldNamesValues(he.journalEntry.EventDataString, eventvars);        // for all events, add to field list
 
-                foreach ( ConditionLists.Condition fe in passed)
-                {
-                    string prog = fe.action;
-                    string progdata = fe.actiondata;
-                    Dictionary<string, string> vars = new Dictionary<string, string>(standardvariables);
+                actionfiles.RunActions(ale, new List<Dictionary<string, string>>() { standardvariables, eventvars }, 
+                                                  he.journalEntry.EventTypeStr, actionrunasync, history, he);  // add programs to action run
 
-                    foreach (KeyValuePair<string, string> v in eventvars)
-                        vars[v.Key] = v.Value;
+                actionrunasync.Execute();       // will execute
+            }
+        }
 
-                    // TBD vars for this from progdata..
+        public void ActionRunOnEvent( string name, Dictionary<string,string> othervars = null )
+        {
+            Dictionary<string, string> testvars = new Dictionary<string, string>(standardvariables);
+            Actions.ActionRun.StandardVars(name, testvars, null);
 
-                    Actions.ActionProgram ap = actionprogramlist.Get(prog);
-                    
-                    if (ap != null)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Run " + prog + "(" + progdata + ") on " + he.journalEntry.EventTypeStr + " " + he.Journalid);
-                        actionrunasync.Add(ap, history, he , vars);
-                    }
-                    else
-                        LogLine("Action program " + prog + " not found for event " + he.journalEntry.EventTypeStr);
-                }
+            Actions.ActionFunctions functions = new Actions.ActionFunctions(this, history, null);                   // function handler
 
-                actionrunasync.Execute();       // will execute async if required..
+            List<Actions.ActionFileList.MatchingSets> ale = new List<Actions.ActionFileList.MatchingSets>();
+            ale = actionfiles.GetActions(name, null, testvars, functions.ExpandString);
+
+            if (ale != null)
+            {
+                actionfiles.RunActions(ale, new List<Dictionary<string, string>>() { standardvariables , othervars },
+                                                  name, actionrunasync, history, null);  // add programs to action run
+
+                actionrunasync.Execute();       // will execute
             }
         }
 
         #endregion
-    }
+        }
 }
 

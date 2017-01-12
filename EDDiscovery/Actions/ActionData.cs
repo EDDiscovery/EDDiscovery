@@ -42,34 +42,79 @@ namespace EDDiscovery.Actions
             return ad.ToString();
         }
 
+        // line may be null or empty, in which case you get false ..
         public static bool DecodeActionData(string line, out List<string> flags, out Dictionary<string, string> vars)
         {
             flags = new List<string>();
             vars = new Dictionary<string, string>();
 
-            try
+            if (line != null && line.Length > 0)
             {
-                JObject jo = (JObject)JObject.Parse(line);
-
-                JArray jf = (JArray)jo["Flags"];
-                JArray jd = (JArray)jo["Vars"];
-
-                foreach (JToken j in jf)
+                try
                 {
-                    flags.Add((string)j);
-                }
+                    JObject jo = (JObject)JObject.Parse(line);
 
-                foreach (JObject j in jd)
-                {
-                    vars[(string)j["Var"]] = (string)j["Value"];
-                }
+                    JArray jf = (JArray)jo["Flags"];
+                    JArray jd = (JArray)jo["Vars"];
 
-                return true;
+                    foreach (JToken j in jf)
+                    {
+                        flags.Add((string)j);
+                    }
+
+                    foreach (JObject j in jd)
+                    {
+                        vars[(string)j["Var"]] = (string)j["Value"];
+                    }
+
+                    return true;
+                }
+                catch
+                { }
             }
-            catch
-            { }
 
             return false;
         }
+
+        static public string ToString(Dictionary<string, string> vars)
+        {
+            string s = "";
+            foreach( KeyValuePair<string,string> v in vars)
+            {
+                if (s.Length > 0)
+                    s += ",";
+                s += v.Key + "=" + v.Value;
+            }
+
+            return s;
+        }
+
+        static public void AddVars(Dictionary<string, string> vars, List<Dictionary<string, string>> varlist)
+        {
+            foreach (Dictionary<string, string> d in varlist)
+            {
+                if (d != null)
+                {
+                    foreach (KeyValuePair<string, string> v in d)   // plus event vars
+                        vars[v.Key] = v.Value;
+                }
+            }
+        }
+
+        static public void AddVars(Dictionary<string, string> vars, Dictionary<string, string> d)
+        {
+            if (d != null)
+            {
+                foreach (KeyValuePair<string, string> v in d)   // plus event vars
+                    vars[v.Key] = v.Value;
+            }
+        }
+
+        static public void DumpVars(Dictionary<string, string> d, string prefix = "")
+        {
+            foreach (KeyValuePair<string, string> k in d)
+            { System.Diagnostics.Debug.WriteLine(prefix + k.Key + "=" + k.Value); }
+        }
+
     }
 }

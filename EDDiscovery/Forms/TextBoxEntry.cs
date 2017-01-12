@@ -15,6 +15,8 @@ namespace EDDiscovery2
         public TextBoxEntry()
         {
             InitializeComponent();
+            AcceptButton = buttonOK;
+            CancelButton = buttonCancel;
         }
 
         public string Value { get { return textBox.Text; } }
