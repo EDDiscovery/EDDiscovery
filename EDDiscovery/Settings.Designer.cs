@@ -74,13 +74,15 @@
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.checkBoxUseNotifyIcon = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxMinimizeToNotifyIcon = new ExtendedControls.CheckBoxCustom();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip
@@ -176,7 +178,7 @@
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 382);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 405);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 108);
             this.groupBoxTheme.TabIndex = 18;
@@ -403,6 +405,8 @@
             this.groupBox3.BackColorScaling = 0.5F;
             this.groupBox3.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox3.BorderColorScaling = 0.5F;
+            this.groupBox3.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
+            this.groupBox3.Controls.Add(this.checkBoxUseNotifyIcon);
             this.groupBox3.Controls.Add(this.checkBoxFocusNewSystem);
             this.groupBox3.Controls.Add(this.checkBoxUTC);
             this.groupBox3.Controls.Add(this.checkBoxOrderRowsInverted);
@@ -411,7 +415,7 @@
             this.groupBox3.FillClientAreaWithAlternateColor = false;
             this.groupBox3.Location = new System.Drawing.Point(3, 254);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 122);
+            this.groupBox3.Size = new System.Drawing.Size(426, 145);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
@@ -725,6 +729,42 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Get an EDSM API key from https://www.edsm.net in \"My account\" menu";
             // 
+            // checkBoxUseNotifyIcon
+            // 
+            this.checkBoxUseNotifyIcon.AutoSize = true;
+            this.checkBoxUseNotifyIcon.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxUseNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxUseNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxUseNotifyIcon.FontNerfReduction = 0.5F;
+            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(17, 115);
+            this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
+            this.checkBoxUseNotifyIcon.Size = new System.Drawing.Size(154, 17);
+            this.checkBoxUseNotifyIcon.TabIndex = 5;
+            this.checkBoxUseNotifyIcon.Text = "Show notification area icon";
+            this.checkBoxUseNotifyIcon.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxUseNotifyIcon, "Show a system notification area (system tray) icon for EDDiscovery.");
+            this.checkBoxUseNotifyIcon.UseVisualStyleBackColor = true;
+            this.checkBoxUseNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxUseNotifyIcon_CheckedChanged);
+            // 
+            // checkBoxMinimizeToNotifyIcon
+            // 
+            this.checkBoxMinimizeToNotifyIcon.AutoSize = true;
+            this.checkBoxMinimizeToNotifyIcon.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxMinimizeToNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxMinimizeToNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxMinimizeToNotifyIcon.FontNerfReduction = 0.5F;
+            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(182, 115);
+            this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
+            this.checkBoxMinimizeToNotifyIcon.Size = new System.Drawing.Size(179, 17);
+            this.checkBoxMinimizeToNotifyIcon.TabIndex = 6;
+            this.checkBoxMinimizeToNotifyIcon.Text = "Minimize to notification area icon";
+            this.checkBoxMinimizeToNotifyIcon.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxMinimizeToNotifyIcon, "Minimize the main window to the system notification area (system tray) icon.");
+            this.checkBoxMinimizeToNotifyIcon.UseVisualStyleBackColor = true;
+            this.checkBoxMinimizeToNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxMinimizeToNotifyIcon_CheckedChanged);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -736,6 +776,7 @@
             this.Controls.Add(this.groupBox4);
             this.Name = "Settings";
             this.Size = new System.Drawing.Size(937, 725);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.groupBoxPopOuts.ResumeLayout(false);
             this.groupBoxPopOuts.PerformLayout();
             this.groupBoxTheme.ResumeLayout(false);
@@ -747,7 +788,6 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.dataViewScrollerPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -798,5 +838,7 @@
         private ExtendedControls.ButtonExt buttonSaveSetup;
         private ExtendedControls.CheckBoxCustom checkBoxAutoSave;
         private ExtendedControls.CheckBoxCustom checkBoxAutoLoad;
+        private ExtendedControls.CheckBoxCustom checkBoxMinimizeToNotifyIcon;
+        internal ExtendedControls.CheckBoxCustom checkBoxUseNotifyIcon;
     }
 }

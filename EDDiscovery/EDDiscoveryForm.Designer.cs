@@ -93,6 +93,13 @@
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon();
+            this.notifyIconContextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
+            this.notifyIconMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIconMenu_SyncEDDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIconMenu_SyncEDSM = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -105,6 +112,7 @@
             this.tabPageExport.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.notifyIconContextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -688,6 +696,60 @@
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Text = "Clear EDSM ID assigned to all records for current commander";
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.ContextMenuStrip = this.notifyIconContextMenuStrip1;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.notifyIcon1.Text = "EDDiscovery";
+            this.notifyIcon1.Visible = false;
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            // 
+            // notifyIconContextMenuStrip1
+            // 
+            this.notifyIconContextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.notifyIconMenu_Open,
+            this.notifyIconMenu_SyncEDDB,
+            this.notifyIconMenu_SyncEDSM,
+            this.notifyIconMenu_Hide,
+            this.notifyIconMenu_Exit});
+            this.notifyIconContextMenuStrip1.Name = "notifyIconContextMenuStrip1";
+            this.notifyIconContextMenuStrip1.Size = new System.Drawing.Size(160, 92);
+            // 
+            // notifyIconMenu_Exit
+            // 
+            this.notifyIconMenu_Exit.Name = "notifyIconMenu_Exit";
+            this.notifyIconMenu_Exit.Size = new System.Drawing.Size(159, 22);
+            this.notifyIconMenu_Exit.Text = "E&xit";
+            this.notifyIconMenu_Exit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // notifyIconMenu_Hide
+            // 
+            this.notifyIconMenu_Hide.Name = "notifyIconMenu_Hide";
+            this.notifyIconMenu_Hide.Size = new System.Drawing.Size(159, 22);
+            this.notifyIconMenu_Hide.Text = "&Hide Tray Icon";
+            this.notifyIconMenu_Hide.Click += new System.EventHandler(this.notifyIconMenu_Hide_Click);
+            // 
+            // notifyIconMenu_Open
+            // 
+            this.notifyIconMenu_Open.Name = "notifyIconMenu_Open";
+            this.notifyIconMenu_Open.Size = new System.Drawing.Size(159, 22);
+            this.notifyIconMenu_Open.Text = "&Open EDDiscovery";
+            this.notifyIconMenu_Open.Click += new System.EventHandler(this.notifyIconMenu_Open_Click);
+            // 
+            // notifyIconMenu_SyncEDDB
+            // 
+            this.notifyIconMenu_SyncEDDB.Name = "notifyIconMenu_SyncEDDB";
+            this.notifyIconMenu_SyncEDDB.Size = new System.Drawing.Size(159, 22);
+            this.notifyIconMenu_SyncEDDB.Text = "Sync with ED&DB";
+            this.notifyIconMenu_SyncEDDB.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
+            // 
+            // notifyIconMenu_SyncEDSM
+            // 
+            this.notifyIconMenu_SyncEDSM.Name = "notifyIconMenu_SyncEDSM";
+            this.notifyIconMenu_SyncEDSM.Size = new System.Drawing.Size(159, 22);
+            this.notifyIconMenu_SyncEDSM.Text = "Sync with ED&SM";
+            this.notifyIconMenu_SyncEDSM.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -711,6 +773,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.ResizeEnd += new System.EventHandler(this.EDDiscoveryForm_ResizeEnd);
+            this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.EDDiscoveryForm_Layout);
             this.menuStrip1.ResumeLayout(false);
@@ -729,6 +792,7 @@
             this.tabPageSettings.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.notifyIconContextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -797,5 +861,12 @@
         private System.Windows.Forms.ToolStripMenuItem showAllInTaskBarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem turnOffAllTransparencyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ContextMenuStrip notifyIconContextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Exit;
+        private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Hide;
+        private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Open;
+        private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_SyncEDDB;
+        private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_SyncEDSM;
     }
 }
