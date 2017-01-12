@@ -94,7 +94,7 @@ namespace EDDiscovery.Forms
                 double value = -1;
                 return (Double.TryParse(fsdLinearConstant.Text, out value) ? value : -1);
             }
-            set { fsdLinearConstant.Text = value.ToString("0.0"); }
+            set { fsdLinearConstant.Text = value.ToString("0.00"); }
         }
         public double UnladenMass
         {
@@ -103,7 +103,7 @@ namespace EDDiscovery.Forms
                 double value = -1;
                 return (Double.TryParse(unladenMass.Text, out value) ? value : -1);
             }
-            set { unladenMass.Text = "" + value.ToString("0.0"); }
+            set { unladenMass.Text = "" + value.ToString("0.00"); }
         }
         public double OptimalMass
         {
@@ -112,7 +112,7 @@ namespace EDDiscovery.Forms
                 double value = -1;
                 return (Double.TryParse(fsdOptimalMass.Text, out value) ? value : -1);
             }
-            set { fsdOptimalMass.Text = "" + value.ToString("0.0"); }
+            set { fsdOptimalMass.Text = "" + value.ToString("0.00"); }
         }
         public double PowerConstant
         {
@@ -140,7 +140,7 @@ namespace EDDiscovery.Forms
                 double value = -1;
                 return (Double.TryParse(currentCargo.Text, out value) ? value : -1);
             }
-            set { currentCargo.Text = "" + value.ToString("0"); }
+            set { currentCargo.Text = "" + value.ToString("0.00"); }
         }
 
         public double tankWarning
@@ -160,7 +160,7 @@ namespace EDDiscovery.Forms
                 double value = -1;
                 return (Double.TryParse(tankSize.Text, out value) ? value : -1);
             }
-            set { tankSize.Text = "" + value.ToString("0"); }
+            set { tankSize.Text = "" + value.ToString("0.00"); }
         }
         public double JumpRange
         {

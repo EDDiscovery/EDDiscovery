@@ -201,6 +201,7 @@ namespace EDDiscovery.UserControls
                     default:
                         break;
                 }
+                fuel = Math.Floor(fuel * 100.0) / 100.0;
                 if (tankSize == -1||tankWarning==-1)
                 {
                     botline = "Please set ships details";
@@ -215,6 +216,7 @@ namespace EDDiscovery.UserControls
                         botline += String.Format(" < {0}%", tankWarning.ToString("N1"));
                     }
                 }
+
                 if (currentCargo >= 0 && linearConstant > 0 && unladenMass > 0 && optimalMass > 0
                     && powerConstant > 0 && maxFuelPerJump > 0)
                 {
@@ -224,8 +226,12 @@ namespace EDDiscovery.UserControls
                         optimalMass, powerConstant,
                         maxFuelPerJump, out maxJumps);
                     double JumpRange = Math.Pow(maxFuelPerJump / (linearConstant * 0.001), 1 / powerConstant) * optimalMass / (currentCargo + unladenMass + fuel);
-                    botline += String.Format(" [{1:0.00}ly @ {0:N2}ly / {2:0}]", maxJumpDistance, JumpRange, maxJumps);
-                }
+                    botline += String.Format(" [{1:N2}ly @ {0:N2}ly / {2:N0}]",
+                         Math.Floor(maxJumpDistance  *100) / 100 ,
+                         Math.Floor(JumpRange * 100) / 100 ,
+                          Math.Floor(maxJumps * 100) / 100
+                        );
+                } 
                 pictureBox.AddTextAutoSize(new Point(botlineleft.pos.Right, 35), new Size(1000, 40), botline, displayfont, textcolour, backcolour, 1.0F);
                 pictureBox.Render();
             }
