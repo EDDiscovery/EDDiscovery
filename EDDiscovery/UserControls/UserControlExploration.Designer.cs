@@ -33,13 +33,10 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonImportRoute = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonShowOn3DMap = new System.Windows.Forms.ToolStripButton();
-            this.toolStripComboBoxRouteSelection = new ExtendedControls.ToolStripComboBoxCustom();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
             this.textBoxRouteName = new ExtendedControls.TextBoxBorder();
             this.labelRouteName = new System.Windows.Forms.Label();
@@ -71,13 +68,10 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
             this.toolStripButtonImportFile,
-            this.toolStripButtonImportRoute,
             this.toolStripButtonSave,
             this.toolStripButtonExport,
             this.toolStripButtonDelete,
-            this.toolStripSeparator1,
-            this.toolStripButtonShowOn3DMap,
-            this.toolStripComboBoxRouteSelection});
+            this.toolStripSeparator1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(787, 25);
@@ -101,16 +95,6 @@
             this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
             this.toolStripButtonImportFile.Text = "Import file";
             this.toolStripButtonImportFile.Click += new System.EventHandler(this.toolStripButtonImportFile_Click);
-            // 
-            // toolStripButtonImportRoute
-            // 
-            this.toolStripButtonImportRoute.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImportRoute.Image")));
-            this.toolStripButtonImportRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonImportRoute.Name = "toolStripButtonImportRoute";
-            this.toolStripButtonImportRoute.Size = new System.Drawing.Size(94, 22);
-            this.toolStripButtonImportRoute.Text = "Import route";
-            this.toolStripButtonImportRoute.ToolTipText = "Import from route tab";
-            this.toolStripButtonImportRoute.Click += new System.EventHandler(this.toolStripButtonImportRoute_Click);
             // 
             // toolStripButtonSave
             // 
@@ -344,9 +328,7 @@
         private System.Windows.Forms.Panel panelRouteInfo;
         private System.Windows.Forms.Label labelRouteName;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonShowOn3DMap;
         private ExtendedControls.TextBoxBorder textBoxRouteName;
-        private ExtendedControls.ToolStripComboBoxCustom toolStripComboBoxRouteSelection;
         private System.Windows.Forms.ContextMenuStrip contextMenuCopyPaste;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
@@ -354,7 +336,6 @@
         private System.Windows.Forms.ToolStripMenuItem deleteRowsToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonDelete;
         private System.Windows.Forms.ToolStripButton toolStripButtonImportFile;
-        private System.Windows.Forms.ToolStripButton toolStripButtonImportRoute;
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
         private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
