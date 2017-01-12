@@ -176,7 +176,7 @@ namespace EDDiscovery
             }
         }
 
-        private void UpdateRouteInfo(SavedRouteClass route)
+        private void UpdateExplorationInfo(ExplorationSetClass route)
         {
             route.Name = textBoxRouteName.Text.Trim();
             route.Systems.Clear();
@@ -202,8 +202,8 @@ namespace EDDiscovery
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            SavedRouteClass newroute = new SavedRouteClass();
-            UpdateRouteInfo(newroute);
+            ExplorationSetClass newroute = new ExplorationSetClass();
+            UpdateExplorationInfo(newroute);
 
             //if (!newroute.Equals(_currentRoute))
             //{
@@ -215,13 +215,11 @@ namespace EDDiscovery
             //    }
             //}
 
-            ClearRoute();
-            toolStripComboBoxRouteSelection.SelectedItem = null;
+            ClearExplorationSet();
         }
 
-        private void ClearRoute()
+        private void ClearExplorationSet()
         {
-            toolStripComboBoxRouteSelection.Text = "";
             _currentExplorationSet = new ExplorationSetClass { Name = "" };
             dataGridViewExplore.Rows.Clear();
         
@@ -484,14 +482,14 @@ namespace EDDiscovery
 
                 _savedExplorationSets.Remove(_currentExplorationSet);
                 UpdateComboBox();
-                ClearRoute();
+                ClearExplorationSet();
             }
         }
         
         private void toolStripButtonImportFile_Click(object sender, EventArgs e)
         {
-            SavedRouteClass newroute = new SavedRouteClass();
-            UpdateRouteInfo(newroute);
+            ExplorationSetClass newroute = new ExplorationSetClass();
+            UpdateExplorationInfo(newroute);
             if (!newroute.Equals(_currentExplorationSet))
             {
                 var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
@@ -500,12 +498,12 @@ namespace EDDiscovery
                     return;
             }
 
-            ClearRoute();
-            toolStripComboBoxRouteSelection.SelectedItem = null;
+            ClearExplorationSet();
+
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Text Files|*.txt";
-            ofd.Title = "Select a route file";
+            ofd.Title = "Select a exploration set file";
 
             if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 return;
@@ -544,7 +542,7 @@ namespace EDDiscovery
             {
                 MessageBox.Show(_discoveryForm,
                 String.Format("There are no known system names in the file import", countbad),
-                "Unsaved route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -552,7 +550,7 @@ namespace EDDiscovery
             {
                 var result = MessageBox.Show(_discoveryForm,
                     String.Format("There are {0} unknown system names do you wish to conitune with the good ones", countbad),
-                    "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                    "Unsaved", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (result == DialogResult.No)
                     return;
             }
@@ -563,34 +561,7 @@ namespace EDDiscovery
             UpdateSystemRows();
         }
 
-        private void toolStripButtonImportRoute_Click(object sender, EventArgs e)
-        {
-            if (_discoveryForm.RouteControl.RouteSystems == null
-                || _discoveryForm.RouteControl.RouteSystems.Count == 0)
-            {
-                MessageBox.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
-                return;
-            }
-
-            SavedRouteClass newroute = new SavedRouteClass();
-            UpdateRouteInfo(newroute);
-            if (!newroute.Equals(_currentExplorationSet))
-            {
-                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
-                    + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                    return;
-            }
-
-            ClearRoute();
-            toolStripComboBoxRouteSelection.SelectedItem = null;
-
-            foreach (SystemClass s in _discoveryForm.RouteControl.RouteSystems)
-            {
-                dataGridViewExplore.Rows.Add(s.name, "", "");
-            }
-            UpdateSystemRows();
-        }
+ 
 
         private void toolStripButtonExport_Click(object sender, EventArgs e)
         {
