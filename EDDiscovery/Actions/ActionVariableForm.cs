@@ -33,6 +33,8 @@ namespace EDDiscovery.Actions
         {
             InitializeComponent();
             groups = new List<Group>();
+            CancelButton = buttonCancel;
+            AcceptButton = buttonOK;
         }
 
         public void Init(string t, EDDiscovery2.EDDTheme th, Dictionary<string, string> vbs)
@@ -52,8 +54,6 @@ namespace EDDiscovery.Actions
             }
         }
 
-        tidy this up
-
         public Group CreateEntry(string var, string value)
         {
             Group g = new Group();
@@ -69,20 +69,24 @@ namespace EDDiscovery.Actions
 
             g.value = new ExtendedControls.TextBoxBorder();
             g.value.Size = new Size(350, 24);
-            g.value.Location = new Point(panelmargin + 140, panelmargin);
+            g.value.Location = new Point(g.var.Location.X + g.var.Width + 8, panelmargin);
             g.value.Text = value;
             g.panel.Controls.Add(g.value);
 
             g.del = new ExtendedControls.ButtonExt();
             g.del.Size = new Size(24, 24);
-            g.del.Location = new Point(panelmargin + 140 + 350 + 10, panelmargin);
+            g.del.Location = new Point(g.value.Location.X + g.value.Width + 8, panelmargin);
             g.del.Text = "X";
+            g.del.Tag = g;
+            g.del.Click += Del_Clicked;
             g.panel.Controls.Add(g.del);
 
             groups.Add(g);
 
             panelVScroll1.Controls.Add(g.panel);
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+
+            panelwidth = g.del.Location.X + g.del.Width + 8;
 
             FixUpGroups();
 
@@ -91,12 +95,12 @@ namespace EDDiscovery.Actions
 
         void FixUpGroups()      // fixes and positions groups.
         {
-            int y = 0;
+            int y = panelmargin;
 
             foreach (Group g in groups)
             {
-                g.panel.Size = new Size(panelwidth - 40, 32);
-                g.panel.Location = new Point(0, y);
+                g.panel.Size = new Size(panelwidth, 32);
+                g.panel.Location = new Point(panelmargin, y);
                 y += g.panel.Height + 6;
             }
 
@@ -124,6 +128,18 @@ namespace EDDiscovery.Actions
 
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void Del_Clicked(object sender, EventArgs e)
+        {
+            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
+            Group g = (Group)b.Tag;
+
+            g.panel.Controls.Clear();
+            panelVScroll1.Controls.Remove(g.panel);
+            groups.Remove(g);
+            Invalidate(true);
+            FixUpGroups();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)

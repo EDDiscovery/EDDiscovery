@@ -71,9 +71,16 @@ namespace EDDiscovery.Actions
                     }
                 }
 
-                bool? condres = condition.Check(ap.currentvars, null);     // may return null..
-                bool res = condres.HasValue && condres.Value;
-                ap.PushState(Type, res );       // true if has values and true, else false
+                string errlist;
+                bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
+
+                if (errlist == null)
+                {
+                    bool res = condres.HasValue && condres.Value;
+                    ap.PushState(Type, res);       // true if has values and true, else false
+                }
+                else
+                    ap.ReportError(errlist);
             }
             else
                 ap.PushState(Type, ActionProgramRun.ExecState.OffForGood);
@@ -107,9 +114,16 @@ namespace EDDiscovery.Actions
                         }
                     }
 
-                    bool? condres = condition.Check(ap.currentvars, null);     // may return null..
-                    bool res = condres.HasValue && condres.Value;
-                    ap.ChangeState(res);            // either to ON.. or to OFF, continuing the off
+                    string errlist;
+                    bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
+
+                    if (errlist == null)
+                    {
+                        bool res = condres.HasValue && condres.Value;
+                        ap.ChangeState(res);            // either to ON.. or to OFF, continuing the off
+                    }
+                    else
+                        ap.ReportError(errlist);
                 }
                 else
                 {
@@ -169,10 +183,16 @@ namespace EDDiscovery.Actions
                     }
                 }
 
-                bool? condres = condition.Check(ap.currentvars, null);     // may return null..
-                bool res = condres.HasValue && condres.Value;
+                string errlist;
+                bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
 
-                ap.PushState(Type, res, res);   // set execute state, and push position if executing, returning us here when it drop out a level..
+                if (errlist == null)
+                {
+                    bool res = condres.HasValue && condres.Value;
+                    ap.PushState(Type, res, res);   // set execute state, and push position if executing, returning us here when it drop out a level..
+                }
+                else
+                    ap.ReportError(errlist);
             }
             else
                 ap.PushState(Type, ActionProgramRun.ExecState.OffForGood);
@@ -194,14 +214,21 @@ namespace EDDiscovery.Actions
                     }
                 }
 
-                bool? condres = condition.Check(ap.currentvars, null);     // may return null..
-                bool res = condres.HasValue && condres.Value;
+                string errlist;
+                bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
 
-                if (res)
+                if (errlist == null)
                 {
-                    ap.Goto(ap.PushPos + 1);                        // back to DO+1, keep level
-                    return true;
+                    bool res = condres.HasValue && condres.Value;
+
+                    if (res)
+                    {
+                        ap.Goto(ap.PushPos + 1);                        // back to DO+1, keep level
+                        return true;                                    // Else drop the level, and finish the do.
+                    }
                 }
+                else
+                    ap.ReportError(errlist);
             }
 
             return false;                                           // not executing the DO, so we just let the standard code drop the level.  Position will not be pushed
@@ -215,6 +242,8 @@ namespace EDDiscovery.Actions
         }
 
         public override bool ConfigurationMenuInUse { get { return false; } }
+
+        public override string DisplayedUserData { get { return null;  } }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
@@ -257,13 +286,20 @@ namespace EDDiscovery.Actions
             {
                 if (!counting)      // if 
                 {
-                    if (int.TryParse(UserData, out loopcount))
+                    string res;
+                    if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
                     {
-                        counting = true;
-                        ap.PushState(Type, (loopcount > 0), true);   // set execute to On (if loop count is >0) and push the position of the LOOP
+                        if (int.TryParse(res, out loopcount))
+                        {
+                            counting = true;
+                            ap.PushState(Type, (loopcount > 0), true);   // set execute to On (if loop count is >0) and push the position of the LOOP
+                            ap.currentvars["Loop" + ap.ExecLevel] = "1";
+                        }
+                        else
+                            ap.ReportError("Loop count must be an integer");
                     }
                     else
-                        ap.ReportError("Loop count must be an integer");
+                        ap.ReportError(res);
                 }
                 else
                     ap.ReportError("Internal error - Loop is saying counting when run");
@@ -283,6 +319,11 @@ namespace EDDiscovery.Actions
                 if (--loopcount > 0)
                 {
                     ap.Goto(ap.PushPos + 1);                    // back to LOOP+1, keep level
+
+                    int c = 0;
+                    if (int.TryParse(ap.currentvars["Loop" + ap.ExecLevel], out c)) // update LOOP level variable.. don't if they have mucked it up
+                        ap.currentvars["Loop" + ap.ExecLevel] = (c + 1).ToString();
+
                     return true;
                 }
                 else
@@ -335,20 +376,88 @@ namespace EDDiscovery.Actions
                 }
             }
 
-            bool? condres = condition.Check(ap.currentvars, null);     // may return null..
-            bool res = condres.HasValue && condres.Value;
+            string errlist;
+            bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
 
-            if (res)
+            if (errlist == null)
             {
-                string curval = GetFlagAuxData(flagErrorText);
-                if (curval == null)
-                    curval = "ErrorIf Tripped";
-                ap.ReportError(curval);
+                bool res = condres.HasValue && condres.Value;
+
+                if (res)
+                {
+                    string curval = GetFlagAuxData(flagErrorText);
+                    if (curval == null)
+                        curval = "ErrorIf Tripped";
+                    ap.ReportError(curval);
+                }
             }
+            else
+                ap.ReportError(errlist);
 
             return true;
         }
     }
 
+    public class ActionCall : Action
+    {
+        public ActionCall(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        {
+        }
+
+        string flagVars = "flagVars";
+
+        public override string DisplayedUserData
+        {
+            get
+            {
+                Dictionary<string, string> inputvars;
+                List<string> flags;
+                ActionData.DecodeActionData(GetFlagAuxData(flagVars), out flags, out inputvars);        // if GetFlag is null, get empty input vars
+
+                if (UserData.Length > 0)
+                    return UserData + "(" + ActionData.ToString(inputvars) + ")";
+                else
+                    return "Not Configured";
+            }
+        }
+
+        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        {
+            string promptValue = PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", UserData, "Configure Call Command");
+            if (promptValue != null)
+            {
+                Dictionary<string, string> inputvars;
+                List<string> flags;
+                ActionData.DecodeActionData(GetFlagAuxData(flagVars), out flags, out inputvars);        // if GetFlag is null, get empty input vars
+                ActionVariableForm avf = new ActionVariableForm();
+                avf.Init("Variables to pass into called program", theme, inputvars);
+
+                if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
+                {
+                    userdata = promptValue;
+                    SetFlag(flagVars, true, ActionData.EncodeActionData(null, avf.result));
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        //special call for execute, needs to pass back more data
+        public bool ExecuteCallAction(ActionProgramRun ap, out string prog, out Dictionary<string,string> vars )
+        {
+            List<string> flags;
+            ActionData.DecodeActionData(GetFlagAuxData(flagVars), out flags, out vars);        // if GetFlag is null, get empty input vars
+            prog = userdata;
+
+            if (prog.Length > 0)
+                return true;
+            else
+            {
+                ap.ReportError("Call not configured");
+                return false;
+            }
+        }
+    }
 }
 

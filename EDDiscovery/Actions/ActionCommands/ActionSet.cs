@@ -51,10 +51,15 @@ namespace EDDiscovery.Actions
         {
             string vn = GetFlagAuxData(flagVar);
 
-            if (vn != null && vn.Length > 0)
+            if (vn != null && vn.Length > 0)    
             {
-                string value = UserData;
-                ap.currentvars[vn] = value;
+                string res;
+                if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                {
+                    ap.currentvars[vn] = res;
+                }
+                else
+                    ap.ReportError(res);
             }
             else
                 ap.ReportError("Set no variable name given");
@@ -77,30 +82,34 @@ namespace EDDiscovery.Actions
 
             if (vn != null && vn.Length > 0)
             {
-                System.Data.DataTable dt = new System.Data.DataTable();
-
                 string res;
-
-                try
+                if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
-                    var v = dt.Compute(value, "");
-                    Type t = v.GetType();
-                    System.Diagnostics.Debug.WriteLine("Type return is " + t.ToString());
-                    if (v is double)
-                        res = v.ToString();
-                    else if (v is System.Decimal)
-                        res = v.ToString();
-                    else if (v is int)
-                        res = v.ToString();
-                    else
-                        res = "NAN";
+                    System.Data.DataTable dt = new System.Data.DataTable();
 
-                    ap.currentvars[vn] = res;
+                    try
+                    {
+                        var v = dt.Compute(res, "");
+                        Type t = v.GetType();
+                        //System.Diagnostics.Debug.WriteLine("Type return is " + t.ToString());
+                        if (v is double)
+                            res = v.ToString();
+                        else if (v is System.Decimal)
+                            res = v.ToString();
+                        else if (v is int)
+                            res = v.ToString();
+                        else
+                            res = "NAN";
+
+                        ap.currentvars[vn] = res;
+                    }
+                    catch
+                    {
+                        ap.ReportError("LET expression does not evaluate");
+                    }
                 }
-                catch
-                {
-                    ap.ReportError("LET expression does not evaluate");
-                }
+                else
+                    ap.ReportError(res);
             }
             else
                 ap.ReportError("Let no variable name given");
