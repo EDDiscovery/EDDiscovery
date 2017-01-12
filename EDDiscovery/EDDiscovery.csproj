@@ -619,6 +619,12 @@
     <Compile Include="TravelHistoryControl.Designer.cs">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlExploration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlExploration.Designer.cs">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
@@ -753,6 +759,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Trilateration\SysWarning.resx">
       <DependentUpon>SysWarning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlExploration.resx">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
