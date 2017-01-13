@@ -218,6 +218,12 @@
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
+    <Compile Include="Forms\ShipDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShipDetails.Designer.cs">
+      <DependentUpon>ShipDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
@@ -614,6 +620,12 @@
     <Compile Include="TravelHistoryControl.Designer.cs">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlExploration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlExploration.Designer.cs">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
@@ -734,6 +746,9 @@
     <EmbeddedResource Include="Forms\JSONFiltersForm.resx">
       <DependentUpon>JSONFiltersForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ShipDetails.resx">
+      <DependentUpon>ShipDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -745,6 +760,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Trilateration\SysWarning.resx">
       <DependentUpon>SysWarning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlExploration.resx">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>

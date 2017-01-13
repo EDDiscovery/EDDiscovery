@@ -52,7 +52,7 @@ namespace EDDiscovery
 
         string[] popoutbuttonlist = new string[] 
         {
-            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker",  // not in tabs
+            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", "Exploration", // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
             "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
         };
@@ -66,7 +66,7 @@ namespace EDDiscovery
                                         EDDiscovery.Properties.Resources.travelgrid , 
                                         EDDiscovery.Properties.Resources.screenshot,
                                         EDDiscovery.Properties.Resources.stats, 
-                                        EDDiscovery.Properties.Resources.scan, 
+                                        EDDiscovery.Properties.Resources.scan,
                                         };
 
         string[] popouttooltips = new string[] { "Display the program log",     // MAtch Pop out enum
@@ -78,7 +78,7 @@ namespace EDDiscovery
                                                "Display the history grid view",
                                                "Display the screen shot view",
                                                "Display statistics from the history",
-                                               "Display scan data"
+                                               "Display scan data",
                                             };
 
         class PopOutInfo
@@ -123,6 +123,7 @@ namespace EDDiscovery
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
             { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
+            { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null, "Explore a collection of systems") },
         };
 
         #region Initialisation
@@ -833,8 +834,10 @@ namespace EDDiscovery
                 PopOut(PopOuts.NotePanel);
             else if (comboBoxCustomPopOut.SelectedIndex == 3)
                 PopOut(PopOuts.RouteTracker);
+            else if (comboBoxCustomPopOut.SelectedIndex == 4)
+                PopOut(PopOuts.Exploration);
             else
-                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 4));
+                PopOut((PopOuts)(comboBoxCustomPopOut.SelectedIndex - 5));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;
