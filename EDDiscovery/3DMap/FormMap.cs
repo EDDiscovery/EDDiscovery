@@ -281,7 +281,6 @@ namespace EDDiscovery2
         public FormMap()
         {
             InitializeComponent();
-            OpenTK.Toolkit.Init();
             // 
             // glControl
             // 
@@ -301,6 +300,7 @@ namespace EDDiscovery2
             this.glControl.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl_OnMouseWheel);
             this.glControlContainer.Controls.Add(this.glControl);
             this.glControlContainer.ResumeLayout();
+            OpenTK.Toolkit.Init();
         }
 
         private void FormMap_Load(object sender, EventArgs e)

@@ -17,6 +17,7 @@ namespace EDDiscovery.UserControls
         public UserControlLog()
         {
             InitializeComponent();
+            richTextBox_History.TextBox.ReadOnly = true;
             Name = "Log";
         }
 

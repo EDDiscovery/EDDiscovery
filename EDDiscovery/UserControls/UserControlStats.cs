@@ -231,13 +231,19 @@ namespace EDDiscovery.UserControls
                 strarr[3] = hl.GetTraveledLy(new DateTime(2012, 1, 1), DateTime.Now).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
+                intar[0] = hl.GetFSDBoostUsed(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetFSDBoostUsed(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetFSDBoostUsed(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetFSDBoostUsed(new DateTime(2012, 1, 1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Boost used", intar);
 
 
-                intar[0] = hl.GetDocked(DateTime.Now.AddDays(-1), DateTime.Now);
-                intar[1] = hl.GetDocked(DateTime.Now.AddDays(-7), DateTime.Now);
-                intar[2] = hl.GetDocked(DateTime.Now.AddDays(-30), DateTime.Now);
-                intar[3] = hl.GetDocked(new DateTime(2012, 1, 1), DateTime.Now);
-                StatToDGV(dataGridViewTravel, "Docked", intar);
+
+                intar[0] = hl.GetJetConeBoost(DateTime.Now.AddDays(-1), DateTime.Now);
+                intar[1] = hl.GetJetConeBoost(DateTime.Now.AddDays(-7), DateTime.Now);
+                intar[2] = hl.GetJetConeBoost(DateTime.Now.AddDays(-30), DateTime.Now);
+                intar[3] = hl.GetJetConeBoost(new DateTime(2012, 1, 1), DateTime.Now);
+                StatToDGV(dataGridViewTravel, "Jet Cone Boost", intar);
 
                 intar[0] = hl.GetTouchDown(DateTime.Now.AddDays(-1), DateTime.Now);
                 intar[1] = hl.GetTouchDown(DateTime.Now.AddDays(-7), DateTime.Now);
@@ -330,6 +336,15 @@ namespace EDDiscovery.UserControls
                     strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                StatToDGV(dataGridViewTravel, "Boost used", strarr);
+
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetJetConeBoost(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                StatToDGV(dataGridViewTravel, "Jet Cone Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetDocked(timeintervals[ii + 1], timeintervals[ii]).ToString();
@@ -483,7 +498,7 @@ namespace EDDiscovery.UserControls
                         strarr[ii] = nr.ToString();
 
                     }
-                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr);
+                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr, false);
                 }
             }
             else
@@ -502,7 +517,7 @@ namespace EDDiscovery.UserControls
                         strarr[ii] = nr.ToString();
 
                     }
-                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr);
+                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr, false);
                 }
             }
 
@@ -510,17 +525,26 @@ namespace EDDiscovery.UserControls
 
 
         void SizeControls()
-        { 
-            int height = 0;
-            foreach (DataGridViewRow row in dataGridViewStats.Rows)
+        {
+            try
             {
-                height += row.Height + 1;
+                int height = 0;
+                foreach (DataGridViewRow row in dataGridViewStats.Rows)
+                {
+                    height += row.Height + 1;
+                }
+                height += dataGridViewStats.ColumnHeadersHeight + 2;
+                dataGridViewStats.Size = new Size(Math.Max(10, panelData.DisplayRectangle.Width - panelData.ScrollBarWidth), height);             // all controls should be placed each time.
+                                                                                                                                    //System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
+                mostVisited.Location = new Point(0, height);
+                mostVisited.Size = new Size(Math.Max(10, panelData.DisplayRectangle.Width - panelData.ScrollBarWidth), mostVisited.Height);
             }
-            height += dataGridViewStats.ColumnHeadersHeight + 2;
-            dataGridViewStats.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, height);             // all controls should be placed each time.
-            //System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
-            mostVisited.Location = new Point(0, height);
-            mostVisited.Size = new Size(panelData.DisplayRectangle.Width - panelData.ScrollBarWidth, mostVisited.Height);
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"UserControlStats::SizeControls Exception: {ex.Message}");
+                return;
+            }
+
         }
 
         protected override void OnLayout(LayoutEventArgs e)
@@ -541,15 +565,21 @@ namespace EDDiscovery.UserControls
             dataGridViewStats.Rows.Add(rowobj);
         }
 
-        void StatToDGV(DataGridView datagrid,  string title, string[] data)
+        void StatToDGV(DataGridView datagrid,  string title, string[] data, bool showEmptyLines = true)
         {
             object[] rowobj = new object[data.Length + 1];
+            bool empty = true;
 
             rowobj[0] = title;
             for (int ii = 0; ii < data.Length; ii++)
+            {
                 rowobj[ii + 1] = data[ii];
+                if (!data[ii].Equals("0") && !data[ii].Equals("0.00"))
+                    empty = false;
+            }
 
-            datagrid.Rows.Add(rowobj);
+            if (showEmptyLines ||empty ==false)
+                datagrid.Rows.Add(rowobj);
         }
 
         void StatToDGV(DataGridView datagrid, string title, int[] data)

@@ -32,6 +32,8 @@
             this.pictureBox = new ExtendedControls.PictureBoxHotspot();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoCopyWPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoSetTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -48,16 +50,33 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setRouteToolStripMenuItem});
+            this.setRouteToolStripMenuItem,
+            this.autoCopyWPToolStripMenuItem,
+            this.autoSetTargetToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 92);
             // 
             // setRouteToolStripMenuItem
             // 
             this.setRouteToolStripMenuItem.Name = "setRouteToolStripMenuItem";
-            this.setRouteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setRouteToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.setRouteToolStripMenuItem.Text = "Set route";
             this.setRouteToolStripMenuItem.Click += new System.EventHandler(this.setRouteToolStripMenuItem_Click);
+            // 
+            // autoCopyWPToolStripMenuItem
+            // 
+            this.autoCopyWPToolStripMenuItem.CheckOnClick = true;
+            this.autoCopyWPToolStripMenuItem.Name = "autoCopyWPToolStripMenuItem";
+            this.autoCopyWPToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.autoCopyWPToolStripMenuItem.Text = "Auto copy waypoint";
+            this.autoCopyWPToolStripMenuItem.CheckedChanged += new System.EventHandler(this.autoCopyWPToolStripMenuItem_CheckedChanged);
+            // 
+            // autoSetTargetToolStripMenuItem
+            // 
+            this.autoSetTargetToolStripMenuItem.CheckOnClick = true;
+            this.autoSetTargetToolStripMenuItem.Name = "autoSetTargetToolStripMenuItem";
+            this.autoSetTargetToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.autoSetTargetToolStripMenuItem.Text = "Auto set target";
             // 
             // UserControlRouteTracker
             // 
@@ -76,5 +95,7 @@
         private ExtendedControls.PictureBoxHotspot pictureBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem setRouteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoCopyWPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoSetTargetToolStripMenuItem;
     }
 }

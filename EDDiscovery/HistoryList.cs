@@ -148,6 +148,13 @@ namespace EDDiscovery
 
                         if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
                         {                                                       // so next time we don't have to do this again..
+                            if (jl.HasCoordinate)
+                            {
+                                s.x = Math.Round(jl.StarPos.X * 32.0) / 32.0;
+                                s.y = Math.Round(jl.StarPos.Y * 32.0) / 32.0;
+                                s.z = Math.Round(jl.StarPos.Z * 32.0) / 32.0;
+                            }
+
                             newsys = s;
 
                             if (jfsd != null && jfsd.JumpDist <= 0 && newsys.HasCoordinate && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
@@ -595,6 +602,10 @@ namespace EDDiscovery
         {
             return historylist.Where(he => he.IsFSDJump && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || he.System.id_edsm == edsmid)).Count();
         }
+        public List<JournalScan> GetScans(string name, long edsmid = 0)
+        {
+            return (from s in historylist where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || s.System.id_edsm == edsmid)) select s.journalEntry as JournalScan).ToList<JournalScan>();
+        }
 
         public int GetFSDJumps( TimeSpan t )
         {
@@ -611,6 +622,20 @@ namespace EDDiscovery
         {
             return (from s in historylist where s.EntryType == JournalTypeEnum.Docked && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
+
+        public int GetJetConeBoost(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.JetConeBoost && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+
+        public int GetFSDBoostUsed(DateTime start, DateTime to)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal   < to select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
+            return (from s in list where s.BoostUsed == true select s  ).Count();
+        }
+
+
+
         public int GetTouchDown(DateTime start, DateTime to)
         {
             return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();

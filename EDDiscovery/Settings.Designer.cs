@@ -30,6 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
+            this.buttonReloadSaved = new ExtendedControls.ButtonExt();
+            this.buttonSaveSetup = new ExtendedControls.ButtonExt();
+            this.checkBoxAutoSave = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxAutoLoad = new ExtendedControls.CheckBoxCustom();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
             this.checkBoxKeepOnTop = new ExtendedControls.CheckBoxCustom();
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
@@ -69,6 +74,7 @@
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -80,6 +86,84 @@
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
+            // 
+            // groupBoxPopOuts
+            // 
+            this.groupBoxPopOuts.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxPopOuts.BackColorScaling = 0.5F;
+            this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxPopOuts.BorderColorScaling = 0.5F;
+            this.groupBoxPopOuts.Controls.Add(this.buttonReloadSaved);
+            this.groupBoxPopOuts.Controls.Add(this.buttonSaveSetup);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoSave);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoLoad);
+            this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
+            this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 361);
+            this.groupBoxPopOuts.Name = "groupBoxPopOuts";
+            this.groupBoxPopOuts.Size = new System.Drawing.Size(277, 79);
+            this.groupBoxPopOuts.TabIndex = 19;
+            this.groupBoxPopOuts.TabStop = false;
+            this.groupBoxPopOuts.Text = "Pop Out Window Options";
+            this.groupBoxPopOuts.TextPadding = 0;
+            this.groupBoxPopOuts.TextStartPosition = -1;
+            // 
+            // buttonReloadSaved
+            // 
+            this.buttonReloadSaved.BorderColorScaling = 1.25F;
+            this.buttonReloadSaved.ButtonColorScaling = 0.5F;
+            this.buttonReloadSaved.ButtonDisabledScaling = 0.5F;
+            this.buttonReloadSaved.Location = new System.Drawing.Point(134, 16);
+            this.buttonReloadSaved.Name = "buttonReloadSaved";
+            this.buttonReloadSaved.Size = new System.Drawing.Size(127, 23);
+            this.buttonReloadSaved.TabIndex = 3;
+            this.buttonReloadSaved.Text = "Open Saved Setup";
+            this.buttonReloadSaved.UseVisualStyleBackColor = true;
+            this.buttonReloadSaved.Click += new System.EventHandler(this.buttonReloadSaved_Click);
+            // 
+            // buttonSaveSetup
+            // 
+            this.buttonSaveSetup.BorderColorScaling = 1.25F;
+            this.buttonSaveSetup.ButtonColorScaling = 0.5F;
+            this.buttonSaveSetup.ButtonDisabledScaling = 0.5F;
+            this.buttonSaveSetup.Location = new System.Drawing.Point(134, 45);
+            this.buttonSaveSetup.Name = "buttonSaveSetup";
+            this.buttonSaveSetup.Size = new System.Drawing.Size(127, 23);
+            this.buttonSaveSetup.TabIndex = 2;
+            this.buttonSaveSetup.Text = "Save Current Setup";
+            this.buttonSaveSetup.UseVisualStyleBackColor = true;
+            this.buttonSaveSetup.Click += new System.EventHandler(this.buttonSaveSetup_Click);
+            // 
+            // checkBoxAutoSave
+            // 
+            this.checkBoxAutoSave.AutoSize = true;
+            this.checkBoxAutoSave.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxAutoSave.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxAutoSave.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxAutoSave.FontNerfReduction = 0.5F;
+            this.checkBoxAutoSave.Location = new System.Drawing.Point(7, 46);
+            this.checkBoxAutoSave.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxAutoSave.Name = "checkBoxAutoSave";
+            this.checkBoxAutoSave.Size = new System.Drawing.Size(117, 17);
+            this.checkBoxAutoSave.TabIndex = 1;
+            this.checkBoxAutoSave.Text = "Save Setup on Exit";
+            this.checkBoxAutoSave.TickBoxReductionSize = 10;
+            this.checkBoxAutoSave.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAutoLoad
+            // 
+            this.checkBoxAutoLoad.AutoSize = true;
+            this.checkBoxAutoLoad.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxAutoLoad.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxAutoLoad.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxAutoLoad.FontNerfReduction = 0.5F;
+            this.checkBoxAutoLoad.Location = new System.Drawing.Point(7, 20);
+            this.checkBoxAutoLoad.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxAutoLoad.Name = "checkBoxAutoLoad";
+            this.checkBoxAutoLoad.Size = new System.Drawing.Size(121, 17);
+            this.checkBoxAutoLoad.TabIndex = 0;
+            this.checkBoxAutoLoad.Text = "Load Setup on Start";
+            this.checkBoxAutoLoad.TickBoxReductionSize = 10;
+            this.checkBoxAutoLoad.UseVisualStyleBackColor = true;
             // 
             // groupBoxTheme
             // 
@@ -645,12 +729,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBoxPopOuts);
             this.Controls.Add(this.groupBoxTheme);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
             this.Name = "Settings";
             this.Size = new System.Drawing.Size(937, 725);
+            this.groupBoxPopOuts.ResumeLayout(false);
+            this.groupBoxPopOuts.PerformLayout();
             this.groupBoxTheme.ResumeLayout(false);
             this.groupBoxTheme.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -706,5 +793,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDirOld;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private ExtendedControls.GroupBoxCustom groupBoxPopOuts;
+        private ExtendedControls.ButtonExt buttonReloadSaved;
+        private ExtendedControls.ButtonExt buttonSaveSetup;
+        private ExtendedControls.CheckBoxCustom checkBoxAutoSave;
+        private ExtendedControls.CheckBoxCustom checkBoxAutoLoad;
     }
 }
