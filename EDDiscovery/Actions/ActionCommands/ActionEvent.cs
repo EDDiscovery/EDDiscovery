@@ -53,7 +53,7 @@ namespace EDDiscovery.Actions
                     {
                         string countstring = NextWord(ref res);
 
-                        count = 0;
+                        count = 1;
                         if (countstring.Length == 0 || int.TryParse(countstring, out count))
                         {
                             List<HistoryEntry> hle = (from h in hl.EntryOrder where h.journalEntry.EventTypeStr.Equals(eventname, StringComparison.InvariantCultureIgnoreCase) select h).ToList();
@@ -71,8 +71,10 @@ namespace EDDiscovery.Actions
                     if (long.TryParse(cmdname, out id))
                     {
                         List<HistoryEntry> hle = (from h in hl.EntryOrder where h.Journalid == id select h).ToList();
-                        FillEventVars(0, hle, ap, false);
+                        FillEventVars(1, hle, ap, false);
                     }
+                    else
+                        ap.ReportError("No an Journal ID Integer in Event");
                 }
             }
 
@@ -86,21 +88,35 @@ namespace EDDiscovery.Actions
         {
             string eventname = "Event";
 
-            if (count >= 0 && count < hl.Count)     // if within range..
+            if (count >= 1 && count <= hl.Count)     // if within range.. (1 based)
             {
+                count--;    // zero based now
+
                 if (revorder)
                     count = hl.Count - 1 - count;
 
-                Dictionary<string, string> values = new Dictionary<string, string>();
-                JSONHelper.GetJSONFieldNamesValues(hl[count].journalEntry.EventDataString, values);
+                try
+                {
+                    Dictionary<string, string> values = new Dictionary<string, string>();
+                    JSONHelper.GetJSONFieldNamesValues(hl[count].journalEntry.EventDataString, values);
 
-                ap.currentvars[eventname + "_LocalTime"] = hl[count].EventTimeLocal.ToString("MM/dd/yyyy HH:mm:ss");
-                ap.currentvars[eventname + "_JID"] = hl[count].Journalid.ToString();
-                foreach (KeyValuePair<string, string> k in values)
-                    ap.currentvars[eventname + "_" + Tools.SafeFileString(k.Key)] = k.Value;
+                    ap.currentvars[eventname + "_LocalTime"] = hl[count].EventTimeLocal.ToString("MM/dd/yyyy HH:mm:ss");
+                    ap.currentvars[eventname + "_JID"] = hl[count].Journalid.ToString();
+                    ap.currentvars[eventname + "_Docked"] = hl[count].IsDocked ? "1" : "0";
+                    ap.currentvars[eventname + "_Landed"] = hl[count].IsLanded ? "1" : "0";
+                    ap.currentvars[eventname + "_WhereAmI"] = hl[count].WhereAmI;
+                    ap.currentvars[eventname + "_ShipType"] = hl[count].ShipType;
+                    foreach (KeyValuePair<string, string> k in values)
+                        ap.currentvars[eventname + "_" + Tools.SafeFileString(k.Key)] = k.Value;
+
+                    return;
+                }
+                catch
+                {
+                }
             }
-            else
-                ap.currentvars[eventname + "_JID"] = "0";
+
+            ap.currentvars[eventname + "_JID"] = "0";
         }
 
         string NextWord(ref string cmd)

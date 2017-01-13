@@ -247,10 +247,17 @@
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
+    <Compile Include="Forms\ShipDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShipDetails.Designer.cs">
+      <DependentUpon>ShipDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="JSON\ConditionLists.cs" />
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
+    <Compile Include="TraceLog.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
@@ -556,6 +563,12 @@
     <Compile Include="3DMap\FormMap.Designer.cs">
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Trilateration\SysWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Trilateration\SysWarning.Designer.cs">
+      <DependentUpon>SysWarning.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\DataGridViewSorter.cs" />
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
@@ -647,6 +660,12 @@
     </Compile>
     <Compile Include="JournalViewControl.Designer.cs">
       <DependentUpon>JournalViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlExploration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlExploration.Designer.cs">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlNotePanel.cs">
       <SubType>UserControl</SubType>
@@ -758,6 +777,9 @@
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ShipDetails.resx">
+      <DependentUpon>ShipDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="JSON\ConditionFilterForm.resx">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -769,6 +791,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Trilateration\SysWarning.resx">
+      <DependentUpon>SysWarning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlExploration.resx">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
