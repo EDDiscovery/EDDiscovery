@@ -801,13 +801,12 @@ namespace EDDiscovery
             }
             catch (IOException)
             {
-                MessageBox.Show(String.Format("There has been an error openning file {0}", ofd.FileName), "Import file",
+                MessageBox.Show(String.Format("There was an error reading {0}", ofd.FileName), "Import route",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             List<String> systems = new List<String>();
-            int countbad = 0;
             foreach (String name in sysnames)
             {
                 String sysname = name;
@@ -816,30 +815,17 @@ namespace EDDiscovery
                     String[] values = sysname.Split(',');
                     sysname = values[0];
                 }
-                if (String.IsNullOrWhiteSpace(sysname))
-                    continue;
-                SystemClass sc = GetSystem(sysname.Trim());
-                if (sc != null)
-                    systems.Add(sc.name);
-                else
-                    countbad++;
+                if (!String.IsNullOrWhiteSpace(sysname))
+                    systems.Add(sysname.Trim());
             }
             if (systems.Count == 0)
             {
                 MessageBox.Show(_discoveryForm,
-                String.Format("There are no known system names in the file import", countbad),
-                "Unsaved route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    String.Format("The imported file contains no known system names"),
+                    "Import route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if (countbad > 0)
-            {
-                var result = MessageBox.Show(_discoveryForm,
-                    String.Format("There are {0} unknown system names do you wish to conitune with the good ones", countbad),
-                    "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                    return;
-            }
             foreach (var sysname in systems)
             {
                 dataGridViewRouteSystems.Rows.Add(sysname, "", "");
