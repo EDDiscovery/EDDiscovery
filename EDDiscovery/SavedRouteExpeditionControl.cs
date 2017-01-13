@@ -242,8 +242,25 @@ namespace EDDiscovery
 
                 if (sys != null)
                 {
+                    string note = "";
                     SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.name, sys.id_edsm);
-                    dataGridViewRouteSystems[2, rowindex].Value = sn != null ? sn.Note : "";
+                    if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
+                    {
+                        note = sn.Note;
+                    }
+                    else
+                    {
+                        BookmarkClass bkmark =BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(sys.name));
+                        if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
+                            note = bkmark.Note;
+                        else
+                        {
+                            var gmo = _discoveryForm.galacticMapping.Find(sys.name);
+                            if (gmo != null && !string.IsNullOrWhiteSpace(gmo.description))
+                                note = gmo.description;
+                        }
+                    }
+                   dataGridViewRouteSystems[2, rowindex].Value = Tools.WordWrap(note, 60);
                 }
 
                 if (sys == null && sysname != "")
@@ -270,24 +287,32 @@ namespace EDDiscovery
         }
         private void UpdateTotalDistances()
         {
-            SystemClass firstSC = null;
-            SystemClass lastSC = null;
             double distance = 0;
-            for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
-            {
-                if (firstSC == null && dataGridViewRouteSystems[0, i].Tag != null)
-                    firstSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
-                if (dataGridViewRouteSystems[0, i].Tag != null)
-                    lastSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
-                String value = dataGridViewRouteSystems[1, i].Value as string;
-                if(!String.IsNullOrWhiteSpace(value))
-                    distance += Double.Parse(value);
-            }
             txtCmlDistance.Text = distance.ToString("0.00") + "LY";
-            Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
-            Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
-            distance = Point3D.DistanceBetween(first, last);
             txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
+            if (dataGridViewRouteSystems.Rows.Count > 1)
+            {
+                SystemClass firstSC = null;
+                SystemClass lastSC = null;
+                for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
+                {
+                    if (firstSC == null && dataGridViewRouteSystems[0, i].Tag != null)
+                        firstSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
+                    if (dataGridViewRouteSystems[0, i].Tag != null)
+                        lastSC = (SystemClass)dataGridViewRouteSystems[0, i].Tag;
+                    String value = dataGridViewRouteSystems[1, i].Value as string;
+                    if (!String.IsNullOrWhiteSpace(value))
+                        distance += Double.Parse(value);
+                }
+                txtCmlDistance.Text = distance.ToString("0.00") + "LY";
+                distance = 0;
+                if (firstSC != null && lastSC != null) { 
+                    Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
+                    Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
+                    distance = Point3D.DistanceBetween(first, last);
+                    txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
+                }
+            }
         }
 
         private void UpdateRouteInfo(SavedRouteClass route)
@@ -791,9 +816,11 @@ namespace EDDiscovery
                     String[] values = sysname.Split(',');
                     sysname = values[0];
                 }
-                SystemClass sc = GetSystem(sysname);
+                if (String.IsNullOrWhiteSpace(sysname))
+                    continue;
+                SystemClass sc = GetSystem(sysname.Trim());
                 if (sc != null)
-                    systems.Add(sysname);
+                    systems.Add(sc.name);
                 else
                     countbad++;
             }
@@ -923,8 +950,12 @@ namespace EDDiscovery
 
             if (obj == null)
                 return;
-
-            RoutingUtils.showBookmarkForm(_discoveryForm, SystemClass.GetSystem((string)obj), null, false);
+            SystemClass sc = SystemClass.GetSystem((string)obj);
+            if (sc == null) {
+                MessageBox.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                return;
+            }
+            RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
         }
     }
 }

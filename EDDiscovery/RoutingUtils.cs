@@ -11,6 +11,11 @@ namespace EDDiscovery
     {
         public static void setTargetSystem(EDDiscoveryForm _discoveryForm, String sn)
         {
+            setTargetSystem(_discoveryForm, sn, true);
+
+        }
+    public static void setTargetSystem(EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
+        {
             if (string.IsNullOrWhiteSpace(sn))
                 return;
 
@@ -37,7 +42,12 @@ namespace EDDiscovery
                     }
                     else
                     {
-                        if (MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                        bool createbookmark = false;
+                        if ((prompt && MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK) || !prompt)
+                        {
+                            createbookmark = true;
+                        }
+                        if (createbookmark)
                         {
                             BookmarkClass newbk = new BookmarkClass();
                             newbk.StarName = sn;
@@ -73,7 +83,7 @@ namespace EDDiscovery
 
             _discoveryForm.NewTargetSet();          // tells everyone who cares a new target was set
 
-            if (msgboxtext != null)
+            if (msgboxtext != null && prompt)
                 MessageBox.Show(msgboxtext, "Create a target", MessageBoxButtons.OK);
 
         }
@@ -81,6 +91,10 @@ namespace EDDiscovery
         public static void showBookmarkForm(
             EDDiscoveryForm discoveryForm, ISystem cursystem, BookmarkClass curbookmark, bool notedsystem)
         {
+            // is it worth popping up a messagebox or something? I don't believe so.
+            if (cursystem == null)
+                return;
+
             // try and find the associated bookmark..
             BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
 
@@ -173,5 +187,25 @@ namespace EDDiscovery
 
             discoveryForm.NewTargetSet();
         }
+
+        //Based on http://elite-dangerous.wikia.com/wiki/Frame_Shift_Drive
+        public static double maxJumpDistance(double f,double cargo, double lc, double mShip, double mOpt, double pc, double mfpj, out double jumps)
+        {
+            double fr = f % mfpj; 
+            jumps = Math.Floor(f/ mfpj);
+
+            mShip += fr + cargo;
+            double d = 0.0;
+            if(f > 0.0 )
+                d= Math.Pow(fr/ (lc * 0.001) , 1 / pc) * mOpt / mShip;
+
+            for (int idx = 0; idx < jumps; idx++)
+            {
+                mShip += mfpj;
+                d += Math.Pow(mfpj / (lc * 0.001), 1 / pc) * mOpt / mShip;
+            }
+            return d;
+        }
+
     }
 }
