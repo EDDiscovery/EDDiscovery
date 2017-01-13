@@ -154,7 +154,7 @@ namespace EDDiscovery.UserControls
                     topline = String.Format("{0} | {1:N2}ly {2}", name, dist, mesg);
                 }
 
-                topline = String.Format("{0} | {1}", he.System.name, topline);
+                topline = String.Format("{0} [{2}] | {1}", he.System.name, topline, discoveryform.history.GetVisitsCount(he.System.name));
 
                 pictureBox.AddTextAutoSize(new Point(100, 5), new Size(1000, 40), topline, displayfont, textcolour, backcolour, 1.0F);
 
