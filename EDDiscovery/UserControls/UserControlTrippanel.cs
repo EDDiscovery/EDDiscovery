@@ -208,6 +208,8 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
+                    if (fuel > tankSize)
+                        fuel = tankSize;
                     botline = String.Format("{0}t / {1}t", fuel.ToString("N1"), tankSize.ToString("N1"));
 
                     if ((fuel / tankSize) < (tankWarning / 100.0))
