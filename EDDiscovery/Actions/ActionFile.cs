@@ -108,7 +108,7 @@ namespace EDDiscovery.Actions
                         ae.passed = new List<ConditionLists.Condition>();
 
                         System.Diagnostics.Debug.WriteLine("Check `" + ae.af.name + ae.af.actionfieldfilter.ToString() + "`");
-                        ActionData.DumpVars(valuesneeded, " Test var:");
+                        //ActionData.DumpVars(valuesneeded, " Test var:");
 
                         ae.af.actionfieldfilter.CheckConditions(ae.cl, valuesneeded, out errlist, ae.passed, se);   // indicate which ones passed
                     }
@@ -147,28 +147,48 @@ namespace EDDiscovery.Actions
             }
         }
 
-        public Tuple<ActionFile, ActionProgram> FindProgram(string prog, ActionFile preferred = null)        // find a program 
+        public Tuple<ActionFile, ActionProgram> FindProgram(string req, ActionFile preferred = null)        // find a program 
         {
             Actions.ActionProgram ap = null;
 
-            if (preferred != null)
-            {
-                ap = preferred.actionprogramlist.Get(prog);   // get in local program list first
+            string file = null, prog;
+            int colon = req.IndexOf("::");
 
-                if (ap != null)
-                    return new Tuple<ActionFile, ActionProgram>(preferred, ap);
+            if (colon != -1)
+            {
+                file = req.Substring(0, colon);
+                prog = req.Substring(colon + 2);
             }
+            else
+                prog = req;
 
-            if (ap == null)
+            if (file != null)                             // if file given, only search that
             {
+                ActionFile f = actionfiles.Find(x => x.name.Equals(file));
+
+                if (f != null)      // found file..
+                {
+                    ap = f.actionprogramlist.Get(prog);
+
+                    return (ap != null) ? new Tuple<ActionFile, ActionProgram>(f, ap) : null;
+                }
+            }
+            else
+            {
+                if (preferred != null)          // if no file stated, and we have a preferred
+                {
+                    ap = preferred.actionprogramlist.Get(prog);   // get in local program list first
+
+                    if (ap != null)
+                        return new Tuple<ActionFile, ActionProgram>(preferred, ap);
+                }
+
                 foreach (ActionFile f in actionfiles)
                 {
                     ap = f.actionprogramlist.Get(prog);
 
-                    if (ap != null)
-                    {
+                    if (ap != null)         // gotcha
                         return new Tuple<ActionFile, ActionProgram>(f, ap);
-                    }
                 }
             }
 

@@ -387,18 +387,21 @@ namespace EDDiscovery2
 
         void RefreshActionDropDowns()
         {
-            comboBoxCustomEditProg.Items.Clear();
-            comboBoxCustomEditProg.Items.AddRange(actionfilelist.CurPrograms.GetActionProgramList());
-            comboBoxCustomEditProg.Items.Add("New");
+            if (IsActionsActive)
+            {
+                comboBoxCustomEditProg.Items.Clear();
+                comboBoxCustomEditProg.Items.AddRange(actionfilelist.CurPrograms.GetActionProgramList());
+                comboBoxCustomEditProg.Items.Add("New");
 
-            comboBoxCustomProgSet.Items.Clear();
-            comboBoxCustomProgSet.Items.AddRange(actionfilelist.GetList);
-            comboBoxCustomProgSet.Items.Add("New");
-            comboBoxCustomProgSet.Enabled = false;
-            comboBoxCustomProgSet.SelectedItem = actionfilelist.CurName;
-            comboBoxCustomProgSet.Enabled = true;
+                comboBoxCustomProgSet.Items.Clear();
+                comboBoxCustomProgSet.Items.AddRange(actionfilelist.GetList);
+                comboBoxCustomProgSet.Items.Add("New");
+                comboBoxCustomProgSet.Enabled = false;
+                comboBoxCustomProgSet.SelectedItem = actionfilelist.CurName;
+                comboBoxCustomProgSet.Enabled = true;
 
-            checkBoxCustomSetEnabled.Checked = actionfilelist.CurEnabled;
+                checkBoxCustomSetEnabled.Checked = actionfilelist.CurEnabled;
+            }
         }
 
         private void comboBoxCustomProgSet_SelectedIndexChanged(object sender, EventArgs e)
@@ -845,11 +848,10 @@ namespace EDDiscovery2
 
             if (res.Length > 0)
             {
-                bool anything = result.Count > 0;
+                string acceptstr = "Click Retry to correct errors, Abort to cancel, Ignore to accept valid entries";
 
-                string acceptstr = (!anything) ? "Click Retry to correct errors, or Cancel to abort" : "Click Retry to correct errors, Abort to cancel, Ignore to accept what filters are valid";
                 DialogResult dr = MessageBox.Show("Filters produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + res + Environment.NewLine + acceptstr,
-                                        "Warning", (anything) ? MessageBoxButtons.AbortRetryIgnore : MessageBoxButtons.RetryCancel);
+                                                  "Warning", MessageBoxButtons.AbortRetryIgnore );
 
                 if (dr == DialogResult.Retry)
                     return false;

@@ -197,10 +197,14 @@ namespace EDDiscovery.Actions
             string res;
             if (f.ExpandString(phraselist, curvars, out res) != EDDiscovery.ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
             {
+                bool silent = phrases.Count == 0;
                 phrases.Add(new Phrase() { phrase = res, voice = voice, volume = volume, rate = rate , ap = ap });
 
-                if (synth.State == SynthesizerState.Ready)
+                if (silent)
+                {
+                    System.Diagnostics.Debug.WriteLine("Queue up " + phrases[0].phrase);
                     StartSpeaking();
+                }
 
                 return null;
             }
@@ -210,6 +214,8 @@ namespace EDDiscovery.Actions
 
         private void StartSpeaking()
         {
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " State " + synth.State);
+
             Phrase p = phrases[0];
 
             if (p.voice.Equals("Female"))
@@ -226,19 +232,27 @@ namespace EDDiscovery.Actions
             System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Say " + p.phrase);
         }
 
-        private void Synth_SpeakCompleted(object sender, SpeakCompletedEventArgs e)
+        private void Synth_SpeakCompleted(object sender, SpeakCompletedEventArgs e) // We appear to get them even if not playing.. handle it
         {
-            Phrase current = phrases[0];
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Outstanding " + phrases.Count);
+            if (phrases.Count > 0)
+            {
+                Phrase current = phrases[0];
 
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Speech finished " + current.phrase);
+                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Speech finished " + current.phrase);
 
-            phrases.RemoveAt(0);
+                phrases.RemoveAt(0);
 
-            if (phrases.Count > 0)                  // more, start next
-                StartSpeaking();
+                if (phrases.Count > 0)                  // more, start next
+                    StartSpeaking();
 
-            if (current.ap != null)                  // if we want to resume
-                current.ap.ResumeAfterPause();
+                if (current.ap != null)                  // if we want to resume
+                    current.ap.ResumeAfterPause();
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Synth complete IGNORE ");
+            }
         }
     }
 }

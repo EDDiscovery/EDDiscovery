@@ -110,11 +110,42 @@ namespace EDDiscovery.Actions
             }
         }
 
+        static public Dictionary<string, string> FilterVars(Dictionary<string, string> d, string filter)
+        {
+            int wildcard = filter.IndexOf('*');
+            if (wildcard >= 0)
+                filter = filter.Substring(0, wildcard);
+
+            Dictionary<string, string> ret = new Dictionary<string, string>();
+
+            foreach (KeyValuePair<string, string> k in d)
+            {
+                if ( (wildcard>=0 && k.Key.StartsWith(filter)) || k.Key.Equals(filter) )
+                    ret[k.Key] = k.Value;
+            }
+
+            return ret;
+        }
+
         static public void DumpVars(Dictionary<string, string> d, string prefix = "")
         {
             foreach (KeyValuePair<string, string> k in d)
             { System.Diagnostics.Debug.WriteLine(prefix + k.Key + "=" + k.Value); }
         }
 
+        static public void AddToVar(Dictionary<string, string> d, string name, int add, int initial)
+        {
+            if (d.ContainsKey(name))
+            {
+                int i;
+                if (int.TryParse(d[name],out i ))
+                {
+                    d[name] = (i + add).ToString();
+                    return;
+                }
+            }
+
+            d[name] = initial.ToString();
+        }
     }
 }

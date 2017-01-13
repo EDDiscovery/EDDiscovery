@@ -470,6 +470,8 @@ namespace EDDiscovery
                 LogLineHighlight("The theme stored has missing colors or other missing information");
                 LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
+
+            ActionRunOnEvent("onStartup");
         }
 
         private Task CheckForNewInstallerAsync()
@@ -1800,6 +1802,9 @@ namespace EDDiscovery
                     CheckEdsm = checkedsm,
                     CurrentCommander = currentcmdr ?? DisplayedCommander
                 };
+
+                ActionRunOnEvent("onRefreshStart");
+
                 _refreshWorker.RunWorkerAsync(args);
             }
         }
@@ -1906,7 +1911,16 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    standardvariables["Commander"] = internalglobalvariables["Commander"] = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
+                    string prevcommander = standardvariables.ContainsKey("Commander") ? standardvariables["Commander"] : "None";
+                    string commander = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
+
+                    if ( prevcommander.Equals(commander))
+                        Actions.ActionData.AddToVar(standardvariables, "RefreshCount", 1, 1);
+                    else
+                        standardvariables["RefreshCount"] = "1";
+
+                    internalglobalvariables["RefreshCount"] = standardvariables["RefreshCount"];
+                    standardvariables["Commander"] = internalglobalvariables["Commander"] = commander;
 
                     travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
                     exportControl1.PopulateCommanders();
@@ -1937,6 +1951,8 @@ namespace EDDiscovery
                     HistoryRefreshed(this, EventArgs.Empty);
 
                 journalmonitor.StartMonitor();
+
+                ActionRunOnEvent("onRefreshEnd");
             }
         }
 
