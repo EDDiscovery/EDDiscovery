@@ -17,6 +17,7 @@ namespace EDDiscovery.Actions
 
         bool async = false;             // if this Action is an asynchoronous object
         bool executing = false;         // Records is executing
+        int progmaxcount = 10000;
       
         Timer restarttick = new Timer();
 
@@ -85,19 +86,50 @@ namespace EDDiscovery.Actions
         {
             executing = true;
 
-            Action ac;
-
             System.Diagnostics.Stopwatch timetaken = new System.Diagnostics.Stopwatch();
             timetaken.Start();
 
-            int debugmax = 1000;
-
-            while ((ac = GetNextAction()) != null)
+            while( true )
             {
-//TBD
-                if ( debugmax-- < 1 )  { TerminateCurrentProgram(); continue; }
+                //TBD
+                if (progmaxcount > 0 && --progmaxcount == 0 ) { System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " **** PROG EXCEEDED RUN LIMIT" ); TerminateCurrentProgram(); }
                 // TBD
-                if (ac.LevelUp > 0 && progcurrent.LevelUp(ac))          // level up, if it returns true, it has changed position, so go back and get next
+
+                if (progcurrent != null)
+                {
+                    if (progcurrent.GetErrorList != null)       // any errors pending, handle
+                    {
+                        discoveryform.LogLine("Error at " + progcurrent.Location + ":" + Environment.NewLine + progcurrent.GetErrorList);
+                        TerminateCurrentProgram();              // clear current program..
+                    }
+                    else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it
+                    {
+                        // this catches a LOOP without a statement at the end..  or a DO without a WHILE at the end..
+                        if (progcurrent.ExecLevel > 0 && progcurrent.LevelUp(progcurrent.ExecLevel, null)) // see if we have any pending LOOP (or a DO without a while) and continue..
+                            continue;       // errors or movement causes it to go back.. errors will be picked up above
+
+                        progcurrent = null;         // cancel it
+                    }
+                }
+
+                while (progcurrent == null && progqueue.Count > 0)    // if no program,but something in queue
+                {
+                    progcurrent = progqueue[0];
+                    progqueue.RemoveAt(0);
+
+                    if (progcurrent.IsProgramFinished)          // reject empty programs..
+                    {
+                        progcurrent = null;
+                        continue;       // and try again
+                    }
+                }
+
+                if (progcurrent == null)        // Still nothing, game over
+                    break;
+
+                Action ac = progcurrent.GetNextStep();      // get the step. move PC on.
+
+                if (ac.LevelUp > 0 && progcurrent.LevelUp(ac.LevelUp, ac) )        // level up..
                 {
                     System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Abort Lv" + progcurrent.ExecLevel + " e " + (progcurrent.IsExecuteOn ? "1" : "0") + " up " + ac.LevelUp + ": " + progcurrent.StepNumber + " " + ac.Name + " " + ac.DisplayedUserData);
                     continue;
@@ -105,21 +137,14 @@ namespace EDDiscovery.Actions
 
                 System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Exec  Lv" + progcurrent.ExecLevel + " e " + (progcurrent.IsExecuteOn ? "1" : "0") + " up " + ac.LevelUp + ": " + progcurrent.StepNumber + " " + ac.Name + " " + ac.DisplayedUserData);
 
-                if (progcurrent.GetErrorList != null)       // any errors due to above.. get next statement from next program
-                {
-                    discoveryform.LogLine("Error at " + progcurrent.Location + ":" + Environment.NewLine + progcurrent.GetErrorList);
-                    TerminateCurrentProgram();
-                    continue; // get next program
-                }
-
                 if (progcurrent.DoExecute(ac))       // execute is on.. 
                 {
-                    if ( ac.Type == Action.ActionType.Call)     // Call needs to pass info back up thru to us, need a different call
+                    if (ac.Type == Action.ActionType.Call)     // Call needs to pass info back up thru to us, need a different call
                     {
                         ActionCall acall = ac as ActionCall;
                         string prog;
                         Dictionary<string, string> paravars;
-                        if ( acall.ExecuteCallAction(progcurrent, out prog, out paravars) ) // if execute ok
+                        if (acall.ExecuteCallAction(progcurrent, out prog, out paravars)) // if execute ok
                         {
                             System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + ActionData.ToString(paravars));
 
@@ -135,23 +160,31 @@ namespace EDDiscovery.Actions
                                 progcurrent.ReportError("Call cannot find " + prog);
                         }
                     }
+                    else if (ac.Type == Action.ActionType.Return)     // Return needs to pass info back up thru to us, need a different call
+                    {
+                        ActionReturn ar = ac as ActionReturn;
+                        string retstr;
+                        if ( ar.ExecuteActionReturn(progcurrent,out retstr) )
+                        {
+                            progcurrent = null;
+                            if (progqueue.Count > 0)        // pass return value if program is there..
+                                progqueue[0].currentvars["ReturnValue"] = retstr;
+
+                            continue;       // back to top, next action from returned function.
+                        }
+                    }
                     else if (!ac.ExecuteAction(progcurrent))      // if execute says, stop, i'm waiting for something
                     {
                         return;     // exit, with executing set true.  ResumeAfterPause will restart it.
                     }
-
-                    if (progcurrent.GetErrorList != null)
-                    {
-                        discoveryform.LogLine("Error at " + progcurrent.Location + ":" + Environment.NewLine + progcurrent.GetErrorList);
-                        TerminateCurrentProgram();
-                    }
                 }
 
-                //if ( async && timetaken.ElapsedMilliseconds > 10000000000000 )  // no more than 100ms per go to stop the main thread being blocked
-                //{
-                //    restarttick.Start();
-                  //  break;
-                //}
+                if (async && timetaken.ElapsedMilliseconds > 100)  // no more than 100ms per go to stop the main thread being blocked
+                {
+                    System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " *** SUSPEND");
+                    restarttick.Start();
+                    break;
+                }
             }
 
             executing = false;
@@ -160,6 +193,7 @@ namespace EDDiscovery.Actions
         private void Tick_Tick(object sender, EventArgs e) // used when async
         {
             restarttick.Stop();
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " *** RESUME");
             Execute();
         }
 
@@ -167,23 +201,6 @@ namespace EDDiscovery.Actions
         {
             if (executing)
                 Execute();
-        }
-
-        private Action GetNextAction()
-        {
-            if (progcurrent != null && progcurrent.IsProgramFinished)        // if current program ran out, cancel it
-                progcurrent = null;
-
-            while (progcurrent == null && progqueue.Count > 0)    // if no program,but something in queue
-            {
-                progcurrent = progqueue[0];
-                progqueue.RemoveAt(0);
-
-                if (progcurrent.IsProgramFinished)          // reject empty programs..
-                    progcurrent = null;
-            }
-
-            return (progcurrent != null) ? progcurrent.GetNextStep() : null;
         }
 
         private void TerminateCurrentProgram()          // stop this program, move onto next

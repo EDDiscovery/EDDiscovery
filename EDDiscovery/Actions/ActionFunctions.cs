@@ -31,7 +31,8 @@ namespace EDDiscovery.Actions
 
             flist = new FuncEntry[]
             {
-                new FuncEntry("exists",Exists,1,20)
+                new FuncEntry("exists",Exists,1,20),
+                new FuncEntry("splitcaps",SplitCaps,1,1)
             };
         }
 
@@ -77,7 +78,7 @@ namespace EDDiscovery.Actions
 
                                 int start = apos;
 
-                                while (apos < line.Length && char.IsLetterOrDigit(line[apos]))
+                                while (apos < line.Length && (char.IsLetterOrDigit(line[apos]) || line[apos] == '_' ))
                                     apos++;
 
                                 if (apos == start)
@@ -169,7 +170,7 @@ namespace EDDiscovery.Actions
 
         private bool Exists(List<string> paras, Dictionary<string, string> vars, out string output)
         {
-            foreach( string s in paras )
+            foreach (string s in paras)
             {
                 if (!vars.ContainsKey(s))
                 {
@@ -180,6 +181,20 @@ namespace EDDiscovery.Actions
 
             output = "1";
             return true;
+        }
+
+        private bool SplitCaps(List<string> paras, Dictionary<string, string> vars, out string output)
+        {
+            if (vars.ContainsKey(paras[0]))
+            {
+                output = Tools.SplitCapsWord(vars[paras[0]]);
+                return true;
+            }
+            else
+            {
+                output = "Variable " + paras[0] + " does not exist";
+                return false;
+            }
         }
 
         #endregion

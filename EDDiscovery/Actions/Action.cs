@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class Action
     {
-        public enum ActionType { Cmd, If, Else, ElseIf, Do, While, Loop , Call };
+        public enum ActionType { Cmd, If, Else, ElseIf, Do, While, Loop , Call , Return };
 
         private string actionname;
         private ActionType actiontype;
@@ -99,6 +99,7 @@ namespace EDDiscovery.Actions
             new Commands("ErrorIf", typeof(ActionErrorIf) , ActionType.Cmd),
             new Commands("Set", typeof(ActionSet) , ActionType.Cmd),
             new Commands("Let", typeof(ActionLet) , ActionType.Cmd),
+            new Commands("Event", typeof(ActionEvent) , ActionType.Cmd),
             new Commands("If", typeof(ActionIf) , ActionType.If),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
             new Commands("Else If", typeof(ActionElseIf) , ActionType.ElseIf),
@@ -106,8 +107,10 @@ namespace EDDiscovery.Actions
             new Commands("Do", typeof(ActionDo) , ActionType.Do),
             new Commands("Loop", typeof(ActionLoop) , ActionType.Loop),
             new Commands("Call", typeof(ActionCall) , ActionType.Call),
+            new Commands("Return", typeof(ActionReturn) , ActionType.Return),
             new Commands("Pragma", typeof(ActionPragma) , ActionType.Cmd),
-            new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd)
+            new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd),
+            new Commands("Rem", typeof(ActionRem) , ActionType.Cmd)
         };
 
         public static string[] GetActionNameList()

@@ -188,6 +188,8 @@
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Actions\Action.cs" />
+    <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
+    <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
     <Compile Include="Actions\ActionData.cs" />
     <Compile Include="Actions\ActionFile.cs" />
     <Compile Include="Actions\ActionFunctions.cs" />
@@ -203,6 +205,7 @@
     <Compile Include="Actions\ActionProgramForm.Designer.cs">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\ActionCommands\ActionRem.cs" />
     <Compile Include="Actions\ActionRun.cs" />
     <Compile Include="Actions\ActionCommands\ActionSay.cs" />
     <Compile Include="Actions\ActionProgram.cs" />

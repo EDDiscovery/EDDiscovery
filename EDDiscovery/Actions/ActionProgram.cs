@@ -148,7 +148,7 @@ namespace EDDiscovery.Actions
             nextstepnumber = 0;
 
             System.Diagnostics.Debug.WriteLine("Run " + actionfile.name + "::" + r.Name );
-            ActionData.DumpVars(gvars, " Func Var:");
+            //ActionData.DumpVars(gvars, " Func Var:");
 
             startvars = new Dictionary<string, string>(gvars); // keep this, used by call to pass clean set to called program without locals
             currentvars = new Dictionary<string, string>(startvars); // copy of.. we can modify to hearts content
@@ -220,19 +220,19 @@ namespace EDDiscovery.Actions
             execlevel = Math.Max(execlevel-1,0);
         }
 
-        public bool LevelUp(Action ac)
-        {
-            int up = ac.LevelUp;
+        // true is reported on an error, or we need to get the next action.
 
+        public bool LevelUp(int up, Action action)      // action may be null at end of program
+        {
             while (up-- > 0)
             {
                 if (IsExecutingType(Action.ActionType.Do))                // DO needs a while at level -1..
                 {
-                    if (ac.Type == Action.ActionType.While)
+                    if ( action!= null && action.Type == Action.ActionType.While)
                     {
-                        if (ac.LevelUp == 1)                // only 1, otherwise its incorrectly nested
+                        if (action.LevelUp == 1)                // only 1, otherwise its incorrectly nested
                         {
-                            ActionWhile w = ac as ActionWhile;
+                            ActionWhile w = action as ActionWhile;
                             if (w.ExecuteEndDo(this))    // if this indicates (due to true) we need to fetch next instruction
                             {
                                 return true;
@@ -243,13 +243,13 @@ namespace EDDiscovery.Actions
                         else
                         {
                             ReportError("While incorrectly nested under Do");
-                            return false;
+                            return true;
                         }
                     }
                     else
                     {
                         ReportError("While missing after Do");
-                        return false;
+                        return true;
                     }
                 }
                 else if (IsExecutingType(Action.ActionType.Loop))        // loop, when needs to make a decision if to change back pos..

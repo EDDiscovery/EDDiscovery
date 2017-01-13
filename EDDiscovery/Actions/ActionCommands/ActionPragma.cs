@@ -13,6 +13,8 @@ namespace EDDiscovery.Actions
         {
         }
 
+        public override bool AllowDirectEditingOfUserData { get { return true; } }
+
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
             string promptValue = PromptSingleLine.ShowDialog(parent, "Pragma", UserData, "Configure Pragma Command");
@@ -41,25 +43,29 @@ namespace EDDiscovery.Actions
                             spc = rest.Length;
 
                         string vname = rest.Substring(0, spc);
-
-                        if (ap.currentvars.ContainsKey(vname))
-                            ap.discoveryform.LogLine(vname + "=" + ap.currentvars[vname]);
-                        else
-                            ap.discoveryform.LogLine(vname + " Unkown");
-
                         rest = rest.Substring(spc).Trim();
+
+                        DumpVars(ap, ActionData.FilterVars(ap.currentvars, vname));
+
                     } while (rest.Length > 0);
                 }
                 else
                 {
-                    ActionData.DumpVars(ap.currentvars);
-                    foreach (KeyValuePair<string, string> k in ap.currentvars)
-                        ap.discoveryform.LogLine(k.Key + "=" + k.Value);
+                    DumpVars(ap, ActionData.FilterVars(ap.currentvars, "*"));
                 }
             }
 
             return true;
         }
 
+
+        private void DumpVars(ActionProgramRun ap, Dictionary<string, string> fv )
+        {
+            foreach (KeyValuePair<string, string> k in fv)
+            {
+                ap.discoveryform.LogLine(k.Key + "=" + k.Value);
+                System.Diagnostics.Debug.WriteLine( "dumpvars " + k.Key + "=" + k.Value);
+            }
+        }
     }
 }

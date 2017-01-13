@@ -294,9 +294,9 @@ namespace EDDiscovery.Actions
                 //DEBUG
                 if (g.programstep != null)
                 {
-                    g.value.Enabled = false;
-                    g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData + "  PS: " + g.programstep.GetFlagList();
-                    g.value.Enabled = true;
+                    //g.value.Enabled = false;
+                    //g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData + "  PS: " + g.programstep.GetFlagList();
+                    //g.value.Enabled = true;
                 }
 
                 first = false;
