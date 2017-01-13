@@ -129,9 +129,11 @@ namespace EDDiscovery
 
         private void UpdateSystemRow(int rowindex)
         {
-            const int idxNote = 8;
-            const int idxScans = 6;
             const int idxVisits = 5;
+            const int idxScans = 6;
+            const int idxPriStar = 7;
+            const int idxInfo = 8;
+            const int idxNote = 9;
 
             if (hl == null)
                 hl = _discoveryForm.history;
@@ -178,6 +180,43 @@ namespace EDDiscovery
 
                     List<JournalScan> scans = hl.GetScans(sysname);
                     dataGridViewExplore[idxScans, rowindex].Value = scans.Count.ToString();
+
+                    string pristar = "";
+                    // Search for primary star
+                    foreach (var scan in scans)
+                    {
+                        if (scan.IsStar && scan.DistanceFromArrivalLS==0.0)
+                        {
+                            pristar = scan.StarType;
+                            break;
+                        }
+                    }
+                    dataGridViewExplore[idxPriStar, rowindex].Value = pristar;
+
+
+                    string info = "";
+
+                    foreach (var scan in scans)
+                    {
+                        if (scan.IsStar)
+                        {
+                            if (scan.StarTypeID == EliteDangerous.EDStar.AeBe)
+                                info = info + " " + "AeBe";
+                            if (scan.StarTypeID == EliteDangerous.EDStar.N)
+                                info = info + " " + "NS";
+                            if (scan.StarTypeID == EliteDangerous.EDStar.H)
+                                info = info + " " + "BH";
+                        }
+                        else
+                        {
+                            if (scan.PlanetTypeID == EliteDangerous.EDPlanet.Earthlike_body)
+                                info = info + " " + "ELW";
+                            if (scan.PlanetTypeID == EliteDangerous.EDPlanet.Water_world)
+                                info = info + " " + "WW";
+                        }
+                    }
+
+                    dataGridViewExplore[idxInfo, rowindex].Value = info.Trim();
 
 
                     string note = "";
