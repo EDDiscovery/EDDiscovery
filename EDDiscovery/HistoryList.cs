@@ -84,10 +84,12 @@ namespace EDDiscovery
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
         private string wheredocked = "";            // empty if in space, else where docked
+        private string shiptype = "Unknown";
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
         public string WhereAmI { get { return wheredocked; } }
+        public string ShipType { get { return shiptype; } }
 
         #endregion
 
@@ -274,6 +276,7 @@ namespace EDDiscovery
                 if (prev.landed.HasValue)
                     he.landed = prev.landed;
 
+                he.shiptype = prev.shiptype;
                 he.wheredocked = prev.wheredocked;
             }
 
@@ -296,12 +299,21 @@ namespace EDDiscovery
             else if (je.EventTypeID == JournalTypeEnum.Touchdown)
             {
                 he.landed = true;
-            }   
+            }
             else if (je.EventTypeID == JournalTypeEnum.Liftoff)
                 he.landed = false;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
+            {
                 he.landed = (je as EliteDangerous.JournalEvents.JournalLoadGame).StartLanded;
-
+                he.shiptype = (je as EliteDangerous.JournalEvents.JournalLoadGame).Ship;
+            }
+            else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)
+                he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardBuy).ShipType;
+            else if (je.EventTypeID == JournalTypeEnum.ShipyardNew)
+                he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardNew).ShipType;
+            else if (je.EventTypeID == JournalTypeEnum.ShipyardSwap)
+                he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipType;
+        
             return he;
         }
 
