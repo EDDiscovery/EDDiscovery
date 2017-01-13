@@ -55,6 +55,7 @@
             this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnScans = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnPrimaryStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1.SuspendLayout();
@@ -225,6 +226,7 @@
             this.ColumnZ,
             this.ColumnVisits,
             this.ColumnScans,
+            this.ColumnPrimaryStar,
             this.ColumnInfo,
             this.ColumnNote});
             this.dataGridViewExplore.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -242,14 +244,14 @@
             // 
             // ColumnDist
             // 
-            this.ColumnDist.Frozen = true;
+            this.ColumnDist.FillWeight = 75F;
             this.ColumnDist.HeaderText = "Dist";
             this.ColumnDist.Name = "ColumnDist";
+            this.ColumnDist.Width = 75;
             // 
             // ColumnX
             // 
             this.ColumnX.FillWeight = 50F;
-            this.ColumnX.Frozen = true;
             this.ColumnX.HeaderText = "X";
             this.ColumnX.Name = "ColumnX";
             this.ColumnX.ReadOnly = true;
@@ -258,7 +260,6 @@
             // ColumnY
             // 
             this.ColumnY.FillWeight = 50F;
-            this.ColumnY.Frozen = true;
             this.ColumnY.HeaderText = "Y";
             this.ColumnY.Name = "ColumnY";
             this.ColumnY.ReadOnly = true;
@@ -287,6 +288,14 @@
             this.ColumnScans.Name = "ColumnScans";
             this.ColumnScans.ReadOnly = true;
             this.ColumnScans.Width = 50;
+            // 
+            // ColumnPrimaryStar
+            // 
+            this.ColumnPrimaryStar.FillWeight = 75F;
+            this.ColumnPrimaryStar.HeaderText = "Pri star";
+            this.ColumnPrimaryStar.Name = "ColumnPrimaryStar";
+            this.ColumnPrimaryStar.ReadOnly = true;
+            this.ColumnPrimaryStar.Width = 75;
             // 
             // ColumnInfo
             // 
@@ -347,6 +356,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnZ;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnVisits;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnScans;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPrimaryStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
     }
