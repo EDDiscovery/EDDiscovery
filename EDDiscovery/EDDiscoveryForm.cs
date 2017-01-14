@@ -106,7 +106,6 @@ namespace EDDiscovery
         Action cancelDownloadMaps = null;
         Task<bool> downloadMapsTask = null;
         Task checkInstallerTask = null;
-        private string logname = "";
         private bool themeok = true;
         private Forms.SplashForm splashform = null;
         BackgroundWorker dbinitworker = null;
