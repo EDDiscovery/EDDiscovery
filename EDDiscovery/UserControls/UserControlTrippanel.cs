@@ -19,7 +19,7 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private TravelHistoryControl travelhistorycontrol;
 
-        static String TITLE = "Trip panel";
+        //static String TITLE = "Trip panel";
 
         private int displaynumber = 0;
         private string DbSave { get { return "TripPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
