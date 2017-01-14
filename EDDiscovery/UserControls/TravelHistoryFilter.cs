@@ -217,11 +217,7 @@ namespace EDDiscovery
         {
             vw.SuspendLayout();
 
-            DataGridViewRow[] theRows = new DataGridViewRow[vw.Rows.Count];
-            vw.Rows.CopyTo(theRows, 0);
-            vw.Rows.Clear();
-
-            for (int loop = 0; loop < theRows.Length; loop++)
+            for (int loop = 0; loop < vw.RowCount; loop++)
             {
                 bool found = false;
 
@@ -229,7 +225,7 @@ namespace EDDiscovery
                     found = true;
                 else
                 {
-                    foreach (DataGridViewCell cell in theRows[loop].Cells)
+                    foreach (DataGridViewCell cell in vw.Rows[loop].Cells)
                     {
                         if (cell.Value != null)
                         {
@@ -242,10 +238,9 @@ namespace EDDiscovery
                     }
                 }
 
-                theRows[loop].Visible = found;
+                vw.Rows[loop].Visible = found;
             }
 
-            vw.Rows.AddRange(theRows);
             vw.ResumeLayout();
         }
     }
