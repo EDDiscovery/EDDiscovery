@@ -381,14 +381,11 @@ namespace EDDiscovery
             }
         }
 
-        private void dataGridViewRouteSystems_CellValidated(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewExplore_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
-                //UpdateSystemRow(e.RowIndex);
-                //UpdateSystemRow(e.RowIndex + 1);
-                //Force the totals to update
-                UpdateSystemRows();
+                UpdateSystemRow(e.RowIndex);
             }
         }
 
@@ -620,17 +617,6 @@ namespace EDDiscovery
         
         private void toolStripButtonImportFile_Click(object sender, EventArgs e)
         {
-            ExplorationSetClass newroute = new ExplorationSetClass();
-            UpdateExplorationInfo(newroute);
-            if (!newroute.Equals(_currentExplorationSet))
-            {
-                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
-                    + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                    return;
-            }
-
-            ClearExplorationSet();
 
 
             OpenFileDialog ofd = new OpenFileDialog();
@@ -639,7 +625,12 @@ namespace EDDiscovery
 
             if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 return;
+
+            ClearExplorationSet();
+
             string[] sysnames;
+
+
 
             try
             {
@@ -772,7 +763,6 @@ namespace EDDiscovery
             }
             RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
         }
-
 
     }
 

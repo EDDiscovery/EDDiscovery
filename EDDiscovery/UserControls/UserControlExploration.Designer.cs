@@ -271,6 +271,7 @@
             this.dataGridViewExplore.Name = "dataGridViewExplore";
             this.dataGridViewExplore.Size = new System.Drawing.Size(787, 471);
             this.dataGridViewExplore.TabIndex = 2;
+            this.dataGridViewExplore.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExplore_CellValidated);
             // 
             // ColumnSystemName
             // 
