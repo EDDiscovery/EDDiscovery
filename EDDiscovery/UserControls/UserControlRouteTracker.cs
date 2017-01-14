@@ -19,7 +19,6 @@ namespace EDDiscovery.UserControls
         private Font displayfont;
         private string DbSave { get { return "RouteTracker" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private SavedRouteClass _currentRoute;
-        private List<SavedRouteClass> _savedRoutes = new List<SavedRouteClass>();
         private  HistoryEntry currentSystem;
         private string lastsystem;
 
@@ -58,10 +57,9 @@ namespace EDDiscovery.UserControls
             autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
             autoSetTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoSetTarget", false);
 
-            _savedRoutes = SavedRouteClass.GetAllSavedRoutes();
-            String selRoute = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute" ,"-1");
+            String selRoute = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute", "-1");
             long id = long.Parse(selRoute);
-            _currentRoute = _savedRoutes.Find(r => r.Id.Equals(id));
+            _currentRoute = SavedRouteClass.GetAllSavedRoutes().Find(r => r.Id.Equals(id));
             updateScreen();
         }
 
@@ -112,7 +110,8 @@ namespace EDDiscovery.UserControls
                 confirmation.Click += (sender, e) => { prompt.Close(); };
                 cancel.Click += (sender, e) => { prompt.Close(); };
                 ComboBox cb = new ComboBox() { Left = 10, Top = 50, Width = 400 };
-                foreach(SavedRouteClass src in savedRoutes)
+
+                foreach (SavedRouteClass src in savedRoutes)
                 {
                     cb.Items.Add(src.Name);
                     if (src.Name.Equals(defaultValue))
@@ -127,7 +126,7 @@ namespace EDDiscovery.UserControls
                 prompt.Controls.Add(textLabel);
                 prompt.AcceptButton = confirmation;
 
-               var  res = prompt.ShowDialog(p); 
+                var  res = prompt.ShowDialog(p); 
                 selectedRoute = (cb.SelectedIndex != -1) ? savedRoutes[cb.SelectedIndex] : null;
                 return (res  == DialogResult.OK && selectedRoute != null);
             }
@@ -136,7 +135,8 @@ namespace EDDiscovery.UserControls
         private void setRouteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SavedRouteClass selectedRoute;
-            if (Prompt.ShowDialog(discoveryform, _savedRoutes, _currentRoute!=null? _currentRoute.Name:"", "Select route", out selectedRoute))
+            if (Prompt.ShowDialog(discoveryform, SavedRouteClass.GetAllSavedRoutes(),
+                _currentRoute!=null? _currentRoute.Name:"", "Select route", out selectedRoute))
             {
                 if (selectedRoute == null)
                     return;
