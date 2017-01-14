@@ -28,6 +28,7 @@ namespace ExtendedControls
                 dgv.Scroll += DGVScroll;
                 dgv.RowsAdded += DGVRowsAdded;
                 dgv.RowsRemoved += DGVRowsRemoved;
+                dgv.RowStateChanged += DGVRowStateChanged;
                 dgv.MouseWheel += DGVMWheel;
             }
             else if (e.Control is VScrollBarCustom)
@@ -84,6 +85,16 @@ namespace ExtendedControls
             Debug.Assert(vsc != null, "No Scroll bar attached");
             //Console.WriteLine("Rows Removed: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + rows +  " Removed " + e.RowCount);
             vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, rows - 1, dgv.DisplayedRowCount(false));
+        }
+
+        protected virtual void DGVRowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+            if (e.StateChanged.Equals(DataGridViewElementStates.Visible))
+            {
+                int rows = dgv.Rows.GetRowCount(DataGridViewElementStates.Visible);
+                Debug.Assert(vsc != null, "No Scroll bar attached");
+                vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingColumnIndex, rows - 1, dgv.DisplayedRowCount(false));
+            }
         }
 
         protected virtual void DGVMWheel(object sender, MouseEventArgs e)
