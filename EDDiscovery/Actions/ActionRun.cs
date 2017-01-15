@@ -31,35 +31,6 @@ namespace EDDiscovery.Actions
         }
 
         //historyentry may be null if not associated with a entry
-
-        static public void StandardVars(string trigname, Dictionary<string, string> vars, HistoryEntry he)
-        {
-            vars["TriggerName"] = trigname;       // Program gets eventname which triggered it..
-            vars["CurrentLocalTime"] = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss");  // time it was started, US format, to match JSON.
-            vars["CurrentUTCTime"] = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm:ss");  // time it was started, US format, to match JSON.
-            vars["CurrentCulture"] = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
-            vars["CurrentCultureInEnglish"] = System.Threading.Thread.CurrentThread.CurrentCulture.EnglishName;
-            vars["CurrentCultureISO"] = System.Threading.Thread.CurrentThread.CurrentCulture.ThreeLetterISOLanguageName;
-
-            if (he != null)
-            {
-                vars["DockedState"] = he.IsDocked ? "1" : "0";
-                vars["LandedState"] = he.IsLanded ? "1" : "0";
-                vars["StarSystem"] = he.System.name;
-                vars["JournalID"] = he.Journalid.ToString();
-            }
-        }
-
-        // standard add, with multiple var lists, and with optional he, and with standard additional vars..
-        public void StandardAdd(ActionFile fileset, string trigname , ActionProgram r, HistoryList hl, HistoryEntry he, List<Dictionary<string, string>> varlist)
-        {
-            Dictionary<string, string> vars = new Dictionary<string, string>();
-            ActionData.AddVars(vars, varlist);
-            StandardVars(trigname, vars, he);
-            Add(fileset, r, hl, he, vars);
-        }
-
-        // v is copied, so the program won't change v.
         // WE take a copy of each program, so each invocation of program action has a unique instance in case
         // it has private variables in either action or program.
         public void Add(ActionFile fileset, ActionProgram r, HistoryList hl, HistoryEntry h, Dictionary<string, string> v)
@@ -73,13 +44,6 @@ namespace EDDiscovery.Actions
                 progqueue.Insert(0, progcurrent);
 
             progcurrent = new ActionProgramRun(fileset, r, this, discoveryform, hl, h, v, async);   // now we run this.. no need to push to stack
-        }
-
-        public bool Call( string name, string parameters, HistoryList hl, HistoryEntry h, Dictionary<string,string> currentvars )      // inside ExecuteAction, will do GetNextAction next..
-        {
-            // push name to front of queue..  decode parameters to dictionary, add to list, change progcurrent to it.
-            //when progcurrent finished, it should resume at the caller at the next steppoint.
-            return false;
         }
 
         public void Execute()    // MAIN thread only..     
@@ -146,14 +110,14 @@ namespace EDDiscovery.Actions
                         Dictionary<string, string> paravars;
                         if (acall.ExecuteCallAction(progcurrent, out prog, out paravars)) // if execute ok
                         {
-                            System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + ActionData.ToString(paravars));
+                            System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + ActionVariables.ToString(paravars));
 
                             Tuple<ActionFile, ActionProgram> ap = actionfilelist.FindProgram(prog, progcurrent.actionfile);          // find program using this name, prefer this action file first
 
                             if (ap != null)
                             {
                                 Dictionary<string, string> callvars = new Dictionary<string, string>(progcurrent.startvars);
-                                ActionData.AddVars(callvars, paravars);
+                                ActionVariables.AddVars(callvars, paravars);
                                 RunNow(ap.Item1, ap.Item2, progcurrent.historylist, progcurrent.historyentry, callvars);
                             }
                             else

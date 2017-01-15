@@ -19,33 +19,37 @@ namespace EDDiscovery.Actions
 
             ConditionLists jf = new ConditionLists();
             if (UserData.Length > 0)
-                jf.FromJSON(UserData);
+            {
+                if ( jf.FromString(UserData)!=null)     // we try string first, but fall back to jSON in case its an older store
+                    jf.FromJSON(UserData);
+            }
 
             frm.InitCondition("Define condition", eventvars, theme, jf);
 
             frm.TopMost = parent.FindForm().TopMost;
             if (frm.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
-                userdata = frm.result.GetJSON();
+                userdata = frm.result.ToString();       // store as string
+
+
+                ConditionLists cl2 = new ConditionLists();
+                string res = cl2.FromString(userdata);
+                if (res != null)
+                {
+                    System.Diagnostics.Debug.Assert(false);
+                }
+
+                string asciistringcl2 = cl2.ToString();
+
+                if (!asciistringcl2.Equals(userdata))
+                {
+                    System.Diagnostics.Debug.Assert(false);
+                }
+
                 return true;
             }
             else
                 return false;
-        }
-
-        public override string DisplayedUserData
-        {
-            get
-            {
-                if (UserData.Length > 0)
-                {
-                    ConditionLists jf = new ConditionLists();
-                    jf.FromJSON(UserData);
-                    return jf.ToString();
-                }
-                else
-                    return "";
-            }
         }
     }
 
@@ -64,7 +68,7 @@ namespace EDDiscovery.Actions
                 if (condition == null)
                 {
                     condition = new ConditionLists();
-                    if (!condition.FromJSON(UserData))
+                    if (condition.FromString(UserData) != null)
                     {
                         ap.ReportError("IF condition is not correctly formed");
                         return true;
@@ -107,7 +111,7 @@ namespace EDDiscovery.Actions
                     if (condition == null)
                     {
                         condition = new ConditionLists();
-                        if (!condition.FromJSON(UserData))
+                        if (condition.FromString(UserData) != null)
                         {
                             ap.ReportError("IF condition is not correctly formed");
                             return true;
@@ -176,7 +180,7 @@ namespace EDDiscovery.Actions
                 if (condition == null)
                 {
                     condition = new ConditionLists();
-                    if (!condition.FromJSON(UserData))
+                    if (condition.FromString(UserData) != null)
                     {
                         ap.ReportError("While condition is not correctly formed");
                         return true;
@@ -207,7 +211,7 @@ namespace EDDiscovery.Actions
                 if (condition == null)
                 {
                     condition = new ConditionLists();
-                    if (!condition.FromJSON(UserData))
+                    if (condition.FromString(UserData) != null)
                     {
                         ap.ReportError("While condition in Do..While is not correctly formed");
                         return true;
@@ -369,7 +373,7 @@ namespace EDDiscovery.Actions
             if (condition == null)
             {
                 condition = new ConditionLists();
-                if (!condition.FromJSON(UserData))
+                if (condition.FromString(UserData) != null)
                 {
                     ap.ReportError("ErrorIF condition is not correctly formed");
                     return true;
@@ -406,6 +410,7 @@ namespace EDDiscovery.Actions
 
         string flagVars = "flagVars";
 
+#if false
         public override string DisplayedUserData
         {
             get
@@ -458,6 +463,8 @@ namespace EDDiscovery.Actions
                 return false;
             }
         }
+
+#endif
     }
 }
 

@@ -45,13 +45,13 @@ namespace EDDiscovery.Actions
                         string vname = rest.Substring(0, spc);
                         rest = rest.Substring(spc).Trim();
 
-                        DumpVars(ap, ActionData.FilterVars(ap.currentvars, vname));
+                        DumpVars(ap, ActionVariables.FilterVars(ap.currentvars, vname));
 
                     } while (rest.Length > 0);
                 }
                 else
                 {
-                    DumpVars(ap, ActionData.FilterVars(ap.currentvars, "*"));
+                    DumpVars(ap, ActionVariables.FilterVars(ap.currentvars, "*"));
                 }
             }
 

@@ -209,7 +209,6 @@ namespace EDDiscovery2
             g.outercond = new ExtendedControls.ComboBoxCustom();
             g.outercond.Items.AddRange(Enum.GetNames(typeof(ConditionLists.LogicalCondition)));
             g.outercond.SelectedIndex = 0;
-            g.outercond.Location = new Point(panelmargin , panelmargin + conditionhoff);
             g.outercond.Size = new Size(60, 24);
             g.outercond.Enabled = g.outercond.Visible = false;
             if (initialcondouter != null)
@@ -219,7 +218,6 @@ namespace EDDiscovery2
 
             g.outerlabel = new Label();
             g.outerlabel.Text = " with group(s) above";
-            g.outerlabel.Location = new Point(g.outercond.Location.X + g.outercond.Width + 4, g.outercond.Location.Y + 3);
             g.outerlabel.AutoSize = true;
             g.outerlabel.Visible = false;
             g.panel.Controls.Add(g.outerlabel);
@@ -689,7 +687,14 @@ namespace EDDiscovery2
                 }
             }
 
-            int minh = panelmargin + conditionhoff + ((g.outercond.Enabled) ? (g.outercond.Height + 8) : 0);
+            if (g.outercond.Enabled)
+            {
+                g.outercond.Location = new Point(panelmargin, vnextcond);
+                g.outerlabel.Location = new Point(g.outercond.Location.X + g.outercond.Width + 4, g.outercond.Location.Y + 3);
+                vnextcond += conditionhoff;
+            }
+
+            int minh = panelmargin + conditionhoff;
             g.panel.Size = new Size(g.panel.Width, Math.Max(vnextcond, minh));
 
             return numcond;

@@ -141,13 +141,13 @@ namespace EDDiscovery
         }
 
 
-        static public string WordWrap(string input, int linelen )
+        static public string WordWrap(string input, int linelen)
         {
-            String[] split = input.Split(new char[] { ' '});
+            String[] split = input.Split(new char[] { ' ' });
 
             string ans = "";
             int l = 0;
-            for( int i = 0; i < split.Length; i++ )
+            for (int i = 0; i < split.Length; i++)
             {
                 ans += split[i];
                 l += split[i].Length;
@@ -163,7 +163,7 @@ namespace EDDiscovery
             return ans;
         }
 
-        static public string StackTrace(string trace, string enclosingfunc, int lines )
+        static public string StackTrace(string trace, string enclosingfunc, int lines)
         {
             int offset = trace.IndexOf(enclosingfunc);
 
@@ -193,11 +193,11 @@ namespace EDDiscovery
             return ret;
         }
 
-        static public string CutLine( ref string trace, int offset )
+        static public string CutLine(ref string trace, int offset)
         {
             int nloffset = trace.IndexOf(Environment.NewLine, offset);
             string ret;
-            if ( nloffset != -1 )
+            if (nloffset != -1)
             {
                 ret = trace.Substring(offset, nloffset - offset);
                 trace = trace.Substring(nloffset);
@@ -216,7 +216,7 @@ namespace EDDiscovery
         static StreamWriter debugout = null;
         static Stopwatch debugtimer = null;
 
-        static public void LogToFile( string s )
+        static public void LogToFile(string s)
         {
             if (debugout == null)
             {
@@ -225,7 +225,7 @@ namespace EDDiscovery
                 debugtimer.Start();
             }
 
-            debugout.WriteLine((debugtimer.ElapsedMilliseconds%100000) + ":" + s);
+            debugout.WriteLine((debugtimer.ElapsedMilliseconds % 100000) + ":" + s);
             debugout.Flush();
         }
 
@@ -233,8 +233,8 @@ namespace EDDiscovery
         {
             return System.Text.RegularExpressions.Regex.Replace(
                    System.Text.RegularExpressions.Regex.Replace(
-                   Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"), 
-                   @"([a-z\d])([A-Z])", "$1 $2"), 
+                   Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"),
+                   @"([a-z\d])([A-Z])", "$1 $2"),
                    @"[-\s]", " ");
         }
 
@@ -256,19 +256,162 @@ namespace EDDiscovery
 
         public static string SafeFileString(string normal)
         {
-            normal = normal.Replace("*", "_star");     
+            normal = normal.Replace("*", "_star");
             normal = normal.Replace("/", "_slash");
             normal = normal.Replace("\\", "_slash");
             normal = normal.Replace(":", "_colon");
             normal = normal.Replace("?", "_qmark");
 
             string ret = "";
-            foreach( char c in normal )
+            foreach (char c in normal)
             {
-                if (char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c== '_' )
+                if (char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c == '_')
                     ret += c;
             }
             return ret;
         }
+
+        public class StringParser
+        {
+            int pos;        // always left after an operation on the next non space char
+            string line;
+
+            public StringParser(string l)
+            {
+                line = l.Trim();
+                pos = 0;
+            }
+
+            public string LineLeft { get { return line.Substring(pos); } }
+            public bool IsEOL { get { return pos == line.Length;  } }
+
+            public bool IncSkipSpace()
+            {
+                if ( pos < line.Length )
+                    pos++;
+
+                return SkipSpace();
+            }
+
+            public bool SkipSpace()
+            {
+                while (pos < line.Length && char.IsWhiteSpace(line[pos]))
+                    pos++;
+
+                return pos == line.Length;
+            }
+
+            public char PeekChar()
+            {
+                return (pos < line.Length) ? line[pos] : ' ';
+            }
+
+            public bool IsCharMoveOn( char t )
+            {
+                if (pos < line.Length && line[pos] == t)
+                {
+                    pos++;
+                    SkipSpace();
+                    return true;
+                }
+                else
+                    return false;
+            }
+
+            public string NextWord(string terminators = " ")
+            {
+                if (pos >= line.Length)     // null if there is nothing..
+                    return null;
+                else
+                {
+                    int start = pos;
+
+                    while (pos < line.Length && terminators.IndexOf(line[pos]) == -1)
+                        pos++;
+
+                    string ret = line.Substring(start, pos - start);
+
+                    SkipSpace();
+
+                    return ret;
+                }
+            }
+
+            public string NextQuotedWord(string nonquoteterminators = " ")
+            {
+                if (pos < line.Length)
+                {
+                    if (line[pos] == '"')
+                    {
+                        string ret = "";
+                        pos++;
+
+                        while (true)
+                        {
+                            int nextquote = line.IndexOf('"', pos);
+                            if (nextquote == -1)
+                                return null;    // MUST have a quote..
+
+                            if (line[nextquote - 1] == '\\')        // if \\"
+                            {
+                                ret += line.Substring(pos, nextquote - 1 - pos) + "\"";
+                                pos = nextquote + 1;        // go past the quote.. try again
+                            }
+                            else
+                            {       //End of quoted string
+                                ret += line.Substring(pos, nextquote - pos);
+                                pos = nextquote + 1;
+                                SkipSpace();
+                                return ret;
+                            }
+                        }
+                    }
+                    else
+                        return NextWord(nonquoteterminators);
+                }
+                else
+                    return null;
+            }
+
+            public List<string> NextOptionallyBracketedList()       // empty list on error
+            {
+                List<string> sl = new List<string>();
+                if (pos < line.Length)
+                {
+                    if (IsCharMoveOn('('))  // if (, we go multi bracketed
+                    {
+                        while (true)
+                        {
+                            string s = NextQuotedWord("), ");
+                            if (s == null) // failed to get a word, error
+                            {
+                                sl.Clear();
+                                break;
+                            }
+                            else
+                                sl.Add(s);
+
+                            if (IsCharMoveOn(')'))      // ), end of word list, move over and stop
+                                break;
+                            else if (!IsCharMoveOn(','))    // must be ,
+                            {
+                                sl.Clear();     // cancel list and stop, error
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string s = NextQuotedWord("), ");
+                        if (s != null)
+                            sl.Add(s);
+                    }
+                }
+
+                return sl;
+            }
+
+        }
+
     }
 }

@@ -40,9 +40,38 @@ namespace EDDiscovery
         };
 
         public static bool IsNullOperation(string matchname) { return matchname.Contains("Always"); }
-        public static bool IsUnaryOperation(string matchname) { return matchname.Contains("Present") || matchname.Contains("Is True") || matchname.Contains("Is False"); }
+        public static bool IsNullOperation(MatchType matchtype) { return matchtype == MatchType.AlwaysTrue; }
 
-        static public string[] MatchNames = { "Contains",
+        public static bool IsUnaryOperation(string matchname) { return matchname.Contains("Present") || matchname.Contains("True") || matchname.Contains("False"); }
+        public static bool IsUnaryOperation(MatchType matchtype) { return matchtype == MatchType.IsNotPresent || matchtype == MatchType.IsPresent || matchtype == MatchType.IsTrue || matchtype == MatchType.IsFalse; }
+
+        static public bool MatchTypeFromString(string s, out MatchType mt )
+        {
+            int indexof = Array.IndexOf(MatchNames, s);
+            if ( indexof == -1 )
+                indexof = Array.IndexOf(OperatorNames, s);
+
+            if (indexof >= 0)
+            {
+                mt = (MatchType)(indexof);
+                return true;
+            }
+            else
+            {
+                try
+                {
+                    mt = (MatchType)Enum.Parse(typeof(MatchType), s.Replace(" ", ""));       // must work, exception otherwise
+                    return true;
+                }
+                catch
+                {
+                    mt = MatchType.Contains;
+                    return false;
+                }
+            }
+        }
+        
+        static public string[] MatchNames = { "Contains",       // used for display
                                        "Not Contains",
                                        "== (Str)",
                                        "!= (Str)",
@@ -65,6 +94,30 @@ namespace EDDiscovery
                                        "Always True"
                                     };
 
+        static public string[] OperatorNames = {        // used for ASCII rep .
+                                       "Contains",
+                                       "NotContains",
+                                       "$==",
+                                       "$!=",
+                                       "CSContains",
+                                       "CSNotContains",
+                                       "CS==",
+                                       "CS!=",
+                                       "IsTrue",
+                                       "IsFalse",
+                                       "==",
+                                       "!=",
+                                       ">",
+                                       ">=",
+                                       "<",
+                                       "<=",
+                                       ">=",
+                                       "<",
+                                       "IsPresent",
+                                       "NotPresent",
+                                       "AlwaysTrue"
+                                    };
+
         public enum LogicalCondition
         {
             Or,     // any true
@@ -81,24 +134,15 @@ namespace EDDiscovery
 
             public bool Create(string i, string ms, string v)     // ms can have spaces inserted into enum
             {
-                try
+                if (MatchTypeFromString(ms, out matchtype))
                 {
                     itemname = i;
-
-                    int indexof = Array.IndexOf(MatchNames, ms);
-
-                    if (indexof >= 0)
-                        matchtype = (MatchType)(indexof);
-                    else
-                        matchtype = (MatchType)Enum.Parse(typeof(MatchType), ms.Replace(" ", ""));       // must work, exception otherwise
-
                     matchstring = v;
 
                     return true;
                 }
-                catch { }
-
-                return false;
+                else
+                    return false;
             }
         };
 
@@ -467,35 +511,6 @@ namespace EDDiscovery
             return evt;
         }
 
-        public override string ToString()
-        {
-            string ret = "";
-
-            for (int j = 0; j < conditionlist.Count; j++)
-            {
-                Condition f = conditionlist[j];
-
-                if (j > 0)
-                    ret += " " + f.outercondition.ToString() + " ";
-
-                if (f.fields.Count > 1)
-                    ret += "(";
-
-                for (int i = 0; i < f.fields.Count; i++)
-                {
-                    if (i > 0)
-                        ret += " " + f.innercondition.ToString() + " ";
-
-                    ret += f.fields[i].itemname + " " + MatchNames[(int)f.fields[i].matchtype] + " " + f.fields[i].matchstring;
-                }
-
-                if (f.fields.Count > 1)
-                    ret += ")";
-            }
-
-            return ret;
-        }
-
         public bool FromJSON(string s)
         {
             Clear();
@@ -561,6 +576,139 @@ namespace EDDiscovery
             catch { }
 
             return false;
+        }
+
+        public override string ToString()
+        {
+            string ret = "";
+
+            if (conditionlist.Count > 1)
+                ret += "(";
+
+            for (int j = 0; j < conditionlist.Count; j++)
+            {
+                Condition f = conditionlist[j];
+
+                if (j > 0)
+                    ret += ") " + f.outercondition.ToString() + " (";
+
+                for (int i = 0; i < f.fields.Count; i++)
+                {
+                    if (i > 0)
+                        ret += " " + f.innercondition.ToString() + " ";
+
+                    if (IsNullOperation(f.fields[i].matchtype))
+                        ret += "Condition " + OperatorNames[(int)f.fields[i].matchtype];
+                    else
+                    {
+                        ret += (f.fields[i].itemname).QuotedEscapeString() + " " + OperatorNames[(int)f.fields[i].matchtype];
+
+                        if (!IsUnaryOperation(f.fields[i].matchtype))
+                            ret += " " + f.fields[i].matchstring.QuotedEscapeString();
+                    }
+                }
+            }
+
+            if (conditionlist.Count > 1)
+                ret += ")";
+
+            return ret;
+        }
+
+        public string FromString(string line )
+        {
+            Tools.StringParser sp = new Tools.StringParser(line);
+
+            bool multi = false;
+
+            if (sp.IsCharMoveOn('('))
+                multi = true;
+
+            List<Condition> cllist = new List<Condition>();
+            List<ConditionEntry> ed = new List<ConditionEntry>();
+            string innercond = null,outercond = "Or";       // innercond == null until we have one, then it needs to be the same every time
+
+            while (true)
+            {
+                string var = sp.NextQuotedWord(") ");
+                string cond = sp.NextQuotedWord( ") ");
+
+                if (var == null || cond == null)
+                    return "Missing parts of condition";
+
+                MatchType mt;
+
+                if (!MatchTypeFromString(cond, out mt))
+                    return "Operator is not recognised";
+
+                string value = "";
+
+                if (!IsUnaryOperation(mt) && !IsNullOperation(mt))
+                {
+                    value = sp.NextQuotedWord(") ");
+                    if (value == null)
+                        return "Missing parts of condition";
+                }
+
+                ConditionEntry ce = new ConditionEntry() { itemname = var, matchtype = mt, matchstring = value };
+                ed.Add(ce);
+
+                if (sp.IsCharMoveOn(')'))      // if closing bracket..
+                {
+                    if (!multi)
+                        return "Closing condition bracket found but no opening ( present";
+
+                    Condition cl = new Condition();
+                    if (!cl.Create("Default", "", "", innercond ?? "Or", outercond))
+                        return "Could not create condition - check inner and outer condition names";
+
+                    cl.fields = ed;
+                    cllist.Add(cl);
+                    ed = new List<ConditionEntry>();
+                    innercond = null;
+
+                    if (sp.IsEOL)  // EOL, end of  (cond..cond) outercond ( cond cond)
+                    {
+                        conditionlist = cllist;
+                        return null;
+                    }
+                    else
+                    {
+                        outercond = sp.NextQuotedWord(") ");
+
+                        if (outercond == null)
+                            return "Missing outer condition in multiple conditions between brackets";
+
+                        if (!sp.IsCharMoveOn('(')) // must have another (
+                            return "Missing multiple condition after " + outercond;
+                    }
+                    
+                }
+                else if ( sp.IsEOL ) // last condition
+                {
+                    if (multi)
+                        return "Missing closing braket in multiple condition";
+
+                    Condition cl = new Condition();
+                    if (!cl.Create("Default", "", "", innercond??"Or", "Or"))
+                        return "Could not create condition - check inner and outer condition names";
+
+                    cl.fields = ed;
+                    cllist.Add(cl);
+                    conditionlist = cllist;
+                    return null;
+                }
+                else
+                {
+                    string condi = sp.NextQuotedWord(") ");
+
+                    if (innercond == null)
+                        innercond = condi;
+                    else if (!innercond.Equals(condi))
+                        return "Differing inner conditions incorrect";
+
+                }
+            }
         }
 
         #region JSON as the vars - used for the filter out system..
