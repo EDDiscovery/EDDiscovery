@@ -173,15 +173,21 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows[rownr].Cells[JournalHistoryColumns.HistoryTag].Tag = item;
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
-        {
-            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he) )
-            {
-                AddNewJournalRow(true, he);
-            }
-        }
+	    private void AddNewEntry(HistoryEntry he, HistoryList hl) // add if in event filter, and not in field filter..
+	    {
+		    if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) &&
+		        fieldfilter.FilterHistory(he))
+		    {
+			    AddNewJournalRow(true, he);
 
-        #endregion
+			    if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem) // Move focus to new row
+			    {
+				    SelectTopRow();
+			    }
+		    }
+	    }
+
+	    #endregion
 
         #region Buttons
 
@@ -386,5 +392,11 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
-    }
+
+		public void SelectTopRow()
+		{
+			dataGridViewJournal.ClearSelection();
+			dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+		}
+	}
 }
