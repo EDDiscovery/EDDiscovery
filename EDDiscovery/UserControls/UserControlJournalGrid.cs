@@ -161,8 +161,17 @@ namespace EDDiscovery.UserControls
 
             if (insert)
             {
-                dataGridViewJournal.Rows.Insert(0, rowobj);
-                rownr = 0;
+				var dgvRowCurrent = dataGridViewJournal.CurrentRow;
+				bool autoscroll = false;
+				if(dgvRowCurrent == null || dgvRowCurrent.Index == 0)
+					autoscroll = true;
+
+				dataGridViewJournal.Rows.Insert(0, rowobj);
+
+				if(autoscroll)
+					dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[0].Cells[0];
+
+				rownr = 0;
             }
             else
             {
