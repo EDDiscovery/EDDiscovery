@@ -159,17 +159,17 @@ namespace EDDiscovery
 
         // return all JSON items as name/value pairs
 
-        static public void GetJSONFieldNamesValues(string json, Dictionary<string, string> values)
+        static public void GetJSONFieldNamesValues(string json, Dictionary<string, string> values , string prefix = "")
         {
             JObject jo = JObject.Parse(json);  // Create a clone
 
             foreach (JToken jc in jo.Children())
             {
-                ExpandTokensA(jc, values);
+                ExpandTokensA(jc, values , prefix);
             }
         }
 
-        static private void ExpandTokensA(JToken jt, Dictionary<string, string> values)
+        static private void ExpandTokensA(JToken jt, Dictionary<string, string> values , string prefix)
         {
             if (jt.HasValues)
             {
@@ -179,11 +179,11 @@ namespace EDDiscovery
                 {
                     if (jc.HasValues)
                     {
-                        ExpandTokensA(jc, values);
+                        ExpandTokensA(jc, values , prefix);
                     }
                     else if (Array.FindIndex(decodeable, x => x == jc.Type) != -1)
                     {
-                        values[jc.Path] = jc.Value<string>();
+                        values[prefix+ jc.Path] = jc.Value<string>();
                     }
                 }
             }

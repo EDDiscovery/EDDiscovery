@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionProgramForm));
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
@@ -45,14 +46,22 @@
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOK = new System.Windows.Forms.Panel();
+            this.buttonExtLoad = new ExtendedControls.ButtonExt();
+            this.buttonExtSave = new ExtendedControls.ButtonExt();
+            this.buttonExtEdit = new ExtendedControls.ButtonExt();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panelOuter.SuspendLayout();
             this.panelVScroll.SuspendLayout();
             this.panelName.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelOuter
@@ -78,6 +87,9 @@
             this.panelVScroll.Size = new System.Drawing.Size(854, 380);
             this.panelVScroll.TabIndex = 8;
             this.panelVScroll.VerticalScrollBarDockRight = true;
+            this.panelVScroll.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelVScroll_MouseDown);
+            this.panelVScroll.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVScroll_MouseMove);
+            this.panelVScroll.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelVScroll_MouseUp);
             // 
             // vScrollBarCustom1
             // 
@@ -265,6 +277,9 @@
             // 
             // panelOK
             // 
+            this.panelOK.Controls.Add(this.buttonExtLoad);
+            this.panelOK.Controls.Add(this.buttonExtSave);
+            this.panelOK.Controls.Add(this.buttonExtEdit);
             this.panelOK.Controls.Add(this.buttonCancel);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -272,6 +287,45 @@
             this.panelOK.Name = "panelOK";
             this.panelOK.Size = new System.Drawing.Size(862, 30);
             this.panelOK.TabIndex = 9;
+            // 
+            // buttonExtLoad
+            // 
+            this.buttonExtLoad.BorderColorScaling = 1.25F;
+            this.buttonExtLoad.ButtonColorScaling = 0.5F;
+            this.buttonExtLoad.ButtonDisabledScaling = 0.5F;
+            this.buttonExtLoad.Location = new System.Drawing.Point(170, 4);
+            this.buttonExtLoad.Name = "buttonExtLoad";
+            this.buttonExtLoad.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtLoad.TabIndex = 10;
+            this.buttonExtLoad.Text = "Load";
+            this.buttonExtLoad.UseVisualStyleBackColor = true;
+            this.buttonExtLoad.Click += new System.EventHandler(this.buttonExtLoad_Click);
+            // 
+            // buttonExtSave
+            // 
+            this.buttonExtSave.BorderColorScaling = 1.25F;
+            this.buttonExtSave.ButtonColorScaling = 0.5F;
+            this.buttonExtSave.ButtonDisabledScaling = 0.5F;
+            this.buttonExtSave.Location = new System.Drawing.Point(88, 4);
+            this.buttonExtSave.Name = "buttonExtSave";
+            this.buttonExtSave.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtSave.TabIndex = 9;
+            this.buttonExtSave.Text = "Save";
+            this.buttonExtSave.UseVisualStyleBackColor = true;
+            this.buttonExtSave.Click += new System.EventHandler(this.buttonExtSave_Click);
+            // 
+            // buttonExtEdit
+            // 
+            this.buttonExtEdit.BorderColorScaling = 1.25F;
+            this.buttonExtEdit.ButtonColorScaling = 0.5F;
+            this.buttonExtEdit.ButtonDisabledScaling = 0.5F;
+            this.buttonExtEdit.Location = new System.Drawing.Point(6, 4);
+            this.buttonExtEdit.Name = "buttonExtEdit";
+            this.buttonExtEdit.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtEdit.TabIndex = 8;
+            this.buttonExtEdit.Text = "Text Edit";
+            this.buttonExtEdit.UseVisualStyleBackColor = true;
+            this.buttonExtEdit.Click += new System.EventHandler(this.buttonExtEdit_Click);
             // 
             // buttonCancel
             // 
@@ -301,6 +355,37 @@
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.deleteToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
             // statusStripCustom
             // 
             this.statusStripCustom.Location = new System.Drawing.Point(3, 478);
@@ -324,6 +409,7 @@
             this.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionProgramForm";
+            this.Resize += new System.EventHandler(this.ActionProgramForm_Resize);
             this.panelOuter.ResumeLayout(false);
             this.panelVScroll.ResumeLayout(false);
             this.panelName.ResumeLayout(false);
@@ -331,6 +417,7 @@
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelOK.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -357,5 +444,12 @@
         private ExtendedControls.ButtonExt buttonExtDelete;
         private ExtendedControls.ButtonExt buttonVars;
         private System.Windows.Forms.Label labelSet;
+        private ExtendedControls.ButtonExt buttonExtLoad;
+        private ExtendedControls.ButtonExt buttonExtSave;
+        private ExtendedControls.ButtonExt buttonExtEdit;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

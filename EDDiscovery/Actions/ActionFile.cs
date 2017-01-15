@@ -100,7 +100,7 @@ namespace EDDiscovery.Actions
                     if (eventjson!=null)
                         JSONHelper.GetJSONFieldValues(eventjson, valuesneeded);     // get the values needed for the conditions
 
-                    ActionData.AddVars(valuesneeded, othervars);    // add any other to the game
+                    ActionVariables.AddVars(valuesneeded, othervars);    // add any other to the game
 
                     foreach ( MatchingSets ae in apl )       // for all files
                     {
@@ -124,7 +124,7 @@ namespace EDDiscovery.Actions
         }
 
         public void RunActions(List<Actions.ActionFileList.MatchingSets> ale, List<Dictionary<string, string>> outervarsin, 
-                                      string trigger, ActionRun run, HistoryList hle, HistoryEntry he )
+                                      ActionRun run, HistoryList hle, HistoryEntry he )
         {
             foreach (Actions.ActionFileList.MatchingSets ae in ale)          // for every file which passed..
             {
@@ -136,12 +136,16 @@ namespace EDDiscovery.Actions
                     {
                         Dictionary<string, string> inputparas;
                         List<string> flags;
-                        Actions.ActionData.DecodeActionData(fe.actiondata, out flags, out inputparas); // may be null inputparas, standardadd copes
+                        Actions.ActionData.FromJSON(fe.actiondata, out flags, out inputparas); // may be null inputparas, standardadd copes
 
-                        List<Dictionary<string, string>> varsin = new List<Dictionary<string, string>>(outervarsin);
-                        varsin.Add(inputparas);
+                        // TBD check flags?
 
-                        run.StandardAdd(ap.Item1, trigger, ap.Item2, hle, he, varsin);
+                        Dictionary<string, string> vars = new Dictionary<string, string>();
+
+                        ActionVariables.AddVars(vars, outervarsin);
+                        ActionVariables.AddVars(vars, inputparas);
+
+                        run.Add(ap.Item1, ap.Item2, hle, he, vars);
                     }
                 }
             }

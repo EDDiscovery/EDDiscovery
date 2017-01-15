@@ -32,38 +32,70 @@ namespace EDDiscovery.Actions
             if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
                 HistoryList hl = ap.historylist;
-                res = res.Trim();
+                Tools.StringParser sp = new Tools.StringParser(res);
 
-                string cmdname = NextWord(ref res);
+                string cmdname = sp.NextWord();
 
                 bool last = cmdname.Equals("LAST", StringComparison.InvariantCultureIgnoreCase);
                 bool first = cmdname.Equals("FIRST", StringComparison.InvariantCultureIgnoreCase);
+                bool nextjid = cmdname.Equals("NEXT", StringComparison.InvariantCultureIgnoreCase);
+                bool previousjid = cmdname.Equals("PREVIOUS", StringComparison.InvariantCultureIgnoreCase);
 
                 if (last || first)
                 {
-                    string eventname = NextWord(ref res);
+                    List<string> eventnames = sp.NextOptionallyBracketedList();
 
                     int count;
-                    if (int.TryParse(eventname, out count))
+                    if (eventnames.Count == 1 && int.TryParse(eventnames[0], out count))
                     {
                         List<HistoryEntry> hle = hl.EntryOrder;
                         FillEventVars(count, hle, ap, last);
                     }
-                    else if (eventname.Length > 0)
+                    else if (eventnames.Count>0)
                     {
-                        string countstring = NextWord(ref res);
+                        string countstring = sp.NextWord();
 
                         count = 1;
-                        if (countstring.Length == 0 || int.TryParse(countstring, out count))
+                        if (countstring == null || int.TryParse(countstring, out count))
                         {
-                            List<HistoryEntry> hle = (from h in hl.EntryOrder where h.journalEntry.EventTypeStr.Equals(eventname, StringComparison.InvariantCultureIgnoreCase) select h).ToList();
+                            List<HistoryEntry> hle = (from h in hl.EntryOrder where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
+
                             FillEventVars(count, hle, ap, last);
                         }
                         else
                             ap.ReportError("Non integer count after event name in Event");
                     }
                     else
-                        ap.ReportError("Missing event name in Event");
+                        ap.ReportError("Missing event name or name list in Event");
+                }
+                else if (nextjid || previousjid )
+                {
+                    string jidstring = sp.NextWord();
+
+                    int jid;
+                    if (jidstring != null && int.TryParse(jidstring, out jid))
+                    {
+                        string countstring = sp.NextWord();
+
+                        int count = 1;
+                        if (countstring == null || int.TryParse(countstring, out count))
+                        {
+                            int indexof = hl.EntryOrder.FindIndex(x => x.Journalid == jid);
+                            if (indexof != -1)
+                            {
+                                if (nextjid)
+                                    indexof += count;
+                                else
+                                    indexof -= count;
+                            }
+
+                            FillEventVars(indexof + 1, hl.EntryOrder, ap, last);    // 1 based system..
+                        }
+                        else
+                            ap.ReportError("Non integer count after JID number in Event");
+                    }
+                    else
+                        ap.ReportError("Missing JID after NEXT or PREVIOUS in Event");
                 }
                 else
                 {
@@ -74,7 +106,7 @@ namespace EDDiscovery.Actions
                         FillEventVars(1, hle, ap, false);
                     }
                     else
-                        ap.ReportError("No an Journal ID Integer in Event");
+                        ap.ReportError("Missing JID in Event");
                 }
             }
 
@@ -86,7 +118,7 @@ namespace EDDiscovery.Actions
 
         void FillEventVars( int count, List<HistoryEntry> hl , ActionProgramRun ap, bool revorder )
         {
-            string eventname = "Event";
+            string prefix = "EC_";
 
             if (count >= 1 && count <= hl.Count)     // if within range.. (1 based)
             {
@@ -98,16 +130,10 @@ namespace EDDiscovery.Actions
                 try
                 {
                     Dictionary<string, string> values = new Dictionary<string, string>();
-                    JSONHelper.GetJSONFieldNamesValues(hl[count].journalEntry.EventDataString, values);
-
-                    ap.currentvars[eventname + "_LocalTime"] = hl[count].EventTimeLocal.ToString("MM/dd/yyyy HH:mm:ss");
-                    ap.currentvars[eventname + "_JID"] = hl[count].Journalid.ToString();
-                    ap.currentvars[eventname + "_Docked"] = hl[count].IsDocked ? "1" : "0";
-                    ap.currentvars[eventname + "_Landed"] = hl[count].IsLanded ? "1" : "0";
-                    ap.currentvars[eventname + "_WhereAmI"] = hl[count].WhereAmI;
-                    ap.currentvars[eventname + "_ShipType"] = hl[count].ShipType;
+                    JSONHelper.GetJSONFieldNamesValues(hl[count].journalEntry.EventDataString, values,prefix);
+                    EDDiscoveryForm.HistoryEntryVars(hl[count], values, prefix);
                     foreach (KeyValuePair<string, string> k in values)
-                        ap.currentvars[eventname + "_" + Tools.SafeFileString(k.Key)] = k.Value;
+                        ap.currentvars[Tools.SafeFileString(k.Key)] = k.Value;
 
                     return;
                 }
@@ -116,24 +142,7 @@ namespace EDDiscovery.Actions
                 }
             }
 
-            ap.currentvars[eventname + "_JID"] = "0";
-        }
-
-        string NextWord(ref string cmd)
-        {
-            int spaceafter = cmd.IndexOf(' ');
-            if (spaceafter >= 0)
-            {
-                string res = cmd.Substring(0, spaceafter);
-                cmd = cmd.Substring(spaceafter + 1).Trim();
-                return res;
-            }
-            else
-            {
-                string res = cmd.Trim();
-                cmd = "";
-                return res;
-            }
+            ap.currentvars[prefix + "JID"] = "0";
         }
 
     }

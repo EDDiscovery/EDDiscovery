@@ -18,6 +18,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             richTextBox_History.TextBox.ReadOnly = true;
+            richTextBox_History.TextBox.ContextMenuStrip = contextMenuStrip1;
             Name = "Log";
         }
 
@@ -40,6 +41,11 @@ namespace EDDiscovery.UserControls
         public void CopyTextFrom( UserControlLog other )
         {
             richTextBox_History.CopyFrom(other.richTextBox_History);
+        }
+
+        private void clearLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox_History.TextBox.Clear();
         }
     }
 }

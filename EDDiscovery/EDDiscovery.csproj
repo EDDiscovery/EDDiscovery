@@ -215,6 +215,7 @@
     <Compile Include="Actions\ActionVariableForm.Designer.cs">
       <DependentUpon>ActionVariableForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\ActionVariables.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>

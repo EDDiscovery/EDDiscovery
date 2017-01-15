@@ -806,7 +806,7 @@ namespace EDDiscovery.UserControls
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if ( rightclicksystem!=null)
-                discoveryform.ActionRunOnEntry(rightclicksystem);
+                discoveryform.ActionRunOnEntry(rightclicksystem , "UserRightClick");
         }
 
         #endregion

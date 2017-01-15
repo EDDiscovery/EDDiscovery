@@ -312,7 +312,7 @@ namespace EDDiscovery
             try
             {
                 List<string> flags;
-                Actions.ActionData.DecodeActionData(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), out flags, out usercontrolledglobalvariables);
+                Actions.ActionData.FromJSON(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), out flags, out usercontrolledglobalvariables);
                 internalglobalvariables = new Dictionary<string, string>();
                 standardvariables = new Dictionary<string, string>(internalglobalvariables);
                 foreach (KeyValuePair<string, string> v in usercontrolledglobalvariables)
@@ -372,7 +372,7 @@ namespace EDDiscovery
                 LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
 
-            ActionRunOnEvent("onStartup");
+            ActionRunOnEvent("onStartup","ProgramEvent");
         }
 
         private Task CheckForNewInstallerAsync()
@@ -1233,7 +1233,6 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            ActionRunOnEvent("onStartup");
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1670,7 +1669,7 @@ namespace EDDiscovery
                     CurrentCommander = currentcmdr ?? DisplayedCommander
                 };
 
-                ActionRunOnEvent("onRefreshStart");
+                ActionRunOnEvent("onRefreshStart", "ProgramEvent");
 
                 _refreshWorker.RunWorkerAsync(args);
             }
@@ -1782,7 +1781,7 @@ namespace EDDiscovery
                     string commander = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
 
                     if ( prevcommander.Equals(commander))
-                        Actions.ActionData.AddToVar(standardvariables, "RefreshCount", 1, 1);
+                        Actions.ActionVariables.AddToVar(standardvariables, "RefreshCount", 1, 1);
                     else
                         standardvariables["RefreshCount"] = "1";
 
@@ -1819,7 +1818,7 @@ namespace EDDiscovery
 
                 journalmonitor.StartMonitor();
 
-                ActionRunOnEvent("onRefreshEnd");
+                ActionRunOnEvent("onRefreshEnd", "ProgramEvent");
             }
         }
 
@@ -1971,17 +1970,18 @@ namespace EDDiscovery
             frm.ShowDialog(this.FindForm()); // don't care about the result, the form does all the saving
 
             usercontrolledglobalvariables = frm.userglobalvariables;
-            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", Actions.ActionData.EncodeActionData(null, usercontrolledglobalvariables));
+            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", Actions.ActionData.ToJSON(null, usercontrolledglobalvariables));
 
             standardvariables = new Dictionary<string, string>(internalglobalvariables);
             foreach (KeyValuePair<string, string> v in usercontrolledglobalvariables)
                 standardvariables[v.Key] = v.Value;
         }
 
-        public void ActionRunOnEntry(HistoryEntry he)
+        public void ActionRunOnEntry(HistoryEntry he , string triggertype)
         {
             Dictionary<string, string> testvars = new Dictionary<string, string>(standardvariables);
-            Actions.ActionRun.StandardVars(he.journalEntry.EventTypeStr,testvars, he);
+            SystemVars(he.journalEntry.EventTypeStr, triggertype, testvars);
+            HistoryEntryVars(he, testvars,"Event_");
 
             Actions.ActionFunctions functions = new Actions.ActionFunctions(this, history, he);                   // function handler
 
@@ -1991,19 +1991,19 @@ namespace EDDiscovery
             if ( ale != null )
             {
                 Dictionary<string, string> eventvars = new Dictionary<string, string>();
-                JSONHelper.GetJSONFieldNamesValues(he.journalEntry.EventDataString, eventvars);        // for all events, add to field list
+                JSONHelper.GetJSONFieldNamesValues(he.journalEntry.EventDataString, eventvars , "Event_");        // for all events, add to field list
 
-                actionfiles.RunActions(ale, new List<Dictionary<string, string>>() { standardvariables, eventvars }, 
-                                                  he.journalEntry.EventTypeStr, actionrunasync, history, he);  // add programs to action run
+                actionfiles.RunActions(ale, new List<Dictionary<string, string>>() { standardvariables, testvars, eventvars }, 
+                                                 actionrunasync, history, he);  // add programs to action run
 
                 actionrunasync.Execute();       // will execute
             }
         }
 
-        public void ActionRunOnEvent( string name, Dictionary<string,string> othervars = null )
+        public void ActionRunOnEvent( string name, string triggertype )
         {
             Dictionary<string, string> testvars = new Dictionary<string, string>(standardvariables);
-            Actions.ActionRun.StandardVars(name, testvars, null);
+            SystemVars(name, triggertype, testvars);
 
             Actions.ActionFunctions functions = new Actions.ActionFunctions(this, history, null);                   // function handler
 
@@ -2012,14 +2012,40 @@ namespace EDDiscovery
 
             if (ale != null)
             {
-                actionfiles.RunActions(ale, new List<Dictionary<string, string>>() { standardvariables , othervars },
-                                                  name, actionrunasync, history, null);  // add programs to action run
+                actionfiles.RunActions(ale, new List<Dictionary<string, string>>() { standardvariables , testvars },
+                                                  actionrunasync, history, null);  // add programs to action run
 
                 actionrunasync.Execute();       // will execute
             }
         }
 
         #endregion
+
+        static public void HistoryEntryVars(HistoryEntry he, Dictionary<string, string> vars, string prefix)
+        {
+            if (he != null)
+            {
+                vars[prefix + "LocalTime"] = he.EventTimeLocal.ToString("MM/dd/yyyy HH:mm:ss");
+                vars[prefix + "DockedState"] = he.IsDocked ? "1" : "0";
+                vars[prefix + "LandedState"] = he.IsLanded ? "1" : "0";
+                vars[prefix + "StarSystem"] = he.System.name;
+                vars[prefix + "WhereAmI"] = he.WhereAmI;
+                vars[prefix + "ShipType"] = he.ShipType;
+                vars[prefix + "JID"] = he.Journalid.ToString();
+            }
         }
+
+        static public void SystemVars(string trigname, string triggertype, Dictionary<string, string> vars)
+        {
+            vars["TriggerName"] = trigname;       // Program gets eventname which triggered it.. (onRefresh, LoadGame..)
+            vars["TriggerType"] = triggertype;       // type (onRefresh, or OnNew, or ProgramTrigger for all others)
+            vars["CurrentLocalTime"] = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss");  // time it was started, US format, to match JSON.
+            vars["CurrentUTCTime"] = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm:ss");  // time it was started, US format, to match JSON.
+            vars["CurrentCulture"] = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+            vars["CurrentCultureInEnglish"] = System.Threading.Thread.CurrentThread.CurrentCulture.EnglishName;
+            vars["CurrentCultureISO"] = System.Threading.Thread.CurrentThread.CurrentCulture.ThreeLetterISOLanguageName;
+        }
+
+    }
 }
 
