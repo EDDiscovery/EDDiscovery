@@ -199,7 +199,7 @@ namespace EDDiscovery2.Forms
             this.linkLabelGitHubIssue.Location = new System.Drawing.Point(7, 143);
             this.linkLabelGitHubIssue.Margin = new System.Windows.Forms.Padding(45, 1, 3, 1);
             this.linkLabelGitHubIssue.Name = "linkLabelGitHubIssue";
-            this.linkLabelGitHubIssue.Size = new System.Drawing.Size(87, 13);
+            this.linkLabelGitHubIssue.Size = new System.Drawing.Size(90, 13);
             this.linkLabelGitHubIssue.TabIndex = 9;
             this.linkLabelGitHubIssue.TabStop = true;
             this.linkLabelGitHubIssue.Text = "Submit Feedback";
