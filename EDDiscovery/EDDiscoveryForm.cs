@@ -1107,8 +1107,11 @@ namespace EDDiscovery
             settings.SaveSettings();
 
             SQLiteDBClass.PutSettingBool("FormMax", this.WindowState == FormWindowState.Maximized);
+            if (FormWindowState.Minimized != this.WindowState)
+            {
             SQLiteDBClass.PutSettingInt("FormWidth", this.Width);
             SQLiteDBClass.PutSettingInt("FormHeight", this.Height);
+            }
             SQLiteDBClass.PutSettingInt("FormTop", this.Top);
             SQLiteDBClass.PutSettingInt("FormLeft", this.Left);
             routeControl1.SaveSettings();
