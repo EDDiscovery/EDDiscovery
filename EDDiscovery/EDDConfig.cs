@@ -1,4 +1,19 @@
-﻿using EDDiscovery.DB;
+﻿/*
+ * Copyright © 2015 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using EDDiscovery.DB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -54,7 +69,9 @@ namespace EDDiscovery2
         private bool _EDSMLog;
         readonly public string LogIndex;
         private bool _canSkipSlowUpdates = false;
+        private bool _useNotifyIcon = false;
         private bool _orderrowsinverted = false;
+        private bool _minimizeToNotifyIcon = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
         private bool _displayUTC = false;
@@ -92,6 +109,22 @@ namespace EDDiscovery2
             LogIndex = DateTime.Now.ToString("yyyyMMdd");
         }
 
+        /// <summary>
+        /// Controls whether or not a system notification area (systray) icon will be shown.
+        /// </summary>
+        public bool UseNotifyIcon
+        {
+            get
+            {
+                return _useNotifyIcon;
+            }
+            set
+            {
+                _useNotifyIcon = value;
+                SQLiteConnectionUser.PutSettingBool("UseNotifyIcon", value);
+            }
+        }
+
         public bool UseDistances
         {
             get
@@ -103,6 +136,24 @@ namespace EDDiscovery2
             {
                 _useDistances = value;
                 SQLiteConnectionUser.PutSettingBool("EDSMDistances", value);
+            }
+        }
+
+        /// <summary>
+        /// Controls whether or not the main window will be hidden to the
+        /// system notification area icon (systray) when minimized.
+        /// Has no effect if <see cref="UseNotifyIcon"/> is not enabled.
+        /// </summary>
+        public bool MinimizeToNotifyIcon
+        {
+            get
+            {
+                return _minimizeToNotifyIcon;
+            }
+            set
+            {
+                _minimizeToNotifyIcon = value;
+                SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
             }
         }
 
@@ -354,10 +405,12 @@ namespace EDDiscovery2
         {
             try
             {
+                _useNotifyIcon = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", false, conn);
                 _useDistances = SQLiteConnectionUser.GetSettingBool("EDSMDistances", false, conn);
                 _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
                 _canSkipSlowUpdates = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", false, conn);
                 _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
+                _minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
                 _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
                 _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
                 _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
