@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 { 
     class ActionReturn : Action
     {
-        public ActionReturn(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionReturn(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 

@@ -10,7 +10,7 @@ namespace EDDiscovery.Actions
 {
     class ActionSleep : Action
     {
-        public ActionSleep(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionSleep(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 
@@ -18,6 +18,11 @@ namespace EDDiscovery.Actions
         ActionProgramRun apr;
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }
+
+        public override string VerifyActionCorrect()
+        {
+            return (UserData.Length > 0) ? null : "Sleep missing timeout in ms";
+        }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {

@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionEvent : Action
     {
-        public ActionEvent(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionEvent(string n, ActionType t, string ud, int lu) : base(n, t,  ud, lu)
         {
         }
 
@@ -32,7 +32,7 @@ namespace EDDiscovery.Actions
             if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
                 HistoryList hl = ap.historylist;
-                Tools.StringParser sp = new Tools.StringParser(res);
+                StringParser sp = new StringParser(res);
 
                 string cmdname = sp.NextWord();
 
@@ -129,12 +129,10 @@ namespace EDDiscovery.Actions
 
                 try
                 {
-                    Dictionary<string, string> values = new Dictionary<string, string>();
-                    JSONHelper.GetJSONFieldNamesValues(hl[count].journalEntry.EventDataString, values,prefix);
+                    ConditionVariables values = new ConditionVariables();
+                    values.GetJSONFieldNamesAndValues(hl[count].journalEntry.EventDataString, prefix);
                     EDDiscoveryForm.HistoryEntryVars(hl[count], values, prefix);
-                    foreach (KeyValuePair<string, string> k in values)
-                        ap.currentvars[Tools.SafeFileString(k.Key)] = k.Value;
-
+                    ap.currentvars.Add(values);
                     return;
                 }
                 catch

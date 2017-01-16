@@ -99,9 +99,9 @@ namespace EDDiscovery
         public Actions.ActionFileList actionfiles;
 
         public Actions.ActionRun actionrunasync;
-        private Dictionary<string, string> internalglobalvariables;         // this is the main list, includes user global variables..
-        private Dictionary<string, string> usercontrolledglobalvariables;     // user specific ones.  fed back into global on change
-        public Dictionary<string, string> standardvariables;               // combo of above.
+        private ConditionVariables internalglobalvariables;         // this is the main list, includes user global variables..
+        private ConditionVariables usercontrolledglobalvariables;     // user specific ones.  fed back into global on change
+        public ConditionVariables standardvariables;               // combo of above.
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
@@ -313,10 +313,8 @@ namespace EDDiscovery
             {
                 List<string> flags;
                 Actions.ActionData.FromJSON(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), out flags, out usercontrolledglobalvariables);
-                internalglobalvariables = new Dictionary<string, string>();
-                standardvariables = new Dictionary<string, string>(internalglobalvariables);
-                foreach (KeyValuePair<string, string> v in usercontrolledglobalvariables)
-                    standardvariables[v.Key] = v.Value;
+                internalglobalvariables = new ConditionVariables();
+                standardvariables = new ConditionVariables(internalglobalvariables,usercontrolledglobalvariables);
 
                 if (!(SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized))
                 {
@@ -1781,7 +1779,7 @@ namespace EDDiscovery
                     string commander = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
 
                     if ( prevcommander.Equals(commander))
-                        Actions.ActionVariables.AddToVar(standardvariables, "RefreshCount", 1, 1);
+                        standardvariables.AddToVar("RefreshCount", 1, 1);
                     else
                         standardvariables["RefreshCount"] = "1";
 
@@ -1964,7 +1962,7 @@ namespace EDDiscovery
             events.Add("onStartup");
             events.Add("onClosedown");
 
-            frm.InitAction("Actions: Define actions", events, internalglobalvariables.Keys.ToList(), usercontrolledglobalvariables, actionfiles, theme);
+            frm.InitAction("Actions: Define actions", events, internalglobalvariables.KeyList, usercontrolledglobalvariables, actionfiles, theme);
             frm.TopMost = this.FindForm().TopMost;
 
             frm.ShowDialog(this.FindForm()); // don't care about the result, the form does all the saving
@@ -1972,14 +1970,12 @@ namespace EDDiscovery
             usercontrolledglobalvariables = frm.userglobalvariables;
             SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", Actions.ActionData.ToJSON(null, usercontrolledglobalvariables));
 
-            standardvariables = new Dictionary<string, string>(internalglobalvariables);
-            foreach (KeyValuePair<string, string> v in usercontrolledglobalvariables)
-                standardvariables[v.Key] = v.Value;
+            standardvariables = new ConditionVariables(internalglobalvariables,usercontrolledglobalvariables);
         }
 
         public void ActionRunOnEntry(HistoryEntry he , string triggertype)
         {
-            Dictionary<string, string> testvars = new Dictionary<string, string>(standardvariables);
+            ConditionVariables testvars = new ConditionVariables(standardvariables);
             SystemVars(he.journalEntry.EventTypeStr, triggertype, testvars);
             HistoryEntryVars(he, testvars,"Event_");
 
@@ -1990,10 +1986,10 @@ namespace EDDiscovery
 
             if ( ale != null )
             {
-                Dictionary<string, string> eventvars = new Dictionary<string, string>();
-                JSONHelper.GetJSONFieldNamesValues(he.journalEntry.EventDataString, eventvars , "Event_");        // for all events, add to field list
+                ConditionVariables eventvars = new ConditionVariables();
+                eventvars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, "Event_");        // for all events, add to field list
 
-                actionfiles.RunActions(ale, new List<Dictionary<string, string>>() { standardvariables, testvars, eventvars }, 
+                actionfiles.RunActions(ale, new List<ConditionVariables>() { standardvariables, testvars, eventvars }, 
                                                  actionrunasync, history, he);  // add programs to action run
 
                 actionrunasync.Execute();       // will execute
@@ -2002,7 +1998,7 @@ namespace EDDiscovery
 
         public void ActionRunOnEvent( string name, string triggertype )
         {
-            Dictionary<string, string> testvars = new Dictionary<string, string>(standardvariables);
+            ConditionVariables testvars = new ConditionVariables(standardvariables);
             SystemVars(name, triggertype, testvars);
 
             Actions.ActionFunctions functions = new Actions.ActionFunctions(this, history, null);                   // function handler
@@ -2012,7 +2008,7 @@ namespace EDDiscovery
 
             if (ale != null)
             {
-                actionfiles.RunActions(ale, new List<Dictionary<string, string>>() { standardvariables , testvars },
+                actionfiles.RunActions(ale, new List<ConditionVariables>() { standardvariables , testvars },
                                                   actionrunasync, history, null);  // add programs to action run
 
                 actionrunasync.Execute();       // will execute
@@ -2021,7 +2017,7 @@ namespace EDDiscovery
 
         #endregion
 
-        static public void HistoryEntryVars(HistoryEntry he, Dictionary<string, string> vars, string prefix)
+        static public void HistoryEntryVars(HistoryEntry he, ConditionVariables vars, string prefix)
         {
             if (he != null)
             {
@@ -2035,7 +2031,7 @@ namespace EDDiscovery
             }
         }
 
-        static public void SystemVars(string trigname, string triggertype, Dictionary<string, string> vars)
+        static public void SystemVars(string trigname, string triggertype, ConditionVariables vars)
         {
             vars["TriggerName"] = trigname;       // Program gets eventname which triggered it.. (onRefresh, LoadGame..)
             vars["TriggerType"] = triggertype;       // type (onRefresh, or OnNew, or ProgramTrigger for all others)

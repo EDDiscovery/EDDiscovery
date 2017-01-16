@@ -12,7 +12,7 @@ namespace EDDiscovery.Actions
 {
     public partial class ActionVariableForm : Form
     {
-        public Dictionary<string, string> result;      // only on OK
+        public ConditionVariables result;      // only on OK
 
         public class Group
         {
@@ -37,7 +37,7 @@ namespace EDDiscovery.Actions
             AcceptButton = buttonOK;
         }
 
-        public void Init(string t, EDDiscovery2.EDDTheme th, Dictionary<string, string> vbs)
+        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs)
         {
             theme = th;
 
@@ -47,7 +47,7 @@ namespace EDDiscovery.Actions
 
             if (vbs != null)
             {
-                foreach (KeyValuePair<string, string> ky in vbs)
+                foreach (KeyValuePair<string, string> ky in vbs.values)
                 {
                     CreateEntry(ky.Key, ky.Value);
                 }
@@ -117,8 +117,8 @@ namespace EDDiscovery.Actions
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            result = new Dictionary<string, string>();
-            foreach( Group g in groups)
+            result = new ConditionVariables();
+            foreach ( Group g in groups)
             {
                 string var = g.var.Text;
                 string value = g.value.Text;

@@ -11,4 +11,13 @@
             obj = "\"" + obj.Replace("\"", "\\\"") + "\"";
         return obj;
     }
+
+    public static int FirstCharNonWhiteSpace(this string obj )
+    {
+        int i = 0;
+        while (i < obj.Length && char.IsWhiteSpace(obj[i]))
+            i++;
+        return i;
+    }
 }
+

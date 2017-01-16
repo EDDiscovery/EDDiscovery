@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// A file holds a set of conditions and programs associated with them
+
 namespace EDDiscovery.Actions
 {
     public class ActionFile
@@ -67,10 +69,10 @@ namespace EDDiscovery.Actions
         // get actions in system matching eventname
         // if eventjson = null meaning not associated with an event.
         // se if passed enabled string expansion of arguments in condition of event..
-        public List<MatchingSets> GetActions(string eventname, string eventjson, Dictionary<string, string> othervars, 
+        public List<MatchingSets> GetActions(string eventname, string eventjson, ConditionVariables othervars, 
                                             ConditionLists.ExpandString se = null)
         {
-            Dictionary<string, string> valuesneeded = new Dictionary<string, string>();
+            ConditionVariables valuesneeded = new ConditionVariables();
 
             List<MatchingSets> apl = new List<MatchingSets>();
 
@@ -98,9 +100,9 @@ namespace EDDiscovery.Actions
                 if (apl.Count > 0)          // we have matching events in files
                 {
                     if (eventjson!=null)
-                        JSONHelper.GetJSONFieldValues(eventjson, valuesneeded);     // get the values needed for the conditions
+                        valuesneeded.GetJSONFieldValuesIndicated(eventjson);     // get the values needed for the conditions
 
-                    ActionVariables.AddVars(valuesneeded, othervars);    // add any other to the game
+                    valuesneeded.Add(othervars);
 
                     foreach ( MatchingSets ae in apl )       // for all files
                     {
@@ -123,7 +125,7 @@ namespace EDDiscovery.Actions
             return null;
         }
 
-        public void RunActions(List<Actions.ActionFileList.MatchingSets> ale, List<Dictionary<string, string>> outervarsin, 
+        public void RunActions(List<Actions.ActionFileList.MatchingSets> ale, List<ConditionVariables> outervarsin, 
                                       ActionRun run, HistoryList hle, HistoryEntry he )
         {
             foreach (Actions.ActionFileList.MatchingSets ae in ale)          // for every file which passed..
@@ -134,18 +136,15 @@ namespace EDDiscovery.Actions
 
                     if (ap != null)     // program got,
                     {
-                        Dictionary<string, string> inputparas;
+                        ConditionVariables inputparas;
                         List<string> flags;
                         Actions.ActionData.FromJSON(fe.actiondata, out flags, out inputparas); // may be null inputparas, standardadd copes
 
                         // TBD check flags?
 
-                        Dictionary<string, string> vars = new Dictionary<string, string>();
+                        inputparas.Add(outervarsin);
 
-                        ActionVariables.AddVars(vars, outervarsin);
-                        ActionVariables.AddVars(vars, inputparas);
-
-                        run.Add(ap.Item1, ap.Item2, hle, he, vars);
+                        run.Add(ap.Item1, ap.Item2, hle, he, inputparas);
                     }
                 }
             }
@@ -215,19 +214,23 @@ namespace EDDiscovery.Actions
                     string json = sr.ReadToEnd();
                     sr.Close();
 
-                    JObject jo = (JObject)JObject.Parse(json);
-
-                    JObject jcond = (JObject)jo["Conditions"];
-                    JObject jprog = (JObject)jo["Programs"];
-                    bool en = (bool)jo["Enabled"];
-
-                    ConditionLists cond = new ConditionLists();
-                    ActionProgramList prog = new ActionProgramList();
-                    if (cond.FromJSON(jcond) && prog.FromJSON(jprog))
+                    try
                     {
-                        ActionFile af = new ActionFile(cond, prog, f.FullName, Path.GetFileNameWithoutExtension(f.FullName),en);
-                        actionfiles.Add(af);
+                        JObject jo = (JObject)JObject.Parse(json);
+
+                        JObject jcond = (JObject)jo["Conditions"];
+                        JObject jprog = (JObject)jo["Programs"];
+                        bool en = (bool)jo["Enabled"];
+
+                        ConditionLists cond = new ConditionLists();
+                        ActionProgramList prog = new ActionProgramList();
+                        if (cond.FromJSON(jcond) && prog.FromJSONObject(jprog))
+                        {
+                            ActionFile af = new ActionFile(cond, prog, f.FullName, Path.GetFileNameWithoutExtension(f.FullName), en);
+                            actionfiles.Add(af);
+                        }
                     }
+                    catch { }   // ignore the file.. garbage.
                 }
             }
 
@@ -243,7 +246,7 @@ namespace EDDiscovery.Actions
             ActionFile af = actionfiles[current];
 
             JObject jcond = af.actionfieldfilter.GetJSONObject();
-            JObject jprog = af.actionprogramlist.GetJSONObject();
+            JObject jprog = af.actionprogramlist.ToJSONObject();
 
             JObject jo = new JObject();
             jo["Conditions"] = jcond;
@@ -252,7 +255,7 @@ namespace EDDiscovery.Actions
 
             string json = jo.ToString(Formatting.Indented);
 
-            using (StreamWriter sr = new StreamWriter(af.filepath))         // read directly from file..
+            using (StreamWriter sr = new StreamWriter(af.filepath))      
             {
                 sr.Write(json);
                 sr.Close();

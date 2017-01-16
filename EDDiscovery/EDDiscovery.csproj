@@ -206,6 +206,7 @@
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\ActionCommands\ActionRem.cs" />
+    <Compile Include="Actions\ActionProgramRun.cs" />
     <Compile Include="Actions\ActionRun.cs" />
     <Compile Include="Actions\ActionCommands\ActionSay.cs" />
     <Compile Include="Actions\ActionProgram.cs" />
@@ -215,7 +216,7 @@
     <Compile Include="Actions\ActionVariableForm.Designer.cs">
       <DependentUpon>ActionVariableForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\ActionVariables.cs" />
+    <Compile Include="Conditions\ConditionVariables.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -254,7 +255,8 @@
     <Compile Include="Forms\ShipDetails.Designer.cs">
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
-    <Compile Include="JSON\ConditionLists.cs" />
+    <Compile Include="Conditions\ConditionLists.cs" />
+    <Compile Include="Conditions\StringParser.cs" />
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
@@ -405,10 +407,10 @@
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="JSON\ConditionFilterForm.cs">
+    <Compile Include="Conditions\ConditionFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="JSON\ConditionFilterForm.Designer.cs">
+    <Compile Include="Conditions\ConditionFilterForm.Designer.cs">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TextBoxEntry.cs">
@@ -781,7 +783,7 @@
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="JSON\ConditionFilterForm.resx">
+    <EmbeddedResource Include="Conditions\ConditionFilterForm.resx">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">

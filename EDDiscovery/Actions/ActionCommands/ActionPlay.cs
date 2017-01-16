@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionPlay : Action
     {
-        public ActionPlay(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionPlay(string n, ActionType t,string ud, int lu) : base(n, t, ud, lu)
         {
         }
 

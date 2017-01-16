@@ -11,7 +11,7 @@ namespace EDDiscovery.Actions
     {
         // reponsible for encoding and decoding the actiondata which goes with the action in a condition list
 
-        public static string ToJSON(List<string> flags, Dictionary<string, string> vars)
+        public static string ToJSON(List<string> flags, ConditionVariables vars)
         {
             JArray jf = new JArray();
 
@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
 
             if (vars != null)
             {
-                foreach (KeyValuePair<string, string> k in vars)
+                foreach (KeyValuePair<string, string> k in vars.values)
                 {
                     JObject v = new JObject();
                     v["Var"] = k.Key;
@@ -43,10 +43,10 @@ namespace EDDiscovery.Actions
         }
 
         // line may be null or empty, in which case you get false ..
-        public static bool FromJSON(string line, out List<string> flags, out Dictionary<string, string> vars)
+        public static bool FromJSON(string line, out List<string> flags, out ConditionVariables vars)
         {
             flags = new List<string>();
-            vars = new Dictionary<string, string>();
+            vars = new ConditionVariables();
 
             if (line != null && line.Length > 0)
             {
