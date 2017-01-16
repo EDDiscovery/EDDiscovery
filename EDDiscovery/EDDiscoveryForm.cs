@@ -129,6 +129,10 @@ namespace EDDiscovery
         GitHubRelease newRelease;
 
         private bool _formMax;
+        private int _formWidth;
+        private int _formHeight;
+        private int _formTop;
+        private int _formLeft;
 
         private bool CanSkipSlowUpdates()
         {
@@ -1126,13 +1130,10 @@ namespace EDDiscovery
             settings.SaveSettings();
 
             SQLiteDBClass.PutSettingBool("FormMax", _formMax);
-            if (FormWindowState.Minimized != this.WindowState)
-            {
-                SQLiteDBClass.PutSettingInt("FormWidth", this.Width);
-                SQLiteDBClass.PutSettingInt("FormHeight", this.Height);
-            }
-            SQLiteDBClass.PutSettingInt("FormTop", this.Top);
-            SQLiteDBClass.PutSettingInt("FormLeft", this.Left);
+            SQLiteDBClass.PutSettingInt("FormWidth", _formWidth);
+            SQLiteDBClass.PutSettingInt("FormHeight", _formHeight);
+            SQLiteDBClass.PutSettingInt("FormTop", _formTop);
+            SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
             routeControl1.SaveSettings();
             theme.SaveSettings(null);
             travelHistoryControl1.SaveSettings();
@@ -1687,6 +1688,10 @@ namespace EDDiscovery
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                     Show();
                 _formMax = FormWindowState.Maximized == WindowState;
+                _formLeft = this.Left;
+                _formTop = this.Top;
+                _formWidth = this.Width;
+                _formHeight = this.Height;
             }
             notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
         }
