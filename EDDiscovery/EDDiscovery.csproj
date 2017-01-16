@@ -556,7 +556,6 @@
     <Compile Include="Forms\ThemeEditor.Designer.cs">
       <DependentUpon>ThemeEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="HTTP\EDMaterializerCom.cs" />
     <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
     <Compile Include="Forms\MoveToCommander.cs">
@@ -1010,12 +1009,6 @@
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="AppSettingsSecrets.config.example">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="AppSettingsSecrets.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
     <None Include="Resources\save.png" />
