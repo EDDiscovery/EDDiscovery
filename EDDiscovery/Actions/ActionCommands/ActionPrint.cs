@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionPrint : Action
     {
-        public ActionPrint(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud,lu)
+        public ActionPrint(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 

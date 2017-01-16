@@ -18,7 +18,7 @@ namespace EDDiscovery2
     public partial class ConditionFilterForm : Form
     {
         public ConditionLists result;
-        public Dictionary<string, string> userglobalvariables;
+        public ConditionVariables userglobalvariables;
 
         EDDiscovery.Actions.ActionFileList actionfilelist;
         bool IsActionsActive { get { return actionfilelist != null;  } }
@@ -28,7 +28,8 @@ namespace EDDiscovery2
         class Group
         {
             public Panel panel;
-            public List<string> varnames;
+            public List<string> condnames;      // condition names (for condition test, plain)
+            public List<string> prognames;      // program names (program has the front decorated)
             public ExtendedControls.ButtonExt upbutton;
             public ExtendedControls.ComboBoxCustom evlist;
             public ExtendedControls.ComboBoxCustom actionlist;
@@ -75,7 +76,7 @@ namespace EDDiscovery2
             LoadConditions(j);
         }
 
-        public void InitAction(string t, List<string> el, List<string> varfields , Dictionary<string,string> ug, 
+        public void InitAction(string t, List<string> el, List<string> varfields , ConditionVariables ug, 
                             EDDiscovery.Actions.ActionFileList acfilelist , EDDiscovery2.EDDTheme th )
         {
             actionfilelist = acfilelist;
@@ -109,7 +110,7 @@ namespace EDDiscovery2
             }
             else
             {
-                labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
+                buttonExtGlobals.Visible = labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
                         comboBoxCustomEditProg.Visible = checkBoxCustomSetEnabled.Visible = false;
             }
         }
@@ -277,7 +278,8 @@ namespace EDDiscovery2
 
         private void SetFieldNames(Group g)
         {
-            g.varnames = new List<string>();
+            g.condnames = new List<string>();
+            g.prognames = new List<string>();
 
             if (eventlist != null )       // fieldnames are null, and we have an event list, try and find the field names
             {
@@ -287,17 +289,30 @@ namespace EDDiscovery2
 
                 if (jel != null)            // may not find it, if event is not in history
                 {
-                    Dictionary<string, string> vars = new Dictionary<string, string>();
+                    ConditionVariables vars = new ConditionVariables();
+                    ConditionVariables varsdec = new ConditionVariables();
                     foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
-                        JSONHelper.GetJSONFieldNamesValues(ev.EventDataString, vars);        // for all events, add to field list
-                    g.varnames.AddRange(vars.Keys.ToList());
+                    {
+                        vars.GetJSONFieldNamesAndValues(ev.EventDataString);        // for all events, add to field list
+                        varsdec.GetJSONFieldNamesAndValues(ev.EventDataString, "Event_");        // for all events, add to field list
+                    }
+
+                    g.condnames.AddRange(vars.KeyList);
+                    g.prognames.AddRange(varsdec.KeyList);
                 }
             }
 
             if (additionalfieldnames != null)
-                g.varnames.AddRange(additionalfieldnames);
+            {
+                g.condnames.AddRange(additionalfieldnames);
+                g.prognames.AddRange(additionalfieldnames);
+            }
+
             if (userglobalvariables != null)
-                g.varnames.AddRange(userglobalvariables.Keys.ToList());
+            {
+                g.condnames.AddRange(userglobalvariables.KeyList);
+                g.prognames.AddRange(userglobalvariables.KeyList);
+            }
 
             foreach (Control c in g.panel.Controls)
             {
@@ -305,8 +320,8 @@ namespace EDDiscovery2
                 {
                     ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
                     cb.Items.Clear();
-                    if (g.varnames != null)
-                        cb.Items.AddRange(g.varnames);
+                    if (g.condnames != null)
+                        cb.Items.AddRange(g.condnames);
                     cb.Items.Add("User Defined");
                     cb.SelectedIndex = -1;
                     cb.Text = "";
@@ -355,7 +370,7 @@ namespace EDDiscovery2
 
             // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames
             // pass in the program if found, and its action data.
-            apf.Init("Action program", theme, g.varnames, actionfilelist.CurName , p, g.actiondata , actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
+            apf.Init("Action program", theme, g.prognames, actionfilelist.CurName , p, g.actiondata , actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
 
             DialogResult res = apf.ShowDialog();
 
@@ -467,7 +482,7 @@ namespace EDDiscovery2
                 if (additionalfieldnames != null)
                     vars.AddRange(additionalfieldnames);
                 if (userglobalvariables != null)
-                    vars.AddRange(userglobalvariables.Keys.ToList());
+                    vars.AddRange(userglobalvariables.KeyList);
 
                 apf.Init("Action program", theme, vars, actionfilelist.CurName, p, null, actionfilelist.CurPrograms.GetActionProgramList(), "");
 
@@ -504,8 +519,8 @@ namespace EDDiscovery2
             fname.Size = new Size(140, 24);
             fname.DropDownHeight = 400;
             fname.Name = "Field";
-            if (g.varnames != null)
-                fname.Items.AddRange(g.varnames);
+            if (g.condnames != null)
+                fname.Items.AddRange(g.condnames);
             fname.Items.Add("User Defined");
 
             if (initialfname != null)

@@ -13,7 +13,7 @@ namespace EDDiscovery.Actions
         HistoryEntry he;
         FuncEntry[] flist;
 
-        delegate bool func(List<string> paras, Dictionary<string, string> vars, out string output);
+        delegate bool func(List<string> paras, ConditionVariables vars, out string output);
 
         class FuncEntry
         {
@@ -39,7 +39,7 @@ namespace EDDiscovery.Actions
         // true, expanded, result = string
         // false, failed, result = error
 
-        public ConditionLists.ExpandResult ExpandString(string line, Dictionary<string, string> vars, out string result)
+        public ConditionLists.ExpandResult ExpandString(string line, ConditionVariables vars, out string result)
         {
             int noexpansion = 0;
             int pos = 0;
@@ -146,7 +146,7 @@ namespace EDDiscovery.Actions
         }
 
         // true, output is written.  false, output has error text
-        public bool RunFunction(string fname, List<string> paras, Dictionary<string, string> vars, out string output)
+        public bool RunFunction(string fname, List<string> paras, ConditionVariables vars, out string output)
         {
             FuncEntry fe = Array.Find(flist, x => x.name.Equals(fname, StringComparison.InvariantCulture));
             if (fe != null)
@@ -168,7 +168,7 @@ namespace EDDiscovery.Actions
 
         #region Functions
 
-        private bool Exists(List<string> paras, Dictionary<string, string> vars, out string output)
+        private bool Exists(List<string> paras, ConditionVariables vars, out string output)
         {
             foreach (string s in paras)
             {
@@ -183,7 +183,7 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        private bool SplitCaps(List<string> paras, Dictionary<string, string> vars, out string output)
+        private bool SplitCaps(List<string> paras, ConditionVariables vars, out string output)
         {
             if (vars.ContainsKey(paras[0]))
             {

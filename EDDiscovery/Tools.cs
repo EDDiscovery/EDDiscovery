@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -229,6 +230,15 @@ namespace EDDiscovery
             debugout.Flush();
         }
 
+        public static string FixTitleCase(string s)
+        {
+            if (s.Length > 0)
+            {
+                s = s.Substring(0, 1).ToUpper() + s.Substring(1).ToLower();
+            }
+            return s;
+        }
+
         public static string SplitCapsWord(string capslower)
         {
             return System.Text.RegularExpressions.Regex.Replace(
@@ -271,147 +281,62 @@ namespace EDDiscovery
             return ret;
         }
 
-        public class StringParser
+        [Flags]
+        public enum AssocF
         {
-            int pos;        // always left after an operation on the next non space char
-            string line;
-
-            public StringParser(string l)
-            {
-                line = l.Trim();
-                pos = 0;
-            }
-
-            public string LineLeft { get { return line.Substring(pos); } }
-            public bool IsEOL { get { return pos == line.Length;  } }
-
-            public bool IncSkipSpace()
-            {
-                if ( pos < line.Length )
-                    pos++;
-
-                return SkipSpace();
-            }
-
-            public bool SkipSpace()
-            {
-                while (pos < line.Length && char.IsWhiteSpace(line[pos]))
-                    pos++;
-
-                return pos == line.Length;
-            }
-
-            public char PeekChar()
-            {
-                return (pos < line.Length) ? line[pos] : ' ';
-            }
-
-            public bool IsCharMoveOn( char t )
-            {
-                if (pos < line.Length && line[pos] == t)
-                {
-                    pos++;
-                    SkipSpace();
-                    return true;
-                }
-                else
-                    return false;
-            }
-
-            public string NextWord(string terminators = " ")
-            {
-                if (pos >= line.Length)     // null if there is nothing..
-                    return null;
-                else
-                {
-                    int start = pos;
-
-                    while (pos < line.Length && terminators.IndexOf(line[pos]) == -1)
-                        pos++;
-
-                    string ret = line.Substring(start, pos - start);
-
-                    SkipSpace();
-
-                    return ret;
-                }
-            }
-
-            public string NextQuotedWord(string nonquoteterminators = " ")
-            {
-                if (pos < line.Length)
-                {
-                    if (line[pos] == '"')
-                    {
-                        string ret = "";
-                        pos++;
-
-                        while (true)
-                        {
-                            int nextquote = line.IndexOf('"', pos);
-                            if (nextquote == -1)
-                                return null;    // MUST have a quote..
-
-                            if (line[nextquote - 1] == '\\')        // if \\"
-                            {
-                                ret += line.Substring(pos, nextquote - 1 - pos) + "\"";
-                                pos = nextquote + 1;        // go past the quote.. try again
-                            }
-                            else
-                            {       //End of quoted string
-                                ret += line.Substring(pos, nextquote - pos);
-                                pos = nextquote + 1;
-                                SkipSpace();
-                                return ret;
-                            }
-                        }
-                    }
-                    else
-                        return NextWord(nonquoteterminators);
-                }
-                else
-                    return null;
-            }
-
-            public List<string> NextOptionallyBracketedList()       // empty list on error
-            {
-                List<string> sl = new List<string>();
-                if (pos < line.Length)
-                {
-                    if (IsCharMoveOn('('))  // if (, we go multi bracketed
-                    {
-                        while (true)
-                        {
-                            string s = NextQuotedWord("), ");
-                            if (s == null) // failed to get a word, error
-                            {
-                                sl.Clear();
-                                break;
-                            }
-                            else
-                                sl.Add(s);
-
-                            if (IsCharMoveOn(')'))      // ), end of word list, move over and stop
-                                break;
-                            else if (!IsCharMoveOn(','))    // must be ,
-                            {
-                                sl.Clear();     // cancel list and stop, error
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        string s = NextQuotedWord("), ");
-                        if (s != null)
-                            sl.Add(s);
-                    }
-                }
-
-                return sl;
-            }
-
+            None = 0,
+            Init_NoRemapCLSID = 0x1,
+            Init_ByExeName = 0x2,
+            Open_ByExeName = 0x2,
+            Init_DefaultToStar = 0x4,
+            Init_DefaultToFolder = 0x8,
+            NoUserSettings = 0x10,
+            NoTruncate = 0x20,
+            Verify = 0x40,
+            RemapRunDll = 0x80,
+            NoFixUps = 0x100,
+            IgnoreBaseClass = 0x200
         }
 
+        public enum AssocStr
+        {
+            Command = 1,
+            Executable,
+            FriendlyDocName,
+            FriendlyAppName,
+            NoOpen,
+            ShellNewValue,
+            DDECommand,
+            DDEIfExec,
+            DDEApplication,
+            DDETopic
+        }
+
+        [DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
+        public static extern uint AssocQueryString(AssocF flags, AssocStr str,
+           string pszAssoc, string pszExtra, [Out] StringBuilder pszOut, ref uint
+           pcchOut);
+
+        public static string AssocQueryString(AssocStr association, string extension)
+        {
+            const int S_OK = 0;
+            const int S_FALSE = 1;
+
+            uint length = 0;
+            uint ret = AssocQueryString(AssocF.None, association, extension, null, null, ref length);
+            if (ret != S_FALSE)
+            {
+                throw new InvalidOperationException("Could not determine associated string");
+            }
+
+            var sb = new StringBuilder((int)length); // (length-1) will probably work too as the marshaller adds null termination
+            ret = AssocQueryString(AssocF.None, association, extension, null, sb, ref length);
+            if (ret != S_OK)
+            {
+                throw new InvalidOperationException("Could not determine associated string");
+            }
+
+            return sb.ToString();
+        }
     }
 }

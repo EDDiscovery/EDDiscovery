@@ -826,7 +826,7 @@ namespace EDDiscovery.UserControls
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
-            frm.InitFilter("Summary Panel: Filter out fields", discoveryform.standardvariables.Keys.ToList(), discoveryform.theme, fieldfilter);
+            frm.InitFilter("Summary Panel: Filter out fields", discoveryform.standardvariables.KeyList, discoveryform.theme, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

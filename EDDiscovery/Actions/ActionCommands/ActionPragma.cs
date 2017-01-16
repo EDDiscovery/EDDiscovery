@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionPragma : Action
     {
-        public ActionPragma(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionPragma(string n, ActionType t, string ud, int lu) : base(n, t,  ud, lu)
         {
         }
 
@@ -45,13 +45,13 @@ namespace EDDiscovery.Actions
                         string vname = rest.Substring(0, spc);
                         rest = rest.Substring(spc).Trim();
 
-                        DumpVars(ap, ActionVariables.FilterVars(ap.currentvars, vname));
+                        DumpVars(ap, ap.currentvars.FilterVars(vname));
 
                     } while (rest.Length > 0);
                 }
                 else
                 {
-                    DumpVars(ap, ActionVariables.FilterVars(ap.currentvars, "*"));
+                    DumpVars(ap, ap.currentvars.FilterVars("*"));
                 }
             }
 
@@ -59,9 +59,9 @@ namespace EDDiscovery.Actions
         }
 
 
-        private void DumpVars(ActionProgramRun ap, Dictionary<string, string> fv )
+        private void DumpVars(ActionProgramRun ap, ConditionVariables fv )
         {
-            foreach (KeyValuePair<string, string> k in fv)
+            foreach (KeyValuePair<string, string> k in fv.values)
             {
                 ap.discoveryform.LogLine(k.Key + "=" + k.Value);
                 System.Diagnostics.Debug.WriteLine( "dumpvars " + k.Key + "=" + k.Value);

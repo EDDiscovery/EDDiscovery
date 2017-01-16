@@ -7,6 +7,8 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
+    // this class allows programs to be run, either sync or async..
+
     public class ActionRun
     {
         private List<ActionProgramRun> progqueue = new List<ActionProgramRun>();
@@ -33,12 +35,12 @@ namespace EDDiscovery.Actions
         //historyentry may be null if not associated with a entry
         // WE take a copy of each program, so each invocation of program action has a unique instance in case
         // it has private variables in either action or program.
-        public void Add(ActionFile fileset, ActionProgram r, HistoryList hl, HistoryEntry h, Dictionary<string, string> v)
+        public void Add(ActionFile fileset, ActionProgram r, HistoryList hl, HistoryEntry h, ConditionVariables v)
         {
             progqueue.Add(new ActionProgramRun(fileset, r, this, discoveryform, hl, h, v, async));
         }
 
-        public void RunNow(ActionFile fileset, ActionProgram r, HistoryList hl, HistoryEntry h, Dictionary<string, string> v)
+        public void RunNow(ActionFile fileset, ActionProgram r, HistoryList hl, HistoryEntry h, ConditionVariables v)
         {
             if (progcurrent != null)                    // if running, push the current one back onto the queue to be picked up
                 progqueue.Insert(0, progcurrent);
@@ -107,17 +109,17 @@ namespace EDDiscovery.Actions
                     {
                         ActionCall acall = ac as ActionCall;
                         string prog;
-                        Dictionary<string, string> paravars;
+                        ConditionVariables paravars;
                         if (acall.ExecuteCallAction(progcurrent, out prog, out paravars)) // if execute ok
                         {
-                            System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + ActionVariables.ToString(paravars));
+                            System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + paravars.ToString());
 
                             Tuple<ActionFile, ActionProgram> ap = actionfilelist.FindProgram(prog, progcurrent.actionfile);          // find program using this name, prefer this action file first
 
                             if (ap != null)
                             {
-                                Dictionary<string, string> callvars = new Dictionary<string, string>(progcurrent.startvars);
-                                ActionVariables.AddVars(callvars, paravars);
+                                ConditionVariables callvars = new ConditionVariables(progcurrent.startvars);
+                                callvars.Add(paravars);
                                 RunNow(ap.Item1, ap.Item2, progcurrent.historylist, progcurrent.historyentry, callvars);
                             }
                             else

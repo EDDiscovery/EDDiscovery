@@ -8,7 +8,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionRem : Action
     {
-        public ActionRem(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionRem(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 

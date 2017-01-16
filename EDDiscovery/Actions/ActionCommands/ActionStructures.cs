@@ -9,47 +9,39 @@ namespace EDDiscovery.Actions
 {
     public class ActionIfElseBase : Action
     {
-        public ActionIfElseBase(string n, ActionType type, List<string> c, string ud, int lu) : base(n, type, c, ud, lu)
+        public ActionIfElseBase(string n, ActionType t, string ud, int lu) : base(n, t, ud,lu)
         {
         }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars) //standard one used for most
+        {
+            ConditionLists jf = new ConditionLists();
+            jf.FromString(userdata);
+            bool ok = ConfigurationMenu(parent, theme, eventvars, ref jf);
+            if (ok)
+                userdata = jf.ToString();
+            return ok;
+        }
+
+        public bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars, ref ConditionLists jf)
         {
             EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
-
-            ConditionLists jf = new ConditionLists();
-            if (UserData.Length > 0)
-            {
-                if ( jf.FromString(UserData)!=null)     // we try string first, but fall back to jSON in case its an older store
-                    jf.FromJSON(UserData);
-            }
-
             frm.InitCondition("Define condition", eventvars, theme, jf);
 
             frm.TopMost = parent.FindForm().TopMost;
             if (frm.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
-                userdata = frm.result.ToString();       // store as string
-
-
-                ConditionLists cl2 = new ConditionLists();
-                string res = cl2.FromString(userdata);
-                if (res != null)
-                {
-                    System.Diagnostics.Debug.Assert(false);
-                }
-
-                string asciistringcl2 = cl2.ToString();
-
-                if (!asciistringcl2.Equals(userdata))
-                {
-                    System.Diagnostics.Debug.Assert(false);
-                }
-
+                jf = frm.result;
                 return true;
             }
             else
                 return false;
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            ConditionLists cl2 = new ConditionLists();
+            return cl2.FromString(userdata);        // returns null if everything is hunky
         }
     }
 
@@ -57,7 +49,7 @@ namespace EDDiscovery.Actions
     {
         ConditionLists condition;
 
-        public ActionIf(string n, ActionType type, List<string> c, string ud, int lu) : base(n, type, c, ud, lu)
+        public ActionIf(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 
@@ -98,7 +90,7 @@ namespace EDDiscovery.Actions
     {
         ConditionLists condition;
 
-        public ActionElseIf(string n, ActionType type, List<string> c, string ud, int lu) : base(n, type, c, ud, lu)
+        public ActionElseIf(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 
@@ -143,7 +135,7 @@ namespace EDDiscovery.Actions
 
     public class ActionElse : Action
     {
-        public ActionElse(string n, ActionType type, List<string> c, string ud, int lu) : base(n, type, c, ud, lu)
+        public ActionElse(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 
@@ -169,7 +161,7 @@ namespace EDDiscovery.Actions
     {
         ConditionLists condition;
 
-        public ActionWhile(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionWhile(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 
@@ -241,7 +233,7 @@ namespace EDDiscovery.Actions
 
     public class ActionDo : Action
     {
-        public ActionDo(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionDo(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 
@@ -266,7 +258,7 @@ namespace EDDiscovery.Actions
 
     public class ActionLoop : Action
     {
-        public ActionLoop(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionLoop(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
         }
 
@@ -274,6 +266,11 @@ namespace EDDiscovery.Actions
         private int loopcount = 0;
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
+        public override string VerifyActionCorrect()
+        {
+            return (UserData.Length > 0) ? null : "Loop missing loop count";
+        }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
@@ -345,22 +342,55 @@ namespace EDDiscovery.Actions
     public class ActionErrorIf : ActionIfElseBase
     {
         ConditionLists condition;
+        string errmsg;
 
-        string flagErrorText = "ErrorText";
+        public ActionErrorIf(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
+        { 
+        }
 
-        public ActionErrorIf(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public bool FromString(string s, out ConditionLists cond , out string errmsg )
         {
+            cond = new ConditionLists();
+
+            StringParser p = new StringParser(s);
+            errmsg = p.NextQuotedWord(" ,");
+            
+            if ( errmsg != null && p.IsCharMoveOn(','))
+            {
+                string condstring = p.LineLeft;
+
+                if (cond.FromString(condstring) == null)
+                    return true;
+            }
+
+            errmsg = "";
+            return false;
+        }
+
+        public string ToString(ConditionLists cond, string errmsg)
+        {
+            return errmsg.QuotedEscapeString() + ", " + cond.ToString();
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            ConditionLists cond;
+            string errmsg;
+            return FromString(userdata, out cond, out errmsg) ? null : "ErrorIf not in correct format: \"Error string\", condition";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
-            if (base.ConfigurationMenu(parent, theme, eventvars))
+            ConditionLists cond;
+            string errmsg;
+            FromString(userdata, out cond, out errmsg);
+
+            if (base.ConfigurationMenu(parent, theme, eventvars, ref cond))
             {
-                string curval = GetFlagAuxData(flagErrorText);
-                string promptValue = PromptSingleLine.ShowDialog(parent, "Error to display", curval != null ? curval : "", "Configure ErrorIf Command");
+                string promptValue = PromptSingleLine.ShowDialog(parent, "Error to display", errmsg, "Configure ErrorIf Command");
                 if (promptValue != null)
                 {
-                    SetFlag(flagErrorText, true, promptValue);
+                    userdata = ToString(cond, promptValue);
                     return true;
                 }
             }
@@ -372,8 +402,7 @@ namespace EDDiscovery.Actions
         {
             if (condition == null)
             {
-                condition = new ConditionLists();
-                if (condition.FromString(UserData) != null)
+                if ( !FromString(userdata, out condition, out errmsg) )
                 {
                     ap.ReportError("ErrorIF condition is not correctly formed");
                     return true;
@@ -388,12 +417,7 @@ namespace EDDiscovery.Actions
                 bool res = condres.HasValue && condres.Value;
 
                 if (res)
-                {
-                    string curval = GetFlagAuxData(flagErrorText);
-                    if (curval == null)
-                        curval = "ErrorIf Tripped";
-                    ap.ReportError(curval);
-                }
+                    ap.ReportError(errmsg);
             }
             else
                 ap.ReportError(errlist);
@@ -404,43 +428,63 @@ namespace EDDiscovery.Actions
 
     public class ActionCall : Action
     {
-        public ActionCall(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
-        {
+        public ActionCall(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
+        { 
         }
 
-        string flagVars = "flagVars";
-
-#if false
-        public override string DisplayedUserData
+        public bool FromString(string s, out string progname, out ConditionVariables vars )
         {
-            get
-            {
-                Dictionary<string, string> inputvars;
-                List<string> flags;
-                ActionData.DecodeActionData(GetFlagAuxData(flagVars), out flags, out inputvars);        // if GetFlag is null, get empty input vars
+            StringParser p = new StringParser(s);
+            progname = p.NextWord("( ");        // stop at space or (
+            vars = new ConditionVariables();
 
-                if (UserData.Length > 0)
-                    return UserData + "(" + ActionData.ToString(inputvars) + ")";
-                else
-                    return "Not Configured";
+            if (progname != null)
+            {
+                if (p.IsCharMoveOn('('))       // if (, then
+                {
+                    if (vars.FromString(p,true) && p.IsCharMoveOn(')') && p.IsEOL)      // if para list decodes and we finish on a ) and its EOL
+                        return true;
+                }
+                else if (p.IsEOL)   // if EOL, its okay, prog name only
+                    return true;
             }
+
+            progname = "";
+            vars.Clear();
+
+            return false;
+        }
+
+        public string ToString(string progname, ConditionVariables cond)
+        {
+            if (cond.Count > 0)
+                return progname + "(" + cond.ToString() + ")";
+            else
+                return progname;
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            string progname;
+            ConditionVariables vars;
+            return FromString(userdata, out progname, out vars) ? null : "Call not in correct format: progname (var list v=\"y\")";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", UserData, "Configure Call Command");
+            string progname;
+            ConditionVariables cond;
+            FromString(UserData, out progname, out cond);
+
+            string promptValue = PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command");
             if (promptValue != null)
             {
-                Dictionary<string, string> inputvars;
-                List<string> flags;
-                ActionData.DecodeActionData(GetFlagAuxData(flagVars), out flags, out inputvars);        // if GetFlag is null, get empty input vars
                 ActionVariableForm avf = new ActionVariableForm();
-                avf.Init("Variables to pass into called program", theme, inputvars);
+                avf.Init("Variables to pass into called program", theme, cond);
 
                 if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
                 {
-                    userdata = promptValue;
-                    SetFlag(flagVars, true, ActionData.EncodeActionData(null, avf.result));
+                    userdata = ToString(promptValue, avf.result);
                     return true;
                 }
             }
@@ -449,13 +493,11 @@ namespace EDDiscovery.Actions
         }
         
         //special call for execute, needs to pass back more data
-        public bool ExecuteCallAction(ActionProgramRun ap, out string prog, out Dictionary<string,string> vars )
+        public bool ExecuteCallAction(ActionProgramRun ap, out string progname, out ConditionVariables vars )
         {
-            List<string> flags;
-            ActionData.DecodeActionData(GetFlagAuxData(flagVars), out flags, out vars);        // if GetFlag is null, get empty input vars
-            prog = userdata;
+            FromString(UserData, out progname, out vars);
 
-            if (prog.Length > 0)
+            if (progname.Length > 0)
                 return true;
             else
             {
@@ -463,8 +505,6 @@ namespace EDDiscovery.Actions
                 return false;
             }
         }
-
-#endif
     }
 }
 

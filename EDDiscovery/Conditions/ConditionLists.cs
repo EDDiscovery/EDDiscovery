@@ -129,8 +129,8 @@ namespace EDDiscovery
         public class ConditionEntry
         {
             public string itemname;
-            public string matchstring;                     // always set
             public MatchType matchtype;                     // true: Contents match for true, else contents dont match for true
+            public string matchstring;                     // always set
 
             public bool Create(string i, string ms, string v)     // ms can have spaces inserted into enum
             {
@@ -178,7 +178,7 @@ namespace EDDiscovery
                 fields.Add(f);
             }
 
-            public void IndicateValuesNeeded(ref Dictionary<string, string> vr)
+            public void IndicateValuesNeeded(ref ConditionVariables vr)
             {
                 foreach (ConditionEntry fd in fields)
                 {
@@ -207,7 +207,7 @@ namespace EDDiscovery
         public int Count { get { return conditionlist.Count; } }
 
         public enum ExpandResult { Failed, NoExpansion, Expansion };
-        public delegate ExpandResult ExpandString(string input, Dictionary<string, string> vars, out string result);    // callback, if we want to expand the content string
+        public delegate ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
 
         //errlist = null if no errors found
 
@@ -222,7 +222,7 @@ namespace EDDiscovery
         }
 
         // check all conditions against these values.
-        public bool? CheckAll(Dictionary<string, string> values, out string errlist , List<Condition> passed = null , ExpandString se = null )            // Check all conditions..
+        public bool? CheckAll(ConditionVariables values, out string errlist , List<Condition> passed = null , ExpandString se = null )            // Check all conditions..
         {
             if (conditionlist.Count == 0)            // no filters match, null
             {
@@ -233,7 +233,7 @@ namespace EDDiscovery
             return CheckConditions(conditionlist, values, out errlist, passed, se);
         }
 
-        public bool? CheckConditions(List<Condition> fel, Dictionary<string, string> values, out string errlist, List<Condition> passed = null,
+        public bool? CheckConditions(List<Condition> fel, ConditionVariables values, out string errlist, List<Condition> passed = null,
                                         ExpandString se = null)            // null nothing trigged, false/true otherwise. 
         {
             errlist = null;
@@ -617,7 +617,7 @@ namespace EDDiscovery
 
         public string FromString(string line )
         {
-            Tools.StringParser sp = new Tools.StringParser(line);
+            StringParser sp = new StringParser(line);
 
             bool multi = false;
 
@@ -715,7 +715,7 @@ namespace EDDiscovery
 
         private bool? CheckJSON(string eventjson,        // JSON of the event 
                             string eventname,       // Event name..
-                            Dictionary<string, string> othervars,   // any other variables to present to the condition, in addition to the JSON variables
+                            ConditionVariables othervars,   // any other variables to present to the condition, in addition to the JSON variables
                             out string errlist,     // null if okay..
                             List<Condition> passed)            // null or conditions passed
         {
@@ -725,17 +725,15 @@ namespace EDDiscovery
 
             if ( fel != null )
             {
-                Dictionary<string, string> valuesneeded = new Dictionary<string, string>();
+                ConditionVariables valuesneeded = new ConditionVariables();
 
                 foreach (Condition fe in fel)        // find all values needed
                     fe.IndicateValuesNeeded(ref valuesneeded);
 
                 try
                 {
-                    JSONHelper.GetJSONFieldValues(eventjson, valuesneeded);
-
-                    foreach (KeyValuePair<string, string> v in othervars)       // store other vars to values needed
-                        valuesneeded[v.Key] = v.Value;
+                    valuesneeded.GetJSONFieldValuesIndicated(eventjson);
+                    valuesneeded.Add(othervars);
 
                     return CheckConditions(fel, valuesneeded, out errlist, passed);    // and check, passing in the values collected against the conditions to test.
                 }
@@ -748,19 +746,19 @@ namespace EDDiscovery
             return null;
         }
     
-        private bool CheckFilterTrueOut(string json, string eventname, Dictionary<string, string> othervars,  out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
+        private bool CheckFilterTrueOut(string json, string eventname, ConditionVariables othervars,  out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
         {                                                                                         // only if the filter passes do we get a false..
             bool? v = CheckJSON(json, eventname, othervars, out errlist, passed);
             return !v.HasValue || v.Value == false;
         }
 
-        public bool FilterHistory(HistoryEntry he, Dictionary<string, string> othervars)                // true if it should be included
+        public bool FilterHistory(HistoryEntry he, ConditionVariables othervars)                // true if it should be included
         {
             string er;
             return CheckFilterTrueOut(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, othervars, out er, null);     // true it should be included
         }
 
-        public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, Dictionary<string, string> othervars , out int count)    // filter in all entries
+        public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, ConditionVariables othervars , out int count)    // filter in all entries
         {
             count = 0;
             if (Count == 0)       // no filters, all in
@@ -775,7 +773,7 @@ namespace EDDiscovery
             }
         }
 
-        public List<HistoryEntry> MarkHistory(List<HistoryEntry> he, Dictionary<string, string> othervars, out int count)       // Used for debugging it..
+        public List<HistoryEntry> MarkHistory(List<HistoryEntry> he, ConditionVariables othervars, out int count)       // Used for debugging it..
         {
             count = 0;
 

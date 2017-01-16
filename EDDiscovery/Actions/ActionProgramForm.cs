@@ -15,7 +15,7 @@ namespace EDDiscovery.Actions
         string initialprogname;
         string[] definedprograms;                                   // list of programs already defined, to detect rename over..
 
-        Dictionary<string, string> inputparas;                      // input parameters to configure for this program
+        ConditionVariables inputparas;                             // input parameters to configure for this program
         List<string> startvarlist;                                  // starting vars
         List<string> currentvarlist;                                // variables available to use.. combination of above
 
@@ -33,6 +33,8 @@ namespace EDDiscovery.Actions
             public ExtendedControls.TextBoxBorder value;
             public int levelup;
             public bool marked;
+
+            public int indentcomputed;      // when displayed, what was the indent
         };
 
         List<Group> groups;
@@ -78,7 +80,7 @@ namespace EDDiscovery.Actions
                 List<string> flaglist;
                 ActionData.FromJSON(progdata, out flaglist, out inputparas);
                 checkBoxCustomRefresh.Checked = flaglist.Contains(ActionProgram.flagRunAtRefresh);
-                currentvarlist.AddRange(inputparas.Keys.ToList());
+                currentvarlist.AddRange(inputparas.KeyList);
             }
             else
                 checkBoxCustomRefresh.Visible = buttonVars.Visible = false;
@@ -86,28 +88,44 @@ namespace EDDiscovery.Actions
             if (defprogs != null)
                 definedprograms = defprogs;
 
-            if (prog != null)
-            {
-                initialprogname = textBoxBorderName.Text = prog.Name;
-
-                Action ac;
-                int step = 0;
-                while ((ac = prog.GetStep(step++)) != null)
-                    CreateStep(ac);
-            }
-            else if (suggestedname != null)
+            if (suggestedname != null)
                 textBoxBorderName.Text = suggestedname;
+
+            if (prog != null)
+                LoadProgram(prog);
 
             panelVScroll.ContextMenuStrip = contextMenuStrip1;
             panelVScroll.MouseDown += panelVScroll_MouseDown;
         }
 
-        #region Code
-
-        private void buttonMore_Click(object sender, EventArgs e)
+        void DeleteAll()
         {
-            CreateStep(null, -1);
+            foreach( Group g in groups )
+            {
+                g.panel.Controls.Clear();
+                panelVScroll.Controls.Remove(g.panel);
+            }
+
+            groups.Clear();
+            RepositionGroups();
         }
+
+        void LoadProgram(ActionProgram prog)
+        {
+            initialprogname = textBoxBorderName.Text = prog.Name;
+
+            Action ac;
+            int step = 0;
+            while ((ac = prog.GetStep(step++)) != null)
+                CreateStep(ac);
+        }
+
+        private void ActionProgramForm_Resize(object sender, EventArgs e)
+        {
+            RepositionGroups();
+        }
+
+        #region Steps
 
         Group CreateStep(Action step = null, int insertpos = -1)
         {
@@ -207,11 +225,6 @@ namespace EDDiscovery.Actions
             value.Enabled = true;
         }
 
-        private void ActionProgramForm_Resize(object sender, EventArgs e)
-        {
-            RepositionGroups();
-        }
-
         string RepositionGroups()
         {
             string errlist = "";
@@ -293,6 +306,8 @@ namespace EDDiscovery.Actions
                     errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " not defined" + Environment.NewLine;
                 }
 
+                g.indentcomputed = displaylevel;        // store this, ASCII output want to know how we indented it.
+
                 g.panel.Location = new Point(panelleftmargin, voff);
                 g.panel.Size = new Size(panelwidth, panelheight);
                 g.stepname.Location = new Point(g.right.Right + 8 + 8 * displaylevel, panelheightmargin);
@@ -330,11 +345,16 @@ namespace EDDiscovery.Actions
             voff += buttonMore.Height + titleHeight + panelName.Height + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
 
             this.MinimumSize = new Size(600, voff);
-            this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width, Screen.FromControl(this).WorkingArea.Height);
+            this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width-100, Screen.FromControl(this).WorkingArea.Height-100);
 
             ResumeLayout();
 
             return errlist;
+        }
+
+        private void buttonMore_Click(object sender, EventArgs e)
+        {
+            CreateStep(null, -1);
         }
 
         private void Stepname_SelectedIndexChanged(object sender, EventArgs e)                // EVENT list changed
@@ -444,6 +464,10 @@ namespace EDDiscovery.Actions
                 g.programstep.UpdateUserData(tb.Text);
         }
 
+        #endregion
+
+        #region OK and Finish
+
         private void buttonOK_Click(object sender, EventArgs e)
         {
             string errorlist = "";
@@ -518,7 +542,7 @@ namespace EDDiscovery.Actions
                 inputparas = avf.result;
 
                 currentvarlist = new List<string>(startvarlist);
-                currentvarlist.AddRange(inputparas.Keys.ToList());
+                currentvarlist.AddRange(inputparas.KeyList);
             }
         }
 
@@ -539,142 +563,138 @@ namespace EDDiscovery.Actions
 
         #endregion
 
-        #region Window Control
+        #region Text editing
 
-        public const int WM_MOVE = 3;
-        public const int WM_SIZE = 5;
-        public const int WM_MOUSEMOVE = 0x200;
-        public const int WM_LBUTTONDOWN = 0x201;
-        public const int WM_LBUTTONUP = 0x202;
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int WM_NCLBUTTONUP = 0xA2;
-        public const int WM_NCMOUSEMOVE = 0xA0;
-        public const int HT_CLIENT = 0x1;
-        public const int HT_CAPTION = 0x2;
-        public const int HT_LEFT = 0xA;
-        public const int HT_RIGHT = 0xB;
-        public const int HT_BOTTOM = 0xF;
-        public const int HT_BOTTOMRIGHT = 0x11;
-        public const int WM_NCL_RESIZE = 0x112;
-        public const int HT_RESIZE = 61448;
-        public const int WM_NCHITTEST = 0x84;
-
-        // Mono compatibility
-        private bool _window_dragging = false;
-        private Point _window_dragMousePos = Point.Empty;
-        private Point _window_dragWindowPos = Point.Empty;
-
-        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
-        {
-            Message message = Message.Create(this.Handle, msg, wparam, lparam);
-            this.WndProc(ref message);
-            return message.Result;
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
-            // Compatibility movement for Mono
-            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                _window_dragMousePos = new Point(x, y);
-                _window_dragWindowPos = this.Location;
-                _window_dragging = true;
-                m.Result = IntPtr.Zero;
-                this.Capture = true;
-            }
-            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
-                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
-                this.Location = _window_dragWindowPos;
-                this.Update();
-                m.Result = IntPtr.Zero;
-            }
-            else if (m.Msg == WM_LBUTTONUP)
-            {
-                _window_dragging = false;
-                _window_dragMousePos = Point.Empty;
-                _window_dragWindowPos = Point.Empty;
-                m.Result = IntPtr.Zero;
-                this.Capture = false;
-            }
-            // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM_NCHITTEST)
-            {
-                base.WndProc(ref m);
-
-                if ((int)m.Result == HT_CLIENT)
-                {
-                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                    int y = unchecked((short)((uint)m.LParam >> 16));
-                    Point p = PointToClient(new Point(x, y));
-
-                    if (p.X > this.ClientSize.Width - statusStripCustom.Height && p.Y > this.ClientSize.Height - statusStripCustom.Height)
-                    {
-                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
-                    }
-                    else if (p.Y > this.ClientSize.Height - statusStripCustom.Height)
-                    {
-                        m.Result = (IntPtr)HT_BOTTOM;
-                    }
-                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
-                    {
-                        m.Result = (IntPtr)HT_RIGHT;
-                    }
-                    else if (p.X < 5)
-                    {
-                        m.Result = (IntPtr)HT_LEFT;
-                    }
-                    else if (!windowsborder)
-                    {
-                        m.Result = (IntPtr)HT_CAPTION;
-                    }
-                }
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
-        }
-
-        private void label_index_MouseDown(object sender, MouseEventArgs e)
-        {
-            ((Control)sender).Capture = false;
-            SendMessage(WM_NCLBUTTONDOWN, (System.IntPtr)HT_CAPTION, (System.IntPtr)0);
-        }
-
-        private void panel_minimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void panel_close_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-
-        #endregion
 
         private void buttonExtEdit_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string prog = Tools.AssocQueryString(Tools.AssocStr.Executable, ".txt");
 
+                string filename = textBoxBorderName.Text.Length > 0 ? textBoxBorderName.Text : "Default";
+
+                string editingloc = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Tools.SafeFileString(filename) + ".atf");
+
+                if (SaveText(editingloc))
+                {
+                    while (true)
+                    {
+                        System.Diagnostics.Process p = new System.Diagnostics.Process();
+                        p.StartInfo.FileName = prog;
+                        p.StartInfo.Arguments = editingloc.QuotedEscapeString();
+                        p.Start();
+                        p.WaitForExit();
+
+                        string err;
+                        ActionProgram ap = ActionProgram.FromFile(editingloc, filename, out err);
+                        if (ap == null)
+                        {
+                            DialogResult dr = MessageBox.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
+                                                "Click Retry to correct errors, Cancel to abort editing",
+                                                "Warning", MessageBoxButtons.RetryCancel);
+
+                            if (dr == DialogResult.Cancel)
+                                break;
+                        }
+                        else
+                        {
+                            DeleteAll();
+                            LoadProgram(ap);
+                            break;
+                        }
+                    }
+
+                    return;
+                }
+            }
+            catch
+            {
+            }
+
+            MessageBox.Show("Unable to run text editor - check association for .txt files");
         }
 
         private void buttonExtLoad_Click(object sender, EventArgs e)
         {
+            OpenFileDialog dlg = new OpenFileDialog();
 
+            dlg.InitialDirectory = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Actions");
+
+            if (!System.IO.Directory.Exists(dlg.InitialDirectory))
+                System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
+
+            dlg.DefaultExt = "atf";
+            dlg.AddExtension = true;
+            dlg.Filter = "Action Text Files (*.atf)|*.atf|All files (*.*)|*.*";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(dlg.FileName))
+                {
+                    string err;
+                    ActionProgram ap = ActionProgram.FromFile(dlg.FileName, System.IO.Path.GetFileNameWithoutExtension(dlg.FileName), out err);
+                    if (ap == null)
+                        MessageBox.Show("Failed to load text file" + Environment.NewLine + err);
+                    else
+                    {
+                        DeleteAll();
+                        LoadProgram(ap);
+                    }
+                }
+            }
         }
 
         private void buttonExtSave_Click(object sender, EventArgs e)
         {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.InitialDirectory = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Actions");
 
+            if (!System.IO.Directory.Exists(dlg.InitialDirectory))
+                System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
+
+            dlg.DefaultExt = ".atf";
+            dlg.AddExtension = true;
+            dlg.Filter = "Action Text Files (*.atf)|*.atf|All files (*.*)|*.*";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                if ( !SaveText(dlg.FileName))
+                    MessageBox.Show("Failed to save text file - check file path");
+            }
         }
+
+        bool SaveText(string file)
+        {
+            try
+            {
+                using (System.IO.StreamWriter sr = new System.IO.StreamWriter(file))
+                {
+                    sr.WriteLine("NAME " + textBoxBorderName.Text + Environment.NewLine);
+
+                    foreach (Group g in groups)
+                    {
+                        if (g.programstep != null)    // don't include ones not set..
+                        {
+                            if (g.levelup > 0)
+                                sr.WriteLine("");
+                            sr.Write(new String(' ', g.indentcomputed * 4));
+                            sr.WriteLine(g.programstep.Name + " " + g.programstep.UserData);
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region cut copy paste
 
         bool indrag = false;
         Point mouselogicalpos;      // used to offset return pos dep on which control first captured the mouse
@@ -817,5 +837,130 @@ namespace EDDiscovery.Actions
             }
         }
 
-}
+        #endregion
+
+
+        #region Window Control
+
+        public const int WM_MOVE = 3;
+        public const int WM_SIZE = 5;
+        public const int WM_MOUSEMOVE = 0x200;
+        public const int WM_LBUTTONDOWN = 0x201;
+        public const int WM_LBUTTONUP = 0x202;
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int WM_NCLBUTTONUP = 0xA2;
+        public const int WM_NCMOUSEMOVE = 0xA0;
+        public const int HT_CLIENT = 0x1;
+        public const int HT_CAPTION = 0x2;
+        public const int HT_LEFT = 0xA;
+        public const int HT_RIGHT = 0xB;
+        public const int HT_BOTTOM = 0xF;
+        public const int HT_BOTTOMRIGHT = 0x11;
+        public const int WM_NCL_RESIZE = 0x112;
+        public const int HT_RESIZE = 61448;
+        public const int WM_NCHITTEST = 0x84;
+
+        // Mono compatibility
+        private bool _window_dragging = false;
+        private Point _window_dragMousePos = Point.Empty;
+        private Point _window_dragWindowPos = Point.Empty;
+
+        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
+        {
+            Message message = Message.Create(this.Handle, msg, wparam, lparam);
+            this.WndProc(ref message);
+            return message.Result;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
+            // Compatibility movement for Mono
+            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                _window_dragMousePos = new Point(x, y);
+                _window_dragWindowPos = this.Location;
+                _window_dragging = true;
+                m.Result = IntPtr.Zero;
+                this.Capture = true;
+            }
+            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
+                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
+                this.Location = _window_dragWindowPos;
+                this.Update();
+                m.Result = IntPtr.Zero;
+            }
+            else if (m.Msg == WM_LBUTTONUP)
+            {
+                _window_dragging = false;
+                _window_dragMousePos = Point.Empty;
+                _window_dragWindowPos = Point.Empty;
+                m.Result = IntPtr.Zero;
+                this.Capture = false;
+            }
+            // Windows honours NCHITTEST; Mono does not
+            else if (m.Msg == WM_NCHITTEST)
+            {
+                base.WndProc(ref m);
+
+                if ((int)m.Result == HT_CLIENT)
+                {
+                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                    int y = unchecked((short)((uint)m.LParam >> 16));
+                    Point p = PointToClient(new Point(x, y));
+
+                    if (p.X > this.ClientSize.Width - statusStripCustom.Height && p.Y > this.ClientSize.Height - statusStripCustom.Height)
+                    {
+                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                    }
+                    else if (p.Y > this.ClientSize.Height - statusStripCustom.Height)
+                    {
+                        m.Result = (IntPtr)HT_BOTTOM;
+                    }
+                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
+                    {
+                        m.Result = (IntPtr)HT_RIGHT;
+                    }
+                    else if (p.X < 5)
+                    {
+                        m.Result = (IntPtr)HT_LEFT;
+                    }
+                    else if (!windowsborder)
+                    {
+                        m.Result = (IntPtr)HT_CAPTION;
+                    }
+                }
+            }
+            else
+            {
+                base.WndProc(ref m);
+            }
+        }
+
+        private void label_index_MouseDown(object sender, MouseEventArgs e)
+        {
+            ((Control)sender).Capture = false;
+            SendMessage(WM_NCLBUTTONDOWN, (System.IntPtr)HT_CAPTION, (System.IntPtr)0);
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+
+        #endregion
+
+    }
 }

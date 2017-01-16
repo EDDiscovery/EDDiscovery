@@ -13,69 +13,33 @@ namespace EDDiscovery.Actions
 
         private string actionname;
         private ActionType actiontype;
-        protected List<string> actionflags; // store aux data in here..
         protected string userdata;
         protected int levelup;              // indicates for control structures that this entry is N levels up (ie. to the left).
 
-        public Action(string n, ActionType type, List<string> f, string ud, int lu)
+        public Action(string n, ActionType type, string ud, int lu)
         {
             actionname = n;
             actiontype = type;
-            actionflags = f;
             userdata = ud;
             levelup = lu;
         }
 
         public string Name { get { return actionname; } }
         public ActionType Type { get { return actiontype; } }
-        public List<string> Flags { get { return actionflags; } }
         public string UserData { get { return userdata; } }
         public int LevelUp { get { return levelup; } set { levelup = value; } }
 
-        public bool IsFlag(string flag) { return actionflags.FindIndex(x => x.StartsWith(flag)) >= 0; }
-        public void SetFlag(string flag, bool state, string auxdata = "")
-        {
-            int pos = actionflags.FindIndex(x => x.StartsWith(flag));
-            if (state)
-            {
-                if (pos < 0)
-                    actionflags.Add(flag + ":" + auxdata);
-                else
-                    actionflags[pos] = flag + ":" + auxdata;
-            }
-            else
-            {
-                if (pos >= 0)
-                    actionflags.RemoveAt(pos);
-            }
-        }
-        public string GetFlagAuxData( string flag , string def = null )
-        {
-            int pos = actionflags.FindIndex(x => x.StartsWith(flag));
-            if (pos >= 0)
-            {
-                int colon = actionflags[pos].IndexOf(":");
-
-                if ( colon >= 0)
-                    return actionflags[pos].Substring(colon+1);
-            }
-            return def;
-        }
-
-        public string GetFlagList()
-        {
-            return string.Join("-", actionflags);
-        }
-
-
-        public virtual string DisplayedUserData { get { return userdata; } }        // what to display, null if you don't want to.
         public virtual bool AllowDirectEditingOfUserData { get { return false; } }    // and allow editing?
+
+        public virtual string DisplayedUserData { get { return userdata; } }
         public virtual void UpdateUserData(string s) { userdata = s; }              // update user data, if allow direct editing
 
         public virtual bool ExecuteAction(ActionProgramRun ap)     // execute action in the action program context.. AP has data on current state, variables etc.
         {
             return false;
         }
+
+        public virtual string VerifyActionCorrect() { return null; } // on load, is the action correct?
 
         public virtual bool ConfigurationMenuInUse { get { return true; } }
         public virtual bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
@@ -123,19 +87,16 @@ namespace EDDiscovery.Actions
 
         // FACTORY make the correct class from name.
 
-        public static Action CreateAction( string name, List<string> control = null ,string user = null , int lu = 0)       
+        public static Action CreateAction( string name, string user = null , int lu = 0)       
         {
             for (int i = 0; i < cmdlist.Length; i++)
             {
-                if ( name.Equals(cmdlist[i].name))
+                if ( name.Equals(cmdlist[i].name, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (control == null)
-                        control = new List<string>();
-
                     if (user == null)
                         user = "";
 
-                    return (Action)Activator.CreateInstance(cmdlist[i].type, new Object[] { name, cmdlist[i].at, control, user, lu });
+                    return (Action)Activator.CreateInstance(cmdlist[i].type, new Object[] { name, cmdlist[i].at, user, lu });
                 }
             }
 
@@ -147,9 +108,7 @@ namespace EDDiscovery.Actions
         {
             Type ty = r.GetType();                      // get its actual type, not the base type..
 
-            List<string> newaf = new List<string>(r.actionflags);   // make a copy of the flags, not a direct reference.
-
-            return (Action)Activator.CreateInstance(ty, new Object[] { r.actionname, r.actiontype, newaf, r.userdata, r.levelup });
+            return (Action)Activator.CreateInstance(ty, new Object[] { r.actionname, r.actiontype, r.userdata, r.levelup });
         }
 
         #region Helper Dialogs

@@ -12,30 +12,81 @@ namespace EDDiscovery.Actions
     {
         static QueuedSynthesizer synth = new QueuedSynthesizer();           // STATIC only one synth throught the whole program
 
-        string flagOnWaitComplete = "WaitComplete";
-        string flagVoice = "Voice";
-        string flagRate = "Rate";
-        string flagVolume = "Volume";
+        static string volumename = "Volume";
+        static string voicename = "Voice";
+        static string ratename = "Rate";
+        static string waitname = "Wait";
+        static List<string> validnames = new List<string>() { voicename, volumename, ratename, waitname };
 
-        public ActionSay(string n, ActionType t, List<string> c, string ud, int lu) : base(n, t, c, ud, lu)
+        public ActionSay(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
         {
+        }
+
+        public bool FromString(string s, out string saying, out ConditionVariables vars )
+        {
+            vars = new ConditionVariables();
+
+            if (s.IndexOf(',') == -1 && s.IndexOf('"') == -1) // no quotes, no commas, just the string, probably typed in..
+            {
+                saying = s;
+                return true;
+            }
+            else
+            {
+                StringParser p = new StringParser(s);
+                saying = p.NextQuotedWord(", ");        // stop at space or comma..
+
+                if (saying != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, false, validnames, true))))   // normalise variable names (true)
+                     return true;
+
+                saying = "";
+                return false;
+            }
+        }
+
+        public string ToString(string saying, ConditionVariables cond)
+        {
+            if (cond.Count > 0)
+                return saying.QuotedEscapeString() + ", " + cond.ToString();
+            else
+                return saying.QuotedEscapeString();
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            string saying;
+            ConditionVariables vars;
+            return FromString(userdata, out saying, out vars) ? null : "Say not in correct format";
         }
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
+            string saying;
+            ConditionVariables vars;
+            FromString(userdata, out saying, out vars);
+
             Tuple<string, bool, string, string, string> promptValue =
                 Prompt.ShowDialog(parent, "Set Text to say (use ; to separate randomly selectable phrases)", "Configure Say Command", theme,
-                UserData, IsFlag(flagOnWaitComplete), GetFlagAuxData(flagVoice, "Default"), GetFlagAuxData(flagVolume, "Default"), GetFlagAuxData(flagRate, "Default"));
+                    saying, vars.ContainsKey(waitname),
+                    vars.ContainsKey(voicename) ? vars[voicename] : "Default",
+                    vars.ContainsKey(volumename) ? vars[volumename] : "Default",
+                    vars.ContainsKey(ratename) ? vars[ratename] : "Default");
 
             if (promptValue != null)
             {
-                userdata = promptValue.Item1;
-                SetFlag(flagOnWaitComplete, promptValue.Item2);
-                SetFlag(flagVoice, true, promptValue.Item3);
-                SetFlag(flagVolume, true, promptValue.Item4);
-                SetFlag(flagRate, true, promptValue.Item5);
+                ConditionVariables cond = new ConditionVariables();
+                if (promptValue.Item2)
+                    cond[waitname] = "1";
+                if (!promptValue.Item3.Equals("Default"))
+                    cond[voicename] = promptValue.Item3;
+                if (!promptValue.Item4.Equals("Default"))
+                    cond[volumename] = promptValue.Item4;
+                if (!promptValue.Item5.Equals("Default"))
+                    cond[ratename] = promptValue.Item5;
+
+                userdata = ToString(promptValue.Item1, cond);
                 return true;
             }
 
@@ -61,29 +112,37 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            string say = UserData;
-            bool wait = IsFlag(flagOnWaitComplete);
-            string voice = GetFlagAuxData(flagVoice, ap.currentvars.ContainsKey("SpeechVoice") ? ap.currentvars["SpeechVoice"] : "Default");
+            string say;
+            ConditionVariables vars;
+            FromString(userdata, out say, out vars);
 
-            string volume;
-            if (ap.functions.ExpandString(GetFlagAuxData(flagVolume, "Default"), ap.currentvars, out volume) == EDDiscovery.ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+            bool wait = vars.ContainsKey(waitname);
+
+            string voice = vars.ContainsKey(voicename) ? vars[voicename] : (ap.currentvars.ContainsKey("SpeechVoice") ? ap.currentvars["SpeechVoice"] : "Default");
+            
+            int vol;
+            string evalres = vars.GetNumericValue(volumename, 0, 100, -999, out vol, ap.functions.ExpandString, ap.currentvars); // expand this..
+            if (evalres != null)
             {
-                ap.ReportError(volume);
+                ap.ReportError(evalres);
                 return true;
             }
 
-            int vol = GetInt(volume, "SpeechVolume", ap.currentvars, 60, 0, 100);
+            if (vol == -999)
+                vars.GetNumericValue("SpeechVolume", 0, 100, 60, out vol);      // don't care about the return, do not expand, its just a number.. if it fails, use def
 
-            string rate;
-            if (ap.functions.ExpandString(GetFlagAuxData(flagRate, "Default"), ap.currentvars, out rate) == EDDiscovery.ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+            int rate;
+            evalres = vars.GetNumericValue(ratename, -10,10,-999, out rate, ap.functions.ExpandString, ap.currentvars); // expand this..
+            if (evalres != null)
             {
-                ap.ReportError(rate);
+                ap.ReportError(evalres);
                 return true;
             }
 
-            int rat = GetInt(rate, "SpeechRate", ap.currentvars, 0, -10, 10);
+            if (rate == -999)
+                vars.GetNumericValue("SpeechRate", -10,10,0, out rate);      // don't care about the return, do not expand, its just a number.. if it fails, use def
 
-            string s = synth.Speak(UserData, voice, vol, rat, ap.functions, ap.currentvars, (wait) ? ap : null);
+            string s = synth.Speak(say, voice, vol, rate, ap.functions, ap.currentvars, (wait) ? ap : null);
 
             if (s != null)
             {
@@ -187,7 +246,7 @@ namespace EDDiscovery.Actions
         }
 
         public string Speak(string phraselist, string voice, int volume, int rate, 
-                            EDDiscovery.Actions.ActionFunctions f, Dictionary<string, string> curvars , EDDiscovery.Actions.ActionProgramRun ap )
+                            EDDiscovery.Actions.ActionFunctions f, ConditionVariables curvars , EDDiscovery.Actions.ActionProgramRun ap )
         {
             string[] phrasearray = phraselist.Split(';');
 
