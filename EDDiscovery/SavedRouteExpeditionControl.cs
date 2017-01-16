@@ -457,12 +457,13 @@ namespace EDDiscovery
             {
                 _currentRoute.Add();
                 _savedRoutes.Add(_currentRoute);
-                UpdateComboBox();
             }
             else
             {
                 _currentRoute.Update();
             }
+            UpdateComboBox();
+            toolStripComboBoxRouteSelection.Text = _currentRoute.Name;
         }
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
