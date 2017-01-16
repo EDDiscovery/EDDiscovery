@@ -211,7 +211,7 @@ namespace EDDiscovery2.EDSM
                 return null;
         }
         
-        internal long GetNewSystems(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        internal long GetNewSystems(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             string lstsyst;
 
@@ -306,7 +306,7 @@ namespace EDDiscovery2.EDSM
                 bool newfile = false;
                 DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
-                string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
+                string json = Tools.TryReadAllTextFromFile(edsmhiddensystems);
 
                 return json;
             }

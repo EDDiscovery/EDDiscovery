@@ -227,6 +227,19 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl)
+        {
+            for (int j = startindex; j >= 0; j--)
+            {
+                if (je.IsStarNameRelated(hl[j].System.name))       // if its part of the name, use it
+                {
+                    return Process(je, hl[j].System);
+                }
+            }
+
+            return Process(je, hl[startindex].System);         // no relationship, add..
+        }
+
         private class DuplicateKeyComparer<TKey> : IComparer<string> where TKey : IComparable      // special compare for sortedlist
         {
             public int Compare(string x, string y)

@@ -1,19 +1,4 @@
-﻿/*
- * Copyright © 2015 - 2017 EDDiscovery development team
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
- */
-using EDDiscovery.DB;
+﻿using EDDiscovery.DB;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
@@ -47,19 +32,10 @@ using EDDiscovery.EDDN;
 
 namespace EDDiscovery
 {
-    public interface IDiscoveryForm : IDiscoveryController
-    {
-        EDDTheme theme { get; }
-        TravelHistoryControl TravelControl { get; }
-        RouteControl RouteControl { get; }
-        ExportControl ExportControl { get; }
-        EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get; }
-        EDDiscovery2._3DMap.MapManager Map { get; }
-    }
 
     public delegate void DistancesLoaded();
 
-    public partial class EDDiscoveryForm : Form, IDiscoveryForm
+    public partial class EDDiscoveryForm : Form
     {
         #region Variables
 
@@ -85,8 +61,8 @@ namespace EDDiscovery
         private bool _window_dragging = false;
         private Point _window_dragMousePos = Point.Empty;
         private Point _window_dragWindowPos = Point.Empty;
-        public EDDTheme theme { get; private set; }
-        public EDDiscoveryController Controller { get; private set; }
+        public EDDTheme theme;
+        public EDDiscoveryController Controller;
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
@@ -107,15 +83,16 @@ namespace EDDiscovery
         public string LogText { get { return Controller.LogText; } }
         public bool PendingClose { get { return Controller.PendingClose; } }
         public string VersionDisplayString { get { return Controller.VersionDisplayString; } }
-        public GalacticMapping galacticMapping { get { return Controller.galacticMapping; } }
+        public GalacticMapping galacticMapping { get { return Controller.GalacticMapping; } }
         public bool ReadyForClose { get { return Controller.ReadyForClose; } }
-        public bool IsDatabaseInitialized { get { return Controller.IsDatabaseInitialized; } }
+        public bool IsDatabaseInitialized { get { return SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized; } }
 
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
-        public event Action OnNewTarget { add { Controller.OnNewTarget += value; } remove { Controller.OnNewTarget -= value; } }
+	public event Action OnNewTarget { add { Controller.OnNewTarget += value; } remove { Controller.OnNewTarget -= value; } }
 
+        public static EDDiscoveryForm Instance { get; private set; }
         public static EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         #endregion
 
@@ -123,6 +100,7 @@ namespace EDDiscovery
 
         public EDDiscoveryForm()
         {
+            Instance = this;
             InitializeComponent();
 
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a), a => Invoke(a));
@@ -130,12 +108,13 @@ namespace EDDiscovery
             Controller.OnCheckSystemsCompleted += OnCheckSystemsCompleted;
             Controller.OnDatabaseInitializationComplete += OnDatabaseInitializationComplete;
             Controller.OnFinalClose += OnFinalClose;
+            Controller.OnNewBodyScan += OnNewBodyScan;
             Controller.OnNewReleaseAvailable += OnNewReleaseAvailable;
             Controller.OnRefreshCommanders += OnRefreshCommanders;
             Controller.OnRefreshHistoryRequested += OnRefreshHistoryRequested;
             Controller.OnRefreshHistoryWorkerCompleted += (h, m, s) => OnRefreshHistoryWorkerCompleted();
             Controller.OnReportProgress += OnReportProgress;
-            Controller.Init();
+            Controller.Init(this);
             label_version.Text = Controller.VersionDisplayString;
 
             theme = new EDDTheme();
@@ -198,16 +177,6 @@ namespace EDDiscovery
             }
         }
 
-        internal void SaveCurrentPopOuts()
-        {
-            travelHistoryControl1.SaveCurrentPopouts();
-        }
-
-        internal void LoadSavedPopouts()
-        {
-            travelHistoryControl1.LoadSavedPopouts();
-        }
-
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
             Controller.PostInit_Shown();
@@ -221,13 +190,17 @@ namespace EDDiscovery
 
         private void PanelInfoNewRelease()
         {
-            ShowInfoPanel("Download new release!", true, Color.Green);
+            panelInfo.BackColor = Color.Green;
+            labelPanelText.Text = "Download new release!";
+            panelInfo.Visible = true;
         }
 
 
         private void InitFormControls()
         {
-            ShowInfoPanel("Loading. Please wait!", true, Color.Gold);
+            labelPanelText.Text = "Loading. Please wait!";
+            panelInfo.Visible = true;
+            panelInfo.BackColor = Color.Gold;
 
             routeControl1.travelhistorycontrol1 = travelHistoryControl1;
         }
@@ -235,7 +208,7 @@ namespace EDDiscovery
         private void RepositionForm()
         {
             var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
-            if (top != -1 && option_nowindowreposition == false)
+            if (top >= 0 && option_nowindowreposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
@@ -260,13 +233,10 @@ namespace EDDiscovery
                 this.CreateParams.Y = this.Top;
                 this.StartPosition = FormStartPosition.Manual;
 
-                var Max = SQLiteDBClass.GetSettingBool("FormMax", false);
-                if (Max) this.WindowState = FormWindowState.Maximized;
             }
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
-            if (EDDConfig.AutoLoadPopOuts) travelHistoryControl1.LoadSavedPopouts();
         }
 
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
@@ -356,10 +326,14 @@ namespace EDDiscovery
             journalViewControl1.RefreshButton(true);
         }
 
+        protected void OnNewBodyScan(JournalScan scan)
+        {
+            travelHistoryControl1.NewBodyScan(scan);
+        }
+
         protected void OnRefreshCommanders()
         {
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
-            exportControl1.PopulateCommanders();
             settings.UpdateCommandersListBox();
         }
         #endregion
@@ -401,7 +375,6 @@ namespace EDDiscovery
         {
             settings.SaveSettings();
 
-            SQLiteDBClass.PutSettingBool("FormMax", this.WindowState == FormWindowState.Maximized);
             SQLiteDBClass.PutSettingInt("FormWidth", this.Width);
             SQLiteDBClass.PutSettingInt("FormHeight", this.Height);
             SQLiteDBClass.PutSettingInt("FormTop", this.Top);
@@ -410,15 +383,9 @@ namespace EDDiscovery
             theme.SaveSettings(null);
             travelHistoryControl1.SaveSettings();
             journalViewControl1.SaveSettings();
-            if (EDDConfig.AutoSavePopOuts) travelHistoryControl1.SaveCurrentPopouts();
+
         }
 
-        public void ShowInfoPanel(string message, bool visible, Color? backColour = null)
-        {
-            labelPanelText.Text = message;
-            panelInfo.Visible = visible;
-            if (backColour.HasValue) panelInfo.BackColor = backColour.Value;
-        }
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -426,7 +393,8 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
                 edsmRefreshTimer.Enabled = false;
-                ShowInfoPanel("Closing, please wait!", true);
+                labelPanelText.Text = "Closing, please wait!";
+                panelInfo.Visible = true;
                 Controller.Shutdown();
             }
             else if (!ReadyForClose)   // still working, cancel again..
@@ -439,13 +407,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region Target
-        public void NewTargetSet() { Controller.NewTargetSet(); }
-        #endregion
-
-        #region Buttons, Mouse, Menus
+#region Buttons, Mouse, Menus
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -583,34 +547,77 @@ namespace EDDiscovery
             Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
         }
 
-        private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
+        protected override void WndProc(ref Message m)
         {
-            travelHistoryControl1.ShowAllPopOutsInTaskBar();
-        }
-
-        private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            travelHistoryControl1.MakeAllPopoutsOpaque();
-        }
-
-        private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," + 
-                                " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
-                                "This will not change your history, but when you next refresh, it will try and reassign EDSM systems to " +
-                                "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
-                                "or notes are going missing\r\n" + 
-                                "\r\n" +
-                                "You can manually change one EDSM assigned system by right clicking on the travel history and selecting the option"
-                                , "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            // Compatibility movement for Mono
+            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !theme.WindowsFrame)
             {
-                EliteDangerous.JournalEntry.ClearEDSMID(EDDConfig.CurrentCommander.Nr);
-                SystemNoteClass.ClearEDSMID();
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                _window_dragMousePos = new Point(x, y);
+                _window_dragWindowPos = this.Location;
+                _window_dragging = true;
+                m.Result = IntPtr.Zero;
+                this.Capture = true;
             }
+            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
+                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
+                this.Location = _window_dragWindowPos;
+                this.Update();
+                m.Result = IntPtr.Zero;
+            }
+            else if (m.Msg == WM_LBUTTONUP)
+            {
+                _window_dragging = false;
+                _window_dragMousePos = Point.Empty;
+                _window_dragWindowPos = Point.Empty;
+                m.Result = IntPtr.Zero;
+                this.Capture = false;
+            }
+            // Windows honours NCHITTEST; Mono does not
+            else if (m.Msg == WM_NCHITTEST)
+            {
+                base.WndProc(ref m);
+                //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
 
+                if ((int)m.Result == HT_CLIENT)
+                {
+                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                    int y = unchecked((short)((uint)m.LParam >> 16));
+                    Point p = PointToClient(new Point(x, y));
+
+                    if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
+                    {
+                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                    }
+                    else if ( p.Y > this.ClientSize.Height - statusStrip1.Height )
+                    {
+                        m.Result = (IntPtr)HT_BOTTOM;
+                    }
+                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
+                    {
+                        m.Result = (IntPtr)HT_RIGHT;
+                    }
+                    else if (p.X < 5)
+                    {
+                        m.Result = (IntPtr)HT_LEFT;
+                    }
+                    else if (!theme.WindowsFrame)
+                    {
+                        m.Result = (IntPtr)HT_CAPTION;
+                    }
+                }
+            }
+            else
+            {
+                base.WndProc(ref m);
+            }
         }
-
-
+        
         private void paneleddiscovery_Click(object sender, EventArgs e)
         {
             AboutBox();
@@ -623,16 +630,7 @@ namespace EDDiscovery
 
         private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Read21Folders(false);
-        }
-
-        private void read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Read21Folders(true);
-        }
-
-        private void Read21Folders(bool force)
-        { 
+            adminToolStripMenuItem.DropDown.Close();
             if (DisplayedCommander >= 0)
             {
                 EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
@@ -654,11 +652,44 @@ namespace EDDiscovery
                         if (logpath != netlogpath)
                         {
                             cmdr.NetLogDir = logpath;
-                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr }, true);
+                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr });
                         }
 
                         //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
-                        Controller.RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: force, currentcmdr: cmdr.Nr);
+                        Controller.RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: false, currentcmdr: cmdr.Nr);
+                    }
+                }
+            }
+        }
+
+        private void read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (DisplayedCommander >= 0)
+            {
+                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
+                if (cmdr != null)
+                {
+                    string netlogpath = cmdr.NetLogDir;
+                    FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+                    if (netlogpath != null && Directory.Exists(netlogpath))
+                    {
+                        dirdlg.SelectedPath = netlogpath;
+                    }
+
+                    DialogResult dlgResult = dirdlg.ShowDialog();
+
+                    if (dlgResult == DialogResult.OK)
+                    {
+                        string logpath = dirdlg.SelectedPath;
+
+                        if (logpath != netlogpath)
+                        {
+                            cmdr.NetLogDir = logpath;
+                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr });
+                        }
+
+                        //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
+                        Controller.RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: true, currentcmdr: cmdr.Nr);
                     }
                 }
             }
@@ -745,8 +776,19 @@ namespace EDDiscovery
             Map.Show();
             this.Cursor = Cursors.Default;
         }
+        #endregion
 
-        private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.ShowAllPopOutsInTaskBar();
+        }
+
+        private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.MakeAllPopoutsOpaque();
+        }
+
+	private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = history.FilterByScanNotEDDNSynced;        // first entry is oldest
             EDDNSync.SendEDDNEvents(this, hlsyncunsyncedlist);
@@ -757,84 +799,9 @@ namespace EDDiscovery
             FindMaterialsForm frm = new FindMaterialsForm();
 
             frm.Show(this);
+
+
         }
-
-        #endregion
-
-        #region Window Control
-
-        protected override void WndProc(ref Message m)
-        {
-            // Compatibility movement for Mono
-            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !theme.WindowsFrame)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                _window_dragMousePos = new Point(x, y);
-                _window_dragWindowPos = this.Location;
-                _window_dragging = true;
-                m.Result = IntPtr.Zero;
-                this.Capture = true;
-            }
-            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
-                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
-                this.Location = _window_dragWindowPos;
-                this.Update();
-                m.Result = IntPtr.Zero;
-            }
-            else if (m.Msg == WM_LBUTTONUP)
-            {
-                _window_dragging = false;
-                _window_dragMousePos = Point.Empty;
-                _window_dragWindowPos = Point.Empty;
-                m.Result = IntPtr.Zero;
-                this.Capture = false;
-            }
-            // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM_NCHITTEST)
-            {
-                base.WndProc(ref m);
-                //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
-
-                if ((int)m.Result == HT_CLIENT)
-                {
-                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                    int y = unchecked((short)((uint)m.LParam >> 16));
-                    Point p = PointToClient(new Point(x, y));
-
-                    if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
-                    {
-                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
-                    }
-                    else if (p.Y > this.ClientSize.Height - statusStrip1.Height)
-                    {
-                        m.Result = (IntPtr)HT_BOTTOM;
-                    }
-                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
-                    {
-                        m.Result = (IntPtr)HT_RIGHT;
-                    }
-                    else if (p.X < 5)
-                    {
-                        m.Result = (IntPtr)HT_LEFT;
-                    }
-                    else if (!theme.WindowsFrame)
-                    {
-                        m.Result = (IntPtr)HT_CAPTION;
-                    }
-                }
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
-        }
-
-        #endregion
     }
 }
 

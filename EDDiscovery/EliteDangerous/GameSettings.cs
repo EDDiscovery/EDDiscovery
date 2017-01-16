@@ -34,9 +34,9 @@ namespace EDDiscovery2
 
         private DateTime lastTry_Displaydata = DateTime.Now - new TimeSpan(1, 0, 0);
 
-        public EDDiscoveryForm _parent;
+        public IDiscoveryController _parent;
 
-        public GameSettings(EDDiscoveryForm parent)
+        public GameSettings(IDiscoveryController parent)
         {
             _parent = parent;
 

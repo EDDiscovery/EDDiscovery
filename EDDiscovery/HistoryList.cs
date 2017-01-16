@@ -22,6 +22,7 @@ using OpenTK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -320,7 +321,7 @@ namespace EDDiscovery
             return he;
         }
 
-        public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl , SQLiteConnectionUser conn )      // called after above with a USER connection
+        public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, SQLiteConnectionUser conn )      // called after above with a USER connection
         {
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
 
@@ -438,6 +439,15 @@ namespace EDDiscovery
         public MaterialCommoditiesLedger materialcommodititiesledger;       // and the ledger..
 
         public EliteDangerous.StarScan starscan;                                           // and the results of scanning
+
+        public HistoryList()
+        {
+        }
+
+        public HistoryList(List<HistoryEntry> hl)
+        {
+            historylist = hl.ToList();
+        }
 
         public void Clear()
         {
@@ -902,6 +912,169 @@ namespace EDDiscovery
                 else if (he.StopMarker)
                     started = false;
             }
+        }
+
+
+        // go thru the history list and reworkout the materials ledger and the materials count, plus any other stuff..
+        public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> filter)
+        {
+            List<HistoryEntry> hl = filter(this);
+            MaterialCommoditiesLedger ledger = new MaterialCommoditiesLedger();
+            StarScan scan = new StarScan();
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
+            {
+                for (int i = 0; i < hl.Count; i++)
+                {
+                    HistoryEntry he = hl[i];
+                    JournalEntry je = he.journalEntry;
+                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, conn);        // let the HE do what it wants to with the user db
+
+                    Debug.Assert(he.MaterialCommodity != null);
+
+                    ledger.Process(je, conn);            // update the ledger
+
+                    if (je.EventTypeID == JournalTypeEnum.Scan)
+                    {
+                        if (!scan.AddScanToBestSystem(je as JournalScan, i, hl))
+                        {
+                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
+                        }
+                    }
+                }
+            }
+
+            materialcommodititiesledger = ledger;
+            starscan = scan;
+        }
+
+        public HistoryEntry Add(JournalEntry je)
+        {
+            HistoryEntry last = GetLast;
+
+            bool journalupdate = false;
+            HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
+
+            if (journalupdate)
+            {
+                EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+
+                if (jfsd != null)
+                {
+                    EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
+                }
+            }
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            {
+                he.ProcessWithUserDb(je, last, conn);           // let some processes which need the user db to work
+
+                materialcommodititiesledger.Process(je, conn);
+            }
+
+            Add(he);
+
+            if (je.EventTypeID == JournalTypeEnum.Scan)
+            {
+                JournalScan js = je as JournalScan;
+                if (!starscan.AddScanToBestSystem(js, this.Count - 1, this.EntryOrder))
+                {
+                    System.Diagnostics.Debug.WriteLine("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                     "Scan object " + js.BodyName + " in " + he.System.name);
+                }
+            }
+
+            return he;
+        }
+
+        public void CopyFrom(HistoryList history)
+        {
+            Clear();
+
+            foreach (var ent in history.historylist)
+            {
+                Add(ent);
+                Debug.Assert(ent.MaterialCommodity != null);
+            }
+
+            materialcommodititiesledger = history.materialcommodititiesledger;
+            starscan = history.starscan;
+        }
+
+        public static HistoryList Load(string netLogPath, bool forceNetLogReload, bool forceJournalReload, bool checkEdsm, int currentCommander, EDJournalClass journalmonitor, Action<int, string> reportProgress, Func<bool> pendingClose)
+        {
+            List<HistoryEntry> hl = new List<HistoryEntry>();
+            EDCommander cmdr = null;
+
+            if (currentCommander >= 0)
+            {
+                cmdr = EDDConfig.Instance.Commander(currentCommander);
+                journalmonitor.ParseJournalFiles(pendingClose, reportProgress, forceReload: forceJournalReload);   // Parse files stop monitor..
+
+                if (netLogPath != null)
+                {
+                    string errstr = null;
+                    NetLogClass.ParseFiles(netLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, pendingClose, reportProgress, forceNetLogReload, currentcmdrid: currentCommander);
+                }
+            }
+
+            reportProgress(-1, "Resolving systems");
+
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(currentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+            List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
+
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
+            {
+                HistoryEntry prev = null;
+                foreach (EliteDangerous.JournalEntry je in jlist)
+                {
+                    bool journalupdate = false;
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, checkEdsm, out journalupdate, conn, cmdr);
+                    prev = he;
+
+                    hl.Add(he);                        // add to the history list here..
+
+                    if (journalupdate)
+                    {
+                        jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
+                    }
+                }
+            }
+
+            if (pendingClose())
+            {
+                return null;
+            }
+
+            if (jlistUpdated.Count > 0)
+            {
+                reportProgress(-1, "Updating journal entries");
+
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
+                {
+                    using (DbTransaction txn = conn.BeginTransaction())
+                    {
+                        foreach (Tuple<EliteDangerous.JournalEntry, HistoryEntry> jehe in jlistUpdated)
+                        {
+                            EliteDangerous.JournalEntry je = jehe.Item1;
+                            HistoryEntry he = jehe.Item2;
+                            EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+                            if (jfsd != null)
+                            {
+                                EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, conn, txn);
+                            }
+                        }
+
+                        txn.Commit();
+                    }
+                }
+            }
+
+            // now database has been updated due to initial fill, now fill in stuff which needs the user database
+
+            HistoryList history = new HistoryList(hl);
+            history.ProcessUserHistoryListEntries(h => h.EntryOrder);      // here, we update the DBs in HistoryEntry and any global DBs in historylist
+            return history;
         }
 
         public static HistoryEntry FindNextSystem(List<HistoryEntry> syslist, string sysname, int dir)
