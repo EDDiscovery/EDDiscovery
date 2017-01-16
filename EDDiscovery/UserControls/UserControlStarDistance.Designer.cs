@@ -1,4 +1,19 @@
-﻿namespace EDDiscovery.UserControls
+﻿/*
+ * Copyright © 2016 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+namespace EDDiscovery.UserControls
 {
     partial class UserControlStarDistance
     {
@@ -48,19 +63,19 @@
             this.addToTrilaterationToolStripMenuItem1,
             this.viewOnEDSMToolStripMenuItem1});
             this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
+            this.closestContextMenu.Size = new System.Drawing.Size(177, 48);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
             this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
-            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
             this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
             this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
             // 
             // viewOnEDSMToolStripMenuItem1
             // 
             this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
-            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
             this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
