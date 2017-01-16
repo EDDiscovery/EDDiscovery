@@ -463,6 +463,10 @@ namespace EDDiscovery
                 _formMax = SQLiteDBClass.GetSettingBool("FormMax", false);
                 if (_formMax) this.WindowState = FormWindowState.Maximized;
             }
+            _formLeft = Left;
+            _formTop = Top;
+            _formHeight = Height;
+            _formWidth = Width;
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
