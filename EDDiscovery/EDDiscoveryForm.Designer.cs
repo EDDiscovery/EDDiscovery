@@ -788,6 +788,7 @@ namespace EDDiscovery
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
+            this.ResizeEnd += new System.EventHandler(this.EDDiscoveryForm_ResizeEnd);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.EDDiscoveryForm_Layout);
             this.menuStrip1.ResumeLayout(false);
