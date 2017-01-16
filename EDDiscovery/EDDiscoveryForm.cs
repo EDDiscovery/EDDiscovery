@@ -1613,6 +1613,18 @@ namespace EDDiscovery
             }
         }
 
+        private void RecordPosition()
+        {
+            _formMax = FormWindowState.Maximized == WindowState;
+            if (FormWindowState.Minimized != WindowState)
+            {
+                _formLeft = this.Left;
+                _formTop = this.Top;
+                _formWidth = this.Width;
+                _formHeight = this.Height;
+            }
+        }
+
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             if (FormWindowState.Minimized == WindowState)
@@ -1624,13 +1636,14 @@ namespace EDDiscovery
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                     Show();
-                _formMax = FormWindowState.Maximized == WindowState;
-                _formLeft = this.Left;
-                _formTop = this.Top;
-                _formWidth = this.Width;
-                _formHeight = this.Height;
             }
+            RecordPosition();
             notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
+        }
+
+        private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)
+        {
+            RecordPosition();
         }
 
         #endregion
