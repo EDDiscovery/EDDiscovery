@@ -1218,8 +1218,8 @@ namespace EDDiscovery
             {
                 closeTimer.Stop();      // stop timer now. So it won't try to save it multiple times during close down if it takes a while - this caused a bug in saving some settings
                 SaveSettings();         // do close now
-                Close();
                 notifyIcon1.Visible = false;
+                Close();
                 Application.Exit();
             }
         }
