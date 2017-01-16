@@ -1682,13 +1682,13 @@ namespace EDDiscovery
 
         private void RecordPosition()
         {
-            _formMax = FormWindowState.Maximized == WindowState;
             if (FormWindowState.Minimized != WindowState)
             {
                 _formLeft = this.Left;
                 _formTop = this.Top;
                 _formWidth = this.Width;
                 _formHeight = this.Height;
+                _formMax = FormWindowState.Maximized == WindowState;
             }
         }
 
