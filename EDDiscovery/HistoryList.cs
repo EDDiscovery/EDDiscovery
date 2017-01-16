@@ -563,30 +563,9 @@ namespace EDDiscovery
             }
         }
 
-        public HistoryEntry GetLastFuelScoop
+        public HistoryEntry GetLastHistoryEntry(Predicate<HistoryEntry> where)
         {
-            get
-            {
-                return historylist.FindLast(x => x.IsFuelScoop);
-            }
-        }
-
-
-        public HistoryEntry GetLastRefuel
-        {
-            get
-            {
-                return historylist.FindLast(x => x.journalEntry.EventTypeID==JournalTypeEnum.RefuelAll
-                    || x.journalEntry.EventTypeID == JournalTypeEnum.RefuelPartial);
-            }
-        }
-        public HistoryEntry GetLastFSDOrFuelScoop
-        {
-            get
-            {
-                return historylist.FindLast(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump
-                    || x.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop);
-            }
+            return historylist.FindLast(where);
         }
 
         public HistoryEntry GetLastWithPosition

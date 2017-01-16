@@ -128,6 +128,8 @@ namespace EDDiscovery
         EliteDangerous.EDJournalClass journalmonitor;
         GitHubRelease newRelease;
 
+        private bool _formMax;
+
         private bool CanSkipSlowUpdates()
         {
 #if DEBUG
@@ -211,6 +213,8 @@ namespace EDDiscovery
             ApplyTheme();
 
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+
+            notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
         }
 
         private void Dbinitworker_DoWork(object sender, DoWorkEventArgs e)
@@ -452,8 +456,8 @@ namespace EDDiscovery
                 this.CreateParams.Y = this.Top;
                 this.StartPosition = FormStartPosition.Manual;
 
-                var Max = SQLiteDBClass.GetSettingBool("FormMax", false);
-                if (Max) this.WindowState = FormWindowState.Maximized;
+                _formMax = SQLiteDBClass.GetSettingBool("FormMax", false);
+                if (_formMax) this.WindowState = FormWindowState.Maximized;
             }
 
             travelHistoryControl1.LoadLayoutSettings();
@@ -1121,7 +1125,7 @@ namespace EDDiscovery
         {
             settings.SaveSettings();
 
-            SQLiteDBClass.PutSettingBool("FormMax", this.WindowState == FormWindowState.Maximized);
+            SQLiteDBClass.PutSettingBool("FormMax", _formMax);
             SQLiteDBClass.PutSettingInt("FormWidth", this.Width);
             SQLiteDBClass.PutSettingInt("FormHeight", this.Height);
             SQLiteDBClass.PutSettingInt("FormTop", this.Top);
@@ -1215,13 +1219,14 @@ namespace EDDiscovery
                 closeTimer.Stop();      // stop timer now. So it won't try to save it multiple times during close down if it takes a while - this caused a bug in saving some settings
                 SaveSettings();         // do close now
                 Close();
+                notifyIcon1.Visible = false;
                 Application.Exit();
             }
         }
 
 #endregion
 
-#region Buttons, Mouse, Menus
+#region Buttons, Mouse, Menus, NotifyIcon
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -1329,6 +1334,17 @@ namespace EDDiscovery
         internal void keepOnTopChanged(bool keepOnTop)
         {
             this.TopMost = keepOnTop;
+        }
+
+        /// <summary>
+        /// The settings panel check box for 'Use notification area icon' has changed.
+        /// </summary>
+        /// <param name="useNotifyIcon">Whether or not the setting is enabled.</param>
+        internal void useNotifyIconChanged(bool useNotifyIcon)
+        {
+            notifyIcon1.Visible = useNotifyIcon;
+            if (!useNotifyIcon && !Visible)
+                Show();
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)
@@ -1543,6 +1559,44 @@ namespace EDDiscovery
             frm.Show(this);
         }
 
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            // Tray icon was double-clicked.
+            if (FormWindowState.Minimized == WindowState)
+            {
+                if (EDDConfig.MinimizeToNotifyIcon)
+                    Show();
+                if (_formMax)
+                    WindowState = FormWindowState.Maximized;
+                else
+                    WindowState = FormWindowState.Normal;
+            }
+            else
+                WindowState = FormWindowState.Minimized;
+        }
+
+        private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
+        {
+            // Tray icon 'Hide Tray Icon' menu item was clicked.
+            settings.checkBoxUseNotifyIcon.Checked = false;
+        }
+
+        private void notifyIconMenu_Open_Click(object sender, EventArgs e)
+        {
+            // Tray icon 'Open EDDiscovery' menu item was clicked. Present the main window.
+            if (FormWindowState.Minimized == WindowState)
+            {
+                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                    Show();
+                if (_formMax)
+                    WindowState = FormWindowState.Maximized;
+                else
+                    WindowState = FormWindowState.Normal;
+            }
+            else
+                Activate();
+        }
+
         #endregion
 
         #region Window Control
@@ -1616,6 +1670,22 @@ namespace EDDiscovery
             {
                 base.WndProc(ref m);
             }
+        }
+
+        private void EDDiscoveryForm_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == WindowState)
+            {
+                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                    Hide();
+            }
+            else
+            {
+                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                    Show();
+                _formMax = FormWindowState.Maximized == WindowState;
+            }
+            notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
         }
 
         #endregion
@@ -1804,7 +1874,7 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        // go thru the hisotry list and reworkout the materials ledge and the materials count, plus any other stuff..
+        // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
         private void ProcessUserHistoryListEntries(List<HistoryEntry> hl, MaterialCommoditiesLedger ledger, StarScan scan)
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
