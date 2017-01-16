@@ -129,6 +129,10 @@ namespace EDDiscovery
         GitHubRelease newRelease;
 
         private bool _formMax;
+        private int _formWidth;
+        private int _formHeight;
+        private int _formTop;
+        private int _formLeft;
 
         private bool CanSkipSlowUpdates()
         {
@@ -459,6 +463,10 @@ namespace EDDiscovery
                 _formMax = SQLiteDBClass.GetSettingBool("FormMax", false);
                 if (_formMax) this.WindowState = FormWindowState.Maximized;
             }
+            _formLeft = Left;
+            _formTop = Top;
+            _formHeight = Height;
+            _formWidth = Width;
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
@@ -1126,10 +1134,10 @@ namespace EDDiscovery
             settings.SaveSettings();
 
             SQLiteDBClass.PutSettingBool("FormMax", _formMax);
-            SQLiteDBClass.PutSettingInt("FormWidth", this.Width);
-            SQLiteDBClass.PutSettingInt("FormHeight", this.Height);
-            SQLiteDBClass.PutSettingInt("FormTop", this.Top);
-            SQLiteDBClass.PutSettingInt("FormLeft", this.Left);
+            SQLiteDBClass.PutSettingInt("FormWidth", _formWidth);
+            SQLiteDBClass.PutSettingInt("FormHeight", _formHeight);
+            SQLiteDBClass.PutSettingInt("FormTop", _formTop);
+            SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
             routeControl1.SaveSettings();
             theme.SaveSettings(null);
             travelHistoryControl1.SaveSettings();
@@ -1672,6 +1680,18 @@ namespace EDDiscovery
             }
         }
 
+        private void RecordPosition()
+        {
+            if (FormWindowState.Minimized != WindowState)
+            {
+                _formLeft = this.Left;
+                _formTop = this.Top;
+                _formWidth = this.Width;
+                _formHeight = this.Height;
+                _formMax = FormWindowState.Maximized == WindowState;
+            }
+        }
+
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             if (FormWindowState.Minimized == WindowState)
@@ -1683,9 +1703,14 @@ namespace EDDiscovery
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                     Show();
-                _formMax = FormWindowState.Maximized == WindowState;
             }
+            RecordPosition();
             notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
+        }
+
+        private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)
+        {
+            RecordPosition();
         }
 
         #endregion
