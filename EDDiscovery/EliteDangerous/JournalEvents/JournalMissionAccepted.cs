@@ -10,18 +10,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Name: name of mission
     //•	Faction: faction offering mission
     //Optional Parameters (depending on mission type)
-    //•	Commodity: commodity type
+    //•	Commodity: $Commodity_Name;
+    //•	Commodity_Localised: commodity type
     //•	Count: number required / to deliver
     //•	Target: name of target
     //•	TargetType: type of target
     //•	TargetFaction: target’s faction
-//•	Expiry: mission expiry time, in ISO 8601
-//•	DestinationSystem
-//•	DestinationStation
-//•	PassengerCount
-//•	PassengerVIPs: bool
-//•	PassengerWanted: bool
-//•	PassengerType: eg Tourist, Soldier, Explorer,...
+    //•	Expiry: mission expiry time, in ISO 8601
+    //•	DestinationSystem
+    //•	DestinationStation
+    //•	PassengerCount
+    //•	PassengerVIPs: bool
+    //•	PassengerWanted: bool
+    //•	PassengerType: eg Tourist, Soldier, Explorer,...
 
 
 
@@ -31,7 +32,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Name = JSONHelper.GetStringDef(evt["Name"]);
             Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            Commodity = JSONHelper.GetStringDef(evt["Commodity"]);
+            Commodity = NormalizeCommodity(JSONHelper.GetStringDef(evt["Commodity"]));
             Count = JSONHelper.GetIntNull(evt["Count"]);
             Target = JSONHelper.GetStringDef(evt["Target"]);
             TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
