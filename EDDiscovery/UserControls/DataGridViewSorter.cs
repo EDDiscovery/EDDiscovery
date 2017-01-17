@@ -140,4 +140,116 @@ namespace EDDiscovery
 
 
 
+
+    public class DataGridViewSorter2
+    {
+        public static void DataGridSort2(DataGridView dgv, int column)
+        {
+            
+            DataGridViewCustomSorter2 dgvSorter = null;
+            if (dgv.Tag == null || !(dgv.Tag is IComparer))
+            {
+                dgvSorter = new DataGridViewCustomSorter2(dgv);
+                dgv.Tag = dgvSorter;
+            }
+            else
+            {
+                dgvSorter = (DataGridViewCustomSorter2)dgv.Tag;
+            }
+
+            DataGridViewColumn gridViewColumn = dgv.Columns[column];
+
+
+
+            dgvSorter.SortColumn = column;
+            dgv.Sort(dgvSorter);
+        }
+
+        private class DataGridViewCustomSorter2 : IComparer
+        {
+            private int ColumnIndex;
+            private SortOrder OrderOfSort;
+            private DataGridView myDataGridView;
+            private TypeCode mySortTypeCode;
+
+            public DataGridViewCustomSorter2(DataGridView dgv)
+            {
+                myDataGridView = dgv;
+                ColumnIndex = 0;
+                OrderOfSort = SortOrder.None;
+            }
+
+            public int Compare(object x, object y)
+            {
+                int result;
+                DataGridViewRow dgvX, dgvY;
+                string sx, sy;
+
+                dgvX = (DataGridViewRow)x;
+                dgvY = (DataGridViewRow)y;
+
+                if (dgvX.Cells[ColumnIndex].Value == null)
+                    sx = "";
+                else
+                    sx = dgvX.Cells[ColumnIndex].Value.ToString();
+
+                if (dgvY.Cells[ColumnIndex].Value == null)
+                    sy = "";
+                else
+                    sy = dgvY.Cells[ColumnIndex].Value.ToString();
+
+                //null handling
+                if (sx == String.Empty && sy == String.Empty)
+                    result = 0;
+                else if (sx == String.Empty && sy != String.Empty)
+                    result = -1;
+                else if (sx != String.Empty && sy == String.Empty)
+                    result = 1;
+
+                double dbx, dby;
+                DateTime dx;
+                DateTime dy;
+
+                if (double.TryParse(sx, out dbx) && double.TryParse(sy, out dby))
+                {
+                    result = dbx.CompareTo(dby);
+                }
+                else if (DateTime.TryParse(sx, out dx) && DateTime.TryParse(sy, out dy))
+                {
+                    result = dbx.CompareTo(dy);
+                }
+                else
+                {
+                      result = (new CaseInsensitiveComparer()).Compare(sx, sy);
+                }
+
+                if (OrderOfSort == SortOrder.Descending)
+                    result = (-result);
+
+                return result;
+            }
+
+            public int SortColumn
+            {
+                set
+                {
+                    if (ColumnIndex == value)
+                    {
+                        OrderOfSort = (OrderOfSort == SortOrder.Descending ? SortOrder.Ascending : SortOrder.Descending);
+                    }
+                    ColumnIndex = value;
+                }
+                get { return ColumnIndex; }
+            }
+
+            public SortOrder Order
+            {
+                set { OrderOfSort = value; }
+                get { return OrderOfSort; }
+            }
+        }
+    }
+
+
+
 }

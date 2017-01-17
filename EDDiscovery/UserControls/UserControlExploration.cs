@@ -764,6 +764,10 @@ namespace EDDiscovery
             RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
         }
 
+        private void dataGridViewExplore_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridViewSorter2.DataGridSort2(dataGridViewExplore, e.ColumnIndex);
+        }
     }
 
     public class ExplorationSetClass
