@@ -453,16 +453,23 @@ namespace EDDiscovery
         {
             UpdateRouteInfo(_currentRoute);
 
+            if (String.IsNullOrEmpty(_currentRoute.Name))
+            {
+                var result = MessageBox.Show(_discoveryForm, "Please specify a name for the route.", "Unsaved route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                textBoxRouteName.Select();
+                return;
+            }
             if (_currentRoute.Id == -1)
             {
                 _currentRoute.Add();
                 _savedRoutes.Add(_currentRoute);
-                UpdateComboBox();
             }
             else
             {
                 _currentRoute.Update();
             }
+            UpdateComboBox();
+            toolStripComboBoxRouteSelection.Text = _currentRoute.Name;
         }
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
