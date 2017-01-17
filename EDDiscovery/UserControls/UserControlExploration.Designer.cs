@@ -287,6 +287,7 @@ namespace EDDiscovery
             this.dataGridViewExplore.Size = new System.Drawing.Size(787, 471);
             this.dataGridViewExplore.TabIndex = 2;
             this.dataGridViewExplore.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExplore_CellValidated);
+            this.dataGridViewExplore.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewExplore_ColumnHeaderMouseClick);
             // 
             // ColumnSystemName
             // 
@@ -332,6 +333,7 @@ namespace EDDiscovery
             this.ColumnVisits.HeaderText = "Visists";
             this.ColumnVisits.Name = "ColumnVisits";
             this.ColumnVisits.ReadOnly = true;
+            this.ColumnVisits.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.ColumnVisits.Width = 50;
             // 
             // ColumnScans
@@ -402,6 +404,9 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
         private System.Windows.Forms.DataGridView dataGridViewExplore;
+        private System.Windows.Forms.ToolStripButton toolStripButtonLoad;
+        private ExtendedControls.TextBoxBorder textBoxFileName;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDist;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
@@ -412,8 +417,5 @@ namespace EDDiscovery
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPrimaryStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
-        private System.Windows.Forms.ToolStripButton toolStripButtonLoad;
-        private ExtendedControls.TextBoxBorder textBoxFileName;
-        private System.Windows.Forms.Label label1;
     }
 }
