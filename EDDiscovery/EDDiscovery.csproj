@@ -131,18 +131,19 @@
       <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenTK.GLControl">
-      <HintPath>..\packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.GLControl.1.1.2349.61993\lib\NET40\OpenTK.GLControl.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.103\lib\net46\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.104.0\lib\net46\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.103\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.104.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Management" />
@@ -805,7 +806,9 @@
     <EmbeddedResource Include="UserControls\UserControlTrippanel.resx">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="App.Portable.config" />
+    <None Include="App.Portable.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="OpenTK.dll.config" />
     <None Include="Resources\promotion.pspimage" />
     <None Include="Resources\shipyardnew.pspimage" />
@@ -1100,7 +1103,9 @@
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1201,20 +1206,20 @@
       <ZipFiles Include="$(OutputPath)\System.Data.SQLite.dll" />
       <ZipFiles Include="$(OutputPath)\System.Data.SQLite.Linq.dll" />
       <ZipFiles Include="$(OutputPath)\System.Data.SQLite.xml" />
-      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.103\build\net46\x86\SQLite.Interop.dll">
+      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\x86\SQLite.Interop.dll">
         <Name>x86\SQLite.Interop.dll</Name>
       </ZipFiles>
-      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.103\build\net46\x64\SQLite.Interop.dll">
+      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\x64\SQLite.Interop.dll">
         <Name>x64\SQLite.Interop.dll</Name>
       </ZipFiles>
     </ItemGroup>
     <Zip OutputFileName="$(OutputPath)\EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
   </Target>
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net46\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.103\build\net46\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
 </Project>
