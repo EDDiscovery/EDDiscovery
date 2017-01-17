@@ -20,14 +20,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When Written: when mining fragments are converted unto a unit of cargo by refinery
     //Parameters:
-    //•	Type: cargo type
+    //•	Type: $cargo_name;
+    //•	Type_Localised: cargo type
     public class JournalMiningRefined : JournalEntry
     {
         public JournalMiningRefined(JObject evt ) : base(evt, JournalTypeEnum.MiningRefined)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);
-
+            Type = NormalizeCommodity(JSONHelper.GetStringDef(evt["Type"]));
         }
+
         public string Type { get; set; }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
