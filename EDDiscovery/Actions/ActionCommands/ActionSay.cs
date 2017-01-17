@@ -36,7 +36,7 @@ namespace EDDiscovery.Actions
                 StringParser p = new StringParser(s);
                 saying = p.NextQuotedWord(", ");        // stop at space or comma..
 
-                if (saying != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, false, validnames, true))))   // normalise variable names (true)
+                if (saying != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma, validnames, true))))   // normalise variable names (true)
                      return true;
 
                 saying = "";

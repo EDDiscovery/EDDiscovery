@@ -500,7 +500,7 @@ namespace EDDiscovery2
 
         private void buttonExtGlobals_Click(object sender, EventArgs e)
         {
-            ActionVariableForm avf = new ActionVariableForm();
+            ConditionVariablesForm avf = new ConditionVariablesForm();
             avf.Init("Global User variables to pass to program on run", theme, userglobalvariables);
 
             if (avf.ShowDialog(this) == DialogResult.OK)

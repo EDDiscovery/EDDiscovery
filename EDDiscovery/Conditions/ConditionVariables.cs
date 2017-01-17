@@ -26,9 +26,9 @@ namespace EDDiscovery
             Add(other2);
         }
 
-        public ConditionVariables(string s)     //v=1,v=2 no brackets
+        public ConditionVariables(string s, FromMode fm)     //v=1,v=2 no brackets
         {
-            FromString(s);
+            FromString(s,fm);
         }
 
         public string this[string s] { get { return values[s]; } set { values[s] = value; } }
@@ -38,7 +38,7 @@ namespace EDDiscovery
         public List<string> KeyList { get { return values.Keys.ToList(); } }
         public bool ContainsKey(string s) { return values.ContainsKey(s); }
 
-        public void Clear() { values.Clear();  }
+        public void Clear() { values.Clear(); }
 
         public bool GetFirstValue(out string var, out string val)
         {
@@ -67,19 +67,21 @@ namespace EDDiscovery
             return s;
         }
 
-        public bool FromString(string s)    // string, not bracketed.
+        public enum FromMode { SingleEntry, MultiEntryComma, MultiEntryCommaBracketEnds };
+
+        public bool FromString(string s, FromMode fm)    // string, not bracketed.
         {
             StringParser p = new StringParser(s);
-            return FromString(p,false);
+            return FromString(p, fm);
         }
 
-        public bool FromString(StringParser p, bool bracketfinished , List<string> namelimit = null, bool fixnamecase = false)
+        public bool FromString(StringParser p, FromMode fm, List<string> namelimit = null, bool fixnamecase = false)
         {
             Dictionary<string, string> newvars = new Dictionary<string, string>();
 
-            while(!p.IsEOL)
+            while (!p.IsEOL)
             {
-                string varname = p.NextWord("=) ");
+                string varname = p.NextQuotedWord( "= ");
                 if (varname == null || !p.IsCharMoveOn('='))
                     return false;
 
@@ -89,23 +91,43 @@ namespace EDDiscovery
                 if (namelimit != null && !namelimit.Contains(varname))
                     return false;
 
-                string value = p.NextQuotedWord(",) ");
+                string value = p.NextQuotedWord((fm == FromMode.SingleEntry) ? " " : (fm == FromMode.MultiEntryComma) ? ", " : ",) ");
+
                 if (value == null)
                     return false;
 
                 newvars[varname] = value;
 
-                if (bracketfinished && p.PeekChar() == ')')        // bracket, stop don't remove.. outer bit wants to check its there..
+                if (fm == FromMode.MultiEntryCommaBracketEnds && p.PeekChar() == ')')        // bracket, stop don't remove.. outer bit wants to check its there..
                 {
                     values = newvars;
                     return true;
                 }
+                else if (fm == FromMode.SingleEntry && !p.IsEOL)        // single entry, must be eol now
+                    return false;
                 else if (!p.IsEOL && !p.IsCharMoveOn(','))   // if not EOL, but not comma, incorrectly formed list
                     return false;
             }
 
             values = newvars;
             return true;
+        }
+
+        public string ToActionDataString(string flag)           // helpers to encode action data..
+        {
+            return flag + "," + ToString();
+        }
+
+        public void FromActionDataString(string ad, out string flag)        // helpers to encode action data..
+        {
+            int comma = ad.IndexOf(',');
+            if (comma >= 0)
+            {
+                flag = ad.Substring(0, comma);
+                FromString(ad.Substring(comma + 1), ConditionVariables.FromMode.MultiEntryComma);
+            }
+            else
+                flag = "";
         }
 
         public void Add(List<ConditionVariables> varlist)

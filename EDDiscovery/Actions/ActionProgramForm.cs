@@ -28,11 +28,10 @@ namespace EDDiscovery.Actions
             public ExtendedControls.ButtonExt up;
             public ExtendedControls.ButtonExt left;
             public ExtendedControls.ButtonExt right;
-            public ExtendedControls.ButtonExt ins;
-            public ExtendedControls.ButtonExt del;
             public ExtendedControls.TextBoxBorder value;
             public int levelup;
             public bool marked;
+            public int whitespace;
 
             public int indentcomputed;      // when displayed, what was the indent
         };
@@ -75,11 +74,13 @@ namespace EDDiscovery.Actions
             labelSet.Text = filesetname + "::";
             textBoxBorderName.Location = new Point(labelSet.Location.X + labelSet.Width + 8, textBoxBorderName.Location.Y);
 
+            inputparas = new ConditionVariables();
+
             if (progdata != null)
             {
-                List<string> flaglist;
-                ActionData.FromJSON(progdata, out flaglist, out inputparas);
-                checkBoxCustomRefresh.Checked = flaglist.Contains(ActionProgram.flagRunAtRefresh);
+                string flag;
+                inputparas.FromActionDataString(progdata, out flag);
+                checkBoxCustomRefresh.Checked = flag.Contains(ActionProgram.flagRunAtRefresh);
                 currentvarlist.AddRange(inputparas.KeyList);
             }
             else
@@ -118,6 +119,8 @@ namespace EDDiscovery.Actions
             int step = 0;
             while ((ac = prog.GetStep(step++)) != null)
                 CreateStep(ac);
+
+            RepositionGroups();
         }
 
         private void ActionProgramForm_Resize(object sender, EventArgs e)
@@ -132,6 +135,7 @@ namespace EDDiscovery.Actions
             Group g = new Group();
             g.programstep = step;
             g.levelup = (step != null) ? step.LevelUp : 0;
+            g.whitespace = (step != null) ? step.Whitespace : 0;
 
             g.panel = new Panel();
             g.panel.MouseUp += panelVScroll_MouseUp;
@@ -174,25 +178,13 @@ namespace EDDiscovery.Actions
             g.config.Click += ActionConfig_Clicked;
             g.panel.Controls.Add(g.config);         // must be next
 
-            g.ins = new ExtendedControls.ButtonExt();
-            g.ins.Size = new Size(controlsize, controlsize);
-            g.ins.Text = "+";
-            g.ins.Click += Ins_Clicked;
-            g.panel.Controls.Add(g.ins);
-
-            g.del = new ExtendedControls.ButtonExt();
-            g.del.Size = new Size(controlsize, controlsize);
-            g.del.Text = "X";
-            g.del.Click += Del_Clicked;
-            g.panel.Controls.Add(g.del);
-
             g.up = new ExtendedControls.ButtonExt();
             g.up.Size = new Size(controlsize, controlsize);
             g.up.Text = "^";
             g.up.Click += Up_Clicked;
             g.panel.Controls.Add(g.up);
 
-            g.del.Tag = g.config.Tag = g.stepname.Tag = g.up.Tag = g.ins.Tag = g.value.Tag = g.left.Tag = g.right.Tag = g;
+            g.config.Tag = g.stepname.Tag = g.up.Tag = g.value.Tag = g.left.Tag = g.right.Tag = g;
 
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
@@ -202,8 +194,6 @@ namespace EDDiscovery.Actions
                 groups.Add(g);
             else
                 groups.Insert(insertpos, g);
-
-            RepositionGroups();
 
             return g;
         }
@@ -316,9 +306,7 @@ namespace EDDiscovery.Actions
                 int valuewidth = panelwidth - 350;
                 g.value.Size = new Size(valuewidth, controlsize);
                 g.config.Location = new Point(g.value.Right + 4, panelheightmargin);      // 8 spacing, allow 8*4 to indent
-                g.ins.Location = new Point(g.config.Right + 4, panelheightmargin);
-                g.del.Location = new Point(g.ins.Right + 4, panelheightmargin);
-                g.up.Location = new Point(g.del.Right + 4, panelheightmargin);
+                g.up.Location = new Point(g.config.Right + 4, panelheightmargin);
 
                 g.up.Visible = !first;
                 g.config.Visible = g.programstep != null && g.programstep.ConfigurationMenuInUse;
@@ -333,6 +321,9 @@ namespace EDDiscovery.Actions
 
                 first = false;
                 voff += g.panel.Height;
+
+                if (g.whitespace>0)
+                    voff += g.panel.Height / 2;
             }
 
             buttonMore.Location = new Point(panelleftmargin, voff);
@@ -355,6 +346,7 @@ namespace EDDiscovery.Actions
         private void buttonMore_Click(object sender, EventArgs e)
         {
             CreateStep(null, -1);
+            RepositionGroups();
         }
 
         private void Stepname_SelectedIndexChanged(object sender, EventArgs e)                // EVENT list changed
@@ -402,27 +394,6 @@ namespace EDDiscovery.Actions
             Group g = (Group)b.Tag;
             if (b.ReadOnly)
                 ActionConfig_Clicked(g.config, null);
-        }
-
-        private void Ins_Clicked(object sender, EventArgs e)
-        {
-            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
-            Group g = (Group)b.Tag;
-
-            int pos = groups.IndexOf(g);
-            CreateStep(null, pos);
-        }
-
-        private void Del_Clicked(object sender, EventArgs e)
-        {
-            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
-            Group g = (Group)b.Tag;
-
-            g.panel.Controls.Clear();
-            panelVScroll.Controls.Remove(g.panel);
-            groups.Remove(g);
-            Invalidate(true);
-            RepositionGroups();
         }
 
         private void Up_Clicked(object sender, EventArgs e)
@@ -516,6 +487,7 @@ namespace EDDiscovery.Actions
                 if (g.programstep != null)    // don't include ones not set..
                 {
                     g.programstep.LevelUp = g.levelup;
+                    g.programstep.Whitespace = g.whitespace;
                     ap.Add(g.programstep);
                 }
             }
@@ -525,16 +497,13 @@ namespace EDDiscovery.Actions
 
         public string GetActionData()         // called on OK to get the actiondata string
         {
-            List<string> flags = new List<string>();
-            if (checkBoxCustomRefresh.Checked)
-                flags.Add(ActionProgram.flagRunAtRefresh);
-
-            return ActionData.ToJSON(flags, inputparas);
+            string flags = (checkBoxCustomRefresh.Checked) ? ActionProgram.flagRunAtRefresh : "";
+            return inputparas.ToActionDataString(flags);
         }
 
         private void buttonVars_Click(object sender, EventArgs e)
         {
-            ActionVariableForm avf = new ActionVariableForm();
+            ConditionVariablesForm avf = new ConditionVariablesForm();
             avf.Init("Input Parameter variables to pass to program on run", theme, inputparas);
 
             if (avf.ShowDialog(this) == DialogResult.OK)
@@ -676,10 +645,10 @@ namespace EDDiscovery.Actions
                     {
                         if (g.programstep != null)    // don't include ones not set..
                         {
-                            if (g.levelup > 0)
-                                sr.WriteLine("");
                             sr.Write(new String(' ', g.indentcomputed * 4));
                             sr.WriteLine(g.programstep.Name + " " + g.programstep.UserData);
+                            if (g.whitespace > 0)
+                                sr.WriteLine("");
                         }
                     }
                 }
@@ -759,7 +728,7 @@ namespace EDDiscovery.Actions
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            deleteToolStripMenuItem.Enabled = copyToolStripMenuItem.Enabled = groups.Find(x => x.marked) != null;
+            whitespaceToolStripMenuItem.Enabled =  deleteToolStripMenuItem.Enabled = copyToolStripMenuItem.Enabled = groups.Find(x => x.marked) != null;
             pasteToolStripMenuItem.Enabled = (rightclickstep != -1 && ActionProgramCopyBuffer.Count > 0);
         }
 
@@ -791,7 +760,7 @@ namespace EDDiscovery.Actions
             {
                 ActionProgramCopyBuffer.Clear();
 
-                foreach(Group g in GetMarked())
+                foreach (Group g in GetMarked())
                     ActionProgramCopyBuffer.Add(g.programstep);
 
                 UnMark();
@@ -835,6 +804,39 @@ namespace EDDiscovery.Actions
                 g.panel.BackColor = Color.Transparent;
                 g.marked = false;
             }
+        }
+
+        private void whitespaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Group g in GetMarked())
+            {
+                g.whitespace = 1;
+            }
+
+            RepositionGroups();
+        }
+
+        private void removeWhitespaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Group g in GetMarked())
+            {
+                g.whitespace = 0;
+            }
+
+            RepositionGroups();
+        }
+
+        private void insertEntryAboveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<Group> ret = GetMarked();
+
+            if ( ret.Count >0 )
+            {
+                for (int i = 0; i < ret.Count; i++ )
+                    CreateStep(null, groups.IndexOf(ret[0]));
+            }
+
+            RepositionGroups();
         }
 
         #endregion

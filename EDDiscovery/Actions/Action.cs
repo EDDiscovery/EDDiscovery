@@ -15,6 +15,7 @@ namespace EDDiscovery.Actions
         private ActionType actiontype;
         protected string userdata;
         protected int levelup;              // indicates for control structures that this entry is N levels up (ie. to the left).
+        protected int whitespace;           // optional whitespace.. lines
 
         public Action(string n, ActionType type, string ud, int lu)
         {
@@ -28,6 +29,7 @@ namespace EDDiscovery.Actions
         public ActionType Type { get { return actiontype; } }
         public string UserData { get { return userdata; } }
         public int LevelUp { get { return levelup; } set { levelup = value; } }
+        public int Whitespace { get { return whitespace; } set { whitespace = value; } }
 
         public virtual bool AllowDirectEditingOfUserData { get { return false; } }    // and allow editing?
 
@@ -64,6 +66,8 @@ namespace EDDiscovery.Actions
             new Commands("Set", typeof(ActionSet) , ActionType.Cmd),
             new Commands("Let", typeof(ActionLet) , ActionType.Cmd),
             new Commands("Event", typeof(ActionEvent) , ActionType.Cmd),
+            new Commands("Materials", typeof(ActionMaterials) , ActionType.Cmd),
+            new Commands("Commodities", typeof(ActionCommodities) , ActionType.Cmd),
             new Commands("If", typeof(ActionIf) , ActionType.If),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
             new Commands("Else If", typeof(ActionElseIf) , ActionType.ElseIf),

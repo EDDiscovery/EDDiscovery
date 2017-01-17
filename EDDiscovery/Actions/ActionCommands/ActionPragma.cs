@@ -28,30 +28,24 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            string ud = UserData.Trim();
+            StringParser p = new StringParser(userdata);
 
-            if ( ud.StartsWith("DumpVars", StringComparison.InvariantCultureIgnoreCase))
+            string cmd;
+            while( (cmd = p.NextWord() ) != null )
             {
-                string rest = ud.Substring(8).Trim();
-
-                if (rest.Length > 0)
+                if (cmd.Equals("DumpVars", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    do
+                    string rest = p.NextQuotedWord();
+
+                    if (rest != null && rest.Length > 0)
                     {
-                        int spc = rest.IndexOf(' ');
-                        if (spc == -1)
-                            spc = rest.Length;
-
-                        string vname = rest.Substring(0, spc);
-                        rest = rest.Substring(spc).Trim();
-
-                        DumpVars(ap, ap.currentvars.FilterVars(vname));
-
-                    } while (rest.Length > 0);
-                }
-                else
-                {
-                    DumpVars(ap, ap.currentvars.FilterVars("*"));
+                        DumpVars(ap, ap.currentvars.FilterVars(rest));
+                    }
+                    else
+                    {
+                        ap.ReportError("Missing variable wildcard after Pragma DumpVars");
+                        return true;
+                    }
                 }
             }
 

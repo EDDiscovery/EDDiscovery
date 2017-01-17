@@ -1,6 +1,6 @@
-﻿namespace EDDiscovery.Actions
+﻿namespace EDDiscovery
 {
-    partial class ActionVariableForm
+    partial class ConditionVariablesForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionVariableForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConditionVariablesForm));
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
