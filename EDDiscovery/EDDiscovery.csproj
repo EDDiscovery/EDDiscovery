@@ -224,6 +224,7 @@
     <Compile Include="Forms\ImportSphere.Designer.cs">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>
     </Compile>

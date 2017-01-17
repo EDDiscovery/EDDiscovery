@@ -538,6 +538,31 @@ namespace EDDiscovery2.EDSM
             return systems;
         }
 
+        public List<String> GetSphereSystems(String systemName, double radius)
+        {
+            List<String> systems = new List<string>();
+            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}", systemName, radius);
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return systems;
+
+            var json = response.Body;
+            if (json == null)
+                return systems;
+
+            JArray msg = JArray.Parse(json);
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    systems.Add(sysname["name"].ToString());
+                }
+            }
+            return systems;
+        }
+
         public bool ShowSystemInEDSM(string sysName, long? id_edsm = null)
         {
             string url = GetUrlToEDSMSystem(sysName, id_edsm);

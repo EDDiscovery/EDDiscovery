@@ -14,6 +14,7 @@ using System.IO;
 using System.Globalization;
 using EDDiscovery2;
 using EDDiscovery.Import;
+using EDDiscovery.ExportImport;
 
 namespace EDDiscovery
 {
@@ -347,6 +348,15 @@ namespace EDDiscovery
         private void textBoxSysNotes_TextChanged(object sender, EventArgs e)
         {
             ValidateColumnInput(textBoxSysNotes);
+        }
+
+        private void btnSphereSystems_Click(object sender, EventArgs e)
+        {
+            //txtExportVisited.Text
+            double r = 0;
+            if (Double.TryParse(txtsphereRadius.Text, out r))
+                new ExportSphereSystems(_discoveryForm).Execute(txtExportVisited.Text, r); 
+
         }
     }
 }
