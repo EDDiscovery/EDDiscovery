@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EDDiscovery.Actions
-{
-    public partial class ActionVariableForm : Form
+namespace EDDiscovery
+{ 
+    public partial class ConditionVariablesForm : Form
     {
         public ConditionVariables result;      // only on OK
 
@@ -29,7 +29,7 @@ namespace EDDiscovery.Actions
         int panelwidth = 800;
         const int vscrollmargin = 10;
 
-        public ActionVariableForm()
+        public ConditionVariablesForm()
         {
             InitializeComponent();
             groups = new List<Group>();

@@ -136,11 +136,9 @@ namespace EDDiscovery.Actions
 
                     if (ap != null)     // program got,
                     {
-                        ConditionVariables inputparas;
-                        List<string> flags;
-                        Actions.ActionData.FromJSON(fe.actiondata, out flags, out inputparas); // may be null inputparas, standardadd copes
-
-                        // TBD check flags?
+                        ConditionVariables inputparas = new ConditionVariables();
+                        string flags;
+                        inputparas.FromActionDataString(fe.actiondata, out flags);
 
                         inputparas.Add(outervarsin);
 

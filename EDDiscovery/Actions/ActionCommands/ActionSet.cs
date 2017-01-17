@@ -16,7 +16,7 @@ namespace EDDiscovery.Actions
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
             string var, value;
-            ConditionVariables av = new ConditionVariables(userdata);
+            ConditionVariables av = new ConditionVariables(userdata, ConditionVariables.FromMode.SingleEntry);
             av.GetFirstValue(out var, out value);       // if it does not exist, don't worry
 
             Tuple<string, string> promptValue = PromptDoubleLine.ShowDialog(parent, "Variable:", "Value:", var, value, "Set Variable");
@@ -34,7 +34,7 @@ namespace EDDiscovery.Actions
         public override string VerifyActionCorrect()
         {
             ConditionVariables av = new ConditionVariables();
-            return av.FromString(userdata) ? null : "Let/Set not in correct format: v=\"y\"";
+            return av.FromString(userdata, ConditionVariables.FromMode.SingleEntry) ? null : "Let/Set not in correct format: v=\"y\"";
         }
 
     }
@@ -47,7 +47,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            ConditionVariables av = new ConditionVariables(userdata);
+            ConditionVariables av = new ConditionVariables(userdata, ConditionVariables.FromMode.SingleEntry);
 
             if (av.Count > 0)
             {
@@ -75,7 +75,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            ConditionVariables av = new ConditionVariables(userdata);
+            ConditionVariables av = new ConditionVariables(userdata, ConditionVariables.FromMode.SingleEntry);
 
             if ( av.Count>0)
             {

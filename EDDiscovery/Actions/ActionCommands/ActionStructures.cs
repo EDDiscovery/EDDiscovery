@@ -442,7 +442,7 @@ namespace EDDiscovery.Actions
             {
                 if (p.IsCharMoveOn('('))       // if (, then
                 {
-                    if (vars.FromString(p,true) && p.IsCharMoveOn(')') && p.IsEOL)      // if para list decodes and we finish on a ) and its EOL
+                    if (vars.FromString(p,ConditionVariables.FromMode.MultiEntryCommaBracketEnds) && p.IsCharMoveOn(')') && p.IsEOL)      // if para list decodes and we finish on a ) and its EOL
                         return true;
                 }
                 else if (p.IsEOL)   // if EOL, its okay, prog name only
@@ -479,7 +479,7 @@ namespace EDDiscovery.Actions
             string promptValue = PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command");
             if (promptValue != null)
             {
-                ActionVariableForm avf = new ActionVariableForm();
+                ConditionVariablesForm avf = new ConditionVariablesForm();
                 avf.Init("Variables to pass into called program", theme, cond);
 
                 if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)

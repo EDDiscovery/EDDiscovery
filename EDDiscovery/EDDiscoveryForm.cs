@@ -311,8 +311,9 @@ namespace EDDiscovery
         {
             try
             {
-                List<string> flags;
-                Actions.ActionData.FromJSON(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), out flags, out usercontrolledglobalvariables);
+                usercontrolledglobalvariables = new ConditionVariables();
+                usercontrolledglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
+
                 internalglobalvariables = new ConditionVariables();
                 standardvariables = new ConditionVariables(internalglobalvariables,usercontrolledglobalvariables);
 
@@ -1968,7 +1969,7 @@ namespace EDDiscovery
             frm.ShowDialog(this.FindForm()); // don't care about the result, the form does all the saving
 
             usercontrolledglobalvariables = frm.userglobalvariables;
-            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", Actions.ActionData.ToJSON(null, usercontrolledglobalvariables));
+            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
 
             standardvariables = new ConditionVariables(internalglobalvariables,usercontrolledglobalvariables);
         }
@@ -2027,6 +2028,7 @@ namespace EDDiscovery
                 vars[prefix + "StarSystem"] = he.System.name;
                 vars[prefix + "WhereAmI"] = he.WhereAmI;
                 vars[prefix + "ShipType"] = he.ShipType;
+                vars[prefix + "IndexOf"] = he.Indexno.ToString();
                 vars[prefix + "JID"] = he.Journalid.ToString();
             }
         }

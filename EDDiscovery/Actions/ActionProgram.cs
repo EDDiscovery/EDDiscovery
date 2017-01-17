@@ -59,6 +59,7 @@ namespace EDDiscovery.Actions
                 step["StepName"] = ac.Name;
                 step["StepUC"] = ac.UserData;
                 step["StepLevelUp"] = ac.LevelUp;
+                step["StepWhitespace"] = ac.Whitespace;
 
                 jf.Add(step);
             }
@@ -81,6 +82,7 @@ namespace EDDiscovery.Actions
                 string stepname = (string)js["StepName"];
                 string stepUC = (string)js["StepUC"];
                 int stepLU = (int)js["StepLevelUp"];
+                int whitespace = JSONHelper.GetInt(js["StepWhitespace"],0);     // was not in earlier version, optional
 
                 Action cmd = Action.CreateAction(stepname, stepUC, stepLU);
 
@@ -188,6 +190,11 @@ namespace EDDiscovery.Actions
                             level.Add(structlevel);
                         }
                     }
+                }
+                else
+                {
+                    if (prog.Count > 0)
+                        prog[prog.Count - 1].Whitespace = 1;
                 }
 
                 lineno++;

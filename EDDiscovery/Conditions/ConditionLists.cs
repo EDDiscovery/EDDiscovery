@@ -713,43 +713,69 @@ namespace EDDiscovery
 
         #region JSON as the vars - used for the filter out system..
 
-        private bool? CheckJSON(string eventjson,        // JSON of the event 
-                            string eventname,       // Event name..
-                            ConditionVariables othervars,   // any other variables to present to the condition, in addition to the JSON variables
-                            out string errlist,     // null if okay..
-                            List<Condition> passed)            // null or conditions passed
+        // take conditions and JSON, decode it, execute..
+        private bool? CheckJSON(List<Condition> fel, 
+                                    string eventjson,        // JSON of the event 
+                                    ConditionVariables othervars,   // any other variables to present to the condition, in addition to the JSON variables
+                                    out string errlist,     // null if okay..
+                                    List<Condition> passed)            // null or conditions passed
         {
             errlist = null;
 
-            List<Condition> fel = GetConditionListByEventName(eventname);
+            ConditionVariables valuesneeded = new ConditionVariables();
 
-            if ( fel != null )
+            foreach (Condition fe in fel)        // find all values needed
+                fe.IndicateValuesNeeded(ref valuesneeded);
+
+            try
             {
-                ConditionVariables valuesneeded = new ConditionVariables();
+                valuesneeded.GetJSONFieldValuesIndicated(eventjson);
+                valuesneeded.Add(othervars);
 
-                foreach (Condition fe in fel)        // find all values needed
-                    fe.IndicateValuesNeeded(ref valuesneeded);
-
-                try
-                {
-                    valuesneeded.GetJSONFieldValuesIndicated(eventjson);
-                    valuesneeded.Add(othervars);
-
-                    return CheckConditions(fel, valuesneeded, out errlist, passed);    // and check, passing in the values collected against the conditions to test.
-                }
-                catch (Exception)
-                {
-                    errlist = "JSON failed to parse!";
-                }
+                return CheckConditions(fel, valuesneeded, out errlist, passed);    // and check, passing in the values collected against the conditions to test.
             }
-
-            return null;
+            catch (Exception)
+            {
+                errlist = "JSON failed to parse!";
+                return null;
+            }
         }
-    
-        private bool CheckFilterTrueOut(string json, string eventname, ConditionVariables othervars,  out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
+        
+        // Filter IN if condition matches..
+
+        private bool CheckFilterTrueIn(string json, ConditionVariables othervars, out string errlist, List<Condition> passed)      // if none, true, if false, true.. 
         {                                                                                         // only if the filter passes do we get a false..
-            bool? v = CheckJSON(json, eventname, othervars, out errlist, passed);
-            return !v.HasValue || v.Value == false;
+            bool? v = CheckJSON(conditionlist, json, othervars, out errlist, passed);
+            return (v.HasValue && v.Value);     // true IF we have a positive result
+        }
+
+        public List<HistoryEntry> FilterHistoryOut(List<HistoryEntry> he , ConditionVariables othervars)    // conditions match for item to stay
+        {
+            if (Count == 0)       // no filters, all in
+                return he;
+            else
+            {
+                string er;
+                List<HistoryEntry> ret = (from s in he where CheckFilterTrueIn(s.journalEntry.EventDataString, othervars, out er, null) select s).ToList();
+                return ret;
+            }
+        }
+
+        // Filter OUT if condition matches..
+
+        private bool CheckFilterTrueOut(string json, string eventname, ConditionVariables othervars,  out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
+        {
+            List<Condition> fel = GetConditionListByEventName(eventname);
+            if (fel != null)        // if we have matching filters..
+            {
+                bool? v = CheckJSON(fel,json, othervars, out errlist, passed);  // true means filter matched
+                return !v.HasValue || v.Value == false; // no value, true .. false did not match, thus true
+            }
+            else
+            {
+                errlist = null;
+                return true;
+            }
         }
 
         public bool FilterHistory(HistoryEntry he, ConditionVariables othervars)                // true if it should be included

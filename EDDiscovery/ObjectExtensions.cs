@@ -7,7 +7,7 @@
 
     public static string QuotedEscapeString(this string obj )
     {
-        if (obj.Contains("\"")||obj.Contains(" "))
+        if (obj.Contains("\"") || obj.Contains(" ") || obj.Contains(")"))       // ) because its used to terminate var lists sometimes
             obj = "\"" + obj.Replace("\"", "\\\"") + "\"";
         return obj;
     }

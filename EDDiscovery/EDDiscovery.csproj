@@ -189,8 +189,8 @@
     <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
+    <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
-    <Compile Include="Actions\ActionData.cs" />
     <Compile Include="Actions\ActionFile.cs" />
     <Compile Include="Actions\ActionFunctions.cs" />
     <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
@@ -210,11 +210,11 @@
     <Compile Include="Actions\ActionRun.cs" />
     <Compile Include="Actions\ActionCommands\ActionSay.cs" />
     <Compile Include="Actions\ActionProgram.cs" />
-    <Compile Include="Actions\ActionVariableForm.cs">
+    <Compile Include="Conditions\ConditionVariablesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Actions\ActionVariableForm.Designer.cs">
-      <DependentUpon>ActionVariableForm.cs</DependentUpon>
+    <Compile Include="Conditions\ConditionVariablesForm.Designer.cs">
+      <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Conditions\ConditionVariables.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
@@ -768,8 +768,8 @@
     <EmbeddedResource Include="Actions\ActionProgramForm.resx">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Actions\ActionVariableForm.resx">
-      <DependentUpon>ActionVariableForm.cs</DependentUpon>
+    <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">
+      <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\RichTextBoxScroll.resx">
       <DependentUpon>RichTextBoxScroll.cs</DependentUpon>
