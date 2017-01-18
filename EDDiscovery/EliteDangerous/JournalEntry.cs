@@ -269,19 +269,19 @@ namespace EDDiscovery.EliteDangerous
         /// Normalize commodity names for MiningRefined, MissionAccepted, and MissionCompleted entries.
         /// "$Indite_Name;" will become "indite", and "$uraninite_name;" will become "uraninite", etc.
         /// </summary>
-        /// <param name="s">The raw commodity name.</param>
+        /// <param name="commodity">The raw commodity name.</param>
         /// <returns>A normalized, lower-cased representation of the commodity name.</returns>
-        protected static string NormalizeCommodity(string s)
+        protected static string NormalizeCommodity(string commodity)
         {
-            if (string.IsNullOrWhiteSpace(s))
+            if (string.IsNullOrWhiteSpace(commodity))
                 return string.Empty;
 
             StringBuilder ret = new StringBuilder();
 
-            if (s.Length > 6 && s.StartsWith("$") && s.EndsWith("_name;", StringComparison.InvariantCultureIgnoreCase))
-                ret.Append(s.Substring(1, s.Length - 7)); // 1 for '$' plus 6 for '_name;'
+            if (commodity.Length >= 8 && commodity.StartsWith("$") && commodity.EndsWith("_name;", StringComparison.InvariantCultureIgnoreCase))
+                ret.Append(commodity.Substring(1, commodity.Length - 7)); // 1 for '$' plus 6 for '_name;'
             else
-                ret.Append(s);
+                ret.Append(commodity);
             return (ret.ToString().ToLowerInvariant());
         }
 
