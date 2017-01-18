@@ -36,6 +36,7 @@ namespace EDDiscovery.UserControls
         private int displaynumber = 0;
         private int namecol, abvcol, catcol, typecol, numcol, pricecol;
         List<MaterialCommodities> last_mc = null;
+        bool editing = false;
 
         public delegate void ChangedCount(List<MaterialCommodities> ls);
         public event ChangedCount OnChangedCount;
@@ -100,29 +101,72 @@ namespace EDDiscovery.UserControls
 
         public void Display(List<MaterialCommodities> mc)
         {
-            SetCheckBoxes();
+            Dictionary<string, MaterialCommodities> mcchanges = new Dictionary<string, MaterialCommodities>();
+            Dictionary<string, MaterialCommodities> mcorig = new Dictionary<string, MaterialCommodities>();
 
-            DisableEditing();
+            if (editing)
+            {
+                foreach (MaterialCommodities m in GetMatCommodChanges())
+                {
+                    mcchanges[m.fdname] = m;
+                }
+
+                for (int i = 0; i < dataGridViewMC.Rows.Count; i++)
+                {
+                    MaterialCommodities rowmc = dataGridViewMC.Rows[i].Tag as MaterialCommodities;
+
+                    if (rowmc != null)
+                    {
+                        mcorig[rowmc.fdname] = rowmc;
+                    }
+                }
+            }
+            else
+            {
+                SetCheckBoxes();
+
+                DisableEditing();
+            }
+
+            foreach (MaterialCommodities m in mc)
+            {
+                if (mcorig.ContainsKey(m.fdname) && mcchanges.ContainsKey(m.fdname))
+                {
+                    if (mcorig[m.fdname].count != m.count)
+                    {
+                        mcchanges[m.fdname].count += m.count - mcorig[m.fdname].count;
+                    }
+                }
+
+                mcorig[m.fdname] = m;
+            }
 
             last_mc = mc;
 
             dataGridViewMC.Rows.Clear();
 
-            if (mc != null && mc.Count > 0)
+            if (mcorig.Count > 0)
             {
                 labelNoItems.Visible = false;
 
-                foreach (MaterialCommodities m in mc)
+                foreach (MaterialCommodities m in mcorig.Values)
                 {
+                    MaterialCommodities _m = m;
+
+                    if (mcchanges.ContainsKey(m.fdname))
+                    {
+                        _m = mcchanges[m.fdname];
+                    }
+
                     object[] rowobj;
 
                     if (materials)
                     {
-                        rowobj = new[] { m.name, m.shortname, m.category, m.type, m.count.ToString() };
+                        rowobj = new[] { _m.name, _m.shortname, _m.category, _m.type, _m.count.ToString() };
                     }
                     else
                     {
-                        rowobj = new[] { m.name, m.type, m.count.ToString(), m.price.ToString("0.#") };
+                        rowobj = new[] { _m.name, _m.type, _m.count.ToString(), _m.price.ToString("0.#") };
                     }
 
                     int idx = dataGridViewMC.Rows.Add(rowobj);
@@ -262,6 +306,7 @@ namespace EDDiscovery.UserControls
         {
             if (buttonExtApply.Enabled)     // then its cancel
             {
+                editing = false;
                 DisableEditing();
                 Display(last_mc);
             }
@@ -277,6 +322,7 @@ namespace EDDiscovery.UserControls
                 buttonExtModify.Text = "Cancel";
 
                 ResetCombo();
+                editing = true;
             }
         }
 
@@ -310,11 +356,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void buttonExtApply_Click(object sender, EventArgs e)
+        private List<MaterialCommodities> GetMatCommodChanges(bool updatedb, out bool dbupdated)
         {
             List<MaterialCommodities> mcchange = new List<MaterialCommodities>();
 
-            bool updateddb = false;
+            dbupdated = false;
 
             for (int i = 0; i < dataGridViewMC.Rows.Count; i++)
             {
@@ -326,11 +372,11 @@ namespace EDDiscovery.UserControls
 
                 if (mc != null)
                 {
-                    if (mc.name != name || mc.shortname != abv || mc.category != cat || mc.type != type)
+                    if (updatedb && (mc.name != name || mc.shortname != abv || mc.category != cat || mc.type != type))
                     {
                         //System.Diagnostics.Debug.WriteLine("Row " + i + " changed text");
                         MaterialCommodities.ChangeDbText(mc.fdname, name, abv, cat, type);
-                        updateddb = true;
+                        dbupdated = true;
                     }
 
                     int numvalue = 0;
@@ -369,6 +415,20 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
+
+            return mcchange;
+        }
+
+        private List<MaterialCommodities> GetMatCommodChanges()
+        {
+            bool updateddb;
+            return GetMatCommodChanges(false, out updateddb);
+        }
+
+        private void buttonExtApply_Click(object sender, EventArgs e)
+        {
+            bool updateddb = false;
+            List<MaterialCommodities> mcchange = GetMatCommodChanges(true, out updateddb);
 
             DisableEditing();
 
