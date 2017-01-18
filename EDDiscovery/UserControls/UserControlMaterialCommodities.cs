@@ -126,6 +126,11 @@ namespace EDDiscovery.UserControls
 
                     }
                 }
+
+                if (dataGridViewMC.SortedColumn != null && dataGridViewMC.SortOrder != SortOrder.None)
+                {
+                    dataGridViewMC.Sort(dataGridViewMC.SortedColumn, dataGridViewMC.SortOrder == SortOrder.Descending ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                }
             }
             else
             {
