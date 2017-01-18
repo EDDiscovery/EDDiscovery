@@ -316,57 +316,57 @@ namespace EDDiscovery.UserControls
 
             bool updateddb = false;
 
-            for (int i = 0; i < last_mc.Count; i++)
+            for (int i = 0; i < dataGridViewMC.Rows.Count; i++)
             {
+                MaterialCommodities mc = dataGridViewMC.Rows[i].Tag as MaterialCommodities;
                 string name = (string)dataGridViewMC.Rows[i].Cells[namecol].Value;
-                string abv = (abvcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[abvcol].Value : last_mc[i].shortname;
-                string cat = (catcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[catcol].Value : last_mc[i].category;
+                string abv = (abvcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[abvcol].Value : mc?.shortname ?? "";
+                string cat = (catcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[catcol].Value : mc?.category ?? (materials ? MaterialCommodities.MaterialRawCategory : MaterialCommodities.CommodityCategory);
                 string type = (string)dataGridViewMC.Rows[i].Cells[typecol].Value;
 
-                if (!last_mc[i].name.Equals(name) || !last_mc[i].shortname.Equals(abv) || !last_mc[i].category.Equals(cat)
-                    || !last_mc[i].type.Equals(type))
+                if (mc != null)
                 {
-                    //System.Diagnostics.Debug.WriteLine("Row " + i + " changed text");
-                    MaterialCommodities.ChangeDbText(last_mc[i].fdname, name, abv, cat, type);
-                    updateddb = true;
+                    if (mc.name != name || mc.shortname != abv || mc.category != cat || mc.type != type)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Row " + i + " changed text");
+                        MaterialCommodities.ChangeDbText(mc.fdname, name, abv, cat, type);
+                        updateddb = true;
+                    }
+
+                    int numvalue = 0;
+                    int.TryParse((string)dataGridViewMC.Rows[i].Cells[numcol].Value, out numvalue);
+
+                    double price = 0;
+                    bool pricechange = false;
+
+                    if (!materials)
+                    {
+                        double.TryParse((string)dataGridViewMC.Rows[i].Cells[pricecol].Value, out price);
+                        pricechange = Math.Abs(mc.price - price) >= 0.01;
+                    }
+
+                    if (mc.count != numvalue || pricechange)
+                    {
+                        mcchange.Add(new MaterialCommodities(0, mc.category, mc.name, mc.fdname, mc.type, mc.shortname, Color.Red, 0, numvalue, (pricechange) ? price : 0));
+                        //System.Diagnostics.Debug.WriteLine("Row " + i + " changed number");
+                    }
                 }
-
-                int numvalue = 0;
-                int.TryParse((string)dataGridViewMC.Rows[i].Cells[numcol].Value, out numvalue);
-
-                double price = 0;
-                bool pricechange = false;
-
-                if (!materials)
+                else
                 {
-                    double.TryParse((string)dataGridViewMC.Rows[i].Cells[pricecol].Value, out price);
-                    pricechange = Math.Abs(last_mc[i].price - price) >= 0.01;
-                }
+                    string fdname = Tools.FDName(name);
 
-                if (last_mc[i].count != numvalue || pricechange)
-                {
-                    mcchange.Add(new MaterialCommodities(0, last_mc[i].category, last_mc[i].name, last_mc[i].fdname, "", "", Color.Red, 0, numvalue, (pricechange) ? price : 0));
-                    //System.Diagnostics.Debug.WriteLine("Row " + i + " changed number");
-                }
-            }
+                    int numvalue = 0;
+                    bool numok = int.TryParse((string)dataGridViewMC.Rows[i].Cells[numcol].Value, out numvalue);
 
-            for (int i = last_mc.Count; i < dataGridViewMC.Rows.Count; i++)                // these have been added
-            {
-                string name = (string)dataGridViewMC.Rows[i].Cells[namecol].Value;
-                string cat = (materials) ? (string)dataGridViewMC.Rows[i].Cells[catcol].Value : MaterialCommodities.CommodityCategory;
-                string fdname = Tools.FDName(name);
+                    double price = 0;
 
-                int numvalue = 0;
-                bool numok = int.TryParse((string)dataGridViewMC.Rows[i].Cells[numcol].Value, out numvalue);
+                    if (!materials)
+                        double.TryParse((string)dataGridViewMC.Rows[i].Cells[pricecol].Value, out price);
 
-                double price = 0;
-
-                if (!materials)
-                    double.TryParse((string)dataGridViewMC.Rows[i].Cells[pricecol].Value, out price);
-
-                if ( numok && cat.Length > 0 && name.Length > 0)
-                {
-                    mcchange.Add(new MaterialCommodities(0, cat, name, fdname, "", "", Color.Red, 0, numvalue , price));
+                    if (numok && cat.Length > 0 && name.Length > 0)
+                    {
+                        mcchange.Add(new MaterialCommodities(0, cat, name, fdname, type, abv, Color.Red, 0, numvalue, price));
+                    }
                 }
             }
 
