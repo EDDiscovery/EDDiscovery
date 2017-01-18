@@ -114,17 +114,19 @@ namespace EDDiscovery.UserControls
 
                 foreach (MaterialCommodities m in mc)
                 {
+                    object[] rowobj;
+
                     if (materials)
                     {
-                        object[] rowobj = { m.name, m.shortname, m.category, m.type, m.count.ToString() };
-                        dataGridViewMC.Rows.Add(rowobj);
+                        rowobj = new[] { m.name, m.shortname, m.category, m.type, m.count.ToString() };
                     }
                     else
                     {
-                        object[] rowobj = { m.name, m.type, m.count.ToString(), m.price.ToString("0.#") };
-                        dataGridViewMC.Rows.Add(rowobj);
-
+                        rowobj = new[] { m.name, m.type, m.count.ToString(), m.price.ToString("0.#") };
                     }
+
+                    int idx = dataGridViewMC.Rows.Add(rowobj);
+                    dataGridViewMC.Rows[idx].Tag = m;
                 }
 
                 if (dataGridViewMC.SortedColumn != null && dataGridViewMC.SortOrder != SortOrder.None)
@@ -178,16 +180,19 @@ namespace EDDiscovery.UserControls
 
                 if (j == dataGridViewMC.Rows.Count)
                 {
+                    object[] rowobj;
+
                     if (materials)
                     {
-                        object[] rowobj = { mc.name, mc.shortname, mc.category, mc.type, "0" };
-                        dataGridViewMC.Rows.Add(rowobj);
+                        rowobj = new[] { mc.name, mc.shortname, mc.category, mc.type, "0" };
                     }
                     else
                     {
-                        object[] rowobj = { mc.name, mc.type, "0", "0" };
-                        dataGridViewMC.Rows.Add(rowobj);
+                        rowobj = new[] { mc.name, mc.type, "0", "0" };
                     }
+
+                    int idx = dataGridViewMC.Rows.Add(rowobj);
+                    dataGridViewMC.Rows[idx].Tag = mc;
 
                     labelNoItems.Visible = false;
                 }
