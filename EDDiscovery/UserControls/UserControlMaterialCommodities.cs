@@ -224,6 +224,35 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if ((materials && e.Column.Index == 4) || (!materials && (e.Column.Index == 2 || e.Column.Index == 3)))
+            {
+                double v1;
+                double v2;
+                bool v1hasval = Double.TryParse(e.CellValue1?.ToString(), out v1);
+                bool v2hasval = Double.TryParse(e.CellValue2?.ToString(), out v2);
+
+                if (v1hasval || v2hasval)
+                {
+                    if (!v1hasval)
+                    {
+                        e.SortResult = 1;
+                    }
+                    else if (!v2hasval)
+                    {
+                        e.SortResult = -1;
+                    }
+                    else
+                    {
+                        e.SortResult = v1.CompareTo(v2);
+                    }
+
+                    e.Handled = true;
+                }
+            }
+        }
+
         private void buttonExtModify_Click(object sender, EventArgs e)
         {
             if (buttonExtApply.Enabled)     // then its cancel
