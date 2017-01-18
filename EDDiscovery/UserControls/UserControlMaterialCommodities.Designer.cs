@@ -108,6 +108,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMC.Size = new System.Drawing.Size(684, 532);
             this.dataGridViewMC.TabIndex = 1;
             this.dataGridViewMC.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellEndEdit);
+            this.dataGridViewMC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMC_SortCompare);
             // 
             // NameCol
             // 
