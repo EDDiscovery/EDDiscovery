@@ -33,6 +33,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
+            this.tsbImportSphere = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLoad = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
@@ -72,6 +73,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
             this.toolStripButtonImportFile,
+            this.tsbImportSphere,
             this.toolStripButtonLoad,
             this.toolStripButtonSave,
             this.toolStripButtonExport,
@@ -100,6 +102,15 @@
             this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
             this.toolStripButtonImportFile.Text = "Import file";
             this.toolStripButtonImportFile.Click += new System.EventHandler(this.toolStripButtonImportFile_Click);
+            // 
+            // tsbImportSphere
+            // 
+            this.tsbImportSphere.Image = ((System.Drawing.Image)(resources.GetObject("tsbImportSphere.Image")));
+            this.tsbImportSphere.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbImportSphere.Name = "tsbImportSphere";
+            this.tsbImportSphere.Size = new System.Drawing.Size(102, 22);
+            this.tsbImportSphere.Text = "Import Sphere";
+            this.tsbImportSphere.Click += new System.EventHandler(this.tsbImportSphere_Click);
             // 
             // toolStripButtonLoad
             // 
@@ -146,11 +157,12 @@
             // 
             // panelRouteInfo
             // 
+            this.panelRouteInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelRouteInfo.Controls.Add(this.textBoxFileName);
             this.panelRouteInfo.Controls.Add(this.label1);
             this.panelRouteInfo.Controls.Add(this.textBoxRouteName);
             this.panelRouteInfo.Controls.Add(this.labelRouteName);
-            this.panelRouteInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelRouteInfo.Location = new System.Drawing.Point(0, 25);
             this.panelRouteInfo.Name = "panelRouteInfo";
             this.panelRouteInfo.Size = new System.Drawing.Size(787, 54);
@@ -254,6 +266,8 @@
             // 
             // dataGridViewExplore
             // 
+            this.dataGridViewExplore.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewExplore.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewExplore.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnSystemName,
@@ -266,7 +280,7 @@
             this.ColumnPrimaryStar,
             this.ColumnInfo,
             this.ColumnNote});
-            this.dataGridViewExplore.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewExplore.ContextMenuStrip = this.contextMenuCopyPaste;
             this.dataGridViewExplore.Location = new System.Drawing.Point(0, 79);
             this.dataGridViewExplore.Name = "dataGridViewExplore";
             this.dataGridViewExplore.Size = new System.Drawing.Size(787, 471);
@@ -402,5 +416,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPrimaryStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
+        private System.Windows.Forms.ToolStripButton tsbImportSphere;
     }
 }
