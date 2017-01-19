@@ -1855,10 +1855,9 @@ namespace EDDiscovery
 
             // now database has been updated due to initial fill, now fill in stuff which needs the user database
 
-            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
-            StarScan starscan = new StarScan();
-
-            ProcessUserHistoryListEntries(hl, matcommodledger, starscan);      // here, we update the DBs in HistoryEntry and any global DBs in historylist
+            HistoryList hist = new HistoryList(hl);
+                             
+            hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 
             if (worker.CancellationPending)
             {
@@ -1866,7 +1865,7 @@ namespace EDDiscovery
             }
             else
             {
-                e.Result = new RefreshWorkerResults { rethistory = hl, retledger = matcommodledger, retstarscan = starscan };
+                e.Result = new RefreshWorkerResults { rethistory = hist.ToList(), retledger = hist.materialcommodititiesledger, retstarscan = hist.starscan };
             }
         }
 
@@ -1925,32 +1924,6 @@ namespace EDDiscovery
         {
             string name = (string)e.UserState;
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
-        }
-
-        // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
-        private void ProcessUserHistoryListEntries(List<HistoryEntry> hl, MaterialCommoditiesLedger ledger, StarScan scan)
-        {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
-            {
-                for (int i = 0; i < hl.Count; i++)
-                {
-                    HistoryEntry he = hl[i];
-                    JournalEntry je = he.journalEntry;
-                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, history, conn);        // let the HE do what it wants to with the user db
-
-                    Debug.Assert(he.MaterialCommodity != null);
-
-                    ledger.Process(je, conn);            // update the ledger
-
-                    if (je.EventTypeID == JournalTypeEnum.Scan)
-                    {
-                        if (!scan.AddScanToBestSystem(je as JournalScan, i, hl))
-                        {
-                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
-                        }
-                    }
-                }
-            }
         }
 
         public void RefreshDisplays()
@@ -2017,13 +1990,7 @@ namespace EDDiscovery
 
         public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
         {
-            MaterialCommoditiesLedger matcommodledger = new MaterialCommoditiesLedger();
-            StarScan starscan = new StarScan();
-
-            ProcessUserHistoryListEntries(history.EntryOrder, matcommodledger, starscan);
-
-            history.materialcommodititiesledger = matcommodledger; ;
-            history.starscan = starscan;
+            history.ProcessUserHistoryListEntries(h => h.EntryOrder);
 
             if (OnHistoryChange != null)
                 OnHistoryChange(history);
