@@ -951,6 +951,52 @@ namespace EDDiscovery
             }
         }
 
+        public HistoryEntry AddJournalEntry(JournalEntry je, Action<string> logerror)
+        {
+            if (je.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
+            {
+                HistoryEntry last = GetLast;
+
+                bool journalupdate = false;
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
+
+                if (journalupdate)
+                {
+                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+
+                    if (jfsd != null)
+                    {
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
+                    }
+                }
+
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+                {
+                    he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
+
+                    materialcommodititiesledger.Process(je, conn);
+                }
+
+                Add(he);
+
+                if (je.EventTypeID == JournalTypeEnum.Scan)
+                {
+                    JournalScan js = je as JournalScan;
+                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder))
+                    {
+                        logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                         "Scan object " + js.BodyName + " in " + he.System.name);
+                    }
+                }
+
+                return he;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress, string NetLogPath = null, bool ForceNetLogReload = false, bool ForceJournalReload = false, bool CheckEdsm = false, int CurrentCommander = Int32.MinValue)
         {
             List<HistoryEntry> hl = new List<HistoryEntry>();

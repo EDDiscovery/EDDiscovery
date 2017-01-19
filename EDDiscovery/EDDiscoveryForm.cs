@@ -1871,41 +1871,9 @@ namespace EDDiscovery
 
             if (je.CommanderId == history.CommanderId)     // we are only interested at this point accepting ones for the display commander
             {
-                HistoryEntry last = history.GetLast;
+                HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));
 
-                bool journalupdate = false;
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
-
-                if (journalupdate)
-                {
-                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
-
-                    if (jfsd != null)
-                    {
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
-                    }
-                }
-
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-                {
-                    he.ProcessWithUserDb(je, last, history, conn);           // let some processes which need the user db to work
-
-                    history.materialcommodititiesledger.Process(je, conn);
-                }
-
-                history.Add(he);
-
-                if (je.EventTypeID == JournalTypeEnum.Scan)
-                {
-                    JournalScan js = je as JournalScan;
-                    if (!history.starscan.AddScanToBestSystem(js, history.Count - 1, history.EntryOrder))
-                    {
-                        LogLineHighlight("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                         "Scan object " + js.BodyName + " in " + he.System.name);
-                    }
-                }
-
-                if (OnNewEntry != null)
+                if (he != null && OnNewEntry != null)
                     OnNewEntry(he, history);
 
                 ActionRunOnEntry(he, "NewEntry");
