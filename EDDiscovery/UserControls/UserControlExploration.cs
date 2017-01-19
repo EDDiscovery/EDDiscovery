@@ -786,6 +786,7 @@ namespace EDDiscovery
         {
             DataGridViewSorter2.DataGridSort2(dataGridViewExplore, e.ColumnIndex);
         }
+    }
 
         private void tsbImportSphere_Click(object sender, EventArgs e)
         {
