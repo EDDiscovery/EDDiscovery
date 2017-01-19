@@ -20,6 +20,9 @@ namespace EDDiscovery.Forms
             var res = prompt.ShowDialog(discoveryForm);
             systemName =  prompt.txtExportVisited.Text;
             bool worked = Double.TryParse(prompt.txtsphereRadius.Text, out radius);
+            if (!worked)
+                MessageBox.Show("Radius in wrong format", "Spehere error");
+
             return (res == DialogResult.OK && worked);
         }
 
