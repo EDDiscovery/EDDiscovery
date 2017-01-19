@@ -447,9 +447,13 @@ namespace EDDiscovery
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
 
-        public MaterialCommoditiesLedger materialcommodititiesledger;       // and the ledger..
+        public MaterialCommoditiesLedger materialcommodititiesledger = new MaterialCommoditiesLedger();       // and the ledger..
 
-        public EliteDangerous.StarScan starscan;                                           // and the results of scanning
+        public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
+
+        public HistoryList() { }
+
+        public HistoryList(List<HistoryEntry> hl) { historylist = hl; }
 
         public void Clear()
         {
@@ -913,6 +917,34 @@ namespace EDDiscovery
                     started = true;
                 else if (he.StopMarker)
                     started = false;
+            }
+        }
+
+        // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
+        public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter)
+        {
+            List<HistoryEntry> hl = hlfilter(this);
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
+            {
+                for (int i = 0; i < hl.Count; i++)
+                {
+                    HistoryEntry he = hl[i];
+                    JournalEntry je = he.journalEntry;
+                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this, conn);        // let the HE do what it wants to with the user db
+
+                    Debug.Assert(he.MaterialCommodity != null);
+
+                    this.materialcommodititiesledger.Process(je, conn);            // update the ledger
+
+                    if (je.EventTypeID == JournalTypeEnum.Scan)
+                    {
+                        if (!this.starscan.AddScanToBestSystem(je as JournalScan, i, hl))
+                        {
+                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
+                        }
+                    }
+                }
             }
         }
 
