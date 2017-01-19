@@ -1788,76 +1788,7 @@ namespace EDDiscovery
             RefreshWorkerArgs args = e.Argument as RefreshWorkerArgs;
             var worker = (BackgroundWorker)sender;
 
-            List<HistoryEntry> hl = new List<HistoryEntry>();
-            EDCommander cmdr = null;
-
-            if (args.CurrentCommander >= 0)
-            {
-                cmdr = EDDConfig.Commander(args.CurrentCommander);
-                journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), forceReload: args.ForceJournalReload);   // Parse files stop monitor..
-
-                if (args != null)
-                {
-                    if (args.NetLogPath != null)
-                    {
-                        string errstr = null;
-                        NetLogClass.ParseFiles(args.NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.ForceNetLogReload, currentcmdrid: args.CurrentCommander);
-                    }
-                }
-            }
-
-            worker.ReportProgress(-1, "Resolving systems");
-
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(args.CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
-            List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
-
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
-            {
-                HistoryEntry prev = null;
-                foreach (EliteDangerous.JournalEntry je in jlist)
-                {
-                    bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, args.CheckEdsm, out journalupdate, conn, cmdr);
-                    prev = he;
-
-                    hl.Add(he);                        // add to the history list here..
-
-                    if (journalupdate)
-                    {
-                        jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
-                    }
-                }
-            }
-
-            if (jlistUpdated.Count > 0)
-            {
-                worker.ReportProgress(-1, "Updating journal entries");
-
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
-                {
-                    using (DbTransaction txn = conn.BeginTransaction())
-                    {
-                        foreach (Tuple<EliteDangerous.JournalEntry, HistoryEntry> jehe in jlistUpdated)
-                        {
-                            EliteDangerous.JournalEntry je = jehe.Item1;
-                            HistoryEntry he = jehe.Item2;
-                            EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
-                            if (jfsd != null)
-                            {
-                                EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, conn, txn);
-                            }
-                        }
-
-                        txn.Commit();
-                    }
-                }
-            }
-
-            // now database has been updated due to initial fill, now fill in stuff which needs the user database
-
-            HistoryList hist = new HistoryList(hl);
-                             
-            hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
+            HistoryList hist = HistoryList.LoadHistory(journalmonitor, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.NetLogPath, args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander);
 
             if (worker.CancellationPending)
             {
