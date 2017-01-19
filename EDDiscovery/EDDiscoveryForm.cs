@@ -1944,26 +1944,13 @@ namespace EDDiscovery
 
                     if (je.EventTypeID == JournalTypeEnum.Scan)
                     {
-                        if (!AddScanToBestSystem(scan, je as JournalScan, i, hl))
+                        if (!scan.AddScanToBestSystem(je as JournalScan, i, hl))
                         {
                             System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
                         }
                     }
                 }
             }
-        }
-
-        private bool AddScanToBestSystem(StarScan starscan, JournalScan je, int startindex, List<HistoryEntry> hl)
-        {
-            for (int j = startindex; j >= 0; j--)
-            {
-                if (je.IsStarNameRelated(hl[j].System.name))       // if its part of the name, use it
-                {
-                    return starscan.Process(je, hl[j].System);
-                }
-            }
-
-            return starscan.Process(je, hl[startindex].System);         // no relationship, add..
         }
 
         public void RefreshDisplays()
@@ -2005,7 +1992,7 @@ namespace EDDiscovery
                 if (je.EventTypeID == JournalTypeEnum.Scan)
                 {
                     JournalScan js = je as JournalScan;
-                    if (!AddScanToBestSystem(history.starscan, js, history.Count - 1, history.EntryOrder))
+                    if (!history.starscan.AddScanToBestSystem(js, history.Count - 1, history.EntryOrder))
                     {
                         LogLineHighlight("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
                                          "Scan object " + js.BodyName + " in " + he.System.name);
