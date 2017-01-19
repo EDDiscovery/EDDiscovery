@@ -146,7 +146,11 @@ namespace EDDiscovery
         {
             InitializeComponent();
 
-            ProcessCommandLineOptions();
+            EDDConfig.Options.Init();
+
+            label_version.Text = EDDConfig.Options.VersionDisplayString;
+
+            ReadCmdLineJournal();
 
             string logpath = "";
             try
@@ -235,12 +239,8 @@ namespace EDDiscovery
         {
         }
 
-        private void ProcessCommandLineOptions()
+        private void ReadCmdLineJournal()
         {
-            EDDConfig.Options.Init();
-
-            label_version.Text = EDDConfig.Options.VersionDisplayString;
-
             if (EDDConfig.Options.ReadJournal != null)
             {
                 string file = EDDConfig.Options.ReadJournal;
