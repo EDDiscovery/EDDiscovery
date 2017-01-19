@@ -90,11 +90,6 @@ namespace EDDiscovery
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
-        public bool option_nowindowreposition { get; set; } = false;                             // Cmd line options
-        public bool option_debugoptions { get; set; } = false;
-        public bool option_tracelog { get; set; } = false;
-        public bool option_fcexcept { get; set; } = false;
-
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
         public event EventHandler HistoryRefreshed; // this is an internal hook
@@ -162,13 +157,13 @@ namespace EDDiscovery
                     Directory.CreateDirectory(logpath);
                 }
 
-                if (!Debugger.IsAttached || option_tracelog)
+                if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
                 {
                     TraceLog.LogFileWriterException += ex =>
                     {
                         LogLineHighlight($"Log Writer Exception: {ex}");
                     };
-                    TraceLog.Init(option_fcexcept);
+                    TraceLog.Init(EDDConfig.Options.LogExceptions);
                 }
             }
             catch (Exception ex)
@@ -206,7 +201,7 @@ namespace EDDiscovery
 
             EdsmSync = new EDSMSync(this);
 
-            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, this);
+            Map = new EDDiscovery2._3DMap.MapManager(EDDConfig.Options.NoWindowReposition, this);
 
             journalmonitor = new EliteDangerous.EDJournalClass();
 
@@ -245,11 +240,6 @@ namespace EDDiscovery
             EDDConfig.Options.Init();
 
             label_version.Text = EDDConfig.Options.VersionDisplayString;
-
-            option_nowindowreposition = EDDConfig.Options.NoWindowReposition;
-            option_debugoptions = EDDConfig.Options.Debug;
-            option_tracelog = EDDConfig.Options.TraceLog;
-            option_fcexcept = EDDConfig.Options.LogExceptions;
 
             if (EDDConfig.Options.ReadJournal != null)
             {
@@ -314,7 +304,7 @@ namespace EDDiscovery
 
                 CheckIfEliteDangerousIsRunning();
 
-                if (option_debugoptions)
+                if (EDDConfig.Options.Debug)
                 {
                     button_test.Visible = true;
                 }
@@ -407,7 +397,7 @@ namespace EDDiscovery
         private void RepositionForm()
         {
             var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
-            if (top != -1 && option_nowindowreposition == false)
+            if (top != -1 && EDDConfig.Options.NoWindowReposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
@@ -442,7 +432,7 @@ namespace EDDiscovery
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
-            if (EDDConfig.AutoLoadPopOuts && option_nowindowreposition == false) travelHistoryControl1.LoadSavedPopouts();
+            if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false) travelHistoryControl1.LoadSavedPopouts();
         }
 
         private void CheckIfEliteDangerousIsRunning()
@@ -1270,7 +1260,7 @@ namespace EDDiscovery
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = option_nowindowreposition;
+            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
         }
 
