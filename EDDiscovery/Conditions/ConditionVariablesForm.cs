@@ -27,7 +27,6 @@ namespace EDDiscovery
         EDDiscovery2.EDDTheme theme;
 
         int panelmargin = 3;
-        int panelwidth = 800;
         const int vscrollmargin = 10;
 
         public ConditionVariablesForm()
@@ -63,6 +62,11 @@ namespace EDDiscovery
             }
         }
 
+        private void ConditionVariablesFormResize(object sender, EventArgs e)
+        {
+            FixUpGroups(false); // don't recalc min size, it creates a loop
+        }
+
         public Group CreateEntry(string var, string value)
         {
             Group g = new Group();
@@ -77,14 +81,12 @@ namespace EDDiscovery
             g.panel.Controls.Add(g.var);
 
             g.value = new ExtendedControls.TextBoxBorder();
-            g.value.Size = new Size(350, 24);
             g.value.Location = new Point(g.var.Location.X + g.var.Width + 8, panelmargin);
             g.value.Text = value;
             g.panel.Controls.Add(g.value);
 
             g.del = new ExtendedControls.ButtonExt();
             g.del.Size = new Size(24, 24);
-            g.del.Location = new Point(g.value.Location.X + g.value.Width + 8, panelmargin);
             g.del.Text = "X";
             g.del.Tag = g;
             g.del.Click += Del_Clicked;
@@ -95,21 +97,22 @@ namespace EDDiscovery
             panelVScroll1.Controls.Add(g.panel);
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
-            panelwidth = g.del.Location.X + g.del.Width + 8;
-
             FixUpGroups();
 
             return g;
         }
 
-        void FixUpGroups()      // fixes and positions groups.
+        void FixUpGroups(bool minmax = true)      // fixes and positions groups.
         {
             int y = panelmargin;
+            int panelwidth = Math.Max(panelVScroll1.Width - panelVScroll1.ScrollBarWidth, 10);
 
             foreach (Group g in groups)
             {
-                g.panel.Size = new Size(panelwidth, 32);
+                g.panel.Size = new Size(panelwidth-panelmargin*2, 32);
                 g.panel.Location = new Point(panelmargin, y);
+                g.value.Size = new Size(panelwidth-180, 24);
+                g.del.Location = new Point(g.value.Location.X + g.value.Width + 8, panelmargin);
                 y += g.panel.Height + 6;
             }
 
@@ -121,8 +124,11 @@ namespace EDDiscovery
 
             y += buttonMore.Height + titleHeight + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
 
-            this.MinimumSize = new Size(panelwidth + vscrollmargin * 2 + panelVScroll1.ScrollBarWidth + 8, y);
-            this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width, Screen.FromControl(this).WorkingArea.Height);
+            if (minmax) // stop circular relationsship with resize
+            {
+                this.MinimumSize = new Size(600, y);
+                this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width, Screen.FromControl(this).WorkingArea.Height);
+            }
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

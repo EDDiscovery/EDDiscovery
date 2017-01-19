@@ -433,6 +433,13 @@ namespace EDDiscovery.Actions
                 return progname;
         }
 
+        public string GetProgramName()
+        {
+            string progname;
+            ConditionVariables vars;
+            return FromString(userdata, out progname, out vars) ? progname : null;
+        }
+
         public override string VerifyActionCorrect()
         {
             string progname;
