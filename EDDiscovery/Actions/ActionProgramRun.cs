@@ -16,9 +16,9 @@ namespace EDDiscovery.Actions
         public EDDiscoveryForm discoveryform;
         public HistoryList historylist;
         public HistoryEntry historyentry;                   // may be null, if the execute uses this, check.
-        public ConditionVariables startvars;        // the vars passed in at start (and used to pass to any callers)
-        public ConditionVariables currentvars;      // these may be freely modified, they are local to this APR
-        public ActionFunctions functions;                   // function handler
+        public ConditionVariables inputvars;        // input vars to this program, never changed
+        public ConditionVariables currentvars;      // set up by ActionRun at invokation so they have the latest globals, see Run line 87 ish
+        public ConditionFunctions functions;                   // function handler
         public bool allowpause;
 
         private int nextstepnumber;     // the next step to execute, 0 based
@@ -31,16 +31,19 @@ namespace EDDiscovery.Actions
 
         private string errlist = null;
 
-        public ActionProgramRun(ActionFile af, ActionProgram r, ActionRun runner,
-                                EDDiscoveryForm ed, HistoryList hl, HistoryEntry h,
-                                ConditionVariables gvars, bool allowp = false) : base(r.Name)      // make a copy of the program..
+        public ActionProgramRun(ActionFile af, // associated file
+                                ActionProgram r,  // the program
+                                ConditionVariables iparas ,             // input variables to the program only.. not globals
+                                ActionRun runner, // who is running it..
+                                EDDiscoveryForm ed, HistoryList hl, HistoryEntry h, // globals
+                                bool allowp = false) : base(r.Name)      // allow a pause
         {
             actionfile = af;
             actionrun = runner;
             discoveryform = ed;
             historyentry = h;
             historylist = hl;
-            functions = new ActionFunctions(ed, hl, h);
+            functions = new ConditionFunctions(ed, hl, h);
             allowpause = allowp;
             execlevel = 0;
             execstate[execlevel] = ExecState.On;
@@ -49,8 +52,7 @@ namespace EDDiscovery.Actions
             System.Diagnostics.Debug.WriteLine("Run " + actionfile.name + "::" + r.Name);
             //ActionData.DumpVars(gvars, " Func Var:");
 
-            startvars = new ConditionVariables(gvars); // keep this, used by call to pass clean set to called program without locals
-            currentvars = new ConditionVariables(startvars); // copy of.. we can modify to hearts content
+            inputvars = iparas;             // current vars is set up by ActionRun at the point of invokation to have the latests globals
 
             List<Action> psteps = new List<Action>();
             Action ac;
@@ -75,6 +77,11 @@ namespace EDDiscovery.Actions
         public int ExecLevel { get { return execlevel; } }
 
         public bool IsProgramFinished { get { return nextstepnumber >= Count; } }
+
+        public void TerminateCurrentProgram()          // stop this program
+        {
+            nextstepnumber = Count;
+        }
 
         public bool IsExecuteOn { get { return execstate[execlevel] == ExecState.On; } }
         public bool IsExecuteOff { get { return execstate[execlevel] == ExecState.Off; } }
@@ -198,6 +205,7 @@ namespace EDDiscovery.Actions
         }
 
         public string GetErrorList { get { return errlist; } }
+
 
         #endregion
 

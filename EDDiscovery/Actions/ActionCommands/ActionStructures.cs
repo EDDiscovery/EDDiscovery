@@ -9,9 +9,6 @@ namespace EDDiscovery.Actions
 {
     public class ActionIfElseBase : Action
     {
-        public ActionIfElseBase(string n, ActionType t, string ud, int lu) : base(n, t, ud,lu)
-        {
-        }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars) //standard one used for most
         {
@@ -49,9 +46,6 @@ namespace EDDiscovery.Actions
     {
         ConditionLists condition;
 
-        public ActionIf(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
@@ -89,10 +83,6 @@ namespace EDDiscovery.Actions
     public class ActionElseIf : ActionIfElseBase
     {
         ConditionLists condition;
-
-        public ActionElseIf(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
@@ -135,11 +125,8 @@ namespace EDDiscovery.Actions
 
     public class ActionElse : Action
     {
-        public ActionElse(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
-
         public override bool ConfigurationMenuInUse { get { return false; } }
+        public override string DisplayedUserData { get { return null; } }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
@@ -160,10 +147,6 @@ namespace EDDiscovery.Actions
     public class ActionWhile : ActionIfElseBase
     {
         ConditionLists condition;
-
-        public ActionWhile(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
 
         public override bool ExecuteAction(ActionProgramRun ap)             // WHILE at top of loop
         {
@@ -233,13 +216,9 @@ namespace EDDiscovery.Actions
 
     public class ActionDo : Action
     {
-        public ActionDo(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
 
         public override bool ConfigurationMenuInUse { get { return false; } }
-
-        public override string DisplayedUserData { get { return null;  } }
+        public override string DisplayedUserData { get { return null; } }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
@@ -258,9 +237,6 @@ namespace EDDiscovery.Actions
 
     public class ActionLoop : Action
     {
-        public ActionLoop(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
 
         private bool counting = false;
         private int loopcount = 0;
@@ -344,9 +320,6 @@ namespace EDDiscovery.Actions
         ConditionLists condition;
         string errmsg;
 
-        public ActionErrorIf(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        { 
-        }
 
         public bool FromString(string s, out ConditionLists cond , out string errmsg )
         {
@@ -428,9 +401,6 @@ namespace EDDiscovery.Actions
 
     public class ActionCall : Action
     {
-        public ActionCall(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        { 
-        }
 
         public bool FromString(string s, out string progname, out ConditionVariables vars )
         {
@@ -480,7 +450,7 @@ namespace EDDiscovery.Actions
             if (promptValue != null)
             {
                 ConditionVariablesForm avf = new ConditionVariablesForm();
-                avf.Init("Variables to pass into called program", theme, cond);
+                avf.Init("Variables to pass into called program", theme, cond,false);
 
                 if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
                 {

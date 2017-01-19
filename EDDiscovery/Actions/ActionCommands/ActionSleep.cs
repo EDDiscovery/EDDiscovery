@@ -10,9 +10,6 @@ namespace EDDiscovery.Actions
 {
     class ActionSleep : Action
     {
-        public ActionSleep(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
 
         Timer t;
         ActionProgramRun apr;

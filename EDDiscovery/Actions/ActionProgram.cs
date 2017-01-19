@@ -84,7 +84,7 @@ namespace EDDiscovery.Actions
                 int stepLU = (int)js["StepLevelUp"];
                 int whitespace = JSONHelper.GetInt(js["StepWhitespace"],0);     // was not in earlier version, optional
 
-                Action cmd = Action.CreateAction(stepname, stepUC, stepLU);
+                Action cmd = Action.CreateAction(stepname, stepUC, stepLU, whitespace);
 
                 if ( cmd != null && cmd.VerifyActionCorrect() == null )                  // throw away ones with bad names
                     ap.programsteps.Add(cmd);
@@ -152,8 +152,6 @@ namespace EDDiscovery.Actions
                             err += "Line " + lineno + " " + vmsg + Environment.NewLine + " " + completeline + Environment.NewLine;
                         else
                         {
-
-
                             if (indentpos == -1)
                                 indentpos = curindent;
                             else if (curindent > indentpos)        // more indented, up one structure
@@ -163,9 +161,9 @@ namespace EDDiscovery.Actions
                             else if (curindent < indentpos)   // deindented
                             {
                                 int tolevel = -1;
-                                for (int i = indents.Count - 1; i >= 0; i--)
+                                for (int i = indents.Count - 1; i >= 0; i--)            // search up and find the entry with the indent..
                                 {
-                                    if (indents[i] <= curindent)    // find entry with less or equal indent
+                                    if (indents[i] <= curindent)    
                                     {
                                         tolevel = i;
                                         break;
@@ -174,8 +172,16 @@ namespace EDDiscovery.Actions
 
                                 int cl = structlevel;
 
-                                if (tolevel != -1)
-                                    structlevel = level[tolevel];   // if found, we are at that..
+                                if (tolevel != -1)                  // if found
+                                {
+                                    structlevel = level[tolevel];   // if found, we are at that.. except..
+
+                                    if ((a.Type == Action.ActionType.While && prog[tolevel].Type == Action.ActionType.Do) ||
+                                        ((a.Type == Action.ActionType.Else || a.Type == Action.ActionType.ElseIf) && prog[tolevel].Type == Action.ActionType.If))
+                                    {
+                                        structlevel++;      // thest are artifically indented (else/elseif after if, and while after do, these maintain level)
+                                    }
+                                }
                                 else
                                     structlevel--;  // else we are just down 1.
 

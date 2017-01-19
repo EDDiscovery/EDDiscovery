@@ -9,10 +9,6 @@ namespace EDDiscovery.Actions
 {
     public class ActionEvent : Action
     {
-        public ActionEvent(string n, ActionType t, string ud, int lu) : base(n, t,  ud, lu)
-        {
-        }
-
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
@@ -37,7 +33,10 @@ namespace EDDiscovery.Actions
 
                 string cmdname = sp.NextWord();
 
-                // [PREFIX varprefix] [FROM JID] Forward/First/Next/Last [event or (event list,event)] [WHERE conditions list]
+                // [PREFIX varprefix] [FROM JID] Forward/First/Backward/Last [event or (event list,event)] [WHERE conditions list]
+                // FROM JID NEXT gives you the one after the JID
+                // FROM JID BACKWARD gives you the JID before the JID
+                // FROM JID gives you the JID
 
                 if (cmdname != null && cmdname.Equals("PREFIX", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -113,36 +112,25 @@ namespace EDDiscovery.Actions
                         }
                     }
 
-                    if (eventnames.Count > 0)
-                    {
-                        List<HistoryEntry> hltest;
+                    List<HistoryEntry> hltest;
 
-                        if (jidindex == -1)     // if no JID given..
-                            hltest = hl.EntryOrder; // the whole list
-                        else if (fwd)
-                            hltest = hl.EntryOrder.GetRange(jidindex + 1, hl.Count - (jidindex + 1));
-                        else
-                            hltest = hl.EntryOrder.GetRange(0, jidindex - 1);
-
-                        List<HistoryEntry> hle = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
-
-                        if (cond.Count > 0)     // if we have filters, apply, filter out, true only stays
-                            hle = cond.FilterHistoryOut(hle, new ConditionVariables()); // apply filter..
-
-                        if (fwd)
-                            ReportEntry(ap, hle, 0, prefix);
-                        else
-                            ReportEntry(ap, hle, hle.Count - 1, prefix);
-                    }
+                    if (jidindex == -1)     // if no JID given..
+                        hltest = hl.EntryOrder; // the whole list
+                    else if (fwd)
+                        hltest = hl.EntryOrder.GetRange(jidindex + 1, hl.Count - (jidindex + 1));       // cut down list, excluding this entry
                     else
-                    {
-                        if (jidindex == -1)
-                            ReportEntry(ap, hl.EntryOrder, (fwd) ? 0 : hl.Count-1, prefix);
-                        else if (fwd)
-                            ReportEntry(ap, hl.EntryOrder, jidindex + 1, prefix);
-                        else
-                            ReportEntry(ap, hl.EntryOrder, jidindex - 1, prefix);
-                    }
+                        hltest = hl.EntryOrder.GetRange(0, jidindex );
+
+                    if (eventnames.Count > 0)
+                        hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
+                    
+                    if (cond.Count > 0)     // if we have filters, apply, filter out, true only stays
+                        hltest = cond.FilterHistoryOut(hltest, new ConditionVariables()); // apply filter..
+
+                    if (fwd)
+                        ReportEntry(ap, hltest, 0, prefix);
+                    else
+                        ReportEntry(ap, hltest, hltest.Count - 1, prefix);
 
                     return true;
                 }
@@ -162,9 +150,10 @@ namespace EDDiscovery.Actions
                 try
                 {
                     ConditionVariables values = new ConditionVariables();
-                    values.GetJSONFieldNamesAndValues(hl[pos].journalEntry.EventDataString, prefix);
-                    EDDiscoveryForm.HistoryEntryVars(hl[pos], values, prefix);
+                    values.GetJSONFieldNamesAndValues(hl[pos].journalEntry.EventDataString, prefix + "JS_");
+                    ActionVars.HistoryEventVars(values, hl[pos], prefix);
                     ap.currentvars.Add(values);
+                    ap.currentvars[prefix + "Count"] = hl.Count.ToString();     // give a count of matches
                     return;
                 }
                 catch
@@ -173,6 +162,7 @@ namespace EDDiscovery.Actions
             }
 
             ap.currentvars[prefix + "JID"] = "0";
+            ap.currentvars[prefix + "Count"] = "0";
         }
 
     }

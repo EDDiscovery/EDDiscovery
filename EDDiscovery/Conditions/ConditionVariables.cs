@@ -174,19 +174,18 @@ namespace EDDiscovery
             { System.Diagnostics.Debug.WriteLine(prefix + k.Key + "=" + k.Value); }
         }
 
-        public void AddToVar(string name, int add, int initial)
+        public string AddToVar(string name, int add, int initial)       // DOES NOT set anything..
         {
             if (values.ContainsKey(name))
             {
                 int i;
                 if (int.TryParse(values[name], out i))
                 {
-                    values[name] = (i + add).ToString();
-                    return;
+                    return (i + add).ToString();
                 }
             }
 
-            values[name] = initial.ToString();
+            return initial.ToString();
         }
 
         public bool GetJSONFieldNamesAndValues(string json, string prefix = "")

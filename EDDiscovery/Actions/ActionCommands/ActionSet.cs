@@ -9,57 +9,80 @@ namespace EDDiscovery.Actions
 {
     public class ActionSetLetBase : Action
     {
-        public ActionSetLetBase(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
+        protected bool FromString(string ud, out bool noexpand, out ConditionVariables vars)
         {
+            vars = new ConditionVariables();
+
+            if (userdata.TrimStart().StartsWith("$"))
+            {
+                noexpand = true;
+                return vars.FromString(userdata.Substring(userdata.IndexOf('$') + 1), ConditionVariables.FromMode.MultiEntryComma);
+            }
+            else
+            {
+                noexpand = false;
+                return vars.FromString(userdata, ConditionVariables.FromMode.MultiEntryComma);
+            }
+        }
+
+        protected string ToString(bool noexpand, ConditionVariables vars)
+        {
+            return ((noexpand) ? "$ " : "" ) + vars.ToString();
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
-            string var, value;
-            ConditionVariables av = new ConditionVariables(userdata, ConditionVariables.FromMode.SingleEntry);
-            av.GetFirstValue(out var, out value);       // if it does not exist, don't worry
+            ConditionVariables av;
+            bool noexpand;
+            FromString(userdata, out noexpand, out av);
 
-            Tuple<string, string> promptValue = PromptDoubleLine.ShowDialog(parent, "Variable:", "Value:", var, value, "Set Variable");
+            ConditionVariablesForm avf = new ConditionVariablesForm();
+            avf.Init("Variable list:", theme, av, true, true, noexpand);
 
-            if (promptValue != null)
+            if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
-                ConditionVariables av2 = new ConditionVariables();
-                av2[promptValue.Item1] = promptValue.Item2;
-                userdata = av2.ToString();
+                userdata = ToString(avf.noexpand, avf.result);
+                return true;
             }
-
-            return (promptValue != null);
+            else
+                return false;
         }
 
         public override string VerifyActionCorrect()
         {
-            ConditionVariables av = new ConditionVariables();
-            return av.FromString(userdata, ConditionVariables.FromMode.SingleEntry) ? null : "Let/Set not in correct format: v=\"y\"";
+            ConditionVariables av;
+            bool f;
+            return FromString(userdata, out f, out av) ? null : "Global/Let/Set not in correct format: ($) v=\"y\"";
         }
 
     }
 
     public class ActionSet : ActionSetLetBase
     {
-        public ActionSet(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
+        ConditionVariables av;
+        bool noexpand;
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            ConditionVariables av = new ConditionVariables(userdata, ConditionVariables.FromMode.SingleEntry);
+            if (av == null)
+                FromString(userdata, out noexpand, out av);
 
-            if (av.Count > 0)
+            foreach (KeyValuePair<string, string> k in av.values)
             {
                 string res;
-                if (ap.functions.ExpandString(av.First().Value, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
-                {
-                    ap.currentvars[av.First().Key] = res;
-                }
+
+                if (noexpand)
+                    ap.currentvars[k.Key] = k.Value;
+                else if ( ap.functions.ExpandString(k.Value, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                    ap.currentvars[k.Key] = res;
                 else
+                {
                     ap.ReportError(res);
+                    break;
+                }
             }
-            else
+
+            if (av.Count == 0)
                 ap.ReportError("Set no variable name given");
 
             return true;
@@ -69,47 +92,91 @@ namespace EDDiscovery.Actions
 
     public class ActionLet : ActionSetLetBase
     {
-        public ActionLet(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
+        ConditionVariables av;
+        bool noexpand;
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            ConditionVariables av = new ConditionVariables(userdata, ConditionVariables.FromMode.SingleEntry);
+            if (av == null)
+                FromString(userdata, out noexpand, out av);
 
-            if ( av.Count>0)
+            foreach (KeyValuePair<string, string> k in av.values)
             {
                 string res;
-                if (ap.functions.ExpandString(av.First().Value, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+
+                if (noexpand)
+                    res = k.Value;
+                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
                 {
-                    System.Data.DataTable dt = new System.Data.DataTable();
+                    ap.ReportError(res);
+                    break;
+                }
 
-                    try
-                    {
-                        var v = dt.Compute(res, "");
-                        Type t = v.GetType();
-                        //System.Diagnostics.Debug.WriteLine("Type return is " + t.ToString());
-                        if (v is double)
-                            res = v.ToString();
-                        else if (v is System.Decimal)
-                            res = v.ToString();
-                        else if (v is int)
-                            res = v.ToString();
-                        else
-                            res = "NAN";
+                System.Data.DataTable dt = new System.Data.DataTable();
 
-                        ap.currentvars[av.First().Key] = res;
-                    }
-                    catch
-                    {
-                        ap.ReportError("LET expression does not evaluate");
-                    }
+                try
+                {
+                    var v = dt.Compute(res, "");
+                    Type t = v.GetType();
+                    //System.Diagnostics.Debug.WriteLine("Type return is " + t.ToString());
+                    if (v is double)
+                        res = v.ToString();
+                    else if (v is System.Decimal)
+                        res = v.ToString();
+                    else if (v is int)
+                        res = v.ToString();
+                    else
+                        res = "NAN";
+
+                    ap.currentvars[k.Key] = res;
+                }
+                catch
+                {
+                    ap.ReportError("LET expression does not evaluate");
+                    break;
+                }
+            }
+
+            if (av.Count == 0)
+                ap.ReportError("Let no variable name given");
+
+            return true;
+        }
+    }
+
+    public class ActionGlobal : ActionSetLetBase
+    {
+        ConditionVariables av;
+        bool noexpand;
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            if (av == null)
+                FromString(userdata, out noexpand, out av);
+
+            foreach (KeyValuePair<string, string> k in av.values)
+            {
+                string res;
+
+                if (noexpand)
+                {
+                    ap.currentvars[k.Key] = k.Value;
+                    ap.discoveryform.SetProgramGlobal(k.Key, k.Value);
+                }
+                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                {
+                    ap.currentvars[k.Key] = res;
+                    ap.discoveryform.SetProgramGlobal(k.Key, res);
                 }
                 else
+                {
                     ap.ReportError(res);
+                    break;
+                }
             }
-            else
-                ap.ReportError("Let no variable name given");
+
+            if (av.Count == 0)
+                ap.ReportError("Global no variable name given");
 
             return true;
         }

@@ -9,10 +9,6 @@ namespace EDDiscovery.Actions
 { 
     class ActionReturn : Action
     {
-        public ActionReturn(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
-
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)

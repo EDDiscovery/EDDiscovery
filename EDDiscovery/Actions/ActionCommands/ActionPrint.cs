@@ -9,10 +9,6 @@ namespace EDDiscovery.Actions
 {
     public class ActionPrint : Action
     {
-        public ActionPrint(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
-
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)

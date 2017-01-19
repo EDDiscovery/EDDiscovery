@@ -99,9 +99,9 @@ namespace EDDiscovery
         public Actions.ActionFileList actionfiles;
 
         public Actions.ActionRun actionrunasync;
-        private ConditionVariables internalglobalvariables;         // this is the main list, includes user global variables..
-        private ConditionVariables usercontrolledglobalvariables;     // user specific ones.  fed back into global on change
-        public ConditionVariables standardvariables;               // combo of above.
+        private ConditionVariables internalglobalvariables;         // internally set variables, either program or user program ones
+        private ConditionVariables usercontrolledglobalvariables;     // user variables, set by user only
+        public ConditionVariables globalvariables;               // combo of above.
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
@@ -314,8 +314,13 @@ namespace EDDiscovery
                 usercontrolledglobalvariables = new ConditionVariables();
                 usercontrolledglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
 
+                globalvariables = new ConditionVariables(usercontrolledglobalvariables);        // copy existing user ones into to shared buffer..
+
                 internalglobalvariables = new ConditionVariables();
-                standardvariables = new ConditionVariables(internalglobalvariables,usercontrolledglobalvariables);
+
+                SetInternalGlobal("CurrentCulture", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
+                SetInternalGlobal("CurrentCultureInEnglish", System.Threading.Thread.CurrentThread.CurrentCulture.EnglishName);
+                SetInternalGlobal("CurrentCultureISO", System.Threading.Thread.CurrentThread.CurrentCulture.ThreeLetterISOLanguageName);
 
                 if (!(SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized))
                 {
@@ -371,7 +376,7 @@ namespace EDDiscovery
                 LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
 
-            ActionRunOnEvent("onStartup","ProgramEvent");
+            ActionRunOnEvent("onStartup", "ProgramEvent");
         }
 
         private Task CheckForNewInstallerAsync()
@@ -1232,6 +1237,7 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
+            ActionRunOnEvent("onStartup", "ProgramEvent");
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1776,16 +1782,12 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    string prevcommander = standardvariables.ContainsKey("Commander") ? standardvariables["Commander"] : "None";
+                    string prevcommander = globalvariables.ContainsKey("Commander") ? globalvariables["Commander"] : "None";
                     string commander = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
 
-                    if ( prevcommander.Equals(commander))
-                        standardvariables.AddToVar("RefreshCount", 1, 1);
-                    else
-                        standardvariables["RefreshCount"] = "1";
-
-                    internalglobalvariables["RefreshCount"] = standardvariables["RefreshCount"];
-                    standardvariables["Commander"] = internalglobalvariables["Commander"] = commander;
+                    string refreshcount = prevcommander.Equals(commander) ? internalglobalvariables.AddToVar("RefreshCount", 1, 1) : "1";
+                    SetInternalGlobal("RefreshCount", refreshcount);
+                    SetInternalGlobal("Commander", commander);
 
                     travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
                     exportControl1.PopulateCommanders();
@@ -1914,6 +1916,8 @@ namespace EDDiscovery
 
                 if (OnNewEntry != null)
                     OnNewEntry(he, history);
+
+                ActionRunOnEntry(he, "NewEntry");
             }
 
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
@@ -1961,9 +1965,9 @@ namespace EDDiscovery
             events.Add("onRefreshStart");
             events.Add("onRefreshEnd");
             events.Add("onStartup");
-            events.Add("onClosedown");
+            //events.Add("onClosedown");
 
-            frm.InitAction("Actions: Define actions", events, internalglobalvariables.KeyList, usercontrolledglobalvariables, actionfiles, theme);
+            frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, usercontrolledglobalvariables, actionfiles, theme);
             frm.TopMost = this.FindForm().TopMost;
 
             frm.ShowDialog(this.FindForm()); // don't care about the result, the form does all the saving
@@ -1971,79 +1975,72 @@ namespace EDDiscovery
             usercontrolledglobalvariables = frm.userglobalvariables;
             SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
 
-            standardvariables = new ConditionVariables(internalglobalvariables,usercontrolledglobalvariables);
+            globalvariables = new ConditionVariables(internalglobalvariables,usercontrolledglobalvariables);    // remake
         }
 
-        public void ActionRunOnEntry(HistoryEntry he , string triggertype)
+        public void ActionRunOnEntry(HistoryEntry he , string triggertype , string flagstart = null )       //set flagstart to be the first flag of the actiondata..
         {
-            ConditionVariables testvars = new ConditionVariables(standardvariables);
-            SystemVars(he.journalEntry.EventTypeStr, triggertype, testvars);
-            HistoryEntryVars(he, testvars,"Event_");
+            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(he.journalEntry.EventTypeStr , flagstart);
 
-            Actions.ActionFunctions functions = new Actions.ActionFunctions(this, history, he);                   // function handler
-
-            List<Actions.ActionFileList.MatchingSets> ale = new List<Actions.ActionFileList.MatchingSets>();
-            ale = actionfiles.GetActions(he.journalEntry.EventTypeStr, he.journalEntry.EventDataString, testvars , functions.ExpandString);
-
-            if ( ale != null )
+            if ( ale.Count > 0 )
             {
-                ConditionVariables eventvars = new ConditionVariables();
-                eventvars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, "Event_");        // for all events, add to field list
+                ConditionVariables testvars = new ConditionVariables(globalvariables);
+                Actions.ActionVars.TriggerVars(testvars, he.journalEntry.EventTypeStr, triggertype);
+                Actions.ActionVars.HistoryEventVars(testvars, he, "Event");
 
-                actionfiles.RunActions(ale, new List<ConditionVariables>() { standardvariables, testvars, eventvars }, 
-                                                 actionrunasync, history, he);  // add programs to action run
+                ConditionFunctions functions = new ConditionFunctions(this, history, he);                   // function handler
 
-                actionrunasync.Execute();       // will execute
+                if ( actionfiles.CheckActions(ale, he.journalEntry.EventDataString, testvars, functions.ExpandString) > 0 )
+                {
+                    ConditionVariables eventvars = new ConditionVariables();        // we don't pass globals in - added when they are run
+                    Actions.ActionVars.TriggerVars(eventvars, he.journalEntry.EventTypeStr, triggertype);
+                    Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");
+                    eventvars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, "EventJS_");        // for all events, add to field list
+
+                    actionfiles.RunActions(ale, actionrunasync, eventvars, history, he);  // add programs to action run
+
+                    actionrunasync.Execute();       // will execute
+                }
             }
         }
 
         public void ActionRunOnEvent( string name, string triggertype )
         {
-            ConditionVariables testvars = new ConditionVariables(standardvariables);
-            SystemVars(name, triggertype, testvars);
+            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(name);
 
-            Actions.ActionFunctions functions = new Actions.ActionFunctions(this, history, null);                   // function handler
-
-            List<Actions.ActionFileList.MatchingSets> ale = new List<Actions.ActionFileList.MatchingSets>();
-            ale = actionfiles.GetActions(name, null, testvars, functions.ExpandString);
-
-            if (ale != null)
+            if ( ale.Count > 0 )
             {
-                actionfiles.RunActions(ale, new List<ConditionVariables>() { standardvariables , testvars },
-                                                  actionrunasync, history, null);  // add programs to action run
+                ConditionVariables testvars = new ConditionVariables(globalvariables);
+                Actions.ActionVars.TriggerVars(testvars, name, triggertype);
 
-                actionrunasync.Execute();       // will execute
+                ConditionFunctions functions = new ConditionFunctions(this, history, null);                   // function handler
+
+                if ( actionfiles.CheckActions(ale, null, testvars, functions.ExpandString) > 0 )
+                {
+                    ConditionVariables eventvars = new ConditionVariables();
+                    Actions.ActionVars.TriggerVars(eventvars, name, triggertype);
+
+                    actionfiles.RunActions(ale, actionrunasync, eventvars, history, null);  // add programs to action run
+
+                    actionrunasync.Execute();       // will execute
+                }
             }
+        }
+
+
+
+        private void SetInternalGlobal(string name, string value)
+        {
+            internalglobalvariables[name] = globalvariables[name] = value;
+        }
+
+        public void SetProgramGlobal(string name, string value)     // different name for identification purposes
+        {
+            internalglobalvariables[name] = globalvariables[name] = value;
         }
 
         #endregion
-
-        static public void HistoryEntryVars(HistoryEntry he, ConditionVariables vars, string prefix)
-        {
-            if (he != null)
-            {
-                vars[prefix + "LocalTime"] = he.EventTimeLocal.ToString("MM/dd/yyyy HH:mm:ss");
-                vars[prefix + "DockedState"] = he.IsDocked ? "1" : "0";
-                vars[prefix + "LandedState"] = he.IsLanded ? "1" : "0";
-                vars[prefix + "StarSystem"] = he.System.name;
-                vars[prefix + "WhereAmI"] = he.WhereAmI;
-                vars[prefix + "ShipType"] = he.ShipType;
-                vars[prefix + "IndexOf"] = he.Indexno.ToString();
-                vars[prefix + "JID"] = he.Journalid.ToString();
-            }
-        }
-
-        static public void SystemVars(string trigname, string triggertype, ConditionVariables vars)
-        {
-            vars["TriggerName"] = trigname;       // Program gets eventname which triggered it.. (onRefresh, LoadGame..)
-            vars["TriggerType"] = triggertype;       // type (onRefresh, or OnNew, or ProgramTrigger for all others)
-            vars["CurrentLocalTime"] = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss");  // time it was started, US format, to match JSON.
-            vars["CurrentUTCTime"] = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm:ss");  // time it was started, US format, to match JSON.
-            vars["CurrentCulture"] = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
-            vars["CurrentCultureInEnglish"] = System.Threading.Thread.CurrentThread.CurrentCulture.EnglishName;
-            vars["CurrentCultureISO"] = System.Threading.Thread.CurrentThread.CurrentCulture.ThreeLetterISOLanguageName;
-        }
-
     }
 }
+
 

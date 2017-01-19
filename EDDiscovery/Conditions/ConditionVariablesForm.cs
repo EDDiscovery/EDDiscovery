@@ -13,6 +13,7 @@ namespace EDDiscovery
     public partial class ConditionVariablesForm : Form
     {
         public ConditionVariables result;      // only on OK
+        public bool noexpand;
 
         public class Group
         {
@@ -37,7 +38,7 @@ namespace EDDiscovery
             AcceptButton = buttonOK;
         }
 
-        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs)
+        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , bool showone , bool shownoexpand = false, bool ne = false)
         {
             theme = th;
 
@@ -45,12 +46,20 @@ namespace EDDiscovery
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
+            checkBoxNoExpand.Enabled = checkBoxNoExpand.Visible = shownoexpand;
+            checkBoxNoExpand.Checked = ne;
+
             if (vbs != null)
             {
                 foreach (KeyValuePair<string, string> ky in vbs.values)
                 {
                     CreateEntry(ky.Key, ky.Value);
                 }
+            }
+
+            if ( groups.Count == 0 && showone )
+            {
+                CreateEntry("", "");
             }
         }
 
@@ -105,6 +114,7 @@ namespace EDDiscovery
             }
 
             buttonMore.Location = new Point(panelmargin, y);
+            checkBoxNoExpand.Location = new Point(buttonMore.Right + 8, buttonMore.Top+4);
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;
@@ -125,6 +135,8 @@ namespace EDDiscovery
                 if (var.Length > 0)
                     result[var] = value;
             }
+
+            noexpand = checkBoxNoExpand.Checked;
 
             DialogResult = DialogResult.OK;
             Close();
