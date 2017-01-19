@@ -315,7 +315,7 @@ namespace EDDiscovery
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 textBoxFileName.Text = dlg.FileName;
-
+                _currentExplorationSet.Clear();
                 _currentExplorationSet.Load(dlg.FileName);
 
                 textBoxRouteName.Text = _currentExplorationSet.Name;
@@ -815,6 +815,12 @@ namespace EDDiscovery
                 Systems.Add(jsys.Value<String>());
             }
 
+        }
+
+        internal void Clear()
+        {
+            Name = "";
+            Systems.Clear();
         }
     }
 }
