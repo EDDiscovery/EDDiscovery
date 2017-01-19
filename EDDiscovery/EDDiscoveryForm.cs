@@ -151,8 +151,6 @@ namespace EDDiscovery
         {
             InitializeComponent();
 
-            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
-
             ProcessCommandLineOptions();
 
             string logpath = "";
@@ -244,46 +242,18 @@ namespace EDDiscovery
 
         private void ProcessCommandLineOptions()
         {
-            List<string> parts = Environment.GetCommandLineArgs().ToList();
+            EDDConfig.Options.Init();
 
-            option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
-                parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
+            label_version.Text = EDDConfig.Options.VersionDisplayString;
 
-            string appfolder = null;
-            int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
-            if ( ai != -1 && ai < parts.Count - 1)
+            option_nowindowreposition = EDDConfig.Options.NoWindowReposition;
+            option_debugoptions = EDDConfig.Options.Debug;
+            option_tracelog = EDDConfig.Options.TraceLog;
+            option_fcexcept = EDDConfig.Options.LogExceptions;
+
+            if (EDDConfig.Options.ReadJournal != null)
             {
-                appfolder = parts[ai + 1];
-                label_version.Text += " (Using " + appfolder + ")";
-            }
-            EDDConfig.Options.SetAppDataDirectory(appfolder);
-
-            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
-            option_tracelog = parts.FindIndex(x => x.Equals("-TraceLog", StringComparison.InvariantCultureIgnoreCase)) != -1;
-            option_fcexcept = parts.FindIndex(x => x.Equals("-LogExceptions", StringComparison.InvariantCultureIgnoreCase)) != -1;
-
-            if (parts.FindIndex(x => x.Equals("-EDSMBeta", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
-                label_version.Text += " (EDSMBeta)";
-            }
-
-            if (parts.FindIndex(x => x.Equals("-EDSMNull", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EDSMClass.ServerAddress = "";
-                label_version.Text += " (EDSM No server)";
-            }
-
-            if (parts.FindIndex(x => x.Equals("-DISABLEBETACHECK", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
-                label_version.Text += " (no BETA detect)";
-            }
-
-            int jr = parts.FindIndex(x => x.Equals("-READJOURNAL", StringComparison.InvariantCultureIgnoreCase));   // use this so much to check journal decoding
-            if (jr != -1)
-            {
-                string file = parts[jr + 1];
+                string file = EDDConfig.Options.ReadJournal;
                 System.IO.StreamReader filejr = new System.IO.StreamReader(file);
                 string line;
                 string system = "";
