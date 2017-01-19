@@ -22,6 +22,8 @@ using System.Text;
 using System.Data.Common;
 using System.Data;
 using System.IO;
+using System.Reflection;
+using EDDiscovery2.EDSM;
 
 namespace EDDiscovery2
 {
@@ -53,13 +55,29 @@ namespace EDDiscovery2
             public System.Drawing.Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop"); } set { PutColour("NamedStarUnpop", value); } }
         }
 
+        public enum EDSMServerType
+        {
+            Normal,
+            Beta,
+            Null
+        }
+
         public class OptionsClass
         {
+            public string VersionDisplayString { get; private set; }
+            public string AppFolder { get; private set; }
             public string AppDataDirectory { get; private set; }
+            public bool StoreDataInProgramDirectory { get; private set; }
+            public bool NoWindowReposition { get; private set; }
+            public bool Debug { get; private set; }
+            public bool TraceLog { get; private set; }
+            public bool LogExceptions { get; private set; }
+            public EDSMServerType EDSMServerType { get; private set; } = EDSMServerType.Normal;
+            public bool DisableBetaCheck { get; private set; }
+            public string ReadJournal { get; private set; }
 
-            public void SetAppDataDirectory(string appfolder)
+            private void SetAppDataDirectory(string appfolder, bool portable)
             {
-                bool portable = System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true";
                 if (appfolder == null)
                 {
                     appfolder = (portable ? "Data" : "EDDiscovery");
@@ -80,6 +98,104 @@ namespace EDDiscovery2
 
                 if (!Directory.Exists(AppDataDirectory))
                     Directory.CreateDirectory(AppDataDirectory);
+            }
+
+            private void SetVersionDisplayString()
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Version ");
+                sb.Append(Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1]);
+
+                if (AppFolder != null)
+                {
+                    sb.Append($" (Using {AppFolder})");
+                }
+
+                switch (EDSMServerType)
+                {
+                    case EDSMServerType.Beta:
+                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
+                        sb.Append(" (EDSMBeta)");
+                        break;
+                    case EDSMServerType.Null:
+                        EDSMClass.ServerAddress = "";
+                        sb.Append(" (EDSM No server)");
+                        break;
+                }
+
+                if (DisableBetaCheck)
+                {
+                    EDDiscovery.EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
+                    sb.Append(" (no BETA detect)");
+                }
+
+                VersionDisplayString = sb.ToString();
+            }
+
+            private void ProcessConfigVariables()
+            {
+                var appsettings = System.Configuration.ConfigurationManager.AppSettings;
+
+                if (appsettings["StoreDataInProgramDirectory"] == "true") StoreDataInProgramDirectory = true;
+            }
+
+            private void ProcessCommandLineOptions()
+            {
+                string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
+
+                int i = 0;
+
+                while (i < cmdlineopts.Length)
+                {
+                    string optname = cmdlineopts[i].ToLowerInvariant();
+                    string optval = null;
+                    if (i < cmdlineopts.Length - 1)
+                    {
+                        optval = cmdlineopts[i + 1];
+                    }
+
+                    if (optname == "-appfolder")
+                    {
+                        AppFolder = optval;
+                        i++;
+                    }
+                    else if (optname == "-readjournal")
+                    {
+                        ReadJournal = optval;
+                        i++;
+                    }
+                    else if (optname.StartsWith("-"))
+                    {
+                        string opt = optname.Substring(1).ToLowerInvariant();
+                        switch (opt)
+                        {
+                            case "norepositionwindow": NoWindowReposition = true; break;
+                            case "portable": StoreDataInProgramDirectory = true; break;
+                            case "nrw": NoWindowReposition = true; break;
+                            case "debug": Debug = true; break;
+                            case "tracelog": TraceLog = true; break;
+                            case "logexceptions": LogExceptions = true; break;
+                            case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
+                            case "edsmnull": EDSMServerType = EDSMServerType.Null; break;
+                            case "disablebetacheck": DisableBetaCheck = true; break;
+                            default:
+                                Console.WriteLine($"Unrecognized option -{opt}");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Unexpected non-option {optname}");
+                    }
+                }
+            }
+
+            public void Init()
+            {
+                ProcessConfigVariables();
+                ProcessCommandLineOptions();
+                SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
+                SetVersionDisplayString();
             }
         }
 
