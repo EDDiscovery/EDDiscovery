@@ -452,6 +452,8 @@ namespace EDDiscovery
 
         public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
 
+        public int CommanderId;
+
         public HistoryList() { }
 
         public HistoryList(List<HistoryEntry> hl) { historylist = hl; }
@@ -1016,6 +1018,7 @@ namespace EDDiscovery
             // now database has been updated due to initial fill, now fill in stuff which needs the user database
 
             HistoryList hist = new HistoryList(hl);
+            hist.CommanderId = CurrentCommander;
 
             hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 

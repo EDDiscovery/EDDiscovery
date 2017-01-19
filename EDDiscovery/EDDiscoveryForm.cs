@@ -79,7 +79,6 @@ namespace EDDiscovery
         public EDDTheme theme;
 
         public string CommanderName { get; private set; }
-        public int DisplayedCommander = 0;
 
         public HistoryList history = new HistoryList();
 
@@ -227,7 +226,7 @@ namespace EDDiscovery
 
             ApplyTheme();
 
-            DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+            history.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
         }
@@ -1448,10 +1447,10 @@ namespace EDDiscovery
         }
 
         private void Read21Folders(bool force)
-        {
-            if (DisplayedCommander >= 0)
+        { 
+            if (history.CommanderId >= 0)
             {
-                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == DisplayedCommander);
+                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == history.CommanderId);
                 if (cmdr != null)
                 {
                     string netlogpath = cmdr.NetLogDir;
@@ -1769,7 +1768,7 @@ namespace EDDiscovery
                     ForceNetLogReload = forcenetlogreload,
                     ForceJournalReload = forcejournalreload,
                     CheckEdsm = checkedsm,
-                    CurrentCommander = currentcmdr ?? DisplayedCommander
+                    CurrentCommander = currentcmdr ?? history.CommanderId
                 };
 
                 ActionRunOnEvent("onRefreshStart", "ProgramEvent");
@@ -1796,7 +1795,7 @@ namespace EDDiscovery
             }
             else
             {
-                e.Result = new RefreshWorkerResults { rethistory = hist.ToList(), retledger = hist.materialcommodititiesledger, retstarscan = hist.starscan };
+                e.Result = hist;
             }
         }
 
@@ -1811,7 +1810,7 @@ namespace EDDiscovery
                 else
                 {
                     string prevcommander = globalvariables.ContainsKey("Commander") ? globalvariables["Commander"] : "None";
-                    string commander = (DisplayedCommander < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
+                    string commander = (history.CommanderId < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
 
                     string refreshcount = prevcommander.Equals(commander) ? internalglobalvariables.AddToVar("RefreshCount", 1, 1) : "1";
                     SetInternalGlobal("RefreshCount", refreshcount);
@@ -1823,14 +1822,17 @@ namespace EDDiscovery
 
                     history.Clear();
 
-                    foreach (var ent in ((RefreshWorkerResults)e.Result).rethistory)
+                    HistoryList hist = (HistoryList)e.Result;
+
+                    foreach (var ent in hist.EntryOrder)
                     {
                         history.Add(ent);
                         Debug.Assert(ent.MaterialCommodity != null);
                     }
 
-                    history.materialcommodititiesledger = ((RefreshWorkerResults)e.Result).retledger;
-                    history.starscan = ((RefreshWorkerResults)e.Result).retstarscan;
+                    history.materialcommodititiesledger = hist.materialcommodititiesledger;
+                    history.starscan = hist.starscan;
+                    history.CommanderId = hist.CommanderId;
 
                     ReportProgress(-1, "");
                     LogLine("Refresh Complete.");
@@ -1867,7 +1869,7 @@ namespace EDDiscovery
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
-            if (je.CommanderId == DisplayedCommander)     // we are only interested at this point accepting ones for the display commander
+            if (je.CommanderId == history.CommanderId)     // we are only interested at this point accepting ones for the display commander
             {
                 HistoryEntry last = history.GetLast;
 
