@@ -18,10 +18,6 @@ namespace EDDiscovery.Actions
         static string waitname = "Wait";
         static List<string> validnames = new List<string>() { voicename, volumename, ratename, waitname };
 
-        public ActionSay(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
-
         public bool FromString(string s, out string saying, out ConditionVariables vars )
         {
             vars = new ConditionVariables();
@@ -246,16 +242,16 @@ namespace EDDiscovery.Actions
         }
 
         public string Speak(string phraselist, string voice, int volume, int rate, 
-                            EDDiscovery.Actions.ActionFunctions f, ConditionVariables curvars , EDDiscovery.Actions.ActionProgramRun ap )
+                            ConditionFunctions f, ConditionVariables curvars , EDDiscovery.Actions.ActionProgramRun ap )
         {
-            string[] phrasearray = phraselist.Split(';');
-
-            if (phrasearray.Length > 1)
-                phraselist = phrasearray[rnd.Next(phrasearray.Length)];
-
             string res;
             if (f.ExpandString(phraselist, curvars, out res) != EDDiscovery.ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
             {
+                string[] phrasearray = res.Split(';');
+
+                if (phrasearray.Length > 1)
+                    res = phrasearray[rnd.Next(phrasearray.Length)];
+
                 bool silent = phrases.Count == 0;
                 phrases.Add(new Phrase() { phrase = res, voice = voice, volume = volume, rate = rate , ap = ap });
 

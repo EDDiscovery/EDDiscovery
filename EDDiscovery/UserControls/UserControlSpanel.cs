@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
 
                 int ftotal;         // event filter
                 result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-                result = fieldfilter.FilterHistory(result, discoveryform.standardvariables, out ftotal); // and the field filter..
+                result = fieldfilter.FilterHistory(result, discoveryform.globalvariables, out ftotal); // and the field filter..
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
@@ -453,7 +453,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.standardvariables);
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.globalvariables);
         }
 
 #endregion
@@ -826,7 +826,7 @@ namespace EDDiscovery.UserControls
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
-            frm.InitFilter("Summary Panel: Filter out fields", discoveryform.standardvariables.KeyList, discoveryform.theme, fieldfilter);
+            frm.InitFilter("Summary Panel: Filter out fields", discoveryform.globalvariables.KeyList, discoveryform.theme, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

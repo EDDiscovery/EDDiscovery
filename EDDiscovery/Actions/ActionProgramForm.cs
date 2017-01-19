@@ -101,7 +101,7 @@ namespace EDDiscovery.Actions
 
         void DeleteAll()
         {
-            foreach( Group g in groups )
+            foreach (Group g in groups)
             {
                 g.panel.Controls.Clear();
                 panelVScroll.Controls.Remove(g.panel);
@@ -125,7 +125,7 @@ namespace EDDiscovery.Actions
 
         private void ActionProgramForm_Resize(object sender, EventArgs e)
         {
-            RepositionGroups();
+            RepositionGroups(false); // don't recalc min size, it creates a loop
         }
 
         #region Steps
@@ -215,7 +215,7 @@ namespace EDDiscovery.Actions
             value.Enabled = true;
         }
 
-        string RepositionGroups()
+        string RepositionGroups(bool calcminsize = true)
         {
             string errlist = "";
 
@@ -311,18 +311,14 @@ namespace EDDiscovery.Actions
                 g.up.Visible = !first;
                 g.config.Visible = g.programstep != null && g.programstep.ConfigurationMenuInUse;
 
-                //DEBUG
-                if (g.programstep != null)
-                {
-                    //g.value.Enabled = false;
-                    //g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData + "  PS: " + g.programstep.GetFlagList();
-                    //g.value.Enabled = true;
-                }
+                //DEBUG Keep this useful for debugging structure levels
+//                if (g.programstep != null)
+  //                  g.value.Enabled = false; g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData;g.value.Enabled = true;
 
                 first = false;
                 voff += g.panel.Height;
 
-                if (g.whitespace>0)
+                if (g.whitespace > 0)
                     voff += g.panel.Height / 2;
             }
 
@@ -335,8 +331,11 @@ namespace EDDiscovery.Actions
             // Beware Visible - it does not report back the set state, only the visible state.. hence use Enabled.
             voff += buttonMore.Height + titleHeight + panelName.Height + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
 
-            this.MinimumSize = new Size(600, voff);
-            this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width-100, Screen.FromControl(this).WorkingArea.Height-100);
+            if (calcminsize)
+            {
+                this.MinimumSize = new Size(600, voff);
+                this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width - 100, Screen.FromControl(this).WorkingArea.Height - 100);
+            }
 
             ResumeLayout();
 
@@ -504,7 +503,7 @@ namespace EDDiscovery.Actions
         private void buttonVars_Click(object sender, EventArgs e)
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Input Parameter variables to pass to program on run", theme, inputparas);
+            avf.Init("Input Parameter variables to pass to program on run", theme, inputparas, true);
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
@@ -628,7 +627,7 @@ namespace EDDiscovery.Actions
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                if ( !SaveText(dlg.FileName))
+                if (!SaveText(dlg.FileName))
                     MessageBox.Show("Failed to save text file - check file path");
             }
         }
@@ -728,18 +727,24 @@ namespace EDDiscovery.Actions
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            whitespaceToolStripMenuItem.Enabled =  deleteToolStripMenuItem.Enabled = copyToolStripMenuItem.Enabled = groups.Find(x => x.marked) != null;
+            if (!IsMarked && rightclickstep >= 0 && rightclickstep < groups.Count)
+            {
+                groups[rightclickstep].marked = true;
+                groups[rightclickstep].panel.BackColor = Color.Red;
+            }
+
+            whitespaceToolStripMenuItem.Enabled = deleteToolStripMenuItem.Enabled = copyToolStripMenuItem.Enabled = groups.Find(x => x.marked) != null;
             pasteToolStripMenuItem.Enabled = (rightclickstep != -1 && ActionProgramCopyBuffer.Count > 0);
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Paste at " + rightclickstep);
-            if (rightclickstep != -1 )
+            if (rightclickstep != -1)
             {
                 int p = rightclickstep;
 
-                if ( IsMarked )     // marked.. we note the start, then delete them..
+                if (IsMarked)     // marked.. we note the start, then delete them..
                 {
                     p = groups.FindIndex(x => x.marked);       // find index of first one, we will insert here
                     deleteToolStripMenuItem_Click(sender, e); // delete any marked
@@ -813,6 +818,7 @@ namespace EDDiscovery.Actions
                 g.whitespace = 1;
             }
 
+            UnMark();
             RepositionGroups();
         }
 
@@ -823,6 +829,7 @@ namespace EDDiscovery.Actions
                 g.whitespace = 0;
             }
 
+            UnMark();
             RepositionGroups();
         }
 
@@ -830,12 +837,13 @@ namespace EDDiscovery.Actions
         {
             List<Group> ret = GetMarked();
 
-            if ( ret.Count >0 )
+            if (ret.Count > 0)
             {
-                for (int i = 0; i < ret.Count; i++ )
+                for (int i = 0; i < ret.Count; i++)
                     CreateStep(null, groups.IndexOf(ret[0]));
             }
 
+            UnMark();
             RepositionGroups();
         }
 

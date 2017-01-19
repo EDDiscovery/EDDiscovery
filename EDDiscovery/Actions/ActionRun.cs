@@ -35,17 +35,18 @@ namespace EDDiscovery.Actions
         //historyentry may be null if not associated with a entry
         // WE take a copy of each program, so each invocation of program action has a unique instance in case
         // it has private variables in either action or program.
-        public void Add(ActionFile fileset, ActionProgram r, HistoryList hl, HistoryEntry h, ConditionVariables v)
+        public void Add(ActionFile fileset, ActionProgram r, ConditionVariables inputparas, HistoryList hl, HistoryEntry h)
         {
-            progqueue.Add(new ActionProgramRun(fileset, r, this, discoveryform, hl, h, v, async));
+            progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, discoveryform, hl, h, async));
         }
 
-        public void RunNow(ActionFile fileset, ActionProgram r, HistoryList hl, HistoryEntry h, ConditionVariables v)
+        public void RunNow(ActionFile fileset, ActionProgram r, ConditionVariables inputparas, HistoryList hl, HistoryEntry h)
         {
             if (progcurrent != null)                    // if running, push the current one back onto the queue to be picked up
                 progqueue.Insert(0, progcurrent);
 
-            progcurrent = new ActionProgramRun(fileset, r, this, discoveryform, hl, h, v, async);   // now we run this.. no need to push to stack
+            progcurrent = new ActionProgramRun(fileset, r, inputparas, this, discoveryform, hl, h, async);   // now we run this.. no need to push to stack
+            progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, discoveryform.globalvariables); // set up its vars..
         }
 
         public void Execute()    // MAIN thread only..     
@@ -83,6 +84,11 @@ namespace EDDiscovery.Actions
                     progcurrent = progqueue[0];
                     progqueue.RemoveAt(0);
 
+                    if (progcurrent.currentvars != null)      // if not null, its because its just been restarted after a call.. reset globals
+                        progcurrent.currentvars.Add(discoveryform.globalvariables); // in case they have been updated...
+                    else
+                        progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, discoveryform.globalvariables); // set them up
+
                     if (progcurrent.IsProgramFinished)          // reject empty programs..
                     {
                         progcurrent = null;
@@ -118,9 +124,7 @@ namespace EDDiscovery.Actions
 
                             if (ap != null)
                             {
-                                ConditionVariables callvars = new ConditionVariables(progcurrent.startvars);
-                                callvars.Add(paravars);
-                                RunNow(ap.Item1, ap.Item2, progcurrent.historylist, progcurrent.historyentry, callvars);
+                                RunNow(ap.Item1, ap.Item2, paravars , progcurrent.historylist, progcurrent.historyentry);   // run with these para vars
                             }
                             else
                                 progcurrent.ReportError("Call cannot find " + prog);
@@ -169,7 +173,7 @@ namespace EDDiscovery.Actions
                 Execute();
         }
 
-        private void TerminateCurrentProgram()          // stop this program, move onto next
+        public void TerminateCurrentProgram()          // stop this program, move onto next
         {
             progcurrent = null;
         }

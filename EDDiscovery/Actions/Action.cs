@@ -17,14 +17,6 @@ namespace EDDiscovery.Actions
         protected int levelup;              // indicates for control structures that this entry is N levels up (ie. to the left).
         protected int whitespace;           // optional whitespace.. lines
 
-        public Action(string n, ActionType type, string ud, int lu)
-        {
-            actionname = n;
-            actiontype = type;
-            userdata = ud;
-            levelup = lu;
-        }
-
         public string Name { get { return actionname; } }
         public ActionType Type { get { return actiontype; } }
         public string UserData { get { return userdata; } }
@@ -33,7 +25,7 @@ namespace EDDiscovery.Actions
 
         public virtual bool AllowDirectEditingOfUserData { get { return false; } }    // and allow editing?
 
-        public virtual string DisplayedUserData { get { return userdata; } }
+        public virtual string DisplayedUserData { get { return userdata; } }        // null if you dont' want to display
         public virtual void UpdateUserData(string s) { userdata = s; }              // update user data, if allow direct editing
 
         public virtual bool ExecuteAction(ActionProgramRun ap)     // execute action in the action program context.. AP has data on current state, variables etc.
@@ -65,12 +57,15 @@ namespace EDDiscovery.Actions
             new Commands("ErrorIf", typeof(ActionErrorIf) , ActionType.Cmd),
             new Commands("Set", typeof(ActionSet) , ActionType.Cmd),
             new Commands("Let", typeof(ActionLet) , ActionType.Cmd),
+            new Commands("Global", typeof(ActionGlobal) , ActionType.Cmd),
             new Commands("Event", typeof(ActionEvent) , ActionType.Cmd),
             new Commands("Materials", typeof(ActionMaterials) , ActionType.Cmd),
             new Commands("Commodities", typeof(ActionCommodities) , ActionType.Cmd),
+            new Commands("Ledger", typeof(ActionLedger) , ActionType.Cmd),
+            new Commands("Scan", typeof(ActionScan) , ActionType.Cmd),
             new Commands("If", typeof(ActionIf) , ActionType.If),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
-            new Commands("Else If", typeof(ActionElseIf) , ActionType.ElseIf),
+            new Commands("ElseIf", typeof(ActionElseIf) , ActionType.ElseIf),
             new Commands("While", typeof(ActionWhile) , ActionType.While),
             new Commands("Do", typeof(ActionDo) , ActionType.Do),
             new Commands("Loop", typeof(ActionLoop) , ActionType.Loop),
@@ -78,7 +73,8 @@ namespace EDDiscovery.Actions
             new Commands("Return", typeof(ActionReturn) , ActionType.Return),
             new Commands("Pragma", typeof(ActionPragma) , ActionType.Cmd),
             new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd),
-            new Commands("Rem", typeof(ActionRem) , ActionType.Cmd)
+            new Commands("Rem", typeof(ActionRem) , ActionType.Cmd),
+            new Commands("End", typeof(ActionEnd) , ActionType.Cmd)
         };
 
         public static string[] GetActionNameList()
@@ -91,7 +87,7 @@ namespace EDDiscovery.Actions
 
         // FACTORY make the correct class from name.
 
-        public static Action CreateAction( string name, string user = null , int lu = 0)       
+        public static Action CreateAction( string name, string user = null , int lu = 0 , int ws = 0 )       
         {
             for (int i = 0; i < cmdlist.Length; i++)
             {
@@ -100,7 +96,13 @@ namespace EDDiscovery.Actions
                     if (user == null)
                         user = "";
 
-                    return (Action)Activator.CreateInstance(cmdlist[i].type, new Object[] { name, cmdlist[i].at, user, lu });
+                    Action a = (Action)Activator.CreateInstance(cmdlist[i].type, new Object[] { });
+                    a.actionname = name;
+                    a.userdata = user;
+                    a.levelup = lu;
+                    a.whitespace = ws;
+                    a.actiontype = cmdlist[i].at;
+                    return a;
                 }
             }
 
@@ -112,7 +114,13 @@ namespace EDDiscovery.Actions
         {
             Type ty = r.GetType();                      // get its actual type, not the base type..
 
-            return (Action)Activator.CreateInstance(ty, new Object[] { r.actionname, r.actiontype, r.userdata, r.levelup });
+            Action a = (Action)Activator.CreateInstance(ty, new Object[] { });
+            a.actionname = r.actionname;
+            a.userdata = r.userdata;
+            a.levelup = r.levelup;
+            a.whitespace = r.whitespace;
+            a.actiontype = r.actiontype;
+            return a;
         }
 
         #region Helper Dialogs

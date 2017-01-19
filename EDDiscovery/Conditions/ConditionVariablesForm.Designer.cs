@@ -41,6 +41,7 @@
             this.panelVScroll1 = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
+            this.checkBoxNoExpand = new ExtendedControls.CheckBoxCustom();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -163,6 +164,7 @@
             // 
             // panelVScroll1
             // 
+            this.panelVScroll1.Controls.Add(this.checkBoxNoExpand);
             this.panelVScroll1.Controls.Add(this.vScrollBarCustom2);
             this.panelVScroll1.Controls.Add(this.buttonMore);
             this.panelVScroll1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -216,7 +218,23 @@
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
-            // ActionVariableForm
+            // checkBoxNoExpand
+            // 
+            this.checkBoxNoExpand.AutoSize = true;
+            this.checkBoxNoExpand.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxNoExpand.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxNoExpand.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxNoExpand.FontNerfReduction = 0.5F;
+            this.checkBoxNoExpand.Location = new System.Drawing.Point(37, 12);
+            this.checkBoxNoExpand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxNoExpand.Name = "checkBoxNoExpand";
+            this.checkBoxNoExpand.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxNoExpand.TabIndex = 6;
+            this.checkBoxNoExpand.Text = "Don\'t Expand";
+            this.checkBoxNoExpand.TickBoxReductionSize = 10;
+            this.checkBoxNoExpand.UseVisualStyleBackColor = true;
+            // 
+            // ConditionVariablesForm
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -227,7 +245,7 @@
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "ActionVariableForm";
+            this.Name = "ConditionVariablesForm";
             this.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionVariableForm";
@@ -236,6 +254,7 @@
             this.panelOK.ResumeLayout(false);
             this.panelOuter.ResumeLayout(false);
             this.panelVScroll1.ResumeLayout(false);
+            this.panelVScroll1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -254,5 +273,6 @@
         private ExtendedControls.PanelVScroll panelVScroll1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private ExtendedControls.ButtonExt buttonMore;
+        private ExtendedControls.CheckBoxCustom checkBoxNoExpand;
     }
 }

@@ -294,7 +294,8 @@ namespace EDDiscovery2
                     foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
                     {
                         vars.GetJSONFieldNamesAndValues(ev.EventDataString);        // for all events, add to field list
-                        varsdec.GetJSONFieldNamesAndValues(ev.EventDataString, "Event_");        // for all events, add to field list
+                        varsdec.GetJSONFieldNamesAndValues(ev.EventDataString, "EventJS_");    // for all events, add to field list
+                        //TBD maybe add the class var in later.. also all those values, only need names.. so need to optimise above AND optimise the class variable reader..
                     }
 
                     g.condnames.AddRange(vars.KeyList);
@@ -501,7 +502,7 @@ namespace EDDiscovery2
         private void buttonExtGlobals_Click(object sender, EventArgs e)
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Global User variables to pass to program on run", theme, userglobalvariables);
+            avf.Init("Global User variables to pass to program on run", theme, userglobalvariables, true);
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {

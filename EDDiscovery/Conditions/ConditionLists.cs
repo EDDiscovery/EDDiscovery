@@ -153,7 +153,7 @@ namespace EDDiscovery
             public LogicalCondition innercondition;               // condition between fields
             public LogicalCondition outercondition;               // condition between filter events of same type
             public string action;                           // action associated with a pass
-            public string actiondata;                       // any data (sound file, program)
+            public string actiondata;                       // any data 
 
             public bool Create(string e, string a, string d, string i, string o)   // i,o can have spaces inserted into enum
             {
@@ -182,7 +182,7 @@ namespace EDDiscovery
             {
                 foreach (ConditionEntry fd in fields)
                 {
-                    if ( !IsNullOperation(fd.matchtype.ToString()) && !fd.itemname.Contains("%"))     // nulls need no data..  nor does anything with expand in
+                    if (!IsNullOperation(fd.matchtype.ToString()) && !fd.itemname.Contains("%"))     // nulls need no data..  nor does anything with expand in
                         vr[fd.itemname] = null;
                 }
             }
@@ -209,13 +209,35 @@ namespace EDDiscovery
         public enum ExpandResult { Failed, NoExpansion, Expansion };
         public delegate ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
 
-        //errlist = null if no errors found
+        // Event name.. give me conditions which match that name or ALL
+        // flagstart, if not null ,compare with start of action data and include only if matches
 
-        public List<Condition> GetConditionListByEventName( string eventname )       // Event name.. give me conditions which match that name or ALL
+        public bool IsConditionFlagSet(string flagstart)
         {
-            List<Condition> fel = (from fil in conditionlist
+            foreach (Condition l in conditionlist)
+            {
+                if (l.actiondata.StartsWith(flagstart))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public List<Condition> GetConditionListByEventName(string eventname , string flagstart = null )       
+        {
+            List<Condition> fel;
+
+            if ( flagstart != null )
+                fel = (from fil in conditionlist
+                                       where
+                                     (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase)) &&
+                                     fil.actiondata.StartsWith(flagstart)
+                                       select fil).ToList();
+
+            else
+                fel = (from fil in conditionlist
                                    where
-                      (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase))
+                                 (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase))
                                    select fil).ToList();
 
             return (fel.Count == 0) ? null : fel;

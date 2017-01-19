@@ -189,10 +189,13 @@
     <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
+    <Compile Include="Actions\ActionCommands\ActionLedger.cs" />
     <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
+    <Compile Include="Actions\ActionCommands\ActionScan.cs" />
     <Compile Include="Actions\ActionFile.cs" />
-    <Compile Include="Actions\ActionFunctions.cs" />
+    <Compile Include="Actions\ActionVars.cs" />
+    <Compile Include="Conditions\ConditionFunctions.cs" />
     <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
     <Compile Include="Actions\ActionCommands\ActionPrint.cs" />
     <Compile Include="Actions\ActionCommands\ActionSet.cs" />
@@ -205,7 +208,7 @@
     <Compile Include="Actions\ActionProgramForm.Designer.cs">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\ActionCommands\ActionRem.cs" />
+    <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
     <Compile Include="Actions\ActionProgramRun.cs" />
     <Compile Include="Actions\ActionRun.cs" />
     <Compile Include="Actions\ActionCommands\ActionSay.cs" />
@@ -261,7 +264,7 @@
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="TraceLog.cs" />
-    <Compile Include="Trilateration\DistanceParser.cs" />
+    <Compile Include="Actions\ActionCommands\DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
     </Compile>

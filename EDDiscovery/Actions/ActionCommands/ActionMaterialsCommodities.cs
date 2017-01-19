@@ -9,10 +9,6 @@ namespace EDDiscovery.Actions
 { 
     public class ActionMaterialsCommoditiesBase : Action
     {
-        public ActionMaterialsCommoditiesBase(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
-        {
-        }
-
         protected bool commodities = false;
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }
@@ -72,6 +68,7 @@ namespace EDDiscovery.Actions
                     List<EDDiscovery2.DB.MaterialCommodities> list = mcl.Sort(commodities);
 
                     ap.currentvars[prefix + "Count"] = list.Count.ToString();
+                    ap.currentvars[prefix + "IndexOf"] = ap.historylist.EntryOrder[jidindex].Indexno.ToString();
 
                     for ( int i = 0; i < list.Count; i++ )
                     {
@@ -95,7 +92,7 @@ namespace EDDiscovery.Actions
 
     public class ActionMaterials : ActionMaterialsCommoditiesBase
     {
-        public ActionMaterials(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
+        public ActionMaterials()
         {
             commodities = false;
         }
@@ -103,7 +100,7 @@ namespace EDDiscovery.Actions
 
     public class ActionCommodities: ActionMaterialsCommoditiesBase
     {
-        public ActionCommodities(string n, ActionType t, string ud, int lu) : base(n, t, ud, lu)
+        public ActionCommodities()
         {
             commodities = true;
         }
