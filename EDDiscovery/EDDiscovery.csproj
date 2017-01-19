@@ -264,7 +264,7 @@
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="TraceLog.cs" />
-    <Compile Include="Actions\ActionCommands\DistanceParser.cs" />
+    <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
     </Compile>

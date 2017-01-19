@@ -39,9 +39,9 @@
             this.panelOK = new System.Windows.Forms.Panel();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll1 = new ExtendedControls.PanelVScroll();
+            this.checkBoxNoExpand = new ExtendedControls.CheckBoxCustom();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.checkBoxNoExpand = new ExtendedControls.CheckBoxCustom();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -176,6 +176,22 @@
             this.panelVScroll1.TabIndex = 8;
             this.panelVScroll1.VerticalScrollBarDockRight = true;
             // 
+            // checkBoxNoExpand
+            // 
+            this.checkBoxNoExpand.AutoSize = true;
+            this.checkBoxNoExpand.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxNoExpand.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxNoExpand.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxNoExpand.FontNerfReduction = 0.5F;
+            this.checkBoxNoExpand.Location = new System.Drawing.Point(37, 12);
+            this.checkBoxNoExpand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxNoExpand.Name = "checkBoxNoExpand";
+            this.checkBoxNoExpand.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxNoExpand.TabIndex = 6;
+            this.checkBoxNoExpand.Text = "Don\'t Expand";
+            this.checkBoxNoExpand.TickBoxReductionSize = 10;
+            this.checkBoxNoExpand.UseVisualStyleBackColor = true;
+            // 
             // vScrollBarCustom2
             // 
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -218,22 +234,6 @@
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
-            // checkBoxNoExpand
-            // 
-            this.checkBoxNoExpand.AutoSize = true;
-            this.checkBoxNoExpand.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxNoExpand.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxNoExpand.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxNoExpand.FontNerfReduction = 0.5F;
-            this.checkBoxNoExpand.Location = new System.Drawing.Point(37, 12);
-            this.checkBoxNoExpand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxNoExpand.Name = "checkBoxNoExpand";
-            this.checkBoxNoExpand.Size = new System.Drawing.Size(90, 17);
-            this.checkBoxNoExpand.TabIndex = 6;
-            this.checkBoxNoExpand.Text = "Don\'t Expand";
-            this.checkBoxNoExpand.TickBoxReductionSize = 10;
-            this.checkBoxNoExpand.UseVisualStyleBackColor = true;
-            // 
             // ConditionVariablesForm
             // 
             this.AcceptButton = this.buttonOK;
@@ -249,6 +249,7 @@
             this.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionVariableForm";
+            this.Resize += new System.EventHandler(this.ConditionVariablesFormResize);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelOK.ResumeLayout(false);

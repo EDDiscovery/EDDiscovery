@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 // A file holds a set of conditions and programs associated with them
 
@@ -27,6 +28,60 @@ namespace EDDiscovery.Actions
         public string filepath;
         public string name;
         public bool enabled;
+
+        public static ActionFile ReadFile( string filename )
+        {
+            using (StreamReader sr = new StreamReader(filename))         // read directly from file..
+            {
+                string json = sr.ReadToEnd();
+                sr.Close();
+
+                try
+                {
+                    JObject jo = (JObject)JObject.Parse(json);
+
+                    JObject jcond = (JObject)jo["Conditions"];
+                    JObject jprog = (JObject)jo["Programs"];
+                    bool en = (bool)jo["Enabled"];
+
+                    ConditionLists cond = new ConditionLists();
+                    ActionProgramList prog = new ActionProgramList();
+
+                    if (cond.FromJSON(jcond) && prog.FromJSONObject(jprog))
+                    {
+                        return new ActionFile(cond, prog, filename, Path.GetFileNameWithoutExtension(filename), en);
+                    }
+                }
+                catch { }   // ignore the file.. garbage.
+
+                return null;
+            }
+        }
+
+        public bool SaveFile()
+        {
+            JObject jo = new JObject();
+            jo["Conditions"] = actionfieldfilter.GetJSONObject();
+            jo["Programs"] = actionprogramlist.ToJSONObject();
+            jo["Enabled"] = enabled;
+
+            string json = jo.ToString(Formatting.Indented);
+
+            try
+            {
+                using (StreamWriter sr = new StreamWriter(filepath))
+                {
+                    sr.Write(json);
+                    sr.Close();
+                }
+
+                return true;
+            }
+            catch
+            { }
+
+            return false;
+        }
     }
 
     public class ActionFileList
@@ -34,6 +89,7 @@ namespace EDDiscovery.Actions
         private List<ActionFile> actionfiles = new List<ActionFile>();
         private int current = 0;
 
+        public ActionFile CurFile { get { return actionfiles[current]; } }
         public ConditionLists CurConditions { get { return actionfiles[current].actionfieldfilter; } }
         public ActionProgramList CurPrograms { get { return actionfiles[current].actionprogramlist; } }
         public string CurName { get { return actionfiles[current].name; } }
@@ -218,29 +274,9 @@ namespace EDDiscovery.Actions
 
             foreach (FileInfo f in allFiles)
             {
-                using (StreamReader sr = new StreamReader(f.FullName))         // read directly from file..
-                {
-                    string json = sr.ReadToEnd();
-                    sr.Close();
-
-                    try
-                    {
-                        JObject jo = (JObject)JObject.Parse(json);
-
-                        JObject jcond = (JObject)jo["Conditions"];
-                        JObject jprog = (JObject)jo["Programs"];
-                        bool en = (bool)jo["Enabled"];
-
-                        ConditionLists cond = new ConditionLists();
-                        ActionProgramList prog = new ActionProgramList();
-                        if (cond.FromJSON(jcond) && prog.FromJSONObject(jprog))
-                        {
-                            ActionFile af = new ActionFile(cond, prog, f.FullName, Path.GetFileNameWithoutExtension(f.FullName), en);
-                            actionfiles.Add(af);
-                        }
-                    }
-                    catch { }   // ignore the file.. garbage.
-                }
+                ActionFile af = ActionFile.ReadFile(f.FullName);
+                if (af != null)
+                    actionfiles.Add(af);
             }
 
             if (actionfiles.Count == 0)           // need a default
@@ -249,26 +285,87 @@ namespace EDDiscovery.Actions
             current = actionfiles.Count - 1;        // always the latest.
         }
 
+        public bool LoadFile(string filename)
+        {
+            ActionFile af = ActionFile.ReadFile(filename);
+            if (af != null)
+            {
+                int indexof = actionfiles.FindIndex(x => x.name.Equals(af.name));
+
+                if (indexof != -1)
+                    actionfiles[indexof] = af;
+                else
+                    actionfiles.Add(af);
+
+                return true;
+            }
+            else
+                return false;
+        }
 
         public void SaveCurrentActionFile()
         {
-            ActionFile af = actionfiles[current];
-
-            JObject jcond = af.actionfieldfilter.GetJSONObject();
-            JObject jprog = af.actionprogramlist.ToJSONObject();
-
-            JObject jo = new JObject();
-            jo["Conditions"] = jcond;
-            jo["Programs"] = jprog;
-            jo["Enabled"] = af.enabled;
-
-            string json = jo.ToString(Formatting.Indented);
-
-            using (StreamWriter sr = new StreamWriter(af.filepath))      
-            {
-                sr.Write(json);
-                sr.Close();
-            }
+            actionfiles[current].SaveFile();
         }
+
+        #region DIalog helps
+
+        public bool ImportDialog()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.DefaultExt = "act";
+            dlg.AddExtension = true;
+            dlg.Filter = "Action Files (*.act)|*.act|All files (*.*)|*.*";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                string importdir = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Actions");
+                if (!System.IO.Directory.Exists(importdir))
+                    System.IO.Directory.CreateDirectory(importdir);
+
+                ActionFile af = ActionFile.ReadFile(dlg.FileName);
+
+                if (af != null)
+                {
+                    if (GetList.Contains(af.name))
+                    {
+                        string acceptstr = "Already have an action file called " + af.name + Environment.NewLine + "Click Cancel to abort, OK to overwrite";
+
+                        DialogResult dr = MessageBox.Show(acceptstr, "Duplicate File Warning", MessageBoxButtons.OKCancel);
+
+                        if (dr == DialogResult.Cancel)
+                            return false;
+                    }
+
+                    string destfile = System.IO.Path.Combine(importdir, af.name + ".act");
+
+                    try
+                    {
+                        System.IO.File.Copy(dlg.FileName, destfile, true);
+
+                        if (LoadFile(destfile))
+                        {
+                            MessageBox.Show("Action file " + af.name + " loaded.  Note if action file relies on start up events, you will need to quit and rerun EDDiscovery to make the file work correctly");
+                            return true;
+                        }
+                        else
+                            MessageBox.Show("Failed to load in");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("File IO error copying file " + dlg.FileName + " to " + destfile + " check permissions");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Action file does not read - check file " + dlg.FileName);
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
     }
 }

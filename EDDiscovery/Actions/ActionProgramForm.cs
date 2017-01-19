@@ -15,6 +15,9 @@ namespace EDDiscovery.Actions
         string initialprogname;
         string[] definedprograms;                                   // list of programs already defined, to detect rename over..
 
+        public delegate void EditProgramFunc(string name);
+        public event EditProgramFunc EditProgram; 
+
         ConditionVariables inputparas;                             // input parameters to configure for this program
         List<string> startvarlist;                                  // starting vars
         List<string> currentvarlist;                                // variables available to use.. combination of above
@@ -26,6 +29,7 @@ namespace EDDiscovery.Actions
             public ExtendedControls.ComboBoxCustom stepname;
             public ExtendedControls.ButtonExt config;
             public ExtendedControls.ButtonExt up;
+            public ExtendedControls.ButtonExt prog;
             public ExtendedControls.ButtonExt left;
             public ExtendedControls.ButtonExt right;
             public ExtendedControls.TextBoxBorder value;
@@ -115,12 +119,14 @@ namespace EDDiscovery.Actions
         {
             initialprogname = textBoxBorderName.Text = prog.Name;
 
+            SuspendLayout();
             Action ac;
             int step = 0;
             while ((ac = prog.GetStep(step++)) != null)
                 CreateStep(ac);
 
             RepositionGroups();
+            ResumeLayout();
         }
 
         private void ActionProgramForm_Resize(object sender, EventArgs e)
@@ -132,6 +138,8 @@ namespace EDDiscovery.Actions
 
         Group CreateStep(Action step = null, int insertpos = -1)
         {
+            SuspendLayout();
+
             Group g = new Group();
             g.programstep = step;
             g.levelup = (step != null) ? step.LevelUp : 0;
@@ -184,7 +192,13 @@ namespace EDDiscovery.Actions
             g.up.Click += Up_Clicked;
             g.panel.Controls.Add(g.up);
 
-            g.config.Tag = g.stepname.Tag = g.up.Tag = g.value.Tag = g.left.Tag = g.right.Tag = g;
+            g.prog = new ExtendedControls.ButtonExt();
+            g.prog.Size = new Size(controlsize, controlsize);
+            g.prog.Text = ">";
+            g.prog.Click += Prog_Clicked;
+            g.panel.Controls.Add(g.prog);
+
+            g.config.Tag = g.stepname.Tag = g.up.Tag = g.value.Tag = g.left.Tag = g.right.Tag = g.prog.Tag = g;
 
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
@@ -195,6 +209,7 @@ namespace EDDiscovery.Actions
             else
                 groups.Insert(insertpos, g);
 
+            ResumeLayout();
             return g;
         }
 
@@ -217,6 +232,8 @@ namespace EDDiscovery.Actions
 
         string RepositionGroups(bool calcminsize = true)
         {
+            SuspendLayout();
+
             string errlist = "";
 
             int voff = panelheightmargin;
@@ -227,7 +244,6 @@ namespace EDDiscovery.Actions
 
             bool first = true;
 
-            SuspendLayout();
 
             int panelwidth = Math.Max(panelVScroll.Width - panelVScroll.ScrollBarWidth, 10);
 
@@ -299,7 +315,7 @@ namespace EDDiscovery.Actions
                 g.indentcomputed = displaylevel;        // store this, ASCII output want to know how we indented it.
 
                 g.panel.Location = new Point(panelleftmargin, voff);
-                g.panel.Size = new Size(panelwidth, panelheight);
+                g.panel.Size = new Size(panelwidth, panelheight + ((g.whitespace>0) ? (panelheight/2) : 0 ));
                 g.stepname.Location = new Point(g.right.Right + 8 + 8 * displaylevel, panelheightmargin);
                 g.stepname.Size = new Size(140 - Math.Max((displaylevel - 4) * 8, 0), controlsize);
                 g.value.Location = new Point(g.right.Right + 140 + 8 + 8 * 4, panelheightmargin * 2);      // 8 spacing, allow 8*4 to indent
@@ -307,7 +323,8 @@ namespace EDDiscovery.Actions
                 g.value.Size = new Size(valuewidth, controlsize);
                 g.config.Location = new Point(g.value.Right + 4, panelheightmargin);      // 8 spacing, allow 8*4 to indent
                 g.up.Location = new Point(g.config.Right + 4, panelheightmargin);
-
+                g.prog.Location = new Point(g.up.Right + 4, panelheightmargin);
+                g.prog.Visible = g.programstep != null && g.programstep.Type == Action.ActionType.Call & EditProgram != null;
                 g.up.Visible = !first;
                 g.config.Visible = g.programstep != null && g.programstep.ConfigurationMenuInUse;
 
@@ -317,9 +334,6 @@ namespace EDDiscovery.Actions
 
                 first = false;
                 voff += g.panel.Height;
-
-                if (g.whitespace > 0)
-                    voff += g.panel.Height / 2;
             }
 
             buttonMore.Location = new Point(panelleftmargin, voff);
@@ -405,6 +419,18 @@ namespace EDDiscovery.Actions
             groups.Insert(indexof - 1, g);
 
             RepositionGroups();
+        }
+
+        private void Prog_Clicked(object sender, EventArgs e)
+        {
+            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
+            Group g = (Group)b.Tag;
+
+            string pname = ((ActionCall)g.programstep).GetProgramName();
+            if (pname != null)
+                EditProgram(g.programstep.UserData);
+            else
+                MessageBox.Show("No program name assigned");
         }
 
         private void Left_Clicked(object sender, EventArgs e)
@@ -733,7 +759,8 @@ namespace EDDiscovery.Actions
                 groups[rightclickstep].panel.BackColor = Color.Red;
             }
 
-            whitespaceToolStripMenuItem.Enabled = deleteToolStripMenuItem.Enabled = copyToolStripMenuItem.Enabled = groups.Find(x => x.marked) != null;
+            insertEntryAboveToolStripMenuItem.Enabled = whitespaceToolStripMenuItem.Enabled = removeWhitespaceToolStripMenuItem.Enabled =
+                deleteToolStripMenuItem.Enabled =  copyToolStripMenuItem.Enabled = groups.Find(x => x.marked) != null;
             pasteToolStripMenuItem.Enabled = (rightclickstep != -1 && ActionProgramCopyBuffer.Count > 0);
         }
 
