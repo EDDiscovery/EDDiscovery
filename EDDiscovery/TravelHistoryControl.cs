@@ -583,7 +583,7 @@ namespace EDDiscovery
             comboBoxCommander.ValueMember = "Nr";
             comboBoxCommander.DisplayMember = "Name";
 
-            if (_discoveryForm.DisplayedCommander == -1)
+            if (_discoveryForm.history.CommanderId == -1)
                 comboBoxCommander.SelectedIndex = 0;
             else
                 comboBoxCommander.SelectedItem = EDDiscoveryForm.EDDConfig.CurrentCommander;
@@ -596,13 +596,12 @@ namespace EDDiscovery
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
-                _discoveryForm.DisplayedCommander = itm.Nr;
                 if (itm.Nr >= 0)
                     EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
 
                 buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
 
-                _discoveryForm.RefreshHistoryAsync();                                   // which will cause DIsplay to be called as some point
+                _discoveryForm.RefreshHistoryAsync(currentcmdr: itm.Nr);                                   // which will cause DIsplay to be called as some point
             }
         }
 
