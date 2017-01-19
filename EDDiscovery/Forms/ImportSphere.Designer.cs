@@ -69,7 +69,7 @@
             this.txtsphereRadius.Name = "txtsphereRadius";
             this.txtsphereRadius.Size = new System.Drawing.Size(54, 20);
             this.txtsphereRadius.TabIndex = 19;
-            this.txtsphereRadius.Text = "10.0";
+            this.txtsphereRadius.Text = "10";
             // 
             // labelExt8
             // 
