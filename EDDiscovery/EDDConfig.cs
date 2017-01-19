@@ -67,6 +67,9 @@ namespace EDDiscovery2
             public string VersionDisplayString { get; private set; }
             public string AppFolder { get; private set; }
             public string AppDataDirectory { get; private set; }
+            public string UserDatabasePath { get; private set; }
+            public string SystemDatabasePath { get; private set; }
+            public string OldDatabasePath { get; private set; }
             public bool StoreDataInProgramDirectory { get; private set; }
             public bool NoWindowReposition { get; private set; }
             public bool Debug { get; private set; }
@@ -137,6 +140,7 @@ namespace EDDiscovery2
                 var appsettings = System.Configuration.ConfigurationManager.AppSettings;
 
                 if (appsettings["StoreDataInProgramDirectory"] == "true") StoreDataInProgramDirectory = true;
+                UserDatabasePath = appsettings["UserDatabasePath"];
             }
 
             private void ProcessCommandLineOptions()
@@ -162,6 +166,21 @@ namespace EDDiscovery2
                     else if (optname == "-readjournal")
                     {
                         ReadJournal = optval;
+                        i++;
+                    }
+                    else if (optname == "-userdbpath")
+                    {
+                        UserDatabasePath = optval;
+                        i++;
+                    }
+                    else if (optname == "-systemsdbpath")
+                    {
+                        SystemDatabasePath = optval;
+                        i++;
+                    }
+                    else if (optname == "-olddbpath")
+                    {
+                        OldDatabasePath = optval;
                         i++;
                     }
                     else if (optname.StartsWith("-"))
@@ -196,6 +215,9 @@ namespace EDDiscovery2
                 ProcessCommandLineOptions();
                 SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
                 SetVersionDisplayString();
+                if (UserDatabasePath != null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
+                if (SystemDatabasePath != null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+                if (OldDatabasePath != null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
             }
         }
 

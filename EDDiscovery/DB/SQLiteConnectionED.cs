@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading;
 using System.IO;
 using System.Windows.Forms;
+using EDDiscovery2;
 
 namespace EDDiscovery.DB
 {
@@ -552,17 +553,17 @@ namespace EDDiscovery.DB
             else if (selector.HasFlag(EDDSqlDbSelection.EDDUser))
             {
                 // Get the EDDUser database path
-                return System.IO.Path.Combine(Tools.GetAppDataDirectory(), "EDDUser.sqlite");
+                return EDDConfig.Options.UserDatabasePath;
             }
             else if (selector.HasFlag(EDDSqlDbSelection.EDDSystem))
             {
                 // Get the EDDSystem database path
-                return System.IO.Path.Combine(Tools.GetAppDataDirectory(), "EDDSystem.sqlite");
+                return EDDConfig.Options.SystemDatabasePath;
             }
             else
             {
                 // Get the old EDDiscovery database path
-                return System.IO.Path.Combine(Tools.GetAppDataDirectory(), "EDDiscovery.sqlite");
+                return EDDConfig.Options.OldDatabasePath;
             }
         }
 
