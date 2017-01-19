@@ -336,6 +336,7 @@ namespace EDDiscovery
                 _currentExplorationSet.Load(dlg.FileName);
 
                 textBoxRouteName.Text = _currentExplorationSet.Name;
+                dataGridViewExplore.Rows.Clear();
                 foreach (var sysname in _currentExplorationSet.Systems)
                 {
                     dataGridViewExplore.Rows.Add(sysname, "", "");
@@ -889,7 +890,9 @@ namespace EDDiscovery
 
             foreach (var jsys in ja)
             {
-                Systems.Add(jsys.Value<String>());
+                string sysname = jsys.Value<String>();
+                if (!Systems.Contains(sysname))
+                    Systems.Add(sysname);
             }
 
         }
