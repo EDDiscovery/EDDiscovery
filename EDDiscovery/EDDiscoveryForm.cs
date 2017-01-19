@@ -249,12 +249,14 @@ namespace EDDiscovery
             option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
                 parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
 
+            string appfolder = null;
             int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
             if ( ai != -1 && ai < parts.Count - 1)
             {
-                Tools.appfolder = parts[ai + 1];
-                label_version.Text += " (Using " + Tools.appfolder + ")";
+                appfolder = parts[ai + 1];
+                label_version.Text += " (Using " + appfolder + ")";
             }
+            EDDConfig.Options.SetAppDataDirectory(appfolder);
 
             option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
             option_tracelog = parts.FindIndex(x => x.Equals("-TraceLog", StringComparison.InvariantCultureIgnoreCase)) != -1;

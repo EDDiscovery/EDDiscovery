@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Common;
 using System.Data;
+using System.IO;
 
 namespace EDDiscovery2
 {
@@ -51,6 +52,38 @@ namespace EDDiscovery2
             public System.Drawing.Color NamedStar { get { return GetColour("NamedStar"); } set { PutColour("NamedStar", value); } }
             public System.Drawing.Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop"); } set { PutColour("NamedStarUnpop", value); } }
         }
+
+        public class OptionsClass
+        {
+            public string AppDataDirectory { get; private set; }
+
+            public void SetAppDataDirectory(string appfolder)
+            {
+                bool portable = System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true";
+                if (appfolder == null)
+                {
+                    appfolder = (portable ? "Data" : "EDDiscovery");
+                }
+
+                if (Path.IsPathRooted(appfolder))
+                {
+                    AppDataDirectory = appfolder;
+                }
+                else if (portable)
+                {
+                    AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
+                }
+                else
+                {
+                    AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
+                }
+
+                if (!Directory.Exists(AppDataDirectory))
+                    Directory.CreateDirectory(AppDataDirectory);
+            }
+        }
+
+        public static OptionsClass Options { get; } = new OptionsClass();
 
         private static EDDConfig _instance;
         public static EDDConfig Instance
