@@ -265,6 +265,25 @@ namespace EDDiscovery.EliteDangerous
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
 
+        /// <summary>
+        /// Normalize commodity names for MiningRefined, MissionAccepted, and MissionCompleted entries.
+        /// "$Indite_Name;" will become "indite", and "$uraninite_name;" will become "uraninite", etc.
+        /// </summary>
+        /// <param name="commodity">The raw commodity name.</param>
+        /// <returns>A normalized, lower-cased representation of the commodity name.</returns>
+        protected static string NormalizeCommodity(string commodity)
+        {
+            if (string.IsNullOrWhiteSpace(commodity))
+                return string.Empty;
+
+            StringBuilder ret = new StringBuilder();
+
+            if (commodity.Length >= 8 && commodity.StartsWith("$") && commodity.EndsWith("_name;", StringComparison.InvariantCultureIgnoreCase))
+                ret.Append(commodity.Substring(1, commodity.Length - 7)); // 1 for '$' plus 6 for '_name;'
+            else
+                ret.Append(commodity);
+            return (ret.ToString().ToLowerInvariant());
+        }
 
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {

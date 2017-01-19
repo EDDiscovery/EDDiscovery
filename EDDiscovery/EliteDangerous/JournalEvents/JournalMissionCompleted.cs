@@ -8,7 +8,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Name: mission type
     //•	Faction: faction name
     //Optional parameters (depending on mission type)
-    //•	Commodity
+    //•	Commodity: $Commodity_Name;
+    //•	Commodity_Localised: commodity type
     //•	Count
     //•	Target
     //•	TargetType
@@ -22,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Name = JSONHelper.GetStringDef(evt["Name"]);
             Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            Commodity = JSONHelper.GetStringDef(evt["Commodity"]);
+            Commodity = NormalizeCommodity(JSONHelper.GetStringDef(evt["Commodity"]));
             Count = JSONHelper.GetIntNull(evt["Count"]);
             Target = JSONHelper.GetStringDef(evt["Target"]);
             TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
