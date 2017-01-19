@@ -830,7 +830,7 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
             FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm.history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = _discoveryForm.option_nowindowreposition;
+            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;
         }
@@ -861,7 +861,7 @@ namespace EDDiscovery
 
         public void PopOut(PopOuts selected)
         { 
-            UserControlForm tcf = usercontrolsforms.NewForm(_discoveryForm.option_nowindowreposition);
+            UserControlForm tcf = usercontrolsforms.NewForm(EDDConfig.Options.NoWindowReposition);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
             tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 

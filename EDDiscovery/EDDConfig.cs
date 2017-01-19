@@ -21,6 +21,9 @@ using System.Linq;
 using System.Text;
 using System.Data.Common;
 using System.Data;
+using System.IO;
+using System.Reflection;
+using EDDiscovery2.EDSM;
 
 namespace EDDiscovery2
 {
@@ -51,6 +54,175 @@ namespace EDDiscovery2
             public System.Drawing.Color NamedStar { get { return GetColour("NamedStar"); } set { PutColour("NamedStar", value); } }
             public System.Drawing.Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop"); } set { PutColour("NamedStarUnpop", value); } }
         }
+
+        public enum EDSMServerType
+        {
+            Normal,
+            Beta,
+            Null
+        }
+
+        public class OptionsClass
+        {
+            public string VersionDisplayString { get; private set; }
+            public string AppFolder { get; private set; }
+            public string AppDataDirectory { get; private set; }
+            public string UserDatabasePath { get; private set; }
+            public string SystemDatabasePath { get; private set; }
+            public string OldDatabasePath { get; private set; }
+            public bool StoreDataInProgramDirectory { get; private set; }
+            public bool NoWindowReposition { get; private set; }
+            public bool Debug { get; private set; }
+            public bool TraceLog { get; private set; }
+            public bool LogExceptions { get; private set; }
+            public EDSMServerType EDSMServerType { get; private set; } = EDSMServerType.Normal;
+            public bool DisableBetaCheck { get; private set; }
+            public string ReadJournal { get; private set; }
+
+            private void SetAppDataDirectory(string appfolder, bool portable)
+            {
+                if (appfolder == null)
+                {
+                    appfolder = (portable ? "Data" : "EDDiscovery");
+                }
+
+                if (Path.IsPathRooted(appfolder))
+                {
+                    AppDataDirectory = appfolder;
+                }
+                else if (portable)
+                {
+                    AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
+                }
+                else
+                {
+                    AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
+                }
+
+                if (!Directory.Exists(AppDataDirectory))
+                    Directory.CreateDirectory(AppDataDirectory);
+            }
+
+            private void SetVersionDisplayString()
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Version ");
+                sb.Append(Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1]);
+
+                if (AppFolder != null)
+                {
+                    sb.Append($" (Using {AppFolder})");
+                }
+
+                switch (EDSMServerType)
+                {
+                    case EDSMServerType.Beta:
+                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
+                        sb.Append(" (EDSMBeta)");
+                        break;
+                    case EDSMServerType.Null:
+                        EDSMClass.ServerAddress = "";
+                        sb.Append(" (EDSM No server)");
+                        break;
+                }
+
+                if (DisableBetaCheck)
+                {
+                    EDDiscovery.EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
+                    sb.Append(" (no BETA detect)");
+                }
+
+                VersionDisplayString = sb.ToString();
+            }
+
+            private void ProcessConfigVariables()
+            {
+                var appsettings = System.Configuration.ConfigurationManager.AppSettings;
+
+                if (appsettings["StoreDataInProgramDirectory"] == "true") StoreDataInProgramDirectory = true;
+                UserDatabasePath = appsettings["UserDatabasePath"];
+            }
+
+            private void ProcessCommandLineOptions()
+            {
+                string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
+
+                int i = 0;
+
+                while (i < cmdlineopts.Length)
+                {
+                    string optname = cmdlineopts[i].ToLowerInvariant();
+                    string optval = null;
+                    if (i < cmdlineopts.Length - 1)
+                    {
+                        optval = cmdlineopts[i + 1];
+                    }
+
+                    if (optname == "-appfolder")
+                    {
+                        AppFolder = optval;
+                        i++;
+                    }
+                    else if (optname == "-readjournal")
+                    {
+                        ReadJournal = optval;
+                        i++;
+                    }
+                    else if (optname == "-userdbpath")
+                    {
+                        UserDatabasePath = optval;
+                        i++;
+                    }
+                    else if (optname == "-systemsdbpath")
+                    {
+                        SystemDatabasePath = optval;
+                        i++;
+                    }
+                    else if (optname == "-olddbpath")
+                    {
+                        OldDatabasePath = optval;
+                        i++;
+                    }
+                    else if (optname.StartsWith("-"))
+                    {
+                        string opt = optname.Substring(1).ToLowerInvariant();
+                        switch (opt)
+                        {
+                            case "norepositionwindow": NoWindowReposition = true; break;
+                            case "portable": StoreDataInProgramDirectory = true; break;
+                            case "nrw": NoWindowReposition = true; break;
+                            case "debug": Debug = true; break;
+                            case "tracelog": TraceLog = true; break;
+                            case "logexceptions": LogExceptions = true; break;
+                            case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
+                            case "edsmnull": EDSMServerType = EDSMServerType.Null; break;
+                            case "disablebetacheck": DisableBetaCheck = true; break;
+                            default:
+                                Console.WriteLine($"Unrecognized option -{opt}");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Unexpected non-option {optname}");
+                    }
+                }
+            }
+
+            public void Init(bool shift)
+            {
+                if (shift) NoWindowReposition = true;
+                ProcessConfigVariables();
+                ProcessCommandLineOptions();
+                SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
+                SetVersionDisplayString();
+                if (UserDatabasePath != null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
+                if (SystemDatabasePath != null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+                if (OldDatabasePath != null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
+            }
+        }
+
+        public static OptionsClass Options { get; } = new OptionsClass();
 
         private static EDDConfig _instance;
         public static EDDConfig Instance

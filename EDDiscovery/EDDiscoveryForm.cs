@@ -90,11 +90,6 @@ namespace EDDiscovery
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
-        public bool option_nowindowreposition { get; set; } = false;                             // Cmd line options
-        public bool option_debugoptions { get; set; } = false;
-        public bool option_tracelog { get; set; } = false;
-        public bool option_fcexcept { get; set; } = false;
-
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
         public event EventHandler HistoryRefreshed; // this is an internal hook
@@ -151,9 +146,11 @@ namespace EDDiscovery
         {
             InitializeComponent();
 
-            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            EDDConfig.Options.Init(ModifierKeys.HasFlag(Keys.Shift));
 
-            ProcessCommandLineOptions();
+            label_version.Text = EDDConfig.Options.VersionDisplayString;
+
+            ReadCmdLineJournal();
 
             string logpath = "";
             try
@@ -164,13 +161,13 @@ namespace EDDiscovery
                     Directory.CreateDirectory(logpath);
                 }
 
-                if (!Debugger.IsAttached || option_tracelog)
+                if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
                 {
                     TraceLog.LogFileWriterException += ex =>
                     {
                         LogLineHighlight($"Log Writer Exception: {ex}");
                     };
-                    TraceLog.Init(option_fcexcept);
+                    TraceLog.Init(EDDConfig.Options.LogExceptions);
                 }
             }
             catch (Exception ex)
@@ -208,7 +205,7 @@ namespace EDDiscovery
 
             EdsmSync = new EDSMSync(this);
 
-            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, this);
+            Map = new EDDiscovery2._3DMap.MapManager(EDDConfig.Options.NoWindowReposition, this);
 
             journalmonitor = new EliteDangerous.EDJournalClass();
 
@@ -242,46 +239,11 @@ namespace EDDiscovery
         {
         }
 
-        private void ProcessCommandLineOptions()
+        private void ReadCmdLineJournal()
         {
-            List<string> parts = Environment.GetCommandLineArgs().ToList();
-
-            option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
-                parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
-
-            int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
-            if ( ai != -1 && ai < parts.Count - 1)
+            if (EDDConfig.Options.ReadJournal != null)
             {
-                Tools.appfolder = parts[ai + 1];
-                label_version.Text += " (Using " + Tools.appfolder + ")";
-            }
-
-            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
-            option_tracelog = parts.FindIndex(x => x.Equals("-TraceLog", StringComparison.InvariantCultureIgnoreCase)) != -1;
-            option_fcexcept = parts.FindIndex(x => x.Equals("-LogExceptions", StringComparison.InvariantCultureIgnoreCase)) != -1;
-
-            if (parts.FindIndex(x => x.Equals("-EDSMBeta", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
-                label_version.Text += " (EDSMBeta)";
-            }
-
-            if (parts.FindIndex(x => x.Equals("-EDSMNull", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EDSMClass.ServerAddress = "";
-                label_version.Text += " (EDSM No server)";
-            }
-
-            if (parts.FindIndex(x => x.Equals("-DISABLEBETACHECK", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
-                label_version.Text += " (no BETA detect)";
-            }
-
-            int jr = parts.FindIndex(x => x.Equals("-READJOURNAL", StringComparison.InvariantCultureIgnoreCase));   // use this so much to check journal decoding
-            if (jr != -1)
-            {
-                string file = parts[jr + 1];
+                string file = EDDConfig.Options.ReadJournal;
                 System.IO.StreamReader filejr = new System.IO.StreamReader(file);
                 string line;
                 string system = "";
@@ -342,7 +304,7 @@ namespace EDDiscovery
 
                 CheckIfEliteDangerousIsRunning();
 
-                if (option_debugoptions)
+                if (EDDConfig.Options.Debug)
                 {
                     button_test.Visible = true;
                 }
@@ -435,7 +397,7 @@ namespace EDDiscovery
         private void RepositionForm()
         {
             var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
-            if (top != -1 && option_nowindowreposition == false)
+            if (top != -1 && EDDConfig.Options.NoWindowReposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
@@ -470,7 +432,7 @@ namespace EDDiscovery
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
-            if (EDDConfig.AutoLoadPopOuts && option_nowindowreposition == false) travelHistoryControl1.LoadSavedPopouts();
+            if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false) travelHistoryControl1.LoadSavedPopouts();
         }
 
         private void CheckIfEliteDangerousIsRunning()
@@ -1298,7 +1260,7 @@ namespace EDDiscovery
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = option_nowindowreposition;
+            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
         }
 

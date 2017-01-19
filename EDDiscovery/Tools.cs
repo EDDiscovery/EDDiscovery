@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Fronter Developments plc.
  */
+using EDDiscovery2;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -122,39 +123,10 @@ namespace EDDiscovery
             }
         }
 
-        public static string appfolder = (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true" ? "Data" : "EDDiscovery");
-
         static internal string GetAppDataDirectory()
         {
-            try
-            {
-                string datapath;
-
-                if (Path.IsPathRooted(appfolder))
-                {
-                    datapath = appfolder;
-                }
-                else if (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true")
-                {
-                    datapath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
-                }
-                else
-                {
-                    datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
-                }
-
-                if (!Directory.Exists(datapath))
-                    Directory.CreateDirectory(datapath);
-
-                return datapath;
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message, "GetAppDataDirectory Exception", System.Windows.Forms.MessageBoxButtons.OK);
-                return null;
-            }
+            return EDDConfig.Options.AppDataDirectory;
         }
-
 
         static public string WordWrap(string input, int linelen )
         {
