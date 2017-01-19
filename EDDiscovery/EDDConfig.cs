@@ -209,8 +209,9 @@ namespace EDDiscovery2
                 }
             }
 
-            public void Init()
+            public void Init(bool shift)
             {
+                if (shift) NoWindowReposition = true;
                 ProcessConfigVariables();
                 ProcessCommandLineOptions();
                 SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);

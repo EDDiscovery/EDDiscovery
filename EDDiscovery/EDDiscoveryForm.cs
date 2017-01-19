@@ -146,7 +146,7 @@ namespace EDDiscovery
         {
             InitializeComponent();
 
-            EDDConfig.Options.Init();
+            EDDConfig.Options.Init(ModifierKeys.HasFlag(Keys.Shift));
 
             label_version.Text = EDDConfig.Options.VersionDisplayString;
 
