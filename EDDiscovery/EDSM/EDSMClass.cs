@@ -198,18 +198,6 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public string GetEDSMDistances()            // download a file of distances..
-        {
-            if (File.Exists(EDSMDistancesFileName))
-                File.Delete(EDSMDistancesFileName);
-            if (File.Exists(EDSMDistancesFileName + ".etag"))
-                File.Delete(EDSMDistancesFileName + ".etag");
-
-            if (DownloadFileHandler.DownloadFile(_serverAddress + "dump/distances.json", EDSMDistancesFileName))
-                return EDSMDistancesFileName;
-            else
-                return null;
-        }
         
         internal long GetNewSystems(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
