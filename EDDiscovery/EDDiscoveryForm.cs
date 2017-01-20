@@ -140,15 +140,6 @@ namespace EDDiscovery
         private int _formTop;
         private int _formLeft;
 
-        private bool CanSkipSlowUpdates()
-        {
-#if DEBUG
-            return EDDConfig.CanSkipSlowUpdates;
-#else
-            return false;
-#endif
-        }
-
         #endregion
 
         #region Initialisation
@@ -354,7 +345,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
             _checkSystemsWorker.RunWorkerAsync();
-            downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
+            downloadMapsTask = FGEImage.DownloadMaps(this, (cb) => cancelDownloadMaps = cb, LogLine, LogLineHighlight);
 
             if (!themeok)
             {
@@ -493,136 +484,6 @@ namespace EDDiscovery
 
             if (OnHistoryChange != null)
                 OnHistoryChange(history);
-        }
-
-        #endregion
-
-        #region Information Downloads
-
-        public Task<bool> DownloadMaps(Action<Action> registerCancelCallback)          // ASYNC process
-        {
-            if (CanSkipSlowUpdates())
-            {
-                LogLine("Skipping checking for new maps (DEBUG option).");
-                var tcs = new TaskCompletionSource<bool>();
-                tcs.SetResult(false);
-                return tcs.Task;
-            }
-
-            try
-            {
-                string mapsdir = Path.Combine(Tools.GetAppDataDirectory(), "Maps");
-                if (!Directory.Exists(mapsdir))
-                    Directory.CreateDirectory(mapsdir);
-
-                LogLine("Checking for new EDDiscovery maps");
-
-                GitHubClass github = new GitHubClass(this);
-
-                var files = github.GetDataFiles("Maps/V1");
-                github.DownloadFiles(files, mapsdir);
-
-                var tcs = new TaskCompletionSource<bool>();
-                return tcs.Task;
-
-                /*
-
-                DeleteMapFile("DW4.png");
-                DeleteMapFile("SC-00.jpg");
-                return DownloadMapFiles(new[]
-                {
-                    "SC-01.jpg",
-                    "SC-02.jpg",
-                    "SC-03.jpg",
-                    "SC-04.jpg",
-                    "SC-L4.jpg",
-                    "SC-U4.jpg",
-                    "SC-00.png",
-                    "SC-00.json",
-                    "Galaxy_L.jpg",
-                    "Galaxy_L.json",
-                    "Galaxy_L_Grid.jpg",
-                    "Galaxy_L_Grid.json",
-                    "DW1.jpg",
-                    "DW1.json",
-                    "DW2.jpg",
-                    "DW2.json",
-                    "DW3.jpg",
-                    "DW3.json",
-                    "DW4.jpg",
-                    "DW4.json",
-                    "Formidine.png",
-                    "Formidine.json",
-                    "Formidine trans.png",
-                    "Formidine trans.json"
-                },
-                (s) => LogLine("Map check complete."),
-                registerCancelCallback);
-                */
-    
-            }
-            catch (Exception ex)
-            {
-                LogLineHighlight("DownloadImages exception: " + ex.Message);
-                var tcs = new TaskCompletionSource<bool>();
-                tcs.SetException(ex);
-                return tcs.Task;
-            }
-        }
-
-        private Task<bool> DownloadMapFiles(string[] files, Action<bool> callback, Action<Action> registerCancelCallback)
-        {
-            List<Task<bool>> tasks = new List<Task<bool>>();
-            List<Action> cancelCallbacks = new List<Action>();
-
-            foreach (string file in files)
-            {
-                var task = EDDiscovery2.HTTP.DownloadFileHandler.BeginDownloadFile(
-                    "http://eddiscovery.astronet.se/Maps/" + file,
-                    Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
-                    (n) =>
-                    {
-                        if (n) LogLine("Downloaded map: " + file);
-                    }, cb => cancelCallbacks.Add(cb));
-                tasks.Add(task);
-            }
-
-            registerCancelCallback(() => { foreach (var cb in cancelCallbacks) cb(); });
-
-            return Task<bool>.Factory.ContinueWhenAll<bool>(tasks.ToArray(), (ta) =>
-            {
-                bool success = ta.All(t => t.IsCompleted && t.Result);
-                callback(success);
-                return success;
-            });
-        }
-
-        private bool DownloadMapFile(string file)
-        {
-            bool newfile = false;
-            if (EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
-            {
-                if (newfile)
-                    LogLine("Downloaded map: " + file);
-                return true;
-            }
-            else
-                return false;
-        }
-
-        private void DeleteMapFile(string file)
-        {
-            string filename = Path.Combine(Tools.GetAppDataDirectory(), "Maps", file);
-
-            try
-            {
-                if (File.Exists(filename))
-                    File.Delete(filename);
-            }
-            catch (Exception ex)
-            {
-                LogLine("Exception in DeleteMapFile:" + ex.Message);
-            }
         }
 
         #endregion
@@ -852,7 +713,7 @@ namespace EDDiscovery
                 LogLine("Indexing systems table");
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
-                if (CanSkipSlowUpdates())
+                if (EDDConfig.Instance.CanSkipSlowUpdates)
                 {
                     LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
                 }
