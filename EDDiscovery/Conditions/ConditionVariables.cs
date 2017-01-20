@@ -310,5 +310,63 @@ namespace EDDiscovery
             return null;
         }
 
+        public void AddPropertiesFieldsOfType( Object o, string prefix = "" )
+        {
+            Type jtype = o.GetType();
+
+            foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
+            {
+                if (pi.GetIndexParameters().GetLength(0) == 0)      // only properties with zero parameters are called
+                {
+                    string name = prefix + pi.Name;
+                    Type rettype = pi.PropertyType;
+                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                    Extract(getter.Invoke(o, null), rettype, name);
+                }
+            }
+
+            foreach (System.Reflection.FieldInfo fi in jtype.GetFields())
+            {
+                string name = prefix + fi.Name;
+                Extract(fi.GetValue(o), fi.FieldType, name);
+            }
+
+        }
+
+        void Extract(Object o, Type rettype, string name)
+        {
+            try // just to make sure a strange type does not barfe it
+            {
+                if (o == null)
+                    values[name] = "";
+                else if ( o is bool)
+                {
+                    values[name] = ((bool)o) ? "1" : "0";
+                }
+                else if (!rettype.IsGenericType || rettype.GetGenericTypeDefinition() != typeof(Nullable<>))
+                {
+                    var v = Convert.ChangeType(o, rettype);
+                    values[name] = v.ToString();
+                }
+                else if (o is Nullable<double>)
+                    ExtractNull<double>((Nullable<double>)o, name);
+                else if (o is Nullable<bool>)
+                    ExtractNull<bool>((Nullable<bool>)o, name);
+                else if (o is Nullable<int>)
+                    ExtractNull<int>((Nullable<int>)o, name);
+                else if (o is Nullable<long>)
+                    ExtractNull<long>((Nullable<long>)o, name);
+            }
+            catch { }
+        }
+
+        void ExtractNull<T>(Nullable<T> obj, string name) where T : struct
+        {
+            if (obj.HasValue)
+                Extract(obj.Value, typeof(T), name);
+            else
+                values[name] = "";
+        }
+
     }
 }

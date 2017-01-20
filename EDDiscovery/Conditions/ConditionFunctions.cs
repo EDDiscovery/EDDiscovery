@@ -33,6 +33,7 @@ namespace EDDiscovery
             {
                 new FuncEntry("exists",Exists,1,20),
                 new FuncEntry("expand",Expand,1,20),
+                new FuncEntry("indirect",Indirect,1,20),
                 new FuncEntry("splitcaps",SplitCaps,1,1),
                 new FuncEntry("datelong",DateLong,2,2),
                 new FuncEntry("datehour",DateHour,1,1),
@@ -197,7 +198,17 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool Expand(List<string> paras, ConditionVariables vars, out string output, int recdepth )
+        private bool Expand(List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            return ExpandCore(paras, vars, out output, recdepth, false);
+        }
+
+        private bool Indirect(List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            return ExpandCore(paras, vars, out output, recdepth, true);
+        }
+
+        private bool ExpandCore(List<string> paras, ConditionVariables vars, out string output, int recdepth, bool indirect)
         {
             if ( recdepth > 9 )
             {
@@ -209,10 +220,25 @@ namespace EDDiscovery
 
             foreach (string s in paras)
             {
-                if (vars.ContainsKey(s))
+                if (vars.ContainsKey(s) )
                 {
+                    string value;
+
+                    if (indirect)
+                    {
+                        if (vars.ContainsKey(vars[s]))
+                            value = vars[vars[s]];
+                        else
+                        {
+                            output = "Indrect Variable " + vars[s] + " not found";
+                            return false;
+                        }
+                    }
+                    else
+                        value = vars[s];
+
                     string res;
-                    ConditionLists.ExpandResult result = ExpandStringFull(vars[s], vars, out res, recdepth + 1);
+                    ConditionLists.ExpandResult result = ExpandStringFull(value, vars, out res, recdepth + 1);
 
                     if (result == ConditionLists.ExpandResult.Failed)
                     {
@@ -224,10 +250,10 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    output = "Variable " + s + " not found";
-                    return false;
+                        output = "Variable " + s + " not found";
+                        return false;
+                    }
                 }
-            }
 
             return true;
         }

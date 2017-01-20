@@ -20,6 +20,9 @@ namespace EDDiscovery
             EqualsCaseSensitive,             // ==
             NotEqualCaseSensitive,           // !=
 
+            IsEmpty,            // string
+            IsNotEmpty,         // string
+
             IsTrue,             // numeric !=0
             IsFalse,            // numeric == 0
 
@@ -42,13 +45,12 @@ namespace EDDiscovery
         public static bool IsNullOperation(string matchname) { return matchname.Contains("Always"); }
         public static bool IsNullOperation(MatchType matchtype) { return matchtype == MatchType.AlwaysTrue; }
 
-        public static bool IsUnaryOperation(string matchname) { return matchname.Contains("Present") || matchname.Contains("True") || matchname.Contains("False"); }
-        public static bool IsUnaryOperation(MatchType matchtype) { return matchtype == MatchType.IsNotPresent || matchtype == MatchType.IsPresent || matchtype == MatchType.IsTrue || matchtype == MatchType.IsFalse; }
+        public static bool IsUnaryOperation(string matchname) { return matchname.Contains("Present") || matchname.Contains("True") || matchname.Contains("False") || matchname.Contains("Empty"); }
+        public static bool IsUnaryOperation(MatchType matchtype) { return matchtype == MatchType.IsNotPresent || matchtype == MatchType.IsPresent || matchtype == MatchType.IsTrue || matchtype == MatchType.IsFalse || matchtype == MatchType.IsEmpty || matchtype == MatchType.IsNotEmpty; }
 
         static public bool MatchTypeFromString(string s, out MatchType mt )
         {
             int indexof = Array.IndexOf(MatchNames, s);
-            if ( indexof == -1 )
                 indexof = Array.IndexOf(OperatorNames, s);
 
             if (indexof >= 0)
@@ -79,6 +81,8 @@ namespace EDDiscovery
                                        "Not Contains(CS)",
                                        "== (CS)",
                                        "!= (CS)",
+                                       "Is Empty",
+                                       "Is Not Empty",
                                        "Is True (Int)",
                                        "Is False (Int)",
                                        "== (Num)",
@@ -103,6 +107,8 @@ namespace EDDiscovery
                                        "CSNotContains",
                                        "CS==",
                                        "CS!=",
+                                       "Empty",
+                                       "IsNotEmpty",
                                        "IsTrue",
                                        "IsFalse",
                                        "==",
@@ -372,6 +378,14 @@ namespace EDDiscovery
                         else if (f.matchtype == MatchType.DoesNotContainCaseSensitive)
                             matched = !leftside.Contains(rightside);
 
+                        else if (f.matchtype == MatchType.IsEmpty)
+                        {
+                            matched = leftside.Length == 0;
+                        }
+                        else if (f.matchtype == MatchType.IsNotEmpty)
+                        {
+                            matched = leftside.Length > 0;
+                        }
                         else if (f.matchtype == MatchType.IsTrue || f.matchtype == MatchType.IsFalse)
                         {
                             int inum = 0;

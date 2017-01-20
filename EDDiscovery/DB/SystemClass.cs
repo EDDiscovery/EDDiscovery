@@ -1723,7 +1723,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static List<string> ReturnSystemListForAutoComplete(string input)
+        public static List<string> ReturnSystemListForAutoComplete(string input, Object ctrl)
         {
             List<string> ret = new List<string>();
 
