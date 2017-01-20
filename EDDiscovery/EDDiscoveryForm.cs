@@ -695,7 +695,15 @@ namespace EDDiscovery
                 if (performedsmsync && !cancelRequested())
                 {
                     // Download new systems
-                    performhistoryrefresh |= PerformEDSMFullSync(this, cancelRequested, reportProgress);
+                    try
+                    {
+                        performhistoryrefresh |= SystemClass.PerformEDSMFullSync(this, cancelRequested, reportProgress, LogLine, LogLineHighlight);
+                        performedsmsync = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
+                    }
                 }
 
                 if (!cancelRequested())
@@ -703,7 +711,15 @@ namespace EDDiscovery
                     LogLine("Indexing systems table");
                     SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
-                    PerformEDDBFullSync(cancelRequested, reportProgress);
+                    try
+                    {
+                        SystemClass.PerformEDDBFullSync(cancelRequested, reportProgress, LogLine, LogLineHighlight);
+                        performeddbsync = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
+                    }
                     performhistoryrefresh = true;
                 }
             }
@@ -782,129 +798,10 @@ namespace EDDiscovery
 
         #region EDSM and EDDB syncs code
 
-        private bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
-        {
-            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-            DateTime edsmdate;
-
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
-            {
-                edsmdate = new DateTime(2000, 1, 1);
-            }
-
-            long updates = 0;
-
-            try
-            {
-                // Delete all old systems
-                SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
-                SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", "0");
-
-                EDSMClass edsm = new EDSMClass();
-
-                LogLine("Get hidden systems from EDSM and remove from database");
-
-                SystemClass.RemoveHiddenSystems();
-
-                if (cancelRequested())
-                    return false;
-
-                LogLine("Download systems file from EDSM.");
-
-                string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
-
-                LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
-
-                bool newfile;
-                bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
-                {
-                    SQLiteConnectionSystem.CreateTempSystemsTable();
-
-                    string rwsysfiletime = "2014-01-01 00:00:00";
-                    bool outoforder = false;
-                    using (var reader = new StreamReader(s))
-                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, discoveryform, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
-                    if (!cancelRequested())       // abort, without saving time, to make it do it again
-                    {
-                        SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                        LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
-                        reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
-                        SQLiteConnectionSystem.ReplaceSystemsTable();
-                        SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
-                        reportProgress(-1, "");
-                    }
-                    else
-                    {
-                        throw new OperationCanceledException();
-                    }
-                });
-
-                if (!success)
-                {
-                    LogLine("Failed to download EDSM system file from server, will check next time");
-                    return false;
-                }
-
-                // Stop if requested
-                if (cancelRequested())
-                    return false;
-
-                LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
-
-                performedsmsync = false;
-                GC.Collect();
-            }
-            catch (Exception ex)
-            {
-                LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
-            }
-
-            return (updates > 0);
-        }
-
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
             AsyncPerformSync();
         }
-
-        private void PerformEDDBFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
-        {
-            try
-            {
-                LogLine("Get systems from EDDB.");
-
-                string eddbdir = Path.Combine(Tools.GetAppDataDirectory(), "eddb");
-                if (!Directory.Exists(eddbdir))
-                    Directory.CreateDirectory(eddbdir);
-
-                string systemFileName = Path.Combine(eddbdir, "systems_populated.jsonl");
-
-                bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl", systemFileName);
-
-                if (success)
-                {
-                    if (cancelRequested())
-                        return;
-
-                    LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
-
-                    long number = SystemClass.ParseEDDBUpdateSystems(systemFileName, LogLineHighlight);
-
-                    LogLine("Local database updated with EDDB data, " + number + " systems updated");
-                    SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
-                }
-                else
-                    LogLineHighlight("Failed to download EDDB Systems. Will try again next run.");
-
-                GC.Collect();
-                performeddbsync = false;
-            }
-            catch (Exception ex)
-            {
-                LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
-            }
-        }
-
 
         #endregion
 
