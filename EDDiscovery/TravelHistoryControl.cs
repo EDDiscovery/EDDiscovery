@@ -280,27 +280,32 @@ namespace EDDiscovery
             // Move controls around on topright
 
             int width = panel_topright.Width;
-            int butoffsetx = buttonMap.Location.X - buttonMap2D.Location.X;
-            int butoffsety = buttonMap2D.Location.Y - button_RefreshHistory.Location.Y;
+            int xpos = buttonMap2D.Left;
+            int ypos = buttonMap2D.Top;
+            int butoffsetx = buttonMap.Left - buttonMap2D.Left;
+            int butoffsety = buttonMap2D.Top - button_RefreshHistory.Top;
 
-            // always 2dmap, 3dmap
-
+            // Refresh, Cmdr label, Cmdr Dropdown
             comboBoxCommander.Width = Math.Min(Math.Max(width - comboBoxCommander.Location.X - 4,64),192);
 
-            if ( width >= buttonMap2D.Location.X + butoffsetx * 3 + buttonSync.Width + 4)  // other two buttons beside (2, 4)
+            // always 2dmap, 3dmap
+            if (width >= xpos + butoffsetx * 4 + buttonSync.Width + 4)  // 2(r,cmd) + 5 
             {
-                comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 2, buttonMap2D.Location.Y);
-                buttonSync.Location = new Point(buttonMap2D.Location.X + butoffsetx * 3, buttonMap2D.Location.Y);
+                comboBoxCustomPopOut.Location = new Point(xpos + butoffsetx * 2, ypos);
+                buttonAction.Location = new Point(xpos + butoffsetx * 3, ypos);
+                buttonSync.Location = new Point(xpos + butoffsetx * 4, ypos);
             }
-            else if (width >= buttonMap2D.Location.X + butoffsetx *2 + comboBoxCustomPopOut.Width + 4)   // one button beside, on below (2,3,1)
+            else if (width >= xpos + butoffsetx * 2 + comboBoxCustomPopOut.Width + 4)  // 2(r,cmd) + 3 (2d,3d,spanel) + 2
             {
-                comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X + butoffsetx * 2, buttonMap2D.Location.Y);
-                buttonSync.Location = new Point(buttonMap2D.Location.X, buttonMap2D.Location.Y + butoffsety);
+                comboBoxCustomPopOut.Location = new Point(xpos + butoffsetx * 2, ypos);
+                buttonAction.Location = new Point(xpos, ypos + butoffsety);
+                buttonSync.Location = new Point(xpos + butoffsetx * 1, ypos + butoffsety);
             }
-            else  // 2,2,2
+            else //if (width >= xpos + butoffsetx *2 + comboBoxCustomPopOut.Width + 4)   // 2(r,cmd) + 2(2d,3d) + 2(spanel,actions) + 1
             {
-                comboBoxCustomPopOut.Location = new Point(buttonMap2D.Location.X, buttonMap2D.Location.Y + butoffsety);
-                buttonSync.Location = new Point(buttonMap2D.Location.X + butoffsetx , comboBoxCustomPopOut.Location.Y);
+                comboBoxCustomPopOut.Location = new Point(xpos, ypos+butoffsety);
+                buttonAction.Location = new Point(xpos+butoffsetx, ypos + butoffsety);
+                buttonSync.Location = new Point(xpos, ypos + butoffsety*2);
             }
             
             panel_topright.Size = new Size(panel_topright.Width, buttonSync.Location.Y + buttonSync.Height + 6);

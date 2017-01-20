@@ -128,8 +128,7 @@ namespace EDDiscovery.Actions
             RepositionGroups();
             ResumeLayout();
         }
-
-        private void ActionProgramForm_Resize(object sender, EventArgs e)
+        private void panelVScroll_Resize(object sender, EventArgs e)
         {
             RepositionGroups(false); // don't recalc min size, it creates a loop
         }
@@ -168,7 +167,6 @@ namespace EDDiscovery.Actions
             g.stepname = new ExtendedControls.ComboBoxCustom();
             g.stepname.Items.AddRange(Action.GetActionNameList());
             g.stepname.DropDownHeight = 400;
-            g.stepname.Name = "g.stepname";
             if (step != null)
                 g.stepname.Text = step.Name;
             g.stepname.SelectedIndexChanged += Stepname_SelectedIndexChanged;
@@ -275,7 +273,7 @@ namespace EDDiscovery.Actions
                     {
                         if (structtype[structlevel] == Action.ActionType.Else)
                             errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " ElseIf after Else found" + Environment.NewLine;
-                        else if (structtype[structlevel] != Action.ActionType.If)
+                        else if (structtype[structlevel] != Action.ActionType.If && structtype[structlevel] != Action.ActionType.ElseIf)
                             errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " ElseIf without IF found" + Environment.NewLine;
                     }
                     else if (g.programstep.Type == Action.ActionType.Else)

@@ -22,6 +22,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
+            ap.ReportError("Not implemented - yet");
             return true;
         }
 

@@ -20,16 +20,19 @@ namespace EDDiscovery2
         public ConditionLists result;
         public ConditionVariables userglobalvariables;
 
-        EDDiscovery.Actions.ActionFileList actionfilelist;
-        bool IsActionsActive { get { return actionfilelist != null;  } }
+        EDDiscovery.Actions.ActionFileList actionfilelist;      // list of vars to list, normally global vars
         List<string> eventlist;
-        List<string> additionalfieldnames; // null not have any
+        List<string> additionalfieldnames;          // must be set
+        EDDiscovery2.EDDTheme theme;
+        bool allowoutercond;
 
-        class Group
+        bool IsActionsActive { get { return actionfilelist != null; } }
+
+        class Group : IComparable<Group>
         {
+            public string actiondata;
+
             public Panel panel;
-            public List<string> condnames;      // condition names (for condition test, plain)
-            public List<string> prognames;      // program names (program has the front decorated)
             public ExtendedControls.ButtonExt upbutton;
             public ExtendedControls.ComboBoxCustom evlist;
             public ExtendedControls.ComboBoxCustom actionlist;
@@ -38,14 +41,31 @@ namespace EDDiscovery2
             public ExtendedControls.ComboBoxCustom outercond;
             public Label outerlabel;
 
-            public string actiondata;
+            public class Conditions
+            {
+                public ExtendedControls.AutoCompleteTextBox fname;
+                public ExtendedControls.ComboBoxCustom cond;
+                public ExtendedControls.TextBoxBorder value;
+                public ExtendedControls.ButtonExt del;
+                public ExtendedControls.ButtonExt more;
+                public Group group;
+            };
+
+            public List<Conditions> condlist = new List<Conditions>();
+
+            public int CompareTo(Group other)
+            {
+                if (other.evlist != null && evlist != null)
+                    return evlist.Text.CompareTo(other.evlist.Text);
+                else if (condlist.Count > 0 && other.condlist.Count > 0)
+                    return condlist[0].fname.Text.CompareTo(other.condlist[0].fname.Text);
+                else
+                    return 1;
+            }
         };
 
         List<Group> groups;
-        bool allowoutercond;
-        public int panelwidth;
         public int condxoffset;
-        EDDiscovery2.EDDTheme theme;
         const int vscrollmargin = 10;
         const int panelmargin = 3;
         const int conditionhoff = 30;
@@ -97,23 +117,20 @@ namespace EDDiscovery2
             additionalfieldnames = varfields;
             allowoutercond = outerconditions;
 
+            // set up where a condition would start on the panel.. dep if the event list is on and the action file system is on..
             condxoffset = ((eventlist != null) ? 148 : 0) + ((actionfilelist != null) ? (140 + 8 + 24 + 8) : 0) + panelmargin;
-            panelwidth = condxoffset + 620;
 
             bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
-            if (IsActionsActive)        // turn off these if not in use..
+            if (!IsActionsActive)        // turn off these if not in use..
             {
-                RefreshActionDropDowns();
-            }
-            else
-            {
-                buttonExtGlobals.Visible = labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
+                buttonImport.Visible = buttonExtGlobals.Visible = labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
                         comboBoxCustomEditProg.Visible = checkBoxCustomSetEnabled.Visible = false;
             }
         }
+
         public void LoadConditions( ConditionLists clist )
         {
             if (clist != null)
@@ -130,27 +147,22 @@ namespace EDDiscovery2
 
                 foreach (ConditionLists.Condition fe in clist.conditionlist)
                 {
-                    System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + " A");
                     Group g = CreateGroupInt(fe.eventname, fe.action, fe.actiondata, fe.innercondition.ToString(), fe.outercondition.ToString());
 
                     foreach (ConditionLists.ConditionEntry f in fe.fields)
-                    {
-                        System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + " B");
                         CreateConditionInt(g, f.itemname, ConditionLists.MatchNames[(int)f.matchtype], f.matchstring);
-                    }
-                    System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + " C");
 
-                    RepositionGroupInternals(g);
                     theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
-                    System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + " D");
                 }
 
-                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + " E");
                 FixUpGroups();      // to move the new button to the correct place if no conditions
-                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + " F");
-
                 ResumeLayout();
             }
+        }
+        private void panelVScroll_Resize(object sender, EventArgs e)
+        {
+            FixUpGroups(false);
+
         }
 
         #region Groups
@@ -163,7 +175,12 @@ namespace EDDiscovery2
                 CreateConditionInt(g,null,null,null);
 
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
-            RepositionGroupInternals(g);
+            FixUpGroups();
+        }
+
+        private void buttonSort_Click(object sender, EventArgs e) // sort button
+        {
+            groups.Sort();
             FixUpGroups();
         }
 
@@ -183,7 +200,6 @@ namespace EDDiscovery2
                 g.evlist.Location = new Point(panelmargin, panelmargin);
                 g.evlist.Size = new Size(140, 24);
                 g.evlist.DropDownHeight = 400;
-                g.evlist.Name = "EVList";
                 if (initialev != null && initialev.Length > 0)
                     g.evlist.Text = initialev;
                 g.evlist.SelectedIndexChanged += Evlist_SelectedIndexChanged;
@@ -194,10 +210,9 @@ namespace EDDiscovery2
             if (IsActionsActive)
             {
                 g.actionlist = new ExtendedControls.ComboBoxCustom();
-                g.actionlist.Location = new Point(g.evlist.Location.X + g.evlist.Width + 8, panelmargin);
+                g.actionlist.Location = new Point(g.evlist.Right + 8, panelmargin);
                 g.actionlist.DropDownHeight = 400;
                 g.actionlist.Size = new Size(140, 24);
-                g.actionlist.Name = "ActionList";
                 g.actionlist.Items.Add("New");
                 g.actionlist.Items.AddRange(actionfilelist.CurPrograms.GetActionProgramList());
                 if (initialaction != null)
@@ -212,7 +227,7 @@ namespace EDDiscovery2
 
                 g.actionconfig = new ExtendedControls.ButtonExt();
                 g.actionconfig.Text = "C";
-                g.actionconfig.Location = new Point(g.actionlist.Location.X + g.actionlist.Width + 8, panelmargin);
+                g.actionconfig.Location = new Point(g.actionlist.Right + 8, panelmargin);
                 g.actionconfig.Size = new Size(24, 24);
                 g.actionconfig.Click += ActionListConfig_Clicked;
                 g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
@@ -224,9 +239,8 @@ namespace EDDiscovery2
             g.innercond = new ExtendedControls.ComboBoxCustom();
             g.innercond.Items.AddRange(Enum.GetNames(typeof(ConditionLists.LogicalCondition)));
             g.innercond.SelectedIndex = 0;
-            g.innercond.Size = new Size(60, 24);
+            g.innercond.Size = new Size(48, 24);
             g.innercond.Visible = false;
-            g.innercond.Name = "InnerCond";
             if ( initialcondinner != null)
                 g.innercond.Text = initialcondinner;
             g.panel.Controls.Add(g.innercond);
@@ -238,7 +252,6 @@ namespace EDDiscovery2
             g.outercond.Enabled = g.outercond.Visible = false;
             if (initialcondouter != null)
                 g.outercond.Text = initialcondouter;
-            g.outercond.Name = "OuterCond";
             g.panel.Controls.Add(g.outercond);
 
             g.outerlabel = new Label();
@@ -248,20 +261,15 @@ namespace EDDiscovery2
             g.panel.Controls.Add(g.outerlabel);
 
             g.upbutton = new ExtendedControls.ButtonExt();
-            g.upbutton.Location = new Point(panelwidth - 20 - panelmargin - 4, panelmargin);
             g.upbutton.Size = new Size(24, 24);
             g.upbutton.Text = "^";
             g.upbutton.Click += Up_Click;
             g.upbutton.Tag = g;
             g.panel.Controls.Add(g.upbutton);
 
-            g.panel.Size = new Size(panelwidth, panelmargin + conditionhoff);
-
             groups.Add(g);
 
             panelVScroll.Controls.Add(g.panel);
-
-            SetFieldNames(g);
 
             if (g.actionconfig != null)
             {
@@ -276,213 +284,13 @@ namespace EDDiscovery2
             ExtendedControls.ComboBoxCustom b = sender as ExtendedControls.ComboBoxCustom;
             Group g = (Group)b.Tag;
 
-            bool onefieldpresent = false;
-            foreach (Control c in g.panel.Controls)
-            {
-                if (c.Name.Equals("Field"))                 // find if any conditions are on screen..
-                {
-                    onefieldpresent = true;
-                    break;
-                }
-            }
-
-            if (!onefieldpresent)                           // if not, display one
+            if ( g.condlist.Count == 0 )        // if no conditions, create one..
                 CreateCondition(g);
 
-            if ( g.actionconfig != null )
+            if ( g.actionconfig != null )       // config, turn on
                 g.actionconfig.Visible = g.actionlist.Visible = g.actionlist.Enabled;        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
 
-            SetFieldNames(g);
-            FixUpGroups();
-        }
-
-        private void SetFieldNames(Group g)
-        {
-            g.condnames = new List<string>();
-            g.prognames = new List<string>();
-
-            if (eventlist != null )       // fieldnames are null, and we have an event list, try and find the field names
-            {
-                string evtype = g.evlist.Text;
-
-                List<EDDiscovery.EliteDangerous.JournalEntry> jel = EDDiscovery.EliteDangerous.JournalEntry.Get(evtype);        // get all events of this type
-
-                if (jel != null)            // may not find it, if event is not in history
-                {
-                    ConditionVariables vars = new ConditionVariables();
-                    ConditionVariables varsdec = new ConditionVariables();
-                    foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
-                    {
-                        vars.GetJSONFieldNamesAndValues(ev.EventDataString);        // for all events, add to field list
-                        varsdec.GetJSONFieldNamesAndValues(ev.EventDataString, "EventJS_");    // for all events, add to field list
-                        //TBD maybe add the class var in later.. also all those values, only need names.. so need to optimise above AND optimise the class variable reader..
-                    }
-
-                    g.condnames.AddRange(vars.KeyList);
-                    g.prognames.AddRange(varsdec.KeyList);
-                }
-            }
-
-            if (additionalfieldnames != null)
-            {
-                g.condnames.AddRange(additionalfieldnames);
-                g.prognames.AddRange(additionalfieldnames);
-            }
-
-            if (userglobalvariables != null)
-            {
-                g.condnames.AddRange(userglobalvariables.KeyList);
-                g.prognames.AddRange(userglobalvariables.KeyList);
-            }
-
-            foreach (Control c in g.panel.Controls)
-            {
-                if (c.Name.Equals("Field"))         // update all the field controls to have an up to date field name list for this event
-                {
-                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
-                    cb.Items.Clear();
-                    if (g.condnames != null)
-                        cb.Items.AddRange(g.condnames);
-                    cb.Items.Add("User Defined");
-                    cb.SelectedIndex = -1;
-                    cb.Text = "";
-                }
-            }
-        }
-
-        #endregion
-
-        #region Condition
-
-        void CreateCondition(Group g )
-        {
-            SuspendLayout();
-            CreateConditionInt(g, null, null, null);
-            theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
-            RepositionGroupInternals(g);
-            FixUpGroups();
-            ResumeLayout();
-        }
-
-        void CreateConditionInt( Group g , string initialfname, string initialcond, string initialvalue )
-        {
-            ExtendedControls.ComboBoxCustom fname = new ExtendedControls.ComboBoxCustom();
-            fname.Size = new Size(140, 24);
-            fname.DropDownHeight = 400;
-            fname.Name = "Field";
-            if (g.condnames != null)
-                fname.Items.AddRange(g.condnames);
-            fname.Items.Add("User Defined");
-
-            if (initialfname != null)
-            {
-                if (fname.Items.IndexOf(initialfname) < 0)
-                    fname.Items.Add(initialfname);
-
-                fname.SelectedItem = initialfname;
-            }
-
-            fname.SelectedIndexChanged += Fname_SelectedIndexChanged;
-
-            g.panel.Controls.Add(fname);                                                // 1st control
-
-            ExtendedControls.ComboBoxCustom cond = new ExtendedControls.ComboBoxCustom();
-            cond.Items.AddRange(ConditionLists.MatchNames);
-            cond.SelectedIndex = 0;
-            cond.Size = new Size(130, 24);
-            cond.DropDownHeight = 400;
-            cond.Tag = g;
-
-            if (initialcond != null)
-                cond.Text = Tools.SplitCapsWord(initialcond);
-
-            cond.SelectedIndexChanged += Cond_SelectedIndexChanged; // and turn on handler
-
-            g.panel.Controls.Add(cond);         // must be next
-
-            ExtendedControls.TextBoxBorder value = new ExtendedControls.TextBoxBorder();
-            value.Size = new Size(190, 24);
-
-            if (initialvalue != null)
-                value.Text = initialvalue;
-
-            g.panel.Controls.Add(value);         // must be next
-
-            ExtendedControls.ButtonExt del = new ExtendedControls.ButtonExt();
-            del.Size = new Size(24, 24);
-            del.Text = "X";
-            del.Click += ConditionDelClick;
-            del.Tag = g;
-            g.panel.Controls.Add(del);
-
-            ExtendedControls.ButtonExt more = new ExtendedControls.ButtonExt();
-            more.Size = new Size(24, 24);
-            more.Text = "+";
-            more.Click += NewConditionClick;
-            more.Tag = g;
-            g.panel.Controls.Add(more);
-        }
-
-        private void Fname_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ExtendedControls.ComboBoxCustom fname = sender as ExtendedControls.ComboBoxCustom;
-
-            if (fname.Enabled && fname.Text.Equals("User Defined"))
-            {
-                EDDiscovery2.TextBoxEntry frm = new TextBoxEntry();
-                frm.Text = "Enter new field";
-                if ( frm.ShowDialog() == DialogResult.OK && frm.Value.Length > 0 )
-                {
-                    fname.Enabled = false;
-                    fname.Items.Add(frm.Value);
-                    fname.SelectedItem = frm.Value;
-                    fname.Enabled = true;
-                }
-            }
-        }
-
-        private void Cond_SelectedIndexChanged(object sender, EventArgs e)          // on condition changing, see if value is needed 
-        {
-            ExtendedControls.ComboBoxCustom cond = sender as ExtendedControls.ComboBoxCustom;
-            Group g = cond.Tag as Group;
-            RepositionGroupInternals(g);
-        }
-
-        private void NewConditionClick(object sender, EventArgs e)
-        {
-            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
-            Group g = (Group)b.Tag;
-            CreateCondition(g);
-        }
-
-        private void ConditionDelClick(object sender, EventArgs e)
-        {
-            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
-            Group g = (Group)b.Tag;
-
-            int i = g.panel.Controls.IndexOf(b);
-
-            Control c1 = g.panel.Controls[i - 3];
-            Control c2 = g.panel.Controls[i - 2];
-            Control c3 = g.panel.Controls[i - 1];
-            Control c4 = g.panel.Controls[i + 0];
-            Control c5 = g.panel.Controls[i + 1];
-            g.panel.Controls.Remove(c1);
-            g.panel.Controls.Remove(c2);
-            g.panel.Controls.Remove(c3);
-            g.panel.Controls.Remove(c4);
-            g.panel.Controls.Remove(c5);
-
-            int numcond = RepositionGroupInternals(g);
-
-            if (numcond == 0)
-            {
-                panelVScroll.Controls.Remove(g.panel);
-                g.panel.Controls.Clear();
-                groups.Remove(g);
-            }
-
-            FixUpGroups();
+            FixUpGroups();                      // and reposition and maybe turn on/off the group outer cond
         }
 
         private void Up_Click(object sender, EventArgs e)
@@ -497,79 +305,124 @@ namespace EDDiscovery2
 
         #endregion
 
+        #region Condition
+
+        void CreateCondition(Group g )
+        {
+            SuspendLayout();
+            CreateConditionInt(g, null, null, null);
+            theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            FixUpGroups();
+            ResumeLayout();
+        }
+
+        void CreateConditionInt( Group g , string initialfname, string initialcond, string initialvalue )
+        {
+            Group.Conditions c = new Group.Conditions();
+
+            c.fname = new ExtendedControls.AutoCompleteTextBox();
+            c.fname.Size = new Size(140, 24);
+            c.fname.SetAutoCompletor(AutoCompletor);
+            c.fname.Tag = g;
+            if (initialfname != null)
+                c.fname.Text = initialfname;
+            g.panel.Controls.Add(c.fname);                                                // 1st control
+
+            c.cond = new ExtendedControls.ComboBoxCustom();
+            c.cond.Items.AddRange(ConditionLists.MatchNames);
+            c.cond.SelectedIndex = 0;
+            c.cond.Size = new Size(130, 24);
+            c.cond.DropDownHeight = 400;
+            c.cond.Tag = g;
+
+            if (initialcond != null)
+                c.cond.Text = Tools.SplitCapsWord(initialcond);
+
+            c.cond.SelectedIndexChanged += Cond_SelectedIndexChanged; // and turn on handler
+
+            g.panel.Controls.Add(c.cond);         // must be next
+
+            c.value = new ExtendedControls.TextBoxBorder();
+
+            if (initialvalue != null)
+                c.value.Text = initialvalue;
+
+            g.panel.Controls.Add(c.value);         // must be next
+
+            c.del = new ExtendedControls.ButtonExt();
+            c.del.Size = new Size(24, 24);
+            c.del.Text = "X";
+            c.del.Click += ConditionDelClick;
+            c.del.Tag = c;
+            g.panel.Controls.Add(c.del);
+
+            c.more = new ExtendedControls.ButtonExt();
+            c.more.Size = new Size(24, 24);
+            c.more.Text = "+";
+            c.more.Click += NewConditionClick;
+            c.more.Tag = g;
+            g.panel.Controls.Add(c.more);
+
+            c.group = g;
+            g.condlist.Add(c);
+        }
+
+
+        private void Cond_SelectedIndexChanged(object sender, EventArgs e)          // on condition changing, see if value is needed 
+        {
+            FixUpGroups();
+        }
+
+        private void ConditionDelClick(object sender, EventArgs e)
+        {
+            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
+            Group.Conditions c = (Group.Conditions)b.Tag;
+            Group g = c.group;
+
+            g.panel.Controls.Remove(c.fname);
+            g.panel.Controls.Remove(c.cond);
+            g.panel.Controls.Remove(c.value);
+            g.panel.Controls.Remove(c.more);
+            g.panel.Controls.Remove(c.del);
+
+            g.condlist.Remove(c);
+
+            if ( g.condlist.Count == 0 )
+            {
+                panelVScroll.Controls.Remove(g.panel);
+                g.panel.Controls.Clear();
+                groups.Remove(g);
+            }
+
+            FixUpGroups();
+        }
+
+        private void NewConditionClick(object sender, EventArgs e)
+        {
+            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
+            Group g = (Group)b.Tag;
+            CreateCondition(g);
+        }
+
+        #endregion
+
 
         #region Positioning
 
-        int RepositionGroupInternals(Group g)
-        {
-            int vnextcond = panelmargin;
-            int numcond = 0;
-            Control lastadd = null;
-
-            g.innercond.Visible = false;
-
-            for (int i = 0; i < g.panel.Controls.Count; i++)        // position, enable controls
-            {
-                if (g.panel.Controls[i].Name.Equals("Field"))           // FIELD starts FIELD | Condition | Value | Delete | More
-                {
-                    g.panel.Controls[i].Location = new Point(condxoffset, vnextcond);
-                    g.panel.Controls[i + 1].Location = new Point(g.panel.Controls[i].Location.X + g.panel.Controls[i].Width + 8, vnextcond);
-                    g.panel.Controls[i + 2].Location = new Point(g.panel.Controls[i + 1].Location.X + g.panel.Controls[i + 1].Width + 8, vnextcond + 4);
-                    g.panel.Controls[i + 3].Location = new Point(g.panel.Controls[i + 2].Location.X + g.panel.Controls[i + 2].Width + 8, vnextcond);
-                    g.panel.Controls[i + 4].Location = new Point(g.panel.Controls[i + 3].Location.X + g.panel.Controls[i + 3].Width + 8, vnextcond);
-                    g.panel.Controls[i + 4].Visible = true;
-
-                    ExtendedControls.ComboBoxCustom cond = g.panel.Controls[i + 1] as ExtendedControls.ComboBoxCustom;
-
-                    g.panel.Controls[i].Enabled = !ConditionLists.IsNullOperation(cond.Text);
-                    if (!g.panel.Controls[i].Enabled)
-                    {
-                        ExtendedControls.ComboBoxCustom fname = g.panel.Controls[i] as ExtendedControls.ComboBoxCustom;
-                        fname.SelectedIndex = -1;
-                    }
-
-                    g.panel.Controls[i+2].Enabled = !ConditionLists.IsNullOperation(cond.Text) && ! ConditionLists.IsUnaryOperation(cond.Text);
-                    if (!g.panel.Controls[i+2].Enabled)
-                        g.panel.Controls[i+2].Text = "";
-
-                    if (lastadd != null)
-                    {
-                        lastadd.Visible = false;
-
-                        if (numcond == 1)
-                        {
-                            g.innercond.Location = lastadd.Location;
-                            g.innercond.Visible = true;
-                        }
-                    }
-
-                    lastadd = g.panel.Controls[i + 4];
-
-                    numcond++;
-                    vnextcond += conditionhoff;
-                }
-            }
-
-            if (g.outercond.Enabled)
-            {
-                g.outercond.Location = new Point(panelmargin, vnextcond);
-                g.outerlabel.Location = new Point(g.outercond.Location.X + g.outercond.Width + 4, g.outercond.Location.Y + 3);
-                vnextcond += conditionhoff;
-            }
-
-            int minh = panelmargin + conditionhoff;
-            g.panel.Size = new Size(g.panel.Width, Math.Max(vnextcond, minh));
-
-            return numcond;
-        }
-
-        void FixUpGroups()      // fixes and positions groups.
+        void FixUpGroups(bool calcminsize = true)      // fixes and positions groups.
         {
             SuspendLayout();
 
+            int panelwidth = Math.Max(panelVScroll.Width - panelVScroll.ScrollBarWidth, 10);
+            int y = panelmargin;
+
             for (int i = 0; i < groups.Count; i++)
             {
-                bool showouter = false;                     // for all groups, see if another group below it has the same event selected as ours
+                Group g = groups[i];
+
+                // for all groups, see if another group below it has the same event selected as ours
+
+                bool showouter = false;                     
 
                 if (eventlist != null)
                 {
@@ -584,24 +437,67 @@ namespace EDDiscovery2
                 else
                     showouter = (i > 0) && allowoutercond;       // and enabled/disable the outer condition switch
 
-                if (groups[i].outercond.Enabled != showouter)
+                g.outercond.Enabled = g.outercond.Visible = g.outerlabel.Visible = showouter;       // and enabled/disable the outer condition switch
+
+                // Now position the conditions inside the panel
+
+                int vnextcond = panelmargin;
+
+                int farx = (g.evlist!= null) ? (g.evlist.Right-g.innercond.Width+8) : 0 ;   // innercond cause below adds it back on
+
+                for (int condc = 0; condc < g.condlist.Count; condc++)
                 {
-                    groups[i].outercond.Enabled = groups[i].outercond.Visible = groups[i].outerlabel.Visible = showouter;       // and enabled/disable the outer condition switch
-                    RepositionGroupInternals(groups[i]);
+                    Group.Conditions c = g.condlist[condc];
+                    c.fname.Location = new Point(condxoffset, vnextcond + 2);
+                    c.fname.Enabled = !ConditionLists.IsNullOperation(c.cond.Text);
+                    if (!c.fname.Enabled)
+                        c.fname.Text = "";
+
+                    c.cond.Location = new Point(c.fname.Right + 4, vnextcond);
+
+                    c.value.Location = new Point(c.cond.Right + 4, vnextcond + 2);
+                    c.value.Size = new Size(panelwidth - condxoffset - c.fname.Width - 4 - c.cond.Width - 4 - c.del.Width - 4 - c.more.Width - 4 - g.innercond.Width - 4 - g.upbutton.Width + 8, 24);
+                    c.value.Enabled = !ConditionLists.IsNullOperation(c.cond.Text) && !ConditionLists.IsUnaryOperation(c.cond.Text);
+                    if (!c.value.Enabled)
+                        c.value.Text = "";
+
+                    c.del.Location = new Point(c.value.Right + 4, vnextcond);
+                    c.more.Location = new Point(c.del.Right + 4, vnextcond);
+                    c.more.Visible = (condc == g.condlist.Count - 1);
+
+                    vnextcond += conditionhoff;
+                    farx = c.more.Left + 4;     // where the more button is
                 }
-            }
 
-            int y = panelmargin;
-            bool showup = false;
+                // and the outer/inner conditions
 
-            foreach (Group g in groups)
-            {
-                g.upbutton.Visible = showup;
-                showup = true;
+                g.innercond.Visible = (g.condlist.Count > 1);       // inner condition on if multiple
+                g.innercond.Location = new Point(farx, panelmargin);    // inner condition is in same place as more button
+                farx = g.innercond.Right + 4;                       // move off    
+
+                // and the up button.. 
+                g.upbutton.Location = new Point(farx, panelmargin);
+                g.upbutton.Visible = (i != 0);
+                farx = g.upbutton.Right;
+
+                // allocate space for the outercond if req.
+                if (g.outercond.Enabled)
+                {
+                    g.outercond.Location = new Point(panelmargin, vnextcond);
+                    g.outerlabel.Location = new Point(g.outercond.Location.X + g.outercond.Width + 4, g.outercond.Location.Y + 3);
+                    vnextcond += conditionhoff;
+                }
+
+                // pos the panel
+
                 g.panel.Location = new Point(panelmargin, y);
+                g.panel.Size = new Size(Math.Max(panelwidth - panelmargin * 2, farx), Math.Max(vnextcond, panelmargin + conditionhoff));
+
                 y += g.panel.Height + 6;
 
-                if (IsActionsActive)     // rework the action list in case something is changed
+                // and make sure actions list is right
+
+                if (IsActionsActive)     
                 {
                     string name = g.actionlist.Text;
                     g.actionlist.Enabled = false;
@@ -619,26 +515,6 @@ namespace EDDiscovery2
                 }
             }
 
-            RefreshActionDropDowns();
-
-            buttonMore.Location = new Point(panelmargin, y);
-
-            Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
-            int titleHeight = screenRectangle.Top - this.Top;
-
-            y += buttonMore.Height + titleHeight + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
-
-            this.MinimumSize = new Size(panelwidth+vscrollmargin*2+panelVScroll.ScrollBarWidth + 8, y );
-            this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width, Screen.FromControl(this).WorkingArea.Height);
-            ResumeLayout();
-        }
-
-        #endregion
-
-        #region Action List programs
-
-        void RefreshActionDropDowns()
-        {
             if (IsActionsActive)
             {
                 comboBoxCustomEditProg.Items.Clear();
@@ -654,7 +530,27 @@ namespace EDDiscovery2
 
                 checkBoxCustomSetEnabled.Checked = actionfilelist.CurEnabled;
             }
+
+            buttonMore.Location = new Point(panelmargin, y);
+            buttonSort.Location = new Point(buttonMore.Right+8, y);
+
+            Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
+            int titleHeight = screenRectangle.Top - this.Top;
+
+            y += buttonMore.Height + titleHeight + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
+
+            if (calcminsize)
+            {
+                this.MinimumSize = new Size(1000, y);
+                this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width - 100, Screen.FromControl(this).WorkingArea.Height - 100);
+            }
+
+            ResumeLayout();
         }
+
+#endregion
+
+#region Action List programs
 
         private void ActionList_SelectedIndexChanged(object sender, EventArgs e)          // on action changing, do its configuration menu
         {
@@ -698,7 +594,17 @@ namespace EDDiscovery2
 
             // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames
             // pass in the program if found, and its action data.
-            apf.Init("Action program", theme, g.prognames, actionfilelist.CurName, p, g.actiondata, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
+
+            List<string> fieldnames = new List<string>();
+            if (g.evlist != null && g.evlist.Text.Length > 0)
+            {
+                EnsureCached(g.evlist.Text);
+                fieldnames = cachedeventsdecorated[g.evlist.Text];
+            }
+            else
+                fieldnames.AddRange(additionalfieldnames);
+
+            apf.Init("Action program", theme, fieldnames, actionfilelist.CurName, p, g.actiondata, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
 
             DialogResult res = apf.ShowDialog();
 
@@ -758,7 +664,7 @@ namespace EDDiscovery2
                     }
                 }
 
-                RefreshActionDropDowns();
+                FixUpGroups();
             }
 
         }
@@ -776,13 +682,7 @@ namespace EDDiscovery2
                 if (!progname.Equals("New"))
                     p = actionfilelist.CurPrograms.Get(comboBoxCustomEditProg.Text);
 
-                List<string> vars = new List<string>();
-                if (additionalfieldnames != null)
-                    vars.AddRange(additionalfieldnames);
-                if (userglobalvariables != null)
-                    vars.AddRange(userglobalvariables.KeyList);
-
-                apf.Init("Action program", theme, vars, actionfilelist.CurName, p, null, actionfilelist.CurPrograms.GetActionProgramList(), "");
+                apf.Init("Action program", theme, additionalfieldnames, actionfilelist.CurName, p, null, actionfilelist.CurPrograms.GetActionProgramList(), "");
 
                 DialogResult res = apf.ShowDialog();
 
@@ -790,6 +690,11 @@ namespace EDDiscovery2
                 {
                     ActionProgram np = apf.GetProgram();
                     actionfilelist.CurPrograms.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                }
+                else if (res == DialogResult.Abort)   // delete
+                {
+                    ActionProgram np2 = apf.GetProgram();
+                    actionfilelist.CurPrograms.Delete(np2.Name);
                 }
 
                 FixUpGroups();       // run  this, it sorts out the group names
@@ -804,6 +709,13 @@ namespace EDDiscovery2
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
                 userglobalvariables = avf.result;
+
+                foreach ( KeyValuePair<string,string> k in userglobalvariables.values )     // add them in in case..
+                {
+                    if (!additionalfieldnames.Contains(k.Key))
+                        additionalfieldnames.Add(k.Key);
+                }
+
             }
         }
 
@@ -822,13 +734,7 @@ namespace EDDiscovery2
                 ActionProgramForm apf = new ActionProgramForm();
                 apf.EditProgram += EditProgram;
 
-                List<string> vars = new List<string>();
-                if (additionalfieldnames != null)
-                    vars.AddRange(additionalfieldnames);
-                if (userglobalvariables != null)
-                    vars.AddRange(userglobalvariables.KeyList);
-
-                apf.Init("Action program", theme, vars, p.Item1.name, p.Item2, null, p.Item1.actionprogramlist.GetActionProgramList(), "");
+                apf.Init("Action program", theme, additionalfieldnames, p.Item1.name, p.Item2, null, p.Item1.actionprogramlist.GetActionProgramList(), "");
 
                 DialogResult res = apf.ShowDialog();
 
@@ -842,11 +748,11 @@ namespace EDDiscovery2
                 MessageBox.Show("Unknown program " + s);
         }
 
-        #endregion
+#endregion
 
 
 
-        #region Checking
+#region Checking
 
         private string Check()
         {
@@ -867,58 +773,46 @@ namespace EDDiscovery2
                 ConditionLists.Condition fe = new ConditionLists.Condition();
 
                 if (IsActionsActive && actionname.Equals("New"))        // actions, but not selected one..
-                {
                     errorlist += "Event " + evt + " does not have an action program defined" + Environment.NewLine;
-                }
-                else if (evt.Length > 0)        // must have name
+                else if (evt.Length == 0)        // must have name
+                    errorlist += "Ignored group with empty name" + Environment.NewLine;
+                else
                 {
                     if (fe.Create(evt, actionname, actiondata, innerc, outerc)) // create must work
                     {
-                        bool ok = true;
-
-                        for (int i = 0; i < g.panel.Controls.Count && ok; i++)
+                        for (int i = 0; i < g.condlist.Count; i++)
                         {
-                            Control c = g.panel.Controls[i];
-                            if (c.Name == "Field")
+                            Group.Conditions c = g.condlist[i];
+                            string fieldn = c.fname.Text;
+                            string condn = c.cond.Text;
+                            string valuen = c.value.Text;
+
+                            if (fieldn.Length > 0 || ConditionLists.IsNullOperation(condn))
                             {
-                                string fieldn = c.Text;
-                                string condn = g.panel.Controls[i + 1].Text;
-                                string valuen = g.panel.Controls[i + 2].Text;
+                                ConditionLists.ConditionEntry f = new ConditionLists.ConditionEntry();
 
-                                //System.Diagnostics.Debug.WriteLine("  {0} {1} {2}", fieldn, condn, valuen);
-
-                                if (fieldn.Length > 0 || ConditionLists.IsNullOperation(condn))
+                                if (f.Create(fieldn, condn, valuen))
                                 {
-                                    ConditionLists.ConditionEntry f = new ConditionLists.ConditionEntry();
+                                    if (valuen.Length == 0 && !ConditionLists.IsUnaryOperation(condn) && !ConditionLists.IsNullOperation(condn))
+                                        errorlist += "Do you want filter '" + fieldn + "' in group '" + fe.eventname + "' to have an empty value" + Environment.NewLine;
 
-                                    if (f.Create(fieldn, condn, valuen))
-                                    {
-                                        if (valuen.Length == 0 && !ConditionLists.IsUnaryOperation(condn) && !ConditionLists.IsNullOperation(condn))
-                                            errorlist += "Do you want filter '" + fieldn + "' in group '" + fe.eventname + "' to have an empty value" + Environment.NewLine;
-
-                                        fe.Add(f);
-                                    }
-                                    else
-                                        errorlist += "Cannot create filter '" + fieldn + "' in group '" + fe.eventname + "' check value" + Environment.NewLine;
+                                    fe.Add(f);
                                 }
                                 else
-                                    errorlist += "Ignored empty filter in " + fe.eventname + Environment.NewLine;
+                                    errorlist += "Cannot create filter '" + fieldn + "' in group '" + fe.eventname + "' check value" + Environment.NewLine;
                             }
+                            else
+                                errorlist += "Ignored empty filter " + (i+1).ToString() + " in " + fe.eventname + Environment.NewLine;
                         }
 
-                        if (ok)
-                        {
-                            if (fe.fields != null)
-                                result.Add(fe);
-                            else
-                                errorlist += "No valid filters found in group '" + fe.eventname + "'" + Environment.NewLine;
-                        }
+                        if (fe.fields != null)
+                            result.Add(fe);
+                        else
+                            errorlist += "No valid filters found in group '" + fe.eventname + "'" + Environment.NewLine;
                     }
                     else
                         errorlist += "Cannot create " + evt + " not a normal error please report" + Environment.NewLine;
                 }
-                else
-                    errorlist += "Ignored group with empty name" + Environment.NewLine;
             }
 
             return errorlist;
@@ -955,9 +849,9 @@ namespace EDDiscovery2
         }
 
 
-        #endregion
+#endregion
 
-        #region OK Cancel
+#region OK Cancel
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
@@ -974,9 +868,9 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
-        #region Window Control
+#region Window Control
 
         public const int WM_MOVE = 3;
         public const int WM_SIZE = 5;
@@ -1093,6 +987,77 @@ namespace EDDiscovery2
         private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        #endregion
+
+        #region Autocomplete event field types.. complicated
+
+        Dictionary<string, List<string>> cachedevents = new Dictionary<string, List<string>>();
+        Dictionary<string, List<string>> cachedeventsdecorated = new Dictionary<string, List<string>>();
+
+        List<string> AutoCompletor(string s, ExtendedControls.AutoCompleteTextBox a)
+        {
+            Group g = a.Tag as Group;
+
+            List<string> list;
+
+            if (g.evlist != null && g.evlist.Text.Length > 0)       // if using event name, cache it
+            {
+                EnsureCached(g.evlist.Text);
+                list = cachedevents[g.evlist.Text];
+            }
+            else 
+            {  // no event name can only give additional field names
+                list = new List<string>();
+                list.AddRange(additionalfieldnames);
+            }
+
+            List<string> ret = new List<string>();
+
+            foreach( string other in list )
+            {
+                if (other.StartsWith(s, StringComparison.InvariantCultureIgnoreCase))
+                    ret.Add(other);
+            }
+
+            return (ret.Count>0) ? ret : list;
+        }
+
+        void EnsureCached(string evtype )
+        {
+            if (!cachedevents.ContainsKey(evtype))  //evtype MAY not be a real journal event, it may be onStartup..
+            {
+                cachedevents[evtype] = new List<string>();
+                cachedeventsdecorated[evtype] = new List<string>();
+
+                List<EDDiscovery.EliteDangerous.JournalEntry> jel = EDDiscovery.EliteDangerous.JournalEntry.Get(evtype);        // get all events of this type
+
+                if (jel != null)            // may not find it, if event is not in history
+                {
+                    ConditionVariables vars = new ConditionVariables();
+                    ConditionVariables varsdecorated = new ConditionVariables();
+                    foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
+                    {
+                        vars.GetJSONFieldNamesAndValues(ev.EventDataString);        // for all events, add to field list
+                        varsdecorated.GetJSONFieldNamesAndValues(ev.EventDataString, "EventJS_");        // for all events, add to field list
+                    }
+
+                    cachedevents[evtype].AddRange(vars.KeyList);
+                    cachedeventsdecorated[evtype].AddRange(varsdecorated.KeyList);
+                }
+
+                List<string> classnames = Tools.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(evtype), "EventClass_");
+                if (classnames != null)
+                {
+                    cachedevents[evtype].AddRange(classnames);
+                    cachedeventsdecorated[evtype].AddRange(classnames);
+                }
+
+                cachedevents[evtype].AddRange(additionalfieldnames);
+                cachedeventsdecorated[evtype].AddRange(additionalfieldnames);
+            }
+
         }
 
         #endregion

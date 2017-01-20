@@ -35,7 +35,7 @@ namespace ExtendedControls
         private bool isActivated = false;
         private bool disableauto = false;
 
-        public delegate List<string> PerformAutoComplete(string input);
+        public delegate List<string> PerformAutoComplete(string input , AutoCompleteTextBox t);
 
         public AutoCompleteTextBox() : base()
         {
@@ -86,7 +86,7 @@ namespace ExtendedControls
             {
                 //Console.WriteLine("{0} Begin AC", Environment.TickCount % 10000);
                 restartautocomplete = false;
-                autocompletestrings = func(string.Copy(autocompletestring));    // pass a copy, in case we change it out from under it
+                autocompletestrings = func(string.Copy(autocompletestring),this);    // pass a copy, in case we change it out from under it
                 //Console.WriteLine("{0} finish func ret {1} restart {2}", Environment.TickCount % 10000, autocompletestrings.Count, restartautocomplete);
             } while (restartautocomplete == true);
 

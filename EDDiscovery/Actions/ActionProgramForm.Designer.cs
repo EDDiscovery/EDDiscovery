@@ -93,6 +93,7 @@
             this.panelVScroll.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelVScroll_MouseDown);
             this.panelVScroll.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVScroll_MouseMove);
             this.panelVScroll.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelVScroll_MouseUp);
+            this.panelVScroll.Resize += new System.EventHandler(this.panelVScroll_Resize);
             // 
             // vScrollBarCustom1
             // 
@@ -436,7 +437,6 @@
             this.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionProgramForm";
-            this.Resize += new System.EventHandler(this.ActionProgramForm_Resize);
             this.panelOuter.ResumeLayout(false);
             this.panelVScroll.ResumeLayout(false);
             this.panelName.ResumeLayout(false);
