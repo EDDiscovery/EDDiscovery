@@ -78,8 +78,6 @@ namespace EDDiscovery
         private Point _window_dragWindowPos = Point.Empty;
         public EDDTheme theme;
 
-        public string CommanderName { get; private set; }
-
         public HistoryList history = new HistoryList();
 
         static public EDDConfig EDDConfig { get; private set; }
@@ -511,8 +509,6 @@ namespace EDDiscovery
         private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
             reportProgress(-1, "");
-
-            CommanderName = EDDConfig.CurrentCommander.Name;
 
             string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate;

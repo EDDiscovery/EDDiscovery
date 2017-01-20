@@ -66,7 +66,7 @@ namespace EDDiscovery2.HTTP
             }
         }
 
-        private static T ProcessDownload<T>(string url, string filename, Action<bool, Stream> processor, Func<HttpWebRequest, Func<Func<HttpWebResponse>, bool>, T> doRequest)
+        private static T ProcessDownload<T>(string url, string filename, Action<bool, Stream> processor, Func<HttpWebRequest, Func<Func<HttpWebResponse>, bool>, T> doRequest, Func<bool> cancelRequested)
         {
             var etagFilename = filename == null ? null : filename + ".etag";
             var tmpEtagFilename = filename == null ? null : etagFilename + ".tmp";
@@ -97,11 +97,17 @@ namespace EDDiscovery2.HTTP
                     {
                         HttpCom.WriteLog("Response", response.StatusCode.ToString());
 
+                        if (cancelRequested?.Invoke() == true)
+                            return false;
+
                         File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
                         File.SetLastWriteTimeUtc(tmpEtagFilename, response.LastModified.ToUniversalTime());
                         using (var httpStream = response.GetResponseStream())
                         {
                             processor(true, httpStream);
+                        if (cancelRequested?.Invoke() == true)
+                            return false;
+
                             File.Delete(etagFilename);
                             File.Move(tmpEtagFilename, etagFilename);
                             return true;
@@ -111,6 +117,9 @@ namespace EDDiscovery2.HTTP
                 catch (WebException ex)
                 {
                     if ((HttpWebResponse)ex.Response == null)
+                        return false;
+
+                    if (cancelRequested?.Invoke() == true)
                         return false;
 
                     var code = ((HttpWebResponse)ex.Response).StatusCode;
@@ -131,6 +140,9 @@ namespace EDDiscovery2.HTTP
                 }
                 catch (Exception ex)
                 {
+                    if (cancelRequested?.Invoke() == true)
+                        return false;
+
                     System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
                     System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                     HttpCom.WriteLog("DownloadFile Exception", ex.Message);
@@ -168,31 +180,28 @@ namespace EDDiscovery2.HTTP
             });
         }
 
-        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool, Stream> processor, Action<Action> registerCancelCallback)
+        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool, Stream> processor, Func<bool> cancelRequested)
         {
-            bool completed = false;
             return ProcessDownload(url, filename, processor, (request, doProcess) =>
             {
-                registerCancelCallback(() => { if (!completed) request.Abort(); });
                 return Task<bool>.Factory.FromAsync(request.BeginGetResponse, (ar) =>
                 {
                     bool success = doProcess(() => (HttpWebResponse)request.EndGetResponse(ar));
-                    completed = true;
                     return success;
                 }, null);
-            });
+            }, cancelRequested);
         }
 
 
-        public static bool DownloadFile(string url, string filename, Action<bool, Stream> processor)
+        public static bool DownloadFile(string url, string filename, Action<bool, Stream> processor, Func<bool> cancelRequested)
         {
             return ProcessDownload(url, filename, processor, (request, doProcess) =>
             {
                 return doProcess(() => (HttpWebResponse)request.GetResponse());
-            });
+            }, cancelRequested);
         }
 
-        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool> callback, Action<Action> registerCancelCallback, Action<bool, Stream> processor = null)
+        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool> callback, Func<bool> cancelRequested, Action<bool, Stream> processor = null)
         {
             bool _newfile = false;
             return DoDownloadFile(url, filename, processor, (u, f, p) =>
@@ -202,11 +211,11 @@ namespace EDDiscovery2.HTTP
                     _newfile = n;
                     p(n, s);
                     callback(_newfile);
-                }, registerCancelCallback);
+                }, cancelRequested);
             });
         }
 
-        static public bool DownloadFile(string url, string filename, out bool newfile, Action<bool, Stream> processor = null)
+        static public bool DownloadFile(string url, string filename, out bool newfile, Action<bool, Stream> processor = null, Func<bool> cancelRequested = null)
         {
             if ( !url.Contains("http"))
             {
@@ -222,7 +231,7 @@ namespace EDDiscovery2.HTTP
                 {
                     _newfile = n;
                     p(n, s);
-                });
+                }, cancelRequested);
             });
 
             newfile = _newfile && success;

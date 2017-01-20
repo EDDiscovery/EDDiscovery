@@ -478,7 +478,7 @@ namespace EDDiscovery2
                     "Formidine trans.json"
                 },
                 (s) => logLine("Map check complete."),
-                registerCancelCallback,
+                cancelRequested,
                 logLine);
                 */
             }
@@ -491,11 +491,9 @@ namespace EDDiscovery2
             }
         }
 
-        private static Task<bool> DownloadMapFiles(string[] files, Action<bool> callback, Action<Action> registerCancelCallback, Action<string> logLine)
+        private static Task<bool> DownloadMapFiles(string[] files, Action<bool> callback, Func<bool> cancelRequested, Action<string> logLine)
         {
             List<Task<bool>> tasks = new List<Task<bool>>();
-            List<Action> cancelCallbacks = new List<Action>();
-
             foreach (string file in files)
             {
                 var task = EDDiscovery2.HTTP.DownloadFileHandler.BeginDownloadFile(
@@ -504,11 +502,9 @@ namespace EDDiscovery2
                     (n) =>
                     {
                         if (n) logLine("Downloaded map: " + file);
-                    }, cb => cancelCallbacks.Add(cb));
+                    }, cancelRequested);
                 tasks.Add(task);
             }
-
-            registerCancelCallback(() => { foreach (var cb in cancelCallbacks) cb(); });
 
             return Task<bool>.Factory.ContinueWhenAll<bool>(tasks.ToArray(), (ta) =>
             {
