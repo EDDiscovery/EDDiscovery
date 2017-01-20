@@ -199,7 +199,7 @@ namespace EDDiscovery2.EDSM
         }
 
         
-        internal long GetNewSystems(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        internal long GetNewSystems(Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine)
         {
             string lstsyst;
 
@@ -241,7 +241,7 @@ namespace EDDiscovery2.EDSM
                     enddate = DateTime.UtcNow;
                 }
 
-                discoveryform.LogLine($"Downloading systems from {lstsystdate.ToLocalTime().ToString()} to {enddate.ToLocalTime().ToString()}");
+                logLine($"Downloading systems from {lstsystdate.ToLocalTime().ToString()} to {enddate.ToLocalTime().ToString()}");
                 reportProgress(-1, "Requesting systems from EDSM");
                 string json = null;
 
@@ -255,32 +255,32 @@ namespace EDDiscovery2.EDSM
                     if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
                     {
                         string status = ((HttpWebResponse)ex.Response).StatusDescription;
-                        discoveryform.LogLine($"Download of EDSM systems from the server failed ({status}), will try next time program is run");
+                        logLine($"Download of EDSM systems from the server failed ({status}), will try next time program is run");
                     }
                     else
                     {
-                        discoveryform.LogLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
+                        logLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
                     }
                     break;
                 }
                 catch (Exception ex)
                 {
                     reportProgress(-1, $"EDSM request failed");
-                    discoveryform.LogLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
+                    logLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
                     break;
                 }
 
                 if (json == null)
                 {
                     reportProgress(-1, "EDSM request failed");
-                    discoveryform.LogLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
+                    logLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
                     break;
                 }
 
-                updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, discoveryform, cancelRequested, reportProgress, false);
+                updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
                 lstsystdate += TimeSpan.FromHours(12);
             }
-            discoveryform.LogLine($"System download complete");
+            logLine($"System download complete");
 
             return updates;
         }

@@ -1128,22 +1128,22 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static long ParseEDSMUpdateSystemsString(string json, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsString(string json, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StringReader sr = new StringReader(json))
-                return ParseEDSMUpdateSystemsStream(sr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
+                return ParseEDSMUpdateSystemsStream(sr, ref date, ref outoforder, removenonedsmids, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
-                return ParseEDSMUpdateSystemsStream(sr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
+                return ParseEDSMUpdateSystemsStream(sr, ref date, ref outoforder, removenonedsmids, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsStream(TextReader sr, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        public static long ParseEDSMUpdateSystemsStream(TextReader sr, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             using (JsonTextReader jr = new JsonTextReader(sr))
-                return ParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
+                return ParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, removenonedsmids, cancelRequested, reportProgress, useCache, useTempSystems);
         }
 
         private static Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> GetEdsmSystemsLite()
@@ -1191,7 +1191,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             DateTime maxdate;
 
@@ -1459,9 +1459,9 @@ namespace EDDiscovery.DB
             return updatecount + insertcount;
         }
 
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
-            return DoParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, discoveryform, cancelRequested, reportProgress, useCache, useTempSystems);
+            return DoParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, cancelRequested, reportProgress, useCache, useTempSystems);
         }
 
         public static void RemoveHiddenSystems()
@@ -1551,7 +1551,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine, Action<string> logError)
+        public static bool PerformEDSMFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine, Action<string> logError)
         {
             string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate;
@@ -1590,7 +1590,7 @@ namespace EDDiscovery.DB
                 string rwsysfiletime = "2014-01-01 00:00:00";
                 bool outoforder = false;
                 using (var reader = new StreamReader(s))
-                    updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, discoveryform, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
+                    updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
                 if (!cancelRequested())       // abort, without saving time, to make it do it again
                 {
                     SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
@@ -1829,6 +1829,93 @@ namespace EDDiscovery.DB
             GC.Collect();
         }
 
+        public class SystemsSyncState
+        {
+            public bool performhistoryrefresh = false;
+            public bool syncwasfirstrun = false;
+            public bool syncwaseddboredsm = false;
+            public bool performedsmsync = false;
+            public bool performeddbsync = false;
+        }
+
+        public static void PerformSync(Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine, Action<string> logError, SystemsSyncState state)           // big check.. done in a thread.
+        {
+            reportProgress(-1, "");
+
+            state.performhistoryrefresh = false;
+            state.syncwasfirstrun = SystemClass.IsSystemsTableEmpty();                 // remember if DB is empty
+
+            // Force a full sync if newest data is more than 14 days old
+
+            bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
+            DateTime lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+            if (DateTime.UtcNow.Subtract(lastmod).TotalDays >= 14)
+            {
+                state.performedsmsync = true;
+            }
+
+            bool edsmoreddbsync = state.performedsmsync || state.performeddbsync;           // remember if we are syncing
+            state.syncwaseddboredsm = edsmoreddbsync;
+
+            if (state.performedsmsync || state.performeddbsync)
+            {
+                if (state.performedsmsync && !cancelRequested())
+                {
+                    // Download new systems
+                    try
+                    {
+                        state.performhistoryrefresh |= SystemClass.PerformEDSMFullSync(cancelRequested, reportProgress, logLine, logError);
+                        state.performedsmsync = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        logError("GetAllEDSMSystems exception:" + ex.Message);
+                    }
+                }
+
+                if (!cancelRequested())
+                {
+                    logLine("Indexing systems table");
+                    SQLiteConnectionSystem.CreateSystemsTableIndexes();
+
+                    try
+                    {
+                        SystemClass.PerformEDDBFullSync(cancelRequested, reportProgress, logLine, logError);
+                        state.performeddbsync = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        logError("GetEDDBUpdate exception: " + ex.Message);
+                    }
+                    state.performhistoryrefresh = true;
+                }
+            }
+
+            if (!cancelRequested())
+            {
+                logLine("Indexing systems table");
+                SQLiteConnectionSystem.CreateSystemsTableIndexes();
+
+                if (EDDConfig.Instance.CanSkipSlowUpdates)
+                {
+                    logLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
+                }
+                else
+                {
+                    lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+                    if (DateTime.UtcNow.Subtract(lastmod).TotalHours >= 1)
+                    {
+                        logLine("Checking for new EDSM systems (may take a few moments).");
+                        EDSMClass edsm = new EDSMClass();
+                        long updates = edsm.GetNewSystems(cancelRequested, reportProgress, logLine);
+                        logLine("EDSM updated " + updates + " systems.");
+                        state.performhistoryrefresh |= (updates > 0);
+                    }
+                }
+            }
+
+            reportProgress(-1, "");
+        }
 
         public static List<string> AutoCompleteAdditionalList = new List<string>();
 
