@@ -15,6 +15,7 @@
  */
 using EDDiscovery2;
 using EDDiscovery2.DB;
+using EDDiscovery2.EDSM;
 using EMK.LightGeometry;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -1550,6 +1551,78 @@ namespace EDDiscovery.DB
             }
         }
 
+        public static bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine, Action<string> logError)
+        {
+            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+            DateTime edsmdate;
+
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
+            {
+                edsmdate = new DateTime(2000, 1, 1);
+            }
+
+            long updates = 0;
+
+            // Delete all old systems
+            SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+            SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", "0");
+
+            EDSMClass edsm = new EDSMClass();
+
+            logLine("Get hidden systems from EDSM and remove from database");
+
+            SystemClass.RemoveHiddenSystems();
+
+            if (cancelRequested())
+                return false;
+
+            logLine("Download systems file from EDSM.");
+
+            string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
+
+            logLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
+
+            bool newfile;
+            bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
+            {
+                SQLiteConnectionSystem.CreateTempSystemsTable();
+
+                string rwsysfiletime = "2014-01-01 00:00:00";
+                bool outoforder = false;
+                using (var reader = new StreamReader(s))
+                    updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, ref outoforder, true, discoveryform, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
+                if (!cancelRequested())       // abort, without saving time, to make it do it again
+                {
+                    SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
+                    logLine("Replacing old systems table with new systems table and re-indexing - please wait");
+                    reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
+                    SQLiteConnectionSystem.ReplaceSystemsTable();
+                    SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
+                    reportProgress(-1, "");
+                }
+                else
+                {
+                    throw new OperationCanceledException();
+                }
+            });
+
+            if (!success)
+            {
+                logLine("Failed to download EDSM system file from server, will check next time");
+                return false;
+            }
+
+            // Stop if requested
+            if (cancelRequested())
+                return false;
+
+            logLine("Local database updated with EDSM data, " + updates + " systems updated.");
+
+            GC.Collect();
+
+            return (updates > 0);
+        }
+
         static public long ParseEDDBUpdateSystems(string filename, Action<string> logline)
         {
             StreamReader sr = new StreamReader(filename);         // read directly from file..
@@ -1726,6 +1799,35 @@ namespace EDDiscovery.DB
             return updated + inserted;
         }
 
+        public static void PerformEDDBFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine, Action<string> logError)
+        {
+            logLine("Get systems from EDDB.");
+
+            string eddbdir = Path.Combine(Tools.GetAppDataDirectory(), "eddb");
+            if (!Directory.Exists(eddbdir))
+                Directory.CreateDirectory(eddbdir);
+
+            string systemFileName = Path.Combine(eddbdir, "systems_populated.jsonl");
+
+            bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl", systemFileName);
+
+            if (success)
+            {
+                if (cancelRequested())
+                    return;
+
+                logLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
+
+                long number = SystemClass.ParseEDDBUpdateSystems(systemFileName, logError);
+
+                logLine("Local database updated with EDDB data, " + number + " systems updated");
+                SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
+            }
+            else
+                logError("Failed to download EDDB Systems. Will try again next run.");
+
+            GC.Collect();
+        }
 
 
         public static List<string> AutoCompleteAdditionalList = new List<string>();
