@@ -206,6 +206,7 @@ namespace EDDiscovery2
                     {
                         Console.WriteLine($"Unexpected non-option {optname}");
                     }
+                    i++;
                 }
             }
 
@@ -216,9 +217,9 @@ namespace EDDiscovery2
                 ProcessCommandLineOptions();
                 SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
                 SetVersionDisplayString();
-                if (UserDatabasePath != null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
-                if (SystemDatabasePath != null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
-                if (OldDatabasePath != null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
+                if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
+                if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+                if (OldDatabasePath == null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
             }
         }
 
