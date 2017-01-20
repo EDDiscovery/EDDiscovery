@@ -169,13 +169,17 @@ namespace EDDiscovery2
 
         private void buttonMore_Click(object sender, EventArgs e)       // main + button
         {
+            SuspendLayout();
+
             Group g = CreateGroupInt(null, null, null, null, null);
 
             if (eventlist == null)      // if we don't have any event list, auto create a condition
                 CreateConditionInt(g,null,null,null);
 
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+
             FixUpGroups();
+            ResumeLayout();
         }
 
         private void buttonSort_Click(object sender, EventArgs e) // sort button
@@ -538,6 +542,8 @@ namespace EDDiscovery2
             int titleHeight = screenRectangle.Top - this.Top;
 
             y += buttonMore.Height + titleHeight + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
+
+            panelVScroll.RestateScroll();       // need to tell the bloody thing to reset the Y offset..
 
             if (calcminsize)
             {

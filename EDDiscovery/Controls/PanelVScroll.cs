@@ -78,6 +78,17 @@ namespace ExtendedControls
 
         int scrollpos = 0;
 
+        public void RestateScroll()             // call this if you've messed about with the position of controls..
+        {
+            foreach (Control c in Controls)
+            {
+                if (!(c is VScrollBarCustom))
+                {
+                    c.Location = new Point(c.Left, c.Top - scrollpos); 
+                }
+            }
+        }
+
         public int ScrollTo(int newscrollpos )
         {
             int maxy = 0;
@@ -100,7 +111,7 @@ namespace ExtendedControls
                 {
                     if (!(c is VScrollBarCustom))
                     {
-                       // System.Diagnostics.Debug.WriteLine("Move {0}", c.Name);
+                        // System.Diagnostics.Debug.WriteLine("Move {0}", c.Name);
 
                         int ynoscroll = c.Location.Y + scrollpos;
                         c.Location = new Point(c.Location.X, ynoscroll - newscrollpos);       // SPENT AGES with the bloody AutoScrollPosition.. could not get it to work..
