@@ -51,6 +51,8 @@ namespace EDDiscovery
         static public bool MatchTypeFromString(string s, out MatchType mt )
         {
             int indexof = Array.IndexOf(MatchNames, s);
+
+            if ( indexof == -1)
                 indexof = Array.IndexOf(OperatorNames, s);
 
             if (indexof >= 0)

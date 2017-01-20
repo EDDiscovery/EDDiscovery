@@ -343,6 +343,8 @@ namespace EDDiscovery.Actions
             // Beware Visible - it does not report back the set state, only the visible state.. hence use Enabled.
             voff += buttonMore.Height + titleHeight + panelName.Height + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
 
+            panelVScroll.RestateScroll();       // need to tell the bloody thing to reset the Y offset..
+
             if (calcminsize)
             {
                 this.MinimumSize = new Size(600, voff);
