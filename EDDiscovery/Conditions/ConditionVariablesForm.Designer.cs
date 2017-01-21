@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Fronter Developments plc.
  */
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     partial class ConditionVariablesForm
     {

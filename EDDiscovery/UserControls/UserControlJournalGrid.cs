@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
             Name = "Journal";
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
             displaynumber = vn;
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
             Display(history);
         }
 
-        public void Display(HistoryList hl )
+        public void Display(HistoryList hl)
         {
             if (hl == null)     // just for safety
                 return;
@@ -190,18 +190,16 @@ namespace EDDiscovery.UserControls
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
-            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.globalvariables) )
+            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.globalvariables))
             {
                 AddNewJournalRow(true, he);
+
+                if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem) // Move focus to new row
+                {
+                    SelectTopRow();
+                }
             }
         }
-
-			    if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem) // Move focus to new row
-			    {
-				    SelectTopRow();
-			    }
-		    }
-	    }
 
 	    #endregion
 

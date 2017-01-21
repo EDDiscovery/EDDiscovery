@@ -248,14 +248,8 @@ namespace EDDiscovery
 
         private void ReadCmdLineJournal()
         {
-            List<string> parts = Environment.GetCommandLineArgs().ToList();
-
-            option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
-                parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
-
-            int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
-            if (ai != -1 && ai < parts.Count - 1)
-            {
+            if (EDDConfig.Options.ReadJournal != null)
+            { 
                 string file = EDDConfig.Options.ReadJournal;
                 System.IO.StreamReader filejr = new System.IO.StreamReader(file);
                 string line;
