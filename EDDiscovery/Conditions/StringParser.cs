@@ -110,6 +110,26 @@ namespace EDDiscovery
                 return null;
         }
 
+        public List<string> NextQuotedWordList()        // empty list on error
+        {
+            List<string> ret = new List<string>();
+
+            do
+            {
+                string v = NextQuotedWord(", ");
+                if (v == null)
+                    return null;
+
+                ret.Add(v);
+
+                if (!IsEOL && !IsCharMoveOn(','))   // either EOL, or its a comma matey
+                    return null;
+
+            } while (!IsEOL);
+
+            return ret;
+        }
+
         public List<string> NextOptionallyBracketedList()       // empty list on error
         {
             List<string> sl = new List<string>();
