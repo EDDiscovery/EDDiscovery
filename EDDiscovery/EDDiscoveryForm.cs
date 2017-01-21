@@ -1,4 +1,19 @@
-﻿using EDDiscovery.DB;
+﻿/*
+ * Copyright © 2015 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using EDDiscovery.DB;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
@@ -75,11 +90,6 @@ namespace EDDiscovery
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
-        public bool option_nowindowreposition { get; set; } = false;                             // Cmd line options
-        public bool option_debugoptions { get; set; } = false;
-        public bool option_tracelog { get; set; } = false;
-        public bool option_fcexcept { get; set; } = false;
-
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
         public event EventHandler HistoryRefreshed; // this is an internal hook
@@ -120,6 +130,12 @@ namespace EDDiscovery
         EliteDangerous.EDJournalClass journalmonitor;
         GitHubRelease newRelease;
 
+        private bool _formMax;
+        private int _formWidth;
+        private int _formHeight;
+        private int _formTop;
+        private int _formLeft;
+
         private bool CanSkipSlowUpdates()
         {
 #if DEBUG
@@ -137,9 +153,11 @@ namespace EDDiscovery
         {
             InitializeComponent();
 
-            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            EDDConfig.Options.Init(ModifierKeys.HasFlag(Keys.Shift));
 
-            ProcessCommandLineOptions();
+            label_version.Text = EDDConfig.Options.VersionDisplayString;
+
+            ReadCmdLineJournal();
 
             string logpath = "";
             try
@@ -150,13 +168,13 @@ namespace EDDiscovery
                     Directory.CreateDirectory(logpath);
                 }
 
-                if (!Debugger.IsAttached || option_tracelog)
+                if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
                 {
                     TraceLog.LogFileWriterException += ex =>
                     {
                         LogLineHighlight($"Log Writer Exception: {ex}");
                     };
-                    TraceLog.Init(option_fcexcept);
+                    TraceLog.Init(EDDConfig.Options.LogExceptions);
                 }
             }
             catch (Exception ex)
@@ -194,7 +212,7 @@ namespace EDDiscovery
 
             EdsmSync = new EDSMSync(this);
 
-            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, this);
+            Map = new EDDiscovery2._3DMap.MapManager(EDDConfig.Options.NoWindowReposition, this);
 
             journalmonitor = new EliteDangerous.EDJournalClass();
 
@@ -203,6 +221,8 @@ namespace EDDiscovery
             ApplyTheme();
 
             DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+
+            notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
         }
 
         private void Dbinitworker_DoWork(object sender, DoWorkEventArgs e)
@@ -226,7 +246,7 @@ namespace EDDiscovery
         {
         }
 
-        private void ProcessCommandLineOptions()
+        private void ReadCmdLineJournal()
         {
             List<string> parts = Environment.GetCommandLineArgs().ToList();
 
@@ -236,36 +256,7 @@ namespace EDDiscovery
             int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
             if (ai != -1 && ai < parts.Count - 1)
             {
-                Tools.appfolder = parts[ai + 1];
-                label_version.Text += " (Using " + Tools.appfolder + ")";
-            }
-
-            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
-            option_tracelog = parts.FindIndex(x => x.Equals("-TraceLog", StringComparison.InvariantCultureIgnoreCase)) != -1;
-            option_fcexcept = parts.FindIndex(x => x.Equals("-LogExceptions", StringComparison.InvariantCultureIgnoreCase)) != -1;
-
-            if (parts.FindIndex(x => x.Equals("-EDSMBeta", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
-                label_version.Text += " (EDSMBeta)";
-            }
-
-            if (parts.FindIndex(x => x.Equals("-EDSMNull", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EDSMClass.ServerAddress = "";
-                label_version.Text += " (EDSM No server)";
-            }
-
-            if (parts.FindIndex(x => x.Equals("-DISABLEBETACHECK", StringComparison.InvariantCultureIgnoreCase)) != -1)
-            {
-                EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
-                label_version.Text += " (no BETA detect)";
-            }
-
-            int jr = parts.FindIndex(x => x.Equals("-READJOURNAL", StringComparison.InvariantCultureIgnoreCase));   // use this so much to check journal decoding
-            if (jr != -1)
-            {
-                string file = parts[jr + 1];
+                string file = EDDConfig.Options.ReadJournal;
                 System.IO.StreamReader filejr = new System.IO.StreamReader(file);
                 string line;
                 string system = "";
@@ -337,7 +328,7 @@ namespace EDDiscovery
 
                 CheckIfEliteDangerousIsRunning();
 
-                if (option_debugoptions)
+                if (EDDConfig.Options.Debug)
                 {
                     button_test.Visible = true;
                 }
@@ -438,7 +429,7 @@ namespace EDDiscovery
         private void RepositionForm()
         {
             var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
-            if (top != -1 && option_nowindowreposition == false)
+            if (top != -1 && EDDConfig.Options.NoWindowReposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
@@ -463,13 +454,17 @@ namespace EDDiscovery
                 this.CreateParams.Y = this.Top;
                 this.StartPosition = FormStartPosition.Manual;
 
-                var Max = SQLiteDBClass.GetSettingBool("FormMax", false);
-                if (Max) this.WindowState = FormWindowState.Maximized;
+                _formMax = SQLiteDBClass.GetSettingBool("FormMax", false);
+                if (_formMax) this.WindowState = FormWindowState.Maximized;
             }
+            _formLeft = Left;
+            _formTop = Top;
+            _formHeight = Height;
+            _formWidth = Width;
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
-            if (EDDConfig.AutoLoadPopOuts && option_nowindowreposition == false) travelHistoryControl1.LoadSavedPopouts();
+            if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false) travelHistoryControl1.LoadSavedPopouts();
         }
 
         private void CheckIfEliteDangerousIsRunning()
@@ -1132,11 +1127,11 @@ namespace EDDiscovery
         {
             settings.SaveSettings();
 
-            SQLiteDBClass.PutSettingBool("FormMax", this.WindowState == FormWindowState.Maximized);
-            SQLiteDBClass.PutSettingInt("FormWidth", this.Width);
-            SQLiteDBClass.PutSettingInt("FormHeight", this.Height);
-            SQLiteDBClass.PutSettingInt("FormTop", this.Top);
-            SQLiteDBClass.PutSettingInt("FormLeft", this.Left);
+            SQLiteDBClass.PutSettingBool("FormMax", _formMax);
+            SQLiteDBClass.PutSettingInt("FormWidth", _formWidth);
+            SQLiteDBClass.PutSettingInt("FormHeight", _formHeight);
+            SQLiteDBClass.PutSettingInt("FormTop", _formTop);
+            SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
             routeControl1.SaveSettings();
             theme.SaveSettings(null);
             travelHistoryControl1.SaveSettings();
@@ -1225,6 +1220,7 @@ namespace EDDiscovery
             {
                 closeTimer.Stop();      // stop timer now. So it won't try to save it multiple times during close down if it takes a while - this caused a bug in saving some settings
                 SaveSettings();         // do close now
+                notifyIcon1.Visible = false;
                 Close();
                 Application.Exit();
             }
@@ -1232,7 +1228,7 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Buttons, Mouse, Menus
+#region Buttons, Mouse, Menus, NotifyIcon
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -1297,7 +1293,7 @@ namespace EDDiscovery
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = option_nowindowreposition;
+            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
         }
 
@@ -1341,6 +1337,17 @@ namespace EDDiscovery
         internal void keepOnTopChanged(bool keepOnTop)
         {
             this.TopMost = keepOnTop;
+        }
+
+        /// <summary>
+        /// The settings panel check box for 'Use notification area icon' has changed.
+        /// </summary>
+        /// <param name="useNotifyIcon">Whether or not the setting is enabled.</param>
+        internal void useNotifyIconChanged(bool useNotifyIcon)
+        {
+            notifyIcon1.Visible = useNotifyIcon;
+            if (!useNotifyIcon && !Visible)
+                Show();
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)
@@ -1555,6 +1562,44 @@ namespace EDDiscovery
             frm.Show(this);
         }
 
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            // Tray icon was double-clicked.
+            if (FormWindowState.Minimized == WindowState)
+            {
+                if (EDDConfig.MinimizeToNotifyIcon)
+                    Show();
+                if (_formMax)
+                    WindowState = FormWindowState.Maximized;
+                else
+                    WindowState = FormWindowState.Normal;
+            }
+            else
+                WindowState = FormWindowState.Minimized;
+        }
+
+        private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
+        {
+            // Tray icon 'Hide Tray Icon' menu item was clicked.
+            settings.checkBoxUseNotifyIcon.Checked = false;
+        }
+
+        private void notifyIconMenu_Open_Click(object sender, EventArgs e)
+        {
+            // Tray icon 'Open EDDiscovery' menu item was clicked. Present the main window.
+            if (FormWindowState.Minimized == WindowState)
+            {
+                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                    Show();
+                if (_formMax)
+                    WindowState = FormWindowState.Maximized;
+                else
+                    WindowState = FormWindowState.Normal;
+            }
+            else
+                Activate();
+        }
+
         #endregion
 
         #region Window Control
@@ -1628,6 +1673,39 @@ namespace EDDiscovery
             {
                 base.WndProc(ref m);
             }
+        }
+
+        private void RecordPosition()
+        {
+            if (FormWindowState.Minimized != WindowState)
+            {
+                _formLeft = this.Left;
+                _formTop = this.Top;
+                _formWidth = this.Width;
+                _formHeight = this.Height;
+                _formMax = FormWindowState.Maximized == WindowState;
+            }
+        }
+
+        private void EDDiscoveryForm_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == WindowState)
+            {
+                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                    Hide();
+            }
+            else
+            {
+                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                    Show();
+            }
+            RecordPosition();
+            notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
+        }
+
+        private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)
+        {
+            RecordPosition();
         }
 
         #endregion
@@ -1828,7 +1906,7 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        // go thru the hisotry list and reworkout the materials ledge and the materials count, plus any other stuff..
+        // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
         private void ProcessUserHistoryListEntries(List<HistoryEntry> hl, MaterialCommoditiesLedger ledger, StarScan scan)
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped

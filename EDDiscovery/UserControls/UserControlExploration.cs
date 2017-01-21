@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+ * Copyright © 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -16,6 +31,8 @@ using EDDiscovery2;
 using EDDiscovery.UserControls;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+using EDDiscovery.Forms;
 
 namespace EDDiscovery
 {
@@ -315,10 +332,11 @@ namespace EDDiscovery
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 textBoxFileName.Text = dlg.FileName;
-
+                _currentExplorationSet.Clear();
                 _currentExplorationSet.Load(dlg.FileName);
 
                 textBoxRouteName.Text = _currentExplorationSet.Name;
+                dataGridViewExplore.Rows.Clear();
                 foreach (var sysname in _currentExplorationSet.Systems)
                 {
                     dataGridViewExplore.Rows.Add(sysname, "", "");
@@ -764,6 +782,70 @@ namespace EDDiscovery
             RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
         }
 
+        private void dataGridViewExplore_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridViewSorter2.DataGridSort2(dataGridViewExplore, e.ColumnIndex);
+        }
+
+        private void tsbImportSphere_Click(object sender, EventArgs e)
+        {
+            string systemName;
+            double radius;
+            if (!ImportSphere.showDialog(_discoveryForm, out systemName, out radius))
+                return;
+            if (String.IsNullOrWhiteSpace(systemName))
+            {
+                MessageBox.Show("System name not set");
+                return;
+            }
+
+            if (radius < 0 || radius > 1000.0) { 
+                MessageBox.Show("Radius should be a number 0.0 and 1000.0");
+                return;
+            }
+
+            ClearExplorationSet();
+            EDSMClass edsm = new EDSMClass();
+            Cursor.Current = Cursors.WaitCursor;
+            Task<List<String>> taskEDSM = Task<List<String>>.Factory.StartNew(() =>
+            {
+                return edsm.GetSphereSystems(systemName, radius);
+            });
+            Task.WaitAll();
+            LoadSphereData(taskEDSM);
+            Cursor.Current = Cursors.Default;
+
+        }
+
+        private void LoadSphereData(Task<List<String>> task)
+        {
+            List<String> systems = new List<String>();
+            int countunknown = 0;
+            foreach (String name in task.Result)
+            {
+                SystemClass sc = GetSystem(name.Trim());
+                if (sc == null)
+                {
+                    sc = new SystemClass(name.Trim());
+                    countunknown++;
+                }
+                systems.Add(sc.name);
+            }
+            if (systems.Count == 0)
+            {
+                MessageBox.Show(_discoveryForm,
+                String.Format("There are no known system names in the import", countunknown),
+                "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+
+            foreach (var sysname in systems)
+            {
+                dataGridViewExplore.Rows.Add(sysname, "", "");
+            }
+            UpdateSystemRows();
+        }
     }
 
     public class ExplorationSetClass
@@ -808,9 +890,17 @@ namespace EDDiscovery
 
             foreach (var jsys in ja)
             {
-                Systems.Add(jsys.Value<String>());
+                string sysname = jsys.Value<String>();
+                if (!Systems.Contains(sysname))
+                    Systems.Add(sysname);
             }
 
+        }
+
+        internal void Clear()
+        {
+            Name = "";
+            Systems.Clear();
         }
     }
 }

@@ -1,4 +1,20 @@
-﻿using Newtonsoft.Json.Linq;
+﻿/*
+ * Copyright © 2015 - 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using EDDiscovery2;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -108,39 +124,10 @@ namespace EDDiscovery
             }
         }
 
-        public static string appfolder = (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true" ? "Data" : "EDDiscovery");
-
         static internal string GetAppDataDirectory()
         {
-            try
-            {
-                string datapath;
-
-                if (Path.IsPathRooted(appfolder))
-                {
-                    datapath = appfolder;
-                }
-                else if (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true")
-                {
-                    datapath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
-                }
-                else
-                {
-                    datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
-                }
-
-                if (!Directory.Exists(datapath))
-                    Directory.CreateDirectory(datapath);
-
-                return datapath;
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message, "GetAppDataDirectory Exception", System.Windows.Forms.MessageBoxButtons.OK);
-                return null;
-            }
+            return EDDConfig.Options.AppDataDirectory;
         }
-
 
         static public string WordWrap(string input, int linelen)
         {

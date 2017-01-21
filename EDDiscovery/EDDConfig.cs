@@ -1,4 +1,19 @@
-﻿using EDDiscovery.DB;
+﻿/*
+ * Copyright © 2015 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using EDDiscovery.DB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,6 +21,9 @@ using System.Linq;
 using System.Text;
 using System.Data.Common;
 using System.Data;
+using System.IO;
+using System.Reflection;
+using EDDiscovery2.EDSM;
 
 namespace EDDiscovery2
 {
@@ -37,6 +55,176 @@ namespace EDDiscovery2
             public System.Drawing.Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop"); } set { PutColour("NamedStarUnpop", value); } }
         }
 
+        public enum EDSMServerType
+        {
+            Normal,
+            Beta,
+            Null
+        }
+
+        public class OptionsClass
+        {
+            public string VersionDisplayString { get; private set; }
+            public string AppFolder { get; private set; }
+            public string AppDataDirectory { get; private set; }
+            public string UserDatabasePath { get; private set; }
+            public string SystemDatabasePath { get; private set; }
+            public string OldDatabasePath { get; private set; }
+            public bool StoreDataInProgramDirectory { get; private set; }
+            public bool NoWindowReposition { get; private set; }
+            public bool Debug { get; private set; }
+            public bool TraceLog { get; private set; }
+            public bool LogExceptions { get; private set; }
+            public EDSMServerType EDSMServerType { get; private set; } = EDSMServerType.Normal;
+            public bool DisableBetaCheck { get; private set; }
+            public string ReadJournal { get; private set; }
+
+            private void SetAppDataDirectory(string appfolder, bool portable)
+            {
+                if (appfolder == null)
+                {
+                    appfolder = (portable ? "Data" : "EDDiscovery");
+                }
+
+                if (Path.IsPathRooted(appfolder))
+                {
+                    AppDataDirectory = appfolder;
+                }
+                else if (portable)
+                {
+                    AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
+                }
+                else
+                {
+                    AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
+                }
+
+                if (!Directory.Exists(AppDataDirectory))
+                    Directory.CreateDirectory(AppDataDirectory);
+            }
+
+            private void SetVersionDisplayString()
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Version ");
+                sb.Append(Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1]);
+
+                if (AppFolder != null)
+                {
+                    sb.Append($" (Using {AppFolder})");
+                }
+
+                switch (EDSMServerType)
+                {
+                    case EDSMServerType.Beta:
+                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
+                        sb.Append(" (EDSMBeta)");
+                        break;
+                    case EDSMServerType.Null:
+                        EDSMClass.ServerAddress = "";
+                        sb.Append(" (EDSM No server)");
+                        break;
+                }
+
+                if (DisableBetaCheck)
+                {
+                    EDDiscovery.EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
+                    sb.Append(" (no BETA detect)");
+                }
+
+                VersionDisplayString = sb.ToString();
+            }
+
+            private void ProcessConfigVariables()
+            {
+                var appsettings = System.Configuration.ConfigurationManager.AppSettings;
+
+                if (appsettings["StoreDataInProgramDirectory"] == "true") StoreDataInProgramDirectory = true;
+                UserDatabasePath = appsettings["UserDatabasePath"];
+            }
+
+            private void ProcessCommandLineOptions()
+            {
+                string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
+
+                int i = 0;
+
+                while (i < cmdlineopts.Length)
+                {
+                    string optname = cmdlineopts[i].ToLowerInvariant();
+                    string optval = null;
+                    if (i < cmdlineopts.Length - 1)
+                    {
+                        optval = cmdlineopts[i + 1];
+                    }
+
+                    if (optname == "-appfolder")
+                    {
+                        AppFolder = optval;
+                        i++;
+                    }
+                    else if (optname == "-readjournal")
+                    {
+                        ReadJournal = optval;
+                        i++;
+                    }
+                    else if (optname == "-userdbpath")
+                    {
+                        UserDatabasePath = optval;
+                        i++;
+                    }
+                    else if (optname == "-systemsdbpath")
+                    {
+                        SystemDatabasePath = optval;
+                        i++;
+                    }
+                    else if (optname == "-olddbpath")
+                    {
+                        OldDatabasePath = optval;
+                        i++;
+                    }
+                    else if (optname.StartsWith("-"))
+                    {
+                        string opt = optname.Substring(1).ToLowerInvariant();
+                        switch (opt)
+                        {
+                            case "norepositionwindow": NoWindowReposition = true; break;
+                            case "portable": StoreDataInProgramDirectory = true; break;
+                            case "nrw": NoWindowReposition = true; break;
+                            case "debug": Debug = true; break;
+                            case "tracelog": TraceLog = true; break;
+                            case "logexceptions": LogExceptions = true; break;
+                            case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
+                            case "edsmnull": EDSMServerType = EDSMServerType.Null; break;
+                            case "disablebetacheck": DisableBetaCheck = true; break;
+                            default:
+                                Console.WriteLine($"Unrecognized option -{opt}");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Unexpected non-option {optname}");
+                    }
+                    i++;
+                }
+            }
+
+            public void Init(bool shift)
+            {
+                if (shift) NoWindowReposition = true;
+                ProcessConfigVariables();
+                ProcessCommandLineOptions();
+                SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
+                SetVersionDisplayString();
+                if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
+                if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+                if (OldDatabasePath == null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
+            }
+        }
+
+        public static OptionsClass Options { get; } = new OptionsClass();
+
         private static EDDConfig _instance;
         public static EDDConfig Instance
         {
@@ -54,7 +242,9 @@ namespace EDDiscovery2
         private bool _EDSMLog;
         readonly public string LogIndex;
         private bool _canSkipSlowUpdates = false;
+        private bool _useNotifyIcon = false;
         private bool _orderrowsinverted = false;
+        private bool _minimizeToNotifyIcon = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
         private bool _displayUTC = false;
@@ -92,6 +282,22 @@ namespace EDDiscovery2
             LogIndex = DateTime.Now.ToString("yyyyMMdd");
         }
 
+        /// <summary>
+        /// Controls whether or not a system notification area (systray) icon will be shown.
+        /// </summary>
+        public bool UseNotifyIcon
+        {
+            get
+            {
+                return _useNotifyIcon;
+            }
+            set
+            {
+                _useNotifyIcon = value;
+                SQLiteConnectionUser.PutSettingBool("UseNotifyIcon", value);
+            }
+        }
+
         public bool UseDistances
         {
             get
@@ -103,6 +309,24 @@ namespace EDDiscovery2
             {
                 _useDistances = value;
                 SQLiteConnectionUser.PutSettingBool("EDSMDistances", value);
+            }
+        }
+
+        /// <summary>
+        /// Controls whether or not the main window will be hidden to the
+        /// system notification area icon (systray) when minimized.
+        /// Has no effect if <see cref="UseNotifyIcon"/> is not enabled.
+        /// </summary>
+        public bool MinimizeToNotifyIcon
+        {
+            get
+            {
+                return _minimizeToNotifyIcon;
+            }
+            set
+            {
+                _minimizeToNotifyIcon = value;
+                SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
             }
         }
 
@@ -354,10 +578,12 @@ namespace EDDiscovery2
         {
             try
             {
+                _useNotifyIcon = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", false, conn);
                 _useDistances = SQLiteConnectionUser.GetSettingBool("EDSMDistances", false, conn);
                 _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
                 _canSkipSlowUpdates = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", false, conn);
                 _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
+                _minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
                 _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
                 _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
                 _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);

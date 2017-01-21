@@ -1,4 +1,19 @@
-﻿using EDDiscovery.DB;
+﻿/*
+ * Copyright © 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
@@ -265,6 +280,25 @@ namespace EDDiscovery.EliteDangerous
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
 
+        /// <summary>
+        /// Normalize commodity names for MiningRefined, MissionAccepted, and MissionCompleted entries.
+        /// "$Indite_Name;" will become "indite", and "$uraninite_name;" will become "uraninite", etc.
+        /// </summary>
+        /// <param name="commodity">The raw commodity name.</param>
+        /// <returns>A normalized, lower-cased representation of the commodity name.</returns>
+        protected static string NormalizeCommodity(string commodity)
+        {
+            if (string.IsNullOrWhiteSpace(commodity))
+                return string.Empty;
+
+            StringBuilder ret = new StringBuilder();
+
+            if (commodity.Length >= 8 && commodity.StartsWith("$") && commodity.EndsWith("_name;", StringComparison.InvariantCultureIgnoreCase))
+                ret.Append(commodity.Substring(1, commodity.Length - 7)); // 1 for '$' plus 6 for '_name;'
+            else
+                ret.Append(commodity);
+            return (ret.ToString().ToLowerInvariant());
+        }
 
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
