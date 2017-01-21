@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+ * Copyright © 2016 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,6 +26,7 @@ using EDDiscovery.DB;
 using EMK.LightGeometry;
 using System.Collections.ObjectModel;
 using EDDiscovery.Forms;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {
@@ -94,9 +110,10 @@ namespace EDDiscovery.UserControls
 
         public void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            HistoryEntry lfs = hl.GetLastFuelScoop;
-            HistoryEntry hex = hl.GetLastFSD;
-            HistoryEntry fuel = hl.GetLastRefuel;
+            HistoryEntry lfs = hl.GetLastHistoryEntry(x => x.IsFuelScoop);
+            HistoryEntry hex = hl.GetLastHistoryEntry(x => x.IsFSDJump);
+            HistoryEntry fuel = hl.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.RefuelAll
+                    || x.journalEntry.EventTypeID == JournalTypeEnum.RefuelPartial);
             if (lfs != null && lfs.EventTimeUTC >= hex.EventTimeUTC)
                 hex = lfs;
             if (fuel != null && fuel.EventTimeUTC >= hex.EventTimeUTC)
@@ -180,7 +197,8 @@ namespace EDDiscovery.UserControls
                         fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
                         break;
                     case EliteDangerous.JournalTypeEnum.RefuelAll:
-                        fuelhe = discoveryform.history.GetLastFSDOrFuelScoop;
+                        fuelhe = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump
+                    || x.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop);
                         if (fuelhe.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
                             fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
                         else
@@ -188,7 +206,8 @@ namespace EDDiscovery.UserControls
                         fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelAll).Amount;
                         break;
                     case EliteDangerous.JournalTypeEnum.RefuelPartial:
-                        fuelhe = discoveryform.history.GetLastFSDOrFuelScoop;
+                        fuelhe = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump
+                    || x.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop);
                         if (fuelhe.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
                             fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
                         else
@@ -228,11 +247,20 @@ namespace EDDiscovery.UserControls
                         optimalMass, powerConstant,
                         maxFuelPerJump, out maxJumps);
                     double JumpRange = Math.Pow(maxFuelPerJump / (linearConstant * 0.001), 1 / powerConstant) * optimalMass / (currentCargo + unladenMass + fuel);
-                    botline += String.Format(" [{1:N2}ly @ {0:N2}ly / {2:N0}]",
-                         Math.Floor(maxJumpDistance  *100) / 100 ,
-                         Math.Floor(JumpRange * 100) / 100 ,
-                          Math.Floor(maxJumps * 100) / 100
-                        );
+
+                    HistoryEntry lastJet= discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
+                    if (lastJet != null && lastJet.EventTimeLocal > lastHE.EventTimeLocal)
+                    {
+                        JumpRange *= (lastJet.journalEntry as EliteDangerous.JournalEvents.JournalJetConeBoost).BoostValue;
+                        botline += String.Format(" [{0:N2}ly @ BOOST]", Math.Floor(JumpRange * 100) / 100);
+                    }
+                    else
+                    {
+                        botline += String.Format(" [{0:N2}ly @ {1:N2}ly / {2:N0}]",
+                         Math.Floor(JumpRange * 100) / 100,
+                         Math.Floor(maxJumpDistance * 100) / 100,
+                         Math.Floor(maxJumps * 100) / 100);
+                    }
                 } 
                 pictureBox.AddTextAutoSize(new Point(botlineleft.pos.Right, 35), new Size(1000, 40), botline, displayfont, textcolour, backcolour, 1.0F);
                 pictureBox.Render();

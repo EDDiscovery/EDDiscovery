@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+ * Copyright © 2016 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -438,16 +453,23 @@ namespace EDDiscovery
         {
             UpdateRouteInfo(_currentRoute);
 
+            if (String.IsNullOrEmpty(_currentRoute.Name))
+            {
+                var result = MessageBox.Show(_discoveryForm, "Please specify a name for the route.", "Unsaved route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                textBoxRouteName.Select();
+                return;
+            }
             if (_currentRoute.Id == -1)
             {
                 _currentRoute.Add();
                 _savedRoutes.Add(_currentRoute);
-                UpdateComboBox();
             }
             else
             {
                 _currentRoute.Update();
             }
+            UpdateComboBox();
+            toolStripComboBoxRouteSelection.Text = _currentRoute.Name;
         }
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
@@ -681,11 +703,14 @@ namespace EDDiscovery
             if (data != null)
             {
                 var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
-                int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+                int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
                 int insertRow = selectedRows.FirstOrDefault();
                 foreach (int index in selectedRows.Reverse())
                 {
-                    dataGridViewRouteSystems.Rows.RemoveAt(index);
+                    if (index != dataGridViewRouteSystems.NewRowIndex)
+                    {
+                        dataGridViewRouteSystems.Rows.RemoveAt(index);
+                    }
                 }
                 InsertRows(insertRow, rows);
             }

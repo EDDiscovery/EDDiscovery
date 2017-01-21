@@ -1,4 +1,19 @@
-﻿namespace EDDiscovery
+﻿/*
+ * Copyright © 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+namespace EDDiscovery
 {
     partial class ExportControl
     {
@@ -64,7 +79,6 @@
             this.radioButtonCustomEU = new ExtendedControls.RadioButtonCustom();
             this.groupBoxCustom1 = new ExtendedControls.GroupBoxCustom();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
             this.txtExportVisited = new ExtendedControls.AutoCompleteTextBox();
             this.buttonExportOpenFolder = new ExtendedControls.ButtonExt();
             this.btnExportTravel = new ExtendedControls.ButtonExt();
@@ -75,6 +89,10 @@
             this.buttonImportHelp = new ExtendedControls.ButtonExt();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.selectImportFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.btnSphereSystems = new ExtendedControls.ButtonExt();
+            this.txtsphereRadius = new ExtendedControls.TextBoxBorder();
+            this.labelExt8 = new ExtendedControls.LabelExt();
+            this.labelExt9 = new ExtendedControls.LabelExt();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBoxCustom2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -122,9 +140,9 @@
             this.groupBoxCustom2.BorderColorScaling = 0.5F;
             this.groupBoxCustom2.Controls.Add(this.tableLayoutPanel4);
             this.groupBoxCustom2.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom2.Location = new System.Drawing.Point(3, 294);
+            this.groupBoxCustom2.Location = new System.Drawing.Point(3, 313);
             this.groupBoxCustom2.Name = "groupBoxCustom2";
-            this.groupBoxCustom2.Size = new System.Drawing.Size(475, 117);
+            this.groupBoxCustom2.Size = new System.Drawing.Size(475, 98);
             this.groupBoxCustom2.TabIndex = 12;
             this.groupBoxCustom2.TabStop = false;
             this.groupBoxCustom2.Text = "History Import";
@@ -623,7 +641,7 @@
             this.groupBoxCustom1.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustom1.Location = new System.Drawing.Point(3, 150);
             this.groupBoxCustom1.Name = "groupBoxCustom1";
-            this.groupBoxCustom1.Size = new System.Drawing.Size(475, 138);
+            this.groupBoxCustom1.Size = new System.Drawing.Size(475, 157);
             this.groupBoxCustom1.TabIndex = 11;
             this.groupBoxCustom1.TabStop = false;
             this.groupBoxCustom1.Text = "Elite Dangerous Visited Stars Creator";
@@ -638,29 +656,24 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.txtExportVisited, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.buttonExportOpenFolder, 2, 2);
             this.tableLayoutPanel3.Controls.Add(this.btnExportTravel, 2, 0);
-            this.tableLayoutPanel3.Controls.Add(this.buttonExportToFilteredSystems, 1, 1);
-            this.tableLayoutPanel3.Controls.Add(this.buttonExportToGalmap, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.buttonExportToGalmap, 1, 3);
+            this.tableLayoutPanel3.Controls.Add(this.buttonExportToFilteredSystems, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.buttonExportOpenFolder, 2, 3);
+            this.tableLayoutPanel3.Controls.Add(this.txtsphereRadius, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.labelExt8, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.labelExt9, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnSphereSystems, 2, 2);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 19);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowCount = 4;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(466, 100);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(466, 119);
             this.tableLayoutPanel3.TabIndex = 10;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Filter";
             // 
             // txtExportVisited
             // 
@@ -677,7 +690,7 @@
             this.txtExportVisited.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.txtExportVisited.DropDownWidth = 0;
             this.txtExportVisited.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.txtExportVisited.Location = new System.Drawing.Point(38, 3);
+            this.txtExportVisited.Location = new System.Drawing.Point(49, 3);
             this.txtExportVisited.Name = "txtExportVisited";
             this.txtExportVisited.Size = new System.Drawing.Size(231, 20);
             this.txtExportVisited.TabIndex = 8;
@@ -688,7 +701,7 @@
             this.buttonExportOpenFolder.BorderColorScaling = 1.25F;
             this.buttonExportOpenFolder.ButtonColorScaling = 0.5F;
             this.buttonExportOpenFolder.ButtonDisabledScaling = 0.5F;
-            this.buttonExportOpenFolder.Location = new System.Drawing.Point(275, 61);
+            this.buttonExportOpenFolder.Location = new System.Drawing.Point(286, 87);
             this.buttonExportOpenFolder.Name = "buttonExportOpenFolder";
             this.buttonExportOpenFolder.Size = new System.Drawing.Size(140, 23);
             this.buttonExportOpenFolder.TabIndex = 10;
@@ -702,7 +715,7 @@
             this.btnExportTravel.BorderColorScaling = 1.25F;
             this.btnExportTravel.ButtonColorScaling = 0.5F;
             this.btnExportTravel.ButtonDisabledScaling = 0.5F;
-            this.btnExportTravel.Location = new System.Drawing.Point(275, 3);
+            this.btnExportTravel.Location = new System.Drawing.Point(286, 3);
             this.btnExportTravel.Name = "btnExportTravel";
             this.btnExportTravel.Size = new System.Drawing.Size(75, 23);
             this.btnExportTravel.TabIndex = 11;
@@ -716,7 +729,7 @@
             this.buttonExportToFilteredSystems.BorderColorScaling = 1.25F;
             this.buttonExportToFilteredSystems.ButtonColorScaling = 0.5F;
             this.buttonExportToFilteredSystems.ButtonDisabledScaling = 0.5F;
-            this.buttonExportToFilteredSystems.Location = new System.Drawing.Point(38, 32);
+            this.buttonExportToFilteredSystems.Location = new System.Drawing.Point(49, 58);
             this.buttonExportToFilteredSystems.Name = "buttonExportToFilteredSystems";
             this.buttonExportToFilteredSystems.Size = new System.Drawing.Size(184, 23);
             this.buttonExportToFilteredSystems.TabIndex = 7;
@@ -730,7 +743,7 @@
             this.buttonExportToGalmap.BorderColorScaling = 1.25F;
             this.buttonExportToGalmap.ButtonColorScaling = 0.5F;
             this.buttonExportToGalmap.ButtonDisabledScaling = 0.5F;
-            this.buttonExportToGalmap.Location = new System.Drawing.Point(38, 61);
+            this.buttonExportToGalmap.Location = new System.Drawing.Point(49, 87);
             this.buttonExportToGalmap.Name = "buttonExportToGalmap";
             this.buttonExportToGalmap.Size = new System.Drawing.Size(184, 24);
             this.buttonExportToGalmap.TabIndex = 6;
@@ -745,7 +758,7 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Controls.Add(this.buttonImport, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.buttonImportHelp, 0, 1);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(484, 294);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(484, 313);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 31F));
@@ -788,6 +801,48 @@
             // selectImportFileDialog
             // 
             this.selectImportFileDialog.FileName = "openFileDialog1";
+            // 
+            // btnSphereSystems
+            // 
+            this.btnSphereSystems.BorderColorScaling = 1.25F;
+            this.btnSphereSystems.ButtonColorScaling = 0.5F;
+            this.btnSphereSystems.ButtonDisabledScaling = 0.5F;
+            this.btnSphereSystems.Location = new System.Drawing.Point(286, 58);
+            this.btnSphereSystems.Name = "btnSphereSystems";
+            this.btnSphereSystems.Size = new System.Drawing.Size(140, 23);
+            this.btnSphereSystems.TabIndex = 12;
+            this.btnSphereSystems.Text = "Export sphere systems";
+            this.btnSphereSystems.UseVisualStyleBackColor = true;
+            this.btnSphereSystems.Click += new System.EventHandler(this.btnSphereSystems_Click);
+            // 
+            // txtsphereRadius
+            // 
+            this.txtsphereRadius.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtsphereRadius.BorderColor = System.Drawing.Color.Transparent;
+            this.txtsphereRadius.BorderColorScaling = 0.5F;
+            this.txtsphereRadius.Location = new System.Drawing.Point(49, 32);
+            this.txtsphereRadius.Name = "txtsphereRadius";
+            this.txtsphereRadius.Size = new System.Drawing.Size(231, 20);
+            this.txtsphereRadius.TabIndex = 13;
+            // 
+            // labelExt8
+            // 
+            this.labelExt8.AutoSize = true;
+            this.labelExt8.Location = new System.Drawing.Point(3, 29);
+            this.labelExt8.Name = "labelExt8";
+            this.labelExt8.Size = new System.Drawing.Size(40, 13);
+            this.labelExt8.TabIndex = 14;
+            this.labelExt8.Text = "Radius";
+            // 
+            // labelExt9
+            // 
+            this.labelExt9.AutoSize = true;
+            this.labelExt9.Location = new System.Drawing.Point(3, 0);
+            this.labelExt9.Name = "labelExt9";
+            this.labelExt9.Size = new System.Drawing.Size(29, 13);
+            this.labelExt9.TabIndex = 15;
+            this.labelExt9.Text = "Filter";
             // 
             // ExportControl
             // 
@@ -838,7 +893,6 @@
         private ExtendedControls.RadioButtonCustom radioButtonCustomEU;
         private ExtendedControls.GroupBoxCustom groupBoxCustom1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.Label label1;
         private ExtendedControls.AutoCompleteTextBox txtExportVisited;
         private ExtendedControls.ButtonExt buttonExportOpenFolder;
         private ExtendedControls.ButtonExt btnExportTravel;
@@ -869,5 +923,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private ExtendedControls.ButtonExt buttonImportFile;
         private ExtendedControls.CheckBoxCustom checkBoxImpHeader;
+        private ExtendedControls.ButtonExt btnSphereSystems;
+        private ExtendedControls.TextBoxBorder txtsphereRadius;
+        private ExtendedControls.LabelExt labelExt8;
+        private ExtendedControls.LabelExt labelExt9;
     }
 }

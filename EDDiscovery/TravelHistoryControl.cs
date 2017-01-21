@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+ * Copyright © 2015 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -820,7 +835,7 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
             FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm.history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = _discoveryForm.option_nowindowreposition;
+            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;
         }
@@ -851,7 +866,7 @@ namespace EDDiscovery
 
         public void PopOut(PopOuts selected)
         { 
-            UserControlForm tcf = usercontrolsforms.NewForm(_discoveryForm.option_nowindowreposition);
+            UserControlForm tcf = usercontrolsforms.NewForm(EDDConfig.Options.NoWindowReposition);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
             tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 

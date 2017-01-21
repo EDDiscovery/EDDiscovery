@@ -1,4 +1,19 @@
-﻿using EDDiscovery;
+﻿/*
+ * Copyright © 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Fronter Developments plc.
+ */
+using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2.DB;
@@ -183,18 +198,6 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public string GetEDSMDistances()            // download a file of distances..
-        {
-            if (File.Exists(EDSMDistancesFileName))
-                File.Delete(EDSMDistancesFileName);
-            if (File.Exists(EDSMDistancesFileName + ".etag"))
-                File.Delete(EDSMDistancesFileName + ".etag");
-
-            if (DownloadFileHandler.DownloadFile(_serverAddress + "dump/distances.json", EDSMDistancesFileName))
-                return EDSMDistancesFileName;
-            else
-                return null;
-        }
         
         internal long GetNewSystems(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
@@ -535,6 +538,31 @@ namespace EDDiscovery2.EDSM
                 }
             }
 
+            return systems;
+        }
+
+        public List<String> GetSphereSystems(String systemName, double radius)
+        {
+            List<String> systems = new List<string>();
+            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}", systemName, radius);
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return systems;
+
+            var json = response.Body;
+            if (json == null)
+                return systems;
+
+            JArray msg = JArray.Parse(json);
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    systems.Add(sysname["name"].ToString());
+                }
+            }
             return systems;
         }
 
