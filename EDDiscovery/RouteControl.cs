@@ -607,8 +607,12 @@ namespace EDDiscovery
 
             if (routeSystems != null && routeSystems.Any())
             {
+                float dist;
+                if (!float.TryParse(textBox_Distance.Text, out dist))       // in case text is crap
+                    dist = 30;
+
                 _discoveryForm.history.FillInPositionsFSDJumps();
-                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), 400 / float.Parse(textBox_Distance.Text) , _discoveryForm.history.FilterByTravel);
+                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), 400 / dist , _discoveryForm.history.FilterByTravel);
                 map.SetPlanned(routeSystems);
                 map.Show();
             }
