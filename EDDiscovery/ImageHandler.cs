@@ -38,6 +38,8 @@ namespace EDDiscovery2.ImageHandler
         private ConcurrentDictionary<string, System.Threading.Timer> ScreenshotTimers = new ConcurrentDictionary<string, System.Threading.Timer>();
         private bool initialized = false;
         private string EDPicturesDir;
+        private int LastJournalCmdr = Int32.MinValue;
+        private JournalLocOrJump LastJournalLoc;
 
         public delegate void ScreenShot(string path, Point size);
         public event ScreenShot OnScreenShot;
@@ -161,6 +163,20 @@ namespace EDDiscovery2.ImageHandler
 
         private void NewJournalEntry(JournalEntry je)
         {
+            if (je is JournalLocOrJump)
+            {
+                LastJournalCmdr = je.CommanderId;
+                LastJournalLoc = je as JournalLocOrJump;
+            }
+            else
+            {
+                if (je.CommanderId != LastJournalCmdr)
+                {
+                    LastJournalLoc = null;
+                    LastJournalCmdr = je.CommanderId;
+                }
+            }
+
             if (je.EventTypeID == JournalTypeEnum.Screenshot)
             {
                 if (!checkBoxAutoConvert.Checked)
@@ -239,6 +255,22 @@ namespace EDDiscovery2.ImageHandler
                 checkboxremove = checkBoxRemove.Checked;
                 checkboxpreview = checkBoxPreview.Checked;
             });
+
+            if (sysname == null)
+            {
+                if (LastJournalLoc != null)
+                {
+                    sysname = LastJournalLoc.StarSystem;
+                }
+                else if (LastJournalCmdr != Int32.MinValue)
+                {
+                    LastJournalLoc = JournalEntry.GetLast<JournalLocOrJump>(LastJournalCmdr, DateTime.UtcNow);
+                    if (LastJournalLoc != null)
+                    {
+                        sysname = LastJournalLoc.StarSystem;
+                    }
+                }
+            }
 
             if (sysname == null)
             {
