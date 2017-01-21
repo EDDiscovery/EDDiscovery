@@ -793,9 +793,6 @@
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\JSONFiltersForm.resx">
-      <DependentUpon>JSONFiltersForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </EmbeddedResource>
