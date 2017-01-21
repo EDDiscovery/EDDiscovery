@@ -183,7 +183,7 @@ namespace EDDiscovery.Actions
                 string errlist = null;
                 ae.passed = new List<ConditionLists.Condition>();
 
-                System.Diagnostics.Debug.WriteLine("Check `" + ae.af.name + ae.af.actionfieldfilter.ToString() + "`");
+                //System.Diagnostics.Debug.WriteLine("Check `" + ae.af.name + ae.af.actionfieldfilter.ToString() + "`");
                 //ActionData.DumpVars(valuesneeded, " Test var:");
 
                 ae.af.actionfieldfilter.CheckConditions(ae.cl, valuesneeded, out errlist, ae.passed, se);   // indicate which ones passed
@@ -308,7 +308,27 @@ namespace EDDiscovery.Actions
             actionfiles[current].SaveFile();
         }
 
-        #region DIalog helps
+        #region special helpers
+
+        public List<Tuple<string, ConditionLists.MatchType>> ReturnValuesOfSpecificConditions(string conditions, List<ConditionLists.MatchType> matchtypes)
+        {
+            List<Tuple<string, ConditionLists.MatchType>> ret = new List<Tuple<string, ConditionLists.MatchType>>();
+            foreach (ActionFile f in actionfiles)
+            {
+                if (f.enabled)
+                {
+                    List<Tuple<string, ConditionLists.MatchType>> fr = f.actionfieldfilter.ReturnValuesOfSpecificConditions(conditions, matchtypes);
+                    if (fr != null)
+                        ret.AddRange(fr);
+                }
+            }
+
+            return ret;
+        }
+
+        #endregion
+
+            #region Dialog helps
 
         public bool ImportDialog()
         {

@@ -34,5 +34,25 @@ public static class ObjectExtensions
             i++;
         return i;
     }
+
+    public static string ToString(this System.Windows.Forms.Keys key, System.Windows.Forms.Keys modifier )
+    {
+        string k = "";
+
+        if ((modifier & System.Windows.Forms.Keys.Alt) != 0)
+        {
+            k += "Alt+";
+        }
+        if ((modifier & System.Windows.Forms.Keys.Control) != 0)
+        {
+            k += "Control+";
+        }
+        if ((modifier & System.Windows.Forms.Keys.Shift) != 0)
+        {
+            k += "Shift+";
+        }
+
+        return k + key.ToString();
+    }
 }
 

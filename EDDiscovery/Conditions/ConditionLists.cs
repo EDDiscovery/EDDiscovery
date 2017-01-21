@@ -39,6 +39,8 @@ namespace EDDiscovery
             IsPresent,          // field is present
             IsNotPresent,       // field is not present
 
+            IsOneOf,            // is it one of a quoted comma list..
+
             AlwaysTrue,       // Always true
         };
 
@@ -97,6 +99,7 @@ namespace EDDiscovery
                                        "< (Date)",
                                        "Is Present",
                                        "Not Present",
+                                       "Is One Of",
                                        "Always True"
                                     };
 
@@ -123,6 +126,7 @@ namespace EDDiscovery
                                        "<",
                                        "IsPresent",
                                        "NotPresent",
+                                       "IsOneOf",
                                        "AlwaysTrue"
                                     };
 
@@ -216,40 +220,6 @@ namespace EDDiscovery
 
         public enum ExpandResult { Failed, NoExpansion, Expansion };
         public delegate ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
-
-        // Event name.. give me conditions which match that name or ALL
-        // flagstart, if not null ,compare with start of action data and include only if matches
-
-        public bool IsConditionFlagSet(string flagstart)
-        {
-            foreach (Condition l in conditionlist)
-            {
-                if (l.actiondata.StartsWith(flagstart))
-                    return true;
-            }
-
-            return false;
-        }
-
-        public List<Condition> GetConditionListByEventName(string eventname , string flagstart = null )       
-        {
-            List<Condition> fel;
-
-            if ( flagstart != null )
-                fel = (from fil in conditionlist
-                                       where
-                                     (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase)) &&
-                                     fil.actiondata.StartsWith(flagstart)
-                                       select fil).ToList();
-
-            else
-                fel = (from fil in conditionlist
-                                   where
-                                 (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase))
-                                   select fil).ToList();
-
-            return (fel.Count == 0) ? null : fel;
-        }
 
         // check all conditions against these values.
         public bool? CheckAll(ConditionVariables values, out string errlist , List<Condition> passed = null , ExpandString se = null )            // Check all conditions..
@@ -379,7 +349,22 @@ namespace EDDiscovery
                             matched = leftside.IndexOf(rightside, StringComparison.InvariantCultureIgnoreCase) < 0;
                         else if (f.matchtype == MatchType.DoesNotContainCaseSensitive)
                             matched = !leftside.Contains(rightside);
+                        else if (f.matchtype == MatchType.IsOneOf)
+                        {
+                            StringParser p = new StringParser(rightside);
+                            List<string> ret = p.NextQuotedWordList();
 
+                            if ( ret == null)
+                            {
+                                errlist += "IsOneOf value list is not in a optionally quoted comma separated form" + Environment.NewLine;
+                                innerres = false;
+                                break;                       // stop the loop, its a false
+                            }
+                            else
+                            {
+                                matched = ret.Contains(leftside, StringComparer.InvariantCultureIgnoreCase);
+                            }
+                        }
                         else if (f.matchtype == MatchType.IsEmpty)
                         {
                             matched = leftside.Length == 0;
@@ -748,6 +733,60 @@ namespace EDDiscovery
                 }
             }
         }
+
+        #region Helpers
+
+        // Event name.. give me conditions which match that name or ALL
+        // flagstart, if not null ,compare with start of action data and include only if matches
+
+        public bool IsConditionFlagSet(string flagstart)
+        {
+            foreach (Condition l in conditionlist)
+            {
+                if (l.actiondata.StartsWith(flagstart))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public List<Condition> GetConditionListByEventName(string eventname, string flagstart = null)
+        {
+            List<Condition> fel;
+
+            if (flagstart != null)
+                fel = (from fil in conditionlist
+                       where
+                     (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase)) &&
+                     fil.actiondata.StartsWith(flagstart)
+                       select fil).ToList();
+
+            else
+                fel = (from fil in conditionlist
+                       where
+                     (fil.eventname.Equals("All") || fil.eventname.Equals(eventname, StringComparison.InvariantCultureIgnoreCase))
+                       select fil).ToList();
+
+            return (fel.Count == 0) ? null : fel;
+        }
+
+        public List<Tuple<string,MatchType>> ReturnValuesOfSpecificConditions(string itemname , List<MatchType> matchtypes)      // given itemname, give me a list of values it is matched against
+        {
+            List<Tuple<string,MatchType>> ret = new List<Tuple<string,MatchType>>();
+
+            foreach (Condition fe in conditionlist)        // find all values needed
+            {
+                foreach (ConditionEntry ce in fe.fields)
+                {
+                    if (ce.itemname.Equals(itemname) && matchtypes.Contains(ce.matchtype))
+                        ret.Add(new Tuple<string,MatchType>(ce.matchstring,ce.matchtype));
+                }
+            }
+
+            return ret;
+        }
+
+        #endregion
 
         #region JSON as the vars - used for the filter out system..
 

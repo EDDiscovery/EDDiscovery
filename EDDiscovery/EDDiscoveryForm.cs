@@ -107,7 +107,8 @@ namespace EDDiscovery
         public GalacticMapping galacticMapping;
 
         public Actions.ActionFileList actionfiles;
-
+        public string actionfileskeyevents;
+        ActionMessageFilter actionfilesmessagefilter;
         public Actions.ActionRun actionrunasync;
         private ConditionVariables internalglobalvariables;         // internally set variables, either program or user program ones
         private ConditionVariables usercontrolledglobalvariables;     // user variables, set by user only
@@ -327,11 +328,7 @@ namespace EDDiscovery
                     button_test.Visible = true;
                 }
 
-                actionfiles = new Actions.ActionFileList();
-                actionfiles.LoadAllActionFiles();
-
-                actionrunasync = new Actions.ActionRun(this,actionfiles,true);        // this is the guy who runs programs asynchronously
-
+                StartUpActions();
             }
             catch (Exception ex)
             {
@@ -2026,6 +2023,14 @@ namespace EDDiscovery
 
         #region Actions
 
+        public void StartUpActions()
+        {
+            actionfiles = new Actions.ActionFileList();
+            actionfiles.LoadAllActionFiles();
+            actionrunasync = new Actions.ActionRun(this, actionfiles, true);        // this is the guy who runs programs asynchronously
+
+            ActionConfigureKeys();
+        }
 
         public void ConfigureActions()
         {
@@ -2036,6 +2041,7 @@ namespace EDDiscovery
             events.Add("onRefreshStart");
             events.Add("onRefreshEnd");
             events.Add("onStartup");
+            events.Add("onKeyPress");
             //events.Add("onClosedown");
 
             frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, usercontrolledglobalvariables, actionfiles, theme);
@@ -2046,7 +2052,9 @@ namespace EDDiscovery
             usercontrolledglobalvariables = frm.userglobalvariables;
             SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
 
-            globalvariables = new ConditionVariables(internalglobalvariables,usercontrolledglobalvariables);    // remake
+            globalvariables = new ConditionVariables(internalglobalvariables, usercontrolledglobalvariables);    // remake
+
+            ActionConfigureKeys();
         }
 
         public void ActionRunOnEntry(HistoryEntry he , string triggertype , string flagstart = null )       //set flagstart to be the first flag of the actiondata..
@@ -2098,8 +2106,6 @@ namespace EDDiscovery
             }
         }
 
-
-
         private void SetInternalGlobal(string name, string value)
         {
             internalglobalvariables[name] = globalvariables[name] = value;
@@ -2109,6 +2115,83 @@ namespace EDDiscovery
         {
             internalglobalvariables[name] = globalvariables[name] = value;
         }
+
+        void ActionConfigureKeys()
+        {
+            List<Tuple<string, ConditionLists.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionLists.MatchType>() { ConditionLists.MatchType.Equals, ConditionLists.MatchType.IsOneOf });        // need these to decide
+
+            if (ret.Count > 0)
+            {
+                actionfileskeyevents = "";
+                foreach (Tuple<string, ConditionLists.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
+                {
+                    if (t.Item2 == ConditionLists.MatchType.Equals)
+                        actionfileskeyevents += t.Item1 + ",";
+                    else
+                    {
+                        StringParser p = new StringParser(t.Item1);
+                        List<string> klist = p.NextQuotedWordList();
+                        if (klist != null)
+                            actionfileskeyevents += String.Join(",", klist) + ",";
+                    }
+                }
+
+                if (actionfilesmessagefilter == null)
+                {
+                    actionfilesmessagefilter = new ActionMessageFilter(this);
+                    Application.AddMessageFilter(actionfilesmessagefilter);
+                    System.Diagnostics.Debug.WriteLine("Installed message filter for keys");
+                }
+            }
+            else if (actionfilesmessagefilter != null)
+            {
+                Application.RemoveMessageFilter(actionfilesmessagefilter);
+                actionfilesmessagefilter = null;
+                System.Diagnostics.Debug.WriteLine("Removed message filter for keys");
+            }
+        }
+
+        public bool CheckKeys(string keyname)
+        {
+            if (actionfileskeyevents.Contains(keyname + ","))  // fast string comparision to determine if key is overridden..
+            {
+                globalvariables["KeyPress"] = keyname;          // only add it to global variables, its not kept in internals.
+                ActionRunOnEvent("onKeyPress", "KeyPress");
+                return true;
+            }
+            else
+                return false;
+        }
+
+        const int WM_KEYDOWN = 0x100;
+        const int WM_KEYCHAR = 0x102;
+        const int WM_SYSKEYDOWN = 0x104;
+
+        public class ActionMessageFilter : IMessageFilter
+        {
+            EDDiscoveryForm discoveryForm;
+            public ActionMessageFilter(EDDiscoveryForm ed)
+            {
+                discoveryForm = ed;
+            }
+
+            public bool PreFilterMessage(ref Message m)
+            {
+                if (m.Msg == WM_KEYDOWN || m.Msg == WM_SYSKEYDOWN)
+                {
+                    Keys k = (Keys)m.WParam;
+                    if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
+                        if (discoveryForm.CheckKeys(k.ToString(Control.ModifierKeys)))
+                            return true;    // swallow, we did it
+                    }
+                }
+
+                return false;
+            }
+        }
+
 
         #endregion
     }

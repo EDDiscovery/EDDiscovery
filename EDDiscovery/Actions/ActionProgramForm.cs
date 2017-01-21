@@ -766,7 +766,7 @@ namespace EDDiscovery.Actions
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Paste at " + rightclickstep);
+            //System.Diagnostics.Debug.WriteLine("Paste at " + rightclickstep);
             if (rightclickstep != -1)
             {
                 int p = rightclickstep;
@@ -797,7 +797,7 @@ namespace EDDiscovery.Actions
 
                 UnMark();
 
-                System.Diagnostics.Debug.WriteLine("Copy " + ActionProgramCopyBuffer.Count);
+              //  System.Diagnostics.Debug.WriteLine("Copy " + ActionProgramCopyBuffer.Count);
             }
         }
 
