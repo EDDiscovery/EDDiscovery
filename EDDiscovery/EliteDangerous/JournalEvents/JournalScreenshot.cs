@@ -27,10 +27,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScreenshot(JObject evt ) : base(evt, JournalTypeEnum.Screenshot)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
-
+            Filename = JSONHelper.GetStringDef(evt["Filename"]);
+            Width = JSONHelper.GetInt(evt["Width"]);
+            Height = JSONHelper.GetInt(evt["Height"]);
+            System = JSONHelper.GetStringDef(evt["System"]);
+            Body = JSONHelper.GetStringDef(evt["Body"]);
         }
-        public string StationName { get; set; }
+        public string Filename { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public string System { get; set; }
+        public string Body { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.screenshot; } }
 
