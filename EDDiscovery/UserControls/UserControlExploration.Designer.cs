@@ -33,11 +33,14 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonLoad = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
+            this.textBoxFileName = new ExtendedControls.TextBoxBorder();
+            this.label1 = new System.Windows.Forms.Label();
             this.textBoxRouteName = new ExtendedControls.TextBoxBorder();
             this.labelRouteName = new System.Windows.Forms.Label();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -69,6 +72,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
             this.toolStripButtonImportFile,
+            this.toolStripButtonLoad,
             this.toolStripButtonSave,
             this.toolStripButtonExport,
             this.toolStripButtonDelete,
@@ -97,6 +101,15 @@
             this.toolStripButtonImportFile.Text = "Import file";
             this.toolStripButtonImportFile.Click += new System.EventHandler(this.toolStripButtonImportFile_Click);
             // 
+            // toolStripButtonLoad
+            // 
+            this.toolStripButtonLoad.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLoad.Image")));
+            this.toolStripButtonLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonLoad.Name = "toolStripButtonLoad";
+            this.toolStripButtonLoad.Size = new System.Drawing.Size(53, 22);
+            this.toolStripButtonLoad.Text = "Load";
+            this.toolStripButtonLoad.Click += new System.EventHandler(this.toolStripButtonLoad_Click);
+            // 
             // toolStripButtonSave
             // 
             this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
@@ -123,6 +136,7 @@
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
             this.toolStripButtonDelete.Size = new System.Drawing.Size(60, 22);
             this.toolStripButtonDelete.Text = "Delete";
+            this.toolStripButtonDelete.Visible = false;
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
             // toolStripSeparator1
@@ -132,13 +146,36 @@
             // 
             // panelRouteInfo
             // 
+            this.panelRouteInfo.Controls.Add(this.textBoxFileName);
+            this.panelRouteInfo.Controls.Add(this.label1);
             this.panelRouteInfo.Controls.Add(this.textBoxRouteName);
             this.panelRouteInfo.Controls.Add(this.labelRouteName);
             this.panelRouteInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelRouteInfo.Location = new System.Drawing.Point(0, 25);
             this.panelRouteInfo.Name = "panelRouteInfo";
-            this.panelRouteInfo.Size = new System.Drawing.Size(787, 38);
+            this.panelRouteInfo.Size = new System.Drawing.Size(787, 54);
             this.panelRouteInfo.TabIndex = 1;
+            // 
+            // textBoxFileName
+            // 
+            this.textBoxFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxFileName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFileName.BorderColorScaling = 0.5F;
+            this.textBoxFileName.Location = new System.Drawing.Point(90, 3);
+            this.textBoxFileName.Name = "textBoxFileName";
+            this.textBoxFileName.ReadOnly = true;
+            this.textBoxFileName.Size = new System.Drawing.Size(694, 20);
+            this.textBoxFileName.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(5, 6);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Filename";
             // 
             // textBoxRouteName
             // 
@@ -146,7 +183,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxRouteName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxRouteName.BorderColorScaling = 0.5F;
-            this.textBoxRouteName.Location = new System.Drawing.Point(90, 4);
+            this.textBoxRouteName.Location = new System.Drawing.Point(90, 28);
             this.textBoxRouteName.Name = "textBoxRouteName";
             this.textBoxRouteName.Size = new System.Drawing.Size(694, 20);
             this.textBoxRouteName.TabIndex = 1;
@@ -154,7 +191,7 @@
             // labelRouteName
             // 
             this.labelRouteName.AutoSize = true;
-            this.labelRouteName.Location = new System.Drawing.Point(5, 7);
+            this.labelRouteName.Location = new System.Drawing.Point(5, 31);
             this.labelRouteName.Name = "labelRouteName";
             this.labelRouteName.Size = new System.Drawing.Size(79, 13);
             this.labelRouteName.TabIndex = 0;
@@ -230,10 +267,11 @@
             this.ColumnInfo,
             this.ColumnNote});
             this.dataGridViewExplore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewExplore.Location = new System.Drawing.Point(0, 63);
+            this.dataGridViewExplore.Location = new System.Drawing.Point(0, 79);
             this.dataGridViewExplore.Name = "dataGridViewExplore";
-            this.dataGridViewExplore.Size = new System.Drawing.Size(787, 487);
+            this.dataGridViewExplore.Size = new System.Drawing.Size(787, 471);
             this.dataGridViewExplore.TabIndex = 2;
+            this.dataGridViewExplore.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExplore_CellValidated);
             // 
             // ColumnSystemName
             // 
@@ -359,5 +397,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPrimaryStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
+        private System.Windows.Forms.ToolStripButton toolStripButtonLoad;
+        private ExtendedControls.TextBoxBorder textBoxFileName;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -15,6 +15,7 @@ using EDDiscovery.EDSM;
 using EDDiscovery2;
 using EDDiscovery.UserControls;
 using EDDiscovery.EliteDangerous.JournalEvents;
+using Newtonsoft.Json.Linq;
 
 namespace EDDiscovery
 {
@@ -29,11 +30,10 @@ namespace EDDiscovery
         private EDDiscoveryForm _discoveryForm;
         private TravelHistoryControl travelhistorycontrol;
         private EDSMClass edsm;
-        private int _currentExploreIndex;
         private Rectangle _dragBox;
         private int _dragRowIndex;
         HistoryList hl = null;
-        HistoryEntry last_he = null;
+        //HistoryEntry last_he = null;
 
         public int JounalScan { get; private set; }
 
@@ -270,36 +270,84 @@ namespace EDDiscovery
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-            //UpdateRouteInfo(_currentRoute);
+            string explorepath = Path.Combine(Tools.GetAppDataDirectory(), "Exploration");
+            if (!Directory.Exists(explorepath))
+                Directory.CreateDirectory(explorepath);
 
-            //if (_currentRoute.Id == -1)
-            //{
-            //    _currentRoute.Add();
-            //    _savedRoutes.Add(_currentRoute);
-            //    UpdateComboBox();
-            //}
-            //else
-            //{
-            //    _currentRoute.Update();
-            //}
+            UpdateExplorationInfo(_currentExplorationSet);
+
+            if (String.IsNullOrEmpty(textBoxFileName.Text))
+            {
+                SaveFileDialog dlg = new SaveFileDialog();
+
+                dlg.InitialDirectory = explorepath;
+                dlg.OverwritePrompt = true;
+                dlg.DefaultExt = "json";
+                dlg.AddExtension = true;
+                dlg.Filter = "Explore file| *.json";
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    textBoxFileName.Text = dlg.FileName;
+                }
+                else
+                    return;
+
+     
+            }
+            UpdateExplorationInfo(_currentExplorationSet);
+            _currentExplorationSet.Save(textBoxFileName.Text);
+        }
+
+        private void toolStripButtonLoad_Click(object sender, EventArgs e)
+        {
+            string explorepath = Path.Combine(Tools.GetAppDataDirectory(), "Exploration");
+            if (!Directory.Exists(explorepath))
+                Directory.CreateDirectory(explorepath);
+
+
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.InitialDirectory = explorepath;
+            dlg.DefaultExt = "json";
+            dlg.AddExtension = true;
+            dlg.Filter = "Explore file| *.json";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                textBoxFileName.Text = dlg.FileName;
+
+                _currentExplorationSet.Load(dlg.FileName);
+
+                textBoxRouteName.Text = _currentExplorationSet.Name;
+                foreach (var sysname in _currentExplorationSet.Systems)
+                {
+                    dataGridViewExplore.Rows.Add(sysname, "", "");
+                }
+                UpdateSystemRows();
+
+            }
         }
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            ExplorationSetClass newroute = new ExplorationSetClass();
-            UpdateExplorationInfo(newroute);
+            SaveFileDialog dlg = new SaveFileDialog();
+            string explorepath = Path.Combine(Tools.GetAppDataDirectory(), "Exploration");
+            if (!Directory.Exists(explorepath))
+                Directory.CreateDirectory(explorepath);
 
-            //if (!newroute.Equals(_currentRoute))
-            //{
-            //    var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-            //    if (result == DialogResult.No)
-            //    {
-            //        toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
-            //        return;
-            //    }
-            //}
+            dlg.InitialDirectory = explorepath;
+            dlg.OverwritePrompt = true;
+            dlg.DefaultExt = "json";
+            dlg.AddExtension = true;
+            dlg.Filter = "Explore file| *.json";
 
-            ClearExplorationSet();
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                textBoxFileName.Text = dlg.FileName;
+                UpdateExplorationInfo(_currentExplorationSet);
+                ClearExplorationSet();
+            }
         }
 
         private void ClearExplorationSet()
@@ -333,14 +381,11 @@ namespace EDDiscovery
             }
         }
 
-        private void dataGridViewRouteSystems_CellValidated(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewExplore_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
-                //UpdateSystemRow(e.RowIndex);
-                //UpdateSystemRow(e.RowIndex + 1);
-                //Force the totals to update
-                UpdateSystemRows();
+                UpdateSystemRow(e.RowIndex);
             }
         }
 
@@ -561,7 +606,7 @@ namespace EDDiscovery
                 else
                 {
                     _currentExplorationSet.Name = "\x7F" + _currentExplorationSet.Name;
-                    _currentExplorationSet.Update();
+
                 }
 
                 _savedExplorationSets.Remove(_currentExplorationSet);
@@ -572,17 +617,6 @@ namespace EDDiscovery
         
         private void toolStripButtonImportFile_Click(object sender, EventArgs e)
         {
-            ExplorationSetClass newroute = new ExplorationSetClass();
-            UpdateExplorationInfo(newroute);
-            if (!newroute.Equals(_currentExplorationSet))
-            {
-                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
-                    + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                    return;
-            }
-
-            ClearExplorationSet();
 
 
             OpenFileDialog ofd = new OpenFileDialog();
@@ -591,7 +625,12 @@ namespace EDDiscovery
 
             if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 return;
+
+            ClearExplorationSet();
+
             string[] sysnames;
+
+
 
             try
             {
@@ -724,6 +763,7 @@ namespace EDDiscovery
             }
             RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
         }
+
     }
 
     public class ExplorationSetClass
@@ -738,10 +778,39 @@ namespace EDDiscovery
 
         public void Delete()
         { }
-        public void Update()
-        {
 
+
+        public void Save(string fileName)
+        {
+            JObject jo = new JObject();
+
+            if (string.IsNullOrEmpty(fileName))
+                return;
+
+            jo["Name"] = Name;
+
+            jo["Systems"] = new JArray(Systems);
+
+            File.WriteAllText(fileName, jo.ToString());
         }
 
+
+        public void Load(string fileName)
+        {
+            JObject jo = JObject.Parse(File.ReadAllText(fileName));
+
+
+            Name = jo["Name"].ToString();
+
+            Systems.Clear();
+
+            JArray ja = (JArray)jo["Systems"];
+
+            foreach (var jsys in ja)
+            {
+                Systems.Add(jsys.Value<String>());
+            }
+
+        }
     }
 }
