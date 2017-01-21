@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Speech.Synthesis;
 
 namespace EDDiscovery.Actions
 {
@@ -155,15 +154,7 @@ namespace EDDiscovery.Actions
                                        String text, bool waitcomplete, string voicename, string volume, string rate)
 
             {
-                SpeechSynthesizer synth = new SpeechSynthesizer();
-
-                List<string> voices = new List<string>();
-
-                foreach (InstalledVoice voice in synth.GetInstalledVoices())
-                {
-                    VoiceInfo info = voice.VoiceInfo;
-                    voices.Add(info.Name);
-                }
+                string[] voices = synth.GetVoiceNames();
 
                 Form prompt = new Form()
                 {
@@ -230,15 +221,91 @@ namespace EDDiscovery.Actions
         };
         
         private List<Phrase> phrases;
-        SpeechSynthesizer synth;
+        ISpeechEngine speechengine;
         Random rnd = new Random();
+
+        interface ISpeechEngine
+        {
+            string[] GetVoiceNames();
+            string GetState();
+            event EventHandler SpeakingCompleted;
+            void SpeakAsync(Phrase p);
+        }
+
+        class DummySpeechEngine : ISpeechEngine
+        {
+            public event EventHandler SpeakingCompleted;
+
+            public string[] GetVoiceNames()
+            {
+                return new string[] { };
+            }
+
+            public string GetState()
+            {
+                return null;
+            }
+
+            public void SpeakAsync(Phrase p)
+            {
+                SpeakingCompleted(this, EventArgs.Empty);
+            }
+        }
+
+#if !__MonoCS__
+        class WindowsSpeechEngine : ISpeechEngine
+        {
+            private System.Speech.Synthesis.SpeechSynthesizer synth;
+            public event EventHandler SpeakingCompleted;
+
+            public WindowsSpeechEngine()
+            {
+                synth = new System.Speech.Synthesis.SpeechSynthesizer();
+                synth.SetOutputToDefaultAudioDevice();
+                synth.SpeakCompleted += (s, e) => SpeakingCompleted?.Invoke(s, e);
+            }
+
+            public string[] GetVoiceNames()
+            {
+                return synth.GetInstalledVoices().Select(v => v.VoiceInfo.Name).ToArray();
+            }
+
+            public string GetState()
+            {
+                return synth.State.ToString();
+            }
+
+            public void SpeakAsync(Phrase p)
+            {
+                if (p.voice.Equals("Female"))
+                    synth.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Female);
+                else if (p.voice.Equals("Male"))
+                    synth.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Male);
+                else if (!p.voice.Equals("Default"))
+                    synth.SelectVoice(p.voice);
+
+                synth.Volume = p.volume;
+                synth.Rate = p.rate;
+
+                synth.SpeakAsync(p.phrase);
+            }
+        }
+#endif
 
         public QueuedSynthesizer()
         {
             phrases = new List<Phrase>();
-            synth = new SpeechSynthesizer();
-            synth.SetOutputToDefaultAudioDevice();
-            synth.SpeakCompleted += Synth_SpeakCompleted;
+#if __MonoCS__
+            speechengine = new DummySpeechEngine();
+#else
+            speechengine = new WindowsSpeechEngine();
+#endif
+            speechengine.SpeakingCompleted += Synth_SpeakCompleted;
+        }
+
+        public string[] GetVoiceNames()
+        {
+            return speechengine.GetVoiceNames();
         }
 
         public string Speak(string phraselist, string voice, int volume, int rate, 
@@ -269,25 +336,16 @@ namespace EDDiscovery.Actions
 
         private void StartSpeaking()
         {
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " State " + synth.State);
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " State " + speechengine.GetState());
 
             Phrase p = phrases[0];
 
-            if (p.voice.Equals("Female"))
-                synth.SelectVoiceByHints(VoiceGender.Female);
-            else if (p.voice.Equals("Male"))
-                synth.SelectVoiceByHints(VoiceGender.Male);
-            else if (!p.voice.Equals("Default"))
-                synth.SelectVoice(p.voice);
+            speechengine.SpeakAsync(p);
 
-            synth.Volume = p.volume;
-            synth.Rate = p.rate;
-
-            synth.SpeakAsync(p.phrase);
             System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Say " + p.phrase);
         }
 
-        private void Synth_SpeakCompleted(object sender, SpeakCompletedEventArgs e) // We appear to get them even if not playing.. handle it
+        private void Synth_SpeakCompleted(object sender, EventArgs e) // We appear to get them even if not playing.. handle it
         {
             System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Outstanding " + phrases.Count);
             if (phrases.Count > 0)
