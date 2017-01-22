@@ -1656,18 +1656,19 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
-            if (FormWindowState.Minimized == WindowState)
+            // We may be getting called by this.ResumeLayout() from InitializeComponent().
+            if (EDDConfig != null)
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
-                    Hide();
+                {
+                    if (FormWindowState.Minimized == WindowState)
+                        Hide();
+                    else
+                        Show();
+                }
+                RecordPosition();
+                notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
             }
-            else
-            {
-                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
-                    Show();
-            }
-            RecordPosition();
-            notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
         }
 
         private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)
