@@ -101,6 +101,11 @@ namespace EDDiscovery.UserControls
 
         public void Display(List<MaterialCommodities> mc)
         {
+            if (mc == null)
+            {
+                dataGridViewMC.Rows.Clear();
+                return;
+            }
             Dictionary<string, MaterialCommodities> mcchanges = new Dictionary<string, MaterialCommodities>();
             Dictionary<string, MaterialCommodities> mcorig = new Dictionary<string, MaterialCommodities>();
 
