@@ -153,7 +153,7 @@ namespace EDDiscovery
                             {
                                 string marker = (lv >= 0.0d) ? "(N)" : "(S)";   // presume lat
                                 if (converters[i].converttype == Types.TLong)
-                                    marker = (lv >= 0) ? "(E)" : "(W)";         // but handle long
+                                    marker = (lv >= 0.0d) ? "(E)" : "(W)";      // but handle long
                                 value = string.Format("{0:0.0000}° {1}", lv, marker);
                                 if (formatsplit.Length >= 2)
                                     value = formatsplit[0] + value + formatsplit[1];
