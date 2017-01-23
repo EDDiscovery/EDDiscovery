@@ -63,6 +63,7 @@ namespace EDDiscovery.Actions
             new Commands("Commodities", typeof(ActionCommodities) , ActionType.Cmd),
             new Commands("Ledger", typeof(ActionLedger) , ActionType.Cmd),
             new Commands("Scan", typeof(ActionScan) , ActionType.Cmd),
+            new Commands("Popout", typeof(ActionPopout) , ActionType.Cmd),
             new Commands("If", typeof(ActionIf) , ActionType.If),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
             new Commands("ElseIf", typeof(ActionElseIf) , ActionType.ElseIf),

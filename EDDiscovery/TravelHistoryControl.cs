@@ -47,7 +47,7 @@ namespace EDDiscovery
 
         List<EDCommander> commanders = null;
 
-        Forms.UserControlFormList usercontrolsforms;
+        public Forms.UserControlFormList usercontrolsforms;
 
         ComputeStarDistance csd = new ComputeStarDistance();
         string lastclosestname;
@@ -96,7 +96,7 @@ namespace EDDiscovery
                                                "Display scan data",
                                             };
 
-        class PopOutInfo
+        public class PopOutInfo
         {
             public string WindowTitlePrefix;
             public string WindowRefName;
@@ -122,7 +122,7 @@ namespace EDDiscovery
             }
         }
 
-        Dictionary<PopOuts, PopOutInfo> popoutinfo = new Dictionary<PopOuts, PopOutInfo>
+        public Dictionary<PopOuts, PopOutInfo> popoutinfo = new Dictionary<PopOuts, PopOutInfo>
         {
             { PopOuts.Log, new PopOutInfo("Log", "Log", EDDiscovery.Properties.Resources.Log, "Display the program log") },
             { PopOuts.NS, new PopOutInfo("Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star, "Display the nearest stars to the currently selected entry") },
