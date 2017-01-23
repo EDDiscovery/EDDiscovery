@@ -144,11 +144,7 @@ namespace EDDiscovery
 
         public EDDiscoveryForm()
         {
-            InitializeComponent();
-
             EDDConfig.Options.Init(ModifierKeys.HasFlag(Keys.Shift));
-
-            label_version.Text = EDDConfig.Options.VersionDisplayString;
 
             if (EDDConfig.Options.ReadJournal != null)
             {
@@ -187,9 +183,14 @@ namespace EDDiscovery
             dbinitworker.RunWorkerCompleted += Dbinitworker_RunWorkerCompleted;
             dbinitworker.RunWorkerAsync();
 
+            EDDConfig = EDDConfig.Instance;
+
+            InitializeComponent();
+
+            label_version.Text = EDDConfig.Options.VersionDisplayString;
+
             theme = new EDDTheme();
 
-            EDDConfig = EDDConfig.Instance;
             galacticMapping = new GalacticMapping();
 
             PopOuts = new PopOutControl(this);
