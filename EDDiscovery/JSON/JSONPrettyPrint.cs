@@ -146,16 +146,15 @@ namespace EDDiscovery
 
                         case Types.TLat:
                         case Types.TLong:
+                            // {N,E,S,W} markings are never used with degrees decimal, but are added here to maximize clarity.
+                            // 4 decimals = 11.132m worst-case precision (0° Lat, radius 6371km) per Wikipedia's "Decimal_degrees"
                             double lv;
                             if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lv))        // if it does parse, we can convert it
                             {
-                                long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
-
-                                string marker = (arcsec < 0) ? "S" : "N";       // presume lat
-                                if (converters[i].converttype == Types.TLong )
-                                    marker = (arcsec < 0) ? "W" : "E";       // presume lat
-                                arcsec = Math.Abs(arcsec);
-                                value = string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60 );
+                                string marker = (lv >= 0.0d) ? "(N)" : "(S)";   // presume lat
+                                if (converters[i].converttype == Types.TLong)
+                                    marker = (lv >= 0) ? "(E)" : "(W)";         // but handle long
+                                value = string.Format("{0:0.0000}° {1}", lv, marker);
                                 if (formatsplit.Length >= 2)
                                     value = formatsplit[0] + value + formatsplit[1];
                             }
