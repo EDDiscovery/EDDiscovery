@@ -77,7 +77,7 @@ namespace EDDiscovery
 
         public HistoryList history { get; private set; } = new HistoryList();
 
-        static public EDDConfig EDDConfig { get; private set; }
+        static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
@@ -174,8 +174,6 @@ namespace EDDiscovery
             dbinitworker.DoWork += Dbinitworker_DoWork;
             dbinitworker.RunWorkerCompleted += Dbinitworker_RunWorkerCompleted;
             dbinitworker.RunWorkerAsync();
-
-            EDDConfig = EDDConfig.Instance;
 
             InitializeComponent();
 
