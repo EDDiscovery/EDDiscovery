@@ -564,6 +564,23 @@ namespace EDDiscovery.Forms
 
         public UserControlForm this[int i] { get { return tabforms[i]; } }
 
+        public UserControlForm Get(string name)
+        {
+            foreach (UserControlForm u in tabforms)
+            {
+                if (u.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    return u;
+            }
+
+            foreach (UserControlForm u in tabforms)
+            {
+                if (u.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+                    return u;
+            }
+
+            return null;
+        }
+
         public UserControlForm NewForm(bool noreposition)
         {
             UserControlForm tcf = new UserControlForm();

@@ -38,7 +38,12 @@ namespace EDDiscovery.Actions
         public override string VerifyActionCorrect()
         {
             ConditionLists cl2 = new ConditionLists();
-            return cl2.FromString(userdata);        // returns null if everything is hunky
+            string ret = cl2.FromString(userdata);
+            if ( ret == null )
+            {
+                userdata = cl2.ToString();  // Normalize it!
+            }
+            return ret;
         }
     }
 

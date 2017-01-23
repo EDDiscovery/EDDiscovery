@@ -131,6 +131,8 @@ namespace EDDiscovery
         EliteDangerous.EDJournalClass journalmonitor;
         GitHubRelease newRelease;
 
+        public PopOutControl PopOuts;
+
         private bool _formMax;
         private int _formWidth;
         private int _formHeight;
@@ -196,6 +198,8 @@ namespace EDDiscovery
 
             EDDConfig = EDDConfig.Instance;
             galacticMapping = new GalacticMapping();
+
+            PopOuts = new PopOutControl(this);
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
@@ -338,12 +342,12 @@ namespace EDDiscovery
 
         internal void SaveCurrentPopOuts()
         {
-            travelHistoryControl1.SaveCurrentPopouts();
+            PopOuts.SaveCurrentPopouts();
         }
 
         internal void LoadSavedPopouts()
         {
-            travelHistoryControl1.LoadSavedPopouts();
+            PopOuts.LoadSavedPopouts();
         }
 
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
@@ -455,7 +459,8 @@ namespace EDDiscovery
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
-            if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false) travelHistoryControl1.LoadSavedPopouts();
+            if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false)
+                PopOuts.LoadSavedPopouts();
         }
 
         private void CheckIfEliteDangerousIsRunning()
@@ -1127,7 +1132,8 @@ namespace EDDiscovery
             theme.SaveSettings(null);
             travelHistoryControl1.SaveSettings();
             journalViewControl1.SaveSettings();
-            if (EDDConfig.AutoSavePopOuts) travelHistoryControl1.SaveCurrentPopouts();
+            if (EDDConfig.AutoSavePopOuts)
+                PopOuts.SaveCurrentPopouts();
         }
 
         Thread safeClose;
@@ -1381,12 +1387,12 @@ namespace EDDiscovery
 
         private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            travelHistoryControl1.ShowAllPopOutsInTaskBar();
+            PopOuts.ShowAllPopOutsInTaskBar();
         }
 
         private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            travelHistoryControl1.MakeAllPopoutsOpaque();
+            PopOuts.MakeAllPopoutsOpaque();
         }
 
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)

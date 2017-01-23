@@ -261,6 +261,7 @@
     <Compile Include="Forms\ImportSphere.Designer.cs">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
+    <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>
     </Compile>
