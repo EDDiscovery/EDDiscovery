@@ -192,6 +192,7 @@
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
     <Compile Include="Actions\ActionCommands\ActionLedger.cs" />
     <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPopout.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
     <Compile Include="Actions\ActionCommands\ActionScan.cs" />
     <Compile Include="Actions\ActionFile.cs" />

@@ -46,7 +46,7 @@ namespace EDDiscovery.Forms
         private Color beforetransparency = Color.Transparent;
         private Color tkey = Color.Transparent;
         private Color labelnormalcolour = Color.Transparent, labeltransparentcolour = Color.Transparent;
-      
+
         private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost, deftransparent;
         private Size normalsize;
@@ -63,7 +63,7 @@ namespace EDDiscovery.Forms
 
         #region Public Interface
 
-        public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf , bool deftopmostp = false , bool defwindowintaskbar = true )
+        public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp = false, bool defwindowintaskbar = true)
         {
             UserControl = c;
             c.Dock = DockStyle.None;
@@ -77,6 +77,7 @@ namespace EDDiscovery.Forms
 
             curwindowsborder = defwindowsborder = winborder;
             dbrefname = "PopUpForm" + rf;
+            this.Name = rf; 
             deftopmost = deftopmostp;
             deftransparent = false;
 
@@ -91,7 +92,7 @@ namespace EDDiscovery.Forms
             Invalidate();
         }
 
-        public void InitForTransparency(bool deftransparentp, Color labeln, Color labelt )
+        public void InitForTransparency(bool deftransparentp, Color labeln, Color labelt)
         {
             deftransparent = deftransparentp;
             labelnormalcolour = labeln;
@@ -102,7 +103,7 @@ namespace EDDiscovery.Forms
         {
             labelControlText.Location = new Point(label_index.Location.X + label_index.Width + 16, labelControlText.Location.Y);
             labelControlText.Text = text;
-            this.Text = wintitle + " " + text; 
+            this.Text = wintitle + " " + text;
         }
 
         public void SetTransparency(bool t)
@@ -168,13 +169,13 @@ namespace EDDiscovery.Forms
 
             this.BackColor = togo;
             statusStripBottom.BackColor = togo;
-            panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor = 
-                    panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor =  panelTop.BackColor = togo;
+            panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor =
+                    panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor = panelTop.BackColor = togo;
 
             System.Diagnostics.Debug.Assert(labeltransparentcolour != Color.Transparent);
             label_index.ForeColor = labelControlText.ForeColor = (istransparent) ? labeltransparentcolour : labelnormalcolour;
 
-            UserControl.SetTransparency(transparent,togo);
+            UserControl.SetTransparency(transparent, togo);
             PerformLayout();
 
             if (transparent || inpanelshow)
@@ -191,7 +192,7 @@ namespace EDDiscovery.Forms
             panelTop.Visible = !curwindowsborder;       // this also has the effect of removing the label_ and panel_ buttons
 
             statusStripBottom.Visible = !transparent && !curwindowsborder;      // status strip on, when not transparent, and when we don't have border
-            
+
             panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = !transparent;
 
             panel_transparent.Visible = IsTransparencySupported && !transparent;
@@ -253,7 +254,7 @@ namespace EDDiscovery.Forms
             this.BringToFront();
 
             bool tr = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent);
-            if ( tr && IsTransparencySupported)     // the check is for paranoia
+            if (tr && IsTransparencySupported)     // the check is for paranoia
                 SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
 
             SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
@@ -321,7 +322,7 @@ namespace EDDiscovery.Forms
             {
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick" + istransparent + " " + inpanelshow);
                 if (ClientRectangle.Contains(this.PointToClient(MousePosition)))
-                {                                                                                                                                
+                {
                     if (!inpanelshow)
                     {
                         inpanelshow = true;
@@ -449,7 +450,7 @@ namespace EDDiscovery.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WM_SYSCOMMAND )
+            if (m.Msg == WM_SYSCOMMAND)
             {
                 int cmd = (int)m.WParam;
                 if (cmd == SYSMENU_ONTOP)
@@ -560,6 +561,8 @@ namespace EDDiscovery.Forms
         {
             tabforms = new List<UserControlForm>();
         }
+
+        public UserControlForm this[int i] { get { return tabforms[i]; } }
 
         public UserControlForm NewForm(bool noreposition)
         {
