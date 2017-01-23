@@ -168,6 +168,16 @@ namespace EDDiscovery
             return sl;
         }
 
+        public int? GetInt(string terminators = ", ")
+        {
+            string s = NextWord(terminators);
+            int i;
+            if (s != null && int.TryParse(s, out i))
+                return i;
+            else
+                return null;
+        }
+
     }
 
 }

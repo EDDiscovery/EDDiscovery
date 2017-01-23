@@ -52,10 +52,10 @@ namespace EDDiscovery
 
         static public bool MatchTypeFromString(string s, out MatchType mt )
         {
-            int indexof = Array.IndexOf(MatchNames, s);
+            int indexof = Array.FindIndex(MatchNames, x => x.Equals(s, StringComparison.InvariantCultureIgnoreCase));
 
             if ( indexof == -1)
-                indexof = Array.IndexOf(OperatorNames, s);
+                indexof = Array.FindIndex(OperatorNames, x => x.Equals(s, StringComparison.InvariantCultureIgnoreCase));
 
             if (indexof >= 0)
             {
