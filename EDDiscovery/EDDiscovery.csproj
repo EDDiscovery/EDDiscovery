@@ -273,6 +273,7 @@
     </Compile>
     <Compile Include="Conditions\ConditionLists.cs" />
     <Compile Include="Conditions\StringParser.cs" />
+    <Compile Include="IDiscoveryController.cs" />
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />

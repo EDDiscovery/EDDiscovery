@@ -47,10 +47,7 @@ using EDDiscovery.EDDN;
 
 namespace EDDiscovery
 {
-
-    public delegate void DistancesLoaded();
-
-    public partial class EDDiscoveryForm : Form
+    public partial class EDDiscoveryForm : Form, IDiscoveryController
     {
         #region Variables
 
@@ -78,7 +75,7 @@ namespace EDDiscovery
         private Point _window_dragWindowPos = Point.Empty;
         public EDDTheme theme;
 
-        public HistoryList history = new HistoryList();
+        public HistoryList history { get; private set; } = new HistoryList();
 
         static public EDDConfig EDDConfig { get; private set; }
 
@@ -92,18 +89,13 @@ namespace EDDiscovery
         public event EventHandler HistoryRefreshed; // this is an internal hook
 
 
-        public delegate void HistoryChange(HistoryList l);          // subscribe to get events
-        public event HistoryChange OnHistoryChange;
-        public delegate void NewEntry(HistoryEntry l, HistoryList hl);
-        public event NewEntry OnNewEntry;
-        public delegate void NewJournalEntry(JournalEntry je);
-        public event NewJournalEntry OnNewJournalEntry;
-        public delegate void NewLogEntry(string txt, Color c);
-        public event NewLogEntry OnNewLogEntry;
-        public delegate void NewTarget();
-        public event NewTarget OnNewTarget;
-
-        public GalacticMapping galacticMapping;
+        public event Action<HistoryList> OnHistoryChange;
+        public event Action<HistoryEntry, HistoryList> OnNewEntry;
+        public event Action<JournalEntry> OnNewJournalEntry;
+        public event Action<string, Color> OnNewLogEntry;
+        public event Action OnNewTarget;
+        
+        public GalacticMapping galacticMapping { get; private set; }
 
         public Actions.ActionFileList actionfiles;
         public string actionfileskeyevents;
@@ -118,7 +110,7 @@ namespace EDDiscovery
         private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
         private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
 
-        public EDSMSync EdsmSync;
+        public EDSMSync EdsmSync { get; private set; }
 
         Action cancelDownloadMaps = null;
         Task<bool> downloadMapsTask = null;
