@@ -101,7 +101,7 @@ namespace EDDiscovery.UserControls
 
         public void Display(List<MaterialCommodities> mc)
         {
-            if ( mc == null )
+            if (mc == null)
             {
                 dataGridViewMC.Rows.Clear();
                 return;
