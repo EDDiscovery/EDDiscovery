@@ -748,7 +748,7 @@
             this.notifyIconMenu_SyncEDSM.Name = "notifyIconMenu_SyncEDSM";
             this.notifyIconMenu_SyncEDSM.Size = new System.Drawing.Size(159, 22);
             this.notifyIconMenu_SyncEDSM.Text = "Sync with ED&SM";
-            this.notifyIconMenu_SyncEDSM.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
+            this.notifyIconMenu_SyncEDSM.Click += new System.EventHandler(this.notifyIconMenu_SyncEDSM_Click);
             // 
             // EDDiscoveryForm
             // 
