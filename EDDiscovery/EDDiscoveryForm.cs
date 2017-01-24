@@ -2132,13 +2132,16 @@ namespace EDDiscovery
                 foreach (Tuple<string, ConditionLists.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
                 {
                     if (t.Item2 == ConditionLists.MatchType.Equals)
-                        actionfileskeyevents += t.Item1 + ",";
+                        actionfileskeyevents += "<" + t.Item1 + ">";
                     else
                     {
                         StringParser p = new StringParser(t.Item1);
                         List<string> klist = p.NextQuotedWordList();
                         if (klist != null)
-                            actionfileskeyevents += String.Join(",", klist) + ",";
+                        {
+                            foreach( string s in klist )
+                                actionfileskeyevents += "<" + s + ">";
+                        }
                     }
                 }
 
@@ -2159,7 +2162,7 @@ namespace EDDiscovery
 
         public bool CheckKeys(string keyname)
         {
-            if (actionfileskeyevents.Contains(keyname + ","))  // fast string comparision to determine if key is overridden..
+            if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
                 globalvariables["KeyPress"] = keyname;          // only add it to global variables, its not kept in internals.
                 ActionRunOnEvent("onKeyPress", "KeyPress");

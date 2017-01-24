@@ -190,6 +190,7 @@
     <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
+    <Compile Include="Actions\ActionCommands\ActionHistoryTab.cs" />
     <Compile Include="Actions\ActionCommands\ActionLedger.cs" />
     <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
     <Compile Include="Actions\ActionCommands\ActionPopout.cs" />

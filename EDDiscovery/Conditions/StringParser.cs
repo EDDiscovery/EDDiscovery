@@ -55,7 +55,7 @@ namespace EDDiscovery
                 return false;
         }
 
-        public string NextWord(string terminators = " ")
+        public string NextWord(string terminators = " " , bool lowercase = false)
         {
             if (pos >= line.Length)     // null if there is nothing..
                 return null;
@@ -70,7 +70,7 @@ namespace EDDiscovery
 
                 SkipSpace();
 
-                return ret;
+                return (lowercase) ? ret.ToLower() : ret;
             }
         }
 

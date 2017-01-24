@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,13 +7,13 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionPopout : Action
+    class ActionHistoryTab : Action
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Popout command", UserData, "Configure Popout Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, "HistoryTab command", UserData, "Configure HistoryTab Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -30,7 +29,7 @@ namespace EDDiscovery.Actions
             {
                 HistoryList hl = ap.historylist;
                 StringParser sp = new StringParser(res);
-                string prefix = "P_";
+                string prefix = "HT_";
 
                 string cmdname = sp.NextWord();
 
@@ -40,18 +39,17 @@ namespace EDDiscovery.Actions
 
                     if (prefix == null)
                     {
-                        ap.ReportError("Missing name after Prefix in in Popout");
+                        ap.ReportError("Missing name after Prefix in Historytab");
                         return true;
                     }
 
                     cmdname = sp.NextWord();
                 }
 
-                Forms.PopOutControl poc = ap.discoveryform.PopOuts;
-
+#if false
                 if (cmdname == null)
                 {
-                    ap.ReportError("Missing command or popout name in Popout");
+                    ap.ReportError("Missing command or panel name in Historytab");
                 }
                 else if (cmdname.Equals("Status", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -63,17 +61,17 @@ namespace EDDiscovery.Actions
                 {
                     Forms.UserControlForm ucf = poc.Get(cmdname);
 
-                    string nextcmd = sp.NextWord(" ",true);
+                    string nextcmd = sp.NextWord(" ", true);
 
-                    if ( nextcmd == null )
+                    if (nextcmd == null)
                     {
-                        ap.ReportError("Missing command after popout name in Popout");
+                        ap.ReportError("Missing command after panel name in Panel");
                     }
-                    else if ( nextcmd.Equals("status"))
+                    else if (nextcmd.Equals("status"))
                     {
                         ap.currentvars[prefix + "Exists"] = (ucf != null) ? "1" : "0";
 
-                        if ( ucf!= null)
+                        if (ucf != null)
                         {
                             ap.currentvars[prefix + "Transparent"] = ucf.istransparent ? "1" : "0";
                             ap.currentvars[prefix + "TopMost"] = ucf.TopMost ? "1" : "0";
@@ -130,7 +128,7 @@ namespace EDDiscovery.Actions
                                 ucf.Size = new Size(w.Value, h.Value);
                             }
                             else
-                                ap.ReportError("Location needs x,y,w,h in Popout");
+                                ap.ReportError("Location needs x,y,w,h in Panel");
                         }
                         else if (nextcmd.Equals("position"))
                         {
@@ -142,7 +140,7 @@ namespace EDDiscovery.Actions
                             if (x.HasValue && y.HasValue)
                                 ucf.Location = new Point(x.Value, y.Value);
                             else
-                                ap.ReportError("Position needs x,y in Popout");
+                                ap.ReportError("Position needs x,y in Panel");
                         }
                         else if (nextcmd.Equals("size"))
                         {
@@ -153,10 +151,10 @@ namespace EDDiscovery.Actions
                             if (w.HasValue && h.HasValue)
                                 ucf.Size = new Size(w.Value, h.Value);
                             else
-                                ap.ReportError("Size needs x,y,w,h in Popout");
+                                ap.ReportError("Size needs x,y,w,h in Panel");
                         }
                         else
-                            ap.ReportError("Unknown command " + cmdname + " after popout name in Popout");
+                            ap.ReportError("Unknown command " + cmdname + " after panel name in Panel");
                     }
                     else
                     {
@@ -169,13 +167,14 @@ namespace EDDiscovery.Actions
                                 poc.PopOut(poi.Value);
                             }
                             else
-                                ap.ReportError("Cannot use command " + nextcmd + " after generic popout name in Popout");
+                                ap.ReportError("Cannot use command " + nextcmd + " after generic panel name in Panel");
                         }
                         else
-                            ap.ReportError("Cannot find generic popout name " + cmdname + " in Popout");
+                            ap.ReportError("Cannot find generic panel name " + cmdname + " in Panel");
                     }
 
                 }
+#endif
             }
             else
                 ap.ReportError(res);
@@ -184,4 +183,6 @@ namespace EDDiscovery.Actions
         }
 
     }
+
+
 }
