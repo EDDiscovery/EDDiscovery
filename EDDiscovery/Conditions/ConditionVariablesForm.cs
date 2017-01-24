@@ -13,7 +13,8 @@ namespace EDDiscovery
     public partial class ConditionVariablesForm : Form
     {
         public ConditionVariables result;      // only on OK
-        public bool noexpand;
+        public bool result_noexpand;
+        public bool result_refresh;
 
         public class Group
         {
@@ -37,7 +38,10 @@ namespace EDDiscovery
             AcceptButton = buttonOK;
         }
 
-        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , bool showone , bool shownoexpand = false, bool ne = false)
+        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , 
+                                                                bool showone , 
+                                                                bool shownoexpand = false, bool notexpandstate = false, 
+                                                                bool showrefresh = false , bool showrefreshstate = false)
         {
             theme = th;
 
@@ -46,7 +50,12 @@ namespace EDDiscovery
             this.Text = label_index.Text = t;
 
             checkBoxNoExpand.Enabled = checkBoxNoExpand.Visible = shownoexpand;
-            checkBoxNoExpand.Checked = ne;
+            checkBoxNoExpand.Checked = notexpandstate;
+            checkBoxNoExpand.Location = new Point(panelmargin, panelmargin);
+
+            checkBoxCustomRefresh.Enabled = checkBoxCustomRefresh.Visible = showrefresh;
+            checkBoxCustomRefresh.Checked = showrefreshstate;
+            checkBoxCustomRefresh.Location = new Point(panelmargin + ((checkBoxNoExpand.Enabled) ? 160 : 0), panelmargin);
 
             if (vbs != null)
             {
@@ -105,6 +114,10 @@ namespace EDDiscovery
         void FixUpGroups(bool minmax = true)      // fixes and positions groups.
         {
             int y = panelmargin;
+
+            if (checkBoxNoExpand.Enabled || checkBoxCustomRefresh.Enabled)
+                y += 32;
+
             int panelwidth = Math.Max(panelVScroll1.Width - panelVScroll1.ScrollBarWidth, 10);
 
             foreach (Group g in groups)
@@ -117,7 +130,6 @@ namespace EDDiscovery
             }
 
             buttonMore.Location = new Point(panelmargin, y);
-            checkBoxNoExpand.Location = new Point(buttonMore.Right + 8, buttonMore.Top+4);
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;
@@ -142,7 +154,8 @@ namespace EDDiscovery
                     result[var] = value;
             }
 
-            noexpand = checkBoxNoExpand.Checked;
+            result_noexpand = checkBoxNoExpand.Checked;
+            result_refresh = checkBoxCustomRefresh.Checked;
 
             DialogResult = DialogResult.OK;
             Close();

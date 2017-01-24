@@ -35,9 +35,7 @@
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
             this.panelName = new System.Windows.Forms.Panel();
-            this.buttonVars = new ExtendedControls.ButtonExt();
             this.buttonExtDelete = new ExtendedControls.ButtonExt();
-            this.checkBoxCustomRefresh = new ExtendedControls.CheckBoxCustom();
             this.textBoxBorderName = new ExtendedControls.TextBoxBorder();
             this.labelSet = new System.Windows.Forms.Label();
             this.labelName = new System.Windows.Forms.Label();
@@ -139,9 +137,7 @@
             // 
             // panelName
             // 
-            this.panelName.Controls.Add(this.buttonVars);
             this.panelName.Controls.Add(this.buttonExtDelete);
-            this.panelName.Controls.Add(this.checkBoxCustomRefresh);
             this.panelName.Controls.Add(this.textBoxBorderName);
             this.panelName.Controls.Add(this.labelSet);
             this.panelName.Controls.Add(this.labelName);
@@ -150,19 +146,6 @@
             this.panelName.Name = "panelName";
             this.panelName.Size = new System.Drawing.Size(862, 36);
             this.panelName.TabIndex = 8;
-            // 
-            // buttonVars
-            // 
-            this.buttonVars.BorderColorScaling = 1.25F;
-            this.buttonVars.ButtonColorScaling = 0.5F;
-            this.buttonVars.ButtonDisabledScaling = 0.5F;
-            this.buttonVars.Location = new System.Drawing.Point(468, 4);
-            this.buttonVars.Name = "buttonVars";
-            this.buttonVars.Size = new System.Drawing.Size(83, 23);
-            this.buttonVars.TabIndex = 26;
-            this.buttonVars.Text = "Input Paras";
-            this.buttonVars.UseVisualStyleBackColor = true;
-            this.buttonVars.Click += new System.EventHandler(this.buttonVars_Click);
             // 
             // buttonExtDelete
             // 
@@ -177,22 +160,6 @@
             this.buttonExtDelete.Text = "X";
             this.buttonExtDelete.UseVisualStyleBackColor = true;
             this.buttonExtDelete.Click += new System.EventHandler(this.buttonExtDelete_Click);
-            // 
-            // checkBoxCustomRefresh
-            // 
-            this.checkBoxCustomRefresh.AutoSize = true;
-            this.checkBoxCustomRefresh.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomRefresh.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomRefresh.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomRefresh.FontNerfReduction = 0.5F;
-            this.checkBoxCustomRefresh.Location = new System.Drawing.Point(332, 6);
-            this.checkBoxCustomRefresh.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomRefresh.Name = "checkBoxCustomRefresh";
-            this.checkBoxCustomRefresh.Size = new System.Drawing.Size(98, 17);
-            this.checkBoxCustomRefresh.TabIndex = 24;
-            this.checkBoxCustomRefresh.Text = "Run at Refresh";
-            this.checkBoxCustomRefresh.TickBoxReductionSize = 10;
-            this.checkBoxCustomRefresh.UseVisualStyleBackColor = true;
             // 
             // textBoxBorderName
             // 
@@ -467,9 +434,7 @@
         private System.Windows.Forms.Panel panelOK;
         private ExtendedControls.ButtonExt buttonCancel;
         private ExtendedControls.ButtonExt buttonOK;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomRefresh;
         private ExtendedControls.ButtonExt buttonExtDelete;
-        private ExtendedControls.ButtonExt buttonVars;
         private System.Windows.Forms.Label labelSet;
         private ExtendedControls.ButtonExt buttonExtLoad;
         private ExtendedControls.ButtonExt buttonExtSave;
