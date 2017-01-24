@@ -61,7 +61,7 @@ namespace EDDiscovery
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.userControlTravelGrid = new EDDiscovery.UserControls.UserControlTravelGrid();
-            this.tabStripBottom = new EDDiscovery.Controls.TabStrip();
+            this.tabStripBottom = new ExtendedControls.TabStrip();
             this.splitContainerRightOuter = new System.Windows.Forms.SplitContainer();
             this.panelTarget = new System.Windows.Forms.Panel();
             this.labelTarget = new System.Windows.Forms.Label();
@@ -91,8 +91,8 @@ namespace EDDiscovery
             this.buttonAction = new ExtendedControls.ButtonExt();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
-            this.tabStripMiddleRight = new EDDiscovery.Controls.TabStrip();
-            this.tabStripBottomRight = new EDDiscovery.Controls.TabStrip();
+            this.tabStripMiddleRight = new ExtendedControls.TabStrip();
+            this.tabStripBottomRight = new ExtendedControls.TabStrip();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -858,9 +858,9 @@ namespace EDDiscovery
         private UserControls.UserControlTravelGrid userControlTravelGrid;
         private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
         private System.Windows.Forms.SplitContainer splitContainerRightOuter;
-        private Controls.TabStrip tabStripBottom;
-        private Controls.TabStrip tabStripMiddleRight;
-        private Controls.TabStrip tabStripBottomRight;
+        private ExtendedControls.TabStrip tabStripBottom;
+        private ExtendedControls.TabStrip tabStripMiddleRight;
+        private ExtendedControls.TabStrip tabStripBottomRight;
         private ExtendedControls.ButtonExt buttonAction;
     }
 }

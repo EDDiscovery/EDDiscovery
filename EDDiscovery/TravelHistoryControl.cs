@@ -56,6 +56,17 @@ namespace EDDiscovery
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
         public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
+        public ExtendedControls.TabStrip GetTabStrip( string name )
+        {
+            if (name.Equals("Bottom", StringComparison.InvariantCultureIgnoreCase))
+                return tabStripBottom;
+            if (name.Equals("Bottom-Right", StringComparison.InvariantCultureIgnoreCase))
+                return tabStripBottom;
+            if (name.Equals("Middle-Right", StringComparison.InvariantCultureIgnoreCase))
+                return tabStripBottom;
+            return null;
+        }
+
         // Subscribe to these to get various events - layout controls via their Init function do this.
 
         public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);       // called when current travel sel changed
@@ -148,7 +159,7 @@ namespace EDDiscovery
 
         #region TAB control
 
-        void TabConfigure(TabStrip t, int displayno)
+        void TabConfigure(ExtendedControls.TabStrip t, int displayno)
         {
             t.Images = tabbitmaps;
             t.ToolTips = tabtooltips;
@@ -159,19 +170,19 @@ namespace EDDiscovery
             t.OnPopOut += TabPopOut;
         }
 
-        void TabRemoved(TabStrip t, Control c )     // called by tab strip when a control is removed
+        void TabRemoved(ExtendedControls.TabStrip t, Control c )     // called by tab strip when a control is removed
         {
             UserControlCommonBase uccb = c as UserControlCommonBase;
             uccb.Closing();
         }
 
-        Control TabCreate(TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
+        Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
             PopOutControl.PopOuts i = (PopOutControl.PopOuts)si;
             return PopOutControl.Create(i);
         }
 
-        void TabPostCreate(TabStrip t, Control ctrl , int i)        // called by tab strip after control has been added..
+        void TabPostCreate(ExtendedControls.TabStrip t, Control ctrl , int i)        // called by tab strip after control has been added..
         {                                                           // now we can do the configure of it, with the knowledge the tab has the right size
             int displaynumber = (int)t.Tag;                         // tab strip - use tag to remember display id which helps us save context.
 
@@ -234,7 +245,7 @@ namespace EDDiscovery
             }
         }
 
-        void TabPopOut(TabStrip t, int i)        // pop out clicked
+        void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
         {
             _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)i);
         }
@@ -640,7 +651,8 @@ namespace EDDiscovery
         private void richTextBoxNote_TextChanged(object sender, EventArgs e)
         {
             userControlTravelGrid.UpdateCurrentNote(richTextBoxNote.Text);
-            _discoveryForm.PopOuts.UpdateNoteJID(userControlTravelGrid.GetCurrentHistoryEntry.Journalid, richTextBoxNote.Text);
+            if (userControlTravelGrid.GetCurrentHistoryEntry != null )
+                _discoveryForm.PopOuts.UpdateNoteJID(userControlTravelGrid.GetCurrentHistoryEntry.Journalid, richTextBoxNote.Text);
         }
 
         private void StoreSystemNote()
