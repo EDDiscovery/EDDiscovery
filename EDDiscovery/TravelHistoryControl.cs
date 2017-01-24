@@ -61,9 +61,9 @@ namespace EDDiscovery
             if (name.Equals("Bottom", StringComparison.InvariantCultureIgnoreCase))
                 return tabStripBottom;
             if (name.Equals("Bottom-Right", StringComparison.InvariantCultureIgnoreCase))
-                return tabStripBottom;
+                return tabStripBottomRight;
             if (name.Equals("Middle-Right", StringComparison.InvariantCultureIgnoreCase))
-                return tabStripBottom;
+                return tabStripMiddleRight;
             return null;
         }
 
@@ -194,7 +194,7 @@ namespace EDDiscovery
                 uc.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
 
-            System.Diagnostics.Debug.WriteLine("And theme {0}", i);
+            //System.Diagnostics.Debug.WriteLine("And theme {0}", i);
             _discoveryForm.theme.ApplyToControls(t);
         }
 

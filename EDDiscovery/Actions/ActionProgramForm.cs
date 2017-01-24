@@ -346,6 +346,7 @@ namespace EDDiscovery.Actions
         {
             CreateStep(null, -1);
             RepositionGroups();
+            panelVScroll.ToEnd();       // tell it to scroll to end
         }
 
         private void Stepname_SelectedIndexChanged(object sender, EventArgs e)                // EVENT list changed

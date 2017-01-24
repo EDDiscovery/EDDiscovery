@@ -63,7 +63,25 @@ namespace ExtendedControls
             drawnPanelPopOut.Location = panelSelected.Location;
         }
 
-        public void ChangePanel(int i)
+        public void Toggle()
+        {
+            if (si != -1)
+                ChangePanel((si + 1) % Images.Length);
+        }
+
+        public bool ChangeTo(int i)
+        {
+            if (i >= 0 && i < Images.Length)
+            {
+                ChangePanel(i);
+                return true;
+            }
+            else
+                return false;
+        }
+
+
+        private void ChangePanel(int i)
         {
             if ( CurrentControl != null )
             {
@@ -110,12 +128,6 @@ namespace ExtendedControls
             panelSelected.Visible = !tabstripvisible && CurrentControl != null;
             labelCurrent.Visible = !tabstripvisible && CurrentControl != null;
             labelControlText.Visible = false; 
-        }
-
-        public void Toggle()
-        {
-            if (si != -1)
-                ChangePanel((si + 1) % Images.Length);
         }
 
         public void SetControlText(string t)

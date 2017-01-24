@@ -104,7 +104,12 @@ namespace ExtendedControls
             }
         }
 
-        public int ScrollTo(int newscrollpos )
+        public void ToEnd()
+        {
+            ScrollTo(99999999, true);
+        }
+
+        private int ScrollTo(int newscrollpos , bool updatescroller = false )
         {
             int maxy = 0;
             foreach (Control c in Controls)
@@ -118,6 +123,13 @@ namespace ExtendedControls
 
             if (maxy < ClientRectangle.Height)          // see if need scroll..
                 newscrollpos = 0;
+            else
+            {
+                int maxscr = maxy - ClientRectangle.Height + ((vsc != null) ? vsc.LargeChange : 0);
+
+                if (newscrollpos > maxscr)
+                    newscrollpos = maxscr;
+            }
 
             if (newscrollpos != scrollpos)
             {
@@ -141,7 +153,11 @@ namespace ExtendedControls
             {
                 vsc.Maximum = maxy - ClientRectangle.Height + vsc.LargeChange;
                 vsc.Minimum = 0;
-                //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
+
+                if (updatescroller)
+                    vsc.Value = newscrollpos;
+
+                System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
             }
 
             scrollpos = newscrollpos;

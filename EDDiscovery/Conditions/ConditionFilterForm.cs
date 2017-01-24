@@ -186,6 +186,8 @@ namespace EDDiscovery2
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
             FixUpGroups();
+
+            panelVScroll.ToEnd();       // tell it to scroll to end
             ResumeLayout();
         }
 

@@ -60,6 +60,14 @@ namespace EDDiscovery.Actions
                         return true;
                     }
                 }
+                else if (cmd.Equals("ignoreerrors", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ap.SetContinueOnErrors(true);
+                }
+                else if (cmd.Equals("allowerrors", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ap.SetContinueOnErrors(true);
+                }
             }
 
             return true;

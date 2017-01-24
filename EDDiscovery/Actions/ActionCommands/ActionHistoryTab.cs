@@ -67,7 +67,18 @@ namespace EDDiscovery.Actions
                             ts.Toggle();
                         }
                         else
-                            ap.ReportError("Unknown command " + cmdname + " after panel name in Historytab");
+                        {
+                            Forms.PopOutControl poc = ap.discoveryform.PopOuts;
+                            Forms.PopOutControl.PopOuts? poi = poc.GetPopOutTypeByName(nextcmd);
+
+                            if (poi.HasValue)
+                            {
+                                if (!ts.ChangeTo((int)poi.Value))
+                                    ap.ReportError("Panel " + nextcmd + " cannot be used in Historytab");
+                            }
+                            else
+                                ap.ReportError("Cannot find generic popout name " + nextcmd + " in Popout");
+                        }
                     }
                     else
                     {
