@@ -2191,7 +2191,7 @@ namespace EDDiscovery
                     Keys k = (Keys)m.WParam;
                     if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
                     {
-                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
+                        System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
                         if (discoveryForm.CheckKeys(k.ToString(Control.ModifierKeys)))
                             return true;    // swallow, we did it
                     }

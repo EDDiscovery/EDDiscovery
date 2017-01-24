@@ -55,7 +55,14 @@ namespace EDDiscovery2
             public int CompareTo(Group other)
             {
                 if (other.evlist != null && evlist != null)
-                    return evlist.Text.CompareTo(other.evlist.Text);
+                {
+                    int r = evlist.Text.CompareTo(other.evlist.Text);
+                    if (r == 0 && actionparas != null)
+                        r = actionparas.Text.CompareTo(other.actionparas.Text);
+                    if (r == 0 && condlist.Count > 0 && other.condlist.Count > 0)
+                        r = condlist[0].value.Text.CompareTo(other.condlist[0].value.Text);
+                    return r;
+                }
                 else if (condlist.Count > 0 && other.condlist.Count > 0)
                     return condlist[0].fname.Text.CompareTo(other.condlist[0].fname.Text);
                 else

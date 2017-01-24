@@ -176,12 +176,15 @@ namespace ExtendedControls
         private void _cbdropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedindex = _cbdropdown.SelectedIndex;
-            this.Text = _cbdropdown.Items[selectedindex];
-            this.Select(this.Text.Length, this.Text.Length);
-            _cbdropdown.Close();
-            isActivated = false;
-            this.Invalidate(true);
-            Focus();
+            if (selectedindex >= 0)
+            {
+                this.Text = _cbdropdown.Items[selectedindex];
+                this.Select(this.Text.Length, this.Text.Length);
+                _cbdropdown.Close();
+                isActivated = false;
+                this.Invalidate(true);
+                Focus();
+            }
         }
 
         private void _cbdropdown_KeyPressed(object sender, KeyPressEventArgs e)
