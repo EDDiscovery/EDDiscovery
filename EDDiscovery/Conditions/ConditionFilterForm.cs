@@ -30,13 +30,12 @@ namespace EDDiscovery2
 
         class Group : IComparable<Group>
         {
-            public string actiondata;
-
             public Panel panel;
             public ExtendedControls.ButtonExt upbutton;
             public ExtendedControls.ComboBoxCustom evlist;
             public ExtendedControls.ComboBoxCustom actionlist;
             public ExtendedControls.ButtonExt actionconfig;
+            public ExtendedControls.TextBoxBorder actionparas;
             public ExtendedControls.ComboBoxCustom innercond;
             public ExtendedControls.ComboBoxCustom outercond;
             public Label outerlabel;
@@ -118,7 +117,8 @@ namespace EDDiscovery2
             allowoutercond = outerconditions;
 
             // set up where a condition would start on the panel.. dep if the event list is on and the action file system is on..
-            condxoffset = ((eventlist != null) ? 148 : 0) + ((actionfilelist != null) ? (140 + 8 + 24 + 8) : 0) + panelmargin;
+            // sizes are the sizes of the controls and gaps
+            condxoffset = ((eventlist != null) ? (140 + 8) : 0) + ((actionfilelist != null) ? (140 + 8 + 24 + 8 + 96 + 8) : 0) + panelmargin + 8;
 
             bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
@@ -192,7 +192,6 @@ namespace EDDiscovery2
                                 string initialcondinner, string initialcondouter)
         {
             Group g = new Group();
-            g.actiondata = initialactiondatastring;
 
             g.panel = new Panel();
             g.panel.BorderStyle = BorderStyle.FixedSingle;
@@ -213,6 +212,8 @@ namespace EDDiscovery2
 
             if (IsActionsActive)
             {
+                bool v = g.evlist.Text.Length > 0;
+
                 g.actionlist = new ExtendedControls.ComboBoxCustom();
                 g.actionlist.Location = new Point(g.evlist.Right + 8, panelmargin);
                 g.actionlist.DropDownHeight = 400;
@@ -223,21 +224,29 @@ namespace EDDiscovery2
                     g.actionlist.Text = initialaction;
                 else
                     g.actionlist.SelectedIndex = 0;
-
-                g.actionlist.Visible = false;
+                g.actionlist.Visible = v;
                 g.actionlist.SelectedIndexChanged += ActionList_SelectedIndexChanged;
                 g.actionlist.Tag = g;
                 g.panel.Controls.Add(g.actionlist);
 
                 g.actionconfig = new ExtendedControls.ButtonExt();
-                g.actionconfig.Text = "C";
+                g.actionconfig.Text = "P";
                 g.actionconfig.Location = new Point(g.actionlist.Right + 8, panelmargin);
                 g.actionconfig.Size = new Size(24, 24);
                 g.actionconfig.Click += ActionListConfig_Clicked;
-                g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
-                g.actionconfig.Visible = false;
+                g.actionconfig.Visible = v;
                 g.actionconfig.Tag = g;
                 g.panel.Controls.Add(g.actionconfig);
+
+                g.actionparas = new ExtendedControls.TextBoxBorder();
+                g.actionparas.Text = (initialactiondatastring != null) ? initialactiondatastring : "";
+                g.actionparas.Location = new Point(g.actionconfig.Right + 8, panelmargin+2);
+                g.actionparas.Size = new Size(96, 24);
+                g.actionparas.Visible = v;
+                g.actionparas.Tag = g;
+                g.actionparas.ReadOnly = true;
+                g.actionparas.Click += Actionparas_Click;
+                g.panel.Controls.Add(g.actionparas);
             }
 
             g.innercond = new ExtendedControls.ComboBoxCustom();
@@ -275,11 +284,6 @@ namespace EDDiscovery2
 
             panelVScroll.Controls.Add(g.panel);
 
-            if (g.actionconfig != null)
-            {
-                g.actionconfig.Visible = g.actionlist.Visible = (g.actionlist.Enabled && (eventlist == null || g.evlist.Text.Length > 0));        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
-            }
-
             return g;
         }
 
@@ -291,8 +295,8 @@ namespace EDDiscovery2
             if ( g.condlist.Count == 0 )        // if no conditions, create one..
                 CreateCondition(g);
 
-            if ( g.actionconfig != null )       // config, turn on
-                g.actionconfig.Visible = g.actionlist.Visible = g.actionlist.Enabled;        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
+            if (IsActionsActive)
+                g.actionconfig.Visible = g.actionlist.Visible = g.actionparas.Visible = true;        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
 
             FixUpGroups();                      // and reposition and maybe turn on/off the group outer cond
         }
@@ -515,7 +519,7 @@ namespace EDDiscovery2
                         g.actionlist.SelectedIndex = 0;
 
                     g.actionlist.Enabled = true;
-                    g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
+                    g.actionparas.Enabled = g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
                 }
             }
 
@@ -568,7 +572,7 @@ namespace EDDiscovery2
                 ActionListConfig_Clicked(g.actionconfig, null);
             }
 
-            g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
+            g.actionparas.Enabled = g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
         }
 
         private void ActionListConfig_Clicked(object sender, EventArgs e)
@@ -592,7 +596,7 @@ namespace EDDiscovery2
                     n++;
                 }
 
-                g.actiondata = null;
+                g.actionparas.Text = "";
             }
 
             ActionProgramForm apf = new ActionProgramForm();
@@ -610,16 +614,13 @@ namespace EDDiscovery2
             else
                 fieldnames.AddRange(additionalfieldnames);
 
-            apf.Init("Action program", theme, fieldnames, actionfilelist.CurName, p, g.actiondata != null ? g.actiondata : "", actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
+            apf.Init("Action program", theme, fieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
 
             DialogResult res = apf.ShowDialog();
 
             if (res == DialogResult.OK)
             {
-                g.actiondata = apf.GetActionData();
-
                 ActionProgram np = apf.GetProgram();
-
                 actionfilelist.CurPrograms.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
                 g.actionlist.Enabled = false;
                 g.actionlist.Text = np.Name;
@@ -688,7 +689,7 @@ namespace EDDiscovery2
                 if (!progname.Equals("New"))
                     p = actionfilelist.CurPrograms.Get(comboBoxCustomEditProg.Text);
 
-                apf.Init("Action program", theme, additionalfieldnames, actionfilelist.CurName, p, null, actionfilelist.CurPrograms.GetActionProgramList(), "");
+                apf.Init("Action program", theme, additionalfieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), "");
 
                 DialogResult res = apf.ShowDialog();
 
@@ -707,6 +708,24 @@ namespace EDDiscovery2
             }
         }
 
+        private void Actionparas_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.TextBoxBorder config = sender as ExtendedControls.TextBoxBorder;
+            Group g = (Group)config.Tag;
+            ConditionVariables cond = new ConditionVariables();
+
+            string flag;
+            cond.FromActionDataString(g.actionparas.Text, out flag);
+
+            ConditionVariablesForm avf = new ConditionVariablesForm();
+            avf.Init("Input parameters and flags to pass to program on run", theme, cond, showone:true, showrefresh:true, showrefreshstate:flag.Equals(ConditionVariables.flagRunAtRefresh) );
+
+            if (avf.ShowDialog(this) == DialogResult.OK)
+            {
+                g.actionparas.Text = avf.result.ToActionDataString( avf.result_refresh ? ConditionVariables.flagRunAtRefresh : "");
+            }
+        }
+
         private void buttonExtGlobals_Click(object sender, EventArgs e)
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
@@ -716,7 +735,7 @@ namespace EDDiscovery2
             {
                 userglobalvariables = avf.result;
 
-                foreach ( KeyValuePair<string,string> k in userglobalvariables.values )     // add them in in case..
+                foreach (KeyValuePair<string, string> k in userglobalvariables.values)     // add them in in case..
                 {
                     if (!additionalfieldnames.Contains(k.Key))
                         additionalfieldnames.Add(k.Key);
@@ -740,7 +759,7 @@ namespace EDDiscovery2
                 ActionProgramForm apf = new ActionProgramForm();
                 apf.EditProgram += EditProgram;
 
-                apf.Init("Action program", theme, additionalfieldnames, p.Item1.name, p.Item2, null, p.Item1.actionprogramlist.GetActionProgramList(), "");
+                apf.Init("Action program", theme, additionalfieldnames, p.Item1.name, p.Item2, p.Item1.actionprogramlist.GetActionProgramList(), "");
 
                 DialogResult res = apf.ShowDialog();
 
@@ -771,7 +790,7 @@ namespace EDDiscovery2
                 string innerc = g.innercond.Text;
                 string outerc = g.outercond.Text;
                 string actionname = (IsActionsActive) ? g.actionlist.Text : "Default";
-                string actiondata = (IsActionsActive && g.actiondata != null) ? g.actiondata : "Default"; // any associated data from the program
+                string actiondata = (IsActionsActive) ? g.actionparas.Text : "Default"; // any associated data from the program
                 string evt = (eventlist != null) ? g.evlist.Text : "Default";
 
                 //System.Diagnostics.Debug.WriteLine("Event {0} inner {1} outer {2} action {3} data '{4}'", evt, innerc, outerc, actionname, actiondata );
