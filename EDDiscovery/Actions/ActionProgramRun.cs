@@ -29,6 +29,7 @@ namespace EDDiscovery.Actions
         private int[] execlooppos = new int[50];            // if not -1, on level down, go back to this step.
         private int execlevel = 0;
 
+        private bool continueonerrors = false;
         private string errlist = null;
 
         public ActionProgramRun(ActionFile af, // associated file
@@ -199,13 +200,25 @@ namespace EDDiscovery.Actions
         #region Run time errors
         public void ReportError(string s)
         {
-            if (errlist != null)
-                errlist += Environment.NewLine;
-            errlist += s;
+            currentvars["LastError"] = s;
+            if (!continueonerrors)
+            {
+                if (errlist != null)
+                    errlist += Environment.NewLine;
+                errlist += s;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Swallowed error " + s);
+            }
         }
 
         public string GetErrorList { get { return errlist; } }
 
+        public void SetContinueOnErrors(bool v)
+        {
+            continueonerrors = v;
+        }
 
         #endregion
 
