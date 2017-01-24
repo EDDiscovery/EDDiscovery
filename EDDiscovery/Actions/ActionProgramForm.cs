@@ -62,7 +62,7 @@ namespace EDDiscovery.Actions
                             List<string> vbs,              // list any variables you want in condition statements - passed to config menu, passed back up to condition, not null
                             string filesetname,             // file set name
                             ActionProgram prog = null,     // give the program to display
-                            string progdata = null,         // give any associated program data
+                            string progdata = null,         // give any associated program data (if null, we don't allow input data to be set)
                             string[] defprogs = null,      // list any default program names
                             string suggestedname = null)   // give a suggested name, if prog is null
         {

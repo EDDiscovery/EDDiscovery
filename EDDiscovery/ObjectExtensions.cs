@@ -39,17 +39,17 @@ public static class ObjectExtensions
     {
         string k = "";
 
+        if ((modifier & System.Windows.Forms.Keys.Shift) != 0)
+        {
+            k += "Shift+";
+        }
         if ((modifier & System.Windows.Forms.Keys.Alt) != 0)
         {
             k += "Alt+";
         }
         if ((modifier & System.Windows.Forms.Keys.Control) != 0)
         {
-            k += "Control+";
-        }
-        if ((modifier & System.Windows.Forms.Keys.Shift) != 0)
-        {
-            k += "Shift+";
+            k += "Ctrl+";
         }
 
         return k + key.ToString();

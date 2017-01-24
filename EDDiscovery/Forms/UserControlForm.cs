@@ -34,12 +34,13 @@ namespace EDDiscovery.Forms
         public bool isloaded = false;
         public bool norepositionwindow = false;
         public bool istemporaryresized = false;
+
         public bool istransparent = false;          // we are in transparent mode (but may be showing due to inpanelshow)
+        public bool displayTitle = true;            // we are displaying the title
 
         private bool inpanelshow = false;       // if we are in a panel show when we were transparent
         private bool defwindowsborder;
         private bool curwindowsborder;          // applied setting
-        private bool displayTitle = true;
         private string dbrefname;
         private string wintitle;
         private Color transparencycolor = Color.Transparent;

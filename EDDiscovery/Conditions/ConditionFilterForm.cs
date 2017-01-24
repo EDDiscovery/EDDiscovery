@@ -610,7 +610,7 @@ namespace EDDiscovery2
             else
                 fieldnames.AddRange(additionalfieldnames);
 
-            apf.Init("Action program", theme, fieldnames, actionfilelist.CurName, p, g.actiondata, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
+            apf.Init("Action program", theme, fieldnames, actionfilelist.CurName, p, g.actiondata != null ? g.actiondata : "", actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
 
             DialogResult res = apf.ShowDialog();
 
