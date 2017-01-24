@@ -1529,9 +1529,11 @@ namespace EDDiscovery
             frm.Show(this);
         }
 
+        /// <summary>
+        /// Handle system notification icon double-click event.
+        /// </summary>
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
-            // Tray icon was double-clicked.
             if (FormWindowState.Minimized == WindowState)
             {
                 if (EDDConfig.MinimizeToNotifyIcon)
@@ -1545,12 +1547,17 @@ namespace EDDiscovery
                 WindowState = FormWindowState.Minimized;
         }
 
+        /// <summary>
+        /// Handle system notification icon context menu "Hide Tray Icon" click event.
+        /// </summary>
         private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
         {
-            // Tray icon 'Hide Tray Icon' menu item was clicked.
             settings.checkBoxUseNotifyIcon.Checked = false;
         }
 
+        /// <summary>
+        /// Handle system notification icon context menu "Open EDDiscovery" click event.
+        /// </summary>
         private void notifyIconMenu_Open_Click(object sender, EventArgs e)
         {
             // Tray icon 'Open EDDiscovery' menu item was clicked. Present the main window.
@@ -1565,6 +1572,32 @@ namespace EDDiscovery
             }
             else
                 Activate();
+        }
+
+        /// <summary>
+        /// Handle system notification icon context menu "Sync with EDSM" click event.
+        /// </summary>
+        private void notifyIconMenu_SyncEDSM_Click(object sender, EventArgs e)
+        {
+            if (EDDConfig == null)
+                return;
+
+            EDSMClass edsm = new EDSMClass();
+
+            if (!edsm.IsApiKeySet)
+            {
+                MessageBox.Show("Please ensure a commander is selected and it has a EDSM API key set");
+                return;
+            }
+
+            try
+            {
+                EdsmSync.StartSync(edsm, EDDConfig.CurrentCommander.SyncToEdsm, EDDConfig.CurrentCommander.SyncFromEdsm, EDDConfig.DefaultMapColour);
+            }
+            catch (Exception ex)
+            {
+                LogLine($"EDSM Sync failed: {ex.Message}");
+            }
         }
 
         #endregion
