@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EDDiscovery.Properties;
 
 namespace EDDiscovery2.Forms
 {
@@ -44,52 +45,52 @@ namespace EDDiscovery2.Forms
 
         private void linkLabelEliteDangerous_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://www.elitedangerous.com/");
+            Process.Start(Resources.URLEDHomepage);
         }
 
         private void linkLabelDeveloperChat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://discordapp.com/invite/0qIqfCQbziTWzsQu");
+            Process.Start(Resources.URLProjectDiscord);
         }
 
         private void linkLabelEDDB_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://eddb.io/");
+            Process.Start(Resources.URLeddb);
         }
 
         private void linkLabelEDSM_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://www.edsm.net/");
+            Process.Start(Resources.URLedsm);
         }
 
         private void linkLabelFDForum_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://forums.frontier.co.uk/showthread.php?t=138155&p=2113535#post2113535");
+            Process.Start(Resources.URLProjectEDForumPost);
         }
 
         private void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery");
+            Process.Start(Resources.URLProjectGithub);
         }
 
         private void linkLabelHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery/wiki");
+            Process.Start(Resources.URLProjectWiki);
         }
 
         private void linkLabelLicense_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery/blob/master/LICENSE.md");
+            Process.Start(Resources.URLProjectLicense);
         }
 
         private void linkLabelGitHubIssue_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
+            Process.Start(Resources.URLProjectFeedback);
         }
 
         private void panelLogo_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery");
+            Process.Start(Resources.URLProjectGithub);
         }
     }
 }

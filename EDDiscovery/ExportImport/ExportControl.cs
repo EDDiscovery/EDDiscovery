@@ -59,6 +59,9 @@ namespace EDDiscovery
             txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             comboBoxCustomExportType.ItemHeight = 20;
+
+            double ly = 10.0;
+            txtsphereRadius.Text = ly.ToString("0.00");
             
         }
 

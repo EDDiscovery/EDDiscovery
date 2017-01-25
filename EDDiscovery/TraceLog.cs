@@ -216,7 +216,7 @@ namespace EDDiscovery
                 WriteLine($"\n==== UNHANDLED EXCEPTION ====\n{e.ExceptionObject.ToString()}\n==== cut ====");
                 WriteLine(null);
                 LogLineQueueEvent.WaitOne(100);
-                MessageBox.Show($"There was an unhandled exception.\nPlease report this at https://github.com/EDDiscovery/EDDiscovery/issues and attach {LogFileName}\nException: {e.ExceptionObject.ToString()}\n\nThis application must now close", "Unhandled Exception");
+                MessageBox.Show($"There was an unhandled exception.\nPlease report this at {Properties.Resources.URLProjectFeedback} and attach {LogFileName}\nException: {e.ExceptionObject.ToString()}\n\nThis application must now close", "Unhandled Exception");
             }
             catch
             {
@@ -235,7 +235,7 @@ namespace EDDiscovery
             try
             {
                 WriteLine($"\n==== UNHANDLED UI EXCEPTION ====\n{e.Exception.ToString()}\n==== cut ====");
-                res = MessageBox.Show($"There was an unhandled UI exception.\nPlease report this at https://github.com/EDDiscovery/EDDiscovery/issues and attach {LogFileName}\nException: {e.Exception.Message}\n{e.Exception.StackTrace}\n\nDo you wish to abort, or ignore the exception and try to continue?", "Unhandled Exception", MessageBoxButtons.AbortRetryIgnore);
+                res = MessageBox.Show($"There was an unhandled UI exception.\nPlease report this at {Properties.Resources.URLProjectFeedback} and attach {LogFileName}\nException: {e.Exception.Message}\n{e.Exception.StackTrace}\n\nDo you wish to abort, or ignore the exception and try to continue?", "Unhandled Exception", MessageBoxButtons.AbortRetryIgnore);
             }
             catch
             {

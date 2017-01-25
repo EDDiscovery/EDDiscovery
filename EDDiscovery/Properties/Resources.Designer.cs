@@ -833,12 +833,13 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to History Import Help
         ///
-        ///Cmdr - select the commander to import the history against
-        ///File - the Select button will open a file browser dialog to allow the source file to be selected
+        ///Cmdr - select the commander to import the history against.
+        ///File - the Select button will open a file browser dialog to allow the source file to be selected.
+        ///Header? - check this box if your import file has a header row.
         ///Delimiter - use the radio buttons to select &apos;Tab&apos; or &apos;Other&apos;, if &apos;Other&apos; then enter the delimiter character in the box.
         ///
         ///Arrival Date - the column in the file containing the date of arrival in a system.
-        ///Arrival Time - the column in the file containing the time of arrival in a system, if the arrival date column includes time the [rest of string was truncated]&quot;;.
+        ///Arrival Time - the column in the file containing the time of arrival [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ImportHelp {
             get {
@@ -1959,6 +1960,87 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("Travelicon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://eddb.io/.
+        /// </summary>
+        internal static string URLeddb {
+            get {
+                return ResourceManager.GetString("URLeddb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.elitedangerous.com/.
+        /// </summary>
+        internal static string URLEDHomepage {
+            get {
+                return ResourceManager.GetString("URLEDHomepage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.edsm.net/.
+        /// </summary>
+        internal static string URLedsm {
+            get {
+                return ResourceManager.GetString("URLedsm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://discordapp.com/invite/0qIqfCQbziTWzsQu.
+        /// </summary>
+        internal static string URLProjectDiscord {
+            get {
+                return ResourceManager.GetString("URLProjectDiscord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://forums.frontier.co.uk/showthread.php?t=138155&amp;amp;p=2113535#post2113535.
+        /// </summary>
+        internal static string URLProjectEDForumPost {
+            get {
+                return ResourceManager.GetString("URLProjectEDForumPost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery/issues.
+        /// </summary>
+        internal static string URLProjectFeedback {
+            get {
+                return ResourceManager.GetString("URLProjectFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery.
+        /// </summary>
+        internal static string URLProjectGithub {
+            get {
+                return ResourceManager.GetString("URLProjectGithub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery/blob/master/LICENSE.md.
+        /// </summary>
+        internal static string URLProjectLicense {
+            get {
+                return ResourceManager.GetString("URLProjectLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery/wiki.
+        /// </summary>
+        internal static string URLProjectWiki {
+            get {
+                return ResourceManager.GetString("URLProjectWiki", resourceCulture);
             }
         }
         
