@@ -673,7 +673,7 @@ namespace EDDiscovery
             }
         }
 
-        private void buttonSync_Click(object sender, EventArgs e)
+        public void buttonSync_Click(object sender, EventArgs e)
         {
             EDSMClass edsm = new EDSMClass();
 
@@ -755,14 +755,9 @@ namespace EDDiscovery
 
         private void button2DMap_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-            FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm.history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
-            frm.Show();
-            this.Cursor = Cursors.Default;
+            _discoveryForm.Open2DMap();
         }
         
-
         private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!comboBoxCustomPopOut.Enabled)
