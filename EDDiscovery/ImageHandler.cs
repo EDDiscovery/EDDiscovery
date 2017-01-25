@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Fronter Developments plc.
  */
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -25,6 +26,8 @@ using System.IO;
 using EDDiscovery.DB;
 using EDDiscovery;
 using EDDiscovery2.DB;
+using EDDiscovery.EliteDangerous;
+using EDDiscovery.EliteDangerous.JournalEvents;
 
 namespace EDDiscovery2.ImageHandler
 {
@@ -32,7 +35,11 @@ namespace EDDiscovery2.ImageHandler
     {
         private EDDiscoveryForm _discoveryForm;
         private FileSystemWatcher watchfolder = null;
+        private ConcurrentDictionary<string, System.Threading.Timer> ScreenshotTimers = new ConcurrentDictionary<string, System.Threading.Timer>();
         private bool initialized = false;
+        private string EDPicturesDir;
+        private int LastJournalCmdr = Int32.MinValue;
+        private JournalLocOrJump LastJournalLoc;
 
         public delegate void ScreenShot(string path, Point size);
         public event ScreenShot OnScreenShot;
@@ -71,6 +78,7 @@ namespace EDDiscovery2.ImageHandler
 
             string ScreenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
             string OutputDirdefault = Path.Combine(ScreenshotsDirdefault, "Converted");
+            EDPicturesDir = ScreenshotsDirdefault;
 
             try
             {
@@ -117,6 +125,8 @@ namespace EDDiscovery2.ImageHandler
 
             numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
 
+            _discoveryForm.OnNewJournalEntry += NewJournalEntry;
+
             this.initialized = true;
         }
 
@@ -151,12 +161,91 @@ namespace EDDiscovery2.ImageHandler
             return false;
         }
 
+        private void NewJournalEntry(JournalEntry je)
+        {
+            if (je is JournalLocOrJump)
+            {
+                LastJournalCmdr = je.CommanderId;
+                LastJournalLoc = je as JournalLocOrJump;
+            }
+            else
+            {
+                if (je.CommanderId != LastJournalCmdr)
+                {
+                    LastJournalLoc = null;
+                    LastJournalCmdr = je.CommanderId;
+                }
+            }
+
+            if (je.EventTypeID == JournalTypeEnum.Screenshot)
+            {
+                if (!checkBoxAutoConvert.Checked)
+                {
+                    return;
+                }
+
+                JournalScreenshot ss = je as JournalScreenshot;
+                string filename = ss.Filename;
+                if (filename.StartsWith("\\ED_Pictures\\"))
+                {
+                    filename = filename.Substring(13);
+                    string ssdir = (string)Invoke(new Func<String>(() => textBoxScreenshotsDir.Text));
+                    string filepath = Path.Combine(textBoxScreenshotsDir.Text, filename);
+
+                    if (!File.Exists(filepath))
+                    {
+                        filepath = Path.Combine(EDPicturesDir, filename);
+                    }
+
+                    if (File.Exists(filepath))
+                    {
+                        filename = filepath;
+                    }
+                }
+
+                if (File.Exists(filename))
+                {
+                    ProcessScreenshot(filename, ss.System);
+                }
+            }
+        }
+
         private void watcher(object sender, System.IO.FileSystemEventArgs e)
         {
             if (!checkBoxAutoConvert.Checked)
             {
                 return;
             }
+
+            if (e.FullPath.ToLowerInvariant().EndsWith(".bmp"))
+            {
+                if (!ScreenshotTimers.ContainsKey(e.FullPath))
+                {
+                    System.Threading.Timer timer = new System.Threading.Timer(s => ProcessScreenshot(e.FullPath, null), null, 5000, System.Threading.Timeout.Infinite);
+
+                    // Destroy the timer if OnScreenshot was run between the above check and adding the timer to the dictionary
+                    if (!ScreenshotTimers.TryAdd(e.FullPath, timer))
+                    {
+                        timer.Dispose();
+                    }
+                }
+            }
+            else
+            {
+                ProcessScreenshot(e.FullPath, null);
+            }
+        }
+
+        private void ProcessScreenshot(string filename, string sysname)
+        {
+            System.Threading.Timer timer = null;
+
+            // Don't run if OnScreenshot has already run for this image
+            if (!ScreenshotTimers.TryGetValue(filename, out timer) || timer == null || !ScreenshotTimers.TryUpdate(filename, null, timer))
+                return;
+
+            if (timer != null)
+                timer.Dispose();
 
             bool checkboxremove = false;
             bool checkboxpreview = false;
@@ -167,10 +256,29 @@ namespace EDDiscovery2.ImageHandler
                 checkboxpreview = checkBoxPreview.Checked;
             });
 
-            HistoryEntry he = _discoveryForm.history.GetLastFSD;
-            string cur_sysname = ( he != null ) ? he.System.name : "Unknown System";
+            if (sysname == null)
+            {
+                if (LastJournalLoc != null)
+                {
+                    sysname = LastJournalLoc.StarSystem;
+                }
+                else if (LastJournalCmdr != Int32.MinValue)
+                {
+                    LastJournalLoc = JournalEntry.GetLast<JournalLocOrJump>(LastJournalCmdr, DateTime.UtcNow);
+                    if (LastJournalLoc != null)
+                    {
+                        sysname = LastJournalLoc.StarSystem;
+                    }
+                }
+            }
 
-            Convert(e.FullPath,cur_sysname,checkboxremove,checkboxpreview);
+            if (sysname == null)
+            {
+                HistoryEntry he = _discoveryForm.history.GetLastFSD;
+                sysname = (he != null) ? he.System.name : "Unknown System";
+            }
+
+            Convert(filename, sysname, checkboxremove, checkboxpreview);
         }
 
         // preparing for a convert stored function by hiving this out to a separate function..
