@@ -41,7 +41,7 @@ namespace EDDiscovery.Actions
 
             if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
-                userdata = ToString(avf.noexpand, avf.result);
+                userdata = ToString(avf.result_noexpand, avf.result);
                 return true;
             }
             else

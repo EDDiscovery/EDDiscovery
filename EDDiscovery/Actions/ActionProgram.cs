@@ -27,7 +27,6 @@ namespace EDDiscovery.Actions
 
         public string Name { get { return name; } }
         public int Count { get { return programsteps.Count; } }
-        static public string flagRunAtRefresh = "RunAtRefresh;";            // ACTION DATA Flags, stored with action program name in events to configure it
 
         public void Add(Action ap)
         {
