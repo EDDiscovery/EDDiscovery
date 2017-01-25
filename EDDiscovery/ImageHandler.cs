@@ -28,6 +28,7 @@ using EDDiscovery;
 using EDDiscovery2.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
+using Newtonsoft.Json.Linq;
 
 namespace EDDiscovery2.ImageHandler
 {
@@ -205,7 +206,7 @@ namespace EDDiscovery2.ImageHandler
 
                 if (File.Exists(filename))
                 {
-                    ProcessScreenshot(filename, ss.System);
+                    ProcessScreenshot(filename, ss.System, ss, ss.CommanderId);
                 }
             }
         }
@@ -217,11 +218,13 @@ namespace EDDiscovery2.ImageHandler
                 return;
             }
 
+            int cmdrid = LastJournalCmdr;
+
             if (e.FullPath.ToLowerInvariant().EndsWith(".bmp"))
             {
                 if (!ScreenshotTimers.ContainsKey(e.FullPath))
                 {
-                    System.Threading.Timer timer = new System.Threading.Timer(s => ProcessScreenshot(e.FullPath, null), null, 5000, System.Threading.Timeout.Infinite);
+                    System.Threading.Timer timer = new System.Threading.Timer(s => ProcessScreenshot(e.FullPath, null, null, cmdrid), null, 5000, System.Threading.Timeout.Infinite);
 
                     // Destroy the timer if OnScreenshot was run between the above check and adding the timer to the dictionary
                     if (!ScreenshotTimers.TryAdd(e.FullPath, timer))
@@ -232,11 +235,11 @@ namespace EDDiscovery2.ImageHandler
             }
             else
             {
-                ProcessScreenshot(e.FullPath, null);
+                ProcessScreenshot(e.FullPath, null, null, cmdrid);
             }
         }
 
-        private void ProcessScreenshot(string filename, string sysname)
+        private void ProcessScreenshot(string filename, string sysname, JournalScreenshot ss, int cmdrid)
         {
             System.Threading.Timer timer = null;
 
@@ -262,9 +265,9 @@ namespace EDDiscovery2.ImageHandler
                 {
                     sysname = LastJournalLoc.StarSystem;
                 }
-                else if (LastJournalCmdr != Int32.MinValue)
+                else if (cmdrid >= 0)
                 {
-                    LastJournalLoc = JournalEntry.GetLast<JournalLocOrJump>(LastJournalCmdr, DateTime.UtcNow);
+                    LastJournalLoc = JournalEntry.GetLast<JournalLocOrJump>(cmdrid, DateTime.UtcNow);
                     if (LastJournalLoc != null)
                     {
                         sysname = LastJournalLoc.StarSystem;
@@ -278,12 +281,12 @@ namespace EDDiscovery2.ImageHandler
                 sysname = (he != null) ? he.System.name : "Unknown System";
             }
 
-            Convert(filename, sysname, checkboxremove, checkboxpreview);
+            Convert(filename, sysname, checkboxremove, checkboxpreview, ss, ss == null ? cmdrid : ss.CommanderId);
         }
 
         // preparing for a convert stored function by hiving this out to a separate function..
 
-        private void Convert(string inputfile, string cur_sysname, bool removeinputfile,bool previewinputfile) // can call independent of watcher
+        private void Convert(string inputfile, string cur_sysname, bool removeinputfile,bool previewinputfile, JournalScreenshot ss, int cmdrid) // can call independent of watcher
         {                                                                             
             try
             {
@@ -364,6 +367,7 @@ namespace EDDiscovery2.ImageHandler
                 } while (File.Exists(store_name));          // if name exists, pick another
 
                 FileStream testfile = null;
+                Bitmap bmp = null;
 
                 for (int tries = 60; tries-- > 0;)          // wait 30 seconds and then try it anyway.. 32K hires shots take a while to write.
                 {
@@ -371,17 +375,30 @@ namespace EDDiscovery2.ImageHandler
                     try
                     {
                         //Console.WriteLine("Trying " + inputfile);
-                        testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.None);        // throws if can't open
+                        using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.Read))        // throws if can't open
+                        {
+                            bmp = new Bitmap(testfile);
+                        }
                         //Console.WriteLine("Worked " + inputfile);
-                        testfile.Close();
                         break;
                     }
                     catch
                     { }
                 }
 
-                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(inputfile);
+                if (bmp == null)
+                {
+                    _discoveryForm.LogLineHighlight($"Unable to open screenshot '{inputfile}'");
+                    return;
+                }
+
+                FileInfo fi = new FileInfo(inputfile);
                 System.Drawing.Bitmap croppedbmp = null;
+
+                if (ss == null)
+                {
+                    ss = JournalScreenshot.GetScreenshot(inputfile, bmp.Size.Width, bmp.Size.Height, fi.CreationTimeUtc, cur_sysname == "Unknown System" ? null : cur_sysname, cmdrid);
+                }
 
                 if (cropimage)
                 {
@@ -453,13 +470,18 @@ namespace EDDiscovery2.ImageHandler
                 bmp.Dispose();              // need to free the bmp before any more operations on the file..
                 croppedbmp.Dispose();       // and ensure this one is freed of handles to the file.
 
-                FileInfo fi = new FileInfo(inputfile);
                 File.SetCreationTime(store_name, fi.CreationTime);
 
                 if (previewinputfile)        // if preview, load in
                 {
                     pictureBox.ImageLocation = store_name;
                     pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                }
+
+                if (ss != null)
+                {
+                    ss.SetConvertedFilename(inputfile, store_name, finalsize.X, finalsize.Y);
+                    ss.Update();
                 }
 
                 if (OnScreenShot!=null)
