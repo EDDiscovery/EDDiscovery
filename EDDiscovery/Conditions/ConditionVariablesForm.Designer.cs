@@ -54,10 +54,11 @@ namespace EDDiscovery
             this.panelOK = new System.Windows.Forms.Panel();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll1 = new ExtendedControls.PanelVScroll();
+            this.checkBoxCustomRefresh = new ExtendedControls.CheckBoxCustom();
             this.checkBoxNoExpand = new ExtendedControls.CheckBoxCustom();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.checkBoxCustomRefresh = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomAddto = new ExtendedControls.CheckBoxCustom();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -181,6 +182,7 @@ namespace EDDiscovery
             // panelVScroll1
             // 
             this.panelVScroll1.Controls.Add(this.checkBoxCustomRefresh);
+            this.panelVScroll1.Controls.Add(this.checkBoxCustomAddto);
             this.panelVScroll1.Controls.Add(this.checkBoxNoExpand);
             this.panelVScroll1.Controls.Add(this.vScrollBarCustom2);
             this.panelVScroll1.Controls.Add(this.buttonMore);
@@ -192,6 +194,22 @@ namespace EDDiscovery
             this.panelVScroll1.Size = new System.Drawing.Size(641, 290);
             this.panelVScroll1.TabIndex = 8;
             this.panelVScroll1.VerticalScrollBarDockRight = true;
+            // 
+            // checkBoxCustomRefresh
+            // 
+            this.checkBoxCustomRefresh.AutoSize = true;
+            this.checkBoxCustomRefresh.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomRefresh.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomRefresh.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomRefresh.FontNerfReduction = 0.5F;
+            this.checkBoxCustomRefresh.Location = new System.Drawing.Point(6, 48);
+            this.checkBoxCustomRefresh.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomRefresh.Name = "checkBoxCustomRefresh";
+            this.checkBoxCustomRefresh.Size = new System.Drawing.Size(93, 17);
+            this.checkBoxCustomRefresh.TabIndex = 6;
+            this.checkBoxCustomRefresh.Text = "Run at refresh";
+            this.checkBoxCustomRefresh.TickBoxReductionSize = 10;
+            this.checkBoxCustomRefresh.UseVisualStyleBackColor = true;
             // 
             // checkBoxNoExpand
             // 
@@ -221,7 +239,7 @@ namespace EDDiscovery
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 10;
             this.vScrollBarCustom2.Location = new System.Drawing.Point(621, 0);
-            this.vScrollBarCustom2.Maximum = -177;
+            this.vScrollBarCustom2.Maximum = -143;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -235,8 +253,8 @@ namespace EDDiscovery
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -177;
-            this.vScrollBarCustom2.ValueLimited = -177;
+            this.vScrollBarCustom2.Value = -143;
+            this.vScrollBarCustom2.ValueLimited = -143;
             // 
             // buttonMore
             // 
@@ -251,21 +269,21 @@ namespace EDDiscovery
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
-            // checkBoxCustomRefresh
+            // checkBoxCustomAddto
             // 
-            this.checkBoxCustomRefresh.AutoSize = true;
-            this.checkBoxCustomRefresh.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomRefresh.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomRefresh.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomRefresh.FontNerfReduction = 0.5F;
-            this.checkBoxCustomRefresh.Location = new System.Drawing.Point(6, 48);
-            this.checkBoxCustomRefresh.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomRefresh.Name = "checkBoxCustomRefresh";
-            this.checkBoxCustomRefresh.Size = new System.Drawing.Size(93, 17);
-            this.checkBoxCustomRefresh.TabIndex = 6;
-            this.checkBoxCustomRefresh.Text = "Run at refresh";
-            this.checkBoxCustomRefresh.TickBoxReductionSize = 10;
-            this.checkBoxCustomRefresh.UseVisualStyleBackColor = true;
+            this.checkBoxCustomAddto.AutoSize = true;
+            this.checkBoxCustomAddto.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomAddto.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomAddto.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomAddto.FontNerfReduction = 0.5F;
+            this.checkBoxCustomAddto.Location = new System.Drawing.Point(6, 116);
+            this.checkBoxCustomAddto.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomAddto.Name = "checkBoxCustomAddto";
+            this.checkBoxCustomAddto.Size = new System.Drawing.Size(57, 17);
+            this.checkBoxCustomAddto.TabIndex = 6;
+            this.checkBoxCustomAddto.Text = "Add to";
+            this.checkBoxCustomAddto.TickBoxReductionSize = 10;
+            this.checkBoxCustomAddto.UseVisualStyleBackColor = true;
             // 
             // ConditionVariablesForm
             // 
@@ -309,5 +327,6 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt buttonMore;
         private ExtendedControls.CheckBoxCustom checkBoxNoExpand;
         private ExtendedControls.CheckBoxCustom checkBoxCustomRefresh;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomAddto;
     }
 }

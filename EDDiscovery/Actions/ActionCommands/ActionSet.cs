@@ -9,39 +9,49 @@ namespace EDDiscovery.Actions
 {
     public class ActionSetLetBase : Action
     {
-        protected bool FromString(string ud, out bool noexpand, out ConditionVariables vars)
+        protected bool FromString(string ud, out bool noexpand, out bool addto, out ConditionVariables vars)
         {
             vars = new ConditionVariables();
 
-            if (userdata.TrimStart().StartsWith("$"))
-            {
+            noexpand = false;
+            addto = false;
+
+            if (ud.StartsWith("+$"))
+                addto = noexpand = true;
+            else if (ud.StartsWith("+"))
+                addto = true;
+            else if (ud.StartsWith("$"))
                 noexpand = true;
-                return vars.FromString(userdata.Substring(userdata.IndexOf('$') + 1), ConditionVariables.FromMode.MultiEntryComma);
-            }
-            else
-            {
-                noexpand = false;
-                return vars.FromString(userdata, ConditionVariables.FromMode.MultiEntryComma);
-            }
+
+            int pos = (noexpand ? 1 : 0) + (addto ? 1 : 0);
+
+            return vars.FromString(userdata.Substring(pos), ConditionVariables.FromMode.MultiEntryComma);
         }
 
-        protected string ToString(bool noexpand, ConditionVariables vars)
+        protected string ToString(bool noexpand, bool addto, ConditionVariables vars)
         {
-            return ((noexpand) ? "$ " : "" ) + vars.ToString();
+            if ( addto && noexpand )
+                return "+$ " + vars.ToString();
+            else if (addto)
+                return "+ " + vars.ToString();
+            else if (noexpand)
+                return "$ " + vars.ToString();
+            else
+                return vars.ToString();
         }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars, bool showaddtov)
         {
             ConditionVariables av;
-            bool noexpand;
-            FromString(userdata, out noexpand, out av);
+            bool noexpand, addto;
+            FromString(userdata, out noexpand, out addto, out av);
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Variable list:", theme, av, true, true, noexpand);
+            avf.Init("Variable list:", theme, av, showone:true, shownoexpand:true, notexpandstate: noexpand , showaddto:showaddtov, addtostate:addto);
 
             if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
-                userdata = ToString(avf.result_noexpand, avf.result);
+                userdata = ToString(avf.result_noexpand, avf.result_addto, avf.result);
                 return true;
             }
             else
@@ -51,8 +61,8 @@ namespace EDDiscovery.Actions
         public override string VerifyActionCorrect()
         {
             ConditionVariables av;
-            bool f;
-            return FromString(userdata, out f, out av) ? null : "Global/Let/Set not in correct format: ($) v=\"y\"";
+            bool f,a;
+            return FromString(userdata, out f, out a, out av) ? null : "Global/Let/Set not in correct format: ($) v=\"y\"";
         }
 
     }
@@ -61,25 +71,34 @@ namespace EDDiscovery.Actions
     {
         ConditionVariables av;
         bool noexpand;
+        bool addto;
+
+        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        {
+            return ConfigurationMenu(parent, theme, eventvars, true);
+        }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             if (av == null)
-                FromString(userdata, out noexpand, out av);
+                FromString(userdata, out noexpand, out addto, out av);
 
             foreach (KeyValuePair<string, string> k in av.values)
             {
                 string res;
 
                 if (noexpand)
-                    ap.currentvars[k.Key] = k.Value;
-                else if ( ap.functions.ExpandString(k.Value, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
-                    ap.currentvars[k.Key] = res;
-                else
+                    res = k.Value;
+                else if ( ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
                     ap.ReportError(res);
                     break;
                 }
+
+                if (addto && ap.currentvars.ContainsKey(k.Key))
+                    ap.currentvars[k.Key] += res;
+                else
+                    ap.currentvars[k.Key] = res;
             }
 
             if (av.Count == 0)
@@ -94,11 +113,17 @@ namespace EDDiscovery.Actions
     {
         ConditionVariables av;
         bool noexpand;
+        bool addto;
+
+        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        {
+            return ConfigurationMenu(parent, theme, eventvars, false);
+        }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             if (av == null)
-                FromString(userdata, out noexpand, out av);
+                FromString(userdata, out noexpand, out addto, out av);
 
             foreach (KeyValuePair<string, string> k in av.values)
             {
@@ -148,30 +173,39 @@ namespace EDDiscovery.Actions
     {
         ConditionVariables av;
         bool noexpand;
+        bool addto;
+
+        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        {
+            return ConfigurationMenu(parent, theme, eventvars, true);
+        }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             if (av == null)
-                FromString(userdata, out noexpand, out av);
+                FromString(userdata, out noexpand, out addto, out av);
 
             foreach (KeyValuePair<string, string> k in av.values)
             {
                 string res;
 
                 if (noexpand)
-                {
-                    ap.currentvars[k.Key] = k.Value;
-                    ap.discoveryform.SetProgramGlobal(k.Key, k.Value);
-                }
-                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
-                {
-                    ap.currentvars[k.Key] = res;
-                    ap.discoveryform.SetProgramGlobal(k.Key, res);
-                }
-                else
+                    res = k.Value;
+                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
                     ap.ReportError(res);
                     break;
+                }
+
+                if ( addto && ap.currentvars.ContainsKey(k.Key))
+                {
+                    ap.currentvars[k.Key] += res;
+                    ap.discoveryform.SetProgramGlobal(k.Key, res);
+                }
+                else 
+                {
+                    ap.currentvars[k.Key] = res;
+                    ap.discoveryform.SetProgramGlobal(k.Key, res);
                 }
             }
 
