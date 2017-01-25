@@ -28,7 +28,7 @@ namespace EDDiscovery2
 
         bool IsActionsActive { get { return actionfilelist != null; } }
 
-        class Group : IComparable<Group>
+        class Group 
         {
             public Panel panel;
             public ExtendedControls.ButtonExt upbutton;
@@ -51,24 +51,49 @@ namespace EDDiscovery2
             };
 
             public List<Conditions> condlist = new List<Conditions>();
-
-            public int CompareTo(Group other)
-            {
-                if (other.evlist != null && evlist != null)
-                {
-                    int r = evlist.Text.CompareTo(other.evlist.Text);
-                    if (r == 0 && actionparas != null)
-                        r = actionparas.Text.CompareTo(other.actionparas.Text);
-                    if (r == 0 && condlist.Count > 0 && other.condlist.Count > 0)
-                        r = condlist[0].value.Text.CompareTo(other.condlist[0].value.Text);
-                    return r;
-                }
-                else if (condlist.Count > 0 && other.condlist.Count > 0)
-                    return condlist[0].fname.Text.CompareTo(other.condlist[0].fname.Text);
-                else
-                    return 1;
-            }
         };
+
+        class GroupSort1 : IComparer<Group>
+        {
+            public int Compare(Group our, Group other)
+            {
+                int r = 1;
+                if (other.evlist != null && our.evlist != null)
+                {
+                    r = our.evlist.Text.CompareTo(other.evlist.Text);
+                    if (r == 0 && our.actionparas != null)
+                        r = our.actionparas.Text.CompareTo(other.actionparas.Text);
+                    if (r == 0 && our.condlist.Count > 0 && other.condlist.Count > 0)
+                        r = our.condlist[0].value.Text.CompareTo(other.condlist[0].value.Text);
+                }
+                else if (our.condlist.Count > 0 && other.condlist.Count > 0)
+                    r= our.condlist[0].fname.Text.CompareTo(other.condlist[0].fname.Text);
+
+                return r;
+            }
+        }
+        class GroupSort2 : IComparer<Group>
+        {
+            public int Compare(Group our, Group other)
+            {
+                int r = 1;
+
+                if (other.evlist != null && our.evlist != null)
+                {
+                    r = our.evlist.Text.CompareTo(other.evlist.Text);
+                    if (r == 0 && our.condlist.Count > 0 && other.condlist.Count > 0)
+                        r = our.condlist[0].value.Text.CompareTo(other.condlist[0].value.Text);
+                    if (r == 0 && our.actionparas != null)
+                        r = our.actionparas.Text.CompareTo(other.actionparas.Text);
+                }
+                else if (our.condlist.Count > 0 && other.condlist.Count > 0)
+                    r = our.condlist[0].fname.Text.CompareTo(other.condlist[0].fname.Text);
+
+                return r;
+            }
+        }
+
+
 
         List<Group> groups;
         public int condxoffset;
@@ -193,7 +218,13 @@ namespace EDDiscovery2
 
         private void buttonSort_Click(object sender, EventArgs e) // sort button
         {
-            groups.Sort();
+            groups.Sort(new GroupSort1());
+            FixUpGroups();
+        }
+
+        private void buttonSort2_Click(object sender, EventArgs e)
+        {
+            groups.Sort(new GroupSort2());
             FixUpGroups();
         }
 
@@ -302,7 +333,12 @@ namespace EDDiscovery2
             Group g = (Group)b.Tag;
 
             if ( g.condlist.Count == 0 )        // if no conditions, create one..
-                CreateCondition(g);
+            {
+                if ( g.evlist.Text.Equals("onKeyPress"))                    // special fill in for some events..
+                    CreateCondition(g,"KeyPress", "== (Str)","");
+                else
+                    CreateCondition(g);
+            }
 
             if (IsActionsActive)
                 g.actionconfig.Visible = g.actionlist.Visible = g.actionparas.Visible = true;        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
@@ -324,16 +360,16 @@ namespace EDDiscovery2
 
         #region Condition
 
-        void CreateCondition(Group g )
+        void CreateCondition(Group g, string initialfname = null, string initialcond = null, string initialvalue = null )
         {
             SuspendLayout();
-            CreateConditionInt(g, null, null, null);
+            CreateConditionInt(g, initialfname, initialcond, initialvalue);
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             FixUpGroups();
             ResumeLayout();
         }
 
-        void CreateConditionInt( Group g , string initialfname, string initialcond, string initialvalue )
+        void CreateConditionInt( Group g , string initialfname, string initialcond, string initialvalue)
         {
             Group.Conditions c = new Group.Conditions();
 
@@ -507,7 +543,7 @@ namespace EDDiscovery2
 
                 // pos the panel
 
-                g.panel.Location = new Point(panelmargin, y);
+                g.panel.Location = new Point(panelmargin, y + panelVScroll.ScrollOffset);
                 g.panel.Size = new Size(Math.Max(panelwidth - panelmargin * 2, farx), Math.Max(vnextcond, panelmargin + conditionhoff));
 
                 y += g.panel.Height + 6;
@@ -548,15 +584,14 @@ namespace EDDiscovery2
                 checkBoxCustomSetEnabled.Checked = actionfilelist.CurEnabled;
             }
 
-            buttonMore.Location = new Point(panelmargin, y);
-            buttonSort.Location = new Point(buttonMore.Right+8, y);
+            buttonMore.Location = new Point(panelmargin, y + panelVScroll.ScrollOffset);
+            buttonSort.Location = new Point(buttonMore.Right + 8, y + panelVScroll.ScrollOffset);
+            buttonSort2.Location = new Point(buttonSort.Right + 8, y + panelVScroll.ScrollOffset);
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;
 
             y += buttonMore.Height + titleHeight + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
-
-            panelVScroll.RestateScroll();       // need to tell the bloody thing to reset the Y offset..
 
             if (calcminsize)
             {
@@ -1096,5 +1131,6 @@ namespace EDDiscovery2
 
         #endregion
 
+        
     }
 }

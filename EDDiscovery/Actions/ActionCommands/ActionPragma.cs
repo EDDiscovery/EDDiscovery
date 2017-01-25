@@ -24,51 +24,57 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            StringParser p = new StringParser(userdata);
-
-            string cmd;
-            while( (cmd = p.NextWord() ) != null )
+            string res;
+            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
-                if (cmd.Equals("DumpVars", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    string rest = p.NextQuotedWord();
+                StringParser p = new StringParser(res);
 
-                    if (rest != null && rest.Length > 0)
+                string cmd;
+                while ((cmd = p.NextWord(" ", true)) != null)
+                {
+                    if (cmd.Equals("dumpvars"))
                     {
-                        foreach (KeyValuePair<string, string> k in ap.currentvars.FilterVars(rest).values)
+                        string rest = p.NextQuotedWord();
+
+                        if (rest != null && rest.Length > 0)
                         {
-                            ap.discoveryform.LogLine(k.Key + "=" + k.Value);
+                            foreach (KeyValuePair<string, string> k in ap.currentvars.FilterVars(rest).values)
+                            {
+                                ap.discoveryform.LogLine(k.Key + "=" + k.Value);
+                            }
+                        }
+                        else
+                        {
+                            ap.ReportError("Missing variable wildcard after Pragma DumpVars");
+                            return true;
                         }
                     }
-                    else
+                    else if (cmd.Equals("log"))
                     {
-                        ap.ReportError("Missing variable wildcard after Pragma DumpVars");
-                        return true;
-                    }
-                }
-                else if (cmd.Equals("Log", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    string rest = p.NextQuotedWord();
+                        string rest = p.NextQuotedWord();
 
-                    if (rest != null )
-                    {
-                        ap.discoveryform.LogLine(rest);
+                        if (rest != null)
+                        {
+                            ap.discoveryform.LogLine(rest);
+                        }
+                        else
+                        {
+                            ap.ReportError("Missing string after Pragma Log");
+                            return true;
+                        }
                     }
-                    else
+                    else if (cmd.Equals("ignoreerrors"))
                     {
-                        ap.ReportError("Missing string after Pragma Log");
-                        return true;
+                        ap.SetContinueOnErrors(true);
                     }
-                }
-                else if (cmd.Equals("ignoreerrors", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    ap.SetContinueOnErrors(true);
-                }
-                else if (cmd.Equals("allowerrors", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    ap.SetContinueOnErrors(true);
+                    else if (cmd.Equals("allowerrors"))
+                    {
+                        ap.SetContinueOnErrors(true);
+                    }
                 }
             }
+            else
+                ap.ReportError(res);
 
             return true;
         }
