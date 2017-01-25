@@ -1289,9 +1289,7 @@ namespace EDDiscovery
 
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
-            frm.Show();
+            Open2DMap();
         }
 
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1546,6 +1544,15 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
+        public void Open2DMap()
+        {
+            this.Cursor = Cursors.WaitCursor;
+            FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
+            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
+            frm.Show();
+            this.Cursor = Cursors.Default;
+        }
+
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = history.FilterByScanNotEDDNSynced;        // first entry is oldest
@@ -1686,18 +1693,19 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
-            if (FormWindowState.Minimized == WindowState)
+            // We may be getting called by this.ResumeLayout() from InitializeComponent().
+            if (EDDConfig != null)
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
-                    Hide();
+                {
+                    if (FormWindowState.Minimized == WindowState)
+                        Hide();
+                    else
+                        Show();
+                }
+                RecordPosition();
+                notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
             }
-            else
-            {
-                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
-                    Show();
-            }
-            RecordPosition();
-            notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
         }
 
         private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)

@@ -65,6 +65,7 @@ namespace EDDiscovery.Actions
             new Commands("Scan", typeof(ActionScan) , ActionType.Cmd),
             new Commands("Popout", typeof(ActionPopout) , ActionType.Cmd),
             new Commands("Historytab", typeof(ActionHistoryTab) , ActionType.Cmd),
+            new Commands("Perform", typeof(ActionPerform) , ActionType.Cmd),
             new Commands("If", typeof(ActionIf) , ActionType.If),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
             new Commands("ElseIf", typeof(ActionElseIf) , ActionType.ElseIf),
