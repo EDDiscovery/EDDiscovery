@@ -99,6 +99,8 @@ namespace EDDiscovery
         public event HistoryChange OnHistoryChange;
         public delegate void NewEntry(HistoryEntry l, HistoryList hl);
         public event NewEntry OnNewEntry;
+        public delegate void NewJournalEntry(JournalEntry je);
+        public event NewJournalEntry OnNewJournalEntry;
         public delegate void NewLogEntry(string txt, Color c);
         public event NewLogEntry OnNewLogEntry;
         public delegate void NewTarget();
@@ -1949,6 +1951,11 @@ namespace EDDiscovery
 
                 if (OnNewEntry != null)
                     OnNewEntry(he,history);
+            }
+
+            if (OnNewJournalEntry != null)
+            {
+                OnNewJournalEntry(je);
             }
 
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
