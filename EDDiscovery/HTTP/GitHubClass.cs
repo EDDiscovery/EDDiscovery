@@ -24,6 +24,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace EDDiscovery
@@ -103,6 +104,104 @@ namespace EDDiscovery
 
         }
 
+
+        public List<GitHubFile> GetDataFiles(string gitdir)
+        {
+            List<GitHubFile> files = new List<GitHubFile>();
+            try
+            {
+                HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscoveryData/contents/" + gitdir) as HttpWebRequest;
+                request.UserAgent = "TestApp";
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    string content1 = reader.ReadToEnd();
+                    JArray ja = JArray.Parse(content1);
+
+                    if (ja != null)
+                    {
+                        foreach (JObject jo in ja)
+                        {
+                            GitHubFile file = new GitHubFile(jo);
+                            files.Add(file);
+                        }
+                        return files;
+                    }
+                    else
+                        return null; ;
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Exception: {ex.Message}");
+                Trace.WriteLine($"ETrace: {ex.StackTrace}");
+                return null;
+            }
+        }
+
+        public bool DownloadFiles(List<GitHubFile> files, string DestinationDir)
+        {
+            foreach (var file in files)
+                if (!DownloadFile(file, DestinationDir))
+                    return false;
+
+            return true;
+        }
+
+        public bool DownloadNeeded(GitHubFile file, string DestinationDir)
+        {
+            string destFile = Path.Combine(DestinationDir, file.Name);
+
+            if (!File.Exists(destFile))
+                return true;
+            else
+            {
+                // Calculate sha
+                string sha = CalcSha1(destFile);
+
+                if (sha.Equals(file.sha))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public string CalcSha1(string filename)
+        {
+
+            using (FileStream fs = new FileStream(filename, FileMode.Open))
+            using (BufferedStream bs = new BufferedStream(fs))
+            {
+                using (SHA1Managed sha1 = new SHA1Managed())
+                {
+                    byte[] hash = sha1.ComputeHash(bs);
+                    StringBuilder formatted = new StringBuilder(2 * hash.Length);
+                    foreach (byte b in hash)
+                    {
+                        formatted.AppendFormat("{0:X2}", b);
+                    }
+
+                    return formatted.ToNullSafeString();
+                }
+            }
+        }
+
+
+        public bool DownloadFile(GitHubFile file, string DestinationDir)
+        {
+            // Check if the file is new/updated first
+            if (!DownloadNeeded(file, DestinationDir))
+                return true;
+
+            // download.....
+
+            string destFile = Path.Combine(DestinationDir, file.Name);
+
+
+            return false;
+        }
+
+       
 
 
     }
