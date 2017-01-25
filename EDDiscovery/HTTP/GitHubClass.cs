@@ -34,12 +34,12 @@ namespace EDDiscovery
         public string commanderName;
 
         private readonly string fromSoftwareVersion;
-//        private readonly string fromSoftware;
+        //        private readonly string fromSoftware;
         private readonly string githubServer = "https://api.github.com/repos/EDDiscovery/EDDiscovery/";
 
         public GitHubClass()
         {
-//            fromSoftware = "EDDiscovery";
+            //            fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
             commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
@@ -47,7 +47,7 @@ namespace EDDiscovery
             _serverAddress = githubServer;
         }
 
-      
+
 
         public JArray GetAllReleases()
         {
@@ -70,7 +70,7 @@ namespace EDDiscovery
                 Trace.WriteLine($"ETrace: {ex.StackTrace}");
                 return null;
             }
-            
+
         }
 
         public GitHubRelease GetLatestRelease()
@@ -194,15 +194,38 @@ namespace EDDiscovery
                 return true;
 
             // download.....
+            try
+            {
 
-            string destFile = Path.Combine(DestinationDir, file.Name);
+                string destFile = Path.Combine(DestinationDir, file.Name);
 
+                using (WebClient client = new WebClient())
+                {
+                    client.DownloadFile(file.DownloadURL, destFile);
+                }
 
-            return false;
+                return true;
+            }
+            catch (WebException ex)
+            {
+                using (WebResponse response = ex.Response)
+                {
+                    HttpWebResponse httpResponse = (HttpWebResponse)response;
+                    System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                    System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
+                    System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
+                    System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                    WriteLog("WebException" + ex.Message, "");
+                    WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLog("GitHub DownloadFile Exception" + ex.Message, "");
+                return false;
+            }
         }
-
-       
-
-
     }
 }
