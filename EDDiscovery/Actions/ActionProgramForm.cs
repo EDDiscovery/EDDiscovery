@@ -18,7 +18,6 @@ namespace EDDiscovery.Actions
         public delegate void EditProgramFunc(string name);
         public event EditProgramFunc EditProgram; 
 
-        ConditionVariables inputparas;                             // input parameters to configure for this program
         List<string> startvarlist;                                  // starting vars
         List<string> currentvarlist;                                // variables available to use.. combination of above
 
@@ -62,7 +61,6 @@ namespace EDDiscovery.Actions
                             List<string> vbs,              // list any variables you want in condition statements - passed to config menu, passed back up to condition, not null
                             string filesetname,             // file set name
                             ActionProgram prog = null,     // give the program to display
-                            string progdata = null,         // give any associated program data (if null, we don't allow input data to be set)
                             string[] defprogs = null,      // list any default program names
                             string suggestedname = null)   // give a suggested name, if prog is null
         {
@@ -77,18 +75,6 @@ namespace EDDiscovery.Actions
 
             labelSet.Text = filesetname + "::";
             textBoxBorderName.Location = new Point(labelSet.Location.X + labelSet.Width + 8, textBoxBorderName.Location.Y);
-
-            inputparas = new ConditionVariables();
-
-            if (progdata != null)
-            {
-                string flag;
-                inputparas.FromActionDataString(progdata, out flag);
-                checkBoxCustomRefresh.Checked = flag.Contains(ActionProgram.flagRunAtRefresh);
-                currentvarlist.AddRange(inputparas.KeyList);
-            }
-            else
-                checkBoxCustomRefresh.Visible = buttonVars.Visible = false;
 
             if (defprogs != null)
                 definedprograms = defprogs;
@@ -360,6 +346,7 @@ namespace EDDiscovery.Actions
         {
             CreateStep(null, -1);
             RepositionGroups();
+            panelVScroll.ToEnd();       // tell it to scroll to end
         }
 
         private void Stepname_SelectedIndexChanged(object sender, EventArgs e)                // EVENT list changed
@@ -520,25 +507,6 @@ namespace EDDiscovery.Actions
             return ap;
         }
 
-        public string GetActionData()         // called on OK to get the actiondata string
-        {
-            string flags = (checkBoxCustomRefresh.Checked) ? ActionProgram.flagRunAtRefresh : "";
-            return inputparas.ToActionDataString(flags);
-        }
-
-        private void buttonVars_Click(object sender, EventArgs e)
-        {
-            ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Input Parameter variables to pass to program on run", theme, inputparas, true);
-
-            if (avf.ShowDialog(this) == DialogResult.OK)
-            {
-                inputparas = avf.result;
-
-                currentvarlist = new List<string>(startvarlist);
-                currentvarlist.AddRange(inputparas.KeyList);
-            }
-        }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {

@@ -52,7 +52,13 @@ public static class ObjectExtensions
             k += "Ctrl+";
         }
 
-        return k + key.ToString();
+        string keyname = key.ToString();
+        if (keyname.Length == 2 && keyname[0] == 'D')
+            keyname = keyname.Substring(1);
+        else if (keyname.StartsWith("Oem") && keyname.Length > 4)       // leave oem1-9, they are not standard.
+            keyname = keyname.Substring(3);
+
+        return k + keyname;
     }
 }
 

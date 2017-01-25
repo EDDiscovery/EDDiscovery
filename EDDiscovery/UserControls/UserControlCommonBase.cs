@@ -39,8 +39,8 @@ namespace EDDiscovery.UserControls
 
         public void SetControlText(string s)            // used to set heading text in either the form of the tabstrip
         {
-            if (this.Parent is Controls.TabStrip)
-                ((Controls.TabStrip)(this.Parent)).SetControlText(s);
+            if (this.Parent is ExtendedControls.TabStrip)
+                ((ExtendedControls.TabStrip)(this.Parent)).SetControlText(s);
             else if (this.Parent is Forms.UserControlForm)
                 ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
         }

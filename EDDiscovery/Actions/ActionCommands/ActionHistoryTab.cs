@@ -46,135 +46,45 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextWord();
                 }
 
-#if false
                 if (cmdname == null)
                 {
-                    ap.ReportError("Missing command or panel name in Historytab");
-                }
-                else if (cmdname.Equals("Status", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    ap.currentvars[prefix + "Count"] = poc.Count.ToString();
-                    for (int i = 0; i < poc.Count; i++)
-                        ap.currentvars[prefix + i.ToString()] = poc[i].Name;
+                    ap.ReportError("Missing panel name in Historytab");
                 }
                 else
                 {
-                    Forms.UserControlForm ucf = poc.Get(cmdname);
+                    ExtendedControls.TabStrip ts = ap.discoveryform.TravelControl.GetTabStrip(cmdname);
 
-                    string nextcmd = sp.NextWord(" ", true);
-
-                    if (nextcmd == null)
+                    if (ts != null)
                     {
-                        ap.ReportError("Missing command after panel name in Panel");
-                    }
-                    else if (nextcmd.Equals("status"))
-                    {
-                        ap.currentvars[prefix + "Exists"] = (ucf != null) ? "1" : "0";
+                        string nextcmd = sp.NextWord(" ", true);
 
-                        if (ucf != null)
+                        if (nextcmd == null)
                         {
-                            ap.currentvars[prefix + "Transparent"] = ucf.istransparent ? "1" : "0";
-                            ap.currentvars[prefix + "TopMost"] = ucf.TopMost ? "1" : "0";
-                            ap.currentvars[prefix + "DisplayTitle"] = ucf.displayTitle ? "1" : "0";
-                            ap.currentvars[prefix + "ShowInTaskbar"] = ucf.ShowInTaskbar ? "1" : "0";
-                            ap.currentvars[prefix + "WindowState"] = ucf.WindowState.ToString();
-                            ap.currentvars[prefix + "Top"] = ucf.Top.ToString();
-                            ap.currentvars[prefix + "Left"] = ucf.Left.ToString();
-                            ap.currentvars[prefix + "Width"] = ucf.Width.ToString();
-                            ap.currentvars[prefix + "Height"] = ucf.Height.ToString();
+                            ap.ReportError("Missing command after panel name in Historytab");
                         }
-                    }
-                    else if (ucf != null)        // found a panel with the name
-                    {
-                        if (nextcmd.Equals("toggle") || nextcmd.Equals("off"))
-                            ucf.Close();
-                        else if (nextcmd.Equals("on"))   // does nothing
-                        { }
-                        else if (nextcmd.Equals("transparent"))
-                            ucf.SetTransparency(true);
-                        else if (nextcmd.Equals("opaque"))
-                            ucf.SetTransparency(false);
-                        else if (nextcmd.Equals("title"))
-                            ucf.SetShowInTaskBar(true);
-                        else if (nextcmd.Equals("notitle"))
-                            ucf.SetShowInTaskBar(false);
-                        else if (nextcmd.Equals("topmost"))
-                            ucf.SetTopMost(true);
-                        else if (nextcmd.Equals("normalz"))
-                            ucf.SetTopMost(false);
-                        else if (nextcmd.Equals("showintaskbar"))
-                            ucf.SetShowInTaskBar(true);
-                        else if (nextcmd.Equals("notshowintaskbar"))
-                            ucf.SetShowInTaskBar(false);
-                        else if (nextcmd.Equals("minimize"))
-                            ucf.WindowState = FormWindowState.Minimized;
-                        else if (nextcmd.Equals("normal"))
-                            ucf.WindowState = FormWindowState.Normal;
-                        else if (nextcmd.Equals("maximize"))
-                            ucf.WindowState = FormWindowState.Maximized;
-                        else if (nextcmd.Equals("location"))
+                        else if (nextcmd.Equals("toggle"))
                         {
-                            int? x = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? y = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? w = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? h = sp.GetInt();
-
-                            if (x.HasValue && y.HasValue && w.HasValue && h.HasValue)
-                            {
-                                ucf.Location = new Point(x.Value, y.Value);
-                                ucf.Size = new Size(w.Value, h.Value);
-                            }
-                            else
-                                ap.ReportError("Location needs x,y,w,h in Panel");
-                        }
-                        else if (nextcmd.Equals("position"))
-                        {
-                            int? x = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? y = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-
-                            if (x.HasValue && y.HasValue)
-                                ucf.Location = new Point(x.Value, y.Value);
-                            else
-                                ap.ReportError("Position needs x,y in Panel");
-                        }
-                        else if (nextcmd.Equals("size"))
-                        {
-                            int? w = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? h = sp.GetInt();
-
-                            if (w.HasValue && h.HasValue)
-                                ucf.Size = new Size(w.Value, h.Value);
-                            else
-                                ap.ReportError("Size needs x,y,w,h in Panel");
+                            ts.Toggle();
                         }
                         else
-                            ap.ReportError("Unknown command " + cmdname + " after panel name in Panel");
+                        {
+                            Forms.PopOutControl poc = ap.discoveryform.PopOuts;
+                            Forms.PopOutControl.PopOuts? poi = poc.GetPopOutTypeByName(nextcmd);
+
+                            if (poi.HasValue)
+                            {
+                                if (!ts.ChangeTo((int)poi.Value))
+                                    ap.ReportError("Panel " + nextcmd + " cannot be used in Historytab");
+                            }
+                            else
+                                ap.ReportError("Cannot find generic popout name " + nextcmd + " in Popout");
+                        }
                     }
                     else
                     {
-                        Forms.PopOutControl.PopOuts? poi = poc.GetPopOutTypeByName(cmdname);
-
-                        if (poi.HasValue)
-                        {
-                            if (nextcmd.Equals("toggle") || nextcmd.Equals("on"))
-                            {
-                                poc.PopOut(poi.Value);
-                            }
-                            else
-                                ap.ReportError("Cannot use command " + nextcmd + " after generic panel name in Panel");
-                        }
-                        else
-                            ap.ReportError("Cannot find generic panel name " + cmdname + " in Panel");
+                        ap.ReportError("Unknown panel name " + cmdname + " in Historytab");
                     }
-
                 }
-#endif
             }
             else
                 ap.ReportError(res);

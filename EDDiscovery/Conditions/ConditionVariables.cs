@@ -113,21 +113,30 @@ namespace EDDiscovery
             return true;
         }
 
+        static public string flagRunAtRefresh = "RunAtRefresh;";            // ACTION DATA Flags, stored with action program name in events to configure it
+
         public string ToActionDataString(string flag)           // helpers to encode action data..
         {
-            return flag + "," + ToString();
+            if ( flag.Length > 0 )
+                return flag + "," + ToString();
+            else
+                return ToString();
         }
 
         public void FromActionDataString(string ad, out string flag)        // helpers to encode action data..
         {
             int comma = ad.IndexOf(',');
-            if (comma >= 0)
+            int equal = ad.IndexOf('=');
+            if (comma >= 0 && (equal == -1 || comma < equal))        // if sksksk, v1 = or wekwkwk,
             {
                 flag = ad.Substring(0, comma);
                 FromString(ad.Substring(comma + 1), ConditionVariables.FromMode.MultiEntryComma);
             }
             else
+            {
                 flag = "";
+                FromString(ad, ConditionVariables.FromMode.MultiEntryComma);
+            }
         }
 
         public void Add(List<ConditionVariables> varlist)
