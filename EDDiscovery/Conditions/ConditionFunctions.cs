@@ -42,7 +42,8 @@ namespace EDDiscovery
                 new FuncEntry("indexof",IndexOf,2,2),
                 new FuncEntry("length",Length,1,1),
                 new FuncEntry("version",Version,1,1),
-                new FuncEntry("floor",Floor,1,2),
+                new FuncEntry("floor",Floor,2,2),
+                new FuncEntry("round",Round,3,3),
                 new FuncEntry("lower",Lower,1,2),
                 new FuncEntry("upper",Upper,1,2),
                 new FuncEntry("trim",Trim,1,2)
@@ -486,16 +487,16 @@ namespace EDDiscovery
 
         private bool Floor(List<string> paras, ConditionVariables vars, out string output, int recdepth)
         {
-            string format = (paras.Count > 1) ? paras[1] : "0.###";
-
             if (vars.ContainsKey(paras[0]))
             {
                 double para;
                 if (double.TryParse(vars[paras[0]], out para))
                 {
+                    string fmt = vars.ContainsKey(paras[1]) ? vars[paras[1]] : paras[1];
+
                     try
                     {
-                        output = Math.Floor(para).ToString(format);
+                        output = Math.Floor(para).ToString(fmt);
                         return true;
                     }
                     catch
@@ -505,6 +506,41 @@ namespace EDDiscovery
                 }
                 else
                     output = "Parameter number be a number";
+            }
+            else
+                output = "The variable does not exist";
+
+            return false;
+        }
+
+        private bool Round(List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            if (vars.ContainsKey(paras[0]))
+            {
+                double para;
+
+                if (double.TryParse(vars[paras[0]], out para))
+                {
+                    int digits = 0;
+                    if (int.TryParse(paras[1], out digits) || (vars.ContainsKey(paras[1]) && int.TryParse(vars[paras[1]], out digits)))
+                    {
+                        string fmt = vars.ContainsKey(paras[2]) ? vars[paras[2]] : paras[2];
+
+                        try
+                        {
+                            output = Math.Round(para, digits).ToString(paras[2]);
+                            return true;
+                        }
+                        catch
+                        {
+                            output = "Format must be a c# ToString format for doubles";
+                        }
+                    }
+                    else
+                        output = "Digits must be a variable or an integer number of digits";
+                }
+                else
+                    output = "Variable must be a integer or double";
             }
             else
                 output = "The variable does not exist";

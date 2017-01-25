@@ -15,6 +15,7 @@ namespace EDDiscovery
         public ConditionVariables result;      // only on OK
         public bool result_noexpand;
         public bool result_refresh;
+        public bool result_addto;
 
         public class Group
         {
@@ -39,8 +40,9 @@ namespace EDDiscovery
         }
 
         public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , 
-                                                                bool showone , 
-                                                                bool shownoexpand = false, bool notexpandstate = false, 
+                                                                bool showone ,
+                                                                bool shownoexpand = false, bool notexpandstate = false,
+                                                                bool showaddto = false, bool addtostate = false,
                                                                 bool showrefresh = false , bool showrefreshstate = false)
         {
             theme = th;
@@ -49,13 +51,20 @@ namespace EDDiscovery
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
+            int pos = panelmargin;
             checkBoxNoExpand.Enabled = checkBoxNoExpand.Visible = shownoexpand;
             checkBoxNoExpand.Checked = notexpandstate;
-            checkBoxNoExpand.Location = new Point(panelmargin, panelmargin);
+            checkBoxNoExpand.Location = new Point(pos, panelmargin);
+            pos += checkBoxNoExpand.Enabled ? 160 : 0;
 
             checkBoxCustomRefresh.Enabled = checkBoxCustomRefresh.Visible = showrefresh;
             checkBoxCustomRefresh.Checked = showrefreshstate;
-            checkBoxCustomRefresh.Location = new Point(panelmargin + ((checkBoxNoExpand.Enabled) ? 160 : 0), panelmargin);
+            checkBoxCustomRefresh.Location = new Point(pos, panelmargin);
+            pos += checkBoxCustomRefresh.Enabled ? 160 : 0;
+
+            checkBoxCustomAddto.Enabled = checkBoxCustomAddto.Visible = showaddto;
+            checkBoxCustomAddto.Checked = addtostate;
+            checkBoxCustomAddto.Location = new Point(pos, panelmargin);
 
             if (vbs != null)
             {
@@ -69,6 +78,9 @@ namespace EDDiscovery
             {
                 CreateEntry("", "");
             }
+
+            if (groups.Count >= 1)
+                groups[0].var.Focus();
         }
 
         private void ConditionVariablesFormResize(object sender, EventArgs e)
@@ -156,6 +168,7 @@ namespace EDDiscovery
 
             result_noexpand = checkBoxNoExpand.Checked;
             result_refresh = checkBoxCustomRefresh.Checked;
+            result_addto = checkBoxCustomAddto.Checked;
 
             DialogResult = DialogResult.OK;
             Close();
