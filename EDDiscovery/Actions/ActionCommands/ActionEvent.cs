@@ -31,14 +31,14 @@ namespace EDDiscovery.Actions
                 StringParser sp = new StringParser(res);
                 string prefix = "EC_";
 
-                string cmdname = sp.NextWord();
+                string cmdname = sp.NextWord(" ", true);
 
                 // [PREFIX varprefix] [FROM JID] Forward/First/Backward/Last [event or (event list,event)] [WHERE conditions list]
                 // FROM JID NEXT gives you the one after the JID
                 // FROM JID BACKWARD gives you the JID before the JID
                 // FROM JID gives you the JID
 
-                if (cmdname != null && cmdname.Equals("PREFIX", StringComparison.InvariantCultureIgnoreCase))
+                if (cmdname != null && cmdname.Equals("prefix") )
                 {
                     prefix = sp.NextWord();
 
@@ -48,31 +48,46 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    cmdname = sp.NextWord();
+                    cmdname = sp.NextWord(" " , true);
                 }
 
                 int jidindex = -1;
 
-                if (cmdname!=null && cmdname.Equals("FROM", StringComparison.InvariantCultureIgnoreCase))
+                if (cmdname!=null && (cmdname.Equals("from") || cmdname.Equals("thpos")))
                 {
-                    string j = sp.NextWord();
+                    long? jid;
 
-                    long jid;
-                    if (j == null || !long.TryParse(j, out jid))
+                    if (cmdname.Equals("thpos"))
                     {
-                        ap.ReportError("Non integer JID after FROM in Event");
-                        return true;
+                        HistoryEntry he = ap.discoveryform.TravelControl.GetTravelHistoryCurrent;
+
+                        if ( he == null )
+                        {
+                            ReportEntry(ap, null, 0, prefix);
+                            return true;
+                        }
+
+                        jid = he.Journalid;
+                    }
+                    else
+                    {
+                        jid = sp.GetLong();
+                        if (!jid.HasValue)
+                        {
+                            ap.ReportError("Non integer JID after FROM in Event");
+                            return true;
+                        }
                     }
 
-                    jidindex = hl.EntryOrder.FindIndex(x => x.Journalid == jid);
+                    jidindex = hl.EntryOrder.FindIndex(x => x.Journalid == jid.Value);
 
                     if ( jidindex == -1 )
                     {
-                        ReportEntry(ap, null, 0,prefix);
+                        ReportEntry(ap, null, 0, prefix);
                         return true;
                     }
 
-                    cmdname = sp.NextWord();
+                    cmdname = sp.NextWord(" ", true);
                 }
 
                 if (cmdname == null)
@@ -87,9 +102,8 @@ namespace EDDiscovery.Actions
                     return true;
                 }
 
-
-                bool fwd = cmdname.Equals("FORWARD", StringComparison.InvariantCultureIgnoreCase) || cmdname.Equals("FIRST", StringComparison.InvariantCultureIgnoreCase);
-                bool back = cmdname.Equals("BACKWARD", StringComparison.InvariantCultureIgnoreCase) || cmdname.Equals("LAST", StringComparison.InvariantCultureIgnoreCase);
+                bool fwd = cmdname.Equals("forward") || cmdname.Equals("first");
+                bool back = cmdname.Equals("backward") || cmdname.Equals("last");
 
                 if (fwd || back)
                 {
@@ -135,7 +149,39 @@ namespace EDDiscovery.Actions
                     return true;
                 }
                 else
-                    ap.ReportError("Unknown command " + cmdname + " in Event");
+                {
+                    if (jidindex == -1)
+                        ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
+                    else if (cmdname.Equals("action"))
+                        ap.discoveryform.ActionRunOnEntry(hl.EntryOrder[jidindex], "ProgramEvent");
+                    else if (cmdname.Equals("edsm"))
+                    {
+                        HistoryEntry he = hl.EntryOrder[jidindex];
+                        ap.discoveryform.history.FillEDSM(he, reload: true);
+
+                        long? id_edsm = he.System.id_edsm;
+                        if (id_edsm <= 0)
+                        {
+                            id_edsm = null;
+                        }
+
+                        EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
+                        string url = edsm.GetUrlToEDSMSystem(he.System.name, id_edsm);
+
+                        if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                            System.Diagnostics.Process.Start(url);
+                    }
+                    else if (cmdname.Equals("ross"))
+                    {
+                        HistoryEntry he = hl.EntryOrder[jidindex];
+                        ap.discoveryform.history.FillEDSM(he, reload: true);
+
+                        if (he.System.id_eddb > 0)
+                            System.Diagnostics.Process.Start("http://ross.eddb.io/system/update/" + he.System.id_eddb.ToString());
+                    }
+                    else
+                        ap.ReportError("Unknown command " + cmdname + " in Event");
+                }
             }
             else
                 ap.ReportError(res);
@@ -153,6 +199,7 @@ namespace EDDiscovery.Actions
                     values.GetJSONFieldNamesAndValues(hl[pos].journalEntry.EventDataString, prefix + "JS_");
                     ActionVars.HistoryEventVars(values, hl[pos], prefix);
                     ap.currentvars.Add(values);
+                    ap.currentvars[prefix + "JID"] = hl[pos].Journalid.ToString();
                     ap.currentvars[prefix + "Count"] = hl.Count.ToString();     // give a count of matches
                     return;
                 }

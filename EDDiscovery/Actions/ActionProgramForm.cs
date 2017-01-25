@@ -298,7 +298,7 @@ namespace EDDiscovery.Actions
 
                 g.indentcomputed = displaylevel;        // store this, ASCII output want to know how we indented it.
 
-                g.panel.Location = new Point(panelleftmargin, voff);
+                g.panel.Location = new Point(panelleftmargin, voff + panelVScroll.ScrollOffset);
                 g.panel.Size = new Size(panelwidth, panelheight + ((g.whitespace>0) ? (panelheight/2) : 0 ));
                 g.stepname.Location = new Point(g.right.Right + 8 + 8 * displaylevel, panelheightmargin);
                 g.stepname.Size = new Size(140 - Math.Max((displaylevel - 4) * 8, 0), controlsize);
@@ -320,7 +320,7 @@ namespace EDDiscovery.Actions
                 voff += g.panel.Height;
             }
 
-            buttonMore.Location = new Point(panelleftmargin, voff);
+            buttonMore.Location = new Point(panelleftmargin, voff + panelVScroll.ScrollOffset);
             buttonMore.Size = new Size(controlsize, controlsize);
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
@@ -328,8 +328,6 @@ namespace EDDiscovery.Actions
 
             // Beware Visible - it does not report back the set state, only the visible state.. hence use Enabled.
             voff += buttonMore.Height + titleHeight + panelName.Height + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
-
-            panelVScroll.RestateScroll();       // need to tell the bloody thing to reset the Y offset..
 
             if (calcminsize)
             {

@@ -42,7 +42,10 @@ namespace EDDiscovery
                 new FuncEntry("indexof",IndexOf,2,2),
                 new FuncEntry("length",Length,1,1),
                 new FuncEntry("version",Version,1,1),
-                new FuncEntry("floor",Floor,1,2)
+                new FuncEntry("floor",Floor,1,2),
+                new FuncEntry("lower",Lower,1,2),
+                new FuncEntry("upper",Upper,1,2),
+                new FuncEntry("trim",Trim,1,2)
         };
         }
 
@@ -402,6 +405,45 @@ namespace EDDiscovery
             if (vars.ContainsKey(paras[0]) && vars.ContainsKey(paras[1]))
             {
                 output = vars[paras[0]].IndexOf(vars[paras[1]]).ToString();
+                return true;
+            }
+            else
+                output = "One of the variables does not exist";
+
+            return false;
+        }
+
+        private bool Lower(List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            if (vars.ContainsKey(paras[0]))
+            {
+                output = vars[paras[0]].ToLower();
+                return true;
+            }
+            else
+                output = "One of the variables does not exist";
+
+            return false;
+        }
+
+        private bool Upper(List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            if (vars.ContainsKey(paras[0]))
+            {
+                output = vars[paras[0]].ToUpper();
+                return true;
+            }
+            else
+                output = "One of the variables does not exist";
+
+            return false;
+        }
+
+        private bool Trim(List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            if (vars.ContainsKey(paras[0]))
+            {
+                output = vars[paras[0]].Trim();
                 return true;
             }
             else
