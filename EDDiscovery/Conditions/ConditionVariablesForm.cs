@@ -13,14 +13,13 @@ namespace EDDiscovery
     public partial class ConditionVariablesForm : Form
     {
         public ConditionVariables result;      // only on OK
-        public bool result_noexpand;
         public bool result_refresh;
-        public bool result_addto;
 
         public class Group
         {
             public Panel panel;
             public ExtendedControls.TextBoxBorder var;
+            public ExtendedControls.ComboBoxCustom op;
             public ExtendedControls.TextBoxBorder value;
             public ExtendedControls.ButtonExt del;
         };
@@ -31,6 +30,8 @@ namespace EDDiscovery
         int panelmargin = 3;
         const int vscrollmargin = 10;
 
+        bool showadd, shownoexpand;
+
         public ConditionVariablesForm()
         {
             InitializeComponent();
@@ -40,10 +41,9 @@ namespace EDDiscovery
         }
 
         public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , 
-                                                                bool showone ,
-                                                                bool shownoexpand = false, bool notexpandstate = false,
-                                                                bool showaddto = false, bool addtostate = false,
-                                                                bool showrefresh = false , bool showrefreshstate = false)
+                                                                bool showone = false ,
+                                                                bool showrefresh = false , bool showrefreshstate = false,
+                                                                bool allowadd = false, bool allownoexpand = false)
         {
             theme = th;
 
@@ -51,20 +51,13 @@ namespace EDDiscovery
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
-            int pos = panelmargin;
-            checkBoxNoExpand.Enabled = checkBoxNoExpand.Visible = shownoexpand;
-            checkBoxNoExpand.Checked = notexpandstate;
-            checkBoxNoExpand.Location = new Point(pos, panelmargin);
-            pos += checkBoxNoExpand.Enabled ? 160 : 0;
+            showadd = allowadd;
+            shownoexpand = allownoexpand;
 
+            int pos = panelmargin;
             checkBoxCustomRefresh.Enabled = checkBoxCustomRefresh.Visible = showrefresh;
             checkBoxCustomRefresh.Checked = showrefreshstate;
             checkBoxCustomRefresh.Location = new Point(pos, panelmargin);
-            pos += checkBoxCustomRefresh.Enabled ? 160 : 0;
-
-            checkBoxCustomAddto.Enabled = checkBoxCustomAddto.Visible = showaddto;
-            checkBoxCustomAddto.Checked = addtostate;
-            checkBoxCustomAddto.Location = new Point(pos, panelmargin);
 
             if (vbs != null)
             {
@@ -101,8 +94,49 @@ namespace EDDiscovery
             g.var.Text = var;
             g.panel.Controls.Add(g.var);
 
+            int nextpos = g.var.Right;
+
+            if (shownoexpand || showadd)
+            {
+                string sel = "=";
+                if (var.EndsWith("$+"))
+                {
+                    sel = "$+=";
+                    var = var.Substring(0, var.Length - 2);
+                }
+                else if (var.EndsWith("+"))
+                {
+                    var = var.Substring(0, var.Length - 1);
+                    sel = "+=";
+                }
+                else if (var.EndsWith("$"))
+                {
+                    var = var.Substring(0, var.Length - 1);
+                    sel = "$=";
+                }
+
+                g.op = new ExtendedControls.ComboBoxCustom();
+                g.op.Size = new Size(50, 24);
+                g.op.Location = new Point(g.var.Right + 4, panelmargin);
+                if ( showadd && shownoexpand )
+                    g.op.Items.AddRange(new string[] { "=", "$=", "+=", "$+=" });
+                else if ( showadd )
+                    g.op.Items.AddRange(new string[] { "=", "+=" });
+                else if ( shownoexpand )
+                    g.op.Items.AddRange(new string[] { "=", "$=" });
+
+                if ( g.op.Items.Contains(sel))
+                    g.op.SelectedItem = sel;
+
+                g.panel.Controls.Add(g.op);
+
+                nextpos = g.op.Right;
+            }
+
+            g.var.Text = var;
+
             g.value = new ExtendedControls.TextBoxBorder();
-            g.value.Location = new Point(g.var.Location.X + g.var.Width + 8, panelmargin);
+            g.value.Location = new Point(nextpos + 4, panelmargin);
             g.value.Text = value;
             g.panel.Controls.Add(g.value);
 
@@ -127,7 +161,7 @@ namespace EDDiscovery
         {
             int y = panelmargin;
 
-            if (checkBoxNoExpand.Enabled || checkBoxCustomRefresh.Enabled)
+            if (checkBoxCustomRefresh.Enabled)
                 y += 32;
 
             int panelwidth = Math.Max(panelVScroll1.Width - panelVScroll1.ScrollBarWidth, 10);
@@ -136,7 +170,7 @@ namespace EDDiscovery
             {
                 g.panel.Size = new Size(panelwidth-panelmargin*2, 32);
                 g.panel.Location = new Point(panelmargin, y);
-                g.value.Size = new Size(panelwidth-180, 24);
+                g.value.Size = new Size(panelwidth-180 - ((g.op!=null)?50:0), 24);
                 g.del.Location = new Point(g.value.Location.X + g.value.Width + 8, panelmargin);
                 y += g.panel.Height + 6;
             }
@@ -161,14 +195,17 @@ namespace EDDiscovery
             foreach ( Group g in groups)
             {
                 string var = g.var.Text;
-                string value = g.value.Text;
                 if (var.Length > 0)
+                {
+                    if (g.op != null && g.op.SelectedIndex > 0)
+                        var += g.op.Text.Substring(0, g.op.Text.Length - 1);
+
+                    string value = g.value.Text;
                     result[var] = value;
+                }
             }
 
-            result_noexpand = checkBoxNoExpand.Checked;
             result_refresh = checkBoxCustomRefresh.Checked;
-            result_addto = checkBoxCustomAddto.Checked;
 
             DialogResult = DialogResult.OK;
             Close();

@@ -55,10 +55,8 @@ namespace EDDiscovery
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll1 = new ExtendedControls.PanelVScroll();
             this.checkBoxCustomRefresh = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxNoExpand = new ExtendedControls.CheckBoxCustom();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.checkBoxCustomAddto = new ExtendedControls.CheckBoxCustom();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -182,8 +180,6 @@ namespace EDDiscovery
             // panelVScroll1
             // 
             this.panelVScroll1.Controls.Add(this.checkBoxCustomRefresh);
-            this.panelVScroll1.Controls.Add(this.checkBoxCustomAddto);
-            this.panelVScroll1.Controls.Add(this.checkBoxNoExpand);
             this.panelVScroll1.Controls.Add(this.vScrollBarCustom2);
             this.panelVScroll1.Controls.Add(this.buttonMore);
             this.panelVScroll1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -211,22 +207,6 @@ namespace EDDiscovery
             this.checkBoxCustomRefresh.TickBoxReductionSize = 10;
             this.checkBoxCustomRefresh.UseVisualStyleBackColor = true;
             // 
-            // checkBoxNoExpand
-            // 
-            this.checkBoxNoExpand.AutoSize = true;
-            this.checkBoxNoExpand.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxNoExpand.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxNoExpand.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxNoExpand.FontNerfReduction = 0.5F;
-            this.checkBoxNoExpand.Location = new System.Drawing.Point(5, 82);
-            this.checkBoxNoExpand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxNoExpand.Name = "checkBoxNoExpand";
-            this.checkBoxNoExpand.Size = new System.Drawing.Size(90, 17);
-            this.checkBoxNoExpand.TabIndex = 6;
-            this.checkBoxNoExpand.Text = "Don\'t Expand";
-            this.checkBoxNoExpand.TickBoxReductionSize = 10;
-            this.checkBoxNoExpand.UseVisualStyleBackColor = true;
-            // 
             // vScrollBarCustom2
             // 
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -239,7 +219,7 @@ namespace EDDiscovery
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 10;
             this.vScrollBarCustom2.Location = new System.Drawing.Point(621, 0);
-            this.vScrollBarCustom2.Maximum = -143;
+            this.vScrollBarCustom2.Maximum = -211;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -253,8 +233,8 @@ namespace EDDiscovery
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -143;
-            this.vScrollBarCustom2.ValueLimited = -143;
+            this.vScrollBarCustom2.Value = -211;
+            this.vScrollBarCustom2.ValueLimited = -211;
             // 
             // buttonMore
             // 
@@ -268,22 +248,6 @@ namespace EDDiscovery
             this.buttonMore.Text = "+";
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
-            // 
-            // checkBoxCustomAddto
-            // 
-            this.checkBoxCustomAddto.AutoSize = true;
-            this.checkBoxCustomAddto.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomAddto.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomAddto.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomAddto.FontNerfReduction = 0.5F;
-            this.checkBoxCustomAddto.Location = new System.Drawing.Point(6, 116);
-            this.checkBoxCustomAddto.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomAddto.Name = "checkBoxCustomAddto";
-            this.checkBoxCustomAddto.Size = new System.Drawing.Size(57, 17);
-            this.checkBoxCustomAddto.TabIndex = 6;
-            this.checkBoxCustomAddto.Text = "Add to";
-            this.checkBoxCustomAddto.TickBoxReductionSize = 10;
-            this.checkBoxCustomAddto.UseVisualStyleBackColor = true;
             // 
             // ConditionVariablesForm
             // 
@@ -325,8 +289,6 @@ namespace EDDiscovery
         private ExtendedControls.PanelVScroll panelVScroll1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private ExtendedControls.ButtonExt buttonMore;
-        private ExtendedControls.CheckBoxCustom checkBoxNoExpand;
         private ExtendedControls.CheckBoxCustom checkBoxCustomRefresh;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomAddto;
     }
 }

@@ -75,14 +75,26 @@ namespace EDDiscovery
             return FromString(p, fm);
         }
 
-        public bool FromString(StringParser p, FromMode fm, List<string> namelimit = null, bool fixnamecase = false)
+        public bool FromString(StringParser p, FromMode fm, List<string> namelimit = null, bool fixnamecase = false , bool allowextops = false )
         {
             Dictionary<string, string> newvars = new Dictionary<string, string>();
 
             while (!p.IsEOL)
             {
                 string varname = p.NextQuotedWord( "= ");
-                if (varname == null || !p.IsCharMoveOn('='))
+
+                if (varname == null)
+                    return false;
+
+                if (allowextops)            // with extended ops, the ops are stored on the end of the variable name to indicate type..
+                {                           // used only with let and set..
+                    if (p.IsCharMoveOn('$'))            // $=
+                        varname += '$';
+                    if (p.IsCharMoveOn('+'))            // += or $+=
+                        varname += '+';
+                }
+
+                if (!p.IsCharMoveOn('='))
                     return false;
 
                 if (fixnamecase)
