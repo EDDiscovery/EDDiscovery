@@ -122,7 +122,7 @@ namespace EDDiscovery2.ImageHandler
             numericUpDownWidth.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropWidth", 0);
             numericUpDownHeight.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropHeight", 0);
 
-            textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
+            textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
 
             numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
 
@@ -299,7 +299,7 @@ namespace EDDiscovery2.ImageHandler
                 {
                     DateTime filetime = fi.CreationTimeUtc;
 
-                    ConvertParams cp = GetConversionParams(cur_sysname);
+                    ConvertParams cp = GetConversionParams(cur_sysname, filetime);
 
                     if (cp.cannotexecute)
                     {
@@ -310,7 +310,7 @@ namespace EDDiscovery2.ImageHandler
 
                     if (store_name == null || cp.reconvert)
                     {
-                        using (Bitmap croppedbmp = ConvertImage(cp, inputfile, bmp, cur_sysname, ss, cmdrid, ref store_name))
+                        using (Bitmap croppedbmp = ConvertImage(cp, inputfile, bmp, cur_sysname, filetime, ss, cmdrid, ref store_name))
                         {
                             if (cp.copyclipboard)
                             {
@@ -477,7 +477,7 @@ namespace EDDiscovery2.ImageHandler
             public bool reconvert = true;
         }
 
-        private ConvertParams GetConversionParams(string cur_sysname)
+        private ConvertParams GetConversionParams(string cur_sysname, DateTime timestamp)
         {
             ConvertParams p = new ConvertParams();
 
@@ -494,25 +494,25 @@ namespace EDDiscovery2.ImageHandler
                         break;
 
                     case 2:     // "YYYY-MM-DD"
-                        p.output_folder += "\\" + DateTime.Now.ToString("yyyy-MM-dd");
+                        p.output_folder += "\\" + timestamp.ToString("yyyy-MM-dd");
                         break;
                     case 3:     // "DD-MM-YYYY"
-                        p.output_folder += "\\" + DateTime.Now.ToString("dd-MM-yyyy");
+                        p.output_folder += "\\" + timestamp.ToString("dd-MM-yyyy");
                         break;
                     case 4:     // "MM-DD-YYYY"
-                        p.output_folder += "\\" + DateTime.Now.ToString("MM-dd-yyyy");
+                        p.output_folder += "\\" + timestamp.ToString("MM-dd-yyyy");
                         break;
 
                     case 5:  //"YYYY-MM-DD Sysname",
-                        p.output_folder += "\\" + DateTime.Now.ToString("yyyy-MM-dd") + " " + Tools.SafeFileString(cur_sysname);
+                        p.output_folder += "\\" + timestamp.ToString("yyyy-MM-dd") + " " + Tools.SafeFileString(cur_sysname);
                         break;
 
                     case 6:  //"DD-MM-YYYY Sysname",
-                        p.output_folder += "\\" + DateTime.Now.ToString("dd-MM-yyyy") + " " + Tools.SafeFileString(cur_sysname);
+                        p.output_folder += "\\" + timestamp.ToString("dd-MM-yyyy") + " " + Tools.SafeFileString(cur_sysname);
                         break;
 
                     case 7: //"MM-DD-YYYY Sysname"
-                        p.output_folder += "\\" + DateTime.Now.ToString("MM-dd-yyyy") + " " + Tools.SafeFileString(cur_sysname);
+                        p.output_folder += "\\" + timestamp.ToString("MM-dd-yyyy") + " " + Tools.SafeFileString(cur_sysname);
                         break;
                 }
 
@@ -536,12 +536,12 @@ namespace EDDiscovery2.ImageHandler
             return p;
         }
 
-        private Bitmap ConvertImage(ConvertParams cp, string inputfile, Bitmap bmp, string cur_sysname, JournalScreenshot ss, int cmdrid, ref string store_name)
+        private Bitmap ConvertImage(ConvertParams cp, string inputfile, Bitmap bmp, string cur_sysname, DateTime timestamp, JournalScreenshot ss, int cmdrid, ref string store_name)
         {
             int index = 0;
             do                                          // add _N on the filename for index>0, to make them unique.
             {
-                store_name = Path.Combine(cp.output_folder, CreateFileName(cur_sysname, inputfile, cp.formatindex, cp.hires) + (index == 0 ? "" : "_" + index) + cp.extension);
+                store_name = Path.Combine(cp.output_folder, CreateFileName(cur_sysname, inputfile, cp.formatindex, cp.hires, timestamp) + (index == 0 ? "" : "_" + index) + cp.extension);
                 index++;
             } while (File.Exists(store_name));          // if name exists, pick another
 
@@ -583,7 +583,7 @@ namespace EDDiscovery2.ImageHandler
             return croppedbmp;
         }
 
-        private string CreateFileName(string cur_sysname, string orignalfile, int formatindex, bool hires)
+        private string CreateFileName(string cur_sysname, string orignalfile, int formatindex, bool hires, DateTime timestamp)
         {
             cur_sysname = Tools.SafeFileString(cur_sysname);
 
@@ -592,11 +592,11 @@ namespace EDDiscovery2.ImageHandler
             switch (formatindex)
             {
                 case 0:
-                    return cur_sysname + " (" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ")" + postfix;
+                    return cur_sysname + " (" + timestamp.ToString("yyyyMMdd-HHmmss") + ")" + postfix;
 
                 case 1:
                     {
-                        string time = DateTime.Now.ToString();
+                        string time = timestamp.ToString();
                         time = time.Replace(":", "-");
                         time = time.Replace("/", "-");          // Rob found it was outputting 21/2/2020 on mine, so we need more replaces
                         time = time.Replace("\\", "-");
@@ -604,29 +604,29 @@ namespace EDDiscovery2.ImageHandler
                     }
                 case 2:
                     {
-                        string time = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
+                        string time = timestamp.ToString("yyyy-MM-dd HH-mm-ss");
                         return time + " " + cur_sysname + postfix;
                     }
                 case 3:
                     {
-                        string time = DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss");
+                        string time = timestamp.ToString("dd-MM-yyyy HH-mm-ss");
                         return time + " " + cur_sysname + postfix;
                     }
                 case 4:
                     {
-                        string time = DateTime.Now.ToString("MM-dd-yyyy HH-mm-ss");
+                        string time = timestamp.ToString("MM-dd-yyyy HH-mm-ss");
                         return time + " " + cur_sysname + postfix;
                     }
 
                 case 5:
                     {
-                        string time = DateTime.Now.ToString("HH-mm-ss");
+                        string time = timestamp.ToString("HH-mm-ss");
                         return time + " " + cur_sysname + postfix;
                     }
 
                 case 6:
                     {
-                        string time = DateTime.Now.ToString("HH-mm-ss");
+                        string time = timestamp.ToString("HH-mm-ss");
                         return time + postfix;
                     }
 
@@ -658,7 +658,7 @@ namespace EDDiscovery2.ImageHandler
             {
                 SQLiteDBClass.PutSettingBool("checkBoxHires", checkBoxHires.Checked);
             }
-            textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
+            textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
         }
 
         private void comboBoxFileNameFormat_SelectedIndexChanged(object sender, EventArgs e)
@@ -667,7 +667,7 @@ namespace EDDiscovery2.ImageHandler
             {
                 SQLiteDBClass.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
             }
-            textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
+            textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
         }
 
         private void checkBoxCropImage_CheckedChanged(object sender, EventArgs e)
