@@ -85,6 +85,8 @@ namespace EDDiscovery
             this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this._refreshWorker = new System.ComponentModel.BackgroundWorker();
+            this.helpMenuSeparatorTop = new System.Windows.Forms.ToolStripSeparator();
+            this.helpMenuSeparatorBottom = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
@@ -137,7 +139,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(154, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(246, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -153,34 +155,38 @@ namespace EDDiscovery
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
+            this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // show2DMapsToolStripMenuItem
             // 
+            this.show2DMapsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.sellexplorationdata;
             this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
             this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.show2DMapsToolStripMenuItem.Text = "Show 2D maps";
+            this.show2DMapsToolStripMenuItem.Text = "Show &2D maps";
             this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
             // show3DMapsToolStripMenuItem
             // 
+            this.show3DMapsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.hyperspace;
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
             this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.show3DMapsToolStripMenuItem.Text = "Show 3D maps";
+            this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
             this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
             // 
             // changeMapColorToolStripMenuItem
             // 
+            this.changeMapColorToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.buytradedata;
             this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
             this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.changeMapColorToolStripMenuItem.Text = "Set Default Map Colour";
+            this.changeMapColorToolStripMenuItem.Text = "Set &Default Map Colour";
             this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
             // 
             // editThemeToolStripMenuItem
             // 
+            this.editThemeToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.eye;
             this.editThemeToolStripMenuItem.Name = "editThemeToolStripMenuItem";
             this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.editThemeToolStripMenuItem.Text = "Edit Theme";
+            this.editThemeToolStripMenuItem.Text = "&Edit Theme";
             this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
             // 
             // materialSearchToolStripMenuItem
@@ -196,29 +202,33 @@ namespace EDDiscovery
             this.showAllPopoutsInTaskBarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showAllInTaskBarToolStripMenuItem,
             this.turnOffAllTransparencyToolStripMenuItem});
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.popout;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
             this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "Pop-outs";
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
             // 
+            this.showAllInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.textsent;
             this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
-            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.showAllInTaskBarToolStripMenuItem.Text = "Show All In Task Bar";
+            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.showAllInTaskBarToolStripMenuItem.Text = "&Show All In Task Bar";
             this.showAllInTaskBarToolStripMenuItem.Click += new System.EventHandler(this.showAllInTaskBarToolStripMenuItem_Click);
             // 
             // turnOffAllTransparencyToolStripMenuItem
             // 
+            this.turnOffAllTransparencyToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.dockinggranted;
             this.turnOffAllTransparencyToolStripMenuItem.Name = "turnOffAllTransparencyToolStripMenuItem";
-            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.turnOffAllTransparencyToolStripMenuItem.Text = "Turn off all transparency";
+            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.turnOffAllTransparencyToolStripMenuItem.Text = "&Turn Off All Transparency";
             this.turnOffAllTransparencyToolStripMenuItem.Click += new System.EventHandler(this.turnOffAllTransparencyToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
+            this.exitToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.selfdestruct;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // adminToolStripMenuItem
@@ -322,62 +332,72 @@ namespace EDDiscovery
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem,
             this.eDDiscoveryHomepageToolStripMenuItem,
-            this.gitHubToolStripMenuItem,
-            this.frontierForumThreadToolStripMenuItem,
-            this.reportIssueIdeasToolStripMenuItem,
+            this.helpMenuSeparatorTop,
             this.eDDiscoveryChatDiscordToolStripMenuItem,
+            this.frontierForumThreadToolStripMenuItem,
+            this.gitHubToolStripMenuItem,
+            this.reportIssueIdeasToolStripMenuItem,
+            this.helpMenuSeparatorBottom,
             this.checkForNewReleaseToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
+            this.aboutToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.stats;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // eDDiscoveryHomepageToolStripMenuItem
             // 
+            this.eDDiscoveryHomepageToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.star;
             this.eDDiscoveryHomepageToolStripMenuItem.Name = "eDDiscoveryHomepageToolStripMenuItem";
-            this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.eDDiscoveryHomepageToolStripMenuItem.Text = "EDDiscovery Help";
+            this.eDDiscoveryHomepageToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.eDDiscoveryHomepageToolStripMenuItem.Text = "&View Help";
             this.eDDiscoveryHomepageToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryHomepageToolStripMenuItem_Click);
             // 
             // gitHubToolStripMenuItem
             // 
+            this.gitHubToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Homeicon;
             this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
-            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.gitHubToolStripMenuItem.Text = "Github";
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.gitHubToolStripMenuItem.Text = "&Project Page (GitHub)";
             this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.gitHubToolStripMenuItem_Click);
             // 
             // frontierForumThreadToolStripMenuItem
             // 
+            this.frontierForumThreadToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Stationenter;
             this.frontierForumThreadToolStripMenuItem.Name = "frontierForumThreadToolStripMenuItem";
-            this.frontierForumThreadToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.frontierForumThreadToolStripMenuItem.Text = "Frontier forum thread";
+            this.frontierForumThreadToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.frontierForumThreadToolStripMenuItem.Text = "&Frontier Forum Thread";
             this.frontierForumThreadToolStripMenuItem.Click += new System.EventHandler(this.frontierForumThreadToolStripMenuItem_Click);
             // 
             // reportIssueIdeasToolStripMenuItem
             // 
+            this.reportIssueIdeasToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.repairall;
             this.reportIssueIdeasToolStripMenuItem.Name = "reportIssueIdeasToolStripMenuItem";
-            this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.reportIssueIdeasToolStripMenuItem.Text = "Report issue / ideas";
+            this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.reportIssueIdeasToolStripMenuItem.Text = "&Report Issue / Idea";
             this.reportIssueIdeasToolStripMenuItem.Click += new System.EventHandler(this.reportIssueIdeasToolStripMenuItem_Click);
             // 
             // eDDiscoveryChatDiscordToolStripMenuItem
             // 
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.engineercraft;
             this.eDDiscoveryChatDiscordToolStripMenuItem.Name = "eDDiscoveryChatDiscordToolStripMenuItem";
-            this.eDDiscoveryChatDiscordToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.eDDiscoveryChatDiscordToolStripMenuItem.Text = "EDDiscovery chat (Discord)";
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Text = "&Developer Chat (Discord)";
             this.eDDiscoveryChatDiscordToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryChatDiscordToolStripMenuItem_Click);
             // 
             // checkForNewReleaseToolStripMenuItem
             // 
+            this.checkForNewReleaseToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.rebootrepair;
             this.checkForNewReleaseToolStripMenuItem.Name = "checkForNewReleaseToolStripMenuItem";
-            this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.checkForNewReleaseToolStripMenuItem.Text = "Check for new release";
+            this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.checkForNewReleaseToolStripMenuItem.Text = "&Check for Updates";
             this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
             // 
             // panelInfo
@@ -452,6 +472,16 @@ namespace EDDiscovery
             this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
             this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
             // 
+            // helpMenuSeparatorTop
+            // 
+            this.helpMenuSeparatorTop.Name = "helpMenuSeparatorTop";
+            this.helpMenuSeparatorTop.Size = new System.Drawing.Size(203, 6);
+            // 
+            // helpMenuSeparatorBottom
+            // 
+            this.helpMenuSeparatorBottom.Name = "helpMenuSeparatorBottom";
+            this.helpMenuSeparatorBottom.Size = new System.Drawing.Size(203, 6);
+            // 
             // tabControl1
             // 
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -519,7 +549,7 @@ namespace EDDiscovery
             this.journalViewControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.journalViewControl1.Location = new System.Drawing.Point(3, 3);
             this.journalViewControl1.Name = "journalViewControl1";
-            this.journalViewControl1.Size = new System.Drawing.Size(979, 665);
+            this.journalViewControl1.Size = new System.Drawing.Size(186, 68);
             this.journalViewControl1.TabIndex = 0;
             // 
             // tabPageTriletaration
@@ -538,7 +568,7 @@ namespace EDDiscovery
             this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
             this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
+            this.trilaterationControl.Size = new System.Drawing.Size(186, 68);
             this.trilaterationControl.TabIndex = 21;
             // 
             // tabPageScreenshots
@@ -557,7 +587,7 @@ namespace EDDiscovery
             this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageHandler1.Location = new System.Drawing.Point(0, 0);
             this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
+            this.imageHandler1.Size = new System.Drawing.Size(192, 74);
             this.imageHandler1.TabIndex = 0;
             // 
             // tabPageRoute
@@ -576,7 +606,7 @@ namespace EDDiscovery
             this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.routeControl1.Location = new System.Drawing.Point(3, 3);
             this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(979, 665);
+            this.routeControl1.Size = new System.Drawing.Size(186, 68);
             this.routeControl1.TabIndex = 0;
             // 
             // tabPageRoutesExpeditions
@@ -595,7 +625,7 @@ namespace EDDiscovery
             this.savedRouteExpeditionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.savedRouteExpeditionControl1.Location = new System.Drawing.Point(3, 3);
             this.savedRouteExpeditionControl1.Name = "savedRouteExpeditionControl1";
-            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(979, 665);
+            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(186, 68);
             this.savedRouteExpeditionControl1.TabIndex = 0;
             // 
             // tabPageExport
@@ -614,7 +644,7 @@ namespace EDDiscovery
             this.exportControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.exportControl1.Location = new System.Drawing.Point(3, 3);
             this.exportControl1.Name = "exportControl1";
-            this.exportControl1.Size = new System.Drawing.Size(979, 665);
+            this.exportControl1.Size = new System.Drawing.Size(186, 68);
             this.exportControl1.TabIndex = 0;
             // 
             // tabPageSettings
@@ -633,7 +663,7 @@ namespace EDDiscovery
             this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.settings.Location = new System.Drawing.Point(3, 3);
             this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(979, 665);
+            this.settings.Size = new System.Drawing.Size(186, 68);
             this.settings.TabIndex = 0;
             // 
             // button_test
@@ -862,5 +892,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Exit;
         private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Hide;
         private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Open;
+        private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
+        private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
     }
 }
