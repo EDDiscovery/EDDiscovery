@@ -112,14 +112,17 @@ namespace EDDiscovery2.EDSM
                         {
                             string errmsg;              // (verified with EDSM 29/9/2016)
 
-                                                        // it converts to UTC inside the function, supply local for now
-                            if ( edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg) )
+                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg))
+                            {
                                 he.SetEdsmSync();
+                                edsmsystemssent++;
+                            }
 
                             if (errmsg.Length > 0)
+                            {
                                 mainForm.LogLine(errmsg);
-
-                            edsmsystemssent++;
+                                break;
+                            }
                         }
                     }
 
