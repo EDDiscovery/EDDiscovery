@@ -43,6 +43,7 @@ namespace EDDiscovery
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConditionVariablesForm));
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
@@ -57,6 +58,7 @@ namespace EDDiscovery
             this.checkBoxCustomRefresh = new ExtendedControls.CheckBoxCustom();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -205,6 +207,7 @@ namespace EDDiscovery
             this.checkBoxCustomRefresh.TabIndex = 6;
             this.checkBoxCustomRefresh.Text = "Run at refresh";
             this.checkBoxCustomRefresh.TickBoxReductionSize = 10;
+            this.toolTip1.SetToolTip(this.checkBoxCustomRefresh, "Click to indicate that this event can run during the refresh cycle");
             this.checkBoxCustomRefresh.UseVisualStyleBackColor = true;
             // 
             // vScrollBarCustom2
@@ -246,8 +249,13 @@ namespace EDDiscovery
             this.buttonMore.Size = new System.Drawing.Size(24, 24);
             this.buttonMore.TabIndex = 5;
             this.buttonMore.Text = "+";
+            this.toolTip1.SetToolTip(this.buttonMore, "Add more variables");
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // ConditionVariablesForm
             // 
@@ -290,5 +298,6 @@ namespace EDDiscovery
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private ExtendedControls.ButtonExt buttonMore;
         private ExtendedControls.CheckBoxCustom checkBoxCustomRefresh;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

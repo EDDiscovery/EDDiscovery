@@ -159,7 +159,7 @@ namespace ExtendedControls
                 if (updatescroller)
                     vsc.Value = newscrollpos;
 
-                System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
+                //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
             }
 
             scrollpos = newscrollpos;

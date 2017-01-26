@@ -9,7 +9,8 @@ namespace EDDiscovery.Actions
 {
     public class ActionSay : Action
     {
-        static QueuedSynthesizer synth = new QueuedSynthesizer();           // STATIC only one synth throught the whole program
+        private static QueuedSynthesizer synth = new QueuedSynthesizer();           // STATIC only one synth throught the whole program
+        public static void KillSpeech() { synth.KillSpeech(); }
 
         static string volumename = "Volume";
         static string voicename = "Voice";
@@ -230,6 +231,7 @@ namespace EDDiscovery.Actions
             string GetState();
             event EventHandler SpeakingCompleted;
             void SpeakAsync(Phrase p);
+            void KillSpeech();
         }
 
         class DummySpeechEngine : ISpeechEngine
@@ -250,9 +252,13 @@ namespace EDDiscovery.Actions
             {
                 SpeakingCompleted(this, EventArgs.Empty);
             }
+
+            public void KillSpeech()
+            {
+            }
         }
 
-#if !__MonoCS__
+#if !__MonoCS__     // Bloody Mono Bravada.. tell me when you see this ;-)
         class WindowsSpeechEngine : ISpeechEngine
         {
             private System.Speech.Synthesis.SpeechSynthesizer synth;
@@ -288,6 +294,11 @@ namespace EDDiscovery.Actions
                 synth.Rate = p.rate;
 
                 synth.SpeakAsync(p.phrase);
+            }
+
+            public void KillSpeech()
+            {
+                synth.SpeakAsyncCancelAll();
             }
         }
 #endif
@@ -366,6 +377,12 @@ namespace EDDiscovery.Actions
             {
                 System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Synth complete IGNORE ");
             }
+        }
+
+        public void KillSpeech()
+        {
+            phrases.Clear();
+            speechengine.KillSpeech();
         }
     }
 }

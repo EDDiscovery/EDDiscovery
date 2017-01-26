@@ -13,6 +13,7 @@ namespace EDDiscovery
     public partial class ConditionVariablesForm : Form
     {
         public ConditionVariables result;      // only on OK
+        public Dictionary<string, string> result_altops;
         public bool result_refresh;
 
         public class Group
@@ -40,10 +41,12 @@ namespace EDDiscovery
             AcceptButton = buttonOK;
         }
 
-        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , 
+        // altops, if given, describes the operator of each variable.
+
+        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , Dictionary<string, string> altops = null,
                                                                 bool showone = false ,
                                                                 bool showrefresh = false , bool showrefreshstate = false,
-                                                                bool allowadd = false, bool allownoexpand = false)
+                                                                bool allowadd = false, bool allownoexpand = false )
         {
             theme = th;
 
@@ -63,13 +66,13 @@ namespace EDDiscovery
             {
                 foreach (KeyValuePair<string, string> ky in vbs.values)
                 {
-                    CreateEntry(ky.Key, ky.Value);
+                    CreateEntry(ky.Key, ky.Value, (altops!= null) ? altops[ky.Key] : "=");
                 }
             }
 
             if ( groups.Count == 0 && showone )
             {
-                CreateEntry("", "");
+                CreateEntry("", "", "=");
             }
 
             if (groups.Count >= 1)
@@ -81,7 +84,7 @@ namespace EDDiscovery
             FixUpGroups(false); // don't recalc min size, it creates a loop
         }
 
-        public Group CreateEntry(string var, string value)
+        public Group CreateEntry(string var, string value, string op)
         {
             Group g = new Group();
 
@@ -93,51 +96,49 @@ namespace EDDiscovery
             g.var.Location = new Point(panelmargin, panelmargin);
             g.var.Text = var;
             g.panel.Controls.Add(g.var);
+            toolTip1.SetToolTip(g.var, "Variable name");
 
             int nextpos = g.var.Right;
 
             if (shownoexpand || showadd)
             {
-                string sel = "=";
-                if (var.EndsWith("$+"))
-                {
-                    sel = "$+=";
-                    var = var.Substring(0, var.Length - 2);
-                }
-                else if (var.EndsWith("+"))
-                {
-                    var = var.Substring(0, var.Length - 1);
-                    sel = "+=";
-                }
-                else if (var.EndsWith("$"))
-                {
-                    var = var.Substring(0, var.Length - 1);
-                    sel = "$=";
-                }
-
                 g.op = new ExtendedControls.ComboBoxCustom();
                 g.op.Size = new Size(50, 24);
                 g.op.Location = new Point(g.var.Right + 4, panelmargin);
-                if ( showadd && shownoexpand )
-                    g.op.Items.AddRange(new string[] { "=", "$=", "+=", "$+=" });
-                else if ( showadd )
-                    g.op.Items.AddRange(new string[] { "=", "+=" });
-                else if ( shownoexpand )
-                    g.op.Items.AddRange(new string[] { "=", "$=" });
 
-                if ( g.op.Items.Contains(sel))
-                    g.op.SelectedItem = sel;
+                string ttip="";
+                if (showadd && shownoexpand)
+                {
+                    g.op.Items.AddRange(new string[] { "=", "$=", "+=", "$+=" });
+                    ttip = "= assign, expand, $= assign, no expansion, += add, expand, $+= add, no expansion";
+                }
+                else if (showadd)
+                {
+                    g.op.Items.AddRange(new string[] { "=", "+=" });
+                    ttip = "= assign, expand, += add, expand";
+                }
+                else
+                {
+                    g.op.Items.AddRange(new string[] { "=", "$=" });
+                    ttip = "= assign, expand, $= add, no expansion";
+                }
+
+                toolTip1.SetToolTip(g.op, ttip);
+                toolTip1.SetToolTip(g.op.GetInternalSystemControl, ttip);
+
+                if (g.op.Items.Contains(op))
+                    g.op.SelectedItem = op;
 
                 g.panel.Controls.Add(g.op);
 
                 nextpos = g.op.Right;
             }
 
-            g.var.Text = var;
 
             g.value = new ExtendedControls.TextBoxBorder();
             g.value.Location = new Point(nextpos + 4, panelmargin);
             g.value.Text = value;
+            toolTip1.SetToolTip(g.value, "Variable value");
             g.panel.Controls.Add(g.value);
 
             g.del = new ExtendedControls.ButtonExt();
@@ -145,6 +146,7 @@ namespace EDDiscovery
             g.del.Text = "X";
             g.del.Tag = g;
             g.del.Click += Del_Clicked;
+            toolTip1.SetToolTip(g.del, "Delete entry");
             g.panel.Controls.Add(g.del);
 
             groups.Add(g);
@@ -192,17 +194,14 @@ namespace EDDiscovery
         private void buttonOK_Click(object sender, EventArgs e)
         {
             result = new ConditionVariables();
+            result_altops = new Dictionary<string, string>();
+
             foreach ( Group g in groups)
             {
-                string var = g.var.Text;
-                if (var.Length > 0)
-                {
-                    if (g.op != null && g.op.SelectedIndex > 0)
-                        var += g.op.Text.Substring(0, g.op.Text.Length - 1);
+                result[g.var.Text] = g.value.Text;
 
-                    string value = g.value.Text;
-                    result[var] = value;
-                }
+                if (g.op != null)
+                    result_altops[g.var.Text] = g.op.Text;
             }
 
             result_refresh = checkBoxCustomRefresh.Checked;
@@ -231,7 +230,7 @@ namespace EDDiscovery
 
         private void buttonMore_Click(object sender, EventArgs e)
         {
-            CreateEntry("", "");
+            CreateEntry("", "","=");
         }
 
         #region Window Control
