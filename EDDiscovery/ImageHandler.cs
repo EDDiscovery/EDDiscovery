@@ -281,7 +281,7 @@ namespace EDDiscovery2.ImageHandler
                 sysname = (he != null) ? he.System.name : "Unknown System";
             }
 
-            Convert(filename, sysname, checkboxremove, checkboxpreview, ss, ss == null ? cmdrid : ss.CommanderId);
+            Convert(filename, sysname, checkboxremove, checkboxpreview, ss, cmdrid);
         }
 
         // preparing for a convert stored function by hiving this out to a separate function..
@@ -295,6 +295,11 @@ namespace EDDiscovery2.ImageHandler
                 Point finalsize = Point.Empty;
                 bool converted = false;
 
+                if (ss != null)
+                {
+                    cmdrid = ss.CommanderId;
+                }
+
                 using (Bitmap bmp = GetScreenshot(inputfile, cur_sysname, cmdrid, ref ss, ref store_name, ref finalsize, ref fi))
                 {
                     DateTime filetime = fi.CreationTimeUtc;
@@ -307,6 +312,8 @@ namespace EDDiscovery2.ImageHandler
                         bmp.Dispose();
                         return;
                     }
+
+                    cmdrid = ss.CommanderId;
 
                     if (store_name == null || cp.reconvert)
                     {
