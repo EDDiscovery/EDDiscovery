@@ -64,7 +64,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     e is JournalLocation ||
                     e is JournalFSDJump);
 
-                if (je is JournalScreenshot && (sysname == null || sysname == ((JournalScreenshot)je).System))
+                if (je is JournalScreenshot && (sysname == null || sysname == ((JournalScreenshot)je).System) && Math.Abs(timestamp.Subtract(je.EventTimeUTC).TotalSeconds) < 2)
                 {
                     ss = je as JournalScreenshot;
                     body = ss.Body;

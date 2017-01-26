@@ -290,198 +290,81 @@ namespace EDDiscovery2.ImageHandler
         {                                                                             
             try
             {
-                string output_folder= "";
-                int formatindex=0;
-                bool hires=false;
-                bool cropimage = false;
-                Rectangle crop = new Rectangle();
-                string extension = null;
-                bool cannotexecute = false;
-                string inputext = null;
-                bool copyclipboard = false;
-
-                Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
-                {                                                   // I've tested that this is required..      
-                                                                    // cropping also picked up dialog items so moved here..
-                                                                    // other items are also picked up here in one go.
-                    output_folder = textBoxOutputDir.Text;
-
-                    switch( comboBoxSubFolder.SelectedIndex )
-                    {
-                        case 1:     // system name
-                            output_folder += "\\" + Tools.SafeFileString(cur_sysname);
-                            break;
-
-                        case 2:     // "YYYY-MM-DD"
-                            output_folder += "\\" + DateTime.Now.ToString("yyyy-MM-dd");
-                            break;
-                        case 3:     // "DD-MM-YYYY"
-                            output_folder += "\\" + DateTime.Now.ToString("dd-MM-yyyy");
-                            break;
-                        case 4:     // "MM-DD-YYYY"
-                            output_folder += "\\" + DateTime.Now.ToString("MM-dd-yyyy");
-                            break;
-
-                        case 5:  //"YYYY-MM-DD Sysname",
-                            output_folder += "\\" + DateTime.Now.ToString("yyyy-MM-dd") + " " + Tools.SafeFileString(cur_sysname);
-                            break;
-
-                        case 6:  //"DD-MM-YYYY Sysname",
-                            output_folder += "\\" + DateTime.Now.ToString("dd-MM-yyyy") + " " + Tools.SafeFileString(cur_sysname);
-                            break;
-
-                        case 7: //"MM-DD-YYYY Sysname"
-                            output_folder += "\\" + DateTime.Now.ToString("MM-dd-yyyy") + " " + Tools.SafeFileString(cur_sysname);
-                            break;
-                    }
-
-                    if (!Directory.Exists(output_folder))
-                        Directory.CreateDirectory(output_folder);
-
-                    formatindex = comboBoxFileNameFormat.SelectedIndex;
-                    hires = checkBoxHires.Checked;
-                    cropimage = checkBoxCropImage.Checked;
-                    crop.X = numericUpDownLeft.Value;      
-                    crop.Y = numericUpDownTop.Value;  
-                    crop.Width = numericUpDownWidth.Value;
-                    crop.Height = numericUpDownHeight.Value;
-                    extension = "." + comboBoxFormat.Text;
-                    inputext = comboBoxScanFor.Text.Substring(0, comboBoxScanFor.Text.IndexOf(" "));
-                    copyclipboard = checkBoxCopyClipboard.Checked;
-
-                    cannotexecute = output_folder.Equals(textBoxScreenshotsDir.Text) && comboBoxFormat.Text.Equals(inputext);
-                });
-
-                if ( cannotexecute )                                // cannot store BMPs into the Elite dangerous folder as it creates a circular condition
-                {
-                    MessageBox.Show("Cannot convert " + inputext + " into the same folder as they are stored into" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format", "WARNING", MessageBoxButtons.OK);
-                    return;
-                }
-
                 string store_name = null;
-                int index = 0;
-                do                                          // add _N on the filename for index>0, to make them unique.
-                {
-                    store_name = Path.Combine(output_folder, CreateFileName(cur_sysname, inputfile, formatindex, hires) + (index==0?"":"_"+index) + extension);
-                    index++;
-                } while (File.Exists(store_name));          // if name exists, pick another
+                FileInfo fi = null;
+                Point finalsize = Point.Empty;
+                bool converted = false;
 
-                FileStream testfile = null;
-                Bitmap bmp = null;
-
-                for (int tries = 60; tries-- > 0;)          // wait 30 seconds and then try it anyway.. 32K hires shots take a while to write.
+                using (Bitmap bmp = GetScreenshot(inputfile, cur_sysname, cmdrid, ref ss, ref store_name, ref finalsize, ref fi))
                 {
-                    System.Threading.Thread.Sleep(500);     // every 500ms see if we can read the file, if we can, go, else wait..
-                    try
+                    DateTime filetime = fi.CreationTimeUtc;
+
+                    ConvertParams cp = GetConversionParams(cur_sysname);
+
+                    if (cp.cannotexecute)
                     {
-                        //Console.WriteLine("Trying " + inputfile);
-                        using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.Read))        // throws if can't open
+                        _discoveryForm.LogLineHighlight("Cannot convert " + cp.inputext + " into the same folder as they are stored into" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format");
+                        bmp.Dispose();
+                        return;
+                    }
+
+                    if (store_name == null || cp.reconvert)
+                    {
+                        using (Bitmap croppedbmp = ConvertImage(cp, inputfile, bmp, cur_sysname, ss, cmdrid, ref store_name))
                         {
-                            bmp = new Bitmap(testfile);
+                            if (cp.copyclipboard)
+                            {
+                                Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
+                                {                                                   // I've tested that this is required..    
+                                    try
+                                    {
+                                        Clipboard.SetImage(croppedbmp);
+                                    }
+                                    catch
+                                    {
+                                        _discoveryForm.LogLineHighlight("Copying image to clipboard failed");
+                                    }
+                                });
+                            }
+
+                            if (cp.extension.Equals(".jpg"))
+                            {
+                                croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            }
+                            else if (cp.extension.Equals(".tiff"))
+                            {
+                                croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Tiff);
+                            }
+                            else if (cp.extension.Equals(".bmp"))
+                            {
+                                croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Bmp);
+                            }
+                            else
+                            {
+                                croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Png);
+                            }
+
+                            finalsize = new Point(croppedbmp.Size);
+                            converted = true;
                         }
-                        //Console.WriteLine("Worked " + inputfile);
-                        break;
                     }
-                    catch
-                    { }
                 }
 
-                if (bmp == null)
+                if (converted)
                 {
-                    _discoveryForm.LogLineHighlight($"Unable to open screenshot '{inputfile}'");
-                    return;
-                }
+                    File.SetCreationTime(store_name, fi.CreationTime);
 
-                FileInfo fi = new FileInfo(inputfile);
-                System.Drawing.Bitmap croppedbmp = null;
-
-                if (ss == null)
-                {
-                    ss = JournalScreenshot.GetScreenshot(inputfile, bmp.Size.Width, bmp.Size.Height, fi.CreationTimeUtc, cur_sysname == "Unknown System" ? null : cur_sysname, cmdrid);
-                }
-
-                if (cropimage)
-                {
-                    /* check that crop settings are within the image, otherwise adjust. */
-                    if ((crop.Width <= 0) || (crop.Width > bmp.Width))
+                    if (previewinputfile)        // if preview, load in
                     {
-                        crop.X = 0;
-                        crop.Width = bmp.Width;
+                        pictureBox.ImageLocation = store_name;
+                        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
                     }
-                    else if (crop.Left + crop.Width > bmp.Width)
+
+                    if (ss != null)
                     {
-                        crop.X = bmp.Width - crop.Width;
+                        ss.SetConvertedFilename(inputfile, store_name, finalsize.X, finalsize.Y);
+                        ss.Update();
                     }
-                    if ((crop.Height <= 0) || (crop.Height > bmp.Height))
-                    {
-                        crop.Y = 0;
-                        crop.Height = bmp.Height;
-                    }
-                    else if (crop.Top + crop.Height > bmp.Height)
-                    {
-                        crop.Y = bmp.Height - crop.Height;
-                    }
-
-                    /* Only crop if we need to */
-                    if ((crop.Width != bmp.Width) || (crop.Height != bmp.Height))
-                    {                                                   // CLONE new one, which creates a new object
-                        croppedbmp = bmp.Clone(crop, System.Drawing.Imaging.PixelFormat.DontCare);
-                    }
-                    else
-                        croppedbmp = bmp;           // just copy reference.. no need to crop.
-                }
-                else
-                    croppedbmp = bmp;               // just copy reference..
-
-                if (copyclipboard)
-                {
-                    Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
-                    {                                                   // I've tested that this is required..    
-                        try
-                        {
-                            Clipboard.SetImage(croppedbmp);
-                        }
-                        catch
-                        {
-                            _discoveryForm.LogLineHighlight("Copying image to clipboard failed");
-                        }
-                    });
-                }
-
-                if (extension.Equals(".jpg"))
-                {
-                    croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Jpeg);
-                }
-                else if (extension.Equals(".tiff"))
-                {
-                    croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Tiff);
-                }
-                else if (extension.Equals(".bmp"))
-                {
-                    croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Bmp);
-                }
-                else
-                {
-                    croppedbmp.Save(store_name, System.Drawing.Imaging.ImageFormat.Png);
-                }
-
-                Point finalsize = new Point(croppedbmp.Size);
-
-                bmp.Dispose();              // need to free the bmp before any more operations on the file..
-                croppedbmp.Dispose();       // and ensure this one is freed of handles to the file.
-
-                File.SetCreationTime(store_name, fi.CreationTime);
-
-                if (previewinputfile)        // if preview, load in
-                {
-                    pictureBox.ImageLocation = store_name;
-                    pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-                }
-
-                if (ss != null)
-                {
-                    ss.SetConvertedFilename(inputfile, store_name, finalsize.X, finalsize.Y);
-                    ss.Update();
                 }
 
                 if (OnScreenShot!=null)
@@ -492,14 +375,19 @@ namespace EDDiscovery2.ImageHandler
                     });
                 }
 
-                if (removeinputfile)         // if remove, delete original picture
+                if (converted)
                 {
-                    File.Delete(inputfile);
-                }
+                    if (removeinputfile)         // if remove, delete original picture
+                    {
+                        File.Delete(inputfile);
+                    }
 
-                Invoke((MethodInvoker)delegate {
-                    _discoveryForm.LogLine("Converted " + Path.GetFileName(inputfile) + " to " + 
-                        Path.GetFileName(store_name) ); });
+                    Invoke((MethodInvoker)delegate
+                    {
+                        _discoveryForm.LogLine("Converted " + Path.GetFileName(inputfile) + " to " +
+                            Path.GetFileName(store_name));
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -508,6 +396,191 @@ namespace EDDiscovery2.ImageHandler
 
                 MessageBox.Show("Error in executing image conversion, try another screenshot, check output path settings. (Exception " + ex.Message + ")");
             }
+        }
+
+        private Bitmap GetScreenshot(string inputfile, string cur_sysname, int cmdrid, ref JournalScreenshot ss, ref string store_name, ref Point finalsize, ref FileInfo fi)
+        {
+            FileStream testfile = null;
+            Bitmap bmp = null;
+
+            for (int tries = 60; tries-- > 0;)          // wait 30 seconds and then try it anyway.. 32K hires shots take a while to write.
+            {
+                System.Threading.Thread.Sleep(500);     // every 500ms see if we can read the file, if we can, go, else wait..
+                try
+                {
+                    //Console.WriteLine("Trying " + inputfile);
+                    using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.Read))        // throws if can't open
+                    {
+                        bmp = new Bitmap(testfile);
+                    }
+                    //Console.WriteLine("Worked " + inputfile);
+                    break;
+                }
+                catch
+                {
+                }
+            }
+
+            try
+            {
+                //Console.WriteLine("Trying " + inputfile);
+                using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))        // throws if can't open
+                {
+                    bmp = new Bitmap(testfile);
+                }
+                //Console.WriteLine("Worked " + inputfile);
+            }
+            catch (Exception ex)
+            {
+                _discoveryForm.LogLineHighlight($"Unable to open screenshot '{inputfile}': {ex.Message}");
+                throw;
+            }
+
+            try
+            {
+                fi = new FileInfo(inputfile);
+                if (ss == null)
+                {
+                    ss = JournalScreenshot.GetScreenshot(inputfile, bmp.Size.Width, bmp.Size.Height, fi.CreationTimeUtc, cur_sysname == "Unknown System" ? null : cur_sysname, cmdrid);
+                }
+
+                if (ss != null)
+                {
+                    JObject jo = JObject.Parse(ss.EventDataString);
+                    if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
+                    {
+                        store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);
+                        finalsize = new Point(JSONHelper.GetInt(jo["EDDOutputWidth"]), JSONHelper.GetInt(jo["EDDOutputHeight"]));
+                    }
+                }
+            }
+            catch
+            {
+                bmp.Dispose();
+                throw;
+            }
+
+            return bmp;
+        }
+
+        private class ConvertParams
+        {
+            public string output_folder = "";
+            public int formatindex = 0;
+            public bool hires = false;
+            public bool cropimage = false;
+            public Rectangle crop = new Rectangle();
+            public bool cannotexecute = false;
+            public string inputext = null;
+            public string extension = null;
+            public bool copyclipboard = false;
+            public bool reconvert = true;
+        }
+
+        private ConvertParams GetConversionParams(string cur_sysname)
+        {
+            ConvertParams p = new ConvertParams();
+
+            Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
+            {                                                   // I've tested that this is required..
+                                                                // cropping also picked up dialog items so moved here..
+                                                                // other items are also picked up here in one go.
+                p.output_folder = textBoxOutputDir.Text;
+
+                switch (comboBoxSubFolder.SelectedIndex)
+                {
+                    case 1:     // system name
+                        p.output_folder += "\\" + Tools.SafeFileString(cur_sysname);
+                        break;
+
+                    case 2:     // "YYYY-MM-DD"
+                        p.output_folder += "\\" + DateTime.Now.ToString("yyyy-MM-dd");
+                        break;
+                    case 3:     // "DD-MM-YYYY"
+                        p.output_folder += "\\" + DateTime.Now.ToString("dd-MM-yyyy");
+                        break;
+                    case 4:     // "MM-DD-YYYY"
+                        p.output_folder += "\\" + DateTime.Now.ToString("MM-dd-yyyy");
+                        break;
+
+                    case 5:  //"YYYY-MM-DD Sysname",
+                        p.output_folder += "\\" + DateTime.Now.ToString("yyyy-MM-dd") + " " + Tools.SafeFileString(cur_sysname);
+                        break;
+
+                    case 6:  //"DD-MM-YYYY Sysname",
+                        p.output_folder += "\\" + DateTime.Now.ToString("dd-MM-yyyy") + " " + Tools.SafeFileString(cur_sysname);
+                        break;
+
+                    case 7: //"MM-DD-YYYY Sysname"
+                        p.output_folder += "\\" + DateTime.Now.ToString("MM-dd-yyyy") + " " + Tools.SafeFileString(cur_sysname);
+                        break;
+                }
+
+                if (!Directory.Exists(p.output_folder))
+                    Directory.CreateDirectory(p.output_folder);
+
+                p.formatindex = comboBoxFileNameFormat.SelectedIndex;
+                p.hires = checkBoxHires.Checked;
+                p.cropimage = checkBoxCropImage.Checked;
+                p.crop.X = numericUpDownLeft.Value;
+                p.crop.Y = numericUpDownTop.Value;
+                p.crop.Width = numericUpDownWidth.Value;
+                p.crop.Height = numericUpDownHeight.Value;
+                p.extension = "." + comboBoxFormat.Text;
+                p.inputext = comboBoxScanFor.Text.Substring(0, comboBoxScanFor.Text.IndexOf(" "));
+                p.copyclipboard = checkBoxCopyClipboard.Checked;
+
+                p.cannotexecute = p.output_folder.Equals(textBoxScreenshotsDir.Text) && comboBoxFormat.Text.Equals(p.inputext);
+            });
+
+            return p;
+        }
+
+        private Bitmap ConvertImage(ConvertParams cp, string inputfile, Bitmap bmp, string cur_sysname, JournalScreenshot ss, int cmdrid, ref string store_name)
+        {
+            int index = 0;
+            do                                          // add _N on the filename for index>0, to make them unique.
+            {
+                store_name = Path.Combine(cp.output_folder, CreateFileName(cur_sysname, inputfile, cp.formatindex, cp.hires) + (index == 0 ? "" : "_" + index) + cp.extension);
+                index++;
+            } while (File.Exists(store_name));          // if name exists, pick another
+
+            System.Drawing.Bitmap croppedbmp = null;
+
+            if (cp.cropimage)
+            {
+                /* check that crop settings are within the image, otherwise adjust. */
+                if ((cp.crop.Width <= 0) || (cp.crop.Width > bmp.Width))
+                {
+                    cp.crop.X = 0;
+                    cp.crop.Width = bmp.Width;
+                }
+                else if (cp.crop.Left + cp.crop.Width > bmp.Width)
+                {
+                    cp.crop.X = bmp.Width - cp.crop.Width;
+                }
+                if ((cp.crop.Height <= 0) || (cp.crop.Height > bmp.Height))
+                {
+                    cp.crop.Y = 0;
+                    cp.crop.Height = bmp.Height;
+                }
+                else if (cp.crop.Top + cp.crop.Height > bmp.Height)
+                {
+                    cp.crop.Y = bmp.Height - cp.crop.Height;
+                }
+
+                /* Only crop if we need to */
+                if ((cp.crop.Width != bmp.Width) || (cp.crop.Height != bmp.Height))
+                {                                                   // CLONE new one, which creates a new object
+                    croppedbmp = bmp.Clone(cp.crop, System.Drawing.Imaging.PixelFormat.DontCare);
+                }
+                else
+                    croppedbmp = bmp;           // just copy reference.. no need to crop.
+            }
+            else
+                croppedbmp = bmp;               // just copy reference..
+
+            return croppedbmp;
         }
 
         private string CreateFileName(string cur_sysname, string orignalfile, int formatindex, bool hires)
