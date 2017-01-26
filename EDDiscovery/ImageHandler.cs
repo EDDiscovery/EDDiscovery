@@ -186,29 +186,36 @@ namespace EDDiscovery2.ImageHandler
                 }
 
                 JournalScreenshot ss = je as JournalScreenshot;
-                string filename = ss.Filename;
-                if (filename.StartsWith("\\ED_Pictures\\"))
-                {
-                    filename = filename.Substring(13);
-                    string ssdir = (string)Invoke(new Func<String>(() => textBoxScreenshotsDir.Text));
-                    string filepath = Path.Combine(textBoxScreenshotsDir.Text, filename);
-
-                    if (!File.Exists(filepath))
-                    {
-                        filepath = Path.Combine(EDPicturesDir, filename);
-                    }
-
-                    if (File.Exists(filepath))
-                    {
-                        filename = filepath;
-                    }
-                }
+                string filename = GetScreenshotPath(ss);
 
                 if (File.Exists(filename))
                 {
                     ProcessScreenshot(filename, ss.System, ss, ss.CommanderId);
                 }
             }
+        }
+
+        public string GetScreenshotPath(JournalScreenshot ss)
+        {
+            string filename = ss.Filename;
+            if (filename.StartsWith("\\ED_Pictures\\"))
+            {
+                filename = filename.Substring(13);
+                string ssdir = (string)Invoke(new Func<String>(() => textBoxScreenshotsDir.Text));
+                string filepath = Path.Combine(textBoxScreenshotsDir.Text, filename);
+
+                if (!File.Exists(filepath))
+                {
+                    filepath = Path.Combine(EDPicturesDir, filename);
+                }
+
+                if (File.Exists(filepath))
+                {
+                    filename = filepath;
+                }
+            }
+
+            return filename;
         }
 
         private void watcher(object sender, System.IO.FileSystemEventArgs e)
