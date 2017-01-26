@@ -327,8 +327,19 @@ namespace EDDiscovery.Actions
             {
                 string[] phrasearray = res.Split(';');
 
-                if (phrasearray.Length > 1)
-                    res = phrasearray[rnd.Next(phrasearray.Length)];
+                if (phrasearray.Length > 1)     // if we have at least x;y
+                {
+                    if (phrasearray[0].Length == 0 && phrasearray.Length >= 2)   // first empty, and we have two or more..
+                    {
+                        res = phrasearray[1];           // say first one
+                        if ( phrasearray.Length > 2 )   // if we have ;first;second;third, pick random at then
+                        {
+                            res += phrasearray[2 + rnd.Next(phrasearray.Length - 2)];
+                        }
+                    }
+                    else
+                        res = phrasearray[rnd.Next(phrasearray.Length)];    // pick randomly
+                }
 
                 bool silent = phrases.Count == 0;
                 phrases.Add(new Phrase() { phrase = res, voice = voice, volume = volume, rate = rate , ap = ap });

@@ -373,15 +373,47 @@ namespace EDDiscovery
                 {
                     string name = prefix + pi.Name;
                     Type rettype = pi.PropertyType;
-                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                    Extract(getter.Invoke(o, null), rettype, name);
+
+                    if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
+                    {
+                        string[] array = (string[])pi.GetValue(o);
+
+                        if (array == null)
+                            values[name + "_Length"] = "0";
+                        else
+                        {
+                            values[name + "_Length"] = array.Length.ToString();
+                            for (int i = 0; i < array.Length; i++)
+                                values[name + "[" + i.ToString() + "]"] = array[i];
+                        }
+                    }
+                    else
+                    {
+                        System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                        Extract(getter.Invoke(o, null), rettype, name);
+                    }
                 }
             }
 
             foreach (System.Reflection.FieldInfo fi in jtype.GetFields())
             {
                 string name = prefix + fi.Name;
-                Extract(fi.GetValue(o), fi.FieldType, name);
+                Type rettype = fi.FieldType;
+
+                if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
+                {
+                    string[] array = (string[])fi.GetValue(o);
+                    if (array == null)
+                        values[name + "_Length"] = "0";
+                    else
+                    {
+                        values[name + "_Length"] = array.Length.ToString();
+                        for (int i = 0; i < array.Length; i++)
+                            values[name + "[" + i.ToString() + "]"] = array[i];
+                    }
+                }
+                else
+                    Extract(fi.GetValue(o), fi.FieldType, name);
             }
 
         }
