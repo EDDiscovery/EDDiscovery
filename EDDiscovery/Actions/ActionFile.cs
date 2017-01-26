@@ -52,7 +52,10 @@ namespace EDDiscovery.Actions
                         return new ActionFile(cond, prog, filename, Path.GetFileNameWithoutExtension(filename), en);
                     }
                 }
-                catch { }   // ignore the file.. garbage.
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Dump:" + ex.StackTrace);
+                }
 
                 return null;
             }

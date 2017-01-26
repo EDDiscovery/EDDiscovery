@@ -193,6 +193,12 @@ namespace EDDiscovery.Actions
             else
                 groups.Insert(insertpos, g);
 
+            string tt1 = "Step " + (groups.IndexOf(g) + 1).ToString();
+
+            toolTip1.SetToolTip(g.stepname, tt1);
+            toolTip1.SetToolTip(g.stepname.GetInternalSystemControl, tt1);
+
+
             ResumeLayout();
             return g;
         }

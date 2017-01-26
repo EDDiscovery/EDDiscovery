@@ -130,6 +130,8 @@ namespace EDDiscovery.Actions
 
             while (( completeline = sr.ReadLine() )!=null)
             {
+                completeline = completeline.Replace("\t", "    ");  // detab, to spaces, tabs are worth 4.
+
                 StringParser p = new StringParser(completeline);
 
                 if (!p.IsEOL)
@@ -298,7 +300,10 @@ namespace EDDiscovery.Actions
 
                 return true;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Dump:" + ex.StackTrace);
+            }
 
             return false;
         }

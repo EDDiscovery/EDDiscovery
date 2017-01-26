@@ -35,6 +35,7 @@
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
+            this.buttonSort2 = new ExtendedControls.ButtonExt();
             this.buttonSort = new ExtendedControls.ButtonExt();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
@@ -49,7 +50,6 @@
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
-            this.buttonSort2 = new ExtendedControls.ButtonExt();
             this.panelTop.SuspendLayout();
             this.panelOuter.SuspendLayout();
             this.panelVScroll.SuspendLayout();
@@ -140,6 +140,19 @@
             this.panelVScroll.VerticalScrollBarDockRight = true;
             this.panelVScroll.Resize += new System.EventHandler(this.panelVScroll_Resize);
             // 
+            // buttonSort2
+            // 
+            this.buttonSort2.BorderColorScaling = 1.25F;
+            this.buttonSort2.ButtonColorScaling = 0.5F;
+            this.buttonSort2.ButtonDisabledScaling = 0.5F;
+            this.buttonSort2.Location = new System.Drawing.Point(95, 7);
+            this.buttonSort2.Name = "buttonSort2";
+            this.buttonSort2.Size = new System.Drawing.Size(45, 23);
+            this.buttonSort2.TabIndex = 6;
+            this.buttonSort2.Text = "Sort2";
+            this.buttonSort2.UseVisualStyleBackColor = true;
+            this.buttonSort2.Click += new System.EventHandler(this.buttonSort2_Click);
+            // 
             // buttonSort
             // 
             this.buttonSort.BorderColorScaling = 1.25F;
@@ -163,7 +176,7 @@
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
-            this.vScrollBarCustom1.LargeChange = 10;
+            this.vScrollBarCustom1.LargeChange = 50;
             this.vScrollBarCustom1.Location = new System.Drawing.Point(868, 0);
             this.vScrollBarCustom1.Maximum = -354;
             this.vScrollBarCustom1.Minimum = 0;
@@ -361,19 +374,6 @@
             this.statusStripCustom.Size = new System.Drawing.Size(890, 22);
             this.statusStripCustom.TabIndex = 27;
             this.statusStripCustom.Text = "statusStripCustom1";
-            // 
-            // buttonSort2
-            // 
-            this.buttonSort2.BorderColorScaling = 1.25F;
-            this.buttonSort2.ButtonColorScaling = 0.5F;
-            this.buttonSort2.ButtonDisabledScaling = 0.5F;
-            this.buttonSort2.Location = new System.Drawing.Point(95, 7);
-            this.buttonSort2.Name = "buttonSort2";
-            this.buttonSort2.Size = new System.Drawing.Size(45, 23);
-            this.buttonSort2.TabIndex = 6;
-            this.buttonSort2.Text = "Sort2";
-            this.buttonSort2.UseVisualStyleBackColor = true;
-            this.buttonSort2.Click += new System.EventHandler(this.buttonSort2_Click);
             // 
             // ConditionFilterForm
             // 

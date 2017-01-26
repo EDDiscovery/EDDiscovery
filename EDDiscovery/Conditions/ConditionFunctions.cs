@@ -43,6 +43,7 @@ namespace EDDiscovery
                 new FuncEntry("length",Length,1,1),
                 new FuncEntry("version",Version,1,1),
                 new FuncEntry("floor",Floor,2,2),
+                new FuncEntry("roundnz",Roundnz,4,4),
                 new FuncEntry("round",Round,3,3),
                 new FuncEntry("lower",Lower,1,2),
                 new FuncEntry("upper",Upper,1,2),
@@ -69,6 +70,8 @@ namespace EDDiscovery
                 if (pos >= 0)
                 {
                     pos++;                                                  // move on, if it fails, next pos= will be past this point
+
+                    int startexpression = pos;
 
                     int apos = pos;
 
@@ -102,7 +105,7 @@ namespace EDDiscovery
 
                                 if (apos == start)
                                 {
-                                    result = "Missing variable name";
+                                    result = "Missing variable name at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ConditionLists.ExpandResult.Failed;
                                 }
 
@@ -118,7 +121,7 @@ namespace EDDiscovery
 
                                 if (c != ',')     // must be ,
                                 {
-                                    result = "Incorrectly formed parameter list";
+                                    result = "Incorrectly formed parameter list at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ConditionLists.ExpandResult.Failed;
                                 }
                             }
@@ -135,7 +138,7 @@ namespace EDDiscovery
                             }
                             else if (varnames.Count > 1)
                             {
-                                result = "Only functions can have multiple comma separated items";
+                                result = "Only functions can have multiple comma separated items at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                 return ConditionLists.ExpandResult.Failed;
                             }
                             else
@@ -224,7 +227,7 @@ namespace EDDiscovery
 
             foreach (string s in paras)
             {
-                if (vars.ContainsKey(s) )
+                if (vars.ContainsKey(s))
                 {
                     string value;
 
@@ -254,10 +257,10 @@ namespace EDDiscovery
                 }
                 else
                 {
-                        output = "Variable " + s + " not found";
-                        return false;
-                    }
+                    output = "Variable " + s + " does not exist";
+                    return false;
                 }
+            }
 
             return true;
         }
@@ -343,26 +346,31 @@ namespace EDDiscovery
 
         private bool FindLine(List<string> paras, ConditionVariables vars, out string output, int recdepth)
         {
-            if (vars.ContainsKey(paras[0]) && vars.ContainsKey(paras[1]))
+            if (vars.ContainsKey(paras[0]))
             {
-                using (System.IO.TextReader sr = new System.IO.StringReader(vars[paras[0]]))
+                if (vars.ContainsKey(paras[1]))
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    using (System.IO.TextReader sr = new System.IO.StringReader(vars[paras[0]]))
                     {
-                        if (line.Contains(vars[paras[1]]))
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
                         {
-                            output = line;
-                            return true;
+                            if (line.Contains(vars[paras[1]]))
+                            {
+                                output = line;
+                                return true;
+                            }
                         }
                     }
-                }
 
-                output = "";
-                return true;
+                    output = "";
+                    return true;
+                }
+                else
+                    output = "The variable " + paras[1] + " does not exist";
             }
             else
-                output = "One of the variables does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
         }
@@ -396,20 +404,25 @@ namespace EDDiscovery
                     output = "Start and/or length are not integers or variables do not exist";
             }
             else
-                output = "One of the variables does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
         }
 
         private bool IndexOf(List<string> paras, ConditionVariables vars, out string output, int recdepth)
         {
-            if (vars.ContainsKey(paras[0]) && vars.ContainsKey(paras[1]))
+            if (vars.ContainsKey(paras[0]))
             {
-                output = vars[paras[0]].IndexOf(vars[paras[1]]).ToString();
-                return true;
+                if (vars.ContainsKey(paras[1]))
+                {
+                    output = vars[paras[0]].IndexOf(vars[paras[1]]).ToString();
+                    return true;
+                }
+                else
+                    output = "The variable " + paras[1] + " does not exist";
             }
             else
-                output = "One of the variables does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
         }
@@ -422,7 +435,7 @@ namespace EDDiscovery
                 return true;
             }
             else
-                output = "One of the variables does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
         }
@@ -435,7 +448,7 @@ namespace EDDiscovery
                 return true;
             }
             else
-                output = "One of the variables does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
         }
@@ -448,7 +461,7 @@ namespace EDDiscovery
                 return true;
             }
             else
-                output = "One of the variables does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
         }
@@ -461,7 +474,7 @@ namespace EDDiscovery
                 return true;
             }
             else
-                output = "The variable does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
         }
@@ -493,27 +506,38 @@ namespace EDDiscovery
                 if (double.TryParse(vars[paras[0]], out para))
                 {
                     string fmt = vars.ContainsKey(paras[1]) ? vars[paras[1]] : paras[1];
-
-                    try
-                    {
-                        output = Math.Floor(para).ToString(fmt);
+                    if (FormatIt(Math.Floor(para), fmt, out output))
                         return true;
-                    }
-                    catch
-                    {
-                        output = "Format must be a c# ToString format for doubles";
-                    }
                 }
                 else
                     output = "Parameter number be a number";
             }
             else
-                output = "The variable does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
         }
 
         private bool Round(List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            return RoundCommon(paras, vars, out output, recdepth, 0);
+        }
+
+        private bool Roundnz(List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            int extradigits;
+
+            if (int.TryParse(paras[3], out extradigits) || (vars.ContainsKey(paras[3]) && int.TryParse(vars[paras[3]], out extradigits)))
+            {
+                return RoundCommon(paras, vars, out output, recdepth, extradigits);
+            }
+            else
+                output = "The variable " + paras[3] + " does not exist";
+
+            return false;
+        }
+
+        private bool RoundCommon(List<string> paras, ConditionVariables vars, out string output, int recdepth, int extradigits)
         {
             if (vars.ContainsKey(paras[0]))
             {
@@ -526,15 +550,17 @@ namespace EDDiscovery
                     {
                         string fmt = vars.ContainsKey(paras[2]) ? vars[paras[2]] : paras[2];
 
-                        try
+                        double res = Math.Round(para, digits);
+
+                        if (extradigits>0 && Math.Abs(res) < 0.0000001)     // if rounded to zero..
                         {
-                            output = Math.Round(para, digits).ToString(paras[2]);
-                            return true;
+                            digits += extradigits;
+                            fmt += new string('#',extradigits);
+                            res = Math.Round(para, digits);
                         }
-                        catch
-                        {
-                            output = "Format must be a c# ToString format for doubles";
-                        }
+
+                        if (FormatIt(res, fmt, out output))
+                             return true;
                     }
                     else
                         output = "Digits must be a variable or an integer number of digits";
@@ -543,9 +569,36 @@ namespace EDDiscovery
                     output = "Variable must be a integer or double";
             }
             else
-                output = "The variable does not exist";
+                output = "The variable " + paras[0] + " does not exist";
 
             return false;
+        }
+
+        private bool FormatIt(double v, string fmt, out string output)
+        {
+            output = "";
+
+            if (fmt.StartsWith("M"))
+            {
+                fmt = fmt.Substring(1);
+
+                if (v < 0)
+                {
+                    output = "Minus ";
+                    v = -v;
+                }
+            }
+
+            try
+            {
+                output += v.ToString(fmt);
+                return true;
+            }
+            catch
+            {
+                output = "Format must be a c# ToString format for doubles";
+                return false;
+            }
         }
 
         #endregion

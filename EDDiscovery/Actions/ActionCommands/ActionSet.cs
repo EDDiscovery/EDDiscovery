@@ -9,29 +9,31 @@ namespace EDDiscovery.Actions
 {
     public class ActionSetLetBase : Action
     {
-        protected bool FromString(string ud, out ConditionVariables vars)
+        protected bool FromString(string ud, out ConditionVariables vars, out Dictionary<string, string> operations)
         {
             vars = new ConditionVariables();
+            operations = new Dictionary<string, string>();
             StringParser p = new StringParser(ud);
-            return vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma, allowextops:true);
+            return vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma, altops:operations);
         }
 
-        protected string ToString(ConditionVariables vars)
+        protected string ToString(ConditionVariables vars, Dictionary<string, string> operations)
         {
-            return vars.ToString();
+            return vars.ToString(operations, " ");
         }
 
         public bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars, bool allowaddv , bool allownoexpandv)
         {
             ConditionVariables av;
-            FromString(userdata, out av);
+            Dictionary<string, string> operations;
+            FromString(userdata, out av, out operations);
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Variable list:", theme, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv);
+            avf.Init("Variable list:", theme, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations);
 
             if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
-                userdata = ToString(avf.result);
+                userdata = ToString(avf.result,avf.result_altops);
                 return true;
             }
             else
@@ -41,9 +43,12 @@ namespace EDDiscovery.Actions
         public override string VerifyActionCorrect()
         {
             ConditionVariables av;
-            bool ok = FromString(userdata, out av);
+            Dictionary<string, string> operations;
+            bool ok = FromString(userdata, out av ,out operations);
+
+            System.Diagnostics.Debug.Assert(operations.Count == av.Count);
             if ( ok )
-                userdata = ToString(av);        // normalise them..
+                userdata = ToString(av,operations);        // normalise them..
 
             return ok ? null : "Global/Let/Set not in correct format";
         }
@@ -53,6 +58,7 @@ namespace EDDiscovery.Actions
     public class ActionSet : ActionSetLetBase
     {
         ConditionVariables av;
+        Dictionary<string, string> operations;
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
@@ -62,31 +68,14 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             if (av == null)
-                FromString(userdata, out av);
+                FromString(userdata, out av, out operations);
 
             foreach (KeyValuePair<string, string> k in av.values)
             {
                 string vname = k.Key;
-                bool noexpand = false, addto = false;
-                if (vname.EndsWith("$+"))
-                {
-                    vname = vname.Substring(0, vname.Length - 2);
-                    noexpand = addto = true;
-                }
-                else if (vname.EndsWith("+"))
-                {
-                    vname = vname.Substring(0, vname.Length - 1);
-                    addto = true;
-                }
-                else if (vname.EndsWith("$"))
-                {
-                    vname = vname.Substring(0, vname.Length - 1);
-                    noexpand = true;
-                }
-
                 string res;
 
-                if (noexpand)
+                if (operations[vname].Contains("$"))
                     res = k.Value;
                 else if ( ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
@@ -94,7 +83,7 @@ namespace EDDiscovery.Actions
                     break;
                 }
 
-                if (addto && ap.currentvars.ContainsKey(vname))
+                if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
                     ap.currentvars[vname] += res;
                 else
                     ap.currentvars[vname] = res;
@@ -111,6 +100,7 @@ namespace EDDiscovery.Actions
     public class ActionLet : ActionSetLetBase
     {
         ConditionVariables av;
+        Dictionary<string, string> operations;
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
@@ -120,21 +110,14 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             if (av == null)
-                FromString(userdata, out av);
+                FromString(userdata, out av, out operations);
 
             foreach (KeyValuePair<string, string> k in av.values)
             {
                 string vname = k.Key;
-                bool noexpand = false;
-                if (vname.EndsWith("$"))
-                {
-                    vname = vname.Substring(0, vname.Length - 1);
-                    noexpand = true;
-                }
-
                 string res;
 
-                if (noexpand)
+                if (operations[vname].Contains("$"))
                     res = k.Value;
                 else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
                 {
@@ -177,6 +160,7 @@ namespace EDDiscovery.Actions
     public class ActionGlobal : ActionSetLetBase
     {
         ConditionVariables av;
+        Dictionary<string, string> operations;
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
@@ -186,31 +170,14 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             if (av == null)
-                FromString(userdata, out av);
+                FromString(userdata, out av, out operations);
 
             foreach (KeyValuePair<string, string> k in av.values)
             {
                 string vname = k.Key;
-                bool noexpand = false, addto = false;
-                if (vname.EndsWith("$+"))
-                {
-                    vname = vname.Substring(0, vname.Length - 2);
-                    noexpand = addto = true;
-                }
-                else if (vname.EndsWith("+"))
-                {
-                    vname = vname.Substring(0, vname.Length - 1);
-                    addto = true;
-                }
-                else if (vname.EndsWith("$"))
-                {
-                    vname = vname.Substring(0, vname.Length - 1);
-                    noexpand = true;
-                }
-
                 string res;
 
-                if (noexpand)
+                if (operations[vname].Contains("$"))
                     res = k.Value;
                 else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
@@ -218,7 +185,7 @@ namespace EDDiscovery.Actions
                     break;
                 }
 
-                if ( addto && ap.currentvars.ContainsKey(vname))
+                if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
                 {
                     ap.currentvars[vname] += res;
                     ap.discoveryform.SetProgramGlobal(vname, res);

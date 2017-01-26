@@ -57,6 +57,7 @@
             this.whitespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeWhitespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelOuter.SuspendLayout();
             this.panelVScroll.SuspendLayout();
             this.panelName.SuspendLayout();
@@ -103,7 +104,7 @@
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
-            this.vScrollBarCustom1.LargeChange = 10;
+            this.vScrollBarCustom1.LargeChange = 50;
             this.vScrollBarCustom1.Location = new System.Drawing.Point(834, 0);
             this.vScrollBarCustom1.Maximum = -336;
             this.vScrollBarCustom1.Minimum = 0;
@@ -389,6 +390,10 @@
             this.statusStripCustom.TabIndex = 28;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
             // ActionProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -446,5 +451,6 @@
         private System.Windows.Forms.ToolStripMenuItem whitespaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeWhitespaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertEntryAboveToolStripMenuItem;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

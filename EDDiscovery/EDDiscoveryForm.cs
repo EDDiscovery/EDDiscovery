@@ -1168,6 +1168,7 @@ namespace EDDiscovery
                 Console.WriteLine("Close.. safe close launched");
                 safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
                 safeClose.Start();
+                Actions.ActionSay.KillSpeech();
             }
             else if (safeClose.IsAlive)   // still working, cancel again..
             {
