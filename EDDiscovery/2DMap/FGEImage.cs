@@ -442,10 +442,7 @@ namespace EDDiscovery2
                 GitHubClass github = new GitHubClass(discoveryform);
 
                 var files = github.GetDataFiles("Maps/V1");
-                github.DownloadFiles(files, mapsdir);
-
-                var tcs = new TaskCompletionSource<bool>();
-                return tcs.Task;
+                return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
 
                 /*
                 DeleteMapFile("DW4.png", logLine);
