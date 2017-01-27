@@ -12,6 +12,7 @@ namespace EDDiscovery
         HistoryList hl;
         HistoryEntry he;
         FuncEntry[] flist;
+        static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
         delegate bool func(List<string> paras, ConditionVariables vars, out string output , int recdepth );
 
@@ -51,6 +52,8 @@ namespace EDDiscovery
                 new FuncEntry("trim",Trim,1,2)
         };
         }
+
+        #region expander
 
         // true, expanded, result = string
         // false, failed, result = error
@@ -169,7 +172,7 @@ namespace EDDiscovery
         }
 
         // true, output is written.  false, output has error text
-        public bool RunFunction(string fname, List<string> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool RunFunction(string fname, List<string> paras, ConditionVariables vars, out string output, int recdepth)
         {
             FuncEntry fe = Array.Find(flist, x => x.name.Equals(fname, StringComparison.InvariantCulture));
             if (fe != null)
@@ -188,6 +191,8 @@ namespace EDDiscovery
 
             return false;
         }
+
+        #endregion
 
         #region Functions
 
@@ -325,6 +330,7 @@ namespace EDDiscovery
 
             return false;
         }
+
         private bool DateHour(List<string> paras, ConditionVariables vars, out string output, int recdepth)
         {
             if (vars.ContainsKey(paras[0]))
@@ -334,7 +340,7 @@ namespace EDDiscovery
                 if (DateTime.TryParse(vars[paras[0]], System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
                                         System.Globalization.DateTimeStyles.None, out res))
                 {
-                    output = res.Hour.ToString();
+                    output = res.Hour.ToString(ct);
                     return true;
                 }
                 else
@@ -382,8 +388,8 @@ namespace EDDiscovery
             {
                 int start, length;
 
-                bool okstart = int.TryParse(paras[1], out start) || (vars.ContainsKey(paras[1]) && int.TryParse(vars[paras[1]], out start));
-                bool oklength = int.TryParse(paras[2], out length) || (vars.ContainsKey(paras[2]) && int.TryParse(vars[paras[2]], out length));
+                bool okstart = paras[1].InvariantParse(out start) || (vars.ContainsKey(paras[1]) && vars[paras[1]].InvariantParse(out start));
+                bool oklength = paras[2].InvariantParse(out length) || (vars.ContainsKey(paras[2]) && vars[paras[2]].InvariantParse(out length));
 
                 if ( okstart && oklength )
                 {
@@ -416,7 +422,7 @@ namespace EDDiscovery
             {
                 if (vars.ContainsKey(paras[1]))
                 {
-                    output = vars[paras[0]].IndexOf(vars[paras[1]]).ToString();
+                    output = vars[paras[0]].IndexOf(vars[paras[1]]).ToString(ct);
                     return true;
                 }
                 else
@@ -471,7 +477,7 @@ namespace EDDiscovery
         {
             if (vars.ContainsKey(paras[0]))
             {
-                output = vars[paras[0]].Length.ToString();
+                output = vars[paras[0]].Length.ToString(ct);
                 return true;
             }
             else
@@ -487,7 +493,7 @@ namespace EDDiscovery
             string[] list = v.Split('.');
 
             int para;
-            if (int.TryParse(paras[0], out para) && para >= 1 && para <= list.Length)
+            if (paras[0].InvariantParse(out para) && para >= 1 && para <= list.Length)
             {
                 output = list[para - 1];
                 return true;
@@ -504,7 +510,7 @@ namespace EDDiscovery
             if (vars.ContainsKey(paras[0]))
             {
                 double para;
-                if (double.TryParse(vars[paras[0]], out para))
+                if (vars[paras[0]].InvariantParse(out para))
                 {
                     string fmt = vars.ContainsKey(paras[1]) ? vars[paras[1]] : paras[1];
                     if (FormatIt(Math.Floor(para), fmt, out output))
@@ -525,7 +531,7 @@ namespace EDDiscovery
 
             if (paras.Count >= 4)
             {
-                if (!int.TryParse(paras[3], out extradigits) && !(vars.ContainsKey(paras[3]) && int.TryParse(vars[paras[3]], out extradigits)))
+                if (!paras[3].InvariantParse(out extradigits) && !(vars.ContainsKey(paras[3]) && vars[paras[3]].InvariantParse(out extradigits)))
                 {
                     output = "The variable " + paras[3] + " does not exist or the value is not an integer";
                     return false;
@@ -535,7 +541,7 @@ namespace EDDiscovery
             double scale = 1.0;
             if (paras.Count >= 5)
             {
-                if (!double.TryParse(paras[4], out scale) && !(vars.ContainsKey(paras[4]) && double.TryParse(vars[paras[4]], out scale)))
+                if (!paras[4].InvariantParse(out scale) && !(vars.ContainsKey(paras[4]) && vars[paras[4]].InvariantParse(out scale)))
                 {
                     output = "The variable " + paras[4] + " does not exist of the value is not a fractional";
                     return false;
@@ -546,12 +552,12 @@ namespace EDDiscovery
             {
                 double value;
 
-                if (double.TryParse(vars[paras[0]], out value))
+                if (vars[paras[0]].InvariantParse(out value))
                 {
                     value *= scale;
 
                     int digits = 0;
-                    if (int.TryParse(paras[1], out digits) || (vars.ContainsKey(paras[1]) && int.TryParse(vars[paras[1]], out digits)))
+                    if (paras[1].InvariantParse(out digits) || (vars.ContainsKey(paras[1]) && vars[paras[1]].InvariantParse(out digits)))
                     {
                         string fmt = vars.ContainsKey(paras[2]) ? vars[paras[2]] : paras[2];
 
@@ -596,7 +602,7 @@ namespace EDDiscovery
 
             try
             {
-                output += v.ToString(fmt);
+                output += v.ToString(fmt,ct);
                 return true;
             }
             catch

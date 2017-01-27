@@ -377,7 +377,7 @@ namespace EDDiscovery
                         {
                             int inum = 0;
 
-                            if (int.TryParse(leftside, out inum))
+                            if (leftside.InvariantParse(out inum))
                                 matched = (f.matchtype == MatchType.IsTrue) ? (inum != 0) : (inum == 0);
                             else
                             {
@@ -390,13 +390,13 @@ namespace EDDiscovery
                         {
                             double fnum = 0, num = 0;
 
-                            if (!double.TryParse(leftside, out num))
+                            if (!leftside.InvariantParse(out num))
                             {
                                 errlist += "Number not in correct format on left side" + Environment.NewLine;
                                 innerres = false;
                                 break;
                             }
-                            else if (!double.TryParse(rightside, out fnum) )
+                            else if (!rightside.InvariantParse(out fnum) )
                             {
                                 errlist += "Number not in correct format on right side" + Environment.NewLine;
                                 innerres = false;
