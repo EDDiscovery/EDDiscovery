@@ -92,11 +92,11 @@ namespace EDDiscovery.Actions
         int GetInt(string value, string vname, Dictionary<string, string> vars, int fallback, int min, int max)
         {
             int i;
-            if (!int.TryParse(value, out i) || i < min || i > max)
+            if (!value.InvariantParse(out i) || i < min || i > max)
             {
                 if (vars.ContainsKey(vname))
                 {
-                    if (!int.TryParse(vars[vname], out i) || i < min || i > max)
+                    if (!vars[vname].InvariantParse(out i) || i < min || i > max)
                         i = fallback;
                 }
                 else

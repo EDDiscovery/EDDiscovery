@@ -172,7 +172,7 @@ namespace EDDiscovery
         {
             string s = NextWord(terminators);
             int i;
-            if (s != null && int.TryParse(s, out i))
+            if (s != null && s.InvariantParse(out i))
                 return i;
             else
                 return null;
@@ -182,7 +182,7 @@ namespace EDDiscovery
         {
             string s = NextWord(terminators);
             long i;
-            if (s != null && long.TryParse(s, out i))
+            if (s != null && s.InvariantParse(out i))
                 return i;
             else
                 return null;
