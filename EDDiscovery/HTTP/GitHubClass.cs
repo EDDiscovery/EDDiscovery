@@ -157,7 +157,7 @@ namespace EDDiscovery
             else
             {
                 // Calculate sha
-                string sha = CalcSha1(destFile);
+                string sha = CalcSha1(destFile).ToLower();
 
                 if (sha.Equals(file.sha))
                     return false;
@@ -170,11 +170,19 @@ namespace EDDiscovery
         {
 
             using (FileStream fs = new FileStream(filename, FileMode.Open))
-            using (BufferedStream bs = new BufferedStream(fs))
+            using (BinaryReader br = new BinaryReader(fs))
+                using (MemoryStream ms = new MemoryStream())
             {
+                byte[] header = Encoding.UTF8.GetBytes("blob " + fs.Length + "\0");
+                ms.Write(header, 0, header.Length);
+
+                ms.Write(br.ReadBytes((int)fs.Length), 0, (int)fs.Length);
+
+
+
                 using (SHA1Managed sha1 = new SHA1Managed())
                 {
-                    byte[] hash = sha1.ComputeHash(bs);
+                    byte[] hash = sha1.ComputeHash(ms.ToArray());
                     StringBuilder formatted = new StringBuilder(2 * hash.Length);
                     foreach (byte b in hash)
                     {
@@ -196,7 +204,7 @@ namespace EDDiscovery
             // download.....
             try
             {
-
+                WriteLog("Download github file " + file.Name, "");
                 string destFile = Path.Combine(DestinationDir, file.Name);
 
                 using (WebClient client = new WebClient())

@@ -512,11 +512,20 @@ namespace EDDiscovery
 
             try
             {
-                if (!Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
-                    Directory.CreateDirectory(Path.Combine(Tools.GetAppDataDirectory(), "Maps"));
+                string mapsdir = Path.Combine(Tools.GetAppDataDirectory(), "Maps");
+                if (!Directory.Exists(mapsdir))
+                    Directory.CreateDirectory(mapsdir);
 
                 LogLine("Checking for new EDDiscovery maps");
 
+                GitHubClass github = new GitHubClass();
+
+                var files = github.GetDataFiles("Maps/V1");
+                github.DownloadFiles(files, mapsdir);
+
+
+
+                /*
                 DeleteMapFile("DW4.png");
                 DeleteMapFile("SC-00.jpg");
                 return DownloadMapFiles(new[]
@@ -548,6 +557,8 @@ namespace EDDiscovery
                 },
                 (s) => LogLine("Map check complete."),
                 registerCancelCallback);
+
+    */
             }
             catch (Exception ex)
             {
