@@ -379,7 +379,7 @@ namespace EDDiscovery
             try
             {
 
-                GitHubClass github = new GitHubClass();
+                GitHubClass github = new GitHubClass(this);
 
                 GitHubRelease rel = github.GetLatestRelease();
 
@@ -518,14 +518,16 @@ namespace EDDiscovery
 
                 LogLine("Checking for new EDDiscovery maps");
 
-                GitHubClass github = new GitHubClass();
+                GitHubClass github = new GitHubClass(this);
 
                 var files = github.GetDataFiles("Maps/V1");
                 github.DownloadFiles(files, mapsdir);
 
-
+                var tcs = new TaskCompletionSource<bool>();
+                return tcs.Task;
 
                 /*
+
                 DeleteMapFile("DW4.png");
                 DeleteMapFile("SC-00.jpg");
                 return DownloadMapFiles(new[]
@@ -557,8 +559,8 @@ namespace EDDiscovery
                 },
                 (s) => LogLine("Map check complete."),
                 registerCancelCallback);
-
-    */
+                */
+    
             }
             catch (Exception ex)
             {
