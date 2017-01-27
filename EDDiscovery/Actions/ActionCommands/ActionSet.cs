@@ -133,11 +133,11 @@ namespace EDDiscovery.Actions
                     Type t = v.GetType();
                     //System.Diagnostics.Debug.WriteLine("Type return is " + t.ToString());
                     if (v is double)
-                        res = v.ToString();
+                        res = ((double)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
                     else if (v is System.Decimal)
-                        res = v.ToString();
+                        res = ((System.Decimal)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
                     else if (v is int)
-                        res = v.ToString();
+                        res = ((int)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
                     else
                         res = "NAN";
 

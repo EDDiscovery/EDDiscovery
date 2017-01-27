@@ -55,7 +55,7 @@ namespace EDDiscovery.Actions
                 if (cmdname != null)
                 {
                     long jid;
-                    if (!long.TryParse(cmdname, out jid))
+                    if (!cmdname.InvariantParse(out jid))
                     {
                         ap.ReportError("Non integer JID in Ledger");
                         return true;
@@ -83,14 +83,14 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    ap.currentvars[prefix + "JID"] = jid.ToString();
-                    ap.currentvars[prefix + "IndexOf"] = ap.historylist.EntryOrder[jidindex].Indexno.ToString();
+                    ap.currentvars[prefix + "JID"] = jid.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap.currentvars[prefix + "IndexOf"] = ap.historylist.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     ap.currentvars[prefix + "UTCTime"] = tx.utctime.ToString("MM/dd/yyyy HH:mm:ss");
                     ap.currentvars[prefix + "EntryType"] = tx.jtype.ToString();
                     ap.currentvars[prefix + "Notes"] = tx.notes;
-                    ap.currentvars[prefix + "Value"] = tx.cashadjust.ToString();
-                    ap.currentvars[prefix + "PPU"] = tx.profitperunit.ToString();
-                    ap.currentvars[prefix + "Credits"] = tx.cash.ToString();
+                    ap.currentvars[prefix + "Value"] = tx.cashadjust.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap.currentvars[prefix + "PPU"] = tx.profitperunit.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap.currentvars[prefix + "Credits"] = tx.cash.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 }
                 else
                     ap.ReportError("Missing JID in Ledger");

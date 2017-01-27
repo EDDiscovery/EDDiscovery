@@ -1,4 +1,6 @@
-﻿/*
+﻿#define DEBUGVOICE
+
+/*
  * Copyright © 2016 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -237,6 +239,11 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows[rownr].Cells[2].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[3].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[4].ToolTipText = tip;
+
+#if DEBUGVOICE
+            List<Actions.ActionFileList.MatchingSets> ale = discoveryform.actionfiles.GetMatchingConditions(item.journalEntry.EventTypeStr);
+            dataGridViewTravel.Rows[rownr].Cells[3].Value = ((ale.Count>0) ? "VOICE " :"NO VOICE") + dataGridViewTravel.Rows[rownr].Cells[3].Value;
+#endif
         }
 
         public void SetPreferredJIDAfterRefresh(long jid)           // call if after the next Display refresh you would like to go to this jid
@@ -487,6 +494,21 @@ namespace EDDiscovery.UserControls
 
                 string infotext = leftclicksystem.EventDescription + ((toexpand && leftclicksystem.EventDetailedInfo.Length > 0) ? (Environment.NewLine + leftclicksystem.EventDetailedInfo) : "");
 
+#if DEBUGVOICE
+                if (toexpand)
+                {
+                    List<Actions.ActionFileList.MatchingSets> ale = discoveryform.actionfiles.GetMatchingConditions(leftclicksystem.journalEntry.EventTypeStr);
+                    infotext = ((ale.Count>0) ? "VOICE " :"NO VOICE") + infotext;
+
+                    ConditionVariables testvars = new ConditionVariables();
+                    Actions.ActionVars.TriggerVars(testvars, leftclicksystem.journalEntry.EventTypeStr, "Debug");
+                    Actions.ActionVars.HistoryEventVars(testvars, leftclicksystem, "Event");
+                    string s = testvars.ToString().Replace(",", "\r\n");
+
+                    infotext = infotext + s;
+                }
+#endif
+
                 int h = DefaultRowHeight;
 
                 if (toexpand)
@@ -500,6 +522,7 @@ namespace EDDiscovery.UserControls
                         h = Math.Max(desch, h);
                         h = Math.Max(infoh, h);
                         h = Math.Max(noteh, h);
+                        h += 20;
                     }
                 }
 
@@ -516,9 +539,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-        #region TravelHistoryRightClick
+#region TravelHistoryRightClick
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -824,9 +847,9 @@ namespace EDDiscovery.UserControls
                 discoveryform.ActionRunOnEntry(rightclicksystem, "UserRightClick");
         }
 
-        #endregion
+#endregion
 
-        #region Event Filter
+#region Event Filter
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
@@ -853,7 +876,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
         private void drawnPanelPopOut_Click(object sender, EventArgs e)
         {

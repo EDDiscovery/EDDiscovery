@@ -193,7 +193,7 @@ namespace EDDiscovery.Actions
             else
                 groups.Insert(insertpos, g);
 
-            string tt1 = "Step " + (groups.IndexOf(g) + 1).ToString();
+            string tt1 = "Step " + (groups.IndexOf(g) + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
             toolTip1.SetToolTip(g.stepname, tt1);
             toolTip1.SetToolTip(g.stepname.GetInternalSystemControl, tt1);
@@ -237,6 +237,8 @@ namespace EDDiscovery.Actions
 
             int panelwidth = Math.Max(panelVScroll.Width - panelVScroll.ScrollBarWidth, 10);
 
+            System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+
             foreach (Group g in groups)
             {
                 g.left.Enabled = g.right.Enabled = false;
@@ -264,16 +266,16 @@ namespace EDDiscovery.Actions
                     if (g.programstep.Type == Action.ActionType.ElseIf)
                     {
                         if (structtype[structlevel] == Action.ActionType.Else)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " ElseIf after Else found" + Environment.NewLine;
+                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " ElseIf after Else found" + Environment.NewLine;
                         else if (structtype[structlevel] != Action.ActionType.If && structtype[structlevel] != Action.ActionType.ElseIf)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " ElseIf without IF found" + Environment.NewLine;
+                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " ElseIf without IF found" + Environment.NewLine;
                     }
                     else if (g.programstep.Type == Action.ActionType.Else)
                     {
                         if (structtype[structlevel] == Action.ActionType.Else)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " Else after Else found" + Environment.NewLine;
+                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " Else after Else found" + Environment.NewLine;
                         else if (structtype[structlevel] != Action.ActionType.If && structtype[structlevel] != Action.ActionType.ElseIf)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " Else without IF found" + Environment.NewLine;
+                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " Else without IF found" + Environment.NewLine;
 
                     }
 
@@ -299,7 +301,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    errlist += "Step " + (groups.IndexOf(g) + 1).ToString() + " not defined" + Environment.NewLine;
+                    errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " not defined" + Environment.NewLine;
                 }
 
                 g.indentcomputed = displaylevel;        // store this, ASCII output want to know how we indented it.

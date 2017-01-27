@@ -232,9 +232,9 @@ namespace EDDiscovery
             if (values.ContainsKey(name))
             {
                 int i;
-                if (int.TryParse(values[name], out i))
+                if (values[name].InvariantParse(out i))
                 {
-                    return (i + add).ToString();
+                    return (i + add).ToString(System.Globalization.CultureInfo.InvariantCulture);
                 }
             }
 
@@ -356,7 +356,7 @@ namespace EDDiscovery
                 else
                     res = values[name];
 
-                if (int.TryParse(res, out val) && val >= min && val <= max) // if we don't have volume..  or does not parse or out of range
+                if (res.InvariantParse(out val) && val >= min && val <= max) // if we don't have volume..  or does not parse or out of range
                     return null;
             }
 
@@ -373,15 +373,47 @@ namespace EDDiscovery
                 {
                     string name = prefix + pi.Name;
                     Type rettype = pi.PropertyType;
-                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                    Extract(getter.Invoke(o, null), rettype, name);
+
+                    if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
+                    {
+                        string[] array = (string[])pi.GetValue(o);
+
+                        if (array == null)
+                            values[name + "_Length"] = "0";
+                        else
+                        {
+                            values[name + "_Length"] = array.Length.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            for (int i = 0; i < array.Length; i++)
+                                values[name + "[" + i.ToString(System.Globalization.CultureInfo.InvariantCulture) + "]"] = array[i];
+                        }
+                    }
+                    else
+                    {
+                        System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                        Extract(getter.Invoke(o, null), rettype, name);
+                    }
                 }
             }
 
             foreach (System.Reflection.FieldInfo fi in jtype.GetFields())
             {
                 string name = prefix + fi.Name;
-                Extract(fi.GetValue(o), fi.FieldType, name);
+                Type rettype = fi.FieldType;
+
+                if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
+                {
+                    string[] array = (string[])fi.GetValue(o);
+                    if (array == null)
+                        values[name + "_Length"] = "0";
+                    else
+                    {
+                        values[name + "_Length"] = array.Length.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        for (int i = 0; i < array.Length; i++)
+                            values[name + "[" + i.ToString(System.Globalization.CultureInfo.InvariantCulture) + "]"] = array[i];
+                    }
+                }
+                else
+                    Extract(fi.GetValue(o), fi.FieldType, name);
             }
 
         }
@@ -399,7 +431,17 @@ namespace EDDiscovery
                 else if (!rettype.IsGenericType || rettype.GetGenericTypeDefinition() != typeof(Nullable<>))
                 {
                     var v = Convert.ChangeType(o, rettype);
-                    values[name] = v.ToString();
+
+                    if (v is Double)
+                        values[name] = ((double)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    else if (v is int)
+                        values[name] = ((int)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    else if (v is long)
+                        values[name] = ((long)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    else if (v is DateTime)
+                        values[name] = ((DateTime)v).ToString(System.Globalization.CultureInfo.CreateSpecificCulture("en-us"));
+                    else
+                        values[name] = v.ToString(  );
                 }
                 else if (o is Nullable<double>)
                     ExtractNull<double>((Nullable<double>)o, name);

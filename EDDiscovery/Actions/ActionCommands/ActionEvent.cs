@@ -199,8 +199,8 @@ namespace EDDiscovery.Actions
                     values.GetJSONFieldNamesAndValues(hl[pos].journalEntry.EventDataString, prefix + "JS_");
                     ActionVars.HistoryEventVars(values, hl[pos], prefix);
                     ap.currentvars.Add(values);
-                    ap.currentvars[prefix + "JID"] = hl[pos].Journalid.ToString();
-                    ap.currentvars[prefix + "Count"] = hl.Count.ToString();     // give a count of matches
+                    ap.currentvars[prefix + "JID"] = hl[pos].Journalid.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap.currentvars[prefix + "Count"] = hl.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);     // give a count of matches
                     return;
                 }
                 catch

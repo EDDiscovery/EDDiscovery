@@ -57,14 +57,16 @@ namespace EDDiscovery.Actions
 
                     EliteDangerous.StarScan.SystemNode sn = scan.FindSystem(sc);
 
+                    System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+
                     if ( sn != null )
                     {
                         int starno = 1;
-                        ap.currentvars[prefix + "Stars"] = sn.starnodes.Count.ToString();
+                        ap.currentvars[prefix + "Stars"] = sn.starnodes.Count.ToString(ct);
 
                         foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> scannode in sn.starnodes)
                         {
-                            DumpInfo(ap, scannode, prefix + "Star_" + starno.ToString() , "_Planets");
+                            DumpInfo(ap, scannode, prefix + "Star_" + starno.ToString(ct) , "_Planets");
 
                             int pcount = 1;
 
@@ -72,21 +74,21 @@ namespace EDDiscovery.Actions
                             {
                                 foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> planetnodes in scannode.Value.children)
                                 {
-                                    DumpInfo(ap, planetnodes, prefix + "Planet_" + starno.ToString() + "_" + pcount.ToString() , "_Moons");
+                                    DumpInfo(ap, planetnodes, prefix + "Planet_" + starno.ToString(ct) + "_" + pcount.ToString(ct) , "_Moons");
 
                                     if (planetnodes.Value.children != null)
                                     {
                                         int mcount = 1;
                                         foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> moonnodes in planetnodes.Value.children)
                                         {
-                                            DumpInfo(ap, moonnodes, prefix + "Moon_" + starno.ToString() + "_" + pcount.ToString() + "_" + mcount.ToString() , "_Submoons");
+                                            DumpInfo(ap, moonnodes, prefix + "Moon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) , "_Submoons");
 
                                             if (moonnodes.Value.children != null)
                                             {
                                                 int smcount = 1;
                                                 foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> submoonnodes in moonnodes.Value.children)
                                                 {
-                                                    DumpInfo(ap, submoonnodes, prefix + "SubMoon_" + starno.ToString() + "_" + pcount.ToString() + "_" + mcount.ToString() + "_" + smcount.ToString(),null);
+                                                    DumpInfo(ap, submoonnodes, prefix + "SubMoon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) + "_" + smcount.ToString(ct),null);
                                                     smcount++;
                                                 }
                                             }
@@ -126,7 +128,7 @@ namespace EDDiscovery.Actions
             ap.currentvars[prefix + "_startype"] = (sc != null) ? (sc.StarType ?? "N/A") : "";
 
             if (scannode.Value.children != null && subname != null)
-                ap.currentvars[prefix + subname] = scannode.Value.children.Count.ToString();
+                ap.currentvars[prefix + subname] = scannode.Value.children.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 }

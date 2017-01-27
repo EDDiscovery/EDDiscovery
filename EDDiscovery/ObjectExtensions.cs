@@ -60,5 +60,21 @@ public static class ObjectExtensions
 
         return k + keyname;
     }
+
+    static public bool InvariantParse(this string s, out int i)
+    {
+        return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public bool InvariantParse(this string s, out double i)
+    {
+        return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public bool InvariantParse(this string s, out long i)
+    {
+        return long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
 }
 
