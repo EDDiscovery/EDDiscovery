@@ -137,9 +137,9 @@ namespace EDDiscovery
         #endregion
 
         #region History
-        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
         {
-            Controller.RefreshHistoryAsync(netlogpath, forcenetlogreload, forcejournalreload, checkedsm, currentcmdr);
+            return Controller.RefreshHistoryAsync(netlogpath, forcenetlogreload, forcejournalreload, checkedsm, currentcmdr);
         }
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }

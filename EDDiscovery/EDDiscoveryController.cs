@@ -6,7 +6,6 @@ using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -15,7 +14,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace EDDiscovery
 {
@@ -26,9 +24,9 @@ namespace EDDiscovery
         public HistoryList history { get; private set; } = new HistoryList();
         public EDSMSync EdsmSync { get; private set; }
         public string LogText { get { return logtext; } }
-        public bool PendingClose { get { return safeClose != null; } }           // we want to close boys!
+        public bool PendingClose { get; private set; }           // we want to close boys!
         public GalacticMapping galacticMapping { get; private set; }
-        public bool ReadyForFinalClose { get { return safeClose != null && !safeClose.IsAlive; } }
+        public bool ReadyForFinalClose { get; private set; }
         #endregion
 
         #region Events
@@ -96,52 +94,25 @@ namespace EDDiscovery
             SQLiteConnectionUser.EarlyReadRegister();
             EDDConfig.Instance.Update(write: false);
 
-            dbinitworker = new BackgroundWorker();
-            dbinitworker.DoWork += Dbinitworker_DoWork;
-            dbinitworker.RunWorkerCompleted += Dbinitworker_RunWorkerCompleted;
-            dbinitworker.RunWorkerAsync();
+            backgroundWorker = new Thread(BackgroundWorkerThread);
+            backgroundWorker.IsBackground = true;
+            backgroundWorker.Name = "Background Worker Thread";
+            backgroundWorker.Start();
 
             galacticMapping = new GalacticMapping();
 
             EdsmSync = new EDSMSync(this);
+            EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EliteDangerous.EDJournalClass();
+            journalmonitor.OnNewJournalEntry += NewPosition;
 
             history.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
-
-            this._syncWorker = new System.ComponentModel.BackgroundWorker();
-            this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
-            this._refreshWorker = new System.ComponentModel.BackgroundWorker();
-
-            // 
-            // _syncWorker
-            // 
-            this._syncWorker.WorkerReportsProgress = true;
-            this._syncWorker.WorkerSupportsCancellation = true;
-            this._syncWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._syncWorker_DoWork);
-            this._syncWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._syncWorker_ProgressChanged);
-            this._syncWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._syncWorker_RunWorkerCompleted);
-            // 
-            // _checkSystemsWorker
-            // 
-            this._checkSystemsWorker.WorkerReportsProgress = true;
-            this._checkSystemsWorker.WorkerSupportsCancellation = true;
-            this._checkSystemsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._checkSystemsWorker_DoWork);
-            this._checkSystemsWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._checkSystemsWorker_ProgressChanged);
-            this._checkSystemsWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._checkSystemsWorker_RunWorkerCompleted);
-            // 
-            // _refreshWorker
-            // 
-            this._refreshWorker.WorkerReportsProgress = true;
-            this._refreshWorker.WorkerSupportsCancellation = true;
-            this._refreshWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RefreshHistoryWorker);
-            this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
-            this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
-
         }
 
         public void PostInit_Loading()
         {
+            readyForUiInvoke.Set();
         }
 
         public void PostInit_Loaded()
@@ -153,32 +124,23 @@ namespace EDDiscovery
 
         public void PostInit_Shown()
         {
-            _checkSystemsWorker.RunWorkerAsync();
             downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
+            readyForInitialLoad.Set();
         }
         #endregion
 
         #region Shutdown
         public void Shutdown()
         {
-            if (safeClose == null)                  // so a close is a request now, and it launches a thread which cleans up the system..
+            if (!PendingClose)
             {
-                CancelHistoryRefresh();
+                PendingClose = true;
                 EDDNSync.StopSync();
-                _syncWorker.CancelAsync();
-                _checkSystemsWorker.CancelAsync();
-                if (cancelDownloadMaps != null)
-                {
-                    cancelDownloadMaps();
-                }
+                EdsmSync.StopSync();
+                journalmonitor.StopMonitor();
                 LogLineHighlight("Closing down, please wait..");
                 Console.WriteLine("Close.. safe close launched");
-                safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
-                safeClose.Start();
-            }
-            else if (!safeClose.IsAlive)   // still working, cancel again..
-            {
-                Console.WriteLine("go for close");
+                closeRequested.Set();
             }
         }
         #endregion
@@ -220,20 +182,22 @@ namespace EDDiscovery
         #endregion
 
         #region History
-        public void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
         {
             if (PendingClose)
             {
-                return;
+                return false;
             }
 
-            if (!_refreshWorker.IsBusy)
+            if (Interlocked.CompareExchange(ref refreshRequestedFlag, 1, 0) == 0)
             {
-                OnRefreshStarting?.Invoke();
+                InvokeSyncOnUiThread(() =>
+                {
+                    OnRefreshStarting?.Invoke();
+                    journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+                });
 
-                journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-
-                RefreshWorkerArgs args = new RefreshWorkerArgs
+                refreshWorkerArgs = new RefreshWorkerArgs
                 {
                     NetLogPath = netlogpath,
                     ForceNetLogReload = forcenetlogreload,
@@ -242,14 +206,18 @@ namespace EDDiscovery
                     CurrentCommander = currentcmdr ?? history.CommanderId
                 };
 
-                _refreshWorker.RunWorkerAsync(args);
+                refreshRequested.Set();
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
         public void RefreshDisplays()
         {
-            if (OnHistoryChange != null)
-                OnHistoryChange(history);
+            OnHistoryChange?.Invoke(history);
         }
 
         public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
@@ -263,12 +231,12 @@ namespace EDDiscovery
         #region EDSM / EDDB
         public bool AsyncPerformSync(bool eddbsync = false, bool edsmsync = false)
         {
-            if (!_syncWorker.IsBusy)
+            if (Interlocked.CompareExchange(ref resyncRequestedFlag, 1, 0) == 0)
             {
                 OnSyncStarting?.Invoke();
                 syncstate.performeddbsync |= eddbsync;
                 syncstate.performedsmsync |= edsmsync;
-                _syncWorker.RunWorkerAsync();
+                resyncRequestedEvent.Set();
                 return true;
             }
             else
@@ -284,21 +252,23 @@ namespace EDDiscovery
         private string logtext = "";     // to keep in case of no logs..
         private event EventHandler HistoryRefreshed; // this is an internal hook
 
-        private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
-        private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
-
-        private Action cancelDownloadMaps = null;
         private Task<bool> downloadMapsTask = null;
-        private BackgroundWorker dbinitworker = null;
 
         private EliteDangerous.EDJournalClass journalmonitor;
 
-        private System.ComponentModel.BackgroundWorker _syncWorker;
-        private System.ComponentModel.BackgroundWorker _checkSystemsWorker;
-        private System.ComponentModel.BackgroundWorker _refreshWorker;
+        private RefreshWorkerArgs refreshWorkerArgs = new RefreshWorkerArgs();
+        private SystemClass.SystemsSyncState syncstate = new SystemClass.SystemsSyncState();
 
-        private Thread safeClose;
-        private System.Windows.Forms.Timer closeTimer;
+        private Thread backgroundWorker;
+        private Thread backgroundRefreshWorker;
+
+        private ManualResetEvent closeRequested = new ManualResetEvent(false);
+        private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
+        private ManualResetEvent readyForUiInvoke = new ManualResetEvent(false);
+        private AutoResetEvent refreshRequested = new AutoResetEvent(false);
+        private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
+        private int refreshRequestedFlag = 0;
+        private int resyncRequestedFlag = 0;
         #endregion
 
         #region Accessors
@@ -310,18 +280,47 @@ namespace EDDiscovery
         #endregion
 
         #region Initialization
-        private void Dbinitworker_DoWork(object sender, DoWorkEventArgs e)
+        private void BackgroundInit()
+        {
+            InitializeDatabases();
+            readyForUiInvoke.WaitOne();
+            InvokeAsyncOnUiThread(() => OnDbInitComplete?.Invoke());
+            readyForInitialLoad.WaitOne();
+            CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
+            ReportProgress(-1, "");
+            InvokeSyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
+            if (PendingClose) return;
+
+            if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
+            {
+                if (EDDConfig.Instance.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
+                {
+                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
+                }
+            }
+
+            if (PendingClose) return;
+            LogLine("Reading travel history");
+            DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDDConfig.Instance.CurrentCmdrID });
+
+            if (PendingClose) return;
+            if (syncstate.performeddbsync || syncstate.performedsmsync)
+            {
+                string databases = (syncstate.performedsmsync && syncstate.performeddbsync) ? "EDSM and EDDB" : ((syncstate.performedsmsync) ? "EDSM" : "EDDB");
+
+                LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
+                                "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
+                                "Please continue running ED Discovery until refresh is complete.");
+            }
+        }
+
+        private void InitializeDatabases()
         {
             Trace.WriteLine("Initializing database");
             SQLiteConnectionOld.Initialize();
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
             Trace.WriteLine("Database initialization complete");
-        }
-
-        private void Dbinitworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            OnDbInitComplete?.Invoke();
         }
 
         private void CheckIfEliteDangerousIsRunning()
@@ -339,24 +338,6 @@ namespace EDDiscovery
         #endregion
 
         #region Initial Check Systems
-
-        private void _checkSystemsWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            try
-            {
-                var worker = (System.ComponentModel.BackgroundWorker)sender;
-
-                CheckSystems(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
-
-                if (worker.CancellationPending)
-                    e.Cancel = true;
-            }
-            catch (Exception ex) { e.Result = ex; }       // any exceptions, ignore
-            finally
-            {
-                _checkSystemsWorkerCompletedEvent.Set();
-            }
-        }
 
         private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
@@ -410,101 +391,31 @@ namespace EDDiscovery
             }
         }
 
-        private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            Exception ex = e.Cancelled ? null : (e.Error ?? e.Result as Exception);
-            ReportProgress(-1, "");
-            if (!e.Cancelled && !PendingClose)
-            {
-                if (ex != null)
-                {
-                    LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
-                }
-
-                journalmonitor.OnNewJournalEntry += NewPosition;
-                EdsmSync.OnDownloadedSystems += RefreshDueToEDSMDownloadedSystems;
-
-                OnInitialSyncComplete?.Invoke();
-
-                LogLine("Reading travel history");
-                HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
-
-                RefreshHistoryAsync();
-
-                if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
-                {
-                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
-                    {
-                        LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
-                    }
-                }
-            }
-        }
-
-        private void RefreshDueToEDSMDownloadedSystems()
-        {
-            InvokeSyncOnUiThread(() => RefreshHistoryAsync());
-        }
-
-        private void _travelHistoryControl1_InitialRefreshDone(object sender, EventArgs e)
-        {
-            HistoryRefreshed -= _travelHistoryControl1_InitialRefreshDone;
-
-            if (!PendingClose)
-            {
-                AsyncPerformSync();                              // perform any async synchronisations
-
-                if (syncstate.performeddbsync || syncstate.performedsmsync)
-                {
-                    string databases = (syncstate.performedsmsync && syncstate.performeddbsync) ? "EDSM and EDDB" : ((syncstate.performedsmsync) ? "EDSM" : "EDDB");
-
-                    LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
-                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.");
-                }
-            }
-        }
-
-        private void _checkSystemsWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-            ReportProgress(e.ProgressPercentage, (string)e.UserState);
-        }
-
         #endregion
 
         #region Async EDSM/EDDB Full Sync
 
-        private void _syncWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void DoPerformSync()
         {
             try
             {
-                var worker = (System.ComponentModel.BackgroundWorker)sender;
-
-                SystemClass.PerformSync(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
-                if (worker.CancellationPending)
-                    e.Cancel = true;
+                SystemClass.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
             }
-            catch (Exception ex) { e.Result = ex; }       // ignore any excepctions
-            finally
+            catch (Exception ex)
             {
-                _syncWorkerCompletedEvent.Set();
+                LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
             }
+
+            InvokeAsyncOnUiThread(() => PerformSyncCompleted());
         }
 
-        private SystemClass.SystemsSyncState syncstate = new SystemClass.SystemsSyncState();
 
-        private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void PerformSyncCompleted()
         {
-            Exception ex = e.Cancelled ? null : (e.Error ?? e.Result as Exception);
             ReportProgress(-1, "");
 
-            if (!e.Cancelled && !PendingClose)
+            if (!PendingClose)
             {
-                if (ex != null)
-                {
-                    LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
-                }
-
                 long totalsystems = SystemClass.GetTotalSystems();
                 LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
 
@@ -516,6 +427,8 @@ namespace EDDiscovery
                 }
 
                 OnSyncComplete?.Invoke();
+
+                resyncRequestedFlag = 0;
             }
         }
 
@@ -532,55 +445,6 @@ namespace EDDiscovery
                 LogLine("EDSM and/or EDDB update complete.");
         }
 
-        private void _syncWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-            ReportProgress(e.ProgressPercentage, (string)e.UserState);
-        }
-
-        #endregion
-
-        #region Closing
-        private void SafeClose()        // ASYNC thread..
-        {
-            Thread.Sleep(1000);
-            Console.WriteLine("Waiting for check systems to close");
-            if (_checkSystemsWorker.IsBusy)
-                _checkSystemsWorkerCompletedEvent.WaitOne();
-
-            Console.WriteLine("Waiting for full sync to close");
-            if (_syncWorker.IsBusy)
-                _syncWorkerCompletedEvent.WaitOne();
-
-            Console.WriteLine("Stopping discrete threads");
-            journalmonitor.StopMonitor();
-
-            if (EdsmSync != null)
-                EdsmSync.StopSync();
-
-            OnBgSafeClose?.Invoke();
-
-            Console.WriteLine("Go for close timer!");
-
-            InvokeSyncOnUiThread(() =>          // we need this thread to die so close will work, so kick off a timer
-            {
-                closeTimer = new System.Windows.Forms.Timer();
-                closeTimer.Interval = 100;
-                closeTimer.Tick += new EventHandler(CloseItFinally);
-                closeTimer.Start();
-            });
-        }
-
-        void CloseItFinally(Object sender, EventArgs e)
-        {
-            if (safeClose.IsAlive)      // still alive, try again
-                closeTimer.Start();
-            else
-            {
-                closeTimer.Stop();      // stop timer now. So it won't try to save it multiple times during close down if it takes a while - this caused a bug in saving some settings
-                OnFinalClose?.Invoke();
-            }
-        }
-
         #endregion
 
         #region Update Data
@@ -594,43 +458,30 @@ namespace EDDiscovery
             public int CurrentCommander;
         }
 
-        private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
+        private void DoRefreshHistory(RefreshWorkerArgs args)
         {
-            RefreshWorkerArgs args = e.Argument as RefreshWorkerArgs;
-            var worker = (BackgroundWorker)sender;
-
-            HistoryList hist = HistoryList.LoadHistory(journalmonitor, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), args.NetLogPath, args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander);
-
-            if (worker.CancellationPending)
+            HistoryList hist = null;
+            try
             {
-                e.Cancel = true;
+                hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath, args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander);
             }
-            else
+            catch (Exception ex)
             {
-                e.Result = hist;
+                LogLineHighlight("History Refresh Error: " + ex);
             }
+
+            InvokeAsyncOnUiThread(() => RefreshHistoryWorkerCompleted(hist));
         }
 
-        private void CancelHistoryRefresh()
+        private void RefreshHistoryWorkerCompleted(HistoryList hist)
         {
-            _refreshWorker.CancelAsync();
-        }
-
-        private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (!e.Cancelled && !PendingClose)
+            if (!PendingClose)
             {
-                if (e.Error != null)
-                {
-                    LogLineHighlight("History Refresh Error: " + e.Error.Message);
-                }
-                else
+                if (hist != null)
                 {
                     OnRefreshCommanders?.Invoke();
 
                     history.Clear();
-
-                    HistoryList hist = (HistoryList)e.Result;
 
                     foreach (var ent in hist.EntryOrder)
                     {
@@ -653,13 +504,9 @@ namespace EDDiscovery
                 journalmonitor.StartMonitor();
 
                 OnRefreshComplete?.Invoke();
-            }
-        }
 
-        private void RefreshHistoryWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            string name = (string)e.UserState;
-            ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
+                refreshRequestedFlag = 0;
+            }
         }
 
         private void NewPosition(EliteDangerous.JournalEntry je)
@@ -679,6 +526,72 @@ namespace EDDiscovery
                 OnRefreshCommanders?.Invoke();
             }
         }
+        #endregion
+
+        #region Background Worker Threads
+        private void BackgroundWorkerThread()
+        {
+            BackgroundInit();
+            if (!PendingClose)
+            {
+                backgroundRefreshWorker = new Thread(BackgroundRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
+                backgroundRefreshWorker.Start();
+
+                try
+                {
+                    DoPerformSync();
+                    while (!PendingClose)
+                    {
+                        int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
+
+                        if (PendingClose) break;
+
+                        switch (wh)
+                        {
+                            case 0:  // Close Requested
+                                break;
+                            case 1:  // Resync Requested
+                                DoPerformSync();
+                                break;
+                        }
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                }
+
+                backgroundRefreshWorker.Join();
+            }
+
+            closeRequested.WaitOne();
+
+            OnBgSafeClose?.Invoke();
+            ReadyForFinalClose = true;
+            InvokeAsyncOnUiThread(() =>
+            {
+                OnFinalClose?.Invoke();
+            });
+        }
+
+        private void BackgroundRefreshWorkerThread()
+        {
+            while (!PendingClose)
+            {
+                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested });
+
+                if (PendingClose) break;
+
+                switch (wh)
+                {
+                    case 0:  // Close Requested
+                        break;
+                    case 1:  // Refresh Requested
+                        DoRefreshHistory(refreshWorkerArgs);
+                        break;
+                }
+            }
+        }
+
         #endregion
 
         #endregion
