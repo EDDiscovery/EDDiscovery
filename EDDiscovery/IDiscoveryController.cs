@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Fronter Developments plc.
  */
 using EDDiscovery.EDSM;
+using EDDiscovery.EliteDangerous;
 using EDDiscovery2.EDSM;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace EDDiscovery
         #region Events
         event Action<HistoryList> OnHistoryChange;
         event Action<HistoryEntry, HistoryList> OnNewEntry;
+        event Action<JournalEntry> OnNewJournalEntry;
         event Action<string, Color> OnNewLogEntry;
         #endregion
 
@@ -45,6 +47,7 @@ namespace EDDiscovery
         void LogLineHighlight(string text);
         void LogLineSuccess(string text);
         void LogLineColor(string text, Color color);
+        void ReportProgress(int percent, string message);
         #endregion
 
         #region History
