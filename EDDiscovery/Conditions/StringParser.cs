@@ -178,6 +178,16 @@ namespace EDDiscovery
                 return null;
         }
 
+        public long? GetLong(string terminators = ", ")
+        {
+            string s = NextWord(terminators);
+            long i;
+            if (s != null && long.TryParse(s, out i))
+                return i;
+            else
+                return null;
+        }
+
     }
 
 }

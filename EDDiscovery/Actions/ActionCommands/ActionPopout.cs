@@ -28,7 +28,6 @@ namespace EDDiscovery.Actions
             string res;
             if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
-                HistoryList hl = ap.historylist;
                 StringParser sp = new StringParser(res);
                 string prefix = "P_";
 

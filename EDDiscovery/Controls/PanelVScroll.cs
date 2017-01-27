@@ -33,6 +33,9 @@ namespace ExtendedControls
         public bool VerticalScrollBarDockRight { get; set; } = true;        // true for dock right
         public Padding InternalMargin { get; set; }            // allows spacing around controls
         public VScrollBarCustom vsc;
+        public int ScrollOffset { get {return -scrollpos; } }
+
+        private int scrollpos = 0;
 
         public PanelVScroll()
         {
@@ -91,7 +94,6 @@ namespace ExtendedControls
             ScrollTo(e.NewValue);
         }
 
-        int scrollpos = 0;
 
         public void RestateScroll()             // call this if you've messed about with the position of controls..
         {
@@ -157,7 +159,7 @@ namespace ExtendedControls
                 if (updatescroller)
                     vsc.Value = newscrollpos;
 
-                System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
+                //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
             }
 
             scrollpos = newscrollpos;

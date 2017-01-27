@@ -462,7 +462,7 @@ namespace EDDiscovery.Actions
             if (promptValue != null)
             {
                 ConditionVariablesForm avf = new ConditionVariablesForm();
-                avf.Init("Variables to pass into called program", theme, cond,false);
+                avf.Init("Variables to pass into called program", theme, cond, showone:true);
 
                 if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
                 {

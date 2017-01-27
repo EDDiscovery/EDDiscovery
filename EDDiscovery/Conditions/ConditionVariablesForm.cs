@@ -13,13 +13,14 @@ namespace EDDiscovery
     public partial class ConditionVariablesForm : Form
     {
         public ConditionVariables result;      // only on OK
-        public bool result_noexpand;
+        public Dictionary<string, string> result_altops;
         public bool result_refresh;
 
         public class Group
         {
             public Panel panel;
             public ExtendedControls.TextBoxBorder var;
+            public ExtendedControls.ComboBoxCustom op;
             public ExtendedControls.TextBoxBorder value;
             public ExtendedControls.ButtonExt del;
         };
@@ -30,6 +31,8 @@ namespace EDDiscovery
         int panelmargin = 3;
         const int vscrollmargin = 10;
 
+        bool showadd, shownoexpand;
+
         public ConditionVariablesForm()
         {
             InitializeComponent();
@@ -38,10 +41,12 @@ namespace EDDiscovery
             AcceptButton = buttonOK;
         }
 
-        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , 
-                                                                bool showone , 
-                                                                bool shownoexpand = false, bool notexpandstate = false, 
-                                                                bool showrefresh = false , bool showrefreshstate = false)
+        // altops, if given, describes the operator of each variable.
+
+        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , Dictionary<string, string> altops = null,
+                                                                bool showone = false ,
+                                                                bool showrefresh = false , bool showrefreshstate = false,
+                                                                bool allowadd = false, bool allownoexpand = false )
         {
             theme = th;
 
@@ -49,26 +54,29 @@ namespace EDDiscovery
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
-            checkBoxNoExpand.Enabled = checkBoxNoExpand.Visible = shownoexpand;
-            checkBoxNoExpand.Checked = notexpandstate;
-            checkBoxNoExpand.Location = new Point(panelmargin, panelmargin);
+            showadd = allowadd;
+            shownoexpand = allownoexpand;
 
+            int pos = panelmargin;
             checkBoxCustomRefresh.Enabled = checkBoxCustomRefresh.Visible = showrefresh;
             checkBoxCustomRefresh.Checked = showrefreshstate;
-            checkBoxCustomRefresh.Location = new Point(panelmargin + ((checkBoxNoExpand.Enabled) ? 160 : 0), panelmargin);
+            checkBoxCustomRefresh.Location = new Point(pos, panelmargin);
 
             if (vbs != null)
             {
                 foreach (KeyValuePair<string, string> ky in vbs.values)
                 {
-                    CreateEntry(ky.Key, ky.Value);
+                    CreateEntry(ky.Key, ky.Value, (altops!= null) ? altops[ky.Key] : "=");
                 }
             }
 
             if ( groups.Count == 0 && showone )
             {
-                CreateEntry("", "");
+                CreateEntry("", "", "=");
             }
+
+            if (groups.Count >= 1)
+                groups[0].var.Focus();
         }
 
         private void ConditionVariablesFormResize(object sender, EventArgs e)
@@ -76,7 +84,7 @@ namespace EDDiscovery
             FixUpGroups(false); // don't recalc min size, it creates a loop
         }
 
-        public Group CreateEntry(string var, string value)
+        public Group CreateEntry(string var, string value, string op)
         {
             Group g = new Group();
 
@@ -88,10 +96,49 @@ namespace EDDiscovery
             g.var.Location = new Point(panelmargin, panelmargin);
             g.var.Text = var;
             g.panel.Controls.Add(g.var);
+            toolTip1.SetToolTip(g.var, "Variable name");
+
+            int nextpos = g.var.Right;
+
+            if (shownoexpand || showadd)
+            {
+                g.op = new ExtendedControls.ComboBoxCustom();
+                g.op.Size = new Size(50, 24);
+                g.op.Location = new Point(g.var.Right + 4, panelmargin);
+
+                string ttip="";
+                if (showadd && shownoexpand)
+                {
+                    g.op.Items.AddRange(new string[] { "=", "$=", "+=", "$+=" });
+                    ttip = "= assign, expand, $= assign, no expansion, += add, expand, $+= add, no expansion";
+                }
+                else if (showadd)
+                {
+                    g.op.Items.AddRange(new string[] { "=", "+=" });
+                    ttip = "= assign, expand, += add, expand";
+                }
+                else
+                {
+                    g.op.Items.AddRange(new string[] { "=", "$=" });
+                    ttip = "= assign, expand, $= add, no expansion";
+                }
+
+                toolTip1.SetToolTip(g.op, ttip);
+                toolTip1.SetToolTip(g.op.GetInternalSystemControl, ttip);
+
+                if (g.op.Items.Contains(op))
+                    g.op.SelectedItem = op;
+
+                g.panel.Controls.Add(g.op);
+
+                nextpos = g.op.Right;
+            }
+
 
             g.value = new ExtendedControls.TextBoxBorder();
-            g.value.Location = new Point(g.var.Location.X + g.var.Width + 8, panelmargin);
+            g.value.Location = new Point(nextpos + 4, panelmargin);
             g.value.Text = value;
+            toolTip1.SetToolTip(g.value, "Variable value");
             g.panel.Controls.Add(g.value);
 
             g.del = new ExtendedControls.ButtonExt();
@@ -99,6 +146,7 @@ namespace EDDiscovery
             g.del.Text = "X";
             g.del.Tag = g;
             g.del.Click += Del_Clicked;
+            toolTip1.SetToolTip(g.del, "Delete entry");
             g.panel.Controls.Add(g.del);
 
             groups.Add(g);
@@ -115,7 +163,7 @@ namespace EDDiscovery
         {
             int y = panelmargin;
 
-            if (checkBoxNoExpand.Enabled || checkBoxCustomRefresh.Enabled)
+            if (checkBoxCustomRefresh.Enabled)
                 y += 32;
 
             int panelwidth = Math.Max(panelVScroll1.Width - panelVScroll1.ScrollBarWidth, 10);
@@ -124,7 +172,7 @@ namespace EDDiscovery
             {
                 g.panel.Size = new Size(panelwidth-panelmargin*2, 32);
                 g.panel.Location = new Point(panelmargin, y);
-                g.value.Size = new Size(panelwidth-180, 24);
+                g.value.Size = new Size(panelwidth-180 - ((g.op!=null)?50:0), 24);
                 g.del.Location = new Point(g.value.Location.X + g.value.Width + 8, panelmargin);
                 y += g.panel.Height + 6;
             }
@@ -146,15 +194,16 @@ namespace EDDiscovery
         private void buttonOK_Click(object sender, EventArgs e)
         {
             result = new ConditionVariables();
+            result_altops = new Dictionary<string, string>();
+
             foreach ( Group g in groups)
             {
-                string var = g.var.Text;
-                string value = g.value.Text;
-                if (var.Length > 0)
-                    result[var] = value;
+                result[g.var.Text] = g.value.Text;
+
+                if (g.op != null)
+                    result_altops[g.var.Text] = g.op.Text;
             }
 
-            result_noexpand = checkBoxNoExpand.Checked;
             result_refresh = checkBoxCustomRefresh.Checked;
 
             DialogResult = DialogResult.OK;
@@ -181,7 +230,7 @@ namespace EDDiscovery
 
         private void buttonMore_Click(object sender, EventArgs e)
         {
-            CreateEntry("", "");
+            CreateEntry("", "","=");
         }
 
         #region Window Control

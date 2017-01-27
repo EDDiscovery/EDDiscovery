@@ -28,7 +28,7 @@ namespace EDDiscovery2
 
         bool IsActionsActive { get { return actionfilelist != null; } }
 
-        class Group : IComparable<Group>
+        class Group 
         {
             public Panel panel;
             public ExtendedControls.ButtonExt upbutton;
@@ -51,30 +51,54 @@ namespace EDDiscovery2
             };
 
             public List<Conditions> condlist = new List<Conditions>();
-
-            public int CompareTo(Group other)
-            {
-                if (other.evlist != null && evlist != null)
-                {
-                    int r = evlist.Text.CompareTo(other.evlist.Text);
-                    if (r == 0 && actionparas != null)
-                        r = actionparas.Text.CompareTo(other.actionparas.Text);
-                    if (r == 0 && condlist.Count > 0 && other.condlist.Count > 0)
-                        r = condlist[0].value.Text.CompareTo(other.condlist[0].value.Text);
-                    return r;
-                }
-                else if (condlist.Count > 0 && other.condlist.Count > 0)
-                    return condlist[0].fname.Text.CompareTo(other.condlist[0].fname.Text);
-                else
-                    return 1;
-            }
         };
 
+        class GroupSort1 : IComparer<Group>
+        {
+            public int Compare(Group our, Group other)
+            {
+                int r = 1;
+                if (other.evlist != null && our.evlist != null)
+                {
+                    r = our.evlist.Text.CompareTo(other.evlist.Text);
+                    if (r == 0 && our.actionparas != null)
+                        r = our.actionparas.Text.CompareTo(other.actionparas.Text);
+                    if (r == 0 && our.condlist.Count > 0 && other.condlist.Count > 0)
+                        r = our.condlist[0].value.Text.CompareTo(other.condlist[0].value.Text);
+                }
+                else if (our.condlist.Count > 0 && other.condlist.Count > 0)
+                    r= our.condlist[0].fname.Text.CompareTo(other.condlist[0].fname.Text);
+
+                return r;
+            }
+        }
+        class GroupSort2 : IComparer<Group>
+        {
+            public int Compare(Group our, Group other)
+            {
+                int r = 1;
+
+                if (other.evlist != null && our.evlist != null)
+                {
+                    r = our.evlist.Text.CompareTo(other.evlist.Text);
+                    if (r == 0 && our.condlist.Count > 0 && other.condlist.Count > 0)
+                        r = our.condlist[0].value.Text.CompareTo(other.condlist[0].value.Text);
+                    if (r == 0 && our.actionparas != null)
+                        r = our.actionparas.Text.CompareTo(other.actionparas.Text);
+                }
+                else if (our.condlist.Count > 0 && other.condlist.Count > 0)
+                    r = our.condlist[0].fname.Text.CompareTo(other.condlist[0].fname.Text);
+
+                return r;
+            }
+        }
+
         List<Group> groups;
-        public int condxoffset;
-        const int vscrollmargin = 10;
-        const int panelmargin = 3;
-        const int conditionhoff = 30;
+        public int condxoffset;     // where conditions start in x, estimate in Init
+
+        const int panelxmargin = 3;
+        const int panelymargin = 1;
+        const int conditionhoff = 26;
 
         public ConditionFilterForm()
         {
@@ -125,7 +149,7 @@ namespace EDDiscovery2
 
             // set up where a condition would start on the panel.. dep if the event list is on and the action file system is on..
             // sizes are the sizes of the controls and gaps
-            condxoffset = ((eventlist != null) ? (140 + 8) : 0) + ((actionfilelist != null) ? (140 + 8 + 24 + 8 + 96 + 8) : 0) + panelmargin + 8;
+            condxoffset = ((eventlist != null) ? (140 + 8) : 0) + ((actionfilelist != null) ? (140 + 8 + 24 + 8 + 96 + 8) : 0) + panelxmargin + 8;
 
             bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
@@ -193,7 +217,13 @@ namespace EDDiscovery2
 
         private void buttonSort_Click(object sender, EventArgs e) // sort button
         {
-            groups.Sort();
+            groups.Sort(new GroupSort1());
+            FixUpGroups();
+        }
+
+        private void buttonSort2_Click(object sender, EventArgs e)
+        {
+            groups.Sort(new GroupSort2());
             FixUpGroups();
         }
 
@@ -203,13 +233,12 @@ namespace EDDiscovery2
             Group g = new Group();
 
             g.panel = new Panel();
-            g.panel.BorderStyle = BorderStyle.FixedSingle;
 
             if (eventlist != null)
             {
                 g.evlist = new ExtendedControls.ComboBoxCustom();
                 g.evlist.Items.AddRange(eventlist);
-                g.evlist.Location = new Point(panelmargin, panelmargin);
+                g.evlist.Location = new Point(panelxmargin, panelymargin);
                 g.evlist.Size = new Size(140, 24);
                 g.evlist.DropDownHeight = 400;
                 if (initialev != null && initialev.Length > 0)
@@ -224,7 +253,7 @@ namespace EDDiscovery2
                 bool v = g.evlist.Text.Length > 0;
 
                 g.actionlist = new ExtendedControls.ComboBoxCustom();
-                g.actionlist.Location = new Point(g.evlist.Right + 8, panelmargin);
+                g.actionlist.Location = new Point(g.evlist.Right + 8, panelymargin);
                 g.actionlist.DropDownHeight = 400;
                 g.actionlist.Size = new Size(140, 24);
                 g.actionlist.Items.Add("New");
@@ -240,7 +269,7 @@ namespace EDDiscovery2
 
                 g.actionconfig = new ExtendedControls.ButtonExt();
                 g.actionconfig.Text = "P";
-                g.actionconfig.Location = new Point(g.actionlist.Right + 8, panelmargin);
+                g.actionconfig.Location = new Point(g.actionlist.Right + 8, panelymargin);
                 g.actionconfig.Size = new Size(24, 24);
                 g.actionconfig.Click += ActionListConfig_Clicked;
                 g.actionconfig.Visible = v;
@@ -249,7 +278,7 @@ namespace EDDiscovery2
 
                 g.actionparas = new ExtendedControls.TextBoxBorder();
                 g.actionparas.Text = (initialactiondatastring != null) ? initialactiondatastring : "";
-                g.actionparas.Location = new Point(g.actionconfig.Right + 8, panelmargin+2);
+                g.actionparas.Location = new Point(g.actionconfig.Right + 8, panelymargin+2);
                 g.actionparas.Size = new Size(96, 24);
                 g.actionparas.Visible = v;
                 g.actionparas.Tag = g;
@@ -302,7 +331,12 @@ namespace EDDiscovery2
             Group g = (Group)b.Tag;
 
             if ( g.condlist.Count == 0 )        // if no conditions, create one..
-                CreateCondition(g);
+            {
+                if ( g.evlist.Text.Equals("onKeyPress"))                    // special fill in for some events..
+                    CreateCondition(g,"KeyPress", "== (Str)","");
+                else
+                    CreateCondition(g);
+            }
 
             if (IsActionsActive)
                 g.actionconfig.Visible = g.actionlist.Visible = g.actionparas.Visible = true;        // enable action list visibility if its enabled.. enabled was set when created to see if its needed
@@ -324,16 +358,16 @@ namespace EDDiscovery2
 
         #region Condition
 
-        void CreateCondition(Group g )
+        void CreateCondition(Group g, string initialfname = null, string initialcond = null, string initialvalue = null )
         {
             SuspendLayout();
-            CreateConditionInt(g, null, null, null);
+            CreateConditionInt(g, initialfname, initialcond, initialvalue);
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             FixUpGroups();
             ResumeLayout();
         }
 
-        void CreateConditionInt( Group g , string initialfname, string initialcond, string initialvalue )
+        void CreateConditionInt( Group g , string initialfname, string initialcond, string initialvalue)
         {
             Group.Conditions c = new Group.Conditions();
 
@@ -431,7 +465,7 @@ namespace EDDiscovery2
             SuspendLayout();
 
             int panelwidth = Math.Max(panelVScroll.Width - panelVScroll.ScrollBarWidth, 10);
-            int y = panelmargin;
+            int y = panelymargin;
 
             for (int i = 0; i < groups.Count; i++)
             {
@@ -458,7 +492,7 @@ namespace EDDiscovery2
 
                 // Now position the conditions inside the panel
 
-                int vnextcond = panelmargin;
+                int vnextcond = panelymargin;
 
                 int farx = (g.evlist!= null) ? (g.evlist.Right-g.innercond.Width+8) : 0 ;   // innercond cause below adds it back on
 
@@ -489,28 +523,29 @@ namespace EDDiscovery2
                 // and the outer/inner conditions
 
                 g.innercond.Visible = (g.condlist.Count > 1);       // inner condition on if multiple
-                g.innercond.Location = new Point(farx, panelmargin);    // inner condition is in same place as more button
+                g.innercond.Location = new Point(farx, panelymargin);    // inner condition is in same place as more button
                 farx = g.innercond.Right + 4;                       // move off    
 
                 // and the up button.. 
-                g.upbutton.Location = new Point(farx, panelmargin);
+                g.upbutton.Location = new Point(farx, panelymargin);
                 g.upbutton.Visible = (i != 0);
                 farx = g.upbutton.Right;
 
                 // allocate space for the outercond if req.
                 if (g.outercond.Enabled)
                 {
-                    g.outercond.Location = new Point(panelmargin, vnextcond);
+                    g.outercond.Location = new Point(panelxmargin, vnextcond);
                     g.outerlabel.Location = new Point(g.outercond.Location.X + g.outercond.Width + 4, g.outercond.Location.Y + 3);
                     vnextcond += conditionhoff;
                 }
 
                 // pos the panel
 
-                g.panel.Location = new Point(panelmargin, y);
-                g.panel.Size = new Size(Math.Max(panelwidth - panelmargin * 2, farx), Math.Max(vnextcond, panelmargin + conditionhoff));
+                g.panel.Location = new Point(panelxmargin, y + panelVScroll.ScrollOffset);
+                g.panel.Size = new Size(Math.Max(panelwidth - panelxmargin * 2, farx), Math.Max(vnextcond, panelymargin + conditionhoff));
+                g.panel.BorderStyle = (g.condlist.Count > 1) ? BorderStyle.FixedSingle : BorderStyle.None;
 
-                y += g.panel.Height + 6;
+                y += g.panel.Height + 2;
 
                 // and make sure actions list is right
 
@@ -548,15 +583,14 @@ namespace EDDiscovery2
                 checkBoxCustomSetEnabled.Checked = actionfilelist.CurEnabled;
             }
 
-            buttonMore.Location = new Point(panelmargin, y);
-            buttonSort.Location = new Point(buttonMore.Right+8, y);
+            buttonMore.Location = new Point(panelxmargin, y + panelVScroll.ScrollOffset);
+            buttonSort.Location = new Point(buttonMore.Right + 8, y + panelVScroll.ScrollOffset);
+            buttonSort2.Location = new Point(buttonSort.Right + 8, y + panelVScroll.ScrollOffset);
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;
 
             y += buttonMore.Height + titleHeight + ((panelTop.Enabled) ? (panelTop.Height + statusStripCustom.Height) : 8) + 16 + panelOK.Height;
-
-            panelVScroll.RestateScroll();       // need to tell the bloody thing to reset the Y offset..
 
             if (calcminsize)
             {
@@ -738,7 +772,7 @@ namespace EDDiscovery2
         private void buttonExtGlobals_Click(object sender, EventArgs e)
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Global User variables to pass to program on run", theme, userglobalvariables, true);
+            avf.Init("Global User variables to pass to program on run", theme, userglobalvariables, showone:true);
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
@@ -1096,5 +1130,6 @@ namespace EDDiscovery2
 
         #endregion
 
+        
     }
 }
