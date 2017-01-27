@@ -51,7 +51,7 @@ namespace EDDiscovery
         #endregion
 
         #region History
-        void RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null);
+        bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null);
         void RefreshDisplays();
         void RecalculateHistoryDBs();
         #endregion
