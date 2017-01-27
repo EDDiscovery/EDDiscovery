@@ -635,7 +635,7 @@ namespace EDDiscovery2
                 int n = 2;
                 while (actionfilelist.CurPrograms.GetActionProgramList().Contains(suggestedname))
                 {
-                    suggestedname = g.evlist.Text + "_" + n.ToString();
+                    suggestedname = g.evlist.Text + "_" + n.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     n++;
                 }
 
@@ -870,7 +870,7 @@ namespace EDDiscovery2
                                     errorlist += "Cannot create filter '" + fieldn + "' in group '" + fe.eventname + "' check value" + Environment.NewLine;
                             }
                             else
-                                errorlist += "Ignored empty filter " + (i+1).ToString() + " in " + fe.eventname + Environment.NewLine;
+                                errorlist += "Ignored empty filter " + (i+1).ToString(System.Globalization.CultureInfo.InvariantCulture) + " in " + fe.eventname + Environment.NewLine;
                         }
 
                         if (fe.fields != null)

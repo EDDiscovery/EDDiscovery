@@ -44,7 +44,7 @@ namespace EDDiscovery.Actions
             }
 
             int i;
-            if (int.TryParse(delay, out i) && i >= 0)
+            if (delay.InvariantParse(out i) && i >= 0)
             {
                 if (t == null)
                 {

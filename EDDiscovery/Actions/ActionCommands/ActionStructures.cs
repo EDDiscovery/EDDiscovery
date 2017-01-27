@@ -271,7 +271,7 @@ namespace EDDiscovery.Actions
                     string res;
                     if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
                     {
-                        if (int.TryParse(res, out loopcount))
+                        if (res.InvariantParse(out loopcount))
                         {
                             counting = true;
                             ap.PushState(Type, (loopcount > 0), true);   // set execute to On (if loop count is >0) and push the position of the LOOP
@@ -303,8 +303,8 @@ namespace EDDiscovery.Actions
                     ap.Goto(ap.PushPos + 1);                    // back to LOOP+1, keep level
 
                     int c = 0;
-                    if (int.TryParse(ap.currentvars["Loop" + ap.ExecLevel], out c)) // update LOOP level variable.. don't if they have mucked it up
-                        ap.currentvars["Loop" + ap.ExecLevel] = (c + 1).ToString();
+                    if (ap.currentvars["Loop" + ap.ExecLevel].InvariantParse(out c)) // update LOOP level variable.. don't if they have mucked it up
+                        ap.currentvars["Loop" + ap.ExecLevel] = (c + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     return true;
                 }

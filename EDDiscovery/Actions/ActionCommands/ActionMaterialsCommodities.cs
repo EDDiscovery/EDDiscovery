@@ -50,7 +50,7 @@ namespace EDDiscovery.Actions
                 if (cmdname != null)
                 {
                     long jid;
-                    if (!long.TryParse(cmdname, out jid))
+                    if (!cmdname.InvariantParse(out jid))
                     {
                         ap.ReportError("Non integer JID in Materials/Commodity");
                         return true;
@@ -67,12 +67,12 @@ namespace EDDiscovery.Actions
                     EDDiscovery2.DB.MaterialCommoditiesList mcl = ap.historylist.EntryOrder[jidindex].MaterialCommodity;
                     List<EDDiscovery2.DB.MaterialCommodities> list = mcl.Sort(commodities);
 
-                    ap.currentvars[prefix + "Count"] = list.Count.ToString();
-                    ap.currentvars[prefix + "IndexOf"] = ap.historylist.EntryOrder[jidindex].Indexno.ToString();
+                    ap.currentvars[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap.currentvars[prefix + "IndexOf"] = ap.historylist.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     for ( int i = 0; i < list.Count; i++ )
                     {
-                        string postfix = (i + 1).ToString();
+                        string postfix = (i + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
                         ap.currentvars[prefix + "Name" + postfix] = list[i].name;
                         ap.currentvars[prefix + "Category" + postfix] = list[i].category;
                         ap.currentvars[prefix + "fdname" + postfix] = list[i].fdname;

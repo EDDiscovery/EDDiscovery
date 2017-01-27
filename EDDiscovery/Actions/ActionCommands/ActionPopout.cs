@@ -54,9 +54,9 @@ namespace EDDiscovery.Actions
                 }
                 else if (cmdname.Equals("Status", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    ap.currentvars[prefix + "Count"] = poc.Count.ToString();
+                    ap.currentvars[prefix + "Count"] = poc.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     for (int i = 0; i < poc.Count; i++)
-                        ap.currentvars[prefix + i.ToString()] = poc[i].Name;
+                        ap.currentvars[prefix + i.ToString(System.Globalization.CultureInfo.InvariantCulture)] = poc[i].Name;
                 }
                 else
                 {
@@ -79,10 +79,10 @@ namespace EDDiscovery.Actions
                             ap.currentvars[prefix + "DisplayTitle"] = ucf.displayTitle ? "1" : "0";
                             ap.currentvars[prefix + "ShowInTaskbar"] = ucf.ShowInTaskbar ? "1" : "0";
                             ap.currentvars[prefix + "WindowState"] = ucf.WindowState.ToString();
-                            ap.currentvars[prefix + "Top"] = ucf.Top.ToString();
-                            ap.currentvars[prefix + "Left"] = ucf.Left.ToString();
-                            ap.currentvars[prefix + "Width"] = ucf.Width.ToString();
-                            ap.currentvars[prefix + "Height"] = ucf.Height.ToString();
+                            ap.currentvars[prefix + "Top"] = ucf.Top.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            ap.currentvars[prefix + "Left"] = ucf.Left.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            ap.currentvars[prefix + "Width"] = ucf.Width.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            ap.currentvars[prefix + "Height"] = ucf.Height.ToString(System.Globalization.CultureInfo.InvariantCulture);
                         }
                     }
                     else if (ucf != null)        // found a panel with the name
