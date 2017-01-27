@@ -421,7 +421,7 @@ namespace EDDiscovery2
             return fgeimages;
         }
 
-        public static Task<bool> DownloadMaps(EDDiscoveryForm discoveryform, Action<Action> registerCancelCallback, Action<string> logLine, Action<string> logError)          // ASYNC process
+        public static Task<bool> DownloadMaps(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
         {
             if (EDDConfig.Instance.CanSkipSlowUpdates)
             {
