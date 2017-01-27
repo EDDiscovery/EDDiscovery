@@ -30,29 +30,30 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConditionFilterForm));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
-            this.panelOK = new System.Windows.Forms.Panel();
-            this.labelProgSet = new System.Windows.Forms.Label();
-            this.labelEditProg = new System.Windows.Forms.Label();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
+            this.buttonSort2 = new ExtendedControls.ButtonExt();
             this.buttonSort = new ExtendedControls.ButtonExt();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panelOK = new System.Windows.Forms.Panel();
             this.buttonImport = new ExtendedControls.ButtonExt();
             this.buttonExtGlobals = new ExtendedControls.ButtonExt();
             this.checkBoxCustomSetEnabled = new ExtendedControls.CheckBoxCustom();
             this.comboBoxCustomProgSet = new ExtendedControls.ComboBoxCustom();
             this.comboBoxCustomEditProg = new ExtendedControls.ComboBoxCustom();
+            this.labelProgSet = new System.Windows.Forms.Label();
+            this.labelEditProg = new System.Windows.Forms.Label();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panelTop.SuspendLayout();
             this.panelOuter.SuspendLayout();
-            this.panelOK.SuspendLayout();
             this.panelVScroll.SuspendLayout();
+            this.panelOK.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -66,131 +67,6 @@
             this.panelTop.Size = new System.Drawing.Size(890, 24);
             this.panelTop.TabIndex = 4;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
-            // 
-            // label_index
-            // 
-            this.label_index.AutoSize = true;
-            this.label_index.Location = new System.Drawing.Point(3, 8);
-            this.label_index.Name = "label_index";
-            this.label_index.Size = new System.Drawing.Size(27, 13);
-            this.label_index.TabIndex = 23;
-            this.label_index.Text = "N/A";
-            this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
-            // 
-            // panelOuter
-            // 
-            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelOuter.Controls.Add(this.panelVScroll);
-            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(3, 24);
-            this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(890, 400);
-            this.panelOuter.TabIndex = 8;
-            // 
-            // panelOK
-            // 
-            this.panelOK.Controls.Add(this.buttonImport);
-            this.panelOK.Controls.Add(this.buttonExtGlobals);
-            this.panelOK.Controls.Add(this.checkBoxCustomSetEnabled);
-            this.panelOK.Controls.Add(this.comboBoxCustomProgSet);
-            this.panelOK.Controls.Add(this.comboBoxCustomEditProg);
-            this.panelOK.Controls.Add(this.labelProgSet);
-            this.panelOK.Controls.Add(this.labelEditProg);
-            this.panelOK.Controls.Add(this.buttonCancel);
-            this.panelOK.Controls.Add(this.buttonOK);
-            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(3, 424);
-            this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(890, 30);
-            this.panelOK.TabIndex = 8;
-            // 
-            // labelProgSet
-            // 
-            this.labelProgSet.AutoSize = true;
-            this.labelProgSet.Location = new System.Drawing.Point(4, 7);
-            this.labelProgSet.Name = "labelProgSet";
-            this.labelProgSet.Size = new System.Drawing.Size(23, 13);
-            this.labelProgSet.TabIndex = 8;
-            this.labelProgSet.Text = "Set";
-            // 
-            // labelEditProg
-            // 
-            this.labelEditProg.AutoSize = true;
-            this.labelEditProg.Location = new System.Drawing.Point(298, 7);
-            this.labelEditProg.Name = "labelEditProg";
-            this.labelEditProg.Size = new System.Drawing.Size(46, 13);
-            this.labelEditProg.TabIndex = 8;
-            this.labelEditProg.Text = "Program";
-            // 
-            // panelVScroll
-            // 
-            this.panelVScroll.Controls.Add(this.buttonSort);
-            this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
-            this.panelVScroll.Controls.Add(this.buttonMore);
-            this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelVScroll.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.panelVScroll.Location = new System.Drawing.Point(0, 0);
-            this.panelVScroll.Name = "panelVScroll";
-            this.panelVScroll.ScrollBarWidth = 20;
-            this.panelVScroll.Size = new System.Drawing.Size(888, 398);
-            this.panelVScroll.TabIndex = 8;
-            this.panelVScroll.VerticalScrollBarDockRight = true;
-            this.panelVScroll.Resize += new System.EventHandler(this.panelVScroll_Resize);
-            // 
-            // buttonSort
-            // 
-            this.buttonSort.BorderColorScaling = 1.25F;
-            this.buttonSort.ButtonColorScaling = 0.5F;
-            this.buttonSort.ButtonDisabledScaling = 0.5F;
-            this.buttonSort.Location = new System.Drawing.Point(44, 6);
-            this.buttonSort.Name = "buttonSort";
-            this.buttonSort.Size = new System.Drawing.Size(45, 23);
-            this.buttonSort.TabIndex = 6;
-            this.buttonSort.Text = "Sort";
-            this.buttonSort.UseVisualStyleBackColor = true;
-            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
-            // 
-            // vScrollBarCustom1
-            // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = false;
-            this.vScrollBarCustom1.LargeChange = 10;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(868, 0);
-            this.vScrollBarCustom1.Maximum = -354;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 398);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 0;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -354;
-            this.vScrollBarCustom1.ValueLimited = -354;
-            // 
-            // buttonMore
-            // 
-            this.buttonMore.BorderColorScaling = 1.25F;
-            this.buttonMore.ButtonColorScaling = 0.5F;
-            this.buttonMore.ButtonDisabledScaling = 0.5F;
-            this.buttonMore.Location = new System.Drawing.Point(6, 6);
-            this.buttonMore.Name = "buttonMore";
-            this.buttonMore.Size = new System.Drawing.Size(24, 24);
-            this.buttonMore.TabIndex = 5;
-            this.buttonMore.Text = "+";
-            this.buttonMore.UseVisualStyleBackColor = true;
-            this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
             // panel_close
             // 
@@ -227,6 +103,127 @@
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 26;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            // 
+            // label_index
+            // 
+            this.label_index.AutoSize = true;
+            this.label_index.Location = new System.Drawing.Point(3, 8);
+            this.label_index.Name = "label_index";
+            this.label_index.Size = new System.Drawing.Size(27, 13);
+            this.label_index.TabIndex = 23;
+            this.label_index.Text = "N/A";
+            this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            // 
+            // panelOuter
+            // 
+            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.panelVScroll);
+            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelOuter.Location = new System.Drawing.Point(3, 24);
+            this.panelOuter.Name = "panelOuter";
+            this.panelOuter.Size = new System.Drawing.Size(890, 400);
+            this.panelOuter.TabIndex = 8;
+            // 
+            // panelVScroll
+            // 
+            this.panelVScroll.Controls.Add(this.buttonSort2);
+            this.panelVScroll.Controls.Add(this.buttonSort);
+            this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
+            this.panelVScroll.Controls.Add(this.buttonMore);
+            this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelVScroll.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.panelVScroll.Location = new System.Drawing.Point(0, 0);
+            this.panelVScroll.Name = "panelVScroll";
+            this.panelVScroll.ScrollBarWidth = 20;
+            this.panelVScroll.Size = new System.Drawing.Size(888, 398);
+            this.panelVScroll.TabIndex = 8;
+            this.panelVScroll.VerticalScrollBarDockRight = true;
+            this.panelVScroll.Resize += new System.EventHandler(this.panelVScroll_Resize);
+            // 
+            // buttonSort2
+            // 
+            this.buttonSort2.BorderColorScaling = 1.25F;
+            this.buttonSort2.ButtonColorScaling = 0.5F;
+            this.buttonSort2.ButtonDisabledScaling = 0.5F;
+            this.buttonSort2.Location = new System.Drawing.Point(95, 7);
+            this.buttonSort2.Name = "buttonSort2";
+            this.buttonSort2.Size = new System.Drawing.Size(45, 23);
+            this.buttonSort2.TabIndex = 6;
+            this.buttonSort2.Text = "Sort2";
+            this.buttonSort2.UseVisualStyleBackColor = true;
+            this.buttonSort2.Click += new System.EventHandler(this.buttonSort2_Click);
+            // 
+            // buttonSort
+            // 
+            this.buttonSort.BorderColorScaling = 1.25F;
+            this.buttonSort.ButtonColorScaling = 0.5F;
+            this.buttonSort.ButtonDisabledScaling = 0.5F;
+            this.buttonSort.Location = new System.Drawing.Point(44, 6);
+            this.buttonSort.Name = "buttonSort";
+            this.buttonSort.Size = new System.Drawing.Size(45, 23);
+            this.buttonSort.TabIndex = 6;
+            this.buttonSort.Text = "Sort";
+            this.buttonSort.UseVisualStyleBackColor = true;
+            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
+            // 
+            // vScrollBarCustom1
+            // 
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = false;
+            this.vScrollBarCustom1.LargeChange = 50;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(868, 0);
+            this.vScrollBarCustom1.Maximum = -354;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 398);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 0;
+            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = -354;
+            this.vScrollBarCustom1.ValueLimited = -354;
+            // 
+            // buttonMore
+            // 
+            this.buttonMore.BorderColorScaling = 1.25F;
+            this.buttonMore.ButtonColorScaling = 0.5F;
+            this.buttonMore.ButtonDisabledScaling = 0.5F;
+            this.buttonMore.Location = new System.Drawing.Point(6, 6);
+            this.buttonMore.Name = "buttonMore";
+            this.buttonMore.Size = new System.Drawing.Size(24, 24);
+            this.buttonMore.TabIndex = 5;
+            this.buttonMore.Text = "+";
+            this.buttonMore.UseVisualStyleBackColor = true;
+            this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
+            // 
+            // panelOK
+            // 
+            this.panelOK.Controls.Add(this.buttonImport);
+            this.panelOK.Controls.Add(this.buttonExtGlobals);
+            this.panelOK.Controls.Add(this.checkBoxCustomSetEnabled);
+            this.panelOK.Controls.Add(this.comboBoxCustomProgSet);
+            this.panelOK.Controls.Add(this.comboBoxCustomEditProg);
+            this.panelOK.Controls.Add(this.labelProgSet);
+            this.panelOK.Controls.Add(this.labelEditProg);
+            this.panelOK.Controls.Add(this.buttonCancel);
+            this.panelOK.Controls.Add(this.buttonOK);
+            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelOK.Location = new System.Drawing.Point(3, 424);
+            this.panelOK.Name = "panelOK";
+            this.panelOK.Size = new System.Drawing.Size(890, 30);
+            this.panelOK.TabIndex = 8;
             // 
             // buttonImport
             // 
@@ -324,6 +321,24 @@
             this.comboBoxCustomEditProg.ValueMember = "";
             this.comboBoxCustomEditProg.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomEditProg_SelectedIndexChanged);
             // 
+            // labelProgSet
+            // 
+            this.labelProgSet.AutoSize = true;
+            this.labelProgSet.Location = new System.Drawing.Point(4, 7);
+            this.labelProgSet.Name = "labelProgSet";
+            this.labelProgSet.Size = new System.Drawing.Size(23, 13);
+            this.labelProgSet.TabIndex = 8;
+            this.labelProgSet.Text = "Set";
+            // 
+            // labelEditProg
+            // 
+            this.labelEditProg.AutoSize = true;
+            this.labelEditProg.Location = new System.Drawing.Point(298, 7);
+            this.labelEditProg.Name = "labelEditProg";
+            this.labelEditProg.Size = new System.Drawing.Size(46, 13);
+            this.labelEditProg.TabIndex = 8;
+            this.labelEditProg.Text = "Program";
+            // 
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -377,9 +392,9 @@
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelOuter.ResumeLayout(false);
+            this.panelVScroll.ResumeLayout(false);
             this.panelOK.ResumeLayout(false);
             this.panelOK.PerformLayout();
-            this.panelVScroll.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -407,5 +422,6 @@
         private ExtendedControls.ButtonExt buttonExtGlobals;
         private ExtendedControls.ButtonExt buttonImport;
         private ExtendedControls.ButtonExt buttonSort;
+        private ExtendedControls.ButtonExt buttonSort2;
     }
 }

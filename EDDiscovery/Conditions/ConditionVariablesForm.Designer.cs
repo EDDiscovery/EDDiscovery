@@ -43,6 +43,7 @@ namespace EDDiscovery
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConditionVariablesForm));
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
@@ -54,10 +55,10 @@ namespace EDDiscovery
             this.panelOK = new System.Windows.Forms.Panel();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll1 = new ExtendedControls.PanelVScroll();
-            this.checkBoxNoExpand = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomRefresh = new ExtendedControls.CheckBoxCustom();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.checkBoxCustomRefresh = new ExtendedControls.CheckBoxCustom();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -181,7 +182,6 @@ namespace EDDiscovery
             // panelVScroll1
             // 
             this.panelVScroll1.Controls.Add(this.checkBoxCustomRefresh);
-            this.panelVScroll1.Controls.Add(this.checkBoxNoExpand);
             this.panelVScroll1.Controls.Add(this.vScrollBarCustom2);
             this.panelVScroll1.Controls.Add(this.buttonMore);
             this.panelVScroll1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -192,64 +192,6 @@ namespace EDDiscovery
             this.panelVScroll1.Size = new System.Drawing.Size(641, 290);
             this.panelVScroll1.TabIndex = 8;
             this.panelVScroll1.VerticalScrollBarDockRight = true;
-            // 
-            // checkBoxNoExpand
-            // 
-            this.checkBoxNoExpand.AutoSize = true;
-            this.checkBoxNoExpand.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxNoExpand.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxNoExpand.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxNoExpand.FontNerfReduction = 0.5F;
-            this.checkBoxNoExpand.Location = new System.Drawing.Point(5, 82);
-            this.checkBoxNoExpand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxNoExpand.Name = "checkBoxNoExpand";
-            this.checkBoxNoExpand.Size = new System.Drawing.Size(90, 17);
-            this.checkBoxNoExpand.TabIndex = 6;
-            this.checkBoxNoExpand.Text = "Don\'t Expand";
-            this.checkBoxNoExpand.TickBoxReductionSize = 10;
-            this.checkBoxNoExpand.UseVisualStyleBackColor = true;
-            // 
-            // vScrollBarCustom2
-            // 
-            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom2.HideScrollBar = false;
-            this.vScrollBarCustom2.LargeChange = 10;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(621, 0);
-            this.vScrollBarCustom2.Maximum = -177;
-            this.vScrollBarCustom2.Minimum = 0;
-            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 290);
-            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom2.SmallChange = 1;
-            this.vScrollBarCustom2.TabIndex = 0;
-            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
-            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -177;
-            this.vScrollBarCustom2.ValueLimited = -177;
-            // 
-            // buttonMore
-            // 
-            this.buttonMore.BorderColorScaling = 1.25F;
-            this.buttonMore.ButtonColorScaling = 0.5F;
-            this.buttonMore.ButtonDisabledScaling = 0.5F;
-            this.buttonMore.Location = new System.Drawing.Point(6, 6);
-            this.buttonMore.Name = "buttonMore";
-            this.buttonMore.Size = new System.Drawing.Size(24, 24);
-            this.buttonMore.TabIndex = 5;
-            this.buttonMore.Text = "+";
-            this.buttonMore.UseVisualStyleBackColor = true;
-            this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
             // checkBoxCustomRefresh
             // 
@@ -265,7 +207,55 @@ namespace EDDiscovery
             this.checkBoxCustomRefresh.TabIndex = 6;
             this.checkBoxCustomRefresh.Text = "Run at refresh";
             this.checkBoxCustomRefresh.TickBoxReductionSize = 10;
+            this.toolTip1.SetToolTip(this.checkBoxCustomRefresh, "Click to indicate that this event can run during the refresh cycle");
             this.checkBoxCustomRefresh.UseVisualStyleBackColor = true;
+            // 
+            // vScrollBarCustom2
+            // 
+            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom2.HideScrollBar = false;
+            this.vScrollBarCustom2.LargeChange = 10;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(621, 0);
+            this.vScrollBarCustom2.Maximum = -211;
+            this.vScrollBarCustom2.Minimum = 0;
+            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 290);
+            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SmallChange = 1;
+            this.vScrollBarCustom2.TabIndex = 0;
+            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
+            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom2.Value = -211;
+            this.vScrollBarCustom2.ValueLimited = -211;
+            // 
+            // buttonMore
+            // 
+            this.buttonMore.BorderColorScaling = 1.25F;
+            this.buttonMore.ButtonColorScaling = 0.5F;
+            this.buttonMore.ButtonDisabledScaling = 0.5F;
+            this.buttonMore.Location = new System.Drawing.Point(6, 6);
+            this.buttonMore.Name = "buttonMore";
+            this.buttonMore.Size = new System.Drawing.Size(24, 24);
+            this.buttonMore.TabIndex = 5;
+            this.buttonMore.Text = "+";
+            this.toolTip1.SetToolTip(this.buttonMore, "Add more variables");
+            this.buttonMore.UseVisualStyleBackColor = true;
+            this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // ConditionVariablesForm
             // 
@@ -307,7 +297,7 @@ namespace EDDiscovery
         private ExtendedControls.PanelVScroll panelVScroll1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private ExtendedControls.ButtonExt buttonMore;
-        private ExtendedControls.CheckBoxCustom checkBoxNoExpand;
         private ExtendedControls.CheckBoxCustom checkBoxCustomRefresh;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

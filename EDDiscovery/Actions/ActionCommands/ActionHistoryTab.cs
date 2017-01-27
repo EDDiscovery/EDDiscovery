@@ -27,24 +27,9 @@ namespace EDDiscovery.Actions
             string res;
             if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
-                HistoryList hl = ap.historylist;
                 StringParser sp = new StringParser(res);
-                string prefix = "HT_";
 
                 string cmdname = sp.NextWord();
-
-                if (cmdname != null && cmdname.Equals("PREFIX", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    prefix = sp.NextWord();
-
-                    if (prefix == null)
-                    {
-                        ap.ReportError("Missing name after Prefix in Historytab");
-                        return true;
-                    }
-
-                    cmdname = sp.NextWord();
-                }
 
                 if (cmdname == null)
                 {
@@ -77,7 +62,7 @@ namespace EDDiscovery.Actions
                                     ap.ReportError("Panel " + nextcmd + " cannot be used in Historytab");
                             }
                             else
-                                ap.ReportError("Cannot find generic popout name " + nextcmd + " in Popout");
+                                ap.ReportError("Cannot find generic panel type name " + nextcmd + " in Historytab");
                         }
                     }
                     else

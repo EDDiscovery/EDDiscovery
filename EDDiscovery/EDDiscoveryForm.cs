@@ -1170,6 +1170,7 @@ namespace EDDiscovery
                 Console.WriteLine("Close.. safe close launched");
                 safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
                 safeClose.Start();
+                Actions.ActionSay.KillSpeech();
             }
             else if (safeClose.IsAlive)   // still working, cancel again..
             {
@@ -1291,9 +1292,7 @@ namespace EDDiscovery
 
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
-            frm.Show();
+            Open2DMap();
         }
 
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1545,6 +1544,15 @@ namespace EDDiscovery
                         settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
                         settings.MapZoom, history.FilterByTravel);
             Map.Show();
+            this.Cursor = Cursors.Default;
+        }
+
+        public void Open2DMap()
+        {
+            this.Cursor = Cursors.WaitCursor;
+            FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
+            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
+            frm.Show();
             this.Cursor = Cursors.Default;
         }
 

@@ -263,7 +263,7 @@ namespace EDDiscovery.EliteDangerous
                     return atm;
             }
 
-            System.Diagnostics.Trace.WriteLine("atm: " + v);
+           // System.Diagnostics.Trace.WriteLine("atm: " + v);
 
             return EDAtmosphereType.Unknown;
         }

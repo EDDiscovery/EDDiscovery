@@ -193,6 +193,7 @@
     <Compile Include="Actions\ActionCommands\ActionHistoryTab.cs" />
     <Compile Include="Actions\ActionCommands\ActionLedger.cs" />
     <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPerform.cs" />
     <Compile Include="Actions\ActionCommands\ActionPopout.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
     <Compile Include="Actions\ActionCommands\ActionScan.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Forms\ImportSphere.Designer.cs">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
+    <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>

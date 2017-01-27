@@ -54,14 +54,21 @@ namespace EDDiscovery
         }
 
 
-        public override string ToString()
+        public string ToString(Dictionary<string,string> altops = null, string pad = "")
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
             {
                 if (s.Length > 0)
                     s += ",";
-                s += v.Key + "=" + v.Value.QuotedEscapeString();
+
+                if ( altops == null )
+                    s += v.Key + pad + "=" + pad + v.Value.QuotedEscapeString();
+                else
+                {
+                    System.Diagnostics.Debug.Assert(altops.ContainsKey(v.Key));
+                    s += v.Key + pad + altops[v.Key] + pad + v.Value.QuotedEscapeString();
+                }
             }
 
             return s;
@@ -75,14 +82,51 @@ namespace EDDiscovery
             return FromString(p, fm);
         }
 
-        public bool FromString(StringParser p, FromMode fm, List<string> namelimit = null, bool fixnamecase = false)
+        public bool FromString(StringParser p, FromMode fm, List<string> namelimit = null, bool fixnamecase = false , Dictionary<string,string> altops = null )
         {
             Dictionary<string, string> newvars = new Dictionary<string, string>();
 
             while (!p.IsEOL)
             {
                 string varname = p.NextQuotedWord( "= ");
-                if (varname == null || !p.IsCharMoveOn('='))
+
+                if (varname == null)
+                    return false;
+
+                if (altops!=null)            // with extended ops, the ops are returned in the altops function, one per variable found
+                {                           // used only with let and set..
+                    if (varname.EndsWith("$+"))
+                    {
+                        varname = varname.Substring(0, varname.Length - 2);
+                        altops[varname] = "$+=";
+                    }
+                    else if (varname.EndsWith("$"))
+                    {
+                        varname = varname.Substring(0, varname.Length - 1);
+                        altops[varname] = "$=";
+                    }
+                    else if (varname.EndsWith("+"))
+                    {
+                        varname = varname.Substring(0, varname.Length - 1);
+                        altops[varname] = "+=";
+                    }
+                    else
+                    {                                           
+                        altops[varname] = "=";              // varname is good, it ended with a = or space, default is =
+
+                        bool dollar = p.IsCharMoveOn('$'); // check for varname space $+
+                        bool add = p.IsCharMoveOn('+');
+
+                        if (dollar && add)
+                            altops[varname] = "$+=";
+                        else if ( dollar )
+                            altops[varname] = "$=";
+                        else if ( add )
+                            altops[varname] = "+=";
+                    }
+                }
+
+                if (!p.IsCharMoveOn('='))
                     return false;
 
                 if (fixnamecase)
