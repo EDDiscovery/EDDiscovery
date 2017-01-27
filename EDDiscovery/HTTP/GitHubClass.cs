@@ -31,15 +31,16 @@ namespace EDDiscovery
 {
     public class GitHubClass : HttpCom
     {
+        private EDDiscoveryForm discoveryform;
         public string commanderName;
 
         private readonly string fromSoftwareVersion;
         //        private readonly string fromSoftware;
         private readonly string githubServer = "https://api.github.com/repos/EDDiscovery/EDDiscovery/";
 
-        public GitHubClass()
+        public GitHubClass(EDDiscoveryForm eddiscoveryform)
         {
-            //            fromSoftware = "EDDiscovery";
+            discoveryform = eddiscoveryform;
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
             commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
@@ -141,6 +142,9 @@ namespace EDDiscovery
 
         public bool DownloadFiles(List<GitHubFile> files, string DestinationDir)
         {
+            if (files == null)
+                return true;
+
             foreach (var file in files)
                 if (!DownloadFile(file, DestinationDir))
                     return false;
@@ -204,6 +208,7 @@ namespace EDDiscovery
             // download.....
             try
             {
+                if (discoveryform!=null) discoveryform.LogLine("Download github file " + file.Name);
                 WriteLog("Download github file " + file.Name, "");
                 string destFile = Path.Combine(DestinationDir, file.Name);
 
@@ -231,6 +236,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
+                if (discoveryform!=null)   discoveryform.LogLine(("GitHub DownloadFile Exception" + ex.Message));
                 WriteLog("GitHub DownloadFile Exception" + ex.Message, "");
                 return false;
             }
