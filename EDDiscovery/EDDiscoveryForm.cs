@@ -292,7 +292,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
             _checkSystemsWorker.RunWorkerAsync();
-            downloadMapsTask = FGEImage.DownloadMaps(this, (cb) => cancelDownloadMaps = cb, LogLine, LogLineHighlight);
+            downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
 
             if (!themeok)
             {
