@@ -746,8 +746,7 @@ namespace EDDiscovery.EliteDangerous
             return vsc;
         }
 
-        public static T GetLast<T>(int cmdrid, DateTime before)
-            where T : JournalEntry
+        public static JournalEntry GetLast(int cmdrid, DateTime before, Func<JournalEntry, bool> filter)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
@@ -760,9 +759,9 @@ namespace EDDiscovery.EliteDangerous
                         while (reader.Read())
                         {
                             JournalEntry ent = CreateJournalEntry(reader);
-                            if (ent is T)
+                            if (filter(ent))
                             {
-                                return (T)ent;
+                                return ent;
                             }
                         }
                     }
@@ -770,6 +769,12 @@ namespace EDDiscovery.EliteDangerous
             }
 
             return null;
+        }
+
+        public static T GetLast<T>(int cmdrid, DateTime before)
+            where T : JournalEntry
+        {
+            return (T)GetLast(cmdrid, before, e => e is T);
         }
 
         public static void RemoveGeneratedKeys(JObject obj, bool removeLocalised)

@@ -697,4 +697,31 @@
   <data name="ImportHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ImportHelp.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="URLeddb" xml:space="preserve">
+    <value>https://eddb.io/</value>
+  </data>
+  <data name="URLEDHomepage" xml:space="preserve">
+    <value>https://www.elitedangerous.com/</value>
+  </data>
+  <data name="URLedsm" xml:space="preserve">
+    <value>https://www.edsm.net/</value>
+  </data>
+  <data name="URLProjectDiscord" xml:space="preserve">
+    <value>https://discordapp.com/invite/0qIqfCQbziTWzsQu</value>
+  </data>
+  <data name="URLProjectEDForumPost" xml:space="preserve">
+    <value>https://forums.frontier.co.uk/showthread.php?t=138155&amp;amp;p=2113535#post2113535</value>
+  </data>
+  <data name="URLProjectFeedback" xml:space="preserve">
+    <value>https://github.com/EDDiscovery/EDDiscovery/issues</value>
+  </data>
+  <data name="URLProjectGithub" xml:space="preserve">
+    <value>https://github.com/EDDiscovery/EDDiscovery</value>
+  </data>
+  <data name="URLProjectLicense" xml:space="preserve">
+    <value>https://github.com/EDDiscovery/EDDiscovery/blob/master/LICENSE.md</value>
+  </data>
+  <data name="URLProjectWiki" xml:space="preserve">
+    <value>https://github.com/EDDiscovery/EDDiscovery/wiki</value>
+  </data>
 </root>
