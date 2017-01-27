@@ -99,6 +99,8 @@ namespace EDDiscovery
         public event HistoryChange OnHistoryChange;
         public delegate void NewEntry(HistoryEntry l, HistoryList hl);
         public event NewEntry OnNewEntry;
+        public delegate void NewJournalEntry(JournalEntry je);
+        public event NewJournalEntry OnNewJournalEntry;
         public delegate void NewLogEntry(string txt, Color c);
         public event NewLogEntry OnNewLogEntry;
         public delegate void NewTarget();
@@ -1240,7 +1242,7 @@ namespace EDDiscovery
 
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://forums.frontier.co.uk/showthread.php?t=138155&p=2113535#post2113535");
+            Process.Start(Properties.Resources.URLProjectEDForumPost);
         }
 
         private void eDDiscoveryFGESupportThreadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1250,7 +1252,7 @@ namespace EDDiscovery
 
         private void eDDiscoveryHomepageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery/wiki");
+            Process.Start(Properties.Resources.URLProjectWiki);
         }
 
         private void openEliteDangerousDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1322,12 +1324,12 @@ namespace EDDiscovery
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery");
+            Process.Start(Properties.Resources.URLProjectGithub);
         }
 
         private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
+            Process.Start(Properties.Resources.URLProjectFeedback);
         }
 
         internal void keepOnTopChanged(bool keepOnTop)
@@ -1381,7 +1383,7 @@ namespace EDDiscovery
 
         private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
+            Process.Start(Properties.Resources.URLProjectDiscord);
         }
 
         private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2001,6 +2003,11 @@ namespace EDDiscovery
                     OnNewEntry(he, history);
 
                 ActionRunOnEntry(he, "NewEntry");
+            }
+
+            if (OnNewJournalEntry != null)
+            {
+                OnNewJournalEntry(je);
             }
 
             travelHistoryControl1.LoadCommandersListBox();  // because we may have new commanders
