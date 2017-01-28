@@ -185,7 +185,7 @@ namespace EDDiscovery
             private int ColumnIndex;
             private SortOrder OrderOfSort;
             private DataGridView myDataGridView;
-            private TypeCode mySortTypeCode;
+            //private TypeCode mySortTypeCode;
 
             public DataGridViewCustomSorter2(DataGridView dgv)
             {

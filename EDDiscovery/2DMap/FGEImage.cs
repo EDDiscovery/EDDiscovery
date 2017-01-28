@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery;
+using System.Threading.Tasks;
 
 namespace EDDiscovery2
 {
@@ -294,7 +295,7 @@ namespace EDDiscovery2
                 foreach (FileInfo fi in allFiles)
                 {
                     JObject pfile = null;
-                    string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(fi.FullName);
+                    string json = Tools.TryReadAllTextFromFile(fi.FullName);
 
                     if (json != null)
                     {
@@ -418,6 +419,124 @@ namespace EDDiscovery2
             }
 
             return fgeimages;
+        }
+
+        public static Task<bool> DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
+        {
+            if (EDDConfig.Instance.CanSkipSlowUpdates)
+            {
+                logLine("Skipping checking for new maps (DEBUG option).");
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetResult(false);
+                return tcs.Task;
+            }
+
+            try
+            {
+                string mapsdir = Path.Combine(Tools.GetAppDataDirectory(), "Maps");
+                if (!Directory.Exists(mapsdir))
+                    Directory.CreateDirectory(mapsdir);
+
+                logLine("Checking for new EDDiscovery maps");
+
+                GitHubClass github = new GitHubClass(discoveryform);
+
+                var files = github.GetDataFiles("Maps/V1");
+                return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
+
+                /*
+                DeleteMapFile("DW4.png", logLine);
+                DeleteMapFile("SC-00.jpg", logLine);
+                return DownloadMapFiles(new[]
+                {
+                    "SC-01.jpg",
+                    "SC-02.jpg",
+                    "SC-03.jpg",
+                    "SC-04.jpg",
+                    "SC-L4.jpg",
+                    "SC-U4.jpg",
+                    "SC-00.png",
+                    "SC-00.json",
+                    "Galaxy_L.jpg",
+                    "Galaxy_L.json",
+                    "Galaxy_L_Grid.jpg",
+                    "Galaxy_L_Grid.json",
+                    "DW1.jpg",
+                    "DW1.json",
+                    "DW2.jpg",
+                    "DW2.json",
+                    "DW3.jpg",
+                    "DW3.json",
+                    "DW4.jpg",
+                    "DW4.json",
+                    "Formidine.png",
+                    "Formidine.json",
+                    "Formidine trans.png",
+                    "Formidine trans.json"
+                },
+                (s) => logLine("Map check complete."),
+                cancelRequested,
+                logLine);
+                */
+            }
+            catch (Exception ex)
+            {
+                logError("DownloadImages exception: " + ex.Message);
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetException(ex);
+                return tcs.Task;
+            }
+        }
+
+        private static Task<bool> DownloadMapFiles(string[] files, Action<bool> callback, Func<bool> cancelRequested, Action<string> logLine)
+        {
+            List<Task<bool>> tasks = new List<Task<bool>>();
+            foreach (string file in files)
+            {
+                var task = EDDiscovery2.HTTP.DownloadFileHandler.BeginDownloadFile(
+                    "http://eddiscovery.astronet.se/Maps/" + file,
+                    Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
+                    (n) =>
+                    {
+                        if (n) logLine("Downloaded map: " + file);
+                    }, cancelRequested);
+                tasks.Add(task);
+            }
+
+            return Task<bool>.Factory.ContinueWhenAll<bool>(tasks.ToArray(), (ta) =>
+            {
+                bool success = ta.All(t => t.IsCompleted && t.Result);
+                callback(success);
+                return success;
+            });
+        }
+
+        private static bool DownloadMapFile(string file, Action<string> logLine)
+        {
+            bool newfile = false;
+            if (EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
+            {
+                if (newfile)
+                    logLine("Downloaded map: " + file);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private static void DeleteMapFile(string file, Action<string> logLine)
+        {
+            string filename = Path.Combine(Tools.GetAppDataDirectory(), "Maps", file);
+
+            try
+            {
+                if (File.Exists(filename))
+                    File.Delete(filename);
+            }
+            catch (Exception ex)
+            {
+                logLine("Exception in DeleteMapFile:" + ex.Message);
+            }
         }
     }
 }

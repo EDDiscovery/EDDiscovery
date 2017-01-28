@@ -81,10 +81,7 @@ namespace EDDiscovery
             this.labelPanelText = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this._syncWorker = new System.ComponentModel.BackgroundWorker();
-            this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
-            this._refreshWorker = new System.ComponentModel.BackgroundWorker();
             this.helpMenuSeparatorTop = new System.Windows.Forms.ToolStripSeparator();
             this.helpMenuSeparatorBottom = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
@@ -443,34 +440,10 @@ namespace EDDiscovery
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
             // 
-            // _syncWorker
-            // 
-            this._syncWorker.WorkerReportsProgress = true;
-            this._syncWorker.WorkerSupportsCancellation = true;
-            this._syncWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._syncWorker_DoWork);
-            this._syncWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._syncWorker_ProgressChanged);
-            this._syncWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._syncWorker_RunWorkerCompleted);
-            // 
-            // _checkSystemsWorker
-            // 
-            this._checkSystemsWorker.WorkerReportsProgress = true;
-            this._checkSystemsWorker.WorkerSupportsCancellation = true;
-            this._checkSystemsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._checkSystemsWorker_DoWork);
-            this._checkSystemsWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._checkSystemsWorker_ProgressChanged);
-            this._checkSystemsWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._checkSystemsWorker_RunWorkerCompleted);
-            // 
             // edsmRefreshTimer
             // 
             this.edsmRefreshTimer.Interval = 3600000;
             this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
-            // 
-            // _refreshWorker
-            // 
-            this._refreshWorker.WorkerReportsProgress = true;
-            this._refreshWorker.WorkerSupportsCancellation = true;
-            this._refreshWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RefreshHistoryWorker);
-            this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
-            this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
             // 
             // helpMenuSeparatorTop
             // 
@@ -866,12 +839,9 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.ComponentModel.BackgroundWorker _syncWorker;
-        private System.ComponentModel.BackgroundWorker _checkSystemsWorker;
         private System.Windows.Forms.Timer edsmRefreshTimer;
         private System.Windows.Forms.TabPage tabPageJournal;
         private JournalViewControl journalViewControl1;
-        private System.ComponentModel.BackgroundWorker _refreshWorker;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openEliteDangerousDirectoryToolStripMenuItem;
