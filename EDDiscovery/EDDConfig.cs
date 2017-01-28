@@ -390,7 +390,7 @@ namespace EDDiscovery2
         {
             get
             {
-                return _canSkipSlowUpdates;
+                return EDDConfig.Options.Debug && _canSkipSlowUpdates;
             }
             set
             {

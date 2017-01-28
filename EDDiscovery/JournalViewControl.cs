@@ -65,7 +65,7 @@ namespace EDDiscovery
 
         public void PopOut()
         {
-            discoveryform.TravelControl.PopOut(PopOuts.Journal);
+            discoveryform.PopOuts.PopOut(Forms.PopOutControl.PopOuts.Journal);
         }
 
         #endregion

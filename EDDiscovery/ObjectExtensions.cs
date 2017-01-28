@@ -19,4 +19,62 @@ public static class ObjectExtensions
         {
         return (obj ?? string.Empty).ToString();
     }
+
+    public static string QuotedEscapeString(this string obj )
+    {
+        if (obj.Contains("\"") || obj.Contains(" ") || obj.Contains(")"))       // ) because its used to terminate var lists sometimes
+            obj = "\"" + obj.Replace("\"", "\\\"") + "\"";
+        return obj;
+    }
+
+    public static int FirstCharNonWhiteSpace(this string obj )
+    {
+        int i = 0;
+        while (i < obj.Length && char.IsWhiteSpace(obj[i]))
+            i++;
+        return i;
+    }
+
+    public static string ToString(this System.Windows.Forms.Keys key, System.Windows.Forms.Keys modifier )
+    {
+        string k = "";
+
+        if ((modifier & System.Windows.Forms.Keys.Shift) != 0)
+        {
+            k += "Shift+";
+        }
+        if ((modifier & System.Windows.Forms.Keys.Alt) != 0)
+        {
+            k += "Alt+";
+        }
+        if ((modifier & System.Windows.Forms.Keys.Control) != 0)
+        {
+            k += "Ctrl+";
+        }
+
+        string keyname = key.ToString();
+        if (keyname.Length == 2 && keyname[0] == 'D')
+            keyname = keyname.Substring(1);
+        else if (keyname.StartsWith("Oem") && keyname.Length > 4)       // leave oem1-9, they are not standard.
+            keyname = keyname.Substring(3);
+
+        return k + keyname;
+    }
+
+    static public bool InvariantParse(this string s, out int i)
+    {
+        return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public bool InvariantParse(this string s, out double i)
+    {
+        return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public bool InvariantParse(this string s, out long i)
+    {
+        return long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
 }
+

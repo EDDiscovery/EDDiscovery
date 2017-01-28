@@ -75,8 +75,9 @@ namespace EDDiscovery.UserControls
             this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -108,6 +109,7 @@ namespace EDDiscovery.UserControls
             this.drawnPanelPopOut.MarginSize = 4;
             this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
             this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
+            this.drawnPanelPopOut.MouseSelectedColorEnable = true;
             this.drawnPanelPopOut.Name = "drawnPanelPopOut";
             this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
             this.drawnPanelPopOut.TabIndex = 27;
@@ -326,9 +328,10 @@ namespace EDDiscovery.UserControls
             this.selectCorrectSystemToolStripMenuItem,
             this.toolStripMenuItemStartStop,
             this.removeJournalEntryToolStripMenuItem,
-            this.sendUnsyncedScanToEDDNToolStripMenuItem});
+            this.sendUnsyncedScanToEDDNToolStripMenuItem,
+            this.runActionsOnThisEntryToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 246);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 268);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -426,6 +429,13 @@ namespace EDDiscovery.UserControls
             this.removeJournalEntryToolStripMenuItem.Text = "Remove Journal Entry";
             this.removeJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.removeJournalEntryToolStripMenuItem_Click);
             // 
+            // sendUnsyncedScanToEDDNToolStripMenuItem
+            // 
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
+            // 
             // toolTip1
             // 
             this.toolTip1.AutoPopDelay = 20000;
@@ -433,12 +443,12 @@ namespace EDDiscovery.UserControls
             this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ShowAlways = true;
             // 
-            // sendUnsyncedScanToEDDNToolStripMenuItem
+            // runActionsOnThisEntryToolStripMenuItem
             // 
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
+            this.runActionsOnThisEntryToolStripMenuItem.Name = "runActionsOnThisEntryToolStripMenuItem";
+            this.runActionsOnThisEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.runActionsOnThisEntryToolStripMenuItem.Text = "Run Actions on this entry";
+            this.runActionsOnThisEntryToolStripMenuItem.Click += new System.EventHandler(this.runActionsOnThisEntryToolStripMenuItem_Click);
             // 
             // UserControlTravelGrid
             // 
@@ -492,5 +502,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.DrawnPanel drawnPanelPopOut;
         private ExtendedControls.ButtonExt buttonField;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
     }
 }

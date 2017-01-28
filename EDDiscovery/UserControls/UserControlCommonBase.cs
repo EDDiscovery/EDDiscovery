@@ -26,27 +26,6 @@ using EDDiscovery.DB;
 
 namespace EDDiscovery.UserControls
 {
-    public enum PopOuts        // id's.. used in tab controls, and in button pop outs button
-    {
-        // IN TABS
-        Log,
-        NS,
-        Materials,
-        Commodities,
-        Ledger,
-        Journal,
-        TravelGrid,
-        ScreenShot,
-        Statistics,
-        Scan,
-        // Not in TABS
-        Spanel,
-        Trippanel,
-        NotePanel,
-        RouteTracker,
-        Exploration
-    };
-
     public class UserControlCommonBase : UserControl
     {
         public virtual void Init( EDDiscoveryForm ed, int displayno) { }
@@ -60,8 +39,8 @@ namespace EDDiscovery.UserControls
 
         public void SetControlText(string s)            // used to set heading text in either the form of the tabstrip
         {
-            if (this.Parent is Controls.TabStrip)
-                ((Controls.TabStrip)(this.Parent)).SetControlText(s);
+            if (this.Parent is ExtendedControls.TabStrip)
+                ((ExtendedControls.TabStrip)(this.Parent)).SetControlText(s);
             else if (this.Parent is Forms.UserControlForm)
                 ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
         }
@@ -77,28 +56,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public static UserControlCommonBase Create(PopOuts i)
-        {
-            switch (i)
-            {
-                case PopOuts.Log: return new UserControlLog();
-                case PopOuts.NS: return new UserControlStarDistance();
-                case PopOuts.Materials: return new UserControlMaterials();
-                case PopOuts.Commodities: return new UserControlCommodities();
-                case PopOuts.Ledger: return new UserControlLedger();
-                case PopOuts.Journal: return new UserControlJournalGrid();
-                case PopOuts.TravelGrid: return new UserControlTravelGrid();
-                case PopOuts.ScreenShot: return new UserControlScreenshot();
-                case PopOuts.Exploration: return new UserControlExploration();
-                case PopOuts.Statistics: return new UserControlStats();
-                case PopOuts.Scan: return new UserControlScan();
-                case PopOuts.Spanel: return new UserControlSpanel();
-                case PopOuts.Trippanel: return new UserControlTrippanel();
-                case PopOuts.NotePanel: return new UserControlNotePanel();
-                case PopOuts.RouteTracker: return new UserControlRouteTracker();
-                default: return null;
-            }
-        }
 
 
         #region Resize

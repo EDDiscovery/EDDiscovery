@@ -34,7 +34,7 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
         EventFilterSelector cfs = new EventFilterSelector();
-        private JSONFilter fieldfilter = new JSONFilter();
+        private ConditionLists fieldfilter = new ConditionLists();
 
         private string DbFilterSave { get { return "JournalGridControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return "JournalGrid" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
             Name = "Journal";
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
             displaynumber = vn;
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
             Display(history);
         }
 
-        public void Display(HistoryList hl )
+        public void Display(HistoryList hl)
         {
             if (hl == null)     // just for safety
                 return;
@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
             toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
 
-            result = fieldfilter.FilterHistory(result, out ftotal);
+            result = fieldfilter.FilterHistory(result, discoveryform.globalvariables, out ftotal);
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewJournal.Rows.Clear();
@@ -188,19 +188,18 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows[rownr].Cells[JournalHistoryColumns.HistoryTag].Tag = item;
         }
 
-	    private void AddNewEntry(HistoryEntry he, HistoryList hl) // add if in event filter, and not in field filter..
-	    {
-		    if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) &&
-		        fieldfilter.FilterHistory(he))
-		    {
-			    AddNewJournalRow(true, he);
+        private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
+        {
+            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.globalvariables))
+            {
+                AddNewJournalRow(true, he);
 
-			    if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem) // Move focus to new row
-			    {
-				    SelectTopRow();
-			    }
-		    }
-	    }
+                if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem) // Move focus to new row
+                {
+                    SelectTopRow();
+                }
+            }
+        }
 
 	    #endregion
 
@@ -256,8 +255,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            EDDiscovery2.JSONFiltersForm frm = new EDDiscovery2.JSONFiltersForm();
-            frm.Init("Journal: Filter out fields", "Filter Out", true, discoveryform.theme, fieldfilter);
+            EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
+            frm.InitFilter("Journal: Filter out fields", discoveryform.globalvariables.KeyList, discoveryform.theme, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

@@ -36,12 +36,12 @@ namespace EDDiscovery2.EDSM
         bool _syncTo = false;
         bool _syncFrom = false;
         int _defmapcolour = 0;
-        private EDDiscoveryForm mainForm;
+        private IDiscoveryController mainForm;
 
         public delegate void EDSMDownloadedSystems();         // used for sync from not supported yet.
         public event EDSMDownloadedSystems OnDownloadedSystems;
 
-        public EDSMSync(EDDiscoveryForm frm)
+        public EDSMSync(IDiscoveryController frm)
         {
             mainForm = frm;
         }
@@ -112,14 +112,17 @@ namespace EDDiscovery2.EDSM
                         {
                             string errmsg;              // (verified with EDSM 29/9/2016)
 
-                                                        // it converts to UTC inside the function, supply local for now
-                            if ( edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg) )
+                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg))
+                            {
                                 he.SetEdsmSync();
+                                edsmsystemssent++;
+                            }
 
                             if (errmsg.Length > 0)
+                            {
                                 mainForm.LogLine(errmsg);
-
-                            edsmsystemssent++;
+                                break;
+                            }
                         }
                     }
 
