@@ -47,7 +47,6 @@ namespace EDDiscovery
 
         List<EDCommander> commanders = null;
 
-        ComputeStarDistance csd = new ComputeStarDistance();
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
 
@@ -141,10 +140,6 @@ namespace EDDiscovery
             TabConfigure(tabStripBottomRight,1001);
             TabConfigure(tabStripMiddleRight,1002);
 
-            csd.Init(_discoveryForm);
-            csd.OnOtherStarDistances += OtherStarDistances;
-            csd.OnNewStarList += NewStarListComputed;
-
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
@@ -152,7 +147,6 @@ namespace EDDiscovery
 
         public void LoadControl()
         {
-            csd.StartComputeThread();
         }
 
         #endregion
@@ -354,14 +348,6 @@ namespace EDDiscovery
 
         #region New Stars
 
-        private void OtherStarDistances(SortedList<double, ISystem> closestsystemlist, ISystem vsc )       // on thread..
-        {
-            Invoke((MethodInvoker)delegate      // being paranoid about threads..
-            {
-                _discoveryForm.history.CalculateSqDistances(closestsystemlist, vsc.x, vsc.y, vsc.z, 50, true);
-            });
-        }
-
         private void NewStarListComputed(string name, SortedList<double, ISystem> csl)      // thread..
         {
             Invoke((MethodInvoker)delegate
@@ -372,11 +358,6 @@ namespace EDDiscovery
                 if (OnNearestStarListChanged != null)
                     OnNearestStarListChanged(name, csl);
             });
-        }
-
-        public void CloseClosestSystemThread()
-        {
-            csd.StopComputeThread();
         }
 
         #endregion
@@ -505,7 +486,7 @@ namespace EDDiscovery
                 textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
                 richTextBoxNote.Text = syspos.snc != null ? syspos.snc.Note : "";
 
-                csd.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
+                _discoveryForm.CalculateClosestSystems(syspos.System, (s, d) => NewStarListComputed(s.name, d));
             }
 
             if (OnTravelSelectionChanged != null)

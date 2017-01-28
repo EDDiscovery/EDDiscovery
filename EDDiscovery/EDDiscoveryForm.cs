@@ -144,6 +144,13 @@ namespace EDDiscovery
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
         #endregion
+
+        #region Star Distance Calculation
+        public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, bool ignoreDuplicates = true)
+        {
+            Controller.CalculateClosestSystems(sys, callback, ignoreDuplicates);
+        }
+        #endregion
         #endregion
 
         #region Initialisation
@@ -472,7 +479,6 @@ namespace EDDiscovery
 
         private void Controller_BgSafeClose()
         {
-            travelHistoryControl1.CloseClosestSystemThread();
         }
 
         private void Controller_FinalClose()
