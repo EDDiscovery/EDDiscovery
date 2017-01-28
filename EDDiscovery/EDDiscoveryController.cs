@@ -120,7 +120,7 @@ namespace EDDiscovery
             EdsmSync = new EDSMSync(this);
             EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
 
-            journalmonitor = new EliteDangerous.EDJournalClass();
+            journalmonitor = new EliteDangerous.EDJournalClass(InvokeSyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewPosition;
 
             history.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
