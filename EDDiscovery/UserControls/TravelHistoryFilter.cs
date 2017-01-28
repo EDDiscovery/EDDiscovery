@@ -231,8 +231,12 @@ namespace EDDiscovery
         public static void FilterGridView(DataGridView vw, string searchstr)
         {
             vw.SuspendLayout();
+            vw.Enabled = false;
 
-            for (int loop = 0; loop < vw.RowCount; loop++)
+            bool[] visible = new bool[vw.RowCount];
+            bool visibleChanged = false;
+
+            foreach (DataGridViewRow row in vw.Rows.OfType<DataGridViewRow>())
             {
                 bool found = false;
 
@@ -240,7 +244,7 @@ namespace EDDiscovery
                     found = true;
                 else
                 {
-                    foreach (DataGridViewCell cell in vw.Rows[loop].Cells)
+                    foreach (DataGridViewCell cell in row.Cells)
                     {
                         if (cell.Value != null)
                         {
@@ -253,9 +257,28 @@ namespace EDDiscovery
                     }
                 }
 
-                vw.Rows[loop].Visible = found;
+                visible[row.Index] = found;
+                visibleChanged |= found != row.Visible;
             }
 
+            if (visibleChanged)
+            {
+                var selectedrow = vw.SelectedRows.OfType<DataGridViewRow>().Select(r => r.Index).FirstOrDefault();
+                DataGridViewRow[] rows = vw.Rows.OfType<DataGridViewRow>().ToArray();
+                vw.Rows.Clear();
+
+                for (int i = 0; i < rows.Length; i++)
+                {
+                    rows[i].Visible = visible[i];
+                }
+
+                vw.Rows.Clear();
+                vw.Rows.AddRange(rows.ToArray());
+
+                vw.Rows[selectedrow].Selected = true;
+            }
+
+            vw.Enabled = true;
             vw.ResumeLayout();
         }
     }
