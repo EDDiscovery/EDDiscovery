@@ -34,7 +34,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Faction = JSONHelper.GetStringDef(evt["Faction"]);
             Victim = JSONHelper.GetStringDef(evt["Victim"]);
             VictimLocalised = JSONHelper.GetStringDef(evt["Victim_Localised"]);
-            Fine = JSONHelper.GetLongNull(evt["ddevent"]);
+            Fine = JSONHelper.GetLongNull(evt["Fine"]);
             Bounty = JSONHelper.GetLongNull(evt["Bounty"]);
         }
         public string CrimeType { get; set; }

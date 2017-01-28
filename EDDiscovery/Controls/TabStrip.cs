@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 
-namespace EDDiscovery.Controls
+namespace ExtendedControls
 {
     public partial class TabStrip : UserControl
     {
@@ -63,7 +63,25 @@ namespace EDDiscovery.Controls
             drawnPanelPopOut.Location = panelSelected.Location;
         }
 
-        void ChangePanel(int i)
+        public void Toggle()
+        {
+            if (si != -1)
+                ChangePanel((si + 1) % Images.Length);
+        }
+
+        public bool ChangeTo(int i)
+        {
+            if (i >= 0 && i < Images.Length)
+            {
+                ChangePanel(i);
+                return true;
+            }
+            else
+                return false;
+        }
+
+
+        private void ChangePanel(int i)
         {
             if ( CurrentControl != null )
             {

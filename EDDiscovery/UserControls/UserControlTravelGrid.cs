@@ -1,4 +1,6 @@
-﻿/*
+﻿#define DEBUGVOICE
+
+/*
  * Copyright © 2016 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -47,7 +49,7 @@ namespace EDDiscovery.UserControls
 
         public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
 
-        private JSONFilter fieldfilter = new JSONFilter();
+        private ConditionLists fieldfilter = new ConditionLists();
 
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick , bool note);
         public event ChangedSelection OnChangedSelection;
@@ -164,7 +166,7 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
             toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
 
-            result = fieldfilter.FilterHistory(result,out ftotal);
+            result = fieldfilter.FilterHistory(result, discoveryform.globalvariables, out ftotal);
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewTravel.Rows.Clear();
@@ -237,6 +239,11 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows[rownr].Cells[2].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[3].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[4].ToolTipText = tip;
+
+#if DEBUGVOICE
+            List<Actions.ActionFileList.MatchingSets> ale = discoveryform.actionfiles.GetMatchingConditions(item.journalEntry.EventTypeStr);
+            dataGridViewTravel.Rows[rownr].Cells[3].Value = ((ale.Count>0) ? "VOICE " :"NO VOICE") + dataGridViewTravel.Rows[rownr].Cells[3].Value;
+#endif
         }
 
         public void SetPreferredJIDAfterRefresh(long jid)           // call if after the next Display refresh you would like to go to this jid
@@ -246,7 +253,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he);
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.globalvariables);
         }
         
         public void SelectTopRow()
@@ -487,6 +494,21 @@ namespace EDDiscovery.UserControls
 
                 string infotext = leftclicksystem.EventDescription + ((toexpand && leftclicksystem.EventDetailedInfo.Length > 0) ? (Environment.NewLine + leftclicksystem.EventDetailedInfo) : "");
 
+#if DEBUGVOICE
+                if (toexpand)
+                {
+                    List<Actions.ActionFileList.MatchingSets> ale = discoveryform.actionfiles.GetMatchingConditions(leftclicksystem.journalEntry.EventTypeStr);
+                    infotext = ((ale.Count>0) ? "VOICE " :"NO VOICE") + infotext;
+
+                    ConditionVariables testvars = new ConditionVariables();
+                    Actions.ActionVars.TriggerVars(testvars, leftclicksystem.journalEntry.EventTypeStr, "Debug");
+                    Actions.ActionVars.HistoryEventVars(testvars, leftclicksystem, "Event");
+                    string s = testvars.ToString().Replace(",", "\r\n");
+
+                    infotext = infotext + s;
+                }
+#endif
+
                 int h = DefaultRowHeight;
 
                 if (toexpand)
@@ -500,6 +522,7 @@ namespace EDDiscovery.UserControls
                         h = Math.Max(desch, h);
                         h = Math.Max(infoh, h);
                         h = Math.Max(noteh, h);
+                        h += 20;
                     }
                 }
 
@@ -516,9 +539,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-        #region TravelHistoryRightClick
+#region TravelHistoryRightClick
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -818,9 +841,15 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+        private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ( rightclicksystem!=null)
+                discoveryform.ActionRunOnEntry(rightclicksystem, "UserRightClick");
+        }
 
-        #region Event Filter
+#endregion
+
+#region Event Filter
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
@@ -836,8 +865,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            EDDiscovery2.JSONFiltersForm frm = new JSONFiltersForm();
-            frm.Init("History: Filter out fields", "Filter Out", true, discoveryform.theme, fieldfilter);
+            EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
+            frm.InitFilter("History: Filter out fields", discoveryform.globalvariables.KeyList, discoveryform.theme, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
@@ -847,13 +876,15 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
         private void drawnPanelPopOut_Click(object sender, EventArgs e)
         {
             if (OnPopOut != null)
                 OnPopOut();
         }
+
+        
     }
 
 }

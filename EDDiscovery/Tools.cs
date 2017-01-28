@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -128,13 +129,13 @@ namespace EDDiscovery
             return EDDConfig.Options.AppDataDirectory;
         }
 
-        static public string WordWrap(string input, int linelen )
+        static public string WordWrap(string input, int linelen)
         {
-            String[] split = input.Split(new char[] { ' '});
+            String[] split = input.Split(new char[] { ' ' });
 
             string ans = "";
             int l = 0;
-            for( int i = 0; i < split.Length; i++ )
+            for (int i = 0; i < split.Length; i++)
             {
                 ans += split[i];
                 l += split[i].Length;
@@ -150,7 +151,7 @@ namespace EDDiscovery
             return ans;
         }
 
-        static public string StackTrace(string trace, string enclosingfunc, int lines )
+        static public string StackTrace(string trace, string enclosingfunc, int lines)
         {
             int offset = trace.IndexOf(enclosingfunc);
 
@@ -180,11 +181,11 @@ namespace EDDiscovery
             return ret;
         }
 
-        static public string CutLine( ref string trace, int offset )
+        static public string CutLine(ref string trace, int offset)
         {
             int nloffset = trace.IndexOf(Environment.NewLine, offset);
             string ret;
-            if ( nloffset != -1 )
+            if (nloffset != -1)
             {
                 ret = trace.Substring(offset, nloffset - offset);
                 trace = trace.Substring(nloffset);
@@ -203,7 +204,7 @@ namespace EDDiscovery
         static StreamWriter debugout = null;
         static Stopwatch debugtimer = null;
 
-        static public void LogToFile( string s )
+        static public void LogToFile(string s)
         {
             if (debugout == null)
             {
@@ -212,16 +213,25 @@ namespace EDDiscovery
                 debugtimer.Start();
             }
 
-            debugout.WriteLine((debugtimer.ElapsedMilliseconds%100000) + ":" + s);
+            debugout.WriteLine((debugtimer.ElapsedMilliseconds % 100000) + ":" + s);
             debugout.Flush();
+        }
+
+        public static string FixTitleCase(string s)
+        {
+            if (s.Length > 0)
+            {
+                s = s.Substring(0, 1).ToUpper() + s.Substring(1).ToLower();
+            }
+            return s;
         }
 
         public static string SplitCapsWord(string capslower)
         {
             return System.Text.RegularExpressions.Regex.Replace(
                    System.Text.RegularExpressions.Regex.Replace(
-                   Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"), 
-                   @"([a-z\d])([A-Z])", "$1 $2"), 
+                   Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"),
+                   @"([a-z\d])([A-Z])", "$1 $2"),
                    @"[-\s]", " ");
         }
 
@@ -241,21 +251,115 @@ namespace EDDiscovery
             return n.ToLower();
         }
 
+        public static string TryReadAllTextFromFile(string filename)
+        {
+            try
+            {
+                return File.ReadAllText(filename, Encoding.UTF8);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static string SafeFileString(string normal)
         {
-            normal = normal.Replace("*", "_star");     
+            normal = normal.Replace("*", "_star");
             normal = normal.Replace("/", "_slash");
             normal = normal.Replace("\\", "_slash");
             normal = normal.Replace(":", "_colon");
             normal = normal.Replace("?", "_qmark");
 
             string ret = "";
-            foreach( char c in normal )
+            foreach (char c in normal)
             {
-                if (char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c== '_' )
+                if (char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c == '_')
                     ret += c;
             }
             return ret;
         }
+
+        [Flags]
+        public enum AssocF
+        {
+            None = 0,
+            Init_NoRemapCLSID = 0x1,
+            Init_ByExeName = 0x2,
+            Open_ByExeName = 0x2,
+            Init_DefaultToStar = 0x4,
+            Init_DefaultToFolder = 0x8,
+            NoUserSettings = 0x10,
+            NoTruncate = 0x20,
+            Verify = 0x40,
+            RemapRunDll = 0x80,
+            NoFixUps = 0x100,
+            IgnoreBaseClass = 0x200
+        }
+
+        public enum AssocStr
+        {
+            Command = 1,
+            Executable,
+            FriendlyDocName,
+            FriendlyAppName,
+            NoOpen,
+            ShellNewValue,
+            DDECommand,
+            DDEIfExec,
+            DDEApplication,
+            DDETopic
+        }
+
+        [DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
+        public static extern uint AssocQueryString(AssocF flags, AssocStr str,
+           string pszAssoc, string pszExtra, [Out] StringBuilder pszOut, ref uint
+           pcchOut);
+
+        public static string AssocQueryString(AssocStr association, string extension)
+        {
+            const int S_OK = 0;
+            const int S_FALSE = 1;
+
+            uint length = 0;
+            uint ret = AssocQueryString(AssocF.None, association, extension, null, null, ref length);
+            if (ret != S_FALSE)
+            {
+                throw new InvalidOperationException("Could not determine associated string");
+            }
+
+            var sb = new StringBuilder((int)length); // (length-1) will probably work too as the marshaller adds null termination
+            ret = AssocQueryString(AssocF.None, association, extension, null, sb, ref length);
+            if (ret != S_OK)
+            {
+                throw new InvalidOperationException("Could not determine associated string");
+            }
+
+            return sb.ToString();
+        }
+
+        static public List<string> GetPropertyFieldNames(Type jtype, string prefix = "")       // give a list of properties for a given name
+        {
+            if (jtype != null)
+            {
+                List<string> ret = new List<string>();
+
+                foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
+                {
+                    if (pi.GetIndexParameters().GetLength(0) == 0)      // only properties with zero parameters are called
+                        ret.Add(prefix + pi.Name);
+                }
+
+                foreach (System.Reflection.FieldInfo fi in jtype.GetFields())
+                {
+                    string name = prefix + fi.Name;
+                }
+                return ret;
+            }
+            else
+                return null;
+        }
+
+
     }
 }

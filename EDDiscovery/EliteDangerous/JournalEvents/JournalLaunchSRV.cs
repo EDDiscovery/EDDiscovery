@@ -26,9 +26,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalLaunchSRV(JObject evt ) : base(evt, JournalTypeEnum.LaunchSRV)
         {
             Loadout = JSONHelper.GetStringDef(evt["Loadout"]);
+            PlayerControlled = JSONHelper.GetStringDef(evt["PlayerControlled"]);
 
         }
         public string Loadout { get; set; }
+        public string PlayerControlled { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.srv; } }
 

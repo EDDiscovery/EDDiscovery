@@ -292,6 +292,8 @@ namespace ExtendedControls
             this.Controls.Add(this._cbsystem);
         }
 
+        public ComboBox GetInternalSystemControl { get { return this._cbsystem; }  }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);

@@ -26,9 +26,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SharedWithOthers: whether shared with other players
     public class JournalBounty : JournalEntry
     {
+        public class BountyReward
+        {
+            public string Faction;
+            public long Reward;
+        }
+
         public JournalBounty(JObject evt ) : base(evt, JournalTypeEnum.Bounty)
         {
-            Reward = JSONHelper.GetLong(evt["Reward"]);     // some of them..
             TotalReward = JSONHelper.GetLong(evt["TotalReward"]);     // others of them..
 
             VictimFaction = JSONHelper.GetStringDef(evt["VictimFaction"]);
@@ -38,7 +43,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Rewards = evt["Rewards"]?.ToObject<BountyReward[]>();
         }
 
-        public long Reward { get; set; }     
         public long TotalReward { get; set; }
         public string VictimFaction { get; set; }
         public string VictimFactionLocalised { get; set; }
@@ -50,17 +54,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {
             string n = (VictimFactionLocalised.Length > 0) ? VictimFactionLocalised : VictimFaction;
-            n += " total " + (TotalReward + Reward).ToString("N0");
+            n += " total " + TotalReward.ToString("N0");
 
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, n);
         }
 
     }
 
-    public class BountyReward
-    {
-        public string Faction;
-        public long Reward;
-    }
 
 }

@@ -79,7 +79,7 @@ namespace EDDiscovery
 
             Application.DoEvents();
 
-            if (_discoveryForm.DisplayedCommander == -1)
+            if (_discoveryForm.history.CommanderId == -1)
                 comboBoxCommander.SelectedIndex = 0;
             else
                 comboBoxCommander.SelectedItem = EDDiscoveryForm.EDDConfig.CurrentCommander;
