@@ -25,10 +25,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Data.Common;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace EDDiscovery.EliteDangerous
 {
@@ -182,8 +182,6 @@ namespace EDDiscovery.EliteDangerous
 
         public void StartMonitor()
         {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
             if (m_Watcher == null)
             {
                 try
@@ -337,13 +335,15 @@ namespace EDDiscovery.EliteDangerous
         public delegate void NewJournalEntryHandler(JournalEntry je);
         public event NewJournalEntryHandler OnNewJournalEntry;
 
-        private System.Windows.Forms.Timer m_scantimer;
-        private System.ComponentModel.BackgroundWorker m_worker;
+        private Thread ScanThread;
+        private ManualResetEvent StopRequested;
+        private Action<Action> InvokeOnUiThread;
         private List<MonitorWatcher> watchers = new List<MonitorWatcher>();
         private string frontierfolder;
 
-        public EDJournalClass()
+        public EDJournalClass(Action<Action> invokeOnUiThread)
         {
+            InvokeOnUiThread = invokeOnUiThread;
             frontierfolder = GetDefaultJournalDir();
         }
 
@@ -479,17 +479,9 @@ namespace EDDiscovery.EliteDangerous
 
         public void StartMonitor()
         {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
-            m_worker = new System.ComponentModel.BackgroundWorker();
-            m_worker.DoWork += ScanTickWorker;
-            m_worker.RunWorkerCompleted += ScanTickDone;
-            m_worker.WorkerSupportsCancellation = true;
-
-            m_scantimer = new System.Windows.Forms.Timer();
-            m_scantimer.Interval = 2000;
-            m_scantimer.Tick += ScanTick;
-            m_scantimer.Start();
+            StopRequested = new ManualResetEvent(false);
+            ScanThread = new Thread(ScanThreadProc) { Name = "Journal Monitor Thread", IsBackground = true };
+            ScanThread.Start();
 
             foreach (MonitorWatcher mw in watchers)
             {
@@ -504,53 +496,55 @@ namespace EDDiscovery.EliteDangerous
                 mw.StopMonitor();
             }
 
-            if (m_scantimer != null)
+            if (StopRequested != null)
             {
-                m_scantimer.Stop();
-                m_scantimer = null;
+                StopRequested.Set();
+                StopRequested = null;
             }
 
-            if (m_worker != null)
+            if (ScanThread != null)
             {
-                m_worker.CancelAsync();
-                m_worker = null;
-            }
-        }
-
-        private void ScanTick(object sender, EventArgs e)
-        {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-
-            if (m_worker != null && !m_worker.IsBusy)
-            {
-                m_worker.RunWorkerAsync();
+                ScanThread.Join();
+                ScanThread = null;
             }
         }
 
-        private void ScanTickWorker(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void ScanThreadProc()
         {
-            var worker = sender as System.ComponentModel.BackgroundWorker;
-            var entries = new List<JournalEntry>();
-            e.Result = entries;
-            foreach (MonitorWatcher mw in watchers)
+            ManualResetEvent stopRequested = StopRequested;
+
+            while (!stopRequested.WaitOne(2000))
             {
-                entries.AddRange(mw.ScanForNewEntries());
-                if (worker.CancellationPending)
+                List<JournalEntry> jl = ScanTickWorker(() => stopRequested.WaitOne(0));
+
+                if (jl != null && jl.Count != 0 && !stopRequested.WaitOne(0))
                 {
-                    e.Cancel = true;
-                    return;
+                    InvokeOnUiThread(() => ScanTickDone(jl));
                 }
             }
         }
 
-        private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private List<JournalEntry> ScanTickWorker(Func<bool> stopRequested)
         {
-            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+            var entries = new List<JournalEntry>();
 
-            if (e.Error == null && !e.Cancelled)
+            foreach (MonitorWatcher mw in watchers)
             {
-                List<JournalEntry> entries = (List<JournalEntry>)e.Result;
+                entries.AddRange(mw.ScanForNewEntries());
 
+                if (stopRequested())
+                {
+                    return null;
+                }
+            }
+
+            return entries;
+        }
+
+        private void ScanTickDone(List<JournalEntry> entries)
+        {
+            if (entries != null)
+            {
                 foreach (var ent in entries)                    // pass them to the handler
                 {
                     System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
