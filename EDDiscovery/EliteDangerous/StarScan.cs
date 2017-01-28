@@ -79,6 +79,19 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
+        public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl)
+        {
+            for (int j = startindex; j >= 0; j--)
+            {
+                if (je.IsStarNameRelated(hl[j].System.name))       // if its part of the name, use it
+                {
+                    return Process(je, hl[j].System);
+                }
+            }
+
+            return Process(je, hl[startindex].System);         // no relationship, add..
+        }
+
         public bool Process(JournalScan sc, EDDiscovery2.DB.ISystem sys)           // FALSE if you can't process it
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);

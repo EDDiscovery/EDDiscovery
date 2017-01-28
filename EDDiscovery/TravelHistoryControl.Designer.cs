@@ -61,7 +61,7 @@ namespace EDDiscovery
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.userControlTravelGrid = new EDDiscovery.UserControls.UserControlTravelGrid();
-            this.tabStripBottom = new EDDiscovery.Controls.TabStrip();
+            this.tabStripBottom = new ExtendedControls.TabStrip();
             this.splitContainerRightOuter = new System.Windows.Forms.SplitContainer();
             this.panelTarget = new System.Windows.Forms.Panel();
             this.labelTarget = new System.Windows.Forms.Label();
@@ -88,10 +88,11 @@ namespace EDDiscovery
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.panel_topright = new System.Windows.Forms.Panel();
+            this.buttonAction = new ExtendedControls.ButtonExt();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
-            this.tabStripMiddleRight = new EDDiscovery.Controls.TabStrip();
-            this.tabStripBottomRight = new EDDiscovery.Controls.TabStrip();
+            this.tabStripMiddleRight = new ExtendedControls.TabStrip();
+            this.tabStripBottomRight = new ExtendedControls.TabStrip();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -174,6 +175,7 @@ namespace EDDiscovery
             this.buttonEDSM.MarginSize = 0;
             this.buttonEDSM.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDSM.MouseSelectedColor = System.Drawing.Color.Green;
+            this.buttonEDSM.MouseSelectedColorEnable = true;
             this.buttonEDSM.Name = "buttonEDSM";
             this.buttonEDSM.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSM.TabIndex = 23;
@@ -204,6 +206,7 @@ namespace EDDiscovery
             this.buttonRoss.MarginSize = 0;
             this.buttonRoss.MouseOverColor = System.Drawing.Color.White;
             this.buttonRoss.MouseSelectedColor = System.Drawing.Color.Green;
+            this.buttonRoss.MouseSelectedColorEnable = true;
             this.buttonRoss.Name = "buttonRoss";
             this.buttonRoss.Size = new System.Drawing.Size(20, 20);
             this.buttonRoss.TabIndex = 40;
@@ -222,6 +225,7 @@ namespace EDDiscovery
             this.buttonEDDB.MarginSize = 0;
             this.buttonEDDB.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDDB.MouseSelectedColor = System.Drawing.Color.Green;
+            this.buttonEDDB.MouseSelectedColorEnable = true;
             this.buttonEDDB.Name = "buttonEDDB";
             this.buttonEDDB.Size = new System.Drawing.Size(20, 20);
             this.buttonEDDB.TabIndex = 39;
@@ -331,7 +335,7 @@ namespace EDDiscovery
             this.buttonSync.BorderColorScaling = 1.25F;
             this.buttonSync.ButtonColorScaling = 0.5F;
             this.buttonSync.ButtonDisabledScaling = 0.5F;
-            this.buttonSync.Location = new System.Drawing.Point(7, 66);
+            this.buttonSync.Location = new System.Drawing.Point(84, 65);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(92, 23);
             this.buttonSync.TabIndex = 4;
@@ -694,6 +698,7 @@ namespace EDDiscovery
             // 
             // panel_topright
             // 
+            this.panel_topright.Controls.Add(this.buttonAction);
             this.panel_topright.Controls.Add(this.comboBoxCustomPopOut);
             this.panel_topright.Controls.Add(this.button_RefreshHistory);
             this.panel_topright.Controls.Add(this.buttonMap2D);
@@ -707,6 +712,19 @@ namespace EDDiscovery
             this.panel_topright.Size = new System.Drawing.Size(337, 100);
             this.panel_topright.TabIndex = 26;
             this.panel_topright.Resize += new System.EventHandler(this.panel_topright_Resize);
+            // 
+            // buttonAction
+            // 
+            this.buttonAction.BorderColorScaling = 1.25F;
+            this.buttonAction.ButtonColorScaling = 0.5F;
+            this.buttonAction.ButtonDisabledScaling = 0.5F;
+            this.buttonAction.Location = new System.Drawing.Point(7, 65);
+            this.buttonAction.Name = "buttonAction";
+            this.buttonAction.Size = new System.Drawing.Size(64, 23);
+            this.buttonAction.TabIndex = 19;
+            this.buttonAction.Text = "Actions";
+            this.buttonAction.UseVisualStyleBackColor = true;
+            this.buttonAction.Click += new System.EventHandler(this.buttonAction_Click);
             // 
             // labelCMDR
             // 
@@ -840,8 +858,9 @@ namespace EDDiscovery
         private UserControls.UserControlTravelGrid userControlTravelGrid;
         private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
         private System.Windows.Forms.SplitContainer splitContainerRightOuter;
-        private Controls.TabStrip tabStripBottom;
-        private Controls.TabStrip tabStripMiddleRight;
-        private Controls.TabStrip tabStripBottomRight;
+        private ExtendedControls.TabStrip tabStripBottom;
+        private ExtendedControls.TabStrip tabStripMiddleRight;
+        private ExtendedControls.TabStrip tabStripBottomRight;
+        private ExtendedControls.ButtonExt buttonAction;
     }
 }

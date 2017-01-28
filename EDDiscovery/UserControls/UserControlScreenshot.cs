@@ -22,6 +22,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EDDiscovery.EliteDangerous.JournalEvents;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace EDDiscovery.UserControls
 {
@@ -45,11 +48,13 @@ namespace EDDiscovery.UserControls
             discoveryform = ed;
             displaynumber = vn;
             discoveryform.ImageHandler.OnScreenShot += ScreenShot;
+            discoveryform.TravelControl.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()
         {
             discoveryform.ImageHandler.OnScreenShot -= ScreenShot;
+            discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
         }
 
         public void ScreenShot(string path, Point size)
@@ -58,6 +63,40 @@ namespace EDDiscovery.UserControls
             ImageSize = size;
 
             FitToWindow();
+        }
+
+        public override void Display(HistoryEntry he, HistoryList hl)
+        {
+            if (he != null)
+            {
+                if (he.EntryType == EliteDangerous.JournalTypeEnum.Screenshot)
+                {
+                    JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
+
+                    JObject jo = JObject.Parse(ss.EventDataString);
+                    if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
+                    {
+                        string store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);
+                        Point size = new Point(JSONHelper.GetInt(jo["EDDOutputWidth"]), JSONHelper.GetInt(jo["EDDOutputHeight"]));
+
+                        ScreenShot(store_name, size);
+                    }
+                    else if (jo["EDDInputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDInputFile"])))
+                    {
+                        string filename = JSONHelper.GetStringDef(jo["EDDInputFile"]);
+                        ScreenShot(filename, new Point(ss.Width, ss.Height));
+                    }
+                    else
+                    {
+                        string filename = discoveryform.ImageHandler.GetScreenshotPath(ss);
+
+                        if (File.Exists(filename))
+                        {
+                            ScreenShot(filename, new Point(ss.Width, ss.Height));
+                        }
+                    }
+                }
+            }
         }
 
         void FitToWindow()

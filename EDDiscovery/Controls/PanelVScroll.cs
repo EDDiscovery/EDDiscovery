@@ -33,6 +33,9 @@ namespace ExtendedControls
         public bool VerticalScrollBarDockRight { get; set; } = true;        // true for dock right
         public Padding InternalMargin { get; set; }            // allows spacing around controls
         public VScrollBarCustom vsc;
+        public int ScrollOffset { get {return -scrollpos; } }
+
+        private int scrollpos = 0;
 
         public PanelVScroll()
         {
@@ -91,9 +94,24 @@ namespace ExtendedControls
             ScrollTo(e.NewValue);
         }
 
-        int scrollpos = 0;
 
-        public int ScrollTo(int newscrollpos )
+        public void RestateScroll()             // call this if you've messed about with the position of controls..
+        {
+            foreach (Control c in Controls)
+            {
+                if (!(c is VScrollBarCustom))
+                {
+                    c.Location = new Point(c.Left, c.Top - scrollpos); 
+                }
+            }
+        }
+
+        public void ToEnd()
+        {
+            ScrollTo(99999999, true);
+        }
+
+        private int ScrollTo(int newscrollpos , bool updatescroller = false )
         {
             int maxy = 0;
             foreach (Control c in Controls)
@@ -107,6 +125,13 @@ namespace ExtendedControls
 
             if (maxy < ClientRectangle.Height)          // see if need scroll..
                 newscrollpos = 0;
+            else
+            {
+                int maxscr = maxy - ClientRectangle.Height + ((vsc != null) ? vsc.LargeChange : 0);
+
+                if (newscrollpos > maxscr)
+                    newscrollpos = maxscr;
+            }
 
             if (newscrollpos != scrollpos)
             {
@@ -115,7 +140,7 @@ namespace ExtendedControls
                 {
                     if (!(c is VScrollBarCustom))
                     {
-                       // System.Diagnostics.Debug.WriteLine("Move {0}", c.Name);
+                        // System.Diagnostics.Debug.WriteLine("Move {0}", c.Name);
 
                         int ynoscroll = c.Location.Y + scrollpos;
                         c.Location = new Point(c.Location.X, ynoscroll - newscrollpos);       // SPENT AGES with the bloody AutoScrollPosition.. could not get it to work..
@@ -130,6 +155,10 @@ namespace ExtendedControls
             {
                 vsc.Maximum = maxy - ClientRectangle.Height + vsc.LargeChange;
                 vsc.Minimum = 0;
+
+                if (updatescroller)
+                    vsc.Value = newscrollpos;
+
                 //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
             }
 

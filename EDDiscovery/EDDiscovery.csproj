@@ -148,6 +148,7 @@
     </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Speech" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
@@ -187,6 +188,42 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Actions\Action.cs" />
+    <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
+    <Compile Include="Actions\ActionCommands\ActionHistoryTab.cs" />
+    <Compile Include="Actions\ActionCommands\ActionLedger.cs" />
+    <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPerform.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPopout.cs" />
+    <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
+    <Compile Include="Actions\ActionCommands\ActionScan.cs" />
+    <Compile Include="Actions\ActionFile.cs" />
+    <Compile Include="Actions\ActionVars.cs" />
+    <Compile Include="Conditions\ConditionFunctions.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPrint.cs" />
+    <Compile Include="Actions\ActionCommands\ActionSet.cs" />
+    <Compile Include="Actions\ActionCommands\ActionSleep.cs" />
+    <Compile Include="Actions\ActionCommands\ActionStructures.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPlay.cs" />
+    <Compile Include="Actions\ActionProgramForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ActionProgramForm.Designer.cs">
+      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
+    <Compile Include="Actions\ActionProgramRun.cs" />
+    <Compile Include="Actions\ActionRun.cs" />
+    <Compile Include="Actions\ActionCommands\ActionSay.cs" />
+    <Compile Include="Actions\ActionProgram.cs" />
+    <Compile Include="Conditions\ConditionVariablesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Conditions\ConditionVariablesForm.Designer.cs">
+      <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Conditions\ConditionVariables.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -219,6 +256,7 @@
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
+    <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\ImportSphere.cs">
       <SubType>Form</SubType>
@@ -226,12 +264,17 @@
     <Compile Include="Forms\ImportSphere.Designer.cs">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
+    <Compile Include="HTTP\GitHubFile.cs" />
+    <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ShipDetails.Designer.cs">
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Conditions\ConditionLists.cs" />
+    <Compile Include="Conditions\StringParser.cs" />
+    <Compile Include="IDiscoveryController.cs" />
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
@@ -382,11 +425,11 @@
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\JSONFiltersForm.cs">
+    <Compile Include="Conditions\ConditionFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\JSONFiltersForm.Designer.cs">
-      <DependentUpon>JSONFiltersForm.cs</DependentUpon>
+    <Compile Include="Conditions\ConditionFilterForm.Designer.cs">
+      <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TextBoxEntry.cs">
       <SubType>Form</SubType>
@@ -394,7 +437,6 @@
     <Compile Include="Forms\TextBoxEntry.Designer.cs">
       <DependentUpon>TextBoxEntry.cs</DependentUpon>
     </Compile>
-    <Compile Include="JSON\JSONFilter.cs" />
     <Compile Include="JSON\JSONPrettyPrint.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
@@ -626,12 +668,6 @@
     <Compile Include="TravelHistoryControl.Designer.cs">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlExploration.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlExploration.Designer.cs">
-      <DependentUpon>UserControlExploration.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
@@ -644,6 +680,12 @@
     </Compile>
     <Compile Include="JournalViewControl.Designer.cs">
       <DependentUpon>JournalViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlExploration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlExploration.Designer.cs">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlNotePanel.cs">
       <SubType>UserControl</SubType>
@@ -740,6 +782,12 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Actions\ActionProgramForm.resx">
+      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">
+      <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\RichTextBoxScroll.resx">
       <DependentUpon>RichTextBoxScroll.cs</DependentUpon>
     </EmbeddedResource>
@@ -752,11 +800,11 @@
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\JSONFiltersForm.resx">
-      <DependentUpon>JSONFiltersForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Conditions\ConditionFilterForm.resx">
+      <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>

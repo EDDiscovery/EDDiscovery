@@ -42,7 +42,7 @@ namespace EDDiscovery
 
         Dictionary<string, NetLogFileReader> netlogreaders = new Dictionary<string, NetLogFileReader>();
 
-        public NetLogClass(EDDiscoveryForm ds)
+        public NetLogClass(IDiscoveryController ds)
         {
         }
 
