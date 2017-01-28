@@ -676,7 +676,7 @@ namespace EDDiscovery2.EDSM
 
         public static JObject ConvertFromEDSMBodies(JObject jo)
         {
-            jo["timestamp"] = DateTime.UtcNow.ToString("yyyy -MM-ddTHH:mm:ssZ");
+            jo["timestamp"] = DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
             jo["EDDFromEDSMBodie"] = true;
 
             JSONHelper.Rename(jo["name"], "BodyName");
