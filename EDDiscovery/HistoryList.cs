@@ -19,7 +19,6 @@ using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
-using OpenTK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -1167,12 +1166,12 @@ namespace EDDiscovery
             return syslist.FindLast(x => x.System.HasCoordinate && x.IsLocOrJump);
         }
 
-        public static HistoryEntry FindByPos(List<HistoryEntry> syslist, Vector3 p, double limit)     // go thru setting the lastknowsystem
+        public static HistoryEntry FindByPos(List<HistoryEntry> syslist, float x, float y, float z, double limit)     // go thru setting the lastknowsystem
         {
-            return syslist.FindLast(x => x.System.HasCoordinate &&
-                                            Math.Abs(x.System.x - p.X) < limit &&
-                                            Math.Abs(x.System.y - p.Y) < limit &&
-                                            Math.Abs(x.System.z - p.Z) < limit);
+            return syslist.FindLast(s => s.System.HasCoordinate &&
+                                            Math.Abs(s.System.x - x) < limit &&
+                                            Math.Abs(s.System.y - y) < limit &&
+                                            Math.Abs(s.System.z - z) < limit);
         }
 
         public static List<HistoryEntry> FilterByJournalEvent(List<HistoryEntry> he , string eventstring , out int count)

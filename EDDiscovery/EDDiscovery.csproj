@@ -774,6 +774,7 @@
     <Compile Include="UserControls\UserControlTrippanel.Designer.cs">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Vector3.cs" />
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
