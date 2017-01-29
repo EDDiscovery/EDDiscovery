@@ -251,7 +251,7 @@ namespace EDDiscovery2.ImageHandler
             System.Threading.Timer timer = null;
 
             // Don't run if OnScreenshot has already run for this image
-            if (!ScreenshotTimers.TryGetValue(filename, out timer) || timer == null || !ScreenshotTimers.TryUpdate(filename, null, timer))
+            if ((ScreenshotTimers.TryGetValue(filename, out timer) && timer == null) || (!ScreenshotTimers.TryAdd(filename, null) && !ScreenshotTimers.TryUpdate(filename, null, timer)))
                 return;
 
             if (timer != null)
