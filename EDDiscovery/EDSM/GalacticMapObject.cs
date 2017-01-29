@@ -15,7 +15,7 @@
  */
 using EDDiscovery2._3DMap;
 using Newtonsoft.Json.Linq;
-using OpenTK;
+using EDDiscovery.Vectors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

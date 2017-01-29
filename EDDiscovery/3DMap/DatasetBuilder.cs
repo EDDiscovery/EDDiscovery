@@ -210,7 +210,7 @@ namespace EDDiscovery2._3DMap
                         Color c = array[cindex++ % array.Length];
 
                         List<Vector2> polygonxz = new List<Vector2>();                              // needs it in x/z and in vector2's
-                        foreach( Vector3 pd in gmo.points )
+                        foreach( var pd in gmo.points )
                             polygonxz.Add(new Vector2((float)pd.X, (float)pd.Z));                   // can be concave and wound the wrong way..
 
                         Vector2 size, avg;
