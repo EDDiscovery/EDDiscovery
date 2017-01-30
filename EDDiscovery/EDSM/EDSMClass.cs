@@ -199,7 +199,7 @@ namespace EDDiscovery2.EDSM
         }
 
         
-        internal long GetNewSystems(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        internal long GetNewSystems(Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine)
         {
             string lstsyst;
 
@@ -241,7 +241,7 @@ namespace EDDiscovery2.EDSM
                     enddate = DateTime.UtcNow;
                 }
 
-                discoveryform.LogLine($"Downloading systems from {lstsystdate.ToLocalTime().ToString()} to {enddate.ToLocalTime().ToString()}");
+                logLine($"Downloading systems from {lstsystdate.ToLocalTime().ToString()} to {enddate.ToLocalTime().ToString()}");
                 reportProgress(-1, "Requesting systems from EDSM");
                 string json = null;
 
@@ -255,32 +255,32 @@ namespace EDDiscovery2.EDSM
                     if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
                     {
                         string status = ((HttpWebResponse)ex.Response).StatusDescription;
-                        discoveryform.LogLine($"Download of EDSM systems from the server failed ({status}), will try next time program is run");
+                        logLine($"Download of EDSM systems from the server failed ({status}), will try next time program is run");
                     }
                     else
                     {
-                        discoveryform.LogLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
+                        logLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
                     }
                     break;
                 }
                 catch (Exception ex)
                 {
                     reportProgress(-1, $"EDSM request failed");
-                    discoveryform.LogLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
+                    logLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
                     break;
                 }
 
                 if (json == null)
                 {
                     reportProgress(-1, "EDSM request failed");
-                    discoveryform.LogLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
+                    logLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
                     break;
                 }
 
-                updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, discoveryform, cancelRequested, reportProgress, false);
+                updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
                 lstsystdate += TimeSpan.FromHours(12);
             }
-            discoveryform.LogLine($"System download complete");
+            logLine($"System download complete");
 
             return updates;
         }
@@ -294,7 +294,7 @@ namespace EDDiscovery2.EDSM
                 bool newfile = false;
                 DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
-                string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
+                string json = Tools.TryReadAllTextFromFile(edsmhiddensystems);
 
                 return json;
             }
@@ -676,7 +676,7 @@ namespace EDDiscovery2.EDSM
 
         public static JObject ConvertFromEDSMBodies(JObject jo)
         {
-            jo["timestamp"] = DateTime.UtcNow.ToString("yyyy -MM-ddTHH:mm:ssZ");
+            jo["timestamp"] = DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
             jo["EDDFromEDSMBodie"] = true;
 
             JSONHelper.Rename(jo["name"], "BodyName");
@@ -762,8 +762,92 @@ namespace EDDiscovery2.EDSM
 
 
             return jo;
-
         }
+
+
+        public string SetRanks(int combat_rank, int combat_progress, int trade_rank, int trade_progress,
+            int explore_rank, int explore_progress, int cqc_rank, int cqc_progress,
+            int federation_rank, int federation_progress, int empire_rank, int empire_progress)
+        {
+            if (!IsApiKeySet)
+                return null;
+
+            string query;
+            query = "set-ranks?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = query + "&Combat=" + combat_rank.ToString() + ";" + combat_progress.ToString();
+            query = query + "&Trade=" + trade_rank.ToString() + ";" + trade_progress.ToString();
+            query = query + "&Explore=" + explore_rank.ToString() + ";" + explore_progress.ToString();
+            query = query + "&CQC=" + cqc_rank.ToString() + ";" + cqc_progress.ToString();
+            query = query + "&Federation=" + federation_rank.ToString() + ";" + federation_progress.ToString();
+            query = query + "&Empire=" + empire_rank.ToString() + ";" + empire_progress.ToString();
+
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
+        public string SetCredits(long credits, long loan)
+        {
+            if (!IsApiKeySet)
+                return null;
+
+            string query;
+            query = "set-credits?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = query + "&balance=" + credits.ToString();
+            query = query + "&loan=" + loan.ToString();
+
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
+
+        public string CommanderUpdateShip(int shipId, string type)
+        {
+            if (!IsApiKeySet)
+                return null;
+
+            string query;
+            query = "update-ship?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = query + "&shipId=" + shipId.ToString();
+            query = query + "&type=" + type;
+
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
+        public string CommanderSetCurrentShip(int shipId)
+        {
+            if (!IsApiKeySet)
+                return null;
+
+            string query;
+            query = "set-ship-id?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = query + "&shipId=" + shipId.ToString();
+
+
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
 
     }
 

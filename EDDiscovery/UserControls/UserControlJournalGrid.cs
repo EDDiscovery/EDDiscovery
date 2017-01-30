@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
             discoveryform.RefreshHistoryAsync(checkedsm: true);
         }
 
-        private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
+        private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
             Tuple<long, int> pos = CurrentGridPosByJID();
 

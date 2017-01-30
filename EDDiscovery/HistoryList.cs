@@ -18,10 +18,12 @@ using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
 using EDDiscovery2.DB;
+using EDDiscovery2.EDSM;
 using OpenTK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -447,9 +449,15 @@ namespace EDDiscovery
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
 
-        public MaterialCommoditiesLedger materialcommodititiesledger;       // and the ledger..
+        public MaterialCommoditiesLedger materialcommodititiesledger = new MaterialCommoditiesLedger();       // and the ledger..
 
-        public EliteDangerous.StarScan starscan;                                           // and the results of scanning
+        public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
+
+        public int CommanderId;
+
+        public HistoryList() { }
+
+        public HistoryList(List<HistoryEntry> hl) { historylist = hl; }
 
         public void Clear()
         {
@@ -914,6 +922,231 @@ namespace EDDiscovery
                 else if (he.StopMarker)
                     started = false;
             }
+        }
+
+        // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
+        public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter)
+        {
+            List<HistoryEntry> hl = hlfilter(this);
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
+            {
+                for (int i = 0; i < hl.Count; i++)
+                {
+                    HistoryEntry he = hl[i];
+                    JournalEntry je = he.journalEntry;
+                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this, conn);        // let the HE do what it wants to with the user db
+
+                    Debug.Assert(he.MaterialCommodity != null);
+
+                    this.materialcommodititiesledger.Process(je, conn);            // update the ledger
+
+                    if (je.EventTypeID == JournalTypeEnum.Scan)
+                    {
+                        if (!this.starscan.AddScanToBestSystem(je as JournalScan, i, hl))
+                        {
+                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
+                        }
+                    }
+                }
+            }
+
+            
+          
+        }
+
+        static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
+        static private long LastEDSMCredtis = -1;
+        static private long LastShipID = -1;
+
+        private void ProcessEDSMApiCommander()
+        {
+            try
+            {
+                if (this.CommanderId < 0)  // Only sync for real commander.
+                    return;
+
+                var commander = EDDiscoveryForm.EDDConfig.Commander(CommanderId);
+
+                string edsmname = commander.Name;
+                if (!string.IsNullOrEmpty(commander.EdsmName))
+                    edsmname = commander.EdsmName;
+
+                // check if we shall sync commander info to EDSM
+                if (!commander.SyncToEdsm || string.IsNullOrEmpty(commander.APIKey) || string.IsNullOrEmpty(edsmname))
+                    return;
+
+                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
+                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank).journalEntry as JournalRank;
+                //= evt.journalEntry as JournalProgress;
+
+                if (progress == null || rank == null)
+                    return;
+
+                EDSMClass edsm = new EDSMClass();
+
+                edsm.apiKey = commander.APIKey;
+                edsm.commanderName = edsmname;
+
+
+                if (progress.EventTimeUTC != LastEDSMAPiCommanderTime) // Different from last sync with EDSM
+                {
+                    edsm.SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
+                    LastEDSMAPiCommanderTime = progress.EventTimeUTC;
+                }
+
+                
+                JournalLoadGame loadgame = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame).journalEntry as JournalLoadGame;
+                if (loadgame != null)
+                {
+                    if (LastEDSMCredtis != loadgame.Credits)
+                        edsm.SetCredits(loadgame.Credits, loadgame.Loan);
+
+                    LastEDSMCredtis = loadgame.Credits;
+
+
+                    if (LastShipID != loadgame.ShipId)
+                    {
+                        edsm.CommanderUpdateShip(loadgame.ShipId, loadgame.Ship);
+                        edsm.CommanderSetCurrentShip(loadgame.ShipId);
+
+                    }
+
+                    LastShipID = loadgame.ShipId;
+
+                }
+
+
+
+            }
+            catch
+            {
+            }
+
+
+
+        }
+
+        public HistoryEntry AddJournalEntry(JournalEntry je, Action<string> logerror)
+        {
+            if (je.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
+            {
+                HistoryEntry last = GetLast;
+
+                bool journalupdate = false;
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
+
+                if (journalupdate)
+                {
+                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+
+                    if (jfsd != null)
+                    {
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
+                    }
+                }
+
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+                {
+                    he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
+
+                    materialcommodititiesledger.Process(je, conn);
+                }
+
+                Add(he);
+
+                if (je.EventTypeID == JournalTypeEnum.Scan)
+                {
+                    JournalScan js = je as JournalScan;
+                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder))
+                    {
+                        logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                         "Scan object " + js.BodyName + " in " + he.System.name);
+                    }
+                }
+
+                return he;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress, string NetLogPath = null, bool ForceNetLogReload = false, bool ForceJournalReload = false, bool CheckEdsm = false, int CurrentCommander = Int32.MinValue)
+        {
+            List<HistoryEntry> hl = new List<HistoryEntry>();
+            EDCommander cmdr = null;
+
+            if (CurrentCommander >= 0)
+            {
+                cmdr = EDDConfig.Instance.Commander(CurrentCommander);
+                journalmonitor.ParseJournalFiles(() => cancelRequested(), (p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
+
+                if (NetLogPath != null)
+                {
+                    string errstr = null;
+                    NetLogClass.ParseFiles(NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => cancelRequested(), (p, s) => reportProgress(p, s), ForceNetLogReload, currentcmdrid: CurrentCommander);
+                }
+            }
+
+            reportProgress(-1, "Resolving systems");
+
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+            List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
+
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
+            {
+                HistoryEntry prev = null;
+                foreach (EliteDangerous.JournalEntry je in jlist)
+                {
+                    bool journalupdate = false;
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
+                    prev = he;
+
+                    hl.Add(he);                        // add to the history list here..
+
+                    if (journalupdate)
+                    {
+                        jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
+                    }
+                }
+            }
+
+            if (jlistUpdated.Count > 0)
+            {
+                reportProgress(-1, "Updating journal entries");
+
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
+                {
+                    using (DbTransaction txn = conn.BeginTransaction())
+                    {
+                        foreach (Tuple<EliteDangerous.JournalEntry, HistoryEntry> jehe in jlistUpdated)
+                        {
+                            EliteDangerous.JournalEntry je = jehe.Item1;
+                            HistoryEntry he = jehe.Item2;
+                            EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+                            if (jfsd != null)
+                            {
+                                EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, conn, txn);
+                            }
+                        }
+
+                        txn.Commit();
+                    }
+                }
+            }
+
+            // now database has been updated due to initial fill, now fill in stuff which needs the user database
+
+            HistoryList hist = new HistoryList(hl);
+            hist.CommanderId = CurrentCommander;
+
+            hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
+
+            hist.ProcessEDSMApiCommander();
+
+            return hist;
         }
 
         public static HistoryEntry FindNextSystem(List<HistoryEntry> syslist, string sysname, int dir)

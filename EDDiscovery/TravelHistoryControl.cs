@@ -47,7 +47,6 @@ namespace EDDiscovery
 
         List<EDCommander> commanders = null;
 
-        ComputeStarDistance csd = new ComputeStarDistance();
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
 
@@ -142,10 +141,6 @@ namespace EDDiscovery
             TabConfigure(tabStripBottomRight,1001);
             TabConfigure(tabStripMiddleRight,1002);
 
-            csd.Init(_discoveryForm);
-            csd.OnOtherStarDistances += OtherStarDistances;
-            csd.OnNewStarList += NewStarListComputed;
-
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
             buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
@@ -153,7 +148,6 @@ namespace EDDiscovery
 
         public void LoadControl()
         {
-            csd.StartComputeThread();
         }
 
         #endregion
@@ -347,14 +341,6 @@ namespace EDDiscovery
 
         #region New Stars
 
-        private void OtherStarDistances(SortedList<double, ISystem> closestsystemlist, ISystem vsc )       // on thread..
-        {
-            Invoke((MethodInvoker)delegate      // being paranoid about threads..
-            {
-                _discoveryForm.history.CalculateSqDistances(closestsystemlist, vsc.x, vsc.y, vsc.z, 50, true);
-            });
-        }
-
         private void NewStarListComputed(string name, SortedList<double, ISystem> csl)      // thread..
         {
             Invoke((MethodInvoker)delegate
@@ -365,11 +351,6 @@ namespace EDDiscovery
                 if (OnNearestStarListChanged != null)
                     OnNearestStarListChanged(name, csl);
             });
-        }
-
-        public void CloseClosestSystemThread()
-        {
-            csd.StopComputeThread();
         }
 
         #endregion
@@ -498,7 +479,7 @@ namespace EDDiscovery
                 textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
                 richTextBoxNote.Text = syspos.snc != null ? syspos.snc.Note : "";
 
-                csd.Add(syspos.System);     // ONLY use the primary to compute the new list, the call back will populate all of them NewStarListComputed
+                _discoveryForm.CalculateClosestSystems(syspos.System, (s, d) => NewStarListComputed(s.name, d));
             }
 
             if (OnTravelSelectionChanged != null)
@@ -576,7 +557,7 @@ namespace EDDiscovery
             comboBoxCommander.ValueMember = "Nr";
             comboBoxCommander.DisplayMember = "Name";
 
-            if (_discoveryForm.DisplayedCommander == -1)
+            if (_discoveryForm.history.CommanderId == -1)
                 comboBoxCommander.SelectedIndex = 0;
             else
                 comboBoxCommander.SelectedItem = EDDiscoveryForm.EDDConfig.CurrentCommander;
@@ -589,13 +570,12 @@ namespace EDDiscovery
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
-                _discoveryForm.DisplayedCommander = itm.Nr;
                 if (itm.Nr >= 0)
                     EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
 
                 buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
 
-                _discoveryForm.RefreshHistoryAsync();                                   // which will cause DIsplay to be called as some point
+                _discoveryForm.RefreshHistoryAsync(currentcmdr: itm.Nr);                                   // which will cause DIsplay to be called as some point
             }
         }
 

@@ -130,44 +130,25 @@ namespace EDDiscovery2
 
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            e.TextColor = colMenuText;
-
-            if (e.ToolStrip is StatusStrip)
-            {
+            if (e.Item.Selected || e.Item.Pressed)
+                e.TextColor = colMenuSelectedText;
+            else
                 e.TextColor = colMenuText;
-            }
-            if (e.Item.Selected)
-            {
-                e.TextColor = colMenuSelectedText;
-            }
-            else if (e.Item.Pressed)
-            {
-                e.TextColor = colMenuSelectedText;
-            }
+
             base.OnRenderItemText(e);
         }
 
 #if false
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
+            int offset = (e.ToolStrip is StatusStrip) ? 2 : 3;
             if (e.Vertical)
             {
-
-                e.Graphics.DrawLine(new Pen(colToolStripSeparator), 2, 0, 2, e.Item.ContentRectangle.Bottom);
-
-                if (!(e.ToolStrip is StatusStrip))
-                {
-                    e.Graphics.DrawLine(new Pen(colToolStripSeparator), 3, 0, 3, e.Item.ContentRectangle.Bottom);
-                }
+                e.Graphics.DrawLine(new Pen(colToolStripSeparator), offset, 0, offset, e.Item.ContentRectangle.Bottom);
             }
             else
             {
-
-                e.Graphics.DrawLine(new Pen(colToolStripSeparator), 0, 2, e.Item.ContentRectangle.Right, 2);
-                if (!(e.ToolStrip is StatusStrip))
-                {
-                    e.Graphics.DrawLine(new Pen(colToolStripSeparator), 0, 3, e.Item.ContentRectangle.Right, 3);
-                }
+                e.Graphics.DrawLine(new Pen(colToolStripSeparator), 0, offset, e.Item.ContentRectangle.Right, offset);
             }
         }
 
@@ -262,7 +243,7 @@ namespace EDDiscovery2
         {
             if (!(e.ToolStrip is StatusStrip))
                 base.OnRenderStatusStripSizingGrip(e);
-            
+
             /*
             int kk = 5;
             Rectangle bnd = e.AffectedBounds;
@@ -279,7 +260,7 @@ namespace EDDiscovery2
                 }
             }
              */
-            
+
             using (Pen p1 = new Pen(ColorTable.GripDark))
             {
                 int rightpx = e.AffectedBounds.Right - 1;
@@ -401,5 +382,12 @@ namespace EDDiscovery2
                 base.OnRenderItemImage(e);
         }
 #endif
+
+        protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
+        {
+            Color right = Color.FromArgb(128, colMenuText);
+            LinearGradientBrush b = new LinearGradientBrush(e.AffectedBounds, colMenuBackground, right, LinearGradientMode.Horizontal);
+            e.Graphics.FillRectangle(b, e.AffectedBounds);
+        }
     }
 }
