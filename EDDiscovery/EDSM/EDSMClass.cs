@@ -753,9 +753,9 @@ namespace EDDiscovery2.EDSM
 
                 foreach (string key in mats.Keys)
                     if (mats[key] == null)
-                        mats2[key] = 0.0;
+                        mats2[key.ToLower()] = 0.0;
                     else
-                        mats2[key] = mats[key].Value;
+                        mats2[key.ToLower()] = mats[key].Value;
 
                 jo["Materials"] = JObject.FromObject(mats2);
             }

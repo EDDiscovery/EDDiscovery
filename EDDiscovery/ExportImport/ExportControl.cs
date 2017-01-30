@@ -55,6 +55,9 @@ namespace EDDiscovery
             exportTypeList.Add(new ExportTypeClass("Sold exploration data (By date)", new ExportExplorationData(true)));
             exportTypeList.Add(new ExportTypeClass("Route plan", new ExportRoute()));
             exportTypeList.Add(new ExportTypeClass("All Notes from All Commanders", new ExportNotes()));
+            exportTypeList.Add(new ExportTypeClass("Exploration list (star data)", new ExportScan(true, false, true)));
+            exportTypeList.Add(new ExportTypeClass("Exploration list (planet data)", new ExportScan(false, true, true)));
+
 
             txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
