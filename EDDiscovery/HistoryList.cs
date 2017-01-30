@@ -956,7 +956,7 @@ namespace EDDiscovery
         }
 
         static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
-
+        static private long LastEDSMCredtis = -1;
         private void ProcessEDSMApiCommander()
         {
             try
@@ -981,15 +981,27 @@ namespace EDDiscovery
                 if (progress == null || rank == null)
                     return;
 
+                EDSMClass edsm = new EDSMClass();
+
+                edsm.apiKey = commander.APIKey;
+                edsm.commanderName = edsmname;
+
+
                 if (progress.EventTimeUTC != LastEDSMAPiCommanderTime) // Different from last sync with EDSM
                 {
-                    EDSMClass edsm = new EDSMClass();
-
-                    edsm.apiKey = commander.APIKey;
-                    edsm.commanderName = edsmname;
 
                     edsm.SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
                     LastEDSMAPiCommanderTime = progress.EventTimeUTC;
+                }
+
+                
+                JournalLoadGame loadgame = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame).journalEntry as JournalLoadGame;
+                if (loadgame != null)
+                {
+                    if (LastEDSMCredtis != loadgame.Credits)
+                        edsm.SetCredits(loadgame.Credits, loadgame.Loan);
+
+                    LastEDSMCredtis = loadgame.Credits;
                 }
             }
             catch
