@@ -32,6 +32,7 @@ namespace EDDiscovery
             TIndex,     // prepostindex "Prefix;postfix;index offset;value;value;value etc" 
             TLat,       // format as a lat 10 N/S degree 20'30. format can be empty or prefix;postfix as above
             TLong,      // format as a long 10 E/W degree 20'30. format can be empty or prefix;postfix as above
+            TShip,      // ship name
             TMaterialCommodity, // see if the stupid fdname can be resolved to something better.  format can be empty or prefix;postfix as above
         };
 
@@ -124,6 +125,14 @@ namespace EDDiscovery
                         case Types.TState:
                             if (value.Length == 0)
                                 value = formatsplit[0];
+                            break;
+
+                        case Types.TShip:
+                            value = EliteDangerous.JournalEntry.GetBetterShipName(value);
+                            if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
+                                value = formatsplit[0] + value;
+                            if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
+                                value += formatsplit[1];
                             break;
 
                         case Types.TPrePost:
