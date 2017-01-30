@@ -68,7 +68,7 @@ namespace EDDiscovery
             public override void WriteLine() { Write("\n"); }
         }
 
-        public static void Init(bool logfcexcept)
+        public static void Init()
         {
             string logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
             LogFileBaseName = logname;
@@ -85,11 +85,6 @@ namespace EDDiscovery
             Application.ThreadException += Application_ThreadException;
             // Redirect console to trace
             Console.SetOut(new TraceLogWriter());
-            // Log first-chance exceptions to help diagnose errors
-            if (logfcexcept)
-            {
-                Register_FirstChanceException_Handler();
-            }
         }
 
         public static void WriteLine(string msg)
@@ -248,7 +243,7 @@ namespace EDDiscovery
         }
 
         // Mono does not implement AppDomain.CurrentDomain.FirstChanceException
-        private static void Register_FirstChanceException_Handler()
+        public static void RegisterFirstChanceExceptionHandler()
         {
             try
             {
