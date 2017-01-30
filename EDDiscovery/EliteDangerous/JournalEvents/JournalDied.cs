@@ -45,7 +45,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
             else
             {
-                // it was an individual
+                // it was an individual, or a suicide/accident
                 Killers = new Killer[1]
                 {
                         new Killer
@@ -57,8 +57,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 };
             }
 
-            foreach( Killer k in Killers )
-                k.Ship = JournalEntry.GetBetterShipName(k.Ship);
+            if (Killers != null)
+            {
+                foreach (Killer k in Killers)
+                    k.Ship = JournalEntry.GetBetterShipName(k.Ship);
+            }
         }
 
         public Killer[] Killers { get; set; }
