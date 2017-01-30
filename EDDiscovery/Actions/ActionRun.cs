@@ -182,7 +182,7 @@ namespace EDDiscovery.Actions
                 if (progcurrent == null)
                     break;
 
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(100);
             }
         }
     }
