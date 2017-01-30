@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
+        private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
             StaticFilters.FilterGridView(dataGridViewLedger, textBoxFilter.Text);
         }
