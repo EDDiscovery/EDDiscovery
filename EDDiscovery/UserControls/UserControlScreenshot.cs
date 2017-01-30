@@ -67,30 +67,33 @@ namespace EDDiscovery.UserControls
 
         public override void Display(HistoryEntry he, HistoryList hl)
         {
-            if (he.EntryType == EliteDangerous.JournalTypeEnum.Screenshot)
+            if (he != null)
             {
-                JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
-
-                JObject jo = JObject.Parse(ss.EventDataString);
-                if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
+                if (he.EntryType == EliteDangerous.JournalTypeEnum.Screenshot)
                 {
-                    string store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);
-                    Point size = new Point(JSONHelper.GetInt(jo["EDDOutputWidth"]), JSONHelper.GetInt(jo["EDDOutputHeight"]));
+                    JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
 
-                    ScreenShot(store_name, size);
-                }
-                else if (jo["EDDInputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDInputFile"])))
-                {
-                    string filename = JSONHelper.GetStringDef(jo["EDDInputFile"]);
-                    ScreenShot(filename, new Point(ss.Width, ss.Height));
-                }
-                else
-                {
-                    string filename = discoveryform.ImageHandler.GetScreenshotPath(ss);
-
-                    if (File.Exists(filename))
+                    JObject jo = JObject.Parse(ss.EventDataString);
+                    if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
                     {
+                        string store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);
+                        Point size = new Point(JSONHelper.GetInt(jo["EDDOutputWidth"]), JSONHelper.GetInt(jo["EDDOutputHeight"]));
+
+                        ScreenShot(store_name, size);
+                    }
+                    else if (jo["EDDInputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDInputFile"])))
+                    {
+                        string filename = JSONHelper.GetStringDef(jo["EDDInputFile"]);
                         ScreenShot(filename, new Point(ss.Width, ss.Height));
+                    }
+                    else
+                    {
+                        string filename = discoveryform.ImageHandler.GetScreenshotPath(ss);
+
+                        if (File.Exists(filename))
+                        {
+                            ScreenShot(filename, new Point(ss.Width, ss.Height));
+                        }
                     }
                 }
             }

@@ -251,7 +251,7 @@ namespace EDDiscovery2.ImageHandler
             System.Threading.Timer timer = null;
 
             // Don't run if OnScreenshot has already run for this image
-            if (!ScreenshotTimers.TryGetValue(filename, out timer) || timer == null || !ScreenshotTimers.TryUpdate(filename, null, timer))
+            if ((ScreenshotTimers.TryGetValue(filename, out timer) && timer == null) || (!ScreenshotTimers.TryAdd(filename, null) && !ScreenshotTimers.TryUpdate(filename, null, timer)))
                 return;
 
             if (timer != null)
@@ -415,6 +415,7 @@ namespace EDDiscovery2.ImageHandler
         private Bitmap GetScreenshot(string inputfile, string cur_sysname, int cmdrid, ref JournalScreenshot ss, ref string store_name, ref Point finalsize, ref FileInfo fi)
         {
             FileStream testfile = null;
+            MemoryStream memstrm = new MemoryStream();
             Bitmap bmp = null;
 
             for (int tries = 60; tries-- > 0;)          // wait 30 seconds and then try it anyway.. 32K hires shots take a while to write.
@@ -425,7 +426,10 @@ namespace EDDiscovery2.ImageHandler
                     //Console.WriteLine("Trying " + inputfile);
                     using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.Read))        // throws if can't open
                     {
-                        bmp = new Bitmap(testfile);
+                        memstrm.SetLength(0);
+                        testfile.CopyTo(memstrm);
+                        memstrm.Seek(0, SeekOrigin.Begin);
+                        bmp = new Bitmap(memstrm);
                     }
                     //Console.WriteLine("Worked " + inputfile);
                     break;
@@ -440,7 +444,10 @@ namespace EDDiscovery2.ImageHandler
                 //Console.WriteLine("Trying " + inputfile);
                 using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))        // throws if can't open
                 {
-                    bmp = new Bitmap(testfile);
+                    memstrm.SetLength(0);
+                    testfile.CopyTo(memstrm);
+                    memstrm.Seek(0, SeekOrigin.Begin);
+                    bmp = new Bitmap(memstrm);
                 }
                 //Console.WriteLine("Worked " + inputfile);
             }

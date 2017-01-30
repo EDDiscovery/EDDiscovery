@@ -262,6 +262,18 @@ namespace EDDiscovery
             return n.ToLower();
         }
 
+        public static string TryReadAllTextFromFile(string filename)
+        {
+            try
+            {
+                return File.ReadAllText(filename, Encoding.UTF8);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static string SafeFileString(string normal)
         {
             normal = normal.Replace("*", "_star");

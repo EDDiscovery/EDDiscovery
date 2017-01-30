@@ -36,12 +36,12 @@ namespace EDDiscovery2.EDSM
         bool _syncTo = false;
         bool _syncFrom = false;
         int _defmapcolour = 0;
-        private EDDiscoveryForm mainForm;
+        private IDiscoveryController mainForm;
 
         public delegate void EDSMDownloadedSystems();         // used for sync from not supported yet.
         public event EDSMDownloadedSystems OnDownloadedSystems;
 
-        public EDSMSync(EDDiscoveryForm frm)
+        public EDSMSync(IDiscoveryController frm)
         {
             mainForm = frm;
         }
