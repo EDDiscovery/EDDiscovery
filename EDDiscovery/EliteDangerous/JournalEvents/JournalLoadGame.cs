@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
             LoadGameCommander = JSONHelper.GetStringDef(evt["Commander"]);
-            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             StartLanded = JSONHelper.GetBool(evt["StartLanded"]);
             StartDead = JSONHelper.GetBool(evt["StartDead"]);

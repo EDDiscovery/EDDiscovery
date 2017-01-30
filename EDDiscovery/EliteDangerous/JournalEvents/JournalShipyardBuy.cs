@@ -38,9 +38,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
             ShipPrice = JSONHelper.GetLong(evt["ShipPrice"]);
-            StoreOldShip = JSONHelper.GetStringDef(evt["StoreOldShip"]);
+            StoreOldShip = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["StoreOldShip"]));
             StoreShipId = JSONHelper.GetIntNull(evt["StoreShipID"]);
-            SellOldShip = JSONHelper.GetStringDef(evt["SellOldShip"]);
+            SellOldShip = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["SellOldShip"]));
             SellShipId = JSONHelper.GetIntNull(evt["SellShipID"]);
             SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
 
