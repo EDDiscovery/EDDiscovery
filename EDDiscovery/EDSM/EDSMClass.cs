@@ -762,7 +762,32 @@ namespace EDDiscovery2.EDSM
 
 
             return jo;
+        }
 
+
+        public string SetRanks(int combat_rank, int combat_progress, int trade_rank, int trade_progress,
+            int explore_rank, int explore_progress, int cqc_rank, int cqc_progress,
+            int federation_rank, int federation_progress, int empire_rank, int empire_progress)
+        {
+            if (!IsApiKeySet)
+                return null;
+
+            string query;
+            query = "set-ranks?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = query + "&Combat=" + combat_rank.ToString() + ";" + combat_progress.ToString();
+            query = query + "&Trade=" + trade_rank.ToString() + ";" + trade_progress.ToString();
+            query = query + "&Explore=" + explore_rank.ToString() + ";" + explore_progress.ToString();
+            query = query + "&CQC=" + cqc_rank.ToString() + ";" + cqc_progress.ToString();
+            query = query + "&Federation=" + federation_rank.ToString() + ";" + federation_progress.ToString();
+            query = query + "&Empire=" + empire_rank.ToString() + ";" + empire_progress.ToString();
+
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
         }
 
     }
