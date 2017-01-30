@@ -957,6 +957,8 @@ namespace EDDiscovery
 
         static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
         static private long LastEDSMCredtis = -1;
+        static private long LastShipID = -1;
+
         private void ProcessEDSMApiCommander()
         {
             try
@@ -989,7 +991,6 @@ namespace EDDiscovery
 
                 if (progress.EventTimeUTC != LastEDSMAPiCommanderTime) // Different from last sync with EDSM
                 {
-
                     edsm.SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
                     LastEDSMAPiCommanderTime = progress.EventTimeUTC;
                 }
@@ -1002,7 +1003,21 @@ namespace EDDiscovery
                         edsm.SetCredits(loadgame.Credits, loadgame.Loan);
 
                     LastEDSMCredtis = loadgame.Credits;
+
+
+                    if (LastShipID != loadgame.ShipId)
+                    {
+                        edsm.CommanderUpdateShip(loadgame.ShipId, loadgame.Ship);
+                        edsm.CommanderSetCurrentShip(loadgame.ShipId);
+
+                    }
+
+                    LastShipID = loadgame.ShipId;
+
                 }
+
+
+
             }
             catch
             {
