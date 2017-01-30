@@ -98,7 +98,12 @@ namespace EDDiscovery
                     {
                         LogLineHighlight($"Log Writer Exception: {ex}");
                     };
-                    TraceLog.Init(EDDConfig.Options.LogExceptions);
+                    TraceLog.Init();
+                }
+
+                if (EDDConfig.Options.LogExceptions)
+                {
+                    TraceLog.RegisterFirstChanceExceptionHandler();
                 }
             }
             catch (Exception ex)
