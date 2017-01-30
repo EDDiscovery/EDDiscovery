@@ -33,9 +33,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardSwap(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSwap)
         {
-            ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
+            ShipType = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["ShipType"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            StoreOldShip = JSONHelper.GetStringDef(evt["StoreOldShip"]);
+            StoreOldShip = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["StoreOldShip"]));
             StoreShipId = JSONHelper.GetIntNull(evt["StoreShipID"]);
             //SellOldShip = JSONHelper.GetStringDef(evt["SellOldShip"]);        // NO EVIDENCE OF THESE
             //SellShipId = JSONHelper.GetIntNull(evt["SellShipID"]);

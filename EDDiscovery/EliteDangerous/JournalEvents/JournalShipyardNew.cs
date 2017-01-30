@@ -29,7 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardNew(JObject evt ) : base(evt, JournalTypeEnum.ShipyardNew)
         {
-            ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
+            ShipType = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["ShipType"]));
             ShipId = JSONHelper.GetInt(evt["NewShipID"]);
 
         }
