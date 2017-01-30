@@ -18,6 +18,7 @@ using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
 using EDDiscovery2.DB;
+using EDDiscovery2.EDSM;
 using OpenTK;
 using System;
 using System.Collections;
@@ -949,6 +950,54 @@ namespace EDDiscovery
                     }
                 }
             }
+
+            
+          
+        }
+
+        static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
+
+        private void ProcessEDSMApiCommander()
+        {
+            try
+            {
+                if (this.CommanderId < 0)  // Only sync for real commander.
+                    return;
+
+                var commander = EDDiscoveryForm.EDDConfig.Commander(CommanderId);
+
+                string edsmname = commander.Name;
+                if (!string.IsNullOrEmpty(commander.EdsmName))
+                    edsmname = commander.EdsmName;
+
+                // check if we shall sync commander info to EDSM
+                if (!commander.SyncToEdsm || string.IsNullOrEmpty(commander.APIKey) || string.IsNullOrEmpty(edsmname))
+                    return;
+
+                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
+                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank).journalEntry as JournalRank;
+                //= evt.journalEntry as JournalProgress;
+
+                if (progress == null || rank == null)
+                    return;
+
+                if (progress.EventTimeUTC != LastEDSMAPiCommanderTime) // Different from last sync with EDSM
+                {
+                    EDSMClass edsm = new EDSMClass();
+
+                    edsm.apiKey = commander.APIKey;
+                    edsm.commanderName = edsmname;
+
+                    edsm.SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
+                    LastEDSMAPiCommanderTime = progress.EventTimeUTC;
+                }
+            }
+            catch
+            {
+            }
+
+
+
         }
 
         public HistoryEntry AddJournalEntry(JournalEntry je, Action<string> logerror)
@@ -1067,6 +1116,8 @@ namespace EDDiscovery
             hist.CommanderId = CurrentCommander;
 
             hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
+
+            hist.ProcessEDSMApiCommander();
 
             return hist;
         }
