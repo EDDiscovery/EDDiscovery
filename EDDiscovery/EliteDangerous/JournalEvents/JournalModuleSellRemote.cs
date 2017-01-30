@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             SellItem = JSONHelper.GetStringDef(evt["SellItem"]);
             SellItemLocalised = JSONHelper.GetStringDef(evt["SellItem_Localised"]);
             SellPrice = JSONHelper.GetLong(evt["SellPrice"]);
-            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             ServerId = JSONHelper.GetInt(evt["ServerId"]);
         }

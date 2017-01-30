@@ -32,7 +32,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardTransfer(JObject evt ) : base(evt, JournalTypeEnum.ShipyardTransfer)
         {
-            ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
+            ShipType = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["ShipType"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             System = JSONHelper.GetStringDef(evt["System"]);
             Distance = JSONHelper.GetDouble(evt["Distance"]);

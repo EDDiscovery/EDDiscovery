@@ -47,11 +47,14 @@ namespace EDDiscovery.EliteDangerous
         CommitCrime = 100,
         CommunityGoalJoin = 110,
         CommunityGoalReward = 120,
+        CommunityGoalDiscard = 1040,
         Continued = 125,
         CrewAssign = 126,
         CrewFire = 127,
         CrewHire = 128,
+        DataScanned = 1030,
         DatalinkScan = 130,
+        DatalinkVoucher = 1020,
         Died = 140,
         Docked = 145,
         DockFighter = 150,
@@ -67,6 +70,7 @@ namespace EDDiscovery.EliteDangerous
         EngineerProgress = 250,
         EscapeInterdiction = 260,
         FactionKillBond = 270,
+        FetchRemoteModule = 1000,
         FSDJump = 280,
         FuelScoop = 290,
         Fileheader = 300,
@@ -82,6 +86,7 @@ namespace EDDiscovery.EliteDangerous
         Liftoff = 380,
         LoadGame = 390,
         Location = 400,
+        MassModuleStore = 1010,
         MarketBuy = 410,
         MarketSell = 420,
         MaterialCollected = 430,
@@ -95,6 +100,7 @@ namespace EDDiscovery.EliteDangerous
         ModuleBuy = 510,
         ModuleRetrieve = 515,
         ModuleSell = 520,
+        ModuleSellRemote = 990,
         ModuleStore = 525,
         ModuleSwap = 530,
         NewCommander = 540,
@@ -145,12 +151,6 @@ namespace EDDiscovery.EliteDangerous
         WingAdd = 960,
         WingJoin = 970,
         WingLeave = 980,
-        ModuleSellRemote = 990,
-        FetchRemoteModule = 1000,
-        MassModuleStore = 1010,
-        DatalinkVoucher = 1020,
-        DataScanned = 1030,
-        CommunityGoalDiscard = 1040,
 
         EDDItemSet = 2000,
 
@@ -266,7 +266,7 @@ namespace EDDiscovery.EliteDangerous
         public JournalTypeEnum EventTypeID;
 
         public DateTime EventTimeUTC;
-        
+
         public int EdsmID;                      // 0 = unassigned, >0 = assigned
 
         protected JObject jEventData;           // event string from the log
@@ -318,14 +318,14 @@ namespace EDDiscovery.EliteDangerous
         {
             if (jc == null)
             {
-                if ( jsonconvcache == null )
+                if (jsonconvcache == null)
                     jsonconvcache = StandardConverters();
 
                 jc = jsonconvcache;
             }
 
-            JSONPrettyPrint jpp = new JSONPrettyPrint(jc,DefaultRemoveItems() + ((additionalremoves!= null) ? (";" + additionalremoves) : ""),"_Localised",EventTypeStr);
-            return jpp.PrettyPrint(EventDataString,80);
+            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), "_Localised", EventTypeStr);
+            return jpp.PrettyPrint(EventDataString, 80);
         }
 
         public JournalEntry(JObject jo, JournalTypeEnum jtype)
@@ -437,7 +437,7 @@ namespace EDDiscovery.EliteDangerous
 
         private bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id",tn))
+            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id", tn))
             {
                 cmd.AddParameterWithValue("@ID", Id);
                 cmd.AddParameterWithValue("@EventTime", EventTimeUTC);  // MUST use UTC connection
@@ -458,7 +458,7 @@ namespace EDDiscovery.EliteDangerous
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
-                Delete(idvalue,cn);
+                Delete(idvalue, cn);
             }
         }
 
@@ -472,7 +472,7 @@ namespace EDDiscovery.EliteDangerous
         }
 
         //dist >0 to update
-        public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos , double dist, SQLiteConnectionUser cn = null, DbTransaction tn = null)
+        public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos, double dist, SQLiteConnectionUser cn = null, DbTransaction tn = null)
         {
             bool ownconn = false;
 
@@ -560,7 +560,7 @@ namespace EDDiscovery.EliteDangerous
                     {
                         cmd.AddParameterWithValue("@journalid", journalid);
                         cmd.AddParameterWithValue("@sync", je.Synced);
-                        System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", journalid , je.Synced));
+                        System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", journalid, je.Synced));
                         SQLiteDBClass.SQLNonQueryText(cn, cmd);
                     }
                 }
@@ -581,7 +581,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public static long AddEDDItemSet(int cmdrid, DateTime dt, long jidofitemset, List<MaterialCommodities> changelist )     // add item, return journal ID
+        public static long AddEDDItemSet(int cmdrid, DateTime dt, long jidofitemset, List<MaterialCommodities> changelist)     // add item, return journal ID
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
@@ -725,7 +725,7 @@ namespace EDDiscovery.EliteDangerous
 
 
 
-        public static List<JournalEntry> GetAllByTLU(long tluid )
+        public static List<JournalEntry> GetAllByTLU(long tluid)
         {
             List<JournalEntry> vsc = new List<JournalEntry>();
 
@@ -841,7 +841,7 @@ namespace EDDiscovery.EliteDangerous
             return entries;
         }
 
-        public static int RemoveDuplicateFSDEntries(int currentcmdrid )
+        public static int RemoveDuplicateFSDEntries(int currentcmdrid)
         {
             // list of systems in journal, sorted by time
             List<JournalLocOrJump> vsSystemsEnts = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().OrderBy(j => j.EventTimeUTC).ToList();
@@ -854,11 +854,11 @@ namespace EDDiscovery.EliteDangerous
                     JournalEvents.JournalFSDJump prev = vsSystemsEnts[ji - 1] as JournalEvents.JournalFSDJump;
                     JournalEvents.JournalFSDJump current = vsSystemsEnts[ji] as JournalEvents.JournalFSDJump;
 
-                    if ( prev != null && current != null )
+                    if (prev != null && current != null)
                     {
                         bool previssame = (prev.StarSystem.Equals(current.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !current.HasCoordinate || (prev.StarPos - current.StarPos).LengthSquared < 0.01));
 
-                        if ( previssame )
+                        if (previssame)
                         {
                             Delete(prev.Id, cn);
                             count++;
@@ -892,11 +892,11 @@ namespace EDDiscovery.EliteDangerous
         {
             //foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum))) // check code only to make sure names match
             //{
-                //Type p = Type.GetType("EDDiscovery.EliteDangerous.JournalEvents.Journal" + jte.ToString());
-                //Debug.Assert(p != null);
+            //Type p = Type.GetType("EDDiscovery.EliteDangerous.JournalEvents.Journal" + jte.ToString());
+            //Debug.Assert(p != null);
             //}
 
-            Type t = Type.GetType("EDDiscovery.EliteDangerous.JournalEvents.Journal" + text,false,true); // no exception, ignore case here
+            Type t = Type.GetType("EDDiscovery.EliteDangerous.JournalEvents.Journal" + text, false, true); // no exception, ignore case here
             return t;
         }
 
@@ -911,7 +911,7 @@ namespace EDDiscovery.EliteDangerous
 
             Type jtype = TypeOfJournalEntry(Eventstr);
 
-            if ( jtype == null )
+            if (jtype == null)
             {
                 System.Diagnostics.Trace.WriteLine("Unknown event: " + Eventstr);
                 return new JournalUnknown(jo, Eventstr);
@@ -920,7 +920,7 @@ namespace EDDiscovery.EliteDangerous
                 return (JournalEntry)Activator.CreateInstance(jtype, jo);
         }
 
-        static public System.Drawing.Bitmap GetIcon(string eventtypestr, string seltext = null )    // get ICON associated with the event type.
+        static public System.Drawing.Bitmap GetIcon(string eventtypestr, string seltext = null)    // get ICON associated with the event type.
         {
             Type jtype = TypeOfJournalEntry(eventtypestr);
 
@@ -931,9 +931,9 @@ namespace EDDiscovery.EliteDangerous
 
             System.Reflection.MethodInfo m = jtype.GetMethod("IconSelect");                 // first we see if the class defines this function..
 
-            if ( m != null )
+            if (m != null)
             {
-                return (System.Drawing.Bitmap)m.Invoke(null, new Object [] { seltext });    // if so, pass it the string and let it pick the icon
+                return (System.Drawing.Bitmap)m.Invoke(null, new Object[] { seltext });    // if so, pass it the string and let it pick the icon
             }
             else
             {
@@ -955,7 +955,7 @@ namespace EDDiscovery.EliteDangerous
         }
 
 
-        static public bool ResetCommanderID(int from , int to)
+        static public bool ResetCommanderID(int from, int to)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
@@ -966,7 +966,7 @@ namespace EDDiscovery.EliteDangerous
 
                     cmd.AddParameterWithValue("@cmdridto", to);
                     cmd.AddParameterWithValue("@cmdridfrom", from);
-                    System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with {1}", from , to));
+                    System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with {1}", from, to));
                     SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 }
             }
@@ -1035,8 +1035,9 @@ namespace EDDiscovery.EliteDangerous
                 jc.AddPrePostfix("SellItem", "; sold", "");
 
                 jc.AddPrePostfix("Credits", "; credits", "", "LoadGame");
-                jc.AddPrePostfix("Ship;ShipType", "Ship ;", "");
-                jc.AddPrePostfix("StoreOldShip", "; stored", "");
+
+                jc.AddSpecial("Ship;ShipType", JSONConverters.Types.TShip, "Ship ;", "");
+                jc.AddSpecial("StoreOldShip;SellOldShip", JSONConverters.Types.TShip, "; stored", "");
 
                 jc.AddScale("Health", 100.0, "'Health' 0.0'%'", "");
 
@@ -1064,7 +1065,7 @@ namespace EDDiscovery.EliteDangerous
             {           // scans
                 string scan = JL(new[] { JournalTypeEnum.Scan });
                 jc.AddPrePostfix("BodyName", "Scan ", "", scan);
-                jc.AddScale("DistanceFromArrivalLS", 1.0, "0.0' ls from arrival point'", "", scan );
+                jc.AddScale("DistanceFromArrivalLS", 1.0, "0.0' ls from arrival point'", "", scan);
                 jc.AddPrePostfix("StarType", "; type star", "", scan);
                 jc.AddScale("StellarMass", 1.0, "0.0' stellar masses'", "", scan);
                 jc.AddScale("Radius", 1.0 / 1000.0, "0.0' km radius'", "", scan);
@@ -1095,7 +1096,7 @@ namespace EDDiscovery.EliteDangerous
 
 
             {       // places where commodities occur
-                string commodities = JL(new[] { JournalTypeEnum.MarketBuy, JournalTypeEnum.MarketSell , JournalTypeEnum.MiningRefined });
+                string commodities = JL(new[] { JournalTypeEnum.MarketBuy, JournalTypeEnum.MarketSell, JournalTypeEnum.MiningRefined });
                 jc.AddSpecial("Type", JSONConverters.Types.TMaterialCommodity, ";", "", commodities);
                 jc.AddPrePostfix("Count", ";", "", commodities);
             }
@@ -1110,7 +1111,7 @@ namespace EDDiscovery.EliteDangerous
             return jc;
         }
 
-        static string JL( JournalTypeEnum[] ar )
+        static string JL(JournalTypeEnum[] ar)
         {
             string s = "";
             foreach (JournalTypeEnum a in ar)
@@ -1139,11 +1140,11 @@ namespace EDDiscovery.EliteDangerous
                     {
                         System.Reflection.MethodInfo m = jtype.GetMethod(method);
 
-                        if (m == null && method2 != null )
+                        if (m == null && method2 != null)
                             m = jtype.GetMethod(method2);
 
-                        if ( m != null )
-                            ret.Add( (towords) ? Tools.SplitCapsWord(n) : n );
+                        if (m != null)
+                            ret.Add((towords) ? Tools.SplitCapsWord(n) : n);
                     }
                 }
             }
@@ -1151,6 +1152,51 @@ namespace EDDiscovery.EliteDangerous
             return ret;
         }
 
-    }
+        private static Dictionary<string, string> shipnames = new Dictionary<string, string>()
+        {
+                { "adder" ,                     "Adder"},
+                { "anaconda",                   "Anaconda" },
+                { "asp",                        "Asp Explorer" },
+                { "asp_scout",                  "Asp Scout" },
+                { "belugaliner",                "Beluga Liner" },
+                { "cobramkiii",                 "Cobra Mk. III" },
+                { "cobramkiv",                  "Cobra Mk. IV" },
+                { "cutter",                     "Imperial Cutter" },
+                { "diamondback",                "Diamondback Scout" },
+                { "diamondbackxl",              "Diamondback Explorer" },
+                { "eagle",                      "Eagle" },
+                { "empire_courier",             "Imperial Courier" },
+                { "empire_eagle",               "Imperial Eagle" },
+                { "empire_fighter",             "Imperial Fighter" },
+                { "empire_trader",              "Imperial Clipper" },
+                { "federation_corvette",        "Federal Corvette" },
+                { "federation_dropship",        "Federal Dropship" },
+                { "federation_dropship_mkii",   "Federal Assault Ship" },
+                { "federation_gunship",         "Federal Gunship" },
+                { "federation_fighter",         "F63 Condor" },
+                { "ferdelance",                 "Fer-de-Lance" },
+                { "hauler",                     "Hauler" },
+                { "independant_trader",         "Keelback" },
+                { "orca",                       "Orca" },
+                { "python",                     "Python" },
+                { "sidewinder",                 "Sidewinder" },
+                { "type6",                      "Type 6 Transporter" },
+                { "type7",                      "Type 7 Transporter" },
+                { "type9",                      "Type 9 Heavy" },
+                { "viper",                      "Viper Mk. III" },
+                { "viper_mkiv",                 "Viper Mk. IV" },
+                { "vulture",                    "Vulture" }
+        };
 
+        static public string GetBetterShipName(string inname)
+        {
+            return shipnames.ContainsKey(inname.ToLower()) ? shipnames[inname.ToLower()] : inname;
+        }
+
+        static public string PhoneticShipName(string inname)
+        {
+            return inname.Replace("Mk. IV", "Mark 4").Replace("Mk. III", "Mark 3");
+        }
+    }
 }
+     
