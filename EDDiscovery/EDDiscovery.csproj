@@ -195,6 +195,7 @@
     <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
     <Compile Include="Actions\ActionCommands\ActionPerform.cs" />
     <Compile Include="Actions\ActionCommands\ActionPopout.cs" />
+    <Compile Include="Actions\ActionCommands\ActionProgramwindow.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
     <Compile Include="Actions\ActionCommands\ActionScan.cs" />
     <Compile Include="Actions\ActionFile.cs" />
@@ -206,10 +207,10 @@
     <Compile Include="Actions\ActionCommands\ActionSleep.cs" />
     <Compile Include="Actions\ActionCommands\ActionStructures.cs" />
     <Compile Include="Actions\ActionCommands\ActionPlay.cs" />
-    <Compile Include="Actions\ActionProgramForm.cs">
+    <Compile Include="Conditions\ActionProgramForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Actions\ActionProgramForm.Designer.cs">
+    <Compile Include="Conditions\ActionProgramForm.Designer.cs">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
@@ -780,7 +781,7 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Actions\ActionProgramForm.resx">
+    <EmbeddedResource Include="Conditions\ActionProgramForm.resx">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">

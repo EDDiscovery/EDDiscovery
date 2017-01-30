@@ -43,6 +43,9 @@ namespace ExtendedControls
 
         protected override void OnControlAdded(ControlEventArgs e)
         {  // as controls are added, remember them in local variables.
+
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " VS start");
+
             if (e.Control is VScrollBarCustom)
             {
                 vsc = e.Control as VScrollBarCustom;
@@ -58,7 +61,7 @@ namespace ExtendedControls
         {
             base.OnLayout(levent);
 
-            //System.Diagnostics.Debug.WriteLine("Client rect {0}", base.ClientRectangle);
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "  VS Layout");
             Rectangle area = ClientRectangle;
             area.X += InternalMargin.Left;
             area.Y += InternalMargin.Top;
@@ -113,6 +116,7 @@ namespace ExtendedControls
 
         private int ScrollTo(int newscrollpos , bool updatescroller = false )
         {
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "  VS Scroll to");
             int maxy = 0;
             foreach (Control c in Controls)
             {
@@ -169,6 +173,7 @@ namespace ExtendedControls
 
         public void RemoveAllControls( List<Control> excluded = null)
         {
+            SuspendLayout();
             List<Control> listtoremove = (from Control s in Controls where (!(s is VScrollBarCustom) && (excluded==null || !excluded.Contains(s))) select s).ToList();
             foreach (Control c in listtoremove)
             {
@@ -180,6 +185,7 @@ namespace ExtendedControls
             }
 
             scrollpos = 0;
+            ResumeLayout();
         }
     }
 }

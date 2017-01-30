@@ -88,7 +88,6 @@ namespace EDDiscovery
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.panel_topright = new System.Windows.Forms.Panel();
-            this.buttonAction = new ExtendedControls.ButtonExt();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
             this.tabStripMiddleRight = new ExtendedControls.TabStrip();
@@ -335,7 +334,7 @@ namespace EDDiscovery
             this.buttonSync.BorderColorScaling = 1.25F;
             this.buttonSync.ButtonColorScaling = 0.5F;
             this.buttonSync.ButtonDisabledScaling = 0.5F;
-            this.buttonSync.Location = new System.Drawing.Point(84, 65);
+            this.buttonSync.Location = new System.Drawing.Point(6, 65);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(92, 23);
             this.buttonSync.TabIndex = 4;
@@ -698,7 +697,6 @@ namespace EDDiscovery
             // 
             // panel_topright
             // 
-            this.panel_topright.Controls.Add(this.buttonAction);
             this.panel_topright.Controls.Add(this.comboBoxCustomPopOut);
             this.panel_topright.Controls.Add(this.button_RefreshHistory);
             this.panel_topright.Controls.Add(this.buttonMap2D);
@@ -712,19 +710,6 @@ namespace EDDiscovery
             this.panel_topright.Size = new System.Drawing.Size(337, 100);
             this.panel_topright.TabIndex = 26;
             this.panel_topright.Resize += new System.EventHandler(this.panel_topright_Resize);
-            // 
-            // buttonAction
-            // 
-            this.buttonAction.BorderColorScaling = 1.25F;
-            this.buttonAction.ButtonColorScaling = 0.5F;
-            this.buttonAction.ButtonDisabledScaling = 0.5F;
-            this.buttonAction.Location = new System.Drawing.Point(7, 65);
-            this.buttonAction.Name = "buttonAction";
-            this.buttonAction.Size = new System.Drawing.Size(64, 23);
-            this.buttonAction.TabIndex = 19;
-            this.buttonAction.Text = "Actions";
-            this.buttonAction.UseVisualStyleBackColor = true;
-            this.buttonAction.Click += new System.EventHandler(this.buttonAction_Click);
             // 
             // labelCMDR
             // 
@@ -861,6 +846,5 @@ namespace EDDiscovery
         private ExtendedControls.TabStrip tabStripBottom;
         private ExtendedControls.TabStrip tabStripMiddleRight;
         private ExtendedControls.TabStrip tabStripBottomRight;
-        private ExtendedControls.ButtonExt buttonAction;
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConditionFilterForm));
             this.panelTop = new System.Windows.Forms.Panel();
             this.panel_close = new ExtendedControls.DrawnPanel();
@@ -50,10 +51,13 @@
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.contextMenuStripBottom = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.configureInstallationValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop.SuspendLayout();
             this.panelOuter.SuspendLayout();
             this.panelVScroll.SuspendLayout();
             this.panelOK.SuspendLayout();
+            this.contextMenuStripBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -64,7 +68,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(3, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(890, 24);
+            this.panelTop.Size = new System.Drawing.Size(1098, 24);
             this.panelTop.TabIndex = 4;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
@@ -76,7 +80,7 @@
             this.panel_close.DrawnImage = null;
             this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
             this.panel_close.ImageText = null;
-            this.panel_close.Location = new System.Drawing.Point(867, 0);
+            this.panel_close.Location = new System.Drawing.Point(1075, 0);
             this.panel_close.MarginSize = 6;
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
@@ -94,7 +98,7 @@
             this.panel_minimize.DrawnImage = null;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.ImageText = null;
-            this.panel_minimize.Location = new System.Drawing.Point(837, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(1045, 0);
             this.panel_minimize.MarginSize = 6;
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
@@ -121,7 +125,7 @@
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(3, 24);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(890, 400);
+            this.panelOuter.Size = new System.Drawing.Size(1098, 492);
             this.panelOuter.TabIndex = 8;
             // 
             // panelVScroll
@@ -135,7 +139,7 @@
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.ScrollBarWidth = 20;
-            this.panelVScroll.Size = new System.Drawing.Size(888, 398);
+            this.panelVScroll.Size = new System.Drawing.Size(1096, 490);
             this.panelVScroll.TabIndex = 8;
             this.panelVScroll.VerticalScrollBarDockRight = true;
             this.panelVScroll.Resize += new System.EventHandler(this.panelVScroll_Resize);
@@ -176,14 +180,14 @@
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
-            this.vScrollBarCustom1.LargeChange = 50;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(868, 0);
-            this.vScrollBarCustom1.Maximum = -354;
+            this.vScrollBarCustom1.LargeChange = 32;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(1076, 0);
+            this.vScrollBarCustom1.Maximum = -424;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 398);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 490);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
@@ -192,8 +196,8 @@
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -354;
-            this.vScrollBarCustom1.ValueLimited = -354;
+            this.vScrollBarCustom1.Value = -424;
+            this.vScrollBarCustom1.ValueLimited = -424;
             // 
             // buttonMore
             // 
@@ -220,9 +224,9 @@
             this.panelOK.Controls.Add(this.buttonCancel);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(3, 424);
+            this.panelOK.Location = new System.Drawing.Point(3, 516);
             this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(890, 30);
+            this.panelOK.Size = new System.Drawing.Size(1098, 30);
             this.panelOK.TabIndex = 8;
             // 
             // buttonImport
@@ -345,7 +349,7 @@
             this.buttonCancel.BorderColorScaling = 1.25F;
             this.buttonCancel.ButtonColorScaling = 0.5F;
             this.buttonCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonCancel.Location = new System.Drawing.Point(714, 4);
+            this.buttonCancel.Location = new System.Drawing.Point(922, 4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 6;
@@ -359,7 +363,7 @@
             this.buttonOK.BorderColorScaling = 1.25F;
             this.buttonOK.ButtonColorScaling = 0.5F;
             this.buttonOK.ButtonDisabledScaling = 0.5F;
-            this.buttonOK.Location = new System.Drawing.Point(811, 4);
+            this.buttonOK.Location = new System.Drawing.Point(1019, 4);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 7;
@@ -369,17 +373,31 @@
             // 
             // statusStripCustom
             // 
-            this.statusStripCustom.Location = new System.Drawing.Point(3, 454);
+            this.statusStripCustom.Location = new System.Drawing.Point(3, 546);
             this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(890, 22);
+            this.statusStripCustom.Size = new System.Drawing.Size(1098, 22);
             this.statusStripCustom.TabIndex = 27;
             this.statusStripCustom.Text = "statusStripCustom1";
+            // 
+            // contextMenuStripBottom
+            // 
+            this.contextMenuStripBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.configureInstallationValuesToolStripMenuItem});
+            this.contextMenuStripBottom.Name = "contextMenuStripBottom";
+            this.contextMenuStripBottom.Size = new System.Drawing.Size(226, 48);
+            // 
+            // configureInstallationValuesToolStripMenuItem
+            // 
+            this.configureInstallationValuesToolStripMenuItem.Name = "configureInstallationValuesToolStripMenuItem";
+            this.configureInstallationValuesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.configureInstallationValuesToolStripMenuItem.Text = "Configure Installation Values";
+            this.configureInstallationValuesToolStripMenuItem.Click += new System.EventHandler(this.configureInstallationValuesToolStripMenuItem_Click);
             // 
             // ConditionFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(896, 476);
+            this.ClientSize = new System.Drawing.Size(1104, 568);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);
@@ -395,6 +413,7 @@
             this.panelVScroll.ResumeLayout(false);
             this.panelOK.ResumeLayout(false);
             this.panelOK.PerformLayout();
+            this.contextMenuStripBottom.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -423,5 +442,7 @@
         private ExtendedControls.ButtonExt buttonImport;
         private ExtendedControls.ButtonExt buttonSort;
         private ExtendedControls.ButtonExt buttonSort2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripBottom;
+        private System.Windows.Forms.ToolStripMenuItem configureInstallationValuesToolStripMenuItem;
     }
 }

@@ -30,15 +30,37 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalPromotion(JObject evt) : base(evt, JournalTypeEnum.Promotion)
         {
-            Combat = (CombatRank)JSONHelper.GetInt(evt["Combat"]);
-            Trade = (TradeRank)JSONHelper.GetInt(evt["Trade"]);
-            Explore = (ExplorationRank)JSONHelper.GetInt(evt["Explore"]);
-            CQC = (CQCRank)JSONHelper.GetInt(evt["CQC"]);
+            int? c = JSONHelper.GetIntNull(evt["Combat"]);
+            if (c.HasValue)
+                Combat = (CombatRank)c.Value;
+
+            int? t = JSONHelper.GetIntNull(evt["Trade"]);
+            if ( t.HasValue)
+                Trade = (TradeRank)t;
+
+            int? e = JSONHelper.GetIntNull(evt["Explore"]);
+            if (e.HasValue)
+                Explore = (ExplorationRank)e;
+
+            int? q = JSONHelper.GetIntNull(evt["CQC"]);
+            if ( q.HasValue)
+                CQC = (CQCRank)q;
+
+            int? f = JSONHelper.GetIntNull(evt["Federation"]);
+            if ( f.HasValue)
+                Federation = (FederationRank)f;
+
+            int? evilempire = JSONHelper.GetIntNull(evt["Empire"]);
+            if ( evilempire.HasValue)
+                Empire = (EmpireRank)evilempire;
         }
-        public CombatRank Combat { get; set; }
-        public TradeRank Trade { get; set; }
-        public ExplorationRank Explore { get; set; }
-        public CQCRank CQC { get; set; }
+
+        public CombatRank? Combat { get; set; }
+        public TradeRank? Trade { get; set; }
+        public ExplorationRank? Explore { get; set; }
+        public CQCRank? CQC { get; set; }
+        public FederationRank? Federation { get; set; }
+        public EmpireRank? Empire { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.promotion; } }
     }

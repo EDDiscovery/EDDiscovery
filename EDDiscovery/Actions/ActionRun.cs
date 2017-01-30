@@ -19,7 +19,6 @@ namespace EDDiscovery.Actions
 
         bool async = false;             // if this Action is an asynchoronous object
         bool executing = false;         // Records is executing
-        int progmaxcount = 10000;
       
         Timer restarttick = new Timer();
 
@@ -58,16 +57,12 @@ namespace EDDiscovery.Actions
 
             while( true )
             {
-                //TBD
-                if (progmaxcount > 0 && --progmaxcount == 0 ) { System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " **** PROG EXCEEDED RUN LIMIT" ); TerminateCurrentProgram(); }
-                // TBD
-
                 if (progcurrent != null)
                 {
                     if (progcurrent.GetErrorList != null)       // any errors pending, handle
                     {
                         discoveryform.LogLine("Error at " + progcurrent.Location + ":" + Environment.NewLine + progcurrent.GetErrorList);
-                        TerminateCurrentProgram();              // clear current program..
+                        progcurrent = null; // terminate current program..
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it
                     {
@@ -173,9 +168,22 @@ namespace EDDiscovery.Actions
                 Execute();
         }
 
-        public void TerminateCurrentProgram()          // stop this program, move onto next
+        public void TerminateAll()          // halt everything
         {
             progcurrent = null;
+            progqueue.Clear();
+        }
+
+        public void WaitTillFinished(int timeout)           // Could be IN ANOTHER THREAD BEWARE
+        {
+            int t = Environment.TickCount + timeout;
+            while( Environment.TickCount < t )
+            {
+                if (progcurrent == null)
+                    break;
+
+                System.Threading.Thread.Sleep(500);
+            }
         }
     }
 }

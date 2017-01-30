@@ -20,11 +20,22 @@ public static class ObjectExtensions
         return (obj ?? string.Empty).ToString();
     }
 
-    public static string QuotedEscapeString(this string obj )
+    public static string QuoteString(this string obj, bool comma = false, bool bracket = false)
     {
-        if (obj.Contains("\"") || obj.Contains(" ") || obj.Contains(")"))       // ) because its used to terminate var lists sometimes
+        if (obj.Length == 0 || obj.Contains("\"") || obj.Contains(" ") || (bracket && obj.Contains(")")) || (comma && obj.Contains(",")))
             obj = "\"" + obj.Replace("\"", "\\\"") + "\"";
+
         return obj;
+    }
+
+    public static string EscapeControlChars(this string obj)
+    {
+        return obj.Replace("\r", "\\r").Replace("\n", "\\n");
+    }
+
+    public static string ReplaceEscapeControlChars(this string obj)
+    {
+        return obj.Replace("\\r", "\r").Replace("\\n", "\n");
     }
 
     public static int FirstCharNonWhiteSpace(this string obj )

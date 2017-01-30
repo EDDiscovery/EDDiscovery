@@ -65,6 +65,7 @@ namespace EDDiscovery.Actions
             new Commands("Scan", typeof(ActionScan) , ActionType.Cmd),
             new Commands("Popout", typeof(ActionPopout) , ActionType.Cmd),
             new Commands("Historytab", typeof(ActionHistoryTab) , ActionType.Cmd),
+            new Commands("ProgramWindow", typeof(ActionProgramwindow) , ActionType.Cmd),
             new Commands("Perform", typeof(ActionPerform) , ActionType.Cmd),
             new Commands("If", typeof(ActionIf) , ActionType.If),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
@@ -130,29 +131,36 @@ namespace EDDiscovery.Actions
 
         public static class PromptSingleLine
         {
-            public static string ShowDialog(Form p, string text, String defaultValue, string caption)
+            public static string ShowDialog(Form p, string text, String defaultValue, string caption , bool multiline = false)
             {
                 Form prompt = new Form()
                 {
                     Width = 440,
-                    Height = 160,
+                    Height = 160 + (multiline?40:0),
                     FormBorderStyle = FormBorderStyle.FixedDialog,
                     Text = caption,
                     StartPosition = FormStartPosition.CenterScreen,
                 };
 
                 Label textLabel = new Label() { Left = 10, Top = 20, Width = 400, Text = text };
-                TextBox textBox = new TextBox() { Left = 10, Top = 50, Width = 400 };
+                TextBox textBox = new TextBox() { Left = 10, Top = 50, Width = 400 , Height = 20 + (multiline?40:0) };
                 textBox.Text = defaultValue;
-                Button confirmation = new Button() { Text = "Ok", Left = 330, Width = 80, Top = 90, DialogResult = DialogResult.OK };
-                Button cancel = new Button() { Text = "Cancel", Left = 245, Width = 80, Top = 90, DialogResult = DialogResult.Cancel };
+                int okline = 90;
+                if (multiline )
+                {
+                    textBox.Multiline = true;
+                    textBox.ScrollBars = ScrollBars.Vertical;
+                    textBox.WordWrap = true;
+                    okline = 130;
+                }
+                Button confirmation = new Button() { Text = "Ok", Left = 330, Width = 80, Top = okline, DialogResult = DialogResult.OK };
+                Button cancel = new Button() { Text = "Cancel", Left = 245, Width = 80, Top = okline, DialogResult = DialogResult.Cancel };
                 confirmation.Click += (sender, e) => { prompt.Close(); };
                 cancel.Click += (sender, e) => { prompt.Close(); };
                 prompt.Controls.Add(textBox);
                 prompt.Controls.Add(confirmation);
                 prompt.Controls.Add(cancel);
                 prompt.Controls.Add(textLabel);
-                prompt.AcceptButton = confirmation;
                 prompt.CancelButton = cancel;
                 prompt.ShowInTaskbar = false;
 

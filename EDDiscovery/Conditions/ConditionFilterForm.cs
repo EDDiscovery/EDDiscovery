@@ -23,6 +23,7 @@ namespace EDDiscovery2
         EDDiscovery.Actions.ActionFileList actionfilelist;      // list of vars to list, normally global vars
         List<string> eventlist;
         List<string> additionalfieldnames;          // must be set
+        string initialtitle;
         EDDiscovery2.EDDTheme theme;
         bool allowoutercond;
 
@@ -153,12 +154,16 @@ namespace EDDiscovery2
 
             bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
-            this.Text = label_index.Text = t;
+            initialtitle = this.Text = label_index.Text = t;
 
             if (!IsActionsActive)        // turn off these if not in use..
             {
                 buttonImport.Visible = buttonExtGlobals.Visible = labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
                         comboBoxCustomEditProg.Visible = checkBoxCustomSetEnabled.Visible = false;
+            }
+            else
+            {
+                panelOK.ContextMenuStrip = this.contextMenuStripBottom;
             }
         }
 
@@ -167,29 +172,47 @@ namespace EDDiscovery2
             if (clist != null)
             {
                 SuspendLayout();
+                this.panelOuter.SuspendLayout();
+                panelVScroll.SuspendLayout();
 
-                foreach (Group g in groups) // remove existing
-                {
-                    panelVScroll.Controls.Remove(g.panel);
-                    g.panel.Controls.Clear();
-                }
+                panelVScroll.RemoveAllControls( new List<Control> { buttonMore, buttonSort, buttonSort2 } );            // except these!
 
                 groups = new List<Group>();
 
                 foreach (ConditionLists.Condition fe in clist.conditionlist)
                 {
-                    Group g = CreateGroupInt(fe.eventname, fe.action, fe.actiondata, fe.innercondition.ToString(), fe.outercondition.ToString());
+                    Group g = CreateGroupInternal(fe.eventname, fe.action, fe.actiondata, fe.innercondition.ToString(), fe.outercondition.ToString());
 
                     foreach (ConditionLists.ConditionEntry f in fe.fields)
                         CreateConditionInt(g, f.itemname, ConditionLists.MatchNames[(int)f.matchtype], f.matchstring);
 
                     theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+
+                    groups.Add(g);
                 }
 
-                FixUpGroups();      // to move the new button to the correct place if no conditions
+                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " 6 ");
+
+                System.Runtime.GCLatencyMode lm = System.Runtime.GCSettings.LatencyMode;
+                System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.LowLatency;
+
+                foreach (Group g in groups)                         // FURTHER investigation.. when VScroll has been used after the swap, this and fix groups takes ages
+                    panelVScroll.Controls.Add(g.panel);             // why? tried a brand new vscroll.  Tried a lot of things.  Is it GC?
+
+                FixUpGroups();                                      // this takes ages too on second load..
+
+                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " 6b");
+
+                panelVScroll.ResumeLayout();
+                this.panelOuter.ResumeLayout();
                 ResumeLayout();
+
+                System.Runtime.GCSettings.LatencyMode = lm;
             }
+
+            this.Text = label_index.Text = initialtitle + " (" + groups.Count.ToString() + " conditions)";
         }
+
         private void panelVScroll_Resize(object sender, EventArgs e)
         {
             FixUpGroups(false);
@@ -201,18 +224,39 @@ namespace EDDiscovery2
         private void buttonMore_Click(object sender, EventArgs e)       // main + button
         {
             SuspendLayout();
+            panelVScroll.SuspendLayout();
 
-            Group g = CreateGroupInt(null, null, null, null, null);
+            Group g;
 
-            if (eventlist == null)      // if we don't have any event list, auto create a condition
-                CreateConditionInt(g,null,null,null);
+            if (IsActionsActive && groups.Count > 0)
+            {
+                Group prev = groups.Last();
+                g = CreateGroupInternal(null, prev.actionlist.Text, prev.actionparas.Text, prev.innercond.Text, prev.outercond.Text);
+
+                if (prev.condlist.Count > 0)
+                    CreateConditionInt(g, prev.condlist[0].fname.Text, prev.condlist[0].cond.Text, prev.condlist[0].value.Text);
+            }
+            else
+            {
+                g = CreateGroupInternal(null, null, null, null, null);
+
+                if (eventlist == null)      // if we don't have any event list, auto create a condition
+                    CreateConditionInt(g, null, null, null);
+            }
 
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
+            groups.Add(g);
+            panelVScroll.Controls.Add(g.panel);
+
             FixUpGroups();
 
-            panelVScroll.ToEnd();       // tell it to scroll to end
+            this.Text = label_index.Text = initialtitle + " (" + groups.Count.ToString() + " conditions)";
+
+            panelVScroll.ResumeLayout();
             ResumeLayout();
+
+            panelVScroll.ToEnd();       // tell it to scroll to end
         }
 
         private void buttonSort_Click(object sender, EventArgs e) // sort button
@@ -227,12 +271,13 @@ namespace EDDiscovery2
             FixUpGroups();
         }
 
-        Group CreateGroupInt(string initialev, string initialaction, string initialactiondatastring,
+        Group CreateGroupInternal(string initialev, string initialaction, string initialactiondatastring,
                                 string initialcondinner, string initialcondouter)
         {
             Group g = new Group();
 
             g.panel = new Panel();
+            g.panel.SuspendLayout();
 
             if (eventlist != null)
             {
@@ -250,7 +295,7 @@ namespace EDDiscovery2
 
             if (IsActionsActive)
             {
-                bool v = g.evlist.Text.Length > 0;
+                bool v = initialaction != null || g.evlist.Text.Length > 0;
 
                 g.actionlist = new ExtendedControls.ComboBoxCustom();
                 g.actionlist.Location = new Point(g.evlist.Right + 8, panelymargin);
@@ -318,9 +363,7 @@ namespace EDDiscovery2
             g.upbutton.Tag = g;
             g.panel.Controls.Add(g.upbutton);
 
-            groups.Add(g);
-
-            panelVScroll.Controls.Add(g.panel);
+            g.panel.ResumeLayout();
 
             return g;
         }
@@ -360,15 +403,15 @@ namespace EDDiscovery2
 
         void CreateCondition(Group g, string initialfname = null, string initialcond = null, string initialvalue = null )
         {
-            SuspendLayout();
             CreateConditionInt(g, initialfname, initialcond, initialvalue);
             theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             FixUpGroups();
-            ResumeLayout();
         }
 
         void CreateConditionInt( Group g , string initialfname, string initialcond, string initialvalue)
         {
+            g.panel.SuspendLayout();
+
             Group.Conditions c = new Group.Conditions();
 
             c.fname = new ExtendedControls.AutoCompleteTextBox();
@@ -416,6 +459,8 @@ namespace EDDiscovery2
 
             c.group = g;
             g.condlist.Add(c);
+
+            g.panel.ResumeLayout();
         }
 
 
@@ -463,6 +508,7 @@ namespace EDDiscovery2
         void FixUpGroups(bool calcminsize = true)      // fixes and positions groups.
         {
             SuspendLayout();
+            panelVScroll.SuspendLayout();
 
             int panelwidth = Math.Max(panelVScroll.Width - panelVScroll.ScrollBarWidth, 10);
             int y = panelymargin;
@@ -470,6 +516,7 @@ namespace EDDiscovery2
             for (int i = 0; i < groups.Count; i++)
             {
                 Group g = groups[i];
+                g.panel.SuspendLayout();
 
                 // for all groups, see if another group below it has the same event selected as ours
 
@@ -565,6 +612,8 @@ namespace EDDiscovery2
                     g.actionlist.Enabled = true;
                     g.actionparas.Enabled = g.actionconfig.Enabled = g.actionlist.SelectedIndex != 0;
                 }
+
+                g.panel.ResumeLayout();
             }
 
             if (IsActionsActive)
@@ -598,12 +647,13 @@ namespace EDDiscovery2
                 this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width - 100, Screen.FromControl(this).WorkingArea.Height - 100);
             }
 
+            panelVScroll.ResumeLayout();
             ResumeLayout();
         }
 
-#endregion
+        #endregion
 
-#region Action List programs
+        #region Action List programs
 
         private void ActionList_SelectedIndexChanged(object sender, EventArgs e)          // on action changing, do its configuration menu
         {
@@ -713,10 +763,7 @@ namespace EDDiscovery2
                         }
                     }
                 }
-
-                FixUpGroups();
             }
-
         }
 
         private void comboBoxCustomEditProg_SelectedIndexChanged(object sender, EventArgs e)
@@ -732,7 +779,7 @@ namespace EDDiscovery2
                 if (!progname.Equals("New"))
                     p = actionfilelist.CurPrograms.Get(comboBoxCustomEditProg.Text);
 
-                apf.Init("Action program", theme, additionalfieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), "");
+                apf.Init("Action program", theme, additionalfieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), "", ModifierKeys.HasFlag(Keys.Shift));
 
                 DialogResult res = apf.ShowDialog();
 
@@ -761,11 +808,11 @@ namespace EDDiscovery2
             cond.FromActionDataString(g.actionparas.Text, out flag);
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Input parameters and flags to pass to program on run", theme, cond, showone:true, showrefresh:true, showrefreshstate:flag.Equals(ConditionVariables.flagRunAtRefresh) );
+            avf.Init("Input parameters and flags to pass to program on run", theme, cond, showone: true, showrefresh: true, showrefreshstate: flag.Equals(ConditionVariables.flagRunAtRefresh));
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
-                g.actionparas.Text = avf.result.ToActionDataString( avf.result_refresh ? ConditionVariables.flagRunAtRefresh : "");
+                g.actionparas.Text = avf.result.ToActionDataString(avf.result_refresh ? ConditionVariables.flagRunAtRefresh : "");
             }
         }
 
@@ -1089,7 +1136,7 @@ namespace EDDiscovery2
                     ret.Add(other);
             }
 
-            return (ret.Count>0) ? ret : list;
+            return ret;
         }
 
         void EnsureCached(string evtype )
@@ -1128,8 +1175,18 @@ namespace EDDiscovery2
 
         }
 
+
         #endregion
 
-        
+        private void configureInstallationValuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConditionVariablesForm avf = new ConditionVariablesForm();
+            avf.Init("Configuration items for installation - specialist use", theme, actionfilelist.CurInstallationVariables, showone: false);
+
+            if (avf.ShowDialog(this) == DialogResult.OK)
+            {
+                actionfilelist.UpdateCurrentInstallationVariables(avf.result);
+            }
+        }
     }
 }

@@ -1112,9 +1112,18 @@ namespace EDDiscovery
             return json;
         }
 
-        internal void ShowTrilaterationTab()
+        public bool SelectTabPage(string name)
         {
-            tabControl1.SelectedIndex = 1;
+            foreach (TabPage p in tabControl1.TabPages)
+            {
+                if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    tabControl1.SelectTab(p);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion
@@ -1167,10 +1176,11 @@ namespace EDDiscovery
                 }
                 ShowInfoPanel("Closing, please wait!", true);
                 LogLineHighlight("Closing down, please wait..");
-                Console.WriteLine("Close.. safe close launched");
+                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Close.. safe close launched");
                 safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
                 safeClose.Start();
-                Actions.ActionSay.KillSpeech();
+
+                ActionRunOnEvent("onShutdown", "ProgramEvent");
             }
             else if (safeClose.IsAlive)   // still working, cancel again..
             {
@@ -1185,23 +1195,28 @@ namespace EDDiscovery
         private void SafeClose()        // ASYNC thread..
         {
             Thread.Sleep(1000);
-            Console.WriteLine("Waiting for check systems to close");
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Waiting for check systems to close");
             if (_checkSystemsWorker.IsBusy)
                 _checkSystemsWorkerCompletedEvent.WaitOne();
 
-            Console.WriteLine("Waiting for full sync to close");
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Waiting for full sync to close");
             if (_syncWorker.IsBusy)
                 _syncWorkerCompletedEvent.WaitOne();
 
-            Console.WriteLine("Stopping discrete threads");
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Stopping discrete threads");
             journalmonitor.StopMonitor();
 
             if (EdsmSync != null)
                 EdsmSync.StopSync();
 
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Stopping closest star");
             travelHistoryControl1.CloseClosestSystemThread();
 
-            Console.WriteLine("Go for close timer!");
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "wait for speech");
+            actionrunasync.WaitTillFinished(10000);
+            Actions.ActionSay.KillSpeech();     // and ensure speech is dead
+
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Go for close timer!");
 
             Invoke((MethodInvoker)delegate          // we need this thread to die so close will work, so kick off a timer
             {
@@ -1857,7 +1872,7 @@ namespace EDDiscovery
             }
         }
 
-        private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)        // FOREGROUND THREAD
         {
             if (!e.Cancelled && !PendingClose)
             {
@@ -1903,6 +1918,14 @@ namespace EDDiscovery
                     HistoryRefreshed(this, EventArgs.Empty);
 
                 journalmonitor.StartMonitor();
+
+                if ( actionfiles.IsConditionFlagSet(ConditionVariables.flagRunAtRefresh) )      // any events have this flag? .. don't usually do this, so worth checking first
+                {
+                    foreach( HistoryEntry he in history.EntryOrder)
+                    {
+                        ActionRunOnEntry(he, "onRefresh", ConditionVariables.flagRunAtRefresh);
+                    }
+                }
 
                 ActionRunOnEvent("onRefreshEnd", "ProgramEvent");
             }
@@ -2002,7 +2025,7 @@ namespace EDDiscovery
                 if (OnNewEntry != null)
                     OnNewEntry(he, history);
 
-                ActionRunOnEntry(he, "NewEntry");
+                ActionRunOnEntry(he, "onNewEntry");
             }
 
             if (OnNewJournalEntry != null)
@@ -2054,7 +2077,7 @@ namespace EDDiscovery
             ActionConfigureKeys();
         }
 
-        public void ConfigureActions()
+        public void EditAddOnActionFile()
         {
             EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
 
@@ -2063,6 +2086,7 @@ namespace EDDiscovery
             events.Add("onRefreshStart");
             events.Add("onRefreshEnd");
             events.Add("onStartup");
+            events.Add("onShutdown");
             events.Add("onKeyPress");
             //events.Add("onClosedown");
 
@@ -2079,7 +2103,17 @@ namespace EDDiscovery
             ActionConfigureKeys();
         }
 
-        public void ActionRunOnEntry(HistoryEntry he , string triggertype , string flagstart = null )       //set flagstart to be the first flag of the actiondata..
+        public void ManageAddOns()
+        {
+
+        }
+
+        public void ConfigureVoice()
+        {
+
+        }
+
+        public int ActionRunOnEntry(HistoryEntry he , string triggertype , string flagstart = null )       //set flagstart to be the first flag of the actiondata..
         {
             List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(he.journalEntry.EventTypeStr , flagstart);
 
@@ -2103,9 +2137,11 @@ namespace EDDiscovery
                     actionrunasync.Execute();       // will execute
                 }
             }
+
+            return ale.Count;
         }
 
-        public void ActionRunOnEvent( string name, string triggertype )
+        public int ActionRunOnEvent( string name, string triggertype )
         {
             List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(name);
 
@@ -2126,6 +2162,8 @@ namespace EDDiscovery
                     actionrunasync.Execute();       // will execute
                 }
             }
+
+            return ale.Count;
         }
 
         private void SetInternalGlobal(string name, string value)
@@ -2207,7 +2245,7 @@ namespace EDDiscovery
                     Keys k = (Keys)m.WParam;
                     if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
                     {
-                        System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
+                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
                         if (discoveryForm.CheckKeys(k.ToString(Control.ModifierKeys)))
                             return true;    // swallow, we did it
                     }
@@ -2217,8 +2255,28 @@ namespace EDDiscovery
             }
         }
 
+        private void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ManageAddOns();
+        }
+
+        private void configureAddOnActionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditAddOnActionFile();
+        }
+
+        private void speechSynthesisSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConfigureVoice();
+        }
+
+        private void stopCurrentlyRunningActionProgramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actionrunasync.TerminateAll();
+        }
 
         #endregion
+
     }
 }
 

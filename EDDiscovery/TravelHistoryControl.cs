@@ -58,11 +58,12 @@ namespace EDDiscovery
 
         public ExtendedControls.TabStrip GetTabStrip( string name )
         {
-            if (name.Equals("Bottom", StringComparison.InvariantCultureIgnoreCase))
+            name = name.ToLower();
+            if (name.Equals("bottom"))
                 return tabStripBottom;
-            if (name.Equals("Bottom-Right", StringComparison.InvariantCultureIgnoreCase))
+            if (name.Equals("bottom-right"))
                 return tabStripBottomRight;
-            if (name.Equals("Middle-Right", StringComparison.InvariantCultureIgnoreCase))
+            if (name.Equals("middle-right"))
                 return tabStripMiddleRight;
             return null;
         }
@@ -268,23 +269,15 @@ namespace EDDiscovery
             comboBoxCommander.Width = Math.Min(Math.Max(width - comboBoxCommander.Location.X - 4,64),192);
 
             // always 2dmap, 3dmap
-            if (width >= xpos + butoffsetx * 4 + buttonSync.Width + 4)  // 2(r,cmd) + 5 
+            if (width >= xpos + butoffsetx * 3 + buttonSync.Width + 4)  // 2(r,cmd) + 4 (2dmap, 3dmap, popout, sync)
             {
                 comboBoxCustomPopOut.Location = new Point(xpos + butoffsetx * 2, ypos);
-                buttonAction.Location = new Point(xpos + butoffsetx * 3, ypos);
-                buttonSync.Location = new Point(xpos + butoffsetx * 4, ypos);
+                buttonSync.Location = new Point(xpos + butoffsetx * 3, ypos);
             }
-            else if (width >= xpos + butoffsetx * 2 + comboBoxCustomPopOut.Width + 4)  // 2(r,cmd) + 3 (2d,3d,spanel) + 2
+            else if (width >= xpos + butoffsetx * 2 + comboBoxCustomPopOut.Width + 4)  // 2(r,cmd) + 2 (2d,3d) + 2 (popout, sync)
             {
-                comboBoxCustomPopOut.Location = new Point(xpos + butoffsetx * 2, ypos);
-                buttonAction.Location = new Point(xpos, ypos + butoffsety);
+                comboBoxCustomPopOut.Location = new Point(xpos , ypos + butoffsety);
                 buttonSync.Location = new Point(xpos + butoffsetx * 1, ypos + butoffsety);
-            }
-            else //if (width >= xpos + butoffsetx *2 + comboBoxCustomPopOut.Width + 4)   // 2(r,cmd) + 2(2d,3d) + 2(spanel,actions) + 1
-            {
-                comboBoxCustomPopOut.Location = new Point(xpos, ypos+butoffsety);
-                buttonAction.Location = new Point(xpos+butoffsetx, ypos + butoffsety);
-                buttonSync.Location = new Point(xpos, ypos + butoffsety*2);
             }
             
             panel_topright.Size = new Size(panel_topright.Width, buttonSync.Location.Y + buttonSync.Height + 6);
@@ -826,13 +819,6 @@ namespace EDDiscovery
         }
 
         #endregion
-
-        private ConditionLists fieldfilter = new ConditionLists();
-
-        private void buttonAction_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.ConfigureActions();
-        }
 
     }
 }

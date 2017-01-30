@@ -71,6 +71,7 @@ namespace EDDiscovery
             this.buttonCancel.BorderColorScaling = 1.25F;
             this.buttonCancel.ButtonColorScaling = 0.5F;
             this.buttonCancel.ButtonDisabledScaling = 0.5F;
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonCancel.Location = new System.Drawing.Point(468, 4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -259,9 +260,9 @@ namespace EDDiscovery
             // 
             // ConditionVariablesForm
             // 
-            this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(649, 371);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);

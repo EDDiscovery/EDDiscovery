@@ -604,8 +604,9 @@ namespace EDDiscovery
         public override string ToString()
         {
             string ret = "";
+            bool multi = conditionlist.Count > 1;
 
-            if (conditionlist.Count > 1)
+            if (multi)
                 ret += "(";
 
             for (int j = 0; j < conditionlist.Count; j++)
@@ -624,15 +625,15 @@ namespace EDDiscovery
                         ret += "Condition " + OperatorNames[(int)f.fields[i].matchtype];
                     else
                     {
-                        ret += (f.fields[i].itemname).QuotedEscapeString() + " " + OperatorNames[(int)f.fields[i].matchtype];
+                        ret += (f.fields[i].itemname).QuoteString(bracket:multi) + " " + OperatorNames[(int)f.fields[i].matchtype];
 
                         if (!IsUnaryOperation(f.fields[i].matchtype))
-                            ret += " " + f.fields[i].matchstring.QuotedEscapeString();
+                            ret += " " + f.fields[i].matchstring.QuoteString(bracket:multi);
                     }
                 }
             }
 
-            if (conditionlist.Count > 1)
+            if (multi)
                 ret += ")";
 
             return ret;
@@ -644,8 +645,12 @@ namespace EDDiscovery
 
             bool multi = false;
 
+            string delimchars = " ";
             if (sp.IsCharMoveOn('('))
+            {
                 multi = true;
+                delimchars = ") ";
+            }
 
             List<Condition> cllist = new List<Condition>();
             List<ConditionEntry> ed = new List<ConditionEntry>();
@@ -653,8 +658,8 @@ namespace EDDiscovery
 
             while (true)
             {
-                string var = sp.NextQuotedWord(") ");
-                string cond = sp.NextQuotedWord( ") ");
+                string var = sp.NextQuotedWord(delimchars);
+                string cond = sp.NextQuotedWord(delimchars);
 
                 if (var == null || cond == null)
                     return "Missing parts of condition";
@@ -668,7 +673,7 @@ namespace EDDiscovery
 
                 if (!IsUnaryOperation(mt) && !IsNullOperation(mt))
                 {
-                    value = sp.NextQuotedWord(") ");
+                    value = sp.NextQuotedWord(delimchars);
                     if (value == null)
                         return "Missing parts of condition";
                 }
@@ -697,7 +702,7 @@ namespace EDDiscovery
                     }
                     else
                     {
-                        outercond = sp.NextQuotedWord(") ");
+                        outercond = sp.NextQuotedWord(delimchars);
 
                         if (outercond == null)
                             return "Missing outer condition in multiple conditions between brackets";
@@ -723,7 +728,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    string condi = sp.NextQuotedWord(") ");
+                    string condi = sp.NextQuotedWord(delimchars);
 
                     if (innercond == null)
                         innercond = condi;

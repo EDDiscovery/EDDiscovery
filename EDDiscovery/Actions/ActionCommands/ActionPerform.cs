@@ -62,6 +62,12 @@ namespace EDDiscovery.Actions
                     else
                         ap.ReportError("Perform url must start with http");
                 }
+                else if (cmdname.Equals("configurevoice"))
+                    ap.discoveryform.ConfigureVoice();
+                else if (cmdname.Equals("manageaddons"))
+                    ap.discoveryform.ManageAddOns();
+                else if (cmdname.Equals("editaddons"))
+                    ap.discoveryform.EditAddOnActionFile();
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");
             }

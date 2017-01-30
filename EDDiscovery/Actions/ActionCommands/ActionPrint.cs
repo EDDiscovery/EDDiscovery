@@ -13,10 +13,10 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Line to display", UserData, "Configure Print Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, "Line to display", UserData.ReplaceEscapeControlChars(), "Configure Print Command" , true);
             if (promptValue != null)
             {
-                userdata = promptValue;
+                userdata = promptValue.EscapeControlChars();
             }
 
             return (promptValue != null);
@@ -25,7 +25,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData.ReplaceEscapeControlChars(), ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
                 ap.discoveryform.LogLine(res);
                 System.Diagnostics.Debug.WriteLine("PRINT " + res);

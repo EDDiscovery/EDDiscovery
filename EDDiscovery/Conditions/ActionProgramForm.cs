@@ -21,6 +21,8 @@ namespace EDDiscovery.Actions
         List<string> startvarlist;                                  // starting vars
         List<string> currentvarlist;                                // variables available to use.. combination of above
 
+        bool editastextimmediately = false;
+
         class Group
         {
             public Panel panel;
@@ -62,7 +64,7 @@ namespace EDDiscovery.Actions
                             string filesetname,             // file set name
                             ActionProgram prog = null,     // give the program to display
                             string[] defprogs = null,      // list any default program names
-                            string suggestedname = null)   // give a suggested name, if prog is null
+                            string suggestedname = null, bool edittext = false)   // give a suggested name, if prog is null
         {
             theme = th;
 
@@ -87,6 +89,8 @@ namespace EDDiscovery.Actions
 
             panelVScroll.ContextMenuStrip = contextMenuStrip1;
             panelVScroll.MouseDown += panelVScroll_MouseDown;
+
+            editastextimmediately = edittext;
         }
 
         void DeleteAll()
@@ -106,12 +110,15 @@ namespace EDDiscovery.Actions
             initialprogname = textBoxBorderName.Text = prog.Name;
 
             SuspendLayout();
+            panelVScroll.SuspendLayout();
+
             Action ac;
             int step = 0;
             while ((ac = prog.GetStep(step++)) != null)
                 CreateStep(ac);
 
             RepositionGroups();
+            panelVScroll.ResumeLayout();
             ResumeLayout();
         }
         private void panelVScroll_Resize(object sender, EventArgs e)
@@ -119,11 +126,21 @@ namespace EDDiscovery.Actions
             RepositionGroups(false); // don't recalc min size, it creates a loop
         }
 
+        private void ActionProgramForm_Shown(object sender, EventArgs e)        
+        {
+            if (editastextimmediately)      // auto text feature
+            {
+                editastextimmediately = false;
+                buttonExtEdit_Click(null, null);
+            }
+        }
+
         #region Steps
 
         Group CreateStep(Action step = null, int insertpos = -1)
         {
             SuspendLayout();
+            panelVScroll.SuspendLayout();
 
             Group g = new Group();
             g.programstep = step;
@@ -131,6 +148,8 @@ namespace EDDiscovery.Actions
             g.whitespace = (step != null) ? step.Whitespace : 0;
 
             g.panel = new Panel();
+            g.panel.SuspendLayout();
+
             g.panel.MouseUp += panelVScroll_MouseUp;
             g.panel.MouseDown += panelVScroll_MouseDown;
             g.panel.MouseMove += panelVScroll_MouseMove;
@@ -198,7 +217,9 @@ namespace EDDiscovery.Actions
             toolTip1.SetToolTip(g.stepname, tt1);
             toolTip1.SetToolTip(g.stepname.GetInternalSystemControl, tt1);
 
+            g.panel.ResumeLayout();
 
+            panelVScroll.ResumeLayout();
             ResumeLayout();
             return g;
         }
@@ -223,6 +244,7 @@ namespace EDDiscovery.Actions
         string RepositionGroups(bool calcminsize = true)
         {
             SuspendLayout();
+            panelVScroll.SuspendLayout();
 
             string errlist = "";
 
@@ -306,6 +328,8 @@ namespace EDDiscovery.Actions
 
                 g.indentcomputed = displaylevel;        // store this, ASCII output want to know how we indented it.
 
+                g.panel.SuspendLayout();
+
                 g.panel.Location = new Point(panelleftmargin, voff + panelVScroll.ScrollOffset);
                 g.panel.Size = new Size(panelwidth, panelheight + ((g.whitespace>0) ? (panelheight/2) : 0 ));
                 g.stepname.Location = new Point(g.right.Right + 8 + 8 * displaylevel, panelheightmargin);
@@ -320,9 +344,11 @@ namespace EDDiscovery.Actions
                 g.up.Visible = !first;
                 g.config.Visible = g.programstep != null && g.programstep.ConfigurationMenuInUse;
 
+                g.panel.ResumeLayout();
+
                 //DEBUG Keep this useful for debugging structure levels
-//                if (g.programstep != null)
-  //                  g.value.Enabled = false; g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData;g.value.Enabled = true;
+                //                if (g.programstep != null)
+                //                  g.value.Enabled = false; g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData;g.value.Enabled = true;
 
                 first = false;
                 voff += g.panel.Height;
@@ -343,6 +369,7 @@ namespace EDDiscovery.Actions
                 this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width - 100, Screen.FromControl(this).WorkingArea.Height - 100);
             }
 
+            panelVScroll.ResumeLayout();
             ResumeLayout();
 
             return errlist;
@@ -550,7 +577,7 @@ namespace EDDiscovery.Actions
                     {
                         System.Diagnostics.Process p = new System.Diagnostics.Process();
                         p.StartInfo.FileName = prog;
-                        p.StartInfo.Arguments = editingloc.QuotedEscapeString();
+                        p.StartInfo.Arguments = editingloc.QuoteString();
                         p.Start();
                         p.WaitForExit();
 

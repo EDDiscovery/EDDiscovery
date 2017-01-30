@@ -53,8 +53,9 @@ namespace EDDiscovery
                 return false;
         }
 
+        // Print vars, if altops is passed in, you can output using alternate operators
 
-        public string ToString(Dictionary<string,string> altops = null, string pad = "")
+        public string ToString(Dictionary<string, string> altops = null, string pad = "")
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
@@ -63,11 +64,11 @@ namespace EDDiscovery
                     s += ",";
 
                 if ( altops == null )
-                    s += v.Key + pad + "=" + pad + v.Value.QuotedEscapeString();
+                    s += v.Key + pad + "=" + pad + v.Value.QuoteString(comma:true);
                 else
                 {
                     System.Diagnostics.Debug.Assert(altops.ContainsKey(v.Key));
-                    s += v.Key + pad + altops[v.Key] + pad + v.Value.QuotedEscapeString();
+                    s += v.Key + pad + altops[v.Key] + pad + v.Value.QuoteString(comma:true);
                 }
             }
 
@@ -81,6 +82,11 @@ namespace EDDiscovery
             StringParser p = new StringParser(s);
             return FromString(p, fm);
         }
+
+        // FromMode controls where its stopped. 
+        // namelimit limits allowable names
+        // fixnamecase means make sure its in Titlecase
+        // altops enables operators other than = to be used (set/let only) 
 
         public bool FromString(StringParser p, FromMode fm, List<string> namelimit = null, bool fixnamecase = false , Dictionary<string,string> altops = null )
         {
@@ -157,29 +163,61 @@ namespace EDDiscovery
             return true;
         }
 
+        public JArray ToJSONObject()
+        {
+            JArray jf = new JArray();
+
+            foreach (KeyValuePair<string, string> v in values)
+            {
+                JObject j1 = new JObject();
+                j1["var"] = v.Key;
+                j1["value"] = v.Value;
+                jf.Add(j1);
+            }
+
+            return jf;
+        }
+
+        public void FromJSONObject(JArray jf)
+        {
+            foreach (JObject jo in jf)
+            {
+                values[(string)jo["var"]] = (string)jo["value"];
+            }
+        }
+
         static public string flagRunAtRefresh = "RunAtRefresh;";            // ACTION DATA Flags, stored with action program name in events to configure it
 
         public string ToActionDataString(string flag)           // helpers to encode action data..
         {
-            if ( flag.Length > 0 )
+            if (flag.Length > 0 && values.Count > 0)
                 return flag + "," + ToString();
-            else
+            else if (values.Count > 0)
                 return ToString();
+            else
+                return flag;
         }
 
         public void FromActionDataString(string ad, out string flag)        // helpers to encode action data..
         {
-            int comma = ad.IndexOf(',');
-            int equal = ad.IndexOf('=');
-            if (comma >= 0 && (equal == -1 || comma < equal))        // if sksksk, v1 = or wekwkwk,
+            if (ad.IndexOf('=') == -1)      // no equals, no variables, all flags
             {
-                flag = ad.Substring(0, comma);
-                FromString(ad.Substring(comma + 1), ConditionVariables.FromMode.MultiEntryComma);
+                flag = ad;
             }
             else
             {
-                flag = "";
-                FromString(ad, ConditionVariables.FromMode.MultiEntryComma);
+                int comma = ad.IndexOf(',');
+
+                if (comma == -1)      // no comma, no flags, all vars
+                {
+                    flag = "";
+                    FromString(ad, ConditionVariables.FromMode.MultiEntryComma);
+                }
+                else
+                {
+                    flag = ad.Substring(0, comma);
+                    FromString(ad.Substring(comma + 1), ConditionVariables.FromMode.MultiEntryComma);
+                }
             }
         }
 
@@ -443,25 +481,18 @@ namespace EDDiscovery
                     else
                         values[name] = v.ToString(  );
                 }
-                else if (o is Nullable<double>)
-                    ExtractNull<double>((Nullable<double>)o, name);
-                else if (o is Nullable<bool>)
-                    ExtractNull<bool>((Nullable<bool>)o, name);
-                else if (o is Nullable<int>)
-                    ExtractNull<int>((Nullable<int>)o, name);
-                else if (o is Nullable<long>)
-                    ExtractNull<long>((Nullable<long>)o, name);
+                else
+                {                                                               // generic, get value type
+                    System.Reflection.PropertyInfo pvalue = rettype.GetProperty("Value");   // value is second property of a nullable class
+
+                    Type nulltype = pvalue.PropertyType;    // its type and value are found..
+                    var value = pvalue.GetValue(o);
+
+//                    System.Diagnostics.Debug.WriteLine("Type is" + nulltype);
+                    Extract(value, nulltype, name);         // recurse to decode it
+                }
             }
             catch { }
         }
-
-        void ExtractNull<T>(Nullable<T> obj, string name) where T : struct
-        {
-            if (obj.HasValue)
-                Extract(obj.Value, typeof(T), name);
-            else
-                values[name] = "";
-        }
-
     }
 }

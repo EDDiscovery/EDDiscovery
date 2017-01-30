@@ -18,12 +18,7 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    //When written: player is awarded a bounty for a kill
-    //Parameters: 
-    //•	Faction: the faction awarding the bounty
-    //•	Reward: the reward value
-    //•	VictimFaction: the victim’s faction
-    //•	SharedWithOthers: whether shared with other players
+
     public class JournalScientificResearch : JournalEntry
     {
         public JournalScientificResearch(JObject evt) : base(evt, JournalTypeEnum.ScientificResearch)
