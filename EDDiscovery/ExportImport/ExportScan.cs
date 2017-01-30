@@ -13,8 +13,10 @@
  * 
  * EDDiscovery is not affiliated with Fronter Developments plc.
  */
+using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery2.EDSM;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -31,6 +33,7 @@ namespace EDDiscovery.Export
         private List<JournalScan> scans;
         private bool ShowPlanets;
         private bool ShowStars;
+        private bool EDSMList;
 
 
         public ExportScan()
@@ -39,24 +42,66 @@ namespace EDDiscovery.Export
             ShowStars = true;
         }
 
-        public ExportScan(bool stars, bool planets)
+        public ExportScan(bool stars, bool planets, bool _EDSMList = false)
         {
             ShowPlanets = planets;
             ShowStars = stars;
+            EDSMList = _EDSMList;
         }
 
 
         override public bool GetData(EDDiscoveryForm _discoveryForm)
         {
-            var filter = _discoveryForm.TravelControl.GetPrimaryFilter;
+            if (EDSMList == false)
+            {
+                var filter = _discoveryForm.TravelControl.GetPrimaryFilter;
 
-            List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
+                List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
 
-            scans = new List<JournalScan>();
+                scans = new List<JournalScan>();
 
-            var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
-            scans = entries.ConvertAll<JournalScan>(x => (JournalScan)x);
+                var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
+                scans = entries.ConvertAll<JournalScan>(x => (JournalScan)x);
+            }
+            else
+            {
+                string explorepath = Path.Combine(Tools.GetAppDataDirectory(), "Exploration");
+                if (!Directory.Exists(explorepath))
+                    Directory.CreateDirectory(explorepath);
 
+
+                OpenFileDialog dlg = new OpenFileDialog();
+                dlg.InitialDirectory = explorepath;
+                dlg.DefaultExt = "json";
+                dlg.AddExtension = true;
+                dlg.Filter = "Explore file| *.json";
+
+                scans = new List<JournalScan>();
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+
+                    ExplorationSetClass _currentExplorationSet = new ExplorationSetClass();
+                    _currentExplorationSet.Clear();
+                    _currentExplorationSet.Load(dlg.FileName);
+
+                    foreach (string system in _currentExplorationSet.Systems)
+                    {
+                        List<long> edsmidlist = SystemClass.GetEdsmIdsFromName(system);
+
+                        if (edsmidlist.Count > 0)
+                        {
+                            for (int ii = 0; ii < edsmidlist.Count; ii++)
+                            {
+                                List<JournalScan> sysscans = EDSMClass.GetBodiesList((int)edsmidlist[ii]);
+                                scans.AddRange(sysscans);
+                            }
+                        }
+                    }
+
+                }
+
+            }
             return true;
         }
 
