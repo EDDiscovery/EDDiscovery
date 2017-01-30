@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.Note].Tag = o;
         }
 
-        private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
+        private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -375,7 +375,8 @@ namespace EDDiscovery.UserControls
 
             int rowno = FindGridPosByJID(pos.Item1);
             if (rowno > 0)
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];
+            // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
         }
 
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -884,7 +885,7 @@ namespace EDDiscovery.UserControls
                 OnPopOut();
         }
 
-        
+
     }
 
 }
