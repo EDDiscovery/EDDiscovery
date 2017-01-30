@@ -45,7 +45,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
             else
             {
-                // it was an individual, or a suicide/accident
+                // it was an individual
                 Killers = new Killer[1]
                 {
                         new Killer
