@@ -46,7 +46,8 @@ namespace EDDiscovery.Actions
             Dictionary<string, string> operations;
             bool ok = FromString(userdata, out av ,out operations);
 
-            System.Diagnostics.Debug.Assert(operations.Count == av.Count);
+            System.Diagnostics.Debug.Assert(ok == false || operations.Count == av.Count);
+
             if ( ok )
                 userdata = ToString(av,operations);        // normalise them..
 
@@ -188,7 +189,7 @@ namespace EDDiscovery.Actions
                 if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
                 {
                     ap.currentvars[vname] += res;
-                    ap.discoveryform.SetProgramGlobal(vname, res);
+                    ap.discoveryform.SetProgramGlobal(vname, ap.currentvars[vname]);
                 }
                 else 
                 {

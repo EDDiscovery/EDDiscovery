@@ -21,14 +21,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when scanning a data link
     //Parameters:
     //•	Message: message from data link
+    //•	MessageLocalised: message from data link
+
     public class JournalDataScanned : JournalEntry
     {
         public JournalDataScanned(JObject evt) : base(evt, JournalTypeEnum.DataScanned)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);
-
+            Message = JSONHelper.GetStringDef(evt["Message"]);
+            MessageLocalised = JSONHelper.GetStringDef(evt["Message_Localised"]);
         }
-        public string Type { get; set; }
+
+        public string Message { get; set; }
+        public string MessageLocalised { get; set; }
 
     }
 }

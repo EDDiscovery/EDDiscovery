@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalInterdiction(JObject evt ) : base(evt, JournalTypeEnum.Interdiction)
         {
             Success = JSONHelper.GetBool(evt["Success"]);
-            Interdictor = JSONHelper.GetStringDef(evt["Interdictor"]);
+            Interdicted = JSONHelper.GetStringDef(evt["Interdicted"]);
             IsPlayer = JSONHelper.GetBool(evt["IsPlayer"]);
             CombatRank = CombatRank.Harmless;
             if (!JSONHelper.IsNullOrEmptyT(evt["CombatRank"]))
@@ -40,7 +40,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Power = JSONHelper.GetStringDef(evt["Power"]);
         }
         public bool Success { get; set; }
-        public string Interdictor { get; set; }
+        public string Interdicted { get; set; }
         public bool IsPlayer { get; set; }
         public CombatRank CombatRank { get; set; }
         public string Faction { get; set; }

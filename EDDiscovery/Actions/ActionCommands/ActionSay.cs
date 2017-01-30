@@ -43,9 +43,9 @@ namespace EDDiscovery.Actions
         public string ToString(string saying, ConditionVariables cond)
         {
             if (cond.Count > 0)
-                return saying.QuotedEscapeString() + ", " + cond.ToString();
+                return saying.QuoteString(comma: true) + ", " + cond.ToString();
             else
-                return saying.QuotedEscapeString();
+                return saying.QuoteString(comma: true);
         }
 
         public override string VerifyActionCorrect()
@@ -369,7 +369,6 @@ namespace EDDiscovery.Actions
 
         private void Synth_SpeakCompleted(object sender, EventArgs e) // We appear to get them even if not playing.. handle it
         {
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Outstanding " + phrases.Count);
             if (phrases.Count > 0)
             {
                 Phrase current = phrases[0];

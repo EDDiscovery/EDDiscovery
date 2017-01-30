@@ -14,17 +14,21 @@ namespace EDDiscovery.Actions
 {
     public class ActionFile
     {
-        public ActionFile(ConditionLists c, ActionProgramList p , string f , string n, bool e )
+        public ActionFile(ConditionLists c, ActionProgramList p , string f , string n, bool e , ConditionVariables ivar = null )
         {
             actionfieldfilter = c;
             actionprogramlist = p;
             filepath = f;
             name = n;
             enabled = e;
+            installationvariables = new ConditionVariables();
+            if (ivar != null)
+                installationvariables.Add(ivar);
         }
 
         public ConditionLists actionfieldfilter;
         public ActionProgramList actionprogramlist;
+        public ConditionVariables installationvariables;                // used to pass to the installer various options, such as disable other packs
         public string filepath;
         public string name;
         public bool enabled;
@@ -44,12 +48,20 @@ namespace EDDiscovery.Actions
                     JObject jprog = (JObject)jo["Programs"];
                     bool en = (bool)jo["Enabled"];
 
+                    JArray ivarja = (JArray)jo["Install"];
+
+                    ConditionVariables ivars = new ConditionVariables();
+                    if ( !JSONHelper.IsNullOrEmptyT(ivarja) )
+                    {
+                        ivars.FromJSONObject(ivarja);
+                    }
+
                     ConditionLists cond = new ConditionLists();
                     ActionProgramList prog = new ActionProgramList();
 
                     if (cond.FromJSON(jcond) && prog.FromJSONObject(jprog))
                     {
-                        return new ActionFile(cond, prog, filename, Path.GetFileNameWithoutExtension(filename), en);
+                        return new ActionFile(cond, prog, filename, Path.GetFileNameWithoutExtension(filename), en, ivars );
                     }
                 }
                 catch (Exception ex)
@@ -67,6 +79,7 @@ namespace EDDiscovery.Actions
             jo["Conditions"] = actionfieldfilter.GetJSONObject();
             jo["Programs"] = actionprogramlist.ToJSONObject();
             jo["Enabled"] = enabled;
+            jo["Install"] = installationvariables.ToJSONObject();
 
             string json = jo.ToString(Formatting.Indented);
 
@@ -95,12 +108,14 @@ namespace EDDiscovery.Actions
         public ActionFile CurFile { get { return actionfiles[current]; } }
         public ConditionLists CurConditions { get { return actionfiles[current].actionfieldfilter; } }
         public ActionProgramList CurPrograms { get { return actionfiles[current].actionprogramlist; } }
+        public ConditionVariables CurInstallationVariables { get { return actionfiles[current].installationvariables; } }
         public string CurName { get { return actionfiles[current].name; } }
         public bool CurEnabled { get { return actionfiles[current].enabled; } }
 
         public List<string> GetList { get { return (from af in actionfiles select af.name).ToList(); } }
 
         public void UpdateCurrentCL(ConditionLists cl) { actionfiles[current].actionfieldfilter = cl; }
+        public void UpdateCurrentInstallationVariables(ConditionVariables v) { actionfiles[current].installationvariables = v; }
         public void UpdateCurrentEnabled(bool v) { actionfiles[current].enabled = v; }
 
         public bool SelectCurrent( string s )

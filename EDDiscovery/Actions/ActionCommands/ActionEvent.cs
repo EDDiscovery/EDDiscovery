@@ -153,7 +153,10 @@ namespace EDDiscovery.Actions
                     if (jidindex == -1)
                         ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
                     else if (cmdname.Equals("action"))
-                        ap.discoveryform.ActionRunOnEntry(hl.EntryOrder[jidindex], "ProgramEvent");
+                    {
+                        int count = ap.discoveryform.ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram");
+                        ap.currentvars[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    }
                     else if (cmdname.Equals("edsm"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
@@ -168,6 +171,8 @@ namespace EDDiscovery.Actions
                         EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
                         string url = edsm.GetUrlToEDSMSystem(he.System.name, id_edsm);
 
+                        ap.currentvars[prefix + "URL"] = url;
+
                         if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                             System.Diagnostics.Process.Start(url);
                     }
@@ -176,8 +181,15 @@ namespace EDDiscovery.Actions
                         HistoryEntry he = hl.EntryOrder[jidindex];
                         ap.discoveryform.history.FillEDSM(he, reload: true);
 
+                        string url = "";
+
                         if (he.System.id_eddb > 0)
-                            System.Diagnostics.Process.Start("http://ross.eddb.io/system/update/" + he.System.id_eddb.ToString());
+                        {
+                            url = "http://ross.eddb.io/system/update/" + he.System.id_eddb.ToString();
+                            System.Diagnostics.Process.Start(url);
+                        }
+
+                        ap.currentvars[prefix + "URL"] = url;
                     }
                     else
                         ap.ReportError("Unknown command " + cmdname + " in Event");

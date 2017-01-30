@@ -27,10 +27,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
-
+            Engineer = JSONHelper.GetStringDef(evt["Engineer"]);
+            Rank = JSONHelper.GetIntNull(evt["Rank"]);
+            Progress = JSONHelper.GetStringDef(evt["Progress"]);
         }
-        public string StationName { get; set; }
+
+        public string Engineer { get; set; }
+        public string Progress { get; set; }
+        public int? Rank { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineerprogress; } }
 

@@ -37,8 +37,6 @@ namespace EDDiscovery
         {
             InitializeComponent();
             groups = new List<Group>();
-            CancelButton = buttonCancel;
-            AcceptButton = buttonOK;
         }
 
         // altops, if given, describes the operator of each variable.
@@ -137,7 +135,10 @@ namespace EDDiscovery
 
             g.value = new ExtendedControls.TextBoxBorder();
             g.value.Location = new Point(nextpos + 4, panelmargin);
-            g.value.Text = value;
+            g.value.Text = value.ReplaceEscapeControlChars();
+            g.value.Multiline = true;
+            g.value.WordWrap = true;
+            g.value.ScrollBars = ScrollBars.Vertical;
             toolTip1.SetToolTip(g.value, "Variable value");
             g.panel.Controls.Add(g.value);
 
@@ -170,9 +171,9 @@ namespace EDDiscovery
 
             foreach (Group g in groups)
             {
-                g.panel.Size = new Size(panelwidth-panelmargin*2, 32);
+                g.panel.Size = new Size(panelwidth-panelmargin*2, 64);
                 g.panel.Location = new Point(panelmargin, y);
-                g.value.Size = new Size(panelwidth-180 - ((g.op!=null)?50:0), 24);
+                g.value.Size = new Size(panelwidth-180 - ((g.op!=null)?50:0), 56);
                 g.del.Location = new Point(g.value.Location.X + g.value.Width + 8, panelmargin);
                 y += g.panel.Height + 6;
             }
@@ -198,10 +199,13 @@ namespace EDDiscovery
 
             foreach ( Group g in groups)
             {
-                result[g.var.Text] = g.value.Text;
+                if (g.var.Text.Length > 0)      // only ones with names are considered
+                {
+                    result[g.var.Text] = g.value.Text.EscapeControlChars();
 
-                if (g.op != null)
-                    result_altops[g.var.Text] = g.op.Text;
+                    if (g.op != null)
+                        result_altops[g.var.Text] = g.op.Text;
+                }
             }
 
             result_refresh = checkBoxCustomRefresh.Checked;

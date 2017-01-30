@@ -235,6 +235,17 @@ namespace EDDiscovery
                    @"[-\s]", " ");
         }
 
+        public static string SplitCapsWordUnderscoreSlash(string capslower)
+        {
+            string s = System.Text.RegularExpressions.Regex.Replace(
+                   System.Text.RegularExpressions.Regex.Replace(
+                   Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"),
+                   @"([a-z\d])([A-Z])", "$1 $2"),
+                   @"[-\s]", " ");
+
+            return s.Replace("_", " ").Replace("-", " ");
+        }
+
         public static string[] SplitCapsWord(string[] capslower)
         {
             string[] rep = new string[capslower.Count()];

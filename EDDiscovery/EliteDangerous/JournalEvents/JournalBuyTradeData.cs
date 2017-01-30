@@ -29,7 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             System = JSONHelper.GetStringDef(evt["System"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
-            Count = JSONHelper.GetLong(evt["Count"]);
+            Count = JSONHelper.GetLong(evt["Count"]);       //TBD NO EVIDENCE
         }
 
         public string System { get; set; }

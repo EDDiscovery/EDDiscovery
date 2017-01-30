@@ -347,7 +347,7 @@ namespace EDDiscovery.Actions
 
         public string ToString(ConditionLists cond, string errmsg)
         {
-            return errmsg.QuotedEscapeString() + ", " + cond.ToString();
+            return errmsg.QuoteString(comma:true) + ", " + cond.ToString();
         }
 
         public override string VerifyActionCorrect()

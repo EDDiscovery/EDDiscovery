@@ -155,7 +155,7 @@ namespace EDDiscovery.Actions
                                 ap.ReportError("Size needs x,y,w,h in Popout");
                         }
                         else
-                            ap.ReportError("Unknown command " + cmdname + " after popout name in Popout");
+                            ap.ReportError("Unknown option " + nextcmd + " after popout name in Popout");
                     }
                     else
                     {
