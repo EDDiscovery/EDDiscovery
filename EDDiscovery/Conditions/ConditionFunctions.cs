@@ -49,6 +49,7 @@ namespace EDDiscovery
                 new FuncEntry("indirect",Indirect,          1,20,   0,0),   // check var, no strings
                 new FuncEntry("splitcaps",SplitCaps,        1,1,    1,1),   //check var, allow strings
                 new FuncEntry("sc",SplitCaps,               1,1,    1,1),   //shorter alias for above
+                new FuncEntry("ship",Ship,                  1,1,    1,1),   //ship translator
                 new FuncEntry("datehour",DateHour,          1,1,    1),     // first is a var, no strings
                 new FuncEntry("date",DateCnv,               2,2,    1),     // first is a var, second is not, no strings
                 new FuncEntry("findline",FindLine,          2,2,    3,2),   //check var1 and var2, second can be a string
@@ -355,6 +356,13 @@ namespace EDDiscovery
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             output = Tools.SplitCapsWordUnderscoreSlash(value);
+            return true;
+        }
+
+        private bool Ship(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            output = Tools.SplitCapsWordUnderscoreSlash(EliteDangerous.JournalEntry.PhoneticShipName(value));
             return true;
         }
 

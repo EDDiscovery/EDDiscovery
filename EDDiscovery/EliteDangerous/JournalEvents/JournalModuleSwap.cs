@@ -35,7 +35,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             FromItemLocalised = JSONHelper.GetStringDef(evt["FromItem_Localised"]);
             ToItem = JSONHelper.GetStringDef(evt["ToItem"]);
             ToItemLocalised = JSONHelper.GetStringDef(evt["ToItem_Localised"]);
-            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
 
         }

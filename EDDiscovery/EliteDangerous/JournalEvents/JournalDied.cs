@@ -57,7 +57,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 };
             }
 
+            foreach( Killer k in Killers )
+                k.Ship = JournalEntry.GetBetterShipName(k.Ship);
         }
+
         public Killer[] Killers { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Coffinicon; } }
