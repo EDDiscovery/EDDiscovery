@@ -456,6 +456,12 @@ namespace EDDiscovery
             travelHistoryControl1.RefreshButton(true);
             journalViewControl1.RefreshButton(true);
 
+            if (actionfiles.IsConditionFlagSet(ConditionVariables.flagRunAtRefresh))      // any events have this flag? .. don't usually do this, so worth checking first
+            {
+                foreach (HistoryEntry he in history.EntryOrder)
+                    ActionRunOnEntry(he, "onRefresh", ConditionVariables.flagRunAtRefresh);
+            }
+
             ActionRunOnEvent("onRefreshEnd", "ProgramEvent");
         }
 
@@ -477,11 +483,13 @@ namespace EDDiscovery
             }
         }
 
-        private void Controller_BgSafeClose()
+        private void Controller_BgSafeClose()       // run in thread..
         {
+            actionrunasync.WaitTillFinished(10000);
+            Actions.ActionSay.KillSpeech();
         }
 
-        private void Controller_FinalClose()
+        private void Controller_FinalClose()        // run in UI
         {
             SaveSettings();         // do close now
             notifyIcon1.Visible = false;
@@ -524,12 +532,8 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
                 ShowInfoPanel("Closing, please wait!", true);
-                Actions.ActionSay.KillSpeech();
+                ActionRunOnEvent("onShutdown", "ProgramEvent");
                 Controller.Shutdown();
-            }
-            else
-            {
-                Console.WriteLine("go for close");
             }
         }
 
@@ -1027,8 +1031,6 @@ namespace EDDiscovery
         #endregion
 
         #region Actions
-
-
 
         public void StartUpActions()
         {
