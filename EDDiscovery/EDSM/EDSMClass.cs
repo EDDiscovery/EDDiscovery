@@ -790,6 +790,27 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
+        public string SetCredits(long credits, long loan)
+        {
+            if (!IsApiKeySet)
+                return null;
+
+            string query;
+            query = "set-credits?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = query + "&balance=" + credits.ToString();
+            query = query + "&loan=" + loan.ToString();
+
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
+
+
     }
 
 
