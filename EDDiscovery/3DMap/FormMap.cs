@@ -2180,7 +2180,7 @@ namespace EDDiscovery2
         {
             if (_systemlist != null)
             {
-                HistoryEntry vsc = HistoryList.FindByPos(_systemlist, pos, 0.1);
+                HistoryEntry vsc = HistoryList.FindByPos(_systemlist, pos.X, pos.Y, pos.Z, 0.1);
 
                 if (vsc != null)
                     return vsc.System;

@@ -80,9 +80,9 @@ namespace EDDiscovery2
         public void FillFromDB()        // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage);       // MAY return array/carray is null
+                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));       // MAY return array/carray is null
             else
-                array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage);
+                array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));
         }
 
         public void FillFromSystemList(List<HistoryEntry> cls) // does not affect the display object
