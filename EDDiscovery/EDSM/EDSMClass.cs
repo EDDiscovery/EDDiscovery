@@ -810,6 +810,44 @@ namespace EDDiscovery2.EDSM
         }
 
 
+        public string CommanderUpdateShip(int shipId, string type)
+        {
+            if (!IsApiKeySet)
+                return null;
+
+            string query;
+            query = "update-ship?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = query + "&shipId=" + shipId.ToString();
+            query = query + "&type=" + type;
+
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
+        public string CommanderSetCurrentShip(int shipId)
+        {
+            if (!IsApiKeySet)
+                return null;
+
+            string query;
+            query = "set-ship-id?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = query + "&shipId=" + shipId.ToString();
+
+
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
 
     }
 
