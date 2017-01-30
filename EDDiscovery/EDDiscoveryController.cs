@@ -174,6 +174,7 @@ namespace EDDiscovery
 
         public void LogLineHighlight(string text)
         {
+            TraceLog.WriteLine(text);
             LogLineColor(text, GetHighlightTextColour());
         }
 
