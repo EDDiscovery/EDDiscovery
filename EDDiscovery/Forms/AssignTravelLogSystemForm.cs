@@ -74,9 +74,9 @@ namespace EDDiscovery.Forms
 
             this.tbLogSystemName.Text = vsc.StarSystem;
             this.tbVisitedDate.Text = vsc.EventTimeLocal.ToString();
-            this.tbLogCoordX.Text = vsc.HasCoordinate ? vsc.StarPos[0].ToString("0.000") : "?";
-            this.tbLogCoordY.Text = vsc.HasCoordinate ? vsc.StarPos[1].ToString("0.000") : "?";
-            this.tbLogCoordZ.Text = vsc.HasCoordinate ? vsc.StarPos[2].ToString("0.000") : "?";
+            this.tbLogCoordX.Text = vsc.HasCoordinate ? vsc.StarPos.X.ToString("0.000") : "?";
+            this.tbLogCoordY.Text = vsc.HasCoordinate ? vsc.StarPos.Y.ToString("0.000") : "?";
+            this.tbLogCoordZ.Text = vsc.HasCoordinate ? vsc.StarPos.Z.ToString("0.000") : "?";
             this.tbLogCoordX.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
             this.tbLogCoordY.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
             this.tbLogCoordZ.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;

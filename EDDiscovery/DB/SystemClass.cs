@@ -19,7 +19,7 @@ using EDDiscovery2.EDSM;
 using EMK.LightGeometry;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OpenTK;
+using EDDiscovery.Vectors;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -178,8 +178,10 @@ namespace EDDiscovery.DB
         }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
-        public static int GetSystemVector(int gridid, ref Vector3[] vertices, ref uint[] colours, 
-                                            SystemAskType ask, int percentage )
+        public static int GetSystemVector<V>(int gridid, ref V[] vertices, ref uint[] colours,
+                                               SystemAskType ask, int percentage,
+                                               Func<float,float,float,V> tovect)
+            where V: struct
         {
             int numvertices = 0;
 
@@ -212,7 +214,7 @@ namespace EDDiscovery.DB
 
                         Object[] array = new Object[5];     // to the number of items above queried
 
-                        vertices = new Vector3[250000];
+                        vertices = new V[250000];
                         colours = new uint[250000];
 
                         using (DbDataReader reader = cmd.ExecuteReader())
@@ -233,7 +235,7 @@ namespace EDDiscovery.DB
                                     Array.Resize(ref colours, colours.Length + 32768);
                                 }
 
-                                Vector3 pos = new Vector3((float)(x / XYZScalar), (float)(y / XYZScalar), (float)(z / XYZScalar));
+                                V pos = tovect((float)(x / XYZScalar), (float)(y / XYZScalar), (float)(z / XYZScalar));
 
                                 Color basec = fixedc[rand&3]; 
                                 int fade = 100 - ((rand>>2)&7) * 8;
@@ -907,9 +909,9 @@ namespace EDDiscovery.DB
             system = new EDDiscovery2.DB.InMemory.SystemClass
             {
                 name = vsc.StarSystem,
-                x = vsc.HasCoordinate ? vsc.StarPos[0] : Double.NaN,
-                y = vsc.HasCoordinate ? vsc.StarPos[1] : Double.NaN,
-                z = vsc.HasCoordinate ? vsc.StarPos[2] : Double.NaN,
+                x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN,
+                y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN,
+                z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN,
                 id_edsm = vsc.EdsmID
             };
 
@@ -954,7 +956,7 @@ namespace EDDiscovery.DB
                 Dictionary<long, SystemClass> matches = new Dictionary<long, SystemClass>();
                 SystemClass edsmidmatch = null;
                 long sel_edsmid = vsc.EdsmID;
-                bool hastravcoords = vsc.HasCoordinate && (vsc.StarSystem.ToLowerInvariant() == "sol" || vsc.StarPos[0] != 0 || vsc.StarPos[1] != 0 || vsc.StarPos[2] != 0);
+                bool hastravcoords = vsc.HasCoordinate && (vsc.StarSystem.ToLowerInvariant() == "sol" || vsc.StarPos.X != 0 || vsc.StarPos.Y != 0 || vsc.StarPos.Z != 0);
                 bool multimatch = false;
 
                 if (sel_edsmid != 0)
@@ -988,9 +990,9 @@ namespace EDDiscovery.DB
                         "AND s.Z >= @Z - 16 " +
                         "AND s.Z <= @Z + 16"))
                     {
-                        selectByPosCmd.AddParameterWithValue("@X", (long)(vsc.StarPos[0] * XYZScalar));
-                        selectByPosCmd.AddParameterWithValue("@Y", (long)(vsc.StarPos[1] * XYZScalar));
-                        selectByPosCmd.AddParameterWithValue("@Z", (long)(vsc.StarPos[2] * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@X", (long)(vsc.StarPos.X * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@Y", (long)(vsc.StarPos.Y * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@Z", (long)(vsc.StarPos.Z * XYZScalar));
 
                         //Stopwatch sw = new Stopwatch(); sw.Start(); long t1 = sw.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query pos in {0}", t1));
 

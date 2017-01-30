@@ -14,7 +14,7 @@
  * EDDiscovery is not affiliated with Fronter Developments plc.
  */
 using Newtonsoft.Json.Linq;
-using OpenTK;
+using EDDiscovery.Vectors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
