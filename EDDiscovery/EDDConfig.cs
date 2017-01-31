@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Common;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using EDDiscovery2.EDSM;
@@ -29,32 +30,155 @@ namespace EDDiscovery2
 {
     public class EDDConfig
     {
-        public class MapColoursClass
+        #region Public interface
+
+        #region Events
+
+        /// <summary>
+        /// The active commander has been changed event.
+        /// </summary>
+        public class CurrentCommanderChangedEventArgs : EventArgs
         {
-            public System.Drawing.Color GetColour(string name)
-            {
-                return System.Drawing.Color.FromArgb(EDDConfig.Instance.GetSettingInt("MapColour_" + name));
-            }
+            /// <summary>
+            /// The newly active commander.
+            /// </summary>
+            public EDCommander Commander { get; protected set; }
 
-            public bool PutColour(string name, System.Drawing.Color colour)
-            {
-                return EDDConfig.Instance.PutSettingInt("MapColour_" + name, colour.ToArgb());
-            }
+            /// <summary>
+            /// The index of the commander in the list.
+            /// </summary>
+            public int Index { get; protected set; }
 
-            public System.Drawing.Color CoarseGridLines { get { return GetColour("CoarseGridLines"); } set { PutColour("CoarseGridLines", value); } }
-            public System.Drawing.Color FineGridLines { get { return GetColour("FineGridLines"); } set { PutColour("FineGridLines", value); } }
-            public System.Drawing.Color SystemDefault { get { return GetColour("SystemDefault"); } set { PutColour("SystemDefault", value); } }
-            public System.Drawing.Color StationSystem { get { return GetColour("StationSystem"); } set { PutColour("StationSystem", value); } }
-            public System.Drawing.Color CentredSystem { get { return GetColour("CentredSystem"); } set { PutColour("CentredSystem", value); } }
-            public System.Drawing.Color SelectedSystem { get { return GetColour("SelectedSystem"); } set { PutColour("SelectedSystem", value); } }
-            public System.Drawing.Color POISystem { get { return GetColour("POISystem"); } set { PutColour("POISystem", value); } }
-            public System.Drawing.Color TrilatCurrentReference { get { return GetColour("TrilatCurrentReference"); } set { PutColour("TrilatCurrentReference", value); } }
-            public System.Drawing.Color TrilatSuggestedReference { get { return GetColour("TrilatSuggestedReference"); } set { PutColour("TrilatSuggestedReference", value); } }
-            public System.Drawing.Color PlannedRoute { get { return GetColour("PlannedRoute"); } set { PutColour("PlannedRoute", value); } }
-            public System.Drawing.Color NamedStar { get { return GetColour("NamedStar"); } set { PutColour("NamedStar", value); } }
-            public System.Drawing.Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop"); } set { PutColour("NamedStarUnpop", value); } }
+            /// <summary>
+            /// Constructs a new CurrentCommanderChangedEventArgs class in preparation to send it off in an event.
+            /// </summary>
+            /// <param name="index">The index of the commander in the list.</param>
+            public CurrentCommanderChangedEventArgs(int index)
+            {
+                Index = index;
+                Commander = Instance.ListOfCommanders[index];
+            }
         }
 
+        /// <summary>
+        /// A configuration changed event.
+        /// </summary>
+        public class ConfigChangedEventArgs : EventArgs
+        {
+            /// <summary>
+            /// The configuration property that was changed.
+            /// </summary>
+            public ConfigProperty Setting { get; protected set; }
+
+            /// <summary>
+            /// The new value for this property.
+            /// </summary>
+            public object NewValue { get; protected set; }
+
+            /// <summary>
+            /// Constructs a new ConfigChangedEventArgs class in preparation to send it off in an event.
+            /// </summary>
+            /// <param name="setting">The configuration property that was changed.</param>
+            /// <param name="newvalue">The new value of the configuration property.</param>
+            public ConfigChangedEventArgs(ConfigProperty setting, object newvalue = null)
+            {
+                Setting = setting;
+                NewValue = newvalue;
+            }
+        }
+
+        /// <summary>
+        /// A map colour changed event.
+        /// </summary>
+        public class MapColourChangedEventArgs : ConfigChangedEventArgs
+        {
+            /// <summary>
+            /// The new colour for this property.
+            /// </summary>
+            public Color NewColour { get { return (Color)NewValue; } }
+
+            /// <summary>
+            /// The map colour property that was changed.
+            /// </summary>
+            public MapColourProperty ColourProp { get; protected set; }
+
+            /// <summary>
+            /// A map colour changed event.
+            /// </summary>
+            /// <param name="prop">The <see cref="MapColourProperty"/> that was changed.</param>
+            /// <param name="newColour">The new colour of this property.</param>
+            public MapColourChangedEventArgs(MapColourProperty prop, Color newColour)
+                : base(ConfigProperty.MapColours, newColour)
+            {
+                ColourProp = prop;
+            }
+        }
+
+        /// <summary>
+        /// The current commander changed event handler.
+        /// </summary>
+        public event EventHandler<CurrentCommanderChangedEventArgs> CurrentCommanderChanged;
+
+        /// <summary>
+        /// The configuration changed event handler.
+        /// </summary>
+        public event EventHandler<ConfigChangedEventArgs> ConfigChanged;
+
+        /// <summary>
+        /// The map colour changed event handler.
+        /// </summary>
+        public event EventHandler<MapColourChangedEventArgs> MapColourChanged;
+
+        #endregion
+
+        #region Enums, subclasses
+
+        /// <summary>
+        /// The configuration property that has been changed.
+        /// </summary>
+        public enum ConfigProperty
+        {
+            AutoLoadPopOuts,
+            AutoSavePopOuts,
+            CanSkipSlowUpdates,
+            CheckCommanderEDSMAPI,
+            ClearCommodities,
+            ClearMaterials,
+            DefaultMapColour,
+            DisplayUTC,
+            EDSMLog,
+            FocusOnNewSystem,
+            KeepOnTop,
+            ListOfCommanders,
+            MapColours,
+            MinimizeToNotifyIcon,
+            OrderRowsInverted,
+            UseNotifyIcon,
+        };
+
+        /// <summary>
+        /// The map colour property that has been changed.
+        /// </summary>
+        public enum MapColourProperty
+        {
+            CentredSystem,
+            CoarseGridLines,
+            FineGridLines,
+            NamedStar,
+            NamedStarUnpopulated,
+            POISystem,
+            SelectedSystem,
+            TrilatCurrentReference,
+            TrilatSuggestedReference,
+            PlannedRoute,
+            StationSystem,
+            SystemDefault,
+        };
+
+        /// <summary>
+        /// Whether EDSM connections shall be handled through the normal API server(s),
+        /// or the beta server(s), or not allowed at all.
+        /// </summary>
         public enum EDSMServerType
         {
             Normal,
@@ -62,78 +186,77 @@ namespace EDDiscovery2
             Null
         }
 
+        /// <summary>
+        /// Colours to be used for mapping.
+        /// </summary>
+        public class MapColoursClass
+        {
+            public Color GetColour(string name, Color defaultColour)
+            {
+                return Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_" + name, defaultColour.ToArgb()));
+            }
+
+            public Color GetColour(string name, string defaultColour)
+            {
+                return GetColour(name, ColorTranslator.FromHtml(defaultColour));
+            }
+
+            public bool PutColour(string name, Color colour)
+            {
+                return SQLiteConnectionUser.PutSettingInt("MapColour_" + name, colour.ToArgb());
+            }
+
+            public Color CentredSystem { get { return GetColour("CentredSystem", Color.Yellow); } set { PutColour("CentredSystem", value); } }
+            public Color CoarseGridLines { get { return GetColour("CoarseGridLines", "#296A6C"); } set { PutColour("CoarseGridLines", value); } }
+            public Color FineGridLines { get { return GetColour("FineGridLines", "#202020"); } set { PutColour("FineGridLines", value); } }
+            public Color NamedStar { get { return GetColour("NamedStar", Color.Yellow); } set { PutColour("NamedStar", value); } }
+            public Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop", "#C0C000"); } set { PutColour("NamedStarUnpop", value); } }
+            public Color POISystem { get { return GetColour("POISystem", Color.Purple); } set { PutColour("POISystem", value); } }
+            public Color SelectedSystem { get { return GetColour("SelectedSystem", Color.Orange); } set { PutColour("SelectedSystem", value); } }
+            public Color TrilatCurrentReference { get { return GetColour("TrilatCurrentReference", Color.Green); } set { PutColour("TrilatCurrentReference", value); } }
+            public Color TrilatSuggestedReference { get { return GetColour("TrilatSuggestedReference", Color.DarkOrange); } set { PutColour("TrilatSuggestedReference", value); } }
+            public Color PlannedRoute { get { return GetColour("PlannedRoute", Color.Green); } set { PutColour("PlannedRoute", value); } }
+            public Color StationSystem { get { return GetColour("StationSystem", Color.RoyalBlue); } set { PutColour("StationSystem", value); } }
+            public Color SystemDefault { get { return GetColour("SystemDefault", Color.White); } set { PutColour("SystemDefault", value); } }
+        }
+
+        /// <summary>
+        /// Class representing command-line options, and other settings that cannot be changed during runtime.
+        /// </summary>
         public class OptionsClass
         {
-            public string VersionDisplayString { get; private set; }
-            public string AppFolder { get; private set; }
+            #region Public properties
+
             public string AppDataDirectory { get; private set; }
-            public string UserDatabasePath { get; private set; }
-            public string SystemDatabasePath { get; private set; }
-            public string OldDatabasePath { get; private set; }
-            public bool StoreDataInProgramDirectory { get; private set; }
-            public bool NoWindowReposition { get; private set; }
+            public string AppFolder { get; private set; }
             public bool Debug { get; private set; }
-            public bool TraceLog { get; private set; }
-            public bool LogExceptions { get; private set; }
-            public EDSMServerType EDSMServerType { get; private set; } = EDSMServerType.Normal;
             public bool DisableBetaCheck { get; private set; }
+            public EDSMServerType EDSMServerType { get; private set; } = EDSMServerType.Normal;
+            public bool LogExceptions { get; private set; }
+            public bool NoWindowReposition { get; private set; }
+            public string OldDatabasePath { get; private set; }
             public string ReadJournal { get; private set; }
+            public bool StoreDataInProgramDirectory { get; private set; }
+            public string SystemDatabasePath { get; private set; }
+            public bool TraceLog { get; private set; }
+            public string UserDatabasePath { get; private set; }
+            public string VersionDisplayString { get; private set; }
 
-            private void SetAppDataDirectory(string appfolder, bool portable)
+            #endregion
+
+            public void Init(bool shift)
             {
-                if (appfolder == null)
-                {
-                    appfolder = (portable ? "Data" : "EDDiscovery");
-                }
-
-                if (Path.IsPathRooted(appfolder))
-                {
-                    AppDataDirectory = appfolder;
-                }
-                else if (portable)
-                {
-                    AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
-                }
-                else
-                {
-                    AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
-                }
-
-                if (!Directory.Exists(AppDataDirectory))
-                    Directory.CreateDirectory(AppDataDirectory);
+                if (shift) NoWindowReposition = true;
+                ProcessConfigVariables();
+                ProcessCommandLineOptions();
+                SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
+                SetVersionDisplayString();
+                if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
+                if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+                if (OldDatabasePath == null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
             }
 
-            private void SetVersionDisplayString()
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Version ");
-                sb.Append(Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1]);
-
-                if (AppFolder != null)
-                {
-                    sb.Append($" (Using {AppFolder})");
-                }
-
-                switch (EDSMServerType)
-                {
-                    case EDSMServerType.Beta:
-                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
-                        sb.Append(" (EDSMBeta)");
-                        break;
-                    case EDSMServerType.Null:
-                        EDSMClass.ServerAddress = "";
-                        sb.Append(" (EDSM No server)");
-                        break;
-                }
-
-                if (DisableBetaCheck)
-                {
-                    EDDiscovery.EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
-                    sb.Append(" (no BETA detect)");
-                }
-
-                VersionDisplayString = sb.ToString();
-            }
+            #region Private implementation
 
             private void ProcessConfigVariables()
             {
@@ -210,22 +333,88 @@ namespace EDDiscovery2
                 }
             }
 
-            public void Init(bool shift)
+            private void SetAppDataDirectory(string appfolder, bool portable)
             {
-                if (shift) NoWindowReposition = true;
-                ProcessConfigVariables();
-                ProcessCommandLineOptions();
-                SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
-                SetVersionDisplayString();
-                if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
-                if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
-                if (OldDatabasePath == null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
+                if (appfolder == null)
+                {
+                    appfolder = (portable ? "Data" : "EDDiscovery");
+                }
+
+                if (Path.IsPathRooted(appfolder))
+                {
+                    AppDataDirectory = appfolder;
+                }
+                else if (portable)
+                {
+                    AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
+                }
+                else
+                {
+                    AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
+                }
+
+                if (!Directory.Exists(AppDataDirectory))
+                    Directory.CreateDirectory(AppDataDirectory);
             }
+
+            private void SetVersionDisplayString()
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Version ");
+                sb.Append(Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1]);
+
+                if (AppFolder != null)
+                {
+                    sb.Append($" (Using {AppFolder})");
+                }
+
+                switch (EDSMServerType)
+                {
+                    case EDSMServerType.Beta:
+                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
+                        sb.Append(" (EDSMBeta)");
+                        break;
+                    case EDSMServerType.Null:
+                        EDSMClass.ServerAddress = "";
+                        sb.Append(" (EDSM No server)");
+                        break;
+                }
+
+                if (DisableBetaCheck)
+                {
+                    EDDiscovery.EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
+                    sb.Append(" (no BETA detect)");
+                }
+
+                VersionDisplayString = sb.ToString();
+            }
+
+            #endregion
         }
 
+        #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// Set during program startup to the current date. Used solely to determine
+        /// the log file that this application instance wiill write to.
+        /// </summary>
+        readonly public static string LogIndex = DateTime.Now.ToString("yyyyMMdd");
+
+        #endregion
+
+        #region Static properties
+
+        /// <summary>
+        /// Command-line options, and other settings that cannot be changed during runtime.
+        /// </summary>
         public static OptionsClass Options { get; } = new OptionsClass();
 
-        private static EDDConfig _instance;
+        /// <summary>
+        /// Return the true instantiated EDDConfig, constructing it if necessary. Use this to access
+        /// all settings that are not established beyond the scope of the application lifecycle.
+        /// </summary>
         public static EDDConfig Instance
         {
             get
@@ -238,48 +427,305 @@ namespace EDDiscovery2
             }
         }
 
-        private bool _useDistances;
-        private bool _EDSMLog;
-        readonly public string LogIndex;
-        private bool _canSkipSlowUpdates = false;
-        private bool _useNotifyIcon = false;
-        private bool _orderrowsinverted = false;
-        private bool _minimizeToNotifyIcon = false;
-        private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
-        private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
-        private bool _displayUTC = false;
-        private bool _clearMaterials = false;
-        private bool _clearCommodities = false;
-        private bool _autoLoadPopouts = false;
-        private bool _autoSavePopouts = false;
+        #endregion
 
-        private List<EDCommander> _ListOfCommanders;
-        public List<EDCommander> ListOfCommanders { get { if (_ListOfCommanders == null) Update();  return _ListOfCommanders;  } }
-        
-        private int currentCmdrID=0;
-        private Dictionary<string, object> settings = new Dictionary<string, object>();
-        private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
-        {
-            { "JournalDir", () => EDDiscovery.EliteDangerous.EDJournalClass.GetDefaultJournalDir() },
-            { "JournalDirAutoMode", () => true },
-            { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() },
-            { "MapColour_CoarseGridLines", () => System.Drawing.ColorTranslator.FromHtml("#296A6C").ToArgb() },
-            { "MapColour_FineGridLines", () => System.Drawing.ColorTranslator.FromHtml("#202020").ToArgb() },
-            { "MapColour_SystemDefault", () => System.Drawing.Color.White.ToArgb() },
-            { "MapColour_StationSystem", () => System.Drawing.Color.RoyalBlue.ToArgb() },
-            { "MapColour_CentredSystem", () => System.Drawing.Color.Yellow.ToArgb() },
-            { "MapColour_SelectedSystem", () => System.Drawing.Color.Orange.ToArgb() },
-            { "MapColour_POISystem", () => System.Drawing.Color.Purple.ToArgb() },
-            { "MapColour_TrilatCurrentReference", () => System.Drawing.Color.Green.ToArgb() },
-            { "MapColour_TrilatSuggestedReference", () => System.Drawing.Color.DarkOrange.ToArgb() },
-            { "MapColour_PlannedRoute", () => System.Drawing.Color.Green.ToArgb() },
-            { "MapColour_NamedStar", () => System.Drawing.Color.Yellow.ToArgb() },
-            { "MapColour_NamedStarUnpop", () => System.Drawing.Color.FromArgb(255,192,192,0).ToArgb() }
-        };
+        /* **** Use 'EDDConfig.Instance.' or (instance of)EDDiscoveryForm'.Config.' to access these directly **** */
+        #region Instantiated properties 
 
-        private EDDConfig()
+        /// <summary>
+        /// Whether we should automatically load popout (S-Panel) windows at startup.
+        /// </summary>
+        public bool AutoLoadPopOuts
         {
-            LogIndex = DateTime.Now.ToString("yyyyMMdd");
+            get
+            {
+                return _autoLoadPopouts;
+            }
+            set
+            {
+                if (_autoLoadPopouts != value)
+                {
+                    _autoLoadPopouts = value;
+                    SQLiteConnectionUser.PutSettingBool("AutoLoadPopouts", value);
+                    OnConfigChangedEvent(ConfigProperty.AutoLoadPopOuts, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether we should automatically save popout (S-Panel) windows at exit.
+        /// </summary>
+        public bool AutoSavePopOuts
+        {
+            get
+            {
+                return _autoSavePopouts;
+            }
+            set
+            {
+                if (_autoSavePopouts != value)
+                {
+                    _autoSavePopouts = value;
+                    SQLiteConnectionUser.PutSettingBool("AutoSavePopouts", value);
+                    OnConfigChangedEvent(ConfigProperty.AutoSavePopOuts, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// (DEBUG ONLY) Whether to skip slow updates at startup. 
+        /// </summary>
+        public bool CanSkipSlowUpdates
+        {
+            get
+            {
+                return EDDConfig.Options.Debug && _canSkipSlowUpdates;
+            }
+            set
+            {
+                if (_canSkipSlowUpdates != value)
+                {
+                    _canSkipSlowUpdates = value;
+                    SQLiteConnectionUser.PutSettingBool("CanSkipSlowUpdates", value);
+                    OnConfigChangedEvent(ConfigProperty.CanSkipSlowUpdates, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether the commodities viewer should hide commodities that the commander does not have on-hand.
+        /// </summary>
+        public bool ClearCommodities
+        {
+            get
+            {
+                return _clearCommodities;
+            }
+            set
+            {
+                if (_clearCommodities != value)
+                {
+                    _clearCommodities = value;
+                    SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
+                    OnConfigChangedEvent(ConfigProperty.ClearCommodities, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether the materials viewer should hide materials that the command does not have on-hand.
+        /// </summary>
+        public bool ClearMaterials
+        {
+            get
+            {
+                return _clearMaterials;
+            }
+            set
+            {
+                if (_clearMaterials != value)
+                {
+                    _clearMaterials = value;
+                    SQLiteConnectionUser.PutSettingBool("ClearMaterials", value);
+                    OnConfigChangedEvent(ConfigProperty.ClearMaterials, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The current commander.
+        /// </summary>
+        public EDCommander CurrentCommander
+        {
+            get
+            {
+                if (_currentCmdrID >= ListOfCommanders.Count)
+                    _currentCmdrID = ListOfCommanders.Count - 1;
+
+                return ListOfCommanders[_currentCmdrID];
+            }
+        }
+
+        /// <summary>
+        /// The current commander's ID.
+        /// </summary>
+        public int CurrentCmdrID
+        {
+            get
+            {
+                return CurrentCommander.Nr;
+            }
+
+            set
+            {
+                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
+                if (cmdr != null && _currentCmdrID != cmdr.index)
+                {
+                    _currentCmdrID = cmdr.index;
+                    SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
+                    OnCommanderChangedEvent(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The default map colour.
+        /// </summary>
+        public int DefaultMapColour
+        {
+            get
+            {
+                return _defaultMapColour;
+            }
+            set
+            {
+                if (_defaultMapColour != value)
+                {
+                    _defaultMapColour = value;
+                    SQLiteConnectionUser.PutSettingInt("DefaultMap", value);
+                    OnConfigChangedEvent(ConfigProperty.DefaultMapColour, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether to display event times in UTC (game time) or in local time.
+        /// </summary>
+        public bool DisplayUTC
+        {
+            get
+            {
+                return _displayUTC;
+            }
+            set
+            {
+                if (_displayUTC != value)
+                {
+                    _displayUTC = value;
+                    SQLiteConnectionUser.PutSettingBool("DisplayUTC", value);
+                    OnConfigChangedEvent(ConfigProperty.DisplayUTC, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether to (verbosely) log all EDSM requests.
+        /// </summary>
+        public bool EDSMLog
+        {
+            get
+            {
+                return _EDSMLog;
+            }
+            set
+            {
+                if (_EDSMLog != value)
+                {
+                    _EDSMLog = value;
+                    SQLiteConnectionUser.PutSettingBool("EDSMLog", value);
+                    OnConfigChangedEvent(ConfigProperty.EDSMLog, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether to automatically scroll (up/down) to new events in the journal and history log views.
+        /// </summary>
+        public bool FocusOnNewSystem
+        {
+            get
+            {
+                return _focusOnNewSystem;
+            }
+            set
+            {
+                if (_focusOnNewSystem != value)
+                {
+                    _focusOnNewSystem = value;
+                    SQLiteConnectionUser.PutSettingBool("FocusOnNewSystem", value);
+                    OnConfigChangedEvent(ConfigProperty.FocusOnNewSystem, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether to keep the <see cref="EDDiscovery"/> window on top.
+        /// </summary>
+        public bool KeepOnTop
+        {
+            get
+            {
+                return _keepOnTop;
+            }
+            set
+            {
+                if (_keepOnTop != value)
+                {
+                    _keepOnTop = value;
+                    SQLiteConnectionUser.PutSettingBool("KeepOnTop", value);
+                    OnConfigChangedEvent(ConfigProperty.KeepOnTop, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The available list of commanders. 
+        /// </summary>
+        public List<EDCommander> ListOfCommanders
+        {
+            get
+            {
+                if (_ListOfCommanders == null)
+                    Update();
+                return _ListOfCommanders;
+            }
+        }
+
+        /// <summary>
+        /// The currently selected colour map.
+        /// </summary>
+        public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
+
+        /// <summary>
+        /// Whether or not the main window will be hidden to the system notification
+        /// area icon (systray) when minimized. Has no effect if
+        /// <see cref="UseNotifyIcon"/> is not also enabled.
+        /// </summary>
+        public bool MinimizeToNotifyIcon
+        {
+            get
+            {
+                return _minimizeToNotifyIcon;
+            }
+            set
+            {
+                if (_minimizeToNotifyIcon != value)
+                {
+                    _minimizeToNotifyIcon = value;
+                    SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
+                    OnConfigChangedEvent(ConfigProperty.MinimizeToNotifyIcon, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether newest rows are on top (<c>false</c>), or bottom (<c>true</c>).
+        /// </summary>
+        public bool OrderRowsInverted
+        {
+            get
+            {
+                return _orderrowsinverted;
+            }
+            set
+            {
+                if (_orderrowsinverted != value)
+                {
+                    _orderrowsinverted = value;
+                    SQLiteConnectionUser.PutSettingBool("OrderRowsInverted", value);
+                    OnConfigChangedEvent(ConfigProperty.OrderRowsInverted, value);
+                }
+            }
         }
 
         /// <summary>
@@ -293,304 +739,126 @@ namespace EDDiscovery2
             }
             set
             {
-                _useNotifyIcon = value;
-                SQLiteConnectionUser.PutSettingBool("UseNotifyIcon", value);
-            }
-        }
-
-        public bool UseDistances
-        {
-            get
-            {
-                return _useDistances;
-            }
-
-            set
-            {
-                _useDistances = value;
-                SQLiteConnectionUser.PutSettingBool("EDSMDistances", value);
-            }
-        }
-
-        /// <summary>
-        /// Controls whether or not the main window will be hidden to the
-        /// system notification area icon (systray) when minimized.
-        /// Has no effect if <see cref="UseNotifyIcon"/> is not enabled.
-        /// </summary>
-        public bool MinimizeToNotifyIcon
-        {
-            get
-            {
-                return _minimizeToNotifyIcon;
-            }
-            set
-            {
-                _minimizeToNotifyIcon = value;
-                SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
-            }
-        }
-
-        public int CurrentCmdrID
-        {
-            get
-            {
-                return CurrentCommander.Nr;
-            }
-
-            set
-            {
-                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
-                if (cmdr != null)
+                if (_useNotifyIcon != value)
                 {
-                    currentCmdrID = cmdr.index;
-                    SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
+                    _useNotifyIcon = value;
+                    SQLiteConnectionUser.PutSettingBool("UseNotifyIcon", value);
+                    OnConfigChangedEvent(ConfigProperty.UseNotifyIcon, value);
                 }
             }
         }
 
-        public EDCommander CurrentCommander
-        {
-            get
-            {
-                if (currentCmdrID >= ListOfCommanders.Count)
-                    currentCmdrID = ListOfCommanders.Count - 1;
+        #endregion // Instantiated properties
 
-                return ListOfCommanders[currentCmdrID];
-            }
-        }
+        #region Methods
 
-        public EDCommander Commander( int i )
+        /// <summary>
+        /// Return the commander stored in the specified 0-based index.
+        /// </summary>
+        /// <param name="index">The storage index to return from.</param>
+        /// <returns>The specified <see cref="EDCommander"/>, if found; <c>null</c> otherwise.</returns>
+        public EDCommander Commander(int i)
         {
             return i < 0 ? null : ListOfCommanders.FirstOrDefault(c => c.Nr == i);
         }
 
-        public bool CheckCommanderEDSMAPI
+        /// <summary>
+        /// Delete a commander from backing storage and refresh instantiated list.
+        /// </summary>
+        /// <param name="cmdr">The commander to be deleted.</param>
+        public void DeleteCommander(EDCommander cmdr)
         {
-            get
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                return CurrentCmdrID >= 0 && CurrentCommander.EdsmName.Length > 0 && CurrentCommander.APIKey.Length > 0;
-            }
-        }
-
-        public bool EDSMLog
-        {
-            get
-            {
-                return _EDSMLog;
-            }
-
-            set
-            {
-                _EDSMLog = value;
-                SQLiteConnectionUser.PutSettingBool("EDSMLog", value);
-            }
-        }
-
-        public bool CanSkipSlowUpdates
-        {
-            get
-            {
-                return EDDConfig.Options.Debug && _canSkipSlowUpdates;
-            }
-            set
-            {
-                _canSkipSlowUpdates = value;
-                SQLiteConnectionUser.PutSettingBool("CanSkipSlowUpdates", value);
-            }
-        }
-
-        public bool OrderRowsInverted {
-            get
-            {
-                return _orderrowsinverted;
-            }
-            set
-            {
-                _orderrowsinverted = value;
-                SQLiteConnectionUser.PutSettingBool("OrderRowsInverted", value);
-            }
-        }
-
-        public bool FocusOnNewSystem {
-            get
-            {
-                return _focusOnNewSystem;
-            }
-            set
-            {
-                _focusOnNewSystem = value;
-                SQLiteConnectionUser.PutSettingBool("FocusOnNewSystem", value);
-            }
-        }
-
-        public bool KeepOnTop
-        {
-            get
-            {
-                return _keepOnTop;
-            }
-            set
-            {
-                _keepOnTop = value;
-                SQLiteConnectionUser.PutSettingBool("KeepOnTop", value);
-            }
-        }
-
-        public bool DisplayUTC
-        {
-            get
-            {
-                return _displayUTC;
-            }
-            set
-            {
-                _displayUTC = value;
-                SQLiteConnectionUser.PutSettingBool("DisplayUTC", value);
-            }
-        }
-
-        public bool ClearCommodities
-        {
-            get
-            {
-                return _clearCommodities;
-            }
-            set
-            {
-                _clearCommodities = value;
-                SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
-            }
-        }
-
-        public bool ClearMaterials
-        {
-            get
-            {
-                return _clearMaterials;
-            }
-            set
-            {
-                _clearMaterials = value;
-                SQLiteConnectionUser.PutSettingBool("ClearMaterials", value);
-            }
-        }
-
-        public bool AutoLoadPopOuts
-        {
-            get
-            {
-                return _autoLoadPopouts;
-            }
-            set
-            {
-                _autoLoadPopouts = value;
-                SQLiteConnectionUser.PutSettingBool("AutoLoadPopouts", value);
-            }
-        }
-
-        public bool AutoSavePopOuts
-        {
-            get
-            {
-                return _autoSavePopouts;
-            }
-            set
-            {
-                _autoSavePopouts = value;
-                SQLiteConnectionUser.PutSettingBool("AutoSavePopouts", value);
-            }
-        }
-
-        public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
-        public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
-
-        private bool GetSettingBool(string key)
-        {
-            return GetSetting<bool>(key, (k, d) => SQLiteConnectionUser.GetSettingBool(k, d));
-        }
-
-        private int GetSettingInt(string key)
-        {
-            return GetSetting<int>(key, (k, d) => SQLiteConnectionUser.GetSettingInt(k, d));
-        }
-
-        private double GetSettingDouble(string key)
-        {
-            return GetSetting<double>(key, (k, d) => SQLiteConnectionUser.GetSettingDouble(k, d));
-        }
-
-        private string GetSettingString(string key)
-        {
-            return GetSetting<string>(key, (k, d) => SQLiteConnectionUser.GetSettingString(k, d));
-        }
-
-        private T GetSetting<T>(string key, Func<string,T,T> getter)
-        {
-            if (!settings.ContainsKey(key))
-            {
-                T defval = default(T);
-                if (defaults.ContainsKey(key))
+                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Deleted = 1 WHERE Id = @Id"))
                 {
-                    defval = (T)defaults[key]();
+                    cmd.AddParameterWithValue("@Id", cmdr.Nr);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            LoadCommanders();
+        }
+
+        /// <summary>
+        /// Generate a new commander with the specified parameters, save it to backing storage, and refresh the instantiated list.
+        /// </summary>
+        /// <param name="name">The in-game name for this commander.</param>
+        /// <param name="edsmName">The name for this commander as shown on EDSM.</param>
+        /// <param name="edsmApiKey">The API key to interface with EDSM.</param>
+        /// <param name="journalpath">Where EDD should monitor for this commander's logs.</param>
+        /// <returns>The newly-generated commander.</returns>
+        public EDCommander GetNewCommander(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null)
+        {
+            EDCommander cmdr;
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
+                {
+                    cmd.AddParameterWithValue("@Name", name ?? "");
+                    cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
+                    cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
+                    cmd.AddParameterWithValue("@JournalDir", journalpath ?? "");
+                    cmd.AddParameterWithValue("@Deleted", false);
+                    cmd.AddParameterWithValue("@SyncToEdsm", true);
+                    cmd.AddParameterWithValue("@SyncFromEdsm", false);
+                    cmd.AddParameterWithValue("@SyncToEddn", true);
+                    cmd.ExecuteNonQuery();
                 }
 
-                settings[key] = getter(key, defval);
+                using (DbCommand cmd = conn.CreateCommand("SELECT Id FROM Commanders WHERE rowid = last_insert_rowid()"))
+                {
+                    int nr = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders WHERE rowid = last_insert_rowid()"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        reader.Read();
+                        {
+                            cmdr = new EDCommander(reader);
+                        }
+                    }
+                }
+
+                if (name == null)
+                {
+                    using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name WHERE rowid = last_insert_rowid()"))
+                    {
+                        cmd.AddParameterWithValue("@Name", cmdr.Name);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
             }
 
-            return (T)settings[key];
+            LoadCommanders();       // refresh in-memory copy
+
+            return cmdr;
         }
 
-        private bool PutSettingBool(string key, bool value)
-        {
-            return PutSetting<bool>(key, value, (k, v) => SQLiteConnectionUser.PutSettingBool(k, v));
-        }
-
-        private bool PutSettingInt(string key, int value)
-        {
-            return PutSetting<int>(key, value, (k, v) => SQLiteConnectionUser.PutSettingInt(k, v));
-        }
-
-        private bool PutSettingDouble(string key, double value)
-        {
-            return PutSetting<double>(key, value, (k, v) => SQLiteConnectionUser.PutSettingDouble(k, v));
-        }
-
-        private bool PutSettingString(string key, string value)
-        {
-            return PutSetting<string>(key, value, (k, v) => SQLiteConnectionUser.PutSettingString(k, v));
-        }
-
-        private bool PutSetting<T>(string key, T value, Func<string,T,bool> setter)
-        {
-            settings[key] = value;
-
-            if (setter(key, value))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+        /// <summary>
+        /// Read config from storage. 
+        /// </summary>
+        /// <param name="write">Whether or not to write new commander information to storage.</param>
+        /// <param name="conn">An existing UserDB connection, if available.</param>
         public void Update(bool write = true, SQLiteConnectionUser conn = null)
         {
             try
             {
-                _useNotifyIcon = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", false, conn);
-                _useDistances = SQLiteConnectionUser.GetSettingBool("EDSMDistances", false, conn);
-                _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
-                _canSkipSlowUpdates = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", false, conn);
-                _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
-                _minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
-                _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
-                _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
-                _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
-                _clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
-                _clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
-                _autoLoadPopouts = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", false, conn);
-                _autoSavePopouts = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", false, conn);
+                _autoLoadPopouts        = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", _autoLoadPopouts, conn);
+                _autoSavePopouts        = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", _autoSavePopouts, conn);
+                _canSkipSlowUpdates     = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", _canSkipSlowUpdates, conn);
+                _clearCommodities       = SQLiteConnectionUser.GetSettingBool("ClearCommodities", _clearCommodities, conn);
+                _clearMaterials         = SQLiteConnectionUser.GetSettingBool("ClearMaterials", _clearMaterials, conn);
+                _defaultMapColour       = SQLiteConnectionUser.GetSettingInt("DefaultMap", _defaultMapColour, conn);
+                _displayUTC             = SQLiteConnectionUser.GetSettingBool("DisplayUTC", _displayUTC, conn);
+                _EDSMLog                = SQLiteConnectionUser.GetSettingBool("EDSMLog", _EDSMLog, conn);
+                _focusOnNewSystem       = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", _focusOnNewSystem, conn);
+                _keepOnTop              = SQLiteConnectionUser.GetSettingBool("KeepOnTop", _keepOnTop, conn);
+                _minimizeToNotifyIcon   = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", _minimizeToNotifyIcon, conn);
+                _orderrowsinverted      = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", _orderrowsinverted, conn);
+                _useNotifyIcon          = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", _useNotifyIcon, conn);
 
                 LoadCommanders(write, conn);
 
@@ -600,7 +868,7 @@ namespace EDDiscovery2
 
                 if (cmdr != null)
                 {
-                    currentCmdrID = cmdr.index;
+                    _currentCmdrID = cmdr.index;
                 }
             }
             catch (Exception ex)
@@ -611,8 +879,111 @@ namespace EDDiscovery2
 
         }
 
+        /// <summary>
+        /// Write commander information to storage.
+        /// </summary>
+        /// <param name="cmdrlist">The new list of <see cref="EDCommander"/> instances.</param>
+        /// <param name="reload">Whether to refresh the in-memory list after writing.</param>
+        public void UpdateCommanders(List<EDCommander> cmdrlist, bool reload)
+        {
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn WHERE Id=@Id"))
+                {
+                    cmd.AddParameter("@Id", DbType.Int32);
+                    cmd.AddParameter("@Name", DbType.String);
+                    cmd.AddParameter("@EdsmName", DbType.String);
+                    cmd.AddParameter("@EdsmApiKey", DbType.String);
+                    cmd.AddParameter("@NetLogDir", DbType.String);
+                    cmd.AddParameter("@JournalDir", DbType.String);
+                    cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
+                    cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
+                    cmd.AddParameter("@SyncToEddn", DbType.Boolean);
+
+                    foreach (EDCommander edcmdr in cmdrlist) // potential NRE, if we're being invoked by an idiot.
+                    {
+                        cmd.Parameters["@Id"].Value = edcmdr.Nr;
+                        cmd.Parameters["@Name"].Value = edcmdr.Name;
+                        cmd.Parameters["@EdsmName"].Value = edcmdr.EdsmName;
+                        cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
+                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "";
+                        cmd.Parameters["@JournalDir"].Value = edcmdr.JournalDir != null ? edcmdr.JournalDir : "";
+                        cmd.Parameters["@SyncToEdsm"].Value = edcmdr.SyncToEdsm;
+                        cmd.Parameters["@SyncFromEdsm"].Value = edcmdr.SyncFromEdsm;
+                        cmd.Parameters["@SyncToEddn"].Value = edcmdr.SyncToEddn;
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    if (reload)
+                        LoadCommanders(true, conn);       // refresh in-memory copy
+                }
+            }
+        }
+
+        #endregion // Public methods
+
+        #endregion // Public interface
+
+        #region Protected event dispatchers
+
+        protected virtual void OnMapColourChangedEvent(MapColourProperty prop, Color colour)
+        {
+            var e = new MapColourChangedEventArgs(prop, colour);
+            MapColourChanged?.Invoke(this, e);
+        }
+
+        protected virtual void OnCommanderChangedEvent(int commanderIndex)
+        {
+            var e = new CurrentCommanderChangedEventArgs(commanderIndex);
+            CurrentCommanderChanged?.Invoke(this, e);
+        }
+
+        protected virtual void OnConfigChangedEvent(ConfigProperty prop, object value)
+        {
+            var e = new ConfigChangedEventArgs(prop, value);
+            ConfigChanged?.Invoke(this, e);
+        }
+
+        #endregion
+
+        #region Private implementation
+
+        #region Fields, both static and instantiated.
+
+        private static EDDConfig _instance;
+
+        // The values assigned here will be treated as program defaults upon initial program execution.
+        private bool _autoLoadPopouts = false;
+        private bool _autoSavePopouts = false;
+        private bool _canSkipSlowUpdates = false;
+        private bool _clearCommodities = false;
+        private bool _clearMaterials = false;
+        private int _currentCmdrID = 0;
+        private int _defaultMapColour = Color.Red.ToArgb();
+        private bool _displayUTC = false;
+        private bool _EDSMLog = false;
+        private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
+        private bool _keepOnTop = false;        /**< Whether to keep the windows on top or not */
+        private bool _minimizeToNotifyIcon = false;
+        private bool _orderrowsinverted = false;
+        private bool _useNotifyIcon = false;
+
+        private List<EDCommander> _ListOfCommanders;
+
+        #endregion // Fields, both static and instantiated.
+
+        #region Methods
+
+        /// <summary>
+        /// The one true constructor (my precious!).
+        /// </summary>
+        private EDDConfig()
+        {
+        }
+
         private void LoadCommanders(bool write = true, SQLiteConnectionUser conn = null)
         {
+            var v = Commander(1);
             if ( _ListOfCommanders == null )
                 _ListOfCommanders = new List<EDCommander>();
 
@@ -702,104 +1073,8 @@ namespace EDDiscovery2
             }
         }
 
-        public void UpdateCommanders(List<EDCommander> cmdrlist, bool reload)
-        {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn WHERE Id=@Id"))
-                {
-                    cmd.AddParameter("@Id", DbType.Int32);
-                    cmd.AddParameter("@Name", DbType.String);
-                    cmd.AddParameter("@EdsmName", DbType.String);
-                    cmd.AddParameter("@EdsmApiKey", DbType.String);
-                    cmd.AddParameter("@NetLogDir", DbType.String);
-                    cmd.AddParameter("@JournalDir", DbType.String);
-                    cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
-                    cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
-                    cmd.AddParameter("@SyncToEddn", DbType.Boolean);
+        #endregion // Private methods
 
-                    foreach (EDCommander edcmdr in cmdrlist)
-                    {
-                        cmd.Parameters["@Id"].Value = edcmdr.Nr;
-                        cmd.Parameters["@Name"].Value = edcmdr.Name;
-                        cmd.Parameters["@EdsmName"].Value = edcmdr.EdsmName;
-                        cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
-                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "";
-                        cmd.Parameters["@JournalDir"].Value = edcmdr.JournalDir != null ? edcmdr.JournalDir : "";
-                        cmd.Parameters["@SyncToEdsm"].Value = edcmdr.SyncToEdsm;
-                        cmd.Parameters["@SyncFromEdsm"].Value = edcmdr.SyncFromEdsm;
-                        cmd.Parameters["@SyncToEddn"].Value = edcmdr.SyncToEddn;
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    if (reload)
-                        LoadCommanders();       // refresh in-memory copy
-                }
-            }
-        }
-
-
-        public EDCommander GetNewCommander(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null)
-        {
-            EDCommander cmdr;
-
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
-                {
-                    cmd.AddParameterWithValue("@Name", name ?? "");
-                    cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
-                    cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
-                    cmd.AddParameterWithValue("@JournalDir", journalpath ?? "");
-                    cmd.AddParameterWithValue("@Deleted", false);
-                    cmd.AddParameterWithValue("@SyncToEdsm", true);
-                    cmd.AddParameterWithValue("@SyncFromEdsm", false);
-                    cmd.AddParameterWithValue("@SyncToEddn", true);
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (DbCommand cmd = conn.CreateCommand("SELECT Id FROM Commanders WHERE rowid = last_insert_rowid()"))
-                {
-                    int nr = Convert.ToInt32(cmd.ExecuteScalar());
-                }
-                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders WHERE rowid = last_insert_rowid()"))
-                {
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        reader.Read();
-                        {
-                            cmdr = new EDCommander(reader);
-                        }
-                    }
-                }
-
-                 if (name == null)
-                {
-                    using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name WHERE rowid = last_insert_rowid()"))
-                    {
-                        cmd.AddParameterWithValue("@Name", cmdr.Name);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-            }
-
-            LoadCommanders();       // refresh in-memory copy
-
-            return cmdr;
-        }
-
-        public void DeleteCommander(EDCommander cmdr)
-        {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Deleted = 1 WHERE Id = @Id"))
-                {
-                    cmd.AddParameterWithValue("@Id", cmdr.Nr);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
-            LoadCommanders();       // refresh in-memory copy
-        }
+        #endregion // Private implementation
     }
 }
