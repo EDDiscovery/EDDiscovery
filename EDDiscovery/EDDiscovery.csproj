@@ -207,10 +207,10 @@
     <Compile Include="Actions\ActionCommands\ActionSleep.cs" />
     <Compile Include="Actions\ActionCommands\ActionStructures.cs" />
     <Compile Include="Actions\ActionCommands\ActionPlay.cs" />
-    <Compile Include="Conditions\ActionProgramForm.cs">
+    <Compile Include="Actions\ActionProgramForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Conditions\ActionProgramForm.Designer.cs">
+    <Compile Include="Actions\ActionProgramForm.Designer.cs">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
@@ -784,7 +784,7 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Conditions\ActionProgramForm.resx">
+    <EmbeddedResource Include="Actions\ActionProgramForm.resx">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">
