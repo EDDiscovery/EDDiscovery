@@ -104,7 +104,7 @@ namespace EDDiscovery
             journalmonitor = new EliteDangerous.EDJournalClass(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewPosition;
 
-            history.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+            history.CommanderId = EDCommander.CurrentCmdrID;
         }
 
         public void PostInit_Loaded()
@@ -308,7 +308,7 @@ namespace EDDiscovery
 
             if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
             {
-                if (EDDConfig.Instance.CurrentCommander.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
+                if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
                 {
                     LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
                 }
@@ -316,7 +316,7 @@ namespace EDDiscovery
 
             if (PendingClose) return;
             LogLine("Reading travel history");
-            DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDDConfig.Instance.CurrentCmdrID });
+            DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });
 
             if (PendingClose) return;
             if (syncstate.performeddbsync || syncstate.performedsmsync)

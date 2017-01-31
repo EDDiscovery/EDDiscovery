@@ -573,7 +573,7 @@ namespace EDDiscovery
         {
             try
             {
-                EDCommander cmdr = EDDConfig.Instance.ListOfCommanders.Find(x => x.Nr == EDDConfig.Instance.CurrentCmdrID);
+                EDCommander cmdr = EDCommander.Current;
 
                 if (cmdr != null)
                 {
@@ -696,7 +696,7 @@ namespace EDDiscovery
                                 "You can manually change one EDSM assigned system by right clicking on the travel history and selecting the option"
                                 , "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                EliteDangerous.JournalEntry.ClearEDSMID(EDDConfig.CurrentCommander.Nr);
+                EliteDangerous.JournalEntry.ClearEDSMID(EDCommander.CurrentCmdrID);
                 SystemNoteClass.ClearEDSMID();
             }
 
@@ -727,7 +727,7 @@ namespace EDDiscovery
         {
             if (Controller.history.CommanderId >= 0)
             {
-                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == Controller.history.CommanderId);
+                EDCommander cmdr = EDCommander.Current;
                 if (cmdr != null)
                 {
                     string netlogpath = cmdr.NetLogDir;
@@ -746,7 +746,7 @@ namespace EDDiscovery
                         if (logpath != netlogpath)
                         {
                             cmdr.NetLogDir = logpath;
-                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr }, true);
+                            EDCommander.Update(new List<EDCommander> { cmdr }, true);
                         }
 
                         //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
@@ -760,7 +760,7 @@ namespace EDDiscovery
         {
             if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                EliteDangerous.JournalEntry.ResetCommanderID(-1, EDDConfig.CurrentCommander.Nr);
+                EliteDangerous.JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
             }
         }
@@ -793,7 +793,7 @@ namespace EDDiscovery
         {
             if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                int n = EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDDConfig.CurrentCommander.Nr);
+                int n = EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
                 Controller.LogLine("Removed " + n + " FSD entries");
                 Controller.RefreshHistoryAsync();
             }
@@ -872,7 +872,7 @@ namespace EDDiscovery
                 {
                     if (send)
                     {
-                        if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
+                        if (EDCommander.Current.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
                             EDSMSync.SendComments(he.snc.Name, he.snc.Note, he.snc.EdsmId);
                     }
 
