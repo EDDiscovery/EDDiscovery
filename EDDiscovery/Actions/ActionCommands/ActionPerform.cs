@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EDDiscovery2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,7 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("edsm"))
                 {
                     EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
-                    ap.discoveryform.EdsmSync.StartSync(edsm, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm, EDDiscovery2.EDDConfig.Instance.DefaultMapColour);
+                    ap.discoveryform.EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDiscovery2.EDDConfig.Instance.DefaultMapColour);
                 }
                 else if (cmdname.Equals("refresh"))
                 {

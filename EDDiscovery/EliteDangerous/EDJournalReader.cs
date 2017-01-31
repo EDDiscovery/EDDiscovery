@@ -97,7 +97,7 @@ namespace EDDiscovery.EliteDangerous
                     newname = "[BETA] " + newname;
                 }
 
-                EDCommander _commander = EDDiscovery2.EDDConfig.Instance.ListOfCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
+                EDCommander _commander = EDCommander.GetCommander(newname);
 
                 if (_commander == null )
                 {

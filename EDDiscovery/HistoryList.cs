@@ -224,7 +224,7 @@ namespace EDDiscovery
                 EventDescription = info,
                 EventDetailedInfo = detailed,
                 IsStarPosFromEDSM = starposfromedsm,
-                Commander = cmdr ?? EDDConfig.Instance.Commander(je.CommanderId)
+                Commander = cmdr ?? EDCommander.GetCommander(je.CommanderId)
             };
 
             if (prev != null && prev.travelling)      // if we are travelling..
@@ -965,7 +965,7 @@ namespace EDDiscovery
                 if (this.CommanderId < 0)  // Only sync for real commander.
                     return;
 
-                var commander = EDDiscoveryForm.EDDConfig.Commander(CommanderId);
+                var commander = EDCommander.GetCommander(CommanderId);
 
                 string edsmname = commander.Name;
                 if (!string.IsNullOrEmpty(commander.EdsmName))
@@ -1079,7 +1079,7 @@ namespace EDDiscovery
 
             if (CurrentCommander >= 0)
             {
-                cmdr = EDDConfig.Instance.Commander(CurrentCommander);
+                cmdr = EDCommander.GetCommander(CurrentCommander);
                 journalmonitor.ParseJournalFiles(() => cancelRequested(), (p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
 
                 if (NetLogPath != null)

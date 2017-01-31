@@ -502,32 +502,6 @@ namespace EDDiscovery2
         }
 
         /// <summary>
-        /// The current commander.
-        /// </summary>
-        public EDCommander CurrentCommander
-        {
-            get
-            {
-                return EDCommander.Current;
-            }
-        }
-
-        /// <summary>
-        /// The current commander's ID.
-        /// </summary>
-        public int CurrentCmdrID
-        {
-            get
-            {
-                return EDCommander.CurrentCmdrID;
-            }
-            set
-            {
-                EDCommander.CurrentCmdrID = value;
-            }
-        }
-
-        /// <summary>
         /// The default map colour.
         /// </summary>
         public int DefaultMapColour
@@ -628,17 +602,6 @@ namespace EDDiscovery2
         }
 
         /// <summary>
-        /// The available list of commanders. 
-        /// </summary>
-        public IEnumerable<EDCommander> ListOfCommanders
-        {
-            get
-            {
-                return EDCommander.GetAll();
-            }
-        }
-
-        /// <summary>
         /// The currently selected colour map.
         /// </summary>
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
@@ -710,38 +673,6 @@ namespace EDDiscovery2
         #region Methods
 
         /// <summary>
-        /// Return the commander stored in the specified 0-based index.
-        /// </summary>
-        /// <param name="index">The storage index to return from.</param>
-        /// <returns>The specified <see cref="EDCommander"/>, if found; <c>null</c> otherwise.</returns>
-        public EDCommander Commander(int i)
-        {
-            return EDCommander.GetCommander(i);
-        }
-
-        /// <summary>
-        /// Delete a commander from backing storage and refresh instantiated list.
-        /// </summary>
-        /// <param name="cmdr">The commander to be deleted.</param>
-        public void DeleteCommander(EDCommander cmdr)
-        {
-            EDCommander.Delete(cmdr);
-        }
-
-        /// <summary>
-        /// Generate a new commander with the specified parameters, save it to backing storage, and refresh the instantiated list.
-        /// </summary>
-        /// <param name="name">The in-game name for this commander.</param>
-        /// <param name="edsmName">The name for this commander as shown on EDSM.</param>
-        /// <param name="edsmApiKey">The API key to interface with EDSM.</param>
-        /// <param name="journalpath">Where EDD should monitor for this commander's logs.</param>
-        /// <returns>The newly-generated commander.</returns>
-        public EDCommander GetNewCommander(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null)
-        {
-            return EDCommander.Create(name, edsmName, edsmApiKey, journalpath);
-        }
-
-        /// <summary>
         /// Read config from storage. 
         /// </summary>
         /// <param name="write">Whether or not to write new commander information to storage.</param>
@@ -772,16 +703,6 @@ namespace EDDiscovery2
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
 
-        }
-
-        /// <summary>
-        /// Write commander information to storage.
-        /// </summary>
-        /// <param name="cmdrlist">The new list of <see cref="EDCommander"/> instances.</param>
-        /// <param name="reload">Whether to refresh the in-memory list after writing.</param>
-        public void UpdateCommanders(List<EDCommander> cmdrlist, bool reload)
-        {
-            EDCommander.Update(cmdrlist, reload);
         }
 
         #endregion // Public methods
