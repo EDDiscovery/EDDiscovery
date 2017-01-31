@@ -432,7 +432,7 @@ namespace EDDiscovery2.HTTP
             {
                 lock(LOCK)
                 {
-                    string filename = Path.Combine(Tools.GetAppDataDirectory(), "Log", "EDD_" + EDDiscoveryForm.EDDConfig.LogIndex + ".log");
+                    string filename = Path.Combine(Tools.GetAppDataDirectory(), "Log", "EDD_" + EDDConfig.LogIndex + ".log");
 
                     using (StreamWriter w = File.AppendText(filename))
                     {
