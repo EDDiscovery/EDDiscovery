@@ -60,6 +60,7 @@ namespace EDDiscovery
         public int MapColour;
 
         public bool IsStarPosFromEDSM;  // flag populated from journal entry when HE is made. Was the star position taken from EDSM?
+        public bool IsEDSMFirstDiscover;// flag populated from journal entry when HE is made. Were we the first to report the system to EDSM?
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
@@ -111,7 +112,7 @@ namespace EDDiscovery
 
         #region Constructors
 
-        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0)
+        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
         {
             Debug.Assert(sys != null);
             EntryType = EliteDangerous.JournalTypeEnum.FSDJump;
@@ -122,6 +123,7 @@ namespace EDDiscovery
             EventDetailedInfo = info;
             MapColour = m;
             Journalid = journalid;
+            IsEDSMFirstDiscover = firstdiscover;
             EdsmSync = true; 
         }
 
@@ -133,7 +135,7 @@ namespace EDDiscovery
             int mapcolour = 0;
             journalupdate = false;
             bool starposfromedsm = false;
-
+            bool firstdiscover = false;
 
 
             if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
@@ -202,6 +204,7 @@ namespace EDDiscovery
 
                 isys = newsys;
                 starposfromedsm = jl.HasCoordinate ? jl.StarPosFromEDSM : newsys.HasCoordinate;
+                firstdiscover = jl.EDSMFirstDiscover;
             }
 
             string summary, info, detailed;
@@ -224,6 +227,7 @@ namespace EDDiscovery
                 EventDescription = info,
                 EventDetailedInfo = detailed,
                 IsStarPosFromEDSM = starposfromedsm,
+                IsEDSMFirstDiscover = firstdiscover,
                 Commander = cmdr ?? EDDConfig.Instance.Commander(je.CommanderId)
             };
 
@@ -397,6 +401,19 @@ namespace EDDiscovery
             if (Journalid != 0)
             {
                 EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EDDN, true);
+            }
+        }
+
+        public void SetFirstDiscover(bool firstdiscover = true)
+        {
+            IsEDSMFirstDiscover = firstdiscover;
+            if (journalEntry != null)
+            {
+                JournalLocOrJump jl = journalEntry as JournalLocOrJump;
+                if (jl != null)
+                {
+                    jl.UpdateEDSMFirstDiscover(firstdiscover);
+                }
             }
         }
 
