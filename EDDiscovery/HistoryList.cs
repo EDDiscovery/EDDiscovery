@@ -101,12 +101,14 @@ namespace EDDiscovery
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
         private string wheredocked = "";            // empty if in space, else where docked
-        private string shiptype = "Unknown";
+        private int shipid = -1;                            // ship id, -1 unknown
+        private string shiptype = "Unknown";        // and the ship
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
         public string WhereAmI { get { return wheredocked; } }
         public string ShipType { get { return shiptype; } }
+        public int ShipId { get { return shipid; } }
 
         #endregion
 
@@ -297,6 +299,7 @@ namespace EDDiscovery
                     he.landed = prev.landed;
 
                 he.shiptype = prev.shiptype;
+                he.shipid = prev.shipid;
                 he.wheredocked = prev.wheredocked;
             }
 
@@ -326,14 +329,21 @@ namespace EDDiscovery
             {
                 he.landed = (je as EliteDangerous.JournalEvents.JournalLoadGame).StartLanded;
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalLoadGame).Ship;
+                he.shipid = (je as EliteDangerous.JournalEvents.JournalLoadGame).ShipId;
             }
-            else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)
+            else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)         // BUY does not have ship id, but the new entry will that is written later - journals 8.34
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardBuy).ShipType;
             else if (je.EventTypeID == JournalTypeEnum.ShipyardNew)
+            {
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardNew).ShipType;
+                he.shipid = (je as EliteDangerous.JournalEvents.JournalShipyardNew).ShipId;
+            }
             else if (je.EventTypeID == JournalTypeEnum.ShipyardSwap)
+            {
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipType;
-        
+                he.shipid = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipId;
+            }
+
             return he;
         }
 
