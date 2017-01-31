@@ -25,6 +25,7 @@ namespace EDDiscovery.Actions
             vars[prefix + "StarSystemEDSMID"] = he.System.id_edsm.ToString(System.Globalization.CultureInfo.InvariantCulture);
             vars[prefix + "WhereAmI"] = he.WhereAmI;
             vars[prefix + "ShipType"] = he.ShipType;
+            vars[prefix + "ShipId"] = he.ShipId.ToString(System.Globalization.CultureInfo.InvariantCulture);
             vars[prefix + "IndexOf"] = he.Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
             vars[prefix + "JID"] = he.Journalid.ToString(System.Globalization.CultureInfo.InvariantCulture);
             vars.AddPropertiesFieldsOfType(he.journalEntry, prefix + "Class_");
