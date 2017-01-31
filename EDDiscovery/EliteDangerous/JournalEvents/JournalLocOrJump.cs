@@ -27,6 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string StarSystem { get; set; }
         public Vector3 StarPos { get; set; }
         public bool StarPosFromEDSM { get; set; }
+        public bool EDSMFirstDiscover { get; set; }
 
         public bool HasCoordinate { get { return !float.IsNaN(StarPos.X); } }
 
@@ -34,6 +35,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             StarSystem = JSONHelper.GetStringDef(jo["StarSystem"],"Unknown!");
             StarPosFromEDSM = JSONHelper.GetBool(jo["StarPosFromEDSM"], false);
+            EDSMFirstDiscover = JSONHelper.GetBool(jo["EDD_EDSMFirstDiscover"], false);
 
             Vector3 pos = new Vector3();
 
@@ -50,6 +52,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
 
             StarPos = pos;
+        }
+
+        public void UpdateEDSMFirstDiscover(bool firstdiscover)
+        {
+            jEventData["EDD_EDSMFirstDiscover"] = firstdiscover;
+            Update();
+            EDSMFirstDiscover = firstdiscover;
         }
     }
 }
