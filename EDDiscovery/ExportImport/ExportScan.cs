@@ -16,6 +16,7 @@
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery2;
 using EDDiscovery2.EDSM;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,7 @@ namespace EDDiscovery.Export
 
                 scans = new List<JournalScan>();
 
-                var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDDiscoveryForm.EDDConfig.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
+                var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
                 scans = entries.ConvertAll<JournalScan>(x => (JournalScan)x);
             }
             else

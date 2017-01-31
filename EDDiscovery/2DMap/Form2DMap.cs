@@ -146,7 +146,7 @@ namespace EDDiscovery2
         {
             DateTime start = startDate;
 
-            int currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+            int currentcmdr = EDCommander.CurrentCmdrID;
 
             var history = from systems in syslist where systems.EventTimeLocal > start && systems.EventTimeLocal<endDate && systems.System.HasCoordinate == true  orderby systems.EventTimeUTC  select systems;
             List<HistoryEntry> listHistory = history.ToList();
