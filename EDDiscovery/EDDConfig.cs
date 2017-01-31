@@ -56,7 +56,7 @@ namespace EDDiscovery2
             public CurrentCommanderChangedEventArgs(int index)
             {
                 Index = index;
-                Commander = Instance.ListOfCommanders[index];
+                Commander = EDCommander.GetCommander(index);
             }
         }
 
@@ -538,10 +538,7 @@ namespace EDDiscovery2
         {
             get
             {
-                if (_currentCmdrID >= ListOfCommanders.Count)
-                    _currentCmdrID = ListOfCommanders.Count - 1;
-
-                return ListOfCommanders[_currentCmdrID];
+                return EDCommander.Current;
             }
         }
 
@@ -552,15 +549,13 @@ namespace EDDiscovery2
         {
             get
             {
-                return CurrentCommander.Nr;
+                return _currentCmdrID;
             }
-
             set
             {
-                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
-                if (cmdr != null && _currentCmdrID != cmdr.index)
+                if (_currentCmdrID != value && EDCommander.GetCommander(value) != null)
                 {
-                    _currentCmdrID = cmdr.index;
+                    _currentCmdrID = value;
                     SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
                     OnCurrentCommanderChangedEvent(value);
                 }
@@ -674,9 +669,7 @@ namespace EDDiscovery2
         {
             get
             {
-                if (_ListOfCommanders == null)
-                    Update();
-                return _ListOfCommanders;
+                return EDCommander.GetAll().ToList();
             }
         }
 
@@ -758,82 +751,7 @@ namespace EDDiscovery2
         /// <returns>The specified <see cref="EDCommander"/>, if found; <c>null</c> otherwise.</returns>
         public EDCommander Commander(int i)
         {
-            return i < 0 ? null : ListOfCommanders.FirstOrDefault(c => c.Nr == i);
-        }
-
-        /// <summary>
-        /// Delete a commander from backing storage and refresh instantiated list.
-        /// </summary>
-        /// <param name="cmdr">The commander to be deleted.</param>
-        public void DeleteCommander(EDCommander cmdr)
-        {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Deleted = 1 WHERE Id = @Id"))
-                {
-                    cmd.AddParameterWithValue("@Id", cmdr.Nr);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
-            LoadCommanders();
-        }
-
-        /// <summary>
-        /// Generate a new commander with the specified parameters, save it to backing storage, and refresh the instantiated list.
-        /// </summary>
-        /// <param name="name">The in-game name for this commander.</param>
-        /// <param name="edsmName">The name for this commander as shown on EDSM.</param>
-        /// <param name="edsmApiKey">The API key to interface with EDSM.</param>
-        /// <param name="journalpath">Where EDD should monitor for this commander's logs.</param>
-        /// <returns>The newly-generated commander.</returns>
-        public EDCommander GetNewCommander(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null)
-        {
-            EDCommander cmdr;
-
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
-                {
-                    cmd.AddParameterWithValue("@Name", name ?? "");
-                    cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
-                    cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
-                    cmd.AddParameterWithValue("@JournalDir", journalpath ?? "");
-                    cmd.AddParameterWithValue("@Deleted", false);
-                    cmd.AddParameterWithValue("@SyncToEdsm", true);
-                    cmd.AddParameterWithValue("@SyncFromEdsm", false);
-                    cmd.AddParameterWithValue("@SyncToEddn", true);
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (DbCommand cmd = conn.CreateCommand("SELECT Id FROM Commanders WHERE rowid = last_insert_rowid()"))
-                {
-                    int nr = Convert.ToInt32(cmd.ExecuteScalar());
-                }
-                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders WHERE rowid = last_insert_rowid()"))
-                {
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        reader.Read();
-                        {
-                            cmdr = new EDCommander(reader);
-                        }
-                    }
-                }
-
-                if (name == null)
-                {
-                    using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name WHERE rowid = last_insert_rowid()"))
-                    {
-                        cmd.AddParameterWithValue("@Name", cmdr.Name);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-            }
-
-            LoadCommanders();       // refresh in-memory copy
-
-            return cmdr;
+            return EDCommander.GetCommander(i);
         }
 
         /// <summary>
@@ -859,15 +777,12 @@ namespace EDDiscovery2
                 _orderrowsinverted      = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", _orderrowsinverted, conn);
                 _useNotifyIcon          = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", _useNotifyIcon, conn);
 
-                LoadCommanders(write, conn);
+                EDCommander.Load(write, conn);
 
-                int activecommander = SQLiteConnectionUser.GetSettingInt("ActiveCommander", 0, conn);
-
-                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
-
-                if (cmdr != null)
+                int cmdrid = SQLiteConnectionUser.GetSettingInt("ActiveCommander", _currentCmdrID, conn);
+                if (cmdrid != _currentCmdrID && EDCommander.GetCommander(cmdrid) != null)
                 {
-                    _currentCmdrID = cmdr.index;
+                    _currentCmdrID = cmdrid;
                 }
             }
             catch (Exception ex)
@@ -876,47 +791,6 @@ namespace EDDiscovery2
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
 
-        }
-
-        /// <summary>
-        /// Write commander information to storage.
-        /// </summary>
-        /// <param name="cmdrlist">The new list of <see cref="EDCommander"/> instances.</param>
-        /// <param name="reload">Whether to refresh the in-memory list after writing.</param>
-        public void UpdateCommanders(List<EDCommander> cmdrlist, bool reload)
-        {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn WHERE Id=@Id"))
-                {
-                    cmd.AddParameter("@Id", DbType.Int32);
-                    cmd.AddParameter("@Name", DbType.String);
-                    cmd.AddParameter("@EdsmName", DbType.String);
-                    cmd.AddParameter("@EdsmApiKey", DbType.String);
-                    cmd.AddParameter("@NetLogDir", DbType.String);
-                    cmd.AddParameter("@JournalDir", DbType.String);
-                    cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
-                    cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
-                    cmd.AddParameter("@SyncToEddn", DbType.Boolean);
-
-                    foreach (EDCommander edcmdr in cmdrlist) // potential NRE, if we're being invoked by an idiot.
-                    {
-                        cmd.Parameters["@Id"].Value = edcmdr.Nr;
-                        cmd.Parameters["@Name"].Value = edcmdr.Name;
-                        cmd.Parameters["@EdsmName"].Value = edcmdr.EdsmName;
-                        cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
-                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "";
-                        cmd.Parameters["@JournalDir"].Value = edcmdr.JournalDir != null ? edcmdr.JournalDir : "";
-                        cmd.Parameters["@SyncToEdsm"].Value = edcmdr.SyncToEdsm;
-                        cmd.Parameters["@SyncFromEdsm"].Value = edcmdr.SyncFromEdsm;
-                        cmd.Parameters["@SyncToEddn"].Value = edcmdr.SyncToEddn;
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    if (reload)
-                        LoadCommanders(true, conn);       // refresh in-memory copy
-                }
-            }
         }
 
         #endregion // Public methods
@@ -966,8 +840,6 @@ namespace EDDiscovery2
         private bool _orderrowsinverted = false;
         private bool _useNotifyIcon = false;
 
-        private List<EDCommander> _ListOfCommanders;
-
         #endregion // Fields, both static and instantiated.
 
         #region Methods
@@ -977,97 +849,6 @@ namespace EDDiscovery2
         /// </summary>
         private EDDConfig()
         {
-        }
-
-        private void LoadCommanders(bool write = true, SQLiteConnectionUser conn = null)
-        {
-            if ( _ListOfCommanders == null )
-                _ListOfCommanders = new List<EDCommander>();
-
-            lock (_ListOfCommanders)
-            {
-                _ListOfCommanders.Clear();
-
-                bool migrate = false;
-
-                var cmdrs = SQLiteConnectionUser.GetCommanders(conn);
-
-                if (cmdrs.Count == 0)
-                {
-                    cmdrs = SQLiteConnectionUser.GetCommandersFromRegister(conn);
-                    if (cmdrs.Count != 0)
-                    {
-                        migrate = true;
-                    }
-                }
-
-                int maxnr = cmdrs.Count == 0 ? 0 : cmdrs.Max(c => c.Nr);
-
-                _ListOfCommanders = cmdrs.Where(c => c.Deleted == false).ToList();
-
-                if (_ListOfCommanders.Count == 0)
-                {
-                    if (write)
-                    {
-                        GetNewCommander("Jameson (Default)");
-                    }
-                    else
-                    {
-                        _ListOfCommanders = new List<EDCommander>
-                        {
-                            new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false)
-                        };
-                    }
-                }
-
-                if (migrate && write)
-                {
-                    bool closeconn = false;
-                    try
-                    {
-                        if (conn == null)
-                        {
-                            conn = new SQLiteConnectionUser();
-                            closeconn = true;
-                        }
-
-                        using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmName, EdsmApiKey, NetLogDir, Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Id, @Name, @EdsmName, @EdsmApiKey, @NetLogDir, @Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
-                        {
-                            cmd.AddParameter("@Id", DbType.Int32);
-                            cmd.AddParameter("@Name", DbType.String);
-                            cmd.AddParameter("@EdsmName", DbType.String);
-                            cmd.AddParameter("@EdsmApiKey", DbType.String);
-                            cmd.AddParameter("@NetLogDir", DbType.String);
-                            cmd.AddParameter("@Deleted", DbType.Boolean);
-                            cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
-                            cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
-                            cmd.AddParameter("@SyncToEddn", DbType.Boolean);
-
-                            foreach (var cmdr in cmdrs)
-                            {
-                                cmd.Parameters["@Id"].Value = cmdr.Nr;
-                                cmd.Parameters["@Name"].Value = cmdr.Name;
-                                cmd.Parameters["@EdsmName"].Value = cmdr.EdsmName;
-                                cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
-                                cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
-                                cmd.Parameters["@Deleted"].Value = cmdr.Deleted;
-                                cmd.Parameters["@SyncToEdsm"].Value = cmdr.SyncToEdsm;
-                                cmd.Parameters["@SyncFromEdsm"].Value = cmdr.SyncFromEdsm;
-                                cmd.Parameters["@SyncToEddn"].Value = cmdr.SyncToEddn;
-
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        if (closeconn && conn != null)
-                        {
-                            conn.Dispose();
-                        }
-                    }
-                }
-            }
         }
 
         #endregion // Private methods

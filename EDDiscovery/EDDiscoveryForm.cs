@@ -585,7 +585,7 @@ namespace EDDiscovery
         {
             try
             {
-                EDCommander cmdr = EDDConfig.Instance.ListOfCommanders.Find(x => x.Nr == EDDConfig.Instance.CurrentCmdrID);
+                EDCommander cmdr = EDDConfig.Instance.CurrentCommander;
 
                 if (cmdr != null)
                 {
@@ -739,7 +739,7 @@ namespace EDDiscovery
         { 
             if (Controller.history.CommanderId >= 0)
             {
-                EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == Controller.history.CommanderId);
+                EDCommander cmdr = EDDConfig.CurrentCommander;
                 if (cmdr != null)
                 {
                     string netlogpath = cmdr.NetLogDir;
@@ -757,8 +757,7 @@ namespace EDDiscovery
 
                         if (logpath != netlogpath)
                         {
-                            cmdr.NetLogDir = logpath;
-                            EDDConfig.UpdateCommanders(new List<EDCommander> { cmdr }, true);
+                            EDCommander.Update(cmdr.Nr, netlogdir: logpath);
                         }
 
                         //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";

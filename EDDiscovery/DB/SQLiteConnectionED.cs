@@ -414,11 +414,15 @@ namespace EDDiscovery.DB
 
             for (int i = 0; i < 100; i++)
             {
-                EDDiscovery2.EDCommander cmdr = new EDDiscovery2.EDCommander(i,
-                    GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
-                    GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn), true, false, true);
-                cmdr.NetLogDir = GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
-                cmdr.Deleted = GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
+                EDDiscovery2.EDCommander cmdr = new EDDiscovery2.EDCommander(
+                    id: i,
+                    Name: GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
+                    APIKey: GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn),
+                    SyncToEDSM: true,
+                    SyncFromEdsm: false,
+                    SyncToEddn: true,
+                    netlogdir: GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn),
+                    deleted: GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn));
 
                 commanderName = "";
                 apikey = "";
