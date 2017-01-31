@@ -491,7 +491,7 @@ namespace EDDiscovery2.EDSM
                             };
 
                         HistoryEntry he = new HistoryEntry();
-                        he.MakeVSEntry(sc, etutc, EDDConfig.Instance.DefaultMapColour, "", "");       // FSD jump entry
+                        he.MakeVSEntry(sc, etutc, EDDConfig.Instance.DefaultMapColour.ToArgb(), "", "");       // FSD jump entry
                         log.Add(he);
                     }
                 }

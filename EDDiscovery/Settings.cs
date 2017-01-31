@@ -104,7 +104,7 @@ namespace EDDiscovery2
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.ListOfCommanders;
             dataGridViewCommanders.AutoGenerateColumns = false;
 
-            panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
+            panel_defaultmapcolor.BackColor = EDDConfig.Instance.DefaultMapColour;
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
         }
@@ -198,12 +198,12 @@ namespace EDDiscovery2
             ColorDialog mapColorDialog = new ColorDialog();
             mapColorDialog.AllowFullOpen = true;
             mapColorDialog.FullOpen = true;
-            mapColorDialog.Color = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
+            mapColorDialog.Color = EDDConfig.Instance.DefaultMapColour;
             if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                EDDConfig.Instance.DefaultMapColour = mapColorDialog.Color.ToArgb();
+                EDDConfig.Instance.DefaultMapColour = mapColorDialog.Color;
                 EDDConfig.Instance.DefaultMapColour = EDDConfig.Instance.DefaultMapColour;
-                panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
+                panel_defaultmapcolor.BackColor = EDDConfig.Instance.DefaultMapColour;
             }
         }
 

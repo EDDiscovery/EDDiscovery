@@ -73,14 +73,14 @@ namespace EDDiscovery2
             /// <summary>
             /// The new value for this property.
             /// </summary>
-            public object NewValue { get; protected set; }
+            public bool NewValue { get; protected set; }
 
             /// <summary>
             /// Constructs a new ConfigChangedEventArgs class in preparation to send it off in an event.
             /// </summary>
             /// <param name="setting">The configuration property that was changed.</param>
             /// <param name="newvalue">The new value of the configuration property.</param>
-            public ConfigChangedEventArgs(ConfigProperty setting, object newvalue = null)
+            public ConfigChangedEventArgs(ConfigProperty setting, bool newvalue)
             {
                 Setting = setting;
                 NewValue = newvalue;
@@ -90,12 +90,12 @@ namespace EDDiscovery2
         /// <summary>
         /// A map colour changed event.
         /// </summary>
-        public class MapColourChangedEventArgs : ConfigChangedEventArgs
+        public class MapColourChangedEventArgs : EventArgs
         {
             /// <summary>
             /// The new colour for this property.
             /// </summary>
-            public Color NewColour { get { return (Color)NewValue; } }
+            public Color NewColour { get; protected set; }
 
             /// <summary>
             /// The map colour property that was changed.
@@ -108,21 +108,21 @@ namespace EDDiscovery2
             /// <param name="prop">The <see cref="MapColourProperty"/> that was changed.</param>
             /// <param name="newColour">The new colour of this property.</param>
             public MapColourChangedEventArgs(MapColourProperty prop, Color newColour)
-                : base(ConfigProperty.MapColours, newColour)
             {
                 ColourProp = prop;
+                NewColour = newColour;
             }
         }
-
-        /// <summary>
-        /// The current commander changed event handler.
-        /// </summary>
-        public event EventHandler<CurrentCommanderChangedEventArgs> CurrentCommanderChanged;
 
         /// <summary>
         /// The configuration changed event handler.
         /// </summary>
         public event EventHandler<ConfigChangedEventArgs> ConfigChanged;
+
+        /// <summary>
+        /// The current commander changed event handler.
+        /// </summary>
+        public event EventHandler<CurrentCommanderChangedEventArgs> CurrentCommanderChanged;
 
         /// <summary>
         /// The map colour changed event handler.
@@ -144,13 +144,11 @@ namespace EDDiscovery2
             CheckCommanderEDSMAPI,
             ClearCommodities,
             ClearMaterials,
-            DefaultMapColour,
             DisplayUTC,
             EDSMLog,
             FocusOnNewSystem,
             KeepOnTop,
             ListOfCommanders,
-            MapColours,
             MinimizeToNotifyIcon,
             OrderRowsInverted,
             UseNotifyIcon,
@@ -163,6 +161,7 @@ namespace EDDiscovery2
         {
             CentredSystem,
             CoarseGridLines,
+            DefaultMapColour,
             FineGridLines,
             NamedStar,
             NamedStarUnpopulated,
@@ -429,7 +428,7 @@ namespace EDDiscovery2
 
         #endregion
 
-        /* **** Use 'EDDConfig.Instance.' or (instance of)EDDiscoveryForm'.Config.' to access these directly **** */
+        /* **** Use 'EDDConfig.Instance.' or (an instance of)EDDiscoveryForm'.EDDConfig.' to access these directly **** */
         #region Instantiated properties 
 
         /// <summary>
@@ -563,7 +562,7 @@ namespace EDDiscovery2
                 {
                     _currentCmdrID = cmdr.index;
                     SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
-                    OnCommanderChangedEvent(value);
+                    OnCurrentCommanderChangedEvent(value);
                 }
             }
         }
@@ -571,7 +570,7 @@ namespace EDDiscovery2
         /// <summary>
         /// The default map colour.
         /// </summary>
-        public int DefaultMapColour
+        public Color DefaultMapColour
         {
             get
             {
@@ -579,11 +578,11 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_defaultMapColour != value)
+                if (_defaultMapColour.ToArgb().CompareTo(value) != 0)
                 {
                     _defaultMapColour = value;
-                    SQLiteConnectionUser.PutSettingInt("DefaultMap", value);
-                    OnConfigChangedEvent(ConfigProperty.DefaultMapColour, value);
+                    SQLiteConnectionUser.PutSettingInt("DefaultMap", value.ToArgb());
+                    OnMapColourChangedEvent(MapColourProperty.DefaultMapColour, value);
                 }
             }
         }
@@ -851,7 +850,7 @@ namespace EDDiscovery2
                 _canSkipSlowUpdates     = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", _canSkipSlowUpdates, conn);
                 _clearCommodities       = SQLiteConnectionUser.GetSettingBool("ClearCommodities", _clearCommodities, conn);
                 _clearMaterials         = SQLiteConnectionUser.GetSettingBool("ClearMaterials", _clearMaterials, conn);
-                _defaultMapColour       = SQLiteConnectionUser.GetSettingInt("DefaultMap", _defaultMapColour, conn);
+                _defaultMapColour       = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("DefaultMap", _defaultMapColour.ToArgb(), conn));
                 _displayUTC             = SQLiteConnectionUser.GetSettingBool("DisplayUTC", _displayUTC, conn);
                 _EDSMLog                = SQLiteConnectionUser.GetSettingBool("EDSMLog", _EDSMLog, conn);
                 _focusOnNewSystem       = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", _focusOnNewSystem, conn);
@@ -924,27 +923,26 @@ namespace EDDiscovery2
 
         #endregion // Public interface
 
+
         #region Protected event dispatchers
+
+        protected virtual void OnConfigChangedEvent(ConfigProperty prop, bool newValue)
+        {
+            ConfigChanged?.Invoke(this, new ConfigChangedEventArgs(prop, newValue));
+        }
+
+        protected virtual void OnCurrentCommanderChangedEvent(int commanderIndex)
+        {
+            CurrentCommanderChanged?.Invoke(this, new CurrentCommanderChangedEventArgs(commanderIndex));
+        }
 
         protected virtual void OnMapColourChangedEvent(MapColourProperty prop, Color colour)
         {
-            var e = new MapColourChangedEventArgs(prop, colour);
-            MapColourChanged?.Invoke(this, e);
+            MapColourChanged?.Invoke(this, new MapColourChangedEventArgs(prop, colour));
         }
 
-        protected virtual void OnCommanderChangedEvent(int commanderIndex)
-        {
-            var e = new CurrentCommanderChangedEventArgs(commanderIndex);
-            CurrentCommanderChanged?.Invoke(this, e);
-        }
+        #endregion // Protected event dispatchers
 
-        protected virtual void OnConfigChangedEvent(ConfigProperty prop, object value)
-        {
-            var e = new ConfigChangedEventArgs(prop, value);
-            ConfigChanged?.Invoke(this, e);
-        }
-
-        #endregion
 
         #region Private implementation
 
@@ -959,7 +957,7 @@ namespace EDDiscovery2
         private bool _clearCommodities = false;
         private bool _clearMaterials = false;
         private int _currentCmdrID = 0;
-        private int _defaultMapColour = Color.Red.ToArgb();
+        private Color _defaultMapColour = Color.Red;
         private bool _displayUTC = false;
         private bool _EDSMLog = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
@@ -983,7 +981,6 @@ namespace EDDiscovery2
 
         private void LoadCommanders(bool write = true, SQLiteConnectionUser conn = null)
         {
-            var v = Commander(1);
             if ( _ListOfCommanders == null )
                 _ListOfCommanders = new List<EDCommander>();
 
