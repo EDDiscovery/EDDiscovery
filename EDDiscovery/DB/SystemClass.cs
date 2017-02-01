@@ -305,7 +305,7 @@ namespace EDDiscovery.DB
         {
             List<long> ret = new List<long>();
 
-            if (name.Length > 0)
+            if (name!=null && name.Length > 0)
             {
                 bool ownconn = false;
                 try
