@@ -931,13 +931,27 @@ namespace EDDiscovery.DB
 
         public static void GetSystemAndAlternatives(EliteDangerous.JournalEvents.JournalLocOrJump vsc, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
-            system = new EDDiscovery2.DB.InMemory.SystemClass
+            ISystem refsystem = new EDDiscovery2.DB.InMemory.SystemClass
             {
                 name = vsc.StarSystem,
                 x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN,
                 y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN,
                 z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN,
                 id_edsm = vsc.EdsmID
+            };
+
+            GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
+        }
+
+        public static void GetSystemAndAlternatives(ISystem refsys, out ISystem system, out List<ISystem> alternatives, out string namestatus)
+        {
+            system = new EDDiscovery2.DB.InMemory.SystemClass
+            {
+                name = refsys.name,
+                x = refsys.HasCoordinate ? refsys.x : Double.NaN,
+                y = refsys.HasCoordinate ? refsys.y : Double.NaN,
+                z = refsys.HasCoordinate ? refsys.z : Double.NaN,
+                id_edsm = refsys.id_edsm
             };
 
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
@@ -980,8 +994,8 @@ namespace EDDiscovery.DB
                 Dictionary<long, SystemClass> altmatches = new Dictionary<long, SystemClass>();
                 Dictionary<long, SystemClass> matches = new Dictionary<long, SystemClass>();
                 SystemClass edsmidmatch = null;
-                long sel_edsmid = vsc.EdsmID;
-                bool hastravcoords = vsc.HasCoordinate && (vsc.StarSystem.ToLowerInvariant() == "sol" || vsc.StarPos.X != 0 || vsc.StarPos.Y != 0 || vsc.StarPos.Z != 0);
+                long sel_edsmid = refsys.id_edsm;
+                bool hastravcoords = refsys.HasCoordinate && (refsys.name.ToLowerInvariant() == "sol" || refsys.x != 0 || refsys.y != 0 || refsys.z != 0);
                 bool multimatch = false;
 
                 if (sel_edsmid != 0)
@@ -1000,7 +1014,7 @@ namespace EDDiscovery.DB
 
                 //Stopwatch sw2 = new Stopwatch(); sw2.Start(); //long t2 = sw2.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query names in {0}", t2));
 
-                Dictionary<long, SystemClass> namematches = GetSystemsByName(vsc.StarSystem).Where(s => s != null).ToDictionary(s => s.id, s => s);
+                Dictionary<long, SystemClass> namematches = GetSystemsByName(refsys.name).Where(s => s != null).ToDictionary(s => s.id, s => s);
                 Dictionary<long, SystemClass> posmatches = new Dictionary<long, SystemClass>();
                 Dictionary<long, SystemClass> nameposmatches = new Dictionary<long, SystemClass>();
 
@@ -1015,9 +1029,9 @@ namespace EDDiscovery.DB
                         "AND s.Z >= @Z - 16 " +
                         "AND s.Z <= @Z + 16"))
                     {
-                        selectByPosCmd.AddParameterWithValue("@X", (long)(vsc.StarPos.X * XYZScalar));
-                        selectByPosCmd.AddParameterWithValue("@Y", (long)(vsc.StarPos.Y * XYZScalar));
-                        selectByPosCmd.AddParameterWithValue("@Z", (long)(vsc.StarPos.Z * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@X", (long)(refsys.x * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@Y", (long)(refsys.y * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@Z", (long)(refsys.z * XYZScalar));
 
                         //Stopwatch sw = new Stopwatch(); sw.Start(); long t1 = sw.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query pos in {0}", t1));
 
@@ -1034,7 +1048,7 @@ namespace EDDiscovery.DB
                                     matches[sys.id] = sys;
                                     posmatches[sys.id] = sys;
 
-                                    if (sys.name.Equals(vsc.StarSystem, StringComparison.InvariantCultureIgnoreCase))
+                                    if (sys.name.Equals(refsys.name, StringComparison.InvariantCultureIgnoreCase))
                                     {
                                         nameposmatches[sys.id] = sys;
                                     }
@@ -1044,9 +1058,9 @@ namespace EDDiscovery.DB
                     }
                 }
 
-                if (aliasesByName.ContainsKey(vsc.StarSystem))
+                if (aliasesByName.ContainsKey(refsys.name))
                 {
-                    foreach (long alt_edsmid in aliasesByName[vsc.StarSystem])
+                    foreach (long alt_edsmid in aliasesByName[refsys.name])
                     {
                         SystemClass sys = GetSystem(alt_edsmid, cn, SystemIDType.EdsmId);
                         if (sys != null)
@@ -1100,7 +1114,7 @@ namespace EDDiscovery.DB
 
                             return; // Continue to next system
                         }
-                        else if (!vsc.HasCoordinate)
+                        else if (!refsys.HasCoordinate)
                         {
                             namestatus = "Name differs";
                         }

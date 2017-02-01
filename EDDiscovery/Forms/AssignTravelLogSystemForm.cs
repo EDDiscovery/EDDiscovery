@@ -62,24 +62,27 @@ namespace EDDiscovery.Forms
         private ISystem _linkSystem;
         private List<ISystem> _alternatives;
         private string _namestatus;
-        private EliteDangerous.JournalEvents.JournalLocOrJump _travelLogEntry;
         private Dictionary<long, SystemLink> _systemLinks;
         private List<SystemLink> _systemLinkList;
 
         public AssignTravelLogSystemForm(EliteDangerous.JournalEvents.JournalLocOrJump vsc)
+            : this(new EDDiscovery2.DB.InMemory.SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
+        {
+        }
+
+        public AssignTravelLogSystemForm(ISystem refsys, DateTime? visited = null)
         {
             InitializeComponent();
-            this._travelLogEntry = vsc;
-            SystemClass.GetSystemAndAlternatives(vsc, out _linkSystem, out _alternatives, out _namestatus);
+            SystemClass.GetSystemAndAlternatives(refsys, out _linkSystem, out _alternatives, out _namestatus);
 
-            this.tbLogSystemName.Text = vsc.StarSystem;
-            this.tbVisitedDate.Text = vsc.EventTimeLocal.ToString();
-            this.tbLogCoordX.Text = vsc.HasCoordinate ? vsc.StarPos.X.ToString("0.000") : "?";
-            this.tbLogCoordY.Text = vsc.HasCoordinate ? vsc.StarPos.Y.ToString("0.000") : "?";
-            this.tbLogCoordZ.Text = vsc.HasCoordinate ? vsc.StarPos.Z.ToString("0.000") : "?";
-            this.tbLogCoordX.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
-            this.tbLogCoordY.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
-            this.tbLogCoordZ.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
+            this.tbLogSystemName.Text = refsys.name;
+            this.tbVisitedDate.Text = visited == null ? "-" : visited.ToString();
+            this.tbLogCoordX.Text = refsys.HasCoordinate ? refsys.x.ToString("0.000") : "?";
+            this.tbLogCoordY.Text = refsys.HasCoordinate ? refsys.y.ToString("0.000") : "?";
+            this.tbLogCoordZ.Text = refsys.HasCoordinate ? refsys.z.ToString("0.000") : "?";
+            this.tbLogCoordX.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
+            this.tbLogCoordY.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
+            this.tbLogCoordZ.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
 
             UpdateLinkedSystemList(_linkSystem);
             tbManualSystemName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
