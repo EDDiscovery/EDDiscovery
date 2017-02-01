@@ -269,7 +269,7 @@ namespace EDDiscovery2.EDSM
                         tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                         tlu.Size = 0;
                         tlu.Path = "EDSM";
-                        tlu.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
+                        tlu.CommanderId = EDCommander.CurrentCmdrID;
                         tlu.Add();  // Add to Database
 
                         using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))

@@ -73,7 +73,7 @@ namespace EDDiscovery
             comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
             
-            commanders.AddRange(EDDConfig.Instance.ListOfCommanders);
+            commanders.AddRange(EDCommander.GetAll());
 
             comboBoxCommander.DataSource = null;
             comboBoxCommander.DataSource = commanders;
@@ -85,7 +85,7 @@ namespace EDDiscovery
             if (_discoveryForm.history.CommanderId == -1)
                 comboBoxCommander.SelectedIndex = 0;
             else
-                comboBoxCommander.SelectedItem = EDDiscoveryForm.EDDConfig.CurrentCommander;
+                comboBoxCommander.SelectedItem = EDCommander.Current;
 
             comboBoxCommander.Enabled = true;
         }
@@ -184,7 +184,7 @@ namespace EDDiscovery
                 exportfilename = dlg.FileName;
             }
 
-            scans = JournalEntry.GetByEventType(JournalTypeEnum.FSDJump, EDDiscoveryForm.EDDConfig.CurrentCmdrID, new DateTime (2014, 1,1), DateTime.UtcNow) ;
+            scans = JournalEntry.GetByEventType(JournalTypeEnum.FSDJump, EDCommander.CurrentCmdrID, new DateTime (2014, 1,1), DateTime.UtcNow) ;
 
             var tscans = scans.ConvertAll<JournalFSDJump>(x=>(JournalFSDJump)x);
             try

@@ -69,7 +69,7 @@ namespace EDDiscovery
 
             if (currentcmdrid < 0)
             {
-                currentcmdrid = EDDConfig.Instance.CurrentCmdrID;
+                currentcmdrid = EDCommander.CurrentCmdrID;
             }
 
             // TLUs
