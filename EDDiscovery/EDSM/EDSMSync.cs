@@ -15,6 +15,7 @@
  */
 using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
@@ -111,9 +112,22 @@ namespace EDDiscovery2.EDSM
                         else
                         {
                             string errmsg;              // (verified with EDSM 29/9/2016)
+                            bool firstdiscover;
+                            int edsmid;
 
-                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg))
+                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg, out firstdiscover, out edsmid))
                             {
+                                if (edsmid != 0 && he.System.id_edsm <= 0)
+                                {
+                                    he.System.id_edsm = edsmid;
+                                    EDDiscovery.EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, -1);
+                                }
+
+                                if (firstdiscover)
+                                {
+                                    he.SetFirstDiscover();
+                                }
+
                                 he.SetEdsmSync();
                                 edsmsystemssent++;
                             }
@@ -237,6 +251,13 @@ namespace EDDiscovery2.EDSM
                         }
                         else
                         {
+                            HistoryEntry lhe = hlfsdlist[index];
+
+                            if (he.IsEDSMFirstDiscover && !lhe.IsEDSMFirstDiscover)
+                            {
+                                lhe.SetFirstDiscover();
+                            }
+
                             previdx = index;
                         }
                     }
@@ -289,10 +310,25 @@ namespace EDDiscovery2.EDSM
                 return;
 
             string errmsg;
+            bool firstdiscover;
+            int edsmid;
             Task taskEDSM = Task.Factory.StartNew(() =>
             {                                                   // LOCAL time, there is a UTC converter inside this call
-                if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg))
+                if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg, out firstdiscover, out edsmid))
+                {
+                    if (edsmid != 0 && he.System.id_edsm <= 0)
+                    {
+                        he.System.id_edsm = edsmid;
+                        EDDiscovery.EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, -1);
+                    }
+
+                    if (firstdiscover)
+                    {
+                        he.SetFirstDiscover();
+                    }
+
                     he.SetEdsmSync();
+                }
             });
         }
 

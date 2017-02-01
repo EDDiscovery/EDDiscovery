@@ -60,6 +60,7 @@ namespace EDDiscovery
         public int MapColour;
 
         public bool IsStarPosFromEDSM;  // flag populated from journal entry when HE is made. Was the star position taken from EDSM?
+        public bool IsEDSMFirstDiscover;// flag populated from journal entry when HE is made. Were we the first to report the system to EDSM?
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
@@ -100,18 +101,20 @@ namespace EDDiscovery
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
         private string wheredocked = "";            // empty if in space, else where docked
-        private string shiptype = "Unknown";
+        private int shipid = -1;                            // ship id, -1 unknown
+        private string shiptype = "Unknown";        // and the ship
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
         public string WhereAmI { get { return wheredocked; } }
         public string ShipType { get { return shiptype; } }
+        public int ShipId { get { return shipid; } }
 
         #endregion
 
         #region Constructors
 
-        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0)
+        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
         {
             Debug.Assert(sys != null);
             EntryType = EliteDangerous.JournalTypeEnum.FSDJump;
@@ -122,6 +125,7 @@ namespace EDDiscovery
             EventDetailedInfo = info;
             MapColour = m;
             Journalid = journalid;
+            IsEDSMFirstDiscover = firstdiscover;
             EdsmSync = true; 
         }
 
@@ -133,7 +137,7 @@ namespace EDDiscovery
             int mapcolour = 0;
             journalupdate = false;
             bool starposfromedsm = false;
-
+            bool firstdiscover = false;
 
 
             if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
@@ -202,6 +206,7 @@ namespace EDDiscovery
 
                 isys = newsys;
                 starposfromedsm = jl.HasCoordinate ? jl.StarPosFromEDSM : newsys.HasCoordinate;
+                firstdiscover = jl.EDSMFirstDiscover;
             }
 
             string summary, info, detailed;
@@ -224,7 +229,8 @@ namespace EDDiscovery
                 EventDescription = info,
                 EventDetailedInfo = detailed,
                 IsStarPosFromEDSM = starposfromedsm,
-                Commander = cmdr ?? EDDConfig.Instance.Commander(je.CommanderId)
+                IsEDSMFirstDiscover = firstdiscover,
+                Commander = cmdr ?? EDCommander.GetCommander(je.CommanderId)
             };
 
             if (prev != null && prev.travelling)      // if we are travelling..
@@ -293,6 +299,7 @@ namespace EDDiscovery
                     he.landed = prev.landed;
 
                 he.shiptype = prev.shiptype;
+                he.shipid = prev.shipid;
                 he.wheredocked = prev.wheredocked;
             }
 
@@ -322,14 +329,21 @@ namespace EDDiscovery
             {
                 he.landed = (je as EliteDangerous.JournalEvents.JournalLoadGame).StartLanded;
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalLoadGame).Ship;
+                he.shipid = (je as EliteDangerous.JournalEvents.JournalLoadGame).ShipId;
             }
-            else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)
+            else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)         // BUY does not have ship id, but the new entry will that is written later - journals 8.34
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardBuy).ShipType;
             else if (je.EventTypeID == JournalTypeEnum.ShipyardNew)
+            {
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardNew).ShipType;
+                he.shipid = (je as EliteDangerous.JournalEvents.JournalShipyardNew).ShipId;
+            }
             else if (je.EventTypeID == JournalTypeEnum.ShipyardSwap)
+            {
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipType;
-        
+                he.shipid = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipId;
+            }
+
             return he;
         }
 
@@ -397,6 +411,19 @@ namespace EDDiscovery
             if (Journalid != 0)
             {
                 EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EDDN, true);
+            }
+        }
+
+        public void SetFirstDiscover(bool firstdiscover = true)
+        {
+            IsEDSMFirstDiscover = firstdiscover;
+            if (journalEntry != null)
+            {
+                JournalLocOrJump jl = journalEntry as JournalLocOrJump;
+                if (jl != null)
+                {
+                    jl.UpdateEDSMFirstDiscover(firstdiscover);
+                }
             }
         }
 
@@ -965,7 +992,7 @@ namespace EDDiscovery
                 if (this.CommanderId < 0)  // Only sync for real commander.
                     return;
 
-                var commander = EDDiscoveryForm.EDDConfig.Commander(CommanderId);
+                var commander = EDCommander.GetCommander(CommanderId);
 
                 string edsmname = commander.Name;
                 if (!string.IsNullOrEmpty(commander.EdsmName))
@@ -1079,7 +1106,7 @@ namespace EDDiscovery
 
             if (CurrentCommander >= 0)
             {
-                cmdr = EDDConfig.Instance.Commander(CurrentCommander);
+                cmdr = EDCommander.GetCommander(CurrentCommander);
                 journalmonitor.ParseJournalFiles(() => cancelRequested(), (p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
 
                 if (NetLogPath != null)

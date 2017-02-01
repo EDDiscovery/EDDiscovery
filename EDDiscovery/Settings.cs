@@ -149,7 +149,7 @@ namespace EDDiscovery2
         {
             List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
 
-            EDDiscoveryForm.EDDConfig.UpdateCommanders(edcommanders,false);     // DONT update the data source.. that fucks it right up.
+            EDCommander.Update(edcommanders);
 
             if ( e.ColumnIndex == 5 )                           // if changed journal location
                 _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
@@ -157,7 +157,7 @@ namespace EDDiscovery2
 
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
-            EDDiscoveryForm.EDDConfig.GetNewCommander();
+            EDCommander.Create();
             UpdateCommandersListBox();
             _discoveryForm.TravelControl.LoadCommandersListBox();
             _discoveryForm.ExportControl.PopulateCommanders();
@@ -184,7 +184,7 @@ namespace EDDiscovery2
                 var result = MessageBox.Show("Do you wish to delete commander " + row.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (result == DialogResult.Yes)
                 {
-                    EDDConfig.Instance.DeleteCommander(row);
+                    EDCommander.Delete(row);
                     _discoveryForm.TravelControl.LoadCommandersListBox();
                     _discoveryForm.ExportControl.PopulateCommanders();
                     UpdateCommandersListBox();
