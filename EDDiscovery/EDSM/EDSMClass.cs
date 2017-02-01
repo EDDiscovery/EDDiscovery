@@ -401,8 +401,11 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public bool SendTravelLog(string name, DateTime timeutc, bool coord, double x, double y, double z, out string error)
+        public bool SendTravelLog(string name, DateTime timeutc, bool coord, double x, double y, double z, out string error, out bool firstdiscover, out int edsmid)
         {
+            firstdiscover = false;
+            edsmid = 0;
+
             if (!IsApiKeySet)
             {
                 error = "EDSM API Key not set";
@@ -435,6 +438,9 @@ namespace EDDiscovery2.EDSM
 
                 if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
                 {
+                    firstdiscover = JSONHelper.GetBool(msg["systemCreated"], false);
+                    edsmid = JSONHelper.GetInt(msg["systemId"], 0);
+
                     return true;
                 }
                 else
@@ -481,6 +487,7 @@ namespace EDDiscovery2.EDSM
                         string name = jo["system"].Value<string>();
                         string ts = jo["date"].Value<string>();
                         long id = jo["systemId"].Value<long>();
+                        bool firstdiscover = jo["firstDiscover"].Value<bool>();
                         DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal|DateTimeStyles.AssumeUniversal); // UTC time
 
                         SystemClass sc = SystemClass.GetSystem(id, cn, SystemClass.SystemIDType.EdsmId);
