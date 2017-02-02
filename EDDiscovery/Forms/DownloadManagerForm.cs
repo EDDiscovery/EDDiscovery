@@ -1,4 +1,10 @@
-﻿using System;
+﻿// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
+// Blamming GITHUB gets you banned for a while during debugging. 
+// turn this on only for releasing
+#define GITHUBDOWNLOAD
+// turn this on only for releasing
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -90,9 +96,18 @@ namespace EDDiscovery.Forms
             if (!System.IO.Directory.Exists(downloadflightfolder))
                 System.IO.Directory.CreateDirectory(downloadflightfolder);
 
-            // DownloadFromGitHub(downloadfolder, "ActionFiles/V1");
+#if GITHUBDOWNLOAD
+            DownloadFromGitHub(downloadactfolder, "ActionFiles/V1");
+            DownloadFromGitHub(downloadflightfolder, "VideoFiles/V1");
+#endif
 
             Invoke((MethodInvoker)ReadyToDisplay);
+        }
+
+        private void DownloadManagerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (CheckThread != null && CheckThread.IsAlive)     // can't close if its alive, it will call back nothing
+                CheckThread.Join();
         }
 
         void ReadyToDisplay()
@@ -116,7 +131,7 @@ namespace EDDiscovery.Forms
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Type" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Name" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[2] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Version" });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Description" });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(120, 24), Text = "Description" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Status" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[5] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Action" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[6] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Delete" });
@@ -311,7 +326,7 @@ namespace EDDiscovery.Forms
             Close();
         }
 
-        #region Window Control
+#region Window Control
 
         public const int WM_MOVE = 3;
         public const int WM_SIZE = 5;
