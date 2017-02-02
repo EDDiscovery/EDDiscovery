@@ -27,8 +27,26 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSynthesis(JObject evt ) : base(evt, JournalTypeEnum.Synthesis)
         {
+            Materials = null;
+
             Name = JSONHelper.GetStringDef(evt["Name"]);
-            Materials = evt["Materials"]?.ToObject<Dictionary<string, int>>();
+            JToken mats = (JToken)evt["Materials"];
+
+            if (mats != null)
+            {
+                if (mats.Type == JTokenType.Object)
+                {
+                    Materials = mats?.ToObject<Dictionary<string, int>>();
+                }
+                else
+                {
+                    Materials = new Dictionary<string, int>();
+                    foreach (JObject ja in (JArray)mats)
+                    {
+                        Materials[(string)ja["Name"]] = JSONHelper.GetInt(ja["Count"]);
+                    }
+                }
+            }
         }
         public string Name { get; set; }
         public Dictionary<string, int> Materials { get; set; }
