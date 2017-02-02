@@ -226,7 +226,7 @@ namespace EDDiscovery
             // (re)set status
             if (system.HasCoordinate)
             {
-                dataGridViewDistances[3, cell.RowIndex].Value = null;
+                dataGridViewDistances[3, cell.RowIndex].Value = "Pos: " + system.x.ToString() + ";" + "Pos: " + system.y.ToString() + ";" + "Pos: " + system.z.ToString();
             }
             else
             {
