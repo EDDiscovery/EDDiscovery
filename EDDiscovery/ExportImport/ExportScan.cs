@@ -94,7 +94,10 @@ namespace EDDiscovery.Export
                             for (int ii = 0; ii < edsmidlist.Count; ii++)
                             {
                                 List<JournalScan> sysscans = EDSMClass.GetBodiesList((int)edsmidlist[ii]);
-                                scans.AddRange(sysscans);
+                                if (sysscans != null)
+                                    scans.AddRange(sysscans);
+                                else
+                                    ii = ii;
                             }
                         }
                     }
