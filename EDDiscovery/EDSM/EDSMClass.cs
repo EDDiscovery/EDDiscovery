@@ -724,11 +724,10 @@ namespace EDDiscovery2.EDSM
             JSONHelper.Rename(jo["surfacePressure"], "SurfacePressure");
             JSONHelper.Rename(jo["orbitalInclination"], "OrbitalInclination");
             JSONHelper.Rename(jo["materials"], "Materials");
-            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
-            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
-            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
-            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
-            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
+            JSONHelper.Rename(jo["distanceToArrival"], "DistanceFromArrivalLS");
+            JSONHelper.Rename(jo["absoluteMagnitude"], "AbsoluteMagnitude");
+            JSONHelper.Rename(jo["terraformingState"], "TerraformState");
+
 
 
 
