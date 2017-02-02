@@ -259,12 +259,19 @@
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
+    <Compile Include="Forms\DownloadManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DownloadManagerForm.Designer.cs">
+      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ImportSphere.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ImportSphere.Designer.cs">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
+    <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
@@ -548,9 +555,6 @@
     <Compile Include="Controls\ListControlCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\RichTextBoxBorder.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Controls\TextBoxBorder.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -795,6 +799,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TabStrip.resx">
       <DependentUpon>TabStrip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DownloadManagerForm.resx">
+      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>

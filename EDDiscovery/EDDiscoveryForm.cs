@@ -285,7 +285,7 @@ namespace EDDiscovery
             try
             {
 
-                GitHubClass github = new GitHubClass(this);
+                GitHubClass github = new GitHubClass(LogLine);
 
                 GitHubRelease rel = github.GetLatestRelease();
 
@@ -1069,7 +1069,18 @@ namespace EDDiscovery
 
         public void ManageAddOns()
         {
+            DownloadManagerForm dmf = new DownloadManagerForm();
+            dmf.Init(theme);
+            dmf.ShowDialog(this);
+            if ( dmf.performedupdate )
+            {
+                actionrunasync.TerminateAll();
+                Actions.ActionSay.KillSpeech();
 
+                StartUpActions();
+
+                ActionRunOnEvent("onStartup", "ProgramEvent");
+            }
         }
 
         public void ConfigureVoice()
@@ -1204,7 +1215,7 @@ namespace EDDiscovery
 
             public bool PreFilterMessage(ref Message m)
             {
-                if (m.Msg == WM_KEYDOWN || m.Msg == WM_SYSKEYDOWN)
+                if ((m.Msg == WM_KEYDOWN || m.Msg == WM_SYSKEYDOWN )&& discoveryForm.CanFocus)
                 {
                     Keys k = (Keys)m.WParam;
                     if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
