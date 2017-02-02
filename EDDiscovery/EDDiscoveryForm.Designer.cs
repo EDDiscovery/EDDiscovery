@@ -250,7 +250,7 @@ namespace EDDiscovery
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.adminToolStripMenuItem.Text = "Admin";
+            this.adminToolStripMenuItem.Text = "A&dmin";
             // 
             // forceEDDBUpdateToolStripMenuItem
             // 
@@ -340,34 +340,38 @@ namespace EDDiscovery
             this.stopCurrentlyRunningActionProgramToolStripMenuItem});
             this.addOnsToolStripMenuItem.Name = "addOnsToolStripMenuItem";
             this.addOnsToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.addOnsToolStripMenuItem.Text = "Add-Ons";
+            this.addOnsToolStripMenuItem.Text = "&Add-Ons";
             // 
             // manageAddOnsToolStripMenuItem
             // 
+            this.manageAddOnsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.module;
             this.manageAddOnsToolStripMenuItem.Name = "manageAddOnsToolStripMenuItem";
             this.manageAddOnsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
-            this.manageAddOnsToolStripMenuItem.Text = "Manage Add-Ons";
+            this.manageAddOnsToolStripMenuItem.Text = "&Manage Add-Ons";
             this.manageAddOnsToolStripMenuItem.Click += new System.EventHandler(this.manageAddOnsToolStripMenuItem_Click);
             // 
             // configureAddOnActionsToolStripMenuItem
             // 
+            this.configureAddOnActionsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Log;
             this.configureAddOnActionsToolStripMenuItem.Name = "configureAddOnActionsToolStripMenuItem";
             this.configureAddOnActionsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
-            this.configureAddOnActionsToolStripMenuItem.Text = "Edit Add-On Action Files";
+            this.configureAddOnActionsToolStripMenuItem.Text = "&Edit Add-On Action Files";
             this.configureAddOnActionsToolStripMenuItem.Click += new System.EventHandler(this.configureAddOnActionsToolStripMenuItem_Click);
             // 
             // speechSynthesisSettingsToolStripMenuItem
             // 
+            this.speechSynthesisSettingsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.missioncompleted;
             this.speechSynthesisSettingsToolStripMenuItem.Name = "speechSynthesisSettingsToolStripMenuItem";
             this.speechSynthesisSettingsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
-            this.speechSynthesisSettingsToolStripMenuItem.Text = "Speech Synthesis Settings";
+            this.speechSynthesisSettingsToolStripMenuItem.Text = "S&peech Synthesis Settings";
             this.speechSynthesisSettingsToolStripMenuItem.Click += new System.EventHandler(this.speechSynthesisSettingsToolStripMenuItem_Click);
             // 
             // stopCurrentlyRunningActionProgramToolStripMenuItem
             // 
+            this.stopCurrentlyRunningActionProgramToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.PauseNormalRed;
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Name = "stopCurrentlyRunningActionProgramToolStripMenuItem";
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
-            this.stopCurrentlyRunningActionProgramToolStripMenuItem.Text = "Stop currently running Action Program";
+            this.stopCurrentlyRunningActionProgramToolStripMenuItem.Text = "&Stop currently running Action Program";
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Click += new System.EventHandler(this.stopCurrentlyRunningActionProgramToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
