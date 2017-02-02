@@ -1,7 +1,7 @@
 ﻿// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
 // Blamming GITHUB gets you banned for a while during debugging. 
 // turn this on only for releasing
-//#define GITHUBDOWNLOAD
+#define GITHUBDOWNLOAD
 // turn this on only for releasing
 
 using System;
