@@ -1061,7 +1061,6 @@ namespace EDDiscovery
 
             usercontrolledglobalvariables = frm.userglobalvariables;
             SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
-
             globalvariables = new ConditionVariables(internalglobalvariables, usercontrolledglobalvariables);    // remake
 
             ActionConfigureKeys();
@@ -1085,6 +1084,38 @@ namespace EDDiscovery
 
         public void ConfigureVoice()
         {
+            Speech.SpeechConfigure cfg = new Speech.SpeechConfigure();
+
+            string voicename = usercontrolledglobalvariables.ContainsKey(Actions.ActionSay.globalvarspeechvoice) ? usercontrolledglobalvariables[Actions.ActionSay.globalvarspeechvoice] : "Default";
+            string volume = usercontrolledglobalvariables.ContainsKey(Actions.ActionSay.globalvarspeechvolume) ? usercontrolledglobalvariables[Actions.ActionSay.globalvarspeechvolume] : "Default";
+            string rate = usercontrolledglobalvariables.ContainsKey(Actions.ActionSay.globalvarspeechrate) ? usercontrolledglobalvariables[Actions.ActionSay.globalvarspeechrate] : "Default";
+
+            Speech.QueuedSynthesizer synth = new Speech.QueuedSynthesizer();           // STATIC only one synth throught the whole program
+
+            cfg.Init("Select voice synthesizer defaults", "Configure Voice Synthesis", theme,
+                        null, false,
+                        synth.GetVoiceNames(),
+                        voicename,
+                        volume,
+                        rate);
+
+            if (cfg.ShowDialog(this) == DialogResult.OK)
+            {
+                int i;
+                if (cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase) || (cfg.Volume.InvariantParse(out i) && i >= 0 && i <= 100))
+                {
+                    if ( cfg.Rate.Equals("Default", StringComparison.InvariantCultureIgnoreCase) || (cfg.Rate.InvariantParse(out i) && i >= -10 && i <= 10))
+                    {
+                        SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvoice, cfg.VoiceName);
+                        SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvolume, cfg.Volume);
+                        SetUserControlledGlobal(Actions.ActionSay.globalvarspeechrate , cfg.Rate);
+
+                        return;
+                    }
+                }
+
+                MessageBox.Show("Speech values not within range, values not saved");
+            }
 
         }
 
@@ -1141,12 +1172,17 @@ namespace EDDiscovery
             return ale.Count;
         }
 
-        private void SetInternalGlobal(string name, string value)
+        private void SetUserControlledGlobal(string name, string value)     // saved on exit
+        {
+            usercontrolledglobalvariables[name] = globalvariables[name] = value;
+        }
+
+        private void SetInternalGlobal(string name, string value)           // internal program vars
         {
             internalglobalvariables[name] = globalvariables[name] = value;
         }
 
-        public void SetProgramGlobal(string name, string value)     // different name for identification purposes
+        public void SetProgramGlobal(string name, string value)         // different name for identification purposes, for sets
         {
             internalglobalvariables[name] = globalvariables[name] = value;
         }
@@ -1264,7 +1300,7 @@ namespace EDDiscovery
             return false;
         }
 
-         #endregion
+#endregion
     }
 }
 
