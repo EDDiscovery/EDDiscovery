@@ -46,6 +46,25 @@ public static class ObjectExtensions
         return i;
     }
 
+    public static string AddSuffixToFilename(this string file, string suffix)
+    {
+        return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(file), System.IO.Path.GetFileNameWithoutExtension(file) + suffix) + System.IO.Path.GetExtension(file);
+    }
+    
+    public static string ToString( this int[] a , string separ)
+    {
+        string outstr = "";
+        if ( a.Length>0)
+        {
+            outstr = a[0].ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            for (int i = 1; i < a.Length; i++)
+                outstr += separ + a[i].ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        return outstr;
+    }
+
     public static string ToString(this System.Windows.Forms.Keys key, System.Windows.Forms.Keys modifier )
     {
         string k = "";

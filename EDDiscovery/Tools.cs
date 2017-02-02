@@ -371,6 +371,38 @@ namespace EDDiscovery
                 return null;
         }
 
+        static public int[] VersionFromString(string s)
+        {
+            string[] list = s.Split('.');
+
+            if (list.Length > 0)
+            {
+                int[] v = new int[list.Length];
+
+                for (int i = 0; i < list.Length; i++)
+                {
+                    if (!list[i].InvariantParse(out v[i]))
+                        return null;
+                }
+
+                return v;
+            }
+
+            return null;
+        }
+
+        static public int CompareVersion(int[] v1, int[] v2)    // is V1>V2, 1, 0 = equals, -1 less
+        {
+            for( int i = 0; i < v1.Length; i++ )
+            {
+                if (i >= v2.Length || v1[i] > v2[i])
+                    return 1;
+                else if (v1[i] < v2[i])
+                    return -1;
+            }
+
+            return 0;
+        }
 
     }
 }

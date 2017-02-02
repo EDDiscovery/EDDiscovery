@@ -172,6 +172,7 @@ namespace EDDiscovery.Actions
         {
             progcurrent = null;
             progqueue.Clear();
+            executing = false;
         }
 
         public void WaitTillFinished(int timeout)           // Could be IN ANOTHER THREAD BEWARE

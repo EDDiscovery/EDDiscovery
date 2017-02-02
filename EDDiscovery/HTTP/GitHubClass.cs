@@ -28,28 +28,26 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace EDDiscovery
+namespace EDDiscovery.HTTP
 {
     public class GitHubClass : HttpCom
     {
-        private IDiscoveryController discoveryform;
-        public string commanderName;
+        //public string commanderName;
+        //private readonly string fromSoftwareVersion;
+        // assemblyFullName = Assembly.GetExecutingAssembly().FullName;
+        //fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
+        //commanderName = EDDConfig.Instance.CurrentCommander.EdsmName;
 
-        private readonly string fromSoftwareVersion;
-        //        private readonly string fromSoftware;
         private readonly string githubServer = "https://api.github.com/repos/EDDiscovery/EDDiscovery/";
 
-        public GitHubClass(IDiscoveryController eddiscoveryform)
+        public delegate void LogLine(string text);
+        LogLine logger = null;
+
+        public GitHubClass(LogLine lg = null )
         {
-            discoveryform = eddiscoveryform;
-            var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
-            fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
-            commanderName = EDDConfig.Instance.CurrentCommander.EdsmName;
-
             _serverAddress = githubServer;
+            logger = lg;
         }
-
-
 
         public JArray GetAllReleases()
         {
@@ -171,19 +169,57 @@ namespace EDDiscovery
             return true;
         }
 
-        public string CalcSha1(string filename)
+        static public string CalcSha1(string[] filenames)
         {
+            long length = 0;
 
+            foreach (string filename in filenames)
+            {
+                FileInfo fi = new FileInfo(filename);
+                if (fi == null)
+                    return "";
+
+                length += fi.Length;
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                byte[] header = Encoding.UTF8.GetBytes("blob " + (int)length + "\0");
+                ms.Write(header, 0, header.Length);
+
+                foreach (string filename in filenames)
+                {
+                    using (FileStream fs = new FileStream(filename, FileMode.Open))
+                    {
+                        using (BinaryReader br = new BinaryReader(fs))
+                            ms.Write(br.ReadBytes((int)fs.Length), 0, (int)fs.Length);
+                    }
+                }
+
+                using (SHA1Managed sha1 = new SHA1Managed())
+                {
+                    byte[] hash = sha1.ComputeHash(ms.ToArray());
+                    StringBuilder formatted = new StringBuilder(2 * hash.Length);
+                    foreach (byte b in hash)
+                    {
+                        formatted.AppendFormat("{0:X2}", b);
+                    }
+
+                    return formatted.ToNullSafeString();
+                }
+            }
+        }
+
+        static public string CalcSha1(string filename)
+        {
             using (FileStream fs = new FileStream(filename, FileMode.Open))
             using (BinaryReader br = new BinaryReader(fs))
-                using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream ms = new MemoryStream())
             {
                 byte[] header = Encoding.UTF8.GetBytes("blob " + fs.Length + "\0");
                 ms.Write(header, 0, header.Length);
 
                 ms.Write(br.ReadBytes((int)fs.Length), 0, (int)fs.Length);
-
-
 
                 using (SHA1Managed sha1 = new SHA1Managed())
                 {
@@ -209,7 +245,9 @@ namespace EDDiscovery
             // download.....
             try
             {
-                if (discoveryform!=null) discoveryform.LogLine("Download github file " + file.Name);
+                if (logger != null)
+                    logger("Download github file " + file.Name);
+
                 WriteLog("Download github file " + file.Name, "");
                 string destFile = Path.Combine(DestinationDir, file.Name);
 
@@ -237,7 +275,9 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                if (discoveryform!=null)   discoveryform.LogLine(("GitHub DownloadFile Exception" + ex.Message));
+                if (logger != null)
+                    logger("GitHub DownloadFile Exception" + ex.Message);
+
                 WriteLog("GitHub DownloadFile Exception" + ex.Message, "");
                 return false;
             }
