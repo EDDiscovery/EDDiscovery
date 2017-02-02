@@ -492,6 +492,31 @@ namespace EDDiscovery.DB
             return sys;
         }
 
+        /// <summary>
+        /// Get a <see cref="SystemClass"/> from <paramref name="systemName"/> with an optional check for merged systems. Returns true if a system was found.
+        /// </summary>
+        /// <param name="systemName">The human-readable name for the system to be checked.</param>
+        /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system known as the supplied <paramref name="systemName"/>.</param>
+        /// <param name="checkMergers">If <c>true</c>, check for system merges. Defaults to <c>false</c>.</param>
+        /// <param name="cn">The database connection to use.</param>
+        /// <returns><c>true</c> if the system is known (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
+        public static bool TryGetSystem(string systemName, out SystemClass result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
+        {
+            result = null;
+            if (string.IsNullOrWhiteSpace(systemName))  // No way José.
+                return false;
+
+            result = GetSystem(systemName, cn);
+            if (checkMergers)
+            {
+                SystemClass s;
+                if (privTryGetMergedSystem(systemName, out s, cn))
+                    result = s;
+            }
+
+            return (result != null);
+        }
+
         // Only hidden systems are deleted, and the table is re-synced every
         // 14 days, so the maximum Id should be very close to the total
         // system count.
@@ -2015,6 +2040,51 @@ namespace EDDiscovery.DB
 
             return system;
         }
+
+        #region Private implementation
+
+        /// <summary>
+        /// Test if <paramref name="systemName"/> has been merged to another system. The return value indicates if a merged system was found.
+        /// </summary>
+        /// <param name="systemName">The name of the system to be checked.</param>
+        /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system that was once named <paramref name="systemName"/>.</param>
+        /// <param name="cn">The database connection to use.</param>
+        /// <returns><c>true</c> if the system is known by a different name (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
+        private static bool privTryGetMergedSystem(string systemName, out SystemClass result, SQLiteConnectionSystem cn = null)
+        {
+            result = null;
+            bool createdCn = false;
+            long edsmMergedId = long.MinValue;
+
+            try
+            {
+                if (cn == null)
+                {
+                    createdCn = true;
+                    cn = new SQLiteConnectionSystem();
+                }
+                using (DbCommand cmd = cn.CreateCommand("SELECT id_edsm_mergedto FROM SystemAliases WHERE name = @param1 LIMIT 1"))
+                {
+                    cmd.AddParameterWithValue("param1", systemName);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            edsmMergedId = (long)reader["id_edsm_mergedto"];
+                    }
+                }
+                if (edsmMergedId != long.MinValue)
+                    result = GetSystem(edsmMergedId, cn, SystemIDType.EdsmId);
+            }
+            finally
+            {
+                if (createdCn && cn != null)
+                    cn.Dispose();
+            }
+
+            return (result != null);
+        }
+
+        #endregion
     }
 
     public class GridId
