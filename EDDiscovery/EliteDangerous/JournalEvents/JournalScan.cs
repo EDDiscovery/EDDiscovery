@@ -489,7 +489,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 //case EDStar.b"supermassiveblackhole":
                  //   return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Super Massive Black Hole");
                 case EDStar.A_BlueWhiteSuperGiant:   
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "Blue White Giant");
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.A9III_White, "Blue White Super Giant");
                 case EDStar.F_WhiteSuperGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "F White Super Giant");
                 case EDStar.M_RedSuperGiant:
