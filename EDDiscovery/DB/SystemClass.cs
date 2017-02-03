@@ -943,6 +943,20 @@ namespace EDDiscovery.DB
             return GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
         }
 
+        public static bool GetSystemAndAlternatives(string sysname, out ISystem system, out List<ISystem> alternatives, out string namestatus)
+        {
+            ISystem refsystem = new EDDiscovery2.DB.InMemory.SystemClass
+            {
+                name = sysname,
+                x = Double.NaN,
+                y = Double.NaN,
+                z = Double.NaN,
+                id_edsm = 0
+            };
+
+            return GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
+        }
+
         public static bool GetSystemAndAlternatives(ISystem refsys, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
             system = new EDDiscovery2.DB.InMemory.SystemClass
