@@ -430,7 +430,7 @@ namespace EDDiscovery2
             c.cond.Tag = g;
 
             if (initialcond != null)
-                c.cond.Text = Tools.SplitCapsWord(initialcond);
+                c.cond.Text = initialcond.SplitCapsWord();
 
             c.cond.SelectedIndexChanged += Cond_SelectedIndexChanged; // and turn on handler
 

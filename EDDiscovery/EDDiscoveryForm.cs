@@ -76,6 +76,7 @@ namespace EDDiscovery
         public EDDTheme theme;
 
         private EDDiscoveryController Controller;
+        private ActionController actioncontroller;
 
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
 
@@ -87,14 +88,6 @@ namespace EDDiscovery
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
         public event Action OnNewTarget;
-
-        public Actions.ActionFileList actionfiles;
-        public string actionfileskeyevents;
-        ActionMessageFilter actionfilesmessagefilter;
-        public Actions.ActionRun actionrunasync;
-        private ConditionVariables internalglobalvariables;         // internally set variables, either program or user program ones
-        private ConditionVariables usercontrolledglobalvariables;     // user variables, set by user only
-        public ConditionVariables globalvariables;               // combo of above.
 
         Task checkInstallerTask = null;
         private bool themeok = true;
@@ -158,7 +151,7 @@ namespace EDDiscovery
         public EDDiscoveryForm()
         {
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => Invoke(a), a => BeginInvoke(a));
-            Controller.OnNewEntry += (he, hl) => ActionRunOnEntry(he, "NewEntry");
+            Controller.OnNewEntry += (he, hl) => actioncontroller.ActionRunOnEntry(he, "NewEntry");
             Controller.OnDbInitComplete += Controller_DbInitComplete;
             Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
@@ -196,6 +189,8 @@ namespace EDDiscovery
 
             this.TopMost = EDDConfig.KeepOnTop;
 
+            actioncontroller = new ActionController(this, Controller);
+
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
@@ -209,17 +204,6 @@ namespace EDDiscovery
         {
             try
             {
-                usercontrolledglobalvariables = new ConditionVariables();
-                usercontrolledglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
-
-                globalvariables = new ConditionVariables(usercontrolledglobalvariables);        // copy existing user ones into to shared buffer..
-
-                internalglobalvariables = new ConditionVariables();
-
-                SetInternalGlobal("CurrentCulture", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
-                SetInternalGlobal("CurrentCultureInEnglish", System.Threading.Thread.CurrentThread.CurrentCulture.EnglishName);
-                SetInternalGlobal("CurrentCultureISO", System.Threading.Thread.CurrentThread.CurrentCulture.ThreeLetterISOLanguageName);
-
                 Controller.PostInit_Loading();
 
                 if (!(SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized))
@@ -241,7 +225,6 @@ namespace EDDiscovery
                     button_test.Visible = true;
                 }
 
-                StartUpActions();
             }
             catch (Exception ex)
             {
@@ -269,7 +252,7 @@ namespace EDDiscovery
                 Controller.LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
 
-            ActionRunOnEvent("onStartup", "ProgramEvent");
+            actioncontroller.ActionRunOnEvent("onStartup", "ProgramEvent");
         }
 
         private Task CheckForNewInstallerAsync()
@@ -285,7 +268,7 @@ namespace EDDiscovery
             try
             {
 
-                GitHubClass github = new GitHubClass(this);
+                GitHubClass github = new GitHubClass(LogLine);
 
                 GitHubRelease rel = github.GetLatestRelease();
 
@@ -325,7 +308,7 @@ namespace EDDiscovery
         private void InitFormControls()
         {
             ShowInfoPanel("Loading. Please wait!", true, Color.Gold);
-            
+
             routeControl1.travelhistorycontrol1 = travelHistoryControl1;
         }
 
@@ -434,18 +417,11 @@ namespace EDDiscovery
         {
             travelHistoryControl1.RefreshButton(false);
             journalViewControl1.RefreshButton(false);
-            ActionRunOnEvent("onRefreshStart", "ProgramEvent");
+            actioncontroller.ActionRunOnEvent("onRefreshStart", "ProgramEvent");
         }
 
         private void Controller_RefreshCommanders()
         {
-            string prevcommander = globalvariables.ContainsKey("Commander") ? globalvariables["Commander"] : "None";
-            string commander = (Controller.history.CommanderId < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
-
-            string refreshcount = prevcommander.Equals(commander) ? internalglobalvariables.AddToVar("RefreshCount", 1, 1) : "1";
-            SetInternalGlobal("RefreshCount", refreshcount);
-            SetInternalGlobal("Commander", commander);
-
             travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
             exportControl1.PopulateCommanders();
             settings.UpdateCommandersListBox();
@@ -455,14 +431,7 @@ namespace EDDiscovery
         {
             travelHistoryControl1.RefreshButton(true);
             journalViewControl1.RefreshButton(true);
-
-            if (actionfiles.IsConditionFlagSet(ConditionVariables.flagRunAtRefresh))      // any events have this flag? .. don't usually do this, so worth checking first
-            {
-                foreach (HistoryEntry he in history.EntryOrder)
-                    ActionRunOnEntry(he, "onRefresh", ConditionVariables.flagRunAtRefresh);
-            }
-
-            ActionRunOnEvent("onRefreshEnd", "ProgramEvent");
+            actioncontroller.ActionRunOnRefresh();
         }
 
         private void Controller_ReportProgress(int percentComplete, string message)
@@ -485,8 +454,7 @@ namespace EDDiscovery
 
         private void Controller_BgSafeClose()       // run in thread..
         {
-            actionrunasync.WaitTillFinished(10000);
-            Actions.ActionSay.KillSpeech();
+            actioncontroller.CloseDown();
         }
 
         private void Controller_FinalClose()        // run in UI
@@ -532,7 +500,7 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
                 ShowInfoPanel("Closing, please wait!", true);
-                ActionRunOnEvent("onShutdown", "ProgramEvent");
+                actioncontroller.ActionRunOnEvent("onShutdown", "ProgramEvent");
                 Controller.Shutdown();
             }
         }
@@ -543,7 +511,7 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            ActionRunOnEvent("onStartup", "ProgramEvent");
+            actioncontroller.ActionRunOnEvent("onStartup", "ProgramEvent");
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -736,7 +704,7 @@ namespace EDDiscovery
         }
 
         private void Read21Folders(bool force)
-        { 
+        {
             if (Controller.history.CommanderId >= 0)
             {
                 EDCommander cmdr = EDDConfig.ListOfCommanders.Find(c => c.Nr == Controller.history.CommanderId);
@@ -1030,213 +998,26 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Actions
-
-        public void StartUpActions()
-        {
-            actionfiles = new Actions.ActionFileList();
-            actionfiles.LoadAllActionFiles();
-            actionrunasync = new Actions.ActionRun(this, actionfiles, true);        // this is the guy who runs programs asynchronously
-
-            ActionConfigureKeys();
-        }
-
-        public void EditAddOnActionFile()
-        {
-            EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
-
-            List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
-            events.Add("All");
-            events.Add("onRefreshStart");
-            events.Add("onRefreshEnd");
-            events.Add("onStartup");
-            events.Add("onShutdown");
-            events.Add("onKeyPress");
-            //events.Add("onClosedown");
-
-            frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, usercontrolledglobalvariables, actionfiles, theme);
-            frm.TopMost = this.FindForm().TopMost;
-
-            frm.ShowDialog(this.FindForm()); // don't care about the result, the form does all the saving
-
-            usercontrolledglobalvariables = frm.userglobalvariables;
-            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
-
-            globalvariables = new ConditionVariables(internalglobalvariables, usercontrolledglobalvariables);    // remake
-
-            ActionConfigureKeys();
-        }
-
-        public void ManageAddOns()
-        {
-
-        }
-
-        public void ConfigureVoice()
-        {
-
-        }
-
-        public int ActionRunOnEntry(HistoryEntry he, string triggertype, string flagstart = null)       //set flagstart to be the first flag of the actiondata..
-        {
-            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(he.journalEntry.EventTypeStr, flagstart);
-
-            if (ale.Count > 0)
-            {
-                ConditionVariables testvars = new ConditionVariables(globalvariables);
-                Actions.ActionVars.TriggerVars(testvars, he.journalEntry.EventTypeStr, triggertype);
-                Actions.ActionVars.HistoryEventVars(testvars, he, "Event");
-
-                ConditionFunctions functions = new ConditionFunctions(this, Controller.history, he);                   // function handler
-
-                if (actionfiles.CheckActions(ale, he.journalEntry.EventDataString, testvars, functions.ExpandString) > 0)
-                {
-                    ConditionVariables eventvars = new ConditionVariables();        // we don't pass globals in - added when they are run
-                    Actions.ActionVars.TriggerVars(eventvars, he.journalEntry.EventTypeStr, triggertype);
-                    Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");
-                    eventvars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, "EventJS_");        // for all events, add to field list
-
-                    actionfiles.RunActions(ale, actionrunasync, eventvars, Controller.history, he);  // add programs to action run
-
-                    actionrunasync.Execute();       // will execute
-                }
-            }
-
-            return ale.Count;
-        }
-
-        public int ActionRunOnEvent(string name, string triggertype)
-        {
-            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(name);
-
-            if (ale.Count > 0)
-            {
-                ConditionVariables testvars = new ConditionVariables(globalvariables);
-                Actions.ActionVars.TriggerVars(testvars, name, triggertype);
-
-                ConditionFunctions functions = new ConditionFunctions(this, Controller.history, null);                   // function handler
-
-                if (actionfiles.CheckActions(ale, null, testvars, functions.ExpandString) > 0)
-                {
-                    ConditionVariables eventvars = new ConditionVariables();
-                    Actions.ActionVars.TriggerVars(eventvars, name, triggertype);
-
-                    actionfiles.RunActions(ale, actionrunasync, eventvars, Controller.history, null);  // add programs to action run
-
-                    actionrunasync.Execute();       // will execute
-                }
-            }
-
-            return ale.Count;
-        }
-
-        private void SetInternalGlobal(string name, string value)
-        {
-            internalglobalvariables[name] = globalvariables[name] = value;
-        }
-
-        public void SetProgramGlobal(string name, string value)     // different name for identification purposes
-        {
-            internalglobalvariables[name] = globalvariables[name] = value;
-        }
-
-        void ActionConfigureKeys()
-        {
-            List<Tuple<string, ConditionLists.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionLists.MatchType>() { ConditionLists.MatchType.Equals, ConditionLists.MatchType.IsOneOf });        // need these to decide
-
-            if (ret.Count > 0)
-            {
-                actionfileskeyevents = "";
-                foreach (Tuple<string, ConditionLists.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
-                {
-                    if (t.Item2 == ConditionLists.MatchType.Equals)
-                        actionfileskeyevents += "<" + t.Item1 + ">";
-                    else
-                    {
-                        StringParser p = new StringParser(t.Item1);
-                        List<string> klist = p.NextQuotedWordList();
-                        if (klist != null)
-                        {
-                            foreach (string s in klist)
-                                actionfileskeyevents += "<" + s + ">";
-                        }
-                    }
-                }
-
-                if (actionfilesmessagefilter == null)
-                {
-                    actionfilesmessagefilter = new ActionMessageFilter(this);
-                    Application.AddMessageFilter(actionfilesmessagefilter);
-                    System.Diagnostics.Debug.WriteLine("Installed message filter for keys");
-                }
-            }
-            else if (actionfilesmessagefilter != null)
-            {
-                Application.RemoveMessageFilter(actionfilesmessagefilter);
-                actionfilesmessagefilter = null;
-                System.Diagnostics.Debug.WriteLine("Removed message filter for keys");
-            }
-        }
-
-        public bool CheckKeys(string keyname)
-        {
-            if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
-            {
-                globalvariables["KeyPress"] = keyname;          // only add it to global variables, its not kept in internals.
-                ActionRunOnEvent("onKeyPress", "KeyPress");
-                return true;
-            }
-            else
-                return false;
-        }
-
-        const int WM_KEYDOWN = 0x100;
-        const int WM_KEYCHAR = 0x102;
-        const int WM_SYSKEYDOWN = 0x104;
-
-        public class ActionMessageFilter : IMessageFilter
-        {
-            EDDiscoveryForm discoveryForm;
-            public ActionMessageFilter(EDDiscoveryForm ed)
-            {
-                discoveryForm = ed;
-            }
-
-            public bool PreFilterMessage(ref Message m)
-            {
-                if (m.Msg == WM_KEYDOWN || m.Msg == WM_SYSKEYDOWN)
-                {
-                    Keys k = (Keys)m.WParam;
-                    if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
-                        if (discoveryForm.CheckKeys(k.ToString(Control.ModifierKeys)))
-                            return true;    // swallow, we did it
-                    }
-                }
-
-                return false;
-            }
-        }
+        #region Add Ons
 
         private void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ManageAddOns();
+            actioncontroller.ManageAddOns();
         }
 
         private void configureAddOnActionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditAddOnActionFile();
+            actioncontroller.EditAddOnActionFile();
         }
 
         private void speechSynthesisSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ConfigureVoice();
+            actioncontroller.ConfigureVoice();
         }
 
         private void stopCurrentlyRunningActionProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            actionrunasync.TerminateAll();
+            actioncontroller.TerminateAll();
         }
 
         public bool SelectTabPage(string name)
@@ -1253,7 +1034,11 @@ namespace EDDiscovery
             return false;
         }
 
-         #endregion
+        public ConditionVariables Globals { get { return actioncontroller.Globals; } }
+
+        public int ActionRunOnEntry(HistoryEntry he, string triggertype) { return actioncontroller.ActionRunOnEntry(he, triggertype); }
+
+        #endregion
     }
 }
 

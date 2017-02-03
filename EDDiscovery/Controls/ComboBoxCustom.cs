@@ -284,6 +284,7 @@ namespace ExtendedControls
 
         public ComboBoxCustom()
         {
+            //Text = "";
             this._cbsystem = new ComboBox();
             this._cbsystem.Dock = DockStyle.Fill;
             this._cbsystem.SelectedIndexChanged += _cbsystem_SelectedIndexChanged;
@@ -524,7 +525,15 @@ namespace ExtendedControls
         private void _cbdropdown_DropDown(object sender, EventArgs e)
         {
             Point location = this.PointToScreen(new Point(0, 0));
-            _cbdropdown.Location = new Point(location.X, location.Y + this.Height);
+
+            int botscr = Screen.FromControl(this).WorkingArea.Height;
+            int botcontrol = location.Y + this.Height + _cbdropdown.Height;
+
+            if (botcontrol < botscr)
+                _cbdropdown.Location = new Point(location.X, location.Y + this.Height);
+            else
+                _cbdropdown.Location = new Point(location.X, location.Y -_cbdropdown.Height);
+
             isActivated = true;
             this.Invalidate(true);
         }

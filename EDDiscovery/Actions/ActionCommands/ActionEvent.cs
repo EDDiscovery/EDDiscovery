@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
             string res;
             if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
-                HistoryList hl = ap.historylist;
+                HistoryList hl = ap.actioncontroller.HistoryList;
                 StringParser sp = new StringParser(res);
                 string prefix = "EC_";
 
@@ -59,7 +59,7 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("thpos"))
                     {
-                        HistoryEntry he = ap.discoveryform.TravelControl.GetTravelHistoryCurrent;
+                        HistoryEntry he = ap.actioncontroller.DiscoveryForm.TravelControl.GetTravelHistoryCurrent;
 
                         if ( he == null )
                         {
@@ -154,13 +154,13 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
                     else if (cmdname.Equals("action"))
                     {
-                        int count = ap.discoveryform.ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram");
+                        int count = ap.actioncontroller.ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram");
                         ap.currentvars[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     else if (cmdname.Equals("edsm"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        ap.discoveryform.history.FillEDSM(he, reload: true);
+                        ap.actioncontroller.HistoryList.FillEDSM(he, reload: true);
 
                         long? id_edsm = he.System.id_edsm;
                         if (id_edsm <= 0)
@@ -179,7 +179,7 @@ namespace EDDiscovery.Actions
                     else if (cmdname.Equals("ross"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        ap.discoveryform.history.FillEDSM(he, reload: true);
+                        ap.actioncontroller.HistoryList.FillEDSM(he, reload: true);
 
                         string url = "";
 

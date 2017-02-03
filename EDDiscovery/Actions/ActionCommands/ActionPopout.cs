@@ -46,7 +46,7 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextWord();
                 }
 
-                Forms.PopOutControl poc = ap.discoveryform.PopOuts;
+                Forms.PopOutControl poc = ap.actioncontroller.DiscoveryForm.PopOuts;
 
                 if (cmdname == null)
                 {

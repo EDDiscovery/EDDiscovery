@@ -40,7 +40,7 @@ namespace EDDiscovery.Actions
                         {
                             foreach (KeyValuePair<string, string> k in ap.currentvars.FilterVars(rest).values)
                             {
-                                ap.discoveryform.LogLine(k.Key + "=" + k.Value);
+                                ap.actioncontroller.LogLine(k.Key + "=" + k.Value);
                             }
                         }
                         else
@@ -55,7 +55,7 @@ namespace EDDiscovery.Actions
 
                         if (rest != null)
                         {
-                            ap.discoveryform.LogLine(rest);
+                            ap.actioncontroller.LogLine(rest);
                         }
                         else
                         {
