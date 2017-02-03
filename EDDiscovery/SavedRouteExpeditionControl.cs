@@ -213,17 +213,11 @@ namespace EDDiscovery
             return (float)maxdist;
         }
 
-        private SystemClass GetSystem(string sysname)
+        private ISystemBase GetSystem(string sysname)
         {
-            SystemClass sys = SystemClass.GetSystem(sysname);
-
-            if (sys == null)
-            {
-                if (edsm.IsKnownSystem(sysname))
-                {
-                    sys = new SystemClass(sysname);
-                }
-            }
+            ISystemBase sys;
+            if (!SystemClass.TryGetSystem(sysname, out sys, true) && edsm.IsKnownSystem(sysname))
+                sys = new SystemClass(sysname);
 
             return sys;
         }
