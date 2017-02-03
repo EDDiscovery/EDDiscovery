@@ -46,7 +46,7 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    EliteDangerous.StarScan scan = ap.historylist.starscan;
+                    EliteDangerous.StarScan scan = ap.actioncontroller.HistoryList.starscan;
                     DB.SystemClass sc = DB.SystemClass.GetSystem(cmdname);
 
                     if (sc == null)

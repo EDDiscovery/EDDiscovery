@@ -189,12 +189,12 @@ namespace EDDiscovery.Actions
                 if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
                 {
                     ap.currentvars[vname] += res;
-                    ap.discoveryform.SetProgramGlobal(vname, ap.currentvars[vname]);
+                    ap.actioncontroller.SetProgramGlobal(vname, ap.currentvars[vname]);
                 }
                 else 
                 {
                     ap.currentvars[vname] = res;
-                    ap.discoveryform.SetProgramGlobal(vname, res);
+                    ap.actioncontroller.SetProgramGlobal(vname, res);
                 }
             }
 

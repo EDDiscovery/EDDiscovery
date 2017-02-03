@@ -14,7 +14,7 @@ namespace EDDiscovery.Actions
         private List<ActionProgramRun> progqueue = new List<ActionProgramRun>();
         private ActionProgramRun progcurrent = null;
 
-        private EDDiscoveryForm discoveryform = null;
+        private ActionController actioncontroller = null;
         private ActionFileList actionfilelist = null;
 
         bool async = false;             // if this Action is an asynchoronous object
@@ -22,30 +22,29 @@ namespace EDDiscovery.Actions
       
         Timer restarttick = new Timer();
 
-        public ActionRun(EDDiscoveryForm ed, ActionFileList afl, bool asy)
+        public ActionRun(ActionController ed, ActionFileList afl)
         {
             restarttick.Interval = 100;
             restarttick.Tick += Tick_Tick;
-            discoveryform = ed;
+            actioncontroller = ed;
             actionfilelist = afl;
-            async = asy;
         }
 
         //historyentry may be null if not associated with a entry
         // WE take a copy of each program, so each invocation of program action has a unique instance in case
         // it has private variables in either action or program.
-        public void Add(ActionFile fileset, ActionProgram r, ConditionVariables inputparas, HistoryList hl, HistoryEntry h)
+        public void Add(ActionFile fileset, ActionProgram r, ConditionVariables inputparas)
         {
-            progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, discoveryform, hl, h, async));
+            progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, actioncontroller));
         }
 
-        public void RunNow(ActionFile fileset, ActionProgram r, ConditionVariables inputparas, HistoryList hl, HistoryEntry h)
+        public void RunNow(ActionFile fileset, ActionProgram r, ConditionVariables inputparas)
         {
             if (progcurrent != null)                    // if running, push the current one back onto the queue to be picked up
                 progqueue.Insert(0, progcurrent);
 
-            progcurrent = new ActionProgramRun(fileset, r, inputparas, this, discoveryform, hl, h, async);   // now we run this.. no need to push to stack
-            progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, discoveryform.globalvariables); // set up its vars..
+            progcurrent = new ActionProgramRun(fileset, r, inputparas, this, actioncontroller);   // now we run this.. no need to push to stack
+            progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, actioncontroller.Globals); // set up its vars..
         }
 
         public void Execute()    // MAIN thread only..     
@@ -61,7 +60,7 @@ namespace EDDiscovery.Actions
                 {
                     if (progcurrent.GetErrorList != null)       // any errors pending, handle
                     {
-                        discoveryform.LogLine("Error at " + progcurrent.Location + ":" + Environment.NewLine + progcurrent.GetErrorList);
+                        actioncontroller.LogLine("Error at " + progcurrent.Location + ":" + Environment.NewLine + progcurrent.GetErrorList);
                         progcurrent = null; // terminate current program..
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it
@@ -80,9 +79,9 @@ namespace EDDiscovery.Actions
                     progqueue.RemoveAt(0);
 
                     if (progcurrent.currentvars != null)      // if not null, its because its just been restarted after a call.. reset globals
-                        progcurrent.currentvars.Add(discoveryform.globalvariables); // in case they have been updated...
+                        progcurrent.currentvars.Add(actioncontroller.Globals); // in case they have been updated...
                     else
-                        progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, discoveryform.globalvariables); // set them up
+                        progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, actioncontroller.Globals); // set them up
 
                     if (progcurrent.IsProgramFinished)          // reject empty programs..
                     {
@@ -119,7 +118,7 @@ namespace EDDiscovery.Actions
 
                             if (ap != null)
                             {
-                                RunNow(ap.Item1, ap.Item2, paravars , progcurrent.historylist, progcurrent.historyentry);   // run with these para vars
+                                RunNow(ap.Item1, ap.Item2, paravars );   // run with these para vars
                             }
                             else
                                 progcurrent.ReportError("Call cannot find " + prog);

@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
             string res;
             if (ap.functions.ExpandString(UserData.ReplaceEscapeControlChars(), ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
-                ap.discoveryform.LogLine(res);
+                ap.actioncontroller.LogLine(res);
                 System.Diagnostics.Debug.WriteLine("PRINT " + res);
             }
             else

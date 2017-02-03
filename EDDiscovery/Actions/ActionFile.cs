@@ -211,7 +211,7 @@ namespace EDDiscovery.Actions
             return progs;
         }
 
-        public void RunActions(List<Actions.ActionFileList.MatchingSets> ale, ActionRun run, ConditionVariables inputparas, HistoryList hle, HistoryEntry he )
+        public void RunActions(List<Actions.ActionFileList.MatchingSets> ale, ActionRun run, ConditionVariables inputparas)
         {
             foreach (Actions.ActionFileList.MatchingSets ae in ale)          // for every file which passed..
             {
@@ -227,7 +227,7 @@ namespace EDDiscovery.Actions
 
                         inputparas.Add(adparas);
 
-                        run.Add(ap.Item1, ap.Item2, inputparas, hle, he);
+                        run.Add(ap.Item1, ap.Item2, inputparas);
                     }
                 }
             }

@@ -37,7 +37,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    ExtendedControls.TabStrip ts = ap.discoveryform.TravelControl.GetTabStrip(cmdname);     // case insensitive
+                    ExtendedControls.TabStrip ts = ap.actioncontroller.DiscoveryForm.TravelControl.GetTabStrip(cmdname);     // case insensitive
 
                     if (ts != null)
                     {
@@ -53,7 +53,7 @@ namespace EDDiscovery.Actions
                         }
                         else
                         {
-                            Forms.PopOutControl poc = ap.discoveryform.PopOuts;
+                            Forms.PopOutControl poc = ap.actioncontroller.DiscoveryForm.PopOuts;
                             Forms.PopOutControl.PopOuts? poi = poc.GetPopOutTypeByName(nextcmd);
 
                             if (poi.HasValue)
