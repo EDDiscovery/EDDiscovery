@@ -73,7 +73,7 @@ namespace EDDiscovery
             comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
             
-            commanders.AddRange(EDCommander.GetAll());
+            commanders.AddRange(EDCommander.GetList());
 
             comboBoxCommander.DataSource = null;
             comboBoxCommander.DataSource = commanders;

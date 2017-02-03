@@ -550,7 +550,7 @@ namespace EDDiscovery
             commanders = new List<EDCommander>();
 
             commanders.Add(new EDCommander(-1, "Hidden log", "", false, false, false));
-            commanders.AddRange(EDCommander.GetAll());
+            commanders.AddRange(EDCommander.GetList());
 
             comboBoxCommander.DataSource = null;
             comboBoxCommander.DataSource = commanders;

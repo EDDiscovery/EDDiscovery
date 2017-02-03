@@ -101,7 +101,7 @@ namespace EDDiscovery2
                 radioButtonCentreHome.Checked = true;
             }
 
-            dataGridViewCommanders.DataSource = EDCommander.GetAll();
+            dataGridViewCommanders.DataSource = EDCommander.GetList();
             dataGridViewCommanders.AutoGenerateColumns = false;
 
             panel_defaultmapcolor.BackColor = EDDConfig.Instance.DefaultMapColour;
@@ -141,7 +141,7 @@ namespace EDDiscovery2
         public void UpdateCommandersListBox()
         {
             dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDCommander.GetAll().ToList();
+            dataGridViewCommanders.DataSource = EDCommander.GetList();
             dataGridViewCommanders.Update();
         }
 

@@ -48,7 +48,7 @@ namespace EDDiscovery2
 
         private void MoveToCommander_Load(object sender, EventArgs e)
         {
-            List<EDCommander> commanders = EDCommander.GetAll().ToList();
+            List<EDCommander> commanders = EDCommander.GetList();
 
             comboBoxCommanders.DataSource = commanders;
             comboBoxCommanders.DisplayMember = "Name";

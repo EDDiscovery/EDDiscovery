@@ -425,7 +425,7 @@ namespace EDDiscovery.EliteDangerous
 
         public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
-            List<EDCommander> listCommanders = EDCommander.GetAll().ToList();
+            List<EDCommander> listCommanders = EDCommander.GetList();
 
             if (frontierfolder != null && frontierfolder.Length != 0 && Directory.Exists(frontierfolder))
             {

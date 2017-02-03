@@ -164,6 +164,15 @@ namespace EDDiscovery2
         }
 
         /// <summary>
+        /// Returns list of commanders
+        /// </summary>
+        /// <returns></returns>
+        public static List<EDCommander> GetList()
+        {
+            return _Commanders.Values.OrderBy(v => v.Nr).ToList();
+        }
+
+        /// <summary>
         /// Delete a commander from backing storage and refresh instantiated list.
         /// </summary>
         /// <param name="cmdr">The commander to be deleted.</param>
