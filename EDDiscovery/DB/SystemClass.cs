@@ -161,7 +161,7 @@ namespace EDDiscovery.DB
             }           // since we don't have control of outside formats, we fail quietly.
         }
 
-        public static double Distance(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
+        public static double Distance(ISystemBase s1, ISystemBase s2)
         {
             if (s1 != null && s2 != null && s1.HasCoordinate && s2.HasCoordinate)
                 return Math.Sqrt((s1.x - s2.x) * (s1.x - s2.x) + (s1.y - s2.y) * (s1.y - s2.y) + (s1.z - s2.z) * (s1.z - s2.z));
@@ -493,23 +493,23 @@ namespace EDDiscovery.DB
         }
 
         /// <summary>
-        /// Get a <see cref="SystemClass"/> from <paramref name="systemName"/> with an optional check for merged systems. Returns true if a system was found.
+        /// Get an <see cref="ISystemBase"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact mathes are found. Returns true if the system was found.
         /// </summary>
         /// <param name="systemName">The human-readable name for the system to be checked.</param>
         /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system known as the supplied <paramref name="systemName"/>.</param>
-        /// <param name="checkMergers">If <c>true</c>, check for system merges. Defaults to <c>false</c>.</param>
+        /// <param name="checkMergers">If <c>true</c>, and no system exactly matches <paramref name="systemName"/>, check to see if it has was merged to another system.</param>
         /// <param name="cn">The database connection to use.</param>
         /// <returns><c>true</c> if the system is known (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
-        public static bool TryGetSystem(string systemName, out SystemClass result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
+        public static bool TryGetSystem(string systemName, out ISystemBase result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
         {
             result = null;
             if (string.IsNullOrWhiteSpace(systemName))  // No way José.
                 return false;
 
             result = GetSystem(systemName, cn);
-            if (checkMergers)
+            if (result == null && checkMergers)
             {
-                SystemClass s;
+                ISystemBase s;
                 if (privTryGetMergedSystem(systemName, out s, cn))
                     result = s;
             }
@@ -2080,7 +2080,7 @@ namespace EDDiscovery.DB
         /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system that was once named <paramref name="systemName"/>.</param>
         /// <param name="cn">The database connection to use.</param>
         /// <returns><c>true</c> if the system is known by a different name (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
-        private static bool privTryGetMergedSystem(string systemName, out SystemClass result, SQLiteConnectionSystem cn = null)
+        private static bool privTryGetMergedSystem(string systemName, out ISystemBase result, SQLiteConnectionSystem cn = null)
         {
             result = null;
             bool createdCn = false;
