@@ -15,9 +15,10 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;               //Process
 using System.Linq;
 using System.Reflection;                //Assembly
-using System.Runtime.InteropServices;   //GuidAttribute
+using System.Runtime.InteropServices;   //GuidAttribute, Win32 DllImports: SetForegoundWindow, ShowWindowAsync, IsIconic
 using System.Security.AccessControl;    //MutexAccessRule
 using System.Security.Principal;        //SecurityIdentifier
 using System.Threading;                 // Tasks and Mutex
@@ -28,6 +29,37 @@ namespace EDDiscovery
 {
     static class Program
     {
+        #region Win32 API needed to focus another application's window.
+        private const int SW_RESTORE = 9;
+
+        /// <summary>
+        /// Brings the thread that created the specified window into the foreground and activates the window.
+        /// </summary>
+        /// Keyboard input is directed to the window, and various visual cues are changed for
+        /// the user. The system assigns a slightly higher priority to the thread that created the
+        /// foreground window than it does to other threads.
+        /// <param name="hWnd">A handle to the window.</param>
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        /// <summary>
+        /// WIN32: Sets the show state of a window without waiting for the operation to complete.
+        /// </summary>
+        /// <param name="hWnd">A handle to the window.</param>
+        /// <param name="nCmdShow">Controls how the window is to be shown. See ShowWindow on MSDN for reference.</param>
+        /// <returns>If the operation was successfully started, the return value is <c>true</c>.</returns>
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+
+        /// <summary>
+        /// WIN32: Determines whether the specified window is minimized (iconic).
+        /// </summary>
+        /// <param name="hWnd">A handle to the window to be tested.</param>
+        /// <returns><c>true</c> if the window is minimized, <c>false</c> otherwise</returns>
+        [DllImport("user32.dll")]
+        private static extern bool IsIconic(IntPtr hWnd);
+        #endregion
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -47,15 +79,40 @@ namespace EDDiscovery
             }
             catch (TimeoutException)
             {
-                if (MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                /* Could not lock the app-global mutex, which means another copy of the App is running.
+                 * Let's try and show it. If we can't, then fallback to showing the classic MessageBox.
+                 */
+                if (!RaiseOtherProcess() && MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Application.Run(new EDDiscoveryForm());
                 }
-
-                /* Could not lock the app-global mutex, which means another copy of the App is running.
-                 * TODO: show a dialog and/or bring the current instance's window to the foreground.
-                 */
             }
+        }
+
+        /// <summary>
+        /// Attempt to bring the main window of a different process to the foreground.
+        /// This is really only useful if we are being launched twice because the user
+        /// was not aware that the application was already running.
+        /// </summary>
+        /// <returns><c>true</c> if the other application window was raised. <c>false</c> otherwise</returns>
+        static bool RaiseOtherProcess()
+        {
+            bool retval = false;
+            Process proc = Process.GetCurrentProcess();
+            foreach (Process otherProc in Process.GetProcessesByName(proc.ProcessName))
+            {
+                if (proc.Id != otherProc.Id)
+                {
+                    IntPtr hWnd = otherProc.MainWindowHandle;
+                    if (IsIconic(hWnd))
+                    {
+                        ShowWindowAsync(hWnd, SW_RESTORE);
+                    }
+                    SetForegroundWindow(hWnd);
+                    retval = true;
+                }
+            }
+            return retval;
         }
     }
 
