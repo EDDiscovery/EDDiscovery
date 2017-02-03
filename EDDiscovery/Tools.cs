@@ -217,45 +217,6 @@ namespace EDDiscovery
             debugout.Flush();
         }
 
-        public static string FixTitleCase(string s)
-        {
-            if (s.Length > 0)
-            {
-                s = s.Substring(0, 1).ToUpper() + s.Substring(1).ToLower();
-            }
-            return s;
-        }
-
-        public static string SplitCapsWord(string capslower)
-        {
-            return System.Text.RegularExpressions.Regex.Replace(
-                   System.Text.RegularExpressions.Regex.Replace(
-                   Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"),
-                   @"([a-z\d])([A-Z])", "$1 $2"),
-                   @"[-\s]", " ");
-        }
-
-        public static string SplitCapsWordUnderscoreSlash(string capslower)
-        {
-            string s = System.Text.RegularExpressions.Regex.Replace(
-                   System.Text.RegularExpressions.Regex.Replace(
-                   Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"),
-                   @"([a-z\d])([A-Z])", "$1 $2"),
-                   @"[-\s]", " ");
-
-            return s.Replace("_", " ").Replace("-", " ");
-        }
-
-        public static string[] SplitCapsWord(string[] capslower)
-        {
-            string[] rep = new string[capslower.Count()];
-
-            for (int i = 0; i < capslower.Count(); i++)
-                rep[i] = SplitCapsWord(capslower[i]);
-
-            return rep;
-        }
-
         public static string FDName(string normal)
         {
             string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
@@ -371,6 +332,49 @@ namespace EDDiscovery
                 return null;
         }
 
+        static public int[] VersionFromString(string s)
+        {
+            string[] list = s.Split('.');
+            return VersionFromStringArray(list);
+        }
 
+        static public int[] VersionFromStringArray(string[] list)
+        { 
+            if (list.Length > 0)
+            {
+                int[] v = new int[list.Length];
+
+                for (int i = 0; i < list.Length; i++)
+                {
+                    if (!list[i].InvariantParse(out v[i]))
+                        return null;
+                }
+
+                return v;
+            }
+
+            return null;
+        }
+
+        static public int CompareVersion(int[] v1, int[] v2)    // is V1>V2, 1, 0 = equals, -1 less
+        {
+            for( int i = 0; i < v1.Length; i++ )
+            {
+                if (i >= v2.Length || v1[i] > v2[i])
+                    return 1;
+                else if (v1[i] < v2[i])
+                    return -1;
+            }
+
+            return 0;
+        }
+
+        static public int[] GetEDVersion()
+        {
+            System.Reflection.Assembly aw = System.Reflection.Assembly.GetExecutingAssembly();
+            string v = aw.FullName.Split(',')[1].Split('=')[1];
+            string[] list = v.Split('.');
+            return VersionFromStringArray(list);
+        }
     }
 }

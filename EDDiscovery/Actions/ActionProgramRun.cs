@@ -12,14 +12,12 @@ namespace EDDiscovery.Actions
     {
         // used during execution.. filled in on program objects associated with an execution
         public ActionFile actionfile;                       // what file it came from..
-        public ActionRun actionrun;                         // who is running it..
-        public EDDiscoveryForm discoveryform;
-        public HistoryList historylist;
-        public HistoryEntry historyentry;                   // may be null, if the execute uses this, check.
-        public ConditionVariables inputvars;        // input vars to this program, never changed
+        public ActionController actioncontroller;
         public ConditionVariables currentvars;      // set up by ActionRun at invokation so they have the latest globals, see Run line 87 ish
         public ConditionFunctions functions;                   // function handler
-        public bool allowpause;
+        public ConditionVariables inputvars;        // input vars to this program, never changed
+
+        private ActionRun actionrun;                         // who is running it..
 
         private int nextstepnumber;     // the next step to execute, 0 based
 
@@ -36,16 +34,12 @@ namespace EDDiscovery.Actions
                                 ActionProgram r,  // the program
                                 ConditionVariables iparas ,             // input variables to the program only.. not globals
                                 ActionRun runner, // who is running it..
-                                EDDiscoveryForm ed, HistoryList hl, HistoryEntry h, // globals
-                                bool allowp = false) : base(r.Name)      // allow a pause
+                                ActionController ed ): base(r.Name)      // allow a pause
         {
             actionfile = af;
             actionrun = runner;
-            discoveryform = ed;
-            historyentry = h;
-            historylist = hl;
-            functions = new ConditionFunctions(ed, hl, h);
-            allowpause = allowp;
+            actioncontroller = ed;
+            functions = new ConditionFunctions();
             execlevel = 0;
             execstate[execlevel] = ExecState.On;
             nextstepnumber = 0;

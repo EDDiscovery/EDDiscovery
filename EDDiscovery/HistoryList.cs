@@ -327,9 +327,15 @@ namespace EDDiscovery
                 he.landed = false;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
-                he.landed = (je as EliteDangerous.JournalEvents.JournalLoadGame).StartLanded;
-                he.shiptype = (je as EliteDangerous.JournalEvents.JournalLoadGame).Ship;
-                he.shipid = (je as EliteDangerous.JournalEvents.JournalLoadGame).ShipId;
+                EliteDangerous.JournalEvents.JournalLoadGame jl = je as EliteDangerous.JournalEvents.JournalLoadGame;
+
+                he.landed = jl.StartLanded;
+
+                if (jl.Ship.IndexOf("buggy", StringComparison.InvariantCultureIgnoreCase) == -1)        // load game with buggy, can't tell what ship we get back into, so ignore
+                {
+                    he.shiptype = (je as EliteDangerous.JournalEvents.JournalLoadGame).Ship;
+                    he.shipid = (je as EliteDangerous.JournalEvents.JournalLoadGame).ShipId;
+                }
             }
             else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)         // BUY does not have ship id, but the new entry will that is written later - journals 8.34
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardBuy).ShipType;
@@ -429,7 +435,7 @@ namespace EDDiscovery
 
         public bool IsJournalEventInEventFilter(string[] events)
         {
-            return events.Contains(Tools.SplitCapsWord(EntryType.ToString()));
+            return events.Contains(EntryType.ToString().SplitCapsWord());
         }
 
         public bool IsJournalEventInEventFilter(string eventstr)

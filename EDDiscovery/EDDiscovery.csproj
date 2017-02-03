@@ -188,6 +188,7 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="ActionController.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
     <Compile Include="Actions\ActionCommands\ActionHistoryTab.cs" />
@@ -259,12 +260,19 @@
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
+    <Compile Include="Forms\DownloadManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DownloadManagerForm.Designer.cs">
+      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ImportSphere.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ImportSphere.Designer.cs">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
+    <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
@@ -279,6 +287,13 @@
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
+    <Compile Include="Speech\SpeechConfigure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Speech\SpeechConfigure.Designer.cs">
+      <DependentUpon>SpeechConfigure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Speech\SpeechSynthesizer.cs" />
     <Compile Include="TraceLog.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
@@ -548,9 +563,6 @@
     <Compile Include="Controls\ListControlCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\RichTextBoxBorder.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Controls\TextBoxBorder.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -796,6 +808,9 @@
     <EmbeddedResource Include="Controls\TabStrip.resx">
       <DependentUpon>TabStrip.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DownloadManagerForm.resx">
+      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -816,6 +831,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Speech\SpeechConfigure.resx">
+      <DependentUpon>SpeechConfigure.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Trilateration\SysWarning.resx">
       <DependentUpon>SysWarning.cs</DependentUpon>
