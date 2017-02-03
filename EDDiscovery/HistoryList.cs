@@ -229,6 +229,7 @@ namespace EDDiscovery
                 EventDescription = info,
                 EventDetailedInfo = detailed,
                 IsStarPosFromEDSM = starposfromedsm,
+                IsEDSMFirstDiscover = firstdiscover,
                 Commander = cmdr ?? EDCommander.GetCommander(je.CommanderId)
             };
 
