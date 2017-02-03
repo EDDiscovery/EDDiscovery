@@ -117,7 +117,7 @@ namespace EDDiscovery.HTTP
                             string installfolder = System.IO.Path.Combine(appfolder, cv["Location"]);
                             string localfilename = System.IO.Path.Combine(installfolder, Path.GetFileName(f.FullName));
 
-                            DownloadItem it = downloaditems.Find(x => x.localfilename.Equals(localfilename));
+                            DownloadItem it = downloaditems.Find(x => x.localfilename.Equals(localfilename, StringComparison.InvariantCultureIgnoreCase));
 
                             if (it != null)
                             {
@@ -151,7 +151,7 @@ namespace EDDiscovery.HTTP
 
                             int[] minedversion = Tools.VersionFromString(cv["MinEDVersion"]);
 
-                            if (Tools.CompareVersion(minedversion, edversion) >= 0)
+                            if (Tools.CompareVersion(minedversion, edversion) > 0)
                                 it.state = ItemState.EDOutOfDate;
 
                         }

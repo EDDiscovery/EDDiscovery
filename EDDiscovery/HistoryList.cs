@@ -435,7 +435,7 @@ namespace EDDiscovery
 
         public bool IsJournalEventInEventFilter(string[] events)
         {
-            return events.Contains(Tools.SplitCapsWord(EntryType.ToString()));
+            return events.Contains(EntryType.ToString().SplitCapsWord());
         }
 
         public bool IsJournalEventInEventFilter(string eventstr)
