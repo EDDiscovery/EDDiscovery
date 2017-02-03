@@ -43,7 +43,10 @@ namespace EDDiscovery2.DB.InMemory
         {
             return other != null &&
                    other.name.Equals(this.name, StringComparison.InvariantCultureIgnoreCase) &&
-                   (!this.HasCoordinate || !other.HasCoordinate || (other.x == this.x && other.y == this.y && other.z == this.z));
+                   (!this.HasCoordinate || !other.HasCoordinate ||
+                    (Math.Abs(this.x - other.x) < 0.125 &&
+                     Math.Abs(this.y - other.y) < 0.125 &&
+                     Math.Abs(this.z - other.z) < 0.125));
         }
     }
 
