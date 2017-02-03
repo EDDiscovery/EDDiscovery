@@ -8,9 +8,6 @@ namespace EDDiscovery
 {
     public class ConditionFunctions
     {
-        EDDiscoveryForm ed;
-        HistoryList hl;
-        HistoryEntry he;
         FuncEntry[] flist;
         static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -38,10 +35,8 @@ namespace EDDiscovery
             }
         }
 
-        public ConditionFunctions(EDDiscoveryForm e, HistoryList l, HistoryEntry h)
+        public ConditionFunctions()
         {
-            ed = e; hl = l; he = h;
-
             flist = new FuncEntry[]                         // first is a bitmap saying if to check for the value is a var
             {                                               // second is a bitmap saying if a string is allowed in this pos
                 new FuncEntry("exists",Exists,              1,20,   0,0),   // don't check macros, no strings

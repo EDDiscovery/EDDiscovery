@@ -61,16 +61,16 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    EDDiscovery2.DB.MaterialCommoditiesLedger ml = ap.historylist.materialcommodititiesledger;
+                    EDDiscovery2.DB.MaterialCommoditiesLedger ml = ap.actioncontroller.HistoryList.materialcommodititiesledger;
                     EDDiscovery2.DB.MaterialCommoditiesLedger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
-                    int jidindex = ap.historylist.EntryOrder.FindIndex(x => x.Journalid == jid);    // find it in the journal
+                    int jidindex = ap.actioncontroller.HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);    // find it in the journal
 
                     if ( tx == null && nextvalidentry ) // if not directly found..
                     {
                         while ( jidindex > 0 )      // go back, to 0.  if jidindex is -1 above, nothing happens
                         {
                             jidindex--;            // predec so we don't test first one
-                            jid = ap.historylist.EntryOrder[jidindex].Journalid;
+                            jid = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Journalid;
                             tx = ml.Transactions.Find(x => x.jid == jid);
                             if (tx != null)
                                 break;
@@ -84,7 +84,7 @@ namespace EDDiscovery.Actions
                     }
 
                     ap.currentvars[prefix + "JID"] = jid.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap.currentvars[prefix + "IndexOf"] = ap.historylist.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap.currentvars[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     ap.currentvars[prefix + "UTCTime"] = tx.utctime.ToString("MM/dd/yyyy HH:mm:ss");
                     ap.currentvars[prefix + "EntryType"] = tx.jtype.ToString();
                     ap.currentvars[prefix + "Notes"] = tx.notes;
