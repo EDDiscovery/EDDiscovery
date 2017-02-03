@@ -160,7 +160,7 @@ namespace EDDiscovery.DB
             }           // since we don't have control of outside formats, we fail quietly.
         }
 
-        public static double Distance(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
+        public static double Distance(ISystemBase s1, ISystemBase s2)
         {
             if (s1 != null && s2 != null && s1.HasCoordinate && s2.HasCoordinate)
                 return Math.Sqrt((s1.x - s2.x) * (s1.x - s2.x) + (s1.y - s2.y) * (s1.y - s2.y) + (s1.z - s2.z) * (s1.z - s2.z));
@@ -487,6 +487,31 @@ namespace EDDiscovery.DB
             }
 
             return sys;
+        }
+
+        /// <summary>
+        /// Get an <see cref="ISystemBase"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact match is found. Returns true if the system was found.
+        /// </summary>
+        /// <param name="systemName">The human-readable name for the system to be checked.</param>
+        /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system known as the supplied <paramref name="systemName"/>.</param>
+        /// <param name="checkMergers">If <c>true</c>, and no system exactly matches <paramref name="systemName"/>, check to see if it has was merged to another system.</param>
+        /// <param name="cn">The database connection to use.</param>
+        /// <returns><c>true</c> if the system is known (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
+        public static bool TryGetSystem(string systemName, out ISystemBase result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
+        {
+            result = null;
+            if (string.IsNullOrWhiteSpace(systemName))  // No way José.
+                return false;
+
+            result = GetSystem(systemName, cn);
+            if (result == null && checkMergers)
+            {
+                ISystemBase s;
+                if (privTryGetMergedSystem(systemName, out s, cn))
+                    result = s;
+            }
+
+            return (result != null);
         }
 
         // Only hidden systems are deleted, and the table is re-synced every
@@ -1824,6 +1849,51 @@ namespace EDDiscovery.DB
 
             return system;
         }
+
+        #region Private implementation
+
+        /// <summary>
+        /// Test if <paramref name="systemName"/> has been merged to another system. The return value indicates if a merged system was found.
+        /// </summary>
+        /// <param name="systemName">The name of the system to be checked.</param>
+        /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system that was once named <paramref name="systemName"/>.</param>
+        /// <param name="cn">The database connection to use.</param>
+        /// <returns><c>true</c> if the system is known by a different name (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
+        private static bool privTryGetMergedSystem(string systemName, out ISystemBase result, SQLiteConnectionSystem cn = null)
+        {
+            result = null;
+            bool createdCn = false;
+            long edsmMergedId = long.MinValue;
+
+            try
+            {
+                if (cn == null)
+                {
+                    createdCn = true;
+                    cn = new SQLiteConnectionSystem();
+                }
+                using (DbCommand cmd = cn.CreateCommand("SELECT id_edsm_mergedto FROM SystemAliases WHERE name = @param1 LIMIT 1"))
+                {
+                    cmd.AddParameterWithValue("param1", systemName);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            edsmMergedId = (long)reader["id_edsm_mergedto"];
+                    }
+                }
+                if (edsmMergedId != long.MinValue)
+                    result = GetSystem(edsmMergedId, cn, SystemIDType.EdsmId);
+            }
+            finally
+            {
+                if (createdCn && cn != null)
+                    cn.Dispose();
+            }
+
+            return (result != null);
+        }
+
+        #endregion
     }
 
     public class GridId
