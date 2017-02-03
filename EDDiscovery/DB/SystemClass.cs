@@ -929,7 +929,7 @@ namespace EDDiscovery.DB
             return nearestsystem;
         }
 
-        public static void GetSystemAndAlternatives(EliteDangerous.JournalEvents.JournalLocOrJump vsc, out ISystem system, out List<ISystem> alternatives, out string namestatus)
+        public static bool GetSystemAndAlternatives(EliteDangerous.JournalEvents.JournalLocOrJump vsc, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
             ISystem refsystem = new EDDiscovery2.DB.InMemory.SystemClass
             {
@@ -940,10 +940,10 @@ namespace EDDiscovery.DB
                 id_edsm = vsc.EdsmID
             };
 
-            GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
+            return GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
         }
 
-        public static void GetSystemAndAlternatives(ISystem refsys, out ISystem system, out List<ISystem> alternatives, out string namestatus)
+        public static bool GetSystemAndAlternatives(ISystem refsys, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
             system = new EDDiscovery2.DB.InMemory.SystemClass
             {
@@ -1092,12 +1092,12 @@ namespace EDDiscovery.DB
                     if (nameposmatches.ContainsKey(system.id)) // name and position matches
                     {
                         namestatus = "Exact match";
-                        return; // Continue to next system
+                        return true; // Continue to next system
                     }
                     else if (posmatches.ContainsKey(system.id)) // position matches
                     {
                         namestatus = "Name differs";
-                        return; // Continue to next system
+                        return true; // Continue to next system
                     }
                     else if (!hastravcoords || !system.HasCoordinate) // no coordinates available
                     {
@@ -1112,7 +1112,7 @@ namespace EDDiscovery.DB
                                 namestatus = "Travel log entry has no coordinates";
                             }
 
-                            return; // Continue to next system
+                            return true; // Continue to next system
                         }
                         else if (!refsys.HasCoordinate)
                         {
@@ -1128,14 +1128,14 @@ namespace EDDiscovery.DB
                         // Both name and position matches
                         system = nameposmatches.Values.Single();
                         namestatus = "Exact match";
-                        return; // Continue to next system
+                        return true; // Continue to next system
                     }
                     else if (posmatches.Count == 1)
                     {
                         // Position matches
                         system = posmatches.Values.Single();
                         namestatus = $"System {system.name} found at location";
-                        return; // Continue to next system
+                        return true; // Continue to next system
                     }
                     else
                     {
@@ -1150,7 +1150,7 @@ namespace EDDiscovery.DB
                         // One system name matched
                         system = namematches.Values.Single();
                         namestatus = "Name matched";
-                        return;
+                        return true;
                     }
                     else if (namematches.Count > 1)
                     {
@@ -1167,6 +1167,8 @@ namespace EDDiscovery.DB
                     namestatus = "System not found";
                 }
             }
+
+            return false;
         }
 
         public static long ParseEDSMUpdateSystemsString(string json, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
