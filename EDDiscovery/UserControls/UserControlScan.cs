@@ -123,9 +123,12 @@ namespace EDDiscovery.UserControls
             StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;  // find node..
             last_he = he;
 
-            if ( newnode == last_sn && he.EntryType == EliteDangerous.JournalTypeEnum.Scan )  // if on same star system, and its a scan, it may have been updated..
+            if ( he.EntryType == EliteDangerous.JournalTypeEnum.Scan )  // if on same star system, and its a scan, it may have been updated..
             {
-                DrawSystem(last_sn);
+                if (newnode == last_sn || (newnode != null && last_sn != null && newnode.system != null && newnode.system.Equals(last_sn.system)))
+                {
+                    DrawSystem(last_sn);
+                }
             }
         }
 
