@@ -116,8 +116,8 @@ namespace EDDiscovery.EliteDangerous
                         if (sys.id_edsm != 0)             // yep, replace
                         {
                             scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), _sn);
-                            sn = _sn;
                         }
+                        sn = _sn;
                         break;
                     }
                 }
@@ -127,16 +127,14 @@ namespace EDDiscovery.EliteDangerous
             {
                 sn = new SystemNode() { system = sys, starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>()) };
 
-                if (sys.id_edsm == 0)
+                if (!scandataByName.ContainsKey(sys.name))
                 {
-                    if (!scandataByName.ContainsKey(sys.name))
-                    {
-                        scandataByName[sys.name] = new List<SystemNode>();
-                    }
-
-                    scandataByName[sys.name].Add(sn);
+                    scandataByName[sys.name] = new List<SystemNode>();
                 }
-                else
+
+                scandataByName[sys.name].Add(sn);
+
+                if (sys.id_edsm != 0)
                 {
                     scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
                 }
