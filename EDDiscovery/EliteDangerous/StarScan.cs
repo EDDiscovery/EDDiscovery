@@ -26,6 +26,7 @@ namespace EDDiscovery.EliteDangerous
     public class StarScan
     {
         Dictionary<Tuple<string, long>, SystemNode> scandata = new Dictionary<Tuple<string, long>, SystemNode>();
+        Dictionary<string, List<SystemNode>> scandataByName = new Dictionary<string, List<SystemNode>>();
 
         public class SystemNode
         {
@@ -68,13 +69,20 @@ namespace EDDiscovery.EliteDangerous
         public SystemNode FindSystem(EDDiscovery2.DB.ISystem sys)
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
-            Tuple<string, long> withoutedsm = new Tuple<string, long>(sys.name, 0);
 
             if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
                 return scandata[withedsm];
 
-            if (scandata.ContainsKey(withoutedsm))  // if we now have an edsm id, see if we have one without it 
-                return scandata[withoutedsm];
+            if (scandataByName.ContainsKey(sys.name))
+            {
+                foreach (SystemNode sn in scandataByName[sys.name])
+                {
+                    if (sn.system.Equals(sys))
+                    {
+                        return sn;
+                    }
+                }
+            }
 
             return null;
         }
@@ -82,25 +90,41 @@ namespace EDDiscovery.EliteDangerous
         public bool Process(JournalScan sc, EDDiscovery2.DB.ISystem sys)           // FALSE if you can't process it
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
-            Tuple<string, long> withoutedsm = new Tuple<string, long>(sys.name, 0);
 
             SystemNode sn;
             if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
                 sn = scandata[withedsm];
-            else if (scandata.ContainsKey(withoutedsm))  // if we now have an edsm id, see if we have one without it 
+            else if (scandataByName.ContainsKey(sys.name))  // if we now have an edsm id, see if we have one without it 
             {
-                sn = scandata[withoutedsm];
-
-                if (sys.id_edsm != 0)             // yep, replace
+                foreach (SystemNode _sn in scandataByName[sys.name])
                 {
-                    scandata.Remove(new Tuple<string, long>(sys.name, 0));
-                    scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
+                    if (_sn.system.Equals(sys))
+                    {
+                        if (sys.id_edsm != 0)             // yep, replace
+                        {
+                            scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), _sn);
+                        }
+                        break;
+                    }
                 }
             }
             else
             {
                 sn = new SystemNode() { system = sys, starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>()) };
-                scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
+
+                if (sys.id_edsm == 0)
+                {
+                    if (!scandataByName.ContainsKey(sys.name))
+                    {
+                        scandataByName[sys.name] = new List<SystemNode>();
+                    }
+
+                    scandataByName[sys.name].Add(sn);
+                }
+                else
+                {
+                    scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
+                }
             }
 
             // handle Earth, starname = Sol
