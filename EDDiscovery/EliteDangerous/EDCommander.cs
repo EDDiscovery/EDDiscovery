@@ -89,7 +89,7 @@ namespace EDDiscovery2
             {
                 if (value != _CurrentCommanderID)
                 {
-                    if (_Commanders.ContainsKey(value))
+                    if (!_Commanders.ContainsKey(value))
                     {
                         throw new ArgumentOutOfRangeException();
                     }
