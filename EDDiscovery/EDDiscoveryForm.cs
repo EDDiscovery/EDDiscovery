@@ -76,7 +76,7 @@ namespace EDDiscovery
         public EDDTheme theme;
 
         private EDDiscoveryController Controller;
-        private ActionController actioncontroller;
+        private Actions.ActionController actioncontroller;
 
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
 
@@ -189,7 +189,7 @@ namespace EDDiscovery
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-            actioncontroller = new ActionController(this, Controller);
+            actioncontroller = new Actions.ActionController(this, Controller);
 
             ApplyTheme();
 
