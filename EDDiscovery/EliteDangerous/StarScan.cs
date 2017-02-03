@@ -91,7 +91,7 @@ namespace EDDiscovery.EliteDangerous
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
 
-            SystemNode sn;
+            SystemNode sn = null;
             if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
                 sn = scandata[withedsm];
             else if (scandataByName.ContainsKey(sys.name))  // if we now have an edsm id, see if we have one without it 
@@ -103,12 +103,14 @@ namespace EDDiscovery.EliteDangerous
                         if (sys.id_edsm != 0)             // yep, replace
                         {
                             scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), _sn);
+                            sn = _sn;
                         }
                         break;
                     }
                 }
             }
-            else
+
+            if (sn == null)
             {
                 sn = new SystemNode() { system = sys, starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>()) };
 
