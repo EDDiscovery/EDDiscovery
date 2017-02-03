@@ -493,7 +493,7 @@ namespace EDDiscovery.DB
         }
 
         /// <summary>
-        /// Get an <see cref="ISystemBase"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact mathes are found. Returns true if the system was found.
+        /// Get an <see cref="ISystemBase"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact match is found. Returns true if the system was found.
         /// </summary>
         /// <param name="systemName">The human-readable name for the system to be checked.</param>
         /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system known as the supplied <paramref name="systemName"/>.</param>
