@@ -136,7 +136,7 @@ namespace EDDiscovery
                     return false;
 
                 if (fixnamecase)
-                    varname = Tools.FixTitleCase(varname);
+                    varname = varname.FixTitleCase();
 
                 if (namelimit != null && !namelimit.Contains(varname))
                     return false;

@@ -355,14 +355,15 @@ namespace EDDiscovery
         private bool SplitCaps(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = Tools.SplitCapsWordUnderscoreSlash(value);
+            output = value.SplitCapsWordUnderscoreTitleCase();
             return true;
         }
 
         private bool Ship(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = Tools.SplitCapsWordUnderscoreSlash(EliteDangerous.JournalEntry.PhoneticShipName(value));
+            output = EliteDangerous.JournalEntry.PhoneticShipName(value);
+            output = output.SplitCapsWordUnderscoreTitleCase();
             return true;
         }
 
@@ -522,14 +523,12 @@ namespace EDDiscovery
 
         private bool Version(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
-            System.Reflection.Assembly aw = System.Reflection.Assembly.GetExecutingAssembly();
-            string v = aw.FullName.Split(',')[1].Split('=')[1];
-            string[] list = v.Split('.');
+            int[] edversion = Tools.GetEDVersion();
 
             int para;
-            if (paras[0].value.InvariantParse(out para) && para >= 1 && para <= list.Length)
+            if (paras[0].value.InvariantParse(out para) && para >= 1 && para <= edversion.Length)
             {
-                output = list[para - 1];
+                output = edversion[para - 1].ToString(ct);
                 return true;
             }
             else
@@ -787,8 +786,8 @@ namespace EDDiscovery
                         if (i != start)
                             output += separ;
 
-                        if ( splitcaps )
-                            output += Tools.SplitCapsWordUnderscoreSlash(vars[aname]);
+                        if (splitcaps)
+                            output += vars[aname].SplitCapsWordUnderscoreTitleCase();
                         else
                             output += vars[aname];
                     }

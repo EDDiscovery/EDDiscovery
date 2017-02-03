@@ -33,6 +33,7 @@ namespace EDDiscovery
             TLat,       // format as a lat 10 N/S degree 20'30. format can be empty or prefix;postfix as above
             TLong,      // format as a long 10 E/W degree 20'30. format can be empty or prefix;postfix as above
             TShip,      // ship name
+            TMissionName, // mission name
             TMaterialCommodity, // see if the stupid fdname can be resolved to something better.  format can be empty or prefix;postfix as above
         };
 
@@ -99,7 +100,7 @@ namespace EDDiscovery
 
         public string Convert(string pname, string value , string eventname)
         {
-            string displayname = Tools.SplitCapsWord(pname);
+            string displayname = pname.SplitCapsWord();
 
             for ( int i = converters.Count-1; i>=0; i--)
             {
@@ -129,6 +130,14 @@ namespace EDDiscovery
 
                         case Types.TShip:
                             value = EliteDangerous.JournalEntry.GetBetterShipName(value);
+                            if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
+                                value = formatsplit[0] + value;
+                            if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
+                                value += formatsplit[1];
+                            break;
+
+                        case Types.TMissionName:
+                            value = EliteDangerous.JournalEntry.GetBetterMissionName(value);
                             if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
                                 value = formatsplit[0] + value;
                             if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat

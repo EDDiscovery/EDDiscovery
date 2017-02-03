@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
                         MaterialCommoditiesLedger.Transaction tx = filteredlist[i];
 
                         object[] rowobj = { utctime ? tx.utctime : tx.utctime.ToLocalTime() ,
-                                            Tools.SplitCapsWord(tx.jtype.ToString()),
+                                            tx.jtype.ToString().SplitCapsWord(),
                                             tx.notes,
                                             (tx.cashadjust>0) ? tx.cashadjust.ToString("N0") : "",
                                             (tx.cashadjust<0) ? (-tx.cashadjust).ToString("N0") : "",

@@ -516,7 +516,7 @@ namespace EDDiscovery2.DB
 
             public bool IsJournalEventInEventFilter(string[] events)
             {
-                return events.Contains(EDDiscovery.Tools.SplitCapsWord(jtype.ToString()));
+                return events.Contains(jtype.ToString().SplitCapsWord());
             }
         }
 

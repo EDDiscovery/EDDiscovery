@@ -116,11 +116,14 @@ namespace EDDiscovery.Forms
 
             mgr = new VersioningManager();
 
+            int[] edversion = Tools.GetEDVersion();
+            System.Diagnostics.Debug.Assert(edversion != null);
+
             mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Actions", "*.act", "Action File");
-            mgr.ReadInstallFiles(downloadactfolder, Tools.GetAppDataDirectory(), "*.act", new int[] { 5, 0, 0, 0 }, "Action File");
+            mgr.ReadInstallFiles(downloadactfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
 
             mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Flights", "*.vid", "Video File");
-            mgr.ReadInstallFiles(downloadflightfolder, Tools.GetAppDataDirectory(), "*.vid", new int[] { 5, 0, 0, 0 }, "Video File");
+            mgr.ReadInstallFiles(downloadflightfolder, Tools.GetAppDataDirectory(), "*.vid", edversion, "Video File");
 
             mgr.Sort();
 
