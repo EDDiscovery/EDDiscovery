@@ -208,6 +208,7 @@ namespace EDDiscovery2
             public bool LogExceptions { get; private set; }
             public bool NoWindowReposition { get; private set; }
             public string OldDatabasePath { get; private set; }
+            public string OptionsFile { get; private set; }
             public string ReadJournal { get; private set; }
             public bool StoreDataInProgramDirectory { get; private set; }
             public string SystemDatabasePath { get; private set; }
@@ -221,6 +222,7 @@ namespace EDDiscovery2
             {
                 if (shift) NoWindowReposition = true;
                 ProcessConfigVariables();
+                ProcessOptionsFile();
                 ProcessCommandLineOptions();
                 SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
                 SetVersionDisplayString();
@@ -239,7 +241,37 @@ namespace EDDiscovery2
                 UserDatabasePath = appsettings["UserDatabasePath"];
             }
 
-            private void ProcessCommandLineOptions()
+            private void ProcessOptionsFile()
+            {
+                OptionsFile = "options.txt";
+
+                ProcessCommandLineOptions((optname, optval) =>
+                {
+                    if (optname == "-optionsfile" && optval != null)
+                    {
+                        OptionsFile = optval;
+                        return true;
+                    }
+
+                    return false;
+                });
+
+                if (!Path.IsPathRooted(OptionsFile))
+                {
+                    OptionsFile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, OptionsFile);
+                }
+
+                if (File.Exists(OptionsFile))
+                {
+                    foreach (string line in File.ReadAllLines(OptionsFile))
+                    {
+                        string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
+                        ProcessCommandLineOption("-" + kvp[0], kvp.Length == 2 ? kvp[1] : null);
+                    }
+                }
+            }
+
+            private void ProcessCommandLineOptions(Func<string, string, bool> getopt)
             {
                 string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
 
@@ -254,56 +286,75 @@ namespace EDDiscovery2
                         optval = cmdlineopts[i + 1];
                     }
 
-                    if (optname == "-appfolder")
+                    if (getopt(optname, optval))
                     {
-                        AppFolder = optval;
                         i++;
-                    }
-                    else if (optname == "-readjournal")
-                    {
-                        ReadJournal = optval;
-                        i++;
-                    }
-                    else if (optname == "-userdbpath")
-                    {
-                        UserDatabasePath = optval;
-                        i++;
-                    }
-                    else if (optname == "-systemsdbpath")
-                    {
-                        SystemDatabasePath = optval;
-                        i++;
-                    }
-                    else if (optname == "-olddbpath")
-                    {
-                        OldDatabasePath = optval;
-                        i++;
-                    }
-                    else if (optname.StartsWith("-"))
-                    {
-                        string opt = optname.Substring(1).ToLowerInvariant();
-                        switch (opt)
-                        {
-                            case "norepositionwindow": NoWindowReposition = true; break;
-                            case "portable": StoreDataInProgramDirectory = true; break;
-                            case "nrw": NoWindowReposition = true; break;
-                            case "debug": Debug = true; break;
-                            case "tracelog": TraceLog = true; break;
-                            case "logexceptions": LogExceptions = true; break;
-                            case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
-                            case "edsmnull": EDSMServerType = EDSMServerType.Null; break;
-                            case "disablebetacheck": DisableBetaCheck = true; break;
-                            default:
-                                Console.WriteLine($"Unrecognized option -{opt}");
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Unexpected non-option {optname}");
                     }
                     i++;
                 }
+            }
+
+            private bool ProcessCommandLineOption(string optname, string optval)
+            {
+                if (optname == "-optionsfile")
+                {
+                    // Skip option as it was handled in ProcessOptionsFile
+                    return true;
+                }
+                else if (optname == "-appfolder")
+                {
+                    AppFolder = optval;
+                    return true;
+                }
+                else if (optname == "-readjournal")
+                {
+                    ReadJournal = optval;
+                    return true;
+                }
+                else if (optname == "-userdbpath")
+                {
+                    UserDatabasePath = optval;
+                    return true;
+                }
+                else if (optname == "-systemsdbpath")
+                {
+                    SystemDatabasePath = optval;
+                    return true;
+                }
+                else if (optname == "-olddbpath")
+                {
+                    OldDatabasePath = optval;
+                    return true;
+                }
+                else if (optname.StartsWith("-"))
+                {
+                    string opt = optname.Substring(1).ToLowerInvariant();
+                    switch (opt)
+                    {
+                        case "norepositionwindow": NoWindowReposition = true; break;
+                        case "portable": StoreDataInProgramDirectory = true; break;
+                        case "nrw": NoWindowReposition = true; break;
+                        case "debug": Debug = true; break;
+                        case "tracelog": TraceLog = true; break;
+                        case "logexceptions": LogExceptions = true; break;
+                        case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
+                        case "edsmnull": EDSMServerType = EDSMServerType.Null; break;
+                        case "disablebetacheck": DisableBetaCheck = true; break;
+                        default:
+                            Console.WriteLine($"Unrecognized option -{opt}");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Unexpected non-option {optname}");
+                }
+                return false;
+            }
+
+            private void ProcessCommandLineOptions()
+            {
+                ProcessCommandLineOptions(ProcessCommandLineOption);
             }
 
             private void SetAppDataDirectory(string appfolder, bool portable)
