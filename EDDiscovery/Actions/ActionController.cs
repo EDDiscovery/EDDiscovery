@@ -138,13 +138,14 @@ namespace EDDiscovery.Actions
 
                 Tuple<ActionFile, ActionProgram> ap = actionfiles.FindProgram(prog);
 
-                if (ap.Item2.EditInEditor())
+                if (ap != null && ap.Item2.EditInEditor())
                 {
                     ap.Item1.SaveFile();
+                    return;
                 }
             }
-            else
-                MessageBox.Show("Voice pack not loaded, or needs updating to support this functionality");
+
+            MessageBox.Show("Voice pack not loaded, or needs updating to support this functionality");
         }
 
         public void ActionRunOnRefresh()
