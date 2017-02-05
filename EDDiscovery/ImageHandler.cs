@@ -393,6 +393,8 @@ namespace EDDiscovery2.ImageHandler
                 {
                     if (removeinputfile)         // if remove, delete original picture
                     {
+                        System.Threading.Timer timer;
+                        ScreenshotTimers.TryRemove(inputfile, out timer);
                         File.Delete(inputfile);
                     }
 
