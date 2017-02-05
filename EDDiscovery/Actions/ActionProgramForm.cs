@@ -23,22 +23,21 @@ namespace EDDiscovery.Actions
 
         bool editastextimmediately = false;
 
-        class Group
+        ActionProgram curprog = new ActionProgram();
+
+        class Group     // group and curprog always have same number of entries, curprog can have a null in an entry indicating a non assigned step
         {
             public Panel panel;
-            public Action programstep;
             public ExtendedControls.ComboBoxCustom stepname;
+            public ExtendedControls.TextBoxBorder value;
             public ExtendedControls.ButtonExt config;
             public ExtendedControls.ButtonExt up;
             public ExtendedControls.ButtonExt prog;
             public ExtendedControls.ButtonExt left;
             public ExtendedControls.ButtonExt right;
-            public ExtendedControls.TextBoxBorder value;
-            public int levelup;
-            public bool marked;
-            public int whitespace;
+            public bool marked;     // is marked for editing
 
-            public int indentcomputed;      // when displayed, what was the indent
+            public Action checkit; // used just to check we keep in sync with curprog, not strictly ness. but useful
         };
 
         List<Group> groups;
@@ -93,7 +92,7 @@ namespace EDDiscovery.Actions
             editastextimmediately = edittext;
         }
 
-        void DeleteAll()
+        void LoadProgram(ActionProgram prog)
         {
             foreach (Group g in groups)
             {
@@ -102,11 +101,9 @@ namespace EDDiscovery.Actions
             }
 
             groups.Clear();
-            RepositionGroups();
-        }
 
-        void LoadProgram(ActionProgram prog)
-        {
+            curprog = new ActionProgram(prog.Name);
+
             initialprogname = textBoxBorderName.Text = prog.Name;
 
             SuspendLayout();
@@ -114,13 +111,19 @@ namespace EDDiscovery.Actions
 
             Action ac;
             int step = 0;
-            while ((ac = prog.GetStep(step++)) != null)
-                CreateStep(ac);
+            while ((ac = prog.GetStep(step)) != null)
+            {
+                Action ca = Action.CreateCopy(ac);// COPY it.. so we can modify without altering current
+                curprog.Add(ca);       
+                CreateStep(-1, ca);
+                step++;
+            }
 
             RepositionGroups();
             panelVScroll.ResumeLayout();
             ResumeLayout();
         }
+
         private void panelVScroll_Resize(object sender, EventArgs e)
         {
             RepositionGroups(false); // don't recalc min size, it creates a loop
@@ -137,16 +140,15 @@ namespace EDDiscovery.Actions
 
         #region Steps
 
-        Group CreateStep(Action step = null, int insertpos = -1)
+        Group CreateStep(int insertpos, Action step = null)
         {
             SuspendLayout();
             panelVScroll.SuspendLayout();
 
             Group g = new Group();
-            g.programstep = step;
-            g.levelup = (step != null) ? step.LevelUp : 0;
-            g.whitespace = (step != null) ? step.Whitespace : 0;
 
+            g.checkit = step;
+            
             g.panel = new Panel();
             g.panel.SuspendLayout();
 
@@ -246,103 +248,52 @@ namespace EDDiscovery.Actions
             SuspendLayout();
             panelVScroll.SuspendLayout();
 
-            string errlist = "";
-
-            int voff = panelheightmargin;
-
-            int structlevel = 0;
-            int[] structcount = new int[50];
-            Action.ActionType[] structtype = new Action.ActionType[50];
-
-            bool first = true;
-
+            string errlist = curprog.CalculateLevels();
 
             int panelwidth = Math.Max(panelVScroll.Width - panelVScroll.ScrollBarWidth, 10);
 
-            System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+            int indentlevel = 0;
+            int voff = panelheightmargin;
+
+            int actstep = 0;
 
             foreach (Group g in groups)
             {
-                g.left.Enabled = g.right.Enabled = false;
+                int whitespace = 0;
+                Action act = curprog.GetStep(actstep);
 
-                bool indo = structtype[structlevel] == Action.ActionType.Do;        // if in a DO..WHILE, and we are a WHILE, we don't indent.
-
-                if (g.levelup > 0)
+                if (act != null)
                 {
-                    if (g.levelup > structlevel)            // ensure its not too big.. this may happen due to copying
-                        g.levelup = structlevel;
+                    System.Diagnostics.Debug.Assert(Object.ReferenceEquals(g.checkit, act));
+                    g.left.Enabled = act.calcAllowLeft;
+                    g.right.Enabled = act.calcAllowRight;
+                    indentlevel = act.calcDisplayLevel;
+                    whitespace = act.Whitespace;
+                    g.prog.Visible = act.Type == Action.ActionType.Call & EditProgram != null;
+                    g.config.Visible = act.ConfigurationMenuInUse;
 
-                    structlevel -= g.levelup;
-                    g.right.Enabled = true;
-                }
-
-                structcount[structlevel]++;
-
-                if (structlevel > 0 && structcount[structlevel] > 1)        // second further on can be moved back..
-                    g.left.Enabled = true;
-
-                int displaylevel = structlevel;        // displayed level..
-
-                if (g.programstep != null)
-                {
-                    if (g.programstep.Type == Action.ActionType.ElseIf)
-                    {
-                        if (structtype[structlevel] == Action.ActionType.Else)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " ElseIf after Else found" + Environment.NewLine;
-                        else if (structtype[structlevel] != Action.ActionType.If && structtype[structlevel] != Action.ActionType.ElseIf)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " ElseIf without IF found" + Environment.NewLine;
-                    }
-                    else if (g.programstep.Type == Action.ActionType.Else)
-                    {
-                        if (structtype[structlevel] == Action.ActionType.Else)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " Else after Else found" + Environment.NewLine;
-                        else if (structtype[structlevel] != Action.ActionType.If && structtype[structlevel] != Action.ActionType.ElseIf)
-                            errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " Else without IF found" + Environment.NewLine;
-
-                    }
-
-                    if (g.programstep.Type == Action.ActionType.ElseIf || g.programstep.Type == Action.ActionType.Else)
-                    {
-                        structtype[structlevel] = g.programstep.Type;
-
-                        if (structlevel == 1)
-                            g.left.Enabled = false;         // can't move an ELSE back to level 0
-
-                        if (structlevel > 0)      // display else artifically indented.. display only
-                            displaylevel--;
-
-                        structcount[structlevel] = 0;   // restart count so we don't allow a left on next one..
-                    }
-                    else if (g.programstep.Type == Action.ActionType.If || (g.programstep.Type == Action.ActionType.While && !indo) ||
-                                g.programstep.Type == Action.ActionType.Do || g.programstep.Type == Action.ActionType.Loop)
-                    {
-                        structlevel++;
-                        structcount[structlevel] = 0;
-                        structtype[structlevel] = g.programstep.Type;
-                    }
+                    actstep++;
                 }
                 else
                 {
-                    errlist += "Step " + (groups.IndexOf(g) + 1).ToString(ct) + " not defined" + Environment.NewLine;
+                    g.left.Enabled = g.right.Enabled = false;
+                    g.prog.Visible = false;
+                    g.config.Visible = false;
                 }
-
-                g.indentcomputed = displaylevel;        // store this, ASCII output want to know how we indented it.
 
                 g.panel.SuspendLayout();
 
                 g.panel.Location = new Point(panelleftmargin, voff + panelVScroll.ScrollOffset);
-                g.panel.Size = new Size(panelwidth, panelheight + ((g.whitespace>0) ? (panelheight/2) : 0 ));
-                g.stepname.Location = new Point(g.right.Right + 8 + 8 * displaylevel, panelheightmargin);
-                g.stepname.Size = new Size(140 - Math.Max((displaylevel - 4) * 8, 0), controlsize);
+                g.panel.Size = new Size(panelwidth, panelheight + ((whitespace>0) ? (panelheight/2) : 0 ));
+                g.stepname.Location = new Point(g.right.Right + 8 + 8 * indentlevel, panelheightmargin);
+                g.stepname.Size = new Size(140 - Math.Max((indentlevel - 4) * 8, 0), controlsize);
                 g.value.Location = new Point(g.right.Right + 140 + 8 + 8 * 4, panelheightmargin * 2);      // 8 spacing, allow 8*4 to indent
                 int valuewidth = panelwidth - 350;
                 g.value.Size = new Size(valuewidth, controlsize);
                 g.config.Location = new Point(g.value.Right + 4, panelheightmargin);      // 8 spacing, allow 8*4 to indent
                 g.up.Location = new Point(g.config.Right + 4, panelheightmargin);
                 g.prog.Location = new Point(g.up.Right + 4, panelheightmargin);
-                g.prog.Visible = g.programstep != null && g.programstep.Type == Action.ActionType.Call & EditProgram != null;
-                g.up.Visible = !first;
-                g.config.Visible = g.programstep != null && g.programstep.ConfigurationMenuInUse;
+                g.up.Visible = groups.IndexOf(g)>0;
 
                 g.panel.ResumeLayout();
 
@@ -350,7 +301,6 @@ namespace EDDiscovery.Actions
                 //                if (g.programstep != null)
                 //                  g.value.Enabled = false; g.value.Text = structlevel.ToString() + " ^ " + g.levelup + " UD: " + g.programstep.DisplayedUserData;g.value.Enabled = true;
 
-                first = false;
                 voff += g.panel.Height;
             }
 
@@ -377,7 +327,8 @@ namespace EDDiscovery.Actions
 
         private void buttonMore_Click(object sender, EventArgs e)
         {
-            CreateStep(null, -1);
+            CreateStep(-1,null);
+            curprog.Add(null);
             RepositionGroups();
             panelVScroll.ToEnd();       // tell it to scroll to end
         }
@@ -385,17 +336,22 @@ namespace EDDiscovery.Actions
         private void Stepname_SelectedIndexChanged(object sender, EventArgs e)                // EVENT list changed
         {
             ExtendedControls.ComboBoxCustom b = sender as ExtendedControls.ComboBoxCustom;
-            Group g = (Group)b.Tag;
 
             if (b.Enabled)
             {
-                if (g.programstep == null || !g.programstep.Name.Equals(b.Text))
+                Group g = (Group)b.Tag;
+                int gstep = groups.IndexOf(g);
+
+                Action curact = curprog.GetStep(gstep);
+
+                if (curact == null || !curact.Name.Equals(b.Text))
                 {
                     Action a = Action.CreateAction(b.Text);
 
                     if (!a.ConfigurationMenuInUse || a.ConfigurationMenu(this, theme, currentvarlist))
                     {
-                        g.programstep = a;
+                        curprog.SetStep(gstep, a);
+                        g.checkit = a;
                         SetValue(g.value, a);
                         RepositionGroups();
                     }
@@ -413,11 +369,12 @@ namespace EDDiscovery.Actions
         {
             ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
+            Action curact = curprog.GetStep(groups.IndexOf(g));
 
-            if (g.programstep != null)
+            if (curact != null)
             {
-                if (g.programstep.ConfigurationMenu(this, theme, currentvarlist))
-                    SetValue(g.value, g.programstep);
+                if (curact.ConfigurationMenu(this, theme, currentvarlist))
+                    SetValue(g.value, curact);
             }
         }
 
@@ -433,10 +390,11 @@ namespace EDDiscovery.Actions
         {
             ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
+            int gstep = groups.IndexOf(g);
 
-            int indexof = groups.IndexOf(g);
-            groups.Remove(g);
-            groups.Insert(indexof - 1, g);
+            groups.RemoveAt(gstep);
+            groups.Insert(gstep - 1, g);
+            curprog.MoveUp(gstep);
 
             RepositionGroups();
         }
@@ -445,19 +403,26 @@ namespace EDDiscovery.Actions
         {
             ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
+            Action curact = curprog.GetStep(groups.IndexOf(g));
 
-            string pname = ((ActionCall)g.programstep).GetProgramName();
-            if (pname != null)
-                EditProgram(g.programstep.UserData);
-            else
-                MessageBox.Show("No program name assigned");
+            if (curact != null)
+            {
+                string pname = ((ActionCall)curact).GetProgramName();
+                if (pname != null)
+                    EditProgram(curact.UserData);
+                else
+                    MessageBox.Show("No program name assigned");
+            }
         }
 
         private void Left_Clicked(object sender, EventArgs e)
         {
             ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
-            g.levelup++;
+            Action curact = curprog.GetStep(groups.IndexOf(g));
+            if (curact != null)
+                curact.LevelUp++;
+
             RepositionGroups();
         }
 
@@ -465,8 +430,9 @@ namespace EDDiscovery.Actions
         {
             ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
-
-            g.levelup = Math.Max(g.levelup - 1, 0);
+            Action curact = curprog.GetStep(groups.IndexOf(g));
+            if (curact != null)
+                curact.LevelUp = Math.Max(curact.LevelUp - 1, 0);
 
             RepositionGroups();
         }
@@ -475,9 +441,10 @@ namespace EDDiscovery.Actions
         {
             ExtendedControls.TextBoxBorder tb = sender as ExtendedControls.TextBoxBorder;
             Group g = (Group)tb.Tag;
+            Action curact = curprog.GetStep(groups.IndexOf(g));
 
-            if (tb.Enabled)
-                g.programstep.UpdateUserData(tb.Text);
+            if (tb.Enabled && curact != null )
+                curact.UpdateUserData(tb.Text);
         }
 
         #endregion
@@ -501,7 +468,7 @@ namespace EDDiscovery.Actions
             if (groups.Count == 0)
                 errorlist += "No action steps have been defined" + Environment.NewLine;
             else
-                errorlist += RepositionGroups();
+                errorlist += curprog.CalculateLevels(); 
 
             if (errorlist.Length > 0)
             {
@@ -527,14 +494,12 @@ namespace EDDiscovery.Actions
         {
             ActionProgram ap = new ActionProgram(textBoxBorderName.Text);
 
-            foreach (Group g in groups)
+            Action ac;
+            int step = 0;
+            while ((ac = curprog.GetStep(step++)) != null)
             {
-                if (g.programstep != null)    // don't include ones not set..
-                {
-                    g.programstep.LevelUp = g.levelup;
-                    g.programstep.Whitespace = g.whitespace;
-                    ap.Add(g.programstep);
-                }
+                if ( ac != null )
+                    ap.Add(ac);
             }
 
             return ap;
@@ -560,54 +525,13 @@ namespace EDDiscovery.Actions
 
         #region Text editing
 
-
         private void buttonExtEdit_Click(object sender, EventArgs e)
         {
-            try
+            curprog.Name = textBoxBorderName.Text;
+            if ( curprog.EditInEditor())
             {
-                string prog = Tools.AssocQueryString(Tools.AssocStr.Executable, ".txt");
-
-                string filename = textBoxBorderName.Text.Length > 0 ? textBoxBorderName.Text : "Default";
-
-                string editingloc = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Tools.SafeFileString(filename) + ".atf");
-
-                if (SaveText(editingloc))
-                {
-                    while (true)
-                    {
-                        System.Diagnostics.Process p = new System.Diagnostics.Process();
-                        p.StartInfo.FileName = prog;
-                        p.StartInfo.Arguments = editingloc.QuoteString();
-                        p.Start();
-                        p.WaitForExit();
-
-                        string err;
-                        ActionProgram ap = ActionProgram.FromFile(editingloc, filename, out err);
-                        if (ap == null)
-                        {
-                            DialogResult dr = MessageBox.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
-                                                "Click Retry to correct errors, Cancel to abort editing",
-                                                "Warning", MessageBoxButtons.RetryCancel);
-
-                            if (dr == DialogResult.Cancel)
-                                break;
-                        }
-                        else
-                        {
-                            DeleteAll();
-                            LoadProgram(ap);
-                            break;
-                        }
-                    }
-
-                    return;
-                }
+                LoadProgram(curprog);
             }
-            catch
-            {
-            }
-
-            MessageBox.Show("Unable to run text editor - check association for .txt files");
         }
 
         private void buttonExtLoad_Click(object sender, EventArgs e)
@@ -633,7 +557,6 @@ namespace EDDiscovery.Actions
                         MessageBox.Show("Failed to load text file" + Environment.NewLine + err);
                     else
                     {
-                        DeleteAll();
                         LoadProgram(ap);
                     }
                 }
@@ -654,36 +577,9 @@ namespace EDDiscovery.Actions
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                if (!SaveText(dlg.FileName))
+                curprog.Name = textBoxBorderName.Text;
+                if (!curprog.SaveText(dlg.FileName))
                     MessageBox.Show("Failed to save text file - check file path");
-            }
-        }
-
-        bool SaveText(string file)
-        {
-            try
-            {
-                using (System.IO.StreamWriter sr = new System.IO.StreamWriter(file))
-                {
-                    sr.WriteLine("NAME " + textBoxBorderName.Text + Environment.NewLine);
-
-                    foreach (Group g in groups)
-                    {
-                        if (g.programstep != null)    // don't include ones not set..
-                        {
-                            sr.Write(new String(' ', g.indentcomputed * 4));
-                            sr.WriteLine(g.programstep.Name + " " + g.programstep.UserData);
-                            if (g.whitespace > 0)
-                                sr.WriteLine("");
-                        }
-                    }
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
             }
         }
 
@@ -730,6 +626,8 @@ namespace EDDiscovery.Actions
                     Group g = groups.Find(x => Object.ReferenceEquals(x.panel, sender));
                     if (g != null)
                         rightclickstep = groups.IndexOf(g);
+                    else
+                        rightclickstep = -1;
                 }
             }
         }
@@ -754,65 +652,113 @@ namespace EDDiscovery.Actions
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            if (!IsMarked && rightclickstep >= 0 && rightclickstep < groups.Count)
-            {
-                groups[rightclickstep].marked = true;
-                groups[rightclickstep].panel.BackColor = Color.Red;
-            }
+            bool validrightclick = rightclickstep >= 0 && rightclickstep < groups.Count;
 
-            insertEntryAboveToolStripMenuItem.Enabled = whitespaceToolStripMenuItem.Enabled = removeWhitespaceToolStripMenuItem.Enabled =
-                deleteToolStripMenuItem.Enabled =  copyToolStripMenuItem.Enabled = groups.Find(x => x.marked) != null;
-            pasteToolStripMenuItem.Enabled = (rightclickstep != -1 && ActionProgramCopyBuffer.Count > 0);
+            insertEntryAboveToolStripMenuItem.Enabled = whitespaceToolStripMenuItem.Enabled = removeWhitespaceToolStripMenuItem.Enabled = validrightclick || IsMarked;
+            deleteToolStripMenuItem.Enabled = copyToolStripMenuItem.Enabled = validrightclick || IsMarked;
+            pasteToolStripMenuItem.Enabled = ActionProgramCopyBuffer.Count > 0 && rightclickstep >=0;
+
+            System.Diagnostics.Debug.WriteLine("Rightclick at " + rightclickstep + " marked " + IsMarked);
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine("Paste at " + rightclickstep);
-            if (rightclickstep != -1)
+            int p = rightclickstep;
+
+            if (IsMarked)     // marked.. we note the start, then delete them..
             {
-                int p = rightclickstep;
-
-                if (IsMarked)     // marked.. we note the start, then delete them..
-                {
-                    p = groups.FindIndex(x => x.marked);       // find index of first one, we will insert here
-                    deleteToolStripMenuItem_Click(sender, e); // delete any marked
-                }
-
-                foreach (Action a in ActionProgramCopyBuffer)
-                {
-                    CreateStep(a, p++);
-                }
-
-                RepositionGroups();
+                p = groups.FindIndex(x => x.marked);       // find index of first one, we will insert here
+                deleteToolStripMenuItem_Click(sender, e); // delete any marked
             }
+
+            foreach (Action a in ActionProgramCopyBuffer)
+            {
+                CreateStep(p,a);
+                curprog.Insert(p, a);
+                p++;
+            }
+
+            RepositionGroups();
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (IsMarked)
+            ActionProgramCopyBuffer.Clear();
+            AddRightClickToMarkIfRequired();
+
+            foreach (Group g in GetMarked())
             {
-                ActionProgramCopyBuffer.Clear();
-
-                foreach (Group g in GetMarked())
-                    ActionProgramCopyBuffer.Add(g.programstep);
-
-                UnMark();
-
-              //  System.Diagnostics.Debug.WriteLine("Copy " + ActionProgramCopyBuffer.Count);
+                Action curact = curprog.GetStep(groups.IndexOf(g));
+                if (curact != null)
+                    ActionProgramCopyBuffer.Add(curact);
             }
+
+            UnMark();
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<Group> marked = GetMarked();
+            AddRightClickToMarkIfRequired();
 
-            foreach (Group g in marked)
+            foreach (Group g in GetMarked())
             {
+                int gstep = groups.IndexOf(g);
                 g.panel.Controls.Clear();
                 panelVScroll.Controls.Remove(g.panel);
-                groups.Remove(g);
+                groups.RemoveAt(gstep);
+                curprog.Delete(gstep);
             }
 
+            RepositionGroups();
+        }
+
+        private void whitespaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddRightClickToMarkIfRequired();
+
+            foreach (Group g in GetMarked())
+            {
+                Action curact = curprog.GetStep(groups.IndexOf(g));
+                if (curact != null)
+                    curact.Whitespace = 1;
+            }
+
+            UnMark();
+            RepositionGroups();
+        }
+
+        private void removeWhitespaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddRightClickToMarkIfRequired();
+
+            foreach (Group g in GetMarked())
+            {
+                Action curact = curprog.GetStep(groups.IndexOf(g));
+                if (curact != null)
+                    curact.Whitespace = 0;
+            }
+
+            UnMark();
+            RepositionGroups();
+        }
+
+        private void insertEntryAboveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddRightClickToMarkIfRequired();
+
+            List<Group> ret = GetMarked();
+
+            if (ret.Count > 0)
+            {
+                int startindex = groups.IndexOf(ret[0]);
+                for (int i = 0; i < ret.Count; i++)
+                {
+                    CreateStep(startindex, null);
+                    curprog.Insert(startindex, null);
+                }
+            }
+
+            UnMark();
             RepositionGroups();
         }
 
@@ -839,40 +785,12 @@ namespace EDDiscovery.Actions
             }
         }
 
-        private void whitespaceToolStripMenuItem_Click(object sender, EventArgs e)
+        void AddRightClickToMarkIfRequired()
         {
-            foreach (Group g in GetMarked())
+            if (!IsMarked && rightclickstep >= 0)
             {
-                g.whitespace = 1;
+                groups[rightclickstep].marked = true;
             }
-
-            UnMark();
-            RepositionGroups();
-        }
-
-        private void removeWhitespaceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (Group g in GetMarked())
-            {
-                g.whitespace = 0;
-            }
-
-            UnMark();
-            RepositionGroups();
-        }
-
-        private void insertEntryAboveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<Group> ret = GetMarked();
-
-            if (ret.Count > 0)
-            {
-                for (int i = 0; i < ret.Count; i++)
-                    CreateStep(null, groups.IndexOf(ret[0]));
-            }
-
-            UnMark();
-            RepositionGroups();
         }
 
         #endregion

@@ -1015,6 +1015,11 @@ namespace EDDiscovery
             actioncontroller.ConfigureVoice();
         }
 
+        private void editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actioncontroller.ConfigureSpeechText();
+        }
+
         private void stopCurrentlyRunningActionProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
             actioncontroller.TerminateAll();
@@ -1039,6 +1044,7 @@ namespace EDDiscovery
         public int ActionRunOnEntry(HistoryEntry he, string triggertype) { return actioncontroller.ActionRunOnEntry(he, triggertype); }
 
         #endregion
+
     }
 }
 

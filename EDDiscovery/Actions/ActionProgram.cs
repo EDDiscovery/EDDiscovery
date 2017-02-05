@@ -4,33 +4,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
     public class ActionProgram
     {
         // name and program stored in memory.
-        protected string name;
         protected List<Action> programsteps;
 
-        public ActionProgram(string n)
+        public ActionProgram(string n = "")
         {
-            name = n;
+            Name = n;
             programsteps = new List<Action>();
         }
 
         public ActionProgram(string n , List<Action> steps)
         {
-            name = n;
+            Name = n;
             programsteps = steps;
         }
 
-        public string Name { get { return name; } }
+        public string Name { get; set; }
         public int Count { get { return programsteps.Count; } }
 
         public void Add(Action ap)
         {
             programsteps.Add(ap);
+        }
+
+        public void Insert(int pos, Action ap)
+        {
+            programsteps.Insert(pos,ap);
         }
 
         public void Clear()
@@ -45,6 +50,28 @@ namespace EDDiscovery.Actions
             else
                 return null;
         }
+
+        public void SetStep(int step, Action act)
+        {
+            while (step >= programsteps.Count)
+                programsteps.Add(null);
+
+            programsteps[step] = act;
+        }
+
+        public void MoveUp(int step)
+        {
+            Action act = programsteps[step];
+            programsteps.RemoveAt(step);
+            programsteps.Insert(step - 1, act);
+        }
+
+        public void Delete(int step)
+        {
+            if (step < programsteps.Count)
+                programsteps.RemoveAt(step);
+        }
+
 
         #region JSON in and out
 
@@ -211,6 +238,169 @@ namespace EDDiscovery.Actions
                 err += "No valid statements" + Environment.NewLine;
 
             return (err.Length == 0) ? new ActionProgram(progname, prog) : null;
+        }
+
+        public string CalculateLevels()         // go thru the program, and calc some values for editing purposes. Also look for errors
+        {
+            string errlist = "";
+
+            int structlevel = 0;
+            int[] structcount = new int[50];
+            Action.ActionType[] structtype = new Action.ActionType[50];
+
+            System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+            int step = 1;
+
+            foreach (Action act in programsteps)
+            {
+                if (act != null)
+                {
+                    act.calcAllowRight = act.calcAllowLeft = false;
+                    bool indo = structtype[structlevel] == Action.ActionType.Do;        // if in a DO..WHILE, and we are a WHILE, we don't indent.
+
+                    if (act.LevelUp > 0)
+                    {
+                        if ( structcount[structlevel] == 0 )
+                            errlist += "Step " + step.ToString(ct) + " no statements at indented level after " + structtype[structlevel].ToString() + " statement" + Environment.NewLine;
+
+                        if (act.LevelUp > structlevel)            // ensure its not too big.. this may happen due to copying
+                            act.LevelUp = structlevel;
+
+                        structlevel -= act.LevelUp;
+                        act.calcAllowRight = true;
+                    }
+
+                    structcount[structlevel]++;
+
+                    if (structlevel > 0 && structcount[structlevel] > 1)        // second further on can be moved back..
+                        act.calcAllowLeft = true;
+
+                    act.calcDisplayLevel = structlevel;
+
+                    if (act.Type == Action.ActionType.ElseIf)
+                    {
+                        if (structtype[structlevel] == Action.ActionType.Else)
+                            errlist += "Step " + step.ToString(ct) + " ElseIf after Else found" + Environment.NewLine;
+                        else if (structtype[structlevel] != Action.ActionType.If && structtype[structlevel] != Action.ActionType.ElseIf)
+                            errlist += "Step " + step.ToString(ct) + " ElseIf without IF found" + Environment.NewLine;
+                    }
+                    else if (act.Type == Action.ActionType.Else)
+                    {
+                        if (structtype[structlevel] == Action.ActionType.Else)
+                            errlist += "Step " + step.ToString(ct) + " Else after Else found" + Environment.NewLine;
+                        else if (structtype[structlevel] != Action.ActionType.If && structtype[structlevel] != Action.ActionType.ElseIf)
+                            errlist += "Step " + step.ToString(ct) + " Else without IF found" + Environment.NewLine;
+                    }
+
+                    if (act.Type == Action.ActionType.ElseIf || act.Type == Action.ActionType.Else)
+                    {
+                        structtype[structlevel] = act.Type;
+
+                        if (structlevel == 1)
+                            act.calcAllowLeft = false;         // can't move an ELSE back to level 0
+
+                        if (structlevel > 0)      // display else artifically indented.. display only
+                            act.calcDisplayLevel--;
+
+                        structcount[structlevel] = 0;   // restart count so we don't allow a left on next one..
+                    }
+                    else if (act.Type == Action.ActionType.If || (act.Type == Action.ActionType.While && !indo) ||
+                                act.Type == Action.ActionType.Do || act.Type == Action.ActionType.Loop)
+                    {
+                        structlevel++;
+                        structcount[structlevel] = 0;
+                        structtype[structlevel] = act.Type;
+                    }
+                }
+                else
+                {
+                    errlist += "Step " + step.ToString(ct) + " not defined" + Environment.NewLine;
+                }
+
+                step++;
+            }
+
+            if ( structlevel > 0 && structcount[structlevel] == 0 )
+            {
+                errlist += "At End of program, no statements present after " + structtype[structlevel].ToString() + " statement" + Environment.NewLine;
+            }
+
+            return errlist;
+        }
+
+        public bool SaveText(string file)
+        {
+            CalculateLevels();
+
+            try
+            {
+                using (System.IO.StreamWriter sr = new System.IO.StreamWriter(file))
+                {
+                    sr.WriteLine("NAME " +Name + Environment.NewLine);
+
+                    foreach (Action act in programsteps)
+                    {
+                        if (act != null)    // don't include ones not set..
+                        {
+                            sr.Write(new String(' ', act.calcDisplayLevel * 4));
+                            sr.WriteLine(act.Name + " " + act.UserData);
+                            if (act.Whitespace > 0)
+                                sr.WriteLine("");
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool EditInEditor()          // edit in editor, swap to this
+        {
+            try
+            {
+                string prog = Tools.AssocQueryString(Tools.AssocStr.Executable, ".txt");
+
+                string filename = Name.Length > 0 ? Name : "Default";
+
+                string editingloc = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Tools.SafeFileString(filename) + ".atf");
+
+                if (SaveText(editingloc))
+                {
+                    while (true)
+                    {
+                        System.Diagnostics.Process p = new System.Diagnostics.Process();
+                        p.StartInfo.FileName = prog;
+                        p.StartInfo.Arguments = editingloc.QuoteString();
+                        p.Start();
+                        p.WaitForExit();
+
+                        string err;
+                        ActionProgram apin = ActionProgram.FromFile(editingloc, filename, out err);
+                        if (apin == null)
+                        {
+                            DialogResult dr = MessageBox.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
+                                                "Click Retry to correct errors, Cancel to abort editing",
+                                                "Warning", MessageBoxButtons.RetryCancel);
+
+                            if (dr == DialogResult.Cancel)
+                                return false;
+                        }
+                        else
+                        {
+                            programsteps = apin.programsteps;
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            MessageBox.Show("Unable to run text editor - check association for .txt files");
+            return false;
         }
 
         #endregion
