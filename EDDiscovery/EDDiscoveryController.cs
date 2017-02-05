@@ -194,7 +194,10 @@ namespace EDDiscovery
                     OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
                 });
             }
-            catch { }
+            catch
+            {
+                System.Diagnostics.Debug.WriteLine("******* Exception trying to write to ui thread log");
+            }
         }
 
         public void ReportProgress(int percent, string message)

@@ -23,6 +23,10 @@ namespace EDDiscovery.Actions
         public int LevelUp { get { return levelup; } set { levelup = value; } }
         public int Whitespace { get { return whitespace; } set { whitespace = value; } }
 
+        public int calcDisplayLevel { get; set; }       // NOT stored, for editing purposes, what is the display level?
+        public bool calcAllowRight { get; set; }        // NOT stored
+        public bool calcAllowLeft { get; set; }         // NOT stored
+
         public virtual bool AllowDirectEditingOfUserData { get { return false; } }    // and allow editing?
 
         public virtual string DisplayedUserData { get { return userdata; } }        // null if you dont' want to display
