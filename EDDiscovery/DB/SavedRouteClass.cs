@@ -22,7 +22,7 @@ using System.Data.Common;
 
 namespace EDDiscovery.DB
 {
-    public class SavedRouteClass
+    public class SavedRouteClass : IEquatable<SavedRouteClass>
     {
         public SavedRouteClass()
         {
@@ -82,7 +82,7 @@ namespace EDDiscovery.DB
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return (Name == null) ? 0 : Name.GetHashCode();
         }
 
         public bool Add()
