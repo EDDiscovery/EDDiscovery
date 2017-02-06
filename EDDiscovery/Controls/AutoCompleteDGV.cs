@@ -29,7 +29,7 @@ namespace ExtendedControls
             set
             {
                 if (value != null && !value.GetType().IsAssignableFrom(typeof(AutoCompleteDGVCell)))
-                    throw new InvalidCastException("value is not an AutoCompleteSystemsCell");
+                    throw new InvalidCastException("value is not an AutoCompleteDGVCell");
                 base.CellTemplate = value;
             }
         }
@@ -112,7 +112,6 @@ namespace ExtendedControls
                 SelectAll();
             else
                 SelectionStart = SelectionLength = 0;
-            selectAll = true;
         }
 
         protected override void OnTextChanged(EventArgs e)
