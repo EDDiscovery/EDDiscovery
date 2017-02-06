@@ -69,20 +69,16 @@ namespace ExtendedControls
 
         private void AutoCompleteTextBox_HandleDestroyed(object sender, EventArgs e)
         {
-            RemoveAutoCompletor();      // make sure auto completor is inert, else we get exceptions
-        }
-
-        public void RemoveAutoCompletor()       // if closing on us.. call before exitt
-        {
-            waitforautotimer.Stop();
-            restartautocomplete = false;
-
-            if (ThreadAutoComplete != null && ThreadAutoComplete.IsAlive)
+            if (func != null)
             {
-                ThreadAutoComplete.Join();
-            }
+                waitforautotimer.Stop();
+                restartautocomplete = false;
 
-            func = null;
+                if (ThreadAutoComplete != null && ThreadAutoComplete.IsAlive)
+                {
+                    ThreadAutoComplete.Join();
+                }
+            }
         }
 
         protected void TextChangeEventHandler(object sender, EventArgs e)
