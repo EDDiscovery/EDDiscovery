@@ -802,6 +802,9 @@
     <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
+      <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\RichTextBoxScroll.resx">
       <DependentUpon>RichTextBoxScroll.cs</DependentUpon>
     </EmbeddedResource>

@@ -58,11 +58,31 @@ namespace ExtendedControls
             waitforautotimer = new System.Windows.Forms.Timer();
             waitforautotimer.Interval = 200;
             waitforautotimer.Tick += TimeOutTick;
+            HandleDestroyed += AutoCompleteTextBox_HandleDestroyed;
+
         }
 
         public void SetAutoCompletor(PerformAutoComplete p)
         {
             func = p;
+        }
+
+        private void AutoCompleteTextBox_HandleDestroyed(object sender, EventArgs e)
+        {
+            RemoveAutoCompletor();      // make sure auto completor is inert, else we get exceptions
+        }
+
+        public void RemoveAutoCompletor()       // if closing on us.. call before exitt
+        {
+            waitforautotimer.Stop();
+            restartautocomplete = false;
+
+            if (ThreadAutoComplete != null && ThreadAutoComplete.IsAlive)
+            {
+                ThreadAutoComplete.Join();
+            }
+
+            func = null;
         }
 
         protected void TextChangeEventHandler(object sender, EventArgs e)
@@ -105,10 +125,8 @@ namespace ExtendedControls
                 //Console.WriteLine("{0} finish func ret {1} restart {2}", Environment.TickCount % 10000, autocompletestrings.Count, restartautocomplete);
             } while (restartautocomplete == true);
 
-            //Console.WriteLine("{0} Finish AC", Environment.TickCount % 10000);
             Invoke((MethodInvoker)delegate { AutoCompleteFinished(); });
         }
-
 
         private void AutoCompleteFinished()
         {
