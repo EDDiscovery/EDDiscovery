@@ -23,7 +23,7 @@ using System.Drawing.Drawing2D;
 
 namespace ExtendedControls
 {
-    class AutoCompleteTextBox : TextBoxBorder
+    public class AutoCompleteTextBox : TextBoxBorder
     {
         // programtic change of text does not make autocomplete execute.
         public override string Text { get { return base.Text; } set { disableauto = true; base.Text = value; disableauto = false; } }
