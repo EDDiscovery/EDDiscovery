@@ -226,6 +226,7 @@
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Conditions\ConditionVariables.cs" />
+    <Compile Include="Controls\AutoCompleteDGV.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
