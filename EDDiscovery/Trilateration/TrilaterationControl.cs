@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using EDDiscovery.DB;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.DB;
+using ExtendedControls;
 
 namespace EDDiscovery
 {
@@ -110,26 +111,11 @@ namespace EDDiscovery
 
         private void dataGridViewDistances_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            try
+            if (dataGridViewDistances.CurrentCell.ColumnIndex == 0 && e.Control != null)
             {
-                var textbox = (TextBox)e.Control;
-
-                if (dataGridViewDistances.CurrentCell.ColumnIndex != 0)
-                {
-                    textbox.AutoCompleteMode = AutoCompleteMode.None;
-                    return;
-                }
-
-                // TBD Used to be an autocomplete..
-            }
-            catch (Exception ex)
-            {
-                this.BeginInvoke(new MethodInvoker(() =>
-                {
-                    LogTextHighlight("ViewPushedSystems Exception:" + ex.Message);
-                    LogText(ex.StackTrace);
-                }));
-
+                AutoCompleteDGVEditControl ctl = (AutoCompleteDGVEditControl)e.Control;
+                if (ctl != null)
+                    ctl.SetAutoCompletor(SystemClass.ReturnSystemListForAutoComplete);
             }
         }
 
