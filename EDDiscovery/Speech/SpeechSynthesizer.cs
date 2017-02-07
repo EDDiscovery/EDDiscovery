@@ -106,10 +106,14 @@ namespace EDDiscovery.Speech
         public QueuedSynthesizer()
         {
             phrases = new List<Phrase>();
-#if __MonoCS__
-            speechengine = new DummySpeechEngine();
+#if !__MonoCS__
+            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+                speechengine = new WindowsSpeechEngine();
+            else
+                speechengine = new DummySpeechEngine();
 #else
-            speechengine = new WindowsSpeechEngine();
+            speechengine = new DummySpeechEngine();
 #endif
             speechengine.SpeakingCompleted += Synth_SpeakCompleted;
         }
