@@ -199,14 +199,24 @@ namespace EDDiscovery
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-#if __MonoCS__
+#if !__MonoCS__
+            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                audiodriverwave = new Audio.AudioDriverCSCore();
+                audiodriverspeech = new Audio.AudioDriverCSCore();
+                speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
+            }
+            else
+            {
+                audiodriverwave = new Audio.AudioDriverDummy();
+                audiodriverspeech = new Audio.AudioDriverDummy();
+                speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
+            }
+#else
             audiodriverwave = new Audio.AudioDriverDummy();
             audiodriverspeech = new Audio.AudioDriverDummy();
             speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
-#else
-            audiodriverwave = new Audio.AudioDriverCSCore();
-            audiodriverspeech = new Audio.AudioDriverCSCore();
-            speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
 #endif
             audioqueuewave = new Audio.AudioQueue(audiodriverwave);
             audioqueuespeech = new Audio.AudioQueue(audiodriverspeech);
