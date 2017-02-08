@@ -1039,6 +1039,13 @@ namespace EDDiscovery
         public int ActionRunOnEntry(HistoryEntry he, string triggertype) { return actioncontroller.ActionRunOnEntry(he, triggertype); }
 
         #endregion
+
+        private void cAPIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCAPI frm = new FormCAPI();
+
+            frm.Show();
+        }
     }
 }
 
