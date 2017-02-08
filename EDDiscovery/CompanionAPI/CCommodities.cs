@@ -38,8 +38,6 @@ namespace EDDiscovery.CompanionAPI
                 demand = JSONHelper.GetInt(jo["demand"]);
                 categoryname = JSONHelper.GetStringDef(jo["categoryname"]);
 
-
-
                 return true;
             }
             catch
