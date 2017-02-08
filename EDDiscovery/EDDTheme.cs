@@ -747,7 +747,7 @@ namespace EDDiscovery2
 
                 myControl.Font = fnt;
 
-                if (myControl is AutoCompleteTextBox || myControl is AutoCompleteDGVEditControl) // derived from text box
+                if (myControl is AutoCompleteTextBox || myControl is AutoCompleteDGVColumn.CellEditControl) // derived from text box
                 {
                     AutoCompleteTextBox actb = myControl as AutoCompleteTextBox;
                     actb.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
