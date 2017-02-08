@@ -42,6 +42,7 @@ namespace EDDiscovery
         public TrilaterationControl()
         {
             InitializeComponent();
+            ColumnSystem.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -107,16 +108,6 @@ namespace EDDiscovery
                 }
             }
             return systems;
-        }
-
-        private void dataGridViewDistances_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            if (dataGridViewDistances.CurrentCell.ColumnIndex == 0 && e.Control != null)
-            {
-                AutoCompleteDGVEditControl ctl = (AutoCompleteDGVEditControl)e.Control;
-                if (ctl != null)
-                    ctl.SetAutoCompletor(SystemClass.ReturnSystemListForAutoComplete);
-            }
         }
 
         private void dataGridViewDistances_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)

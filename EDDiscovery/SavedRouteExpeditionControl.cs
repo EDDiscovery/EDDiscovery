@@ -131,6 +131,7 @@ namespace EDDiscovery
         {
             InitializeComponent();
             _currentRoute = new SavedRouteClass("");
+            SystemName.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -554,16 +555,6 @@ namespace EDDiscovery
                 //Force the totals to update
                 UpdateSystemRows();
             }
-        }
-
-        private void dataGridViewRouteSystems_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            if (dataGridViewRouteSystems.CurrentCell.ColumnIndex != 0 || e.Control == null)
-                return;
-
-            AutoCompleteDGVEditControl ctl = (AutoCompleteDGVEditControl)e.Control;
-            if (ctl != null)
-                ctl.SetAutoCompletor(SystemClass.ReturnSystemListForAutoComplete);
         }
 
         private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)
