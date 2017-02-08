@@ -279,7 +279,7 @@ namespace EDDiscovery2
         
         public EDDToolStripRenderer toolstripRenderer;
 
-        public EDDTheme()
+        private EDDTheme()
         {
             toolstripRenderer = new EDDToolStripRenderer();
             themelist = new List<Settings>();           // theme list in
