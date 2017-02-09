@@ -833,11 +833,10 @@ namespace EDDiscovery
         {
             double dist;
             double dx, dy, dz;
+            var list = distlist.Values.ToList();
 
             foreach (HistoryEntry pos in historylist)
             {
-                var list = distlist.Values.ToList();
-
                 if (pos.System.HasCoordinate && list.FindIndex(qx => qx.name.Equals(pos.System.name, StringComparison.InvariantCultureIgnoreCase)) == -1)
                 {
                     dx = (pos.System.x - x);
