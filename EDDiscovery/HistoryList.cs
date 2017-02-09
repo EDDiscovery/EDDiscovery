@@ -447,7 +447,7 @@ namespace EDDiscovery
         {
             if ((snc == null && txt.Length > 0) || (snc != null && !snc.Note.Equals(txt))) // if no system note, and text,  or system not is not text
             {
-                if (snc != null && (snc.Journalid == Journalid || snc.Journalid == 0 || (snc.Name.Equals(System.name, StringComparison.InvariantCultureIgnoreCase) && snc.EdsmId <= 0) || (snc.EdsmId > 0 && snc.EdsmId == System.id_edsm)))           // already there, update
+                if (snc != null && (snc.Journalid == Journalid || snc.Journalid == 0 || (snc.EdsmId > 0 && snc.EdsmId == System.id_edsm) || (snc.Name.Equals(System.name, StringComparison.InvariantCultureIgnoreCase) && snc.EdsmId <= 0)))           // already there, update
                 {
                     snc.Note = txt;
                     snc.Time = DateTime.Now;
@@ -680,8 +680,9 @@ namespace EDDiscovery
 
         public int GetFSDBoostUsed(DateTime start, DateTime to)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal   < to select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
-            return (from s in list where s.BoostUsed == true select s  ).Count();
+            return (from s in historylist
+                    where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to && ((JournalFSDJump)s.journalEntry).BoostUsed == true)
+                    select s).Count();
         }
 
 
@@ -724,8 +725,7 @@ namespace EDDiscovery
 
         public List<JournalScan> GetScanList(DateTime start, DateTime to)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
-            return list;
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
 
@@ -864,7 +864,7 @@ namespace EDDiscovery
             if (fsdjump)
                 return historylist.FindLast(x => x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             else
-                return historylist.FindLast(x => x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && x.IsFSDJump);
+                return historylist.FindLast(x => x.IsFSDJump && x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public ISystem FindSystem(string name, EDSM.GalacticMapping glist = null)        // in system or name
