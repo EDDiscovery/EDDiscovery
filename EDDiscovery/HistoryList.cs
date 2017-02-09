@@ -844,6 +844,8 @@ namespace EDDiscovery
                     dz = (pos.System.z - z);
                     dist = dx * dx + dy * dy + dz * dz;
 
+                    list.Add(pos.System);
+
                     if (dist >= 0.1 || !removezerodiststar)
                     {
                         if (distlist.Count < maxitems)          // if less than max, add..
