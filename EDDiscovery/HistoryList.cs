@@ -646,11 +646,15 @@ namespace EDDiscovery
 
         public int GetVisitsCount(string name, long edsmid = 0)
         {
-            return historylist.Where(he => he.IsFSDJump && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || he.System.id_edsm == edsmid)).Count();
+            return (from he in historylist.AsParallel()
+                   where (he.IsFSDJump && (edsmid <= 0 || he.System.id_edsm == edsmid) && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                   select he).Count();
         }
         public List<JournalScan> GetScans(string name, long edsmid = 0)
         {
-            return (from s in historylist where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || s.System.id_edsm == edsmid)) select s.journalEntry as JournalScan).ToList<JournalScan>();
+            return (from s in historylist.AsParallel()
+                    where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && (edsmid <= 0 || s.System.id_edsm == edsmid) && s.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
         public int GetFSDJumps( TimeSpan t )
