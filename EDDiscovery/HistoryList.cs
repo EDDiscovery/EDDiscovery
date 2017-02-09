@@ -837,7 +837,7 @@ namespace EDDiscovery
 
             foreach (HistoryEntry pos in historylist)
             {
-                if (pos.System.HasCoordinate && list.FindIndex(qx => qx.name.Equals(pos.System.name, StringComparison.InvariantCultureIgnoreCase)) == -1)
+                if (pos.System.HasCoordinate && !list.Any(qx => (qx.id == pos.System.id || qx.name.Equals(pos.System.name, StringComparison.InvariantCultureIgnoreCase))))
                 {
                     dx = (pos.System.x - x);
                     dy = (pos.System.y - y);
