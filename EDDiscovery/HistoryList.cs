@@ -447,7 +447,7 @@ namespace EDDiscovery
         {
             if ((snc == null && txt.Length > 0) || (snc != null && !snc.Note.Equals(txt))) // if no system note, and text,  or system not is not text
             {
-                if (snc != null && (snc.Journalid == Journalid || snc.Journalid == 0 || (snc.EdsmId > 0 && snc.EdsmId == System.id_edsm) || (snc.Name.Equals(System.name, StringComparison.InvariantCultureIgnoreCase) && snc.EdsmId <= 0)))           // already there, update
+                if (snc != null && (snc.Journalid == Journalid || snc.Journalid == 0 || (snc.EdsmId > 0 && snc.EdsmId == System.id_edsm) || (snc.EdsmId <= 0 && snc.Name.Equals(System.name, StringComparison.InvariantCultureIgnoreCase))))           // already there, update
                 {
                     snc.Note = txt;
                     snc.Time = DateTime.Now;
