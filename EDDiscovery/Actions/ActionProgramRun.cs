@@ -185,7 +185,7 @@ namespace EDDiscovery.Actions
 
         public void ResumeAfterPause()          // used when async..
         {
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Resume code " + this.name);
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Resume code " + this.Name);
             actionrun.ResumeAfterPause();
         }
 

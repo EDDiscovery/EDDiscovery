@@ -418,6 +418,7 @@ namespace EDDiscovery2
             c.fname.Size = new Size(140, 24);
             c.fname.SetAutoCompletor(AutoCompletor);
             c.fname.Tag = g;
+            c.fname.DropDownWidth = 200;
             if (initialfname != null)
                 c.fname.Text = initialfname;
             g.panel.Controls.Add(c.fname);                                                // 1st control

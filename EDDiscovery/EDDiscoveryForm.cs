@@ -1015,6 +1015,11 @@ namespace EDDiscovery
             actioncontroller.ConfigureVoice();
         }
 
+        private void editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actioncontroller.ConfigureSpeechText();
+        }
+
         private void stopCurrentlyRunningActionProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
             actioncontroller.TerminateAll();
