@@ -388,7 +388,6 @@ namespace EDDiscovery2.DB
         public static List<MaterialCommodities> GetMaterialsCommoditiesList { get { return loadedlist; } }
     }
 
-
     public class MaterialCommoditiesList
     {
         private List<MaterialCommodities> list;
@@ -484,18 +483,11 @@ namespace EDDiscovery2.DB
         {
             MaterialCommoditiesList newmc = (oldml == null) ? new MaterialCommoditiesList() : oldml;
 
-            Type jtype = JournalEntry.TypeOfJournalEntry(je.EventTypeStr);
-
-            if (jtype != null)
+            if (je is IMaterialCommodityJournalEntry)
             {
-                System.Reflection.MethodInfo m = jtype.GetMethod("MaterialList"); // see if the class defines this function..
-
-                if (m != null)                                      // event wants to change it
-                {
-                    newmc = newmc.Clone(clearzeromaterials,clearzerocommodities);          // so we need a new one
-
-                    m.Invoke(Convert.ChangeType(je, jtype), new Object[] { newmc, conn });
-                }
+                IMaterialCommodityJournalEntry e = je as IMaterialCommodityJournalEntry;
+                newmc = newmc.Clone(clearzeromaterials,clearzerocommodities);          // so we need a new one
+                e.MaterialList(newmc, conn);
             }
 
             return newmc;

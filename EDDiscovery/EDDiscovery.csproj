@@ -259,6 +259,7 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
+    <Compile Include="EliteDangerous\IMaterialCommodityJournalEvent.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>
