@@ -180,7 +180,7 @@ namespace EDDiscovery
                             break;
 
                         case Types.TMaterialCommodity:
-                            EDDiscovery2.DB.MaterialCommodities mc = EDDiscovery2.DB.MaterialCommodities.GetCachedMaterial(value);
+                            EDDiscovery2.DB.MaterialCommodity mc = EDDiscovery2.DB.MaterialCommodity.GetCachedMaterial(value);
                             if (mc != null)
                                 value = mc.name;
 

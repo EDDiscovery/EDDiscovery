@@ -362,13 +362,13 @@ namespace EDDiscovery
             HistoryEntry he = userControlTravelGrid.GetCurrentHistoryEntry;
             long jid = JournalEntry.AddEDDItemSet(EDDiscoveryForm.EDDConfig.CurrentCommander.Nr, he.EventTimeUTC, (he.EntryType == JournalTypeEnum.EDDItemSet) ? he.Journalid : 0, changelist);
             userControlTravelGrid.SetPreferredJIDAfterRefresh(jid);         // tell the main grid, please find and move here
-            MaterialCommodities.LoadCacheList();        // in case we did anything..
+            MaterialCommodity.LoadCacheList();        // in case we did anything..
             _discoveryForm.RefreshHistoryAsync();
         }
 
         void MaterialCommodityRequireRefresh()
         {
-            MaterialCommodities.LoadCacheList();        // in case we did anything..
+            MaterialCommodity.LoadCacheList();        // in case we did anything..
             _discoveryForm.RefreshHistoryAsync();
         }
 
