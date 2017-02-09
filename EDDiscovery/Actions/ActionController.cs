@@ -74,7 +74,6 @@ namespace EDDiscovery.Actions
             frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
 
             usercontrolledglobalvariables = frm.userglobalvariables;
-            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
             globalvariables = new ConditionVariables(internalglobalvariables, usercontrolledglobalvariables);    // remake
 
             ActionConfigureKeys();
@@ -131,6 +130,24 @@ namespace EDDiscovery.Actions
 
         }
 
+        public void ConfigureSpeechText()
+        {
+            if (internalglobalvariables.ContainsKey("SpeechDefinitionFile"))
+            {
+                string prog = internalglobalvariables["SpeechDefinitionFile"];
+
+                Tuple<ActionFile, ActionProgram> ap = actionfiles.FindProgram(prog);
+
+                if (ap != null && ap.Item2.EditInEditor())
+                {
+                    ap.Item1.SaveFile();
+                    return;
+                }
+            }
+
+            MessageBox.Show("Voice pack not loaded, or needs updating to support this functionality");
+        }
+
         public void ActionRunOnRefresh()
         {
             string prevcommander = internalglobalvariables.ContainsKey("Commander") ? internalglobalvariables["Commander"] : "None";
@@ -178,7 +195,7 @@ namespace EDDiscovery.Actions
             return ale.Count;
         }
 
-        public int ActionRunOnEvent(string name, string triggertype)
+        public int ActionRunOnEvent(string name, string triggertype, ConditionVariables additionalvars = null)
         {
             List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(name);
 
@@ -193,6 +210,9 @@ namespace EDDiscovery.Actions
                 {
                     ConditionVariables eventvars = new ConditionVariables();
                     Actions.ActionVars.TriggerVars(eventvars, name, triggertype);
+
+                    if (additionalvars != null)
+                        eventvars.Add(additionalvars);
 
                     actionfiles.RunActions(ale, actionrunasync, eventvars);  // add programs to action run
 
@@ -227,6 +247,7 @@ namespace EDDiscovery.Actions
         {
             actionrunasync.WaitTillFinished(10000);
             Actions.ActionSay.KillSpeech();
+            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
         }
 
         public void LogLine(string s)
