@@ -144,14 +144,14 @@ namespace EDDiscovery.EliteDangerous
             return false;
         }
 
-        public IEnumerable<JournalEntry> ReadJournalLog()
+        public IEnumerable<JournalEntry> ReadJournalLog(bool continueOnError = false)
         {
             JournalEntry entry;
             bool resetOnError = false;
             while (ReadJournalLog(out entry, resetOnError: resetOnError))
             {
                 yield return entry;
-                resetOnError = true;
+                resetOnError = !continueOnError;
             }
         }
     }
