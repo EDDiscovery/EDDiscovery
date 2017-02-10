@@ -95,7 +95,7 @@ namespace EDDiscovery.EliteDangerous
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
-                    List<JournalEntry> entries = reader.ReadJournalLog().ToList();      // this may create new commanders, and may write to the TLU db
+                    List<JournalEntry> entries = reader.ReadJournalLog(true).ToList();      // this may create new commanders, and may write to the TLU db
                     ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
 
                     using (DbTransaction tn = cn.BeginTransaction())
