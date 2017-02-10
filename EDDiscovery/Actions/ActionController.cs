@@ -68,7 +68,7 @@ namespace EDDiscovery.Actions
             events.Add("onKeyPress");
             //events.Add("onClosedown");
 
-            frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, usercontrolledglobalvariables, actionfiles, discoveryform.theme);
+            frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, usercontrolledglobalvariables, actionfiles, discoveryform);
             frm.TopMost = discoveryform.FindForm().TopMost;
 
             frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
@@ -87,7 +87,7 @@ namespace EDDiscovery.Actions
             if (dmf.performedupdate)
             {
                 actionrunasync.TerminateAll();
-                Actions.ActionSay.KillSpeech();
+                discoveryform.AudioQueueSpeech.StopAll();
                 ReLoad();
                 ActionRunOnEvent("onStartup", "ProgramEvent");
             }
@@ -95,20 +95,20 @@ namespace EDDiscovery.Actions
 
         public void ConfigureVoice()
         {
-            Speech.SpeechConfigure cfg = new Speech.SpeechConfigure();
 
-            string voicename = usercontrolledglobalvariables.ContainsKey(Actions.ActionSay.globalvarspeechvoice) ? usercontrolledglobalvariables[Actions.ActionSay.globalvarspeechvoice] : "Default";
-            string volume = usercontrolledglobalvariables.ContainsKey(Actions.ActionSay.globalvarspeechvolume) ? usercontrolledglobalvariables[Actions.ActionSay.globalvarspeechvolume] : "Default";
-            string rate = usercontrolledglobalvariables.ContainsKey(Actions.ActionSay.globalvarspeechrate) ? usercontrolledglobalvariables[Actions.ActionSay.globalvarspeechrate] : "Default";
+            string voicename = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechvoice, "Default");
+            string volume = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechvolume,"Default");
+            string rate = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechrate,"Default");
+            ConditionVariables effects = new ConditionVariables( usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
 
-            Speech.QueuedSynthesizer synth = new Speech.QueuedSynthesizer();           // STATIC only one synth throught the whole program
-
-            cfg.Init("Select voice synthesizer defaults", "Configure Voice Synthesis", discoveryform.theme,
-                        null, false,
-                        synth.GetVoiceNames(),
+            Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
+            cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
+                        "Select voice synthesizer defaults", "Configure Voice Synthesis", discoveryform.theme,
+                        null, false, false,
                         voicename,
                         volume,
-                        rate);
+                        rate, 
+                        effects);
 
             if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
             {
@@ -120,6 +120,7 @@ namespace EDDiscovery.Actions
                         SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvoice, cfg.VoiceName);
                         SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvolume, cfg.Volume);
                         SetUserControlledGlobal(Actions.ActionSay.globalvarspeechrate, cfg.Rate);
+                        SetUserControlledGlobal(Actions.ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
 
                         return;
                     }
@@ -167,7 +168,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        public int ActionRunOnEntry(HistoryEntry he, string triggertype, string flagstart = null)       //set flagstart to be the first flag of the actiondata..
+        public int ActionRunOnEntry(HistoryEntry he, string triggertype, string flagstart = null, bool noexecute =false)       //set flagstart to be the first flag of the actiondata..
         {
             List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(he.journalEntry.EventTypeStr, flagstart);
 
@@ -188,7 +189,8 @@ namespace EDDiscovery.Actions
 
                     actionfiles.RunActions(ale, actionrunasync, eventvars);  // add programs to action run
 
-                    actionrunasync.Execute();       // will execute
+                    if ( !noexecute )
+                        actionrunasync.Execute();       // will execute
                 }
             }
 
@@ -246,7 +248,6 @@ namespace EDDiscovery.Actions
         public void CloseDown()
         {
             actionrunasync.WaitTillFinished(10000);
-            Actions.ActionSay.KillSpeech();
             SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
         }
 

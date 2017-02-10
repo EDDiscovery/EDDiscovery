@@ -24,7 +24,7 @@ namespace EDDiscovery2
         List<string> eventlist;
         List<string> additionalfieldnames;          // must be set
         string initialtitle;
-        EDDiscovery2.EDDTheme theme;
+        EDDiscoveryForm discoveryform;
         bool allowoutercond;
 
         bool IsActionsActive { get { return actionfilelist != null; } }
@@ -111,28 +111,28 @@ namespace EDDiscovery2
 
         // used to start when just filtering.. uses a fixed event list
 
-        public void InitFilter(string t, List<string> varfields, EDDiscovery2.EDDTheme th, ConditionLists j = null)
+        public void InitFilter(string t, List<string> varfields, EDDiscoveryForm frm, ConditionLists j = null)
         {
             List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
             events.Add("All");
-            Init(t, events, varfields, true, th);
+            Init(t, events, varfields, true, frm);
             LoadConditions(j);
         }
 
         // used to start when inside a condition of an IF of a program action
 
-        public void InitCondition(string t, List<string> varfields, EDDiscovery2.EDDTheme th, ConditionLists j = null)
+        public void InitCondition(string t, List<string> varfields, EDDiscoveryForm frm, ConditionLists j = null)
         {
-            Init(t, null, varfields, true, th);
+            Init(t, null, varfields, true, frm);
             LoadConditions(j);
         }
 
         public void InitAction(string t, List<string> el, List<string> varfields , ConditionVariables ug, 
-                            EDDiscovery.Actions.ActionFileList acfilelist , EDDiscovery2.EDDTheme th )
+                            EDDiscovery.Actions.ActionFileList acfilelist , EDDiscoveryForm frm )
         {
             actionfilelist = acfilelist;
             userglobalvariables = ug;
-            Init(t, el, varfields, false, th);
+            Init(t, el, varfields, false, frm);
             LoadConditions(acfilelist.CurConditions);
         }
 
@@ -141,9 +141,9 @@ namespace EDDiscovery2
         public void Init(string t, List<string> el,                             // list of event types or null if event types not used
                                    List<string> varfields,                      // list of additional variable/field names (must be set)
                                    bool outerconditions,                        // outc selects if group outer action can be selected, else its OR
-                                   EDDTheme th)
+                                   EDDiscoveryForm form)
         {
-            theme = th;
+            discoveryform = form;
             eventlist = el;
             additionalfieldnames = varfields;
             allowoutercond = outerconditions;
@@ -152,7 +152,7 @@ namespace EDDiscovery2
             // sizes are the sizes of the controls and gaps
             condxoffset = ((eventlist != null) ? (140 + 8) : 0) + ((actionfilelist != null) ? (140 + 8 + 24 + 8 + 96 + 8) : 0) + panelxmargin + 8;
 
-            bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
+            bool winborder = discoveryform.theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             initialtitle = this.Text = label_index.Text = t;
 
@@ -186,7 +186,7 @@ namespace EDDiscovery2
                     foreach (ConditionLists.ConditionEntry f in fe.fields)
                         CreateConditionInt(g, f.itemname, ConditionLists.MatchNames[(int)f.matchtype], f.matchstring);
 
-                    theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+                    discoveryform.theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
                     groups.Add(g);
                 }
@@ -244,7 +244,7 @@ namespace EDDiscovery2
                     CreateConditionInt(g, null, null, null);
             }
 
-            theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            discoveryform.theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
             groups.Add(g);
             panelVScroll.Controls.Add(g.panel);
@@ -404,7 +404,7 @@ namespace EDDiscovery2
         void CreateCondition(Group g, string initialfname = null, string initialcond = null, string initialvalue = null )
         {
             CreateConditionInt(g, initialfname, initialcond, initialvalue);
-            theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            discoveryform.theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             FixUpGroups();
         }
 
@@ -708,7 +708,7 @@ namespace EDDiscovery2
             else
                 fieldnames.AddRange(additionalfieldnames);
 
-            apf.Init("Action program", theme, fieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
+            apf.Init("Action program", discoveryform, fieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
 
             DialogResult res = apf.ShowDialog();
 
@@ -780,7 +780,7 @@ namespace EDDiscovery2
                 if (!progname.Equals("New"))
                     p = actionfilelist.CurPrograms.Get(comboBoxCustomEditProg.Text);
 
-                apf.Init("Action program", theme, additionalfieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), "", ModifierKeys.HasFlag(Keys.Shift));
+                apf.Init("Action program", discoveryform, additionalfieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), "", ModifierKeys.HasFlag(Keys.Shift));
 
                 DialogResult res = apf.ShowDialog();
 
@@ -809,7 +809,7 @@ namespace EDDiscovery2
             cond.FromActionDataString(g.actionparas.Text, out flag);
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Input parameters and flags to pass to program on run", theme, cond, showone: true, showrefresh: true, showrefreshstate: flag.Equals(ConditionVariables.flagRunAtRefresh));
+            avf.Init("Input parameters and flags to pass to program on run", discoveryform.theme, cond, showone: true, showrefresh: true, showrefreshstate: flag.Equals(ConditionVariables.flagRunAtRefresh));
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
@@ -820,7 +820,7 @@ namespace EDDiscovery2
         private void buttonExtGlobals_Click(object sender, EventArgs e)
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Global User variables to pass to program on run", theme, userglobalvariables, showone:true);
+            avf.Init("Global User variables to pass to program on run", discoveryform.theme, userglobalvariables, showone:true);
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
@@ -850,7 +850,7 @@ namespace EDDiscovery2
                 ActionProgramForm apf = new ActionProgramForm();
                 apf.EditProgram += EditProgram;
 
-                apf.Init("Action program", theme, additionalfieldnames, p.Item1.name, p.Item2, p.Item1.actionprogramlist.GetActionProgramList(), "");
+                apf.Init("Action program", discoveryform, additionalfieldnames, p.Item1.name, p.Item2, p.Item1.actionprogramlist.GetActionProgramList(), "");
 
                 DialogResult res = apf.ShowDialog();
 
@@ -1182,7 +1182,7 @@ namespace EDDiscovery2
         private void configureInstallationValuesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Configuration items for installation - specialist use", theme, actionfilelist.CurInstallationVariables, showone: false);
+            avf.Init("Configuration items for installation - specialist use", discoveryform.theme, actionfilelist.CurInstallationVariables, showone: false);
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {

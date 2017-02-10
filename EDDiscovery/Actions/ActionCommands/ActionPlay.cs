@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionPlay : Action
     {
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             string promptValue = PromptSingleLine.ShowDialog(parent, "File to play", UserData, "Configure Play Command");
             if (promptValue != null)
