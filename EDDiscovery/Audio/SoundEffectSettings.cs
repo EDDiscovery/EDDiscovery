@@ -11,6 +11,7 @@ namespace EDDiscovery.Audio
         public EDDiscovery.ConditionVariables values;
 
         public bool Any { get { return echoenabled || chorusenabled || reverbenabled || distortionenabled || gargleenabled; } }
+        public bool OverrideNone { get { return values.ContainsKey("NoEffects"); } set { values["NoEffects"] = (value)?"1":"0"; } }
 
         public bool echoenabled { get { return values.ContainsKey("EchoMix") || values.ContainsKey("EchoFeedback") || values.ContainsKey("EchoDelay"); } }
         public int echomix { get { return values.GetInt("EchoMix", 50); } set { values["EchoMix"] = value.ToString(); } }

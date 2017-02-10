@@ -95,7 +95,6 @@ namespace EDDiscovery.Actions
 
         public void ConfigureVoice()
         {
-
             string voicename = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechvoice, "Default");
             string volume = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechvolume,"Default");
             string rate = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechrate,"Default");
@@ -112,24 +111,31 @@ namespace EDDiscovery.Actions
 
             if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
             {
-                int i;
-                if (cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase) || (cfg.Volume.InvariantParse(out i) && i >= 0 && i <= 100))
-                {
-                    if (cfg.Rate.Equals("Default", StringComparison.InvariantCultureIgnoreCase) || (cfg.Rate.InvariantParse(out i) && i >= -10 && i <= 10))
-                    {
-                        SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvoice, cfg.VoiceName);
-                        SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvolume, cfg.Volume);
-                        SetUserControlledGlobal(Actions.ActionSay.globalvarspeechrate, cfg.Rate);
-                        SetUserControlledGlobal(Actions.ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
-
-                        return;
-                    }
-                }
-
-                MessageBox.Show("Speech values not within range, values not saved");
+                SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvoice, cfg.VoiceName);
+                SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvolume, cfg.Volume);
+                SetUserControlledGlobal(Actions.ActionSay.globalvarspeechrate, cfg.Rate);
+                SetUserControlledGlobal(Actions.ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
             }
-
         }
+
+        public void ConfigureWave()
+        {
+            string volume = usercontrolledglobalvariables.GetString(Actions.ActionPlay.globalvarplayvolume, "60");
+            ConditionVariables effects = new ConditionVariables(usercontrolledglobalvariables.GetString(Actions.ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
+
+            Audio.WaveConfigureDialog dlg = new Audio.WaveConfigureDialog();
+            dlg.Init(discoveryform.AudioQueueWave, true, "Configure Audio", discoveryform.theme, "",
+                        false, false, volume, effects);
+
+            if (dlg.ShowDialog(discoveryform) == DialogResult.OK)
+            {
+                ConditionVariables cond = new ConditionVariables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
+
+                SetUserControlledGlobal(Actions.ActionPlay.globalvarplayvolume, dlg.Volume);
+                SetUserControlledGlobal(Actions.ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
+            }
+        }
+
 
         public void ConfigureSpeechText()
         {
@@ -168,7 +174,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        public int ActionRunOnEntry(HistoryEntry he, string triggertype, string flagstart = null, bool noexecute =false)       //set flagstart to be the first flag of the actiondata..
+        public int ActionRunOnEntry(HistoryEntry he, string triggertype, string flagstart = null, bool now = false, bool noexecute = false)       //set flagstart to be the first flag of the actiondata..
         {
             List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(he.journalEntry.EventTypeStr, flagstart);
 
@@ -187,7 +193,7 @@ namespace EDDiscovery.Actions
                     Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");
                     eventvars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, "EventJS_");        // for all events, add to field list
 
-                    actionfiles.RunActions(ale, actionrunasync, eventvars);  // add programs to action run
+                    actionfiles.RunActions(now,ale, actionrunasync, eventvars);  // add programs to action run
 
                     if ( !noexecute )
                         actionrunasync.Execute();       // will execute
@@ -197,7 +203,7 @@ namespace EDDiscovery.Actions
             return ale.Count;
         }
 
-        public int ActionRunOnEvent(string name, string triggertype, ConditionVariables additionalvars = null)
+        public int ActionRunOnEvent(string name, string triggertype, ConditionVariables additionalvars = null , bool now = false, bool noexecute = false)
         {
             List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(name);
 
@@ -216,9 +222,10 @@ namespace EDDiscovery.Actions
                     if (additionalvars != null)
                         eventvars.Add(additionalvars);
 
-                    actionfiles.RunActions(ale, actionrunasync, eventvars);  // add programs to action run
+                    actionfiles.RunActions(now,ale, actionrunasync, eventvars);  // add programs to action run
 
-                    actionrunasync.Execute();       // will execute
+                    if ( !noexecute)
+                        actionrunasync.Execute();       // will execute
                 }
             }
 

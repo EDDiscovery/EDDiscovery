@@ -1067,11 +1067,16 @@ namespace EDDiscovery
             return false;
         }
 
+        private void soundSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actioncontroller.ConfigureWave();
+        }
+
         public ConditionVariables Globals { get { return actioncontroller.Globals; } }
 
         public int ActionRunOnEntry(HistoryEntry he, string triggertype) { return actioncontroller.ActionRunOnEntry(he, triggertype); }
 
-#endregion
+        #endregion
 
     }
 }

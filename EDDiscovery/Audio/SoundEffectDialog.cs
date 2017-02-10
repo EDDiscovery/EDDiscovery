@@ -17,41 +17,73 @@ namespace EDDiscovery.Audio
         public delegate void StopTestSettings(SoundEffectsDialog sender);
         public event StopTestSettings StopTestSettingEvent;
 
+        EDDiscovery2.EDDTheme theme;
+
         public SoundEffectsDialog()
         {
             InitializeComponent();
-            comboBoxCustomDefaults.Items.AddRange(defaulteffects);
+            comboBoxCustomVoices.Items.AddRange(defaulteffects);
         }
 
-        public void Init(ConditionVariables cv)
+        public void Init(ConditionVariables cv, bool shownone, EDDiscovery2.EDDTheme th)
         {
+            theme = th;
+
+            if (!shownone)
+                checkBoxCustomNone.Visible = false;
+
+            Set(cv);
+        }
+
+        void Set(ConditionVariables cv)
+        { 
             SoundEffectSettings ap = new SoundEffectSettings(cv);
 
+            // we have no control over values, user could have messed them up, and it excepts if out of range
+
             trackBarEM.Enabled = trackBarEF.Enabled = trackBarED.Enabled = checkBoxE.Checked = ap.echoenabled;
-            trackBarEM.Value = ap.echomix;
-            trackBarEF.Value = ap.echofeedback;
-            trackBarED.Value = ap.echodelay;
+            try
+            {
+                trackBarEM.Value = ap.echomix;
+                trackBarEF.Value = ap.echofeedback;
+                trackBarED.Value = ap.echodelay;
+            } catch { }
 
             trackBarCM.Enabled = trackBarCF.Enabled = trackBarCD.Enabled = trackBarCDp.Enabled = checkBoxC.Checked = ap.chorusenabled;
-            trackBarCM.Value = ap.chorusmix;
-            trackBarCF.Value = ap.chorusfeedback;
-            trackBarCD.Value = ap.chorusdelay;
-            trackBarCDp.Value = ap.chorusdepth;
+            try
+            {
+                trackBarCM.Value = ap.chorusmix;
+                trackBarCF.Value = ap.chorusfeedback;
+                trackBarCD.Value = ap.chorusdelay;
+                trackBarCDp.Value = ap.chorusdepth;
+            } catch { }
 
             trackBarRM.Enabled = trackBarRT.Enabled = trackBarRH.Enabled = checkBoxR.Checked = ap.reverbenabled;
-            trackBarRM.Value = ap.reverbmix;
-            trackBarRT.Value = ap.reverbtime;
-            trackBarRH.Value = ap.reverbhfratio;
+            try
+            {
+                trackBarRM.Value = ap.reverbmix;
+                trackBarRT.Value = ap.reverbtime;
+                trackBarRH.Value = ap.reverbhfratio;
+            } catch { }
 
             trackBarDG.Enabled = trackBarDE.Enabled = trackBarDC.Enabled = trackBarDW.Enabled = checkBoxD.Checked = ap.distortionenabled;
-            trackBarDG.Value = ap.distortiongain;
-            trackBarDE.Value = ap.distortionedge;
-            trackBarDC.Value = ap.distortioncentrefreq;
-            trackBarDW.Value = ap.distortionfreqwidth;
+            try
+            {
+                trackBarDG.Value = ap.distortiongain;
+                trackBarDE.Value = ap.distortionedge;
+                trackBarDC.Value = ap.distortioncentrefreq;
+                trackBarDW.Value = ap.distortionfreqwidth;
+            } catch { }
 
             trackBarGF.Enabled = checkBoxG.Checked = ap.gargleenabled;
-            trackBarGF.Value = ap.garglefreq;
+            try
+            {
+                trackBarGF.Value = ap.garglefreq;
+            } catch { }
 
+            checkBoxCustomNone.Checked = ap.OverrideNone;
+
+            theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         public ConditionVariables GetEffects()
@@ -93,6 +125,9 @@ namespace EDDiscovery.Audio
                 ap.garglefreq = trackBarGF.Value;
             }
 
+            if (checkBoxCustomNone.Checked)
+                ap.OverrideNone = true;
+
             return ap.values;
         }
 
@@ -107,6 +142,7 @@ namespace EDDiscovery.Audio
             trackBarEM.Enabled = checkBoxE.Checked;
             trackBarEF.Enabled = checkBoxE.Checked;
             trackBarED.Enabled = checkBoxE.Checked;
+            TurnOffNone();
         }
 
         private void checkBoxC_CheckedChanged(object sender, EventArgs e)
@@ -115,6 +151,7 @@ namespace EDDiscovery.Audio
             trackBarCF.Enabled = checkBoxC.Checked;
             trackBarCD.Enabled = checkBoxC.Checked;
             trackBarCDp.Enabled = checkBoxC.Checked;
+            TurnOffNone();
         }
 
         private void checkBoxR_CheckedChanged(object sender, EventArgs e)
@@ -122,6 +159,7 @@ namespace EDDiscovery.Audio
             trackBarRM.Enabled = checkBoxR.Checked;
             trackBarRT.Enabled = checkBoxR.Checked;
             trackBarRH.Enabled = checkBoxR.Checked;
+            TurnOffNone();
         }
 
         private void checkBoxD_CheckedChanged(object sender, EventArgs e)
@@ -130,11 +168,29 @@ namespace EDDiscovery.Audio
             trackBarDE.Enabled = checkBoxD.Checked;
             trackBarDC.Enabled = checkBoxD.Checked;
             trackBarDW.Enabled = checkBoxD.Checked;
+            TurnOffNone();
         }
 
         private void checkBoxG_CheckedChanged(object sender, EventArgs e)
         {
             trackBarGF.Enabled = checkBoxG.Checked;
+            TurnOffNone();
+        }
+
+        void TurnOffNone()
+        {
+            if (checkBoxCustomNone.Visible)
+            {
+                checkBoxCustomNone.Enabled = false;
+                checkBoxCustomNone.Checked = false;
+                checkBoxCustomNone.Enabled = true;
+            }
+        }
+
+        private void checkBoxCustomNone_CheckedChanged(object sender, EventArgs e)
+        {
+            if ( checkBoxCustomNone.Enabled )
+                checkBoxE.Checked = checkBoxC.Checked = checkBoxR.Checked = checkBoxD.Checked = checkBoxG.Checked = false;
         }
 
         private void buttonExtTest_Click(object sender, EventArgs e)
@@ -173,9 +229,10 @@ namespace EDDiscovery.Audio
 
         private void comboBoxCustomDefaults_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ConditionVariables vs = new ConditionVariables(defaulteffectsconfig[comboBoxCustomDefaults.SelectedIndex],ConditionVariables.FromMode.MultiEntryComma);
-            Init(vs);
+            ConditionVariables vs = new ConditionVariables(defaulteffectsconfig[comboBoxCustomVoices.SelectedIndex],ConditionVariables.FromMode.MultiEntryComma);
+            Set(vs);
         }
+
     }
 
 }

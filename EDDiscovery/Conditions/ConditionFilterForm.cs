@@ -191,8 +191,6 @@ namespace EDDiscovery2
                     groups.Add(g);
                 }
 
-                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " 6 ");
-
                 System.Runtime.GCLatencyMode lm = System.Runtime.GCSettings.LatencyMode;
                 System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.LowLatency;
 
@@ -200,8 +198,6 @@ namespace EDDiscovery2
                     panelVScroll.Controls.Add(g.panel);             // why? tried a brand new vscroll.  Tried a lot of things.  Is it GC?
 
                 FixUpGroups();                                      // this takes ages too on second load..
-
-                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " 6b");
 
                 panelVScroll.ResumeLayout();
                 this.panelOuter.ResumeLayout();

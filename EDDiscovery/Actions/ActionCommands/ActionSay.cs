@@ -93,90 +93,81 @@ namespace EDDiscovery.Actions
             return false;
         }
 
-        int GetInt(string value, string vname, Dictionary<string, string> vars, int fallback, int min, int max)
-        {
-            int i;
-            if (!value.InvariantParse(out i) || i < min || i > max)
-            {
-                if (vars.ContainsKey(vname))
-                {
-                    if (!vars[vname].InvariantParse(out i) || i < min || i > max)
-                        i = fallback;
-                }
-                else
-                    i = fallback;
-            }
-
-            return i;
-        }
-
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string say;
-            ConditionVariables vars;
-            FromString(userdata, out say, out vars);
+            ConditionVariables statementvars;
+            FromString(userdata, out say, out statementvars);
 
-            bool wait = vars.ContainsKey(waitname);
-            bool priority = vars.ContainsKey(preemptname);
+            string errlist = null;
+            ConditionVariables vars = statementvars.ExpandAll(ap.functions.ExpandString, ap.currentvars, out errlist);
 
-            string voice = vars.ContainsKey(voicename) ? vars[voicename] : (ap.currentvars.ContainsKey(globalvarspeechvoice) ? ap.currentvars[globalvarspeechvoice] : "Default");
-
-            int vol;
-            string evalres = vars.GetNumericValue(volumename, 0, 100, -999, out vol, ap.functions.ExpandString, ap.currentvars); // expand this..
-            if (evalres != null)
+            if (errlist == null)
             {
-                ap.ReportError(evalres);
-                return true;
-            }
+                bool wait = vars.GetInt(waitname, 0) != 0;
+                bool priority = vars.GetInt(preemptname, 0) != 0;
+                string voice = vars.ContainsKey(voicename) ? vars[voicename] : (ap.currentvars.ContainsKey(globalvarspeechvoice) ? ap.currentvars[globalvarspeechvoice] : "Default");
 
-            if (vol == -999)
-                ap.currentvars.GetNumericValue(globalvarspeechvolume, 0, 100, 60, out vol);      // don't care about the return, do not expand, its just a number.. if it fails, use def
+                int vol = vars.GetInt(volumename, -999);
+                if (vol == -999)
+                    vol = ap.currentvars.GetInt(globalvarspeechvolume, 60);
 
-            int rate;
-            evalres = vars.GetNumericValue(ratename, -10,10,-999, out rate, ap.functions.ExpandString, ap.currentvars); // expand this.. from our own vars
-            if (evalres != null)
-            {
-                ap.ReportError(evalres);
-                return true;
-            }
+                int rate = vars.GetInt(ratename, -999);
+                if ( rate == -999 )
+                    rate = ap.currentvars.GetInt(globalvarspeechrate, 0);
 
-            if (rate == -999)
-                ap.currentvars.GetNumericValue(globalvarspeechrate, -10,10,0, out rate);      // don't care about the return, do not expand, its just a number.. if it fails, use def
+                Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
-            ConditionVariables effects = vars;
-
-            Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(effects);
-            if ( !ses.Any && ap.currentvars.ContainsKey(globalvarspeecheffects))        // if can't see any, and we have a global, use that
-            {
-                effects = new ConditionVariables(ap.currentvars[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
-            }
-
-            string errlist;
-            System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(say, voice, rate, out errlist, ap.functions, ap.currentvars);
-
-            if (ms != null)
-            {
-                Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, effects);
-                if (audio != null)
+                if (!ses.Any && !ses.OverrideNone && ap.currentvars.ContainsKey(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
                 {
-                    if ( wait )
-                    {
-                        audio.sampleOverTag = ap;
-                        audio.sampleOverEvent += Audio_sampleOverEvent;
-                    }
-
-                    ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
-                    return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                    vars = new ConditionVariables(ap.currentvars[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
                 }
+
+                string phrase = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.ToPhrase(say, out errlist, ap.functions, ap.currentvars);
+
+                if (errlist == null)
+                {
+                    if (phrase.Length == 0) // just abort..
+                        return true;
+
+#if true
+                    System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(phrase, voice, rate);
+
+                    if (ms != null)
+                    {
+                        Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars);
+
+                        if (audio != null)
+                        {
+                            if (wait)
+                            {
+                                audio.sampleOverTag = ap;
+                                audio.sampleOverEvent += Audio_sampleOverEvent;
+                            }
+
+                            ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
+                            return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                        }
+                        else
+                            ap.ReportError("Say could not create audio, check Effects settings");
+                    }
+#else
+                    synth.SelectVoice(voice);
+                    synth.Rate = 0;
+                    synth.SpeakAsync(phrase);       // for checking quality..
+#endif
+
+                }
+                else
+                    ap.ReportError(errlist);
             }
             else
                 ap.ReportError(errlist);
 
             return true;
-                // callback here to call ap.Resume
-                // TBD ap call back                
-                //            ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(say, voice, vol, rate, ap.functions, ap.currentvars, (wait) ? ap : null)string s = ;
-            }
+        }
+
+//        static System.Speech.Synthesis.SpeechSynthesizer synth = new System.Speech.Synthesis.SpeechSynthesizer();
 
         private void Audio_sampleOverEvent(Audio.AudioQueue sender, object tag)
         {
@@ -185,3 +176,4 @@ namespace EDDiscovery.Actions
         }
     }
 }
+

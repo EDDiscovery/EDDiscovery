@@ -61,7 +61,7 @@ namespace ExtendedControls
         {
             base.OnLayout(levent);
 
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "  VS Layout");
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "  VS Layout");
             Rectangle area = ClientRectangle;
             area.X += InternalMargin.Left;
             area.Y += InternalMargin.Top;
@@ -72,7 +72,7 @@ namespace ExtendedControls
             {
                 Point p = new Point(area.X + ((VerticalScrollBarDockRight) ? (area.Width - ScrollBarWidth) : 0), area.Y);
                 vsc.Location = p;
-                System.Diagnostics.Debug.WriteLine("vsc {0}", vsc.Location);
+                //System.Diagnostics.Debug.WriteLine("vsc {0}", vsc.Location);
                 vsc.Size = new Size(ScrollBarWidth, area.Height);
             }
 
@@ -161,7 +161,7 @@ namespace ExtendedControls
                 vsc.Minimum = 0;
                 vsc.Value = newscrollpos;
 
-                System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {2} sb {3} ch {4}", scrollpos, newscrollpos, maxy, vsc.Maximum, ClientRectangle.Height);
+                //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {2} sb {3} ch {4}", scrollpos, newscrollpos, maxy, vsc.Maximum, ClientRectangle.Height);
             }
 
             scrollpos = newscrollpos;

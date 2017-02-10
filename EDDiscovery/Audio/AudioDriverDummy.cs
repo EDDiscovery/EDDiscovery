@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable 0067
+
 namespace EDDiscovery.Audio
 {
     class AudioDriverDummy : IAudioDriver, IDisposable

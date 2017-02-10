@@ -12,6 +12,7 @@ namespace EDDiscovery.Audio
 {
     public partial class WaveConfigureDialog : Form
     {
+        public string Path {  get { return textBoxBorderText.Text; } }
         public bool Wait { get { return checkBoxCustomComplete.Checked; } }
         public bool Preempt { get { return checkBoxCustomPreempt.Checked; } }
         public string Volume { get { return (checkBoxCustomV.Checked) ? trackBarVolume.Value.ToString() : "Default"; } }
@@ -19,6 +20,7 @@ namespace EDDiscovery.Audio
 
         ConditionVariables effects;
         AudioQueue queue;
+        EDDiscovery2.EDDTheme theme;
 
         public WaveConfigureDialog()
         {
@@ -27,13 +29,14 @@ namespace EDDiscovery.Audio
 
         public void Init(AudioQueue qu, 
                           bool defaultmode,
-                          string caption, EDDiscovery2.EDDTheme theme,
+                          string caption, EDDiscovery2.EDDTheme th,
                           string defpath,
                           bool waitcomplete, bool preempt,
                           string volume,
                           ConditionVariables ef)
         {
             queue = qu;
+            theme = th;
             this.Text = caption;
             textBoxBorderText.Text = defpath;
 
@@ -70,14 +73,15 @@ namespace EDDiscovery.Audio
         {
             if (buttonExtTest.Text.Equals("Stop"))
             {
-                queue.StopAll();
-                buttonExtTest.Text = "Test";
+                queue.StopCurrent();
             }
             else
             {
                 try
                 {
-                    queue.Submit(queue.Generate(textBoxBorderText.Text, effects), trackBarVolume.Value);
+                    Audio.AudioQueue.AudioSample audio = queue.Generate(textBoxBorderText.Text, effects);
+                    audio.sampleOverEvent += Audio_sampleOverEvent;
+                    queue.Submit(audio, trackBarVolume.Value);
                     buttonExtTest.Text = "Stop";
                 }
                 catch
@@ -85,6 +89,11 @@ namespace EDDiscovery.Audio
                     MessageBox.Show("Unable to play " + textBoxBorderText.Text);
                 }
             }
+        }
+
+        private void Audio_sampleOverEvent(AudioQueue sender, object tag)
+        {
+            buttonExtTest.Text = "Test";
         }
 
         private void buttonExtOK_Click(object sender, EventArgs e)
@@ -96,7 +105,7 @@ namespace EDDiscovery.Audio
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
             SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(effects);
+            sfe.Init(effects,true,theme);
             sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
             sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
             if (sfe.ShowDialog(this) == DialogResult.OK)
@@ -134,7 +143,16 @@ namespace EDDiscovery.Audio
 
         private void buttonExtBrowse_Click(object sender, EventArgs e)
         {
+            OpenFileDialog dlg = new OpenFileDialog();
 
+            dlg.DefaultExt = "mp3";
+            dlg.AddExtension = true;
+            dlg.Filter = "MP3 Files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav|All files (*.*)|*.*";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                textBoxBorderText.Text = dlg.FileName;
+            }
         }
     }
 }

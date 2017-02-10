@@ -39,7 +39,7 @@ namespace EDDiscovery.Audio
             synth.Volume = volume;
             synth.Rate = rate;
 
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Speak " + phrase + " " + volume  + " " + rate);
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Speak " + phrase + " " + rate);
 
             System.IO.MemoryStream stream = new System.IO.MemoryStream();
             synth.SetOutputToWaveStream(stream);

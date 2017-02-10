@@ -69,7 +69,8 @@ namespace EDDiscovery
                 new FuncEntry("ifnotcontains",Ifnotcontains,3,4,    15,15),
                 new FuncEntry("ifequal",Ifequal,            3,4,    15,15),
                 new FuncEntry("ifnotequal",Ifnotequal,      3,4,    15,15),
-                new FuncEntry("expandarray",ExpandArray,    4,5,    2,2)   // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                new FuncEntry("expandarray",ExpandArray,    4,5,    2,2),  // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                new FuncEntry("fileexists",FileExists,      1,20,   0xfffffff,0xfffffff)   // check var, can be string
         };
         }
 
@@ -796,6 +797,23 @@ namespace EDDiscovery
                 output = "Start and/or length are not integers or variables do not exist";
 
             return false;
+        }
+
+        private bool FileExists(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            foreach (Parameter p in paras)
+            {
+                string s = p.isstring ? p.value : vars[p.value];
+
+                if (!System.IO.File.Exists(s))
+                {
+                    output = "0";
+                    return true;
+                }
+            }
+
+            output = "1";
+            return true;
         }
 
         #endregion

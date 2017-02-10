@@ -40,7 +40,7 @@ namespace EDDiscovery
 
         public void Clear() { values.Clear(); }
 
-        public int GetInt(string name, int def = 0)
+        public int GetInt(string name, int def = 0)     // get or default
         {
             int i;
             if (values.ContainsKey(name) && values[name].InvariantParse(out i))
@@ -271,6 +271,27 @@ namespace EDDiscovery
             { System.Diagnostics.Debug.WriteLine(prefix + k.Key + "=" + k.Value); }
         }
 
+        public delegate ConditionLists.ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
+
+        // all variables, expand out thru macro expander.  does not alter these ones
+        public ConditionVariables ExpandAll(ExpandString e, ConditionVariables vars, out string errlist)
+        {
+            errlist = null;
+
+            ConditionVariables exp = new ConditionVariables();
+
+            foreach( KeyValuePair<string,string> k in values)
+            {
+                if (e(values[k.Key], vars, out errlist) == ConditionLists.ExpandResult.Failed)
+                    return null;
+
+                exp[k.Key] = errlist;
+            }
+
+            errlist = null;
+            return exp;
+        }
+
         public string AddToVar(string name, int add, int initial)       // DOES NOT set anything..
         {
             if (values.ContainsKey(name))
@@ -379,34 +400,6 @@ namespace EDDiscovery
                         break;
                 }
             }
-        }
-
-        public delegate ConditionLists.ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
-
-        // if ver there, pass it thru expander, then eval it between these ranges..
-
-        public string GetNumericValue(string name, int min , int max, int def , out int val, ExpandString e = null , ConditionVariables vars = null )
-        {
-            if (values.ContainsKey(name))
-            {
-                string res;
-                if (e != null)
-                {
-                    if (e(values[name], vars, out res) == ConditionLists.ExpandResult.Failed)
-                    {
-                        val = def;
-                        return res;
-                    }
-                }
-                else
-                    res = values[name];
-
-                if (res.InvariantParse(out val) && val >= min && val <= max) // if we don't have volume..  or does not parse or out of range
-                    return null;
-            }
-
-            val = def;
-            return null;
         }
 
         public void AddPropertiesFieldsOfType( Object o, string prefix = "" )
