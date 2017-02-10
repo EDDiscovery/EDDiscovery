@@ -27,8 +27,7 @@ namespace EDDiscovery.Audio
             return speechengine.GetVoiceNames();
         }
 
-        public System.IO.MemoryStream Speak(string phraselist, string voice, int rate, out string errlist,
-                                            ConditionFunctions f = null, ConditionVariables curvars = null )
+        public string ToPhrase(string phraselist, out string errlist, ConditionFunctions f = null, ConditionVariables curvars = null)
         {
             string res = phraselist;
             if (f == null || f.ExpandString(phraselist, curvars, out res) != EDDiscovery.ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
@@ -50,7 +49,7 @@ namespace EDDiscovery.Audio
                 }
 
                 errlist = null;
-                return speechengine.Speak(res, voice, 100, rate);     // samples are always generated at 100 volume
+                return res;
             }
             else
             {
@@ -59,6 +58,9 @@ namespace EDDiscovery.Audio
             }
         }
 
-
+        public System.IO.MemoryStream Speak(string say, string voice, int rate)
+        {
+            return speechengine.Speak(say, voice, 100, rate);     // samples are always generated at 100 volume
+        }
     }
 }

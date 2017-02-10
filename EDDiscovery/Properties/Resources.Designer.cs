@@ -839,7 +839,7 @@ namespace EDDiscovery.Properties {
         ///Delimiter - use the radio buttons to select &apos;Tab&apos; or &apos;Other&apos;, if &apos;Other&apos; then enter the delimiter character in the box.
         ///
         ///Arrival Date - the column in the file containing the date of arrival in a system.
-        ///Arrival Time - the column in the file containing the time of arrival [rest of string was truncated]&quot;;.
+        ///Arrival Time - the column in the file containing the time of [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ImportHelp {
             get {
@@ -1099,6 +1099,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap metal_rich {
             get {
                 object obj = ResourceManager.GetObject("metal_rich", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap microphone {
+            get {
+                object obj = ResourceManager.GetObject("microphone", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1769,6 +1779,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap SizeSelectorsTiny {
             get {
                 object obj = ResourceManager.GetObject("SizeSelectorsTiny", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap speaker {
+            get {
+                object obj = ResourceManager.GetObject("speaker", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

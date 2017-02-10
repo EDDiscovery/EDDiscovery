@@ -1116,6 +1116,8 @@
     <None Include="Resources\materialrare.png" />
     <None Include="Resources\Water_World_Poles_Cloudless4.png" />
     <None Include="Resources\ImportHelp.txt" />
+    <None Include="Resources\speaker.png" />
+    <None Include="Resources\microphone.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

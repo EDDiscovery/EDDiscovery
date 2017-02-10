@@ -23,6 +23,7 @@ namespace EDDiscovery.Audio
         AudioQueue queue;
         SpeechSynthesizer synth;
         ConditionVariables effects;
+        EDDiscovery2.EDDTheme theme;
 
         public SpeechConfigure()
         {
@@ -30,7 +31,7 @@ namespace EDDiscovery.Audio
         }
 
         public void Init( AudioQueue qu, SpeechSynthesizer syn,
-                            string title, string caption , EDDiscovery2.EDDTheme theme,
+                            string title, string caption , EDDiscovery2.EDDTheme th,
                             String text,          // if null, no text box or wait complete
                             bool waitcomplete, bool preempt,
                             string voicename,
@@ -40,6 +41,7 @@ namespace EDDiscovery.Audio
         {
             queue = qu;
             synth = syn;
+            theme = th;
             this.Text = caption;
             Title.Text = title;
             textBoxBorderTest.Text = "The quick brown fox jumped over the lazy dog";
@@ -112,7 +114,7 @@ namespace EDDiscovery.Audio
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
             SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(effects);
+            sfe.Init(effects, textBoxBorderText.Visible, theme);           // give them the none option ONLY if we are allowing text
             sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
             sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
             if ( sfe.ShowDialog(this) == DialogResult.OK )
@@ -123,8 +125,7 @@ namespace EDDiscovery.Audio
 
         private void Sfe_TestSettingEvent(SoundEffectsDialog sfe, ConditionVariables effects)
         {
-            string errlist;
-            System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, comboBoxCustomVoice.Text, trackBarRate.Value, out errlist);
+            System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, comboBoxCustomVoice.Text, trackBarRate.Value);
             if (ms != null)
             {
                 AudioQueue.AudioSample a = queue.Generate(ms, effects);
@@ -159,18 +160,18 @@ namespace EDDiscovery.Audio
         {
             if (buttonExtTest.Text.Equals("Stop"))
             {
-                queue.StopAll();
-                buttonExtTest.Text = "Test";
+                queue.StopCurrent();
             }
             else
             {
                 try
                 {
-                    string errlist;
-                    System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, comboBoxCustomVoice.Text, trackBarRate.Value, out errlist);
+                    System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, comboBoxCustomVoice.Text, trackBarRate.Value);
                     if (ms != null)
                     {
-                        queue.Submit(queue.Generate(ms, effects), trackBarVolume.Value);
+                        Audio.AudioQueue.AudioSample audio = queue.Generate(ms, effects);
+                        audio.sampleOverEvent += Audio_sampleOverEvent;
+                        queue.Submit(audio, trackBarVolume.Value);
                         buttonExtTest.Text = "Stop";
                     }
                 }
@@ -179,6 +180,11 @@ namespace EDDiscovery.Audio
                     MessageBox.Show("Unable to play " + textBoxBorderText.Text);
                 }
             }
+        }
+
+        private void Audio_sampleOverEvent(AudioQueue sender, object tag)
+        {
+            buttonExtTest.Text = "Test";
         }
     }
 }

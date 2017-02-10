@@ -117,7 +117,7 @@ namespace EDDiscovery.Audio
             }
         }
 
-        public AudioSample Generate(string file, ConditionVariables effects)        // from a file (you get a AS back so you have the chance to add events)
+        public AudioSample Generate(string file, ConditionVariables effects = null)        // from a file (you get a AS back so you have the chance to add events)
         {
             Object audio = ad.Generate(file, effects);
             if (audio != null)
@@ -129,7 +129,7 @@ namespace EDDiscovery.Audio
                 return null;
         }
 
-        public AudioSample Generate(System.IO.Stream audioms, ConditionVariables effects)   // from a memory stream
+        public AudioSample Generate(System.IO.Stream audioms, ConditionVariables effects = null)   // from a memory stream
         {
             if (audioms != null)
             {

@@ -19,7 +19,7 @@ namespace EDDiscovery.Actions
 
         bool async = false;             // if this Action is an asynchoronous object
         bool executing = false;         // Records is executing
-      
+        bool inpause = false;           // we are executing, but pausing
         Timer restarttick = new Timer();
 
         public ActionRun(ActionController ed, ActionFileList afl)
@@ -30,25 +30,26 @@ namespace EDDiscovery.Actions
             actionfilelist = afl;
         }
 
-        //historyentry may be null if not associated with a entry
-        // WE take a copy of each program, so each invocation of program action has a unique instance in case
-        // it has private variables in either action or program.
-        public void Add(ActionFile fileset, ActionProgram r, ConditionVariables inputparas)
+        // now = true, run it immediately, else run at end of queue
+        public void Run(bool now, ActionFile fileset, ActionProgram r, ConditionVariables inputparas)
         {
-            progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, actioncontroller));
-        }
+            if (now)
+            {
+                if (progcurrent != null)                    // if running, push the current one back onto the queue to be picked up
+                    progqueue.Insert(0, progcurrent);
 
-        public void RunNow(ActionFile fileset, ActionProgram r, ConditionVariables inputparas)
-        {
-            if (progcurrent != null)                    // if running, push the current one back onto the queue to be picked up
-                progqueue.Insert(0, progcurrent);
-
-            progcurrent = new ActionProgramRun(fileset, r, inputparas, this, actioncontroller);   // now we run this.. no need to push to stack
-            progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, actioncontroller.Globals); // set up its vars..
+                progcurrent = new ActionProgramRun(fileset, r, inputparas, this, actioncontroller);   // now we run this.. no need to push to stack
+                progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, actioncontroller.Globals); // set up its vars..
+            }
+            else
+                progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, actioncontroller));
         }
 
         public void Execute()    // MAIN thread only..     
         {
+            if (inpause)        // someone else, during a pause, asked for us to run.. we don't, until the pause completes.
+                return;
+
             executing = true;
 
             System.Diagnostics.Stopwatch timetaken = new System.Diagnostics.Stopwatch();
@@ -118,7 +119,7 @@ namespace EDDiscovery.Actions
 
                             if (ap != null)
                             {
-                                RunNow(ap.Item1, ap.Item2, paravars );   // run with these para vars
+                                Run(true,ap.Item1, ap.Item2, paravars );   // run now with these para vars
                             }
                             else
                                 progcurrent.ReportError("Call cannot find " + prog);
@@ -139,7 +140,8 @@ namespace EDDiscovery.Actions
                     }
                     else if (!ac.ExecuteAction(progcurrent))      // if execute says, stop, i'm waiting for something
                     {
-                        return;     // exit, with executing set true.  ResumeAfterPause will restart it.
+                        inpause = true;
+                        return;             // exit, with executing set true.  ResumeAfterPause will restart it.
                     }
                 }
 
@@ -163,15 +165,18 @@ namespace EDDiscovery.Actions
 
         public void ResumeAfterPause()          // used when async..
         {
-            if (executing)
+            if (executing && inpause)
+            {
+                inpause = false;
                 Execute();
+            }
         }
 
         public void TerminateAll()          // halt everything
         {
             progcurrent = null;
             progqueue.Clear();
-            executing = false;
+            inpause = executing = false;
         }
 
         public void WaitTillFinished(int timeout)           // Could be IN ANOTHER THREAD BEWARE

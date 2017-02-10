@@ -146,7 +146,7 @@ namespace EDDiscovery.Actions
                 }
                 catch
                 {
-                    ap.ReportError("LET expression does not evaluate");
+                    ap.ReportError("Let expression does not evaluate");
                     break;
                 }
             }

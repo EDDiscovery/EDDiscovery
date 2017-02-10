@@ -18,8 +18,11 @@ namespace EDDiscovery.Audio
 
         public AudioDriverCSCore( string devicestr = null)     // string would give a hint on device.. not used yet
         {
-            MMDevice def = MMDeviceEnumerator.DefaultAudioEndpoint(DataFlow.Render, Role.Console);
-            aout = new WasapiOut() { Latency = 100, Device = def };
+            //MMDevice def = MMDeviceEnumerator.DefaultAudioEndpoint(DataFlow.Render, Role.Console);
+            //aout = new WasapiOut() { Latency = 100, Device = def  }; //BAD breakup
+            //aout = new WasapiOut(true, AudioClientShareMode.Shared, 500, System.Threading.ThreadPriority.Highest); // still no better, with sync and highest.
+
+            aout = new DirectSoundOut() { Latency = 200 };    // seems good quality
             aout.Stopped += Output_Stopped;
         }
 
@@ -38,11 +41,13 @@ namespace EDDiscovery.Audio
         {
             IWaveSource iws = o as IWaveSource;
             iws.Dispose();
+
         }
 
         public void Start(Object o, int vol)
         {
-            aout.Initialize(o as IWaveSource);
+            IWaveSource current = o as IWaveSource;
+            aout.Initialize(current);
             aout.Volume = (float)(vol) / 100;
             aout.Play();
         }
@@ -97,7 +102,7 @@ namespace EDDiscovery.Audio
 
                 if (extend > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine("Extend by " + extend + " ms due to effects");
+                    //System.Diagnostics.Debug.WriteLine("Extend by " + extend + " ms due to effects");
                     src = src.AppendSource(x => new ExtendWaveSource(x, extend));
                 }
 
@@ -138,7 +143,7 @@ namespace EDDiscovery.Audio
         {
             extrabytes = ws.WaveFormat.MillisecondsToBytes(ms);
             totalbytes = base.Length + extrabytes;
-            System.Diagnostics.Debug.WriteLine("Extend by " + extrabytes + " at " + ws.WaveFormat.SampleRate);
+            //System.Diagnostics.Debug.WriteLine("Extend by " + extrabytes + " at " + ws.WaveFormat.SampleRate);
         }
 
         public override long Length { get { return totalbytes; } }

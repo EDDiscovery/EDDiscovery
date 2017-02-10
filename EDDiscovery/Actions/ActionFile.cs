@@ -211,7 +211,8 @@ namespace EDDiscovery.Actions
             return progs;
         }
 
-        public void RunActions(List<Actions.ActionFileList.MatchingSets> ale, ActionRun run, ConditionVariables inputparas)
+        // now = true run immediately, else defer to current programs
+        public void RunActions(bool now, List<Actions.ActionFileList.MatchingSets> ale, ActionRun run, ConditionVariables inputparas)
         {
             foreach (Actions.ActionFileList.MatchingSets ae in ale)          // for every file which passed..
             {
@@ -227,7 +228,7 @@ namespace EDDiscovery.Actions
 
                         inputparas.Add(adparas);
 
-                        run.Add(ap.Item1, ap.Item2, inputparas);
+                        run.Run(now, ap.Item1, ap.Item2, inputparas);
                     }
                 }
             }
