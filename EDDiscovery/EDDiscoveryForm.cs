@@ -85,6 +85,16 @@ namespace EDDiscovery
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
+        public Audio.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
+        public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
+        public Audio.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
+
+        Audio.AudioDriverCSCore audiodriverwave;
+        Audio.AudioQueue audioqueuewave;
+        Audio.AudioDriverCSCore audiodriverspeech;
+        Audio.AudioQueue audioqueuespeech;
+        Audio.SpeechSynthesizer speechsynth;
+
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
         public event Action OnNewTarget;
@@ -188,6 +198,18 @@ namespace EDDiscovery
             Map = new EDDiscovery2._3DMap.MapManager(EDDConfig.Options.NoWindowReposition, this);
 
             this.TopMost = EDDConfig.KeepOnTop;
+
+#if MONO
+            audiodriverwave = new Audio.AudioDriverDummy();
+            audiodriverspeech = new Audio.AudioDriverDummy();
+            speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
+#else
+            audiodriverwave = new Audio.AudioDriverCSCore();
+            audiodriverspeech = new Audio.AudioDriverCSCore();
+            speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
+#endif
+            audioqueuewave = new Audio.AudioQueue(audiodriverwave);
+            audioqueuespeech = new Audio.AudioQueue(audiodriverspeech);
 
             actioncontroller = new Actions.ActionController(this, Controller);
 
@@ -372,18 +394,18 @@ namespace EDDiscovery
             Controller.RefreshDisplays();
         }
 
-        #endregion
+#endregion
 
-        #region EDSM and EDDB syncs code
+#region EDSM and EDDB syncs code
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
             Controller.AsyncPerformSync();
         }
 
-        #endregion
+#endregion
 
-        #region Controller event handlers
+#region Controller event handlers
         private void Controller_DbInitComplete()
         {
             if (splashform != null)
@@ -461,14 +483,20 @@ namespace EDDiscovery
         {
             SaveSettings();         // do close now
             notifyIcon1.Visible = false;
+
+            audioqueuespeech.Dispose();     // in order..
+            audiodriverspeech.Dispose();
+            audioqueuewave.Dispose();
+            audiodriverwave.Dispose();
+
             Close();
             Application.Exit();
         }
 
 
-        #endregion
+#endregion
 
-        #region Closing
+#region Closing
         private void SaveSettings()
         {
             settings.SaveSettings();
@@ -505,9 +533,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region Buttons, Mouse, Menus, NotifyIcon
+#region Buttons, Mouse, Menus, NotifyIcon
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -876,9 +904,9 @@ namespace EDDiscovery
                 Activate();
         }
 
-        #endregion
+#endregion
 
-        #region Window Control
+#region Window Control
 
         protected override void WndProc(ref Message m)
         {
@@ -985,9 +1013,9 @@ namespace EDDiscovery
             RecordPosition();
         }
 
-        #endregion
+#endregion
 
-        #region Targets
+#region Targets
 
         public void NewTargetSet()
         {
@@ -996,9 +1024,9 @@ namespace EDDiscovery
                 OnNewTarget();
         }
 
-        #endregion
+#endregion
 
-        #region Add Ons
+#region Add Ons
 
         private void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1043,7 +1071,7 @@ namespace EDDiscovery
 
         public int ActionRunOnEntry(HistoryEntry he, string triggertype) { return actioncontroller.ActionRunOnEntry(he, triggertype); }
 
-        #endregion
+#endregion
 
     }
 }

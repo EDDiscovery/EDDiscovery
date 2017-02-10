@@ -22,14 +22,14 @@ namespace EDDiscovery.Actions
             return vars.ToString(operations, " ");
         }
 
-        public bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars, bool allowaddv , bool allownoexpandv)
+        public bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars, bool allowaddv , bool allownoexpandv)
         {
             ConditionVariables av;
             Dictionary<string, string> operations;
             FromString(userdata, out av, out operations);
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Variable list:", theme, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations);
+            avf.Init("Variable list:", discoveryform.theme, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations);
 
             if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
@@ -61,9 +61,9 @@ namespace EDDiscovery.Actions
         ConditionVariables av;
         Dictionary<string, string> operations;
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            return ConfigurationMenu(parent, theme, eventvars, true, true);
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
@@ -103,9 +103,9 @@ namespace EDDiscovery.Actions
         ConditionVariables av;
         Dictionary<string, string> operations;
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            return ConfigurationMenu(parent, theme, eventvars,false, true);
+            return base.ConfigurationMenu(parent, discoveryform, eventvars,false, true);
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
@@ -163,9 +163,9 @@ namespace EDDiscovery.Actions
         ConditionVariables av;
         Dictionary<string, string> operations;
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            return ConfigurationMenu(parent, theme, eventvars, true , true);
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true , true);
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)

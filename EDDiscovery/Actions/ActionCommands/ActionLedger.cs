@@ -10,7 +10,7 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             string promptValue = PromptSingleLine.ShowDialog(parent, "JID of event", UserData, "Configure Ledger Command" );
             if (promptValue != null)

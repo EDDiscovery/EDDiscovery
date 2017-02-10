@@ -1,0 +1,169 @@
+﻿using CSCore;
+using CSCore.CoreAudioAPI;
+using CSCore.SoundOut;
+using CSCore.Streams.Effects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EDDiscovery.Audio
+{
+    class AudioDriverCSCore : IAudioDriver, IDisposable
+    {
+        public event AudioStopped AudioStoppedEvent;
+
+        ISoundOut aout;
+
+        public AudioDriverCSCore( string devicestr = null)     // string would give a hint on device.. not used yet
+        {
+            MMDevice def = MMDeviceEnumerator.DefaultAudioEndpoint(DataFlow.Render, Role.Console);
+            aout = new WasapiOut() { Latency = 100, Device = def };
+            aout.Stopped += Output_Stopped;
+        }
+
+        private void Output_Stopped(object sender, PlaybackStoppedEventArgs e)
+        {
+            if (AudioStoppedEvent != null)
+                AudioStoppedEvent();
+        }
+
+        public void Dispose()
+        {
+            aout.Dispose();
+        }
+
+        public void Dispose(Object o)
+        {
+            IWaveSource iws = o as IWaveSource;
+            iws.Dispose();
+        }
+
+        public void Start(Object o, int vol)
+        {
+            aout.Initialize(o as IWaveSource);
+            aout.Volume = (float)(vol) / 100;
+            aout.Play();
+        }
+
+        public void Stop()
+        {
+            aout.Stop();
+        }
+
+        public Object Generate(string file, ConditionVariables effects)
+        {
+            try
+            {
+                IWaveSource s = CSCore.Codecs.CodecFactory.Instance.GetCodec(file);
+                ApplyEffects(ref s, effects);
+                return s;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public Object Generate(System.IO.Stream audioms, ConditionVariables effects)
+        {
+            try
+            {
+                audioms.Position = 0;
+                IWaveSource s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
+                ApplyEffects(ref s, effects);
+                return s;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        static private void ApplyEffects(ref IWaveSource src, ConditionVariables effect)
+        {
+            if (effect != null)
+            {
+                SoundEffectSettings ap = new SoundEffectSettings(effect);
+
+                int extend = 0;
+                if (ap.echoenabled)
+                    extend = ap.echodelay * 2;
+                if (ap.chorusenabled)
+                    extend = Math.Max(extend, 50);
+                if (ap.reverbenabled)
+                    extend = Math.Max(extend, 50);
+
+                if (extend > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Extend by " + extend + " ms due to effects");
+                    src = src.AppendSource(x => new ExtendWaveSource(x, extend));
+                }
+
+                if (ap.chorusenabled)
+                {
+                    src = src.AppendSource(x => new DmoChorusEffect(x) { WetDryMix = ap.chorusmix, Feedback = ap.chorusfeedback, Delay = ap.chorusdelay, Depth = ap.chorusdepth });
+                }
+
+                if (ap.reverbenabled)
+                {
+                    src = src.AppendSource(x => new DmoWavesReverbEffect(x) { InGain = 0, ReverbMix = ap.reverbmix, ReverbTime = ((float)ap.reverbtime) / 1000.0F, HighFrequencyRTRatio = ((float)ap.reverbhfratio) / 1000.0F });
+                }
+
+                if (ap.distortionenabled)
+                {
+                    src = src.AppendSource(x => new DmoDistortionEffect(x) { Gain = ap.distortiongain, Edge = ap.distortionedge, PostEQCenterFrequency = ap.distortioncentrefreq, PostEQBandwidth = ap.distortionfreqwidth });
+                }
+
+                if (ap.gargleenabled)
+                {
+                    src = src.AppendSource(x => new DmoGargleEffect(x) { RateHz = ap.garglefreq });
+                }
+
+                if (ap.echoenabled)
+                {
+                    src = src.AppendSource(x => new DmoEchoEffect(x) { WetDryMix = ap.echomix, Feedback = ap.echofeedback, LeftDelay = ap.echodelay, RightDelay = ap.echodelay });
+                }
+            }
+        }
+    }
+
+    public class ExtendWaveSource : WaveAggregatorBase  // based on the TrimmedWaveSource in the CS Example
+    {
+        long extrabytes;
+        long totalbytes;
+
+        public ExtendWaveSource(IWaveSource ws, int ms) : base(ws)
+        {
+            extrabytes = ws.WaveFormat.MillisecondsToBytes(ms);
+            totalbytes = base.Length + extrabytes;
+            System.Diagnostics.Debug.WriteLine("Extend by " + extrabytes + " at " + ws.WaveFormat.SampleRate);
+        }
+
+        public override long Length { get { return totalbytes; } }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            int read = BaseSource.Read(buffer, offset, count);      // want count, stored at offset
+
+            if (read < count)
+            {
+                int left = count - read;      // what is left
+                int totake = Math.Min(left, (int)extrabytes);
+
+                if (totake > 0)
+                {
+                    Array.Clear(buffer, offset + read, totake);     // at offset+read, clear down to zero the extra bytes
+                    extrabytes -= totake;
+                }
+
+                return read + totake;       // returned this total
+            }
+
+            return read;
+        }
+    }
+
+
+}

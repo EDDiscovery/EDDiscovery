@@ -40,17 +40,29 @@ namespace EDDiscovery
 
         public void Clear() { values.Clear(); }
 
-        public bool GetFirstValue(out string var, out string val)
+        public int GetInt(string name, int def = 0)
         {
-            var = val = "";
-            if (Count > 0)
-            {
-                var = values.First().Key;
-                val = values.First().Value;
-                return true;
-            }
+            int i;
+            if (values.ContainsKey(name) && values[name].InvariantParse(out i))
+                return i;
             else
-                return false;
+                return def;
+        }
+
+        public string GetString(string name, string def = null)
+        {
+            if (values.ContainsKey(name))
+                return values[name];
+            else
+                return def;
+        }
+
+        public void SetOrRemove(bool add, string name,  string value)     // Set it, or remove it
+        {
+            if (add)
+                values[name] = value;
+            else
+                values.Remove(name);
         }
 
         // Print vars, if altops is passed in, you can output using alternate operators
@@ -88,7 +100,7 @@ namespace EDDiscovery
         // fixnamecase means make sure its in Titlecase
         // altops enables operators other than = to be used (set/let only) 
 
-        public bool FromString(StringParser p, FromMode fm, List<string> namelimit = null, bool fixnamecase = false , Dictionary<string,string> altops = null )
+        public bool FromString(StringParser p, FromMode fm, Dictionary<string,string> altops = null )
         {
             Dictionary<string, string> newvars = new Dictionary<string, string>();
 
@@ -133,12 +145,6 @@ namespace EDDiscovery
                 }
 
                 if (!p.IsCharMoveOn('='))
-                    return false;
-
-                if (fixnamecase)
-                    varname = varname.FixTitleCase();
-
-                if (namelimit != null && !namelimit.Contains(varname))
                     return false;
 
                 string value = p.NextQuotedWord((fm == FromMode.SingleEntry) ? " " : (fm == FromMode.MultiEntryComma) ? ", " : ",) ");

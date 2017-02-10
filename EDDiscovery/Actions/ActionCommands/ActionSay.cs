@@ -9,18 +9,16 @@ namespace EDDiscovery.Actions
 {
     public class ActionSay : Action
     {
-        private static Speech.QueuedSynthesizer synth = new Speech.QueuedSynthesizer();           // STATIC only one synth throught the whole program
-        public static void KillSpeech() { synth.KillSpeech(); }
-
         public static string globalvarspeechvolume = "SpeechVolume";
         public static string globalvarspeechrate = "SpeechRate";
         public static string globalvarspeechvoice = "SpeechVoice";
+        public static string globalvarspeecheffects = "SpeechEffects";
 
         static string volumename = "Volume";
         static string voicename = "Voice";
         static string ratename = "Rate";
         static string waitname = "Wait";
-        static List<string> validnames = new List<string>() { voicename, volumename, ratename, waitname };
+        static string preemptname = "Preempt";
 
         public bool FromString(string s, out string saying, out ConditionVariables vars )
         {
@@ -36,7 +34,7 @@ namespace EDDiscovery.Actions
                 StringParser p = new StringParser(s);
                 saying = p.NextQuotedWord(", ");        // stop at space or comma..
 
-                if (saying != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma, validnames, true))))   // normalise variable names (true)
+                if (saying != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma))))   // normalise variable names (true)
                      return true;
 
                 saying = "";
@@ -61,32 +59,32 @@ namespace EDDiscovery.Actions
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             string saying;
             ConditionVariables vars;
             FromString(userdata, out saying, out vars);
 
-            Speech.SpeechConfigure cfg = new Speech.SpeechConfigure();
-            cfg.Init("Set Text to say (use ; to separate randomly selectable phrases)", "Configure Say Command", theme,
-                        saying, vars.ContainsKey(waitname),
-                        synth.GetVoiceNames(),
-                        vars.ContainsKey(voicename) ? vars[voicename] : "Default",
-                        vars.ContainsKey(volumename) ? vars[volumename] : "Default",
-                        vars.ContainsKey(ratename) ? vars[ratename] : "Default");
+            Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
+            cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
+                        "Set Text to say (use ; to separate randomly selectable phrases)", "Configure Say Command", discoveryform.theme,
+                        saying,
+                        vars.ContainsKey(waitname),
+                        vars.ContainsKey(preemptname),
+                        vars.GetString(voicename,"Default"),
+                        vars.GetString(volumename,"Default"),
+                        vars.GetString(ratename,"Default"),
+                        vars
+                        );
 
             if ( cfg.ShowDialog(parent) == DialogResult.OK)
             {
-                ConditionVariables cond = new ConditionVariables();
-
-                if (cfg.Wait)
-                    cond[waitname] = "1";
-                if (!cfg.VoiceName.Equals("Default", StringComparison.InvariantCultureIgnoreCase))
-                    cond[voicename] = cfg.VoiceName;
-                if (!cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase))
-                    cond[volumename] = cfg.Volume;
-                if (!cfg.Rate.Equals("Default", StringComparison.InvariantCultureIgnoreCase))
-                    cond[ratename] = cfg.Rate;
+                ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge
+                cond.SetOrRemove(cfg.Wait, waitname, "1");
+                cond.SetOrRemove(cfg.Preempt, preemptname, "1");
+                cond.SetOrRemove(!cfg.VoiceName.Equals("Default", StringComparison.InvariantCultureIgnoreCase), voicename, cfg.VoiceName);
+                cond.SetOrRemove(!cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase), volumename, cfg.Volume);
+                cond.SetOrRemove(!cfg.Rate.Equals("Default", StringComparison.InvariantCultureIgnoreCase), ratename, cfg.Rate);
 
                 userdata = ToString(cfg.SayText, cond);
                 return true;
@@ -119,9 +117,10 @@ namespace EDDiscovery.Actions
             FromString(userdata, out say, out vars);
 
             bool wait = vars.ContainsKey(waitname);
+            bool priority = vars.ContainsKey(preemptname);
 
             string voice = vars.ContainsKey(voicename) ? vars[voicename] : (ap.currentvars.ContainsKey(globalvarspeechvoice) ? ap.currentvars[globalvarspeechvoice] : "Default");
-            
+
             int vol;
             string evalres = vars.GetNumericValue(volumename, 0, 100, -999, out vol, ap.functions.ExpandString, ap.currentvars); // expand this..
             if (evalres != null)
@@ -144,15 +143,45 @@ namespace EDDiscovery.Actions
             if (rate == -999)
                 ap.currentvars.GetNumericValue(globalvarspeechrate, -10,10,0, out rate);      // don't care about the return, do not expand, its just a number.. if it fails, use def
 
-            string s = synth.Speak(say, voice, vol, rate, ap.functions, ap.currentvars, (wait) ? ap : null);
+            ConditionVariables effects = vars;
 
-            if (s != null)
+            Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(effects);
+            if ( !ses.Any && ap.currentvars.ContainsKey(globalvarspeecheffects))        // if can't see any, and we have a global, use that
             {
-                ap.ReportError(s);
-                return true;
+                effects = new ConditionVariables(ap.currentvars[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
+            }
+
+            string errlist;
+            System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(say, voice, rate, out errlist, ap.functions, ap.currentvars);
+
+            if (ms != null)
+            {
+                Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, effects);
+                if (audio != null)
+                {
+                    if ( wait )
+                    {
+                        audio.sampleOverTag = ap;
+                        audio.sampleOverEvent += Audio_sampleOverEvent;
+                    }
+
+                    ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
+                    return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                }
             }
             else
-                return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                ap.ReportError(errlist);
+
+            return true;
+                // callback here to call ap.Resume
+                // TBD ap call back                
+                //            ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(say, voice, vol, rate, ap.functions, ap.currentvars, (wait) ? ap : null)string s = ;
+            }
+
+        private void Audio_sampleOverEvent(Audio.AudioQueue sender, object tag)
+        {
+            ActionProgramRun ap = tag as ActionProgramRun;
+            ap.ResumeAfterPause();
         }
     }
 }

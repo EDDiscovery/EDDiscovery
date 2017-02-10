@@ -40,7 +40,7 @@ namespace EDDiscovery.Actions
         public virtual string VerifyActionCorrect() { return null; } // on load, is the action correct?
 
         public virtual bool ConfigurationMenuInUse { get { return true; } }
-        public virtual bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public virtual bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             return false;
         }
