@@ -89,9 +89,9 @@ namespace EDDiscovery
         public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public Audio.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
 
-        Audio.AudioDriverCSCore audiodriverwave;
+        Audio.IAudioDriver audiodriverwave;
         Audio.AudioQueue audioqueuewave;
-        Audio.AudioDriverCSCore audiodriverspeech;
+        Audio.IAudioDriver audiodriverspeech;
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
 
@@ -199,7 +199,7 @@ namespace EDDiscovery
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-#if MONO
+#if __MonoCS__
             audiodriverwave = new Audio.AudioDriverDummy();
             audiodriverspeech = new Audio.AudioDriverDummy();
             speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
