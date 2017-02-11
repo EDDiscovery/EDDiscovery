@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.Audio
 {
+#if !__MonoCS__
     class WindowsSpeechEngine : ISpeechEngine
     {
         private System.Speech.Synthesis.SpeechSynthesizer synth;
@@ -49,4 +50,5 @@ namespace EDDiscovery.Audio
             return stream;
         }
     }
+#endif
 }
