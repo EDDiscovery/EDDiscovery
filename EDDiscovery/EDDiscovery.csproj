@@ -212,13 +212,13 @@
     <Compile Include="Audio\SoundEffectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Audio\SoundEffectDialog.designer.cs">
+    <Compile Include="Audio\SoundEffectDialog.Designer.cs">
       <DependentUpon>SoundEffectDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Audio\SpeechConfigure.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Audio\SpeechConfigure.designer.cs">
+    <Compile Include="Audio\SpeechConfigure.Designer.cs">
       <DependentUpon>SpeechConfigure.cs</DependentUpon>
     </Compile>
     <Compile Include="Audio\SpeechSynthesizer.cs" />
@@ -227,7 +227,7 @@
     <Compile Include="Audio\WaveConfigureDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Audio\WaveConfigureDialog.designer.cs">
+    <Compile Include="Audio\WaveConfigureDialog.Designer.cs">
       <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Conditions\ConditionFunctions.cs" />
