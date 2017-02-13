@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace EDDiscovery.CompanionAPI
 {
@@ -43,7 +44,49 @@ namespace EDDiscovery.CompanionAPI
             { "Vulture", "Vulture" }
         };
 
+        public int id { get; set; }
+        public string name { get; set; }
+        public List<CModules> modules;
+        public long valueHull { get; set; }
+        public long valueModules { get; set; }
+        public long valueCargo { get; set; }
+        public long valueTotal { get; set; }
+        public long valueUnloaned { get; set; }
 
+
+        public bool free { get; set; }
+
+        public int healthHull { get; set; }
+        public int healthShield { get; set; }
+        public bool shieldUp { get; set; }
+        public int integrity { get; set; }
+        public int paintwork { get; set; }
+
+
+        public bool cockpitBreached { get; set; }
+        public int oxygenRemaining { get; set; }
+
+
+
+
+        public CShip(JObject jo)
+        {
+            FromJson(jo);
+        }
+
+        public bool FromJson(JObject jo)
+        {
+            try
+            {
+                id = JSONHelper.GetInt(jo["id"]);
+                name = JSONHelper.GetStringDef(jo["name"]);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
     }
 }

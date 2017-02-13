@@ -61,7 +61,7 @@ namespace EDDiscovery.Forms
                 {
                     if (profileJson == null)
                     {
-                        profileJson = CompanionAPIClass.Instance.GetProfile();
+                        profileJson = CompanionAPIClass.Instance.GetProfileString();
                     }
                     if (profileJson == null)
                     {
@@ -97,7 +97,7 @@ namespace EDDiscovery.Forms
             {
                 CompanionAPIClass.Instance.Confirm(code);
                 // All done - see if it works
-                profileJson = CompanionAPIClass.Instance.GetProfile();
+                profileJson = CompanionAPIClass.Instance.GetProfileString();
                 if (profileJson != null)
                 {
                     setUpLoggedIn("Login OK");

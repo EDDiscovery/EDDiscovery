@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using EDDiscovery2.HTTP;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -76,8 +77,11 @@ namespace EDDiscovery.CompanionAPI
                 CurrentState = State.READY;
                 try
                 {
-                    string json = GetProfile();
+                    string json = GetProfileString();
                     JObject jo = JObject.Parse(json);
+
+                    CProfile profile = new CProfile(jo);
+
                     JObject commander = (JObject)jo["commander"];
                     JObject lastSystem = (JObject)jo["lastSystem"];
                     JObject lastStarport = (JObject)jo["lastStarport"];
@@ -192,7 +196,7 @@ namespace EDDiscovery.CompanionAPI
             CurrentState = State.NEEDS_LOGIN;
         }
 
-        public string GetProfile(bool forceRefresh = false)
+        public string GetProfileString(bool forceRefresh = false)
         {
             
             if (CurrentState != State.READY)
@@ -293,10 +297,10 @@ namespace EDDiscovery.CompanionAPI
                 string data = reader.ReadToEnd();
                 if (data == null || data.Trim() == "")
                 {
-                    Trace.WriteLine("No data returned");
+                    HttpCom.WriteLog("Companion No data returned", "");
                     return null;
                 }
-                Trace.WriteLine("Data is " + data);
+                HttpCom.WriteLog("Companion Data is ", data);
                 return data;
             }
         }
@@ -321,9 +325,8 @@ namespace EDDiscovery.CompanionAPI
         // Obtain a response, ensuring that we obtain the response's cookies
         private HttpWebResponse GetResponse(HttpWebRequest request)
         {
-
-            Trace.WriteLine("Requesting " + request.RequestUri);
-
+            HttpCom.WriteLog("Companion Requesting " , request.RequestUri.ToNullSafeString());
+            //Trace.WriteLine("Requesting " + request.RequestUri);
             HttpWebResponse response;
             try
             {
@@ -334,7 +337,8 @@ namespace EDDiscovery.CompanionAPI
                 Trace.WriteLine("Failed to obtain response, error code " + wex.Status);
                 return null;
             }
-            Trace.WriteLine("Response is " + JsonConvert.SerializeObject(response));
+            HttpCom.WriteLog("Companion Response ", JsonConvert.SerializeObject(response));
+            //Trace.WriteLine("Response is " + JsonConvert.SerializeObject(response));
             UpdateCredentials(response);
             Credentials.ToFile();
             
