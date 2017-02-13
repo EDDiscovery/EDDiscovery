@@ -801,16 +801,35 @@ namespace EDDiscovery
             }
         }
 
+        public ISystem GetHomeSystem()
+        {
+            string homesysname = settings.MapHomeSystem;
+
+            ISystem homesys = ((homesysname != null) ? SystemClass.GetSystem(homesysname) : null);
+
+            if (homesys == null || !homesys.HasCoordinate)
+            {
+                homesys = SystemClass.GetSystem("Sol");
+
+                if (homesys == null)
+                {
+                    homesys = new SystemClass("Sol", 0, 0, 0);
+                }
+            }
+
+            return homesys;
+        }
+
         public void Open3DMap(HistoryEntry he)
         {
             this.Cursor = Cursors.WaitCursor;
 
-            string HomeSystem = settings.MapHomeSystem;
+            ISystem HomeSystem = GetHomeSystem();
 
             Controller.history.FillInPositionsFSDJumps();
 
             Map.Prepare(he?.System, HomeSystem,
-                        settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
+                        settings.MapCentreOnSelection ? he?.System : HomeSystem,
                         settings.MapZoom, Controller.history.FilterByTravel);
             Map.Show();
             this.Cursor = Cursors.Default;

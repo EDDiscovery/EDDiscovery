@@ -135,10 +135,17 @@ namespace EDDiscovery2
         public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
                             List<HistoryEntry> visited)
         {
+            ISystem homeSystem = (homesys != null) ? FindSystem(homesys) : null;
+            Prepare(historysel, homeSystem, centersys, zoom, visited);
+        }
+
+        public void Prepare(ISystem historysel, ISystem homesys, ISystem centersys, float zoom,
+                            List<HistoryEntry> visited)
+        {
             _systemlist = visited;
 
             _historySelection = SafeSystem(historysel);
-            _homeSystem = SafeSystem((homesys != null) ? FindSystem(homesys) : null);
+            _homeSystem = SafeSystem(homesys);
             _centerSystem = SafeSystem(centersys);
 
             if (_stargrids == null)
