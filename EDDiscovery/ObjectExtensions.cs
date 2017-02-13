@@ -18,8 +18,24 @@ using System.Text.RegularExpressions;
 public static class ObjectExtensions
 {
     public static string ToNullSafeString(this object obj)
-        {
+    {
         return (obj ?? string.Empty).ToString();
+    }
+
+    public static string ToNANSafeString(this double obj, string format)
+    {
+        return (obj != double.NaN) ? obj.ToString(format) : string.Empty;
+    }
+
+    public static string ToNullUnknownString(this object obj )
+    {
+        if (obj == null)
+            return string.Empty;
+        else
+        {
+            string str = obj.ToString();
+            return str.Equals("Unknown") ? "" : str.Replace("_", " ");
+        }
     }
 
     public static string QuoteString(this string obj, bool comma = false, bool bracket = false)
@@ -32,12 +48,12 @@ public static class ObjectExtensions
 
     public static string EscapeControlChars(this string obj)
     {
-        return obj.Replace("\r", "\\r").Replace("\n", "\\n");
+        return obj.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\\", "\\\\");
     }
 
     public static string ReplaceEscapeControlChars(this string obj)
     {
-        return obj.Replace("\\r", "\r").Replace("\\n", "\n");
+        return obj.Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\\\","\\");
     }
 
     public static int FirstCharNonWhiteSpace(this string obj )

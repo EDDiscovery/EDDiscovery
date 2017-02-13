@@ -28,7 +28,19 @@ namespace EDDiscovery
 
         public ConditionVariables(string s, FromMode fm)     //v=1,v=2 no brackets
         {
-            FromString(s,fm);
+            FromString(s, fm);
+        }
+
+        public ConditionVariables(string s, string value)     
+        {
+            values[s] = value;
+        }
+
+        public ConditionVariables(string[] s) // name,value,name,value..
+        {
+            System.Diagnostics.Debug.Assert(s.Length % 2 == 0);
+            for (int i = 0; i < s.Length; i+=2)
+                values[s[i]] = s[i+1];
         }
 
         public string this[string s] { get { return values[s]; } set { values[s] = value; } }
@@ -40,17 +52,35 @@ namespace EDDiscovery
 
         public void Clear() { values.Clear(); }
 
-        public bool GetFirstValue(out string var, out string val)
+        public void Delete(string name)
         {
-            var = val = "";
-            if (Count > 0)
-            {
-                var = values.First().Key;
-                val = values.First().Value;
-                return true;
-            }
+            if (values.ContainsKey(name))
+                values.Remove(name);
+        }
+
+        public int GetInt(string name, int def = 0)     // get or default
+        {
+            int i;
+            if (values.ContainsKey(name) && values[name].InvariantParse(out i))
+                return i;
             else
-                return false;
+                return def;
+        }
+
+        public string GetString(string name, string def = null)
+        {
+            if (values.ContainsKey(name))
+                return values[name];
+            else
+                return def;
+        }
+
+        public void SetOrRemove(bool add, string name,  string value)     // Set it, or remove it
+        {
+            if (add)
+                values[name] = value;
+            else
+                values.Remove(name);
         }
 
         // Print vars, if altops is passed in, you can output using alternate operators
@@ -88,7 +118,7 @@ namespace EDDiscovery
         // fixnamecase means make sure its in Titlecase
         // altops enables operators other than = to be used (set/let only) 
 
-        public bool FromString(StringParser p, FromMode fm, List<string> namelimit = null, bool fixnamecase = false , Dictionary<string,string> altops = null )
+        public bool FromString(StringParser p, FromMode fm, Dictionary<string,string> altops = null )
         {
             Dictionary<string, string> newvars = new Dictionary<string, string>();
 
@@ -133,12 +163,6 @@ namespace EDDiscovery
                 }
 
                 if (!p.IsCharMoveOn('='))
-                    return false;
-
-                if (fixnamecase)
-                    varname = varname.FixTitleCase();
-
-                if (namelimit != null && !namelimit.Contains(varname))
                     return false;
 
                 string value = p.NextQuotedWord((fm == FromMode.SingleEntry) ? " " : (fm == FromMode.MultiEntryComma) ? ", " : ",) ");
@@ -265,6 +289,27 @@ namespace EDDiscovery
             { System.Diagnostics.Debug.WriteLine(prefix + k.Key + "=" + k.Value); }
         }
 
+        public delegate ConditionLists.ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
+
+        // all variables, expand out thru macro expander.  does not alter these ones
+        public ConditionVariables ExpandAll(ExpandString e, ConditionVariables vars, out string errlist)
+        {
+            errlist = null;
+
+            ConditionVariables exp = new ConditionVariables();
+
+            foreach( KeyValuePair<string,string> k in values)
+            {
+                if (e(values[k.Key], vars, out errlist) == ConditionLists.ExpandResult.Failed)
+                    return null;
+
+                exp[k.Key] = errlist;
+            }
+
+            errlist = null;
+            return exp;
+        }
+
         public string AddToVar(string name, int add, int initial)       // DOES NOT set anything..
         {
             if (values.ContainsKey(name))
@@ -373,34 +418,6 @@ namespace EDDiscovery
                         break;
                 }
             }
-        }
-
-        public delegate ConditionLists.ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
-
-        // if ver there, pass it thru expander, then eval it between these ranges..
-
-        public string GetNumericValue(string name, int min , int max, int def , out int val, ExpandString e = null , ConditionVariables vars = null )
-        {
-            if (values.ContainsKey(name))
-            {
-                string res;
-                if (e != null)
-                {
-                    if (e(values[name], vars, out res) == ConditionLists.ExpandResult.Failed)
-                    {
-                        val = def;
-                        return res;
-                    }
-                }
-                else
-                    res = values[name];
-
-                if (res.InvariantParse(out val) && val >= min && val <= max) // if we don't have volume..  or does not parse or out of range
-                    return null;
-            }
-
-            val = def;
-            return null;
         }
 
         public void AddPropertiesFieldsOfType( Object o, string prefix = "" )

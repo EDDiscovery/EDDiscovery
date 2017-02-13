@@ -54,23 +54,23 @@ namespace EDDiscovery.Actions
             AcceptButton = buttonOK;
         }
 
-        EDDiscovery2.EDDTheme theme;
+        EDDiscoveryForm discoveryform;
         const int vscrollmargin = 10;
         const int xpanelmargin = 3;
 
-        public void Init(string t, EDDiscovery2.EDDTheme th,
+        public void Init(string t, EDDiscoveryForm form,
                             List<string> vbs,              // list any variables you want in condition statements - passed to config menu, passed back up to condition, not null
                             string filesetname,             // file set name
                             ActionProgram prog = null,     // give the program to display
                             string[] defprogs = null,      // list any default program names
                             string suggestedname = null, bool edittext = false)   // give a suggested name, if prog is null
         {
-            theme = th;
+            discoveryform = form;
 
             startvarlist = vbs;
             currentvarlist = new List<string>(startvarlist);
 
-            bool winborder = theme.ApplyToForm(this, SystemFonts.DefaultFont);
+            bool winborder = discoveryform.theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
@@ -205,7 +205,7 @@ namespace EDDiscovery.Actions
 
             g.config.Tag = g.stepname.Tag = g.up.Tag = g.value.Tag = g.left.Tag = g.right.Tag = g.prog.Tag = g;
 
-            theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            discoveryform.theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
             panelVScroll.Controls.Add(g.panel);
 
@@ -260,7 +260,7 @@ namespace EDDiscovery.Actions
             foreach (Group g in groups)
             {
                 int whitespace = 0;
-                Action act = curprog.GetStep(actstep);
+                Action act = curprog.GetStep(actstep++);
 
                 if (act != null)
                 {
@@ -271,8 +271,6 @@ namespace EDDiscovery.Actions
                     whitespace = act.Whitespace;
                     g.prog.Visible = act.Type == Action.ActionType.Call & EditProgram != null;
                     g.config.Visible = act.ConfigurationMenuInUse;
-
-                    actstep++;
                 }
                 else
                 {
@@ -348,7 +346,7 @@ namespace EDDiscovery.Actions
                 {
                     Action a = Action.CreateAction(b.Text);
 
-                    if (!a.ConfigurationMenuInUse || a.ConfigurationMenu(this, theme, currentvarlist))
+                    if (!a.ConfigurationMenuInUse || a.ConfigurationMenu(this, discoveryform, currentvarlist))
                     {
                         curprog.SetStep(gstep, a);
                         g.checkit = a;
@@ -373,7 +371,7 @@ namespace EDDiscovery.Actions
 
             if (curact != null)
             {
-                if (curact.ConfigurationMenu(this, theme, currentvarlist))
+                if (curact.ConfigurationMenu(this, discoveryform, currentvarlist))
                     SetValue(g.value, curact);
             }
         }
