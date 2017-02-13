@@ -24,10 +24,10 @@ namespace EDDiscovery.CompanionAPI
         public List<CShip> Ships { get; set; }
 
         /// <summary>The current starsystem</summary>
-        public ISystem CurrentStarSystem{ get; set; }
+        public CLastSystem CurrentStarSystem{ get; set; }
 
         /// <summary>The last station the commander docked at</summary>
-        //public Station LastStation { get; set; }
+        public CLastStarport StarPort { get; set; }
 
         public CProfile()
         {
@@ -39,10 +39,14 @@ namespace EDDiscovery.CompanionAPI
             if (json["commander"] != null)
             {
                 Cmdr = new CCommander((JObject)json["commander"]);
+                CurrentStarSystem = new CLastSystem((JObject)json["lastSystem"]);
+                StarPort = new CLastStarport((JObject)json["lastStarport"]);
+                Ship = new CShip((JObject)json["ship"]);
+                //Ships = new CShips((JObject)json["ship"]);
             }
 
 
-         
+
         }
 
     }
