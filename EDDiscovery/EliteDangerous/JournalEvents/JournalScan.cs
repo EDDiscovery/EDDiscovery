@@ -191,7 +191,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         //public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
 
 
-         public bool IsEDSMBody
+        public bool IsEDSMBody
         {
             get
             {
@@ -591,7 +591,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         static public System.Drawing.Image GetMoonImageNotScanned()
         {
-            return EDDiscovery.Properties.Resources.Icy_Body_Greenish1;
+            return EDDiscovery.Properties.Resources.Globe;
         }
 
         internal double GetMaterial(string v)

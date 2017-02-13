@@ -39,7 +39,7 @@ namespace ExtendedControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.Flat)
+            if (Appearance == Appearance.Button || FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.Flat)
                 base.OnPaint(e);
             else
             {
@@ -134,12 +134,14 @@ namespace ExtendedControls
         {
             base.OnMouseEnter(eventargs);
             mouseover = true;
+            Invalidate();
         }
 
         protected override void OnMouseLeave(EventArgs eventargs)
         {
-            base.OnMouseEnter(eventargs);
+            base.OnMouseLeave(eventargs);
             mouseover = false;
+            Invalidate();
         }
 
         private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }

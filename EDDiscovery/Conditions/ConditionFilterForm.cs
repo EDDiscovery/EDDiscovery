@@ -150,7 +150,7 @@ namespace EDDiscovery2
 
             // set up where a condition would start on the panel.. dep if the event list is on and the action file system is on..
             // sizes are the sizes of the controls and gaps
-            condxoffset = ((eventlist != null) ? (140 + 8) : 0) + ((actionfilelist != null) ? (140 + 8 + 24 + 8 + 96 + 8) : 0) + panelxmargin + 8;
+            condxoffset = ((eventlist != null) ? (150 + 8) : 0) + ((actionfilelist != null) ? (140 + 8 + 24 + 8 + 96 + 8) : 0) + panelxmargin + 8;
 
             bool winborder = discoveryform.theme.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
@@ -280,7 +280,7 @@ namespace EDDiscovery2
                 g.evlist = new ExtendedControls.ComboBoxCustom();
                 g.evlist.Items.AddRange(eventlist);
                 g.evlist.Location = new Point(panelxmargin, panelymargin);
-                g.evlist.Size = new Size(140, 24);
+                g.evlist.Size = new Size(150, 24);
                 g.evlist.DropDownHeight = 400;
                 if (initialev != null && initialev.Length > 0)
                     g.evlist.Text = initialev;
@@ -422,7 +422,7 @@ namespace EDDiscovery2
             c.cond = new ExtendedControls.ComboBoxCustom();
             c.cond.Items.AddRange(ConditionLists.MatchNames);
             c.cond.SelectedIndex = 0;
-            c.cond.Size = new Size(130, 24);
+            c.cond.Size = new Size(140, 24);
             c.cond.DropDownHeight = 400;
             c.cond.Tag = g;
 
@@ -738,7 +738,7 @@ namespace EDDiscovery2
                     {
                         if (newfile)
                         {
-                            newname = EDDiscovery.Actions.Action.PromptSingleLine.ShowDialog(this, "Enter name of new action file", "", "Action File");
+                            newname = EDDiscovery.Actions.Action.PromptSingleLine.ShowDialog(this, discoveryform.theme, "Enter name of new action file", "", "Action File");
 
                             if (newname != null)
                             {

@@ -274,7 +274,7 @@ namespace EDDiscovery
                 Controller.LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
 
-            actioncontroller.ActionRunOnEvent("onStartup", "ProgramEvent");
+            actioncontroller.ActionRun("onStartup", "ProgramEvent");
         }
 
         private Task CheckForNewInstallerAsync()
@@ -439,7 +439,7 @@ namespace EDDiscovery
         {
             travelHistoryControl1.RefreshButton(false);
             journalViewControl1.RefreshButton(false);
-            actioncontroller.ActionRunOnEvent("onRefreshStart", "ProgramEvent");
+            actioncontroller.ActionRun("onRefreshStart", "ProgramEvent");
         }
 
         private void Controller_RefreshCommanders()
@@ -528,7 +528,7 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
                 ShowInfoPanel("Closing, please wait!", true);
-                actioncontroller.ActionRunOnEvent("onShutdown", "ProgramEvent");
+                actioncontroller.ActionRun("onShutdown", "ProgramEvent");
                 Controller.Shutdown();
             }
         }
@@ -539,7 +539,6 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            actioncontroller.ActionRunOnEvent("onStartup", "ProgramEvent");
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1067,6 +1066,11 @@ namespace EDDiscovery
             return false;
         }
 
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActionRun("onTabChange", "UserUIEvent", null,new ConditionVariables("TabName", tabControl1.TabPages[tabControl1.SelectedIndex].Text));
+        }
+
         private void soundSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             actioncontroller.ConfigureWave();
@@ -1074,7 +1078,11 @@ namespace EDDiscovery
 
         public ConditionVariables Globals { get { return actioncontroller.Globals; } }
 
-        public int ActionRunOnEntry(HistoryEntry he, string triggertype) { return actioncontroller.ActionRunOnEntry(he, triggertype); }
+        public int ActionRunOnEntry(HistoryEntry he, string triggertype)
+        { return actioncontroller.ActionRunOnEntry(he, triggertype); }
+
+        public int ActionRun(string name, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
+        { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
         #endregion
 

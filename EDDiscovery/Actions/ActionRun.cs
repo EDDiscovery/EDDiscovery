@@ -19,7 +19,6 @@ namespace EDDiscovery.Actions
 
         bool async = false;             // if this Action is an asynchoronous object
         bool executing = false;         // Records is executing
-        bool inpause = false;           // we are executing, but pausing
         Timer restarttick = new Timer();
 
         public ActionRun(ActionController ed, ActionFileList afl)
@@ -45,11 +44,24 @@ namespace EDDiscovery.Actions
                 progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, actioncontroller));
         }
 
-        public void Execute()    // MAIN thread only..     
+        public void Execute()  
         {
-            if (inpause)        // someone else, during a pause, asked for us to run.. we don't, until the pause completes.
-                return;
+            if (!executing)        // someone else, asked for us to run.. we don't, as there is a pause, and we wait until the pause completes
+            {
+                DoExecute();
+            }
+        }
 
+        public void ResumeAfterPause()          // used when async..
+        {
+            if (executing) // must be in an execute state
+            {
+                DoExecute();
+            }
+        }
+
+        private void DoExecute()    // MAIN thread only..     
+        {
             executing = true;
 
             System.Diagnostics.Stopwatch timetaken = new System.Diagnostics.Stopwatch();
@@ -140,7 +152,6 @@ namespace EDDiscovery.Actions
                     }
                     else if (!ac.ExecuteAction(progcurrent))      // if execute says, stop, i'm waiting for something
                     {
-                        inpause = true;
                         return;             // exit, with executing set true.  ResumeAfterPause will restart it.
                     }
                 }
@@ -163,20 +174,12 @@ namespace EDDiscovery.Actions
             Execute();
         }
 
-        public void ResumeAfterPause()          // used when async..
-        {
-            if (executing && inpause)
-            {
-                inpause = false;
-                Execute();
-            }
-        }
 
         public void TerminateAll()          // halt everything
         {
             progcurrent = null;
             progqueue.Clear();
-            inpause = executing = false;
+            executing = false;
         }
 
         public void WaitTillFinished(int timeout)           // Could be IN ANOTHER THREAD BEWARE

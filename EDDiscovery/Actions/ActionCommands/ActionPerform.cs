@@ -13,7 +13,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Perform command", UserData, "Configure Perform Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Perform command", UserData, "Configure Perform Command");
             if (promptValue != null)
             {
                 userdata = promptValue;

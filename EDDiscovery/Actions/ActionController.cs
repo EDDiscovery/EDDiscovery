@@ -17,8 +17,8 @@ namespace EDDiscovery.Actions
         private ActionMessageFilter actionfilesmessagefilter;
         private Actions.ActionRun actionrunasync;
 
-        private ConditionVariables internalglobalvariables;         // internally set variables, either program or user program ones
-        private ConditionVariables usercontrolledglobalvariables;   // user variables, set by user only, including user setting vars like SpeechVolume
+        private ConditionVariables programrunglobalvariables;         // program run, lost at power off, set by GLOBAL or internal 
+        private ConditionVariables persistentglobalvariables;   // user variables, set by user only, including user setting vars like SpeechVolume
         private ConditionVariables globalvariables;                  // combo of above.
 
         private EDDiscoveryForm discoveryform;
@@ -33,12 +33,12 @@ namespace EDDiscovery.Actions
             discoveryform = frm;
             discoverycontroller = ctrl;
 
-            usercontrolledglobalvariables = new ConditionVariables();
-            usercontrolledglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
+            persistentglobalvariables = new ConditionVariables();
+            persistentglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
 
-            globalvariables = new ConditionVariables(usercontrolledglobalvariables);        // copy existing user ones into to shared buffer..
+            globalvariables = new ConditionVariables(persistentglobalvariables);        // copy existing user ones into to shared buffer..
 
-            internalglobalvariables = new ConditionVariables();
+            programrunglobalvariables = new ConditionVariables();
 
             SetInternalGlobal("CurrentCulture", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
             SetInternalGlobal("CurrentCultureInEnglish", System.Threading.Thread.CurrentThread.CurrentCulture.EnglishName);
@@ -63,18 +63,24 @@ namespace EDDiscovery.Actions
             events.Add("All");
             events.Add("onRefreshStart");
             events.Add("onRefreshEnd");
+            events.Add("onInstall");
             events.Add("onStartup");
             events.Add("onShutdown");
             events.Add("onKeyPress");
-            //events.Add("onClosedown");
+            events.Add("onTimer");
+            events.Add("onPopUp");
+            events.Add("onPopDown");
+            events.Add("onTabChange");
+            events.Add("onPanelChange");
+            events.Add("onHistorySelection");
 
-            frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, usercontrolledglobalvariables, actionfiles, discoveryform);
+            frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, persistentglobalvariables, actionfiles, discoveryform);
             frm.TopMost = discoveryform.FindForm().TopMost;
 
             frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
 
-            usercontrolledglobalvariables = frm.userglobalvariables;
-            globalvariables = new ConditionVariables(internalglobalvariables, usercontrolledglobalvariables);    // remake
+            persistentglobalvariables = frm.userglobalvariables;
+            globalvariables = new ConditionVariables(programrunglobalvariables, persistentglobalvariables);    // remake
 
             ActionConfigureKeys();
         }
@@ -84,21 +90,29 @@ namespace EDDiscovery.Actions
             DownloadManagerForm dmf = new DownloadManagerForm();
             dmf.Init(discoveryform.theme);
             dmf.ShowDialog(discoveryform);
-            if (dmf.performedupdate)
+            if (dmf.changelist.Count>0)
             {
                 actionrunasync.TerminateAll();
                 discoveryform.AudioQueueSpeech.StopAll();
                 ReLoad();
-                ActionRunOnEvent("onStartup", "ProgramEvent");
+
+                string changes = "";
+                foreach( KeyValuePair<string,string> kv in dmf.changelist)
+                {
+                    if (kv.Value.Equals("+"))
+                        changes += kv.Key + ";";
+                }
+
+                ActionRun("onInstall", "ProgramEvent",null,new ConditionVariables("InstallList", changes));
             }
         }
 
         public void ConfigureVoice()
         {
-            string voicename = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechvoice, "Default");
-            string volume = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechvolume,"Default");
-            string rate = usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeechrate,"Default");
-            ConditionVariables effects = new ConditionVariables( usercontrolledglobalvariables.GetString(Actions.ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
+            string voicename = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechvoice, "Default");
+            string volume = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechvolume,"Default");
+            string rate = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechrate,"Default");
+            ConditionVariables effects = new ConditionVariables( persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
 
             Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
             cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
@@ -111,17 +125,17 @@ namespace EDDiscovery.Actions
 
             if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
             {
-                SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvoice, cfg.VoiceName);
-                SetUserControlledGlobal(Actions.ActionSay.globalvarspeechvolume, cfg.Volume);
-                SetUserControlledGlobal(Actions.ActionSay.globalvarspeechrate, cfg.Rate);
-                SetUserControlledGlobal(Actions.ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
+                SetPeristentGlobal(Actions.ActionSay.globalvarspeechvoice, cfg.VoiceName);
+                SetPeristentGlobal(Actions.ActionSay.globalvarspeechvolume, cfg.Volume);
+                SetPeristentGlobal(Actions.ActionSay.globalvarspeechrate, cfg.Rate);
+                SetPeristentGlobal(Actions.ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
             }
         }
 
         public void ConfigureWave()
         {
-            string volume = usercontrolledglobalvariables.GetString(Actions.ActionPlay.globalvarplayvolume, "60");
-            ConditionVariables effects = new ConditionVariables(usercontrolledglobalvariables.GetString(Actions.ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
+            string volume = persistentglobalvariables.GetString(Actions.ActionPlay.globalvarplayvolume, "60");
+            ConditionVariables effects = new ConditionVariables(persistentglobalvariables.GetString(Actions.ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             Audio.WaveConfigureDialog dlg = new Audio.WaveConfigureDialog();
             dlg.Init(discoveryform.AudioQueueWave, true, "Configure Audio", discoveryform.theme, "",
@@ -131,17 +145,17 @@ namespace EDDiscovery.Actions
             {
                 ConditionVariables cond = new ConditionVariables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
 
-                SetUserControlledGlobal(Actions.ActionPlay.globalvarplayvolume, dlg.Volume);
-                SetUserControlledGlobal(Actions.ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
+                SetPeristentGlobal(Actions.ActionPlay.globalvarplayvolume, dlg.Volume);
+                SetPeristentGlobal(Actions.ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
             }
         }
 
 
         public void ConfigureSpeechText()
         {
-            if (internalglobalvariables.ContainsKey("SpeechDefinitionFile"))
+            if (programrunglobalvariables.ContainsKey("SpeechDefinitionFile"))
             {
-                string prog = internalglobalvariables["SpeechDefinitionFile"];
+                string prog = programrunglobalvariables["SpeechDefinitionFile"];
 
                 Tuple<ActionFile, ActionProgram> ap = actionfiles.FindProgram(prog);
 
@@ -157,10 +171,10 @@ namespace EDDiscovery.Actions
 
         public void ActionRunOnRefresh()
         {
-            string prevcommander = internalglobalvariables.ContainsKey("Commander") ? internalglobalvariables["Commander"] : "None";
+            string prevcommander = programrunglobalvariables.ContainsKey("Commander") ? programrunglobalvariables["Commander"] : "None";
             string commander = (discoverycontroller.history.CommanderId < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
 
-            string refreshcount = prevcommander.Equals(commander) ? internalglobalvariables.AddToVar("RefreshCount", 1, 1) : "1";
+            string refreshcount = prevcommander.Equals(commander) ? programrunglobalvariables.AddToVar("RefreshCount", 1, 1) : "1";
             SetInternalGlobal("RefreshCount", refreshcount);
             SetInternalGlobal("Commander", commander);
 
@@ -170,81 +184,67 @@ namespace EDDiscovery.Actions
                     ActionRunOnEntry(he, "onRefresh", ConditionVariables.flagRunAtRefresh);
             }
 
-            ActionRunOnEvent("onRefreshEnd", "ProgramEvent");
+            ActionRun("onRefreshEnd", "ProgramEvent");
         }
 
-
-        public int ActionRunOnEntry(HistoryEntry he, string triggertype, string flagstart = null, bool now = false, bool noexecute = false)       //set flagstart to be the first flag of the actiondata..
+        public int ActionRunOnEntry(HistoryEntry he, string triggertype, string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
         {
-            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(he.journalEntry.EventTypeStr, flagstart);
+            return ActionRun(he.journalEntry.EventTypeStr, triggertype, he, null, flagstart, now);
+        }
+
+        public int ActionRun(string triggername, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null ,
+                                string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
+        {
+            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(triggername, flagstart);
 
             if (ale.Count > 0)
             {
                 ConditionVariables testvars = new ConditionVariables(globalvariables);
-                Actions.ActionVars.TriggerVars(testvars, he.journalEntry.EventTypeStr, triggertype);
-                Actions.ActionVars.HistoryEventVars(testvars, he, "Event");
+                Actions.ActionVars.TriggerVars(testvars, triggername, triggertype);
+                testvars.Add(additionalvars);   // adding null is allowed
+                Actions.ActionVars.HistoryEventVars(testvars, he, "Event");     // if HE is null, ignored
 
                 ConditionFunctions functions = new ConditionFunctions();
 
-                if (actionfiles.CheckActions(ale, he.journalEntry.EventDataString, testvars, functions.ExpandString) > 0)
+                if (actionfiles.CheckActions(ale, (he!=null) ? he.journalEntry.EventDataString : null, testvars, functions.ExpandString) > 0)
                 {
                     ConditionVariables eventvars = new ConditionVariables();        // we don't pass globals in - added when they are run
-                    Actions.ActionVars.TriggerVars(eventvars, he.journalEntry.EventTypeStr, triggertype);
+                    Actions.ActionVars.TriggerVars(eventvars, triggername, triggertype);
+                    eventvars.Add(additionalvars);
                     Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");
-                    eventvars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, "EventJS_");        // for all events, add to field list
 
-                    actionfiles.RunActions(now,ale, actionrunasync, eventvars);  // add programs to action run
+                    if (he != null)
+                        eventvars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, "EventJS_");        // for all events, add to field list
 
-                    if ( !noexecute )
-                        actionrunasync.Execute();       // will execute
+                    actionfiles.RunActions(now, ale, actionrunasync, eventvars);  // add programs to action run
+
+                    actionrunasync.Execute();       // See if needs executing
                 }
             }
 
             return ale.Count;
         }
 
-        public int ActionRunOnEvent(string name, string triggertype, ConditionVariables additionalvars = null , bool now = false, bool noexecute = false)
+        public void SetPeristentGlobal(string name, string value)     // saved on exit
         {
-            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(name);
-
-            if (ale.Count > 0)
-            {
-                ConditionVariables testvars = new ConditionVariables(globalvariables);
-                Actions.ActionVars.TriggerVars(testvars, name, triggertype);
-
-                ConditionFunctions functions = new ConditionFunctions();
-
-                if (actionfiles.CheckActions(ale, null, testvars, functions.ExpandString) > 0)
-                {
-                    ConditionVariables eventvars = new ConditionVariables();
-                    Actions.ActionVars.TriggerVars(eventvars, name, triggertype);
-
-                    if (additionalvars != null)
-                        eventvars.Add(additionalvars);
-
-                    actionfiles.RunActions(now,ale, actionrunasync, eventvars);  // add programs to action run
-
-                    if ( !noexecute)
-                        actionrunasync.Execute();       // will execute
-                }
-            }
-
-            return ale.Count;
-        }
-
-        public void SetUserControlledGlobal(string name, string value)     // saved on exit
-        {
-            usercontrolledglobalvariables[name] = globalvariables[name] = value;
+            persistentglobalvariables[name] = globalvariables[name] = value;
         }
 
         public void SetInternalGlobal(string name, string value)           // internal program vars
         {
-            internalglobalvariables[name] = globalvariables[name] = value;
+            programrunglobalvariables[name] = globalvariables[name] = value;
         }
 
-        public void SetProgramGlobal(string name, string value)         // different name for identification purposes, for sets
+        public void SetNonPersistentGlobal(string name, string value)         // different name for identification purposes, for sets
         {
-            internalglobalvariables[name] = globalvariables[name] = value;
+            programrunglobalvariables[name] = globalvariables[name] = value;
+        }
+
+        public void DeleteVariable(string name)
+        {
+            programrunglobalvariables.Delete(name);
+            persistentglobalvariables.Delete(name);
+            globalvariables.Delete(name); 
         }
 
         public void TerminateAll()
@@ -255,7 +255,7 @@ namespace EDDiscovery.Actions
         public void CloseDown()
         {
             actionrunasync.WaitTillFinished(10000);
-            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", usercontrolledglobalvariables.ToString());
+            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", persistentglobalvariables.ToString());
         }
 
         public void LogLine(string s)
@@ -306,7 +306,7 @@ namespace EDDiscovery.Actions
             if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
                 globalvariables["KeyPress"] = keyname;          // only add it to global variables, its not kept in internals.
-                ActionRunOnEvent("onKeyPress", "KeyPress");
+                ActionRun("onKeyPress", "KeyPress");
                 return true;
             }
             else

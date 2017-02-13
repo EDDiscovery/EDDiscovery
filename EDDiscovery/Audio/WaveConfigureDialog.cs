@@ -147,7 +147,7 @@ namespace EDDiscovery.Audio
 
             dlg.DefaultExt = "mp3";
             dlg.AddExtension = true;
-            dlg.Filter = "MP3 Files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav|All files (*.*)|*.*";
+            dlg.Filter = "MP3 Files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav|Audio Files (*.mp3;*.wav)|*.mp3;*.wav|All files (*.*)|*.*";
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {

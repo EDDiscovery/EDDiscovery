@@ -20,7 +20,7 @@ namespace EDDiscovery.Forms
 {
     public partial class DownloadManagerForm : Form
     {
-        public bool performedupdate;
+        public Dictionary<string,string> changelist = new Dictionary<string,string>();      //+ enabled/installed, - deleted/disabled
 
         class Group
         {
@@ -45,8 +45,12 @@ namespace EDDiscovery.Forms
         int labelheightmargin = 6;
         int panelleftmargin = 3;
         Font font;
+
         string downloadactfolder;
         string downloadflightfolder;
+#if DEBUG
+        string downloadactdebugfolder;
+#endif
 
         public DownloadManagerForm()
         {
@@ -96,9 +100,19 @@ namespace EDDiscovery.Forms
             if (!System.IO.Directory.Exists(downloadflightfolder))
                 System.IO.Directory.CreateDirectory(downloadflightfolder);
 
+#if DEBUG
+            downloadactdebugfolder = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "temp\\Debug");
+            if (!System.IO.Directory.Exists(downloadactdebugfolder))
+                System.IO.Directory.CreateDirectory(downloadactdebugfolder);
+#endif
+
 #if GITHUBDOWNLOAD
+
             DownloadFromGitHub(downloadactfolder, "ActionFiles/V1");
             DownloadFromGitHub(downloadflightfolder, "VideoFiles/V1");
+#if DEBUG
+            DownloadFromGitHub(downloadactdebugfolder, "ActionFiles/Debug");
+#endif
 #endif
 
             Invoke((MethodInvoker)ReadyToDisplay);
@@ -121,6 +135,10 @@ namespace EDDiscovery.Forms
 
             mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Actions", "*.act", "Action File");
             mgr.ReadInstallFiles(downloadactfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
+
+#if DEBUG
+            mgr.ReadInstallFiles(downloadactdebugfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
+#endif
 
             mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Flights", "*.vid", "Video File");
             mgr.ReadInstallFiles(downloadflightfolder, Tools.GetAppDataDirectory(), "*.vid", edversion, "Video File");
@@ -286,7 +304,7 @@ namespace EDDiscovery.Forms
             ExtendedControls.CheckBoxCustom cb = sender as ExtendedControls.CheckBoxCustom;
             Group g = cb.Tag as Group;
             VersioningManager.SetEnableFlag(g.di.localfilename, cb.Checked);
-            performedupdate = true;
+            changelist[g.di.itemname] = cb.Checked ? "+" : "-";
         }
 
         private void Actionbutton_Click(object sender, EventArgs e)
@@ -300,11 +318,11 @@ namespace EDDiscovery.Forms
                     return;
             }
 
-            if (VersioningManager.InstallFiles(g.di, Tools.GetAppDataDirectory()))
+            if (mgr.InstallFiles(g.di, Tools.GetAppDataDirectory()))
             {
+                changelist[g.di.itemname] = "+";
                 MessageBox.Show(this, "Add-on updated");
                 ReadyToDisplay();
-                performedupdate = true;
             }
             else
                 MessageBox.Show(this, "Add-on failed to update. Check files for read only status", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -319,7 +337,7 @@ namespace EDDiscovery.Forms
             {
                 VersioningManager.DeleteInstall(g.di, Tools.GetAppDataDirectory());
                 ReadyToDisplay();
-                performedupdate = true;
+                changelist[g.di.itemname] = "-";
             }
         }
                 

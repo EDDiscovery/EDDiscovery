@@ -17,7 +17,7 @@ namespace EDDiscovery.Forms
         public PopOutControl( EDDiscoveryForm ed )
         {
             _discoveryForm = ed;
-            usercontrolsforms = new UserControlFormList();
+            usercontrolsforms = new UserControlFormList(_discoveryForm);
         }
 
         public int Count { get { return usercontrolsforms.Count;  } }
@@ -80,7 +80,7 @@ namespace EDDiscovery.Forms
             }
         }
 
-        public Dictionary<PopOuts, PopOutInfo> popoutinfo = new Dictionary<PopOuts, PopOutInfo>
+        static public Dictionary<PopOuts, PopOutInfo> popoutinfo = new Dictionary<PopOuts, PopOutInfo>
         {
             { PopOuts.Log, new PopOutInfo("Log", "Log", EDDiscovery.Properties.Resources.Log, "Display the program log") },
             { PopOuts.StarDistance, new PopOutInfo("Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star, "Display the nearest stars to the currently selected entry") },
@@ -184,19 +184,20 @@ namespace EDDiscovery.Forms
                 }
 
                 _discoveryForm.TravelControl.UserControlPostCreate(numopened, ctrl);        // YUK YUK YUK wire up to some internals.. at some point this needs sorting out
+                tcf.Show();
+
+                if (tcf.UserControl != null)
+                    tcf.UserControl.Font = _discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
+                                                                                // ApplyToForm does not apply the font to the actual UC, only
+                                                                                // specific children controls.  The TabControl in the discoveryform ends up autoscaling most stuff
+                                                                                // the children directly attached to the discoveryform are not autoscaled
+
+                _discoveryForm.theme.ApplyToForm(tcf);
+
+                ctrl.Display(_discoveryForm.TravelControl.GetTravelHistoryCurrent, _discoveryForm.history);
+
+                _discoveryForm.ActionRun("onPopUp", "UserUIEvent", null, new ConditionVariables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }
-
-            tcf.Show();
-
-            if (tcf.UserControl != null)
-                tcf.UserControl.Font = _discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
-                                                                            // ApplyToForm does not apply the font to the actual UC, only
-                                                                            // specific children controls.  The TabControl in the discoveryform ends up autoscaling most stuff
-                                                                            // the children directly attached to the discoveryform are not autoscaled
-
-            _discoveryForm.theme.ApplyToForm(tcf);
-
-            ctrl.Display(_discoveryForm.TravelControl.GetTravelHistoryCurrent, _discoveryForm.history);
         }
 
         public void SetRefreshState(bool state)

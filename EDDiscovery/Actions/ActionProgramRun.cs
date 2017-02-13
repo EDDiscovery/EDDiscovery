@@ -192,7 +192,7 @@ namespace EDDiscovery.Actions
         #endregion
 
         #region Run time errors
-        public void ReportError(string s)
+        public bool ReportError(string s)
         {
             currentvars["LastError"] = s;
             if (!continueonerrors)
@@ -205,6 +205,8 @@ namespace EDDiscovery.Actions
             {
                 System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Swallowed error " + s);
             }
+
+            return true;    // always true.. so you can use this directly in a return in the commands
         }
 
         public string GetErrorList { get { return errlist; } }

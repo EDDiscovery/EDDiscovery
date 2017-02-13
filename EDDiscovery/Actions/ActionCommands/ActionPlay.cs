@@ -10,6 +10,8 @@ namespace EDDiscovery.Actions
 {
     public class ActionPlay : Action
     {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
         public static string globalvarplayvolume = "WaveVolume";
         public static string globalvarplayeffects = "WaveEffects";
 
@@ -47,6 +49,12 @@ namespace EDDiscovery.Actions
                 return path.QuoteString(comma: true);
         }
 
+        public override string VerifyActionCorrect()
+        {
+            string path;
+            ConditionVariables vars;
+            return FromString(userdata, out path, out vars) ? null : "Play command line not in correct format";
+        }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
@@ -78,56 +86,59 @@ namespace EDDiscovery.Actions
         {
             string pathunexpanded;
             ConditionVariables statementvars;
-            FromString(userdata, out pathunexpanded, out statementvars);
-
-            string errlist = null;
-            ConditionVariables vars = statementvars.ExpandAll(ap.functions.ExpandString, ap.currentvars, out errlist);
-
-            if (errlist == null)
+            if (FromString(userdata, out pathunexpanded, out statementvars))
             {
-                string path;
-                if (ap.functions.ExpandString(pathunexpanded, ap.currentvars, out path) != ConditionLists.ExpandResult.Failed)
+                string errlist = null;
+                ConditionVariables vars = statementvars.ExpandAll(ap.functions.ExpandString, ap.currentvars, out errlist);
+
+                if (errlist == null)
                 {
-                    if (System.IO.File.Exists(path))
+                    string path;
+                    if (ap.functions.ExpandString(pathunexpanded, ap.currentvars, out path) != ConditionLists.ExpandResult.Failed)
                     {
-                        bool wait = vars.GetInt(waitname, 0) != 0;
-                        bool priority = vars.GetInt(preemptname, 0) != 0;
-
-                        int vol = vars.GetInt(volumename, -999);
-                        if (vol == -999)
-                            vol = ap.currentvars.GetInt(globalvarplayvolume, 60);
-
-                        Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
-
-                        if (!ses.Any && !ses.OverrideNone && ap.currentvars.ContainsKey(globalvarplayeffects))  // if can't see any, and override none if off, and we have a global, use that
+                        if (System.IO.File.Exists(path))
                         {
-                            vars = new ConditionVariables(ap.currentvars[globalvarplayeffects], ConditionVariables.FromMode.MultiEntryComma);
-                        }
+                            bool wait = vars.GetInt(waitname, 0) != 0;
+                            bool priority = vars.GetInt(preemptname, 0) != 0;
 
-                        Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(path, vars);
+                            int vol = vars.GetInt(volumename, -999);
+                            if (vol == -999)
+                                vol = ap.currentvars.GetInt(globalvarplayvolume, 60);
 
-                        if (audio != null)
-                        {
-                            if (wait)
+                            Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
+
+                            if (!ses.Any && !ses.OverrideNone && ap.currentvars.ContainsKey(globalvarplayeffects))  // if can't see any, and override none if off, and we have a global, use that
                             {
-                                audio.sampleOverTag = ap;
-                                audio.sampleOverEvent += Audio_sampleOverEvent;
+                                vars = new ConditionVariables(ap.currentvars[globalvarplayeffects], ConditionVariables.FromMode.MultiEntryComma);
                             }
 
-                            ap.actioncontroller.DiscoveryForm.AudioQueueWave.Submit(audio, vol, priority);
-                            return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(path, vars);
+
+                            if (audio != null)
+                            {
+                                if (wait)
+                                {
+                                    audio.sampleOverTag = ap;
+                                    audio.sampleOverEvent += Audio_sampleOverEvent;
+                                }
+
+                                ap.actioncontroller.DiscoveryForm.AudioQueueWave.Submit(audio, vol, priority);
+                                return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                            }
+                            else
+                                ap.ReportError("Play could not create audio, check audio file format is supported and effects settings");
                         }
                         else
-                            ap.ReportError("Play could not create audio, check audio file format is supported and effects settings");
+                            ap.ReportError("Play could not find file " + path);
                     }
                     else
-                        ap.ReportError("Play could not find file " + path);
+                        ap.ReportError(path);
                 }
                 else
-                    ap.ReportError(path);
+                    ap.ReportError(errlist);
             }
             else
-                ap.ReportError(errlist);
+                ap.ReportError("Play command line not in correct format");
 
             return true;
         }
