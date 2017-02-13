@@ -89,9 +89,9 @@ namespace EDDiscovery
         public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public Audio.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
 
-        Audio.AudioDriverCSCore audiodriverwave;
+        Audio.IAudioDriver audiodriverwave;
         Audio.AudioQueue audioqueuewave;
-        Audio.AudioDriverCSCore audiodriverspeech;
+        Audio.IAudioDriver audiodriverspeech;
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
 
@@ -199,14 +199,24 @@ namespace EDDiscovery
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-#if MONO
+#if !__MonoCS__
+            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                audiodriverwave = new Audio.AudioDriverCSCore();
+                audiodriverspeech = new Audio.AudioDriverCSCore();
+                speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
+            }
+            else
+            {
+                audiodriverwave = new Audio.AudioDriverDummy();
+                audiodriverspeech = new Audio.AudioDriverDummy();
+                speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
+            }
+#else
             audiodriverwave = new Audio.AudioDriverDummy();
             audiodriverspeech = new Audio.AudioDriverDummy();
             speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
-#else
-            audiodriverwave = new Audio.AudioDriverCSCore();
-            audiodriverspeech = new Audio.AudioDriverCSCore();
-            speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
 #endif
             audioqueuewave = new Audio.AudioQueue(audiodriverwave);
             audioqueuespeech = new Audio.AudioQueue(audiodriverspeech);
