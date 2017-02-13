@@ -12,6 +12,10 @@ namespace EDDiscovery.Audio
     {
         public event AudioStopped AudioStoppedEvent;
 
+        public AudioDriverDummy()
+        {
+        }
+
         public AudioDriverDummy(string devicestr)     // string would give a hint on device.. not used yet
         {
         }
