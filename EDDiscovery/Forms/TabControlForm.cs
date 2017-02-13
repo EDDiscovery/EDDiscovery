@@ -35,6 +35,10 @@ namespace EDDiscovery2
         public bool isactive = false;
         public int displaynumber;
         public bool norepositionwindow = false;
+        private int _formWidth;
+        private int _formHeight;
+        private int _formTop;
+        private int _formLeft;
 
         public TabControlForm()
         {
@@ -114,6 +118,11 @@ namespace EDDiscovery2
                 this.Height = height;
                 this.Width = width;
 
+                this._formTop = top;
+                this._formLeft = left;
+                this._formWidth = width;
+                this._formHeight = height;
+
                 this.CreateParams.X = this.Left;
                 this.CreateParams.Y = this.Top;
                 this.StartPosition = FormStartPosition.Manual;
@@ -130,12 +139,38 @@ namespace EDDiscovery2
             }
 
             string root = "PopUpForm" + displaynumber;
-            SQLiteDBClass.PutSettingInt(root + "Width", this.Width);
-            SQLiteDBClass.PutSettingInt(root + "Height", this.Height);
-            SQLiteDBClass.PutSettingInt(root + "Top", this.Top);
-            SQLiteDBClass.PutSettingInt(root + "Left", this.Left);
+            SQLiteDBClass.PutSettingInt(root + "Width", this._formWidth);
+            SQLiteDBClass.PutSettingInt(root + "Height", this._formHeight);
+            SQLiteDBClass.PutSettingInt(root + "Top", this._formTop);
+            SQLiteDBClass.PutSettingInt(root + "Left", this._formLeft);
 
             SQLiteDBClass.PutSettingInt(root + "Tab", ctc.SelectedIndex);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            if (WindowState == FormWindowState.Normal)
+            {
+                _formTop = this.Top;
+                _formLeft = this.Left;
+                _formWidth = this.Width;
+                _formHeight = this.Height;
+            }
+
+            base.OnResize(e);
+        }
+
+        protected override void OnResizeEnd(EventArgs e)
+        {
+            if (WindowState == FormWindowState.Normal)
+            {
+                _formTop = this.Top;
+                _formLeft = this.Left;
+                _formWidth = this.Width;
+                _formHeight = this.Height;
+            }
+
+            base.OnResizeEnd(e);
         }
 
         public void SelectDefaultTab()

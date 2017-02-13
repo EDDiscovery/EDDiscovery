@@ -8,7 +8,7 @@ namespace EDDiscovery.Audio
 {
     public delegate void AudioStopped();
 
-    public interface IAudioDriver                               
+    public interface IAudioDriver : IDisposable
     {
         event AudioStopped AudioStoppedEvent;
         void Start(Object o, int vol);      // start with this audio
