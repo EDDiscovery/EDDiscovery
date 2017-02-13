@@ -456,7 +456,18 @@ namespace EDDiscovery
                     textBoxY.Text = syspos.System.y.ToString(SingleCoordinateFormat);
                     textBoxZ.Text = syspos.System.z.ToString(SingleCoordinateFormat);
 
-                    textBoxHomeDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
+                    ISystem homesys = _discoveryForm.GetHomeSystem();
+
+                    if (homesys == null || !homesys.HasCoordinate)
+                    {
+                        homesys = new SystemClass("Sol", 0, 0, 0);
+                    }
+
+                    double xdist = syspos.System.x - homesys.x;
+                    double ydist = syspos.System.y - homesys.y;
+                    double zdist = syspos.System.z - homesys.z;
+
+                    textBoxHomeDist.Text = Math.Sqrt(xdist * xdist + ydist * ydist + zdist * zdist).ToString("0.00");
                 }
                 else
                 {
