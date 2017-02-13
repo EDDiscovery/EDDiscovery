@@ -260,7 +260,7 @@ namespace EDDiscovery.Actions
             foreach (Group g in groups)
             {
                 int whitespace = 0;
-                Action act = curprog.GetStep(actstep);
+                Action act = curprog.GetStep(actstep++);
 
                 if (act != null)
                 {
@@ -271,8 +271,6 @@ namespace EDDiscovery.Actions
                     whitespace = act.Whitespace;
                     g.prog.Visible = act.Type == Action.ActionType.Call & EditProgram != null;
                     g.config.Visible = act.ConfigurationMenuInUse;
-
-                    actstep++;
                 }
                 else
                 {

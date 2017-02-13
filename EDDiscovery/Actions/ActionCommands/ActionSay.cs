@@ -9,6 +9,8 @@ namespace EDDiscovery.Actions
 {
     public class ActionSay : Action
     {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
         public static string globalvarspeechvolume = "SpeechVolume";
         public static string globalvarspeechrate = "SpeechRate";
         public static string globalvarspeechvoice = "SpeechVoice";
@@ -54,10 +56,8 @@ namespace EDDiscovery.Actions
         {
             string saying;
             ConditionVariables vars;
-            return FromString(userdata, out saying, out vars) ? null : "Say not in correct format";
+            return FromString(userdata, out saying, out vars) ? null : "Say command line not in correct format";
         }
-
-        public override bool AllowDirectEditingOfUserData { get { return true; } }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
@@ -97,72 +97,76 @@ namespace EDDiscovery.Actions
         {
             string say;
             ConditionVariables statementvars;
-            FromString(userdata, out say, out statementvars);
-
-            string errlist = null;
-            ConditionVariables vars = statementvars.ExpandAll(ap.functions.ExpandString, ap.currentvars, out errlist);
-
-            if (errlist == null)
+            if (FromString(userdata, out say, out statementvars))
             {
-                bool wait = vars.GetInt(waitname, 0) != 0;
-                bool priority = vars.GetInt(preemptname, 0) != 0;
-                string voice = vars.ContainsKey(voicename) ? vars[voicename] : (ap.currentvars.ContainsKey(globalvarspeechvoice) ? ap.currentvars[globalvarspeechvoice] : "Default");
-
-                int vol = vars.GetInt(volumename, -999);
-                if (vol == -999)
-                    vol = ap.currentvars.GetInt(globalvarspeechvolume, 60);
-
-                int rate = vars.GetInt(ratename, -999);
-                if ( rate == -999 )
-                    rate = ap.currentvars.GetInt(globalvarspeechrate, 0);
-
-                Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
-
-                if (!ses.Any && !ses.OverrideNone && ap.currentvars.ContainsKey(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
-                {
-                    vars = new ConditionVariables(ap.currentvars[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
-                }
-
-                string phrase = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.ToPhrase(say, out errlist, ap.functions, ap.currentvars);
+                string errlist = null;
+                ConditionVariables vars = statementvars.ExpandAll(ap.functions.ExpandString, ap.currentvars, out errlist);
 
                 if (errlist == null)
                 {
-                    if (phrase.Length == 0) // just abort..
-                        return true;
+                    bool wait = vars.GetInt(waitname, 0) != 0;
+                    bool priority = vars.GetInt(preemptname, 0) != 0;
+                    string voice = vars.ContainsKey(voicename) ? vars[voicename] : (ap.currentvars.ContainsKey(globalvarspeechvoice) ? ap.currentvars[globalvarspeechvoice] : "Default");
+
+                    int vol = vars.GetInt(volumename, -999);
+                    if (vol == -999)
+                        vol = ap.currentvars.GetInt(globalvarspeechvolume, 60);
+
+                    int rate = vars.GetInt(ratename, -999);
+                    if (rate == -999)
+                        rate = ap.currentvars.GetInt(globalvarspeechrate, 0);
+
+                    Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
+
+                    if (!ses.Any && !ses.OverrideNone && ap.currentvars.ContainsKey(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
+                    {
+                        vars = new ConditionVariables(ap.currentvars[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
+                    }
+
+                    string phrase = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.ToPhrase(say, out errlist, ap.functions, ap.currentvars);
+
+                    if (errlist == null)
+                    {
+                        if (phrase.Length == 0) // just abort..
+                            return true;
 
 #if true
-                    System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(phrase, voice, rate);
+                        System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(phrase, voice, rate);
 
-                    if (ms != null)
-                    {
-                        Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars);
-
-                        if (audio != null)
+                        if (ms != null)
                         {
-                            if (wait)
-                            {
-                                audio.sampleOverTag = ap;
-                                audio.sampleOverEvent += Audio_sampleOverEvent;
-                            }
+                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars);
 
-                            ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
-                            return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                            if (audio != null)
+                            {
+                                if (wait)
+                                {
+                                    audio.sampleOverTag = ap;
+                                    audio.sampleOverEvent += Audio_sampleOverEvent;
+                                }
+
+                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
+                                return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                            }
+                            else
+                                ap.ReportError("Say could not create audio, check Effects settings");
                         }
-                        else
-                            ap.ReportError("Say could not create audio, check Effects settings");
-                    }
 #else
-                    synth.SelectVoice(voice);
-                    synth.Rate = 0;
-                    synth.SpeakAsync(phrase);       // for checking quality..
+                        synth.SelectVoice(voice);
+                        synth.Rate = 0;
+                        synth.SpeakAsync(phrase);       // for checking quality..
 #endif
 
+                    }
+                    else
+                        ap.ReportError(errlist);
                 }
                 else
                     ap.ReportError(errlist);
             }
             else
-                ap.ReportError(errlist);
+                ap.ReportError("Say command line not in correct format");
+
 
             return true;
         }

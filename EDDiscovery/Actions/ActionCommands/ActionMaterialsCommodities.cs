@@ -15,7 +15,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "JID of event" , UserData, (commodities) ? "Configure Commodities Command" : "Configure Material Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "JID of event", UserData, (commodities) ? "Configure Commodities Command" : "Configure Material Command");
             if (promptValue != null)
             {
                 userdata = promptValue;

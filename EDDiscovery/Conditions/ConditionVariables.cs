@@ -28,7 +28,19 @@ namespace EDDiscovery
 
         public ConditionVariables(string s, FromMode fm)     //v=1,v=2 no brackets
         {
-            FromString(s,fm);
+            FromString(s, fm);
+        }
+
+        public ConditionVariables(string s, string value)     
+        {
+            values[s] = value;
+        }
+
+        public ConditionVariables(string[] s) // name,value,name,value..
+        {
+            System.Diagnostics.Debug.Assert(s.Length % 2 == 0);
+            for (int i = 0; i < s.Length; i+=2)
+                values[s[i]] = s[i+1];
         }
 
         public string this[string s] { get { return values[s]; } set { values[s] = value; } }
@@ -39,6 +51,12 @@ namespace EDDiscovery
         public bool ContainsKey(string s) { return values.ContainsKey(s); }
 
         public void Clear() { values.Clear(); }
+
+        public void Delete(string name)
+        {
+            if (values.ContainsKey(name))
+                values.Remove(name);
+        }
 
         public int GetInt(string name, int def = 0)     // get or default
         {

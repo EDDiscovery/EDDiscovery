@@ -192,6 +192,8 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
+    <Compile Include="Actions\ActionCommands\AudioUserInteraction.cs" />
     <Compile Include="Actions\ActionController.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
@@ -451,9 +453,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalWingAdd.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingJoin.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingLeave.cs" />
-    <Compile Include="EliteDangerous\Material.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
-    <Compile Include="EliteDangerous\Synthesis.cs" />
     <Compile Include="ExportImport\ExportExplorationData.cs" />
     <Compile Include="ExportImport\ExportFilteredSystems.cs" />
     <Compile Include="ExportImport\ExportRoute.cs" />
@@ -999,6 +999,9 @@
     <None Include="Resources\edsm.png" />
     <None Include="Resources\edlogo24.png" />
     <None Include="Resources\edsm32x32.png" />
+    <None Include="Resources\edsmblue.png" />
+    <None Include="Resources\edsmred.png" />
+    <None Include="Resources\edsmown.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

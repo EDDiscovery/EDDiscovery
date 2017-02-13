@@ -13,7 +13,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Pragma", UserData, "Configure Pragma Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Pragma", UserData, "Configure Pragma Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
