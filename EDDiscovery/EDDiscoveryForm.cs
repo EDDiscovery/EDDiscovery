@@ -89,9 +89,9 @@ namespace EDDiscovery
         public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public Audio.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
 
-        Audio.AudioDriverCSCore audiodriverwave;
+        Audio.IAudioDriver audiodriverwave;
         Audio.AudioQueue audioqueuewave;
-        Audio.AudioDriverCSCore audiodriverspeech;
+        Audio.IAudioDriver audiodriverspeech;
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
 
@@ -199,14 +199,24 @@ namespace EDDiscovery
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-#if MONO
+#if !__MonoCS__
+            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                audiodriverwave = new Audio.AudioDriverCSCore();
+                audiodriverspeech = new Audio.AudioDriverCSCore();
+                speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
+            }
+            else
+            {
+                audiodriverwave = new Audio.AudioDriverDummy();
+                audiodriverspeech = new Audio.AudioDriverDummy();
+                speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
+            }
+#else
             audiodriverwave = new Audio.AudioDriverDummy();
             audiodriverspeech = new Audio.AudioDriverDummy();
             speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
-#else
-            audiodriverwave = new Audio.AudioDriverCSCore();
-            audiodriverspeech = new Audio.AudioDriverCSCore();
-            speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
 #endif
             audioqueuewave = new Audio.AudioQueue(audiodriverwave);
             audioqueuespeech = new Audio.AudioQueue(audiodriverspeech);
@@ -828,16 +838,35 @@ namespace EDDiscovery
             }
         }
 
+        public ISystem GetHomeSystem()
+        {
+            string homesysname = settings.MapHomeSystem;
+
+            ISystem homesys = ((homesysname != null) ? SystemClass.GetSystem(homesysname) : null);
+
+            if (homesys == null || !homesys.HasCoordinate)
+            {
+                homesys = SystemClass.GetSystem("Sol");
+
+                if (homesys == null)
+                {
+                    homesys = new SystemClass("Sol", 0, 0, 0);
+                }
+            }
+
+            return homesys;
+        }
+
         public void Open3DMap(HistoryEntry he)
         {
             this.Cursor = Cursors.WaitCursor;
 
-            string HomeSystem = settings.MapHomeSystem;
+            ISystem HomeSystem = GetHomeSystem();
 
             Controller.history.FillInPositionsFSDJumps();
 
             Map.Prepare(he?.System, HomeSystem,
-                        settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
+                        settings.MapCentreOnSelection ? he?.System : HomeSystem,
                         settings.MapZoom, Controller.history.FilterByTravel);
             Map.Show();
             this.Cursor = Cursors.Default;
