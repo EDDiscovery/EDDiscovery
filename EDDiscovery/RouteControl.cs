@@ -627,7 +627,7 @@ namespace EDDiscovery
                     dist = 30;
 
                 _discoveryForm.history.FillInPositionsFSDJumps();
-                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), 400 / dist , _discoveryForm.history.FilterByTravel);
+                map.Prepare(routeSystems.First(), _discoveryForm.GetHomeSystem(), routeSystems.First(), 400 / dist , _discoveryForm.history.FilterByTravel);
                 map.SetPlanned(routeSystems);
                 map.Show();
             }
