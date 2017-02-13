@@ -398,23 +398,28 @@ namespace EDDiscovery.Forms
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern bool AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
+        // Unused. Any reason to keep this?
+        // [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        // private static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
 
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
 
-            // Get a handle to a copy of this form's system (window) menu
-            IntPtr hSysMenu = GetSystemMenu(this.Handle, false);
+            // Windows title-bar context menu manipulation (2000 and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                // Get a handle to a copy of this form's system (window) menu
+                IntPtr hSysMenu = GetSystemMenu(this.Handle, false);
 
-            // Add a separator
-            AppendMenu(hSysMenu, MF_SEPARATOR, 0, string.Empty);
+                // Add a separator
+                AppendMenu(hSysMenu, MF_SEPARATOR, 0, string.Empty);
 
-            // Add the About menu item
-            AppendMenu(hSysMenu, MF_STRING, SYSMENU_ONTOP, "&On Top");
-            AppendMenu(hSysMenu, MF_STRING, SYSMENU_TRANSPARENT, "&Transparent");
-            AppendMenu(hSysMenu, MF_STRING, SYSMENU_TASKBAR, "Show icon in Task&Bar for window");
+                // Add the About menu item
+                AppendMenu(hSysMenu, MF_STRING, SYSMENU_ONTOP, "&On Top");
+                AppendMenu(hSysMenu, MF_STRING, SYSMENU_TRANSPARENT, "&Transparent");
+                AppendMenu(hSysMenu, MF_STRING, SYSMENU_TASKBAR, "Show icon in Task&Bar for window");
+            }
         }
 
 
