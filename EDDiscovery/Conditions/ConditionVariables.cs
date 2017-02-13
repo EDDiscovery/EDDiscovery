@@ -381,15 +381,16 @@ namespace EDDiscovery
 
         public string GetNumericValue(string name, int min , int max, int def , out int val, ExpandString e = null , ConditionVariables vars = null )
         {
-            val = def;
-
             if (values.ContainsKey(name))
             {
                 string res;
                 if (e != null)
                 {
                     if (e(values[name], vars, out res) == ConditionLists.ExpandResult.Failed)
+                    {
+                        val = def;
                         return res;
+                    }
                 }
                 else
                     res = values[name];
@@ -398,6 +399,7 @@ namespace EDDiscovery
                     return null;
             }
 
+            val = def;
             return null;
         }
 
