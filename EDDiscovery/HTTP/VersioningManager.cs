@@ -212,7 +212,7 @@ namespace EDDiscovery.HTTP
             }
         }
 
-        static public bool InstallFiles(DownloadItem item, string appfolder)
+        public bool InstallFiles(DownloadItem item, string appfolder)
         {
             try
             {
@@ -224,6 +224,14 @@ namespace EDDiscovery.HTTP
                         string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
                         string s = Path.Combine(item.downloadedpath, parts[0]);
                         File.Copy(s, o, true);
+                    }
+
+                    if (k.Key.StartsWith("DisableOther"))
+                    {
+                        DownloadItem other = downloaditems.Find(x => x.itemname.Equals(k.Value));
+
+                        if (other != null)
+                            SetEnableFlag(other.localfilename, false);
                     }
                 }
 

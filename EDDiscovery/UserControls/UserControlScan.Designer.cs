@@ -87,12 +87,12 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemToolbar});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(177, 26);
+            this.contextMenuStrip.Size = new System.Drawing.Size(178, 26);
             // 
             // toolStripMenuItemToolbar
             // 
             this.toolStripMenuItemToolbar.Name = "toolStripMenuItemToolbar";
-            this.toolStripMenuItemToolbar.Size = new System.Drawing.Size(176, 22);
+            this.toolStripMenuItemToolbar.Size = new System.Drawing.Size(177, 22);
             this.toolStripMenuItemToolbar.Text = "Show/Hide Toolbar";
             this.toolStripMenuItemToolbar.Click += new System.EventHandler(this.toolStripMenuItemToolbar_Click);
             // 
@@ -154,17 +154,18 @@ namespace EDDiscovery.UserControls
             // checkBoxSmall
             // 
             this.checkBoxSmall.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxSmall.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxSmall.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxSmall.BackgroundImage = global::EDDiscovery.Properties.Resources.SizeSelectorsSmall;
             this.checkBoxSmall.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxSmall.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxSmall.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxSmall.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxSmall.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxSmall.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.checkBoxSmall.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
-            this.checkBoxSmall.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.checkBoxSmall.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxSmall.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxSmall.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxSmall.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxSmall.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxSmall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxSmall.FontNerfReduction = 0.5F;
             this.checkBoxSmall.Location = new System.Drawing.Point(184, 0);
             this.checkBoxSmall.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -179,17 +180,18 @@ namespace EDDiscovery.UserControls
             // checkBoxMedium
             // 
             this.checkBoxMedium.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxMedium.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxMedium.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxMedium.BackgroundImage = global::EDDiscovery.Properties.Resources.SizeSelectorsMedium;
             this.checkBoxMedium.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMedium.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMedium.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxMedium.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMedium.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxMedium.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.checkBoxMedium.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
-            this.checkBoxMedium.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.checkBoxMedium.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxMedium.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxMedium.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxMedium.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxMedium.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxMedium.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxMedium.FontNerfReduction = 0.5F;
             this.checkBoxMedium.Location = new System.Drawing.Point(152, 0);
             this.checkBoxMedium.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -204,17 +206,18 @@ namespace EDDiscovery.UserControls
             // checkBoxLarge
             // 
             this.checkBoxLarge.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxLarge.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxLarge.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxLarge.BackgroundImage = global::EDDiscovery.Properties.Resources.SizeSelectorsLarge;
             this.checkBoxLarge.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxLarge.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxLarge.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxLarge.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxLarge.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxLarge.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.checkBoxLarge.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
-            this.checkBoxLarge.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.checkBoxLarge.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxLarge.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxLarge.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxLarge.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxLarge.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxLarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxLarge.FontNerfReduction = 0.5F;
             this.checkBoxLarge.Location = new System.Drawing.Point(120, 0);
             this.checkBoxLarge.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -229,17 +232,18 @@ namespace EDDiscovery.UserControls
             // checkBoxMoons
             // 
             this.checkBoxMoons.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxMoons.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxMoons.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxMoons.BackgroundImage = global::EDDiscovery.Properties.Resources.Moon24;
             this.checkBoxMoons.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMoons.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMoons.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxMoons.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMoons.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxMoons.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.checkBoxMoons.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
-            this.checkBoxMoons.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.checkBoxMoons.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxMoons.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxMoons.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxMoons.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxMoons.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxMoons.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxMoons.FontNerfReduction = 0.5F;
             this.checkBoxMoons.Location = new System.Drawing.Point(76, 0);
             this.checkBoxMoons.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -254,17 +258,18 @@ namespace EDDiscovery.UserControls
             // checkBoxMaterials
             // 
             this.checkBoxMaterials.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxMaterials.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxMaterials.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxMaterials.BackgroundImage = global::EDDiscovery.Properties.Resources.material;
             this.checkBoxMaterials.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterials.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMaterials.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxMaterials.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMaterials.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxMaterials.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.checkBoxMaterials.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
-            this.checkBoxMaterials.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.checkBoxMaterials.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxMaterials.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxMaterials.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxMaterials.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxMaterials.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxMaterials.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxMaterials.FontNerfReduction = 0.5F;
             this.checkBoxMaterials.Location = new System.Drawing.Point(0, 0);
             this.checkBoxMaterials.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -279,17 +284,18 @@ namespace EDDiscovery.UserControls
             // checkBoxMaterialsRare
             // 
             this.checkBoxMaterialsRare.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxMaterialsRare.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxMaterialsRare.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxMaterialsRare.BackgroundImage = global::EDDiscovery.Properties.Resources.materialrare;
             this.checkBoxMaterialsRare.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterialsRare.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMaterialsRare.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxMaterialsRare.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMaterialsRare.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxMaterialsRare.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.checkBoxMaterialsRare.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
-            this.checkBoxMaterialsRare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.checkBoxMaterialsRare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxMaterialsRare.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxMaterialsRare.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxMaterialsRare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxMaterialsRare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxMaterialsRare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxMaterialsRare.FontNerfReduction = 0.5F;
             this.checkBoxMaterialsRare.Location = new System.Drawing.Point(32, 0);
             this.checkBoxMaterialsRare.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -304,17 +310,18 @@ namespace EDDiscovery.UserControls
             // checkBoxTiny
             // 
             this.checkBoxTiny.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxTiny.BackColor = System.Drawing.Color.DarkGray;
+            this.checkBoxTiny.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxTiny.BackgroundImage = global::EDDiscovery.Properties.Resources.SizeSelectorsTiny;
             this.checkBoxTiny.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxTiny.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxTiny.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxTiny.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxTiny.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxTiny.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.checkBoxTiny.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
-            this.checkBoxTiny.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.checkBoxTiny.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxTiny.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxTiny.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxTiny.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxTiny.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxTiny.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxTiny.FontNerfReduction = 0.5F;
             this.checkBoxTiny.Location = new System.Drawing.Point(216, 0);
             this.checkBoxTiny.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -347,18 +354,19 @@ namespace EDDiscovery.UserControls
             // checkBoxEDSM
             // 
             this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.Color.DarkGray;
-            this.checkBoxEDSM.BackgroundImage = global::EDDiscovery.Properties.Resources.edsm32x32;
+            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxEDSM.FontNerfReduction = 0.5F;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Properties.Resources.edsmown;
             this.checkBoxEDSM.Location = new System.Drawing.Point(263, 0);
             this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSM.Name = "checkBoxEDSM";

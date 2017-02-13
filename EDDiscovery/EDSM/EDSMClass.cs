@@ -43,7 +43,7 @@ namespace EDDiscovery2.EDSM
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
         private string EDSMDistancesFileName;
-        static private Dictionary<int, List<JournalScan>> DictEDSMBodies = new Dictionary<int, List<JournalScan>>();
+        static private Dictionary<long, List<JournalScan>> DictEDSMBodies = new Dictionary<long, List<JournalScan>>();
 
         public EDSMClass()
         {
@@ -636,7 +636,7 @@ namespace EDDiscovery2.EDSM
             return msg;
         }
 
-        public JObject GetBodies(int edsmID)
+        public JObject GetBodies(long edsmID)
         {
             string query = "bodies?systemId=" + edsmID.ToString();
             var response = RequestGet("api-system-v1/" + query, handleException: true);
@@ -651,7 +651,7 @@ namespace EDDiscovery2.EDSM
             return msg;
         }
 
-        public  static List<JournalScan> GetBodiesList(int edsmid)
+        public  static List<JournalScan> GetBodiesList(long edsmid)
         {
             if (DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
                 return DictEDSMBodies[edsmid];
