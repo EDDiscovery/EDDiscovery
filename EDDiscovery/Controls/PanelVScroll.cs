@@ -61,7 +61,7 @@ namespace ExtendedControls
         {
             base.OnLayout(levent);
 
-            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "  VS Layout");
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "  VS Layout");
             Rectangle area = ClientRectangle;
             area.X += InternalMargin.Left;
             area.Y += InternalMargin.Top;
@@ -72,7 +72,7 @@ namespace ExtendedControls
             {
                 Point p = new Point(area.X + ((VerticalScrollBarDockRight) ? (area.Width - ScrollBarWidth) : 0), area.Y);
                 vsc.Location = p;
-                //System.Diagnostics.Debug.WriteLine("vsc {0}", vsc.Location);
+                System.Diagnostics.Debug.WriteLine("vsc {0}", vsc.Location);
                 vsc.Size = new Size(ScrollBarWidth, area.Height);
             }
 
@@ -111,10 +111,10 @@ namespace ExtendedControls
 
         public void ToEnd()
         {
-            ScrollTo(99999999, true);
+            ScrollTo(99999999);
         }
 
-        private int ScrollTo(int newscrollpos , bool updatescroller = false )
+        private int ScrollTo(int newscrollpos )
         {
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "  VS Scroll to");
             int maxy = 0;
@@ -159,11 +159,9 @@ namespace ExtendedControls
             {
                 vsc.Maximum = maxy - ClientRectangle.Height + vsc.LargeChange;
                 vsc.Minimum = 0;
+                vsc.Value = newscrollpos;
 
-                if (updatescroller)
-                    vsc.Value = newscrollpos;
-
-                //System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {0} sb {1}", scrollpos, newscrollpos, maxy, vsc.Maximum);
+                System.Diagnostics.Debug.WriteLine("Scroll {0} to {1} maxy {2} sb {3} ch {4}", scrollpos, newscrollpos, maxy, vsc.Maximum, ClientRectangle.Height);
             }
 
             scrollpos = newscrollpos;

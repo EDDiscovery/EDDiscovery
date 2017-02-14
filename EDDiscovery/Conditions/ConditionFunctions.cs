@@ -8,9 +8,6 @@ namespace EDDiscovery
 {
     public class ConditionFunctions
     {
-        EDDiscoveryForm ed;
-        HistoryList hl;
-        HistoryEntry he;
         FuncEntry[] flist;
         static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -38,10 +35,8 @@ namespace EDDiscovery
             }
         }
 
-        public ConditionFunctions(EDDiscoveryForm e, HistoryList l, HistoryEntry h)
+        public ConditionFunctions()
         {
-            ed = e; hl = l; he = h;
-
             flist = new FuncEntry[]                         // first is a bitmap saying if to check for the value is a var
             {                                               // second is a bitmap saying if a string is allowed in this pos
                 new FuncEntry("exists",Exists,              1,20,   0,0),   // don't check macros, no strings
@@ -355,14 +350,15 @@ namespace EDDiscovery
         private bool SplitCaps(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = Tools.SplitCapsWordUnderscoreSlash(value);
+            output = value.SplitCapsWordUnderscoreTitleCase();
             return true;
         }
 
         private bool Ship(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = Tools.SplitCapsWordUnderscoreSlash(EliteDangerous.JournalEntry.PhoneticShipName(value));
+            output = EliteDangerous.JournalEntry.PhoneticShipName(value);
+            output = output.SplitCapsWordUnderscoreTitleCase();
             return true;
         }
 
@@ -522,14 +518,12 @@ namespace EDDiscovery
 
         private bool Version(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
-            System.Reflection.Assembly aw = System.Reflection.Assembly.GetExecutingAssembly();
-            string v = aw.FullName.Split(',')[1].Split('=')[1];
-            string[] list = v.Split('.');
+            int[] edversion = Tools.GetEDVersion();
 
             int para;
-            if (paras[0].value.InvariantParse(out para) && para >= 1 && para <= list.Length)
+            if (paras[0].value.InvariantParse(out para) && para >= 1 && para <= edversion.Length)
             {
-                output = list[para - 1];
+                output = edversion[para - 1].ToString(ct);
                 return true;
             }
             else
@@ -787,8 +781,8 @@ namespace EDDiscovery
                         if (i != start)
                             output += separ;
 
-                        if ( splitcaps )
-                            output += Tools.SplitCapsWordUnderscoreSlash(vars[aname]);
+                        if (splitcaps)
+                            output += vars[aname].SplitCapsWordUnderscoreTitleCase();
                         else
                             output += vars[aname];
                     }

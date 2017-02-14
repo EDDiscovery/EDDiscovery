@@ -192,7 +192,12 @@ namespace ExtendedControls
                 Brush textb = new SolidBrush(this.ForeColor);
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-               // Console.WriteLine("Paint {0} {1}", focusindex, firstindex);
+                StringFormat f = new StringFormat();
+                f.Alignment = StringAlignment.Near;
+                f.LineAlignment = StringAlignment.Center;
+                f.FormatFlags = StringFormatFlags.NoWrap;
+
+                // Console.WriteLine("Paint {0} {1}", focusindex, firstindex);
                 foreach (string s in Items)
                 {   // if not fitting to items height, 
                     if (offset >= firstindex && offset < firstindex + displayableitems + (FitToItemsHeight ? 0:1))
@@ -205,7 +210,7 @@ namespace ExtendedControls
                             }
                         }
 
-                        e.Graphics.DrawString(s, this.Font, textb, pos);
+                        e.Graphics.DrawString(s, this.Font, textb, pos,f);
 
                         pos.Y += ItemHeight;
                     }
