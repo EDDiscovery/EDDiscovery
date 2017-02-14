@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //    If the cargo is related to powerplay:
 //•	PowerplayOrigin
 
-    public class JournalEjectCargo : JournalEntry
+    public class JournalEjectCargo : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalEjectCargo(JObject evt) : base(evt, JournalTypeEnum.EjectCargo)
         {
