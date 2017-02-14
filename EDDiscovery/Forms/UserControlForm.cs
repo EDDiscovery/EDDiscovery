@@ -37,12 +37,12 @@ namespace EDDiscovery.Forms
 
         public bool istransparent = false;          // we are in transparent mode (but may be showing due to inpanelshow)
         public bool displayTitle = true;            // we are displaying the title
+        public string dbrefname;
+        public string wintitle;
 
         private bool inpanelshow = false;       // if we are in a panel show when we were transparent
         private bool defwindowsborder;
         private bool curwindowsborder;          // applied setting
-        private string dbrefname;
-        private string wintitle;
         private Color transparencycolor = Color.Transparent;
         private Color beforetransparency = Color.Transparent;
         private Color tkey = Color.Transparent;
@@ -398,23 +398,28 @@ namespace EDDiscovery.Forms
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern bool AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
+        // Unused. Any reason to keep this?
+        // [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        // private static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
 
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
 
-            // Get a handle to a copy of this form's system (window) menu
-            IntPtr hSysMenu = GetSystemMenu(this.Handle, false);
+            // Windows title-bar context menu manipulation (2000 and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                // Get a handle to a copy of this form's system (window) menu
+                IntPtr hSysMenu = GetSystemMenu(this.Handle, false);
 
-            // Add a separator
-            AppendMenu(hSysMenu, MF_SEPARATOR, 0, string.Empty);
+                // Add a separator
+                AppendMenu(hSysMenu, MF_SEPARATOR, 0, string.Empty);
 
-            // Add the About menu item
-            AppendMenu(hSysMenu, MF_STRING, SYSMENU_ONTOP, "&On Top");
-            AppendMenu(hSysMenu, MF_STRING, SYSMENU_TRANSPARENT, "&Transparent");
-            AppendMenu(hSysMenu, MF_STRING, SYSMENU_TASKBAR, "Show icon in Task&Bar for window");
+                // Add the About menu item
+                AppendMenu(hSysMenu, MF_STRING, SYSMENU_ONTOP, "&On Top");
+                AppendMenu(hSysMenu, MF_STRING, SYSMENU_TRANSPARENT, "&Transparent");
+                AppendMenu(hSysMenu, MF_STRING, SYSMENU_TASKBAR, "Show icon in Task&Bar for window");
+            }
         }
 
 
@@ -555,12 +560,14 @@ namespace EDDiscovery.Forms
     public class UserControlFormList
     {
         private List<UserControlForm> tabforms;
+        EDDiscoveryForm discoveryform;
 
         public int Count { get { return tabforms.Count; } }
 
-        public UserControlFormList()
+        public UserControlFormList(EDDiscoveryForm ed)
         {
             tabforms = new List<UserControlForm>();
+            discoveryform = ed;
         }
 
         public UserControlForm this[int i] { get { return tabforms[i]; } }
@@ -596,6 +603,7 @@ namespace EDDiscovery.Forms
         {
             UserControlForm tcf = (UserControlForm)sender;
             tabforms.Remove(tcf);
+            discoveryform.ActionRun("onPopDown", "UserUIEvent", null, new ConditionVariables(new string[] { "PopOutName", tcf.dbrefname.Substring(9), "PopOutTitle", tcf.wintitle }));
         }
 
         public List<UserControlCommonBase> GetListOfControls(Type c)

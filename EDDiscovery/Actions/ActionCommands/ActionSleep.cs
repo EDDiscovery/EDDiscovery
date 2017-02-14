@@ -21,9 +21,9 @@ namespace EDDiscovery.Actions
             return (UserData.Length > 0) ? null : "Sleep missing timeout in ms";
         }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Sleep time in ms:", UserData, "Set Sleep timeout");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Sleep time in ms:", UserData, "Set Sleep timeout");
 
             if (promptValue != null)
             {

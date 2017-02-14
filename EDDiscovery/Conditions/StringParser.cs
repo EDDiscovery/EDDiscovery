@@ -85,18 +85,26 @@ namespace EDDiscovery
 
                     while (true)
                     {
+                        int nextslash = line.IndexOf("\\", pos);
                         int nextquote = line.IndexOf('"', pos);
-                        if (nextquote == -1)
-                            return null;    // MUST have a quote..
 
-                        if (line[nextquote - 1] == '\\')        // if \\"
+                        if (nextslash >= 0 && nextslash < nextquote)        // slash first..
                         {
-                            ret += line.Substring(pos, nextquote - 1 - pos) + "\"";
-                            pos = nextquote + 1;        // go past the quote.. try again
+                            if (nextslash + 1 >= line.Length)               // slash at end of line, uhoh
+                                return null;
+
+                            if (line[nextslash + 1] == '"')                 // if \", its just a "
+                                ret += line.Substring(pos, nextslash - pos) + "\""; // copy up to slash, but not the slash, then add the quote
+                            else
+                                ret += line.Substring(pos, nextslash + 2 - pos);    // copy all, include the next char
+
+                            pos = nextslash + 2;                        // and skip over the slash and the next char
                         }
+                        else if (nextquote == -1)                     // must have a quote somewhere..
+                            return null;
                         else
-                        {       //End of quoted string
-                            ret += line.Substring(pos, nextquote - pos);
+                        {
+                            ret += line.Substring(pos, nextquote - pos);    // quote, end of line, copy up and remove it
                             pos = nextquote + 1;
                             SkipSpace();
                             return ret;

@@ -267,7 +267,7 @@ namespace EDDiscovery.EliteDangerous
 
         public DateTime EventTimeUTC;
 
-        public int EdsmID;                      // 0 = unassigned, >0 = assigned
+        public long EdsmID;                      // 0 = unassigned, >0 = assigned
 
         protected JObject jEventData;           // event string from the log
         private int Synced;                     // sync flags
@@ -357,7 +357,7 @@ namespace EDDiscovery.EliteDangerous
             jr.CommanderId = (int)(long)dr["CommanderId"];
             jr.EventTimeUTC = (DateTime)dr["EventTime"];
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
-            jr.EdsmID = (int)(long)dr["EdsmID"];
+            jr.EdsmID = (long)dr["EdsmID"];
             jr.Synced = (int)(long)dr["Synced"];
             return jr;
         }
@@ -374,7 +374,7 @@ namespace EDDiscovery.EliteDangerous
             if (jr.EventTimeUTC == default(DateTime))
                 jr.EventTimeUTC = ((DateTime)dr["EventTime"]).ToUniversalTime();
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
-            jr.EdsmID = (int)(long)dr["EdsmID"];
+            jr.EdsmID = (long)dr["EdsmID"];
             jr.Synced = (int)(long)dr["Synced"];
             return jr;
         }

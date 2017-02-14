@@ -10,9 +10,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "JID of event", UserData, "Configure Ledger Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Scan system name", UserData, "Configure Scan Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -44,6 +44,13 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
+                bool edsm = false;
+                if ( cmdname != null && cmdname.Equals("EDSM",StringComparison.InvariantCultureIgnoreCase))
+                {
+                    edsm = true;
+                    cmdname = sp.NextQuotedWord();
+                }
+
                 if (cmdname != null)
                 {
                     EliteDangerous.StarScan scan = ap.actioncontroller.HistoryList.starscan;
@@ -56,6 +63,11 @@ namespace EDDiscovery.Actions
                     }
 
                     EliteDangerous.StarScan.SystemNode sn = scan.FindSystem(sc);
+
+                    if (edsm)       // if check edsm..
+                    {
+                        sn = scan.UpdateFromEDSM(sn, sc);   // do an edsm check
+                    }
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -100,6 +112,8 @@ namespace EDDiscovery.Actions
                                     pcount++;
                                 }
                             }
+
+                            starno++;
                         }
                     }
                     else
@@ -122,7 +136,8 @@ namespace EDDiscovery.Actions
 
             ap.currentvars[prefix] = scannode.Key;
             ap.currentvars[prefix + "_text"] = (sc != null) ? sc.DisplayString(true):"";
-            ap.currentvars[prefix + "_type"] = (sc != null) ? ((sc.IsStar) ? "Star" : "Planet"):"";
+            ap.currentvars[prefix + "_type"] = scannode.Value.type.ToString();
+            ap.currentvars[prefix + "_edsmbody"] = (sc != null) ? ((sc.IsEDSMBody) ? "1" : "0") : "0";
             ap.currentvars[prefix + "_landable"] = (sc != null) ? (sc.IsLandable ? "Landable" : "Not Landable"):"";
             ap.currentvars[prefix + "_bodyname"] = (sc != null) ? sc.BodyName : "";
             ap.currentvars[prefix + "_startype"] = (sc != null) ? (sc.StarType ?? "N/A") : "";
