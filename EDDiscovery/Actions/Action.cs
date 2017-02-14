@@ -23,6 +23,10 @@ namespace EDDiscovery.Actions
         public int LevelUp { get { return levelup; } set { levelup = value; } }
         public int Whitespace { get { return whitespace; } set { whitespace = value; } }
 
+        public int calcDisplayLevel { get; set; }       // NOT stored, for editing purposes, what is the display level?
+        public bool calcAllowRight { get; set; }        // NOT stored
+        public bool calcAllowLeft { get; set; }         // NOT stored
+
         public virtual bool AllowDirectEditingOfUserData { get { return false; } }    // and allow editing?
 
         public virtual string DisplayedUserData { get { return userdata; } }        // null if you dont' want to display
@@ -36,7 +40,7 @@ namespace EDDiscovery.Actions
         public virtual string VerifyActionCorrect() { return null; } // on load, is the action correct?
 
         public virtual bool ConfigurationMenuInUse { get { return true; } }
-        public virtual bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public virtual bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             return false;
         }
@@ -51,34 +55,39 @@ namespace EDDiscovery.Actions
 
         static private Commands[] cmdlist = new Commands[]
         {
-            new Commands("Say", typeof(ActionSay), ActionType.Cmd ),
-            new Commands("Play", typeof(ActionPlay) , ActionType.Cmd),
-            new Commands("Print", typeof(ActionPrint) , ActionType.Cmd),
-            new Commands("ErrorIf", typeof(ActionErrorIf) , ActionType.Cmd),
-            new Commands("Set", typeof(ActionSet) , ActionType.Cmd),
-            new Commands("Let", typeof(ActionLet) , ActionType.Cmd),
-            new Commands("Global", typeof(ActionGlobal) , ActionType.Cmd),
-            new Commands("Event", typeof(ActionEvent) , ActionType.Cmd),
-            new Commands("Materials", typeof(ActionMaterials) , ActionType.Cmd),
+            new Commands("Call", typeof(ActionCall) , ActionType.Call),
             new Commands("Commodities", typeof(ActionCommodities) , ActionType.Cmd),
-            new Commands("Ledger", typeof(ActionLedger) , ActionType.Cmd),
-            new Commands("Scan", typeof(ActionScan) , ActionType.Cmd),
-            new Commands("Popout", typeof(ActionPopout) , ActionType.Cmd),
-            new Commands("Historytab", typeof(ActionHistoryTab) , ActionType.Cmd),
-            new Commands("ProgramWindow", typeof(ActionProgramwindow) , ActionType.Cmd),
-            new Commands("Perform", typeof(ActionPerform) , ActionType.Cmd),
-            new Commands("If", typeof(ActionIf) , ActionType.If),
+            new Commands("Do", typeof(ActionDo) , ActionType.Do),
+            new Commands("DeleteVariable", typeof(ActionDeleteVariable) , ActionType.Cmd),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
             new Commands("ElseIf", typeof(ActionElseIf) , ActionType.ElseIf),
-            new Commands("While", typeof(ActionWhile) , ActionType.While),
-            new Commands("Do", typeof(ActionDo) , ActionType.Do),
+            new Commands("End", typeof(ActionEnd) , ActionType.Cmd),
+            new Commands("ErrorIf", typeof(ActionErrorIf) , ActionType.Cmd),
+            new Commands("Event", typeof(ActionEvent) , ActionType.Cmd),
+            new Commands("FileDialog", typeof(ActionFileDialog) , ActionType.Cmd),
+            new Commands("Global", typeof(ActionGlobal) , ActionType.Cmd),
+            new Commands("Historytab", typeof(ActionHistoryTab) , ActionType.Cmd),
+            new Commands("If", typeof(ActionIf) , ActionType.If),
+            new Commands("Ledger", typeof(ActionLedger) , ActionType.Cmd),
+            new Commands("Let", typeof(ActionLet) , ActionType.Cmd),
             new Commands("Loop", typeof(ActionLoop) , ActionType.Loop),
-            new Commands("Call", typeof(ActionCall) , ActionType.Call),
-            new Commands("Return", typeof(ActionReturn) , ActionType.Return),
-            new Commands("Pragma", typeof(ActionPragma) , ActionType.Cmd),
-            new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd),
+            new Commands("Materials", typeof(ActionMaterials) , ActionType.Cmd),
+            new Commands("MessageBox", typeof(ActionMessageBox) , ActionType.Cmd),
             new Commands("Rem", typeof(ActionRem) , ActionType.Cmd),
-            new Commands("End", typeof(ActionEnd) , ActionType.Cmd)
+            new Commands("Return", typeof(ActionReturn) , ActionType.Return),
+            new Commands("Scan", typeof(ActionScan) , ActionType.Cmd),
+            new Commands("Perform", typeof(ActionPerform) , ActionType.Cmd),
+            new Commands("PersistentGlobal", typeof(ActionPersistentGlobal) , ActionType.Cmd),
+            new Commands("Play", typeof(ActionPlay) , ActionType.Cmd),
+            new Commands("Popout", typeof(ActionPopout) , ActionType.Cmd),
+            new Commands("Pragma", typeof(ActionPragma) , ActionType.Cmd),
+            new Commands("Print", typeof(ActionPrint) , ActionType.Cmd),
+            new Commands("ProgramWindow", typeof(ActionProgramwindow) , ActionType.Cmd),
+            new Commands("Say", typeof(ActionSay), ActionType.Cmd ),
+            new Commands("Set", typeof(ActionSet) , ActionType.Cmd),
+            new Commands("Timer", typeof(ActionTimer) , ActionType.Cmd),
+            new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd),
+            new Commands("While", typeof(ActionWhile) , ActionType.While),
         };
 
         public static string[] GetActionNameList()
@@ -131,38 +140,43 @@ namespace EDDiscovery.Actions
 
         public static class PromptSingleLine
         {
-            public static string ShowDialog(Form p, string text, String defaultValue, string caption , bool multiline = false)
+            public static string ShowDialog(Form p, EDDiscovery2.EDDTheme theme, string text, String defaultValue, string caption, bool multiline = false)
             {
                 Form prompt = new Form()
                 {
                     Width = 440,
-                    Height = 160 + (multiline?40:0),
+                    Height = 160 + (multiline ? 40 : 0),
                     FormBorderStyle = FormBorderStyle.FixedDialog,
                     Text = caption,
                     StartPosition = FormStartPosition.CenterScreen,
                 };
 
+                Panel outer = new Panel() { Dock = DockStyle.Fill, BorderStyle = BorderStyle.FixedSingle };
+                prompt.Controls.Add(outer);
+
                 Label textLabel = new Label() { Left = 10, Top = 20, Width = 400, Text = text };
-                TextBox textBox = new TextBox() { Left = 10, Top = 50, Width = 400 , Height = 20 + (multiline?40:0) };
+                ExtendedControls.TextBoxBorder textBox = new ExtendedControls.TextBoxBorder() { Left = 10, Top = 50, Width = 400 , Height = 20 + (multiline?40:0) };
                 textBox.Text = defaultValue;
-                int okline = 90;
+                int okline = 110;
                 if (multiline )
                 {
                     textBox.Multiline = true;
                     textBox.ScrollBars = ScrollBars.Vertical;
                     textBox.WordWrap = true;
-                    okline = 130;
+                    okline = 150;
                 }
-                Button confirmation = new Button() { Text = "Ok", Left = 330, Width = 80, Top = okline, DialogResult = DialogResult.OK };
-                Button cancel = new Button() { Text = "Cancel", Left = 245, Width = 80, Top = okline, DialogResult = DialogResult.Cancel };
+                ExtendedControls.ButtonExt confirmation = new ExtendedControls.ButtonExt() { Text = "Ok", Left = 330, Width = 80, Top = okline, DialogResult = DialogResult.OK };
+                ExtendedControls.ButtonExt cancel = new ExtendedControls.ButtonExt() { Text = "Cancel", Left = 245, Width = 80, Top = okline, DialogResult = DialogResult.Cancel };
                 confirmation.Click += (sender, e) => { prompt.Close(); };
                 cancel.Click += (sender, e) => { prompt.Close(); };
-                prompt.Controls.Add(textBox);
-                prompt.Controls.Add(confirmation);
-                prompt.Controls.Add(cancel);
-                prompt.Controls.Add(textLabel);
+                outer.Controls.Add(textBox);
+                outer.Controls.Add(confirmation);
+                outer.Controls.Add(cancel);
+                outer.Controls.Add(textLabel);
                 prompt.CancelButton = cancel;
                 prompt.ShowInTaskbar = false;
+
+                theme.ApplyToForm(prompt, System.Drawing.SystemFonts.DefaultFont);
 
                 return prompt.ShowDialog(p) == DialogResult.OK ? textBox.Text : null;
             }
@@ -170,7 +184,7 @@ namespace EDDiscovery.Actions
 
         public static class PromptDoubleLine
         {
-            public static Tuple<string,string> ShowDialog(Form p, string lab1, string lab2, string defaultValue1 , string defaultValue2, string caption)
+            public static Tuple<string,string> ShowDialog(Form p, EDDiscovery2.EDDTheme theme, string lab1, string lab2, string defaultValue1 , string defaultValue2, string caption)
             {
                 Form prompt = new Form()
                 {
@@ -185,23 +199,28 @@ namespace EDDiscovery.Actions
                 int lx = 10;
                 int tx = 10 + lw + 8;
 
+                Panel outer = new Panel() { Dock = DockStyle.Fill, BorderStyle = BorderStyle.FixedSingle };
+                prompt.Controls.Add(outer);
+
                 Label textLabel1 = new Label() { Left = lx, Top = 20, Width = lw, Text = lab1 };
                 Label textLabel2 = new Label() { Left = lx, Top = 60, Width = lw, Text = lab2};
-                TextBox textBox1 = new TextBox() { Left = tx, Top = 20, Width = prompt.Width - 50 - tx, Text = defaultValue1 };
-                TextBox textBox2 = new TextBox() { Left = tx, Top = 60, Width = prompt.Width - 50 - tx, Text = defaultValue2 };
-                Button confirmation = new Button() { Text = "Ok", Left = textBox1.Location.X+textBox1.Width-80, Width = 80, Top = prompt.Height - 70, DialogResult = DialogResult.OK };
-                Button cancel = new Button() { Text = "Cancel", Left = confirmation.Location.X-90, Width = 80, Top = prompt.Height - 70, DialogResult = DialogResult.Cancel };
+                ExtendedControls.TextBoxBorder textBox1 = new ExtendedControls.TextBoxBorder() { Left = tx, Top = 20, Width = prompt.Width - 50 - tx, Text = defaultValue1 };
+                ExtendedControls.TextBoxBorder textBox2 = new ExtendedControls.TextBoxBorder() { Left = tx, Top = 60, Width = prompt.Width - 50 - tx, Text = defaultValue2 };
+                ExtendedControls.ButtonExt confirmation = new ExtendedControls.ButtonExt() { Text = "Ok", Left = textBox1.Location.X+textBox1.Width-80, Width = 80, Top = prompt.Height - 50, DialogResult = DialogResult.OK };
+                ExtendedControls.ButtonExt cancel = new ExtendedControls.ButtonExt() { Text = "Cancel", Left = confirmation.Location.X-90, Width = 80, Top = prompt.Height - 50, DialogResult = DialogResult.Cancel };
                 confirmation.Click += (sender, e) => { prompt.Close(); };
                 cancel.Click += (sender, e) => { prompt.Close(); };
-                prompt.Controls.Add(textLabel1);
-                prompt.Controls.Add(textLabel2);
-                prompt.Controls.Add(textBox1);
-                prompt.Controls.Add(textBox2);
-                prompt.Controls.Add(confirmation);
-                prompt.Controls.Add(cancel);
+                outer.Controls.Add(textLabel1);
+                outer.Controls.Add(textLabel2);
+                outer.Controls.Add(textBox1);
+                outer.Controls.Add(textBox2);
+                outer.Controls.Add(confirmation);
+                outer.Controls.Add(cancel);
                 prompt.AcceptButton = confirmation;
                 prompt.CancelButton = cancel;
                 prompt.ShowInTaskbar = false;
+
+                theme.ApplyToForm(prompt, System.Drawing.SystemFonts.DefaultFont);
 
                 return prompt.ShowDialog(p) == DialogResult.OK ? new Tuple<string,string>(textBox1.Text,textBox2.Text) : null;
             }

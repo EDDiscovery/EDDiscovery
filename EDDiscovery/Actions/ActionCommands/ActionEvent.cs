@@ -11,9 +11,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Event get command", UserData, "Configure Event Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Event get command", UserData, "Configure Event Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
             string res;
             if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
-                HistoryList hl = ap.historylist;
+                HistoryList hl = ap.actioncontroller.HistoryList;
                 StringParser sp = new StringParser(res);
                 string prefix = "EC_";
 
@@ -59,7 +59,7 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("thpos"))
                     {
-                        HistoryEntry he = ap.discoveryform.TravelControl.GetTravelHistoryCurrent;
+                        HistoryEntry he = ap.actioncontroller.DiscoveryForm.TravelControl.GetTravelHistoryCurrent;
 
                         if ( he == null )
                         {
@@ -154,13 +154,13 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
                     else if (cmdname.Equals("action"))
                     {
-                        int count = ap.discoveryform.ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram");
+                        int count = ap.actioncontroller.ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram", now:true);
                         ap.currentvars[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     else if (cmdname.Equals("edsm"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        ap.discoveryform.history.FillEDSM(he, reload: true);
+                        ap.actioncontroller.HistoryList.FillEDSM(he, reload: true);
 
                         long? id_edsm = he.System.id_edsm;
                         if (id_edsm <= 0)
@@ -179,7 +179,7 @@ namespace EDDiscovery.Actions
                     else if (cmdname.Equals("ross"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        ap.discoveryform.history.FillEDSM(he, reload: true);
+                        ap.actioncontroller.HistoryList.FillEDSM(he, reload: true);
 
                         string url = "";
 
@@ -201,28 +201,49 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        void ReportEntry(ActionProgramRun ap, List<HistoryEntry> hl , int pos, string prefix)
+        static void ReportEntry(ActionProgramRun ap, List<HistoryEntry> hl, int pos, string prefix)
         {
-            if (hl != null && pos>=0 && pos < hl.Count)     // if within range.. (1 based)
+            if (hl != null && pos >= 0 && pos < hl.Count)     // if within range.. (1 based)
             {
-                try
-                {
-                    ConditionVariables values = new ConditionVariables();
-                    values.GetJSONFieldNamesAndValues(hl[pos].journalEntry.EventDataString, prefix + "JS_");
-                    ActionVars.HistoryEventVars(values, hl[pos], prefix);
-                    ap.currentvars.Add(values);
-                    ap.currentvars[prefix + "JID"] = hl[pos].Journalid.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap.currentvars[prefix + "Count"] = hl.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);     // give a count of matches
-                    return;
-                }
-                catch
-                {
-                }
+                ReportHistoryEntry(ap, hl[pos], prefix);
+                ap.currentvars[prefix + "Count"] = hl.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);     // give a count of matches
             }
-
-            ap.currentvars[prefix + "JID"] = "0";
-            ap.currentvars[prefix + "Count"] = "0";
+            else
+            {
+                ap.currentvars[prefix + "JID"] = "0";
+                ap.currentvars[prefix + "Count"] = "0";
+            }
         }
 
+        static void ReportHistoryEntry(ActionProgramRun ap, HistoryEntry he, string prefix)
+        {
+            try
+            {
+                ConditionVariables values = new ConditionVariables();
+                values.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, prefix + "JS_");
+                ActionVars.HistoryEventVars(values, he, prefix);
+                ap.currentvars.Add(values);
+
+                System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+
+                ap.currentvars[prefix + "JID"] = he.Journalid.ToString(ct);
+
+                ap.currentvars[prefix + "EDSMID"] = he.System.id_edsm.ToString(ct);
+                ap.currentvars[prefix + "xpos"] = he.System.x.ToNANSafeString("0.###");
+                ap.currentvars[prefix + "ypos"] = he.System.y.ToNANSafeString("0.###");
+                ap.currentvars[prefix + "zpos"] = he.System.z.ToNANSafeString("0.###");
+
+                ap.currentvars[prefix + "EDDBID"] = he.System.id_eddb.ToString(ct);
+                ap.currentvars[prefix + "EDDBGovernment"] = he.System.government.ToNullUnknownString();
+                ap.currentvars[prefix + "EDDBAllegiance"] = he.System.allegiance.ToNullUnknownString();
+                ap.currentvars[prefix + "EDDBState"] = he.System.state.ToNullUnknownString();
+                ap.currentvars[prefix + "EDDBSecurity"] = he.System.security.ToNullUnknownString();
+                ap.currentvars[prefix + "EDDBPrimaryEconomy"] = he.System.primary_economy.ToNullUnknownString();
+                ap.currentvars[prefix + "EDDBFaction"] = he.System.faction.ToNullUnknownString();
+                ap.currentvars[prefix + "EDDBPopulation"] = he.System.population.ToString(ct);
+                ap.currentvars[prefix + "EDDBNeedsPermit"] = (he.System.needs_permit != 0) ? "1" : "0";
+            }
+            catch { }
+        }
     }
 }

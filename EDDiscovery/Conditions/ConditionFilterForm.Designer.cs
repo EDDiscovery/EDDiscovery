@@ -321,7 +321,6 @@
             this.comboBoxCustomEditProg.SelectedValue = null;
             this.comboBoxCustomEditProg.Size = new System.Drawing.Size(145, 23);
             this.comboBoxCustomEditProg.TabIndex = 9;
-            this.comboBoxCustomEditProg.Text = "comboBoxCustom1";
             this.comboBoxCustomEditProg.ValueMember = "";
             this.comboBoxCustomEditProg.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomEditProg_SelectedIndexChanged);
             // 
@@ -384,7 +383,7 @@
             this.contextMenuStripBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.configureInstallationValuesToolStripMenuItem});
             this.contextMenuStripBottom.Name = "contextMenuStripBottom";
-            this.contextMenuStripBottom.Size = new System.Drawing.Size(226, 48);
+            this.contextMenuStripBottom.Size = new System.Drawing.Size(226, 26);
             // 
             // configureInstallationValuesToolStripMenuItem
             // 

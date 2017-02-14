@@ -161,7 +161,7 @@ namespace EDDiscovery.DB
             }           // since we don't have control of outside formats, we fail quietly.
         }
 
-        public static double Distance(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
+        public static double Distance(ISystemBase s1, ISystemBase s2)
         {
             if (s1 != null && s2 != null && s1.HasCoordinate && s2.HasCoordinate)
                 return Math.Sqrt((s1.x - s2.x) * (s1.x - s2.x) + (s1.y - s2.y) * (s1.y - s2.y) + (s1.z - s2.z) * (s1.z - s2.z));
@@ -493,23 +493,23 @@ namespace EDDiscovery.DB
         }
 
         /// <summary>
-        /// Get a <see cref="SystemClass"/> from <paramref name="systemName"/> with an optional check for merged systems. Returns true if a system was found.
+        /// Get an <see cref="ISystemBase"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact match is found. Returns true if the system was found.
         /// </summary>
         /// <param name="systemName">The human-readable name for the system to be checked.</param>
         /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system known as the supplied <paramref name="systemName"/>.</param>
-        /// <param name="checkMergers">If <c>true</c>, check for system merges. Defaults to <c>false</c>.</param>
+        /// <param name="checkMergers">If <c>true</c>, and no system exactly matches <paramref name="systemName"/>, check to see if it has was merged to another system.</param>
         /// <param name="cn">The database connection to use.</param>
         /// <returns><c>true</c> if the system is known (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
-        public static bool TryGetSystem(string systemName, out SystemClass result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
+        public static bool TryGetSystem(string systemName, out ISystemBase result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
         {
             result = null;
             if (string.IsNullOrWhiteSpace(systemName))  // No way José.
                 return false;
 
             result = GetSystem(systemName, cn);
-            if (checkMergers)
+            if (result == null && checkMergers)
             {
-                SystemClass s;
+                ISystemBase s;
                 if (privTryGetMergedSystem(systemName, out s, cn))
                     result = s;
             }
@@ -929,15 +929,43 @@ namespace EDDiscovery.DB
             return nearestsystem;
         }
 
-        public static void GetSystemAndAlternatives(EliteDangerous.JournalEvents.JournalLocOrJump vsc, out ISystem system, out List<ISystem> alternatives, out string namestatus)
+        public static bool GetSystemAndAlternatives(EliteDangerous.JournalEvents.JournalLocOrJump vsc, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
-            system = new EDDiscovery2.DB.InMemory.SystemClass
+            ISystem refsystem = new EDDiscovery2.DB.InMemory.SystemClass
             {
                 name = vsc.StarSystem,
                 x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN,
                 y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN,
                 z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN,
                 id_edsm = vsc.EdsmID
+            };
+
+            return GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
+        }
+
+        public static bool GetSystemAndAlternatives(string sysname, out ISystem system, out List<ISystem> alternatives, out string namestatus)
+        {
+            ISystem refsystem = new EDDiscovery2.DB.InMemory.SystemClass
+            {
+                name = sysname,
+                x = Double.NaN,
+                y = Double.NaN,
+                z = Double.NaN,
+                id_edsm = 0
+            };
+
+            return GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
+        }
+
+        public static bool GetSystemAndAlternatives(ISystem refsys, out ISystem system, out List<ISystem> alternatives, out string namestatus)
+        {
+            system = new EDDiscovery2.DB.InMemory.SystemClass
+            {
+                name = refsys.name,
+                x = refsys.HasCoordinate ? refsys.x : Double.NaN,
+                y = refsys.HasCoordinate ? refsys.y : Double.NaN,
+                z = refsys.HasCoordinate ? refsys.z : Double.NaN,
+                id_edsm = refsys.id_edsm
             };
 
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
@@ -980,8 +1008,8 @@ namespace EDDiscovery.DB
                 Dictionary<long, SystemClass> altmatches = new Dictionary<long, SystemClass>();
                 Dictionary<long, SystemClass> matches = new Dictionary<long, SystemClass>();
                 SystemClass edsmidmatch = null;
-                long sel_edsmid = vsc.EdsmID;
-                bool hastravcoords = vsc.HasCoordinate && (vsc.StarSystem.ToLowerInvariant() == "sol" || vsc.StarPos.X != 0 || vsc.StarPos.Y != 0 || vsc.StarPos.Z != 0);
+                long sel_edsmid = refsys.id_edsm;
+                bool hastravcoords = refsys.HasCoordinate && (refsys.name.ToLowerInvariant() == "sol" || refsys.x != 0 || refsys.y != 0 || refsys.z != 0);
                 bool multimatch = false;
 
                 if (sel_edsmid != 0)
@@ -1000,7 +1028,7 @@ namespace EDDiscovery.DB
 
                 //Stopwatch sw2 = new Stopwatch(); sw2.Start(); //long t2 = sw2.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query names in {0}", t2));
 
-                Dictionary<long, SystemClass> namematches = GetSystemsByName(vsc.StarSystem).Where(s => s != null).ToDictionary(s => s.id, s => s);
+                Dictionary<long, SystemClass> namematches = GetSystemsByName(refsys.name).Where(s => s != null).ToDictionary(s => s.id, s => s);
                 Dictionary<long, SystemClass> posmatches = new Dictionary<long, SystemClass>();
                 Dictionary<long, SystemClass> nameposmatches = new Dictionary<long, SystemClass>();
 
@@ -1015,9 +1043,9 @@ namespace EDDiscovery.DB
                         "AND s.Z >= @Z - 16 " +
                         "AND s.Z <= @Z + 16"))
                     {
-                        selectByPosCmd.AddParameterWithValue("@X", (long)(vsc.StarPos.X * XYZScalar));
-                        selectByPosCmd.AddParameterWithValue("@Y", (long)(vsc.StarPos.Y * XYZScalar));
-                        selectByPosCmd.AddParameterWithValue("@Z", (long)(vsc.StarPos.Z * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@X", (long)(refsys.x * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@Y", (long)(refsys.y * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@Z", (long)(refsys.z * XYZScalar));
 
                         //Stopwatch sw = new Stopwatch(); sw.Start(); long t1 = sw.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query pos in {0}", t1));
 
@@ -1034,7 +1062,7 @@ namespace EDDiscovery.DB
                                     matches[sys.id] = sys;
                                     posmatches[sys.id] = sys;
 
-                                    if (sys.name.Equals(vsc.StarSystem, StringComparison.InvariantCultureIgnoreCase))
+                                    if (sys.name.Equals(refsys.name, StringComparison.InvariantCultureIgnoreCase))
                                     {
                                         nameposmatches[sys.id] = sys;
                                     }
@@ -1044,9 +1072,9 @@ namespace EDDiscovery.DB
                     }
                 }
 
-                if (aliasesByName.ContainsKey(vsc.StarSystem))
+                if (aliasesByName.ContainsKey(refsys.name))
                 {
-                    foreach (long alt_edsmid in aliasesByName[vsc.StarSystem])
+                    foreach (long alt_edsmid in aliasesByName[refsys.name])
                     {
                         SystemClass sys = GetSystem(alt_edsmid, cn, SystemIDType.EdsmId);
                         if (sys != null)
@@ -1078,12 +1106,12 @@ namespace EDDiscovery.DB
                     if (nameposmatches.ContainsKey(system.id)) // name and position matches
                     {
                         namestatus = "Exact match";
-                        return; // Continue to next system
+                        return true; // Continue to next system
                     }
                     else if (posmatches.ContainsKey(system.id)) // position matches
                     {
                         namestatus = "Name differs";
-                        return; // Continue to next system
+                        return true; // Continue to next system
                     }
                     else if (!hastravcoords || !system.HasCoordinate) // no coordinates available
                     {
@@ -1098,9 +1126,9 @@ namespace EDDiscovery.DB
                                 namestatus = "Travel log entry has no coordinates";
                             }
 
-                            return; // Continue to next system
+                            return true; // Continue to next system
                         }
-                        else if (!vsc.HasCoordinate)
+                        else if (!refsys.HasCoordinate)
                         {
                             namestatus = "Name differs";
                         }
@@ -1114,14 +1142,14 @@ namespace EDDiscovery.DB
                         // Both name and position matches
                         system = nameposmatches.Values.Single();
                         namestatus = "Exact match";
-                        return; // Continue to next system
+                        return true; // Continue to next system
                     }
                     else if (posmatches.Count == 1)
                     {
                         // Position matches
                         system = posmatches.Values.Single();
                         namestatus = $"System {system.name} found at location";
-                        return; // Continue to next system
+                        return true; // Continue to next system
                     }
                     else
                     {
@@ -1136,7 +1164,7 @@ namespace EDDiscovery.DB
                         // One system name matched
                         system = namematches.Values.Single();
                         namestatus = "Name matched";
-                        return;
+                        return true;
                     }
                     else if (namematches.Count > 1)
                     {
@@ -1153,6 +1181,8 @@ namespace EDDiscovery.DB
                     namestatus = "System not found";
                 }
             }
+
+            return false;
         }
 
         public static long ParseEDSMUpdateSystemsString(string json, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
@@ -2050,7 +2080,7 @@ namespace EDDiscovery.DB
         /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system that was once named <paramref name="systemName"/>.</param>
         /// <param name="cn">The database connection to use.</param>
         /// <returns><c>true</c> if the system is known by a different name (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
-        private static bool privTryGetMergedSystem(string systemName, out SystemClass result, SQLiteConnectionSystem cn = null)
+        private static bool privTryGetMergedSystem(string systemName, out ISystemBase result, SQLiteConnectionSystem cn = null)
         {
             result = null;
             bool createdCn = false;

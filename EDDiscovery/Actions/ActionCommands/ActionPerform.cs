@@ -12,9 +12,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Perform command", UserData, "Configure Perform Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Perform command", UserData, "Configure Perform Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -37,20 +37,20 @@ namespace EDDiscovery.Actions
                 }
                 else if (cmdname.Equals("3dmap"))
                 {
-                    ap.discoveryform.Open3DMap(null);
+                    ap.actioncontroller.DiscoveryForm.Open3DMap(null);
                 }
                 else if (cmdname.Equals("2dmap"))
                 {
-                    ap.discoveryform.Open2DMap();
+                    ap.actioncontroller.DiscoveryForm.Open2DMap();
                 }
                 else if (cmdname.Equals("edsm"))
                 {
                     EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
-                    ap.discoveryform.EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDiscovery2.EDDConfig.Instance.DefaultMapColour.ToArgb());
+                    ap.actioncontroller.DiscoveryForm.EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDiscovery2.EDDConfig.Instance.DefaultMapColour.ToArgb());
                 }
                 else if (cmdname.Equals("refresh"))
                 {
-                    ap.discoveryform.RefreshHistoryAsync(checkedsm: true);
+                    ap.actioncontroller.DiscoveryForm.RefreshHistoryAsync(checkedsm: true);
                 }
                 else if (cmdname.Equals("url"))
                 {
@@ -64,11 +64,11 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Perform url must start with http");
                 }
                 else if (cmdname.Equals("configurevoice"))
-                    ap.discoveryform.ConfigureVoice();
+                    ap.actioncontroller.ConfigureVoice();
                 else if (cmdname.Equals("manageaddons"))
-                    ap.discoveryform.ManageAddOns();
+                    ap.actioncontroller.ManageAddOns();
                 else if (cmdname.Equals("editaddons"))
-                    ap.discoveryform.EditAddOnActionFile();
+                    ap.actioncontroller.EditAddOnActionFile();
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");
             }

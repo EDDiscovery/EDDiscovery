@@ -20,7 +20,7 @@ using System.Text;
 
 namespace EDDiscovery2.DB
 {
-    public interface ISystemBase
+    public interface ISystemBase : IEquatable<ISystemBase>
     {
         long id { get; set; }
         long id_edsm { get; set; }

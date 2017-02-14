@@ -327,9 +327,15 @@ namespace EDDiscovery
                 he.landed = false;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
-                he.landed = (je as EliteDangerous.JournalEvents.JournalLoadGame).StartLanded;
-                he.shiptype = (je as EliteDangerous.JournalEvents.JournalLoadGame).Ship;
-                he.shipid = (je as EliteDangerous.JournalEvents.JournalLoadGame).ShipId;
+                EliteDangerous.JournalEvents.JournalLoadGame jl = je as EliteDangerous.JournalEvents.JournalLoadGame;
+
+                he.landed = jl.StartLanded;
+
+                if (jl.Ship.IndexOf("buggy", StringComparison.InvariantCultureIgnoreCase) == -1)        // load game with buggy, can't tell what ship we get back into, so ignore
+                {
+                    he.shiptype = (je as EliteDangerous.JournalEvents.JournalLoadGame).Ship;
+                    he.shipid = (je as EliteDangerous.JournalEvents.JournalLoadGame).ShipId;
+                }
             }
             else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)         // BUY does not have ship id, but the new entry will that is written later - journals 8.34
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardBuy).ShipType;
@@ -429,7 +435,7 @@ namespace EDDiscovery
 
         public bool IsJournalEventInEventFilter(string[] events)
         {
-            return events.Contains(Tools.SplitCapsWord(EntryType.ToString()));
+            return events.Contains(EntryType.ToString().SplitCapsWord());
         }
 
         public bool IsJournalEventInEventFilter(string eventstr)
@@ -441,7 +447,7 @@ namespace EDDiscovery
         {
             if ((snc == null && txt.Length > 0) || (snc != null && !snc.Note.Equals(txt))) // if no system note, and text,  or system not is not text
             {
-                if (snc != null && (snc.Journalid == Journalid || snc.Journalid == 0 || (snc.Name.Equals(System.name, StringComparison.InvariantCultureIgnoreCase) && snc.EdsmId <= 0) || (snc.EdsmId > 0 && snc.EdsmId == System.id_edsm)))           // already there, update
+                if (snc != null && (snc.Journalid == Journalid || snc.Journalid == 0 || (snc.EdsmId > 0 && snc.EdsmId == System.id_edsm) || (snc.EdsmId <= 0 && snc.Name.Equals(System.name, StringComparison.InvariantCultureIgnoreCase))))           // already there, update
                 {
                     snc.Note = txt;
                     snc.Time = DateTime.Now;
@@ -640,11 +646,15 @@ namespace EDDiscovery
 
         public int GetVisitsCount(string name, long edsmid = 0)
         {
-            return historylist.Where(he => he.IsFSDJump && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || he.System.id_edsm == edsmid)).Count();
+            return (from he in historylist.AsParallel()
+                   where (he.IsFSDJump && (edsmid <= 0 || he.System.id_edsm == edsmid) && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                   select he).Count();
         }
         public List<JournalScan> GetScans(string name, long edsmid = 0)
         {
-            return (from s in historylist where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || s.System.id_edsm == edsmid)) select s.journalEntry as JournalScan).ToList<JournalScan>();
+            return (from s in historylist.AsParallel()
+                    where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && (edsmid <= 0 || s.System.id_edsm == edsmid) && s.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
         public int GetFSDJumps( TimeSpan t )
@@ -670,8 +680,9 @@ namespace EDDiscovery
 
         public int GetFSDBoostUsed(DateTime start, DateTime to)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal   < to select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
-            return (from s in list where s.BoostUsed == true select s  ).Count();
+            return (from s in historylist
+                    where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to && ((JournalFSDJump)s.journalEntry).BoostUsed == true)
+                    select s).Count();
         }
 
 
@@ -714,8 +725,7 @@ namespace EDDiscovery
 
         public List<JournalScan> GetScanList(DateTime start, DateTime to)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
-            return list;
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
 
@@ -823,17 +833,18 @@ namespace EDDiscovery
         {
             double dist;
             double dx, dy, dz;
+            var list = distlist.Values.ToList();
 
             foreach (HistoryEntry pos in historylist)
             {
-                var list = distlist.Values.ToList();
-
-                if (pos.System.HasCoordinate && list.FindIndex(qx => qx.name.Equals(pos.System.name, StringComparison.InvariantCultureIgnoreCase)) == -1)
+                if (pos.System.HasCoordinate && !list.Any(qx => (qx.id == pos.System.id || qx.name.Equals(pos.System.name, StringComparison.InvariantCultureIgnoreCase))))
                 {
                     dx = (pos.System.x - x);
                     dy = (pos.System.y - y);
                     dz = (pos.System.z - z);
                     dist = dx * dx + dy * dy + dz * dz;
+
+                    list.Add(pos.System);
 
                     if (dist >= 0.1 || !removezerodiststar)
                     {
@@ -854,7 +865,7 @@ namespace EDDiscovery
             if (fsdjump)
                 return historylist.FindLast(x => x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             else
-                return historylist.FindLast(x => x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && x.IsFSDJump);
+                return historylist.FindLast(x => x.IsFSDJump && x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public ISystem FindSystem(string name, EDSM.GalacticMapping glist = null)        // in system or name

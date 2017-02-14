@@ -194,7 +194,10 @@ namespace EDDiscovery
                     OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
                 });
             }
-            catch { }
+            catch
+            {
+                System.Diagnostics.Debug.WriteLine("******* Exception trying to write to ui thread log");
+            }
         }
 
         public void ReportProgress(int percent, string message)
@@ -211,22 +214,32 @@ namespace EDDiscovery
                 return false;
             }
 
-            if (Interlocked.CompareExchange(ref refreshRequestedFlag, 1, 0) == 0)
-            {
-                InvokeSyncOnUiThread(() =>
-                {
-                    OnRefreshStarting?.Invoke();
-                    journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-                });
+            bool newrefresh = false;
 
-                refreshWorkerArgs = new RefreshWorkerArgs
+            RefreshWorkerArgs curargs = refreshWorkerArgs;
+            if (refreshRequestedFlag == 0)
+            {
+                if (curargs == null ||
+                    curargs.CheckEdsm != checkedsm ||
+                    curargs.ForceNetLogReload != forcenetlogreload ||
+                    curargs.ForceJournalReload != forcejournalreload ||
+                    curargs.CurrentCommander != (currentcmdr ?? history.CommanderId) ||
+                    curargs.NetLogPath != netlogpath)
+                {
+                    newrefresh = true;
+                }
+            }
+
+            if (Interlocked.CompareExchange(ref refreshRequestedFlag, 1, 0) == 0 || newrefresh)
+            {
+                refreshWorkerQueue.Enqueue(new RefreshWorkerArgs
                 {
                     NetLogPath = netlogpath,
                     ForceNetLogReload = forcenetlogreload,
                     ForceJournalReload = forcejournalreload,
                     CheckEdsm = checkedsm,
                     CurrentCommander = currentcmdr ?? history.CommanderId
-                };
+                });
 
                 refreshRequested.Set();
                 return true;
@@ -286,9 +299,10 @@ namespace EDDiscovery
 
         private EliteDangerous.EDJournalClass journalmonitor;
 
-        private RefreshWorkerArgs refreshWorkerArgs = new RefreshWorkerArgs();
+        private ConcurrentQueue<RefreshWorkerArgs> refreshWorkerQueue = new ConcurrentQueue<RefreshWorkerArgs>();
         private SystemClass.SystemsSyncState syncstate = new SystemClass.SystemsSyncState();
         private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
+        private RefreshWorkerArgs refreshWorkerArgs = new RefreshWorkerArgs();
 
         private Thread backgroundWorker;
         private Thread backgroundRefreshWorker;
@@ -297,6 +311,7 @@ namespace EDDiscovery
         private ManualResetEvent closeRequested = new ManualResetEvent(false);
         private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
         private ManualResetEvent readyForUiInvoke = new ManualResetEvent(false);
+        private ManualResetEvent readyForNewRefresh = new ManualResetEvent(false);
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
         private AutoResetEvent stardistRequested = new AutoResetEvent(false);
@@ -496,6 +511,7 @@ namespace EDDiscovery
             HistoryList hist = null;
             try
             {
+                refreshWorkerArgs = args;
                 hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath, args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander);
             }
             catch (Exception ex)
@@ -539,6 +555,7 @@ namespace EDDiscovery
                 OnRefreshComplete?.Invoke();
 
                 refreshRequestedFlag = 0;
+                readyForNewRefresh.Set();
             }
         }
 
@@ -611,9 +628,12 @@ namespace EDDiscovery
 
         private void BackgroundRefreshWorkerThread()
         {
+            WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh after initial refresh
             while (!PendingClose)
             {
                 int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested });
+                RefreshWorkerArgs argstemp = null;
+                RefreshWorkerArgs args = null;
 
                 if (PendingClose) break;
 
@@ -622,7 +642,24 @@ namespace EDDiscovery
                     case 0:  // Close Requested
                         break;
                     case 1:  // Refresh Requested
-                        DoRefreshHistory(refreshWorkerArgs);
+                        InvokeSyncOnUiThread(() =>
+                        {
+                            OnRefreshStarting?.Invoke();
+                            journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+                        });
+
+
+                        while (refreshWorkerQueue.TryDequeue(out argstemp)) // Get the most recent refresh
+                        {
+                            args = argstemp;
+                        }
+
+                        if (args != null)
+                        {
+                            readyForNewRefresh.Reset();
+                            DoRefreshHistory(args);
+                            WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh
+                        }
                         break;
                 }
             }

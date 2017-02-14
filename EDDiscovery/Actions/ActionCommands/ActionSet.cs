@@ -22,14 +22,14 @@ namespace EDDiscovery.Actions
             return vars.ToString(operations, " ");
         }
 
-        public bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars, bool allowaddv , bool allownoexpandv)
+        public bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars, bool allowaddv , bool allownoexpandv)
         {
             ConditionVariables av;
             Dictionary<string, string> operations;
             FromString(userdata, out av, out operations);
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Variable list:", theme, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations);
+            avf.Init("Variable list:", discoveryform.theme, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations);
 
             if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
@@ -51,7 +51,7 @@ namespace EDDiscovery.Actions
             if ( ok )
                 userdata = ToString(av,operations);        // normalise them..
 
-            return ok ? null : "Global/Let/Set not in correct format";
+            return ok ? null : "Variable command not in correct format";
         }
 
     }
@@ -61,9 +61,9 @@ namespace EDDiscovery.Actions
         ConditionVariables av;
         Dictionary<string, string> operations;
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            return ConfigurationMenu(parent, theme, eventvars, true, true);
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
@@ -103,9 +103,9 @@ namespace EDDiscovery.Actions
         ConditionVariables av;
         Dictionary<string, string> operations;
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            return ConfigurationMenu(parent, theme, eventvars,false, true);
+            return base.ConfigurationMenu(parent, discoveryform, eventvars,false, true);
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
@@ -146,7 +146,7 @@ namespace EDDiscovery.Actions
                 }
                 catch
                 {
-                    ap.ReportError("LET expression does not evaluate");
+                    ap.ReportError("Let expression does not evaluate");
                     break;
                 }
             }
@@ -163,9 +163,9 @@ namespace EDDiscovery.Actions
         ConditionVariables av;
         Dictionary<string, string> operations;
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            return ConfigurationMenu(parent, theme, eventvars, true , true);
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true , true);
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
@@ -189,12 +189,12 @@ namespace EDDiscovery.Actions
                 if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
                 {
                     ap.currentvars[vname] += res;
-                    ap.discoveryform.SetProgramGlobal(vname, ap.currentvars[vname]);
+                    ap.actioncontroller.SetNonPersistentGlobal(vname, ap.currentvars[vname]);
                 }
                 else 
                 {
                     ap.currentvars[vname] = res;
-                    ap.discoveryform.SetProgramGlobal(vname, res);
+                    ap.actioncontroller.SetNonPersistentGlobal(vname, res);
                 }
             }
 
@@ -205,4 +205,88 @@ namespace EDDiscovery.Actions
         }
 
     }
+
+    public class ActionPersistentGlobal : ActionSetLetBase
+    {
+        ConditionVariables av;
+        Dictionary<string, string> operations;
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            if (av == null)
+                FromString(userdata, out av, out operations);
+
+            foreach (KeyValuePair<string, string> k in av.values)
+            {
+                string vname = k.Key;
+                string res;
+
+                if (operations[vname].Contains("$"))
+                    res = k.Value;
+                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                {
+                    ap.ReportError(res);
+                    break;
+                }
+
+                if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
+                {
+                    ap.currentvars[vname] += res;
+                    ap.actioncontroller.SetPeristentGlobal(vname, ap.currentvars[vname]);
+                }
+                else
+                {
+                    ap.currentvars[vname] = res;
+                    ap.actioncontroller.SetPeristentGlobal(vname, res);
+                }
+            }
+
+            if (av.Count == 0)
+                ap.ReportError("PersistentGlobal no variable name given");
+
+            return true;
+        }
+
+    }
+
+    public class ActionDeleteVariable: Action
+    {
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Variable name", UserData.ReplaceEscapeControlChars(), "Configure DeleteVariable Command", true);
+            if (promptValue != null)
+            {
+                userdata = promptValue.EscapeControlChars();
+            }
+
+            return (promptValue != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            string res;
+            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            {
+                StringParser p = new StringParser(res);
+
+                string v;
+                while ((v = p.NextWord(", ")) != null)
+                {
+                    ap.actioncontroller.DeleteVariable(v);
+                    ap.currentvars.Delete(v);
+                }
+            }
+            else
+                ap.ReportError(res);
+
+            return true;
+        }
+
+    }
+
 }

@@ -13,9 +13,9 @@ namespace EDDiscovery.Actions
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "JID of event" , UserData, (commodities) ? "Configure Commodities Command" : "Configure Material Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "JID of event", UserData, (commodities) ? "Configure Commodities Command" : "Configure Material Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -56,7 +56,7 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    int jidindex = ap.historylist.EntryOrder.FindIndex(x => x.Journalid == jid);
+                    int jidindex = ap.actioncontroller.HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);
 
                     if (jidindex == -1)
                     {
@@ -64,11 +64,11 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    EDDiscovery2.DB.MaterialCommoditiesList mcl = ap.historylist.EntryOrder[jidindex].MaterialCommodity;
+                    EDDiscovery2.DB.MaterialCommoditiesList mcl = ap.actioncontroller.HistoryList.EntryOrder[jidindex].MaterialCommodity;
                     List<EDDiscovery2.DB.MaterialCommodities> list = mcl.Sort(commodities);
 
                     ap.currentvars[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap.currentvars[prefix + "IndexOf"] = ap.historylist.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap.currentvars[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     for ( int i = 0; i < list.Count; i++ )
                     {

@@ -38,6 +38,16 @@ namespace EDDiscovery2.DB.InMemory
                 return (!double.IsNaN(x));
             }
         }
+
+        public bool Equals(ISystemBase other)
+        {
+            return other != null &&
+                   other.name.Equals(this.name, StringComparison.InvariantCultureIgnoreCase) &&
+                   (!this.HasCoordinate || !other.HasCoordinate ||
+                    (Math.Abs(this.x - other.x) < 0.125 &&
+                     Math.Abs(this.y - other.y) < 0.125 &&
+                     Math.Abs(this.z - other.z) < 0.125));
+        }
     }
 
     public class SystemClass : SystemClassBase, ISystem

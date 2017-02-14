@@ -32,7 +32,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Engineer = JSONHelper.GetStringDef(evt["Engineer"]);
             Blueprint = JSONHelper.GetStringDef(evt["Blueprint"]);
             Level = JSONHelper.GetInt(evt["Level"]);
-            Ingredients = evt["Ingredients"]?.ToObject<Dictionary<string, int>>();
+
+            JToken mats = (JToken)evt["Ingredients"];
+
+            if (mats != null)
+            {
+                if (mats.Type == JTokenType.Object)
+                {
+                    Ingredients = mats?.ToObject<Dictionary<string, int>>();
+                }
+                else
+                {
+                    Ingredients = new Dictionary<string, int>();
+                    foreach (JObject jo in (JArray)mats)
+                    {
+                        Ingredients[(string)jo["Name"]] = JSONHelper.GetInt(jo["Count"]);
+                    }
+                }
+            }
+
         }
 
         public string Engineer { get; set; }

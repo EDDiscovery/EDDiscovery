@@ -213,17 +213,11 @@ namespace EDDiscovery
             return (float)maxdist;
         }
 
-        private SystemClass GetSystem(string sysname)
+        private ISystemBase GetSystem(string sysname)
         {
-            SystemClass sys = SystemClass.GetSystem(sysname);
-
-            if (sys == null)
-            {
-                if (edsm.IsKnownSystem(sysname))
-                {
-                    sys = new SystemClass(sysname);
-                }
-            }
+            ISystemBase sys;
+            if (!SystemClass.TryGetSystem(sysname, out sys, true) && edsm.IsKnownSystem(sysname))
+                sys = new SystemClass(sysname);
 
             return sys;
         }
@@ -518,7 +512,7 @@ namespace EDDiscovery
             if (route.Count >= 2)
             {
                 _discoveryForm.history.FillInPositionsFSDJumps();
-                map.Prepare(route[0], _discoveryForm.settings.MapHomeSystem, route[0], 400 / CalculateRouteMaxDistFromOrigin(), _discoveryForm.history.FilterByTravel);
+                map.Prepare(route[0], _discoveryForm.GetHomeSystem(), route[0], 400 / CalculateRouteMaxDistFromOrigin(), _discoveryForm.history.FilterByTravel);
                 map.SetPlanned(route);
                 map.Show();
             }

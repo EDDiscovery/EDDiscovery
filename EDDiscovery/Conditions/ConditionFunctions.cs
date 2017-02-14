@@ -8,9 +8,6 @@ namespace EDDiscovery
 {
     public class ConditionFunctions
     {
-        EDDiscoveryForm ed;
-        HistoryList hl;
-        HistoryEntry he;
         FuncEntry[] flist;
         static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -38,10 +35,8 @@ namespace EDDiscovery
             }
         }
 
-        public ConditionFunctions(EDDiscoveryForm e, HistoryList l, HistoryEntry h)
+        public ConditionFunctions()
         {
-            ed = e; hl = l; he = h;
-
             flist = new FuncEntry[]                         // first is a bitmap saying if to check for the value is a var
             {                                               // second is a bitmap saying if a string is allowed in this pos
                 new FuncEntry("exists",Exists,              1,20,   0,0),   // don't check macros, no strings
@@ -74,7 +69,11 @@ namespace EDDiscovery
                 new FuncEntry("ifnotcontains",Ifnotcontains,3,4,    15,15),
                 new FuncEntry("ifequal",Ifequal,            3,4,    15,15),
                 new FuncEntry("ifnotequal",Ifnotequal,      3,4,    15,15),
-                new FuncEntry("expandarray",ExpandArray,    4,5,    2,2)   // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                new FuncEntry("expandarray",ExpandArray,    4,5,    2,2),  // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                new FuncEntry("fileexists",FileExists,      1,20,   0xfffffff,0xfffffff),   // check var, can be string
+                new FuncEntry("escapechar",EscapeChar,      1,1,    1,1),   // check var, can be string
+                new FuncEntry("replaceescapechar",ReplaceEscapeChar,      1,1,    1,1),   // check var, can be string
+                new FuncEntry("random",Random,              1,1,    0,0),   // no change var, not string
         };
         }
 
@@ -355,14 +354,15 @@ namespace EDDiscovery
         private bool SplitCaps(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = Tools.SplitCapsWordUnderscoreSlash(value);
+            output = value.SplitCapsWordUnderscoreTitleCase();
             return true;
         }
 
         private bool Ship(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = Tools.SplitCapsWordUnderscoreSlash(EliteDangerous.JournalEntry.PhoneticShipName(value));
+            output = EliteDangerous.JournalEntry.PhoneticShipName(value);
+            output = output.SplitCapsWordUnderscoreTitleCase();
             return true;
         }
 
@@ -522,14 +522,12 @@ namespace EDDiscovery
 
         private bool Version(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
-            System.Reflection.Assembly aw = System.Reflection.Assembly.GetExecutingAssembly();
-            string v = aw.FullName.Split(',')[1].Split('=')[1];
-            string[] list = v.Split('.');
+            int[] edversion = Tools.GetEDVersion();
 
             int para;
-            if (paras[0].value.InvariantParse(out para) && para >= 1 && para <= list.Length)
+            if (paras[0].value.InvariantParse(out para) && para >= 1 && para <= edversion.Length)
             {
-                output = list[para - 1];
+                output = edversion[para - 1].ToString(ct);
                 return true;
             }
             else
@@ -787,8 +785,8 @@ namespace EDDiscovery
                         if (i != start)
                             output += separ;
 
-                        if ( splitcaps )
-                            output += Tools.SplitCapsWordUnderscoreSlash(vars[aname]);
+                        if (splitcaps)
+                            output += vars[aname].SplitCapsWordUnderscoreTitleCase();
                         else
                             output += vars[aname];
                     }
@@ -802,6 +800,54 @@ namespace EDDiscovery
                 output = "Start and/or length are not integers or variables do not exist";
 
             return false;
+        }
+
+        private bool FileExists(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            foreach (Parameter p in paras)
+            {
+                string s = p.isstring ? p.value : vars[p.value];
+
+                if (!System.IO.File.Exists(s))
+                {
+                    output = "0";
+                    return true;
+                }
+            }
+
+            output = "1";
+            return true;
+        }
+
+        private bool EscapeChar(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            output = s.EscapeControlChars();
+            return true;
+        }
+
+        private bool ReplaceEscapeChar(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            output = s.ReplaceEscapeControlChars();
+            return true;
+        }
+
+        static Random rnd = new System.Random();
+
+        private bool Random(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            int v;
+            if ( paras[0].value.InvariantParse(out v ) || (vars.ContainsKey(paras[0].value) && vars[paras[0].value].InvariantParse(out v)) )
+            {
+                output = rnd.Next(v).ToString(ct);
+                return true;
+            }
+            else
+            {
+                output = "Parameter should be an integer constant or a variable name with an integer in its value";
+                return false;
+            }
         }
 
         #endregion

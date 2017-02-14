@@ -11,9 +11,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Pragma", UserData, "Configure Pragma Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Pragma", UserData, "Configure Pragma Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -40,7 +40,7 @@ namespace EDDiscovery.Actions
                         {
                             foreach (KeyValuePair<string, string> k in ap.currentvars.FilterVars(rest).values)
                             {
-                                ap.discoveryform.LogLine(k.Key + "=" + k.Value);
+                                ap.actioncontroller.LogLine(k.Key + "=" + k.Value);
                             }
                         }
                         else
@@ -55,7 +55,7 @@ namespace EDDiscovery.Actions
 
                         if (rest != null)
                         {
-                            ap.discoveryform.LogLine(rest);
+                            ap.actioncontroller.LogLine(rest);
                         }
                         else
                         {

@@ -11,9 +11,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Line to display", UserData.ReplaceEscapeControlChars(), "Configure Print Command" , true);
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Line to display", UserData.ReplaceEscapeControlChars(), "Configure Print Command" , true);
             if (promptValue != null)
             {
                 userdata = promptValue.EscapeControlChars();
@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
             string res;
             if (ap.functions.ExpandString(UserData.ReplaceEscapeControlChars(), ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
             {
-                ap.discoveryform.LogLine(res);
+                ap.actioncontroller.LogLine(res);
                 System.Diagnostics.Debug.WriteLine("PRINT " + res);
             }
             else

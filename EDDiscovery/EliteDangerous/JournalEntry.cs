@@ -267,7 +267,7 @@ namespace EDDiscovery.EliteDangerous
 
         public DateTime EventTimeUTC;
 
-        public int EdsmID;                      // 0 = unassigned, >0 = assigned
+        public long EdsmID;                      // 0 = unassigned, >0 = assigned
 
         protected JObject jEventData;           // event string from the log
         private int Synced;                     // sync flags
@@ -302,7 +302,7 @@ namespace EDDiscovery.EliteDangerous
 
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
-            summary = Tools.SplitCapsWord(EventTypeStr);
+            summary = EventTypeStr.SplitCapsWord();
             info = ToShortString();
             detailed = "";
         }
@@ -357,7 +357,7 @@ namespace EDDiscovery.EliteDangerous
             jr.CommanderId = (int)(long)dr["CommanderId"];
             jr.EventTimeUTC = (DateTime)dr["EventTime"];
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
-            jr.EdsmID = (int)(long)dr["EdsmID"];
+            jr.EdsmID = (long)dr["EdsmID"];
             jr.Synced = (int)(long)dr["Synced"];
             return jr;
         }
@@ -374,7 +374,7 @@ namespace EDDiscovery.EliteDangerous
             if (jr.EventTimeUTC == default(DateTime))
                 jr.EventTimeUTC = ((DateTime)dr["EventTime"]).ToUniversalTime();
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
-            jr.EdsmID = (int)(long)dr["EdsmID"];
+            jr.EdsmID = (long)dr["EdsmID"];
             jr.Synced = (int)(long)dr["Synced"];
             return jr;
         }
@@ -1048,7 +1048,7 @@ namespace EDDiscovery.EliteDangerous
             }
 
             {           //missions
-                jc.AddPrePostfix("Name", "", "", "MissionAccepted;MissionAbandoned;MissionCompleted;MissionFailed");
+                jc.AddSpecial("Name", JSONConverters.Types.TMissionName, "", "", "MissionAccepted;MissionAbandoned;MissionCompleted;MissionFailed");
             }
 
             {           // transfers
@@ -1130,7 +1130,7 @@ namespace EDDiscovery.EliteDangerous
 
                 if (method == null)
                 {
-                    ret.Add((towords) ? Tools.SplitCapsWord(n) : n);
+                    ret.Add((towords) ? n.SplitCapsWord() : n);
                 }
                 else
                 {
@@ -1144,7 +1144,7 @@ namespace EDDiscovery.EliteDangerous
                             m = jtype.GetMethod(method2);
 
                         if (m != null)
-                            ret.Add((towords) ? Tools.SplitCapsWord(n) : n);
+                            ret.Add((towords) ? n.SplitCapsWord() : n);
                     }
                 }
             }
@@ -1196,6 +1196,11 @@ namespace EDDiscovery.EliteDangerous
         static public string PhoneticShipName(string inname)
         {
             return inname.Replace("Mk. IV", "Mark 4").Replace("Mk. III", "Mark 3");
+        }
+
+        static public string GetBetterMissionName(string inname)
+        {
+            return inname.Replace("_name", "").SplitCapsWordUnderscoreTitleCase();
         }
     }
 }

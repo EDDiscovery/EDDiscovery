@@ -12,9 +12,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "ProgramWindow command", UserData, "Configure Program Window Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "ProgramWindow command", UserData, "Configure Program Window Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -39,23 +39,23 @@ namespace EDDiscovery.Actions
                 else if (nextcmd.Equals("tab"))
                 {
                     string tabname = sp.NextWord(" ", true);
-                    if (!ap.discoveryform.SelectTabPage(tabname))
+                    if (!ap.actioncontroller.DiscoveryForm.SelectTabPage(tabname))
                         ap.ReportError("Tab page name " + tabname + " not found");
                 }
                 else if (nextcmd.Equals("topmost"))
-                    ap.discoveryform.TopMost = true;
+                    ap.actioncontroller.DiscoveryForm.TopMost = true;
                 else if (nextcmd.Equals("normalz"))
-                    ap.discoveryform.TopMost = false;
+                    ap.actioncontroller.DiscoveryForm.TopMost = false;
                 else if (nextcmd.Equals("showintaskbar"))
-                    ap.discoveryform.ShowInTaskbar = true;
+                    ap.actioncontroller.DiscoveryForm.ShowInTaskbar = true;
                 else if (nextcmd.Equals("notshowintaskbar"))
-                    ap.discoveryform.ShowInTaskbar = false;
+                    ap.actioncontroller.DiscoveryForm.ShowInTaskbar = false;
                 else if (nextcmd.Equals("minimize"))
-                    ap.discoveryform.WindowState = FormWindowState.Minimized;
+                    ap.actioncontroller.DiscoveryForm.WindowState = FormWindowState.Minimized;
                 else if (nextcmd.Equals("normal"))
-                    ap.discoveryform.WindowState = FormWindowState.Normal;
+                    ap.actioncontroller.DiscoveryForm.WindowState = FormWindowState.Normal;
                 else if (nextcmd.Equals("maximize"))
-                    ap.discoveryform.WindowState = FormWindowState.Maximized;
+                    ap.actioncontroller.DiscoveryForm.WindowState = FormWindowState.Maximized;
                 else if (nextcmd.Equals("location"))
                 {
                     int? x = sp.GetInt();
@@ -68,8 +68,8 @@ namespace EDDiscovery.Actions
 
                     if (x.HasValue && y.HasValue && w.HasValue && h.HasValue)
                     {
-                        ap.discoveryform.Location = new Point(x.Value, y.Value);
-                        ap.discoveryform.Size = new Size(w.Value, h.Value);
+                        ap.actioncontroller.DiscoveryForm.Location = new Point(x.Value, y.Value);
+                        ap.actioncontroller.DiscoveryForm.Size = new Size(w.Value, h.Value);
                     }
                     else
                         ap.ReportError("Location needs x,y,w,h in Popout");
@@ -82,7 +82,7 @@ namespace EDDiscovery.Actions
                     sp.IsCharMoveOn(',');
 
                     if (x.HasValue && y.HasValue)
-                        ap.discoveryform.Location = new Point(x.Value, y.Value);
+                        ap.actioncontroller.DiscoveryForm.Location = new Point(x.Value, y.Value);
                     else
                         ap.ReportError("Position needs x,y in Popout");
                 }
@@ -93,7 +93,7 @@ namespace EDDiscovery.Actions
                     int? h = sp.GetInt();
 
                     if (w.HasValue && h.HasValue)
-                        ap.discoveryform.Size = new Size(w.Value, h.Value);
+                        ap.actioncontroller.DiscoveryForm.Size = new Size(w.Value, h.Value);
                     else
                         ap.ReportError("Size needs x,y,w,h in Popout");
                 }

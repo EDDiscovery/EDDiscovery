@@ -98,7 +98,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             nSurfacePressure = JSONHelper.GetDoubleNull(evt["SurfacePressure"]);
             nLandable = JSONHelper.GetBoolNull(evt["Landable"]);
 
-            Materials = evt["Materials"]?.ToObject<Dictionary<string, double>>();
+            JToken mats = (JToken)evt["Materials"];
+
+            if (mats != null)
+            {
+                if (mats.Type == JTokenType.Object)
+                {
+                    Materials = mats?.ToObject<Dictionary<string, double>>();
+                }
+                else
+                {
+                    Materials = new Dictionary<string, double>();
+                    foreach (JObject jo in mats)
+                    {
+                        Materials[(string)jo["Name"]] = JSONHelper.GetDouble(jo["Percent"]);
+                    }
+                }
+            }
+
+
 
             if (IsStar)
                 StarTypeID = Bodies.StarStr2Enum(StarType);
@@ -173,7 +191,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         //public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
 
 
-         public bool IsEDSMBody
+        public bool IsEDSMBody
         {
             get
             {
@@ -573,7 +591,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         static public System.Drawing.Image GetMoonImageNotScanned()
         {
-            return EDDiscovery.Properties.Resources.Icy_Body_Greenish1;
+            return EDDiscovery.Properties.Resources.Globe;
         }
 
         internal double GetMaterial(string v)

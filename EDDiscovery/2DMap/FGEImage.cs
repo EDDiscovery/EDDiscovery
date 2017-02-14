@@ -439,7 +439,7 @@ namespace EDDiscovery2
 
                 logLine("Checking for new EDDiscovery maps");
 
-                GitHubClass github = new GitHubClass(discoveryform);
+                EDDiscovery.HTTP.GitHubClass github = new EDDiscovery.HTTP.GitHubClass(discoveryform.LogLine);
 
                 var files = github.GetDataFiles("Maps/V1");
                 return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
