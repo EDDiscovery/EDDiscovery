@@ -106,9 +106,11 @@ namespace ExtendedControls
                 }
                 else if (ImageSelected == ImageType.OnTop)
                 {
-                    Brush bbck = new SolidBrush(pc);
-                    Rectangle area = new Rectangle(leftmarginpx, topmarginpx, rightmarginpx - leftmarginpx + 1, bottommarginpx - topmarginpx + 1);
-                    e.Graphics.FillRectangle(bbck, area);
+                    using (Brush bbck = new SolidBrush(pc))
+                    {
+                        Rectangle area = new Rectangle(leftmarginpx, topmarginpx, rightmarginpx - leftmarginpx + 1, bottommarginpx - topmarginpx + 1);
+                        e.Graphics.FillRectangle(bbck, area);
+                    }
                 }
                 else if (ImageSelected == ImageType.Floating)
                 {
