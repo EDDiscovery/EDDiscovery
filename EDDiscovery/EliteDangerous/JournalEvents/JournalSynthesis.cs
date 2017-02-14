@@ -23,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name: synthesis blueprint
     //•	Materials: JSON object listing materials used and quantities
-    public class JournalSynthesis : JournalEntry
+    public class JournalSynthesis : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalSynthesis(JObject evt ) : base(evt, JournalTypeEnum.Synthesis)
         {

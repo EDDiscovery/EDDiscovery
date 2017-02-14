@@ -19,7 +19,7 @@ using System.Linq;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
 
-    public class JournalMaterialDiscarded : JournalEntry
+    public class JournalMaterialDiscarded : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalMaterialDiscarded(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscarded)
         {

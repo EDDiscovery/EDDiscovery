@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters: 
     //•	Category: type of material (Raw/Encoded/Manufactured)
     //•	Name: name of material
-    public class JournalMaterialCollected : JournalEntry
+    public class JournalMaterialCollected : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalMaterialCollected(JObject evt ) : base(evt, JournalTypeEnum.MaterialCollected)
         {

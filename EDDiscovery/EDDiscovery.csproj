@@ -294,6 +294,7 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
+    <Compile Include="EliteDangerous\IMaterialCommodityJournalEvent.cs" />
     <Compile Include="CompanionAPI\CompanionCredentials.cs" />
     <Compile Include="CompanionAPI\CompanionException.cs" />
     <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
