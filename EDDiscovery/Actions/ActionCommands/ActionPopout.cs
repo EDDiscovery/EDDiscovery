@@ -12,9 +12,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Popout command", UserData, "Configure Popout Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Popout command", UserData, "Configure Popout Command");
             if (promptValue != null)
             {
                 userdata = promptValue;

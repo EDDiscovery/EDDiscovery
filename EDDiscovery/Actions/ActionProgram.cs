@@ -311,6 +311,11 @@ namespace EDDiscovery.Actions
                         structcount[structlevel] = 0;
                         structtype[structlevel] = act.Type;
                     }
+
+                    string vmsg = act.VerifyActionCorrect();
+                    if (vmsg != null)
+                        errlist += "Step " + step.ToString(ct) + " " + vmsg + Environment.NewLine;
+
                 }
                 else
                 {

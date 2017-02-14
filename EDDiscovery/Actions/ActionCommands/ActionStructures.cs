@@ -10,20 +10,20 @@ namespace EDDiscovery.Actions
     public class ActionIfElseBase : Action
     {
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars) //standard one used for most
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars) //standard one used for most
         {
             ConditionLists jf = new ConditionLists();
             jf.FromString(userdata);
-            bool ok = ConfigurationMenu(parent, theme, eventvars, ref jf);
+            bool ok = ConfigurationMenu(parent, discoveryform, eventvars, ref jf);
             if (ok)
                 userdata = jf.ToString();
             return ok;
         }
 
-        public bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars, ref ConditionLists jf)
+        public bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars, ref ConditionLists jf)
         {
             EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
-            frm.InitCondition("Define condition", eventvars, theme, jf);
+            frm.InitCondition("Define condition", eventvars, discoveryform, jf);
 
             frm.TopMost = parent.FindForm().TopMost;
             if (frm.ShowDialog(parent.FindForm()) == DialogResult.OK)
@@ -253,9 +253,9 @@ namespace EDDiscovery.Actions
             return (UserData.Length > 0) ? null : "Loop missing loop count";
         }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-             string promptValue = PromptSingleLine.ShowDialog(parent, "Enter integer count", UserData, "Configure Loop");
+             string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Enter integer count", UserData, "Configure Loop");
              if (promptValue != null)
                 userdata = promptValue;
 
@@ -357,15 +357,15 @@ namespace EDDiscovery.Actions
             return FromString(userdata, out cond, out errmsg) ? null : "ErrorIf not in correct format: \"Error string\", condition";
         }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             ConditionLists cond;
             string errmsg;
             FromString(userdata, out cond, out errmsg);
 
-            if (base.ConfigurationMenu(parent, theme, eventvars, ref cond))
+            if (base.ConfigurationMenu(parent, discoveryform, eventvars, ref cond))
             {
-                string promptValue = PromptSingleLine.ShowDialog(parent, "Error to display", errmsg, "Configure ErrorIf Command");
+                string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Error to display", errmsg, "Configure ErrorIf Command");
                 if (promptValue != null)
                 {
                     userdata = ToString(cond, promptValue);
@@ -452,17 +452,17 @@ namespace EDDiscovery.Actions
             return FromString(userdata, out progname, out vars) ? null : "Call not in correct format: progname (var list v=\"y\")";
         }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscovery2.EDDTheme theme, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             string progname;
             ConditionVariables cond;
             FromString(UserData, out progname, out cond);
 
-            string promptValue = PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command");
+            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Program to call (use set::prog if req)", progname, "Configure Call Command");
             if (promptValue != null)
             {
                 ConditionVariablesForm avf = new ConditionVariablesForm();
-                avf.Init("Variables to pass into called program", theme, cond, showone:true);
+                avf.Init("Variables to pass into called program", discoveryform.theme, cond, showone:true);
 
                 if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
                 {

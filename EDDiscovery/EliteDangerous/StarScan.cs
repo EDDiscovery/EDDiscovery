@@ -35,7 +35,7 @@ namespace EDDiscovery.EliteDangerous
             public bool EDSMAdded = false;
         };
 
-        public enum ScanNodeType { star, barycentre, planet, moon, submoon, starbelt, rings };
+        public enum ScanNodeType { star, barycentre, planet, moon, submoon };
 
         public class ScanNode
         {
@@ -64,7 +64,25 @@ namespace EDDiscovery.EliteDangerous
                         scandata = value;
                 }
             }
+
+            public bool DoesNodeHaveNonEDSMScansBelow()
+            {
+                if (ScanData != null && ScanData.IsEDSMBody == false)
+                    return true;
+
+                if ( children != null )
+                {
+                    foreach (KeyValuePair<string, ScanNode> csn in children)
+                    {
+                        if ( csn.Value.DoesNodeHaveNonEDSMScansBelow())
+                            return true;
+                    }
+                }
+
+                return false;
+            }
         };
+
 
         public SystemNode FindSystem(EDDiscovery2.DB.ISystem sys)
         {
@@ -281,5 +299,26 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public SystemNode UpdateFromEDSM(SystemNode sn, EDDiscovery2.DB.ISystem sys)    // see if EDSM has a valid system, if so, add, return update SN
+        {
+            if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.id_edsm > 0)   // null, or not scanned, and with EDSM ID
+            {
+                List<JournalScan> jl = EDDiscovery2.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
+
+                if (jl != null)
+                {
+                    foreach (JournalScan js in jl)
+                        Process(js, sys);
+                }
+
+                if (sn == null)
+                    sn = FindSystem(sys);
+
+                if (sn != null)
+                    sn.EDSMAdded = true;
+            }
+
+            return sn;
+        }
     }
 }

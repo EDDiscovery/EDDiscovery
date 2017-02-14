@@ -85,6 +85,16 @@ namespace EDDiscovery
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
+        public Audio.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
+        public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
+        public Audio.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
+
+        Audio.IAudioDriver audiodriverwave;
+        Audio.AudioQueue audioqueuewave;
+        Audio.IAudioDriver audiodriverspeech;
+        Audio.AudioQueue audioqueuespeech;
+        Audio.SpeechSynthesizer speechsynth;
+
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
         public event Action OnNewTarget;
@@ -189,6 +199,28 @@ namespace EDDiscovery
 
             this.TopMost = EDDConfig.KeepOnTop;
 
+#if !__MonoCS__
+            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                audiodriverwave = new Audio.AudioDriverCSCore();
+                audiodriverspeech = new Audio.AudioDriverCSCore();
+                speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
+            }
+            else
+            {
+                audiodriverwave = new Audio.AudioDriverDummy();
+                audiodriverspeech = new Audio.AudioDriverDummy();
+                speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
+            }
+#else
+            audiodriverwave = new Audio.AudioDriverDummy();
+            audiodriverspeech = new Audio.AudioDriverDummy();
+            speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
+#endif
+            audioqueuewave = new Audio.AudioQueue(audiodriverwave);
+            audioqueuespeech = new Audio.AudioQueue(audiodriverspeech);
+
             actioncontroller = new Actions.ActionController(this, Controller);
 
             ApplyTheme();
@@ -252,7 +284,7 @@ namespace EDDiscovery
                 Controller.LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
 
-            actioncontroller.ActionRunOnEvent("onStartup", "ProgramEvent");
+            actioncontroller.ActionRun("onStartup", "ProgramEvent");
         }
 
         private Task CheckForNewInstallerAsync()
@@ -372,18 +404,18 @@ namespace EDDiscovery
             Controller.RefreshDisplays();
         }
 
-        #endregion
+#endregion
 
-        #region EDSM and EDDB syncs code
+#region EDSM and EDDB syncs code
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
             Controller.AsyncPerformSync();
         }
 
-        #endregion
+#endregion
 
-        #region Controller event handlers
+#region Controller event handlers
         private void Controller_DbInitComplete()
         {
             if (splashform != null)
@@ -417,7 +449,7 @@ namespace EDDiscovery
         {
             travelHistoryControl1.RefreshButton(false);
             journalViewControl1.RefreshButton(false);
-            actioncontroller.ActionRunOnEvent("onRefreshStart", "ProgramEvent");
+            actioncontroller.ActionRun("onRefreshStart", "ProgramEvent");
         }
 
         private void Controller_RefreshCommanders()
@@ -461,14 +493,20 @@ namespace EDDiscovery
         {
             SaveSettings();         // do close now
             notifyIcon1.Visible = false;
+
+            audioqueuespeech.Dispose();     // in order..
+            audiodriverspeech.Dispose();
+            audioqueuewave.Dispose();
+            audiodriverwave.Dispose();
+
             Close();
             Application.Exit();
         }
 
 
-        #endregion
+#endregion
 
-        #region Closing
+#region Closing
         private void SaveSettings()
         {
             settings.SaveSettings();
@@ -500,18 +538,17 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
                 ShowInfoPanel("Closing, please wait!", true);
-                actioncontroller.ActionRunOnEvent("onShutdown", "ProgramEvent");
+                actioncontroller.ActionRun("onShutdown", "ProgramEvent");
                 Controller.Shutdown();
             }
         }
 
-        #endregion
+#endregion
 
-        #region Buttons, Mouse, Menus, NotifyIcon
+#region Buttons, Mouse, Menus, NotifyIcon
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            actioncontroller.ActionRunOnEvent("onStartup", "ProgramEvent");
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -801,16 +838,35 @@ namespace EDDiscovery
             }
         }
 
+        public ISystem GetHomeSystem()
+        {
+            string homesysname = settings.MapHomeSystem;
+
+            ISystem homesys = ((homesysname != null) ? SystemClass.GetSystem(homesysname) : null);
+
+            if (homesys == null || !homesys.HasCoordinate)
+            {
+                homesys = SystemClass.GetSystem("Sol");
+
+                if (homesys == null)
+                {
+                    homesys = new SystemClass("Sol", 0, 0, 0);
+                }
+            }
+
+            return homesys;
+        }
+
         public void Open3DMap(HistoryEntry he)
         {
             this.Cursor = Cursors.WaitCursor;
 
-            string HomeSystem = settings.MapHomeSystem;
+            ISystem HomeSystem = GetHomeSystem();
 
             Controller.history.FillInPositionsFSDJumps();
 
             Map.Prepare(he?.System, HomeSystem,
-                        settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
+                        settings.MapCentreOnSelection ? he?.System : HomeSystem,
                         settings.MapZoom, Controller.history.FilterByTravel);
             Map.Show();
             this.Cursor = Cursors.Default;
@@ -876,9 +932,9 @@ namespace EDDiscovery
                 Activate();
         }
 
-        #endregion
+#endregion
 
-        #region Window Control
+#region Window Control
 
         protected override void WndProc(ref Message m)
         {
@@ -985,9 +1041,9 @@ namespace EDDiscovery
             RecordPosition();
         }
 
-        #endregion
+#endregion
 
-        #region Targets
+#region Targets
 
         public void NewTargetSet()
         {
@@ -996,9 +1052,9 @@ namespace EDDiscovery
                 OnNewTarget();
         }
 
-        #endregion
+#endregion
 
-        #region Add Ons
+#region Add Ons
 
         private void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1039,9 +1095,23 @@ namespace EDDiscovery
             return false;
         }
 
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActionRun("onTabChange", "UserUIEvent", null,new ConditionVariables("TabName", tabControl1.TabPages[tabControl1.SelectedIndex].Text));
+        }
+
+        private void soundSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actioncontroller.ConfigureWave();
+        }
+
         public ConditionVariables Globals { get { return actioncontroller.Globals; } }
 
-        public int ActionRunOnEntry(HistoryEntry he, string triggertype) { return actioncontroller.ActionRunOnEntry(he, triggertype); }
+        public int ActionRunOnEntry(HistoryEntry he, string triggertype)
+        { return actioncontroller.ActionRunOnEntry(he, triggertype); }
+
+        public int ActionRun(string name, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
+        { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
         #endregion
 

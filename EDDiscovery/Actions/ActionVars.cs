@@ -18,17 +18,20 @@ namespace EDDiscovery.Actions
 
         static public void HistoryEventVars(ConditionVariables vars, HistoryEntry he, string prefix)
         {
-            vars[prefix + "LocalTime"] = he.EventTimeLocal.ToString("MM/dd/yyyy HH:mm:ss");
-            vars[prefix + "DockedState"] = he.IsDocked ? "1" : "0";
-            vars[prefix + "LandedState"] = he.IsLanded ? "1" : "0";
-            vars[prefix + "StarSystem"] = he.System.name;
-            vars[prefix + "StarSystemEDSMID"] = he.System.id_edsm.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            vars[prefix + "WhereAmI"] = he.WhereAmI;
-            vars[prefix + "ShipType"] = he.ShipType;
-            vars[prefix + "ShipId"] = he.ShipId.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            vars[prefix + "IndexOf"] = he.Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            vars[prefix + "JID"] = he.Journalid.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            vars.AddPropertiesFieldsOfType(he.journalEntry, prefix + "Class_");
+            if (he != null)
+            {
+                vars[prefix + "LocalTime"] = he.EventTimeLocal.ToString("MM/dd/yyyy HH:mm:ss");
+                vars[prefix + "DockedState"] = he.IsDocked ? "1" : "0";
+                vars[prefix + "LandedState"] = he.IsLanded ? "1" : "0";
+                vars[prefix + "StarSystem"] = he.System.name;
+                vars[prefix + "StarSystemEDSMID"] = he.System.id_edsm.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                vars[prefix + "WhereAmI"] = he.WhereAmI;
+                vars[prefix + "ShipType"] = he.ShipType;
+                vars[prefix + "ShipId"] = he.ShipId.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                vars[prefix + "IndexOf"] = he.Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                vars[prefix + "JID"] = he.Journalid.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                vars.AddPropertiesFieldsOfType(he.journalEntry, prefix + "Class_");
+            }
         }
     }
 }

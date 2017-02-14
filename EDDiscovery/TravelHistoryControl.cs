@@ -57,12 +57,11 @@ namespace EDDiscovery
 
         public ExtendedControls.TabStrip GetTabStrip( string name )
         {
-            name = name.ToLower();
-            if (name.Equals("bottom"))
+            if (name.Equals(tabStripBottom.Name, StringComparison.InvariantCultureIgnoreCase))
                 return tabStripBottom;
-            if (name.Equals("bottom-right"))
+            if (name.Equals(tabStripBottomRight.Name, StringComparison.InvariantCultureIgnoreCase))
                 return tabStripBottomRight;
-            if (name.Equals("middle-right"))
+            if (name.Equals(tabStripMiddleRight.Name, StringComparison.InvariantCultureIgnoreCase))
                 return tabStripMiddleRight;
             return null;
         }
@@ -137,9 +136,9 @@ namespace EDDiscovery
             userControlTravelGrid.OnResort += Resort;   // and if he or she resorts
             userControlTravelGrid.OnPopOut += TGPopOut;
 
-            TabConfigure(tabStripBottom,1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
-            TabConfigure(tabStripBottomRight,1001);
-            TabConfigure(tabStripMiddleRight,1002);
+            TabConfigure(tabStripBottom,"Bottom",1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
+            TabConfigure(tabStripBottomRight,"Bottom-Right",1001);
+            TabConfigure(tabStripMiddleRight,"Middle-Right",1002);
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
@@ -154,7 +153,7 @@ namespace EDDiscovery
 
         #region TAB control
 
-        void TabConfigure(ExtendedControls.TabStrip t, int displayno)
+        void TabConfigure(ExtendedControls.TabStrip t, string name, int displayno)
         {
             t.Images = tabbitmaps;
             t.ToolTips = tabtooltips;
@@ -163,6 +162,7 @@ namespace EDDiscovery
             t.OnCreateTab += TabCreate;
             t.OnPostCreateTab += TabPostCreate;
             t.OnPopOut += TabPopOut;
+            t.Name = name;
         }
 
         void TabRemoved(ExtendedControls.TabStrip t, Control c )     // called by tab strip when a control is removed
@@ -174,6 +174,9 @@ namespace EDDiscovery
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
             PopOutControl.PopOuts i = (PopOutControl.PopOuts)si;
+
+            _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
+
             return PopOutControl.Create(i);
         }
 
@@ -456,7 +459,18 @@ namespace EDDiscovery
                     textBoxY.Text = syspos.System.y.ToString(SingleCoordinateFormat);
                     textBoxZ.Text = syspos.System.z.ToString(SingleCoordinateFormat);
 
-                    textBoxHomeDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
+                    ISystem homesys = _discoveryForm.GetHomeSystem();
+
+                    if (homesys == null || !homesys.HasCoordinate)
+                    {
+                        homesys = new SystemClass("Sol", 0, 0, 0);
+                    }
+
+                    double xdist = syspos.System.x - homesys.x;
+                    double ydist = syspos.System.y - homesys.y;
+                    double zdist = syspos.System.z - homesys.z;
+
+                    textBoxHomeDist.Text = Math.Sqrt(xdist * xdist + ydist * ydist + zdist * zdist).ToString("0.00");
                 }
                 else
                 {
@@ -473,10 +487,10 @@ namespace EDDiscovery
 
                 buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
 
-                textBoxAllegiance.Text = EnumStringFormat(syspos.System.allegiance.ToString());
-                textBoxEconomy.Text = EnumStringFormat(syspos.System.primary_economy.ToString());
-                textBoxGovernment.Text = EnumStringFormat(syspos.System.government.ToString());
-                textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
+                textBoxAllegiance.Text = syspos.System.allegiance.ToNullUnknownString();
+                textBoxEconomy.Text = syspos.System.primary_economy.ToNullUnknownString();
+                textBoxGovernment.Text = syspos.System.government.ToNullUnknownString();
+                textBoxState.Text = syspos.System.state.ToNullUnknownString();
                 richTextBoxNote.Text = syspos.snc != null ? syspos.snc.Note : "";
 
                 _discoveryForm.CalculateClosestSystems(syspos.System, (s, d) => NewStarListComputed(s.name, d));
@@ -484,16 +498,6 @@ namespace EDDiscovery
 
             if (OnTravelSelectionChanged != null)
                 OnTravelSelectionChanged(syspos, _discoveryForm.history);
-        }
-
-        private string EnumStringFormat(string str)
-        {
-            if (str == null)
-                return "";
-            if (str.Equals("Unknown"))
-                return "";
-
-            return str.Replace("_", " ");
         }
 
         #endregion
@@ -602,6 +606,10 @@ namespace EDDiscovery
                     richTextBoxNote.TextBox.ScrollToCaret();
                     richTextBoxNote.TextBox.Focus();
                 }
+
+                if (userControlTravelGrid.GetCurrentHistoryEntry!= null)        // paranoia
+                    _discoveryForm.ActionRun("onHistorySelection", "UserUIEvent", userControlTravelGrid.GetCurrentHistoryEntry);
+
             }
         }
 

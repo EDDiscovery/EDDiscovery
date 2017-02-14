@@ -123,6 +123,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSCore, Version=1.1.6245.30570, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSCore.1.2.0\lib\net35-client\CSCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -188,6 +192,8 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
+    <Compile Include="Actions\ActionCommands\AudioUserInteraction.cs" />
     <Compile Include="Actions\ActionController.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
@@ -201,6 +207,31 @@
     <Compile Include="Actions\ActionCommands\ActionScan.cs" />
     <Compile Include="Actions\ActionFile.cs" />
     <Compile Include="Actions\ActionVars.cs" />
+    <Compile Include="Audio\AudioDriverCSCore.cs" />
+    <Compile Include="Audio\AudioDriverDummy.cs" />
+    <Compile Include="Audio\AudioQueue.cs" />
+    <Compile Include="Audio\SoundEffectSettings.cs" />
+    <Compile Include="Audio\SoundEffectDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Audio\SoundEffectDialog.Designer.cs">
+      <DependentUpon>SoundEffectDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\SpeechConfigure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Audio\SpeechConfigure.Designer.cs">
+      <DependentUpon>SpeechConfigure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\SpeechSynthesizer.cs" />
+    <Compile Include="Audio\SpeechSythesizerDummy.cs" />
+    <Compile Include="Audio\SpeechSythesizerWindows.cs" />
+    <Compile Include="Audio\WaveConfigureDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Audio\WaveConfigureDialog.Designer.cs">
+      <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Conditions\ConditionFunctions.cs" />
     <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
     <Compile Include="Actions\ActionCommands\ActionPrint.cs" />
@@ -288,13 +319,6 @@
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
-    <Compile Include="Speech\SpeechConfigure.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Speech\SpeechConfigure.Designer.cs">
-      <DependentUpon>SpeechConfigure.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Speech\SpeechSynthesizer.cs" />
     <Compile Include="TraceLog.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
@@ -430,9 +454,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalWingAdd.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingJoin.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingLeave.cs" />
-    <Compile Include="EliteDangerous\Material.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
-    <Compile Include="EliteDangerous\Synthesis.cs" />
     <Compile Include="ExportImport\ExportExplorationData.cs" />
     <Compile Include="ExportImport\ExportFilteredSystems.cs" />
     <Compile Include="ExportImport\ExportRoute.cs" />
@@ -800,6 +822,15 @@
     <EmbeddedResource Include="Actions\ActionProgramForm.resx">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Audio\SoundEffectDialog.resx">
+      <DependentUpon>SoundEffectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Audio\SpeechConfigure.resx">
+      <DependentUpon>SpeechConfigure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Audio\WaveConfigureDialog.resx">
+      <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -835,9 +866,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Speech\SpeechConfigure.resx">
-      <DependentUpon>SpeechConfigure.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Trilateration\SysWarning.resx">
       <DependentUpon>SysWarning.cs</DependentUpon>
@@ -972,6 +1000,9 @@
     <None Include="Resources\edsm.png" />
     <None Include="Resources\edlogo24.png" />
     <None Include="Resources\edsm32x32.png" />
+    <None Include="Resources\edsmblue.png" />
+    <None Include="Resources\edsmred.png" />
+    <None Include="Resources\edsmown.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -1089,6 +1120,8 @@
     <None Include="Resources\materialrare.png" />
     <None Include="Resources\Water_World_Poles_Cloudless4.png" />
     <None Include="Resources\ImportHelp.txt" />
+    <None Include="Resources\speaker.png" />
+    <None Include="Resources\microphone.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
