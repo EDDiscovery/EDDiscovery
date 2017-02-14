@@ -845,16 +845,23 @@ namespace EDDiscovery2._3DMap
 
         public void FreeVerticesTri()
         {
-            if (_control != null && VtxVboID != 0 )
+            if (Parent != null)
             {
-                if (_control.InvokeRequired)
+                Parent.FreeVerticesTri();
+            }
+            else
+            {
+                if (_control != null && !_control.IsDisposed && VtxVboID != 0)
                 {
-                    _control.Invoke(new Action(this.FreeVerticesTri));
-                }
-                else
-                {
-                    GL.DeleteBuffer(VtxVboID);
-                    VtxVboID = 0;
+                    if (_control.InvokeRequired)
+                    {
+                        _control.Invoke(new Action(this.FreeVerticesTri));
+                    }
+                    else
+                    {
+                        GL.DeleteBuffer(VtxVboID);
+                        VtxVboID = 0;
+                    }
                 }
             }
         }
@@ -889,16 +896,23 @@ namespace EDDiscovery2._3DMap
 
         public void FreeVerticesTex()
         {
-            if (_control != null && TexVboID != 0)
+            if (Parent != null)
             {
-                if (_control.InvokeRequired)
+                Parent.FreeVerticesTex();
+            }
+            else
+            {
+                if (_control != null && !_control.IsDisposed && TexVboID != 0)
                 {
-                    _control.Invoke(new Action(this.FreeVerticesTex));
-                }
-                else
-                {
-                    GL.DeleteBuffer(TexVboID);
-                    TexVboID = 0;
+                    if (_control.InvokeRequired)
+                    {
+                        _control.Invoke(new Action(this.FreeVerticesTex));
+                    }
+                    else
+                    {
+                        GL.DeleteBuffer(TexVboID);
+                        TexVboID = 0;
+                    }
                 }
             }
         }
@@ -1055,6 +1069,25 @@ namespace EDDiscovery2._3DMap
             Vector4[] texcoords = GetTexCoords(bmp.Width, bmp.Height);
             Vector3[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
             return new TexturedQuadData(vertices, texcoords, bmp);
+        }
+
+        public static TexturedQuadData FromBaseTexture(TexturedQuadData basetex, PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        {
+            return FromBaseTexture(basetex, centre.Pos, rotationdeg, width, height, hoffset, voffset);
+        }
+
+        public static TexturedQuadData FromBaseTexture(TexturedQuadData basetex, Vector3 centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        {
+            Vector4[] texcoords = GetTexCoords(basetex.Texture.Width, basetex.Texture.Height);
+            Vector3[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
+            return new TexturedQuadData(vertices, texcoords, basetex);
+        }
+
+        public static TexturedQuadData FromBaseTexture(TexturedQuadData basetex, Vector3 centre, Vector3 rotationdeg, Rectangle bounds, float width, float height, float hoffset = 0, float voffset = 0)
+        {
+            Vector4[] texcoords = GetTexCoords(bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, basetex.Texture.Width, basetex.Texture.Height);
+            Vector3[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
+            return new TexturedQuadData(vertices, texcoords, basetex);
         }
 
         public void UpdateVertices(PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)

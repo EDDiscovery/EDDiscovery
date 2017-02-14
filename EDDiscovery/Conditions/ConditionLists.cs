@@ -41,14 +41,24 @@ namespace EDDiscovery
 
             IsOneOf,            // is it one of a quoted comma list..
 
-            AlwaysTrue,       // Always true
+            AlwaysTrue,         // Always true
+            AlwaysFalse,          // never true
         };
 
-        public static bool IsNullOperation(string matchname) { return matchname.Contains("Always"); }
-        public static bool IsNullOperation(MatchType matchtype) { return matchtype == MatchType.AlwaysTrue; }
-
-        public static bool IsUnaryOperation(string matchname) { return matchname.Contains("Present") || matchname.Contains("True") || matchname.Contains("False") || matchname.Contains("Empty"); }
+        public static bool IsNullOperation(MatchType matchtype) { return matchtype == MatchType.AlwaysTrue || matchtype == MatchType.AlwaysFalse; }
         public static bool IsUnaryOperation(MatchType matchtype) { return matchtype == MatchType.IsNotPresent || matchtype == MatchType.IsPresent || matchtype == MatchType.IsTrue || matchtype == MatchType.IsFalse || matchtype == MatchType.IsEmpty || matchtype == MatchType.IsNotEmpty; }
+
+        public static bool IsNullOperation(string matchname)
+        {
+            MatchType mt;
+            return MatchTypeFromString(matchname, out mt) && IsNullOperation(mt);
+        }
+
+        public static bool IsUnaryOperation(string matchname)
+        {
+            MatchType mt;
+            return MatchTypeFromString(matchname, out mt) && IsUnaryOperation(mt);
+        }
 
         static public bool MatchTypeFromString(string s, out MatchType mt )
         {
@@ -100,7 +110,8 @@ namespace EDDiscovery
                                        "Is Present",
                                        "Not Present",
                                        "Is One Of",
-                                       "Always True"
+                                       "Always True/Enable",
+                                       "Always False/Disable"
                                     };
 
         static public string[] OperatorNames = {        // used for ASCII rep .
@@ -127,7 +138,8 @@ namespace EDDiscovery
                                        "IsPresent",
                                        "NotPresent",
                                        "IsOneOf",
-                                       "AlwaysTrue"
+                                       "AlwaysTrue",
+                                       "AlwaysFalse"
                                     };
 
         public enum LogicalCondition
@@ -194,7 +206,7 @@ namespace EDDiscovery
             {
                 foreach (ConditionEntry fd in fields)
                 {
-                    if (!IsNullOperation(fd.matchtype.ToString()) && !fd.itemname.Contains("%"))     // nulls need no data..  nor does anything with expand in
+                    if (!IsNullOperation(fd.matchtype) && !fd.itemname.Contains("%"))     // nulls need no data..  nor does anything with expand in
                         vr[fd.itemname] = null;
                 }
             }

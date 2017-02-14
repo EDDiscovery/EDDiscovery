@@ -154,7 +154,7 @@ namespace EDDiscovery2._3DMap
             {
                 TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
 
-                foreach (TexturedQuadData tqd in tqdc.BaseTextures)
+                foreach (TexturedQuadData tqd in tqdc.Primatives)
                 {
                     PointData pd;
                     if ( (int)tqd.Tag2 == 1)
@@ -294,14 +294,152 @@ namespace EDDiscovery2._3DMap
                         if (touse != null && gmo.points.Count > 0)             // if it has an image its a point object , and has co-ord
                         {
                             Vector3 pd = gmo.points[0];
+                            string tucachename = "GalMapType:" + gmo.galMapType.Typeid;
+                            TexturedQuadData tubasetex = null;
 
-                            TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly);
+                            if (_cachedTextures.ContainsKey(tucachename))
+                            {
+                                tubasetex = _cachedTextures[tucachename];
+                            }
+                            else
+                            {
+                                tubasetex = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly);
+                                _cachedTextures[tucachename] = tubasetex;
+                            }
+
+
+                            TexturedQuadData newtexture = TexturedQuadData.FromBaseTexture(tubasetex, pd, rotation, widthly, heightly);
                             newtexture.Tag = gmo;
                             newtexture.Tag2 = 0;
                             datasetbks.Add(newtexture);
 
-                            if (namethem)
+                            if (gmo.id == gmotarget)
                             {
+                                TexturedQuadData ntag = TexturedQuadData.FromBitmap(target, pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                                ntag.Tag = gmo;
+                                ntag.Tag2 = 2;
+                                datasetbks.Add(ntag);
+                            }
+                        }
+                    }
+                }
+
+                if (namethem)
+                {
+                    bool useaggregate = true;
+
+                    if (useaggregate)
+                    {
+                        foreach (GalMapType t in galmap.galacticMapTypes)
+                        {
+                            if (t.Enabled)
+                            {
+                                Bitmap bmp = null;
+                                TexturedQuadData nbasetex = null;
+                                List<TexturedQuadData> ntex = new List<TexturedQuadData>();
+
+                                string ncachename = "GalMapNames:" + t.Typeid + textc.ToString();
+                                if (_cachedBitmaps.ContainsKey(ncachename) && _cachedTextures.ContainsKey(ncachename))
+                                {
+                                    bmp = _cachedBitmaps[ncachename];
+                                    nbasetex = _cachedTextures[ncachename];
+                                    ntex = nbasetex.Children.ToList();
+                                }
+                                else
+                                {
+                                    List<GalacticMapObject> tgmos = galmap.galacticMapObjects.Where(o => o.galMapType.Typeid == t.Typeid && o.points.Count > 0).ToList();
+
+                                    float maxheight = 32;
+                                    List<Rectangle> bounds = new List<Rectangle>();
+                                    List<float> widths = new List<float>();
+
+                                    Bitmap stringstarmeasurebitmap = new Bitmap(1, 1);
+                                    using (Graphics g = Graphics.FromImage(stringstarmeasurebitmap))
+                                    {
+                                        foreach (GalacticMapObject gmo in tgmos)
+                                        {
+                                            SizeF sz = g.MeasureString(gmo.name, gmostarfont);
+                                            if (sz.Height > maxheight)
+                                            {
+                                                maxheight = sz.Height;
+                                            }
+                                            widths.Add(sz.Width);
+                                        }
+                                    }
+
+                                    int textheight = (int)(maxheight + 4);
+
+                                    int x = 0;
+                                    int y = 0;
+
+                                    foreach (float twidth in widths)
+                                    {
+                                        int w = (int)(twidth + 4);
+
+                                        if ((w + x) > 1024)
+                                        {
+                                            x = 0;
+                                            y = y + textheight;
+
+                                            if (((y + textheight) % 1024) < (y % 1024))
+                                            {
+                                                y = y + ((1024 - y) % 1024);
+                                            }
+                                        }
+
+                                        bounds.Add(new Rectangle(x, y, w, textheight));
+                                        x = x + w;
+                                    }
+
+                                    y = y + textheight;
+
+                                    bmp = new Bitmap(1024, y);
+                                    nbasetex = new TexturedQuadData(null, null, bmp);
+
+                                    using (Graphics g = Graphics.FromImage(bmp))
+                                    {
+                                        for (int i = 0; i < tgmos.Count; i++)
+                                        {
+                                            GalacticMapObject gmo = tgmos[i];
+                                            string cachename = gmo.name + textc.ToString();
+                                            Vector3 pd = gmo.points[0];
+                                            Rectangle clip = bounds[i];
+                                            Point pos = clip.Location;
+                                            g.SetClip(clip);
+                                            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+                                            using (Brush br = new SolidBrush(textc))
+                                                g.DrawString(gmo.name, gmostarfont, br, pos);
+                                            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+
+                                            TexturedQuadData tex = TexturedQuadData.FromBaseTexture(nbasetex, pd, rotation, clip,
+                                                            (widthly / 10 * gmo.name.Length),
+                                                            (heightly / 3),
+                                                            0, heightly * gmonameoff);
+                                            tex.Tag = gmo;
+                                            tex.Tag2 = 1;
+                                            _cachedTextures[cachename] = tex;
+                                            ntex.Add(tex);
+                                        }
+                                    }
+
+                                    _cachedBitmaps[ncachename] = bmp;
+                                    _cachedTextures[ncachename] = nbasetex;
+                                }
+
+                                foreach (TexturedQuadData tex in ntex)
+                                {
+                                    datasetbks.Add(tex);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (GalacticMapObject gmo in galmap.galacticMapObjects)
+                        {
+                            if (gmo.galMapType.Enabled && gmo.points.Count > 0)
+                            {
+                                Vector3 pd = gmo.points[0];
                                 Bitmap map = null;
                                 string cachename = gmo.name + textc.ToString();
 
@@ -322,14 +460,6 @@ namespace EDDiscovery2._3DMap
                                 ntext.Tag = gmo;
                                 ntext.Tag2 = 1;
                                 datasetbks.Add(ntext);
-                            }
-
-                            if (gmo.id == gmotarget)
-                            {
-                                TexturedQuadData ntag = TexturedQuadData.FromBitmap(target, pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
-                                ntag.Tag = gmo;
-                                ntag.Tag2 = 2;
-                                datasetbks.Add(ntag);
                             }
                         }
                     }
@@ -352,7 +482,7 @@ namespace EDDiscovery2._3DMap
                 {
                     TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
 
-                    foreach (TexturedQuadData tqd in tqdc.BaseTextures)
+                    foreach (TexturedQuadData tqd in tqdc.Primatives)
                     {
                         GalacticMapObject gmo = tqd.Tag as GalacticMapObject;
                         Debug.Assert(gmo != null);
@@ -681,7 +811,7 @@ namespace EDDiscovery2._3DMap
                 {
                     TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
 
-                    foreach (TexturedQuadData tqd in tqdc.BaseTextures)
+                    foreach (TexturedQuadData tqd in tqdc.Primatives)
                     {
                         int id = (int)tqd.Tag;
 

@@ -637,7 +637,7 @@ namespace EDDiscovery
 
             var map = _discoveryForm.Map;
 
-            map.Prepare(centerSystem, _discoveryForm.settings.MapHomeSystem, centerSystem,
+            map.Prepare(centerSystem, _discoveryForm.GetHomeSystem(), centerSystem,
                         _discoveryForm.settings.MapZoom, _discoveryForm.history.FilterByTravel);
 
             map.Show();

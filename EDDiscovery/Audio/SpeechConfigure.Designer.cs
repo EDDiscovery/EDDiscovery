@@ -1,4 +1,4 @@
-﻿namespace EDDiscovery.Speech
+﻿namespace EDDiscovery.Audio
 {
     partial class SpeechConfigure
     {
@@ -32,18 +32,24 @@
             this.Title = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.textBoxBorderText = new ExtendedControls.TextBoxBorder();
             this.checkBoxCustomComplete = new ExtendedControls.CheckBoxCustom();
-            this.textBoxBorderVolume = new ExtendedControls.TextBoxBorder();
-            this.textBoxBorderRate = new ExtendedControls.TextBoxBorder();
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.buttonExtTest = new ExtendedControls.ButtonExt();
+            this.buttonExtEffects = new ExtendedControls.ButtonExt();
+            this.trackBarVolume = new System.Windows.Forms.TrackBar();
             this.buttonExtCancel = new ExtendedControls.ButtonExt();
             this.buttonExtOK = new ExtendedControls.ButtonExt();
             this.comboBoxCustomVoice = new ExtendedControls.ComboBoxCustom();
+            this.textBoxBorderTest = new ExtendedControls.TextBoxBorder();
             this.label6 = new System.Windows.Forms.Label();
+            this.trackBarRate = new System.Windows.Forms.TrackBar();
+            this.checkBoxCustomR = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomV = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomPreempt = new ExtendedControls.CheckBoxCustom();
             this.panelOuter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarRate)).BeginInit();
             this.SuspendLayout();
             // 
             // Title
@@ -67,38 +73,20 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 249);
+            this.label3.Location = new System.Drawing.Point(11, 274);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(30, 13);
             this.label3.TabIndex = 0;
             this.label3.Text = "Rate";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(176, 216);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(86, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Default, or 0-100";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(176, 249);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(101, 13);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Default, or -10 to 10";
-            // 
             // textBoxBorderText
             // 
             this.textBoxBorderText.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderText.BorderColorScaling = 0.5F;
-            this.textBoxBorderText.Location = new System.Drawing.Point(15, 42);
+            this.textBoxBorderText.Location = new System.Drawing.Point(14, 42);
             this.textBoxBorderText.Multiline = true;
             this.textBoxBorderText.Name = "textBoxBorderText";
-            this.textBoxBorderText.Size = new System.Drawing.Size(400, 74);
+            this.textBoxBorderText.Size = new System.Drawing.Size(401, 74);
             this.textBoxBorderText.TabIndex = 0;
             this.textBoxBorderText.WordWrap = false;
             // 
@@ -118,45 +106,68 @@
             this.checkBoxCustomComplete.TickBoxReductionSize = 10;
             this.checkBoxCustomComplete.UseVisualStyleBackColor = true;
             // 
-            // textBoxBorderVolume
-            // 
-            this.textBoxBorderVolume.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderVolume.BorderColorScaling = 0.5F;
-            this.textBoxBorderVolume.Location = new System.Drawing.Point(59, 213);
-            this.textBoxBorderVolume.Name = "textBoxBorderVolume";
-            this.textBoxBorderVolume.Size = new System.Drawing.Size(100, 20);
-            this.textBoxBorderVolume.TabIndex = 3;
-            // 
-            // textBoxBorderRate
-            // 
-            this.textBoxBorderRate.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderRate.BorderColorScaling = 0.5F;
-            this.textBoxBorderRate.Location = new System.Drawing.Point(59, 246);
-            this.textBoxBorderRate.Name = "textBoxBorderRate";
-            this.textBoxBorderRate.Size = new System.Drawing.Size(100, 20);
-            this.textBoxBorderRate.TabIndex = 4;
-            // 
             // panelOuter
             // 
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.buttonExtTest);
+            this.panelOuter.Controls.Add(this.buttonExtEffects);
+            this.panelOuter.Controls.Add(this.trackBarVolume);
             this.panelOuter.Controls.Add(this.buttonExtCancel);
             this.panelOuter.Controls.Add(this.buttonExtOK);
             this.panelOuter.Controls.Add(this.comboBoxCustomVoice);
-            this.panelOuter.Controls.Add(this.textBoxBorderRate);
-            this.panelOuter.Controls.Add(this.textBoxBorderVolume);
+            this.panelOuter.Controls.Add(this.checkBoxCustomPreempt);
             this.panelOuter.Controls.Add(this.checkBoxCustomComplete);
+            this.panelOuter.Controls.Add(this.textBoxBorderTest);
             this.panelOuter.Controls.Add(this.textBoxBorderText);
-            this.panelOuter.Controls.Add(this.label4);
-            this.panelOuter.Controls.Add(this.label2);
             this.panelOuter.Controls.Add(this.label3);
             this.panelOuter.Controls.Add(this.label6);
             this.panelOuter.Controls.Add(this.label1);
+            this.panelOuter.Controls.Add(this.trackBarRate);
+            this.panelOuter.Controls.Add(this.checkBoxCustomR);
+            this.panelOuter.Controls.Add(this.checkBoxCustomV);
             this.panelOuter.Controls.Add(this.Title);
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(0, 0);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(431, 331);
+            this.panelOuter.Size = new System.Drawing.Size(437, 421);
             this.panelOuter.TabIndex = 0;
+            // 
+            // buttonExtTest
+            // 
+            this.buttonExtTest.BorderColorScaling = 1.25F;
+            this.buttonExtTest.ButtonColorScaling = 0.5F;
+            this.buttonExtTest.ButtonDisabledScaling = 0.5F;
+            this.buttonExtTest.Location = new System.Drawing.Point(340, 327);
+            this.buttonExtTest.Name = "buttonExtTest";
+            this.buttonExtTest.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtTest.TabIndex = 42;
+            this.buttonExtTest.Text = "Test";
+            this.buttonExtTest.UseVisualStyleBackColor = true;
+            this.buttonExtTest.Click += new System.EventHandler(this.buttonExtTest_Click);
+            // 
+            // buttonExtEffects
+            // 
+            this.buttonExtEffects.BorderColorScaling = 1.25F;
+            this.buttonExtEffects.ButtonColorScaling = 0.5F;
+            this.buttonExtEffects.ButtonDisabledScaling = 0.5F;
+            this.buttonExtEffects.Location = new System.Drawing.Point(340, 166);
+            this.buttonExtEffects.Name = "buttonExtEffects";
+            this.buttonExtEffects.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtEffects.TabIndex = 42;
+            this.buttonExtEffects.Text = "Effects";
+            this.buttonExtEffects.UseVisualStyleBackColor = true;
+            this.buttonExtEffects.Click += new System.EventHandler(this.buttonExtEffects_Click);
+            // 
+            // trackBarVolume
+            // 
+            this.trackBarVolume.Location = new System.Drawing.Point(59, 204);
+            this.trackBarVolume.Maximum = 100;
+            this.trackBarVolume.Name = "trackBarVolume";
+            this.trackBarVolume.Size = new System.Drawing.Size(203, 45);
+            this.trackBarVolume.TabIndex = 7;
+            this.trackBarVolume.TickFrequency = 5;
+            this.trackBarVolume.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBarVolume.Value = 60;
             // 
             // buttonExtCancel
             // 
@@ -164,7 +175,7 @@
             this.buttonExtCancel.ButtonColorScaling = 0.5F;
             this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
             this.buttonExtCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonExtCancel.Location = new System.Drawing.Point(246, 289);
+            this.buttonExtCancel.Location = new System.Drawing.Point(249, 383);
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonExtCancel.TabIndex = 6;
@@ -176,7 +187,7 @@
             this.buttonExtOK.BorderColorScaling = 1.25F;
             this.buttonExtOK.ButtonColorScaling = 0.5F;
             this.buttonExtOK.ButtonDisabledScaling = 0.5F;
-            this.buttonExtOK.Location = new System.Drawing.Point(340, 289);
+            this.buttonExtOK.Location = new System.Drawing.Point(340, 383);
             this.buttonExtOK.Name = "buttonExtOK";
             this.buttonExtOK.Size = new System.Drawing.Size(75, 23);
             this.buttonExtOK.TabIndex = 5;
@@ -210,6 +221,16 @@
             this.comboBoxCustomVoice.Text = "comboBoxCustom1";
             this.comboBoxCustomVoice.ValueMember = "";
             // 
+            // textBoxBorderTest
+            // 
+            this.textBoxBorderTest.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorderTest.BorderColorScaling = 0.5F;
+            this.textBoxBorderTest.Location = new System.Drawing.Point(15, 327);
+            this.textBoxBorderTest.Multiline = true;
+            this.textBoxBorderTest.Name = "textBoxBorderTest";
+            this.textBoxBorderTest.Size = new System.Drawing.Size(247, 38);
+            this.textBoxBorderTest.TabIndex = 0;
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -219,13 +240,73 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "Voice";
             // 
+            // trackBarRate
+            // 
+            this.trackBarRate.LargeChange = 2;
+            this.trackBarRate.Location = new System.Drawing.Point(59, 261);
+            this.trackBarRate.Minimum = -10;
+            this.trackBarRate.Name = "trackBarRate";
+            this.trackBarRate.Size = new System.Drawing.Size(203, 45);
+            this.trackBarRate.TabIndex = 41;
+            this.trackBarRate.TickStyle = System.Windows.Forms.TickStyle.Both;
+            // 
+            // checkBoxCustomR
+            // 
+            this.checkBoxCustomR.AutoSize = true;
+            this.checkBoxCustomR.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomR.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomR.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomR.FontNerfReduction = 0.5F;
+            this.checkBoxCustomR.Location = new System.Drawing.Point(271, 274);
+            this.checkBoxCustomR.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomR.Name = "checkBoxCustomR";
+            this.checkBoxCustomR.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxCustomR.TabIndex = 8;
+            this.checkBoxCustomR.Text = "Override";
+            this.checkBoxCustomR.TickBoxReductionSize = 10;
+            this.checkBoxCustomR.UseVisualStyleBackColor = true;
+            this.checkBoxCustomR.CheckedChanged += new System.EventHandler(this.checkBoxCustomR_CheckedChanged);
+            // 
+            // checkBoxCustomV
+            // 
+            this.checkBoxCustomV.AutoSize = true;
+            this.checkBoxCustomV.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomV.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomV.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomV.FontNerfReduction = 0.5F;
+            this.checkBoxCustomV.Location = new System.Drawing.Point(271, 216);
+            this.checkBoxCustomV.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomV.Name = "checkBoxCustomV";
+            this.checkBoxCustomV.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxCustomV.TabIndex = 8;
+            this.checkBoxCustomV.Text = "Override";
+            this.checkBoxCustomV.TickBoxReductionSize = 10;
+            this.checkBoxCustomV.UseVisualStyleBackColor = true;
+            this.checkBoxCustomV.CheckedChanged += new System.EventHandler(this.checkBoxCustomV_CheckedChanged);
+            // 
+            // checkBoxCustomPreempt
+            // 
+            this.checkBoxCustomPreempt.AutoSize = true;
+            this.checkBoxCustomPreempt.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomPreempt.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomPreempt.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomPreempt.FontNerfReduction = 0.5F;
+            this.checkBoxCustomPreempt.Location = new System.Drawing.Point(210, 132);
+            this.checkBoxCustomPreempt.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomPreempt.Name = "checkBoxCustomPreempt";
+            this.checkBoxCustomPreempt.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxCustomPreempt.TabIndex = 1;
+            this.checkBoxCustomPreempt.Text = "Preempt all speech";
+            this.checkBoxCustomPreempt.TickBoxReductionSize = 10;
+            this.checkBoxCustomPreempt.UseVisualStyleBackColor = true;
+            // 
             // SpeechConfigure
             // 
             this.AcceptButton = this.buttonExtOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonExtCancel;
-            this.ClientSize = new System.Drawing.Size(431, 331);
+            this.ClientSize = new System.Drawing.Size(437, 421);
             this.Controls.Add(this.panelOuter);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SpeechConfigure";
@@ -233,6 +314,8 @@
             this.Text = "Configure Speech";
             this.panelOuter.ResumeLayout(false);
             this.panelOuter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarRate)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -242,16 +325,20 @@
         private System.Windows.Forms.Label Title;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label4;
         private ExtendedControls.TextBoxBorder textBoxBorderText;
         private ExtendedControls.CheckBoxCustom checkBoxCustomComplete;
-        private ExtendedControls.TextBoxBorder textBoxBorderVolume;
-        private ExtendedControls.TextBoxBorder textBoxBorderRate;
         private System.Windows.Forms.Panel panelOuter;
         private ExtendedControls.ComboBoxCustom comboBoxCustomVoice;
         private System.Windows.Forms.Label label6;
         private ExtendedControls.ButtonExt buttonExtCancel;
         private ExtendedControls.ButtonExt buttonExtOK;
+        private System.Windows.Forms.TrackBar trackBarVolume;
+        private System.Windows.Forms.TrackBar trackBarRate;
+        private ExtendedControls.ButtonExt buttonExtEffects;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomR;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomV;
+        private ExtendedControls.ButtonExt buttonExtTest;
+        private ExtendedControls.TextBoxBorder textBoxBorderTest;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomPreempt;
     }
 }

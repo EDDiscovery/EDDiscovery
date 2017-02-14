@@ -916,6 +916,13 @@ namespace EDDiscovery2
                     MyDgv.TickBoxReductionSize = (fnt.SizeInPoints > 10) ? 10 : 6;
                     MyDgv.Font = fnt;
                 }
+                else if ( MyDgv.FlatStyle == FlatStyle.Flat )
+                {
+                    MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
+                    MyDgv.FlatAppearance.CheckedBackColor = currentsettings.colors[Settings.CI.checkbox];
+                    MyDgv.FlatAppearance.MouseOverBackColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+                    MyDgv.FlatAppearance.BorderColor = currentsettings.colors[Settings.CI.button_border];
+                }
             }
             else if (myControl is RadioButtonCustom)
             {
