@@ -27,7 +27,36 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery2.DB
 {
-    public class MaterialCommodities
+    public struct MaterialCommodities
+    {
+        public int count { get; set; }
+        public double price { get; set; }
+        public int flags { get; set; }
+        public MaterialCommodity Details { get; set; }
+
+        public MaterialCommodities(MaterialCommodity c, int? flags = null, int? count = 0, double? price = 0)
+        {
+            this.count = count ?? 0;
+            this.price =  price ?? 0;
+            this.flags = flags ?? c.flags;
+            this.Details = c;
+        }
+
+        public long id { get { return Details.id; } }
+        public string category { get { return Details.category; } }
+        public string name { get { return Details.name; } }
+        public string fdname { get { return Details.fdname; } }
+        public string type { get { return Details.type; } }
+        public string shortname { get { return Details.shortname; } }
+        public Color colour { get { return Details.colour; } }
+
+        #region Static properties and methods linking to MaterialCommodity
+        public static string CommodityCategory { get { return MaterialCommodity.CommodityCategory; } }
+        public static string MaterialRawCategory { get { return MaterialCommodity.MaterialRawCategory; } }
+        #endregion
+    }
+
+    public class MaterialCommodity
     {
         public long id { get; set; }
         public string category { get; set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
@@ -38,35 +67,16 @@ namespace EDDiscovery2.DB
         public Color colour { get; set; }                   // colour if its associated with one
         public int flags { get; set; }                      // 0 is automatically set, 1 is user edited (so don't override)
 
-        // Not in DB
-
-        public int count { get; set; }
-        public double price { get; set; }
-
         public static string CommodityCategory = "Commodity";
         public static string MaterialRawCategory = "Raw";
 
         // Helpers
 
-        public MaterialCommodities()
+        public MaterialCommodity()
         {
         }
 
-        public MaterialCommodities(MaterialCommodities c)     // copy constructor, ensure a different copy of this
-        {
-            id = c.id;
-            category = c.category;
-            name = String.Copy(c.name);
-            fdname = String.Copy(c.fdname);
-            type = String.Copy(c.type);
-            shortname = c.shortname;
-            colour = c.colour;
-            flags = c.flags;
-            count = c.count;
-            price = c.price;
-        }
-
-        public MaterialCommodities(long i, string cs, string n, string fd, string t, string shortn, Color cl, int fl, int c = 0, double  p = 0)
+        public MaterialCommodity(long i, string cs, string n, string fd, string t, string shortn, Color cl, int fl)
         {
             id = i;
             category = cs;
@@ -76,8 +86,6 @@ namespace EDDiscovery2.DB
             shortname = shortn;
             colour = cl;
             flags = fl;
-            count = c;
-            price = p;
         }
 
         public bool Add()
@@ -154,7 +162,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodities GetCatFDName(string cat, string fdname)
+        public static MaterialCommodity GetCatFDName(string cat, string fdname)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
@@ -163,7 +171,7 @@ namespace EDDiscovery2.DB
         }
 
         // if cat is null, fdname only
-        public static MaterialCommodities GetCatFDName(string cat , string fdname, SQLiteConnectionUser cn)
+        public static MaterialCommodity GetCatFDName(string cat , string fdname, SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities WHERE FDName=@name"))
             {
@@ -179,7 +187,7 @@ namespace EDDiscovery2.DB
                 {
                     if (reader.Read())           // already sorted, and already limited to max items
                     {
-                        return new MaterialCommodities((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
+                        return new MaterialCommodity((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
                     }
                     else
                         return null;
@@ -187,7 +195,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodities GetCatName(string cat, string name)
+        public static MaterialCommodity GetCatName(string cat, string name)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
@@ -195,7 +203,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodities GetCatName(string cat, string name, SQLiteConnectionUser cn)      // by NAME and CAT
+        public static MaterialCommodity GetCatName(string cat, string name, SQLiteConnectionUser cn)      // by NAME and CAT
         {
             using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities WHERE Name=@name AND Category==@cat"))
             {
@@ -206,7 +214,7 @@ namespace EDDiscovery2.DB
                 {
                     if (reader.Read())           // already sorted, and already limited to max items
                     {
-                        return new MaterialCommodities((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
+                        return new MaterialCommodity((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
                     }
                     else
                         return null;
@@ -214,17 +222,17 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static List<MaterialCommodities> GetAll(SQLiteConnectionUser cn)
+        public static List<MaterialCommodity> GetAll(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities Order by Name"))
             {
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
-                    List<MaterialCommodities> list = new List<MaterialCommodities>();
+                    List<MaterialCommodity> list = new List<MaterialCommodity>();
 
                     while (reader.Read())           // already sorted, and already limited to max items
                     {
-                        list.Add(new MaterialCommodities((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]));
+                        list.Add(new MaterialCommodity((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]));
                     }
 
                     return list;
@@ -248,11 +256,11 @@ namespace EDDiscovery2.DB
                 {
                     string fdname = EDDiscovery.Tools.FDName(name);
 
-                    MaterialCommodities mc = GetCatFDName(null, fdname, cn);
+                    MaterialCommodity mc = GetCatFDName(null, fdname, cn);
 
                     if (mc == null)
                     {
-                        mc = new MaterialCommodities(0, c, name, fdname, t, sn, cl, 0);
+                        mc = new MaterialCommodity(0, c, name, fdname, t, sn, cl, 0);
                         mc.Add(cn);
                     }               // don't change any user changed fields
                     else if (mc.flags == 0 && (!mc.name.Equals(name) && !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || mc.colour.ToArgb() != cl.ToArgb()))
@@ -270,7 +278,7 @@ namespace EDDiscovery2.DB
 
         public static bool ChangeDbText(string fdname, string name, string abv, string cat, string type)
         {
-            MaterialCommodities mc = GetCatName(cat, name);             // is the name,cat duplex there?
+            MaterialCommodity mc = GetCatName(cat, name);             // is the name,cat duplex there?
 
             if (mc != null && !mc.fdname.Equals(fdname))                // yes, so entry is there with name/cat, and fdname is the same, ok.  else abort
                 return false;                                           // if fdname is different to the one we want to modify, but cat/name is there, its a duplicate
@@ -370,7 +378,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        static List<MaterialCommodities> loadedlist;
+        static List<MaterialCommodity> loadedlist;
 
         public static void LoadCacheList()
         {
@@ -380,14 +388,13 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodities GetCachedMaterial(string fdname)
+        public static MaterialCommodity GetCachedMaterial(string fdname)
         {
             return loadedlist?.Find(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public static List<MaterialCommodities> GetMaterialsCommoditiesList { get { return loadedlist; } }
+        public static List<MaterialCommodity> GetMaterialsCommoditiesList { get { return loadedlist; } }
     }
-
 
     public class MaterialCommoditiesList
     {
@@ -406,9 +413,9 @@ namespace EDDiscovery2.DB
             list.ForEach(item => 
             {
                 bool commodity = item.category.Equals(MaterialCommodities.CommodityCategory);
-                    // if items, or commodity and not clear zero, or material and not clear zero, add
-                if ( item.count > 0 || ( commodity && !clearzerocommodities) || ( !commodity && !clearzeromaterials ))
-                    mcl.list.Add(new MaterialCommodities(item));
+                // if items, or commodity and not clear zero, or material and not clear zero, add
+                if (item.count > 0 || (commodity && !clearzerocommodities) || (!commodity && !clearzeromaterials))
+                    mcl.list.Add(item);
             });
 
             return mcl;
@@ -429,31 +436,35 @@ namespace EDDiscovery2.DB
 
         // ifnorecatonsearch is used if you don't know if its a material or commodity.. for future use.
 
-        private MaterialCommodities EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn , bool ignorecatonsearch = false)
+        private int EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn , bool ignorecatonsearch = false)
         {
-            MaterialCommodities mc = list.Find(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
+            int index = list.FindIndex(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
 
-            if (mc == null)
+            if (index >= 0)
             {
-                MaterialCommodities mcdb = MaterialCommodities.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
+                return index;
+            }
+            else
+            {
+                MaterialCommodity mcdb = MaterialCommodity.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
 
                 if (mcdb == null)             // no record of this, add as Unknown to db
                 {
-                    mcdb = new MaterialCommodities(0,cat, fdname, fdname, "","",Color.Green,0);
+                    mcdb = new MaterialCommodity(0,cat, fdname, fdname, "","",Color.Green,0);
                     mcdb.Add();                 // and add to data base
                 }
 
-                mc = new MaterialCommodities(0,mcdb.category, mcdb.name, mcdb.fdname, mcdb.type,mcdb.shortname , mcdb.colour,0);        // make a new entry
+                MaterialCommodities mc = new MaterialCommodities(mcdb, 0);        // make a new entry
                 list.Add(mc);
+                return list.Count - 1;
             }
-
-            return mc;
         }
 
         // ignore cat is only used if you don't know what it is 
         public void Change(string cat, string name, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            MaterialCommodities mc = EnsurePresent(cat, name, conn, ignorecatonsearch);
+            int index = EnsurePresent(cat, name, conn, ignorecatonsearch);
+            MaterialCommodities mc = list[index];
 
             double costprev = mc.count * mc.price;
             double costnew = num * price;
@@ -461,22 +472,32 @@ namespace EDDiscovery2.DB
 
             if ( mc.count > 0 && num > 0 )      // if bought (defensive with mc.count)
                 mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
+
+            list[index] = mc;
         }
 
         public void Craft(string name, int num)
         {
-            MaterialCommodities mc = list.Find(x => x.fdname.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            int index = list.FindIndex(x => x.fdname.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-            if ( mc != null )               // if we find it, we remove count, else we don't worry since we may have not got the bought/collected event
+            if (index >= 0)
+            {
+                MaterialCommodities mc = list[index];
                 mc.count = Math.Max(mc.count - num, 0);
+                list[index] = mc;
+            }
         }
 
         public void Set(string cat, string name, int num , double price , SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            MaterialCommodities mc = EnsurePresent(cat, name, conn);
+            int index = EnsurePresent(cat, name, conn);
+            MaterialCommodities mc = list[index];
+
             mc.count = num;
             if ( price>0 )
                 mc.price = price;
+
+            list[index] = mc;
         }
 
         static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn , 
@@ -484,18 +505,11 @@ namespace EDDiscovery2.DB
         {
             MaterialCommoditiesList newmc = (oldml == null) ? new MaterialCommoditiesList() : oldml;
 
-            Type jtype = JournalEntry.TypeOfJournalEntry(je.EventTypeStr);
-
-            if (jtype != null)
+            if (je is IMaterialCommodityJournalEntry)
             {
-                System.Reflection.MethodInfo m = jtype.GetMethod("MaterialList"); // see if the class defines this function..
-
-                if (m != null)                                      // event wants to change it
-                {
-                    newmc = newmc.Clone(clearzeromaterials,clearzerocommodities);          // so we need a new one
-
-                    m.Invoke(Convert.ChangeType(je, jtype), new Object[] { newmc, conn });
-                }
+                IMaterialCommodityJournalEntry e = je as IMaterialCommodityJournalEntry;
+                newmc = newmc.Clone(clearzeromaterials,clearzerocommodities);          // so we need a new one
+                e.MaterialList(newmc, conn);
             }
 
             return newmc;
@@ -532,15 +546,12 @@ namespace EDDiscovery2.DB
         
         public MaterialCommodities GetMaterialCommodity(string cat, string fdname, SQLiteConnectionUser conn)
         {
-            MaterialCommodities mcdb = MaterialCommodities.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
+            MaterialCommodity mcdb = MaterialCommodity.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
 
-            MaterialCommodities mc = null;
             if (mcdb != null)
-                mc = new MaterialCommodities(0, cat, mcdb.name, mcdb.fdname, mcdb.type, mcdb.shortname, Color.Green, 0);
+                return new MaterialCommodities(mcdb, 0);
             else
-                mc = new MaterialCommodities(0, cat, fdname, fdname, "", "", Color.Green, 0);
-
-            return mc;
+                return new MaterialCommodities(new MaterialCommodity(0, cat, fdname, fdname, "", "", Color.Green, 0));
         }
 
         public void AddEvent(long jidn, DateTime t, JournalTypeEnum j, string n, long? ca, double ppu = 0)
