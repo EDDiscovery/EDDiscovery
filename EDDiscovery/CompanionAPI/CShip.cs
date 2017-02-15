@@ -44,6 +44,7 @@ namespace EDDiscovery.CompanionAPI
             { "Vulture", "Vulture" }
         };
 
+        private JObject _jo;
         public int id { get; set; }
         public string name { get; set; }
         public List<CModules> modules;
@@ -65,8 +66,22 @@ namespace EDDiscovery.CompanionAPI
 
         public bool cockpitBreached { get; set; }
         public int oxygenRemaining { get; set; }
+        public float fuelMainCapacity { get; set; }
+        public float fuelMainLevel { get; set; }
+        public float fuelReserveCapacity { get; set; }
+        public float fuelResrveLevel { get; set; }
 
+        public int superchargedFSD { get; set; }
+        public int cargoCapacity { get; set; }
+        public int cargoQty { get; set; }
+        public JArray cargoItems { get; set; }
+        //	"lock" : 643120447,   ???????
+        //	"ts" : {
+        //		"sec" : 1480776109,
+        //		"usec" : 823000
 
+        public JObject refinery { get; set; }
+        public JArray passenger { get; set; }
 
 
         public CShip(JObject jo)
@@ -78,8 +93,29 @@ namespace EDDiscovery.CompanionAPI
         {
             try
             {
+                _jo = jo;
                 id = JSONHelper.GetInt(jo["id"]);
                 name = JSONHelper.GetStringDef(jo["name"]);
+
+                valueHull = JSONHelper.GetInt(jo["value"]["hull"]);
+                valueModules = JSONHelper.GetInt(jo["value"]["modules"]);
+                valueCargo = JSONHelper.GetInt(jo["value"]["cargo"]);
+                valueTotal = JSONHelper.GetInt(jo["value"]["total"]);
+                valueUnloaned = JSONHelper.GetInt(jo["value"]["unloaned"]);
+
+                free = JSONHelper.GetBool(jo["free"]);
+
+                healthHull = JSONHelper.GetInt(jo["health"]["hull"]);
+                healthShield = JSONHelper.GetInt(jo["health"]["shield"]);
+                shieldUp = JSONHelper.GetBool(jo["health"]["shieldup"]);
+                integrity = JSONHelper.GetInt(jo["health"]["integrity"]);
+                paintwork= JSONHelper.GetInt(jo["health"]["paintwork"]);
+
+                cockpitBreached = JSONHelper.GetBool(jo["cockpitBreached"]);
+                oxygenRemaining = JSONHelper.GetInt(jo["oxygenRemaining"]);
+
+
+
                 return true;
             }
             catch

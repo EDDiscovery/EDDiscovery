@@ -4,6 +4,7 @@ namespace EDDiscovery.CompanionAPI
 {
     internal class CCommodities
     {
+        private JObject _jo;
         public int id { get; set; }
         public string name { get; set; }
         public int buyPrice { get; set; }
@@ -27,6 +28,7 @@ namespace EDDiscovery.CompanionAPI
         {
             try
             {
+                _jo = jo;
                 id = JSONHelper.GetInt(jo["id"]);
                 name = JSONHelper.GetStringDef(jo["name"]);
                 buyPrice = JSONHelper.GetInt(jo["buyPrice"]);
