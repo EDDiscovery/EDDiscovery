@@ -9,6 +9,7 @@ namespace EDDiscovery.CompanionAPI
 {
     public class CLastStarport
     {
+        private JObject _jo;
         long id { get; set; }
         string name { get; set; }
         string faction { get; set; }
@@ -23,6 +24,7 @@ namespace EDDiscovery.CompanionAPI
         {
             try
             {
+                _jo = jo;
                 id = JSONHelper.GetLong(jo["id"]);
                 name = JSONHelper.GetStringDef(jo["name"]);
                 faction = JSONHelper.GetStringDef(jo["faction"]);

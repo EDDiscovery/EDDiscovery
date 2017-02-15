@@ -5,6 +5,7 @@ namespace EDDiscovery.CompanionAPI
 {
     public class CCommander
     {
+        private JObject _jo;
         public int id { get; set; }
         public string name { get; set; }
         public long credits { get; set; }
@@ -25,6 +26,7 @@ namespace EDDiscovery.CompanionAPI
 
         public CCommander(JObject json)
         {
+            _jo = json;
             id = JSONHelper.GetInt(json["id"]);
             name =  JSONHelper.GetStringDef(json["name"]);
             credits = JSONHelper.GetLong(json["credits"]);
