@@ -70,7 +70,7 @@ namespace EDDiscovery
             this.textBoxRouteName = new ExtendedControls.TextBoxBorder();
             this.labelRouteName = new System.Windows.Forms.Label();
             this.dataGridViewRouteSystems = new System.Windows.Forms.DataGridView();
-            this.SystemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SystemName = new ExtendedControls.AutoCompleteDGVColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -482,7 +482,7 @@ namespace EDDiscovery
         private System.Windows.Forms.Label labelDateStart;
         private System.Windows.Forms.Label labelRouteName;
         private System.Windows.Forms.DataGridView dataGridViewRouteSystems;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SystemName;
+        private ExtendedControls.AutoCompleteDGVColumn SystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
