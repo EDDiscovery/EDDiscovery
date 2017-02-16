@@ -62,6 +62,21 @@ namespace ExtendedControls
 
         }
 
+        // Sometimes, the user is quicker than the timer, and has commited to a selection before the results even come back.
+        public void AbortAutoComplete()
+        {
+            if (waitforautotimer.Enabled)
+            {
+                waitforautotimer.Stop();
+            }
+            else if (isActivated && _cbdropdown != null)
+            {
+                isActivated = false;
+                _cbdropdown.Close();
+                Invalidate(true);
+            }
+        }
+
         public void SetAutoCompletor(PerformAutoComplete p)
         {
             func = p;
@@ -81,7 +96,7 @@ namespace ExtendedControls
             }
         }
 
-        protected void TextChangeEventHandler(object sender, EventArgs e)
+        private void TextChangeEventHandler(object sender, EventArgs e)
         {
             if (func != null && !isActivated && !disableauto)
             {
@@ -101,7 +116,7 @@ namespace ExtendedControls
             }
         }
 
-        void TimeOutTick(object sender, EventArgs e)
+        private void TimeOutTick(object sender, EventArgs e)
         {
             waitforautotimer.Stop();
             inautocomplete = true;
