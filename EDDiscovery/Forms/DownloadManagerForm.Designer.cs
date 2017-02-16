@@ -17,6 +17,7 @@
             {
                 components.Dispose();
             }
+            font?.Dispose();
             base.Dispose(disposing);
         }
 
