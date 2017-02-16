@@ -212,6 +212,7 @@ namespace ExtendedControls
                 {
                     e.img?.Dispose();
                     e.altimg?.Dispose();
+                    e.tag = null;
                 }
                 elements.Clear();
             }
