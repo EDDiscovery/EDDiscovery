@@ -23,6 +23,7 @@ namespace EDDiscovery.CompanionAPI
         private static string PROFILE_URL = "/profile";
 
         // We cache the profile to avoid spamming the service
+        public CProfile profile;
         private string cachedJsonProfile;
         private DateTime cachedProfileExpires;
 
@@ -78,23 +79,23 @@ namespace EDDiscovery.CompanionAPI
                 try
                 {
                     string json = GetProfileString();
-                    JObject jo = JObject.Parse(json);
-
-                    CProfile profile = new CProfile(jo);
-
-                    JObject commander = (JObject)jo["commander"];
-                    JObject lastSystem = (JObject)jo["lastSystem"];
-                    JObject lastStarport = (JObject)jo["lastStarport"];
-
-
-                    JObject ship = (JObject)jo["ship"];
-                    JObject ships = (JObject)jo["ships"];
                 }
                 catch (CompanionAppException ex)
                 {
                     Trace.WriteLine("Failed to obtain profile: " + ex.ToString());
                 }
             }
+        }
+
+        private void CreateProfile(string json)
+        {
+            if (json!=null)
+            {
+                JObject jo = JObject.Parse(json);
+
+                profile = new CProfile(jo);
+            }
+
         }
 
         ///<summary>Log in.  Throws an exception if it fails</summary>
@@ -238,7 +239,9 @@ namespace EDDiscovery.CompanionAPI
                 Trace.WriteLine("Profile: " + cachedJsonProfile);
             }
 
-            
+
+            CreateProfile(cachedJsonProfile);
+
             return cachedJsonProfile;
         }
 

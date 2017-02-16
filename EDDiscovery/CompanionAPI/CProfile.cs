@@ -31,7 +31,6 @@ namespace EDDiscovery.CompanionAPI
 
         public CProfile()
         {
-            Ships = new List<CShip>();
         }
 
         public CProfile(JObject json)
@@ -42,7 +41,18 @@ namespace EDDiscovery.CompanionAPI
                 CurrentStarSystem = new CLastSystem((JObject)json["lastSystem"]);
                 StarPort = new CLastStarport((JObject)json["lastStarport"]);
                 Ship = new CShip((JObject)json["ship"]);
-                //Ships = new CShips((JObject)json["ship"]);
+
+                JObject jships = (JObject)json["ships"];
+                Ships = new List<CShip>();
+
+                if (jships != null)
+                {
+                    foreach (JToken tship in jships.Values())
+                    {
+                        CShip ship = new CShip((JObject)tship);
+                        Ships.Add(ship);
+                    }
+                }
             }
 
 
