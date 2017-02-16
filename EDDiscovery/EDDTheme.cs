@@ -31,6 +31,18 @@ namespace EDDiscovery2
 {
     public class EDDTheme
     {
+        private static EDDTheme _instance;
+
+        public static EDDTheme Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new EDDTheme();
+                return _instance;
+            }
+        }
+
         public static readonly string[] ButtonStyles = "System Flat Gradient".Split();
         public static readonly string[] TextboxBorderStyles = "None FixedSingle Fixed3D Colour".Split();
 
@@ -267,7 +279,7 @@ namespace EDDiscovery2
         
         public EDDToolStripRenderer toolstripRenderer;
 
-        public EDDTheme()
+        private EDDTheme()
         {
             toolstripRenderer = new EDDToolStripRenderer();
             themelist = new List<Settings>();           // theme list in
@@ -735,7 +747,7 @@ namespace EDDiscovery2
 
                 myControl.Font = fnt;
 
-                if (myControl is AutoCompleteTextBox) // derived from text box
+                if (myControl is AutoCompleteTextBox || myControl is AutoCompleteDGVColumn.CellEditControl) // derived from text box
                 {
                     AutoCompleteTextBox actb = myControl as AutoCompleteTextBox;
                     actb.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
