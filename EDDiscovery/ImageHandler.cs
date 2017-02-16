@@ -111,8 +111,8 @@ namespace EDDiscovery2.ImageHandler
             checkBoxRemove.Checked = SQLiteDBClass.GetSettingBool("checkBoxRemove", false);
             checkBoxHires.Checked = SQLiteDBClass.GetSettingBool("checkBoxHires", false);
 
-            textBoxOutputDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
-            textBoxScreenshotsDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
+            textBoxOutputDir.Text = EDDConfig.UserPaths.ImageHandlerOutputDir ?? OutputDirdefault;
+            textBoxScreenshotsDir.Text = EDDConfig.UserPaths.ImageHandlerScreenshotsDir ?? ScreenshotsDirdefault;
 
             checkBoxCopyClipboard.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerClipboard", false);
             checkBoxPreview.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerPreview", false);
@@ -762,7 +762,8 @@ namespace EDDiscovery2.ImageHandler
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 textBoxScreenshotsDir.Text = dlg.SelectedPath;
-                SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+                EDDConfig.UserPaths.ImageHandlerScreenshotsDir = textBoxScreenshotsDir.Text;
+                EDDConfig.UserPaths.Save();
 
                 StartWatcher();
             }
@@ -770,7 +771,8 @@ namespace EDDiscovery2.ImageHandler
 
         private void textBoxScreenshotsDir_Leave(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+            EDDConfig.UserPaths.ImageHandlerScreenshotsDir = textBoxScreenshotsDir.Text;
+            EDDConfig.UserPaths.Save();
 
             if (!StartWatcher())
             {
@@ -796,13 +798,15 @@ namespace EDDiscovery2.ImageHandler
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 textBoxOutputDir.Text = dlg.SelectedPath;
-                SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+                EDDConfig.UserPaths.ImageHandlerOutputDir = textBoxOutputDir.Text;
+                EDDConfig.UserPaths.Save();
             }
         }
 
         private void textBoxOutputDir_Leave(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+            EDDConfig.UserPaths.ImageHandlerOutputDir = textBoxOutputDir.Text;
+            EDDConfig.UserPaths.Save();
         }
 
         private void textBoxOutputDir_KeyUp(object sender, KeyEventArgs e)

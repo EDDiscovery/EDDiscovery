@@ -428,7 +428,7 @@ namespace EDDiscovery
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
-                EDDiscovery2.DB.MaterialCommodities.SetUpInitialTable();
+                EDDiscovery2.DB.MaterialCommodity.SetUpInitialTable();
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 

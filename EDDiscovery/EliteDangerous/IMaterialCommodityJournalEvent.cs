@@ -13,24 +13,18 @@
  * 
  * EDDiscovery is not affiliated with Fronter Developments plc.
  */
+using EDDiscovery.DB;
+using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.Audio
+namespace EDDiscovery.EliteDangerous
 {
-    class DummySpeechEngine : ISpeechEngine
+    public interface IMaterialCommodityJournalEntry
     {
-        public string[] GetVoiceNames()
-        {
-            return new string[] { };
-        }
-
-        public System.IO.MemoryStream Speak(string phrase, string voice, int volume, int rate)
-        {
-            return null;
-        }
+        void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn);
     }
 }
