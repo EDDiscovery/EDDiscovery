@@ -296,6 +296,8 @@ namespace EDDiscovery2
 
             private bool ProcessCommandLineOption(string optname, string optval)
             {
+                optname = optname.ToLowerInvariant();
+
                 if (optname == "-optionsfile")
                 {
                     // Skip option as it was handled in ProcessOptionsFile

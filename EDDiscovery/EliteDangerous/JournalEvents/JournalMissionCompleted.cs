@@ -32,7 +32,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Reward: value of reward
     //•	Donation: donation offered (for altruism missions)
     //•	PermitsAwarded:[] (names of any permits awarded, as a JSON array)
-    public class JournalMissionCompleted : JournalEntry
+    public class JournalMissionCompleted : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalMissionCompleted(JObject evt ) : base(evt, JournalTypeEnum.MissionCompleted)
         {

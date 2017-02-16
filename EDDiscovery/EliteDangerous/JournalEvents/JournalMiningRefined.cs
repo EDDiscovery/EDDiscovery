@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Type: $cargo_name;
     //•	Type_Localised: cargo type
-    public class JournalMiningRefined : JournalEntry
+    public class JournalMiningRefined : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalMiningRefined(JObject evt ) : base(evt, JournalTypeEnum.MiningRefined)
         {

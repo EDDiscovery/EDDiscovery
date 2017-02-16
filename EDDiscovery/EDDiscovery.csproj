@@ -257,6 +257,7 @@
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Conditions\ConditionVariables.cs" />
+    <Compile Include="Controls\AutoCompleteDGV.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -290,6 +291,7 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
+    <Compile Include="EliteDangerous\IMaterialCommodityJournalEvent.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>

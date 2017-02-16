@@ -20,7 +20,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: by EDD when a user manually sets an item count (material or commodity)
 
-    public class JournalEDDItemSet : JournalEntry
+    public class JournalEDDItemSet : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalEDDItemSet(JObject evt) : base(evt, JournalTypeEnum.EDDItemSet)
         {
