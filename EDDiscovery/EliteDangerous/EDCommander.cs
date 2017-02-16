@@ -21,6 +21,10 @@ using System.Linq;
 using System.Text;
 using EDDiscovery.DB;
 using System.Data;
+using System.IO;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using EDDiscovery;
 
 namespace EDDiscovery2
 {
@@ -298,6 +302,30 @@ namespace EDDiscovery2
                         Load(true, conn);       // refresh in-memory copy
                 }
             }
+
+            JObject jo = new JObject();
+            foreach (EDCommander cmdr in _commandersDict.Values)
+            {
+                jo[cmdr.Name] = new JObject(new
+                {
+                    NetLogDir = cmdr.NetLogDir,
+                    JournalDir = cmdr.JournalDir
+                });
+            }
+
+            using (Stream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp")))
+            {
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    using (JsonTextWriter jwriter = new JsonTextWriter(writer))
+                    {
+                        jo.WriteTo(jwriter);
+                    }
+                }
+            }
+
+            File.Delete(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
+            File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
         }
 
         /// <summary>
@@ -394,6 +422,34 @@ namespace EDDiscovery2
                         {
                             conn.Dispose();
                         }
+                    }
+                }
+            }
+
+            if (File.Exists(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json")))
+            {
+                JObject jo;
+
+                using (Stream stream = File.OpenRead(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json")))
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        using (JsonTextReader jreader = new JsonTextReader(reader))
+                        {
+                            jo = JObject.Load(jreader);
+                        }
+                    }
+                }
+
+                foreach (var kvp in jo)
+                {
+                    string name = kvp.Key;
+                    JObject props = kvp.Value as JObject;
+                    EDCommander cmdr = GetCommander(name);
+                    if (props != null && cmdr != null)
+                    {
+                        cmdr.NetLogDir = JSONHelper.GetStringDef(props["NetLogDir"], cmdr.NetLogDir);
+                        cmdr.JournalDir = JSONHelper.GetStringDef(props["JournalDir"], cmdr.JournalDir);
                     }
                 }
             }
