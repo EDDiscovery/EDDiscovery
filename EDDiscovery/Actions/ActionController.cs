@@ -102,23 +102,25 @@ namespace EDDiscovery.Actions
 
         public void ManageAddOns()
         {
-            DownloadManagerForm dmf = new DownloadManagerForm();
-            dmf.Init(discoveryform.theme);
-            dmf.ShowDialog(discoveryform);
-            if (dmf.changelist.Count>0)
+            using (DownloadManagerForm dmf = new DownloadManagerForm())
             {
-                actionrunasync.TerminateAll();
-                discoveryform.AudioQueueSpeech.StopAll();
-                ReLoad();
-
-                string changes = "";
-                foreach( KeyValuePair<string,string> kv in dmf.changelist)
+                dmf.Init(discoveryform.theme);
+                dmf.ShowDialog(discoveryform);
+                if (dmf.changelist.Count>0)
                 {
-                    if (kv.Value.Equals("+"))
-                        changes += kv.Key + ";";
-                }
+                    actionrunasync.TerminateAll();
+                    discoveryform.AudioQueueSpeech.StopAll();
+                    ReLoad();
 
-                ActionRun("onInstall", "ProgramEvent",null,new ConditionVariables("InstallList", changes));
+                    string changes = "";
+                    foreach( KeyValuePair<string,string> kv in dmf.changelist)
+                    {
+                        if (kv.Value.Equals("+"))
+                            changes += kv.Key + ";";
+                    }
+
+                    ActionRun("onInstall", "ProgramEvent",null,new ConditionVariables("InstallList", changes));
+                }
             }
         }
 
