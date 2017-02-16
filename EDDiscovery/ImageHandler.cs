@@ -733,6 +733,7 @@ namespace EDDiscovery2.ImageHandler
             {
                 SQLiteDBClass.PutSettingBool("ImageHandlerPreview", checkBoxPreview.Checked);
             }
+            pictureBox.Image?.Dispose();
             pictureBox.Image = null;
         }
 
