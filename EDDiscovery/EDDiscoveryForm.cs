@@ -73,12 +73,12 @@ namespace EDDiscovery
         private bool _window_dragging = false;
         private Point _window_dragMousePos = Point.Empty;
         private Point _window_dragWindowPos = Point.Empty;
-        public EDDTheme theme;
 
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
 
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
+        public EDDTheme theme { get { return EDDTheme.Instance; } }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
@@ -177,8 +177,6 @@ namespace EDDiscovery
             InitializeComponent();
 
             label_version.Text = EDDConfig.Options.VersionDisplayString;
-
-            theme = new EDDTheme();
 
             PopOuts = new PopOutControl(this);
 
