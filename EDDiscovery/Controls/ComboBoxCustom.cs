@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections;
@@ -383,7 +383,12 @@ namespace ExtendedControls
                     }
                 }
 
-                e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea);
+                StringFormat f = new StringFormat();
+                f.Alignment = StringAlignment.Near;
+                f.LineAlignment = StringAlignment.Near;
+                f.FormatFlags = StringFormatFlags.NoWrap;
+
+                e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea, f);
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 

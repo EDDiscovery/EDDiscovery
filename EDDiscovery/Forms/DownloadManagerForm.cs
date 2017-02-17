@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 // WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
@@ -138,6 +138,8 @@ namespace EDDiscovery.Forms
         {
             if (CheckThread != null && CheckThread.IsAlive)     // can't close if its alive, it will call back nothing
                 CheckThread.Join();
+
+            font?.Dispose();
         }
 
         void ReadyToDisplay()

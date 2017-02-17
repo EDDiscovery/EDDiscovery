@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
 using EDDiscovery.Actions;
@@ -657,6 +657,9 @@ namespace EDDiscovery2
             {
                 this.MinimumSize = new Size(1000, y);
                 this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width - 100, Screen.FromControl(this).WorkingArea.Height - 100);
+
+                if (Bottom > Screen.FromControl(this).WorkingArea.Height)
+                    Top = Screen.FromControl(this).WorkingArea.Height - Height - 50;
             }
 
             panelVScroll.ResumeLayout();
@@ -753,7 +756,7 @@ namespace EDDiscovery2
                     {
                         if (newfile)
                         {
-                            newname = EDDiscovery.Actions.Action.PromptSingleLine.ShowDialog(this, discoveryform.theme, "Enter name of new action file", "", "Action File");
+                            newname = EDDiscovery.Forms.PromptSingleLine.ShowDialog(this, discoveryform.theme, "Enter name of new action file", "", "Action File");
 
                             if (newname != null)
                             {

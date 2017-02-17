@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -41,28 +41,46 @@ namespace EDDiscovery.Audio
             return synth.GetInstalledVoices().Select(v => v.VoiceInfo.Name).ToArray();
         }
 
-        public System.IO.MemoryStream Speak(string phrase, string voice, int volume, int rate)
+        public System.IO.MemoryStream Speak(string phrase, string culture, string voice, int volume, int rate)
         {
-            if (voice.Equals("Female", StringComparison.InvariantCultureIgnoreCase))
-                synth.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Female);
-            else if (voice.Equals("Male", StringComparison.InvariantCultureIgnoreCase))
-                synth.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Male);
-            else if (!voice.Equals("Default", StringComparison.InvariantCultureIgnoreCase))
-                synth.SelectVoice(voice);
-            else
-                synth.SelectVoice(systemdefaultvoice);
+            try
+            {                                                   // paranoia here..
+                System.Speech.Synthesis.PromptBuilder pb;
 
-            synth.Volume = volume;
-            synth.Rate = rate;
+                if (culture.Equals("Default"))
+                    pb = new System.Speech.Synthesis.PromptBuilder();
+                else
+                    pb = new System.Speech.Synthesis.PromptBuilder(new System.Globalization.CultureInfo(culture));
 
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Speak " + phrase + " " + rate);
+                if (voice.Equals("Female", StringComparison.InvariantCultureIgnoreCase))
+                    pb.StartVoice(System.Speech.Synthesis.VoiceGender.Female);
+                else if (voice.Equals("Male", StringComparison.InvariantCultureIgnoreCase))
+                    pb.StartVoice(System.Speech.Synthesis.VoiceGender.Male);
+                else if (!voice.Equals("Default", StringComparison.InvariantCultureIgnoreCase))
+                    pb.StartVoice(voice);
+                else
+                    pb.StartVoice(systemdefaultvoice);
 
-            System.IO.MemoryStream stream = new System.IO.MemoryStream();
-            synth.SetOutputToWaveStream(stream);
+                synth.Volume = volume;
+                synth.Rate = rate;
 
-            synth.Speak(phrase);
+                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Speak " + phrase + ", Rate " + rate + " culture " + culture);
 
-            return stream;
+                System.IO.MemoryStream stream = new System.IO.MemoryStream();
+                synth.SetOutputToWaveStream(stream);
+
+                pb.AppendText(phrase);
+
+                pb.EndVoice();
+
+                synth.Speak(pb);
+
+                return stream;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 #endif

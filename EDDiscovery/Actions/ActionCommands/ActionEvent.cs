@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Event get command", UserData, "Configure Event Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Event get command", UserData, "Configure Event Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -94,7 +94,7 @@ namespace EDDiscovery.Actions
                         }
                     }
 
-                    jidindex = hl.EntryOrder.FindIndex(x => x.Journalid == jid.Value);
+                    jidindex = hl.GetIndex(jid.Value);
 
                     if ( jidindex == -1 )
                     {

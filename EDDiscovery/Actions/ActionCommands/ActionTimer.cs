@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -26,48 +26,47 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
-        bool FromString(string input, out string timername, out string time)
+        List<string> FromString(string input)
         {
             StringParser sp = new StringParser(input);
-            timername = sp.NextQuotedWord(", ");
-            time = null;
-
-            if (timername != null)
-            {
-                timername.ReplaceEscapeControlChars();
-                sp.IsCharMoveOn(',');
-                time = sp.NextQuotedWord(", ");
-
-                if (time != null)
-                    return true;
-            }
-
-            timername = time = "";
-            return false;
+            List<string> s = sp.NextQuotedWordList();
+            return (s != null && s.Count >= 2) ? s : null;
         }
 
-        string ToString(string timername, string time)
+        string ToString(List<string> list)
         {
-            return timername.QuoteString(comma: true) + "," + time.QuoteString(comma: true);
+            string r = "";
+            for( int i = 0; i < list.Count; i++)
+            {
+                if (i == 2 && list[i].Length == 0)
+                    break;
+
+                if (i > 0)
+                    r += ",";
+
+                r += list[i].QuoteString(comma: true);
+            }
+
+            return r;
         }
 
         public override string VerifyActionCorrect()
         {
-            string name,time;
-            return FromString(userdata, out name, out time) ? null : "Timer not in correct format";
+            List<string> l = FromString(userdata);
+            return (l != null) ? null : "Timer command line not in correct format";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string name, time;
-            FromString(UserData, out name, out time);
-            Tuple<string, string> promptValue = PromptDoubleLine.ShowDialog(parent, discoveryform.theme, "Timer Name", "Time", name, time, "Configure Timer Dialog");
-            if (promptValue != null)
+            List<string> l = FromString(userdata);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, discoveryform.theme, "Configure Timer Dialog",
+                            new string[] { "TimerName", "Milliseconds", "Opt JID" }, l?.ToArray());
+            if (r != null)
             {
-                userdata = ToString(promptValue.Item1.EscapeControlChars(), promptValue.Item2);
+                userdata = ToString(r);
             }
 
-            return (promptValue != null);
+            return (r != null);
         }
 
         List<Timer> timers = new List<Timer>();
@@ -75,39 +74,49 @@ namespace EDDiscovery.Actions
         {
             public string name;
             public ActionProgramRun ap;
+            public HistoryEntry he;
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            string timername, timervalue;
-            if (FromString(UserData, out timername, out timervalue))
+            List<string> ctrl = FromString(UserData);
+
+            if (ctrl != null && ctrl.Count >= 2)
             {
-                string timernameres, timervaluesres;
-                if (ap.functions.ExpandString(timername, ap.currentvars, out timernameres) != ConditionLists.ExpandResult.Failed)
+                List<string> exp;
+
+                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
                 {
-                    if (ap.functions.ExpandString(timervalue, ap.currentvars, out timervaluesres) != ConditionLists.ExpandResult.Failed)
+                    int time;
+                    if (exp[1].InvariantParse(out time))
                     {
-                        int time;
-                        if (timernameres.Length > 0 && timervaluesres.InvariantParse(out time))
+                        HistoryEntry he = null;
+                        long jid;
+                        if (exp.Count >= 3 && exp[2].InvariantParse(out jid))
                         {
-                            Timer t = new Timer() { Interval = time };
-                            t.Tick += Timer_Tick;
-                            t.Tag = new TimerInfo() { ap = ap, name = timernameres };
-                            timers.Add(t);
-                            t.Start();
+                            he = ap.actioncontroller.HistoryList.GetByJID(jid);
+
+                            if (he == null)
+                            {
+                                ap.ReportError("Timer could not find event " + jid);
+                                return true;
+                            }
                         }
-                        else
-                            ap.ReportError("Timer bad name or time count");
+
+                        Timer t = new Timer() { Interval = time };
+                        t.Tick += Timer_Tick;
+                        t.Tag = new TimerInfo() { ap = ap, name = exp[0] , he = he};
+                        timers.Add(t);
+                        t.Start();
                     }
                     else
-                        ap.ReportError(timervaluesres);
+                        ap.ReportError("Timer bad name or time count");
                 }
                 else
-                    ap.ReportError(timernameres);
+                    ap.ReportError(exp[0]);
             }
             else
                 ap.ReportError("Timer command line not in correct format");
-
 
             return true;
         }
@@ -118,10 +127,8 @@ namespace EDDiscovery.Actions
             t.Stop();
 
             TimerInfo ti = t.Tag as TimerInfo;
-           
-            ConditionVariables additionalvars = new ConditionVariables();
-            additionalvars["TimerName"] = ti.name;
-            ti.ap.actioncontroller.ActionRun("onTimer", "ActionTimer", null,additionalvars, now: false);    // queue at end an event
+
+            ti.ap.actioncontroller.ActionRun("onTimer", "ActionProgram", ti.he, new ConditionVariables("TimerName", ti.name), now: false);    // queue at end an event
 
             timers.Remove(t);   // done with it
         }

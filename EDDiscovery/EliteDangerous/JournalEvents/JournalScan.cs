@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
 using Newtonsoft.Json.Linq;
@@ -139,6 +139,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string BodyName { get; set; }
         public double DistanceFromArrivalLS { get; set; }
         public string StarType { get; set; }                            // null if no StarType
+        public string StarTypeText { get { return IsStar ? GetStarTypeImage().Item2 : ""; } }
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
 
         public double? nAge { get; set; }
@@ -223,7 +224,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             else
             {
                 scanText.AppendFormat("{0}", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii", "II").Replace("Ii", "II").Replace("Iv", "IV"));
+                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii", "II").Replace("Iv", "IV"));
             }
 
             if (PlanetClass != null && !PlanetClass.ToLower().Contains("gas"))

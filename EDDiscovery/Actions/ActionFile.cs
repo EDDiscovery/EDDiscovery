@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -247,6 +247,21 @@ namespace EDDiscovery.Actions
                     }
                 }
             }
+        }
+
+        public Tuple<ActionFile, ActionProgram> FindProgram(string packname , string progname)
+        {
+            ActionFile f = actionfiles.Find(x => x.name.Equals(packname));
+
+            if ( f != null )
+            {
+                ActionProgram ap = f.actionprogramlist.Get(progname);   // get in local program list first
+
+                if (ap != null)
+                    return new Tuple<ActionFile, ActionProgram>(f, ap);
+            }
+
+            return null;
         }
 
         public Tuple<ActionFile, ActionProgram> FindProgram(string req, ActionFile preferred = null)        // find a program 
