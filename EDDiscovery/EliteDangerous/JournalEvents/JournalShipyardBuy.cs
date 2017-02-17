@@ -32,7 +32,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellPrice: (if selling current ship) ship sale price
     //
     //Note: the new ship’s ShipID will be logged in a separate event after the purchase
-    public class JournalShipyardBuy : JournalEntry
+    public class JournalShipyardBuy : JournalEntry, ILedgerJournalEntry
     {
         public JournalShipyardBuy(JObject evt ) : base(evt, JournalTypeEnum.ShipyardBuy)
         {

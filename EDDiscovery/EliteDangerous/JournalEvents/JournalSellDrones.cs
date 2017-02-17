@@ -25,7 +25,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellPrice
     //•	TotalSale
 
-    public class JournalSellDrones : JournalEntry
+    public class JournalSellDrones : JournalEntry, ILedgerJournalEntry
     {
         public JournalSellDrones(JObject evt) : base(evt, JournalTypeEnum.SellDrones)
         {

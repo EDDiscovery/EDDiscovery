@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	VictimFaction
 //•	PayeeFaction
 
-    public class JournalDatalinkVoucher : JournalEntry
+    public class JournalDatalinkVoucher : JournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalDatalinkVoucher(JObject evt) : base(evt, JournalTypeEnum.DatalinkVoucher)
         {

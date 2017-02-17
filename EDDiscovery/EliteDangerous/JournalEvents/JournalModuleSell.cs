@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellItem
     //•	SellPrice
     //•	Ship
-    public class JournalModuleSell : JournalEntry
+    public class JournalModuleSell : JournalEntry, ILedgerJournalEntry
     {
         public JournalModuleSell(JObject evt ) : base(evt, JournalTypeEnum.ModuleSell)
         {

@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	Amount: (Net amount received, after any broker fee)
 //•	BrokerPercenentage
 
-    public class JournalRedeemVoucher : JournalEntry
+    public class JournalRedeemVoucher : JournalEntry, ILedgerJournalEntry
     {
         public JournalRedeemVoucher(JObject evt) : base(evt, JournalTypeEnum.RedeemVoucher)
         {

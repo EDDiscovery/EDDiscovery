@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //If replacing an existing module:
     //•	SellItem: item being sold
     //•	SellPrice: sale price
-    public class JournalModuleBuy : JournalEntry
+    public class JournalModuleBuy : JournalEntry, ILedgerJournalEntry
     {
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {

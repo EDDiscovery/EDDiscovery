@@ -25,7 +25,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Cost
     //•	CombatRank
 
-    public class JournalCrewHire : JournalEntry
+    public class JournalCrewHire : JournalEntry, ILedgerJournalEntry
     {
         public JournalCrewHire(JObject evt) : base(evt, JournalTypeEnum.CrewHire)
         {

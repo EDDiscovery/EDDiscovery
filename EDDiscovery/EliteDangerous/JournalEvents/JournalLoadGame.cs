@@ -21,7 +21,7 @@ using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    public class JournalLoadGame : JournalEntry
+    public class JournalLoadGame : JournalEntry, ILedgerJournalEntry
     {
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
