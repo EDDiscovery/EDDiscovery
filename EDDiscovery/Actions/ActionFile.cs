@@ -249,6 +249,21 @@ namespace EDDiscovery.Actions
             }
         }
 
+        public Tuple<ActionFile, ActionProgram> FindProgram(string packname , string progname)
+        {
+            ActionFile f = actionfiles.Find(x => x.name.Equals(packname));
+
+            if ( f != null )
+            {
+                ActionProgram ap = f.actionprogramlist.Get(progname);   // get in local program list first
+
+                if (ap != null)
+                    return new Tuple<ActionFile, ActionProgram>(f, ap);
+            }
+
+            return null;
+        }
+
         public Tuple<ActionFile, ActionProgram> FindProgram(string req, ActionFile preferred = null)        // find a program 
         {
             Actions.ActionProgram ap = null;

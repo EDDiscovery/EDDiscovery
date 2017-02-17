@@ -25,7 +25,6 @@ namespace EDDiscovery.Actions
 {
     class ActionSleep : Action
     {
-
         Timer t;
         ActionProgramRun apr;
 
@@ -38,7 +37,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Sleep time in ms:", UserData, "Set Sleep timeout");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Sleep time in ms:", UserData, "Set Sleep timeout");
 
             if (promptValue != null)
             {

@@ -27,7 +27,7 @@ public static class ObjectExtensions
         return (obj != double.NaN) ? obj.ToString(format) : string.Empty;
     }
 
-    public static string ToNullUnknownString(this object obj )
+    public static string ToNullUnknownString(this object obj)
     {
         if (obj == null)
             return string.Empty;
@@ -48,12 +48,16 @@ public static class ObjectExtensions
 
     public static string EscapeControlChars(this string obj)
     {
-        return obj.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\\", "\\\\");
+        string s = obj.Replace(@"\", @"\\");        // order vital
+        s = obj.Replace("\r", @"\r");
+        return s.Replace("\n", @"\n");
     }
 
     public static string ReplaceEscapeControlChars(this string obj)
     {
-        return obj.Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\\\","\\");
+        string s = obj.Replace(@"\n", "\n");
+        s = s.Replace(@"\r", "\r");
+        return s.Replace(@"\\","\\");
     }
 
     public static int FirstCharNonWhiteSpace(this string obj )
@@ -63,6 +67,56 @@ public static class ObjectExtensions
             i++;
         return i;
     }
+
+    public static string PickOneOf(this string str, char separ, System.Random rx)   // pick one of x;y;z or if ;x;y;z, pick x and one of y or z
+    {
+        string[] a = str.Split(separ);
+
+        if (a.Length >= 2)          // x;y
+        {
+            if (a[0].Length == 0)      // ;y      
+            {
+                string res = a[1];
+                if (a.Length > 2)   // ;y;x;z
+                    res += " " + a[2 + rx.Next(a.Length - 2)];
+
+                return res;
+            }
+            else
+                return a[rx.Next(a.Length)];
+        }
+        else
+            return a[0];
+    }
+
+    public static string PickOneOfGroups(this string exp, System.Random rx) // pick one of x;y;z or if ;x;y;z, pick x and one of y or z, include {x;y;z}
+    {
+        string res = "";
+        exp = exp.Trim();
+
+        while (true)
+        {
+            if (exp[0] == '{')
+            {
+                int end = exp.IndexOf('}');
+
+                if (end >= 0)
+                {
+                    string pl = exp.Substring(1, end - 1);
+                    res += pl.PickOneOf(';', rx) + " ";
+                    exp = exp.Substring(end + 1).Trim();
+                }
+            }
+            else
+            {
+                res += exp.PickOneOf(';', rx);
+                break;
+            }
+        }
+
+        return res;
+    }
+
 
     public static string AddSuffixToFilename(this string file, string suffix)
     {
@@ -153,5 +207,36 @@ public static class ObjectExtensions
         return s;
     }
 
+    public static bool Eval(this string ins, out string res)        // true, res = eval.  false, res = error
+    {
+        System.Data.DataTable dt = new System.Data.DataTable();
+
+        res = "";
+
+        try
+        {
+            var v = dt.Compute(ins, "");
+            System.Type t = v.GetType();
+            //System.Diagnostics.Debug.WriteLine("Type return is " + t.ToString());
+            if (v is double)
+                res = ((double)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+            else if (v is System.Decimal)
+                res = ((System.Decimal)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+            else if (v is int)
+                res = ((int)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+            else
+            {
+                res = "Expression is Not A Number";
+                return false;
+            }
+
+            return true;
+        }
+        catch
+        {
+            res = "Expression does not evaluate";
+            return false;
+        }
+    }
 }
 

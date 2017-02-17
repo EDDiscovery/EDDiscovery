@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Scan system name", UserData, "Configure Scan Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Scan system name", UserData, "Configure Scan Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -150,15 +150,36 @@ namespace EDDiscovery.Actions
             EliteDangerous.JournalEvents.JournalScan sc = scannode.Value.ScanData;
 
             ap.currentvars[prefix] = scannode.Key;
-            ap.currentvars[prefix + "_text"] = (sc != null) ? sc.DisplayString(true):"";
             ap.currentvars[prefix + "_type"] = scannode.Value.type.ToString();
-            ap.currentvars[prefix + "_edsmbody"] = (sc != null) ? ((sc.IsEDSMBody) ? "1" : "0") : "0";
-            ap.currentvars[prefix + "_landable"] = (sc != null) ? (sc.IsLandable ? "Landable" : "Not Landable"):"";
-            ap.currentvars[prefix + "_bodyname"] = (sc != null) ? sc.BodyName : "";
-            ap.currentvars[prefix + "_startype"] = (sc != null) ? (sc.StarType ?? "N/A") : "";
+            ap.currentvars[prefix + "_assignedname"] = scannode.Value.ownname;
+            ap.currentvars[prefix + "_assignedfullname"] = scannode.Value.fullname;
+            ap.currentvars[prefix + "_data"] = (sc != null) ? "1" : "0";
 
-            if (scannode.Value.children != null && subname != null)
-                ap.currentvars[prefix + subname] = scannode.Value.children.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            if ( sc != null )
+            {
+                ap.currentvars[prefix + "_text"] = sc.DisplayString(true);
+                ap.currentvars[prefix + "_edsmbody"] = (sc.IsEDSMBody) ? "1" : "0";
+                ap.currentvars[prefix + "_bodyname"] = sc.BodyName;
+
+                if ( sc.IsStar )
+                {
+                    ap.currentvars[prefix + "_startype"] = sc.StarType;
+                    ap.currentvars[prefix + "_startypetext"] = sc.StarTypeText;
+                    ap.currentvars[prefix + "_stellarmass"] = (sc.nStellarMass??0).ToString("0.###");
+                }
+                else
+                {
+                    ap.currentvars[prefix + "_landable"] = sc.IsLandable ? "Landable" : "Not Landable";
+                    ap.currentvars[prefix + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
+                    ap.currentvars[prefix + "_class"] = sc.PlanetClass.ToNullSafeString().Replace("II", " 2").Replace("IV", " 4");
+                }
+            }
+
+            if ( subname != null )
+            {
+                int totalchildren = (scannode.Value.children != null) ? scannode.Value.children.Count : 0;
+                ap.currentvars[prefix + subname] = totalchildren.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
         }
     }
 }

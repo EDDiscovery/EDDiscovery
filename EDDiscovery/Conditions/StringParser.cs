@@ -70,7 +70,7 @@ namespace EDDiscovery
                 return false;
         }
 
-        public string NextWord(string terminators = " " , bool lowercase = false)
+        public string NextWord(string terminators = " " , bool lowercase = false, bool replacescape = false)
         {
             if (pos >= line.Length)     // null if there is nothing..
                 return null;
@@ -85,11 +85,14 @@ namespace EDDiscovery
 
                 SkipSpace();
 
-                return (lowercase) ? ret.ToLower() : ret;
+                if (lowercase)
+                    ret = ret.ToLower();
+
+                return (replacescape) ? ret.ReplaceEscapeControlChars() : ret;
             }
         }
 
-        public string NextQuotedWord(string nonquoteterminators = " ")
+        public string NextQuotedWord(string nonquoteterminators = " ", bool lowercase = false, bool replaceescape = false)
         {
             if (pos < line.Length)
             {
@@ -122,24 +125,37 @@ namespace EDDiscovery
                             ret += line.Substring(pos, nextquote - pos);    // quote, end of line, copy up and remove it
                             pos = nextquote + 1;
                             SkipSpace();
-                            return ret;
+
+                            if (lowercase)
+                                ret = ret.ToLower();
+
+                            return (replaceescape) ? ret.ReplaceEscapeControlChars() : ret;
                         }
                     }
                 }
                 else
-                    return NextWord(nonquoteterminators);
+                    return NextWord(nonquoteterminators, lowercase, replaceescape);
             }
             else
                 return null;
         }
 
-        public List<string> NextQuotedWordList()        // empty list on error
+        public string NextQuotedWordComma(bool lowercase = false , bool replaceescape = false)           // comma separ
+        {
+            string res = NextQuotedWord(" ,", lowercase, replaceescape);
+            if (IsEOL || IsCharMoveOn(','))
+                return res;
+            else
+                return null;
+        }
+
+        public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false )        // empty list on error
         {
             List<string> ret = new List<string>();
 
             do
             {
-                string v = NextQuotedWord(", ");
+                string v = NextQuotedWord(", ",lowercase,replaceescape);
                 if (v == null)
                     return null;
 
