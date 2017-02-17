@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StationName: name of station
 
     //•	Security
+    [JournalEntryType(JournalTypeEnum.EngineerProgress)]
     public class JournalEngineerProgress : JournalEntry
     {
         public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)

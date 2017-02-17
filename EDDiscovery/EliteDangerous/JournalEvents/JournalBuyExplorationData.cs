@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	System
     //•	Cost
+    [JournalEntryType(JournalTypeEnum.BuyExplorationData)]
     public class JournalBuyExplorationData : JournalEntry, ILedgerJournalEntry
     {
         public JournalBuyExplorationData(JObject evt ) : base(evt, JournalTypeEnum.BuyExplorationData)

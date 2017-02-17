@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when joining up with a power
     //Parameters:
     //•	Power
+    [JournalEntryType(JournalTypeEnum.PowerplayJoin)]
     public class JournalPowerplayJoin : JournalEntry
     {
         public JournalPowerplayJoin(JObject evt) : base(evt, JournalTypeEnum.PowerplayJoin)

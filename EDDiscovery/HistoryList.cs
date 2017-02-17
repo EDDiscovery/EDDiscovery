@@ -380,7 +380,7 @@ namespace EDDiscovery
         {
             get
             {
-                return EliteDangerous.JournalEntry.GetIcon(EntryType.ToString(),EventDescription);
+                return EliteDangerous.JournalEntry.GetIcon(EntryType, EventDescription);
             }
         }
 

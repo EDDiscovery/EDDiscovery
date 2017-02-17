@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Latitude
     //•	Longitude
+    [JournalEntryType(JournalTypeEnum.Liftoff)]
     public class JournalLiftoff : JournalEntry
     {
         public JournalLiftoff(JObject evt ) : base(evt, JournalTypeEnum.Liftoff)

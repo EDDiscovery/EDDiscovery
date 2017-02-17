@@ -35,6 +35,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Economy
     //•	Government
     //•	Security
+    [JournalEntryType(JournalTypeEnum.Location)]
     public class JournalLocation : JournalLocOrJump
     {
         public JournalLocation(JObject evt ) : base(evt, JournalTypeEnum.Location)

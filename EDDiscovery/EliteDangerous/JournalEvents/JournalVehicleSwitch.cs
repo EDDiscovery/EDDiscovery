@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when switching control between the main ship and a fighter
     //Parameters:
     //•	To: ( Mothership/Fighter)
+    [JournalEntryType(JournalTypeEnum.VehicleSwitch)]
     public class JournalVehicleSwitch : JournalEntry
     {
         public JournalVehicleSwitch(JObject evt ) : base(evt, JournalTypeEnum.VehicleSwitch)

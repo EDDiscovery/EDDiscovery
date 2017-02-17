@@ -20,6 +20,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: this player has left a wing
     //Parameters: none
+    [JournalEntryType(JournalTypeEnum.WingLeave)]
     public class JournalWingLeave : JournalEntry
     {
         public JournalWingLeave(JObject evt ) : base(evt, JournalTypeEnum.WingLeave)

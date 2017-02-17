@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Count
     //•	SellPrice
     //•	TotalSale
-
+    [JournalEntryType(JournalTypeEnum.SellDrones)]
     public class JournalSellDrones : JournalEntry, ILedgerJournalEntry
     {
         public JournalSellDrones(JObject evt) : base(evt, JournalTypeEnum.SellDrones)

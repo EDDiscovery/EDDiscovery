@@ -30,6 +30,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Economy
     //•	Government
     //•	Security
+    [JournalEntryType(JournalTypeEnum.Docked)]
     public class JournalDocked : JournalEntry
     {
 

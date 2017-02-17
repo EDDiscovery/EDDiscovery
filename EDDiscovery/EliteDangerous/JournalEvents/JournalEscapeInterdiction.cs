@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters: 
     //•	Interdictor: interdicting pilot name
     //•	IsPlayer: whether player or npc
+    [JournalEntryType(JournalTypeEnum.EscapeInterdiction)]
     public class JournalEscapeInterdiction : JournalEntry
     {
         public JournalEscapeInterdiction(JObject evt ) : base(evt, JournalTypeEnum.EscapeInterdiction)

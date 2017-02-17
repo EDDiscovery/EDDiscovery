@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Reward: value of award
     //•	AwardingFaction
     //•	VictimFaction
-
+    [JournalEntryType(JournalTypeEnum.CapShipBond)]
     public class JournalCapShipBond : JournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalCapShipBond(JObject evt) : base(evt, JournalTypeEnum.CapShipBond)

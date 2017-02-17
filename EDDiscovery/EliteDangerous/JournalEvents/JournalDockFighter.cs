@@ -20,6 +20,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: when docking a fighter back with the mothership
     //Parameters: none
+    [JournalEntryType(JournalTypeEnum.DockFighter)]
     public class JournalDockFighter : JournalEntry
     {
         public JournalDockFighter(JObject evt ) : base(evt, JournalTypeEnum.DockFighter)

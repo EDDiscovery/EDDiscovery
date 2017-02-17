@@ -25,6 +25,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Blueprint: name of blueprint
     //•	Level: crafting level
     //•	Ingredients: JSON object with names and quantities of materials required
+    [JournalEntryType(JournalTypeEnum.EngineerCraft)]
     public class JournalEngineerCraft : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalEngineerCraft(JObject evt ) : base(evt, JournalTypeEnum.EngineerCraft)

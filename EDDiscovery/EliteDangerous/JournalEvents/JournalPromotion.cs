@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-
+    [JournalEntryType(JournalTypeEnum.Promotion)]
     public class JournalPromotion : JournalEntry
     {
         //        When written: when the player’s rank increases
