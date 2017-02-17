@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -233,14 +233,12 @@ namespace ExtendedControls
             }
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
+        protected override void OnMouseClick(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
-
             int items = (Items != null) ? Items.Count() : 0;
 
-            if ( items > 0 )                                // if any items.. just to check
-            { 
+            if (items > 0)                                // if any items.. just to check
+            {
                 int index = firstindex + e.Location.Y / ItemHeight;
 
                 if (index >= items)                 // due to the few pixels for border.  we let them have this

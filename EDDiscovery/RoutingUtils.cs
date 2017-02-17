@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Windows.Forms;
@@ -106,10 +106,6 @@ namespace EDDiscovery
         public static void showBookmarkForm(
             EDDiscoveryForm discoveryForm, ISystem cursystem, BookmarkClass curbookmark, bool notedsystem)
         {
-            // is it worth popping up a messagebox or something? I don't believe so.
-            if (cursystem == null)
-                return;
-
             // try and find the associated bookmark..
             BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
 

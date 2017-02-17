@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,9 @@ namespace EDDiscovery.Audio
     {
         public string Path {  get { return textBoxBorderText.Text; } }
         public bool Wait { get { return checkBoxCustomComplete.Checked; } }
-        public bool Preempt { get { return checkBoxCustomPreempt.Checked; } }
+        public AudioQueue.Priority Priority { get { return (AudioQueue.Priority)Enum.Parse(typeof(AudioQueue.Priority), comboBoxCustomPriority.Text); } }
+        public string StartEvent { get { return textBoxBorderStartTrigger.Text; } }
+        public string FinishEvent { get { return textBoxBorderEndTrigger.Text; } }
         public string Volume { get { return (checkBoxCustomV.Checked) ? trackBarVolume.Value.ToString() : "Default"; } }
         public ConditionVariables Effects { get { return effects; } }
 
@@ -44,25 +46,33 @@ namespace EDDiscovery.Audio
 
         public void Init(AudioQueue qu, 
                           bool defaultmode,
-                          string caption, EDDiscovery2.EDDTheme th,
+                          string title, string caption, EDDiscovery2.EDDTheme th,
                           string defpath,
-                          bool waitcomplete, bool preempt,
+                          bool waitcomplete,
+                          AudioQueue.Priority prio,
+                          string startname, string endname,
                           string volume,
                           ConditionVariables ef)
         {
+            comboBoxCustomPriority.Items.AddRange(Enum.GetNames(typeof(AudioQueue.Priority)));
+
             queue = qu;
             theme = th;
             this.Text = caption;
+            labelTitle.Text = title;
             textBoxBorderText.Text = defpath;
 
             if (defaultmode)
             {
-                checkBoxCustomComplete.Visible = checkBoxCustomPreempt.Visible = checkBoxCustomV.Visible = false;
+                checkBoxCustomComplete.Visible = comboBoxCustomPriority.Visible =
+                textBoxBorderStartTrigger.Visible = textBoxBorderEndTrigger.Visible = checkBoxCustomV.Visible = labelStartTrigger.Visible = labelEndTrigger.Visible = false;
             }
             else
             {
                 checkBoxCustomComplete.Checked = waitcomplete;
-                checkBoxCustomPreempt.Checked = preempt;
+                comboBoxCustomPriority.SelectedItem = prio.ToString();
+                textBoxBorderStartTrigger.Text = startname;
+                textBoxBorderEndTrigger.Text = endname;
             }
 
             int i;
@@ -96,7 +106,7 @@ namespace EDDiscovery.Audio
                 {
                     Audio.AudioQueue.AudioSample audio = queue.Generate(textBoxBorderText.Text, effects);
                     audio.sampleOverEvent += Audio_sampleOverEvent;
-                    queue.Submit(audio, trackBarVolume.Value);
+                    queue.Submit(audio, trackBarVolume.Value, AudioQueue.Priority.High);
                     buttonExtTest.Text = "Stop";
                 }
                 catch
@@ -136,7 +146,7 @@ namespace EDDiscovery.Audio
                 AudioQueue.AudioSample a = queue.Generate(textBoxBorderText.Text, effects);
                 a.sampleOverEvent += SampleOver;
                 a.sampleOverTag = sfe;
-                queue.Submit(a, trackBarVolume.Value);
+                queue.Submit(a, trackBarVolume.Value, AudioQueue.Priority.High);
             }
             catch
             {
@@ -168,6 +178,11 @@ namespace EDDiscovery.Audio
             {
                 textBoxBorderText.Text = dlg.FileName;
             }
+        }
+
+        private void checkBoxCustomV_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBarVolume.Enabled = checkBoxCustomV.Checked;
         }
     }
 }

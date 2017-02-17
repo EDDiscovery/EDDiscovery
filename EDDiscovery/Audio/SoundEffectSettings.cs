@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace EDDiscovery.Audio
     {
         public EDDiscovery.ConditionVariables values;
 
-        public bool Any { get { return echoenabled || chorusenabled || reverbenabled || distortionenabled || gargleenabled; } }
+        public bool Any { get { return echoenabled || chorusenabled || reverbenabled || distortionenabled || gargleenabled || pitchshiftenabled; } }
         public bool OverrideNone { get { return values.ContainsKey("NoEffects"); } set { values["NoEffects"] = (value)?"1":"0"; } }
 
         public bool echoenabled { get { return values.ContainsKey("EchoMix") || values.ContainsKey("EchoFeedback") || values.ContainsKey("EchoDelay"); } }
@@ -52,6 +52,9 @@ namespace EDDiscovery.Audio
 
         public bool gargleenabled { get { return values.ContainsKey("GargleFreq"); } }
         public int garglefreq { get { return values.GetInt("GargleFreq", 20); } set { values["GargleFreq"] = value.ToString(); } }
+
+        public bool pitchshiftenabled { get { return values.ContainsKey("PitchShift"); } }
+        public int pitchshift { get { return values.GetInt("PitchShift", 100); } set { values["PitchShift"] = value.ToString(); } }
 
         public SoundEffectSettings()
         { values = new ConditionVariables(); }

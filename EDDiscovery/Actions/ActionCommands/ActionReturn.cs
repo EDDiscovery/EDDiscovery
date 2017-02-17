@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -28,11 +28,11 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Return", UserData, "Configure Return Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Return", UserData.ReplaceEscapeControlChars(), 
+                                "Configure Return Command" , true);
+
             if (promptValue != null)
-            {
-                userdata = promptValue;
-            }
+                userdata = promptValue.EscapeControlChars();
 
             return (promptValue != null);
         }
@@ -40,7 +40,7 @@ namespace EDDiscovery.Actions
         public bool ExecuteActionReturn(ActionProgramRun ap , out string retstr )
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+            if (ap.functions.ExpandString(UserData.ReplaceEscapeControlChars(), ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
             {
                 retstr = res;
                 return true;
