@@ -27,4 +27,14 @@ namespace EDDiscovery.EliteDangerous
     {
         void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn);
     }
+
+    public interface ILedgerJournalEntry
+    {
+        void Ledger(MaterialCommoditiesLedger mcl, SQLiteConnectionUser conn);
+    }
+
+    public interface ILedgerNoCashJournalEntry
+    {
+        void LedgerNC(MaterialCommoditiesLedger mcl, SQLiteConnectionUser conn);
+    }
 }

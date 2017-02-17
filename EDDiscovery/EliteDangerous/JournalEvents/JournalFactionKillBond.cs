@@ -23,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Reward
     //•	AwardingFaction
     //•	VictimFaction
-    public class JournalFactionKillBond : JournalEntry
+    public class JournalFactionKillBond : JournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalFactionKillBond(JObject evt ) : base(evt, JournalTypeEnum.FactionKillBond)
         {

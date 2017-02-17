@@ -23,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	Amount: (total amount paid , including any broker fee)
 //•	BrokerPercentage(present if paid via a Broker)
 
-    public class JournalPayFines : JournalEntry
+    public class JournalPayFines : JournalEntry, ILedgerJournalEntry
     {
         public JournalPayFines(JObject evt) : base(evt, JournalTypeEnum.PayFines)
         {

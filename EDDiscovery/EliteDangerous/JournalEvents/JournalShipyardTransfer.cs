@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	System: where it is
     //•	Distance: how far away
     //•	TransferPrice: cost of transfer
-    public class JournalShipyardTransfer : JournalEntry
+    public class JournalShipyardTransfer : JournalEntry, ILedgerJournalEntry
     {
         public JournalShipyardTransfer(JObject evt ) : base(evt, JournalTypeEnum.ShipyardTransfer)
         {

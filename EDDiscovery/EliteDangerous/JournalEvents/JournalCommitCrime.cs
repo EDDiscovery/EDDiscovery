@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Victim
     //•	Fine
     //•	Bounty
-    public class JournalCommitCrime : JournalEntry
+    public class JournalCommitCrime : JournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalCommitCrime(JObject evt ) : base(evt, JournalTypeEnum.CommitCrime)
         {

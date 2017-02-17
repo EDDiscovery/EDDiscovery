@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Discovered: JSON array of discovered bodies
     //•	BaseValue: value of systems
     //•	Bonus: bonus for first discoveries
-    public class JournalSellExplorationData : JournalEntry
+    public class JournalSellExplorationData : JournalEntry, ILedgerJournalEntry
     {
         public JournalSellExplorationData(JObject evt ) : base(evt, JournalTypeEnum.SellExplorationData)
         {

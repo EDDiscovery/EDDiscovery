@@ -23,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StationName: name of station
 
     //•	Security
-    public class JournalRefuelPartial : JournalEntry
+    public class JournalRefuelPartial : JournalEntry, ILedgerJournalEntry
     {
         public JournalRefuelPartial(JObject evt ) : base(evt, JournalTypeEnum.RefuelPartial)
         {

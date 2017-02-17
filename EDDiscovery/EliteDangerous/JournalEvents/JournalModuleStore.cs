@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	ReplacementItem(if a core module)
 //•	Cost(if any)
 
-    public class JournalModuleStore : JournalEntry
+    public class JournalModuleStore : JournalEntry, ILedgerJournalEntry
     {
         public JournalModuleStore(JObject evt) : base(evt, JournalTypeEnum.ModuleStore)
         {

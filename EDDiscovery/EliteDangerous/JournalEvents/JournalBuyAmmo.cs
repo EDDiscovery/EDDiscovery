@@ -21,7 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When Written: when purchasing ammunition
     //Parameters:
     //•	Cost
-    public class JournalBuyAmmo : JournalEntry
+    public class JournalBuyAmmo : JournalEntry, ILedgerJournalEntry
     {
         public JournalBuyAmmo(JObject evt ) : base(evt, JournalTypeEnum.BuyAmmo)
         {

@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	EngineerModifications: name of modification blueprint, if any
     //•	SwapOutItem (if slot was not empty)
     //•	Cost
-    public class JournalModuleRetrieve : JournalEntry
+    public class JournalModuleRetrieve : JournalEntry, ILedgerJournalEntry
     {
         public JournalModuleRetrieve(JObject evt) : base(evt, JournalTypeEnum.ModuleRetrieve)
         {

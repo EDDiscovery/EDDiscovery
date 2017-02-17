@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	Ship
 //•	ShipId
 
-    public class JournalFetchRemoteModule : JournalEntry
+    public class JournalFetchRemoteModule : JournalEntry, ILedgerJournalEntry
     {
         public JournalFetchRemoteModule(JObject evt) : base(evt, JournalTypeEnum.FetchRemoteModule)
         {

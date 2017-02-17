@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Power
     //•	Cost
-    public class JournalPowerplayFastTrack : JournalEntry
+    public class JournalPowerplayFastTrack : JournalEntry, ILedgerJournalEntry
     {
         public JournalPowerplayFastTrack(JObject evt) : base(evt, JournalTypeEnum.PowerplayFastTrack)
         {
