@@ -206,7 +206,16 @@ namespace ExtendedControls
 
         public void ClearImageList()        // clears the element list, not the image.  call render to do this
         {
-            elements.Clear();
+            if (elements != null && elements.Count >= 1)
+            {
+                foreach (var e in elements)
+                {
+                    e.img?.Dispose();
+                    e.altimg?.Dispose();
+                    e.tag = null;
+                }
+                elements.Clear();
+            }
         }
 
         public Size DisplaySize()
@@ -227,7 +236,7 @@ namespace ExtendedControls
         public void Render( bool resizecontrol = true , Size? minsize = null , Size? margin = null )          
         {
             Size max = DisplaySize();
-
+            Image?.Dispose();
             if (max.Width > 0 && max.Height > 0 ) // will be zero if no elements
             {
                 elementin = null;
@@ -289,6 +298,21 @@ namespace ExtendedControls
         }
 
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                EnterElement = LeaveElement = ClickElement = null;
+                ClearImageList();
+                elements = null;
+                ClearHoverTip();
+                hovertimer.Dispose();
+                hovertimer = null;
+            }
+            
+            base.Dispose(disposing);
+        }
 
         protected override void OnMouseMove(MouseEventArgs eventargs)
         {
