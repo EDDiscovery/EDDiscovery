@@ -79,7 +79,15 @@ namespace EDDiscovery.Audio
             try
             {
                 trackBarGF.Value = ap.garglefreq;
-            } catch { }
+            }
+            catch { }
+
+            trackBarPitch.Enabled = checkBoxP.Checked = ap.pitchshiftenabled;
+            try
+            {
+                trackBarPitch.Value = ap.pitchshift;
+            }
+            catch { }
 
             checkBoxCustomNone.Checked = ap.OverrideNone;
 
@@ -123,6 +131,11 @@ namespace EDDiscovery.Audio
             if (checkBoxG.Checked)
             {
                 ap.garglefreq = trackBarGF.Value;
+            }
+
+            if (checkBoxP.Checked)
+            {
+                ap.pitchshift = trackBarPitch.Value;
             }
 
             if (checkBoxCustomNone.Checked)
@@ -174,6 +187,12 @@ namespace EDDiscovery.Audio
         private void checkBoxG_CheckedChanged(object sender, EventArgs e)
         {
             trackBarGF.Enabled = checkBoxG.Checked;
+            TurnOffNone();
+        }
+
+        private void checkBoxP_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBarPitch.Enabled = checkBoxP.Checked;
             TurnOffNone();
         }
 

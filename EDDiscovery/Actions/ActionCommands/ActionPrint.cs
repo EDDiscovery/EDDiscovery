@@ -13,11 +13,11 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Line to display", UserData.ReplaceEscapeControlChars(), "Configure Print Command" , true);
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Line to display", 
+                            UserData.ReplaceEscapeControlChars(), "Configure Print Command" , true);
+
             if (promptValue != null)
-            {
                 userdata = promptValue.EscapeControlChars();
-            }
 
             return (promptValue != null);
         }

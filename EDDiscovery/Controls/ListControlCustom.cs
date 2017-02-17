@@ -233,14 +233,12 @@ namespace ExtendedControls
             }
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
+        protected override void OnMouseClick(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
-
             int items = (Items != null) ? Items.Count() : 0;
 
-            if ( items > 0 )                                // if any items.. just to check
-            { 
+            if (items > 0)                                // if any items.. just to check
+            {
                 int index = firstindex + e.Location.Y / ItemHeight;
 
                 if (index >= items)                 // due to the few pixels for border.  we let them have this

@@ -13,7 +13,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "HistoryTab command", UserData, "Configure HistoryTab Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "HistoryTab command", UserData, "Configure HistoryTab Command");
             if (promptValue != null)
             {
                 userdata = promptValue;

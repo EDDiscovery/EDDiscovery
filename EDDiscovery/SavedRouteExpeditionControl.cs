@@ -956,11 +956,12 @@ namespace EDDiscovery
             if (obj == null)
                 return;
             SystemClass sc = SystemClass.GetSystem((string)obj);
-            if (sc == null) {
+            if (sc == null)
+            {
                 MessageBox.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
-                return;
             }
-            RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
+            else
+                RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
         }
     }
 }
