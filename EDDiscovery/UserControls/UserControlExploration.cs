@@ -58,6 +58,7 @@ namespace EDDiscovery
         {
             InitializeComponent();
             _currentExplorationSet = new ExplorationSetClass();
+            ColumnSystemName.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
         }
 
         public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc

@@ -28,6 +28,7 @@ using System.IO;
 using EMK.LightGeometry;
 using EDDiscovery.EDSM;
 using EDDiscovery2;
+using ExtendedControls;
 
 namespace EDDiscovery
 {
@@ -130,6 +131,7 @@ namespace EDDiscovery
         {
             InitializeComponent();
             _currentRoute = new SavedRouteClass("");
+            SystemName.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -553,18 +555,6 @@ namespace EDDiscovery
                 //Force the totals to update
                 UpdateSystemRows();
             }
-        }
-
-        private void dataGridViewRouteSystems_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            var textbox = (TextBox)e.Control;
-            if (dataGridViewRouteSystems.CurrentCell.ColumnIndex != 0)
-            {
-                textbox.AutoCompleteMode = AutoCompleteMode.None;
-                return;
-            }
-
-            //TBD this used to have an autocomplete, but now we don't have systemnames we are lacking it
         }
 
         private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)

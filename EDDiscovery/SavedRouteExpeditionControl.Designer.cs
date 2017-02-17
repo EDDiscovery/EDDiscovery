@@ -70,7 +70,7 @@ namespace EDDiscovery
             this.textBoxRouteName = new ExtendedControls.TextBoxBorder();
             this.labelRouteName = new System.Windows.Forms.Label();
             this.dataGridViewRouteSystems = new System.Windows.Forms.DataGridView();
-            this.SystemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SystemName = new ExtendedControls.AutoCompleteDGVColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -366,7 +366,6 @@ namespace EDDiscovery
             this.dataGridViewRouteSystems.TabIndex = 2;
             this.dataGridViewRouteSystems.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridViewRouteSystems.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewRouteSystems_CellValidating);
-            this.dataGridViewRouteSystems.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewRouteSystems_EditingControlShowing);
             this.dataGridViewRouteSystems.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
             this.dataGridViewRouteSystems.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragDrop);
             this.dataGridViewRouteSystems.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
@@ -403,7 +402,7 @@ namespace EDDiscovery
             this.setTargetToolStripMenuItem,
             this.editBookmarkToolStripMenuItem});
             this.contextMenuCopyPaste.Name = "contextMenuCopyPaste";
-            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 158);
+            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 136);
             this.contextMenuCopyPaste.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCopyPaste_Opening);
             // 
             // copyToolStripMenuItem
@@ -482,7 +481,7 @@ namespace EDDiscovery
         private System.Windows.Forms.Label labelDateStart;
         private System.Windows.Forms.Label labelRouteName;
         private System.Windows.Forms.DataGridView dataGridViewRouteSystems;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SystemName;
+        private ExtendedControls.AutoCompleteDGVColumn SystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
