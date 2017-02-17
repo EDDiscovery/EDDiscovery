@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StationName: name of station
 
     //•	Security
+    [JournalEntryType(JournalTypeEnum.ShieldState)]
     public class JournalShieldState : JournalEntry
     {
         public JournalShieldState(JObject evt ) : base(evt, JournalTypeEnum.ShieldState)
@@ -39,6 +40,5 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             else
                 return EDDiscovery.Properties.Resources.shieldsup;
         }
-
     }
 }

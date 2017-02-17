@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	EngineerModifications: name of modification blueprint, if any
 //•	ReplacementItem(if a core module)
 //•	Cost(if any)
-
+    [JournalEntryType(JournalTypeEnum.ModuleStore)]
     public class JournalModuleStore : JournalEntry, ILedgerJournalEntry
     {
         public JournalModuleStore(JObject evt) : base(evt, JournalTypeEnum.ModuleStore)

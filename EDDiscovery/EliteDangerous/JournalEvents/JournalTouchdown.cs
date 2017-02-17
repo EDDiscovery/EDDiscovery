@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Latitude
     //•	Longitude
+    [JournalEntryType(JournalTypeEnum.Touchdown)]
     public class JournalTouchdown : JournalEntry
     {
         public JournalTouchdown(JObject evt ) : base(evt, JournalTypeEnum.Touchdown)

@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Power: name of power
     //•	Type: type of commodity
     //•	Count: number of units
+    [JournalEntryType(JournalTypeEnum.PowerplayCollect)]
     public class JournalPowerplayCollect : JournalEntry
     {
         public JournalPowerplayCollect(JObject evt) : base(evt, JournalTypeEnum.PowerplayCollect)

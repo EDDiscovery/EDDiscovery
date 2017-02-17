@@ -24,6 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Count: number of units
     //•	BuyPrice: cost per unit
     //•	TotalCost: total cost
+    [JournalEntryType(JournalTypeEnum.MarketBuy)]
     public class JournalMarketBuy : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
     {
         public JournalMarketBuy(JObject evt ) : base(evt, JournalTypeEnum.MarketBuy)

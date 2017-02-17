@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Item: all, wear, hull, paint, or name of module
     //•	Cost: cost of repair
+    [JournalEntryType(JournalTypeEnum.RepairAll)]
     public class JournalRepairAll : JournalEntry, ILedgerJournalEntry
     {
         public JournalRepairAll(JObject evt) : base(evt, JournalTypeEnum.RepairAll)

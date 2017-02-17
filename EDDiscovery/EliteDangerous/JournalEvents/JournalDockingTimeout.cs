@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when a docking request has timed out
     //Parameters:
     //•	StationName: name of station
+    [JournalEntryType(JournalTypeEnum.DockingTimeout)]
     public class JournalDockingTimeout : JournalEntry
     {
         public JournalDockingTimeout(JObject evt ) : base(evt, JournalTypeEnum.DockingTimeout)

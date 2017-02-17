@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Message: message from data link
     //•	MessageLocalised: message from data link
-
+    [JournalEntryType(JournalTypeEnum.DataScanned)]
     public class JournalDataScanned : JournalEntry
     {
         public JournalDataScanned(JObject evt) : base(evt, JournalTypeEnum.DataScanned)

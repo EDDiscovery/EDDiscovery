@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Starsystem
     //•	Body
+    [JournalEntryType(JournalTypeEnum.SupercruiseExit)]
     public class JournalSupercruiseExit : JournalEntry
     {
         public JournalSupercruiseExit(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseExit)
