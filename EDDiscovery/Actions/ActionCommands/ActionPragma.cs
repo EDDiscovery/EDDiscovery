@@ -13,7 +13,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Pragma", UserData, "Configure Pragma Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Pragma", UserData, "Configure Pragma Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -51,7 +51,7 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmd.Equals("log"))
                     {
-                        string rest = p.NextQuotedWord();
+                        string rest = p.NextQuotedWord(replaceescape: true);
 
                         if (rest != null)
                         {
@@ -62,6 +62,22 @@ namespace EDDiscovery.Actions
                             ap.ReportError("Missing string after Pragma Log");
                             return true;
                         }
+                    }
+                    else if (cmd.Equals("debug"))
+                    {
+                        string rest = p.NextQuotedWord(replaceescape: true);
+
+                        if (rest != null)
+                        {
+#if DEBUG
+                            ap.actioncontroller.LogLine(rest);
+#endif
+                        }
+                        else
+                        {
+                            ap.ReportError("Missing string after Debug");
+                        }
+                        return true;
                     }
                     else if (cmd.Equals("ignoreerrors"))
                     {

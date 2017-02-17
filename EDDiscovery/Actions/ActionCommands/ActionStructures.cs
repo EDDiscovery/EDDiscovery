@@ -242,8 +242,7 @@ namespace EDDiscovery.Actions
 
     public class ActionLoop : Action
     {
-
-        private bool counting = false;
+        private bool inloop = false;
         private int loopcount = 0;
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
@@ -255,7 +254,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-             string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Enter integer count", UserData, "Configure Loop");
+             string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Enter integer count", UserData, "Configure Loop");
              if (promptValue != null)
                 userdata = promptValue;
 
@@ -264,16 +263,16 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)     // LOOP when encountered
         {
-            if (ap.IsExecuteOn)       // if executing
+            if (ap.IsExecuteOn)         // if executing
             {
-                if (!counting)      // if 
+                if (!inloop)            // if not in a loop
                 {
                     string res;
                     if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
                     {
                         if (res.InvariantParse(out loopcount))
                         {
-                            counting = true;
+                            inloop = true;
                             ap.PushState(Type, (loopcount > 0), true);   // set execute to On (if loop count is >0) and push the position of the LOOP
                             ap.currentvars["Loop" + ap.ExecLevel] = "1";
                         }
@@ -288,7 +287,9 @@ namespace EDDiscovery.Actions
             }
             else
             {
-                ap.PushState(Type, ActionProgramRun.ExecState.OffForGood);  // push off for good, don't push position since we don't want to loop
+                ap.PushState(Type, ActionProgramRun.ExecState.OffForGood , true);  // push off for good and save position so we know which loop we are executing
+                inloop = true;    // we are in the loop properly.
+                loopcount = 0;      // and with no count
             }
 
             return true;
@@ -296,9 +297,9 @@ namespace EDDiscovery.Actions
 
         public bool ExecuteEndLoop(ActionProgramRun ap)     // only called if executing
         {
-            if ( counting )
+            if ( inloop )                   // if in a count, we were executing at the loop, either on or off
             {
-                if (--loopcount > 0)
+                if (--loopcount > 0)        // any count left?
                 {
                     ap.Goto(ap.PushPos + 1);                    // back to LOOP+1, keep level
 
@@ -310,7 +311,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    counting = false;                           // turn off check flag, and we just exit the loop normally
+                    inloop = false;                           // turn off check flag, and we just exit the loop normally
                 }
             }
             else
@@ -365,7 +366,7 @@ namespace EDDiscovery.Actions
 
             if (base.ConfigurationMenu(parent, discoveryform, eventvars, ref cond))
             {
-                string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Error to display", errmsg, "Configure ErrorIf Command");
+                string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Error to display", errmsg, "Configure ErrorIf Command");
                 if (promptValue != null)
                 {
                     userdata = ToString(cond, promptValue);
@@ -458,7 +459,7 @@ namespace EDDiscovery.Actions
             ConditionVariables cond;
             FromString(UserData, out progname, out cond);
 
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Program to call (use set::prog if req)", progname, "Configure Call Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Program to call (use set::prog if req)", progname, "Configure Call Command");
             if (promptValue != null)
             {
                 ConditionVariablesForm avf = new ConditionVariablesForm();

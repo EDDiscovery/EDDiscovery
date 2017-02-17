@@ -41,7 +41,7 @@ namespace EDDiscovery.Audio
             return null;
         }
 
-        public Object Generate(System.IO.Stream audioms, ConditionVariables effects)
+        public Object Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
         {
             return null;
         }

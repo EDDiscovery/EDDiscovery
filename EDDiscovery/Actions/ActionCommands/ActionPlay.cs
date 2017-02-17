@@ -17,7 +17,9 @@ namespace EDDiscovery.Actions
 
         static string volumename = "Volume";
         static string waitname = "Wait";
-        static string preemptname = "Preempt";
+        static string priorityname = "Priority";
+        static string startname = "StartEvent";
+        static string finishname = "FinishEvent";
 
         public bool FromString(string s, out string path, out ConditionVariables vars)
         {
@@ -62,24 +64,36 @@ namespace EDDiscovery.Actions
             ConditionVariables vars;
             FromString(userdata, out path, out vars);
 
-            WaveConfigureDialog dlg = new WaveConfigureDialog();
-            dlg.Init(discoveryform.AudioQueueWave, false, "Configure Play Command", discoveryform.theme, path,
+            WaveConfigureDialog cfg = new WaveConfigureDialog();
+            cfg.Init(discoveryform.AudioQueueWave, false, "Select file, volume and effects", "Configure Play Command", discoveryform.theme, path,
                         vars.ContainsKey(waitname),
-                        vars.ContainsKey(preemptname),
+                        Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
+                        vars.GetString(startname, ""),
+                        vars.GetString(finishname, ""),
                         vars.GetString(volumename, "Default"),
                         vars);
 
-            if (dlg.ShowDialog(parent) == DialogResult.OK)
+            if (cfg.ShowDialog(parent) == DialogResult.OK)
             {
-                ConditionVariables cond = new ConditionVariables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
-                cond.SetOrRemove(dlg.Wait, waitname, "1");
-                cond.SetOrRemove(dlg.Preempt, preemptname, "1");
-                cond.SetOrRemove(!dlg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase), volumename, dlg.Volume);
-                userdata = ToString(dlg.Path, cond);
+                ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
+                cond.SetOrRemove(cfg.Wait, waitname, "1");
+                cond.SetOrRemove(cfg.Priority != Audio.AudioQueue.Priority.Normal, priorityname, cfg.Priority.ToString());
+                cond.SetOrRemove(cfg.StartEvent.Length > 0, startname, cfg.StartEvent);
+                cond.SetOrRemove(cfg.StartEvent.Length > 0, finishname, cfg.FinishEvent);
+                cond.SetOrRemove(!cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase), volumename, cfg.Volume);
+                userdata = ToString(cfg.Path, cond);
                 return true;
             }
 
             return false;
+        }
+
+        class AudioEvent
+        {
+            public ActionProgramRun apr;
+            public bool wait;
+            public string triggername;
+            public string eventname;
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
@@ -99,7 +113,9 @@ namespace EDDiscovery.Actions
                         if (System.IO.File.Exists(path))
                         {
                             bool wait = vars.GetInt(waitname, 0) != 0;
-                            bool priority = vars.GetInt(preemptname, 0) != 0;
+                            Audio.AudioQueue.Priority priority = Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal"));
+                            string start = vars.GetString(startname);
+                            string finish = vars.GetString(finishname);
 
                             int vol = vars.GetInt(volumename, -999);
                             if (vol == -999)
@@ -116,10 +132,18 @@ namespace EDDiscovery.Actions
 
                             if (audio != null)
                             {
-                                if (wait)
+                                if (start != null)
                                 {
-                                    audio.sampleOverTag = ap;
-                                    audio.sampleOverEvent += Audio_sampleOverEvent;
+                                    System.Diagnostics.Debug.WriteLine("Play start trigger set up");
+                                    audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onPlayStarted" };
+                                    audio.sampleStartEvent += Audio_sampleEvent;
+
+                                }
+                                if (wait || finish != null)       // if waiting, or finish call
+                                {
+                                    System.Diagnostics.Debug.WriteLine("Play finish trigger set up");
+                                    audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onPlayFinished" };
+                                    audio.sampleOverEvent += Audio_sampleEvent;
                                 }
 
                                 ap.actioncontroller.DiscoveryForm.AudioQueueWave.Submit(audio, vol, priority);
@@ -143,10 +167,15 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        private void Audio_sampleOverEvent(Audio.AudioQueue sender, object tag)
+        private void Audio_sampleEvent(Audio.AudioQueue sender, object tag)
         {
-            ActionProgramRun ap = tag as ActionProgramRun;
-            ap.ResumeAfterPause();
+            AudioEvent af = tag as AudioEvent;
+
+            if (af.eventname != null)
+                af.apr.actioncontroller.ActionRun(af.triggername, "ActionProgram", null, new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
+
+            if (af.wait)
+                af.apr.ResumeAfterPause();
         }
     }
 }

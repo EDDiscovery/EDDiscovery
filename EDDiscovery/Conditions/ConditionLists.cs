@@ -72,18 +72,12 @@ namespace EDDiscovery
                 mt = (MatchType)(indexof);
                 return true;
             }
+            else if (Enum.TryParse<MatchType>(s, out mt))
+                return true;
             else
             {
-                try
-                {
-                    mt = (MatchType)Enum.Parse(typeof(MatchType), s.Replace(" ", ""));       // must work, exception otherwise
-                    return true;
-                }
-                catch
-                {
-                    mt = MatchType.Contains;
-                    return false;
-                }
+                mt = MatchType.Contains;
+                return false;
             }
         }
         

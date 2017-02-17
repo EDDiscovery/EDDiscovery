@@ -15,12 +15,16 @@ namespace EDDiscovery.Actions
         public static string globalvarspeechrate = "SpeechRate";
         public static string globalvarspeechvoice = "SpeechVoice";
         public static string globalvarspeecheffects = "SpeechEffects";
+        public static string globalvarspeechculture = "SpeechCulture";
 
         static string volumename = "Volume";
         static string voicename = "Voice";
         static string ratename = "Rate";
         static string waitname = "Wait";
-        static string preemptname = "Preempt";
+        static string priorityname = "Priority";
+        static string startname = "StartEvent";
+        static string finishname = "FinishEvent";
+        static string culturename = "Culture";
 
         public bool FromString(string s, out string saying, out ConditionVariables vars )
         {
@@ -66,12 +70,14 @@ namespace EDDiscovery.Actions
             FromString(userdata, out saying, out vars);
 
             Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
-            cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
-                        "Set Text to say (use ; to separate randomly selectable phrases)", "Configure Say Command", discoveryform.theme,
+            cfg.Init(discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
+                        "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command", discoveryform.theme,
                         saying,
                         vars.ContainsKey(waitname),
-                        vars.ContainsKey(preemptname),
-                        vars.GetString(voicename,"Default"),
+                        Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
+                        vars.GetString(startname,""),
+                        vars.GetString(finishname, ""),
+                        vars.GetString(voicename, "Default"),
                         vars.GetString(volumename,"Default"),
                         vars.GetString(ratename,"Default"),
                         vars
@@ -81,7 +87,9 @@ namespace EDDiscovery.Actions
             {
                 ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge
                 cond.SetOrRemove(cfg.Wait, waitname, "1");
-                cond.SetOrRemove(cfg.Preempt, preemptname, "1");
+                cond.SetOrRemove(cfg.Priority != Audio.AudioQueue.Priority.Normal, priorityname, cfg.Priority.ToString());
+                cond.SetOrRemove(cfg.StartEvent.Length > 0, startname, cfg.StartEvent);
+                cond.SetOrRemove(cfg.StartEvent.Length > 0, finishname, cfg.FinishEvent);
                 cond.SetOrRemove(!cfg.VoiceName.Equals("Default", StringComparison.InvariantCultureIgnoreCase), voicename, cfg.VoiceName);
                 cond.SetOrRemove(!cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase), volumename, cfg.Volume);
                 cond.SetOrRemove(!cfg.Rate.Equals("Default", StringComparison.InvariantCultureIgnoreCase), ratename, cfg.Rate);
@@ -92,6 +100,16 @@ namespace EDDiscovery.Actions
 
             return false;
         }
+
+        class AudioEvent
+        {
+            public ActionProgramRun apr;
+            public bool wait;
+            public string triggername;
+            public string eventname;
+        }
+
+        Random rnd = new Random();
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
@@ -105,7 +123,9 @@ namespace EDDiscovery.Actions
                 if (errlist == null)
                 {
                     bool wait = vars.GetInt(waitname, 0) != 0;
-                    bool priority = vars.GetInt(preemptname, 0) != 0;
+                    Audio.AudioQueue.Priority priority = Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal"));
+                    string start = vars.GetString(startname);
+                    string finish = vars.GetString(finishname);
                     string voice = vars.ContainsKey(voicename) ? vars[voicename] : (ap.currentvars.ContainsKey(globalvarspeechvoice) ? ap.currentvars[globalvarspeechvoice] : "Default");
 
                     int vol = vars.GetInt(volumename, -999);
@@ -116,6 +136,9 @@ namespace EDDiscovery.Actions
                     if (rate == -999)
                         rate = ap.currentvars.GetInt(globalvarspeechrate, 0);
 
+                    string culture = vars.ContainsKey(culturename) ? vars[culturename] : (ap.currentvars.ContainsKey(globalvarspeechculture) ? ap.currentvars[globalvarspeechculture] : "Default");
+
+
                     Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
                     if (!ses.Any && !ses.OverrideNone && ap.currentvars.ContainsKey(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
@@ -123,26 +146,32 @@ namespace EDDiscovery.Actions
                         vars = new ConditionVariables(ap.currentvars[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
                     }
 
-                    string phrase = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.ToPhrase(say, out errlist, ap.functions, ap.currentvars);
-
-                    if (errlist == null)
+                    string expsay;
+                    if (ap.functions.ExpandString(say, ap.currentvars, out expsay) != EDDiscovery.ConditionLists.ExpandResult.Failed)
                     {
-                        if (phrase.Length == 0) // just abort..
-                            return true;
+                        expsay = expsay.PickOneOfGroups(rnd);
 
 #if true
-                        System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(phrase, voice, rate);
+                        System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(expsay, culture, voice, rate);
 
                         if (ms != null)
                         {
-                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars);
+                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
 
                             if (audio != null)
                             {
-                                if (wait)
+                                if ( start != null )
                                 {
-                                    audio.sampleOverTag = ap;
-                                    audio.sampleOverEvent += Audio_sampleOverEvent;
+                                    System.Diagnostics.Debug.WriteLine("Say start trigger set up");
+                                    audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start , triggername = "onSayStarted" };
+                                    audio.sampleStartEvent += Audio_sampleEvent;
+
+                                }
+                                if (wait || finish != null)       // if waiting, or finish call
+                                {
+                                    System.Diagnostics.Debug.WriteLine("Say finish trigger set up");
+                                    audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
+                                    audio.sampleOverEvent += Audio_sampleEvent;
                                 }
 
                                 ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
@@ -157,9 +186,10 @@ namespace EDDiscovery.Actions
                         synth.SpeakAsync(phrase);       // for checking quality..
 #endif
 
+
                     }
                     else
-                        ap.ReportError(errlist);
+                        ap.ReportError(expsay);
                 }
                 else
                     ap.ReportError(errlist);
@@ -171,12 +201,17 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-//        static System.Speech.Synthesis.SpeechSynthesizer synth = new System.Speech.Synthesis.SpeechSynthesizer();
+        //        static System.Speech.Synthesis.SpeechSynthesizer synth = new System.Speech.Synthesis.SpeechSynthesizer(); // debug
 
-        private void Audio_sampleOverEvent(Audio.AudioQueue sender, object tag)
+        private void Audio_sampleEvent(Audio.AudioQueue sender, object tag)
         {
-            ActionProgramRun ap = tag as ActionProgramRun;
-            ap.ResumeAfterPause();
+            AudioEvent af = tag as AudioEvent;
+
+            if (af.eventname != null)
+                af.apr.actioncontroller.ActionRun(af.triggername, "ActionProgram", null, new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
+
+            if (af.wait)
+                af.apr.ResumeAfterPause();
         }
     }
 }

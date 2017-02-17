@@ -595,6 +595,15 @@ namespace EDDiscovery
             }
         }
 
+        public HistoryEntry GetByJID(long jid)
+        {
+            return historylist.Find(x => x.Journalid == jid);
+        }
+
+        public int GetIndex(long jid)
+        {
+            return EntryOrder.FindIndex(x => x.Journalid == jid);
+        }
 
         public HistoryEntry GetLast
         {

@@ -214,11 +214,6 @@ namespace EDDiscovery.Actions
             else
                 groups.Insert(insertpos, g);
 
-            string tt1 = "Step " + (groups.IndexOf(g) + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-            toolTip1.SetToolTip(g.stepname, tt1);
-            toolTip1.SetToolTip(g.stepname.GetInternalSystemControl, tt1);
-
             g.panel.ResumeLayout();
 
             panelVScroll.ResumeLayout();
@@ -251,14 +246,12 @@ namespace EDDiscovery.Actions
             string errlist = curprog.CalculateLevels();
 
             int panelwidth = Math.Max(panelVScroll.Width - panelVScroll.ScrollBarWidth, 10);
-
-            int indentlevel = 0;
             int voff = panelheightmargin;
-
             int actstep = 0;
 
             foreach (Group g in groups)
             {
+                int indentlevel = 0;
                 int whitespace = 0;
                 Action act = curprog.GetStep(actstep++);
 
@@ -285,7 +278,7 @@ namespace EDDiscovery.Actions
                 g.panel.Size = new Size(panelwidth, panelheight + ((whitespace>0) ? (panelheight/2) : 0 ));
                 g.stepname.Location = new Point(g.right.Right + 8 + 8 * indentlevel, panelheightmargin);
                 g.stepname.Size = new Size(140 - Math.Max((indentlevel - 4) * 8, 0), controlsize);
-                g.value.Location = new Point(g.right.Right + 140 + 8 + 8 * 4, panelheightmargin * 2);      // 8 spacing, allow 8*4 to indent
+                g.value.Location = new Point(g.right.Right + 140 + 8 + 8 * 4+ 8, panelheightmargin * 2);      // 8 spacing, allow 8*4 to indent
                 int valuewidth = panelwidth - 350;
                 g.value.Size = new Size(valuewidth, controlsize);
                 g.config.Location = new Point(g.value.Right + 4, panelheightmargin);      // 8 spacing, allow 8*4 to indent
@@ -294,6 +287,13 @@ namespace EDDiscovery.Actions
                 g.up.Visible = groups.IndexOf(g)>0;
 
                 g.panel.ResumeLayout();
+
+                string tt1 = "Step " + actstep.ToString(System.Globalization.CultureInfo.InvariantCulture) + " Level " + indentlevel;
+                if ( act != null )
+                    tt1 += " SL " + act.calcStructLevel + " LU" + act.LevelUp ;
+
+                toolTip1.SetToolTip(g.stepname, tt1);
+                toolTip1.SetToolTip(g.stepname.GetInternalSystemControl, tt1);
 
                 //DEBUG Keep this useful for debugging structure levels
                 //                if (g.programstep != null)
@@ -315,6 +315,9 @@ namespace EDDiscovery.Actions
             {
                 this.MinimumSize = new Size(600, voff);
                 this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width - 100, Screen.FromControl(this).WorkingArea.Height - 100);
+
+                if (Bottom > Screen.FromControl(this).WorkingArea.Height)
+                    Top = Screen.FromControl(this).WorkingArea.Height - Height - 50;
             }
 
             panelVScroll.ResumeLayout();
@@ -417,9 +420,16 @@ namespace EDDiscovery.Actions
         {
             ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
-            Action curact = curprog.GetStep(groups.IndexOf(g));
+            int step = groups.IndexOf(g);
+            Action curact = curprog.GetStep(step);
             if (curact != null)
+            {
                 curact.LevelUp++;
+                Action nextact = curprog.GetStep(step + 1);
+
+                if (!curact.IsStructStart && nextact != null)            // move next up back 1 level, to keep it the same  but if its a struct start dont
+                    nextact.LevelUp = Math.Max(nextact.LevelUp - 1, 0);
+            }
 
             RepositionGroups();
         }
@@ -428,9 +438,16 @@ namespace EDDiscovery.Actions
         {
             ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
             Group g = (Group)b.Tag;
-            Action curact = curprog.GetStep(groups.IndexOf(g));
+            int step = groups.IndexOf(g);
+            Action curact = curprog.GetStep(step);
             if (curact != null)
+            {
                 curact.LevelUp = Math.Max(curact.LevelUp - 1, 0);
+                Action nextact = curprog.GetStep(step + 1);
+
+                if (!curact.IsStructStart && nextact != null)            // move next up back 1 level, to keep it the same  but if its a struct start dont
+                    nextact.LevelUp++;
+            }
 
             RepositionGroups();
         }
