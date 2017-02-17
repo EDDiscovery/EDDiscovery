@@ -29,7 +29,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "ProgramWindow command", UserData, "Configure Program Window Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "ProgramWindow command", UserData, "Configure Program Window Command");
             if (promptValue != null)
             {
                 userdata = promptValue;

@@ -547,6 +547,7 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
+            actioncontroller.ActionRun("onStartup", "ProgramEvent");
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1064,19 +1065,75 @@ namespace EDDiscovery
             actioncontroller.EditAddOnActionFile();
         }
 
-        private void speechSynthesisSettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            actioncontroller.ConfigureVoice();
-        }
-
-        private void editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            actioncontroller.ConfigureSpeechText();
-        }
-
         private void stopCurrentlyRunningActionProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
             actioncontroller.TerminateAll();
+        }
+
+        public bool AddNewMenuItemToAddOns(string menuname, string menuitemtext, string icon , string menutrigger, string packname)
+        {
+            ToolStripMenuItem parent;
+
+            menuname = menuname.ToLower();
+            if (menuname.Equals("add-ons"))
+                parent = addOnsToolStripMenuItem;
+            else if (menuname.Equals("help"))
+                parent = helpToolStripMenuItem;
+            else if (menuname.Equals("tools"))
+                parent = toolsToolStripMenuItem;
+            else if (menuname.Equals("admin"))
+                parent = adminToolStripMenuItem;
+            else
+                return false;
+
+            Object res = Properties.Resources.ResourceManager.GetObject(icon);
+
+            var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menuitemtext) && p.Tag != null && p.Name.Equals(menutrigger) select p);
+
+            if (x.Count() == 0)           // double entries screened out
+            {
+                ToolStripMenuItem it = new ToolStripMenuItem();
+                it.Text = menuitemtext;
+                it.Name = menutrigger;
+                it.Tag = packname;
+                if (res != null && res is Bitmap)
+                    it.Image = (Bitmap)res;
+                it.Size = new Size(313, 22);
+                it.Click += MenuTrigger_Click;
+                parent.DropDownItems.Add(it);
+            }
+
+            return true;
+        }
+
+        public void RemoveMenuItemsFromAddOns(ToolStripMenuItem menu, string packname)
+        {
+            List<ToolStripItem> removelist = (from ToolStripItem s in menu.DropDownItems where s.Tag != null && ((string)s.Tag).Equals(packname) select s).ToList();
+            foreach (ToolStripItem it in removelist)
+            {
+                menu.DropDownItems.Remove(it);
+                it.Dispose();
+            }
+        }
+
+        public void RemoveMenuItemsFromAddOns(string packname)
+        {
+            RemoveMenuItemsFromAddOns(addOnsToolStripMenuItem, packname);
+            RemoveMenuItemsFromAddOns(helpToolStripMenuItem, packname);
+            RemoveMenuItemsFromAddOns(toolsToolStripMenuItem, packname);
+            RemoveMenuItemsFromAddOns(adminToolStripMenuItem, packname);
+        }
+
+        private void MenuTrigger_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem it = sender as ToolStripMenuItem;
+            ConditionVariables vars = new ConditionVariables(new string[]
+            {   "MenuName", it.Name,
+                "MenuText", it.Text,
+                "TopLevelMenuName" , it.OwnerItem.Name,
+            });
+
+            actioncontroller.ActionRun("onMenuItem", "UserUIEvent", null, vars);
         }
 
         public bool SelectTabPage(string name)
@@ -1096,11 +1153,6 @@ namespace EDDiscovery
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActionRun("onTabChange", "UserUIEvent", null,new ConditionVariables("TabName", tabControl1.TabPages[tabControl1.SelectedIndex].Text));
-        }
-
-        private void soundSettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            actioncontroller.ConfigureWave();
         }
 
         public ConditionVariables Globals { get { return actioncontroller.Globals; } }

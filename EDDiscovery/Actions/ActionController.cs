@@ -88,6 +88,11 @@ namespace EDDiscovery.Actions
             events.Add("onTabChange");
             events.Add("onPanelChange");
             events.Add("onHistorySelection");
+            events.Add("onSayStarted");
+            events.Add("onSayFinished");
+            events.Add("onPlayStarted");
+            events.Add("onPlayFinished");
+            events.Add("onMenuItem");
 
             frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, persistentglobalvariables, actionfiles, discoveryform);
             frm.TopMost = discoveryform.FindForm().TopMost;
@@ -106,20 +111,22 @@ namespace EDDiscovery.Actions
             {
                 dmf.Init(discoveryform.theme);
                 dmf.ShowDialog(discoveryform);
-                if (dmf.changelist.Count>0)
+                if (dmf.changelist.Count > 0)
                 {
                     actionrunasync.TerminateAll();
                     discoveryform.AudioQueueSpeech.StopAll();
                     ReLoad();
 
                     string changes = "";
-                    foreach( KeyValuePair<string,string> kv in dmf.changelist)
+                    foreach (KeyValuePair<string, string> kv in dmf.changelist)
                     {
                         if (kv.Value.Equals("+"))
                             changes += kv.Key + ";";
+                        if (kv.Value.Equals("-"))
+                            discoveryform.RemoveMenuItemsFromAddOns(kv.Key);
                     }
 
-                    ActionRun("onInstall", "ProgramEvent",null,new ConditionVariables("InstallList", changes));
+                    ActionRun("onInstall", "ProgramEvent", null, new ConditionVariables("InstallList", changes));
                 }
             }
         }
@@ -134,7 +141,7 @@ namespace EDDiscovery.Actions
             Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
             cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
                         "Select voice synthesizer defaults", "Configure Voice Synthesis", discoveryform.theme,
-                        null, false, false,
+                        null, false, Audio.AudioQueue.Priority.Normal, "", "",
                         voicename,
                         volume,
                         rate, 
@@ -155,8 +162,9 @@ namespace EDDiscovery.Actions
             ConditionVariables effects = new ConditionVariables(persistentglobalvariables.GetString(Actions.ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             Audio.WaveConfigureDialog dlg = new Audio.WaveConfigureDialog();
-            dlg.Init(discoveryform.AudioQueueWave, true, "Configure Audio", discoveryform.theme, "",
-                        false, false, volume, effects);
+            dlg.Init(discoveryform.AudioQueueWave, true, "Select Play Default volume and effects", "Configure Play Audio", discoveryform.theme, "",
+                        false, Audio.AudioQueue.Priority.Normal, "", "",
+                        volume, effects);
 
             if (dlg.ShowDialog(discoveryform) == DialogResult.OK)
             {
@@ -168,7 +176,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        public void ConfigureSpeechText()
+        public void EditSpeechText()
         {
             if (programrunglobalvariables.ContainsKey("SpeechDefinitionFile"))
             {
@@ -219,7 +227,7 @@ namespace EDDiscovery.Actions
                 ConditionVariables testvars = new ConditionVariables(globalvariables);
                 Actions.ActionVars.TriggerVars(testvars, triggername, triggertype);
                 testvars.Add(additionalvars);   // adding null is allowed
-                Actions.ActionVars.HistoryEventVars(testvars, he, "Event");     // if HE is null, ignored
+                Actions.ActionVars.HistoryEventVars(testvars, he , "Event");     // if HE is null, ignored
 
                 ConditionFunctions functions = new ConditionFunctions();
 
@@ -240,6 +248,21 @@ namespace EDDiscovery.Actions
             }
 
             return ale.Count;
+        }
+
+        public bool ActionRun(string packname, string programname , ConditionVariables runvars , bool now = false )
+        {
+            Tuple<ActionFile, ActionProgram> found = actionfiles.FindProgram(packname, programname);
+
+            if (found != null)
+            {
+                actionrunasync.Run(now, found.Item1, found.Item2, runvars);
+                actionrunasync.Execute();       // See if needs executing
+
+                return true;
+            }
+            else
+                return false;
         }
 
         public void SetPeristentGlobal(string name, string value)     // saved on exit

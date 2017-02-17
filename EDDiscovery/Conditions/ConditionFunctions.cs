@@ -55,8 +55,8 @@ namespace EDDiscovery
             flist = new FuncEntry[]                         // first is a bitmap saying if to check for the value is a var
             {                                               // second is a bitmap saying if a string is allowed in this pos
                 new FuncEntry("exists",Exists,              1,20,   0,0),   // don't check macros, no strings
-                new FuncEntry("expand",Expand,              1,20,   0xfffffff,0xfffffff), // check var, can be string
-                new FuncEntry("indirect",Indirect,          1,20,   0,0),   // check var, no strings
+                new FuncEntry("expand",Expand,              1,20,   0xfffffff,0xfffffff), // check var, can be string (if so expanded)
+                new FuncEntry("indirect",Indirect,          1,20,   0xfffffff,0xfffffff),   // check var, no strings
                 new FuncEntry("splitcaps",SplitCaps,        1,1,    1,1),   //check var, allow strings
                 new FuncEntry("sc",SplitCaps,               1,1,    1,1),   //shorter alias for above
                 new FuncEntry("ship",Ship,                  1,1,    1,1),   //ship translator
@@ -65,8 +65,9 @@ namespace EDDiscovery
                 new FuncEntry("findline",FindLine,          2,2,    3,2),   //check var1 and var2, second can be a string
                 new FuncEntry("substring",SubString,        3,3,    1,1),   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
                 new FuncEntry("indexof",IndexOf,            2,2,    3,3),   // check var1 and 2 if normal, allow string in 1 and 2
-                new FuncEntry("lower",Lower,                1,1,    1,1),   // check var1, allow string
-                new FuncEntry("upper",Upper,                1,1,    1,1),
+                new FuncEntry("lower",Lower,                1,20,   0xfffffff,0xfffffff),   // all can be string, check var
+                new FuncEntry("upper",Upper,                1,20,   0xfffffff,0xfffffff),   // all can be string, check var
+                new FuncEntry("join",Join,                  3,20,   0xfffffff,0xfffffff),   // all can be string, check var
                 new FuncEntry("trim",Trim,                  1,1,    1,1),
                 new FuncEntry("length",Length,              1,1,    1,1),
                 new FuncEntry("version",Version,            1,1,    0),     // don't check first para
@@ -89,6 +90,8 @@ namespace EDDiscovery
                 new FuncEntry("escapechar",EscapeChar,      1,1,    1,1),   // check var, can be string
                 new FuncEntry("replaceescapechar",ReplaceEscapeChar,      1,1,    1,1),   // check var, can be string
                 new FuncEntry("random",Random,              1,1,    0,0),   // no change var, not string
+                new FuncEntry("eval",Eval,                  1,2,    1,1),   // can be string, can be variable, p2 is not a variable, and can't be a string
+                new FuncEntry("existsdefault",ExistsDefault,2,2,    2,2),   // first is a macro but can not exist, second is a string or macro which must exist
         };
         }
 
@@ -96,6 +99,25 @@ namespace EDDiscovery
 
         // true, expanded, result = string
         // false, failed, result = error
+
+        public ConditionLists.ExpandResult ExpandStrings(List<string> inv , out List<string> outv, ConditionVariables vars)
+        {
+            outv = new List<string>();
+
+            foreach( string s in inv )
+            {
+                string r;
+                if ( ExpandString(s,vars, out r) == ConditionLists.ExpandResult.Failed )
+                {
+                    outv = new List<string>() { r };
+                    return ConditionLists.ExpandResult.Failed;
+                }
+
+                outv.Add(r);
+            }
+
+            return ConditionLists.ExpandResult.Expansion;
+        }
 
         public ConditionLists.ExpandResult ExpandString(string line, ConditionVariables vars, out string result)
         {
@@ -254,7 +276,7 @@ namespace EDDiscovery
         // true, output is written.  false, output has error text
         private bool RunFunction(string fname, List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
-            FuncEntry fe = Array.Find(flist, x => x.name.Equals(fname, StringComparison.InvariantCulture));
+            FuncEntry fe = Array.Find(flist, x => x.name.Equals(fname, StringComparison.InvariantCultureIgnoreCase));
             if (fe != null)
             {
                 if (paras.Count < fe.numberparasmin)
@@ -308,6 +330,16 @@ namespace EDDiscovery
             return true;
         }
 
+        private bool ExistsDefault(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            if (vars.ContainsKey(paras[0].value))
+                output = vars[paras[0].value];
+            else
+                output = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+
+            return true;
+        }
+
         private bool Expand(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             return ExpandCore(paras, vars, out output, recdepth, false);
@@ -330,25 +362,17 @@ namespace EDDiscovery
 
             foreach (Parameter p in paras)
             {
-                string s = p.value;
-                string value;
+                string value = (p.isstring) ? p.value : vars[p.value];          // if string, its the value, else look up vars (must exist i've checked)
 
                 if (indirect)
                 {
-                    if (vars.ContainsKey(vars[s]))
-                        value = vars[vars[s]];
+                    if (vars.ContainsKey(value))
+                        value = vars[value];
                     else
                     {
-                        output = "Indrect Variable " + vars[s] + " not found";
+                        output = "Indrect Variable " + value + " not found";
                         return false;
                     }
-                }
-                else
-                {
-                    if (p.isstring)
-                        value = s;
-                    else
-                        value = vars[s];
                 }
 
                 string res;
@@ -510,6 +534,11 @@ namespace EDDiscovery
         private bool Lower(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string delim = (paras.Count > 1) ? ((paras[1].isstring) ? paras[1].value : vars[paras[1].value]) : "";
+
+            for (int i = 2; i < paras.Count; i++)
+                value += delim + ((paras[i].isstring) ? paras[i].value : vars[paras[i].value]);
+
             output = value.ToLower();
             return true;
         }
@@ -517,7 +546,24 @@ namespace EDDiscovery
         private bool Upper(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string delim = (paras.Count > 1) ? ((paras[1].isstring) ? paras[1].value : vars[paras[1].value]) : "";
+
+            for (int i = 2; i < paras.Count; i++)
+                value += delim + ((paras[i].isstring) ? paras[i].value : vars[paras[i].value]);
+
             output = value.ToUpper();
+            return true;
+        }
+
+        private bool Join(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string delim = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string value = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+
+            for (int i = 2; i < paras.Count; i++)
+                value += delim + ((paras[i].isstring) ? paras[i].value : vars[paras[i].value]);
+
+            output = value;
             return true;
         }
 
@@ -863,6 +909,23 @@ namespace EDDiscovery
                 output = "Parameter should be an integer constant or a variable name with an integer in its value";
                 return false;
             }
+        }
+
+        private bool Eval(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+
+            bool tryit = paras.Count > 1 && paras[1].value.Equals("Try", StringComparison.InvariantCultureIgnoreCase);
+
+            bool evalstate = s.Eval(out output);      // true okay, with output, false bad, with error
+
+            if ( tryit && !evalstate)                   // if try and failed.. NAN without error
+            {
+                output = "NAN";
+                return true;
+            }
+
+            return evalstate;                       // else return error and output
         }
 
         #endregion

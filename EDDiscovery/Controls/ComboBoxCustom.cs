@@ -383,7 +383,12 @@ namespace ExtendedControls
                     }
                 }
 
-                e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea);
+                StringFormat f = new StringFormat();
+                f.Alignment = StringAlignment.Near;
+                f.LineAlignment = StringAlignment.Near;
+                f.FormatFlags = StringFormatFlags.NoWrap;
+
+                e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea, f);
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 

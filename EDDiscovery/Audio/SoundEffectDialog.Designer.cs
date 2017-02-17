@@ -94,6 +94,10 @@ namespace EDDiscovery.Audio
             this.checkBoxCustomNone = new ExtendedControls.CheckBoxCustom();
             this.comboBoxCustomVoices = new ExtendedControls.ComboBoxCustom();
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.trackBarPitch = new System.Windows.Forms.TrackBar();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.checkBoxP = new ExtendedControls.CheckBoxCustom();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCDp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarDC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarRH)).BeginInit();
@@ -110,6 +114,7 @@ namespace EDDiscovery.Audio
             ((System.ComponentModel.ISupportInitialize)(this.trackBarDW)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarGF)).BeginInit();
             this.panelOuter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarPitch)).BeginInit();
             this.SuspendLayout();
             // 
             // trackBarCDp
@@ -119,7 +124,7 @@ namespace EDDiscovery.Audio
             this.trackBarCDp.Name = "trackBarCDp";
             this.trackBarCDp.Size = new System.Drawing.Size(95, 45);
             this.trackBarCDp.SmallChange = 5;
-            this.trackBarCDp.TabIndex = 43;
+            this.trackBarCDp.TabIndex = 7;
             this.trackBarCDp.TickFrequency = 5;
             this.trackBarCDp.Value = 10;
             // 
@@ -131,7 +136,7 @@ namespace EDDiscovery.Audio
             this.trackBarDC.Name = "trackBarDC";
             this.trackBarDC.Size = new System.Drawing.Size(95, 45);
             this.trackBarDC.SmallChange = 10;
-            this.trackBarDC.TabIndex = 30;
+            this.trackBarDC.TabIndex = 15;
             this.trackBarDC.TickFrequency = 200;
             this.trackBarDC.Value = 2400;
             // 
@@ -143,7 +148,7 @@ namespace EDDiscovery.Audio
             this.trackBarRH.Name = "trackBarRH";
             this.trackBarRH.Size = new System.Drawing.Size(95, 45);
             this.trackBarRH.SmallChange = 10;
-            this.trackBarRH.TabIndex = 31;
+            this.trackBarRH.TabIndex = 11;
             this.trackBarRH.TickFrequency = 50;
             this.trackBarRH.Value = 99;
             // 
@@ -154,7 +159,7 @@ namespace EDDiscovery.Audio
             this.trackBarCD.Name = "trackBarCD";
             this.trackBarCD.Size = new System.Drawing.Size(95, 45);
             this.trackBarCD.SmallChange = 10;
-            this.trackBarCD.TabIndex = 32;
+            this.trackBarCD.TabIndex = 6;
             this.trackBarCD.Value = 16;
             // 
             // trackBarED
@@ -166,7 +171,7 @@ namespace EDDiscovery.Audio
             this.trackBarED.Name = "trackBarED";
             this.trackBarED.Size = new System.Drawing.Size(196, 45);
             this.trackBarED.SmallChange = 5;
-            this.trackBarED.TabIndex = 33;
+            this.trackBarED.TabIndex = 2;
             this.trackBarED.TickFrequency = 20;
             this.trackBarED.Value = 100;
             // 
@@ -177,7 +182,7 @@ namespace EDDiscovery.Audio
             this.trackBarDE.Name = "trackBarDE";
             this.trackBarDE.Size = new System.Drawing.Size(95, 45);
             this.trackBarDE.SmallChange = 25;
-            this.trackBarDE.TabIndex = 34;
+            this.trackBarDE.TabIndex = 14;
             this.trackBarDE.TickFrequency = 5;
             this.trackBarDE.Value = 15;
             // 
@@ -189,7 +194,7 @@ namespace EDDiscovery.Audio
             this.trackBarRT.Name = "trackBarRT";
             this.trackBarRT.Size = new System.Drawing.Size(95, 45);
             this.trackBarRT.SmallChange = 25;
-            this.trackBarRT.TabIndex = 35;
+            this.trackBarRT.TabIndex = 10;
             this.trackBarRT.TickFrequency = 100;
             this.trackBarRT.Value = 50;
             // 
@@ -201,7 +206,7 @@ namespace EDDiscovery.Audio
             this.trackBarCF.Name = "trackBarCF";
             this.trackBarCF.Size = new System.Drawing.Size(95, 45);
             this.trackBarCF.SmallChange = 10;
-            this.trackBarCF.TabIndex = 42;
+            this.trackBarCF.TabIndex = 5;
             this.trackBarCF.TickFrequency = 10;
             this.trackBarCF.Value = 25;
             // 
@@ -212,7 +217,7 @@ namespace EDDiscovery.Audio
             this.trackBarEF.Name = "trackBarEF";
             this.trackBarEF.Size = new System.Drawing.Size(95, 45);
             this.trackBarEF.SmallChange = 10;
-            this.trackBarEF.TabIndex = 36;
+            this.trackBarEF.TabIndex = 1;
             this.trackBarEF.TickFrequency = 10;
             this.trackBarEF.Value = 50;
             // 
@@ -224,7 +229,7 @@ namespace EDDiscovery.Audio
             this.trackBarDG.Name = "trackBarDG";
             this.trackBarDG.Size = new System.Drawing.Size(95, 45);
             this.trackBarDG.SmallChange = 10;
-            this.trackBarDG.TabIndex = 37;
+            this.trackBarDG.TabIndex = 13;
             this.trackBarDG.TickFrequency = 10;
             this.trackBarDG.Value = -18;
             // 
@@ -236,7 +241,7 @@ namespace EDDiscovery.Audio
             this.trackBarRM.Name = "trackBarRM";
             this.trackBarRM.Size = new System.Drawing.Size(95, 45);
             this.trackBarRM.SmallChange = 10;
-            this.trackBarRM.TabIndex = 38;
+            this.trackBarRM.TabIndex = 9;
             this.trackBarRM.TickFrequency = 10;
             // 
             // trackBarCM
@@ -246,7 +251,7 @@ namespace EDDiscovery.Audio
             this.trackBarCM.Name = "trackBarCM";
             this.trackBarCM.Size = new System.Drawing.Size(95, 45);
             this.trackBarCM.SmallChange = 10;
-            this.trackBarCM.TabIndex = 39;
+            this.trackBarCM.TabIndex = 4;
             this.trackBarCM.TickFrequency = 10;
             this.trackBarCM.Value = 50;
             // 
@@ -257,7 +262,7 @@ namespace EDDiscovery.Audio
             this.trackBarEM.Name = "trackBarEM";
             this.trackBarEM.Size = new System.Drawing.Size(95, 45);
             this.trackBarEM.SmallChange = 10;
-            this.trackBarEM.TabIndex = 40;
+            this.trackBarEM.TabIndex = 0;
             this.trackBarEM.TickFrequency = 10;
             this.trackBarEM.Value = 50;
             // 
@@ -426,7 +431,7 @@ namespace EDDiscovery.Audio
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(36, 119);
+            this.label9.Location = new System.Drawing.Point(33, 116);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(40, 13);
             this.label9.TabIndex = 22;
@@ -444,7 +449,7 @@ namespace EDDiscovery.Audio
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(36, 47);
+            this.label2.Location = new System.Drawing.Point(31, 47);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
             this.label2.TabIndex = 25;
@@ -458,7 +463,7 @@ namespace EDDiscovery.Audio
             this.trackBarDW.Name = "trackBarDW";
             this.trackBarDW.Size = new System.Drawing.Size(95, 45);
             this.trackBarDW.SmallChange = 10;
-            this.trackBarDW.TabIndex = 30;
+            this.trackBarDW.TabIndex = 16;
             this.trackBarDW.TickFrequency = 200;
             this.trackBarDW.Value = 2400;
             // 
@@ -483,7 +488,7 @@ namespace EDDiscovery.Audio
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(100, 365);
+            this.label6.Location = new System.Drawing.Point(147, 361);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(57, 13);
             this.label6.TabIndex = 16;
@@ -506,7 +511,7 @@ namespace EDDiscovery.Audio
             this.trackBarGF.Name = "trackBarGF";
             this.trackBarGF.Size = new System.Drawing.Size(196, 45);
             this.trackBarGF.SmallChange = 10;
-            this.trackBarGF.TabIndex = 37;
+            this.trackBarGF.TabIndex = 18;
             this.trackBarGF.TickFrequency = 100;
             this.trackBarGF.Value = 20;
             // 
@@ -517,11 +522,11 @@ namespace EDDiscovery.Audio
             this.checkBoxG.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxG.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxG.FontNerfReduction = 0.5F;
-            this.checkBoxG.Location = new System.Drawing.Point(474, 328);
+            this.checkBoxG.Location = new System.Drawing.Point(472, 331);
             this.checkBoxG.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxG.Name = "checkBoxG";
             this.checkBoxG.Size = new System.Drawing.Size(59, 17);
-            this.checkBoxG.TabIndex = 8;
+            this.checkBoxG.TabIndex = 19;
             this.checkBoxG.Text = "Enable";
             this.checkBoxG.TickBoxReductionSize = 10;
             this.checkBoxG.UseVisualStyleBackColor = true;
@@ -534,11 +539,11 @@ namespace EDDiscovery.Audio
             this.checkBoxD.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxD.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxD.FontNerfReduction = 0.5F;
-            this.checkBoxD.Location = new System.Drawing.Point(474, 256);
+            this.checkBoxD.Location = new System.Drawing.Point(472, 262);
             this.checkBoxD.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxD.Name = "checkBoxD";
             this.checkBoxD.Size = new System.Drawing.Size(59, 17);
-            this.checkBoxD.TabIndex = 8;
+            this.checkBoxD.TabIndex = 17;
             this.checkBoxD.Text = "Enable";
             this.checkBoxD.TickBoxReductionSize = 10;
             this.checkBoxD.UseVisualStyleBackColor = true;
@@ -551,10 +556,10 @@ namespace EDDiscovery.Audio
             this.buttonExtCancel.ButtonColorScaling = 0.5F;
             this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
             this.buttonExtCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonExtCancel.Location = new System.Drawing.Point(378, 422);
+            this.buttonExtCancel.Location = new System.Drawing.Point(378, 479);
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtCancel.TabIndex = 6;
+            this.buttonExtCancel.TabIndex = 22;
             this.buttonExtCancel.Text = "Cancel";
             this.buttonExtCancel.UseVisualStyleBackColor = true;
             // 
@@ -564,10 +569,10 @@ namespace EDDiscovery.Audio
             this.buttonExtOK.BorderColorScaling = 1.25F;
             this.buttonExtOK.ButtonColorScaling = 0.5F;
             this.buttonExtOK.ButtonDisabledScaling = 0.5F;
-            this.buttonExtOK.Location = new System.Drawing.Point(472, 422);
+            this.buttonExtOK.Location = new System.Drawing.Point(472, 479);
             this.buttonExtOK.Name = "buttonExtOK";
             this.buttonExtOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtOK.TabIndex = 5;
+            this.buttonExtOK.TabIndex = 23;
             this.buttonExtOK.Text = "OK";
             this.buttonExtOK.UseVisualStyleBackColor = true;
             this.buttonExtOK.Click += new System.EventHandler(this.buttonExtOK_Click);
@@ -579,11 +584,11 @@ namespace EDDiscovery.Audio
             this.checkBoxR.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxR.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxR.FontNerfReduction = 0.5F;
-            this.checkBoxR.Location = new System.Drawing.Point(474, 187);
+            this.checkBoxR.Location = new System.Drawing.Point(472, 190);
             this.checkBoxR.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxR.Name = "checkBoxR";
             this.checkBoxR.Size = new System.Drawing.Size(59, 17);
-            this.checkBoxR.TabIndex = 8;
+            this.checkBoxR.TabIndex = 12;
             this.checkBoxR.Text = "Enable";
             this.checkBoxR.TickBoxReductionSize = 10;
             this.checkBoxR.UseVisualStyleBackColor = true;
@@ -596,7 +601,7 @@ namespace EDDiscovery.Audio
             this.checkBoxC.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxC.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxC.FontNerfReduction = 0.5F;
-            this.checkBoxC.Location = new System.Drawing.Point(474, 115);
+            this.checkBoxC.Location = new System.Drawing.Point(472, 112);
             this.checkBoxC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxC.Name = "checkBoxC";
             this.checkBoxC.Size = new System.Drawing.Size(59, 17);
@@ -613,11 +618,11 @@ namespace EDDiscovery.Audio
             this.checkBoxE.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxE.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxE.FontNerfReduction = 0.5F;
-            this.checkBoxE.Location = new System.Drawing.Point(474, 43);
+            this.checkBoxE.Location = new System.Drawing.Point(472, 43);
             this.checkBoxE.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxE.Name = "checkBoxE";
             this.checkBoxE.Size = new System.Drawing.Size(59, 17);
-            this.checkBoxE.TabIndex = 8;
+            this.checkBoxE.TabIndex = 3;
             this.checkBoxE.Text = "Enable";
             this.checkBoxE.TickBoxReductionSize = 10;
             this.checkBoxE.UseVisualStyleBackColor = true;
@@ -629,10 +634,10 @@ namespace EDDiscovery.Audio
             this.buttonExtTest.BorderColorScaling = 1.25F;
             this.buttonExtTest.ButtonColorScaling = 0.5F;
             this.buttonExtTest.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTest.Location = new System.Drawing.Point(34, 422);
+            this.buttonExtTest.Location = new System.Drawing.Point(34, 479);
             this.buttonExtTest.Name = "buttonExtTest";
             this.buttonExtTest.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtTest.TabIndex = 45;
+            this.buttonExtTest.TabIndex = 21;
             this.buttonExtTest.Text = "Test";
             this.buttonExtTest.UseVisualStyleBackColor = true;
             this.buttonExtTest.Click += new System.EventHandler(this.buttonExtTest_Click);
@@ -644,11 +649,11 @@ namespace EDDiscovery.Audio
             this.checkBoxCustomNone.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomNone.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomNone.FontNerfReduction = 0.5F;
-            this.checkBoxCustomNone.Location = new System.Drawing.Point(474, 371);
+            this.checkBoxCustomNone.Location = new System.Drawing.Point(472, 438);
             this.checkBoxCustomNone.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomNone.Name = "checkBoxCustomNone";
             this.checkBoxCustomNone.Size = new System.Drawing.Size(75, 17);
-            this.checkBoxCustomNone.TabIndex = 8;
+            this.checkBoxCustomNone.TabIndex = 20;
             this.checkBoxCustomNone.Text = "No effects";
             this.checkBoxCustomNone.TickBoxReductionSize = 10;
             this.checkBoxCustomNone.UseVisualStyleBackColor = true;
@@ -667,7 +672,7 @@ namespace EDDiscovery.Audio
             this.comboBoxCustomVoices.DropDownWidth = 150;
             this.comboBoxCustomVoices.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomVoices.ItemHeight = 13;
-            this.comboBoxCustomVoices.Location = new System.Drawing.Point(166, 422);
+            this.comboBoxCustomVoices.Location = new System.Drawing.Point(166, 479);
             this.comboBoxCustomVoices.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomVoices.Name = "comboBoxCustomVoices";
             this.comboBoxCustomVoices.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -694,10 +699,12 @@ namespace EDDiscovery.Audio
             this.panelOuter.Controls.Add(this.label9);
             this.panelOuter.Controls.Add(this.checkBoxCustomNone);
             this.panelOuter.Controls.Add(this.label15);
+            this.panelOuter.Controls.Add(this.checkBoxP);
             this.panelOuter.Controls.Add(this.checkBoxG);
             this.panelOuter.Controls.Add(this.label19);
             this.panelOuter.Controls.Add(this.checkBoxD);
             this.panelOuter.Controls.Add(this.label7);
+            this.panelOuter.Controls.Add(this.label23);
             this.panelOuter.Controls.Add(this.label3);
             this.panelOuter.Controls.Add(this.trackBarCDp);
             this.panelOuter.Controls.Add(this.label10);
@@ -709,6 +716,7 @@ namespace EDDiscovery.Audio
             this.panelOuter.Controls.Add(this.trackBarDC);
             this.panelOuter.Controls.Add(this.label11);
             this.panelOuter.Controls.Add(this.checkBoxC);
+            this.panelOuter.Controls.Add(this.label26);
             this.panelOuter.Controls.Add(this.label6);
             this.panelOuter.Controls.Add(this.trackBarRH);
             this.panelOuter.Controls.Add(this.label4);
@@ -726,6 +734,7 @@ namespace EDDiscovery.Audio
             this.panelOuter.Controls.Add(this.label24);
             this.panelOuter.Controls.Add(this.trackBarEF);
             this.panelOuter.Controls.Add(this.label1);
+            this.panelOuter.Controls.Add(this.trackBarPitch);
             this.panelOuter.Controls.Add(this.trackBarGF);
             this.panelOuter.Controls.Add(this.label13);
             this.panelOuter.Controls.Add(this.trackBarDG);
@@ -738,15 +747,61 @@ namespace EDDiscovery.Audio
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(0, 0);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(566, 466);
+            this.panelOuter.Size = new System.Drawing.Size(566, 523);
             this.panelOuter.TabIndex = 48;
+            // 
+            // trackBarPitch
+            // 
+            this.trackBarPitch.Location = new System.Drawing.Point(80, 397);
+            this.trackBarPitch.Maximum = 200;
+            this.trackBarPitch.Minimum = 50;
+            this.trackBarPitch.Name = "trackBarPitch";
+            this.trackBarPitch.Size = new System.Drawing.Size(196, 45);
+            this.trackBarPitch.TabIndex = 18;
+            this.trackBarPitch.TickFrequency = 10;
+            this.trackBarPitch.Value = 100;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(33, 397);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(31, 13);
+            this.label23.TabIndex = 20;
+            this.label23.Text = "Pitch";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(159, 429);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(42, 13);
+            this.label26.TabIndex = 16;
+            this.label26.Text = "Octave";
+            // 
+            // checkBoxP
+            // 
+            this.checkBoxP.AutoSize = true;
+            this.checkBoxP.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxP.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxP.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxP.FontNerfReduction = 0.5F;
+            this.checkBoxP.Location = new System.Drawing.Point(472, 393);
+            this.checkBoxP.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxP.Name = "checkBoxP";
+            this.checkBoxP.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxP.TabIndex = 19;
+            this.checkBoxP.Text = "Enable";
+            this.checkBoxP.TickBoxReductionSize = 10;
+            this.checkBoxP.UseVisualStyleBackColor = true;
+            this.checkBoxP.CheckedChanged += new System.EventHandler(this.checkBoxP_CheckedChanged);
             // 
             // SoundEffectsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonExtCancel;
-            this.ClientSize = new System.Drawing.Size(566, 466);
+            this.ClientSize = new System.Drawing.Size(566, 523);
             this.Controls.Add(this.panelOuter);
             this.Name = "SoundEffectsDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -768,6 +823,7 @@ namespace EDDiscovery.Audio
             ((System.ComponentModel.ISupportInitialize)(this.trackBarGF)).EndInit();
             this.panelOuter.ResumeLayout(false);
             this.panelOuter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarPitch)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -825,5 +881,9 @@ namespace EDDiscovery.Audio
         private ExtendedControls.CheckBoxCustom checkBoxCustomNone;
         private ExtendedControls.ComboBoxCustom comboBoxCustomVoices;
         private System.Windows.Forms.Panel panelOuter;
+        private ExtendedControls.CheckBoxCustom checkBoxP;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TrackBar trackBarPitch;
     }
 }

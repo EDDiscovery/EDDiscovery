@@ -141,29 +141,14 @@ namespace EDDiscovery.Actions
                     break;
                 }
 
-                System.Data.DataTable dt = new System.Data.DataTable();
-
-                try
+                string value;
+                if (!res.Eval(out value))
                 {
-                    var v = dt.Compute(res, "");
-                    Type t = v.GetType();
-                    //System.Diagnostics.Debug.WriteLine("Type return is " + t.ToString());
-                    if (v is double)
-                        res = ((double)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    else if (v is System.Decimal)
-                        res = ((System.Decimal)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    else if (v is int)
-                        res = ((int)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    else
-                        res = "NAN";
-
-                    ap.currentvars[vname] = res;
-                }
-                catch
-                {
-                    ap.ReportError("Let expression does not evaluate");
+                    ap.ReportError("Let " + value);
                     break;
                 }
+
+                ap.currentvars[vname] = value;
             }
 
             if (av.Count == 0)
@@ -171,6 +156,7 @@ namespace EDDiscovery.Actions
 
             return true;
         }
+
     }
 
     public class ActionGlobal : ActionSetLetBase
@@ -273,10 +259,10 @@ namespace EDDiscovery.Actions
     {
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Variable name", UserData.ReplaceEscapeControlChars(), "Configure DeleteVariable Command", true);
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Variable name", UserData, "Configure DeleteVariable Command");
             if (promptValue != null)
             {
-                userdata = promptValue.EscapeControlChars();
+                userdata = promptValue;
             }
 
             return (promptValue != null);
@@ -294,6 +280,7 @@ namespace EDDiscovery.Actions
                 {
                     ap.actioncontroller.DeleteVariable(v);
                     ap.currentvars.Delete(v);
+                    p.IsCharMoveOn(',');
                 }
             }
             else
@@ -301,7 +288,5 @@ namespace EDDiscovery.Actions
 
             return true;
         }
-
     }
-
 }

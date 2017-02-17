@@ -28,7 +28,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Perform command", UserData, "Configure Perform Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Perform command", UserData, "Configure Perform Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -83,6 +83,10 @@ namespace EDDiscovery.Actions
                     ap.actioncontroller.ManageAddOns();
                 else if (cmdname.Equals("editaddons"))
                     ap.actioncontroller.EditAddOnActionFile();
+                else if (cmdname.Equals("editspeechtext"))
+                    ap.actioncontroller.EditSpeechText();
+                else if (cmdname.Equals("configurewave"))
+                    ap.actioncontroller.ConfigureWave();
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");
             }

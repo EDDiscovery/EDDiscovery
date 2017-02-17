@@ -138,6 +138,8 @@ namespace EDDiscovery.Forms
         {
             if (CheckThread != null && CheckThread.IsAlive)     // can't close if its alive, it will call back nothing
                 CheckThread.Join();
+
+            font?.Dispose();
         }
 
         void ReadyToDisplay()

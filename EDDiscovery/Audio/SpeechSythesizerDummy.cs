@@ -28,7 +28,7 @@ namespace EDDiscovery.Audio
             return new string[] { };
         }
 
-        public System.IO.MemoryStream Speak(string phrase, string voice, int volume, int rate)
+        public System.IO.MemoryStream Speak(string phrase, string culture, string voice, int volume, int rate)
         {
             return null;
         }
