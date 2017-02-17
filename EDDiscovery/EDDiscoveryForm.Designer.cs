@@ -337,8 +337,7 @@ namespace EDDiscovery
             this.configureAddOnActionsToolStripMenuItem,
             this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem,
             this.stopCurrentlyRunningActionProgramToolStripMenuItem,
-            this.speechSynthesisSettingsToolStripMenuItem,
-            this.stopCurrentlyRunningActionProgramToolStripMenuItem,
+             this.stopCurrentlyRunningActionProgramToolStripMenuItem,
             this.cAPIToolStripMenuItem,
             this.soundSettingsToolStripMenuItem});
             this.addOnsToolStripMenuItem.Name = "addOnsToolStripMenuItem";
