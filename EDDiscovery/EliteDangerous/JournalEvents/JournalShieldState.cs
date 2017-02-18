@@ -40,5 +40,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             else
                 return EDDiscovery.Properties.Resources.shieldsup;
         }
+
+        public override System.Drawing.Bitmap GetIcon()
+        {
+            return ShieldsUp ? EDDiscovery.Properties.Resources.shieldsup : EDDiscovery.Properties.Resources.shieldsdown;
+        }
     }
 }

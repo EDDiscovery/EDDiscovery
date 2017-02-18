@@ -37,5 +37,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             else
                 return EDDiscovery.Properties.Resources.fighter;
         }
+
+        public override System.Drawing.Bitmap GetIcon()
+        {
+            if (To.Contains("Mothership"))
+                return EDDiscovery.Properties.Resources.mothership;
+            else
+                return EDDiscovery.Properties.Resources.fighter;
+        }
     }
 }
