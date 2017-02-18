@@ -130,7 +130,7 @@ namespace ExtendedControls
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
                 Color color1 = BorderColor;
-                Color color2 = Multiply(BorderColor, BorderColorScaling);
+                Color color2 = BorderColor.Multiply(BorderColorScaling);
 
                 GraphicsPath g1 = RectCutCorners(1, 1, ClientRectangle.Width - 2, ClientRectangle.Height - 1, 1, 1);
                 using (Pen pc1 = new Pen(color1, 1.0F))
@@ -274,8 +274,6 @@ namespace ExtendedControls
         #endregion
 
         private int lc = 1;
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         private void InitializeComponent()
         {
