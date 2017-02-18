@@ -67,7 +67,7 @@ namespace ExtendedControls
 
                 using (Graphics dgr = Graphics.FromImage(img))
                 {
-                    if (b != Color.Transparent && text.Length > 0)
+                    if (!b.IsFullyTransparent() && text.Length > 0)
                     {
                         Rectangle backarea = new Rectangle(0, 0, img.Width, img.Height);
                         using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, b.Multiply(backscale), 90))
@@ -92,7 +92,7 @@ namespace ExtendedControls
 
             using (Graphics dgr = Graphics.FromImage(img))
             {
-                if (b != Color.Transparent && text.Length > 0)
+                if (!b.IsFullyTransparent() && text.Length > 0)
                 {
                     Rectangle backarea = new Rectangle(0, 0, img.Width,img.Height);
                     using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, b.Multiply(backscale), 90))

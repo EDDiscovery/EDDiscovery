@@ -336,7 +336,7 @@ namespace EDDiscovery.UserControls
 
             if (Config(Configuration.showEDSMButton))
             {
-                Color backtext = (backcolour == Color.Transparent) ? Color.Black : backcolour;
+                Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
                 ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(45, 14), 
                                             "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM");
                 edsm.Translate(0, (rowheight - edsm.img.Height) / 2);          // align to centre of rowh..

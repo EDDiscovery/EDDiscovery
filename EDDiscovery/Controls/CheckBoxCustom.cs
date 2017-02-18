@@ -116,7 +116,7 @@ namespace ExtendedControls
                     Point pt2 = new Point(checkarea.X + checkarea.Width / 2 - 1, checkarea.Bottom - 2);
                     Point pt3 = new Point(checkarea.X + checkarea.Width - 2, checkarea.Y);
 
-                    Color c1 = Color.FromArgb(200, CheckColor.R, CheckColor.G, CheckColor.B);
+                    Color c1 = Color.FromArgb(200, CheckColor);
 
                     using (Pen pcheck = new Pen(c1, 2.0F))
                     {
