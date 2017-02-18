@@ -125,6 +125,23 @@ public static class ObjectExtensions
         return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(file), System.IO.Path.GetFileNameWithoutExtension(file) + suffix) + System.IO.Path.GetExtension(file);
     }
 
+    public static string ToStringCommaList( this System.Collections.Generic.List<string> list , int mincount = 100000)
+    {
+        string r = "";
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (i >= mincount && list[i].Length == 0)
+                break;
+
+            if (i > 0)
+                r += ", ";
+
+            r += list[i].QuoteString(comma: true);
+        }
+
+        return r;
+    }
+
     public static string ToString( this int[] a , string separ)
     {
         string outstr = "";

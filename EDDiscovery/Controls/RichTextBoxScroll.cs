@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -165,7 +166,7 @@ namespace ExtendedControls
             int textboxclienth = ClientRectangle.Height - bordersize * 2;       // border is within Client area
             int linesinbox = EstimateLinesInBox(textboxclienth);
 
-            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
+            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM.GETFIRSTVISIBLELINE, IntPtr.Zero, IntPtr.Zero));
             ScrollBar.SetValueMaximumLargeChange(firstVisibleLine, LineCount - 1, linesinbox);
 
             visibleonlayout = ScrollBar.IsScrollBarOn || DesignMode || !HideScrollBar;  // Hide must be on, or in design mode, or scroll bar is on due to values
@@ -187,7 +188,7 @@ namespace ExtendedControls
             int textboxclienth = ClientRectangle.Height - bordersize * 2;
             int linesinbox = EstimateLinesInBox(textboxclienth);
 
-            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
+            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM.GETFIRSTVISIBLELINE, IntPtr.Zero, IntPtr.Zero));
 
             //System.Diagnostics.Debug.WriteLine("Scroll State Lines: " + LineCount+ " FVL: " + firstVisibleLine + " textlines " + textboxlinesestimate);
 
@@ -222,10 +223,6 @@ namespace ExtendedControls
             return pixels;
         }
 
-        const int EM_GETFIRSTVISIBLELINE = 0x00CE;
-        const int EM_LINESCROLL = 0x00B6;
-        const int EM_GETLINECOUNT = 0x00BA;
-
         protected virtual void OnVscrollChanged(object sender, EventArgs e) // comes from TextBox, update scroll..
         {
             UpdateScrollBar();
@@ -244,14 +241,14 @@ namespace ExtendedControls
 
         private void ScrollToBar()              // from the scrollbar, scroll first line to value
         {
-            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
+            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM.GETFIRSTVISIBLELINE, IntPtr.Zero, IntPtr.Zero));
             int scrollvalue = ScrollBar.Value;
             int delta = scrollvalue - firstVisibleLine;
 
             //Console.WriteLine("Scroll Bar:" + scrollvalue + " FVL: " + firstVisibleLine + " delta " + delta);
             if (delta != 0)
             {
-                TextBox.SendMessage(EM_LINESCROLL, (IntPtr)0, (IntPtr)(scrollvalue - firstVisibleLine));
+                TextBox.SendMessage(EM.LINESCROLL, IntPtr.Zero, (IntPtr)(scrollvalue - firstVisibleLine));
             }
         }
 

@@ -37,7 +37,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Sleep time in ms:", UserData, "Set Sleep timeout");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Sleep time in ms:", UserData, "Set Sleep timeout");
 
             if (promptValue != null)
             {
@@ -83,6 +83,7 @@ namespace EDDiscovery.Actions
             t.Stop();
             System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Resume after sleep");
             apr.ResumeAfterPause();
+            t.Dispose();
         }
     }
 }
