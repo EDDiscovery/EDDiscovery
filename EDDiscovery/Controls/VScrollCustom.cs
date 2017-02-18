@@ -158,13 +158,13 @@ namespace ExtendedControls
                     return;
 
                 c1 = (mousepressed == but) ? MousePressedButtonColor : ((mouseover == but) ? MouseOverButtonColor : ThumbButtonColor);
-                c2 = (FlatStyle == FlatStyle.Popup) ? Multiply(c1, ThumbColorScaling) : c1;
+                c2 = (FlatStyle == FlatStyle.Popup) ? c1.Multiply(ThumbColorScaling) : c1;
                 angle = ThumbDrawAngle;
             }
             else
             {
                 c1 = (mousepressed == but) ? MousePressedButtonColor : ((mouseover == but) ? MouseOverButtonColor : ArrowButtonColor);
-                c2 = (FlatStyle == FlatStyle.Popup) ? Multiply(c1, ArrowColorScaling) : c1;
+                c2 = (FlatStyle == FlatStyle.Popup) ? c1.Multiply(ArrowColorScaling) : c1;
                 angle = (but == MouseOver.MouseOverUp) ? ArrowUpDrawAngle : ArrowDownDrawAngle;
             }
 
@@ -478,9 +478,6 @@ namespace ExtendedControls
             EventHandler handler = (EventHandler)Events[EVENT_VALUECHANGED];
             if (handler != null) handler(this, e);
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         #endregion
 

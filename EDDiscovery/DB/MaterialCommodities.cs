@@ -263,7 +263,7 @@ namespace EDDiscovery2.DB
                         mc = new MaterialCommodity(0, c, name, fdname, t, sn, cl, 0);
                         mc.Add(cn);
                     }               // don't change any user changed fields
-                    else if (mc.flags == 0 && (!mc.name.Equals(name) && !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || mc.colour.ToArgb() != cl.ToArgb()))
+                    else if (mc.flags == 0 && (!mc.name.Equals(name) && !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || !mc.colour.IsEqual(cl)))
                     {
                         mc.name = name;
                         mc.shortname = sn;          // So, name is there, update the others
