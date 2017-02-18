@@ -93,7 +93,7 @@ namespace ExtendedControls
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
                 Color color1 = BorderColor;
-                Color color2 = Multiply(BorderColor, BorderColorScaling);
+                Color color2 = BorderColor.Multiply(BorderColorScaling);
 
                 int hg = tb.Height + 6;
                 GraphicsPath g1 = RectCutCorners(1, 1, ClientRectangle.Width - 2, hg - 1, 1, 1);
@@ -183,9 +183,6 @@ namespace ExtendedControls
             if (oldvalue != curvalue)
                 OnValueChanged(new EventArgs());
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         #endregion
 

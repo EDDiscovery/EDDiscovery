@@ -120,7 +120,7 @@ namespace ExtendedControls
                     }
                 }
 
-                using (Brush textb = new SolidBrush((Enabled) ? this.ForeColor : Multiply(this.ForeColor, 0.5F)))
+                using (Brush textb = new SolidBrush((Enabled) ? this.ForeColor : this.ForeColor.Multiply(0.5F)))
                 {
                     StringFormat fmt = new StringFormat();
                     fmt.Alignment = StringAlignment.Near;
@@ -148,9 +148,6 @@ namespace ExtendedControls
             base.OnMouseEnter(eventargs);
             mouseover = false;
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         private bool mouseover = false;
 

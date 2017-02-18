@@ -70,7 +70,7 @@ namespace ExtendedControls
                     if (b != Color.Transparent && text.Length > 0)
                     {
                         Rectangle backarea = new Rectangle(0, 0, img.Width, img.Height);
-                        using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90))
+                        using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, b.Multiply(backscale), 90))
                             dgr.FillRectangle(bb, backarea);
 
                         dgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;   // only worth doing this if we have filled it.. if transparent, antialias does not work
@@ -95,7 +95,7 @@ namespace ExtendedControls
                 if (b != Color.Transparent && text.Length > 0)
                 {
                     Rectangle backarea = new Rectangle(0, 0, img.Width,img.Height);
-                    using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, ButtonExt.Multiply(b, backscale), 90))
+                    using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, b, b.Multiply(backscale), 90))
                         dgr.FillRectangle(bb, backarea);
 
                     dgr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias; // only if filled
@@ -125,7 +125,7 @@ namespace ExtendedControls
             using (Graphics dgr = Graphics.FromImage(img))
             {
                 Rectangle backarea = new Rectangle(0, 0, img.Width, img.Height);
-                using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, c, ButtonExt.Multiply(c, backscale), 90))
+                using (Brush bb = new System.Drawing.Drawing2D.LinearGradientBrush(backarea, c, c.Multiply(backscale), 90))
                     dgr.FillRectangle(bb, backarea);
             }
         }

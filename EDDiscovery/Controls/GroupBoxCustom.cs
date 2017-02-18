@@ -54,7 +54,7 @@ namespace ExtendedControls
 
                 if (colorback != Color.Transparent)
                 {
-                    Color color2 = (FlatStyle == FlatStyle.Popup) ? Multiply(colorback, BackColorScaling) : BackColor;
+                    Color color2 = (FlatStyle == FlatStyle.Popup) ? colorback.Multiply(BackColorScaling) : BackColor;
 
                     Rectangle borderrect = ClientRectangle;
                     if (FillClientAreaWithAlternateColor)
@@ -70,7 +70,7 @@ namespace ExtendedControls
                 if ( BorderColor != Color.Transparent )
                 {
                     Color color1 = BorderColor;
-                    Color color2 = Multiply(BorderColor, BorderColorScaling);
+                    Color color2 = BorderColor.Multiply(BorderColorScaling);
                     
                     int textlength = 0;
                     if ( this.Text != "" )
@@ -142,9 +142,5 @@ namespace ExtendedControls
             gr.AddLine(x, y + roundnessleft, x + roundnessleft, y);         // close figure manually, closing it with a break does not seem to work
             return gr;
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
-
     }
 }
