@@ -259,7 +259,7 @@ namespace EDDiscovery.Actions
     {
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Variable name", UserData, "Configure DeleteVariable Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Variable name", UserData, "Configure DeleteVariable Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
