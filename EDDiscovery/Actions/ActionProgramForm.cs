@@ -721,7 +721,7 @@ namespace EDDiscovery.Actions
             {
                 Action curact = curprog.GetStep(groups.IndexOf(g));
                 if (curact != null)
-                    ActionProgramCopyBuffer.Add(curact);
+                    ActionProgramCopyBuffer.Add(Action.CreateCopy(curact));
             }
 
             UnMark();

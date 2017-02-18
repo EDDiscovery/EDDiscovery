@@ -30,40 +30,22 @@ namespace EDDiscovery.Actions
         {
             StringParser sp = new StringParser(input);
             List<string> s = sp.NextQuotedWordList();
-            return (s != null && s.Count >= 2) ? s : null;
-        }
-
-        string ToString(List<string> list)
-        {
-            string r = "";
-            for( int i = 0; i < list.Count; i++)
-            {
-                if (i == 2 && list[i].Length == 0)
-                    break;
-
-                if (i > 0)
-                    r += ",";
-
-                r += list[i].QuoteString(comma: true);
-            }
-
-            return r;
+            return (s != null && s.Count >= 2 && s.Count <= 3) ? s : null;
         }
 
         public override string VerifyActionCorrect()
         {
-            List<string> l = FromString(userdata);
-            return (l != null) ? null : "Timer command line not in correct format";
+            return (FromString(userdata) != null) ? null : "Timer command line not in correct format";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, discoveryform.theme, "Configure Timer Dialog",
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure Timer Dialog",
                             new string[] { "TimerName", "Milliseconds", "Opt JID" }, l?.ToArray());
             if (r != null)
             {
-                userdata = ToString(r);
+                userdata = r.ToStringCommaList(2);       // min 2
             }
 
             return (r != null);
@@ -81,7 +63,7 @@ namespace EDDiscovery.Actions
         {
             List<string> ctrl = FromString(UserData);
 
-            if (ctrl != null && ctrl.Count >= 2)
+            if (ctrl != null )
             {
                 List<string> exp;
 
@@ -92,13 +74,21 @@ namespace EDDiscovery.Actions
                     {
                         HistoryEntry he = null;
                         long jid;
-                        if (exp.Count >= 3 && exp[2].InvariantParse(out jid))
+                        if (exp.Count >= 3)
                         {
-                            he = ap.actioncontroller.HistoryList.GetByJID(jid);
-
-                            if (he == null)
+                            if (exp[2].InvariantParse(out jid))
                             {
-                                ap.ReportError("Timer could not find event " + jid);
+                                he = ap.actioncontroller.HistoryList.GetByJID(jid);
+
+                                if (he == null)
+                                {
+                                    ap.ReportError("Timer could not find event " + jid);
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                ap.ReportError("Timer JID is not an integer ");
                                 return true;
                             }
                         }
@@ -131,6 +121,7 @@ namespace EDDiscovery.Actions
             ti.ap.actioncontroller.ActionRun("onTimer", "ActionProgram", ti.he, new ConditionVariables("TimerName", ti.name), now: false);    // queue at end an event
 
             timers.Remove(t);   // done with it
+            t.Dispose();
         }
     }
 }
