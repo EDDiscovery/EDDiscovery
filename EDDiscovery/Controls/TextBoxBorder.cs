@@ -41,7 +41,7 @@ namespace ExtendedControls
 
             if (m.Msg == WM_PAINT)          // Stupid control does not have a OnPaint
             {
-                if (BorderColor != Color.Transparent)
+                if (!BorderColor.IsFullyTransparent())
                 {
                     Graphics g = Parent.CreateGraphics();
 

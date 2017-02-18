@@ -74,7 +74,7 @@ namespace ExtendedControls
 
             if (ClientRectangle.Width > 0 && ClientRectangle.Height > 0)
             {
-                int bordersize = (BorderColor != Color.Transparent) ? 3 : 0;
+                int bordersize = (!BorderColor.IsFullyTransparent()) ? 3 : 0;
 
                 tb.Location = new Point(bordersize, bordersize);
                 tb.Size = new Size(ClientRectangle.Width - SpinnerSize - bordersize * 2, ClientRectangle.Height - bordersize * 2);
@@ -88,7 +88,7 @@ namespace ExtendedControls
         {
             base.OnPaint(e);
 
-            if (BorderColor != Color.Transparent)
+            if (!BorderColor.IsFullyTransparent())
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 

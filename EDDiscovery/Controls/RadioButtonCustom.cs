@@ -100,7 +100,7 @@ namespace ExtendedControls
 
                 if (Checked)
                 {
-                    Color c1 = Color.FromArgb(255, SelectedColor.R, SelectedColor.G, SelectedColor.B);
+                    Color c1 = Color.FromArgb(255, SelectedColor);
 
                     if (FlatStyle == FlatStyle.Flat)
                     {

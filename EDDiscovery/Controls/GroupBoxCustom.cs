@@ -52,7 +52,7 @@ namespace ExtendedControls
 
                 Color colorback = (FillClientAreaWithAlternateColor) ? AlternateClientBackColor : BackColor;
 
-                if (colorback != Color.Transparent)
+                if (!colorback.IsFullyTransparent())
                 {
                     Color color2 = (FlatStyle == FlatStyle.Popup) ? colorback.Multiply(BackColorScaling) : BackColor;
 
@@ -67,7 +67,7 @@ namespace ExtendedControls
                         e.Graphics.FillRectangle(b, borderrect);
                 }
 
-                if ( BorderColor != Color.Transparent )
+                if (!BorderColor.IsFullyTransparent())
                 {
                     Color color1 = BorderColor;
                     Color color2 = BorderColor.Multiply(BorderColorScaling);

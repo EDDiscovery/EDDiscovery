@@ -95,7 +95,7 @@ namespace ExtendedControls
         {
             bordersize = 0;
 
-            if (FlatStyle != FlatStyle.System && BorderColor != Color.Transparent)
+            if (FlatStyle != FlatStyle.System && !BorderColor.IsFullyTransparent())
                 bordersize = 2;
 
             int items = (Items != null) ? Items.Count() : 0;
@@ -171,7 +171,7 @@ namespace ExtendedControls
 
             Brush backb;
 
-            if ( this.SelectionBackColor != Color.Transparent)
+            if (!this.SelectionBackColor.IsFullyTransparent())
             {
                 Color c1 = SelectionBackColor;
                 if (FlatStyle == FlatStyle.Popup)
