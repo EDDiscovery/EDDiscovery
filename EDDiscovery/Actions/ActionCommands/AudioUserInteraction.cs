@@ -30,32 +30,22 @@ namespace EDDiscovery.Actions
         {
             StringParser sp = new StringParser(input);
             List<string> s = sp.NextQuotedWordList(replaceescape:true);
-            return (s != null && s.Count >=2) ? s : null;
-        }
-
-        string ToString(List<string> list)          // string in non escaped form
-        {
-            string r = "";
-            foreach (string s in list)
-                r += ((r.Length > 0) ? "," : "") + s.EscapeControlChars().QuoteString(comma: true);
-            return r;
+            return (s != null && s.Count >=1 && s.Count <= 4) ? s : null;
         }
 
         public override string VerifyActionCorrect()
         {
-            List<string> l = FromString(userdata);
-            return ( l!= null) ? null : "MessageBox command line not in correct format";
+            return (FromString(userdata) != null) ? null : "MessageBox command line not in correct format";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, discoveryform.theme, "Configure MessageBox Dialog",
-                            new string[] { "Message" , "Caption"}, l?.ToArray(), true);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure MessageBox Dialog",
+                            new string[] { "Message" , "Caption" , "Buttons", "Icon"}, l?.ToArray(), true);
+
             if (r != null)
-            {
-                userdata = ToString(r);
-            }
+                userdata = r.ToStringCommaList(1);
 
             return (r != null);
         }
@@ -64,16 +54,33 @@ namespace EDDiscovery.Actions
         {
             List<string> ctrl = FromString(UserData);
 
-            if (ctrl != null && ctrl.Count == 2)
+            if (ctrl != null)
             {
                 List<string> exp;
 
                 if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
                 {
-                    if (exp[1].Length == 0)
-                        exp[1] = "EDDiscovery Program Message";
+                    string caption = (exp.Count>=2) ? exp[1] : "EDDiscovery Program Message";
 
-                    MessageBox.Show(ap.actioncontroller.DiscoveryForm, exp[0], exp[1]);
+                    MessageBoxButtons but = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.None;
+                
+                    if (exp.Count >=3 && !Enum.TryParse<MessageBoxButtons>(exp[2], true, out but))
+                    {
+                        ap.ReportError("MessageBox button type not recognised");
+                        return true;
+                    }
+                    if (exp.Count >= 4 && !Enum.TryParse<MessageBoxIcon>(exp[3], true, out icon))
+                    {
+                        ap.ReportError("MessageBox icon type not recognised");
+                        return true;
+                    }
+
+                    DialogResult res = Forms.MessageBoxTheme.Show(ap.actioncontroller.DiscoveryForm, exp[0], caption, but, icon);
+
+                    // debug MessageBox.Show(exp[0], caption, but, icon);
+
+                    ap.currentvars["DialogResult"] = res.ToString();
                 }
                 else
                     ap.ReportError(exp[0]);
@@ -83,7 +90,6 @@ namespace EDDiscovery.Actions
 
             return true;
         }
-
     }
 
     public class ActionFileDialog : Action
@@ -92,7 +98,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Options", UserData, "Configure File Dialog");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Options", UserData, "Configure File Dialog");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -189,31 +195,22 @@ namespace EDDiscovery.Actions
         {
             StringParser sp = new StringParser(input);
             List<string> s = sp.NextQuotedWordList();
-            return (s != null && s.Count == 4) ? s : null;
-        }
-
-        string ToString(List<string> list)
-        {
-            string r = "";
-            foreach (string s in list)
-                r += ((r.Length > 0) ? "," : "") + s.QuoteString(comma: true);
-            return r;
+            return (s != null && s.Count >= 3 && s.Count <= 4) ? s : null;
         }
 
         public override string VerifyActionCorrect()
         {
-            List<string> l = FromString(userdata);
-            return (l != null && l.Count == 4) ? null : "MenuItem command line not in correct format";
+            return (FromString(userdata) != null) ? null : "MenuItem command line not in correct format";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, discoveryform.theme, "Configure MenuInput Dialog",
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure MenuInput Dialog",
                             new string[] { "MenuName", "In Menu", "Menu Text", "Icon" }, l?.ToArray());
             if ( r != null)
             {
-                userdata = ToString(r);
+                userdata = r.ToStringCommaList(); 
             }
 
             return (r != null);
@@ -223,13 +220,13 @@ namespace EDDiscovery.Actions
         {
             List<string> ctrl = FromString(UserData);
 
-            if (ctrl != null && ctrl.Count == 4)
+            if (ctrl != null)
             {
                 List<string> exp;
 
                 if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
                 {
-                    if (!ap.actioncontroller.DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], exp[3], exp[0], ap.actionfile.name))
+                    if (!ap.actioncontroller.DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count>=4) ? exp[3] : "None", exp[0], ap.actionfile.name))
                         ap.ReportError("MenuItem cannot add to menu, check menu");
                 }
                 else
@@ -250,31 +247,22 @@ namespace EDDiscovery.Actions
         {
             StringParser sp = new StringParser(input);
             List<string> s = sp.NextQuotedWordList();
-            return (s != null && s.Count == 4) ? s : null;
-        }
-
-        string ToString(List<string> list)
-        {
-            string r = "";
-            foreach (string s in list)
-                r += ((r.Length > 0) ? "," : "") + s.QuoteString(comma: true);
-            return r;
+            return (s != null && s.Count >= 2 && s.Count <= 4) ? s : null;
         }
 
         public override string VerifyActionCorrect()
         {
-            List<string> l = FromString(userdata);
-            return (l != null && l.Count == 4) ? null : " command line not in correct format";
+            return (FromString(userdata) != null) ? null : " command line not in correct format";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, discoveryform.theme, "Configure InputBox Dialog",
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure InputBox Dialog",
                             new string[] { "Caption", "Prompt List", "Default List", "Features" }, l?.ToArray());
             if (r != null)
             {
-                userdata = ToString(r);
+                userdata = r.ToStringCommaList(2);
             }
 
             return (r != null);
@@ -284,17 +272,18 @@ namespace EDDiscovery.Actions
         {
             List<string> ctrl = FromString(UserData);
 
-            if (ctrl != null && ctrl.Count == 4)
+            if (ctrl != null)
             {
                 List<string> exp;
 
                 if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
                 {
                     string[] prompts = exp[1].Split(';');
-                    string[] def = exp[2].Split(';');
+                    string[] def = (exp.Count >= 3) ? exp[2].Split(';') : null;
+                    bool multiline = (exp.Count >= 4) ? (exp[3].IndexOf("Multiline", StringComparison.InvariantCultureIgnoreCase) >= 0) : false;
 
-                    List<string> r = Forms.PromptMultiLine.ShowDialog(ap.actioncontroller.DiscoveryForm, ap.actioncontroller.DiscoveryForm.theme, exp[0],
-                                        prompts, def, exp[3].IndexOf("Multiline",StringComparison.InvariantCultureIgnoreCase) >= 0);
+                    List<string> r = Forms.PromptMultiLine.ShowDialog(ap.actioncontroller.DiscoveryForm, exp[0],
+                                        prompts, def, multiline);
 
                     ap.currentvars["InputBoxOK"] = (r != null) ? "1" : "0";
                     if ( r != null )

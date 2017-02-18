@@ -28,7 +28,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Event get command", UserData, "Configure Event Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Event get command", UserData, "Configure Event Command");
             if (promptValue != null)
             {
                 userdata = promptValue;

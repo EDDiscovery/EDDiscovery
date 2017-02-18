@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "JID of event", UserData, "Configure Ledger Command" );
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, "Configure Ledger Command" );
             if (promptValue != null)
             {
                 userdata = promptValue;

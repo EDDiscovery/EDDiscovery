@@ -289,7 +289,9 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
+#if !DEBUG
                 CheckForNewinstaller();
+#endif
             });
         }
 
@@ -1163,7 +1165,7 @@ namespace EDDiscovery
         public int ActionRun(string name, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
         { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
-        #endregion
+#endregion
 
     }
 }
