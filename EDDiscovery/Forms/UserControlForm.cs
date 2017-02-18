@@ -53,7 +53,7 @@ namespace EDDiscovery.Forms
         private bool deftopmost, deftransparent;
         private Size normalsize;
 
-        public bool IsTransparencySupported { get { return transparencycolor != Color.Transparent; } }
+        public bool IsTransparencySupported { get { return !transparencycolor.IsFullyTransparent(); } }
 
         public UserControlForm()
         {
@@ -158,7 +158,7 @@ namespace EDDiscovery.Forms
 
             Color togo;
 
-            if (beforetransparency == Color.Transparent)
+            if (beforetransparency.IsFullyTransparent())
             {
                 beforetransparency = this.BackColor;
                 tkey = this.TransparencyKey;
@@ -174,7 +174,7 @@ namespace EDDiscovery.Forms
             panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor =
                     panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor = panelTop.BackColor = togo;
 
-            System.Diagnostics.Debug.Assert(labeltransparentcolour != Color.Transparent);
+            System.Diagnostics.Debug.Assert(!labeltransparentcolour.IsFullyTransparent());
             label_index.ForeColor = labelControlText.ForeColor = (istransparent) ? labeltransparentcolour : labelnormalcolour;
 
             UserControl.SetTransparency(transparent, togo);

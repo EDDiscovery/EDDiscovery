@@ -255,7 +255,7 @@ namespace ExtendedControls
 
                 Bitmap newrender = new Bitmap(max.Width, max.Height);   // size bitmap to contents
 
-                if (FillColor != Color.Transparent)
+                if (!FillColor.IsFullyTransparent())
                 {
                     ControlHelpers.FillBitmap(newrender, FillColor);
                 }
