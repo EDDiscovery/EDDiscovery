@@ -859,7 +859,7 @@ namespace EDDiscovery
         public void Open2DMap()
         {
             this.Cursor = Cursors.WaitCursor;
-            FormSagCarinaMission frm = new FormSagCarinaMission(Controller.history.FilterByFSDAndPosition);
+            Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDAndPosition);
             frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;
