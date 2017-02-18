@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System;
@@ -87,18 +87,12 @@ namespace EDDiscovery
                 mt = (MatchType)(indexof);
                 return true;
             }
+            else if (Enum.TryParse<MatchType>(s, out mt))
+                return true;
             else
             {
-                try
-                {
-                    mt = (MatchType)Enum.Parse(typeof(MatchType), s.Replace(" ", ""));       // must work, exception otherwise
-                    return true;
-                }
-                catch
-                {
-                    mt = MatchType.Contains;
-                    return false;
-                }
+                mt = MatchType.Contains;
+                return false;
             }
         }
         

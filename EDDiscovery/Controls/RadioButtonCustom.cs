@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -100,7 +100,7 @@ namespace ExtendedControls
 
                 if (Checked)
                 {
-                    Color c1 = Color.FromArgb(255, SelectedColor.R, SelectedColor.G, SelectedColor.B);
+                    Color c1 = Color.FromArgb(255, SelectedColor);
 
                     if (FlatStyle == FlatStyle.Flat)
                     {
@@ -120,7 +120,7 @@ namespace ExtendedControls
                     }
                 }
 
-                using (Brush textb = new SolidBrush((Enabled) ? this.ForeColor : Multiply(this.ForeColor, 0.5F)))
+                using (Brush textb = new SolidBrush((Enabled) ? this.ForeColor : this.ForeColor.Multiply(0.5F)))
                 {
                     StringFormat fmt = new StringFormat();
                     fmt.Alignment = StringAlignment.Near;
@@ -148,9 +148,6 @@ namespace ExtendedControls
             base.OnMouseEnter(eventargs);
             mouseover = false;
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         private bool mouseover = false;
 

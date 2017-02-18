@@ -5,13 +5,13 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ *
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery2;
 using EDDiscovery2.DB;
@@ -215,7 +215,7 @@ namespace EDDiscovery.EliteDangerous
                 m_Watcher.Dispose();
                 m_Watcher = null;
 
-                System.Diagnostics.Trace.WriteLine("Stop Monitor on " + m_watcherfolder); 
+                System.Diagnostics.Trace.WriteLine("Stop Monitor on " + m_watcherfolder);
             }
         }
 
@@ -247,7 +247,7 @@ namespace EDDiscovery.EliteDangerous
                     }
                     else
                     {
-                        Trace.WriteLine($"No activity on {lastnfi.FileName} for 60 seconds ({lastnfi.filePos} >= {new FileInfo(lastnfi.FileName).Length} - scanning for new journals");
+//                        Trace.WriteLine($"No activity on {lastnfi.FileName} for 60 seconds ({lastnfi.filePos} >= {new FileInfo(lastnfi.FileName).Length} - scanning for new journals");
                     }
 
                     HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
