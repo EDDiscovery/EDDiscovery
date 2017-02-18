@@ -15,6 +15,7 @@
  */
 using EDDiscovery.DB;
 using EDDiscovery.Forms;
+using EDDiscovery.Win32Constants;
 using EDDiscovery2;
 using System;
 using System.Collections.Generic;
@@ -353,11 +354,6 @@ namespace EDDiscovery.Actions
                 return false;
         }
 
-
-        const int WM_KEYDOWN = 0x100;
-        const int WM_KEYCHAR = 0x102;
-        const int WM_SYSKEYDOWN = 0x104;
-
         private class ActionMessageFilter : IMessageFilter
         {
             EDDiscoveryForm discoveryform;
@@ -370,7 +366,7 @@ namespace EDDiscovery.Actions
 
             public bool PreFilterMessage(ref Message m)
             {
-                if ((m.Msg == WM_KEYDOWN || m.Msg == WM_SYSKEYDOWN) && discoveryform.CanFocus)
+                if ((m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN) && discoveryform.CanFocus)
                 {
                     Keys k = (Keys)m.WParam;
                     if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)

@@ -819,6 +819,7 @@
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Vector3.cs" />
+    <Compile Include="Win32Constants.cs" />
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

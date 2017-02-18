@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -78,9 +79,6 @@ namespace ExtendedControls
             Invalidate();           // and repaint
         }
 
-        public const int WM_SETFONT = 0x30;
-        public const int WM_FONTCHANGE = 0x1d;
-
         private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
         {
             Message message = Message.Create(this.Handle, msg, wparam, lparam);
@@ -94,8 +92,8 @@ namespace ExtendedControls
                                 ControlStyles.Opaque | ControlStyles.ResizeRedraw, (fs != FlatStyle.System));
 
             // asking for a font set seems to make it set size better during start up
-            SendMessage(WM_SETFONT, (IntPtr)this.Font.ToHfont(), (IntPtr)(-1));
-            SendMessage(WM_FONTCHANGE, IntPtr.Zero, IntPtr.Zero);
+            SendMessage(WM.SETFONT, (IntPtr)this.Font.ToHfont(), (IntPtr)(-1));
+            SendMessage(WM.FONTCHANGE, IntPtr.Zero, IntPtr.Zero);
 
             flatstyle = fs;
             CleanUp();              // start afresh
