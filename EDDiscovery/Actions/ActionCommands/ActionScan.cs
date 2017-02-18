@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Scan system name", UserData, "Configure Scan Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Scan system name", UserData, "Configure Scan Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
