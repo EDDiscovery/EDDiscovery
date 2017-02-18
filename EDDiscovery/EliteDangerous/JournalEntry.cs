@@ -1002,6 +1002,11 @@ namespace EDDiscovery.EliteDangerous
                 return (JournalEntry)Activator.CreateInstance(jtype, jo);
         }
 
+        public virtual System.Drawing.Bitmap GetIcon()
+        {
+            return GetIcon(this.EventTypeID);
+        }
+
         static public System.Drawing.Bitmap GetIcon(JournalTypeEnum eventtype, string seltext = null)    // get ICON associated with the event type.
         {
             if (JournalTypeIcons.ContainsKey(eventtype))
