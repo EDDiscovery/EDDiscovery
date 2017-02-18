@@ -28,7 +28,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Return", UserData.ReplaceEscapeControlChars(), 
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Return", UserData.ReplaceEscapeControlChars(), 
                                 "Configure Return Command" , true);
 
             if (promptValue != null)

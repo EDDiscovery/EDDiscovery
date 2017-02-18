@@ -757,7 +757,7 @@ namespace EDDiscovery2
                     {
                         if (newfile)
                         {
-                            newname = EDDiscovery.Forms.PromptSingleLine.ShowDialog(this, discoveryform.theme, "Enter name of new action file", "", "Action File");
+                            newname = EDDiscovery.Forms.PromptSingleLine.ShowDialog(this, "Enter name of new action file", "", "Action File");
 
                             if (newname != null)
                             {
