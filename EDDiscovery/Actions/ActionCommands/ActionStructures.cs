@@ -269,7 +269,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-             string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Enter integer count", UserData, "Configure Loop");
+             string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Enter integer count", UserData, "Configure Loop");
              if (promptValue != null)
                 userdata = promptValue;
 
@@ -381,7 +381,7 @@ namespace EDDiscovery.Actions
 
             if (base.ConfigurationMenu(parent, discoveryform, eventvars, ref cond))
             {
-                string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Error to display", errmsg, "Configure ErrorIf Command");
+                string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Error to display", errmsg, "Configure ErrorIf Command");
                 if (promptValue != null)
                 {
                     userdata = ToString(cond, promptValue);
@@ -474,7 +474,7 @@ namespace EDDiscovery.Actions
             ConditionVariables cond;
             FromString(UserData, out progname, out cond);
 
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Program to call (use set::prog if req)", progname, "Configure Call Command");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command");
             if (promptValue != null)
             {
                 ConditionVariablesForm avf = new ConditionVariablesForm();

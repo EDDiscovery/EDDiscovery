@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -125,12 +126,12 @@ namespace ExtendedControls
         {
             base.OnPaint(e);
 
-            if (BorderColor != Color.Transparent )
+            if (!BorderColor.IsFullyTransparent())
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
                 Color color1 = BorderColor;
-                Color color2 = Multiply(BorderColor, BorderColorScaling);
+                Color color2 = BorderColor.Multiply(BorderColorScaling);
 
                 GraphicsPath g1 = RectCutCorners(1, 1, ClientRectangle.Width - 2, ClientRectangle.Height - 1, 1, 1);
                 using (Pen pc1 = new Pen(color1, 1.0F))
@@ -160,12 +161,12 @@ namespace ExtendedControls
         {
             base.OnLayout(levent);
 
-            int bordersize = (BorderColor != Color.Transparent) ? 3 : 0;
+            int bordersize = (!BorderColor.IsFullyTransparent()) ? 3 : 0;
 
             int textboxclienth = ClientRectangle.Height - bordersize * 2;       // border is within Client area
             int linesinbox = EstimateLinesInBox(textboxclienth);
 
-            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
+            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM.GETFIRSTVISIBLELINE, IntPtr.Zero, IntPtr.Zero));
             ScrollBar.SetValueMaximumLargeChange(firstVisibleLine, LineCount - 1, linesinbox);
 
             visibleonlayout = ScrollBar.IsScrollBarOn || DesignMode || !HideScrollBar;  // Hide must be on, or in design mode, or scroll bar is on due to values
@@ -183,11 +184,11 @@ namespace ExtendedControls
 
         private void UpdateScrollBar()            // from the richtext, set the scroll bar
         {
-            int bordersize = (BorderColor != Color.Transparent) ? 3 : 0;
+            int bordersize = (!BorderColor.IsFullyTransparent()) ? 3 : 0;
             int textboxclienth = ClientRectangle.Height - bordersize * 2;
             int linesinbox = EstimateLinesInBox(textboxclienth);
 
-            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
+            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM.GETFIRSTVISIBLELINE, IntPtr.Zero, IntPtr.Zero));
 
             //System.Diagnostics.Debug.WriteLine("Scroll State Lines: " + LineCount+ " FVL: " + firstVisibleLine + " textlines " + textboxlinesestimate);
 
@@ -215,16 +216,12 @@ namespace ExtendedControls
         public int EstimateVerticalSizeFromText()
         {
             int numberlines = TextBox.Lines.Count();
-            int bordersize = (BorderColor != Color.Transparent) ? 3 : 0;
+            int bordersize = (!BorderColor.IsFullyTransparent()) ? 3 : 0;
             double fonth = GetRealFontHeight();
             int pixels = (int)( fonth * numberlines) + bordersize * 2 + 4;      // 4 extra for border area of this (bounds-client rect)
             //System.Diagnostics.Debug.WriteLine("Est Box " + numberlines + " " + bordersize + " " + fonth + " " + pixels + " " );
             return pixels;
         }
-
-        const int EM_GETFIRSTVISIBLELINE = 0x00CE;
-        const int EM_LINESCROLL = 0x00B6;
-        const int EM_GETLINECOUNT = 0x00BA;
 
         protected virtual void OnVscrollChanged(object sender, EventArgs e) // comes from TextBox, update scroll..
         {
@@ -244,14 +241,14 @@ namespace ExtendedControls
 
         private void ScrollToBar()              // from the scrollbar, scroll first line to value
         {
-            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
+            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM.GETFIRSTVISIBLELINE, IntPtr.Zero, IntPtr.Zero));
             int scrollvalue = ScrollBar.Value;
             int delta = scrollvalue - firstVisibleLine;
 
             //Console.WriteLine("Scroll Bar:" + scrollvalue + " FVL: " + firstVisibleLine + " delta " + delta);
             if (delta != 0)
             {
-                TextBox.SendMessage(EM_LINESCROLL, (IntPtr)0, (IntPtr)(scrollvalue - firstVisibleLine));
+                TextBox.SendMessage(EM.LINESCROLL, IntPtr.Zero, (IntPtr)(scrollvalue - firstVisibleLine));
             }
         }
 
@@ -274,8 +271,6 @@ namespace ExtendedControls
         #endregion
 
         private int lc = 1;
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         private void InitializeComponent()
         {

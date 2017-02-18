@@ -45,7 +45,7 @@ namespace ExtendedControls
                 {
                     Graphics mpg = Graphics.FromImage(mp);
 
-                    if (this.TextBackColor != Color.Transparent)
+                    if (!this.TextBackColor.IsFullyTransparent())
                     {
                         using (Brush b = new SolidBrush(this.TextBackColor))
                         {

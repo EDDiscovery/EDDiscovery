@@ -39,9 +39,6 @@ namespace ExtendedControls
         {
         }
 
-        private static byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public static Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
-
         private bool mouseover = false;
         private bool mousedown = false;
 
@@ -98,15 +95,15 @@ namespace ExtendedControls
 
                 if (!Enabled)
                 {
-                    back = Multiply(BackColor, 0.5F);
-                    b = new System.Drawing.Drawing2D.LinearGradientBrush(buttonarea, back, Multiply(back, ButtonColorScaling), 90);
-                    p = new Pen(Multiply(FlatAppearance.BorderColor, ButtonDisabledScaling));
+                    back = BackColor.Multiply(0.5F);
+                    b = new System.Drawing.Drawing2D.LinearGradientBrush(buttonarea, back, back.Multiply(ButtonColorScaling), 90);
+                    p = new Pen(FlatAppearance.BorderColor.Multiply(ButtonDisabledScaling));
                 }
                 else
                 {
                     back = (mousedown) ? FlatAppearance.MouseDownBackColor : ((mouseover) ? FlatAppearance.MouseOverBackColor : BackColor);
-                    b = new System.Drawing.Drawing2D.LinearGradientBrush(buttonarea, back, Multiply(back, ButtonColorScaling), 90);
-                    p = new Pen((mousedown || mouseover) ? Multiply(FlatAppearance.BorderColor, BorderColorScaling) : FlatAppearance.BorderColor);
+                    b = new System.Drawing.Drawing2D.LinearGradientBrush(buttonarea, back, back.Multiply(ButtonColorScaling), 90);
+                    p = new Pen((mousedown || mouseover) ? FlatAppearance.BorderColor.Multiply(BorderColorScaling) : FlatAppearance.BorderColor);
                 }
 
                 pe.Graphics.DrawRectangle(p, border);
@@ -130,7 +127,7 @@ namespace ExtendedControls
                 {
                     SizeF sz = pe.Graphics.MeasureString(this.Text, this.Font);
 
-                    Brush textb = new SolidBrush((Enabled) ? this.ForeColor : Multiply(this.ForeColor, 0.5F));
+                    Brush textb = new SolidBrush((Enabled) ? this.ForeColor : this.ForeColor.Multiply(0.5F));
 
                     pe.Graphics.DrawString(this.Text, this.Font, textb,
                         buttonarea.Left + (buttonarea.Width - sz.Width) / 2,

@@ -116,7 +116,7 @@ namespace EDDiscovery2._3DMap
         protected int VtxColorVboId = 0;
         protected GLControl GLContext;
 
-        private bool UsePointDataColour { get { return this.Color == Color.Transparent; } }
+        private bool UsePointDataColour { get { return this.Color.IsFullyTransparent(); } }
 
         public PointDataCollection(string name, Color color, float pointsize)       // Color Transparent to use Point Data colours.
             : base(name, color, pointsize)
@@ -429,7 +429,7 @@ namespace EDDiscovery2._3DMap
         protected int VtxColorVboId = 0;
         protected GLControl GLContext;
 
-        private bool UseLineDataColour { get { return this.Color == Color.Transparent; } }
+        private bool UseLineDataColour { get { return this.Color.IsFullyTransparent(); } }
 
         public LineDataCollection(string name, Color color, float pointsize) // Color Transparent to use Line Data colours
             : base(name, color, pointsize)

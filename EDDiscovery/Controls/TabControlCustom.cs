@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -78,9 +79,6 @@ namespace ExtendedControls
             Invalidate();           // and repaint
         }
 
-        public const int WM_SETFONT = 0x30;
-        public const int WM_FONTCHANGE = 0x1d;
-
         private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
         {
             Message message = Message.Create(this.Handle, msg, wparam, lparam);
@@ -94,8 +92,8 @@ namespace ExtendedControls
                                 ControlStyles.Opaque | ControlStyles.ResizeRedraw, (fs != FlatStyle.System));
 
             // asking for a font set seems to make it set size better during start up
-            SendMessage(WM_SETFONT, (IntPtr)this.Font.ToHfont(), (IntPtr)(-1));
-            SendMessage(WM_FONTCHANGE, IntPtr.Zero, IntPtr.Zero);
+            SendMessage(WM.SETFONT, (IntPtr)this.Font.ToHfont(), (IntPtr)(-1));
+            SendMessage(WM.FONTCHANGE, IntPtr.Zero, IntPtr.Zero);
 
             flatstyle = fs;
             CleanUp();              // start afresh
@@ -247,8 +245,8 @@ namespace ExtendedControls
             if (TabStyle == null)
                 throw new ArgumentNullException("Custom style not attached");
 
-            Color tabc1 = (Enabled) ? ((selected) ? TabSelectedColor : ((mouseover) ? TabMouseOverColor : TabNotSelectedColor)) : Multiply(TabNotSelectedColor, TabDisabledScaling);
-            Color tabc2 = (FlatStyle == FlatStyle.Popup) ? Multiply(tabc1, TabColorScaling) : tabc1;
+            Color tabc1 = (Enabled) ? ((selected) ? TabSelectedColor : ((mouseover) ? TabMouseOverColor : TabNotSelectedColor)) : TabNotSelectedColor.Multiply(TabDisabledScaling);
+            Color tabc2 = (FlatStyle == FlatStyle.Popup) ? tabc1.Multiply(TabColorScaling) : tabc1;
             Color taboutline = (selected) ? TabControlBorderColor : TabNotSelectedBorderColor;
 
             Image tabimage = null;
@@ -258,7 +256,7 @@ namespace ExtendedControls
             if (this.ImageList != null && this.TabPages[i].ImageIndex >= 0 && this.TabPages[i].ImageIndex < this.ImageList.Images.Count)
                 tabimage = this.ImageList.Images[this.TabPages[i].ImageIndex];
 
-            Color tabtextc = (Enabled) ? ((selected) ? TextSelectedColor : TextNotSelectedColor) : Multiply(TextNotSelectedColor, TabDisabledScaling);
+            Color tabtextc = (Enabled) ? ((selected) ? TextSelectedColor : TextNotSelectedColor) : TextNotSelectedColor.Multiply(TabDisabledScaling);
             TabStyle.DrawText(gr, GetTabRect(i), i, selected, tabtextc, this.TabPages[i].Text, Font , tabimage);
 
             gr.SmoothingMode = SmoothingMode.Default;
@@ -310,8 +308,6 @@ namespace ExtendedControls
         #endregion
 
         #region Helpers
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         protected override void Dispose(bool disposing)
         {

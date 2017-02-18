@@ -98,7 +98,7 @@ namespace ExtendedControls
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                using (Brush textb = new SolidBrush((Enabled) ? this.ForeColor : Multiply(this.ForeColor, 0.5F)))
+                using (Brush textb = new SolidBrush((Enabled) ? this.ForeColor : this.ForeColor.Multiply(0.5F)))
                 {
                     StringFormat fmt = new StringFormat();
                     fmt.Alignment = StringAlignment.Near;
@@ -116,7 +116,7 @@ namespace ExtendedControls
                     Point pt2 = new Point(checkarea.X + checkarea.Width / 2 - 1, checkarea.Bottom - 2);
                     Point pt3 = new Point(checkarea.X + checkarea.Width - 2, checkarea.Y);
 
-                    Color c1 = Color.FromArgb(200, CheckColor.R, CheckColor.G, CheckColor.B);
+                    Color c1 = Color.FromArgb(200, CheckColor);
 
                     using (Pen pcheck = new Pen(c1, 2.0F))
                     {
@@ -143,9 +143,6 @@ namespace ExtendedControls
             mouseover = false;
             Invalidate();
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         private bool mouseover = false;
     }
