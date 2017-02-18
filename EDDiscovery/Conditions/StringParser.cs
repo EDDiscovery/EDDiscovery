@@ -161,7 +161,7 @@ namespace EDDiscovery
 
                 ret.Add(v);
 
-                if (!IsEOL && !IsCharMoveOn(','))   // either EOL, or its a comma matey
+                if (!IsEOL && !IsCharMoveOn(','))   // either EOL, or its not a comma matey
                     return null;
 
             } while (!IsEOL);
