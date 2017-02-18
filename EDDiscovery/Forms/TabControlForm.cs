@@ -15,6 +15,7 @@
  */
 using EDDiscovery.DB;
 using EDDiscovery.UserControls;
+using EDDiscovery.Win32Constants;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -216,21 +217,6 @@ namespace EDDiscovery2
             }
         }
 
-        public const int WM_MOVE = 3;
-        public const int WM_SIZE = 5;
-        public const int WM_MOUSEMOVE = 0x200;
-        public const int WM_LBUTTONDOWN = 0x201;
-        public const int WM_LBUTTONUP = 0x202;
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int WM_NCLBUTTONUP = 0xA2;
-        public const int WM_NCMOUSEMOVE = 0xA0;
-        public const int HT_CLIENT = 0x1;
-        public const int HT_CAPTION = 0x2;
-        public const int HT_BOTTOMRIGHT = 0x11;
-        public const int WM_NCL_RESIZE = 0x112;
-        public const int HT_RESIZE = 61448;
-        public const int WM_NCHITTEST = 0x84;
-
         private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
         {
             Message message = Message.Create(this.Handle, msg, wparam, lparam);
@@ -246,7 +232,7 @@ namespace EDDiscovery2
         protected override void WndProc(ref Message m)
         {
             // Compatibility movement for Mono
-            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
+            if (m.Msg == WM.LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -256,7 +242,7 @@ namespace EDDiscovery2
                 m.Result = IntPtr.Zero;
                 this.Capture = true;
             }
-            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            else if (m.Msg == WM.MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -266,7 +252,7 @@ namespace EDDiscovery2
                 this.Update();
                 m.Result = IntPtr.Zero;
             }
-            else if (m.Msg == WM_LBUTTONUP)
+            else if (m.Msg == WM.LBUTTONUP)
             {
                 _window_dragging = false;
                 _window_dragMousePos = Point.Empty;
@@ -275,11 +261,11 @@ namespace EDDiscovery2
                 this.Capture = false;
             }
             // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM_NCHITTEST)
+            else if (m.Msg == WM.NCHITTEST)
             {
                 base.WndProc(ref m);
 
-                if ((int)m.Result == HT_CLIENT)
+                if ((int)m.Result == HT.CLIENT)
                 {
                     int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                     int y = unchecked((short)((uint)m.LParam >> 16));
@@ -287,11 +273,11 @@ namespace EDDiscovery2
 
                     if (p.X > this.ClientSize.Width - statusStripCustom1.Height && p.Y > this.ClientSize.Height - statusStripCustom1.Height)
                     {
-                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                        m.Result = (IntPtr)HT.BOTTOMRIGHT;
                     }
                     else if (!windowsborder)
                     {
-                        m.Result = (IntPtr)HT_CAPTION;
+                        m.Result = (IntPtr)HT.CAPTION;
                     }
                 }
             }

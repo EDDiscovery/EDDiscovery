@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,13 +34,11 @@ namespace ExtendedControls
         {
         }
 
-        private const int WM_PAINT = 15;
-
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
 
-            if (m.Msg == WM_PAINT)          // Stupid control does not have a OnPaint
+            if (m.Msg == WM.PAINT)          // Stupid control does not have a OnPaint
             {
                 if (BorderColor != Color.Transparent)
                 {
