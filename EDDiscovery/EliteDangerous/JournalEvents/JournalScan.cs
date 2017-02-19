@@ -80,6 +80,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nStellarMass { get; set; }                   // direct
         public double? nAbsoluteMagnitude { get; set; }             // direct
         public double? nAge { get; set; }                           // direct
+        public double? HabitableZoneInner { get; set; }             // calculated
+        public double? HabitableZoneOuter { get; set; }             // calculated
 
         // All orbiting bodies (Stars/Planets), not main star
         public double? nSemiMajorAxis;                              // direct
@@ -170,7 +172,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             nLandable = JSONHelper.GetBoolNull(evt["Landable"]);
 
             if (IsStar)
+            {
                 StarTypeID = Bodies.StarStr2Enum(StarType);
+
+                if (nRadius.HasValue && nSurfaceTemperature.HasValue)
+                {
+                    HabitableZoneInner = DistanceForBlackBodyTemperature(315);
+                    HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
+                }
+            }
             else
                 PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
 
@@ -332,11 +342,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 scanText.Append("\n" + DisplayMaterials(2) + "\n");
             }
 
-            if (IsStar)
+            if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
-                string hz = HabitableZone();
-                if ( hz != null )
-                    scanText.Append("\n" + hz);
+                StringBuilder habZone = new StringBuilder();
+                habZone.AppendFormat("Habitable Zone Approx. {0}ls to {1}ls\n", HabitableZoneInner.Value.ToString("N0"), HabitableZoneOuter.Value.ToString("N0"));
+                if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+                    habZone.AppendFormat(" (This star only, others not considered)\n");
+                scanText.Append("\n" + habZone);
             }
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
@@ -646,25 +658,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             double radius_metres = Math.Pow(top / bottom, 0.5);
             return radius_metres / 300000000;
         }
-        
-        private string HabitableZone()
-        {
-            if (nRadius.HasValue && nSurfaceTemperature.HasValue)
-            {
-                StringBuilder habZone = new StringBuilder();
-                habZone.AppendFormat("Habitable Zone Approx. {0}ls to {1}ls\n",
-                    DistanceForBlackBodyTemperature(315).ToString("N0"),
-                    DistanceForBlackBodyTemperature(223).ToString("N0"));
-                if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-                {
-                    habZone.AppendFormat(" (This star only, others not considered)\n");
-                }
-                return habZone.ToNullSafeString();
-            }
-            else
-                return null;
-        }
-
 
         public int EstimatedValue(out int low, out int high)
         {
