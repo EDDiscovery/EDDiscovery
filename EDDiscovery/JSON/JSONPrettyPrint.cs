@@ -268,15 +268,12 @@ namespace EDDiscovery
             }
         }
 
-        bool InDupList(JToken jt, string name)
+        bool InDupList(HashSet<string> names, string name)
         {
             foreach (string l in duplicatepostfixremove)
             {
-                foreach( JToken jc in jt.Children())
-                {
-                    if (jc.Path.Contains(name + l))
-                        return true;
-                }
+                if (names.Contains(name + l))
+                    return true;
             }
             return false;
         }
@@ -291,9 +288,12 @@ namespace EDDiscovery
                 JObject jo = JObject.Parse(json);  // Create a clone
                 int linelen = 0;
                 int nc = 1;
-                foreach (JToken jc in jo.Children())
+
+                HashSet<string> names = new HashSet<string>(jo.Properties().Select(p => p.Name));
+
+                foreach (JProperty jc in jo.Properties())
                 {
-                    if ( !InDupList(jo,jc.Path))
+                    if (!InDupList(names, jc.Name))
                         ExpandTokens(jc, ref outstr, ref linelen, nc, jo.Children().Count());
 
                     nc++;
