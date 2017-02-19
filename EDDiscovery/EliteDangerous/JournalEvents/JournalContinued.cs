@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     // When written: if the journal file grows to 500k lines, we write this event, close the file, and start a new one
     // Parameters:
     // •	Part: next part number
-
+    [JournalEntryType(JournalTypeEnum.Continued)]
     public class JournalContinued : JournalEntry
     {
         public JournalContinued(JObject evt ) : base(evt, JournalTypeEnum.Continued)

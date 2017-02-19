@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -64,15 +64,15 @@ namespace ExtendedControls
             if (upper.Width == 0)
                 return;
 
-            Color pcup = (Enabled) ? ((mousedown == MouseOver.MouseOverUp) ? MouseSelectedColor : ((mouseover == MouseOver.MouseOverUp) ? MouseOverColor : this.BackColor)) : Multiply(this.BackColor, 0.5F);
-            Color pcdown = (Enabled) ? ((mousedown == MouseOver.MouseOverDown) ? MouseSelectedColor : ((mouseover == MouseOver.MouseOverDown) ? MouseOverColor : this.BackColor)) : Multiply(this.BackColor, 0.5F);
+            Color pcup = (Enabled) ? ((mousedown == MouseOver.MouseOverUp) ? MouseSelectedColor : ((mouseover == MouseOver.MouseOverUp) ? MouseOverColor : this.BackColor)) : this.BackColor.Multiply(0.5F);
+            Color pcdown = (Enabled) ? ((mousedown == MouseOver.MouseOverDown) ? MouseSelectedColor : ((mouseover == MouseOver.MouseOverDown) ? MouseOverColor : this.BackColor)) : this.BackColor.Multiply(0.5F);
 
             Rectangle area = new Rectangle(0, 0, lower.Width, lower.Height + 1); // seems to make it linear paint bettwe
 
-            using (Brush b = new LinearGradientBrush(area, pcup, Multiply(pcup, BackColorScaling), 90))
+            using (Brush b = new LinearGradientBrush(area, pcup, pcup.Multiply(BackColorScaling), 90))
                 e.Graphics.FillRectangle(b, upper);
 
-            using (Brush b = new LinearGradientBrush(area, pcdown, Multiply(pcdown, BackColorScaling), 270))
+            using (Brush b = new LinearGradientBrush(area, pcdown, pcdown.Multiply(BackColorScaling), 270))
                 e.Graphics.FillRectangle(b, lower);
 
             using (Pen p = new Pen(BorderColor, 1F))
@@ -89,7 +89,7 @@ namespace ExtendedControls
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                using (Pen p = new Pen(mousedown == MouseOver.MouseOverUp ? Multiply(ForeColor, MouseSelectedColorScaling) : ForeColor))
+                using (Pen p = new Pen(mousedown == MouseOver.MouseOverUp ? ForeColor.Multiply(MouseSelectedColorScaling) : ForeColor))
                 {
                     int hoffset = upper.Width / 3;
                     int voffset = upper.Height / 3;
@@ -101,7 +101,7 @@ namespace ExtendedControls
                     e.Graphics.DrawLine(p, arrowpt2u, arrowpt3u);
                 }
 
-                using (Pen p = new Pen(mousedown == MouseOver.MouseOverDown ? Multiply(ForeColor, MouseSelectedColorScaling) : ForeColor))
+                using (Pen p = new Pen(mousedown == MouseOver.MouseOverDown ? ForeColor.Multiply(MouseSelectedColorScaling) : ForeColor))
                 {
                     int hoffset = lower.Width / 3;
                     int voffset = lower.Height / 3;
@@ -202,9 +202,6 @@ namespace ExtendedControls
             if (Selected != null)
                 Selected(this, mouseargs);
         }
-        
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         #endregion
 

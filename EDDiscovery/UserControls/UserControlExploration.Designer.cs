@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 namespace EDDiscovery
 {
@@ -67,7 +67,7 @@ namespace EDDiscovery
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewExplore = new System.Windows.Forms.DataGridView();
-            this.ColumnSystemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSystemName = new ExtendedControls.AutoCompleteDGVColumn();
             this.ColumnDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -422,7 +422,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripButton toolStripButtonLoad;
         private ExtendedControls.TextBoxBorder textBoxFileName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystemName;
+        private ExtendedControls.AutoCompleteDGVColumn ColumnSystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDist;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnY;

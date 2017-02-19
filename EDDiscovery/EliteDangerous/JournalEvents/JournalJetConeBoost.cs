@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when enough material has been collected from a solar jet code (at a white dwarf or neutron star) for a jump boost
     //Parameters:
     //•	BoostValue
+    [JournalEntryType(JournalTypeEnum.JetConeBoost)]
     public class JournalJetConeBoost : JournalEntry
     {
         public JournalJetConeBoost(JObject evt ) : base(evt, JournalTypeEnum.JetConeBoost)

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -24,6 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Blueprint: blueprint being applied
     //•	Level: crafting level
     //•	Override: whether overriding special effect
+    [JournalEntryType(JournalTypeEnum.EngineerApply)]
     public class JournalEngineerApply : JournalEntry
     {
         public JournalEngineerApply(JObject evt ) : base(evt, JournalTypeEnum.EngineerApply)

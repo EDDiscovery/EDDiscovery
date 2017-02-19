@@ -1,6 +1,22 @@
-﻿using CSCore;
+﻿/*
+ * Copyright © 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using CSCore;
 using CSCore.CoreAudioAPI;
 using CSCore.SoundOut;
+using CSCore.Streams;
 using CSCore.Streams.Effects;
 using System;
 using System.Collections.Generic;
@@ -71,18 +87,25 @@ namespace EDDiscovery.Audio
             }
         }
 
-        public Object Generate(System.IO.Stream audioms, ConditionVariables effects)
+        public Object Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
         {
             try
             {
                 audioms.Position = 0;
                 IWaveSource s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
+
+                if ( ensureaudio )
+                    s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
+
                 ApplyEffects(ref s, effects);
                 return s;
             }
             catch
             {
-                return null;
+                if (ensureaudio)
+                    return new NullWaveSource(5);
+                else
+                    return null;
             }
         }
 
@@ -130,6 +153,13 @@ namespace EDDiscovery.Audio
                 {
                     src = src.AppendSource(x => new DmoEchoEffect(x) { WetDryMix = ap.echomix, Feedback = ap.echofeedback, LeftDelay = ap.echodelay, RightDelay = ap.echodelay });
                 }
+
+                if ( ap.pitchshiftenabled )
+                {
+                    ISampleSource srs = src.ToSampleSource();
+                    srs = srs.AppendSource(x => new PitchShifter(x) { PitchShiftFactor = ((float)ap.pitchshift)/100.0F });
+                    src = srs.ToWaveSource();
+                }
             }
         }
     }
@@ -151,11 +181,14 @@ namespace EDDiscovery.Audio
         public override int Read(byte[] buffer, int offset, int count)
         {
             int read = BaseSource.Read(buffer, offset, count);      // want count, stored at offset
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString() + " At " + offset + " Read " + count);
 
             if (read < count)
             {
                 int left = count - read;      // what is left
                 int totake = Math.Min(left, (int)extrabytes);
+
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString() + " read " + read + " left " + left + " extend " + totake + " left " + (extrabytes - totake));
 
                 if (totake > 0)
                 {
@@ -170,5 +203,51 @@ namespace EDDiscovery.Audio
         }
     }
 
+    public class NullWaveSource : IWaveSource  // empty audio
+    {
+        long pos = 0;
+        long totalbytes = 0;
+        private readonly WaveFormat _waveFormat;
 
+        public NullWaveSource(int ms) 
+        {
+            _waveFormat = new WaveFormat(44100,16, 1, AudioEncoding.Pcm);
+            totalbytes = _waveFormat.MillisecondsToBytes(ms);
+        }
+
+        public WaveFormat WaveFormat
+        {
+            get { return _waveFormat; }
+        }
+
+
+        public int Read(byte[] buffer, int offset, int count)
+        {
+            if ( pos < totalbytes)
+            {
+                int totake = Math.Min(count, (int)(totalbytes - pos));
+
+                if ( totake > 0 )
+                {
+                    Array.Clear(buffer, offset , totake);     // at offset+read, clear down to zero the extra bytes
+                }
+
+                pos += totake;
+                return totake;
+            }
+
+            return 0;
+        }
+
+        public long Length { get { return totalbytes; } set { } }
+        public long Position { get { return pos; } set { } }
+        public bool CanSeek
+        {
+            get { return false; }
+        }
+
+        public void Dispose()
+        {
+        }
+    }
 }

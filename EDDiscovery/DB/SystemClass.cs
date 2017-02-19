@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery2;
 using EDDiscovery2.DB;
@@ -1987,8 +1987,16 @@ namespace EDDiscovery.DB
         public static List<string> ReturnSystemListForAutoComplete(string input, Object ctrl)
         {
             List<string> ret = new List<string>();
+            ret.AddRange(ReturnOnlyGalMapListForAutoComplete(input, ctrl));
+            ret.AddRange(ReturnOnlySystemsListForAutoComplete(input, ctrl));
+            return ret;
+        }
 
-            if (input.Length > 0)
+        public static List<string> ReturnOnlyGalMapListForAutoComplete(string input, Object ctrl)
+        {
+            List<string> ret = new List<string>();
+
+            if (input != null && input.Length > 0)
             {
                 lock (AutoCompleteAdditionalList)
                 {
@@ -1998,7 +2006,15 @@ namespace EDDiscovery.DB
                             ret.Add(other);
                     }
                 }
+            }
+            return ret;
+        }
 
+        public static List<string> ReturnOnlySystemsListForAutoComplete(string input, Object ctrl)
+        {
+            List<string> ret = new List<string>();
+            if (input != null && input.Length > 0)
+            {
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("SELECT Name,EdsmId FROM SystemNames WHERE Name>=@first AND Name<=@second LIMIT 1000"))
@@ -2016,7 +2032,6 @@ namespace EDDiscovery.DB
                     }
                 }
             }
-
             return ret;
         }
 

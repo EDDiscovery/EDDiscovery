@@ -257,6 +257,7 @@
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Conditions\ConditionVariables.cs" />
+    <Compile Include="Controls\AutoCompleteDGV.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -290,6 +291,8 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
+    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
+    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>
@@ -303,6 +306,13 @@
     <Compile Include="Forms\ImportSphere.Designer.cs">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MessageBoxTheme.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MessageBoxTheme.Designer.cs">
+      <DependentUpon>MessageBoxTheme.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PromptDialogs.cs" />
     <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="PopOutControl.cs" />
@@ -810,6 +820,7 @@
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Vector3.cs" />
+    <Compile Include="Win32Constants.cs" />
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -850,6 +861,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MessageBoxTheme.resx">
+      <DependentUpon>MessageBoxTheme.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
@@ -1311,6 +1325,7 @@
       <ZipFiles Include="$(ProjectDir)\App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
+      <ZipFiles Include="$(OutputPath)\CSCore.dll" />
       <ZipFiles Include="$(OutputPath)\fround.js" />
       <ZipFiles Include="$(OutputPath)\trilateration.js" />
       <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />

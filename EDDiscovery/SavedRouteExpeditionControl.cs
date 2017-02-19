@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -28,6 +28,7 @@ using System.IO;
 using EMK.LightGeometry;
 using EDDiscovery.EDSM;
 using EDDiscovery2;
+using ExtendedControls;
 
 namespace EDDiscovery
 {
@@ -130,6 +131,7 @@ namespace EDDiscovery
         {
             InitializeComponent();
             _currentRoute = new SavedRouteClass("");
+            SystemName.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -555,18 +557,6 @@ namespace EDDiscovery
             }
         }
 
-        private void dataGridViewRouteSystems_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            var textbox = (TextBox)e.Control;
-            if (dataGridViewRouteSystems.CurrentCell.ColumnIndex != 0)
-            {
-                textbox.AutoCompleteMode = AutoCompleteMode.None;
-                return;
-            }
-
-            //TBD this used to have an autocomplete, but now we don't have systemnames we are lacking it
-        }
-
         private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button.HasFlag(MouseButtons.Left))
@@ -956,11 +946,12 @@ namespace EDDiscovery
             if (obj == null)
                 return;
             SystemClass sc = SystemClass.GetSystem((string)obj);
-            if (sc == null) {
+            if (sc == null)
+            {
                 MessageBox.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
-                return;
             }
-            RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
+            else
+                RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
         }
     }
 }

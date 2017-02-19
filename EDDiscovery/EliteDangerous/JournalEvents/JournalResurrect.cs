@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -23,7 +23,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Option: the option selected on the insurance rebuy screen
     //•	Cost: the price paid
     //•	Bankrupt: whether the commander declared bankruptcy
-    public class JournalResurrect : JournalEntry
+    [JournalEntryType(JournalTypeEnum.Resurrect)]
+    public class JournalResurrect : JournalEntry, ILedgerJournalEntry
     {
         public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
         {

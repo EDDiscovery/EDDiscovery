@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 namespace EDDiscovery2.Forms
 {
@@ -128,7 +128,7 @@ namespace EDDiscovery2.Forms
             this.labelNoAffiliation.Name = "labelNoAffiliation";
             this.labelNoAffiliation.Size = new System.Drawing.Size(288, 13);
             this.labelNoAffiliation.TabIndex = 2;
-            this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Fronter Developments plc.";
+            this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Frontier Developments plc.";
             // 
             // panelLinks
             // 

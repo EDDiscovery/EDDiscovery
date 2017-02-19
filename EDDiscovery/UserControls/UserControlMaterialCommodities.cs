@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -119,10 +119,9 @@ namespace EDDiscovery.UserControls
 
                 for (int i = 0; i < dataGridViewMC.Rows.Count; i++)
                 {
-                    MaterialCommodities rowmc = dataGridViewMC.Rows[i].Tag as MaterialCommodities;
-
-                    if (rowmc != null)
+                    if (dataGridViewMC.Rows[i].Tag != null && dataGridViewMC.Rows[i].Tag is MaterialCommodities)
                     {
+                        MaterialCommodities rowmc = (MaterialCommodities)dataGridViewMC.Rows[i].Tag;
                         mcorig[rowmc.fdname] = rowmc;
                     }
                 }
@@ -140,7 +139,9 @@ namespace EDDiscovery.UserControls
                 {
                     if (mcorig[m.fdname].count != m.count)
                     {
-                        mcchanges[m.fdname].count += m.count - mcorig[m.fdname].count;
+                        MaterialCommodities mcc = mcchanges[m.fdname];
+                        mcc.count += m.count - mcorig[m.fdname].count;
+                        mcchanges[m.fdname] = mcc;
                     }
                 }
 
@@ -334,14 +335,14 @@ namespace EDDiscovery.UserControls
 
         private void ResetCombo()
         {
-            List<MaterialCommodities> list = MaterialCommodities.GetMaterialsCommoditiesList;
+            List<MaterialCommodity> list = MaterialCommodity.GetMaterialsCommoditiesList;
             comboBoxCustomAdd.Items.Clear();
             mclist.Clear();
-            foreach (MaterialCommodities mc in list)
+            foreach (MaterialCommodity mc in list)
             {
-                if (!mc.category.Equals(MaterialCommodities.CommodityCategory) == materials)
+                if (!mc.category.Equals(MaterialCommodity.CommodityCategory) == materials)
                 {
-                    mclist.Add(mc);
+                    mclist.Add(new MaterialCommodities(mc));
                     comboBoxCustomAdd.Items.Add(mc.name);
                 }
             }
@@ -370,18 +371,25 @@ namespace EDDiscovery.UserControls
 
             for (int i = 0; i < dataGridViewMC.Rows.Count; i++)
             {
-                MaterialCommodities mc = dataGridViewMC.Rows[i].Tag as MaterialCommodities;
+                object tag = dataGridViewMC.Rows[i].Tag;
                 string name = (string)dataGridViewMC.Rows[i].Cells[namecol].Value;
-                string abv = (abvcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[abvcol].Value : mc?.shortname ?? "";
-                string cat = (catcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[catcol].Value : mc?.category ?? (materials ? MaterialCommodities.MaterialRawCategory : MaterialCommodities.CommodityCategory);
                 string type = (string)dataGridViewMC.Rows[i].Cells[typecol].Value;
+                string abv = (abvcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[abvcol].Value : "";
+                string cat = (catcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[catcol].Value : (materials ? MaterialCommodities.MaterialRawCategory : MaterialCommodities.CommodityCategory);
 
-                if (mc != null)
+                if (tag != null && tag is MaterialCommodities)
                 {
+                    MaterialCommodities mc = (MaterialCommodities)tag;
+
+                    if (abvcol < 0)
+                        abv = mc.shortname ?? "";
+                    if (catcol < 0)
+                        cat = mc.category ?? (materials ? MaterialCommodities.MaterialRawCategory : MaterialCommodities.CommodityCategory);
+
                     if (updatedb && (mc.name != name || mc.shortname != abv || mc.category != cat || mc.type != type))
                     {
                         //System.Diagnostics.Debug.WriteLine("Row " + i + " changed text");
-                        MaterialCommodities.ChangeDbText(mc.fdname, name, abv, cat, type);
+                        MaterialCommodity.ChangeDbText(mc.fdname, name, abv, cat, type);
                         dbupdated = true;
                     }
 
@@ -399,7 +407,7 @@ namespace EDDiscovery.UserControls
 
                     if (mc.count != numvalue || pricechange)
                     {
-                        mcchange.Add(new MaterialCommodities(0, mc.category, mc.name, mc.fdname, mc.type, mc.shortname, Color.Red, 0, numvalue, (pricechange) ? price : 0));
+                        mcchange.Add(new MaterialCommodities(new MaterialCommodity(0, mc.category, mc.name, mc.fdname, mc.type, mc.shortname, Color.Red, 0), 0, numvalue, (pricechange) ? price : 0));
                         //System.Diagnostics.Debug.WriteLine("Row " + i + " changed number");
                     }
                 }
@@ -417,7 +425,7 @@ namespace EDDiscovery.UserControls
 
                     if (numok && cat.Length > 0 && name.Length > 0)
                     {
-                        mcchange.Add(new MaterialCommodities(0, cat, name, fdname, type, abv, Color.Red, 0, numvalue, price));
+                        mcchange.Add(new MaterialCommodities(new MaterialCommodity(0, cat, name, fdname, type, abv, Color.Red, 0), 0, numvalue, price));
                     }
                 }
             }

@@ -11,8 +11,9 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,22 +34,20 @@ namespace ExtendedControls
         {
         }
 
-        private const int WM_PAINT = 15;
-
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
 
-            if (m.Msg == WM_PAINT)          // Stupid control does not have a OnPaint
+            if (m.Msg == WM.PAINT)          // Stupid control does not have a OnPaint
             {
-                if (BorderColor != Color.Transparent)
+                if (!BorderColor.IsFullyTransparent())
                 {
                     Graphics g = Parent.CreateGraphics();
 
                     Rectangle clientborder = new Rectangle(Location.X - BorderOffset, Location.Y - BorderOffset, ClientRectangle.Width + BorderOffset*2, ClientRectangle.Height + BorderOffset*2);
 
                     Color color1 = BorderColor;
-                    Color color2 = Multiply(BorderColor, BorderColorScaling);
+                    Color color2 = BorderColor.Multiply(BorderColorScaling);
                     
                     GraphicsPath g1 = RectCutCorners(clientborder.X + 1, clientborder.Y+1, clientborder.Width - 2, clientborder.Height - 1, 1, 1);
                     using (Pen pc1 = new Pen(color1, 1.0F))
@@ -74,9 +73,6 @@ namespace ExtendedControls
             gr.AddLine(x, y + roundnessleft, x + roundnessleft, y);         // close figure manually, closing it with a break does not seem to work
             return gr;
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
     }
 
 }

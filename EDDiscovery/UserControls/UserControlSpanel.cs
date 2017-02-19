@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 // DEFINE this, allows you to click on an entry to make the scan change
@@ -336,11 +336,11 @@ namespace EDDiscovery.UserControls
 
             if (Config(Configuration.showEDSMButton))
             {
-                Color backtext = (backcolour == Color.Transparent) ? Color.Black : backcolour;
+                Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
                 ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(45, 14), 
                                             "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM");
                 edsm.Translate(0, (rowheight - edsm.img.Height) / 2);          // align to centre of rowh..
-                edsm.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, ExtendedControls.ButtonExt.Multiply(textcolour, 1.2F), 0.5F, true), edsm.pos, true);
+                edsm.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
             }
 
             string tooltip = he.EventSummary + Environment.NewLine + he.EventDescription + Environment.NewLine + he.EventDetailedInfo;

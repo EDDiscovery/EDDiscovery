@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
@@ -258,6 +258,7 @@ namespace EDDiscovery.EliteDangerous
     [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmID} JID {Id} C {CommanderId}")]
     public abstract class JournalEntry
     {
+        #region Instance properties and fields
         public long Id;                          // this is the entry ID
         public long TLUId;                       // this ID of the journal tlu (aka TravelLogId)
         public int CommanderId;                 // commander Id of entry
@@ -279,6 +280,75 @@ namespace EDDiscovery.EliteDangerous
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
+        #endregion
+
+        #region Static properties and fields
+        private static Dictionary<JournalTypeEnum, Func<string, System.Drawing.Bitmap>> JournalTypeIcons = GetJournalTypeIcons();
+        private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();
+        #endregion
+
+        /// <summary>
+        /// Gets all of the journal type icons
+        /// </summary>
+        /// <returns>Map of journal type icon accessors</returns>
+        private static Dictionary<JournalTypeEnum, Func<string, System.Drawing.Bitmap>> GetJournalTypeIcons()
+        {
+            Dictionary<JournalTypeEnum, Func<string, System.Drawing.Bitmap>> icons = new Dictionary<JournalTypeEnum, Func<string, System.Drawing.Bitmap>>();
+            var asm = System.Reflection.Assembly.GetExecutingAssembly();
+            var types = asm.GetTypes().Where(t => typeof(JournalEntry).IsAssignableFrom(t) && !t.IsAbstract).ToList();
+
+            foreach (Type type in types)
+            {
+                JournalEntryTypeAttribute typeattrib = type.GetCustomAttributes(false).OfType<JournalEntryTypeAttribute>().FirstOrDefault();
+                if (typeattrib != null)
+                {
+                    System.Drawing.Bitmap defbmp = EDDiscovery.Properties.Resources.genericevent;
+                    Func<string, System.Drawing.Bitmap> bmpfunc = (d) => defbmp;
+
+                    System.Reflection.MethodInfo mi = type.GetMethod("SelectIcon");
+                    if (mi != null)
+                    {
+                        var p = System.Linq.Expressions.Expression.Parameter(typeof(string));
+                        bmpfunc = System.Linq.Expressions.Expression.Lambda<Func<string, System.Drawing.Bitmap>>(System.Linq.Expressions.Expression.Call(mi, p), p).Compile();
+                    }
+                    else
+                    {
+                        System.Reflection.PropertyInfo pi = type.GetProperty("Icon");
+                        if (pi != null)
+                        {
+                            System.Drawing.Bitmap bmp = (System.Drawing.Bitmap)pi.GetValue(null);
+                            bmpfunc = (d) => bmp;
+                        }
+                    }
+
+                    icons[typeattrib.EntryType] = bmpfunc;
+                }
+            }
+
+            return icons;
+        }
+
+        /// <summary>
+        /// Gets the mapping of journal type value to JournalEntry type
+        /// </summary>
+        /// <returns>Map of type values to types</returns>
+        private static Dictionary<JournalTypeEnum, Type> GetJournalEntryTypes()
+        {
+            Dictionary<JournalTypeEnum, Type> typedict = new Dictionary<JournalTypeEnum, Type>();
+            var asm = System.Reflection.Assembly.GetExecutingAssembly();
+            var types = asm.GetTypes().Where(t => typeof(JournalEntry).IsAssignableFrom(t) && !t.IsAbstract).ToList();
+
+            foreach (Type type in types)
+            {
+                JournalEntryTypeAttribute typeattrib = type.GetCustomAttributes(false).OfType<JournalEntryTypeAttribute>().FirstOrDefault();
+                if (typeattrib != null)
+                {
+                    typedict[typeattrib.EntryType] = type;
+                }
+            }
+
+            return typedict;
+        }
 
         /// <summary>
         /// Normalize commodity names for MiningRefined, MissionAccepted, and MissionCompleted entries.
@@ -888,6 +958,18 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        static public Type TypeOfJournalEntry(JournalTypeEnum type)
+        {
+            if (JournalEntryTypes.ContainsKey(type))
+            {
+                return JournalEntryTypes[type];
+            }
+            else
+            {
+                return TypeOfJournalEntry(type.ToString());
+            }
+        }
+
         static public Type TypeOfJournalEntry(string text)
         {
             //foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum))) // check code only to make sure names match
@@ -920,9 +1002,19 @@ namespace EDDiscovery.EliteDangerous
                 return (JournalEntry)Activator.CreateInstance(jtype, jo);
         }
 
-        static public System.Drawing.Bitmap GetIcon(string eventtypestr, string seltext = null)    // get ICON associated with the event type.
+        public virtual System.Drawing.Bitmap GetIcon()
         {
-            Type jtype = TypeOfJournalEntry(eventtypestr);
+            return GetIcon(this.EventTypeID);
+        }
+
+        static public System.Drawing.Bitmap GetIcon(JournalTypeEnum eventtype, string seltext = null)    // get ICON associated with the event type.
+        {
+            if (JournalTypeIcons.ContainsKey(eventtype))
+            {
+                return JournalTypeIcons[eventtype].Invoke(seltext);
+            }
+
+            Type jtype = TypeOfJournalEntry(eventtype);
 
             if (jtype == null)
             {
@@ -1134,7 +1226,7 @@ namespace EDDiscovery.EliteDangerous
                 }
                 else
                 {
-                    Type jtype = TypeOfJournalEntry(n);
+                    Type jtype = TypeOfJournalEntry(jte);
 
                     if (jtype != null)      // may be null, Unknown for instance
                     {

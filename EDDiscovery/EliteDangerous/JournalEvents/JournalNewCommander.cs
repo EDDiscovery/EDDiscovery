@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name: (new) commander name
     //•	Package: selected starter package
+    [JournalEntryType(JournalTypeEnum.NewCommander)]
     public class JournalNewCommander : JournalEntry
     {
         public JournalNewCommander(JObject evt ) : base(evt, JournalTypeEnum.NewCommander)

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -45,7 +45,7 @@ namespace ExtendedControls
                 {
                     Graphics mpg = Graphics.FromImage(mp);
 
-                    if (this.TextBackColor != Color.Transparent)
+                    if (!this.TextBackColor.IsFullyTransparent())
                     {
                         using (Brush b = new SolidBrush(this.TextBackColor))
                         {
