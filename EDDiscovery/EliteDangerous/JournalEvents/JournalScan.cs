@@ -62,6 +62,70 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     [JournalEntryType(JournalTypeEnum.Scan)]
     public class JournalScan : JournalEntry
     {
+        public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
+
+        // ALL
+        public string BodyName { get; set; }                        // direct (meaning no translation)
+        public double DistanceFromArrivalLS { get; set; }           // direct
+        public double? nRotationPeriod { get; set; }                // direct
+        public double? nSurfaceTemperature { get; set; }            // direct
+        public double? nRadius { get; set; }                        // direct
+        public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
+        public StarPlanetRing[] Rings { get; set; }
+
+        // STAR
+        public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc
+        public EDStar StarTypeID { get; }                           // star type -> identifier
+        public string StarTypeText { get { return IsStar ? GetStarTypeImage().Item2 : ""; } }   // Long form star name, from StarTypeID
+        public double? nStellarMass { get; set; }                   // direct
+        public double? nAbsoluteMagnitude { get; set; }             // direct
+        public double? nAge { get; set; }                           // direct
+
+        // All orbiting bodies (Stars/Planets), not main star
+        public double? nSemiMajorAxis;                              // direct
+        public double? nEccentricity;                               // direct    
+        public double? nOrbitalInclination;                         // direct
+        public double? nPeriapsis;                                  // direct    
+        public double? nOrbitalPeriod { get; set; }                 // direct    
+
+        // Planets
+        public string PlanetClass { get; set; }                     // planet class, direct
+        public EDPlanet PlanetTypeID { get; }                       // planet class -> ID
+        public bool? nTidalLock { get; set; }                       // direct
+        public string TerraformState { get; set; }                  // direct, can be empty or a string
+        public string Atmosphere { get; set; }                      // direct from journal, if not there or blank, tries AtmosphereType (Earthlikes)
+        public EDAtmosphereType AtmosphereID { get; }               // Atmosphere -> ID (Ammonia, Carbon etc)
+        public EDAtmosphereProperty AtmosphereProperty;             // Atomsphere -> Property (None, Rich, Thick , Thin, Hot)
+        public string Volcanism { get; set; }                       // direct from journal
+        public EDVolcanism VolcanismID { get; }                     // Volcanism -> ID (Water_Magma, Nitrogen_Magma etc)
+        public EDVolcanismProperty VolcanismProperty;               // Volcanism -> Property (None, Major, Minor)
+        public double? nSurfaceGravity { get; set; }                // direct
+        public double? nSurfacePressure { get; set; }               // direct
+        public bool? nLandable { get; set; }                        // direct
+        public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
+        public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
+        public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
+        public Dictionary<string, double> Materials { get; set; }   
+
+        // Classes
+
+        public class StarPlanetRing
+        {
+            public string Name;
+            public string RingClass;
+            public double MassMT;
+            public double InnerRad;
+            public double OuterRad;
+        }
+
+        public bool IsEDSMBody
+        {
+            get
+            {
+                return JSONHelper.GetBool(jEventData["EDDFromEDSMBodie"], false);
+            }
+        }
+
         private const double solarRadius_m = 695700000;
         private const double oneAU_m = 149597870000;
         private const double oneDay_s = 86400;
@@ -91,13 +155,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             nTidalLock = JSONHelper.GetBoolNull(evt["TidalLock"]);
             TerraformState = JSONHelper.GetStringNull(evt["TerraformState"]);
             PlanetClass = JSONHelper.GetStringNull(evt["PlanetClass"]);
+
             Atmosphere = JSONHelper.GetStringNull(evt["Atmosphere"]);
+            if ( Atmosphere == null || Atmosphere.Length == 0 )             // Earthlikes appear to have empty atmospheres but AtmosphereType
+                Atmosphere = JSONHelper.GetStringNull(evt["AtmosphereType"]);
+
+            AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
             Volcanism = JSONHelper.GetStringNull(evt["Volcanism"]);
+            VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
             nMassEM = JSONHelper.GetDoubleNull(evt["MassEM"]);
             nSurfaceGravity = JSONHelper.GetDoubleNull(evt["SurfaceGravity"]);
             nSurfaceTemperature = JSONHelper.GetDoubleNull(evt["SurfaceTemperature"]);
             nSurfacePressure = JSONHelper.GetDoubleNull(evt["SurfacePressure"]);
             nLandable = JSONHelper.GetBoolNull(evt["Landable"]);
+
+            if (IsStar)
+                StarTypeID = Bodies.StarStr2Enum(StarType);
+            else
+                PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
 
             JToken mats = (JToken)evt["Materials"];
 
@@ -116,17 +191,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     }
                 }
             }
-
-
-
-            if (IsStar)
-                StarTypeID = Bodies.StarStr2Enum(StarType);
-            else
-                PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
-
-
-            AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
-            VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
         }
 
 
@@ -137,69 +201,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             throw new NotImplementedException();
         }
 
-        public string BodyName { get; set; }
-        public double DistanceFromArrivalLS { get; set; }
-        public string StarType { get; set; }                            // null if no StarType
-        public string StarTypeText { get { return IsStar ? GetStarTypeImage().Item2 : ""; } }
-        public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
-
-        public double? nAge { get; set; }
-        public double? nStellarMass { get; set; }
-        public double? nRadius { get; set; }
-        public double? nAbsoluteMagnitude { get; set; }
-        public double? nRotationPeriod { get; set; }
-
-        public double? nOrbitalPeriod { get; set; }
-        public double? nSemiMajorAxis;
-        public double? nEccentricity;
-        public double? nOrbitalInclination;
-        public double? nPeriapsis;
-
-        public EDStar StarTypeID { get; }
-        public EDPlanet PlanetTypeID { get; }
-
-        public EDAtmosphereType AtmosphereID { get; }
-        public EDAtmosphereProperty AtmosphereProperty;
-        public EDVolcanism VolcanismID { get; }
-        public EDVolcanismProperty VolcanismProperty;
-
-        public class StarPlanetRing
-        {
-            public string Name;
-            public string RingClass;
-            public double MassMT;
-            public double InnerRad;
-            public double OuterRad;
-        }
-
-        public StarPlanetRing[] Rings { get; set; }
-        public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
-
-        public bool? nTidalLock { get; set; }
-        public string TerraformState { get; set; }
-        public string PlanetClass { get; set; }
-        public string Atmosphere { get; set; }
-        public string Volcanism { get; set; }
-        public double? nMassEM { get; set; } // not in description of event
-        public double? nSurfaceGravity { get; set; } // not in description of event
-        public double? nSurfaceTemperature { get; set; }
-        public double? nSurfacePressure { get; set; }
-        public bool? nLandable { get; set; }
-
-        public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
-        public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
-        public Dictionary<string, double> Materials { get; set; }
-
-        //public string MaterialsString { get { return jEventData["Materials"].ToString(); } }
-
-
-        public bool IsEDSMBody
-        {
-            get
-            {
-                return JSONHelper.GetBool(jEventData["EDDFromEDSMBodie"], false);
-            }
-        }
 
         public override void FillInformation(out string summary, out string info, out string detailed)
         {
