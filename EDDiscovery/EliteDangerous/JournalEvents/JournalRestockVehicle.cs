@@ -24,7 +24,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Loadout: variant
     //•	Cost: purchase cost
     //•	Count: number of vehicles purchased
-    public class JournalRestockVehicle : JournalEntry
+    [JournalEntryType(JournalTypeEnum.RestockVehicle)]
+    public class JournalRestockVehicle : JournalEntry, ILedgerJournalEntry
     {
         public JournalRestockVehicle(JObject evt ) : base(evt, JournalTypeEnum.RestockVehicle)
         {

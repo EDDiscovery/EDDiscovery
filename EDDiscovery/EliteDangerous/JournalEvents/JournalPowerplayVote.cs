@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Power
     //•	Votes
     //•	System
+    [JournalEntryType(JournalTypeEnum.PowerplayVote)]
     public class JournalPowerplayVote : JournalEntry
     {
         public JournalPowerplayVote(JObject evt) : base(evt, JournalTypeEnum.PowerplayVote)

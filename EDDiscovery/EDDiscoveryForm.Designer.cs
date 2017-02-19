@@ -335,11 +335,9 @@ namespace EDDiscovery
             this.addOnsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.manageAddOnsToolStripMenuItem,
             this.configureAddOnActionsToolStripMenuItem,
-            this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem,
             this.stopCurrentlyRunningActionProgramToolStripMenuItem,
              this.stopCurrentlyRunningActionProgramToolStripMenuItem,
-            this.cAPIToolStripMenuItem,
-            this.soundSettingsToolStripMenuItem});
+            this.cAPIToolStripMenuItem,});
             this.addOnsToolStripMenuItem.Name = "addOnsToolStripMenuItem";
             this.addOnsToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.addOnsToolStripMenuItem.Text = "&Add-Ons";
@@ -922,7 +920,5 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
         private System.Windows.Forms.ToolStripMenuItem cAPIToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem soundSettingsToolStripMenuItem;
     }
 }

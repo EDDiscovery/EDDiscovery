@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: deploying the SRV from a ship onto planet surface
     //Parameters:
     //•	Loadout
+    [JournalEntryType(JournalTypeEnum.LaunchSRV)]
     public class JournalLaunchSRV : JournalEntry
     {
         public JournalLaunchSRV(JObject evt ) : base(evt, JournalTypeEnum.LaunchSRV)

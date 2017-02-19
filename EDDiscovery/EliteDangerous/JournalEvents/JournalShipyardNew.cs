@@ -25,6 +25,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	ShipType
     //•	ShipID
+    [JournalEntryType(JournalTypeEnum.ShipyardNew)]
     public class JournalShipyardNew : JournalEntry
     {
         public JournalShipyardNew(JObject evt ) : base(evt, JournalTypeEnum.ShipyardNew)

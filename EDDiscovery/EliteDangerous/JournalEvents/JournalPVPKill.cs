@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters: 
     //•	Victim: name of victim
     //•	CombatRank: victim’s rank in range 0..8
+    [JournalEntryType(JournalTypeEnum.PVPKill)]
     public class JournalPVPKill : JournalEntry
     {
         public JournalPVPKill(JObject evt) : base(evt, JournalTypeEnum.PVPKill)

@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery2
 {
-    partial class FormSagCarinaMission
+    partial class Form2DMap
     {
         /// <summary>
         /// Required designer variable.
@@ -43,7 +43,7 @@ namespace EDDiscovery2
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSagCarinaMission));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2DMap));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripComboBoxTime = new System.Windows.Forms.ToolStripComboBox();
@@ -188,7 +188,7 @@ namespace EDDiscovery2
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "FormSagCarinaMission";
+            this.Name = "Form2DMap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "2D Map";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSagCarinaMission_FormClosing);

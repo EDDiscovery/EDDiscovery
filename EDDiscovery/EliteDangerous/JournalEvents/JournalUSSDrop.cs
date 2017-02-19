@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	USSType: description of USS
     //•	USSThreat: threat level
+    [JournalEntryType(JournalTypeEnum.USSDrop)]
     public class JournalUSSDrop : JournalEntry
     {
         public JournalUSSDrop(JObject evt ) : base(evt, JournalTypeEnum.USSDrop)

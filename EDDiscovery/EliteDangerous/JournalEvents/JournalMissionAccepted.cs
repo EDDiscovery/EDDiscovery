@@ -40,7 +40,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	PassengerType: eg Tourist, Soldier, Explorer,...
 
 
-
+    [JournalEntryType(JournalTypeEnum.MissionAccepted)]
     public class JournalMissionAccepted : JournalEntry
     {
         public JournalMissionAccepted(JObject evt ) : base(evt, JournalTypeEnum.MissionAccepted)

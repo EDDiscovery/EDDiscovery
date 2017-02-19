@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Reason: reason for denial
     //
     //Reasons include: NoSpace, TooLarge, Hostile, Offences, Distance, ActiveFighter, NoReason
-
+    [JournalEntryType(JournalTypeEnum.DockingDenied)]
     public class JournalDockingDenied : JournalEntry
     {
         public JournalDockingDenied(JObject evt ) : base(evt, JournalTypeEnum.DockingDenied)

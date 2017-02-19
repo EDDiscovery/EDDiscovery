@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when switching control between the main ship and a fighter
     //Parameters:
     //•	To: ( Mothership/Fighter)
+    [JournalEntryType(JournalTypeEnum.VehicleSwitch)]
     public class JournalVehicleSwitch : JournalEntry
     {
         public JournalVehicleSwitch(JObject evt ) : base(evt, JournalTypeEnum.VehicleSwitch)
@@ -32,6 +33,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public static System.Drawing.Bitmap IconSelect(string desc)
         {
             if (desc.Contains("Mothership"))
+                return EDDiscovery.Properties.Resources.mothership;
+            else
+                return EDDiscovery.Properties.Resources.fighter;
+        }
+
+        public override System.Drawing.Bitmap GetIcon()
+        {
+            if (To.Contains("Mothership"))
                 return EDDiscovery.Properties.Resources.mothership;
             else
                 return EDDiscovery.Properties.Resources.fighter;
