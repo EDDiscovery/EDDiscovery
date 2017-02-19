@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StationName: name of station
 
     //•	Security
+    [JournalEntryType(JournalTypeEnum.SelfDestruct)]
     public class JournalSelfDestruct: JournalEntry
     {
         public JournalSelfDestruct(JObject evt ) : base(evt,   JournalTypeEnum.SelfDestruct)

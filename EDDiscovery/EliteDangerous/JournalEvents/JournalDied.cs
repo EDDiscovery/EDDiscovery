@@ -26,6 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: player was killed by a wing
     //Parameters:
     //•	Killers: a JSON array of objects containing player name, ship, and rank
+    [JournalEntryType(JournalTypeEnum.Died)]
     public class JournalDied : JournalEntry
     {
         public class Killer

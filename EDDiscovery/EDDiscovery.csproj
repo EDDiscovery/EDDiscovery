@@ -295,7 +295,8 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
-    <Compile Include="EliteDangerous\IMaterialCommodityJournalEvent.cs" />
+    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
+    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
     <Compile Include="CompanionAPI\CompanionCredentials.cs" />
     <Compile Include="CompanionAPI\CompanionException.cs" />
     <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
@@ -1345,6 +1346,7 @@
       <ZipFiles Include="$(ProjectDir)\App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
+      <ZipFiles Include="$(OutputPath)\CSCore.dll" />
       <ZipFiles Include="$(OutputPath)\fround.js" />
       <ZipFiles Include="$(OutputPath)\trilateration.js" />
       <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />

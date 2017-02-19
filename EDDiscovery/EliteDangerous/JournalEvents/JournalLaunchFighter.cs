@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Loadout
     //•	PlayerControlled: whether player is controlling the fighter from launch
+    [JournalEntryType(JournalTypeEnum.LaunchFighter)]
     public class JournalLaunchFighter : JournalEntry
     {
         public JournalLaunchFighter(JObject evt) : base(evt, JournalTypeEnum.LaunchFighter)

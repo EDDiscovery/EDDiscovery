@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	FromPower
     //•	ToPower
+    [JournalEntryType(JournalTypeEnum.PowerplayDefect)]
     public class JournalPowerplayDefect : JournalEntry
     {
         public JournalPowerplayDefect(JObject evt) : base(evt, JournalTypeEnum.PowerplayDefect)

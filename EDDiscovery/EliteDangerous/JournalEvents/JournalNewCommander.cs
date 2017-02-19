@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name: (new) commander name
     //•	Package: selected starter package
+    [JournalEntryType(JournalTypeEnum.NewCommander)]
     public class JournalNewCommander : JournalEntry
     {
         public JournalNewCommander(JObject evt ) : base(evt, JournalTypeEnum.NewCommander)

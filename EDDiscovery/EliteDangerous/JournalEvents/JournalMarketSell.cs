@@ -28,7 +28,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	IllegalGoods: (not always present) whether goods are illegal here
     //•	StolenGoods: (not always present) whether goods were stolen
     //•	BlackMarket: (not always present) whether selling in a black market
-    public class JournalMarketSell : JournalEntry, IMaterialCommodityJournalEntry
+    [JournalEntryType(JournalTypeEnum.MarketSell)]
+    public class JournalMarketSell : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
     {
         public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {

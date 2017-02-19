@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Scooped: tons fuel scooped
     //•	Total: total fuel level after scooping
+    [JournalEntryType(JournalTypeEnum.FuelScoop)]
     public class JournalFuelScoop : JournalEntry
     {
         public JournalFuelScoop(JObject evt ) : base(evt, JournalTypeEnum.FuelScoop)

@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Reward
     //•	AwardingFaction
     //•	VictimFaction
+    [JournalEntryType(JournalTypeEnum.HeatDamage)]
     public class JournalHeatDamage : JournalEntry
     {
         public JournalHeatDamage(JObject evt ) : base(evt, JournalTypeEnum.HeatDamage)

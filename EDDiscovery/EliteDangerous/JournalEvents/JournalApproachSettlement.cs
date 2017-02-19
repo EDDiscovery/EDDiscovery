@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     // •	Name
 
+    [JournalEntryType(JournalTypeEnum.ApproachSettlement)]
     public class JournalApproachSettlement : JournalEntry
     {
         public JournalApproachSettlement(JObject evt) : base(evt, JournalTypeEnum.ApproachSettlement)

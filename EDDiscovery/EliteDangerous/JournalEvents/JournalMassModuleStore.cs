@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //o   Name
 //o   EngineerModifications(only present if modified)
 
-
+    [JournalEntryType(JournalTypeEnum.MassModuleStore)]
     public class JournalMassModuleStore : JournalEntry
     {
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)

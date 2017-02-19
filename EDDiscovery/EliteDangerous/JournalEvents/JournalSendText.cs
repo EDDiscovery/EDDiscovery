@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	To
     //•	Message
-
+    [JournalEntryType(JournalTypeEnum.SendText)]
     public class JournalSendText : JournalEntry
     {
         public JournalSendText(JObject evt) : base(evt, JournalTypeEnum.SendText)
