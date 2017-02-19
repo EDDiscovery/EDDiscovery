@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Count
     //•	SellPrice
     //•	TotalSale
-
+    [JournalEntryType(JournalTypeEnum.CrewFire)]
     public class JournalCrewFire : JournalEntry
     {
         public JournalCrewFire(JObject evt) : base(evt, JournalTypeEnum.CrewFire)

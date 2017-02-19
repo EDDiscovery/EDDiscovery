@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //    Parameters:
 //•	Modules: JSON array of names of modules repaired
 
-
+    [JournalEntryType(JournalTypeEnum.RebootRepair)]
     public class JournalRebootRepair : JournalEntry
     {
         public JournalRebootRepair(JObject evt) : base(evt, JournalTypeEnum.RebootRepair)

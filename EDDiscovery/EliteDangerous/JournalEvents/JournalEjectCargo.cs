@@ -25,8 +25,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Abandoned: whether ‘abandoned’
 //    If the cargo is related to powerplay:
 //•	PowerplayOrigin
-
-    public class JournalEjectCargo : JournalEntry, IMaterialCommodityJournalEntry
+    [JournalEntryType(JournalTypeEnum.EjectCargo)]
+    public class JournalEjectCargo : JournalEntry, IMaterialCommodityJournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalEjectCargo(JObject evt) : base(evt, JournalTypeEnum.EjectCargo)
         {

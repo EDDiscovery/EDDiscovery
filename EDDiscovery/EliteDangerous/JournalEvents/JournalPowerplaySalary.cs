@@ -22,7 +22,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Power
     //•	Amount
-    public class JournalPowerplaySalary : JournalEntry
+    [JournalEntryType(JournalTypeEnum.PowerplaySalary)]
+    public class JournalPowerplaySalary : JournalEntry, ILedgerJournalEntry
     {
         public JournalPowerplaySalary(JObject evt) : base(evt, JournalTypeEnum.PowerplaySalary)
         {

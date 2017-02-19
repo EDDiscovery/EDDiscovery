@@ -22,7 +22,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Type: cargo type
     //•	Stolen: whether stolen goods
-    public class JournalCollectCargo : JournalEntry, IMaterialCommodityJournalEntry
+    [JournalEntryType(JournalTypeEnum.CollectCargo)]
+    public class JournalCollectCargo : JournalEntry, IMaterialCommodityJournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalCollectCargo(JObject evt ) : base(evt, JournalTypeEnum.CollectCargo)
         {

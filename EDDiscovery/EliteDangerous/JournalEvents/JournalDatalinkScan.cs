@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when scanning a data link
     //Parameters:
     //•	Message: message from data link
+    [JournalEntryType(JournalTypeEnum.DatalinkScan)]
     public class JournalDatalinkScan : JournalEntry
     {
         public JournalDatalinkScan(JObject evt ) : base(evt, JournalTypeEnum.DatalinkScan)

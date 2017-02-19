@@ -95,7 +95,7 @@ namespace ExtendedControls
         {
             bordersize = 0;
 
-            if (FlatStyle != FlatStyle.System && BorderColor != Color.Transparent)
+            if (FlatStyle != FlatStyle.System && !BorderColor.IsFullyTransparent())
                 bordersize = 2;
 
             int items = (Items != null) ? Items.Count() : 0;
@@ -127,9 +127,9 @@ namespace ExtendedControls
                 vScrollBar.BackColor = ScrollBarColor;
                 vScrollBar.BorderColor = vScrollBar.ThumbBorderColor = vScrollBar.ArrowBorderColor = BorderColor;
                 vScrollBar.ArrowButtonColor = vScrollBar.ThumbButtonColor = ScrollBarButtonColor;
-                vScrollBar.MouseOverButtonColor = Multiply(ScrollBarButtonColor, 1.4F);
-                vScrollBar.MousePressedButtonColor = Multiply(ScrollBarButtonColor, 1.5F);
-                vScrollBar.ForeColor = Multiply(ScrollBarButtonColor, 0.25F);
+                vScrollBar.MouseOverButtonColor = ScrollBarButtonColor.Multiply(1.4F);
+                vScrollBar.MousePressedButtonColor = ScrollBarButtonColor.Multiply(1.5F);
+                vScrollBar.ForeColor = ScrollBarButtonColor.Multiply(0.25F);
             }
         }
 
@@ -171,11 +171,11 @@ namespace ExtendedControls
 
             Brush backb;
 
-            if ( this.SelectionBackColor != Color.Transparent)
+            if (!this.SelectionBackColor.IsFullyTransparent())
             {
                 Color c1 = SelectionBackColor;
                 if (FlatStyle == FlatStyle.Popup)
-                    backb = new System.Drawing.Drawing2D.LinearGradientBrush(mainarea, c1, Multiply(c1, GradientColorScaling), 90);
+                    backb = new System.Drawing.Drawing2D.LinearGradientBrush(mainarea, c1, c1.Multiply(GradientColorScaling), 90);
                 else
                     backb = new SolidBrush(c1);
 
@@ -370,9 +370,6 @@ namespace ExtendedControls
         {
             this.Invalidate(true);
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         #endregion
 

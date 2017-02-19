@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: entering supercruise from normal space
     //Parameters:
     //•	Starsystem
+    [JournalEntryType(JournalTypeEnum.SupercruiseEntry)]
     public class JournalSupercruiseEntry : JournalEntry
     {
         public JournalSupercruiseEntry(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseEntry)
