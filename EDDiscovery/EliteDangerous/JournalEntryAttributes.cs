@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,24 +13,22 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace EDDiscovery.EliteDangerous.JournalEvents
+namespace EDDiscovery.EliteDangerous
 {
-    //When written: player was HullDamage by player or npc
-    //Parameters: 
-    [JournalEntryType(JournalTypeEnum.HullDamage)]
-    public class JournalHullDamage : JournalEntry
+    [AttributeUsage(AttributeTargets.Class)]
+    public class JournalEntryTypeAttribute : Attribute
     {
-        public JournalHullDamage(JObject evt ) : base(evt, JournalTypeEnum.HullDamage)
+        public JournalTypeEnum EntryType { get; set; }
+
+        public JournalEntryTypeAttribute(JournalTypeEnum entrytype)
         {
-            Health = JSONHelper.GetDouble(evt["Health"]);
-
+            EntryType = entrytype;
         }
-        public double Health { get; set; }
-
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.damage; } }
-
     }
 }

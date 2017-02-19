@@ -59,6 +59,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	InnerRad
     //•	OuterRad
     //
+    [JournalEntryType(JournalTypeEnum.Scan)]
     public class JournalScan : JournalEntry
     {
         private const double solarRadius_m = 695700000;

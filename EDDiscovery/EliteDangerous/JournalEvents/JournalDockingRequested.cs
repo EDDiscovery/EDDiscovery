@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when the player requests docking at a station
     //Parameters:
     //•	StationName: name of station
+    [JournalEntryType(JournalTypeEnum.DockingRequested)]
     public class JournalDockingRequested : JournalEntry
     {
         public JournalDockingRequested(JObject evt ) : base(evt, JournalTypeEnum.DockingRequested)

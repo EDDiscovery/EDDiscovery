@@ -24,6 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Blueprint: blueprint being applied
     //•	Level: crafting level
     //•	Override: whether overriding special effect
+    [JournalEntryType(JournalTypeEnum.EngineerApply)]
     public class JournalEngineerApply : JournalEntry
     {
         public JournalEngineerApply(JObject evt ) : base(evt, JournalTypeEnum.EngineerApply)

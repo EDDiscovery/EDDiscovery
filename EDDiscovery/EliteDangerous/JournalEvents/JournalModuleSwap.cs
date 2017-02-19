@@ -25,6 +25,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	FromItem
     //•	ToItem
     //•	Ship
+    [JournalEntryType(JournalTypeEnum.ModuleSwap)]
     public class JournalModuleSwap : JournalEntry
     {
         public JournalModuleSwap(JObject evt ) : base(evt, JournalTypeEnum.ModuleSwap)

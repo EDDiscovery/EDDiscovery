@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name
     //•	System
+    [JournalEntryType(JournalTypeEnum.CommunityGoalJoin)]
     public class JournalCommunityGoalJoin : JournalEntry
     {
         public JournalCommunityGoalJoin(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalJoin)

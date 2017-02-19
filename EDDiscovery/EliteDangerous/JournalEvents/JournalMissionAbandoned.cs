@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When Written: when a mission has been abandoned
     //Parameters:
     //•	Name: name of mission
+    [JournalEntryType(JournalTypeEnum.MissionAbandoned)]
     public class JournalMissionAbandoned : JournalEntry
     {
         public JournalMissionAbandoned(JObject evt ) : base(evt, JournalTypeEnum.MissionAbandoned)
