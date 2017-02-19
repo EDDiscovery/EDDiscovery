@@ -1324,6 +1324,7 @@
       <ZipFiles Include="$(ProjectDir)\App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
+      <ZipFiles Include="$(OutputPath)\CSCore.dll" />
       <ZipFiles Include="$(OutputPath)\fround.js" />
       <ZipFiles Include="$(OutputPath)\trilateration.js" />
       <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />
