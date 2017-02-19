@@ -1,20 +1,37 @@
-﻿// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
+﻿/*
+ * Copyright © 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+
+// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
 // Blamming GITHUB gets you banned for a while during debugging. 
 // turn this on only for releasing
 #define GITHUBDOWNLOAD
 // turn this on only for releasing
 
+using EDDiscovery.HTTP;
+using EDDiscovery.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.HTTP;
-using System.IO;
 
 namespace EDDiscovery.Forms
 {
@@ -122,6 +139,8 @@ namespace EDDiscovery.Forms
         {
             if (CheckThread != null && CheckThread.IsAlive)     // can't close if its alive, it will call back nothing
                 CheckThread.Join();
+
+            font?.Dispose();
         }
 
         void ReadyToDisplay()
@@ -349,24 +368,6 @@ namespace EDDiscovery.Forms
 
 #region Window Control
 
-        public const int WM_MOVE = 3;
-        public const int WM_SIZE = 5;
-        public const int WM_MOUSEMOVE = 0x200;
-        public const int WM_LBUTTONDOWN = 0x201;
-        public const int WM_LBUTTONUP = 0x202;
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int WM_NCLBUTTONUP = 0xA2;
-        public const int WM_NCMOUSEMOVE = 0xA0;
-        public const int HT_CLIENT = 0x1;
-        public const int HT_CAPTION = 0x2;
-        public const int HT_LEFT = 0xA;
-        public const int HT_RIGHT = 0xB;
-        public const int HT_BOTTOM = 0xF;
-        public const int HT_BOTTOMRIGHT = 0x11;
-        public const int WM_NCL_RESIZE = 0x112;
-        public const int HT_RESIZE = 61448;
-        public const int WM_NCHITTEST = 0x84;
-
         // Mono compatibility
         private bool _window_dragging = false;
         private Point _window_dragMousePos = Point.Empty;
@@ -383,7 +384,7 @@ namespace EDDiscovery.Forms
         {
             bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
             // Compatibility movement for Mono
-            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
+            if (m.Msg == WM.LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -393,7 +394,7 @@ namespace EDDiscovery.Forms
                 m.Result = IntPtr.Zero;
                 this.Capture = true;
             }
-            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            else if (m.Msg == WM.MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -403,7 +404,7 @@ namespace EDDiscovery.Forms
                 this.Update();
                 m.Result = IntPtr.Zero;
             }
-            else if (m.Msg == WM_LBUTTONUP)
+            else if (m.Msg == WM.LBUTTONUP)
             {
                 _window_dragging = false;
                 _window_dragMousePos = Point.Empty;
@@ -412,11 +413,11 @@ namespace EDDiscovery.Forms
                 this.Capture = false;
             }
             // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM_NCHITTEST)
+            else if (m.Msg == WM.NCHITTEST)
             {
                 base.WndProc(ref m);
 
-                if ((int)m.Result == HT_CLIENT)
+                if ((int)m.Result == HT.CLIENT)
                 {
                     int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                     int y = unchecked((short)((uint)m.LParam >> 16));
@@ -424,23 +425,23 @@ namespace EDDiscovery.Forms
 
                     if (p.X > this.ClientSize.Width - statusStripCustom.Height && p.Y > this.ClientSize.Height - statusStripCustom.Height)
                     {
-                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                        m.Result = (IntPtr)HT.BOTTOMRIGHT;
                     }
                     else if (p.Y > this.ClientSize.Height - statusStripCustom.Height)
                     {
-                        m.Result = (IntPtr)HT_BOTTOM;
+                        m.Result = (IntPtr)HT.BOTTOM;
                     }
                     else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
                     {
-                        m.Result = (IntPtr)HT_RIGHT;
+                        m.Result = (IntPtr)HT.RIGHT;
                     }
                     else if (p.X < 5)
                     {
-                        m.Result = (IntPtr)HT_LEFT;
+                        m.Result = (IntPtr)HT.LEFT;
                     }
                     else if (!windowsborder)
                     {
-                        m.Result = (IntPtr)HT_CAPTION;
+                        m.Result = (IntPtr)HT.CAPTION;
                     }
                 }
             }
@@ -453,7 +454,7 @@ namespace EDDiscovery.Forms
         private void label_index_MouseDown(object sender, MouseEventArgs e)
         {
             ((Control)sender).Capture = false;
-            SendMessage(WM_NCLBUTTONDOWN, (System.IntPtr)HT_CAPTION, (System.IntPtr)0);
+            SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, IntPtr.Zero);
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)

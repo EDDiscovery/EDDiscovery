@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -365,13 +365,13 @@ namespace EDDiscovery
             HistoryEntry he = userControlTravelGrid.GetCurrentHistoryEntry;
             long jid = JournalEntry.AddEDDItemSet(EDDiscoveryForm.EDDConfig.CurrentCommander.Nr, he.EventTimeUTC, (he.EntryType == JournalTypeEnum.EDDItemSet) ? he.Journalid : 0, changelist);
             userControlTravelGrid.SetPreferredJIDAfterRefresh(jid);         // tell the main grid, please find and move here
-            MaterialCommodities.LoadCacheList();        // in case we did anything..
+            MaterialCommodity.LoadCacheList();        // in case we did anything..
             _discoveryForm.RefreshHistoryAsync();
         }
 
         void MaterialCommodityRequireRefresh()
         {
-            MaterialCommodities.LoadCacheList();        // in case we did anything..
+            MaterialCommodity.LoadCacheList();        // in case we did anything..
             _discoveryForm.RefreshHistoryAsync();
         }
 

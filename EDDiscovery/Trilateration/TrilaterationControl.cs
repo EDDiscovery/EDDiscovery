@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using EDDiscovery.DB;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.DB;
+using ExtendedControls;
 
 namespace EDDiscovery
 {
@@ -41,6 +42,7 @@ namespace EDDiscovery
         public TrilaterationControl()
         {
             InitializeComponent();
+            ColumnSystem.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -106,31 +108,6 @@ namespace EDDiscovery
                 }
             }
             return systems;
-        }
-
-        private void dataGridViewDistances_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            try
-            {
-                var textbox = (TextBox)e.Control;
-
-                if (dataGridViewDistances.CurrentCell.ColumnIndex != 0)
-                {
-                    textbox.AutoCompleteMode = AutoCompleteMode.None;
-                    return;
-                }
-
-                // TBD Used to be an autocomplete..
-            }
-            catch (Exception ex)
-            {
-                this.BeginInvoke(new MethodInvoker(() =>
-                {
-                    LogTextHighlight("ViewPushedSystems Exception:" + ex.Message);
-                    LogText(ex.StackTrace);
-                }));
-
-            }
         }
 
         private void dataGridViewDistances_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)

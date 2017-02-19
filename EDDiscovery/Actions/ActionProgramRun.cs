@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+ * Copyright © 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -153,18 +168,16 @@ namespace EDDiscovery.Actions
                         return true;
                     }
                 }
-                else if (IsExecutingType(Action.ActionType.Loop))        // loop, when needs to make a decision if to change back pos..
+                else if (IsExecutingType(Action.ActionType.Loop) ) // active loop, need to consider if we need to go back
                 {
-                    if (IsExecuteOn)          // if executing, the loop is active.. If not, we can just continue on.
+                    ActionLoop l = GetStep(PushPos) as ActionLoop;  // go back and get the Loop position
+
+                    if (l.ExecuteEndLoop(this))      // if true, it wants to move back, so go back and get next value.
                     {
-                        ActionLoop l = GetStep(PushPos) as ActionLoop;  // go back and get the Loop position
-                        if (l.ExecuteEndLoop(this))      // if true, it wants to move back, so go back and get next value.
-                        {
-                            return true;
-                        }
-                        else
-                            RemoveLevel();      // else, just remove level.. 
+                        return true;
                     }
+                    else
+                        RemoveLevel();      // else, just remove level.. 
                 }
                 else
                 {                                               // normal, just see if need to loop back

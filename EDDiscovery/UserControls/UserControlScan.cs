@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
                         {
                             bool nonedsmscans = planetnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
 
-                            System.Diagnostics.Debug.WriteLine("Planet Node " + planetnode.ownname + " has scans " + nonedsmscans);
+                            //System.Diagnostics.Debug.WriteLine("Planet Node " + planetnode.ownname + " has scans " + nonedsmscans);
 
                             if (nonedsmscans || checkBoxEDSM.Checked)
                             {
@@ -307,7 +307,7 @@ namespace EDDiscovery.UserControls
 
             JournalScan sc = sn.ScanData;
 
-            System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + curpos + " " + size + " hoff " + offset + " EDSM " + ((sc!= null) ? sc.IsEDSMBody.ToString() : ""));
+            //System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + curpos + " " + size + " hoff " + offset + " EDSM " + ((sc!= null) ? sc.IsEDSMBody.ToString() : ""));
 
             if (sc != null && (!sc.IsEDSMBody || checkBoxEDSM.Checked))     // if got one, and its our scan, or we are showing EDSM
             {
@@ -422,7 +422,7 @@ namespace EDDiscovery.UserControls
                 string tooltip = sd.Key;
                 Color fillc = Color.Yellow;
 
-                EDDiscovery2.DB.MaterialCommodities mc = EDDiscovery2.DB.MaterialCommodities.GetCachedMaterial(sd.Key);
+                EDDiscovery2.DB.MaterialCommodity mc = EDDiscovery2.DB.MaterialCommodity.GetCachedMaterial(sd.Key);
                 if (mc != null)
                 {
                     abv = mc.shortname;

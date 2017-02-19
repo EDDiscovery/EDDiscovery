@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when passing through the jet code from a white dwarf or neutron star has caused damage to a ship module
     //Parameters:
     //•	Module: the name of the module that has taken some damage
+    [JournalEntryType(JournalTypeEnum.JetConeDamage)]
     public class JournalJetConeDamage : JournalEntry
     {
         public JournalJetConeDamage(JObject evt ) : base(evt, JournalTypeEnum.JetConeDamage)

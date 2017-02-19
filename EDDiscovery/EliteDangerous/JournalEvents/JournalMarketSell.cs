@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -28,7 +28,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	IllegalGoods: (not always present) whether goods are illegal here
     //•	StolenGoods: (not always present) whether goods were stolen
     //•	BlackMarket: (not always present) whether selling in a black market
-    public class JournalMarketSell : JournalEntry
+    [JournalEntryType(JournalTypeEnum.MarketSell)]
+    public class JournalMarketSell : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
     {
         public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {

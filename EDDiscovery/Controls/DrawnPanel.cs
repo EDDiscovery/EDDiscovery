@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -75,7 +75,7 @@ namespace ExtendedControls
             if (ImageSelected != ImageType.None)
             {
                 int msize = (MarginSize == -1) ? 0 : ((MarginSize > 0) ? MarginSize : ClientRectangle.Height / 6);
-                Color pc = (Enabled) ? ((mousedown || mousecapture) ? MouseSelectedColor : ((mouseover) ? MouseOverColor : this.ForeColor)) : Average(this.ForeColor, this.BackColor, 0.25F);
+                Color pc = (Enabled) ? ((mousedown || mousecapture) ? MouseSelectedColor : ((mouseover) ? MouseOverColor : this.ForeColor)) : this.ForeColor.Average(this.BackColor, 0.25F);
                 //Console.WriteLine("Enabled" + Enabled + " Mouse over " + mouseover + " mouse down " + mousedown);
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -106,9 +106,11 @@ namespace ExtendedControls
                 }
                 else if (ImageSelected == ImageType.OnTop)
                 {
-                    Brush bbck = new SolidBrush(pc);
-                    Rectangle area = new Rectangle(leftmarginpx, topmarginpx, rightmarginpx - leftmarginpx + 1, bottommarginpx - topmarginpx + 1);
-                    e.Graphics.FillRectangle(bbck, area);
+                    using (Brush bbck = new SolidBrush(pc))
+                    {
+                        Rectangle area = new Rectangle(leftmarginpx, topmarginpx, rightmarginpx - leftmarginpx + 1, bottommarginpx - topmarginpx + 1);
+                        e.Graphics.FillRectangle(bbck, area);
+                    }
                 }
                 else if (ImageSelected == ImageType.Floating)
                 {
@@ -306,10 +308,6 @@ namespace ExtendedControls
                 Invalidate();
             base.OnMouseUp(mevent);
         }
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
-        public Color Average(Color c1, Color c2, float l) { float r = 1.0F - l; return Color.FromArgb(limit(c1.A * l + c2.A * r), limit(c1.R * l + c2.R * r), limit(c1.G * l + c2.G * r), limit(c1.B * l + c2.B * r)); }
 
         private bool mouseover = false;
         private bool mousedown = false;

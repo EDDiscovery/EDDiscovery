@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -26,6 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	CombatRank: if a player
     //•	Faction: if an npc
     //•	Power: if npc working for power
+    [JournalEntryType(JournalTypeEnum.Interdiction)]
     public class JournalInterdiction : JournalEntry
     {
         public JournalInterdiction(JObject evt ) : base(evt, JournalTypeEnum.Interdiction)

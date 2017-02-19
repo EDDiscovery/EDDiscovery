@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -32,7 +32,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Reward: value of reward
     //•	Donation: donation offered (for altruism missions)
     //•	PermitsAwarded:[] (names of any permits awarded, as a JSON array)
-    public class JournalMissionCompleted : JournalEntry
+    [JournalEntryType(JournalTypeEnum.MissionCompleted)]
+    public class JournalMissionCompleted : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
     {
         public JournalMissionCompleted(JObject evt ) : base(evt, JournalTypeEnum.MissionCompleted)
         {

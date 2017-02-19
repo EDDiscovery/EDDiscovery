@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -24,7 +24,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Loadout: variant
     //•	Cost: purchase cost
     //•	Count: number of vehicles purchased
-    public class JournalRestockVehicle : JournalEntry
+    [JournalEntryType(JournalTypeEnum.RestockVehicle)]
+    public class JournalRestockVehicle : JournalEntry, ILedgerJournalEntry
     {
         public JournalRestockVehicle(JObject evt ) : base(evt, JournalTypeEnum.RestockVehicle)
         {

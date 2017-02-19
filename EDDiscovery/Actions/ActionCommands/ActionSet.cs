@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+ * Copyright © 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -126,29 +141,14 @@ namespace EDDiscovery.Actions
                     break;
                 }
 
-                System.Data.DataTable dt = new System.Data.DataTable();
-
-                try
+                string value;
+                if (!res.Eval(out value))
                 {
-                    var v = dt.Compute(res, "");
-                    Type t = v.GetType();
-                    //System.Diagnostics.Debug.WriteLine("Type return is " + t.ToString());
-                    if (v is double)
-                        res = ((double)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    else if (v is System.Decimal)
-                        res = ((System.Decimal)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    else if (v is int)
-                        res = ((int)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    else
-                        res = "NAN";
-
-                    ap.currentvars[vname] = res;
-                }
-                catch
-                {
-                    ap.ReportError("Let expression does not evaluate");
+                    ap.ReportError("Let " + value);
                     break;
                 }
+
+                ap.currentvars[vname] = value;
             }
 
             if (av.Count == 0)
@@ -156,6 +156,7 @@ namespace EDDiscovery.Actions
 
             return true;
         }
+
     }
 
     public class ActionGlobal : ActionSetLetBase
@@ -258,10 +259,10 @@ namespace EDDiscovery.Actions
     {
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Variable name", UserData.ReplaceEscapeControlChars(), "Configure DeleteVariable Command", true);
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Variable name", UserData, "Configure DeleteVariable Command");
             if (promptValue != null)
             {
-                userdata = promptValue.EscapeControlChars();
+                userdata = promptValue;
             }
 
             return (promptValue != null);
@@ -279,6 +280,7 @@ namespace EDDiscovery.Actions
                 {
                     ap.actioncontroller.DeleteVariable(v);
                     ap.currentvars.Delete(v);
+                    p.IsCharMoveOn(',');
                 }
             }
             else
@@ -286,7 +288,5 @@ namespace EDDiscovery.Actions
 
             return true;
         }
-
     }
-
 }
