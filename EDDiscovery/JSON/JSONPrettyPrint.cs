@@ -250,21 +250,26 @@ namespace EDDiscovery
             eventtype = eventp;
         }
 
-        private string TrimEnd(string outstr)
+        private void TrimEnd(StringBuilder sb)
         {
-            outstr = outstr.TrimEnd();
-            if (outstr.Length > 0 && outstr[outstr.Length - 1] == ',')
-                outstr = outstr.Substring(0, outstr.Length - 1);
+            int end = sb.Length;
 
-            return outstr;
+            while (end > 0 && char.IsWhiteSpace(sb[end - 1]))
+                end--;
+
+            if (end > 0 && sb[end - 1] == ',')
+                end--;
+
+            if (end < sb.Length)
+                sb.Remove(end, sb.Length - end);
         }
 
-        private void LF(ref string str, ref int linelen , bool forcelf = false )
+        private void LF(StringBuilder sb, ref int linelen , bool forcelf = false )
         {
-            if (( forcelf && str.Length>0) || str.Length - linelen > maxlinelen)       // not too many on one line.
+            if (( forcelf && sb.Length>0) || sb.Length - linelen > maxlinelen)       // not too many on one line.
             {
-                str += Environment.NewLine;
-                linelen = str.Length;
+                sb.Append(Environment.NewLine);
+                linelen = sb.Length;
             }
         }
 
@@ -275,15 +280,16 @@ namespace EDDiscovery
                 if (names.Contains(name + l))
                     return true;
             }
+
             return false;
         }
 
         public string PrettyPrint(string json , int maxlinel)
         {
-            string outstr = "";
-
             try
             {
+                StringBuilder sb = new StringBuilder();
+
                 maxlinelen = maxlinel;
                 JObject jo = JObject.Parse(json);  // Create a clone
                 int linelen = 0;
@@ -291,25 +297,26 @@ namespace EDDiscovery
 
                 HashSet<string> names = new HashSet<string>(jo.Properties().Select(p => p.Name));
 
+                int childcount = jo.Count;
                 foreach (JProperty jc in jo.Properties())
                 {
                     if (!InDupList(names, jc.Name))
-                        ExpandTokens(jc, ref outstr, ref linelen, nc, jo.Children().Count());
+                        ExpandTokens(jc, sb, ref linelen, nc, childcount);
 
                     nc++;
                 }
 
-                outstr = TrimEnd(outstr);
+                TrimEnd(sb);
+
+                return sb.ToString();
             }
             catch (Exception)
             {
-                outstr = "Report problem to EDDiscovery team, did not print properly";
+                return "Report problem to EDDiscovery team, did not print properly";
             }
-
-            return outstr;
         }
 
-        private void ExpandTokens(JToken jt, ref string outstr, ref int linelen, int childno , int siblings)
+        private void ExpandTokens(JToken jt, StringBuilder sb, ref int linelen, int childno , int siblings)
         {
             //System.Diagnostics.Trace.WriteLine("parent JT " + jt.Path + " is a " + jt.Type.ToString());
             if (jt.HasValues)
@@ -334,22 +341,23 @@ namespace EDDiscovery
                     }
                 }
 
-                int totalchildren = jt.Children().Count();
+                int totalchildren = jt is JContainer ? ((JContainer)jt).Count : 0;
 
                 bool isarray = jt is JArray;
                 bool isobject = jt is JObject;
 
-                LF(ref outstr, ref linelen);
+                LF(sb, ref linelen);
 
                 if (isarray)            
                 {
-                    if (totalchildren >= 1 && jt.Children().First() is JObject )
-                        LF(ref outstr, ref linelen,true);
+                    if (totalchildren >= 1 && jt is JObject )
+                        LF(sb, ref linelen,true);
 
-                    outstr += name + "(";
+                    sb.Append(name);
+                    sb.Append("(");
                 }
                 if (isobject)
-                    outstr += "{";
+                    sb.Append("{");
 
                 int cno = 1;
 
@@ -360,7 +368,7 @@ namespace EDDiscovery
                     //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} : {1} {2}", cno, jc.Path, jc.Type.ToString()));
                     if (jc.HasValues)
                     {
-                        ExpandTokens(jc, ref outstr, ref linelen, cno , totalchildren);
+                        ExpandTokens(jc, sb, ref linelen, cno , totalchildren);
                     }
                     else if ( Array.FindIndex(decodeable,x=>x==jc.Type )!=-1 )
                     {
@@ -371,15 +379,23 @@ namespace EDDiscovery
                         else if ( !isarray )                                        // if no converter, array elements do are not named..
                             value = name + ":" + value;
 
-                        outstr +=  value + ", ";
+                        sb.Append(value);
+                        sb.Append(", ");
                     }
                     cno++;
                 }
 
                 if (isarray)
-                    outstr = TrimEnd(outstr) + "), ";
+                {
+                    TrimEnd(sb);
+                    sb.Append("), ");
+                }
                 if (isobject)
-                    outstr = TrimEnd(outstr) + "}," + Environment.NewLine;
+                {
+                    TrimEnd(sb);
+                    sb.Append("},");
+                    sb.Append(Environment.NewLine);
+                }
             }
         }
     }
