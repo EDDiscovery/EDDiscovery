@@ -22,7 +22,8 @@ using System.Text;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
 
-  public class JournalShipyardSell : JournalEntry, ILedgerJournalEntry
+    [JournalEntryType(JournalTypeEnum.ShipyardSell)]
+    public class JournalShipyardSell : JournalEntry, ILedgerJournalEntry
     {
         //When Written: when selling a ship stored in the shipyard
         //Parameters:
@@ -30,7 +31,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         //•	SellShipID
         //•	ShipPrice: sale price
         //•	System: (if ship is in another system) name of system
-        [JournalEntryType(JournalTypeEnum.ShipyardSell)]
         public JournalShipyardSell(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSell)
         {
             ShipType = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["ShipType"]));
