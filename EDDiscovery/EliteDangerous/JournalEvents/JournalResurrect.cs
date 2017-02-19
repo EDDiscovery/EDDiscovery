@@ -23,7 +23,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Option: the option selected on the insurance rebuy screen
     //•	Cost: the price paid
     //•	Bankrupt: whether the commander declared bankruptcy
-    public class JournalResurrect : JournalEntry
+    [JournalEntryType(JournalTypeEnum.Resurrect)]
+    public class JournalResurrect : JournalEntry, ILedgerJournalEntry
     {
         public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
         {

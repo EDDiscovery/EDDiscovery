@@ -43,7 +43,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	PowerplayState: the system state – one of("InPrepareRadius", "Prepared", "Exploited", "Contested", "Controlled", "Turmoil", "HomeSystem")
 
 
-
+    [JournalEntryType(JournalTypeEnum.FSDJump)]
     public class JournalFSDJump : JournalLocOrJump
     {
         public JournalFSDJump(JObject evt ) : base(evt, JournalTypeEnum.FSDJump)

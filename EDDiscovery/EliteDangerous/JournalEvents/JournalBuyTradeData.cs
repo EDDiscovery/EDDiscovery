@@ -23,7 +23,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StationName: name of station
 
     //•	Security
-    public class JournalBuyTradeData : JournalEntry
+    [JournalEntryType(JournalTypeEnum.BuyTradeData)]
+    public class JournalBuyTradeData : JournalEntry, ILedgerJournalEntry
     {
         public JournalBuyTradeData(JObject evt ) : base(evt, JournalTypeEnum.BuyTradeData)
         {

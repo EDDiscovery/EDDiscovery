@@ -30,6 +30,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Economy
     //•	Government
     //•	Security
+    [JournalEntryType(JournalTypeEnum.DockingGranted)]
     public class JournalDockingGranted : JournalEntry
     {
         public JournalDockingGranted(JObject evt ) : base(evt, JournalTypeEnum.DockingGranted)

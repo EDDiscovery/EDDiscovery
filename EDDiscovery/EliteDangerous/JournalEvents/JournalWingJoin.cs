@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: this player has joined a wing
     //Parameters:
     //•	Others: JSON array of other player names already in wing
+    [JournalEntryType(JournalTypeEnum.WingJoin)]
     public class JournalWingJoin : JournalEntry
     {
         public JournalWingJoin(JObject evt ) : base(evt, JournalTypeEnum.WingJoin)

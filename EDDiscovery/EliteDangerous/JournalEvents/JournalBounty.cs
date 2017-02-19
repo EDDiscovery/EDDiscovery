@@ -24,7 +24,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Reward: the reward value
     //•	VictimFaction: the victim’s faction
     //•	SharedWithOthers: whether shared with other players
-    public class JournalBounty : JournalEntry
+    [JournalEntryType(JournalTypeEnum.Bounty)]
+    public class JournalBounty : JournalEntry, ILedgerNoCashJournalEntry
     {
         public class BountyReward
         {

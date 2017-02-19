@@ -19,7 +19,7 @@ using System.Linq;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: by EDD when a user manually sets an item count (material or commodity)
-
+    [JournalEntryType(JournalTypeEnum.EDDItemSet)]
     public class JournalEDDItemSet : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalEDDItemSet(JObject evt) : base(evt, JournalTypeEnum.EDDItemSet)

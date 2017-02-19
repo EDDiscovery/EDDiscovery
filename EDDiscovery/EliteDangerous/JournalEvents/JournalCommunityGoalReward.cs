@@ -23,7 +23,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Name
     //•	System
     //•	Reward
-    public class JournalCommunityGoalReward : JournalEntry
+    [JournalEntryType(JournalTypeEnum.CommunityGoalReward)]
+    public class JournalCommunityGoalReward : JournalEntry, ILedgerJournalEntry
     {
         public JournalCommunityGoalReward(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalReward)
         {

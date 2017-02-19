@@ -26,6 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	CombatRank: if player
     //•	Faction: if npc
     //•	Power: if npc working for a power
+    [JournalEntryType(JournalTypeEnum.Interdicted)]
     public class JournalInterdicted : JournalEntry
     {
         public JournalInterdicted(JObject evt ) : base(evt, JournalTypeEnum.Interdicted)

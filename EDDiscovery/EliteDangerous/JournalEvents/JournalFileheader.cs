@@ -21,6 +21,7 @@ using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
+    [JournalEntryType(JournalTypeEnum.Fileheader)]
     public class JournalFileheader : JournalEntry
     {
         public JournalFileheader(JObject evt ) : base(evt, JournalTypeEnum.Fileheader)
