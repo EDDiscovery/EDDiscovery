@@ -37,7 +37,7 @@ namespace EDDiscovery
             TMaterialCommodity, // see if the stupid fdname can be resolved to something better.  format can be empty or prefix;postfix as above
         };
 
-        struct Converters
+        class Converters
         {
             public Converters(string fn, string nname, Types t , double s, string f, string[] q )
             {
@@ -46,7 +46,8 @@ namespace EDDiscovery
                 converttype = t;
                 scale = s;
                 format = f;
-                eventqual = q;
+                formatsplit = f.Split(';');
+                eventqual = q == null ? null : new HashSet<string>(q);
             }
 
             public string fieldnames;     // match on any part of this (List searched in backward order)
@@ -54,63 +55,81 @@ namespace EDDiscovery
             public Types converttype;
             public double scale;     // scale value by this
             public string format;    // format info
-            public string[] eventqual; // null for none, else has to match eventqual passed in to match
+            public string[] formatsplit;
+            public HashSet<string> eventqual; // null for none, else has to match eventqual passed in to match
         }
 
-        List<Converters> converters;
+        Dictionary<string, List<Converters>> convertersdict;
 
         public JSONConverters()
         {
-            converters = new List<Converters>();
+            convertersdict = new Dictionary<string, List<Converters>>();
         }
 
         // name = list of id's to match "one;two;three" or just a single "one"
         // nmane = replace name with this, or null keep name, or "" no name
         // eventq = limit to these events, "one;two;three" or a single "one"
 
+        private void Add(Converters cv)
+        {
+            foreach (string fn in cv.fieldnames.Split(';'))
+            {
+                if (!convertersdict.ContainsKey(fn))
+                {
+                    convertersdict[fn] = new List<Converters>();
+                }
+                convertersdict[fn].Add(cv);
+            }
+        }
+
         public void AddScale(string name, double s, string f = "0.0", string nname = null, string eventq = null)
         {
-            converters.Add(new Converters(name, nname, Types.TScale, s, f, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TScale, s, f, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public void AddBool(string name, string falsevalue , string truevalue , string nname = null, string eventq = null)    // converts a true/false bool into these string, with an optional name removal
         {
-            converters.Add(new Converters(name, nname, Types.TBool, 0, falsevalue + ";" + truevalue, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TBool, 0, falsevalue + ";" + truevalue, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public void AddState(string name, string emptyvalue, string nname = null, string eventq = null)    // adds an empty state and allows the name to be removed
         {
-            converters.Add(new Converters(name, nname, Types.TState, 0, emptyvalue, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TState, 0, emptyvalue, (eventq != null) ? eventq.Split(';') : null));
         }
         
         public void AddPrePostfix(string name, string prepostfix, string nname = null, string eventq = null)    // adds an postfix string to the value and allows the name to be removed
         {
-            converters.Add(new Converters(name, nname, Types.TPrePost, 0, prepostfix, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TPrePost, 0, prepostfix, (eventq != null) ? eventq.Split(';') : null));
         }
         
         public void AddIndex(string name, string prepostindex, string nname = null, string eventq = null)    // indexer
         {
-            converters.Add(new Converters(name, nname, Types.TIndex, 0, prepostindex, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TIndex, 0, prepostindex, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public void AddSpecial(string name, Types t, string format, string nname = null, string eventq = null)    // indexer
         {
-            converters.Add(new Converters(name, nname, t, 0, format, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, t, 0, format, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public string Convert(string pname, string value , string eventname)
         {
             string displayname = pname.SplitCapsWord();
 
-            for ( int i = converters.Count-1; i>=0; i--)
+            if (convertersdict.ContainsKey(pname))
             {
-                string[] ids = converters[i].fieldnames.Split(';');
+                List<Converters> cvlist = convertersdict[pname];
 
-                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && (converters[i].eventqual ==null ||  Array.FindIndex(converters[i].eventqual,x=>x.Equals(eventname))!=-1 ))
+                for (int i = cvlist.Count - 1; i >= 0; i--)
                 {
-                    string[] formatsplit = converters[i].format.Split(';');
+                    Converters cv = cvlist[i];
 
-                    switch (converters[i].converttype)
+                    if (cv.eventqual != null && !cv.eventqual.Contains(eventname))
+                        continue;
+
+                    string[] formatsplit = cv.formatsplit;
+
+                    switch (cv.converttype)
                     {
                         case Types.TBool:
                             bool bv = false;
@@ -170,7 +189,7 @@ namespace EDDiscovery
                                 long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
 
                                 string marker = (arcsec < 0) ? "S" : "N";       // presume lat
-                                if (converters[i].converttype == Types.TLong )
+                                if (cv.converttype == Types.TLong )
                                     marker = (arcsec < 0) ? "W" : "E";       // presume lat
                                 arcsec = Math.Abs(arcsec);
                                 value = string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60 );
@@ -193,13 +212,13 @@ namespace EDDiscovery
                             double v = 0;
 
                             if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out v))        // if it does parse, we can convert it
-                                value = (v * converters[i].scale).ToString(converters[i].format);
+                                value = (v * cv.scale).ToString(cv.format);
                             break;
                     }
 
-                    if (converters[i].newname != null)
+                    if (cv.newname != null)
                     {
-                        displayname = converters[i].newname;
+                        displayname = cv.newname;
                     }
 
                     break;
