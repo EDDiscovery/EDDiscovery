@@ -20,7 +20,7 @@ using System.Linq;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: screenshot
-
+    [JournalEntryType(JournalTypeEnum.Screenshot)]
     public class JournalScreenshot : JournalEntry
     {
         public JournalScreenshot(JObject evt ) : base(evt, JournalTypeEnum.Screenshot)

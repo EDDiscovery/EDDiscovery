@@ -705,11 +705,9 @@ namespace EDDiscovery2
 
         void VideoMessage( string msg = null , int time = 0 )       // no paras, close it
         {
-            if (mapmsg != null)
-            {
-                mapmsg.Close();
-                mapmsg = null;
-            }
+            mapmsg?.Close();
+            mapmsg?.Dispose();
+            mapmsg = null;
 
             if (msg != null && msg.Length > 0 && time > 0)
             {

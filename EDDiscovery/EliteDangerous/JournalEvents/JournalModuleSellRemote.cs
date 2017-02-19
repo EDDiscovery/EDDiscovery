@@ -23,7 +23,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellItem
     //•	SellPrice
     //•	Ship
-    public class JournalModuleSellRemote : JournalEntry
+    [JournalEntryType(JournalTypeEnum.ModuleSellRemote)]
+    public class JournalModuleSellRemote : JournalEntry, ILedgerJournalEntry
     {
         public JournalModuleSellRemote(JObject evt) : base(evt, JournalTypeEnum.ModuleSellRemote)
         {

@@ -340,8 +340,8 @@ namespace ExtendedControls
                 }
                 else
                 {
-                    textb = new SolidBrush(Multiply(ForeColor, 0.5F));
-                    p = new Pen(Multiply(BorderColor, 0.5F));
+                    textb = new SolidBrush(ForeColor.Multiply(0.5F));
+                    p = new Pen(BorderColor.Multiply(0.5F));
                     p2 = null;
                 }
 
@@ -352,13 +352,13 @@ namespace ExtendedControls
                 if (Enabled)
                     bck = (mouseover) ? MouseOverBackgroundColor : BackColor;
                 else
-                    bck = Multiply(BackColor, 0.5F);
+                    bck = BackColor.Multiply(0.5F);
 
                 Brush bbck;
 
                 if (FlatStyle == FlatStyle.Popup)
                 {
-                    bbck = new System.Drawing.Drawing2D.LinearGradientBrush(topBoxTextTotalArea, bck, Multiply(bck, ButtonColorScaling), 90);
+                    bbck = new System.Drawing.Drawing2D.LinearGradientBrush(topBoxTextTotalArea, bck, bck.Multiply(ButtonColorScaling), 90);
                 }
                 else
                 {
@@ -576,7 +576,5 @@ namespace ExtendedControls
                 SelectedIndexChanged(this, e);
             }
         }
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
     }
 }

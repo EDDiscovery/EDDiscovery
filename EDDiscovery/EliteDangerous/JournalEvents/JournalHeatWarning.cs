@@ -20,6 +20,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: player was HeatWarning by player or npc
     //Parameters: 
+    [JournalEntryType(JournalTypeEnum.HeatWarning)]
     public class JournalHeatWarning : JournalEntry
     {
         public JournalHeatWarning(JObject evt ) : base(evt, JournalTypeEnum.HeatWarning)

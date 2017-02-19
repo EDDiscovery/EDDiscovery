@@ -263,7 +263,7 @@ namespace EDDiscovery2.DB
                         mc = new MaterialCommodity(0, c, name, fdname, t, sn, cl, 0);
                         mc.Add(cn);
                     }               // don't change any user changed fields
-                    else if (mc.flags == 0 && (!mc.name.Equals(name) && !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || mc.colour.ToArgb() != cl.ToArgb()))
+                    else if (mc.flags == 0 && (!mc.name.Equals(name) && !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || !mc.colour.IsEqual(cl)))
                     {
                         mc.name = name;
                         mc.shortname = sn;          // So, name is there, update the others
@@ -587,17 +587,13 @@ namespace EDDiscovery2.DB
 
         public void Process(JournalEntry je, SQLiteConnectionUser conn )
         {
-            Type jtype = JournalEntry.TypeOfJournalEntry(je.EventTypeStr);
-
-            if (jtype != null)
+            if (je is ILedgerJournalEntry)
             {
-                System.Reflection.MethodInfo m = jtype.GetMethod("Ledger"); // see if the class defines this function..
-
-                if (m == null)
-                    m = jtype.GetMethod("LedgerNC"); // see if the class defines this function..
-
-                if (m!=null)
-                    m.Invoke(Convert.ChangeType(je, jtype), new Object[] { this, conn });
+                ((ILedgerJournalEntry)je).Ledger(this, conn);
+            }
+            else if (je is ILedgerNoCashJournalEntry)
+            {
+                ((ILedgerNoCashJournalEntry)je).LedgerNC(this, conn);
             }
         }
 

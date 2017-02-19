@@ -291,7 +291,8 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
-    <Compile Include="EliteDangerous\IMaterialCommodityJournalEvent.cs" />
+    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
+    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>
@@ -1324,6 +1325,7 @@
       <ZipFiles Include="$(ProjectDir)\App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
+      <ZipFiles Include="$(OutputPath)\CSCore.dll" />
       <ZipFiles Include="$(OutputPath)\fround.js" />
       <ZipFiles Include="$(OutputPath)\trilateration.js" />
       <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />

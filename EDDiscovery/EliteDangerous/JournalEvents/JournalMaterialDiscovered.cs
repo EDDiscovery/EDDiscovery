@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StationName: name of station
 
     //•	Security
+    [JournalEntryType(JournalTypeEnum.MaterialDiscovered)]
     public class JournalMaterialDiscovered : JournalEntry
     {
         public JournalMaterialDiscovered(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscovered)

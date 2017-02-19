@@ -29,6 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StoreShipID
     //•	SellOldShip: (if selling old ship) type of ship being sold
     //•	SellShipID
+    [JournalEntryType(JournalTypeEnum.ShipyardSwap)]
     public class JournalShipyardSwap : JournalEntry
     {
         public JournalShipyardSwap(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSwap)

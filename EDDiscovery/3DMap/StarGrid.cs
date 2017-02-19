@@ -341,7 +341,7 @@ namespace EDDiscovery2
                         GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                         GL.PointSize(Size);
 
-                        if (Color == Color.Transparent)
+                        if (Color.IsFullyTransparent())
                         {
                             GL.EnableClientState(ArrayCap.ColorArray);
                             GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);

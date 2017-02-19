@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when enough material has been collected from a solar jet code (at a white dwarf or neutron star) for a jump boost
     //Parameters:
     //•	BoostValue
+    [JournalEntryType(JournalTypeEnum.JetConeBoost)]
     public class JournalJetConeBoost : JournalEntry
     {
         public JournalJetConeBoost(JObject evt ) : base(evt, JournalTypeEnum.JetConeBoost)

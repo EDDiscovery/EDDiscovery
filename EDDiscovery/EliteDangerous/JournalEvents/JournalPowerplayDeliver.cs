@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Power
     //•	Type
     //•	Count
+    [JournalEntryType(JournalTypeEnum.PowerplayDeliver)]
     public class JournalPowerplayDeliver : JournalEntry
     {
         public JournalPowerplayDeliver(JObject evt) : base(evt, JournalTypeEnum.PowerplayDeliver)

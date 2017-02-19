@@ -21,7 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //    When written: If you should ever reset your game
     //    Parameters:
     //•	Name: commander name
-
+    [JournalEntryType(JournalTypeEnum.ClearSavedGame)]
     public class JournalClearSavedGame : JournalEntry
     {
         public JournalClearSavedGame(JObject evt) : base(evt, JournalTypeEnum.ClearSavedGame)

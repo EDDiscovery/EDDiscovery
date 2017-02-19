@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name
     //•	Role
-
+    [JournalEntryType(JournalTypeEnum.CrewAssign)]
     public class JournalCrewAssign : JournalEntry
     {
         public JournalCrewAssign(JObject evt) : base(evt, JournalTypeEnum.CrewAssign)

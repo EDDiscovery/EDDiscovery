@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When Written: when a mission has failed
     //Parameters:
     //•	Name: name of mission
+    [JournalEntryType(JournalTypeEnum.MissionFailed)]
     public class JournalMissionFailed : JournalEntry
     {
         public JournalMissionFailed(JObject evt ) : base(evt, JournalTypeEnum.MissionFailed)

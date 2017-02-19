@@ -22,6 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Power
     //•	Systems:[name,name]
+    [JournalEntryType(JournalTypeEnum.PowerplayVoucher)]
     public class JournalPowerplayVoucher : JournalEntry
     {
         public JournalPowerplayVoucher(JObject evt) : base(evt, JournalTypeEnum.PowerplayVoucher)

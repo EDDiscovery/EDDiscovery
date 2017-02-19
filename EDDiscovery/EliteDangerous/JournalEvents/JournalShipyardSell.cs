@@ -22,7 +22,8 @@ using System.Text;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
 
-  public class JournalShipyardSell : JournalEntry
+    [JournalEntryType(JournalTypeEnum.ShipyardSell)]
+    public class JournalShipyardSell : JournalEntry, ILedgerJournalEntry
     {
         //When Written: when selling a ship stored in the shipyard
         //Parameters:
