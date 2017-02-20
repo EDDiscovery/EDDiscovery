@@ -401,7 +401,7 @@ namespace EDDiscovery.Actions
                     {
                         string acceptstr = "Already have an action file called " + af.name + Environment.NewLine + "Click Cancel to abort, OK to overwrite";
 
-                        DialogResult dr = MessageBox.Show(acceptstr, "Duplicate File Warning", MessageBoxButtons.OKCancel);
+                        DialogResult dr = Forms.MessageBoxTheme.Show(acceptstr, "Duplicate File Warning", MessageBoxButtons.OKCancel);
 
                         if (dr == DialogResult.Cancel)
                             return false;
@@ -415,20 +415,20 @@ namespace EDDiscovery.Actions
 
                         if (LoadFile(destfile))
                         {
-                            MessageBox.Show("Action file " + af.name + " loaded.  Note if action file relies on start up events, you will need to quit and rerun EDDiscovery to make the file work correctly");
+                            Forms.MessageBoxTheme.Show("Action file " + af.name + " loaded.  Note if action file relies on start up events, you will need to quit and rerun EDDiscovery to make the file work correctly");
                             return true;
                         }
                         else
-                            MessageBox.Show("Failed to load in");
+                            Forms.MessageBoxTheme.Show("Failed to load in");
                     }
                     catch
                     {
-                        MessageBox.Show("File IO error copying file " + dlg.FileName + " to " + destfile + " check permissions");
+                        Forms.MessageBoxTheme.Show("File IO error copying file " + dlg.FileName + " to " + destfile + " check permissions");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Action file does not read - check file " + dlg.FileName);
+                    Forms.MessageBoxTheme.Show("Action file does not read - check file " + dlg.FileName);
                 }
             }
 

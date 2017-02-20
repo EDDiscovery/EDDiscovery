@@ -428,7 +428,7 @@ namespace EDDiscovery.Actions
                 if (pname != null)
                     EditProgram(curact.UserData);
                 else
-                    MessageBox.Show("No program name assigned");
+                    Forms.MessageBoxTheme.Show("No program name assigned");
             }
         }
 
@@ -504,7 +504,7 @@ namespace EDDiscovery.Actions
             if (errorlist.Length > 0)
             {
                 string acceptstr = "Click Retry to correct errors, Abort to cancel, Ignore to accept what steps are valid";
-                DialogResult dr = MessageBox.Show("Actions produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + errorlist + Environment.NewLine + acceptstr,
+                DialogResult dr = Forms.MessageBoxTheme.Show("Actions produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + errorlist + Environment.NewLine + acceptstr,
                                         "Warning", MessageBoxButtons.AbortRetryIgnore);
 
                 if (dr == DialogResult.Retry)
@@ -545,7 +545,7 @@ namespace EDDiscovery.Actions
 
         private void buttonExtDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(this, "Do you want to delete this program?", "Delete program", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (Forms.MessageBoxTheme.Show(this, "Do you want to delete this program?", "Delete program", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 DialogResult = DialogResult.Abort;
                 Close();
@@ -585,7 +585,7 @@ namespace EDDiscovery.Actions
                     string err;
                     ActionProgram ap = ActionProgram.FromFile(dlg.FileName, System.IO.Path.GetFileNameWithoutExtension(dlg.FileName), out err);
                     if (ap == null)
-                        MessageBox.Show("Failed to load text file" + Environment.NewLine + err);
+                        Forms.MessageBoxTheme.Show("Failed to load text file" + Environment.NewLine + err);
                     else
                     {
                         LoadProgram(ap);
@@ -610,7 +610,7 @@ namespace EDDiscovery.Actions
             {
                 curprog.Name = textBoxBorderName.Text;
                 if (!curprog.SaveText(dlg.FileName))
-                    MessageBox.Show("Failed to save text file - check file path");
+                    Forms.MessageBoxTheme.Show("Failed to save text file - check file path");
             }
         }
 

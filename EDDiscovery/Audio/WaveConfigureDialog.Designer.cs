@@ -43,6 +43,7 @@ namespace EDDiscovery.Audio
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WaveConfigureDialog));
             this.textBoxBorderText = new ExtendedControls.TextBoxBorder();
             this.buttonExtBrowse = new ExtendedControls.ButtonExt();
             this.trackBarVolume = new System.Windows.Forms.TrackBar();
@@ -54,6 +55,7 @@ namespace EDDiscovery.Audio
             this.buttonExtCancel = new ExtendedControls.ButtonExt();
             this.buttonExtEffects = new ExtendedControls.ButtonExt();
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.buttonExtDevice = new ExtendedControls.ButtonExt();
             this.textBoxBorderStartTrigger = new ExtendedControls.TextBoxBorder();
             this.labelStartTrigger = new System.Windows.Forms.Label();
             this.textBoxBorderEndTrigger = new ExtendedControls.TextBoxBorder();
@@ -71,7 +73,7 @@ namespace EDDiscovery.Audio
             this.textBoxBorderText.Location = new System.Drawing.Point(12, 37);
             this.textBoxBorderText.Multiline = true;
             this.textBoxBorderText.Name = "textBoxBorderText";
-            this.textBoxBorderText.Size = new System.Drawing.Size(324, 24);
+            this.textBoxBorderText.Size = new System.Drawing.Size(364, 24);
             this.textBoxBorderText.TabIndex = 0;
             this.textBoxBorderText.WordWrap = false;
             // 
@@ -80,7 +82,7 @@ namespace EDDiscovery.Audio
             this.buttonExtBrowse.BorderColorScaling = 1.25F;
             this.buttonExtBrowse.ButtonColorScaling = 0.5F;
             this.buttonExtBrowse.ButtonDisabledScaling = 0.5F;
-            this.buttonExtBrowse.Location = new System.Drawing.Point(368, 23);
+            this.buttonExtBrowse.Location = new System.Drawing.Point(382, 21);
             this.buttonExtBrowse.Name = "buttonExtBrowse";
             this.buttonExtBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonExtBrowse.TabIndex = 1;
@@ -90,7 +92,7 @@ namespace EDDiscovery.Audio
             // 
             // trackBarVolume
             // 
-            this.trackBarVolume.Location = new System.Drawing.Point(57, 136);
+            this.trackBarVolume.Location = new System.Drawing.Point(57, 147);
             this.trackBarVolume.Maximum = 100;
             this.trackBarVolume.Name = "trackBarVolume";
             this.trackBarVolume.Size = new System.Drawing.Size(203, 45);
@@ -102,7 +104,7 @@ namespace EDDiscovery.Audio
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 152);
+            this.label1.Location = new System.Drawing.Point(9, 163);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 13);
             this.label1.TabIndex = 43;
@@ -115,7 +117,7 @@ namespace EDDiscovery.Audio
             this.checkBoxCustomV.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomV.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomV.FontNerfReduction = 0.5F;
-            this.checkBoxCustomV.Location = new System.Drawing.Point(276, 148);
+            this.checkBoxCustomV.Location = new System.Drawing.Point(276, 159);
             this.checkBoxCustomV.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomV.Name = "checkBoxCustomV";
             this.checkBoxCustomV.Size = new System.Drawing.Size(66, 17);
@@ -132,7 +134,7 @@ namespace EDDiscovery.Audio
             this.checkBoxCustomComplete.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomComplete.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomComplete.FontNerfReduction = 0.5F;
-            this.checkBoxCustomComplete.Location = new System.Drawing.Point(12, 76);
+            this.checkBoxCustomComplete.Location = new System.Drawing.Point(12, 82);
             this.checkBoxCustomComplete.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomComplete.Name = "checkBoxCustomComplete";
             this.checkBoxCustomComplete.Size = new System.Drawing.Size(150, 17);
@@ -146,7 +148,7 @@ namespace EDDiscovery.Audio
             this.buttonExtTest.BorderColorScaling = 1.25F;
             this.buttonExtTest.ButtonColorScaling = 0.5F;
             this.buttonExtTest.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTest.Location = new System.Drawing.Point(367, 52);
+            this.buttonExtTest.Location = new System.Drawing.Point(382, 50);
             this.buttonExtTest.Name = "buttonExtTest";
             this.buttonExtTest.Size = new System.Drawing.Size(75, 23);
             this.buttonExtTest.TabIndex = 7;
@@ -159,7 +161,7 @@ namespace EDDiscovery.Audio
             this.buttonExtOK.BorderColorScaling = 1.25F;
             this.buttonExtOK.ButtonColorScaling = 0.5F;
             this.buttonExtOK.ButtonDisabledScaling = 0.5F;
-            this.buttonExtOK.Location = new System.Drawing.Point(368, 187);
+            this.buttonExtOK.Location = new System.Drawing.Point(381, 198);
             this.buttonExtOK.Name = "buttonExtOK";
             this.buttonExtOK.Size = new System.Drawing.Size(75, 23);
             this.buttonExtOK.TabIndex = 8;
@@ -173,7 +175,7 @@ namespace EDDiscovery.Audio
             this.buttonExtCancel.ButtonColorScaling = 0.5F;
             this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
             this.buttonExtCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonExtCancel.Location = new System.Drawing.Point(276, 187);
+            this.buttonExtCancel.Location = new System.Drawing.Point(275, 198);
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonExtCancel.TabIndex = 9;
@@ -185,7 +187,7 @@ namespace EDDiscovery.Audio
             this.buttonExtEffects.BorderColorScaling = 1.25F;
             this.buttonExtEffects.ButtonColorScaling = 0.5F;
             this.buttonExtEffects.ButtonDisabledScaling = 0.5F;
-            this.buttonExtEffects.Location = new System.Drawing.Point(368, 143);
+            this.buttonExtEffects.Location = new System.Drawing.Point(382, 154);
             this.buttonExtEffects.Name = "buttonExtEffects";
             this.buttonExtEffects.Size = new System.Drawing.Size(75, 23);
             this.buttonExtEffects.TabIndex = 6;
@@ -196,6 +198,7 @@ namespace EDDiscovery.Audio
             // panelOuter
             // 
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.buttonExtDevice);
             this.panelOuter.Controls.Add(this.textBoxBorderStartTrigger);
             this.panelOuter.Controls.Add(this.labelStartTrigger);
             this.panelOuter.Controls.Add(this.textBoxBorderEndTrigger);
@@ -215,14 +218,27 @@ namespace EDDiscovery.Audio
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(0, 0);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(455, 230);
+            this.panelOuter.Size = new System.Drawing.Size(475, 247);
             this.panelOuter.TabIndex = 50;
+            // 
+            // buttonExtDevice
+            // 
+            this.buttonExtDevice.BorderColorScaling = 1.25F;
+            this.buttonExtDevice.ButtonColorScaling = 0.5F;
+            this.buttonExtDevice.ButtonDisabledScaling = 0.5F;
+            this.buttonExtDevice.Location = new System.Drawing.Point(382, 92);
+            this.buttonExtDevice.Name = "buttonExtDevice";
+            this.buttonExtDevice.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtDevice.TabIndex = 50;
+            this.buttonExtDevice.Text = "Device";
+            this.buttonExtDevice.UseVisualStyleBackColor = true;
+            this.buttonExtDevice.Click += new System.EventHandler(this.buttonExtDevice_Click);
             // 
             // textBoxBorderStartTrigger
             // 
             this.textBoxBorderStartTrigger.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderStartTrigger.BorderColorScaling = 0.5F;
-            this.textBoxBorderStartTrigger.Location = new System.Drawing.Point(98, 108);
+            this.textBoxBorderStartTrigger.Location = new System.Drawing.Point(98, 116);
             this.textBoxBorderStartTrigger.Name = "textBoxBorderStartTrigger";
             this.textBoxBorderStartTrigger.Size = new System.Drawing.Size(100, 20);
             this.textBoxBorderStartTrigger.TabIndex = 49;
@@ -230,7 +246,7 @@ namespace EDDiscovery.Audio
             // labelStartTrigger
             // 
             this.labelStartTrigger.AutoSize = true;
-            this.labelStartTrigger.Location = new System.Drawing.Point(12, 111);
+            this.labelStartTrigger.Location = new System.Drawing.Point(12, 119);
             this.labelStartTrigger.Name = "labelStartTrigger";
             this.labelStartTrigger.Size = new System.Drawing.Size(65, 13);
             this.labelStartTrigger.TabIndex = 48;
@@ -240,7 +256,7 @@ namespace EDDiscovery.Audio
             // 
             this.textBoxBorderEndTrigger.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderEndTrigger.BorderColorScaling = 0.5F;
-            this.textBoxBorderEndTrigger.Location = new System.Drawing.Point(343, 108);
+            this.textBoxBorderEndTrigger.Location = new System.Drawing.Point(357, 116);
             this.textBoxBorderEndTrigger.Name = "textBoxBorderEndTrigger";
             this.textBoxBorderEndTrigger.Size = new System.Drawing.Size(100, 20);
             this.textBoxBorderEndTrigger.TabIndex = 47;
@@ -257,7 +273,7 @@ namespace EDDiscovery.Audio
             this.comboBoxCustomPriority.DropDownWidth = 110;
             this.comboBoxCustomPriority.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomPriority.ItemHeight = 13;
-            this.comboBoxCustomPriority.Location = new System.Drawing.Point(226, 70);
+            this.comboBoxCustomPriority.Location = new System.Drawing.Point(226, 79);
             this.comboBoxCustomPriority.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomPriority.Name = "comboBoxCustomPriority";
             this.comboBoxCustomPriority.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -274,7 +290,7 @@ namespace EDDiscovery.Audio
             // labelEndTrigger
             // 
             this.labelEndTrigger.AutoSize = true;
-            this.labelEndTrigger.Location = new System.Drawing.Point(261, 111);
+            this.labelEndTrigger.Location = new System.Drawing.Point(261, 119);
             this.labelEndTrigger.Name = "labelEndTrigger";
             this.labelEndTrigger.Size = new System.Drawing.Size(62, 13);
             this.labelEndTrigger.TabIndex = 45;
@@ -294,8 +310,9 @@ namespace EDDiscovery.Audio
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonExtCancel;
-            this.ClientSize = new System.Drawing.Size(455, 230);
+            this.ClientSize = new System.Drawing.Size(475, 247);
             this.Controls.Add(this.panelOuter);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WaveConfigureDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "WaveConfigure";
@@ -325,5 +342,6 @@ namespace EDDiscovery.Audio
         private System.Windows.Forms.Label labelEndTrigger;
         private ExtendedControls.TextBoxBorder textBoxBorderStartTrigger;
         private System.Windows.Forms.Label labelStartTrigger;
+        private ExtendedControls.ButtonExt buttonExtDevice;
     }
 }

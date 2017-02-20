@@ -80,7 +80,7 @@ namespace EDDiscovery.Actions
             FromString(userdata, out path, out vars);
 
             WaveConfigureDialog cfg = new WaveConfigureDialog();
-            cfg.Init(discoveryform.AudioQueueWave, false, "Select file, volume and effects", "Configure Play Command", discoveryform.theme, path,
+            cfg.Init(discoveryform.AudioQueueWave, false, "Select file, volume and effects", "Configure Play Command", path,
                         vars.ContainsKey(waitname),
                         Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
                         vars.GetString(startname, ""),

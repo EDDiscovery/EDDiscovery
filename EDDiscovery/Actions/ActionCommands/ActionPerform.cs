@@ -78,7 +78,7 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Perform url must start with http");
                 }
                 else if (cmdname.Equals("configurevoice"))
-                    ap.actioncontroller.ConfigureVoice();
+                    ap.actioncontroller.ConfigureVoice(sp.NextQuotedWord() ?? "Configure Voice Synthesis");
                 else if (cmdname.Equals("manageaddons"))
                     ap.actioncontroller.ManageAddOns();
                 else if (cmdname.Equals("editaddons"))
@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("editspeechtext"))
                     ap.actioncontroller.EditSpeechText();
                 else if (cmdname.Equals("configurewave"))
-                    ap.actioncontroller.ConfigureWave();
+                    ap.actioncontroller.ConfigureWave(sp.NextQuotedWord() ?? "Configure Wave Output");
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");
             }

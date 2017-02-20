@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
 
             Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
             cfg.Init(discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
-                        "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command", discoveryform.theme,
+                        "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command", 
                         saying,
                         vars.ContainsKey(waitname),
                         Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),

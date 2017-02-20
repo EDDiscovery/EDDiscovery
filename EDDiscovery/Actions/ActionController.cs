@@ -132,7 +132,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        public void ConfigureVoice()
+        public void ConfigureVoice(string title)
         {
             string voicename = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechvoice, "Default");
             string volume = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechvolume,"Default");
@@ -141,7 +141,7 @@ namespace EDDiscovery.Actions
 
             Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
             cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
-                        "Select voice synthesizer defaults", "Configure Voice Synthesis", discoveryform.theme,
+                        "Select voice synthesizer defaults", title, 
                         null, false, Audio.AudioQueue.Priority.Normal, "", "",
                         voicename,
                         volume,
@@ -154,16 +154,18 @@ namespace EDDiscovery.Actions
                 SetPeristentGlobal(Actions.ActionSay.globalvarspeechvolume, cfg.Volume);
                 SetPeristentGlobal(Actions.ActionSay.globalvarspeechrate, cfg.Rate);
                 SetPeristentGlobal(Actions.ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
+
+                EDDConfig.Instance.DefaultVoiceDevice = discoveryform.AudioQueueSpeech.Driver.GetAudioEndpoint();
             }
         }
 
-        public void ConfigureWave()
+        public void ConfigureWave(string title)
         {
             string volume = persistentglobalvariables.GetString(Actions.ActionPlay.globalvarplayvolume, "60");
             ConditionVariables effects = new ConditionVariables(persistentglobalvariables.GetString(Actions.ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             Audio.WaveConfigureDialog dlg = new Audio.WaveConfigureDialog();
-            dlg.Init(discoveryform.AudioQueueWave, true, "Select Play Default volume and effects", "Configure Play Audio", discoveryform.theme, "",
+            dlg.Init(discoveryform.AudioQueueWave, true, "Select Default device, volume and effects", title, "",
                         false, Audio.AudioQueue.Priority.Normal, "", "",
                         volume, effects);
 
@@ -173,6 +175,8 @@ namespace EDDiscovery.Actions
 
                 SetPeristentGlobal(Actions.ActionPlay.globalvarplayvolume, dlg.Volume);
                 SetPeristentGlobal(Actions.ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
+
+                EDDConfig.Instance.DefaultWaveDevice = discoveryform.AudioQueueWave.Driver.GetAudioEndpoint();
             }
         }
 
@@ -192,7 +196,7 @@ namespace EDDiscovery.Actions
                 }
             }
 
-            MessageBox.Show("Voice pack not loaded, or needs updating to support this functionality");
+            Forms.MessageBoxTheme.Show("Voice pack not loaded, or needs updating to support this functionality");
         }
 
         public void ActionRunOnRefresh()
