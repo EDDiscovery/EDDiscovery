@@ -37,7 +37,7 @@ namespace EDDiscovery
             TMaterialCommodity, // see if the stupid fdname can be resolved to something better.  format can be empty or prefix;postfix as above
         };
 
-        struct Converters
+        class Converters
         {
             public Converters(string fn, string nname, Types t , double s, string f, string[] q )
             {
@@ -46,7 +46,8 @@ namespace EDDiscovery
                 converttype = t;
                 scale = s;
                 format = f;
-                eventqual = q;
+                formatsplit = f.Split(';');
+                eventqual = q == null ? null : new HashSet<string>(q);
             }
 
             public string fieldnames;     // match on any part of this (List searched in backward order)
@@ -54,63 +55,81 @@ namespace EDDiscovery
             public Types converttype;
             public double scale;     // scale value by this
             public string format;    // format info
-            public string[] eventqual; // null for none, else has to match eventqual passed in to match
+            public string[] formatsplit;
+            public HashSet<string> eventqual; // null for none, else has to match eventqual passed in to match
         }
 
-        List<Converters> converters;
+        Dictionary<string, List<Converters>> convertersdict;
 
         public JSONConverters()
         {
-            converters = new List<Converters>();
+            convertersdict = new Dictionary<string, List<Converters>>();
         }
 
         // name = list of id's to match "one;two;three" or just a single "one"
         // nmane = replace name with this, or null keep name, or "" no name
         // eventq = limit to these events, "one;two;three" or a single "one"
 
+        private void Add(Converters cv)
+        {
+            foreach (string fn in cv.fieldnames.Split(';'))
+            {
+                if (!convertersdict.ContainsKey(fn))
+                {
+                    convertersdict[fn] = new List<Converters>();
+                }
+                convertersdict[fn].Add(cv);
+            }
+        }
+
         public void AddScale(string name, double s, string f = "0.0", string nname = null, string eventq = null)
         {
-            converters.Add(new Converters(name, nname, Types.TScale, s, f, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TScale, s, f, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public void AddBool(string name, string falsevalue , string truevalue , string nname = null, string eventq = null)    // converts a true/false bool into these string, with an optional name removal
         {
-            converters.Add(new Converters(name, nname, Types.TBool, 0, falsevalue + ";" + truevalue, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TBool, 0, falsevalue + ";" + truevalue, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public void AddState(string name, string emptyvalue, string nname = null, string eventq = null)    // adds an empty state and allows the name to be removed
         {
-            converters.Add(new Converters(name, nname, Types.TState, 0, emptyvalue, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TState, 0, emptyvalue, (eventq != null) ? eventq.Split(';') : null));
         }
         
         public void AddPrePostfix(string name, string prepostfix, string nname = null, string eventq = null)    // adds an postfix string to the value and allows the name to be removed
         {
-            converters.Add(new Converters(name, nname, Types.TPrePost, 0, prepostfix, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TPrePost, 0, prepostfix, (eventq != null) ? eventq.Split(';') : null));
         }
         
         public void AddIndex(string name, string prepostindex, string nname = null, string eventq = null)    // indexer
         {
-            converters.Add(new Converters(name, nname, Types.TIndex, 0, prepostindex, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TIndex, 0, prepostindex, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public void AddSpecial(string name, Types t, string format, string nname = null, string eventq = null)    // indexer
         {
-            converters.Add(new Converters(name, nname, t, 0, format, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, t, 0, format, (eventq != null) ? eventq.Split(';') : null));
         }
 
         public string Convert(string pname, string value , string eventname)
         {
             string displayname = pname.SplitCapsWord();
 
-            for ( int i = converters.Count-1; i>=0; i--)
+            if (convertersdict.ContainsKey(pname))
             {
-                string[] ids = converters[i].fieldnames.Split(';');
+                List<Converters> cvlist = convertersdict[pname];
 
-                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && (converters[i].eventqual ==null ||  Array.FindIndex(converters[i].eventqual,x=>x.Equals(eventname))!=-1 ))
+                for (int i = cvlist.Count - 1; i >= 0; i--)
                 {
-                    string[] formatsplit = converters[i].format.Split(';');
+                    Converters cv = cvlist[i];
 
-                    switch (converters[i].converttype)
+                    if (cv.eventqual != null && !cv.eventqual.Contains(eventname))
+                        continue;
+
+                    string[] formatsplit = cv.formatsplit;
+
+                    switch (cv.converttype)
                     {
                         case Types.TBool:
                             bool bv = false;
@@ -170,7 +189,7 @@ namespace EDDiscovery
                                 long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
 
                                 string marker = (arcsec < 0) ? "S" : "N";       // presume lat
-                                if (converters[i].converttype == Types.TLong )
+                                if (cv.converttype == Types.TLong )
                                     marker = (arcsec < 0) ? "W" : "E";       // presume lat
                                 arcsec = Math.Abs(arcsec);
                                 value = string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60 );
@@ -193,13 +212,13 @@ namespace EDDiscovery
                             double v = 0;
 
                             if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out v))        // if it does parse, we can convert it
-                                value = (v * converters[i].scale).ToString(converters[i].format);
+                                value = (v * cv.scale).ToString(cv.format);
                             break;
                     }
 
-                    if (converters[i].newname != null)
+                    if (cv.newname != null)
                     {
-                        displayname = converters[i].newname;
+                        displayname = cv.newname;
                     }
 
                     break;
@@ -231,66 +250,73 @@ namespace EDDiscovery
             eventtype = eventp;
         }
 
-        private string TrimEnd(string outstr)
+        private void TrimEnd(StringBuilder sb)
         {
-            outstr = outstr.TrimEnd();
-            if (outstr.Length > 0 && outstr[outstr.Length - 1] == ',')
-                outstr = outstr.Substring(0, outstr.Length - 1);
+            int end = sb.Length;
 
-            return outstr;
+            while (end > 0 && char.IsWhiteSpace(sb[end - 1]))
+                end--;
+
+            if (end > 0 && sb[end - 1] == ',')
+                end--;
+
+            if (end < sb.Length)
+                sb.Remove(end, sb.Length - end);
         }
 
-        private void LF(ref string str, ref int linelen , bool forcelf = false )
+        private void LF(StringBuilder sb, ref int linelen , bool forcelf = false )
         {
-            if (( forcelf && str.Length>0) || str.Length - linelen > maxlinelen)       // not too many on one line.
+            if (( forcelf && sb.Length>0) || sb.Length - linelen > maxlinelen)       // not too many on one line.
             {
-                str += Environment.NewLine;
-                linelen = str.Length;
+                sb.Append(Environment.NewLine);
+                linelen = sb.Length;
             }
         }
 
-        bool InDupList(JToken jt, string name)
+        bool InDupList(HashSet<string> names, string name)
         {
             foreach (string l in duplicatepostfixremove)
             {
-                foreach( JToken jc in jt.Children())
-                {
-                    if (jc.Path.Contains(name + l))
-                        return true;
-                }
+                if (names.Contains(name + l))
+                    return true;
             }
+
             return false;
         }
 
         public string PrettyPrint(string json , int maxlinel)
         {
-            string outstr = "";
-
             try
             {
+                StringBuilder sb = new StringBuilder();
+
                 maxlinelen = maxlinel;
                 JObject jo = JObject.Parse(json);  // Create a clone
                 int linelen = 0;
                 int nc = 1;
-                foreach (JToken jc in jo.Children())
+
+                HashSet<string> names = new HashSet<string>(jo.Properties().Select(p => p.Name));
+
+                int childcount = jo.Count;
+                foreach (JProperty jc in jo.Properties())
                 {
-                    if ( !InDupList(jo,jc.Path))
-                        ExpandTokens(jc, ref outstr, ref linelen, nc, jo.Children().Count());
+                    if (!InDupList(names, jc.Name))
+                        ExpandTokens(jc, sb, ref linelen, nc, childcount);
 
                     nc++;
                 }
 
-                outstr = TrimEnd(outstr);
+                TrimEnd(sb);
+
+                return sb.ToString();
             }
             catch (Exception)
             {
-                outstr = "Report problem to EDDiscovery team, did not print properly";
+                return "Report problem to EDDiscovery team, did not print properly";
             }
-
-            return outstr;
         }
 
-        private void ExpandTokens(JToken jt, ref string outstr, ref int linelen, int childno , int siblings)
+        private void ExpandTokens(JToken jt, StringBuilder sb, ref int linelen, int childno , int siblings)
         {
             //System.Diagnostics.Trace.WriteLine("parent JT " + jt.Path + " is a " + jt.Type.ToString());
             if (jt.HasValues)
@@ -315,22 +341,23 @@ namespace EDDiscovery
                     }
                 }
 
-                int totalchildren = jt.Children().Count();
+                int totalchildren = jt is JContainer ? ((JContainer)jt).Count : 0;
 
                 bool isarray = jt is JArray;
                 bool isobject = jt is JObject;
 
-                LF(ref outstr, ref linelen);
+                LF(sb, ref linelen);
 
                 if (isarray)            
                 {
-                    if (totalchildren >= 1 && jt.Children().First() is JObject )
-                        LF(ref outstr, ref linelen,true);
+                    if (totalchildren >= 1 && jt is JObject )
+                        LF(sb, ref linelen,true);
 
-                    outstr += name + "(";
+                    sb.Append(name);
+                    sb.Append("(");
                 }
                 if (isobject)
-                    outstr += "{";
+                    sb.Append("{");
 
                 int cno = 1;
 
@@ -341,7 +368,7 @@ namespace EDDiscovery
                     //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} : {1} {2}", cno, jc.Path, jc.Type.ToString()));
                     if (jc.HasValues)
                     {
-                        ExpandTokens(jc, ref outstr, ref linelen, cno , totalchildren);
+                        ExpandTokens(jc, sb, ref linelen, cno , totalchildren);
                     }
                     else if ( Array.FindIndex(decodeable,x=>x==jc.Type )!=-1 )
                     {
@@ -352,15 +379,23 @@ namespace EDDiscovery
                         else if ( !isarray )                                        // if no converter, array elements do are not named..
                             value = name + ":" + value;
 
-                        outstr +=  value + ", ";
+                        sb.Append(value);
+                        sb.Append(", ");
                     }
                     cno++;
                 }
 
                 if (isarray)
-                    outstr = TrimEnd(outstr) + "), ";
+                {
+                    TrimEnd(sb);
+                    sb.Append("), ");
+                }
                 if (isobject)
-                    outstr = TrimEnd(outstr) + "}," + Environment.NewLine;
+                {
+                    TrimEnd(sb);
+                    sb.Append("},");
+                    sb.Append(Environment.NewLine);
+                }
             }
         }
     }

@@ -31,8 +31,21 @@ namespace EDDiscovery.Audio
         {
         }
 
-        public AudioDriverDummy(string devicestr)     // string would give a hint on device.. not used yet
+        public List<string> GetAudioEndpoints()
         {
+            List<string> ep = new List<string>();
+            ep.Add("Default");
+            return ep;
+        }
+
+        public bool SetAudioEndpoint(string dev , bool usedefaultifnotfound = false)
+        {
+            return true;
+        }
+
+        public string GetAudioEndpoint()
+        {
+            return "Default";
         }
 
         public void Dispose()

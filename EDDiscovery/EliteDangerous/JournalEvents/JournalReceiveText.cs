@@ -23,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	From
     //•	Message
 
-
+    [JournalEntryType(JournalTypeEnum.ReceiveText)]
     public class JournalReceiveText : JournalEntry
     {
         public JournalReceiveText(JObject evt) : base(evt, JournalTypeEnum.ReceiveText)

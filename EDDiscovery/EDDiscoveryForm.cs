@@ -184,8 +184,8 @@ namespace EDDiscovery
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
-                audiodriverwave = new Audio.AudioDriverCSCore();
-                audiodriverspeech = new Audio.AudioDriverCSCore();
+                audiodriverwave = new Audio.AudioDriverCSCore( EDDConfig.DefaultWaveDevice );
+                audiodriverspeech = new Audio.AudioDriverCSCore( EDDConfig.DefaultVoiceDevice );
                 speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
             }
             else
@@ -859,7 +859,7 @@ namespace EDDiscovery
         public void Open2DMap()
         {
             this.Cursor = Cursors.WaitCursor;
-            FormSagCarinaMission frm = new FormSagCarinaMission(Controller.history.FilterByFSDAndPosition);
+            Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDAndPosition);
             frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;

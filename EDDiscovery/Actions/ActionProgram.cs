@@ -430,7 +430,7 @@ namespace EDDiscovery.Actions
                         ActionProgram apin = ActionProgram.FromFile(editingloc, filename, out err);
                         if (apin == null)
                         {
-                            DialogResult dr = MessageBox.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
+                            DialogResult dr = Forms.MessageBoxTheme.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
                                                 "Click Retry to correct errors, Cancel to abort editing",
                                                 "Warning", MessageBoxButtons.RetryCancel);
 
@@ -447,7 +447,7 @@ namespace EDDiscovery.Actions
             }
             catch { }
 
-            MessageBox.Show("Unable to run text editor - check association for .txt files");
+            Forms.MessageBoxTheme.Show("Unable to run text editor - check association for .txt files");
             return false;
         }
 

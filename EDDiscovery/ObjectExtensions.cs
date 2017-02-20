@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
 
@@ -220,10 +221,36 @@ public static class ObjectExtensions
 
     public static string SplitCapsWord(this string capslower)
     {
-        string s = Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"); //Upper(rep)UpperLower = Upper(rep) UpperLower
-        s = Regex.Replace(s, @"([a-z\d])([A-Z])", "$1 $2");     // lowerdecUpper split
-        s = Regex.Replace(s, @"[-\s]", " ");                    // -orwhitespace with spc
-        return s;
+        List<int> positions = new List<int>();
+        List<string> words = new List<string>();
+
+        int start = 0;
+
+        if (capslower[0] == '-' || char.IsWhiteSpace(capslower[0]))  // Remove leading dash or whitespace
+            start = 1;
+
+        for (int i = 1; i <= capslower.Length; i++)
+        {
+            char c0 = capslower[i - 1];
+            char c1 = i < capslower.Length ? capslower[i] : '\0';
+            char c2 = i < capslower.Length - 1 ? capslower[i + 1] : '\0';
+
+            if (i == capslower.Length || // End of string
+                (i < capslower.Length - 1 && c0 >= 'A' && c0 <= 'Z' && c1 >= 'A' && c1 <= 'Z' && c2 >= 'a' && c2 <= 'z') || // UpperUpperLower
+                (((c0 >= 'a' && c0 <= 'z') || (c0 >= '0' && c0 <= '9')) && c1 >= 'A' && c1 <= 'Z') || // LowerdigitUpper
+                (c1 == '-' || c1 == ' ' || c1 == '\t' || c1 == '\r')) // dash or whitespace
+            {
+                if (i > start)
+                    words.Add(capslower.Substring(start, i - start));
+
+                if (i < capslower.Length && (c1 == '-' || c1 == ' ' || c1 == '\t' || c1 == '\r'))
+                    start = i + 1;
+                else
+                    start = i;
+            }
+        }
+
+        return String.Join(" ", words);
     }
 
     public static bool Eval(this string ins, out string res)        // true, res = eval.  false, res = error

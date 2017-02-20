@@ -21,18 +21,6 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.Audio
 {
-    public delegate void AudioStopped();
-
-    public interface IAudioDriver : IDisposable
-    {
-        event AudioStopped AudioStoppedEvent;
-        void Start(Object o, int vol);      // start with this audio
-        void Stop();
-        Object Generate(string file, ConditionVariables effects = null);       // generate audio samples and return. Effects 
-        Object Generate(System.IO.Stream audioms, ConditionVariables effects = null , bool ensuresomeaudio = false );
-        void Dispose(Object o);             // finish with this audio
-    }
-
     public class AudioQueue : IDisposable       // Must dispose BEFORE ISoundOut.
     {
         public delegate void SampleStart(AudioQueue sender, Object tag);
@@ -80,6 +68,28 @@ namespace EDDiscovery.Audio
             audioqueue = new List<AudioSample>();
         }
 
+        public IAudioDriver Driver { get { return ad; } }           // be careful! go thru this class to change anything
+
+        public bool SetAudioEndpoint( string dev )
+        {
+            bool res = ad.SetAudioEndpoint(dev);
+            if (res)
+                Clear();
+            return res;
+        }
+
+        public void Clear()
+        {
+            foreach( AudioSample a in audioqueue )
+            {
+                a.SampleOver(this);     // let callers know a sample is over
+                ad.Dispose(a.audiodata);        // tell the driver to clean up
+                a.ms?.Dispose();            // clean any stream
+            }
+
+            audioqueue.Clear();
+        }
+
         private void AudioStoppedEvent()
         {
             System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stopped audio");
@@ -89,7 +99,7 @@ namespace EDDiscovery.Audio
                 audioqueue[0].SampleOver(this);     // let callers know a sample is over
 
                 ad.Dispose(audioqueue[0].audiodata);        // tell the driver to clean up
-                audioqueue[0].ms?.Dispose();
+                audioqueue[0].ms?.Dispose();        // clean stream
 
                 audioqueue.RemoveAt(0);
             }

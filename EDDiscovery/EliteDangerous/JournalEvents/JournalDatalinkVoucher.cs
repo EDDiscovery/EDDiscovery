@@ -23,8 +23,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	Reward: value in credits
 //•	VictimFaction
 //•	PayeeFaction
-
-    public class JournalDatalinkVoucher : JournalEntry
+    [JournalEntryType(JournalTypeEnum.DatalinkVoucher)]
+    public class JournalDatalinkVoucher : JournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalDatalinkVoucher(JObject evt) : base(evt, JournalTypeEnum.DatalinkVoucher)
         {

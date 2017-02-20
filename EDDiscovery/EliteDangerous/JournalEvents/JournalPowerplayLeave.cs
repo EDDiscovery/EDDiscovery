@@ -21,6 +21,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when leaving a power
     //Parameters:
     //•	Power
+    [JournalEntryType(JournalTypeEnum.PowerplayLeave)]
     public class JournalPowerplayLeave : JournalEntry
     {
         public JournalPowerplayLeave(JObject evt) : base(evt, JournalTypeEnum.PowerplayLeave)

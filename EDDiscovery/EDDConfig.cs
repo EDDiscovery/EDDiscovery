@@ -725,6 +725,40 @@ namespace EDDiscovery2
         }
         #endregion
 
+        #region String properties
+        /// <summary>
+        /// Default audio output device name to use for voice output
+        /// </summary>
+        public string DefaultVoiceDevice
+        {
+            get
+            {
+                return _defaultvoicedevice;
+            }
+            set
+            {
+                _defaultvoicedevice = value;
+                SQLiteConnectionUser.PutSettingString("VoiceAudioDevice", value);
+            }
+        }
+
+        /// <summary>
+        /// Default audio output device name to use for sound output
+        /// </summary>
+        public string DefaultWaveDevice
+        {
+            get
+            {
+                return _defaultwavedevice;
+            }
+            set
+            {
+                _defaultwavedevice = value;
+                SQLiteConnectionUser.PutSettingString("WaveAudioDevice", value);
+            }
+        }
+        #endregion
+
         #region Map Colours
         /// <summary>
         /// The default map colour.
@@ -773,6 +807,9 @@ namespace EDDiscovery2
                 _minimizeToNotifyIcon   = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", _minimizeToNotifyIcon, conn);
                 _orderrowsinverted      = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", _orderrowsinverted, conn);
                 _useNotifyIcon          = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", _useNotifyIcon, conn);
+                // String properties
+                _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", _defaultvoicedevice, conn);
+                _defaultwavedevice = SQLiteConnectionUser.GetSettingString("VoiceWaveDevice", _defaultwavedevice, conn);
                 // Colour properties
                 _defaultMapColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("DefaultMap", _defaultMapColour.ToArgb(), conn));
                 MapColours.Load(conn);
@@ -832,6 +869,8 @@ namespace EDDiscovery2
         private bool _minimizeToNotifyIcon = false;
         private bool _orderrowsinverted = false;
         private bool _useNotifyIcon = false;
+        private string _defaultvoicedevice = "Default";
+        private string _defaultwavedevice = "Default";
         private Color _defaultMapColour = Color.Red;
 
         #endregion // Fields, both static and instantiated.

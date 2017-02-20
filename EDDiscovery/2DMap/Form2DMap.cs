@@ -30,7 +30,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery2
 {
-    public partial class FormSagCarinaMission : Form
+    public partial class Form2DMap : Form
     {
         public List<FGEImage> fgeimages;
         private FGEImage currentFGEImage;
@@ -46,7 +46,7 @@ namespace EDDiscovery2
 
         public bool Nowindowreposition { get; set; } = false;
 
-        public FormSagCarinaMission(List<HistoryEntry> sl)
+        public Form2DMap(List<HistoryEntry> sl)
         {
             syslist = sl;
             InitializeComponent();
@@ -128,6 +128,7 @@ namespace EDDiscovery2
             //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
             if (fgeimg != null && initdone)
             {
+                imageViewer1.Image?.Dispose();
                 //panel1.BackgroundImage = new Bitmap(fgeimg.FilePath);
                 imageViewer1.Image = new Bitmap(fgeimg.FilePath);
                 imageViewer1.ZoomToFit();
@@ -150,33 +151,26 @@ namespace EDDiscovery2
             var history = from systems in syslist where systems.EventTimeLocal > start && systems.EventTimeLocal<endDate && systems.System.HasCoordinate == true  orderby systems.EventTimeUTC  select systems;
             List<HistoryEntry> listHistory = history.ToList();
 
-            Graphics gfx = Graphics.FromImage(imageViewer1.Image);
-            
-            if (listHistory.Count > 1)
+            using (Graphics gfx = Graphics.FromImage(imageViewer1.Image))
             {
-                Pen pen = new Pen(Color.FromArgb(listHistory[1].MapColour), 2);
-                if (pen.Color.A == 0)
-                    pen.Color = Color.FromArgb(255, pen.Color);
-                for (int ii = 1; ii < listHistory.Count; ii++)
+                if (listHistory.Count > 1)
                 {
-                    if (listHistory[ii].MapColour != listHistory[ii-1].MapColour)
+                    for (int ii = 1; ii < listHistory.Count; ii++)
                     {
-                        pen = new Pen(Color.FromArgb(listHistory[ii].MapColour), 2);
-                        if (pen.Color.A == 0)
-                            pen.Color = Color.FromArgb(255, pen.Color);
-                        
+                        Color a = Color.FromArgb(listHistory[ii].MapColour);
+                        Color b = (a.IsFullyTransparent()) ? Color.FromArgb(255, a) : a;
+
+                        using (Pen pen = new Pen(b, 2))
+                            DrawLine(gfx, pen, listHistory[ii - 1].System, listHistory[ii].System);
                     }
-
-                    DrawLine(gfx, pen, listHistory[ii - 1].System, listHistory[ii].System);
                 }
+
+                Point test1 = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
+                Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
+
+                if (Test)
+                    TestGrid(gfx);
             }
-
-            Point test1  = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
-            Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
-
-
-            if (Test)
-            TestGrid(gfx);
         }
 
         private void DrawStars()
@@ -184,15 +178,14 @@ namespace EDDiscovery2
             if ( starpositions == null )
                 starpositions = SystemClass.GetStarPositions();
 
-            Pen pen = new Pen(Color.White, 2);
-            Graphics gfx = Graphics.FromImage(imageViewer1.Image);
-
-            foreach (Point3D si in starpositions)
+            using (Pen pen = new Pen(Color.White, 2))
+            using (Graphics gfx = Graphics.FromImage(imageViewer1.Image))
             {
-                DrawPoint(gfx, pen, si.X,si.Z );
+                foreach (Point3D si in starpositions)
+                {
+                    DrawPoint(gfx, pen, si.X,si.Z );
+                }
             }
-
-            pen = new Pen(Color.White, 2);
         }
 
         private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
@@ -214,11 +207,10 @@ namespace EDDiscovery2
 
         private void TestGrid(Graphics gfx)
         {
-            Pen pointPen = new Pen(Color.LawnGreen, 3);
-
-            for (int x = currentFGEImage.BottomLeft.X; x<= currentFGEImage.BottomRight.X; x+= 1000)
-                for (int z = currentFGEImage.BottomLeft.Y; z<= currentFGEImage.TopLeft.Y; z+= 1000)
-                    gfx.DrawLine(pointPen, currentFGEImage.TransformCoordinate(new Point(x,z)), currentFGEImage.TransformCoordinate(new Point(x+10, z)));
+            using (Pen pointPen = new Pen(Color.LawnGreen, 3))
+                for (int x = currentFGEImage.BottomLeft.X; x<= currentFGEImage.BottomRight.X; x+= 1000)
+                    for (int z = currentFGEImage.BottomLeft.Y; z<= currentFGEImage.TopLeft.Y; z+= 1000)
+                        gfx.DrawLine(pointPen, currentFGEImage.TransformCoordinate(new Point(x,z)), currentFGEImage.TransformCoordinate(new Point(x+10, z)));
         }
 
 
