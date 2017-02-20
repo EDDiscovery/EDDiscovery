@@ -166,42 +166,47 @@ namespace EDDiscovery.Actions
                     {
                         expsay = expsay.PickOneOfGroups(rnd);
 
-#if true
-                        System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(expsay, culture, voice, rate);
-
-                        if (ms != null)
+                        if (ap.currentvars.ContainsKey("SpeechDebug") && ap.currentvars["SpeechDebug"].Contains("Print"))
                         {
-                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
-
-                            if (audio != null)
-                            {
-                                if ( start != null )
-                                {
-                                    System.Diagnostics.Debug.WriteLine("Say start trigger set up");
-                                    audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start , triggername = "onSayStarted" };
-                                    audio.sampleStartEvent += Audio_sampleEvent;
-
-                                }
-                                if (wait || finish != null)       // if waiting, or finish call
-                                {
-                                    System.Diagnostics.Debug.WriteLine("Say finish trigger set up");
-                                    audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
-                                    audio.sampleOverEvent += Audio_sampleEvent;
-                                }
-
-                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
-                                return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
-                            }
-                            else
-                                ap.ReportError("Say could not create audio, check Effects settings");
+                            ap.actioncontroller.LogLine("Say: " + expsay);
                         }
+                        else
+                        {
+#if true
+                            System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(expsay, culture, voice, rate);
+
+                            if (ms != null)
+                            {
+                                Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
+
+                                if (audio != null)
+                                {
+                                    if (start != null)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("Say start trigger set up");
+                                        audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
+                                        audio.sampleStartEvent += Audio_sampleEvent;
+
+                                    }
+                                    if (wait || finish != null)       // if waiting, or finish call
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("Say finish trigger set up");
+                                        audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
+                                        audio.sampleOverEvent += Audio_sampleEvent;
+                                    }
+
+                                    ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
+                                    return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
+                                }
+                                else
+                                    ap.ReportError("Say could not create audio, check Effects settings");
+                            }
 #else
-                        synth.SelectVoice(voice);
-                        synth.Rate = 0;
-                        synth.SpeakAsync(phrase);       // for checking quality..
+                            synth.SelectVoice(voice);
+                            synth.Rate = 0;
+                            synth.SpeakAsync(phrase);       // for checking quality..
 #endif
-
-
+                        }
                     }
                     else
                         ap.ReportError(expsay);

@@ -765,7 +765,7 @@ namespace EDDiscovery2
 
                                 if (actionfilelist.GetList.Contains(newname))
                                 {
-                                    MessageBox.Show(this, "Set already exists");
+                                    EDDiscovery.Forms.MessageBoxTheme.Show(this, "Set already exists");
                                     return;
                                 }
                                 else
@@ -876,7 +876,7 @@ namespace EDDiscovery2
                 }
             }
             else
-                MessageBox.Show("Unknown program " + s);
+                EDDiscovery.Forms.MessageBoxTheme.Show(this, "Unknown program " + s);
         }
 
 #endregion
@@ -957,7 +957,7 @@ namespace EDDiscovery2
             {
                 string acceptstr = "Click Retry to correct errors, Abort to cancel, Ignore to accept valid entries";
 
-                DialogResult dr = MessageBox.Show("Filters produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + res + Environment.NewLine + acceptstr,
+                DialogResult dr = EDDiscovery.Forms.MessageBoxTheme.Show(this, "Filters produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + res + Environment.NewLine + acceptstr,
                                                   "Warning", MessageBoxButtons.AbortRetryIgnore );
 
                 if (dr == DialogResult.Retry)

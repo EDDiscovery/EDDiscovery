@@ -376,6 +376,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+                discoveryform.ActionRunOnEntry(rightclicksystem, "UserRightClick");
+        }
+
         #endregion
 
         Tuple<long, int> CurrentGridPosByJID()
@@ -412,5 +418,6 @@ namespace EDDiscovery.UserControls
 			dataGridViewJournal.ClearSelection();
 			dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
 		}
-	}
+
+    }
 }
