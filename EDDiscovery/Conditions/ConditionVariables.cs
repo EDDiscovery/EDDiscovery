@@ -444,64 +444,63 @@ namespace EDDiscovery
                 if (pi.GetIndexParameters().GetLength(0) == 0)      // only properties with zero parameters are called
                 {
                     string name = prefix + pi.Name;
-                    Type rettype = pi.PropertyType;
-
-                    if ( name.Contains("Rings"))
-                    {
-                        System.Diagnostics.Debug.WriteLine("Rings;");
-                    }
-
-                    if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
-                    {
-                        string[] array = (string[])pi.GetValue(o);
-
-                        if (array == null)
-                            values[name + "_Length"] = "0";
-                        else
-                        {
-                            values[name + "_Length"] = array.Length.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                            for (int i = 0; i < array.Length; i++)
-                                values[name + "[" + i.ToString(System.Globalization.CultureInfo.InvariantCulture) + "]"] = array[i];
-                        }
-                    }
-                    else
-                    {
-                        System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                        Extract(getter.Invoke(o, null), rettype, name);
-                    }
+                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                    Extract(getter.Invoke(o, null), pi.PropertyType, name);
                 }
             }
 
             foreach (System.Reflection.FieldInfo fi in jtype.GetFields())
             {
                 string name = prefix + fi.Name;
-                Type rettype = fi.FieldType;
-
-                if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
-                {
-                    string[] array = (string[])fi.GetValue(o);
-                    if (array == null)
-                        values[name + "_Length"] = "0";
-                    else
-                    {
-                        values[name + "_Length"] = array.Length.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        for (int i = 0; i < array.Length; i++)
-                            values[name + "[" + i.ToString(System.Globalization.CultureInfo.InvariantCulture) + "]"] = array[i];
-                    }
-                }
-                else
-                    Extract(fi.GetValue(o), fi.FieldType, name);
+                Extract(fi.GetValue(o), fi.FieldType, name);
             }
-
         }
 
         void Extract(Object o, Type rettype, string name)
         {
+            System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+
             try // just to make sure a strange type does not barfe it
             {
                 if (o == null)
+                {
                     values[name] = "";
-                else if ( o is bool)
+                }
+                else if (rettype.UnderlyingSystemType.Name.Contains("Dictionary"))
+                {
+                    var data = (System.Collections.IDictionary)o;       // lovely to work out
+
+
+                    foreach (Object k in data.Keys)
+                    {
+                        if (k is string)
+                        {
+                            Object v = data[k as string];
+                            Extract(v, v.GetType(), name + "_" + (string)k);
+                        }
+                    }
+                }
+                else if (rettype.IsArray)
+                {
+                    Object[] array = (Object[])o;
+
+                    values[name + "_Length"] = array.Length.ToString(ct);
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                    }
+                }
+                else if (o is string)     // string is a class, so intercept first
+                {
+                    values[name] = o as string;
+                }
+                else if (rettype.IsClass)
+                {
+                    foreach (System.Reflection.FieldInfo fi in rettype.GetFields())
+                    {
+                        Extract(fi.GetValue(o), fi.FieldType, name + "_" + fi.Name);
+                    }
+                }
+                else if (o is bool)
                 {
                     values[name] = ((bool)o) ? "1" : "0";
                 }
@@ -510,15 +509,15 @@ namespace EDDiscovery
                     var v = Convert.ChangeType(o, rettype);
 
                     if (v is Double)
-                        values[name] = ((double)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        values[name] = ((double)v).ToString(ct);
                     else if (v is int)
-                        values[name] = ((int)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        values[name] = ((int)v).ToString(ct);
                     else if (v is long)
-                        values[name] = ((long)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        values[name] = ((long)v).ToString(ct);
                     else if (v is DateTime)
                         values[name] = ((DateTime)v).ToString(System.Globalization.CultureInfo.CreateSpecificCulture("en-us"));
                     else
-                        values[name] = v.ToString(  );
+                        values[name] = v.ToString();
                 }
                 else
                 {                                                               // generic, get value type
