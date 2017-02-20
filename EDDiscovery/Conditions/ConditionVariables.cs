@@ -470,6 +470,7 @@ namespace EDDiscovery
                 {
                     var data = (System.Collections.IDictionary)o;       // lovely to work out
 
+                    values[name + "Count"] = data.Count.ToString(ct);       // purposely not putting a _ to distinguish it from the entries
 
                     foreach (Object k in data.Keys)
                     {
@@ -487,6 +488,7 @@ namespace EDDiscovery
                     values[name + "_Length"] = array.Length.ToString(ct);
                     for (int i = 0; i < array.Length; i++)
                     {
+                        Extract(array[i], array[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]");
                     }
                 }
                 else if (o is string)     // string is a class, so intercept first
@@ -525,8 +527,6 @@ namespace EDDiscovery
 
                     Type nulltype = pvalue.PropertyType;    // its type and value are found..
                     var value = pvalue.GetValue(o);
-
-//                    System.Diagnostics.Debug.WriteLine("Type is" + nulltype);
                     Extract(value, nulltype, name);         // recurse to decode it
                 }
             }
