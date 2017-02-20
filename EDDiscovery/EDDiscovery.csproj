@@ -207,6 +207,13 @@
     <Compile Include="Actions\ActionCommands\ActionScan.cs" />
     <Compile Include="Actions\ActionFile.cs" />
     <Compile Include="Actions\ActionVars.cs" />
+    <Compile Include="Audio\AudioDeviceConfigure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Audio\AudioDeviceConfigure.Designer.cs">
+      <DependentUpon>AudioDeviceConfigure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\AudioDriver.cs" />
     <Compile Include="Audio\AudioDriverCSCore.cs" />
     <Compile Include="Audio\AudioDriverDummy.cs" />
     <Compile Include="Audio\AudioQueue.cs" />
@@ -831,6 +838,9 @@
     </Content>
     <EmbeddedResource Include="Actions\ActionProgramForm.resx">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Audio\AudioDeviceConfigure.resx">
+      <DependentUpon>AudioDeviceConfigure.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Audio\SoundEffectDialog.resx">
       <DependentUpon>SoundEffectDialog.cs</DependentUpon>

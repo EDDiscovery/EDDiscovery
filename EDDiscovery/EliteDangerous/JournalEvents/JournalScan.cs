@@ -182,7 +182,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 }
             }
             else
+            {
                 PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
+                                                                                    // Fix naming to standard and fix case..
+                PlanetClass = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii", "II").Replace("Iv", "IV");
+            }
+
 
             JToken mats = (JToken)evt["Materials"];
 
@@ -235,8 +241,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
             else
             {
-                scanText.AppendFormat("{0}", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii", "II").Replace("Iv", "IV"));
+                scanText.AppendFormat("{0}", PlanetClass);
             }
 
             if (PlanetClass != null && !PlanetClass.ToLower().Contains("gas"))

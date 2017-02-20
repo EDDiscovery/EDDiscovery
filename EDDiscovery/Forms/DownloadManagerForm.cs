@@ -322,7 +322,7 @@ namespace EDDiscovery.Forms
         {
             ExtendedControls.CheckBoxCustom cb = sender as ExtendedControls.CheckBoxCustom;
             Group g = cb.Tag as Group;
-            VersioningManager.SetEnableFlag(g.di.localfilename, cb.Checked);
+            VersioningManager.SetEnableFlag(g.di, cb.Checked, Tools.GetAppDataDirectory());
             changelist[g.di.itemname] = cb.Checked ? "+" : "-";
         }
 

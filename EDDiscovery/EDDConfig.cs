@@ -29,31 +29,402 @@ namespace EDDiscovery2
 {
     public class EDDConfig
     {
+        private static EDDConfig _instance;
+
+        private EDDConfig()
+        {
+            LogIndex = DateTime.Now.ToString("yyyyMMdd");
+        }
+
+        public static EDDConfig Instance            // Singleton pattern
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new EDDConfig();
+                }
+                return _instance;
+            }
+        }
+
+        readonly public string LogIndex;            // fixed string
+
+        #region Discrete Controls
+
+        private bool _EDSMLog;
+        private bool _canSkipSlowUpdates = false;
+        private bool _useNotifyIcon = false;
+        private bool _orderrowsinverted = false;
+        private bool _minimizeToNotifyIcon = false;
+        private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
+        private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
+        private bool _displayUTC = false;
+        private bool _clearMaterials = false;
+        private bool _clearCommodities = false;
+        private bool _autoLoadPopouts = false;
+        private bool _autoSavePopouts = false;
+        private string _defaultwavedevice = "Default";
+        private string _defaultvoicedevice = "Default";
+
+        public bool EDSMLog
+        {
+            get
+            {
+                return _EDSMLog;
+            }
+
+            set
+            {
+                _EDSMLog = value;
+                SQLiteConnectionUser.PutSettingBool("EDSMLog", value);
+            }
+        }
+
+        public bool CanSkipSlowUpdates
+        {
+            get
+            {
+                return EDDConfig.Options.Debug && _canSkipSlowUpdates;
+            }
+            set
+            {
+                _canSkipSlowUpdates = value;
+                SQLiteConnectionUser.PutSettingBool("CanSkipSlowUpdates", value);
+            }
+        }
+
+        /// <summary>
+        /// Controls whether or not a system notification area (systray) icon will be shown.
+        /// </summary>
+        public bool UseNotifyIcon
+        {
+            get
+            {
+                return _useNotifyIcon;
+            }
+            set
+            {
+                _useNotifyIcon = value;
+                SQLiteConnectionUser.PutSettingBool("UseNotifyIcon", value);
+            }
+        }
+
+        public bool OrderRowsInverted
+        {
+            get
+            {
+                return _orderrowsinverted;
+            }
+            set
+            {
+                _orderrowsinverted = value;
+                SQLiteConnectionUser.PutSettingBool("OrderRowsInverted", value);
+            }
+        }
+
+
+        /// <summary>
+        /// Controls whether or not the main window will be hidden to the
+        /// system notification area icon (systray) when minimized.
+        /// Has no effect if <see cref="UseNotifyIcon"/> is not enabled.
+        /// </summary>
+        public bool MinimizeToNotifyIcon
+        {
+            get
+            {
+                return _minimizeToNotifyIcon;
+            }
+            set
+            {
+                _minimizeToNotifyIcon = value;
+                SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
+            }
+        }
+
+
+        public bool FocusOnNewSystem
+        {
+            get
+            {
+                return _focusOnNewSystem;
+            }
+            set
+            {
+                _focusOnNewSystem = value;
+                SQLiteConnectionUser.PutSettingBool("FocusOnNewSystem", value);
+            }
+        }
+
+        public bool KeepOnTop
+        {
+            get
+            {
+                return _keepOnTop;
+            }
+            set
+            {
+                _keepOnTop = value;
+                SQLiteConnectionUser.PutSettingBool("KeepOnTop", value);
+            }
+        }
+
+        public bool DisplayUTC
+        {
+            get
+            {
+                return _displayUTC;
+            }
+            set
+            {
+                _displayUTC = value;
+                SQLiteConnectionUser.PutSettingBool("DisplayUTC", value);
+            }
+        }
+
+        public bool ClearMaterials
+        {
+            get
+            {
+                return _clearMaterials;
+            }
+            set
+            {
+                _clearMaterials = value;
+                SQLiteConnectionUser.PutSettingBool("ClearMaterials", value);
+            }
+        }
+
+        public bool ClearCommodities
+        {
+            get
+            {
+                return _clearCommodities;
+            }
+            set
+            {
+                _clearCommodities = value;
+                SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
+            }
+        }
+
+        public bool AutoLoadPopOuts
+        {
+            get
+            {
+                return _autoLoadPopouts;
+            }
+            set
+            {
+                _autoLoadPopouts = value;
+                SQLiteConnectionUser.PutSettingBool("AutoLoadPopouts", value);
+            }
+        }
+
+        public bool AutoSavePopOuts
+        {
+            get
+            {
+                return _autoSavePopouts;
+            }
+            set
+            {
+                _autoSavePopouts = value;
+                SQLiteConnectionUser.PutSettingBool("AutoSavePopouts", value);
+            }
+        }
+
+        public string DefaultWaveDevice
+        {
+            get
+            {
+                return _defaultwavedevice;
+            }
+            set
+            {
+                _defaultwavedevice = value;
+                SQLiteConnectionUser.PutSettingString("WaveAudioDevice", value);
+            }
+        }
+
+        public string DefaultVoiceDevice
+        {
+            get
+            {
+                return _defaultvoicedevice;
+            }
+            set
+            {
+                _defaultvoicedevice = value;
+                SQLiteConnectionUser.PutSettingString("VoiceAudioDevice", value);
+            }
+        }
+
+        #endregion
+
+        #region Commanders
+
+        private int currentCmdrID = 0;
+        private List<EDCommander> _ListOfCommanders;
+
+        public List<EDCommander> ListOfCommanders { get { if (_ListOfCommanders == null) Update(); return _ListOfCommanders; } }
+
+        public EDCommander CurrentCommander
+        {
+            get
+            {
+                if (currentCmdrID >= ListOfCommanders.Count)
+                    currentCmdrID = ListOfCommanders.Count - 1;
+
+                return ListOfCommanders[currentCmdrID];
+            }
+        }
+
+        public EDCommander Commander(int i)
+        {
+            return i < 0 ? null : ListOfCommanders.FirstOrDefault(c => c.Nr == i);
+        }
+
+        public int CurrentCmdrID
+        {
+            get
+            {
+                return CurrentCommander.Nr;
+            }
+
+            set
+            {
+                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
+                if (cmdr != null)
+                {
+                    currentCmdrID = cmdr.index;
+                    SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
+                }
+            }
+        }
+
+        public bool CheckCommanderEDSMAPI
+        {
+            get
+            {
+                return CurrentCmdrID >= 0 && CurrentCommander.EdsmName.Length > 0 && CurrentCommander.APIKey.Length > 0;
+            }
+        }
+
+        #endregion
+
+        #region Update at start
+
+        public void Update(bool write = true, SQLiteConnectionUser conn = null)     // call at start to populate above
+        {
+            try
+            {
+                _useNotifyIcon = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", false, conn);
+                _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
+                _canSkipSlowUpdates = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", false, conn);
+                _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
+                _minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
+                _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
+                _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
+                _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
+                _clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
+                _clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
+                _autoLoadPopouts = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", false, conn);
+                _autoSavePopouts = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", false, conn);
+                _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
+                _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
+
+                LoadCommanders(write, conn);
+
+                int activecommander = SQLiteConnectionUser.GetSettingInt("ActiveCommander", 0, conn);
+
+                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
+
+                if (cmdr != null)
+                {
+                    currentCmdrID = cmdr.index;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("EDDConfig.Update()" + ":" + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+
+        }
+
+        #endregion
+
+        #region Mapping colours
+
+        public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
+        public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
+
         public class MapColoursClass
         {
-            public System.Drawing.Color GetColour(string name)
+            private System.Drawing.Color GetColour(string name)
             {
                 return System.Drawing.Color.FromArgb(EDDConfig.Instance.GetSettingInt("MapColour_" + name));
             }
 
-            public bool PutColour(string name, System.Drawing.Color colour)
+            private bool PutColour(string name, System.Drawing.Color colour)
             {
                 return EDDConfig.Instance.PutSettingInt("MapColour_" + name, colour.ToArgb());
             }
 
             public System.Drawing.Color CoarseGridLines { get { return GetColour("CoarseGridLines"); } set { PutColour("CoarseGridLines", value); } }
             public System.Drawing.Color FineGridLines { get { return GetColour("FineGridLines"); } set { PutColour("FineGridLines", value); } }
-            public System.Drawing.Color SystemDefault { get { return GetColour("SystemDefault"); } set { PutColour("SystemDefault", value); } }
-            public System.Drawing.Color StationSystem { get { return GetColour("StationSystem"); } set { PutColour("StationSystem", value); } }
             public System.Drawing.Color CentredSystem { get { return GetColour("CentredSystem"); } set { PutColour("CentredSystem", value); } }
-            public System.Drawing.Color SelectedSystem { get { return GetColour("SelectedSystem"); } set { PutColour("SelectedSystem", value); } }
-            public System.Drawing.Color POISystem { get { return GetColour("POISystem"); } set { PutColour("POISystem", value); } }
-            public System.Drawing.Color TrilatCurrentReference { get { return GetColour("TrilatCurrentReference"); } set { PutColour("TrilatCurrentReference", value); } }
-            public System.Drawing.Color TrilatSuggestedReference { get { return GetColour("TrilatSuggestedReference"); } set { PutColour("TrilatSuggestedReference", value); } }
             public System.Drawing.Color PlannedRoute { get { return GetColour("PlannedRoute"); } set { PutColour("PlannedRoute", value); } }
-            public System.Drawing.Color NamedStar { get { return GetColour("NamedStar"); } set { PutColour("NamedStar", value); } }
-            public System.Drawing.Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop"); } set { PutColour("NamedStarUnpop", value); } }
         }
+
+        private Dictionary<string, object> settings = new Dictionary<string, object>();
+        private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
+        {
+            { "MapColour_CoarseGridLines", () => System.Drawing.ColorTranslator.FromHtml("#296A6C").ToArgb() },
+            { "MapColour_FineGridLines", () => System.Drawing.ColorTranslator.FromHtml("#202020").ToArgb() },
+            { "MapColour_CentredSystem", () => System.Drawing.Color.Yellow.ToArgb() },
+            { "MapColour_PlannedRoute", () => System.Drawing.Color.Green.ToArgb() },
+            { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() },
+        };
+
+        private int GetSettingInt(string key)
+        {
+            return GetSetting<int>(key, (k, d) => SQLiteConnectionUser.GetSettingInt(k, d));
+        }
+
+        private T GetSetting<T>(string key, Func<string, T, T> getter)
+        {
+            System.Diagnostics.Debug.WriteLine("GetSetting " + key);
+            if (!settings.ContainsKey(key))
+            {
+                T defval = default(T);
+                if (defaults.ContainsKey(key))
+                {
+                    defval = (T)defaults[key]();
+                }
+
+                settings[key] = getter(key, defval);
+            }
+
+            return (T)settings[key];
+        }
+
+        private bool PutSettingInt(string key, int value)
+        {
+            return PutSetting<int>(key, value, (k, v) => SQLiteConnectionUser.PutSettingInt(k, v));
+        }
+
+        private bool PutSetting<T>(string key, T value, Func<string, T, bool> setter)
+        {
+            settings[key] = value;
+            return setter(key, value);
+        }
+
+
+        #endregion
+
+        #region Option control
 
         public enum EDSMServerType
         {
@@ -278,391 +649,9 @@ namespace EDDiscovery2
 
         public static OptionsClass Options { get; } = new OptionsClass();
 
-        private static EDDConfig _instance;
-        public static EDDConfig Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new EDDConfig();
-                }
-                return _instance;
-            }
-        }
+        #endregion
 
-        private bool _useDistances;
-        private bool _EDSMLog;
-        readonly public string LogIndex;
-        private bool _canSkipSlowUpdates = false;
-        private bool _useNotifyIcon = false;
-        private bool _orderrowsinverted = false;
-        private bool _minimizeToNotifyIcon = false;
-        private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
-        private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
-        private bool _displayUTC = false;
-        private bool _clearMaterials = false;
-        private bool _clearCommodities = false;
-        private bool _autoLoadPopouts = false;
-        private bool _autoSavePopouts = false;
-
-        private List<EDCommander> _ListOfCommanders;
-        public List<EDCommander> ListOfCommanders { get { if (_ListOfCommanders == null) Update();  return _ListOfCommanders;  } }
-        
-        private int currentCmdrID=0;
-        private Dictionary<string, object> settings = new Dictionary<string, object>();
-        private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
-        {
-            { "JournalDir", () => EDDiscovery.EliteDangerous.EDJournalClass.GetDefaultJournalDir() },
-            { "JournalDirAutoMode", () => true },
-            { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() },
-            { "MapColour_CoarseGridLines", () => System.Drawing.ColorTranslator.FromHtml("#296A6C").ToArgb() },
-            { "MapColour_FineGridLines", () => System.Drawing.ColorTranslator.FromHtml("#202020").ToArgb() },
-            { "MapColour_SystemDefault", () => System.Drawing.Color.White.ToArgb() },
-            { "MapColour_StationSystem", () => System.Drawing.Color.RoyalBlue.ToArgb() },
-            { "MapColour_CentredSystem", () => System.Drawing.Color.Yellow.ToArgb() },
-            { "MapColour_SelectedSystem", () => System.Drawing.Color.Orange.ToArgb() },
-            { "MapColour_POISystem", () => System.Drawing.Color.Purple.ToArgb() },
-            { "MapColour_TrilatCurrentReference", () => System.Drawing.Color.Green.ToArgb() },
-            { "MapColour_TrilatSuggestedReference", () => System.Drawing.Color.DarkOrange.ToArgb() },
-            { "MapColour_PlannedRoute", () => System.Drawing.Color.Green.ToArgb() },
-            { "MapColour_NamedStar", () => System.Drawing.Color.Yellow.ToArgb() },
-            { "MapColour_NamedStarUnpop", () => System.Drawing.Color.FromArgb(255,192,192,0).ToArgb() }
-        };
-
-        private EDDConfig()
-        {
-            LogIndex = DateTime.Now.ToString("yyyyMMdd");
-        }
-
-        /// <summary>
-        /// Controls whether or not a system notification area (systray) icon will be shown.
-        /// </summary>
-        public bool UseNotifyIcon
-        {
-            get
-            {
-                return _useNotifyIcon;
-            }
-            set
-            {
-                _useNotifyIcon = value;
-                SQLiteConnectionUser.PutSettingBool("UseNotifyIcon", value);
-            }
-        }
-
-        public bool UseDistances
-        {
-            get
-            {
-                return _useDistances;
-            }
-
-            set
-            {
-                _useDistances = value;
-                SQLiteConnectionUser.PutSettingBool("EDSMDistances", value);
-            }
-        }
-
-        /// <summary>
-        /// Controls whether or not the main window will be hidden to the
-        /// system notification area icon (systray) when minimized.
-        /// Has no effect if <see cref="UseNotifyIcon"/> is not enabled.
-        /// </summary>
-        public bool MinimizeToNotifyIcon
-        {
-            get
-            {
-                return _minimizeToNotifyIcon;
-            }
-            set
-            {
-                _minimizeToNotifyIcon = value;
-                SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
-            }
-        }
-
-        public int CurrentCmdrID
-        {
-            get
-            {
-                return CurrentCommander.Nr;
-            }
-
-            set
-            {
-                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
-                if (cmdr != null)
-                {
-                    currentCmdrID = cmdr.index;
-                    SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
-                }
-            }
-        }
-
-        public EDCommander CurrentCommander
-        {
-            get
-            {
-                if (currentCmdrID >= ListOfCommanders.Count)
-                    currentCmdrID = ListOfCommanders.Count - 1;
-
-                return ListOfCommanders[currentCmdrID];
-            }
-        }
-
-        public EDCommander Commander( int i )
-        {
-            return i < 0 ? null : ListOfCommanders.FirstOrDefault(c => c.Nr == i);
-        }
-
-        public bool CheckCommanderEDSMAPI
-        {
-            get
-            {
-                return CurrentCmdrID >= 0 && CurrentCommander.EdsmName.Length > 0 && CurrentCommander.APIKey.Length > 0;
-            }
-        }
-
-        public bool EDSMLog
-        {
-            get
-            {
-                return _EDSMLog;
-            }
-
-            set
-            {
-                _EDSMLog = value;
-                SQLiteConnectionUser.PutSettingBool("EDSMLog", value);
-            }
-        }
-
-        public bool CanSkipSlowUpdates
-        {
-            get
-            {
-                return EDDConfig.Options.Debug && _canSkipSlowUpdates;
-            }
-            set
-            {
-                _canSkipSlowUpdates = value;
-                SQLiteConnectionUser.PutSettingBool("CanSkipSlowUpdates", value);
-            }
-        }
-
-        public bool OrderRowsInverted {
-            get
-            {
-                return _orderrowsinverted;
-            }
-            set
-            {
-                _orderrowsinverted = value;
-                SQLiteConnectionUser.PutSettingBool("OrderRowsInverted", value);
-            }
-        }
-
-        public bool FocusOnNewSystem {
-            get
-            {
-                return _focusOnNewSystem;
-            }
-            set
-            {
-                _focusOnNewSystem = value;
-                SQLiteConnectionUser.PutSettingBool("FocusOnNewSystem", value);
-            }
-        }
-
-        public bool KeepOnTop
-        {
-            get
-            {
-                return _keepOnTop;
-            }
-            set
-            {
-                _keepOnTop = value;
-                SQLiteConnectionUser.PutSettingBool("KeepOnTop", value);
-            }
-        }
-
-        public bool DisplayUTC
-        {
-            get
-            {
-                return _displayUTC;
-            }
-            set
-            {
-                _displayUTC = value;
-                SQLiteConnectionUser.PutSettingBool("DisplayUTC", value);
-            }
-        }
-
-        public bool ClearCommodities
-        {
-            get
-            {
-                return _clearCommodities;
-            }
-            set
-            {
-                _clearCommodities = value;
-                SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
-            }
-        }
-
-        public bool ClearMaterials
-        {
-            get
-            {
-                return _clearMaterials;
-            }
-            set
-            {
-                _clearMaterials = value;
-                SQLiteConnectionUser.PutSettingBool("ClearMaterials", value);
-            }
-        }
-
-        public bool AutoLoadPopOuts
-        {
-            get
-            {
-                return _autoLoadPopouts;
-            }
-            set
-            {
-                _autoLoadPopouts = value;
-                SQLiteConnectionUser.PutSettingBool("AutoLoadPopouts", value);
-            }
-        }
-
-        public bool AutoSavePopOuts
-        {
-            get
-            {
-                return _autoSavePopouts;
-            }
-            set
-            {
-                _autoSavePopouts = value;
-                SQLiteConnectionUser.PutSettingBool("AutoSavePopouts", value);
-            }
-        }
-
-        public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
-        public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
-
-        private bool GetSettingBool(string key)
-        {
-            return GetSetting<bool>(key, (k, d) => SQLiteConnectionUser.GetSettingBool(k, d));
-        }
-
-        private int GetSettingInt(string key)
-        {
-            return GetSetting<int>(key, (k, d) => SQLiteConnectionUser.GetSettingInt(k, d));
-        }
-
-        private double GetSettingDouble(string key)
-        {
-            return GetSetting<double>(key, (k, d) => SQLiteConnectionUser.GetSettingDouble(k, d));
-        }
-
-        private string GetSettingString(string key)
-        {
-            return GetSetting<string>(key, (k, d) => SQLiteConnectionUser.GetSettingString(k, d));
-        }
-
-        private T GetSetting<T>(string key, Func<string,T,T> getter)
-        {
-            if (!settings.ContainsKey(key))
-            {
-                T defval = default(T);
-                if (defaults.ContainsKey(key))
-                {
-                    defval = (T)defaults[key]();
-                }
-
-                settings[key] = getter(key, defval);
-            }
-
-            return (T)settings[key];
-        }
-
-        private bool PutSettingBool(string key, bool value)
-        {
-            return PutSetting<bool>(key, value, (k, v) => SQLiteConnectionUser.PutSettingBool(k, v));
-        }
-
-        private bool PutSettingInt(string key, int value)
-        {
-            return PutSetting<int>(key, value, (k, v) => SQLiteConnectionUser.PutSettingInt(k, v));
-        }
-
-        private bool PutSettingDouble(string key, double value)
-        {
-            return PutSetting<double>(key, value, (k, v) => SQLiteConnectionUser.PutSettingDouble(k, v));
-        }
-
-        private bool PutSettingString(string key, string value)
-        {
-            return PutSetting<string>(key, value, (k, v) => SQLiteConnectionUser.PutSettingString(k, v));
-        }
-
-        private bool PutSetting<T>(string key, T value, Func<string,T,bool> setter)
-        {
-            settings[key] = value;
-
-            if (setter(key, value))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void Update(bool write = true, SQLiteConnectionUser conn = null)
-        {
-            try
-            {
-                _useNotifyIcon = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", false, conn);
-                _useDistances = SQLiteConnectionUser.GetSettingBool("EDSMDistances", false, conn);
-                _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
-                _canSkipSlowUpdates = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", false, conn);
-                _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
-                _minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
-                _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
-                _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
-                _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
-                _clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
-                _clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
-                _autoLoadPopouts = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", false, conn);
-                _autoSavePopouts = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", false, conn);
-
-                LoadCommanders(write, conn);
-
-                int activecommander = SQLiteConnectionUser.GetSettingInt("ActiveCommander", 0, conn);
-
-                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
-
-                if (cmdr != null)
-                {
-                    currentCmdrID = cmdr.index;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("EDDConfig.Update()" + ":" + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
-
-        }
+        #region Commander Functions
 
         private void LoadCommanders(bool write = true, SQLiteConnectionUser conn = null)
         {
@@ -854,5 +843,7 @@ namespace EDDiscovery2
 
             LoadCommanders();       // refresh in-memory copy
         }
+
+        #endregion
     }
 }

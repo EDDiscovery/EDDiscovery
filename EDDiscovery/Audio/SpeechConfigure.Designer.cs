@@ -54,6 +54,7 @@ namespace EDDiscovery.Audio
             this.textBoxBorderStartTrigger = new ExtendedControls.TextBoxBorder();
             this.comboBoxCustomPriority = new ExtendedControls.ComboBoxCustom();
             this.buttonExtTest = new ExtendedControls.ButtonExt();
+            this.buttonExtDevice = new ExtendedControls.ButtonExt();
             this.buttonExtEffects = new ExtendedControls.ButtonExt();
             this.trackBarVolume = new System.Windows.Forms.TrackBar();
             this.buttonExtCancel = new ExtendedControls.ButtonExt();
@@ -132,6 +133,7 @@ namespace EDDiscovery.Audio
             this.panelOuter.Controls.Add(this.textBoxBorderStartTrigger);
             this.panelOuter.Controls.Add(this.comboBoxCustomPriority);
             this.panelOuter.Controls.Add(this.buttonExtTest);
+            this.panelOuter.Controls.Add(this.buttonExtDevice);
             this.panelOuter.Controls.Add(this.buttonExtEffects);
             this.panelOuter.Controls.Add(this.trackBarVolume);
             this.panelOuter.Controls.Add(this.buttonExtCancel);
@@ -152,7 +154,7 @@ namespace EDDiscovery.Audio
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(0, 0);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(437, 475);
+            this.panelOuter.Size = new System.Drawing.Size(433, 475);
             this.panelOuter.TabIndex = 0;
             // 
             // textBoxBorderEndTrigger
@@ -211,6 +213,19 @@ namespace EDDiscovery.Audio
             this.buttonExtTest.Text = "Test";
             this.buttonExtTest.UseVisualStyleBackColor = true;
             this.buttonExtTest.Click += new System.EventHandler(this.buttonExtTest_Click);
+            // 
+            // buttonExtDevice
+            // 
+            this.buttonExtDevice.BorderColorScaling = 1.25F;
+            this.buttonExtDevice.ButtonColorScaling = 0.5F;
+            this.buttonExtDevice.ButtonDisabledScaling = 0.5F;
+            this.buttonExtDevice.Location = new System.Drawing.Point(340, 256);
+            this.buttonExtDevice.Name = "buttonExtDevice";
+            this.buttonExtDevice.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtDevice.TabIndex = 4;
+            this.buttonExtDevice.Text = "Device";
+            this.buttonExtDevice.UseVisualStyleBackColor = true;
+            this.buttonExtDevice.Click += new System.EventHandler(this.buttonExtDevice_Click);
             // 
             // buttonExtEffects
             // 
@@ -375,7 +390,7 @@ namespace EDDiscovery.Audio
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonExtCancel;
-            this.ClientSize = new System.Drawing.Size(437, 475);
+            this.ClientSize = new System.Drawing.Size(433, 475);
             this.Controls.Add(this.panelOuter);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SpeechConfigure";
@@ -413,5 +428,6 @@ namespace EDDiscovery.Audio
         private ExtendedControls.TextBoxBorder textBoxBorderStartTrigger;
         private System.Windows.Forms.Label labelEndTrigger;
         private System.Windows.Forms.Label labelStartTrigger;
+        private ExtendedControls.ButtonExt buttonExtDevice;
     }
 }
