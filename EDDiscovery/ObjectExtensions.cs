@@ -131,8 +131,15 @@ public static class ObjectExtensions
         string r = "";
         for (int i = 0; i < list.Count; i++)
         {
-            if (i >= mincount && list[i].Length == 0)
-                break;
+            if (i >= mincount && list[i].Length == 0)           // if >= minimum, and zero
+            {
+                int j = i + 1;
+                while (j < list.Count && list[j].Length == 0)   // if all others are zero
+                    j++;
+
+                if (j == list.Count)        // if so, stop
+                    break;
+            }
 
             if (i > 0)
                 r += ", ";

@@ -196,7 +196,21 @@ namespace EDDiscovery.Actions
                 }
             }
 
-            Forms.MessageBoxTheme.Show("Voice pack not loaded, or needs updating to support this functionality");
+            Forms.MessageBoxTheme.Show(discoveryform, "Voice pack not loaded, or needs updating to support this functionality");
+        }
+
+        public void EditLastTextFile()
+        {
+            if (ActionProgramForm.LastTextEditedFile != null )
+            {
+                Tuple<ActionFile, ActionProgram> ap = actionfiles.FindProgram(ActionProgramForm.LastTextEditedFile);
+
+                if (ap != null && ap.Item2.EditInEditor())
+                {
+                    ap.Item1.SaveFile();
+                    return;
+                }
+            }
         }
 
         public void ActionRunOnRefresh()
@@ -229,23 +243,18 @@ namespace EDDiscovery.Actions
 
             if (ale.Count > 0)
             {
+                ConditionVariables eventvars = new ConditionVariables();
+                Actions.ActionVars.TriggerVars(eventvars, triggername, triggertype);
+                Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
+                eventvars.Add(additionalvars);   // adding null is allowed
+
                 ConditionVariables testvars = new ConditionVariables(globalvariables);
-                Actions.ActionVars.TriggerVars(testvars, triggername, triggertype);
-                testvars.Add(additionalvars);   // adding null is allowed
-                Actions.ActionVars.HistoryEventVars(testvars, he , "Event");     // if HE is null, ignored
+                testvars.Add(eventvars);
 
                 ConditionFunctions functions = new ConditionFunctions();
 
                 if (actionfiles.CheckActions(ale, (he!=null) ? he.journalEntry.EventDataString : null, testvars, functions.ExpandString) > 0)
                 {
-                    ConditionVariables eventvars = new ConditionVariables();        // we don't pass globals in - added when they are run
-                    Actions.ActionVars.TriggerVars(eventvars, triggername, triggertype);
-                    eventvars.Add(additionalvars);
-                    Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");
-
-                    if (he != null)
-                        eventvars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, "EventJS_");        // for all events, add to field list
-
                     actionfiles.RunActions(now, ale, actionrunasync, eventvars);  // add programs to action run
 
                     actionrunasync.Execute();       // See if needs executing

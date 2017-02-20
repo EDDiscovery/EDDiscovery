@@ -28,6 +28,9 @@ namespace EDDiscovery.Actions
 {
     public partial class ActionProgramForm : Form
     {
+        static public string LastTextEditedFile;
+
+        string filesetname;
         string initialprogname;
         string[] definedprograms;                                   // list of programs already defined, to detect rename over..
 
@@ -76,7 +79,7 @@ namespace EDDiscovery.Actions
 
         public void Init(string t, EDDiscoveryForm form,
                             List<string> vbs,              // list any variables you want in condition statements - passed to config menu, passed back up to condition, not null
-                            string filesetname,             // file set name
+                            string pfilesetname,             // file set name
                             ActionProgram prog = null,     // give the program to display
                             string[] defprogs = null,      // list any default program names
                             string suggestedname = null, bool edittext = false)   // give a suggested name, if prog is null
@@ -90,6 +93,7 @@ namespace EDDiscovery.Actions
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
+            filesetname = pfilesetname;
             labelSet.Text = filesetname + "::";
             textBoxBorderName.Location = new Point(labelSet.Location.X + labelSet.Width + 8, textBoxBorderName.Location.Y);
 
@@ -428,7 +432,7 @@ namespace EDDiscovery.Actions
                 if (pname != null)
                     EditProgram(curact.UserData);
                 else
-                    Forms.MessageBoxTheme.Show("No program name assigned");
+                    Forms.MessageBoxTheme.Show(this,"No program name assigned");
             }
         }
 
@@ -504,7 +508,7 @@ namespace EDDiscovery.Actions
             if (errorlist.Length > 0)
             {
                 string acceptstr = "Click Retry to correct errors, Abort to cancel, Ignore to accept what steps are valid";
-                DialogResult dr = Forms.MessageBoxTheme.Show("Actions produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + errorlist + Environment.NewLine + acceptstr,
+                DialogResult dr = Forms.MessageBoxTheme.Show(this,"Actions produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + errorlist + Environment.NewLine + acceptstr,
                                         "Warning", MessageBoxButtons.AbortRetryIgnore);
 
                 if (dr == DialogResult.Retry)
@@ -559,6 +563,7 @@ namespace EDDiscovery.Actions
         private void buttonExtEdit_Click(object sender, EventArgs e)
         {
             curprog.Name = textBoxBorderName.Text;
+            LastTextEditedFile = filesetname + "::" + curprog.Name;
             if ( curprog.EditInEditor())
             {
                 LoadProgram(curprog);
@@ -585,7 +590,7 @@ namespace EDDiscovery.Actions
                     string err;
                     ActionProgram ap = ActionProgram.FromFile(dlg.FileName, System.IO.Path.GetFileNameWithoutExtension(dlg.FileName), out err);
                     if (ap == null)
-                        Forms.MessageBoxTheme.Show("Failed to load text file" + Environment.NewLine + err);
+                        Forms.MessageBoxTheme.Show(this,"Failed to load text file" + Environment.NewLine + err);
                     else
                     {
                         LoadProgram(ap);
@@ -610,7 +615,7 @@ namespace EDDiscovery.Actions
             {
                 curprog.Name = textBoxBorderName.Text;
                 if (!curprog.SaveText(dlg.FileName))
-                    Forms.MessageBoxTheme.Show("Failed to save text file - check file path");
+                    Forms.MessageBoxTheme.Show(this,"Failed to save text file - check file path");
             }
         }
 

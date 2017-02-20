@@ -446,6 +446,11 @@ namespace EDDiscovery
                     string name = prefix + pi.Name;
                     Type rettype = pi.PropertyType;
 
+                    if ( name.Contains("Rings"))
+                    {
+                        System.Diagnostics.Debug.WriteLine("Rings;");
+                    }
+
                     if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
                     {
                         string[] array = (string[])pi.GetValue(o);

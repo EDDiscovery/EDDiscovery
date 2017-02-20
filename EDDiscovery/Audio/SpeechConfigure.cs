@@ -211,7 +211,7 @@ namespace EDDiscovery.Audio
                 }
                 catch
                 {
-                    Forms.MessageBoxTheme.Show("Unable to play " + textBoxBorderText.Text);
+                    Forms.MessageBoxTheme.Show(this,"Unable to play " + textBoxBorderText.Text);
                 }
             }
         }

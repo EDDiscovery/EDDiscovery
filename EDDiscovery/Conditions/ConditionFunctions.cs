@@ -92,6 +92,7 @@ namespace EDDiscovery
                 new FuncEntry("random",Random,              1,1,    0,0),   // no change var, not string
                 new FuncEntry("eval",Eval,                  1,2,    1,1),   // can be string, can be variable, p2 is not a variable, and can't be a string
                 new FuncEntry("existsdefault",ExistsDefault,2,2,    2,2),   // first is a macro but can not exist, second is a string or macro which must exist
+                new FuncEntry("wordof",WordOf,              2,3,    1+4,1+4),   // first is a macro or string, second is a var or literal, third is a macro or string
         };
         }
 
@@ -919,13 +920,35 @@ namespace EDDiscovery
 
             bool evalstate = s.Eval(out output);      // true okay, with output, false bad, with error
 
-            if ( tryit && !evalstate)                   // if try and failed.. NAN without error
+            if (tryit && !evalstate)                   // if try and failed.. NAN without error
             {
                 output = "NAN";
                 return true;
             }
 
             return evalstate;                       // else return error and output
+        }
+
+        private bool WordOf(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            string c = vars.ContainsKey(paras[1].value) ? vars[paras[1].value] : paras[1].value;
+            string splitter = (paras.Count >= 3) ? (paras[2].isstring ? paras[2].value : vars[paras[2].value]) : ";";
+            char splitchar = (splitter.Length > 0) ? splitter[0] : ';';
+
+            int count;
+            if (c.InvariantParse(out count))
+            {
+                string[] split = s.Split(splitchar);
+                count = Math.Max(1, Math.Min(count, split.Length));  // between 1 and split length
+                output = split[count - 1];
+                return true;
+            }
+            else
+            {
+                output = "Parameter should be an integer constant or a variable name with an integer in its value";
+                return false;
+            }
         }
 
         #endregion
