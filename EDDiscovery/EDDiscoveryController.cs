@@ -112,8 +112,11 @@ namespace EDDiscovery
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
 
+            string proc64 = Environment.Is64BitProcess ? "64-bit" : "32-bit";
+            string os64 = Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit";
             Trace.WriteLine("************************************************");
-            Trace.WriteLine($"EDDiscovery Initializing: {EDDiscovery2.EDDConfig.Options.VersionDisplayString}");
+            Trace.WriteLine($"EDDiscovery Initializing: {EDDiscovery2.EDDConfig.Options.VersionDisplayString} {proc64}");
+            Trace.WriteLine($"OS: {Environment.OSVersion.VersionString} {os64}");
             Trace.WriteLine("************************************************");
 
             SQLiteConnectionUser.EarlyReadRegister();
