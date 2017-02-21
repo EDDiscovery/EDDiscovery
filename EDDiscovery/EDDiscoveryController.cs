@@ -112,6 +112,10 @@ namespace EDDiscovery
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
 
+            Trace.WriteLine("************************************************");
+            Trace.WriteLine($"EDDiscovery Initializing: {EDDiscovery2.EDDConfig.Options.VersionDisplayString}");
+            Trace.WriteLine("************************************************");
+
             SQLiteConnectionUser.EarlyReadRegister();
             EDDConfig.Instance.Update(write: false);
 
