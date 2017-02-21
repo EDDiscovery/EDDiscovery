@@ -60,7 +60,6 @@ namespace EDDiscovery
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
 
-        static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
@@ -90,6 +89,7 @@ namespace EDDiscovery
 
         public PopOutControl PopOuts;
 
+        private bool _initialized = false;
         private bool _formMax;
         private int _formWidth;
         private int _formHeight;
@@ -158,6 +158,7 @@ namespace EDDiscovery
             Controller.Init(Control.ModifierKeys.HasFlag(Keys.Shift));
 
             InitializeComponent();
+            _initialized = true;
 
             label_version.Text = EDDConfig.Options.VersionDisplayString;
 
@@ -662,7 +663,7 @@ namespace EDDiscovery
         {
             AboutForm frm = new AboutForm();
             frm.labelVersion.Text = this.Text;
-            frm.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            frm.TopMost = EDDConfig.KeepOnTop;
             frm.ShowDialog(this);
         }
 
@@ -824,9 +825,7 @@ namespace EDDiscovery
 
         public ISystem GetHomeSystem()
         {
-            string homesysname = settings.MapHomeSystem;
-
-            ISystem homesys = ((homesysname != null) ? SystemClass.GetSystem(homesysname) : null);
+            ISystem homesys = SystemClass.GetSystem(EDDConfig.HomeSystem);
 
             if (homesys == null || !homesys.HasCoordinate)
             {
@@ -1006,7 +1005,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             // We may be getting called by this.ResumeLayout() from InitializeComponent().
-            if (EDDConfig != null)
+            if (_initialized)
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                 {

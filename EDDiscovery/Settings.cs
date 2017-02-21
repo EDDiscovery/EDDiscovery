@@ -32,6 +32,7 @@ namespace EDDiscovery2
     {
         private EDDiscoveryForm _discoveryForm;
         private ThemeEditor themeeditor = null;
+        private bool initialized = false;
 
         public string MapHomeSystem { get { return textBoxHomeSystem.Text; } }
         public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
@@ -71,23 +72,23 @@ namespace EDDiscovery2
 
         public void InitSettingsTab()
         {
-            checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
-            checkboxSkipSlowUpdates.Checked = EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates;
-            checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
-            checkBoxMinimizeToNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon;
-            checkBoxFocusNewSystem.Checked = EDDiscoveryForm.EDDConfig.FocusOnNewSystem;
-            checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
-            checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
-            checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
-            checkBoxAutoLoad.Checked = EDDiscoveryForm.EDDConfig.AutoLoadPopOuts;
-            checkBoxAutoSave.Checked = EDDiscoveryForm.EDDConfig.AutoSavePopOuts;
+            checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
+            checkboxSkipSlowUpdates.Checked = EDDConfig.CanSkipSlowUpdates;
+            checkBoxOrderRowsInverted.Checked = EDDConfig.OrderRowsInverted;
+            checkBoxMinimizeToNotifyIcon.Checked = EDDConfig.MinimizeToNotifyIcon;
+            checkBoxFocusNewSystem.Checked = EDDConfig.FocusOnNewSystem;
+            checkBoxKeepOnTop.Checked = EDDConfig.KeepOnTop;
+            checkBoxUseNotifyIcon.Checked = EDDConfig.UseNotifyIcon;
+            checkBoxUTC.Checked = EDDConfig.DisplayUTC;
+            checkBoxAutoLoad.Checked = EDDConfig.AutoLoadPopOuts;
+            checkBoxAutoSave.Checked = EDDConfig.AutoSavePopOuts;
 
-            checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
+            checkBoxMinimizeToNotifyIcon.Enabled = EDDConfig.UseNotifyIcon;
 
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
-            textBoxHomeSystem.Text = SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol");
+            textBoxHomeSystem.Text = EDDConfig.HomeSystem;
 
             textBoxDefaultZoom.Text = SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
 
@@ -104,28 +105,29 @@ namespace EDDiscovery2
             dataGridViewCommanders.DataSource = EDCommander.GetList();
             dataGridViewCommanders.AutoGenerateColumns = false;
 
-            panel_defaultmapcolor.BackColor = EDDConfig.Instance.DefaultMapColour;
+            panel_defaultmapcolor.BackColor = EDDConfig.DefaultMapColour;
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
+            initialized = true;
         }
 
         public void SaveSettings()
         {
-            SQLiteDBClass.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             double zoom = 1;
             SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
             SQLiteDBClass.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
 
-            EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
-            EDDiscoveryForm.EDDConfig.UseNotifyIcon = checkBoxUseNotifyIcon.Checked;
-            EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
-            EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
-            EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
-            EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
-            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
-            EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
-            EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
+            EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
+            EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
+            EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
+            EDDConfig.DisplayUTC = checkBoxUTC.Checked;
+            EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
+            EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
+            EDDConfig.HomeSystem = textBoxHomeSystem.Text;
+            EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
+            EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
+            EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
+            EDDConfig.UseNotifyIcon = checkBoxUseNotifyIcon.Checked;
         }
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -198,17 +200,18 @@ namespace EDDiscovery2
             ColorDialog mapColorDialog = new ColorDialog();
             mapColorDialog.AllowFullOpen = true;
             mapColorDialog.FullOpen = true;
-            mapColorDialog.Color = EDDConfig.Instance.DefaultMapColour;
+            mapColorDialog.Color = EDDConfig.DefaultMapColour;
             if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                EDDConfig.Instance.DefaultMapColour = mapColorDialog.Color;
-                EDDConfig.Instance.DefaultMapColour = EDDConfig.Instance.DefaultMapColour;
-                panel_defaultmapcolor.BackColor = EDDConfig.Instance.DefaultMapColour;
+                EDDConfig.DefaultMapColour = mapColorDialog.Color;
+                EDDConfig.DefaultMapColour = EDDConfig.DefaultMapColour;
+                panel_defaultmapcolor.BackColor = EDDConfig.DefaultMapColour;
             }
         }
 
         private void comboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) // theme selected..
         {
+            if (!initialized) return;
             string themename = comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString();
 
             string fontwanted = null;                                               // don't check custom, only a stored theme..
@@ -284,32 +287,37 @@ namespace EDDiscovery2
 
         private void checkBoxFocusNewSystem_CheckedChanged(object sender, EventArgs e)
         {
-            EDDConfig.Instance.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
+            if (!initialized) return;
+            EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
         }
 
         private void checkBoxKeepOnTop_CheckedChanged(object sender, EventArgs e)
         {
-            EDDConfig.Instance.KeepOnTop = checkBoxKeepOnTop.Checked;
+            if (!initialized) return;
+            EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
             this.FindForm().TopMost = checkBoxKeepOnTop.Checked;
             _discoveryForm.keepOnTopChanged(checkBoxKeepOnTop.Checked);
         }
 
         private void checkBoxMinimizeToNotifyIcon_CheckedChanged(object sender, EventArgs e)
         {
-            EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
+            if (!initialized) return;
+            EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
         }
 
         private void checkBoxUseNotifyIcon_CheckedChanged(object sender, EventArgs e)
         {
+            if (!initialized) return;
             bool chk = checkBoxUseNotifyIcon.Checked;
-            EDDiscoveryForm.EDDConfig.UseNotifyIcon = chk;
+            EDDConfig.UseNotifyIcon = chk;
             checkBoxMinimizeToNotifyIcon.Enabled = chk;
             _discoveryForm.useNotifyIconChanged(chk);
         }
 
         private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
         {
-            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
+            if (!initialized) return;
+            EDDConfig.DisplayUTC = checkBoxUTC.Checked;
             _discoveryForm.RefreshDisplays();
         }
 

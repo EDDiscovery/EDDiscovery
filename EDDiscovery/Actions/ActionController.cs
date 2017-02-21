@@ -155,7 +155,7 @@ namespace EDDiscovery.Actions
                 SetPeristentGlobal(Actions.ActionSay.globalvarspeechrate, cfg.Rate);
                 SetPeristentGlobal(Actions.ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
 
-                EDDConfig.Instance.DefaultVoiceDevice = discoveryform.AudioQueueSpeech.Driver.GetAudioEndpoint();
+                EDDConfig.DefaultVoiceDevice = discoveryform.AudioQueueSpeech.Driver.GetAudioEndpoint();
             }
         }
 
@@ -176,7 +176,7 @@ namespace EDDiscovery.Actions
                 SetPeristentGlobal(Actions.ActionPlay.globalvarplayvolume, dlg.Volume);
                 SetPeristentGlobal(Actions.ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
 
-                EDDConfig.Instance.DefaultWaveDevice = discoveryform.AudioQueueWave.Driver.GetAudioEndpoint();
+                EDDConfig.DefaultWaveDevice = discoveryform.AudioQueueWave.Driver.GetAudioEndpoint();
             }
         }
 

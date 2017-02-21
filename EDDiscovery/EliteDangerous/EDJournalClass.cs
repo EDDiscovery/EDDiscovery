@@ -161,7 +161,7 @@ namespace EDDiscovery.EliteDangerous
                     int part;
                     if (Int32.TryParse(partstr, NumberStyles.Integer, CultureInfo.InvariantCulture, out part) && part > 1)
                     {
-                        //EDCommander lastcmdr = EDDConfig.Instance.CurrentCommander;
+                        //EDCommander lastcmdr = EDCommander.Current;
                         var lastreader = netlogreaders.Where(kvp => kvp.Key.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
                                                       .Select(k => k.Value)
                                                       .FirstOrDefault();

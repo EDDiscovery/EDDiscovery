@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
             }
 
-            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+            dataGridViewJournal.Columns[0].HeaderText = EDDConfig.DisplayUTC ? "Game Time" : "Time";
         }
 
         private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls
             if (item.EventDetailedInfo.Length > 0)
                 detail += ((detail.Length > 0) ? Environment.NewLine : "") + item.EventDetailedInfo;
 
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail };
+            object[] rowobj = { EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail };
 
             int rownr;
 
@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
             {
                 AddNewJournalRow(true, he);
 
-                if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem) // Move focus to new row
+                if (EDDConfig.FocusOnNewSystem) // Move focus to new row
                 {
                     SelectTopRow();
                 }

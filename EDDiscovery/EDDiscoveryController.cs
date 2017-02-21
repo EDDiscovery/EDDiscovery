@@ -113,7 +113,7 @@ namespace EDDiscovery
             }
 
             SQLiteConnectionUser.EarlyReadRegister();
-            EDDConfig.Instance.Update(write: false);
+            EDDConfig.Load(write: false);
 
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
@@ -139,7 +139,7 @@ namespace EDDiscovery
         public void PostInit_Loaded()
         {
             EliteDangerousClass.CheckED();
-            EDDConfig.Instance.Update();
+            EDDConfig.Load();
             CheckIfEliteDangerousIsRunning();
         }
 

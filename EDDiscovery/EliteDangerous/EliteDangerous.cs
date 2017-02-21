@@ -147,7 +147,7 @@ namespace EDDiscovery2
                         if (!checkedfordefaultfolder)
                         {
                             checkedfordefaultfolder = true;                 // do it once, but no need to keep on doing it.. only this class can set it once the process starts
-                            EDDirectory = EDDConfig.UserPaths.EDDirectory;
+                            EDDirectory = EDDiscovery.EDDConfig.UserPaths.EDDirectory;
                         }
                     }
                 }
@@ -173,8 +173,8 @@ namespace EDDiscovery2
                         if ( newfolder != null && !newfolder.Equals(EDDirectory) )
                         {
                             EDDirectory = newfolder;
-                            EDDConfig.UserPaths.EDDirectory = EDDirectory;
-                            EDDConfig.UserPaths.Save();
+                            EDDiscovery.EDDConfig.UserPaths.EDDirectory = EDDirectory;
+                            EDDiscovery.EDDConfig.UserPaths.Save();
                         }
 
                         EDRunning = true;

@@ -50,8 +50,6 @@ namespace EDDiscovery2
 
         const int HELP_VERSION = 5;         // increment this to force help onto the screen of users first time.
 
-        public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
-
         private List<IData3DSet> _datasets_finegridlines;
         private List<IData3DSet> _datasets_coarsegridlines;
         private List<IData3DSet> _datasets_gridlinecoords;

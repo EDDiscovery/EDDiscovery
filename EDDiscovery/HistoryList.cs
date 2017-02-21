@@ -355,7 +355,7 @@ namespace EDDiscovery
 
         public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl , SQLiteConnectionUser conn )      // called after above with a USER connection
         {
-            materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
+            materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDConfig.ClearMaterials, EDDConfig.ClearCommodities);
 
             snc = SystemNoteClass.GetNoteOnJournalEntry(Journalid);
 
@@ -1139,7 +1139,7 @@ namespace EDDiscovery
                 if (NetLogPath != null)
                 {
                     string errstr = null;
-                    NetLogClass.ParseFiles(NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour.ToArgb(), () => cancelRequested(), (p, s) => reportProgress(p, s), ForceNetLogReload, currentcmdrid: CurrentCommander);
+                    NetLogClass.ParseFiles(NetLogPath, out errstr, EDDConfig.DefaultMapColour.ToArgb(), () => cancelRequested(), (p, s) => reportProgress(p, s), ForceNetLogReload, currentcmdrid: CurrentCommander);
                 }
             }
 

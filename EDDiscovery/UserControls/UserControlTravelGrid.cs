@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
 
             currentGridRow = rowno;
 
-            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+            dataGridViewTravel.Columns[0].HeaderText = EDDConfig.DisplayUTC ? "Game Time" : "Time";
 
             if (OnRedisplay != null)
                 OnRedisplay(hl);
@@ -213,7 +213,7 @@ namespace EDDiscovery.UserControls
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (item.snc != null) ? item.snc.Note : "" };
+            object[] rowobj = { EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (item.snc != null) ? item.snc.Note : "" };
 
             int rownr;
             if (insert)

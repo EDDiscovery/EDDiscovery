@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
         void SetCheckBoxes()
         {
             checkBoxClear.Enabled = false;
-            checkBoxClear.Checked = (materials) ? EDDiscoveryForm.EDDConfig.ClearMaterials : EDDiscoveryForm.EDDConfig.ClearCommodities;
+            checkBoxClear.Checked = (materials) ? EDDConfig.ClearMaterials : EDDConfig.ClearCommodities;
             checkBoxClear.Enabled = true;
         }
 
@@ -272,9 +272,9 @@ namespace EDDiscovery.UserControls
             if (checkBoxClear.Enabled)
             {
                 if (materials)
-                    EDDiscoveryForm.EDDConfig.ClearMaterials = checkBoxClear.Checked;
+                    EDDConfig.ClearMaterials = checkBoxClear.Checked;
                 else
-                    EDDiscoveryForm.EDDConfig.ClearCommodities = checkBoxClear.Checked;
+                    EDDConfig.ClearCommodities = checkBoxClear.Checked;
 
                 discoveryform.RecalculateHistoryDBs();
             }

@@ -413,7 +413,7 @@ namespace EDDiscovery
                 {
                     RefreshTargetDisplay();                                     // tell the target system its changed the latest system
 
-                    if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)   // Move focus to new row
+                    if (EDDConfig.FocusOnNewSystem)   // Move focus to new row
                     {
                         userControlTravelGrid.SelectTopRow();
                         ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
@@ -666,7 +666,7 @@ namespace EDDiscovery
 
             try
             {
-                _discoveryForm.EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour.ToArgb());
+                _discoveryForm.EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.DefaultMapColour.ToArgb());
             }
             catch (Exception ex)
             {

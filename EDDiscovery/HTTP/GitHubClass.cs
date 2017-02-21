@@ -36,7 +36,7 @@ namespace EDDiscovery.HTTP
         //private readonly string fromSoftwareVersion;
         // assemblyFullName = Assembly.GetExecutingAssembly().FullName;
         //fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
-        //commanderName = EDDConfig.Instance.CurrentCommander.EdsmName;
+        //commanderName = EDCommander.Current.EdsmName;
 
         private readonly string githubServer = "https://api.github.com/repos/EDDiscovery/EDDiscovery/";
 

@@ -68,7 +68,7 @@ namespace EDDiscovery2.HTTP
                     // Get the response.
                     //request.Timeout = 740 * 1000;
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    if (EDDConfig.EDSMLog)
                         WriteLog("POST " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -76,7 +76,7 @@ namespace EDDiscovery2.HTTP
                     var data = getResponseData(response);
                     response.Close();
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    if (EDDConfig.EDSMLog)
                     {
                         //TODO: Log Status Code too
                         WriteLog(data.Body, "");
@@ -100,7 +100,7 @@ namespace EDDiscovery2.HTTP
                         System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
                         System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        if (EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
@@ -119,7 +119,7 @@ namespace EDDiscovery2.HTTP
 
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                if (EDDConfig.EDSMLog)
                 {
                     WriteLog("Exception" + ex.Message, "");
                 }
@@ -164,7 +164,7 @@ namespace EDDiscovery2.HTTP
                     // Get the response.
                     //request.Timeout = 740 * 1000;
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    if (EDDConfig.EDSMLog)
                         WriteLog("PATCH " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -172,7 +172,7 @@ namespace EDDiscovery2.HTTP
                     var data = getResponseData(response);
                     response.Close();
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    if (EDDConfig.EDSMLog)
                     {
                         WriteLog(data.Body, "");
                     }
@@ -195,7 +195,7 @@ namespace EDDiscovery2.HTTP
                         System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
                         System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        if (EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
@@ -214,7 +214,7 @@ namespace EDDiscovery2.HTTP
 
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                if (EDDConfig.EDSMLog)
                 {
                     WriteLog("Exception" + ex.Message, "");
                 }
@@ -250,7 +250,7 @@ namespace EDDiscovery2.HTTP
                     }
                     request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    if (EDDConfig.EDSMLog)
                         WriteLog("GET " + request.RequestUri, "");
 
 
@@ -261,7 +261,7 @@ namespace EDDiscovery2.HTTP
                     var data = getResponseData(response);
                     response.Close();
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    if (EDDConfig.EDSMLog)
                     {
                         WriteLog(data.Body, "");
                     }
@@ -289,7 +289,7 @@ namespace EDDiscovery2.HTTP
                             System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         }
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        if (EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             if (httpResponse != null)
@@ -313,7 +313,7 @@ namespace EDDiscovery2.HTTP
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                if (EDDConfig.EDSMLog)
                 {
                     WriteLog("Exception" + ex.Message, "");
                 }
@@ -349,7 +349,7 @@ namespace EDDiscovery2.HTTP
                     }
                     request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    if (EDDConfig.EDSMLog)
                         WriteLog("DELETE " + request.RequestUri, "");
 
 
@@ -360,7 +360,7 @@ namespace EDDiscovery2.HTTP
                     var data = getResponseData(response);
                     response.Close();
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    if (EDDConfig.EDSMLog)
                     {
                         WriteLog(data.Body, "");
                     }
@@ -384,7 +384,7 @@ namespace EDDiscovery2.HTTP
                         System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
                         System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        if (EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
@@ -404,7 +404,7 @@ namespace EDDiscovery2.HTTP
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                if (EDDConfig.EDSMLog)
                 {
                     WriteLog("Exception" + ex.Message, "");
                 }
@@ -425,7 +425,7 @@ namespace EDDiscovery2.HTTP
             if (str2 != null && str2.ToUpper().Contains("PASSWORD"))
                 str2 = "** This string contains a password so not logging it.**";
 
-            if (EDDiscoveryForm.EDDConfig.EDSMLog == false)
+            if (EDDConfig.EDSMLog == false)
                 return;
 
             try

@@ -37,8 +37,6 @@ namespace EDDiscovery2._3DMap
         private static Dictionary<string, TexturedQuadData> _cachedTextures = new Dictionary<string, TexturedQuadData>();
         private static Dictionary<string, Bitmap> _cachedBitmaps = new Dictionary<string, Bitmap>();
 
-        public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
-
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
 
@@ -587,7 +585,7 @@ namespace EDDiscovery2._3DMap
         {
             using (Graphics g = Graphics.FromImage(text_bmp))
             {
-                using (Brush br = new SolidBrush(MapColours.CoarseGridLines))
+                using (Brush br = new SolidBrush(EDDConfig.CoarseGridLinesColour))
                     g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(px, py));
             }
 
@@ -597,7 +595,7 @@ namespace EDDiscovery2._3DMap
         public List<IData3DSet> AddFineGridLines()
         {
             int smallUnitSize = gridunitSize / 10;
-            var smalldatasetGrid = Data3DSetClass<LineData>.Create("gridFine", MapColours.FineGridLines, 0.6f);
+            var smalldatasetGrid = Data3DSetClass<LineData>.Create("gridFine", EDDConfig.FineGridLinesColour, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += smallUnitSize)
             {
@@ -615,7 +613,7 @@ namespace EDDiscovery2._3DMap
 
         public List<IData3DSet> AddCoarseGridLines()
         {
-            var datasetGridLOD1 = Data3DSetClass<LineData>.Create("gridNormal", MapColours.CoarseGridLines, 0.6f);
+            var datasetGridLOD1 = Data3DSetClass<LineData>.Create("gridNormal", EDDConfig.CoarseGridLinesColour, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
             {
@@ -629,7 +627,7 @@ namespace EDDiscovery2._3DMap
 
             _datasets.Add(datasetGridLOD1);
 
-            var datasetGridLOD2 = Data3DSetClass<LineData>.Create("gridCoarse", MapColours.CoarseGridLines, 0.6f);
+            var datasetGridLOD2 = Data3DSetClass<LineData>.Create("gridCoarse", EDDConfig.CoarseGridLinesColour, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize * 10)
             {
@@ -652,7 +650,7 @@ namespace EDDiscovery2._3DMap
             if ( grid != null )
             {
                 LineDataCollection ldc = grid as LineDataCollection;
-                var colour = MapColours.CoarseGridLines;
+                var colour = EDDConfig.CoarseGridLinesColour;
                 float LODfade = (float)Math.Max(Math.Min((zoom / 0.1 - 1.0) / 5.0, 1.0), 0.5);
                 ldc.Color = Color.FromArgb((int)(colour.R * LODfade), (int)(colour.G * LODfade), (int)(colour.B * LODfade));
                 //Console.WriteLine("LOD {0} fade {1} Color {2}", ldc.Name, LODfade, ldc.Color);
@@ -746,7 +744,7 @@ namespace EDDiscovery2._3DMap
         {
             if (PlannedRoute != null && PlannedRoute.Any())
             {
-                var routeLines = Data3DSetClass<LineData>.Create("PlannedRoute", MapColours.PlannedRoute, 25.0f);
+                var routeLines = Data3DSetClass<LineData>.Create("PlannedRoute", EDDConfig.PlannedRouteColour, 25.0f);
                 ISystem prevSystem = PlannedRoute.First();
                 foreach (ISystem point in PlannedRoute.Skip(1))
                 {
@@ -768,7 +766,7 @@ namespace EDDiscovery2._3DMap
 
             if (centersystem != null)
             {
-                var dataset = Data3DSetClass<PointData>.Create("Center", MapColours.CentredSystem, 5.0f);
+                var dataset = Data3DSetClass<PointData>.Create("Center", EDDConfig.CentredSystemColour, 5.0f);
                 dataset.Add(new PointData(centersystem.x, centersystem.y, centersystem.z));
                 _datasets.Add(dataset);
             }

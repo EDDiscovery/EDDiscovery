@@ -14,133 +14,382 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Data.Common;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
+using EDDiscovery2;
 using EDDiscovery2.EDSM;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using EDDiscovery;
+using System;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
-    public class EDDConfig
+    public sealed class EDDConfig : INotifyPropertyChanged
     {
         #region Public interface
 
-        #region Events
-
         /// <summary>
-        /// A configuration changed event.
+        /// The <see cref="INotifyPropertyChanged"/> event handler to allow for binding this class the <see cref="Settings"/> tab and other controls.
         /// </summary>
-        public class ConfigChangedEventArgs : EventArgs
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #region Configuration properties
+
+        /*
+         * When adding a new property, be sure to add it to the `static Load(bool, SQLConnection)` function to read it in once the database is up,
+         * and set an appropriate default value to the backing field that is .
+         * 
+         * Since properties may exist in the database using an different name that no longer reflects the property name, the `Instance.SetT()`
+         * methods allow for an optional `backendName` parameter capable of mapping to the older name used in the DB. When not specified, it
+         * will default to the name of the property currently being set.
+         */
+
+        private bool _AutoLoadPopouts = false;
+        /// <summary>
+        /// Whether we should automatically load popout (S-Panel) windows at startup.
+        /// </summary>
+        public static bool AutoLoadPopOuts
         {
-            /// <summary>
-            /// The configuration property that was changed.
-            /// </summary>
-            public ConfigProperty Setting { get; protected set; }
-
-            /// <summary>
-            /// The new value for this property.
-            /// </summary>
-            public bool NewValue { get; protected set; }
-
-            /// <summary>
-            /// Constructs a new ConfigChangedEventArgs class in preparation to send it off in an event.
-            /// </summary>
-            /// <param name="setting">The configuration property that was changed.</param>
-            /// <param name="newvalue">The new value of the configuration property.</param>
-            public ConfigChangedEventArgs(ConfigProperty setting, bool newvalue)
+            get
             {
-                Setting = setting;
-                NewValue = newvalue;
+                return Instance._AutoLoadPopouts;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._AutoLoadPopouts, value);
             }
         }
 
+        private bool _AutoSavePopouts = false;
         /// <summary>
-        /// A map colour changed event.
+        /// Whether we should automatically save popout (S-Panel) windows at exit.
         /// </summary>
-        public class MapColourChangedEventArgs : EventArgs
+        public static bool AutoSavePopOuts
         {
-            /// <summary>
-            /// The new colour for this property.
-            /// </summary>
-            public Color NewColour { get; protected set; }
-
-            /// <summary>
-            /// The map colour property that was changed.
-            /// </summary>
-            public MapColourProperty ColourProp { get; protected set; }
-
-            /// <summary>
-            /// A map colour changed event.
-            /// </summary>
-            /// <param name="prop">The <see cref="MapColourProperty"/> that was changed.</param>
-            /// <param name="newColour">The new colour of this property.</param>
-            public MapColourChangedEventArgs(MapColourProperty prop, Color newColour)
+            get
             {
-                ColourProp = prop;
-                NewColour = newColour;
+                return Instance._AutoSavePopouts;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._AutoSavePopouts, value);
             }
         }
 
+        private bool _CanSkipSlowUpdates = false;
         /// <summary>
-        /// The configuration changed event handler.
+        /// (DEBUG ONLY) Whether to skip slow updates at startup. 
         /// </summary>
-        public event EventHandler<ConfigChangedEventArgs> ConfigChanged;
-
-        /// <summary>
-        /// The current commander changed event handler.
-        /// </summary>
-        public event EventHandler<CurrentCommanderChangedEventArgs> CurrentCommanderChanged;
-
-        /// <summary>
-        /// The map colour changed event handler.
-        /// </summary>
-        public event EventHandler<MapColourChangedEventArgs> MapColourChanged;
-
-        #endregion
-
-        #region Enums, subclasses
-
-        /// <summary>
-        /// The configuration property that has been changed.
-        /// </summary>
-        public enum ConfigProperty
+        public static bool CanSkipSlowUpdates
         {
-            AutoLoadPopOuts,
-            AutoSavePopOuts,
-            CanSkipSlowUpdates,
-            ClearCommodities,
-            ClearMaterials,
-            DisplayUTC,
-            EDSMLog,
-            FocusOnNewSystem,
-            KeepOnTop,
-            ListOfCommanders,
-            MinimizeToNotifyIcon,
-            OrderRowsInverted,
-            UseNotifyIcon,
-        };
+            get
+            {
+                return (Instance._CanSkipSlowUpdates && EDDConfig.Options.Debug);
+            }
+            set
+            {
+                if (EDDConfig.Options.Debug)
+                    Instance.SetBool(ref Instance._CanSkipSlowUpdates, value);
+            }
+        }
 
+        private Color _CentredSystemColour = Color.Yellow;
         /// <summary>
-        /// The map colour property that has been changed.
+        /// The color of the selected system in the maps.
         /// </summary>
-        public enum MapColourProperty
+        public static Color CentredSystemColour
         {
-            CentredSystem,
-            CoarseGridLines,
-            DefaultMapColour,
-            FineGridLines,
-            PlannedRoute,
-        };
+            get
+            {
+                return Instance._CentredSystemColour;
+            }
+            set
+            {
+                Instance.SetColor(ref Instance._CentredSystemColour, value, "MapColour_CentredSystem");
+            }
+        }
+        
+        private bool _ClearCommodities = false;
+        /// <summary>
+        /// Whether the commodities viewer should hide commodities that the commander does not have on-hand.
+        /// </summary>
+        public static bool ClearCommodities
+        {
+            get
+            {
+                return Instance._ClearCommodities;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._ClearCommodities, value);
+            }
+        }
+
+        private bool _ClearMaterials = false;
+        /// <summary>
+        /// Whether the materials viewer should hide materials that the command does not have on-hand.
+        /// </summary>
+        public static bool ClearMaterials
+        {
+            get
+            {
+                return Instance._ClearMaterials;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._ClearMaterials, value);
+            }
+        }
+
+        private Color _CoarseGridLinesColour = ColorTranslator.FromHtml("#296A6C");
+        /// <summary>
+        /// The coarse grid line colour used for the maps.
+        /// </summary>
+        public static Color CoarseGridLinesColour
+        {
+            get
+            {
+                return Instance._CoarseGridLinesColour;
+            }
+            set
+            {
+                Instance.SetColor(ref Instance._CoarseGridLinesColour, value, "MapColour_CoarseGridLines");
+            }
+        }
+
+        private Color _DefaultMapColour = Color.Red;
+        /// <summary>
+        /// The default map colour.
+        /// </summary>
+        public static Color DefaultMapColour
+        {
+            get
+            {
+                return Instance._DefaultMapColour;
+            }
+            set
+            {
+                Instance.SetColor(ref Instance._DefaultMapColour, value, "DefaultMap");
+            }
+        }
+
+        private string _DefaultVoiceDevice = "Default";
+        /// <summary>
+        /// The audio device that is selected to play text-to-speech events.
+        /// </summary>
+        public static string DefaultVoiceDevice
+        {
+            get
+            {
+                return Instance._DefaultVoiceDevice;
+            }
+            set
+            {
+                Instance.SetString(ref Instance._DefaultVoiceDevice, value, "VoiceAudioDevice");
+            }
+        }
+
+        private string _DefaultWaveDevice = "Default";
+        /// <summary>
+        /// The audio device that is selected to play audio output events besides text-to-speech.
+        /// </summary>
+        public static string DefaultWaveDevice
+        {
+            get
+            {
+                return Instance._DefaultWaveDevice;
+            }
+            set
+            {
+                Instance.SetString(ref Instance._DefaultWaveDevice, value, "WaveAudioDevice");
+            }
+        }
+
+        private bool _DisplayUTC = false;
+        /// <summary>
+        /// Whether to display event times in UTC (game time, when <c>true</c>) or in local time (when <c>false</c>).
+        /// </summary>
+        public static bool DisplayUTC
+        {
+            get
+            {
+                return Instance._DisplayUTC;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._DisplayUTC, value);
+            }
+        }
+
+        private bool _EDSMLog = false;
+        /// <summary>
+        /// Whether to (verbosely) log all EDSM requests.
+        /// </summary>
+        public static bool EDSMLog
+        {
+            get
+            {
+                return Instance._EDSMLog;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._EDSMLog, value);
+            }
+        }
+
+        private Color _FineGridLinesColour = ColorTranslator.FromHtml("#202020");
+        /// <summary>
+        /// The fine grid line color used for the maps.
+        /// </summary>
+        public static Color FineGridLinesColour
+        {
+            get
+            {
+                return Instance._FineGridLinesColour;
+            }
+            set
+            {
+                Instance.SetColor(ref Instance._FineGridLinesColour, value, "MapColour_FineGridLines");
+            }
+        }
+
+        private bool _FocusOnNewSystem = false;
+        /// <summary>
+        /// Whether to automatically scroll (up/down) to new events in the journal and history log views.
+        /// </summary>
+        public static bool FocusOnNewSystem
+        {
+            get
+            {
+                return Instance._FocusOnNewSystem;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._FocusOnNewSystem, value);
+            }
+        }
+
+        private string _HomeSystem = "Sol";
+        /// <summary>
+        /// This is what the user has marked as their home system, and is used for distance calculations as
+        /// well as the default center point for the 3d map whenever it is displayed.
+        /// </summary>
+        public static string HomeSystem
+        {
+            get
+            {
+                return Instance._HomeSystem;
+            }
+            set
+            {
+                if (value != null)
+                    Instance.SetString(ref Instance._HomeSystem, value, "DefaultMapCenter");
+            }
+        }
+
+        private bool _KeepOnTop = false;
+        /// <summary>
+        /// Whether to keep the <see cref="EDDiscoveryForm"/> window on top.
+        /// </summary>
+        public static bool KeepOnTop
+        {
+            get
+            {
+                return Instance._KeepOnTop;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._KeepOnTop, value);
+            }
+        }
+
+        private readonly string _LogIndex;
+        /// <summary>
+        /// Set during <see cref="EDDConfig"/> constructor to the current date. Used solely
+        /// to determine the log file that this application instance wiill write to.
+        /// </summary>
+        public static string LogIndex
+        {
+            get
+            {
+                return Instance._LogIndex;
+            }
+        }
+
+        private bool _MinimizeToNotifyIcon = false;
+        /// <summary>
+        /// Whether or not the main window will be hidden to the system notification area icon (systray)
+        /// when minimized. Has no effect if <see cref="UseNotifyIcon"/> is not also enabled.
+        /// </summary>
+        public static bool MinimizeToNotifyIcon
+        {
+            get
+            {
+                return Instance._MinimizeToNotifyIcon;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._MinimizeToNotifyIcon, value);
+            }
+        }
+
+        private bool _OrderRowsInverted = false;
+        /// <summary>
+        /// Whether newest rows are on top (<c>false</c>), or bottom (<c>true</c>).
+        /// </summary>
+        public static bool OrderRowsInverted
+        {
+            get
+            {
+                return Instance._OrderRowsInverted;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._OrderRowsInverted, value);
+            }
+        }
+
+        private Color _PlannedRouteColour = Color.Green;
+        /// <summary>
+        /// The color of the currently planned route on the maps.
+        /// </summary>
+        public static Color PlannedRouteColour
+        {
+            get
+            {
+                return Instance._PlannedRouteColour;
+            }
+            set
+            {
+                Instance.SetColor(ref Instance._PlannedRouteColour, value, "MapColour_PlannedRoute");
+            }
+        }
+
+        private bool _UseNotifyIcon = false;
+        /// <summary>
+        /// Whether or not a system notification area (systray) icon will be used.
+        /// </summary>
+        public static bool UseNotifyIcon
+        {
+            get
+            {
+                return Instance._UseNotifyIcon;
+            }
+            set
+            {
+                Instance.SetBool(ref Instance._UseNotifyIcon, value);
+            }
+        }
+
+        #endregion // Configuration properties
+
+        #region Less exciting stuff
 
         /// <summary>
         /// Whether EDSM connections shall be handled through the normal API server(s),
@@ -154,43 +403,11 @@ namespace EDDiscovery2
         }
 
         /// <summary>
-        /// Colours to be used for mapping.
+        /// Command-line options, and other settings that cannot be changed during runtime.
         /// </summary>
-        public class MapColoursClass
-        {
-            private EDDConfig _instance;
-            private Color _centreSystemColour = Color.Yellow;
-            private Color _coarseGridLinesColour = ColorTranslator.FromHtml("#296A6C");
-            private Color _fineGridLinesColour = ColorTranslator.FromHtml("#202020");
-            private Color _plannedRouteColour = Color.Green;
-
-            public MapColoursClass(EDDConfig instance)
-            {
-                _instance = instance;
-            }
-
-            public void Load(SQLiteConnectionUser conn)
-            {
-                _centreSystemColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_CentredSystem", _centreSystemColour.ToArgb(), conn));
-                _coarseGridLinesColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_CoarseGridLines", _coarseGridLinesColour.ToArgb(), conn));
-                _fineGridLinesColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_FineGridLines", _fineGridLinesColour.ToArgb(), conn));
-                _plannedRouteColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_PlannedRoute", _plannedRouteColour.ToArgb(), conn));
-
-            }
-
-            private void PutColour(ref Color field, Color colour, string name, MapColourProperty prop)
-            {
-                _instance.UpdateColourProperty(ref field, colour, "MapColour_" + name, prop);
-            }
-
-            public Color CentredSystem { get { return _centreSystemColour; } set { PutColour(ref _centreSystemColour, value, "CentredSystem", MapColourProperty.CentredSystem); } }
-            public Color CoarseGridLines { get { return _coarseGridLinesColour; } set { PutColour(ref _coarseGridLinesColour, value, "CoarseGridLines", MapColourProperty.CoarseGridLines); } }
-            public Color FineGridLines { get { return _fineGridLinesColour; } set { PutColour(ref _fineGridLinesColour, value, "FineGridLines", MapColourProperty.FineGridLines); } }
-            public Color PlannedRoute { get { return _plannedRouteColour; } set { PutColour(ref _plannedRouteColour, value, "PlannedRoute", MapColourProperty.PlannedRoute); } }
-        }
-
+        public static OptionsClass Options { get; } = new OptionsClass();
         /// <summary>
-        /// Class representing command-line options, and other settings that cannot be changed during runtime.
+        /// Class representing command-line options, and other settings that cannot be changed while running.
         /// </summary>
         public class OptionsClass
         {
@@ -210,6 +427,7 @@ namespace EDDiscovery2
             public string SystemDatabasePath { get; private set; }
             public bool TraceLog { get; private set; }
             public string UserDatabasePath { get; private set; }
+            public string Version { get; private set; }
             public string VersionDisplayString { get; private set; }
 
             #endregion
@@ -381,9 +599,10 @@ namespace EDDiscovery2
 
             private void SetVersionDisplayString()
             {
+                Version = Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+
                 StringBuilder sb = new StringBuilder();
-                sb.Append("Version ");
-                sb.Append(Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1]);
+                sb.Append($"Version {Version}");
 
                 if (AppFolder != null)
                 {
@@ -415,6 +634,10 @@ namespace EDDiscovery2
         }
 
         /// <summary>
+        /// User-specified paths to directories and files on the computer
+        /// </summary>
+        public static UserPathsClass UserPaths { get; } = new UserPathsClass();
+        /// <summary>
         /// Class representing paths to files on the current computer.
         /// </summary>
         /// <remarks>
@@ -424,12 +647,26 @@ namespace EDDiscovery2
         public class UserPathsClass
         {
             #region Properties
+
+            /// <summary>
+            /// The folder containing the Elite Dangerous executable.
+            /// </summary>
             public string EDDirectory { get; set; }
+
+            /// <summary>
+            /// The folder where EDD outputs processed screenshots.
+            /// </summary>
             public string ImageHandlerOutputDir { get; set; }
+
+            /// <summary>
+            /// The folder where screenshots are output from Elite Dangerous, (potentially) prior to being processed by EDD.
+            /// </summary>
             public string ImageHandlerScreenshotsDir { get; set; }
+
             #endregion
 
             #region Methods
+
             /// <summary>
             /// Loads the paths from the database and from UserPaths.json
             /// </summary>
@@ -440,11 +677,11 @@ namespace EDDiscovery2
                 ImageHandlerOutputDir = SQLiteConnectionUser.GetSettingString("ImageHandlerOutputDir", null, conn);
                 ImageHandlerScreenshotsDir = SQLiteConnectionUser.GetSettingString("ImageHandlerScreenshotDir", null, conn);
 
-                if (File.Exists(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json")))
+                if (!string.IsNullOrWhiteSpace(Options.AppFolder) && File.Exists(Path.Combine(Options.AppFolder, "UserPaths.json")))
                 {
                     JObject jo;
 
-                    using (FileStream stream = File.OpenRead(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json")))
+                    using (FileStream stream = File.OpenRead(Path.Combine(Options.AppFolder, "UserPaths.json")))
                     {
                         using (StreamReader rdr = new StreamReader(stream))
                         {
@@ -471,54 +708,34 @@ namespace EDDiscovery2
                 SQLiteConnectionUser.PutSettingString("ImageHandlerOutputDir", ImageHandlerOutputDir, conn);
                 SQLiteConnectionUser.PutSettingString("ImageHandlerScreenshotsDir", ImageHandlerScreenshotsDir, conn);
 
-                JObject jo = new JObject(new
+                if (!string.IsNullOrWhiteSpace(Options.AppFolder))
                 {
-                    EDDirectory = EDDirectory,
-                    ImageHandlerOutputDir = ImageHandlerOutputDir,
-                    ImageHandlerScreenshotsDir = ImageHandlerScreenshotsDir
-                });
+                    JObject jo = new JObject(
+                        new JProperty("EDDirectory", EDDirectory),
+                        new JProperty("ImageHandlerOutputDir", ImageHandlerOutputDir),
+                        new JProperty("ImageHandlerScreenshotsDir", ImageHandlerScreenshotsDir)
+                    );
 
-                using (FileStream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp")))
-                {
-                    using (StreamWriter writer = new StreamWriter(stream))
+                    using (FileStream stream = File.OpenWrite(Path.Combine(Options.AppFolder, "UserPaths.json.tmp")))
                     {
-                        using (JsonTextWriter jwriter = new JsonTextWriter(writer))
+                        using (StreamWriter writer = new StreamWriter(stream))
                         {
-                            jo.WriteTo(jwriter);
+                            using (JsonTextWriter jwriter = new JsonTextWriter(writer))
+                            {
+                                jo.WriteTo(jwriter);
+                            }
                         }
                     }
-                }
 
-                File.Delete(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
-                File.Move(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
+                    File.Delete(Path.Combine(Options.AppFolder, "UserPaths.json"));
+                    File.Move(Path.Combine(Options.AppFolder, "UserPaths.json.tmp"), Path.Combine(Options.AppFolder, "UserPaths.json"));
+                }
             }
+
             #endregion
         }
 
-        #endregion
-
-        #region Fields
-
-        /// <summary>
-        /// Set during program startup to the current date. Used solely to determine
-        /// the log file that this application instance wiill write to.
-        /// </summary>
-        readonly public static string LogIndex = DateTime.Now.ToString("yyyyMMdd");
-
-        #endregion
-
-        #region Static properties
-
-        /// <summary>
-        /// Command-line options, and other settings that cannot be changed during runtime.
-        /// </summary>
-        public static OptionsClass Options { get; } = new OptionsClass();
-
-        /// <summary>
-        /// User-specified paths to directories and files on the computer
-        /// </summary>
-        public static UserPathsClass UserPaths { get; } = new UserPathsClass();
-
+        private static readonly Lazy<EDDConfig> _Instance = new Lazy<EDDConfig>(() => new EDDConfig());
         /// <summary>
         /// Return the true instantiated EDDConfig, constructing it if necessary. Use this to access
         /// all settings that are not established beyond the scope of the application lifecycle.
@@ -527,292 +744,47 @@ namespace EDDiscovery2
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = new EDDConfig();
-                }
-                return _instance;
+                return _Instance.Value;
             }
         }
-
-        #endregion
-
-        /* **** Use 'EDDConfig.Instance.' or (an instance of)EDDiscoveryForm'.EDDConfig.' to access these directly **** */
-        #region Instantiated properties 
-
-        #region Boolean properties
-        /// <summary>
-        /// Whether we should automatically load popout (S-Panel) windows at startup.
-        /// </summary>
-        public bool AutoLoadPopOuts
-        {
-            get
-            {
-                return _autoLoadPopouts;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _autoLoadPopouts, value, "AutoLoadPopouts", ConfigProperty.AutoLoadPopOuts);
-            }
-        }
-
-        /// <summary>
-        /// Whether we should automatically save popout (S-Panel) windows at exit.
-        /// </summary>
-        public bool AutoSavePopOuts
-        {
-            get
-            {
-                return _autoSavePopouts;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _autoSavePopouts, value, "AutoSavePopouts", ConfigProperty.AutoSavePopOuts);
-            }
-        }
-
-        /// <summary>
-        /// (DEBUG ONLY) Whether to skip slow updates at startup. 
-        /// </summary>
-        public bool CanSkipSlowUpdates
-        {
-            get
-            {
-                return EDDConfig.Options.Debug && _canSkipSlowUpdates;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _canSkipSlowUpdates, value, "CanSkipSlowUpdates", ConfigProperty.CanSkipSlowUpdates);
-            }
-        }
-
-        /// <summary>
-        /// Whether the commodities viewer should hide commodities that the commander does not have on-hand.
-        /// </summary>
-        public bool ClearCommodities
-        {
-            get
-            {
-                return _clearCommodities;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _clearCommodities, value, "ClearCommodities", ConfigProperty.ClearCommodities);
-            }
-        }
-
-        /// <summary>
-        /// Whether the materials viewer should hide materials that the command does not have on-hand.
-        /// </summary>
-        public bool ClearMaterials
-        {
-            get
-            {
-                return _clearMaterials;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _clearMaterials, value, "ClearMaterials", ConfigProperty.ClearMaterials);
-            }
-        }
-
-        /// <summary>
-        /// Whether to display event times in UTC (game time) or in local time.
-        /// </summary>
-        public bool DisplayUTC
-        {
-            get
-            {
-                return _displayUTC;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _displayUTC, value, "DisplayUTC", ConfigProperty.DisplayUTC);
-            }
-        }
-
-        /// <summary>
-        /// Whether to (verbosely) log all EDSM requests.
-        /// </summary>
-        public bool EDSMLog
-        {
-            get
-            {
-                return _EDSMLog;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _EDSMLog, value, "EDSMLog", ConfigProperty.EDSMLog);
-            }
-        }
-
-        /// <summary>
-        /// Whether to automatically scroll (up/down) to new events in the journal and history log views.
-        /// </summary>
-        public bool FocusOnNewSystem
-        {
-            get
-            {
-                return _focusOnNewSystem;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _focusOnNewSystem, value, "FocusOnNewSystem", ConfigProperty.FocusOnNewSystem);
-            }
-        }
-
-        /// <summary>
-        /// Whether to keep the <see cref="EDDiscovery"/> window on top.
-        /// </summary>
-        public bool KeepOnTop
-        {
-            get
-            {
-                return _keepOnTop;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _keepOnTop, value, "KeepOnTop", ConfigProperty.KeepOnTop);
-            }
-        }
-
-
-        /// <summary>
-        /// Whether or not the main window will be hidden to the system notification
-        /// area icon (systray) when minimized. Has no effect if
-        /// <see cref="UseNotifyIcon"/> is not also enabled.
-        /// </summary>
-        public bool MinimizeToNotifyIcon
-        {
-            get
-            {
-                return _minimizeToNotifyIcon;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _minimizeToNotifyIcon, value, "MinimizeToNotifyIcon", ConfigProperty.MinimizeToNotifyIcon);
-            }
-        }
-
-        /// <summary>
-        /// Whether newest rows are on top (<c>false</c>), or bottom (<c>true</c>).
-        /// </summary>
-        public bool OrderRowsInverted
-        {
-            get
-            {
-                return _orderrowsinverted;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _orderrowsinverted, value, "OrderRowsInverted", ConfigProperty.OrderRowsInverted);
-            }
-        }
-
-        /// <summary>
-        /// Controls whether or not a system notification area (systray) icon will be shown.
-        /// </summary>
-        public bool UseNotifyIcon
-        {
-            get
-            {
-                return _useNotifyIcon;
-            }
-            set
-            {
-                UpdateBoolProperty(ref _useNotifyIcon, value, "UseNotifyIcon", ConfigProperty.UseNotifyIcon);
-            }
-        }
-        #endregion
-
-        #region String properties
-        /// <summary>
-        /// Default audio output device name to use for voice output
-        /// </summary>
-        public string DefaultVoiceDevice
-        {
-            get
-            {
-                return _defaultvoicedevice;
-            }
-            set
-            {
-                _defaultvoicedevice = value;
-                SQLiteConnectionUser.PutSettingString("VoiceAudioDevice", value);
-            }
-        }
-
-        /// <summary>
-        /// Default audio output device name to use for sound output
-        /// </summary>
-        public string DefaultWaveDevice
-        {
-            get
-            {
-                return _defaultwavedevice;
-            }
-            set
-            {
-                _defaultwavedevice = value;
-                SQLiteConnectionUser.PutSettingString("WaveAudioDevice", value);
-            }
-        }
-        #endregion
-
-        #region Map Colours
-        /// <summary>
-        /// The default map colour.
-        /// </summary>
-        public Color DefaultMapColour
-        {
-            get
-            {
-                return _defaultMapColour;
-            }
-            set
-            {
-                UpdateColourProperty(ref _defaultMapColour, value, "DefaultMap", MapColourProperty.DefaultMapColour);
-            }
-        }
-
-        /// <summary>
-        /// The currently selected colour map.
-        /// </summary>
-        public MapColoursClass MapColours { get; private set; }
-        #endregion
-
-        #endregion // Instantiated properties
-
-        #region Methods
 
         /// <summary>
         /// Read config from storage. 
         /// </summary>
         /// <param name="write">Whether or not to write new commander information to storage.</param>
-        /// <param name="conn">An existing UserDB connection, if available.</param>
-        public void Update(bool write = true, SQLiteConnectionUser conn = null)
+        /// <param name="conn">An existing <see cref="SQLiteConnectionUser"/> database connection, if available.</param>
+        public static void Load(bool write = true, SQLiteConnectionUser conn = null)
         {
+            bool createdconn = false;
             try
             {
-                // Boolean properties
-                _autoLoadPopouts        = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", _autoLoadPopouts, conn);
-                _autoSavePopouts        = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", _autoSavePopouts, conn);
-                _canSkipSlowUpdates     = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", _canSkipSlowUpdates, conn);
-                _clearCommodities       = SQLiteConnectionUser.GetSettingBool("ClearCommodities", _clearCommodities, conn);
-                _clearMaterials         = SQLiteConnectionUser.GetSettingBool("ClearMaterials", _clearMaterials, conn);
-                _displayUTC             = SQLiteConnectionUser.GetSettingBool("DisplayUTC", _displayUTC, conn);
-                _EDSMLog                = SQLiteConnectionUser.GetSettingBool("EDSMLog", _EDSMLog, conn);
-                _focusOnNewSystem       = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", _focusOnNewSystem, conn);
-                _keepOnTop              = SQLiteConnectionUser.GetSettingBool("KeepOnTop", _keepOnTop, conn);
-                _minimizeToNotifyIcon   = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", _minimizeToNotifyIcon, conn);
-                _orderrowsinverted      = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", _orderrowsinverted, conn);
-                _useNotifyIcon          = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", _useNotifyIcon, conn);
-                // String properties
-                _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", _defaultvoicedevice, conn);
-                _defaultwavedevice = SQLiteConnectionUser.GetSettingString("VoiceWaveDevice", _defaultwavedevice, conn);
-                // Colour properties
-                _defaultMapColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("DefaultMap", _defaultMapColour.ToArgb(), conn));
-                MapColours.Load(conn);
+                if (conn == null && write)
+                {
+                    createdconn = true;
+                    conn = new SQLiteConnectionUser(Instance._DisplayUTC, EDDbAccessMode.Indeterminate);
+                }
+                Instance._AutoLoadPopouts       = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", Instance._AutoLoadPopouts, conn);
+                Instance._AutoSavePopouts       = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", Instance._AutoSavePopouts, conn);
+                Instance._CanSkipSlowUpdates    = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", Instance._CanSkipSlowUpdates, conn);
+                Instance._ClearCommodities      = SQLiteConnectionUser.GetSettingBool("ClearCommodities", Instance._ClearCommodities, conn);
+                Instance._ClearMaterials        = SQLiteConnectionUser.GetSettingBool("ClearMaterials", Instance._ClearMaterials, conn);
+                Instance._DisplayUTC            = SQLiteConnectionUser.GetSettingBool("DisplayUTC", Instance._DisplayUTC, conn);
+                Instance._EDSMLog               = SQLiteConnectionUser.GetSettingBool("EDSMLog", Instance._EDSMLog, conn);
+                Instance._FocusOnNewSystem      = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", Instance._FocusOnNewSystem, conn);
+                Instance._KeepOnTop             = SQLiteConnectionUser.GetSettingBool("KeepOnTop", Instance._KeepOnTop, conn);
+                Instance._MinimizeToNotifyIcon  = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", Instance._MinimizeToNotifyIcon, conn);
+                Instance._OrderRowsInverted     = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", Instance._OrderRowsInverted, conn);
+                Instance._UseNotifyIcon         = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", Instance._UseNotifyIcon, conn);
+
+                Instance._DefaultVoiceDevice    = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", Instance._DefaultVoiceDevice, conn);
+                Instance._DefaultWaveDevice     = SQLiteConnectionUser.GetSettingString("VoiceWaveDevice", Instance._DefaultWaveDevice, conn);
+                Instance._HomeSystem            = SQLiteConnectionUser.GetSettingString("DefaultMapCenter", Instance._HomeSystem, conn);
+
+                Instance._CentredSystemColour   = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_CentredSystem", Instance._CentredSystemColour.ToArgb(), conn));
+                Instance._CoarseGridLinesColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_CoarseGridLines", Instance._CoarseGridLinesColour.ToArgb(), conn));
+                Instance._DefaultMapColour      = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("DefaultMap", Instance._DefaultMapColour.ToArgb(), conn));
+                Instance._FineGridLinesColour   = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_FineGridLines", Instance._FineGridLinesColour.ToArgb(), conn));
+                Instance._PlannedRouteColour    = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_PlannedRoute", Instance._PlannedRouteColour.ToArgb(), conn));
 
                 EDCommander.Load(write, conn);
                 EDDConfig.UserPaths.Load(conn);
@@ -822,91 +794,135 @@ namespace EDDiscovery2
                 System.Diagnostics.Trace.WriteLine("EDDConfig.Update()" + ":" + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
-
+            finally
+            {
+                if (createdconn)
+                {
+                    conn?.Dispose();
+                    conn = null;
+                }
+            }
         }
 
-        #endregion // Public methods
+        #endregion // Less exciting stuff
 
         #endregion // Public interface
 
 
-        #region Protected event dispatchers
-
-        protected virtual void OnConfigChangedEvent(ConfigProperty prop, bool newValue)
-        {
-            ConfigChanged?.Invoke(this, new ConfigChangedEventArgs(prop, newValue));
-        }
-
-        protected virtual void OnCurrentCommanderChangedEvent(int commanderIndex)
-        {
-            CurrentCommanderChanged?.Invoke(this, new CurrentCommanderChangedEventArgs(commanderIndex));
-        }
-
-        protected virtual void OnMapColourChangedEvent(MapColourProperty prop, Color colour)
-        {
-            MapColourChanged?.Invoke(this, new MapColourChangedEventArgs(prop, colour));
-        }
-
-        #endregion // Protected event dispatchers
-
-
         #region Private implementation
-
-        #region Fields, both static and instantiated.
-
-        private static EDDConfig _instance;
-
-        // The values assigned here will be treated as program defaults upon initial program execution.
-        private bool _autoLoadPopouts = false;
-        private bool _autoSavePopouts = false;
-        private bool _canSkipSlowUpdates = false;
-        private bool _clearCommodities = false;
-        private bool _clearMaterials = false;
-        private bool _displayUTC = false;
-        private bool _EDSMLog = false;
-        private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
-        private bool _keepOnTop = false;        /**< Whether to keep the windows on top or not */
-        private bool _minimizeToNotifyIcon = false;
-        private bool _orderrowsinverted = false;
-        private bool _useNotifyIcon = false;
-        private string _defaultvoicedevice = "Default";
-        private string _defaultwavedevice = "Default";
-        private Color _defaultMapColour = Color.Red;
-
-        #endregion // Fields, both static and instantiated.
-
-        #region Methods
 
         /// <summary>
         /// The one true constructor (my precious!).
         /// </summary>
         private EDDConfig()
         {
-            // Can't use a constructor taking `this` using C# auto-property initializers
-            MapColours = new MapColoursClass(this);
+            _LogIndex = DateTime.Now.ToString("yyyyMMdd");
         }
 
-        private void UpdateBoolProperty(ref bool field, bool value, string name, ConfigProperty prop)
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="propertyName">The property that has changed.</param>
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Update a <paramref name="field"/> of type <see cref="bool"/> to the provided <paramref name="value"/>, save it to
+        /// the backend using the provided <paramref name="backendName"/>, and raise the <see cref="OnPropertyChanged"/> event.
+        /// </summary>
+        /// <param name="field">The field to save the <paramref name="value"/> to.</param>
+        /// <param name="value">The new value to assign to the <paramref name="field"/>.</param>
+        /// <param name="backendName">The name that this field will use in backend storage.</param>
+        /// <param name="propertyName">The name of the property that has changed.</param>
+        private bool SetBool(ref bool field, bool value, string backendName = null, [CallerMemberName] string propertyName = null)
         {
             if (field != value)
             {
                 field = value;
-                SQLiteConnectionUser.PutSettingBool(name, value);
-                OnConfigChangedEvent(prop, value);
+                if (backendName == null)
+                    SQLiteConnectionUser.PutSettingBool(propertyName, value);
+                else
+                    SQLiteConnectionUser.PutSettingBool(backendName, value);
+                OnPropertyChanged(propertyName);
+                return true;
             }
+            else
+                return false;
         }
 
-        private void UpdateColourProperty(ref Color field, Color value, string name, MapColourProperty prop)
+        /// <summary>
+        /// Update a <paramref name="field"/> of type <see cref="Color"/> to the provided <paramref name="value"/>, save it to
+        /// the backend using the provided <paramref name="backendName"/>, and raise the <see cref="OnPropertyChanged"/> event.
+        /// </summary>
+        /// <param name="field">The field to save the <paramref name="value"/> to.</param>
+        /// <param name="value">The new value to assign to the <paramref name="field"/>.</param>
+        /// <param name="backendName">The name that this field will use in backend storage.</param>
+        /// <param name="propertyName">The name of the property that has changed.</param>
+        private bool SetColor(ref Color field, Color value, string backendName = null, [CallerMemberName] string propertyName = null)
         {
-            if (field.ToArgb().CompareTo(value) != 0)
+            if (field.ToArgb() != value.ToArgb())
             {
                 field = value;
-                SQLiteConnectionUser.PutSettingInt(name, value.ToArgb());
-                OnMapColourChangedEvent(prop, value);
+                if (backendName == null)
+                    SQLiteConnectionUser.PutSettingInt(propertyName, value.ToArgb());
+                else
+                    SQLiteConnectionUser.PutSettingInt(backendName, value.ToArgb());
+                OnPropertyChanged(propertyName);
+                return true;
             }
+            else
+                return false;
         }
 
-        #endregion // Private methods
+        /// <summary>
+        /// Update a <paramref name="field"/> of type <see cref="int"/> to the provided <paramref name="value"/>, save it to
+        /// the backend using the provided <paramref name="backendName"/>, and raise the <see cref="OnPropertyChanged"/> event.
+        /// </summary>
+        /// <param name="field">The field to save the <paramref name="value"/> to.</param>
+        /// <param name="value">The new value to assign to the <paramref name="field"/>.</param>
+        /// <param name="backendName">The name that this field will use in backend storage.</param>
+        /// <param name="propertyName">The name of the property that has changed.</param>
+        private bool SetInt(ref int field, int value, string backendName = null, [CallerMemberName] string propertyName = null)
+        {
+            if (field != value)
+            {
+                field = value;
+                if (backendName == null)
+                    SQLiteConnectionUser.PutSettingInt(propertyName, value);
+                else
+                    SQLiteConnectionUser.PutSettingInt(backendName, value);
+                OnPropertyChanged(propertyName);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Update a <paramref name="field"/> of type <see cref="string"/> to the provided <paramref name="value"/>, save it to
+        /// the backend using the provided <paramref name="propertyName"/>, and raise the <see cref="OnPropertyChanged"/> event.
+        /// </summary>
+        /// <param name="field">The field to save the <paramref name="value"/> to.</param>
+        /// <param name="value">The new value to assign to the <paramref name="field"/>.</param>
+        /// <param name="backendName">The name that this field will use in backend storage.</param>
+        /// <param name="propertyName">The name of the property that has changed.</param>
+        private bool SetString(ref string field, string value, string backendName = null, [CallerMemberName] string propertyName = null)
+        {
+            if (!field.Equals(value))
+            {
+                field = value;
+                if (backendName == null)
+                    SQLiteConnectionUser.PutSettingString(propertyName, value);
+                else
+                    SQLiteConnectionUser.PutSettingString(backendName, value);
+                OnPropertyChanged(propertyName);
+                return true;
+            }
+            else
+                return false;
+        }
 
         #endregion // Private implementation
     }
