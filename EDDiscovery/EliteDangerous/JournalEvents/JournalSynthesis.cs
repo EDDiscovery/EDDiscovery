@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -23,6 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name: synthesis blueprint
     //•	Materials: JSON object listing materials used and quantities
+    [JournalEntryType(JournalTypeEnum.Synthesis)]
     public class JournalSynthesis : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalSynthesis(JObject evt ) : base(evt, JournalTypeEnum.Synthesis)

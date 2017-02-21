@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -32,18 +32,14 @@ namespace EDDiscovery.Audio
         public delegate void StopTestSettings(SoundEffectsDialog sender);
         public event StopTestSettings StopTestSettingEvent;
 
-        EDDiscovery2.EDDTheme theme;
-
         public SoundEffectsDialog()
         {
             InitializeComponent();
             comboBoxCustomVoices.Items.AddRange(defaulteffects);
         }
 
-        public void Init(ConditionVariables cv, bool shownone, EDDiscovery2.EDDTheme th)
+        public void Init(ConditionVariables cv, bool shownone)
         {
-            theme = th;
-
             if (!shownone)
                 checkBoxCustomNone.Visible = false;
 
@@ -94,11 +90,19 @@ namespace EDDiscovery.Audio
             try
             {
                 trackBarGF.Value = ap.garglefreq;
-            } catch { }
+            }
+            catch { }
+
+            trackBarPitch.Enabled = checkBoxP.Checked = ap.pitchshiftenabled;
+            try
+            {
+                trackBarPitch.Value = ap.pitchshift;
+            }
+            catch { }
 
             checkBoxCustomNone.Checked = ap.OverrideNone;
 
-            theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            EDDiscovery2.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         public ConditionVariables GetEffects()
@@ -138,6 +142,11 @@ namespace EDDiscovery.Audio
             if (checkBoxG.Checked)
             {
                 ap.garglefreq = trackBarGF.Value;
+            }
+
+            if (checkBoxP.Checked)
+            {
+                ap.pitchshift = trackBarPitch.Value;
             }
 
             if (checkBoxCustomNone.Checked)
@@ -189,6 +198,12 @@ namespace EDDiscovery.Audio
         private void checkBoxG_CheckedChanged(object sender, EventArgs e)
         {
             trackBarGF.Enabled = checkBoxG.Checked;
+            TurnOffNone();
+        }
+
+        private void checkBoxP_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBarPitch.Enabled = checkBoxP.Checked;
             TurnOffNone();
         }
 

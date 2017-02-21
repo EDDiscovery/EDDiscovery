@@ -11,11 +11,13 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using CSCore;
 using CSCore.CoreAudioAPI;
+using CSCore.DirectSound;
 using CSCore.SoundOut;
+using CSCore.Streams;
 using CSCore.Streams.Effects;
 using System;
 using System.Collections.Generic;
@@ -31,15 +33,63 @@ namespace EDDiscovery.Audio
 
         ISoundOut aout;
 
-        public AudioDriverCSCore( string devicestr = null)     // string would give a hint on device.. not used yet
+        public AudioDriverCSCore(string dev = null)
         {
             //MMDevice def = MMDeviceEnumerator.DefaultAudioEndpoint(DataFlow.Render, Role.Console);
             //aout = new WasapiOut() { Latency = 100, Device = def  }; //BAD breakup
             //aout = new WasapiOut(true, AudioClientShareMode.Shared, 500, System.Threading.ThreadPriority.Highest); // still no better, with sync and highest.
 
-            aout = new DirectSoundOut() { Latency = 200 };    // seems good quality
-            aout.Stopped += Output_Stopped;
+            SetAudioEndpoint(dev,true);
         }
+
+        public List<string> GetAudioEndpoints()
+        {
+            List<string> ep = new List<string>();
+            IReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
+            foreach ( DirectSoundDevice d in list )
+                ep.Add(d.Description);
+
+            return ep;
+        }
+
+        public bool SetAudioEndpoint(string dev, bool usedefault = false)
+        {
+            System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
+
+            DirectSoundDevice dsd = null;
+            if (dev != null)       // active selection
+            {
+                dsd = list.FirstOrDefault(x => x.Description.Equals(dev));        // find
+                if (dsd == null && !usedefault) // if not found, and don't use the default (used by constructor)
+                    return false;
+            }
+
+            DirectSoundOut dso = new DirectSoundOut(200);    // seems good quality at 200 ms latency
+
+            if ( dsd != null )
+                dso.Device = dsd.Guid; 
+
+            if ( aout != null )                 // clean up last
+            {
+                aout.Stopped -= Output_Stopped;
+                aout.Stop();
+                aout.Dispose();
+            }
+
+            aout = dso;
+            aout.Stopped += Output_Stopped;
+
+            return true;
+        }
+
+        public string GetAudioEndpoint()
+        {
+            Guid guid = ((DirectSoundOut)aout).Device;
+            System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
+            DirectSoundDevice dsd = list.First(x => x.Guid == guid);
+            return dsd.Description;
+        }
+
 
         private void Output_Stopped(object sender, PlaybackStoppedEventArgs e)
         {
@@ -56,11 +106,11 @@ namespace EDDiscovery.Audio
         {
             IWaveSource iws = o as IWaveSource;
             iws.Dispose();
-
         }
 
         public void Start(Object o, int vol)
         {
+
             IWaveSource current = o as IWaveSource;
             aout.Initialize(current);
             aout.Volume = (float)(vol) / 100;
@@ -86,18 +136,25 @@ namespace EDDiscovery.Audio
             }
         }
 
-        public Object Generate(System.IO.Stream audioms, ConditionVariables effects)
+        public Object Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
         {
             try
             {
                 audioms.Position = 0;
                 IWaveSource s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
+
+                if ( ensureaudio )
+                    s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
+
                 ApplyEffects(ref s, effects);
                 return s;
             }
             catch
             {
-                return null;
+                if (ensureaudio)
+                    return new NullWaveSource(5);
+                else
+                    return null;
             }
         }
 
@@ -145,6 +202,13 @@ namespace EDDiscovery.Audio
                 {
                     src = src.AppendSource(x => new DmoEchoEffect(x) { WetDryMix = ap.echomix, Feedback = ap.echofeedback, LeftDelay = ap.echodelay, RightDelay = ap.echodelay });
                 }
+
+                if ( ap.pitchshiftenabled )
+                {
+                    ISampleSource srs = src.ToSampleSource();
+                    srs = srs.AppendSource(x => new PitchShifter(x) { PitchShiftFactor = ((float)ap.pitchshift)/100.0F });
+                    src = srs.ToWaveSource();
+                }
             }
         }
     }
@@ -166,11 +230,14 @@ namespace EDDiscovery.Audio
         public override int Read(byte[] buffer, int offset, int count)
         {
             int read = BaseSource.Read(buffer, offset, count);      // want count, stored at offset
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString() + " At " + offset + " Read " + count);
 
             if (read < count)
             {
                 int left = count - read;      // what is left
                 int totake = Math.Min(left, (int)extrabytes);
+
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString() + " read " + read + " left " + left + " extend " + totake + " left " + (extrabytes - totake));
 
                 if (totake > 0)
                 {
@@ -185,5 +252,51 @@ namespace EDDiscovery.Audio
         }
     }
 
+    public class NullWaveSource : IWaveSource  // empty audio
+    {
+        long pos = 0;
+        long totalbytes = 0;
+        private readonly WaveFormat _waveFormat;
 
+        public NullWaveSource(int ms) 
+        {
+            _waveFormat = new WaveFormat(44100,16, 1, AudioEncoding.Pcm);
+            totalbytes = _waveFormat.MillisecondsToBytes(ms);
+        }
+
+        public WaveFormat WaveFormat
+        {
+            get { return _waveFormat; }
+        }
+
+
+        public int Read(byte[] buffer, int offset, int count)
+        {
+            if ( pos < totalbytes)
+            {
+                int totake = Math.Min(count, (int)(totalbytes - pos));
+
+                if ( totake > 0 )
+                {
+                    Array.Clear(buffer, offset , totake);     // at offset+read, clear down to zero the extra bytes
+                }
+
+                pos += totake;
+                return totake;
+            }
+
+            return 0;
+        }
+
+        public long Length { get { return totalbytes; } set { } }
+        public long Position { get { return pos; } set { } }
+        public bool CanSeek
+        {
+            get { return false; }
+        }
+
+        public void Dispose()
+        {
+        }
+    }
 }

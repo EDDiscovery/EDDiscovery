@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -28,8 +28,11 @@ namespace EDDiscovery.Audio
     public partial class SpeechConfigure : Form
     {
         public bool Wait { get { return checkBoxCustomComplete.Checked; } }
-        public bool Preempt { get { return checkBoxCustomPreempt.Checked; } }
+
         public string SayText { get { return textBoxBorderText.Text; } }
+        public AudioQueue.Priority Priority { get { return (AudioQueue.Priority)Enum.Parse(typeof(AudioQueue.Priority), comboBoxCustomPriority.Text); } }
+        public string StartEvent { get { return textBoxBorderStartTrigger.Text; } }
+        public string FinishEvent { get { return textBoxBorderEndTrigger.Text; } }
         public string VoiceName { get { return comboBoxCustomVoice.Text; } }
         public string Volume { get { return (checkBoxCustomV.Checked) ? trackBarVolume.Value.ToString() : "Default"; } }
         public string Rate { get { return (checkBoxCustomR.Checked) ? trackBarRate.Value.ToString() : "Default"; } }
@@ -38,25 +41,27 @@ namespace EDDiscovery.Audio
         AudioQueue queue;
         SpeechSynthesizer synth;
         ConditionVariables effects;
-        EDDiscovery2.EDDTheme theme;
 
         public SpeechConfigure()
         {
             InitializeComponent();
         }
 
-        public void Init( AudioQueue qu, SpeechSynthesizer syn,
-                            string title, string caption , EDDiscovery2.EDDTheme th,
+        public void Init(AudioQueue qu, SpeechSynthesizer syn,
+                            string title, string caption,
                             String text,          // if null, no text box or wait complete
-                            bool waitcomplete, bool preempt,
+                            bool waitcomplete,
+                            AudioQueue.Priority prio,
+                            string startname, string endname,
                             string voicename,
                             string volume,
                             string rate,
                             ConditionVariables ef)     // effects can also contain other vars, it will ignore
         {
+            comboBoxCustomPriority.Items.AddRange(Enum.GetNames(typeof(AudioQueue.Priority)));
+
             queue = qu;
             synth = syn;
-            theme = th;
             this.Text = caption;
             Title.Text = title;
             textBoxBorderTest.Text = "The quick brown fox jumped over the lazy dog";
@@ -65,8 +70,8 @@ namespace EDDiscovery.Audio
 
             if (defaultmode)
             {
-                textBoxBorderText.Visible = checkBoxCustomComplete.Visible = checkBoxCustomPreempt.Visible = false;
-                checkBoxCustomV.Visible = checkBoxCustomR.Visible = false;
+                textBoxBorderText.Visible = checkBoxCustomComplete.Visible = comboBoxCustomPriority.Visible = labelStartTrigger.Visible = labelEndTrigger.Visible =
+                textBoxBorderStartTrigger.Visible = checkBoxCustomV.Visible = checkBoxCustomR.Visible = textBoxBorderEndTrigger.Visible = false;
 
                 int offset = comboBoxCustomVoice.Top - textBoxBorderText.Top;
                 foreach (Control c in panelOuter.Controls )
@@ -81,7 +86,10 @@ namespace EDDiscovery.Audio
             {
                 textBoxBorderText.Text = text;
                 checkBoxCustomComplete.Checked = waitcomplete;
-                checkBoxCustomPreempt.Checked = preempt;
+                comboBoxCustomPriority.SelectedItem = prio.ToString();
+                textBoxBorderStartTrigger.Text = startname;
+                textBoxBorderEndTrigger.Text = endname;
+                buttonExtDevice.Visible = false;
             }
 
             comboBoxCustomVoice.Items.Add("Default");
@@ -117,7 +125,7 @@ namespace EDDiscovery.Audio
 
             effects = ef;
 
-            theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            EDDiscovery2.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         private void buttonExtOK_Click(object sender, EventArgs e)
@@ -129,7 +137,7 @@ namespace EDDiscovery.Audio
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
             SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(effects, textBoxBorderText.Visible, theme);           // give them the none option ONLY if we are allowing text
+            sfe.Init(effects, textBoxBorderText.Visible);           // give them the none option ONLY if we are allowing text
             sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
             sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
             if ( sfe.ShowDialog(this) == DialogResult.OK )
@@ -140,13 +148,13 @@ namespace EDDiscovery.Audio
 
         private void Sfe_TestSettingEvent(SoundEffectsDialog sfe, ConditionVariables effects)
         {
-            System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, comboBoxCustomVoice.Text, trackBarRate.Value);
+            System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, "Default", comboBoxCustomVoice.Text, trackBarRate.Value);
             if (ms != null)
             {
                 AudioQueue.AudioSample a = queue.Generate(ms, effects);
                 a.sampleOverEvent += SampleOver;
                 a.sampleOverTag = sfe;
-                queue.Submit(a, trackBarVolume.Value);
+                queue.Submit(a, trackBarVolume.Value, AudioQueue.Priority.High);
             }
         }
 
@@ -171,6 +179,17 @@ namespace EDDiscovery.Audio
             trackBarRate.Enabled = checkBoxCustomR.Checked;
         }
 
+        private void buttonExtDevice_Click(object sender, EventArgs e)
+        {
+            AudioDeviceConfigure adc = new AudioDeviceConfigure();
+            adc.Init("Configure voice device", queue.Driver);
+            if ( adc.ShowDialog(this) == DialogResult.OK )
+            {
+                if (!queue.SetAudioEndpoint(adc.Selected))
+                    Forms.MessageBoxTheme.Show(this, "Audio Device Selection failed", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
         private void buttonExtTest_Click(object sender, EventArgs e)
         {
             if (buttonExtTest.Text.Equals("Stop"))
@@ -181,18 +200,18 @@ namespace EDDiscovery.Audio
             {
                 try
                 {
-                    System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, comboBoxCustomVoice.Text, trackBarRate.Value);
+                    System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, "Default", comboBoxCustomVoice.Text, trackBarRate.Value);
                     if (ms != null)
                     {
                         Audio.AudioQueue.AudioSample audio = queue.Generate(ms, effects);
                         audio.sampleOverEvent += Audio_sampleOverEvent;
-                        queue.Submit(audio, trackBarVolume.Value);
+                        queue.Submit(audio, trackBarVolume.Value, AudioQueue.Priority.High);
                         buttonExtTest.Text = "Stop";
                     }
                 }
                 catch
                 {
-                    MessageBox.Show("Unable to play " + textBoxBorderText.Text);
+                    Forms.MessageBoxTheme.Show("Unable to play " + textBoxBorderText.Text);
                 }
             }
         }
@@ -201,5 +220,6 @@ namespace EDDiscovery.Audio
         {
             buttonExtTest.Text = "Test";
         }
+
     }
 }

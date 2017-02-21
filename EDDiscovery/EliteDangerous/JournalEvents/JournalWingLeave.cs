@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -20,6 +20,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: this player has left a wing
     //Parameters: none
+    [JournalEntryType(JournalTypeEnum.WingLeave)]
     public class JournalWingLeave : JournalEntry
     {
         public JournalWingLeave(JObject evt ) : base(evt, JournalTypeEnum.WingLeave)

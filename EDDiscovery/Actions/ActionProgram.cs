@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System;
@@ -88,7 +88,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        #region JSON in and out
+        #region to/from JSON
 
         public JObject ToJSON()
         {
@@ -133,6 +133,10 @@ namespace EDDiscovery.Actions
 
             return ap;
         }
+
+        #endregion
+
+        #region to/from File
 
         static public ActionProgram FromFile(string file, string progname, out string err)
         {
@@ -195,48 +199,51 @@ namespace EDDiscovery.Actions
                             err += "Line " + lineno + " " + vmsg + Environment.NewLine + " " + completeline + Environment.NewLine;
                         else
                         {
+                            System.Diagnostics.Debug.WriteLine(indentpos + ":" + structlevel + ": Cmd " + cmd + " : " + line);
+
                             if (indentpos == -1)
                                 indentpos = curindent;
                             else if (curindent > indentpos)        // more indented, up one structure
                             {
                                 structlevel++;
+                                indentpos = curindent;
                             }
                             else if (curindent < indentpos)   // deindented
                             {
                                 int tolevel = -1;
                                 for (int i = indents.Count - 1; i >= 0; i--)            // search up and find the entry with the indent..
                                 {
-                                    if (indents[i] <= curindent)    
+                                    if (indents[i] <= curindent)
                                     {
                                         tolevel = i;
                                         break;
                                     }
                                 }
 
-                                int cl = structlevel;
-
-                                if (tolevel != -1)                  // if found
+                                if (tolevel >= 0)       // if found, we have a statement to hook to..
                                 {
-                                    structlevel = level[tolevel];   // if found, we are at that.. except..
-
                                     if ((a.Type == Action.ActionType.While && prog[tolevel].Type == Action.ActionType.Do) ||
                                         ((a.Type == Action.ActionType.Else || a.Type == Action.ActionType.ElseIf) && prog[tolevel].Type == Action.ActionType.If))
                                     {
-                                        structlevel++;      // thest are artifically indented (else/elseif after if, and while after do, these maintain level)
+                                        int reallevel = level[tolevel] + 1;     // else, while are dedented, but they really are on level+1
+                                        a.LevelUp = structlevel - reallevel;
+                                        structlevel = reallevel;
+                                        indentpos = indents[tolevel] + 4;       // and our indent should continue 4 in, so we don't match against this when we do indent
+                                    }
+                                    else
+                                    { 
+                                        a.LevelUp = structlevel - level[tolevel];
+                                        structlevel = level[tolevel];   // if found, we are at that.. except..
+                                        indentpos = indents[tolevel]; // and back to this level
                                     }
                                 }
-                                else
-                                    structlevel--;  // else we are just down 1.
-
-                                a.LevelUp = cl - structlevel;       // how much to go up..
                             }
 
-//                            System.Diagnostics.Debug.WriteLine(structlevel + ": Cmd " + cmd + " : " + line);
-                            prog.Add(a);
+                            System.Diagnostics.Debug.WriteLine("    >>>> " + indentpos + ":" + structlevel);
 
-                            indentpos = curindent;
                             indents.Add(indentpos);
                             level.Add(structlevel);
+                            prog.Add(a);
                         }
                     }
                 }
@@ -255,6 +262,40 @@ namespace EDDiscovery.Actions
             return (err.Length == 0) ? new ActionProgram(progname, prog) : null;
         }
 
+        public bool SaveText(string file)
+        {
+            CalculateLevels();
+
+            try
+            {
+                using (System.IO.StreamWriter sr = new System.IO.StreamWriter(file))
+                {
+                    sr.WriteLine("NAME " + Name + Environment.NewLine);
+
+                    foreach (Action act in programsteps)
+                    {
+                        if (act != null)    // don't include ones not set..
+                        {
+                            sr.Write(new String(' ', act.calcDisplayLevel * 4));
+                            sr.WriteLine(act.Name + " " + act.UserData);
+                            if (act.Whitespace > 0)
+                                sr.WriteLine("");
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Calculate Level data
+
         public string CalculateLevels()         // go thru the program, and calc some values for editing purposes. Also look for errors
         {
             string errlist = "";
@@ -265,6 +306,7 @@ namespace EDDiscovery.Actions
 
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
             int step = 1;
+            bool lastwaswhileafterdo = false;
 
             foreach (Action act in programsteps)
             {
@@ -273,25 +315,30 @@ namespace EDDiscovery.Actions
                     act.calcAllowRight = act.calcAllowLeft = false;
                     bool indo = structtype[structlevel] == Action.ActionType.Do;        // if in a DO..WHILE, and we are a WHILE, we don't indent.
 
-                    if (act.LevelUp > 0)
+                    if (indo && lastwaswhileafterdo && act.LevelUp == 0)        // force back down if after do/while
+                        act.LevelUp = 1;
+
+                    if (act.LevelUp > 0)            // if backing up
                     {
-                        if ( structcount[structlevel] == 0 )
+                        if ( structcount[structlevel] == 0 )        // if we had nothing on this level, its wrong
                             errlist += "Step " + step.ToString(ct) + " no statements at indented level after " + structtype[structlevel].ToString() + " statement" + Environment.NewLine;
 
                         if (act.LevelUp > structlevel)            // ensure its not too big.. this may happen due to copying
                             act.LevelUp = structlevel;
 
-                        structlevel -= act.LevelUp;
-                        act.calcAllowRight = true;
+                        structlevel -= act.LevelUp;                 // back up
+                        act.calcAllowRight = act.LevelUp>1 || !lastwaswhileafterdo;      // normally we can go right, but can't if its directly after do..while and only 1 level of detent
                     }
 
-                    structcount[structlevel]++;
+                    lastwaswhileafterdo = false;        // records if last entry was while after do
+
+                    structcount[structlevel]++;         // 1 more on this level
 
                     if (structlevel > 0 && structcount[structlevel] > 1)        // second further on can be moved back..
                         act.calcAllowLeft = true;
 
-                    act.calcDisplayLevel = structlevel;
-
+                    act.calcStructLevel = act.calcDisplayLevel = structlevel;
+                    
                     if (act.Type == Action.ActionType.ElseIf)
                     {
                         if (structtype[structlevel] == Action.ActionType.Else)
@@ -318,6 +365,13 @@ namespace EDDiscovery.Actions
                             act.calcDisplayLevel--;
 
                         structcount[structlevel] = 0;   // restart count so we don't allow a left on next one..
+                    }
+                    else if ( act.Type == Action.ActionType.While && indo )     // do..while
+                    {
+                        if (structlevel > 0)      // display else artifically indented.. display only
+                            act.calcDisplayLevel--;
+
+                        lastwaswhileafterdo = true;     // be careful backing up
                     }
                     else if (act.Type == Action.ActionType.If || (act.Type == Action.ActionType.While && !indo) ||
                                 act.Type == Action.ActionType.Do || act.Type == Action.ActionType.Loop)
@@ -348,35 +402,9 @@ namespace EDDiscovery.Actions
             return errlist;
         }
 
-        public bool SaveText(string file)
-        {
-            CalculateLevels();
+        #endregion
 
-            try
-            {
-                using (System.IO.StreamWriter sr = new System.IO.StreamWriter(file))
-                {
-                    sr.WriteLine("NAME " +Name + Environment.NewLine);
-
-                    foreach (Action act in programsteps)
-                    {
-                        if (act != null)    // don't include ones not set..
-                        {
-                            sr.Write(new String(' ', act.calcDisplayLevel * 4));
-                            sr.WriteLine(act.Name + " " + act.UserData);
-                            if (act.Whitespace > 0)
-                                sr.WriteLine("");
-                        }
-                    }
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        #region Editor
 
         public bool EditInEditor()          // edit in editor, swap to this
         {
@@ -402,7 +430,7 @@ namespace EDDiscovery.Actions
                         ActionProgram apin = ActionProgram.FromFile(editingloc, filename, out err);
                         if (apin == null)
                         {
-                            DialogResult dr = MessageBox.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
+                            DialogResult dr = Forms.MessageBoxTheme.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
                                                 "Click Retry to correct errors, Cancel to abort editing",
                                                 "Warning", MessageBoxButtons.RetryCancel);
 
@@ -419,7 +447,7 @@ namespace EDDiscovery.Actions
             }
             catch { }
 
-            MessageBox.Show("Unable to run text editor - check association for .txt files");
+            Forms.MessageBoxTheme.Show("Unable to run text editor - check association for .txt files");
             return false;
         }
 

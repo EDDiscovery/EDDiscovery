@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 namespace EDDiscovery
 {
@@ -72,10 +72,7 @@ namespace EDDiscovery
             this.addOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageAddOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureAddOnActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopCurrentlyRunningActionProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.speechSynthesisSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.soundSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,7 +141,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(222, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(314, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -337,10 +334,7 @@ namespace EDDiscovery
             this.addOnsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.manageAddOnsToolStripMenuItem,
             this.configureAddOnActionsToolStripMenuItem,
-            this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem,
-            this.stopCurrentlyRunningActionProgramToolStripMenuItem,
-            this.speechSynthesisSettingsToolStripMenuItem,
-            this.soundSettingsToolStripMenuItem});
+            this.stopCurrentlyRunningActionProgramToolStripMenuItem});
             this.addOnsToolStripMenuItem.Name = "addOnsToolStripMenuItem";
             this.addOnsToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.addOnsToolStripMenuItem.Text = "&Add-Ons";
@@ -349,7 +343,7 @@ namespace EDDiscovery
             // 
             this.manageAddOnsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.module;
             this.manageAddOnsToolStripMenuItem.Name = "manageAddOnsToolStripMenuItem";
-            this.manageAddOnsToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.manageAddOnsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.manageAddOnsToolStripMenuItem.Text = "&Manage Add-Ons";
             this.manageAddOnsToolStripMenuItem.Click += new System.EventHandler(this.manageAddOnsToolStripMenuItem_Click);
             // 
@@ -357,41 +351,17 @@ namespace EDDiscovery
             // 
             this.configureAddOnActionsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Log;
             this.configureAddOnActionsToolStripMenuItem.Name = "configureAddOnActionsToolStripMenuItem";
-            this.configureAddOnActionsToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.configureAddOnActionsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.configureAddOnActionsToolStripMenuItem.Text = "&Edit Add-On Action Files";
             this.configureAddOnActionsToolStripMenuItem.Click += new System.EventHandler(this.configureAddOnActionsToolStripMenuItem_Click);
-            // 
-            // editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem
-            // 
-            this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.missioncompleted;
-            this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem.Name = "editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem";
-            this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem.Text = "Edit in text current Speech Synthesis Variables";
-            this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem.Click += new System.EventHandler(this.editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem_Click);
             // 
             // stopCurrentlyRunningActionProgramToolStripMenuItem
             // 
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.PauseNormalRed;
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Name = "stopCurrentlyRunningActionProgramToolStripMenuItem";
-            this.stopCurrentlyRunningActionProgramToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.stopCurrentlyRunningActionProgramToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Text = "&Stop currently running Action Program";
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Click += new System.EventHandler(this.stopCurrentlyRunningActionProgramToolStripMenuItem_Click);
-            // 
-            // speechSynthesisSettingsToolStripMenuItem
-            // 
-            this.speechSynthesisSettingsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.microphone;
-            this.speechSynthesisSettingsToolStripMenuItem.Name = "speechSynthesisSettingsToolStripMenuItem";
-            this.speechSynthesisSettingsToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.speechSynthesisSettingsToolStripMenuItem.Text = "S&peech Synthesis Settings";
-            this.speechSynthesisSettingsToolStripMenuItem.Click += new System.EventHandler(this.speechSynthesisSettingsToolStripMenuItem_Click);
-            // 
-            // soundSettingsToolStripMenuItem
-            // 
-            this.soundSettingsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.speaker;
-            this.soundSettingsToolStripMenuItem.Name = "soundSettingsToolStripMenuItem";
-            this.soundSettingsToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.soundSettingsToolStripMenuItem.Text = "Sound Settings";
-            this.soundSettingsToolStripMenuItem.Click += new System.EventHandler(this.soundSettingsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -935,11 +905,8 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem addOnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manageAddOnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem configureAddOnActionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem speechSynthesisSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopCurrentlyRunningActionProgramToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
-        private System.Windows.Forms.ToolStripMenuItem editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem soundSettingsToolStripMenuItem;
     }
 }

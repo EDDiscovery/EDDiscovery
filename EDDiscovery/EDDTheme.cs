@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -709,8 +709,8 @@ namespace EDDiscovery2
                     MyDgv.ScrollBar.BorderColor = MyDgv.ScrollBar.ThumbBorderColor = 
                                 MyDgv.ScrollBar.ArrowBorderColor = currentsettings.colors[Settings.CI.textbox_border];
                     MyDgv.ScrollBar.ArrowButtonColor = MyDgv.ScrollBar.ThumbButtonColor = c1;
-                    MyDgv.ScrollBar.MouseOverButtonColor = ButtonExt.Multiply(c1, mouseoverscaling);
-                    MyDgv.ScrollBar.MousePressedButtonColor = ButtonExt.Multiply(c1, mouseselectedscaling);
+                    MyDgv.ScrollBar.MouseOverButtonColor = c1.Multiply(mouseoverscaling);
+                    MyDgv.ScrollBar.MousePressedButtonColor = c1.Multiply(mouseselectedscaling);
                     MyDgv.ScrollBar.ForeColor = currentsettings.colors[Settings.CI.textbox_scrollarrow];
                     MyDgv.ScrollBar.FlatStyle = FlatStyle.Popup;
                 }
@@ -754,7 +754,7 @@ namespace EDDiscovery2
                     actb.DropDownBorderColor = currentsettings.colors[Settings.CI.textbox_border];
                     actb.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                     actb.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
-                    actb.DropDownMouseOverBackgroundColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], mouseoverscaling);
+                    actb.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
 
                     if (currentsettings.buttonstyle.Equals(ButtonStyles[0]))
                         actb.FlatStyle = FlatStyle.System;
@@ -779,8 +779,8 @@ namespace EDDiscovery2
                     MyDgv.BackColor = currentsettings.colors[Settings.CI.button_back];
                     MyDgv.FlatAppearance.BorderColor = currentsettings.colors[Settings.CI.button_border];
                     MyDgv.FlatAppearance.BorderSize = 1;
-                    MyDgv.FlatAppearance.MouseOverBackColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], mouseoverscaling);
-                    MyDgv.FlatAppearance.MouseDownBackColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], mouseselectedscaling);
+                    MyDgv.FlatAppearance.MouseOverBackColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                    MyDgv.FlatAppearance.MouseDownBackColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseselectedscaling);
 
                     if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
                         MyDgv.FlatStyle = FlatStyle.Flat;
@@ -797,14 +797,14 @@ namespace EDDiscovery2
                 if (!currentsettings.buttonstyle.Equals(ButtonStyles[0])) // not system
                 {
                     MyDgv.FlatStyle = (currentsettings.buttonstyle.Equals(ButtonStyles[1])) ? FlatStyle.Flat : FlatStyle.Popup;
-                    MyDgv.TabControlBorderColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.tabcontrol_borderlines], 0.6F);
+                    MyDgv.TabControlBorderColor = currentsettings.colors[Settings.CI.tabcontrol_borderlines].Multiply(0.6F);
                     MyDgv.TabControlBorderBrightColor = currentsettings.colors[Settings.CI.tabcontrol_borderlines];
-                    MyDgv.TabNotSelectedBorderColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.tabcontrol_borderlines], 0.4F);
+                    MyDgv.TabNotSelectedBorderColor = currentsettings.colors[Settings.CI.tabcontrol_borderlines].Multiply(0.4F);
                     MyDgv.TabNotSelectedColor = currentsettings.colors[Settings.CI.button_back];
-                    MyDgv.TabSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], mouseselectedscaling);
-                    MyDgv.TabMouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], mouseoverscaling);
+                    MyDgv.TabSelectedColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseselectedscaling);
+                    MyDgv.TabMouseOverColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
                     MyDgv.TextSelectedColor = currentsettings.colors[Settings.CI.button_text];
-                    MyDgv.TextNotSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_text], 0.8F);
+                    MyDgv.TextNotSelectedColor = currentsettings.colors[Settings.CI.button_text].Multiply(0.8F);
                     MyDgv.TabStyle = new ExtendedControls.TabStyleAngled();
                 }
                 else
@@ -850,7 +850,7 @@ namespace EDDiscovery2
                 {
                     MyDgv.BackColor = MyDgv.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
                     MyDgv.BorderColor = currentsettings.colors[Settings.CI.button_border];
-                    MyDgv.MouseOverBackgroundColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], mouseoverscaling);
+                    MyDgv.MouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
                     MyDgv.ScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                     MyDgv.ScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
 
@@ -876,8 +876,8 @@ namespace EDDiscovery2
                 DrawnPanel MyDgv = (DrawnPanel)myControl;
                 MyDgv.BackColor = currentsettings.colors[Settings.CI.form];
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.label];
-                MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.label], mouseoverscaling);
-                MyDgv.MouseSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.label], mouseselectedscaling);
+                MyDgv.MouseOverColor = currentsettings.colors[Settings.CI.label].Multiply(mouseoverscaling);
+                MyDgv.MouseSelectedColor = currentsettings.colors[Settings.CI.label].Multiply(mouseselectedscaling);
 
                 System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
                 colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
@@ -922,9 +922,9 @@ namespace EDDiscovery2
                     MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
                     MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
                     MyDgv.CheckBoxColor = currentsettings.colors[Settings.CI.checkbox];
-                    MyDgv.CheckBoxInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
+                    MyDgv.CheckBoxInnerColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.5F);
                     MyDgv.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
-                    MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+                    MyDgv.MouseOverColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
                     MyDgv.TickBoxReductionSize = (fnt.SizeInPoints > 10) ? 10 : 6;
                     MyDgv.Font = fnt;
                 }
@@ -932,7 +932,7 @@ namespace EDDiscovery2
                 {
                     MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
                     MyDgv.FlatAppearance.CheckedBackColor = currentsettings.colors[Settings.CI.checkbox];
-                    MyDgv.FlatAppearance.MouseOverBackColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+                    MyDgv.FlatAppearance.MouseOverBackColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
                     MyDgv.FlatAppearance.BorderColor = currentsettings.colors[Settings.CI.button_border];
                 }
             }
@@ -955,9 +955,9 @@ namespace EDDiscovery2
                 MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
                 MyDgv.RadioButtonColor = currentsettings.colors[Settings.CI.checkbox];
-                MyDgv.RadioButtonInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
-                MyDgv.SelectedColor = ButtonExt.Multiply(MyDgv.BackColor, 0.75F);
-                MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+                MyDgv.RadioButtonInnerColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.5F);
+                MyDgv.SelectedColor = MyDgv.BackColor.Multiply(0.75F);
+                MyDgv.MouseOverColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
             }
             else if (myControl is DataGridView)                     // we theme this directly
             {
@@ -1011,8 +1011,8 @@ namespace EDDiscovery2
                     MyDgv.BorderColor = MyDgv.ThumbBorderColor =
                             MyDgv.ArrowBorderColor = currentsettings.colors[Settings.CI.grid_borderlines];
                     MyDgv.ArrowButtonColor = MyDgv.ThumbButtonColor = c1;
-                    MyDgv.MouseOverButtonColor = ButtonExt.Multiply(c1, mouseoverscaling);
-                    MyDgv.MousePressedButtonColor = ButtonExt.Multiply(c1, mouseselectedscaling);
+                    MyDgv.MouseOverButtonColor = c1.Multiply(mouseoverscaling);
+                    MyDgv.MousePressedButtonColor = c1.Multiply(mouseselectedscaling);
                     MyDgv.ForeColor = currentsettings.colors[Settings.CI.grid_scrollarrow];
                     MyDgv.FlatStyle = FlatStyle.Popup;
                 }
@@ -1030,8 +1030,8 @@ namespace EDDiscovery2
                 Color c1 = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                 MyDgv.updown.BackColor = c1;
                 MyDgv.updown.ForeColor = currentsettings.colors[Settings.CI.textbox_scrollarrow];
-                MyDgv.updown.MouseOverColor = ButtonExt.Multiply(c1, mouseoverscaling);
-                MyDgv.updown.MouseSelectedColor = ButtonExt.Multiply(c1, mouseselectedscaling);
+                MyDgv.updown.MouseOverColor = c1.Multiply(mouseoverscaling);
+                MyDgv.updown.MouseSelectedColor = c1.Multiply(mouseselectedscaling);
                 MyDgv.Invalidate();
             }
             else if (myControl is Chart)

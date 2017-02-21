@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -26,77 +26,70 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
-        bool FromString(string input, out string msg, out string caption)
+        List<string> FromString(string input)       // returns in non escaped form
         {
             StringParser sp = new StringParser(input);
-            msg = sp.NextQuotedWord(", ");
-            caption = null;
-
-            if (msg != null)
-            {
-                msg.ReplaceEscapeControlChars();
-                sp.IsCharMoveOn(',');
-                caption = sp.NextQuotedWord(", ");
-
-                if (caption != null)
-                    return true;
-            }
-
-            msg = caption = "";
-            return false;
-        }
-
-        string ToString(string msg, string caption)
-        {
-            return msg.EscapeControlChars().QuoteString(comma: true) + "," + caption.QuoteString(comma: true);
+            List<string> s = sp.NextQuotedWordList(replaceescape:true);
+            return (s != null && s.Count >=1 && s.Count <= 4) ? s : null;
         }
 
         public override string VerifyActionCorrect()
         {
-            string msg, caption;
-            return FromString(userdata, out msg, out caption) ? null : "MessageBox command line not in correct format";
+            return (FromString(userdata) != null) ? null : "MessageBox command line not in correct format";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string msg, caption;
-            FromString(UserData, out msg, out caption);
-            Tuple<string,string> promptValue = PromptDoubleLine.ShowDialog(parent, discoveryform.theme, "Message", "Caption",msg,caption, "Configure MessageBox Dialog");
-            if (promptValue != null)
-            {
-                userdata = ToString(promptValue.Item1.EscapeControlChars().QuoteString(true), promptValue.Item2.QuoteString(true));
-            }
+            List<string> l = FromString(userdata);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure MessageBox Dialog",
+                            new string[] { "Message" , "Caption" , "Buttons", "Icon"}, l?.ToArray(), true);
 
-            return (promptValue != null);
+            if (r != null)
+                userdata = r.ToStringCommaList(1);
+
+            return (r != null);
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            string msg, caption;
-            if (FromString(UserData, out msg, out caption))
-            {
-                string msgres, captionres;
-                if (ap.functions.ExpandString(msg, ap.currentvars, out msgres) != ConditionLists.ExpandResult.Failed)
-                {
-                    if (ap.functions.ExpandString(caption, ap.currentvars, out captionres) != ConditionLists.ExpandResult.Failed)
-                    {
-                        if (captionres.Length == 0)
-                            captionres = "EDDiscovery Program Message";
+            List<string> ctrl = FromString(UserData);
 
-                        MessageBox.Show(ap.actioncontroller.DiscoveryForm, msgres.ReplaceEscapeControlChars(), captionres);
+            if (ctrl != null)
+            {
+                List<string> exp;
+
+                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                {
+                    string caption = (exp.Count>=2) ? exp[1] : "EDDiscovery Program Message";
+
+                    MessageBoxButtons but = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.None;
+                
+                    if (exp.Count >=3 && !Enum.TryParse<MessageBoxButtons>(exp[2], true, out but))
+                    {
+                        ap.ReportError("MessageBox button type not recognised");
+                        return true;
                     }
-                    else
-                        ap.ReportError(captionres);
+                    if (exp.Count >= 4 && !Enum.TryParse<MessageBoxIcon>(exp[3], true, out icon))
+                    {
+                        ap.ReportError("MessageBox icon type not recognised");
+                        return true;
+                    }
+
+                    DialogResult res = Forms.MessageBoxTheme.Show(ap.actioncontroller.DiscoveryForm, exp[0], caption, but, icon);
+
+                    // debug Forms.MessageBoxTheme.Show(exp[0], caption, but, icon);
+
+                    ap.currentvars["DialogResult"] = res.ToString();
                 }
                 else
-                    ap.ReportError(msgres);
+                    ap.ReportError(exp[0]);
             }
             else
                 ap.ReportError("MessageBox command line not in correct format");
 
             return true;
         }
-
     }
 
     public class ActionFileDialog : Action
@@ -105,7 +98,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            string promptValue = PromptSingleLine.ShowDialog(parent, discoveryform.theme, "Options", UserData, "Configure File Dialog");
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Options", UserData, "Configure File Dialog");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -192,7 +185,122 @@ namespace EDDiscovery.Actions
 
             return true;
         }
+    }
 
+    class ActionMenuItem : Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
+        List<string> FromString(string input)
+        {
+            StringParser sp = new StringParser(input);
+            List<string> s = sp.NextQuotedWordList();
+            return (s != null && s.Count >= 3 && s.Count <= 4) ? s : null;
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            return (FromString(userdata) != null) ? null : "MenuItem command line not in correct format";
+        }
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            List<string> l = FromString(userdata);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure MenuInput Dialog",
+                            new string[] { "MenuName", "In Menu", "Menu Text", "Icon" }, l?.ToArray());
+            if ( r != null)
+            {
+                userdata = r.ToStringCommaList(); 
+            }
+
+            return (r != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            List<string> ctrl = FromString(UserData);
+
+            if (ctrl != null)
+            {
+                List<string> exp;
+
+                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                {
+                    if (!ap.actioncontroller.DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count>=4) ? exp[3] : "None", exp[0], ap.actionfile.name))
+                        ap.ReportError("MenuItem cannot add to menu, check menu");
+                }
+                else
+                    ap.ReportError(exp[0]);
+            }
+            else
+                ap.ReportError("MenuItem command line not in correct format");
+
+            return true;
+        }
+    }
+
+    public class ActionInputBox : Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
+        List<string> FromString(string input)
+        {
+            StringParser sp = new StringParser(input);
+            List<string> s = sp.NextQuotedWordList();
+            return (s != null && s.Count >= 2 && s.Count <= 4) ? s : null;
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            return (FromString(userdata) != null) ? null : " command line not in correct format";
+        }
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            List<string> l = FromString(userdata);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure InputBox Dialog",
+                            new string[] { "Caption", "Prompt List", "Default List", "Features" }, l?.ToArray());
+            if (r != null)
+            {
+                userdata = r.ToStringCommaList(2);
+            }
+
+            return (r != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            List<string> ctrl = FromString(UserData);
+
+            if (ctrl != null)
+            {
+                List<string> exp;
+
+                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                {
+                    string[] prompts = exp[1].Split(';');
+                    string[] def = (exp.Count >= 3) ? exp[2].Split(';') : null;
+                    bool multiline = (exp.Count >= 4) ? (exp[3].IndexOf("Multiline", StringComparison.InvariantCultureIgnoreCase) >= 0) : false;
+
+                    List<string> r = Forms.PromptMultiLine.ShowDialog(ap.actioncontroller.DiscoveryForm, exp[0],
+                                        prompts, def, multiline);
+
+                    ap.currentvars["InputBoxOK"] = (r != null) ? "1" : "0";
+                    if ( r != null )
+                    {
+                        for (int i = 0; i < r.Count; i++)
+                            ap.currentvars["InputBox" + (i+1).ToString()] = r[i];
+                    }
+                }
+                else
+                    ap.ReportError(exp[0]);
+            }
+            else
+                ap.ReportError("MenuInput command line not in correct format");
+
+            return true;
+        }
 
     }
+
 }

@@ -11,9 +11,16 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
+using EDDiscovery.EDDN;
+using EDDiscovery.EDSM;
+using EDDiscovery.EliteDangerous;
+using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery.Forms;
+using EDDiscovery.HTTP;
+using EDDiscovery.Win32Constants;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
@@ -21,6 +28,8 @@ using EDDiscovery2.Forms;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
@@ -30,44 +39,18 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Threading;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Configuration;
-using EDDiscovery.EDSM;
-using System.Threading.Tasks;
 using System.Text;
-using System.ComponentModel;
 using System.Text.RegularExpressions;
-using EDDiscovery.HTTP;
-using EDDiscovery.Forms;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery.EDDN;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EDDiscovery
 {
     public partial class EDDiscoveryForm : Form, IDiscoveryController
     {
         #region Variables
-
-        public const int WM_MOVE = 3;
-        public const int WM_SIZE = 5;
-        public const int WM_MOUSEMOVE = 0x200;
-        public const int WM_LBUTTONDOWN = 0x201;
-        public const int WM_LBUTTONUP = 0x202;
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int WM_NCLBUTTONUP = 0xA2;
-        public const int WM_NCMOUSEMOVE = 0xA0;
-        public const int HT_CLIENT = 0x1;
-        public const int HT_CAPTION = 0x2;
-        public const int HT_LEFT = 0xA;
-        public const int HT_RIGHT = 0xB;
-        public const int HT_BOTTOM = 0xF;
-        public const int HT_BOTTOMRIGHT = 0x11;
-        public const int WM_NCL_RESIZE = 0x112;
-        public const int HT_RESIZE = 61448;
-        public const int WM_NCHITTEST = 0x84;
 
         // Mono compatibility
         private bool _window_dragging = false;
@@ -201,8 +184,8 @@ namespace EDDiscovery
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
-                audiodriverwave = new Audio.AudioDriverCSCore();
-                audiodriverspeech = new Audio.AudioDriverCSCore();
+                audiodriverwave = new Audio.AudioDriverCSCore( EDDConfig.DefaultWaveDevice );
+                audiodriverspeech = new Audio.AudioDriverCSCore( EDDConfig.DefaultVoiceDevice );
                 speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
             }
             else
@@ -289,7 +272,9 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
+#if !DEBUG
                 CheckForNewinstaller();
+#endif
             });
         }
 
@@ -547,6 +532,7 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
+            actioncontroller.ActionRun("onStartup", "ProgramEvent");
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -873,7 +859,7 @@ namespace EDDiscovery
         public void Open2DMap()
         {
             this.Cursor = Cursors.WaitCursor;
-            FormSagCarinaMission frm = new FormSagCarinaMission(Controller.history.FilterByFSDAndPosition);
+            Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDAndPosition);
             frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;
@@ -937,7 +923,7 @@ namespace EDDiscovery
         protected override void WndProc(ref Message m)
         {
             // Compatibility movement for Mono
-            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !theme.WindowsFrame)
+            if (m.Msg == WM.LBUTTONDOWN && (int)m.WParam == 1 && !theme.WindowsFrame)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -947,7 +933,7 @@ namespace EDDiscovery
                 m.Result = IntPtr.Zero;
                 this.Capture = true;
             }
-            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            else if (m.Msg == WM.MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -957,7 +943,7 @@ namespace EDDiscovery
                 this.Update();
                 m.Result = IntPtr.Zero;
             }
-            else if (m.Msg == WM_LBUTTONUP)
+            else if (m.Msg == WM.LBUTTONUP)
             {
                 _window_dragging = false;
                 _window_dragMousePos = Point.Empty;
@@ -966,12 +952,12 @@ namespace EDDiscovery
                 this.Capture = false;
             }
             // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM_NCHITTEST)
+            else if (m.Msg == WM.NCHITTEST)
             {
                 base.WndProc(ref m);
                 //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
 
-                if ((int)m.Result == HT_CLIENT)
+                if ((int)m.Result == HT.CLIENT)
                 {
                     int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                     int y = unchecked((short)((uint)m.LParam >> 16));
@@ -979,23 +965,23 @@ namespace EDDiscovery
 
                     if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
                     {
-                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                        m.Result = (IntPtr)HT.BOTTOMRIGHT;
                     }
                     else if (p.Y > this.ClientSize.Height - statusStrip1.Height)
                     {
-                        m.Result = (IntPtr)HT_BOTTOM;
+                        m.Result = (IntPtr)HT.BOTTOM;
                     }
                     else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
                     {
-                        m.Result = (IntPtr)HT_RIGHT;
+                        m.Result = (IntPtr)HT.RIGHT;
                     }
                     else if (p.X < 5)
                     {
-                        m.Result = (IntPtr)HT_LEFT;
+                        m.Result = (IntPtr)HT.LEFT;
                     }
                     else if (!theme.WindowsFrame)
                     {
-                        m.Result = (IntPtr)HT_CAPTION;
+                        m.Result = (IntPtr)HT.CAPTION;
                     }
                 }
             }
@@ -1064,19 +1050,75 @@ namespace EDDiscovery
             actioncontroller.EditAddOnActionFile();
         }
 
-        private void speechSynthesisSettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            actioncontroller.ConfigureVoice();
-        }
-
-        private void editInTextCurrentSpeechSynthesisVariablesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            actioncontroller.ConfigureSpeechText();
-        }
-
         private void stopCurrentlyRunningActionProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
             actioncontroller.TerminateAll();
+        }
+
+        public bool AddNewMenuItemToAddOns(string menuname, string menuitemtext, string icon , string menutrigger, string packname)
+        {
+            ToolStripMenuItem parent;
+
+            menuname = menuname.ToLower();
+            if (menuname.Equals("add-ons"))
+                parent = addOnsToolStripMenuItem;
+            else if (menuname.Equals("help"))
+                parent = helpToolStripMenuItem;
+            else if (menuname.Equals("tools"))
+                parent = toolsToolStripMenuItem;
+            else if (menuname.Equals("admin"))
+                parent = adminToolStripMenuItem;
+            else
+                return false;
+
+            Object res = Properties.Resources.ResourceManager.GetObject(icon);
+
+            var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menuitemtext) && p.Tag != null && p.Name.Equals(menutrigger) select p);
+
+            if (x.Count() == 0)           // double entries screened out
+            {
+                ToolStripMenuItem it = new ToolStripMenuItem();
+                it.Text = menuitemtext;
+                it.Name = menutrigger;
+                it.Tag = packname;
+                if (res != null && res is Bitmap)
+                    it.Image = (Bitmap)res;
+                it.Size = new Size(313, 22);
+                it.Click += MenuTrigger_Click;
+                parent.DropDownItems.Add(it);
+            }
+
+            return true;
+        }
+
+        public void RemoveMenuItemsFromAddOns(ToolStripMenuItem menu, string packname)
+        {
+            List<ToolStripItem> removelist = (from ToolStripItem s in menu.DropDownItems where s.Tag != null && ((string)s.Tag).Equals(packname) select s).ToList();
+            foreach (ToolStripItem it in removelist)
+            {
+                menu.DropDownItems.Remove(it);
+                it.Dispose();
+            }
+        }
+
+        public void RemoveMenuItemsFromAddOns(string packname)
+        {
+            RemoveMenuItemsFromAddOns(addOnsToolStripMenuItem, packname);
+            RemoveMenuItemsFromAddOns(helpToolStripMenuItem, packname);
+            RemoveMenuItemsFromAddOns(toolsToolStripMenuItem, packname);
+            RemoveMenuItemsFromAddOns(adminToolStripMenuItem, packname);
+        }
+
+        private void MenuTrigger_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem it = sender as ToolStripMenuItem;
+            ConditionVariables vars = new ConditionVariables(new string[]
+            {   "MenuName", it.Name,
+                "MenuText", it.Text,
+                "TopLevelMenuName" , it.OwnerItem.Name,
+            });
+
+            actioncontroller.ActionRun("onMenuItem", "UserUIEvent", null, vars);
         }
 
         public bool SelectTabPage(string name)
@@ -1098,11 +1140,6 @@ namespace EDDiscovery
             ActionRun("onTabChange", "UserUIEvent", null,new ConditionVariables("TabName", tabControl1.TabPages[tabControl1.SelectedIndex].Text));
         }
 
-        private void soundSettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            actioncontroller.ConfigureWave();
-        }
-
         public ConditionVariables Globals { get { return actioncontroller.Globals; } }
 
         public int ActionRunOnEntry(HistoryEntry he, string triggertype)
@@ -1111,7 +1148,7 @@ namespace EDDiscovery
         public int ActionRun(string name, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
         { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
-        #endregion
+#endregion
 
     }
 }

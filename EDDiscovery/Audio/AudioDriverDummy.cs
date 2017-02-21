@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -31,8 +31,21 @@ namespace EDDiscovery.Audio
         {
         }
 
-        public AudioDriverDummy(string devicestr)     // string would give a hint on device.. not used yet
+        public List<string> GetAudioEndpoints()
         {
+            List<string> ep = new List<string>();
+            ep.Add("Default");
+            return ep;
+        }
+
+        public bool SetAudioEndpoint(string dev , bool usedefaultifnotfound = false)
+        {
+            return true;
+        }
+
+        public string GetAudioEndpoint()
+        {
+            return "Default";
         }
 
         public void Dispose()
@@ -56,7 +69,7 @@ namespace EDDiscovery.Audio
             return null;
         }
 
-        public Object Generate(System.IO.Stream audioms, ConditionVariables effects)
+        public Object Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
         {
             return null;
         }

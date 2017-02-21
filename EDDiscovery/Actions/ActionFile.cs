@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -249,6 +249,21 @@ namespace EDDiscovery.Actions
             }
         }
 
+        public Tuple<ActionFile, ActionProgram> FindProgram(string packname , string progname)
+        {
+            ActionFile f = actionfiles.Find(x => x.name.Equals(packname));
+
+            if ( f != null )
+            {
+                ActionProgram ap = f.actionprogramlist.Get(progname);   // get in local program list first
+
+                if (ap != null)
+                    return new Tuple<ActionFile, ActionProgram>(f, ap);
+            }
+
+            return null;
+        }
+
         public Tuple<ActionFile, ActionProgram> FindProgram(string req, ActionFile preferred = null)        // find a program 
         {
             Actions.ActionProgram ap = null;
@@ -386,7 +401,7 @@ namespace EDDiscovery.Actions
                     {
                         string acceptstr = "Already have an action file called " + af.name + Environment.NewLine + "Click Cancel to abort, OK to overwrite";
 
-                        DialogResult dr = MessageBox.Show(acceptstr, "Duplicate File Warning", MessageBoxButtons.OKCancel);
+                        DialogResult dr = Forms.MessageBoxTheme.Show(acceptstr, "Duplicate File Warning", MessageBoxButtons.OKCancel);
 
                         if (dr == DialogResult.Cancel)
                             return false;
@@ -400,20 +415,20 @@ namespace EDDiscovery.Actions
 
                         if (LoadFile(destfile))
                         {
-                            MessageBox.Show("Action file " + af.name + " loaded.  Note if action file relies on start up events, you will need to quit and rerun EDDiscovery to make the file work correctly");
+                            Forms.MessageBoxTheme.Show("Action file " + af.name + " loaded.  Note if action file relies on start up events, you will need to quit and rerun EDDiscovery to make the file work correctly");
                             return true;
                         }
                         else
-                            MessageBox.Show("Failed to load in");
+                            Forms.MessageBoxTheme.Show("Failed to load in");
                     }
                     catch
                     {
-                        MessageBox.Show("File IO error copying file " + dlg.FileName + " to " + destfile + " check permissions");
+                        Forms.MessageBoxTheme.Show("File IO error copying file " + dlg.FileName + " to " + destfile + " check permissions");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Action file does not read - check file " + dlg.FileName);
+                    Forms.MessageBoxTheme.Show("Action file does not read - check file " + dlg.FileName);
                 }
             }
 

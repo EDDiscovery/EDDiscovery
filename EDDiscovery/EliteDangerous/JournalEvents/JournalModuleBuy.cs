@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -27,7 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //If replacing an existing module:
     //•	SellItem: item being sold
     //•	SellPrice: sale price
-    public class JournalModuleBuy : JournalEntry
+    [JournalEntryType(JournalTypeEnum.ModuleBuy)]
+    public class JournalModuleBuy : JournalEntry, ILedgerJournalEntry
     {
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {

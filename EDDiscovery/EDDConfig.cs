@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
 using System;
@@ -118,7 +118,6 @@ namespace EDDiscovery2
             AutoLoadPopOuts,
             AutoSavePopOuts,
             CanSkipSlowUpdates,
-            CheckCommanderEDSMAPI,
             ClearCommodities,
             ClearMaterials,
             DisplayUTC,
@@ -140,15 +139,7 @@ namespace EDDiscovery2
             CoarseGridLines,
             DefaultMapColour,
             FineGridLines,
-            NamedStar,
-            NamedStarUnpopulated,
-            POISystem,
-            SelectedSystem,
-            TrilatCurrentReference,
-            TrilatSuggestedReference,
             PlannedRoute,
-            StationSystem,
-            SystemDefault,
         };
 
         /// <summary>
@@ -167,33 +158,35 @@ namespace EDDiscovery2
         /// </summary>
         public class MapColoursClass
         {
-            public Color GetColour(string name, Color defaultColour)
+            private EDDConfig _instance;
+            private Color _centreSystemColour = Color.Yellow;
+            private Color _coarseGridLinesColour = ColorTranslator.FromHtml("#296A6C");
+            private Color _fineGridLinesColour = ColorTranslator.FromHtml("#202020");
+            private Color _plannedRouteColour = Color.Green;
+
+            public MapColoursClass(EDDConfig instance)
             {
-                return Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_" + name, defaultColour.ToArgb()));
+                _instance = instance;
             }
 
-            public Color GetColour(string name, string defaultColour)
+            public void Load(SQLiteConnectionUser conn)
             {
-                return GetColour(name, ColorTranslator.FromHtml(defaultColour));
+                _centreSystemColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_CentredSystem", _centreSystemColour.ToArgb(), conn));
+                _coarseGridLinesColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_CoarseGridLines", _coarseGridLinesColour.ToArgb(), conn));
+                _fineGridLinesColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_FineGridLines", _fineGridLinesColour.ToArgb(), conn));
+                _plannedRouteColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("MapColour_PlannedRoute", _plannedRouteColour.ToArgb(), conn));
+
             }
 
-            public bool PutColour(string name, Color colour)
+            private void PutColour(ref Color field, Color colour, string name, MapColourProperty prop)
             {
-                return SQLiteConnectionUser.PutSettingInt("MapColour_" + name, colour.ToArgb());
+                _instance.UpdateColourProperty(ref field, colour, "MapColour_" + name, prop);
             }
 
-            public Color CentredSystem { get { return GetColour("CentredSystem", Color.Yellow); } set { PutColour("CentredSystem", value); } }
-            public Color CoarseGridLines { get { return GetColour("CoarseGridLines", "#296A6C"); } set { PutColour("CoarseGridLines", value); } }
-            public Color FineGridLines { get { return GetColour("FineGridLines", "#202020"); } set { PutColour("FineGridLines", value); } }
-            public Color NamedStar { get { return GetColour("NamedStar", Color.Yellow); } set { PutColour("NamedStar", value); } }
-            public Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop", "#C0C000"); } set { PutColour("NamedStarUnpop", value); } }
-            public Color POISystem { get { return GetColour("POISystem", Color.Purple); } set { PutColour("POISystem", value); } }
-            public Color SelectedSystem { get { return GetColour("SelectedSystem", Color.Orange); } set { PutColour("SelectedSystem", value); } }
-            public Color TrilatCurrentReference { get { return GetColour("TrilatCurrentReference", Color.Green); } set { PutColour("TrilatCurrentReference", value); } }
-            public Color TrilatSuggestedReference { get { return GetColour("TrilatSuggestedReference", Color.DarkOrange); } set { PutColour("TrilatSuggestedReference", value); } }
-            public Color PlannedRoute { get { return GetColour("PlannedRoute", Color.Green); } set { PutColour("PlannedRoute", value); } }
-            public Color StationSystem { get { return GetColour("StationSystem", Color.RoyalBlue); } set { PutColour("StationSystem", value); } }
-            public Color SystemDefault { get { return GetColour("SystemDefault", Color.White); } set { PutColour("SystemDefault", value); } }
+            public Color CentredSystem { get { return _centreSystemColour; } set { PutColour(ref _centreSystemColour, value, "CentredSystem", MapColourProperty.CentredSystem); } }
+            public Color CoarseGridLines { get { return _coarseGridLinesColour; } set { PutColour(ref _coarseGridLinesColour, value, "CoarseGridLines", MapColourProperty.CoarseGridLines); } }
+            public Color FineGridLines { get { return _fineGridLinesColour; } set { PutColour(ref _fineGridLinesColour, value, "FineGridLines", MapColourProperty.FineGridLines); } }
+            public Color PlannedRoute { get { return _plannedRouteColour; } set { PutColour(ref _plannedRouteColour, value, "PlannedRoute", MapColourProperty.PlannedRoute); } }
         }
 
         /// <summary>
@@ -547,6 +540,7 @@ namespace EDDiscovery2
         /* **** Use 'EDDConfig.Instance.' or (an instance of)EDDiscoveryForm'.EDDConfig.' to access these directly **** */
         #region Instantiated properties 
 
+        #region Boolean properties
         /// <summary>
         /// Whether we should automatically load popout (S-Panel) windows at startup.
         /// </summary>
@@ -558,12 +552,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_autoLoadPopouts != value)
-                {
-                    _autoLoadPopouts = value;
-                    SQLiteConnectionUser.PutSettingBool("AutoLoadPopouts", value);
-                    OnConfigChangedEvent(ConfigProperty.AutoLoadPopOuts, value);
-                }
+                UpdateBoolProperty(ref _autoLoadPopouts, value, "AutoLoadPopouts", ConfigProperty.AutoLoadPopOuts);
             }
         }
 
@@ -578,12 +567,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_autoSavePopouts != value)
-                {
-                    _autoSavePopouts = value;
-                    SQLiteConnectionUser.PutSettingBool("AutoSavePopouts", value);
-                    OnConfigChangedEvent(ConfigProperty.AutoSavePopOuts, value);
-                }
+                UpdateBoolProperty(ref _autoSavePopouts, value, "AutoSavePopouts", ConfigProperty.AutoSavePopOuts);
             }
         }
 
@@ -598,12 +582,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_canSkipSlowUpdates != value)
-                {
-                    _canSkipSlowUpdates = value;
-                    SQLiteConnectionUser.PutSettingBool("CanSkipSlowUpdates", value);
-                    OnConfigChangedEvent(ConfigProperty.CanSkipSlowUpdates, value);
-                }
+                UpdateBoolProperty(ref _canSkipSlowUpdates, value, "CanSkipSlowUpdates", ConfigProperty.CanSkipSlowUpdates);
             }
         }
 
@@ -618,12 +597,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_clearCommodities != value)
-                {
-                    _clearCommodities = value;
-                    SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
-                    OnConfigChangedEvent(ConfigProperty.ClearCommodities, value);
-                }
+                UpdateBoolProperty(ref _clearCommodities, value, "ClearCommodities", ConfigProperty.ClearCommodities);
             }
         }
 
@@ -638,32 +612,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_clearMaterials != value)
-                {
-                    _clearMaterials = value;
-                    SQLiteConnectionUser.PutSettingBool("ClearMaterials", value);
-                    OnConfigChangedEvent(ConfigProperty.ClearMaterials, value);
-                }
-            }
-        }
-
-        /// <summary>
-        /// The default map colour.
-        /// </summary>
-        public Color DefaultMapColour
-        {
-            get
-            {
-                return _defaultMapColour;
-            }
-            set
-            {
-                if (_defaultMapColour.ToArgb().CompareTo(value) != 0)
-                {
-                    _defaultMapColour = value;
-                    SQLiteConnectionUser.PutSettingInt("DefaultMap", value.ToArgb());
-                    OnMapColourChangedEvent(MapColourProperty.DefaultMapColour, value);
-                }
+                UpdateBoolProperty(ref _clearMaterials, value, "ClearMaterials", ConfigProperty.ClearMaterials);
             }
         }
 
@@ -678,12 +627,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_displayUTC != value)
-                {
-                    _displayUTC = value;
-                    SQLiteConnectionUser.PutSettingBool("DisplayUTC", value);
-                    OnConfigChangedEvent(ConfigProperty.DisplayUTC, value);
-                }
+                UpdateBoolProperty(ref _displayUTC, value, "DisplayUTC", ConfigProperty.DisplayUTC);
             }
         }
 
@@ -698,12 +642,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_EDSMLog != value)
-                {
-                    _EDSMLog = value;
-                    SQLiteConnectionUser.PutSettingBool("EDSMLog", value);
-                    OnConfigChangedEvent(ConfigProperty.EDSMLog, value);
-                }
+                UpdateBoolProperty(ref _EDSMLog, value, "EDSMLog", ConfigProperty.EDSMLog);
             }
         }
 
@@ -718,12 +657,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_focusOnNewSystem != value)
-                {
-                    _focusOnNewSystem = value;
-                    SQLiteConnectionUser.PutSettingBool("FocusOnNewSystem", value);
-                    OnConfigChangedEvent(ConfigProperty.FocusOnNewSystem, value);
-                }
+                UpdateBoolProperty(ref _focusOnNewSystem, value, "FocusOnNewSystem", ConfigProperty.FocusOnNewSystem);
             }
         }
 
@@ -738,19 +672,10 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_keepOnTop != value)
-                {
-                    _keepOnTop = value;
-                    SQLiteConnectionUser.PutSettingBool("KeepOnTop", value);
-                    OnConfigChangedEvent(ConfigProperty.KeepOnTop, value);
-                }
+                UpdateBoolProperty(ref _keepOnTop, value, "KeepOnTop", ConfigProperty.KeepOnTop);
             }
         }
 
-        /// <summary>
-        /// The currently selected colour map.
-        /// </summary>
-        public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
 
         /// <summary>
         /// Whether or not the main window will be hidden to the system notification
@@ -765,12 +690,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_minimizeToNotifyIcon != value)
-                {
-                    _minimizeToNotifyIcon = value;
-                    SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
-                    OnConfigChangedEvent(ConfigProperty.MinimizeToNotifyIcon, value);
-                }
+                UpdateBoolProperty(ref _minimizeToNotifyIcon, value, "MinimizeToNotifyIcon", ConfigProperty.MinimizeToNotifyIcon);
             }
         }
 
@@ -785,12 +705,7 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_orderrowsinverted != value)
-                {
-                    _orderrowsinverted = value;
-                    SQLiteConnectionUser.PutSettingBool("OrderRowsInverted", value);
-                    OnConfigChangedEvent(ConfigProperty.OrderRowsInverted, value);
-                }
+                UpdateBoolProperty(ref _orderrowsinverted, value, "OrderRowsInverted", ConfigProperty.OrderRowsInverted);
             }
         }
 
@@ -805,14 +720,66 @@ namespace EDDiscovery2
             }
             set
             {
-                if (_useNotifyIcon != value)
-                {
-                    _useNotifyIcon = value;
-                    SQLiteConnectionUser.PutSettingBool("UseNotifyIcon", value);
-                    OnConfigChangedEvent(ConfigProperty.UseNotifyIcon, value);
-                }
+                UpdateBoolProperty(ref _useNotifyIcon, value, "UseNotifyIcon", ConfigProperty.UseNotifyIcon);
             }
         }
+        #endregion
+
+        #region String properties
+        /// <summary>
+        /// Default audio output device name to use for voice output
+        /// </summary>
+        public string DefaultVoiceDevice
+        {
+            get
+            {
+                return _defaultvoicedevice;
+            }
+            set
+            {
+                _defaultvoicedevice = value;
+                SQLiteConnectionUser.PutSettingString("VoiceAudioDevice", value);
+            }
+        }
+
+        /// <summary>
+        /// Default audio output device name to use for sound output
+        /// </summary>
+        public string DefaultWaveDevice
+        {
+            get
+            {
+                return _defaultwavedevice;
+            }
+            set
+            {
+                _defaultwavedevice = value;
+                SQLiteConnectionUser.PutSettingString("WaveAudioDevice", value);
+            }
+        }
+        #endregion
+
+        #region Map Colours
+        /// <summary>
+        /// The default map colour.
+        /// </summary>
+        public Color DefaultMapColour
+        {
+            get
+            {
+                return _defaultMapColour;
+            }
+            set
+            {
+                UpdateColourProperty(ref _defaultMapColour, value, "DefaultMap", MapColourProperty.DefaultMapColour);
+            }
+        }
+
+        /// <summary>
+        /// The currently selected colour map.
+        /// </summary>
+        public MapColoursClass MapColours { get; private set; }
+        #endregion
 
         #endregion // Instantiated properties
 
@@ -827,12 +794,12 @@ namespace EDDiscovery2
         {
             try
             {
+                // Boolean properties
                 _autoLoadPopouts        = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", _autoLoadPopouts, conn);
                 _autoSavePopouts        = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", _autoSavePopouts, conn);
                 _canSkipSlowUpdates     = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", _canSkipSlowUpdates, conn);
                 _clearCommodities       = SQLiteConnectionUser.GetSettingBool("ClearCommodities", _clearCommodities, conn);
                 _clearMaterials         = SQLiteConnectionUser.GetSettingBool("ClearMaterials", _clearMaterials, conn);
-                _defaultMapColour       = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("DefaultMap", _defaultMapColour.ToArgb(), conn));
                 _displayUTC             = SQLiteConnectionUser.GetSettingBool("DisplayUTC", _displayUTC, conn);
                 _EDSMLog                = SQLiteConnectionUser.GetSettingBool("EDSMLog", _EDSMLog, conn);
                 _focusOnNewSystem       = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", _focusOnNewSystem, conn);
@@ -840,6 +807,12 @@ namespace EDDiscovery2
                 _minimizeToNotifyIcon   = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", _minimizeToNotifyIcon, conn);
                 _orderrowsinverted      = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", _orderrowsinverted, conn);
                 _useNotifyIcon          = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", _useNotifyIcon, conn);
+                // String properties
+                _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", _defaultvoicedevice, conn);
+                _defaultwavedevice = SQLiteConnectionUser.GetSettingString("VoiceWaveDevice", _defaultwavedevice, conn);
+                // Colour properties
+                _defaultMapColour = Color.FromArgb(SQLiteConnectionUser.GetSettingInt("DefaultMap", _defaultMapColour.ToArgb(), conn));
+                MapColours.Load(conn);
 
                 EDCommander.Load(write, conn);
                 EDDConfig.UserPaths.Load(conn);
@@ -889,7 +862,6 @@ namespace EDDiscovery2
         private bool _canSkipSlowUpdates = false;
         private bool _clearCommodities = false;
         private bool _clearMaterials = false;
-        private Color _defaultMapColour = Color.Red;
         private bool _displayUTC = false;
         private bool _EDSMLog = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
@@ -897,6 +869,9 @@ namespace EDDiscovery2
         private bool _minimizeToNotifyIcon = false;
         private bool _orderrowsinverted = false;
         private bool _useNotifyIcon = false;
+        private string _defaultvoicedevice = "Default";
+        private string _defaultwavedevice = "Default";
+        private Color _defaultMapColour = Color.Red;
 
         #endregion // Fields, both static and instantiated.
 
@@ -907,6 +882,28 @@ namespace EDDiscovery2
         /// </summary>
         private EDDConfig()
         {
+            // Can't use a constructor taking `this` using C# auto-property initializers
+            MapColours = new MapColoursClass(this);
+        }
+
+        private void UpdateBoolProperty(ref bool field, bool value, string name, ConfigProperty prop)
+        {
+            if (field != value)
+            {
+                field = value;
+                SQLiteConnectionUser.PutSettingBool(name, value);
+                OnConfigChangedEvent(prop, value);
+            }
+        }
+
+        private void UpdateColourProperty(ref Color field, Color value, string name, MapColourProperty prop)
+        {
+            if (field.ToArgb().CompareTo(value) != 0)
+            {
+                field = value;
+                SQLiteConnectionUser.PutSettingInt(name, value.ToArgb());
+                OnMapColourChangedEvent(prop, value);
+            }
         }
 
         #endregion // Private methods

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -22,8 +22,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //    Parameters:
 //•	Amount: (total amount paid , including any broker fee)
 //•	BrokerPercentage(present if paid via a Broker)
-
-    public class JournalPayFines : JournalEntry
+    [JournalEntryType(JournalTypeEnum.PayFines)]
+    public class JournalPayFines : JournalEntry, ILedgerJournalEntry
     {
         public JournalPayFines(JObject evt) : base(evt, JournalTypeEnum.PayFines)
         {

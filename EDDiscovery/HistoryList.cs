@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
@@ -380,7 +380,14 @@ namespace EDDiscovery
         {
             get
             {
-                return EliteDangerous.JournalEntry.GetIcon(EntryType.ToString(),EventDescription);
+                if (journalEntry != null)
+                {
+                    return journalEntry.GetIcon();
+                }
+                else
+                {
+                    return EliteDangerous.JournalEntry.GetIcon(EntryType, EventDescription);
+                }
             }
         }
 
@@ -595,6 +602,15 @@ namespace EDDiscovery
             }
         }
 
+        public HistoryEntry GetByJID(long jid)
+        {
+            return historylist.Find(x => x.Journalid == jid);
+        }
+
+        public int GetIndex(long jid)
+        {
+            return EntryOrder.FindIndex(x => x.Journalid == jid);
+        }
 
         public HistoryEntry GetLast
         {

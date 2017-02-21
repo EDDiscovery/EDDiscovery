@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -144,10 +144,10 @@ namespace EDDiscovery.UserControls
                 Color backcolour = IsTransparent ? Color.Black : this.BackColor;
 
                 ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(5, 5), new Size(80, 20), "EDSM", displayfont, backcolour, textcolour, 0.5F, true, he, "View system on EDSM");
-                edsm.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backcolour, ExtendedControls.ButtonExt.Multiply(textcolour, 1.2F), 0.5F, true), edsm.pos, true);
+                edsm.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
 
                 ExtendedControls.PictureBoxHotspot.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(5, 35), new Size(80, 20), "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
-                start.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("Start", edsm.img.Size, displayfont, backcolour, ExtendedControls.ButtonExt.Multiply(textcolour, 1.2F), 0.5F, true), start.pos, true);
+                start.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("Start", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.pos, true);
 
                 backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 

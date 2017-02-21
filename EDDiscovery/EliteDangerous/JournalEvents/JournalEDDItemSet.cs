@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -19,7 +19,7 @@ using System.Linq;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     //When written: by EDD when a user manually sets an item count (material or commodity)
-
+    [JournalEntryType(JournalTypeEnum.EDDItemSet)]
     public class JournalEDDItemSet : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalEDDItemSet(JObject evt) : base(evt, JournalTypeEnum.EDDItemSet)

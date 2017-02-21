@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -21,28 +21,20 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.Audio
 {
-    public delegate void AudioStopped();
-
-    public interface IAudioDriver : IDisposable
-    {
-        event AudioStopped AudioStoppedEvent;
-        void Start(Object o, int vol);      // start with this audio
-        void Stop();
-        Object Generate(string file, ConditionVariables effects = null);       // generate audio samples and return. Effects 
-        Object Generate(System.IO.Stream audioms, ConditionVariables effects = null);
-        void Dispose(Object o);             // finish with this audio
-    }
-
     public class AudioQueue : IDisposable       // Must dispose BEFORE ISoundOut.
     {
         public delegate void SampleStart(AudioQueue sender, Object tag);
         public delegate void SampleOver(AudioQueue sender, Object tag);
 
+        public enum Priority { Low, Normal, High };
+        static public Priority GetPriority(string s) { Priority p; if (Enum.TryParse<AudioQueue.Priority>(s, out p)) return p; else return Priority.Normal; }
+
         public class AudioSample
         {
             public System.IO.Stream ms;
             public Object audiodata;            // held as an object.. driver specific format
-            public int volume;          // 0-100
+            public int volume;                  // 0-100
+            public Priority priority;           // audio priority
 
             public event SampleStart sampleStartEvent;
             public object sampleStartTag;
@@ -76,6 +68,28 @@ namespace EDDiscovery.Audio
             audioqueue = new List<AudioSample>();
         }
 
+        public IAudioDriver Driver { get { return ad; } }           // be careful! go thru this class to change anything
+
+        public bool SetAudioEndpoint( string dev )
+        {
+            bool res = ad.SetAudioEndpoint(dev);
+            if (res)
+                Clear();
+            return res;
+        }
+
+        public void Clear()
+        {
+            foreach( AudioSample a in audioqueue )
+            {
+                a.SampleOver(this);     // let callers know a sample is over
+                ad.Dispose(a.audiodata);        // tell the driver to clean up
+                a.ms?.Dispose();            // clean any stream
+            }
+
+            audioqueue.Clear();
+        }
+
         private void AudioStoppedEvent()
         {
             System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stopped audio");
@@ -85,9 +99,7 @@ namespace EDDiscovery.Audio
                 audioqueue[0].SampleOver(this);     // let callers know a sample is over
 
                 ad.Dispose(audioqueue[0].audiodata);        // tell the driver to clean up
-
-                if (audioqueue[0].ms != null)       // clean up any memory streams we may have
-                    audioqueue[0].ms.Dispose();
+                audioqueue[0].ms?.Dispose();        // clean stream
 
                 audioqueue.RemoveAt(0);
             }
@@ -95,19 +107,43 @@ namespace EDDiscovery.Audio
             Queue(null);
         }
 
-        private void Queue(AudioSample newdata, bool priority = false)
+
+        private void Queue(AudioSample newdata, Priority p = Priority.Normal )
         {
             if (newdata != null)
             {
-                if (priority && audioqueue.Count > 0)       // priority, and something is playing..
+                if ( audioqueue.Count > 0 && p > audioqueue[0].priority )       // if something is playing, and we have priority..
                 {
-                    audioqueue.Insert(1, newdata);  // add one past front
-                    ad.Stop();                      // stopping makes it stop, does the callback, this gets called again
-                    System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Priority insert");
+                    System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Priority insert " + p + " front " + audioqueue[0].priority);
+
+                    if (audioqueue[0].priority == Priority.Low)                 // if low at front, remove all other lows after it
+                    {
+                        List<AudioSample> remove = new List<AudioSample>();
+                        for (int i = 1; i < audioqueue.Count; i++)
+                        {
+                            if (audioqueue[i].priority == Priority.Low)
+                                remove.Add(audioqueue[i]);
+                        }
+                        foreach (AudioSample a in remove)
+                        {
+                            audioqueue.Remove(a);
+                            ad.Dispose(a.audiodata);        // tell the driver to clean up
+                            a.ms?.Dispose();        // dispose of ms handle
+                        }
+                    }
+
+                    if (audioqueue[0].priority == Priority.High)                // High playing, don't interrupt, but this one next
+                        audioqueue.Insert(1, newdata);  // add one past front
+                    else
+                    {                                       
+                        audioqueue.Insert(1, newdata);  // add one past front
+                        ad.Stop();                      // stopping makes it stop, does the callback, this gets called again, audio plays
+                    }
                     return;
                 }
                 else
                 {
+                    newdata.priority = p;
                     audioqueue.Add(newdata);
                     if (audioqueue.Count > 1)       // if not the first in queue, no action yet, let stopped handle it
                         return;
@@ -135,6 +171,7 @@ namespace EDDiscovery.Audio
         public AudioSample Generate(string file, ConditionVariables effects = null)        // from a file (you get a AS back so you have the chance to add events)
         {
             Object audio = ad.Generate(file, effects);
+
             if (audio != null)
             {
                 AudioSample a = new AudioSample() { ms = null, audiodata = audio };
@@ -144,11 +181,11 @@ namespace EDDiscovery.Audio
                 return null;
         }
 
-        public AudioSample Generate(System.IO.Stream audioms, ConditionVariables effects = null)   // from a memory stream
+        public AudioSample Generate(System.IO.Stream audioms, ConditionVariables effects = null, bool ensuresomeaudio = false)   // from a memory stream
         {
             if (audioms != null)
             {
-                Object audio = ad.Generate(audioms, effects);
+                Object audio = ad.Generate(audioms, effects, ensuresomeaudio);
                 if (audio != null)
                 {
                     AudioSample a = new AudioSample() { ms = audioms, audiodata = audio };
@@ -159,10 +196,10 @@ namespace EDDiscovery.Audio
             return null;
         }
 
-        public void Submit(AudioSample s, int vol, bool priority = false)       // submit to queue
+        public void Submit(AudioSample s, int vol, Priority p)       // submit to queue
         {
             s.volume = vol;
-            Queue(s, priority);
+            Queue(s, p);
         }
 
         public void StopCurrent()

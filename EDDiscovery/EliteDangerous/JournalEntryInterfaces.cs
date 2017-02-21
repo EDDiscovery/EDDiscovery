@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
@@ -26,5 +26,15 @@ namespace EDDiscovery.EliteDangerous
     public interface IMaterialCommodityJournalEntry
     {
         void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn);
+    }
+
+    public interface ILedgerJournalEntry
+    {
+        void Ledger(MaterialCommoditiesLedger mcl, SQLiteConnectionUser conn);
+    }
+
+    public interface ILedgerNoCashJournalEntry
+    {
+        void LedgerNC(MaterialCommoditiesLedger mcl, SQLiteConnectionUser conn);
     }
 }

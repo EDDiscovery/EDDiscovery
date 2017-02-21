@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Fronter Developments plc.
+ * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
 using EDDiscovery.DB;
@@ -705,11 +705,9 @@ namespace EDDiscovery2
 
         void VideoMessage( string msg = null , int time = 0 )       // no paras, close it
         {
-            if (mapmsg != null)
-            {
-                mapmsg.Close();
-                mapmsg = null;
-            }
+            mapmsg?.Close();
+            mapmsg?.Dispose();
+            mapmsg = null;
 
             if (msg != null && msg.Length > 0 && time > 0)
             {
