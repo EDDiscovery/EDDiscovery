@@ -445,6 +445,42 @@ namespace EDDiscovery
                 if (OldDatabasePath == null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
             }
 
+            /// <summary>
+            /// Dump the configured options to a string for easy writing to the trace log.
+            /// </summary>
+            /// <returns>A string containing any configured options, ignoring ones that are visible in <see cref="VersionDisplayString"/>.</returns>
+            public override string ToString()
+            {
+                StringBuilder sb = new StringBuilder();
+#if DEBUG
+                sb.Append("DEBUG defined, ");
+#endif
+#if TRACE
+                sb.Append("TRACE defined, ");
+#endif
+                sb.Append($"AppDataDir: '{AppDataDirectory}', ");
+                if (Debug)
+                    sb.Append("Debug, ");
+                if (LogExceptions)
+                    sb.Append("LogExceptions, ");
+                if (NoWindowReposition)
+                    sb.Append("NoWindowReposition, ");
+                if (!string.IsNullOrWhiteSpace(OldDatabasePath) && File.Exists(OldDatabasePath))
+                    sb.Append($"OldDBPath: '{OldDatabasePath}', ");
+                if (!string.IsNullOrWhiteSpace(OptionsFile) && File.Exists(OptionsFile))
+                    sb.Append($"Using OptionsFile: '{OptionsFile}', ");
+                if (!string.IsNullOrWhiteSpace(ReadJournal))
+                    sb.Append($"ReadJournal: '{ReadJournal}', ");
+                if (StoreDataInProgramDirectory)
+                    sb.Append("Portable, ");
+                if (TraceLog)
+                    sb.Append("Explicit TraceLog, ");
+                sb.Append($"UserDB: '{UserDatabasePath}', ");
+                sb.Append($"SysDB: '{SystemDatabasePath}'");
+
+                return sb.ToString();
+            }
+
             #region Private implementation
 
             private void ProcessConfigVariables()

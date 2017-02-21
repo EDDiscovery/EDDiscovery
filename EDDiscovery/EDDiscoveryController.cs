@@ -118,6 +118,8 @@ namespace EDDiscovery
             Trace.WriteLine($"EDDiscovery Initializing: {EDDConfig.Options.VersionDisplayString} {proc64}");
             Trace.WriteLine($"OS: {Environment.OSVersion.VersionString} {os64}");
             Trace.WriteLine("************************************************");
+            Trace.WriteLine($"Config: {EDDConfig.Options.ToString()}");
+            Trace.WriteLine("************************************************");
 
             SQLiteConnectionUser.EarlyReadRegister();
             EDDConfig.Load(write: false);
