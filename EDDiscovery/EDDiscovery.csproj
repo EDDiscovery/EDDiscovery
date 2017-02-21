@@ -77,9 +77,6 @@
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
-  <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
@@ -121,6 +118,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>EDDiscovery.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CSCore, Version=1.1.6245.30570, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
@@ -938,6 +938,7 @@
     <EmbeddedResource Include="UserControls\UserControlTrippanel.resx">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="EDDiscovery.manifest" />
     <None Include="App.Portable.config">
       <SubType>Designer</SubType>
     </None>
