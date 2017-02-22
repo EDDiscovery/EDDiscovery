@@ -25,12 +25,15 @@ namespace EDDiscovery.Actions
 {
     public class ActionProgram
     {
-        // name and program stored in memory.
         protected List<Action> programsteps;
+        public string Name { get; set; }
+        public string StoredInFile { get; set; }                              // if set, stored in a file not in JSON.. for debugging
+        public int Count { get { return programsteps.Count; } }
 
-        public ActionProgram(string n = "")
+        public ActionProgram(string n = "", string f = null)
         {
             Name = n;
+            StoredInFile = f;
             programsteps = new List<Action>();
         }
 
@@ -39,9 +42,6 @@ namespace EDDiscovery.Actions
             Name = n;
             programsteps = steps;
         }
-
-        public string Name { get; set; }
-        public int Count { get { return programsteps.Count; } }
 
         public void Add(Action ap)
         {
@@ -92,46 +92,70 @@ namespace EDDiscovery.Actions
 
         public JObject ToJSON()
         {
-            JArray jf = new JArray();
-
-            foreach( Action ac in programsteps )
-            {
-                JObject step = new JObject();
-                step["StepName"] = ac.Name;
-                step["StepUC"] = ac.UserData;
-                step["StepLevelUp"] = ac.LevelUp;
-                step["StepWhitespace"] = ac.Whitespace;
-
-                jf.Add(step);
-            }
-
             JObject prog = new JObject();
             prog["Name"] = Name;
-            prog["Steps"] = jf;
+
+            if (StoredInFile != null)
+                prog["Filename"] = StoredInFile;
+            else
+            {
+                JArray jf = new JArray();
+
+                foreach (Action ac in programsteps)
+                {
+                    JObject step = new JObject();
+                    step["StepName"] = ac.Name;
+                    step["StepUC"] = ac.UserData;
+                    step["StepLevelUp"] = ac.LevelUp;
+                    step["StepWhitespace"] = ac.Whitespace;
+
+                    jf.Add(step);
+                }
+
+                prog["Steps"] = jf;
+            }
 
             return prog;
         }
 
         static public ActionProgram FromJSON(JObject j )
         {
-            ActionProgram ap = new ActionProgram((string)j["Name"]);
-
+            string progname = (string)j["Name"];
             JArray steps = (JArray)j["Steps"];
 
-            foreach (JObject js in steps)
+            if (steps != null)
             {
-                string stepname = (string)js["StepName"];
-                string stepUC = (string)js["StepUC"];
-                int stepLU = (int)js["StepLevelUp"];
-                int whitespace = JSONHelper.GetInt(js["StepWhitespace"],0);     // was not in earlier version, optional
+                ActionProgram ap = new ActionProgram(progname);
 
-                Action cmd = Action.CreateAction(stepname, stepUC, stepLU, whitespace);
+                foreach (JObject js in steps)
+                {
+                    string stepname = (string)js["StepName"];
+                    string stepUC = (string)js["StepUC"];
+                    int stepLU = (int)js["StepLevelUp"];
+                    int whitespace = JSONHelper.GetInt(js["StepWhitespace"], 0);     // was not in earlier version, optional
 
-                if ( cmd != null && cmd.VerifyActionCorrect() == null )                  // throw away ones with bad names
-                    ap.programsteps.Add(cmd);
+                    Action cmd = Action.CreateAction(stepname, stepUC, stepLU, whitespace);
+
+                    if (cmd != null && cmd.VerifyActionCorrect() == null)                  // throw away ones with bad names
+                        ap.programsteps.Add(cmd);
+                }
+
+                return ap;
+            }
+            else
+            {
+                string file = (string)j["Filename"];
+
+                if ( file != null )
+                {
+                    string errlist;
+                    ActionProgram ap = FromFile(file, progname, out errlist);
+                    ap.StoredInFile = file;
+                    return ap;
+                }
             }
 
-            return ap;
+            return null;
         }
 
         #endregion
@@ -292,6 +316,23 @@ namespace EDDiscovery.Actions
             }
         }
 
+        public bool StoreOnDisk(string filename)
+        {
+            if (SaveText(filename))
+            {
+                StoredInFile = filename;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool StoreInJSON()
+        {
+            StoredInFile = null;                    // its already in memory, all we need to do is disassocate the file
+            return true;
+        }
+
         #endregion
 
         #region Calculate Level data
@@ -406,42 +447,43 @@ namespace EDDiscovery.Actions
 
         #region Editor
 
-        public bool EditInEditor()          // edit in editor, swap to this
+        public bool EditInEditor(string file = null )          // edit in editor, swap to this
         {
             try
             {
-                string prog = Tools.AssocQueryString(Tools.AssocStr.Executable, ".txt");
-
-                string filename = Name.Length > 0 ? Name : "Default";
-
-                string editingloc = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Tools.SafeFileString(filename) + ".atf");
-
-                if (SaveText(editingloc))
+                if ( file == null)                              // if not associated directly with a file, save to a temp one
                 {
-                    while (true)
+                    string filename = Name.Length > 0 ? Name : "Default";
+                    file = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Tools.SafeFileString(filename) + ".atf");
+
+                    if (!SaveText(file))
+                        return false;
+                }
+
+                while (true)
+                {
+                    System.Diagnostics.Process p = new System.Diagnostics.Process();
+                    p.StartInfo.FileName = Tools.AssocQueryString(Tools.AssocStr.Executable, ".txt");
+                    p.StartInfo.Arguments = file.QuoteString();
+                    p.Start();
+                    p.WaitForExit();
+
+                    string err;
+                    ActionProgram apin = ActionProgram.FromFile(file, Name, out err);
+
+                    if (apin == null)
                     {
-                        System.Diagnostics.Process p = new System.Diagnostics.Process();
-                        p.StartInfo.FileName = prog;
-                        p.StartInfo.Arguments = editingloc.QuoteString();
-                        p.Start();
-                        p.WaitForExit();
+                        DialogResult dr = Forms.MessageBoxTheme.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
+                                            "Click Retry to correct errors, Cancel to abort editing",
+                                            "Warning", MessageBoxButtons.RetryCancel);
 
-                        string err;
-                        ActionProgram apin = ActionProgram.FromFile(editingloc, filename, out err);
-                        if (apin == null)
-                        {
-                            DialogResult dr = Forms.MessageBoxTheme.Show("Editing produced the following errors" + Environment.NewLine + Environment.NewLine + err + Environment.NewLine +
-                                                "Click Retry to correct errors, Cancel to abort editing",
-                                                "Warning", MessageBoxButtons.RetryCancel);
-
-                            if (dr == DialogResult.Cancel)
-                                return false;
-                        }
-                        else
-                        {
-                            programsteps = apin.programsteps;
-                            return true;
-                        }
+                        if (dr == DialogResult.Cancel)
+                            return false;
+                    }
+                    else
+                    {
+                        programsteps = apin.programsteps;
+                        return true;
                     }
                 }
             }
@@ -533,7 +575,8 @@ namespace EDDiscovery.Actions
                 foreach (JObject j in jf)
                 {
                     ActionProgram ap = ActionProgram.FromJSON(j);
-                    programs.Add(ap);
+                    if ( ap != null )
+                        programs.Add(ap);
                 }
 
                 return true;

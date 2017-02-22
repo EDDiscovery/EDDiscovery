@@ -486,7 +486,7 @@ namespace EDDiscovery.Actions
 
         #region OK and Finish
 
-        private void buttonOK_Click(object sender, EventArgs e)
+        private string ErrorList()
         {
             string errorlist = "";
 
@@ -503,7 +503,14 @@ namespace EDDiscovery.Actions
             if (groups.Count == 0)
                 errorlist += "No action steps have been defined" + Environment.NewLine;
             else
-                errorlist += curprog.CalculateLevels(); 
+                errorlist += curprog.CalculateLevels();
+
+            return errorlist;
+        }
+
+        private void buttonOK_Click(object sender, EventArgs e)
+        {
+            string errorlist = ErrorList();
 
             if (errorlist.Length > 0)
             {
@@ -522,12 +529,13 @@ namespace EDDiscovery.Actions
             }
 
             DialogResult = DialogResult.OK;
+            curprog.Name = textBoxBorderName.Text;
             Close();
         }
 
         public ActionProgram GetProgram()      // call only when OK returned
         {
-            ActionProgram ap = new ActionProgram(textBoxBorderName.Text);
+            ActionProgram ap = new ActionProgram(curprog.Name,curprog.StoredInFile);
 
             Action ac;
             int step = 0;
@@ -601,21 +609,46 @@ namespace EDDiscovery.Actions
 
         private void buttonExtSave_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.InitialDirectory = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Actions");
+            SaveFileDialog(false);
+        }
 
-            if (!System.IO.Directory.Exists(dlg.InitialDirectory))
-                System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
+        private void buttonExtDisk_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog(true);
+        }
 
-            dlg.DefaultExt = ".atf";
-            dlg.AddExtension = true;
-            dlg.Filter = "Action Text Files (*.atf)|*.atf|All files (*.*)|*.*";
-
-            if (dlg.ShowDialog() == DialogResult.OK)
+        private void SaveFileDialog(bool associate)
+        {
+            string errlist = ErrorList();
+            if ( errlist.Length > 0 )
             {
-                curprog.Name = textBoxBorderName.Text;
-                if (!curprog.SaveText(dlg.FileName))
-                    Forms.MessageBoxTheme.Show(this,"Failed to save text file - check file path");
+                Forms.MessageBoxTheme.Show(this, "Program contains errors, correct first\r\n" + errlist);
+            }
+            else
+            { 
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.InitialDirectory = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Actions");
+
+                if (!System.IO.Directory.Exists(dlg.InitialDirectory))
+                    System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
+
+                dlg.DefaultExt = ".atf";
+                dlg.AddExtension = true;
+                dlg.Filter = "Action Text Files (*.atf)|*.atf|All files (*.*)|*.*";
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    curprog.Name = textBoxBorderName.Text;
+
+                    if (!curprog.SaveText(dlg.FileName))
+                        Forms.MessageBoxTheme.Show(this, "Failed to save text file - check file path");
+                    else if (associate)
+                    {
+                        curprog.StoredInFile = dlg.FileName;        // now
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
+                }
             }
         }
 
