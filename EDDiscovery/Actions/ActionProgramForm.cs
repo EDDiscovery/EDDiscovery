@@ -110,6 +110,10 @@ namespace EDDiscovery.Actions
             panelVScroll.MouseDown += panelVScroll_MouseDown;
 
             editastextimmediately = edittext;
+
+#if !DEBUG
+            buttonExtDisk.Visible = false;
+#endif
         }
 
         void LoadProgram(ActionProgram prog)
@@ -158,7 +162,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        #region Steps
+#region Steps
 
         Group CreateStep(int insertpos, Action step = null)
         {
@@ -273,6 +277,7 @@ namespace EDDiscovery.Actions
             {
                 int indentlevel = 0;
                 int whitespace = 0;
+                int lineno = 0;
                 Action act = curprog.GetStep(actstep++);
 
                 if (act != null)
@@ -282,6 +287,7 @@ namespace EDDiscovery.Actions
                     g.right.Enabled = act.calcAllowRight;
                     indentlevel = act.calcDisplayLevel;
                     whitespace = act.Whitespace;
+                    lineno = act.LineNumber;
                     g.prog.Visible = act.Type == Action.ActionType.Call & EditProgram != null;
                     g.config.Visible = act.ConfigurationMenuInUse;
                 }
@@ -308,7 +314,11 @@ namespace EDDiscovery.Actions
 
                 g.panel.ResumeLayout();
 
-                string tt1 = "Step " + actstep.ToString(System.Globalization.CultureInfo.InvariantCulture) + " Level " + indentlevel;
+                string tt1 = "Step " + actstep;
+                if ( indentlevel>0)
+                    tt1 += " Lv " + indentlevel;
+                if ( lineno > 0 )
+                    tt1 += " Ln " + lineno;
                 if ( act != null )
                     tt1 += " SL " + act.calcStructLevel + " LU" + act.LevelUp ;
 
@@ -482,9 +492,9 @@ namespace EDDiscovery.Actions
                 curact.UpdateUserData(tb.Text);
         }
 
-        #endregion
+#endregion
 
-        #region OK and Finish
+#region OK and Finish
 
         private string ErrorList()
         {
@@ -564,9 +574,9 @@ namespace EDDiscovery.Actions
             }
         }
 
-        #endregion
+#endregion
 
-        #region Text editing
+#region Text editing
 
         private void buttonExtEdit_Click(object sender, EventArgs e)
         {
@@ -652,9 +662,9 @@ namespace EDDiscovery.Actions
             }
         }
 
-        #endregion
+#endregion
 
-        #region cut copy paste
+#region cut copy paste
 
         bool indrag = false;
         Point mouselogicalpos;      // used to offset return pos dep on which control first captured the mouse
@@ -862,10 +872,10 @@ namespace EDDiscovery.Actions
             }
         }
 
-        #endregion
+#endregion
 
 
-        #region Window Control
+#region Window Control
 
         // Mono compatibility
         private bool _window_dragging = false;
@@ -967,7 +977,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        #endregion
+#endregion
 
     }
 }

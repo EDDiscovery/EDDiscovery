@@ -30,6 +30,11 @@ public static class ObjectExtensions
         return (obj != double.NaN) ? obj.ToString(format) : string.Empty;
     }
 
+    public static string ToNANNullSafeString(this double? obj, string format)
+    {
+        return (obj.HasValue && obj != double.NaN) ? obj.Value.ToString(format) : string.Empty;
+    }
+
     public static string ToNullUnknownString(this object obj)
     {
         if (obj == null)

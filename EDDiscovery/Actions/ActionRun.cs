@@ -88,7 +88,8 @@ namespace EDDiscovery.Actions
                 {
                     if (progcurrent.GetErrorList != null)       // any errors pending, handle
                     {
-                        actioncontroller.LogLine("Error at " + progcurrent.Location + ":" + Environment.NewLine + progcurrent.GetErrorList);
+                        actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ": "+ progcurrent.GetLastStep().Name +  Environment.NewLine + 
+                                                    progcurrent.GetErrorList);
                         progcurrent = null; // terminate current program..
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it

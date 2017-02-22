@@ -63,10 +63,13 @@ namespace EDDiscovery.Actions
             ReLoad();
         }
 
-        private void ReLoad()
+        public void ReLoad()
         {
             actionfiles = new Actions.ActionFileList();
-            actionfiles.LoadAllActionFiles();
+            string errlist = actionfiles.LoadAllActionFiles();
+            if (errlist.Length > 0)
+                EDDiscovery.Forms.MessageBoxTheme.Show("Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             actionrunasync = new Actions.ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
         }

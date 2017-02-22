@@ -24,7 +24,9 @@ namespace EDDiscovery.Actions
 {
     public class Action
     {
-        public enum ActionType { Cmd, If, Else, ElseIf, Do, While, Loop , Call , Return };
+        public enum ActionType { Cmd, Call, Return,         // NOT auto
+                                If, Else, ElseIf, Do, While, Loop // Force execute
+                                };
 
         private string actionname;
         private ActionType actiontype;
@@ -37,6 +39,8 @@ namespace EDDiscovery.Actions
         public string UserData { get { return userdata; } }
         public int LevelUp { get { return levelup; } set { levelup = value; } }
         public int Whitespace { get { return whitespace; } set { whitespace = value; } }
+
+        public int LineNumber { get; set; }             // NOT stored, calculated line number.. calculated on read and editing
 
         public int calcDisplayLevel { get; set; }       // NOT stored, for editing purposes, what is the display level?
         public int calcStructLevel { get; set; }        // NOT stored, for editing purposes, what is the structure level?
@@ -153,6 +157,7 @@ namespace EDDiscovery.Actions
             a.levelup = r.levelup;
             a.whitespace = r.whitespace;
             a.actiontype = r.actiontype;
+            a.LineNumber = r.LineNumber;
             return a;
         }
         

@@ -93,7 +93,7 @@ namespace EDDiscovery.Actions
 
                 if (operations[vname].Contains("$"))
                     res = k.Value;
-                else if ( ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
                     ap.ReportError(res);
                     break;

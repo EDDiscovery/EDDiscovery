@@ -118,14 +118,19 @@ namespace EDDiscovery.Actions
             return prog;
         }
 
-        static public ActionProgram FromJSON(JObject j )
+        static public string FromJSON(JObject j , out ActionProgram ap )
         {
+            ap = null;
+            string errlist = "";
+
             string progname = (string)j["Name"];
             JArray steps = (JArray)j["Steps"];
 
             if (steps != null)
             {
-                ActionProgram ap = new ActionProgram(progname);
+                ap = new ActionProgram(progname);
+
+                int lineno = 1;
 
                 foreach (JObject js in steps)
                 {
@@ -137,10 +142,14 @@ namespace EDDiscovery.Actions
                     Action cmd = Action.CreateAction(stepname, stepUC, stepLU, whitespace);
 
                     if (cmd != null && cmd.VerifyActionCorrect() == null)                  // throw away ones with bad names
+                    {
+                        cmd.LineNumber = lineno++;
+                        lineno += cmd.Whitespace;
                         ap.programsteps.Add(cmd);
+                    }
+                    else
+                        errlist += "Failed to create " + progname + " step: " + stepname + ":" + stepUC + Environment.NewLine;
                 }
-
-                return ap;
             }
             else
             {
@@ -148,14 +157,13 @@ namespace EDDiscovery.Actions
 
                 if ( file != null )
                 {
-                    string errlist;
-                    ActionProgram ap = FromFile(file, progname, out errlist);
-                    ap.StoredInFile = file;
-                    return ap;
+                    ap = FromFile(file, progname, out errlist);
+                    if ( ap != null )
+                        ap.StoredInFile = file;
                 }
             }
 
-            return null;
+            return errlist;
         }
 
         #endregion
@@ -218,12 +226,12 @@ namespace EDDiscovery.Actions
                         string vmsg;
 
                         if (a == null)
-                            err += "Line " + lineno + " Unrecognised command " + cmd + Environment.NewLine;
+                            err += progname + ":" + lineno + " Unrecognised command " + cmd + Environment.NewLine;
                         else if ((vmsg = a.VerifyActionCorrect()) != null)
-                            err += "Line " + lineno + " " + vmsg + Environment.NewLine + " " + completeline + Environment.NewLine;
+                            err += progname + ":" + lineno + " " + vmsg + Environment.NewLine + " " + completeline.Trim() + Environment.NewLine;
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine(indentpos + ":" + structlevel + ": Cmd " + cmd + " : " + line);
+                            //System.Diagnostics.Debug.WriteLine(indentpos + ":" + structlevel + ": Cmd " + cmd + " : " + line);
 
                             if (indentpos == -1)
                                 indentpos = curindent;
@@ -263,7 +271,9 @@ namespace EDDiscovery.Actions
                                 }
                             }
 
-                            System.Diagnostics.Debug.WriteLine("    >>>> " + indentpos + ":" + structlevel);
+                            a.LineNumber = lineno;
+
+                            //System.Diagnostics.Debug.WriteLine("    >>>> " + indentpos + ":" + structlevel);
 
                             indents.Add(indentpos);
                             level.Add(structlevel);
@@ -281,7 +291,7 @@ namespace EDDiscovery.Actions
             }
 
             if (prog.Count == 0)
-                err += "No valid statements" + Environment.NewLine;
+                err += progname + ":No valid statements" + Environment.NewLine;
 
             return (err.Length == 0) ? new ActionProgram(progname, prog) : null;
         }
@@ -348,6 +358,8 @@ namespace EDDiscovery.Actions
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
             int step = 1;
             bool lastwaswhileafterdo = false;
+
+            int lineno = 1;
 
             foreach (Action act in programsteps)
             {
@@ -426,6 +438,8 @@ namespace EDDiscovery.Actions
                     if (vmsg != null)
                         errlist += "Step " + step.ToString(ct) + " " + vmsg + Environment.NewLine;
 
+                    act.LineNumber = lineno;
+                    lineno += act.Whitespace;
                 }
                 else
                 {
@@ -433,6 +447,7 @@ namespace EDDiscovery.Actions
                 }
 
                 step++;
+                lineno++;
             }
 
             if ( structlevel > 0 && structcount[structlevel] == 0 )
@@ -551,7 +566,7 @@ namespace EDDiscovery.Actions
             return evt;
         }
 
-        public bool FromJSON(string s)
+        public string FromJSON(string s)
         {
             try
             {
@@ -560,33 +575,41 @@ namespace EDDiscovery.Actions
             }
             catch
             {
-                return false;
+                return "Exception Bad JSON";
             }
         }
 
-        public bool FromJSONObject(JObject jo)
+        public string FromJSONObject(JObject jo)
         {
+            string errlist = "";
+
             try
             {
                 Clear();
 
                 JArray jf = (JArray)jo["ProgramSet"];
 
+
                 foreach (JObject j in jf)
                 {
-                    ActionProgram ap = ActionProgram.FromJSON(j);
-                    if ( ap != null )
+                    ActionProgram ap;
+                    string err = ActionProgram.FromJSON(j, out ap);
+
+                    if (err.Length == 0 && ap!=null)         // if can't load, we can't trust the pack, so indicate error so we can let the user manually sort it out
                         programs.Add(ap);
+                    else
+                        errlist += err;
                 }
 
-                return true;
+                return errlist;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Dump:" + ex.StackTrace);
+                errlist = "Exception bad JSON";
             }
 
-            return false;
+            return errlist;
         }
 
         public void AddOrChange(ActionProgram ap)

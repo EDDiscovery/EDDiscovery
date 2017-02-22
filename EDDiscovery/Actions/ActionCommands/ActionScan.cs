@@ -154,25 +154,42 @@ namespace EDDiscovery.Actions
             ap.currentvars[prefix + "_assignedname"] = scannode.Value.ownname;
             ap.currentvars[prefix + "_assignedfullname"] = scannode.Value.fullname;
             ap.currentvars[prefix + "_data"] = (sc != null) ? "1" : "0";
+            System.Diagnostics.Debug.WriteLine("Prefix " + prefix + " Data "  + ap.currentvars[prefix + "_data"]);
 
             if ( sc != null )
             {
-                ap.currentvars[prefix + "_text"] = sc.DisplayString(true);
-                ap.currentvars[prefix + "_edsmbody"] = (sc.IsEDSMBody) ? "1" : "0";
+                ap.currentvars[prefix + "_isstar"] = sc.IsStar ? "1" : "0";
+                ap.currentvars[prefix + "_edsmbody"] = sc.IsEDSMBody ? "1" : "0";
                 ap.currentvars[prefix + "_bodyname"] = sc.BodyName;
+                ap.currentvars[prefix + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.###");
+                ap.currentvars[prefix + "_rotationperiod"] = sc.nRotationPeriod.ToNANNullSafeString("0.###");
+                ap.currentvars[prefix + "_surfacetemperature"] = sc.nSurfaceTemperature.ToNANNullSafeString("0.###");
+                ap.currentvars[prefix + "_distls"] = sc.DistanceFromArrivalLS.ToNANSafeString("0.###");
 
                 if ( sc.IsStar )
                 {
                     ap.currentvars[prefix + "_startype"] = sc.StarType;
                     ap.currentvars[prefix + "_startypetext"] = sc.StarTypeText;
-                    ap.currentvars[prefix + "_stellarmass"] = (sc.nStellarMass??0).ToString("0.###");
+                    ap.currentvars[prefix + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.###");
+                    ap.currentvars[prefix + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
+                    ap.currentvars[prefix + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
+                    ap.currentvars[prefix + "_habinner"] = sc.HabitableZoneInner.ToNANNullSafeString("0.##");
+                    ap.currentvars[prefix + "_habouter"] = sc.HabitableZoneOuter.ToNANNullSafeString("0.##");
                 }
                 else
                 {
+                    ap.currentvars[prefix + "_class"] = sc.PlanetClass.ToNullSafeString().Replace("II", " 2").Replace("IV", " 4");
                     ap.currentvars[prefix + "_landable"] = sc.IsLandable ? "Landable" : "Not Landable";
                     ap.currentvars[prefix + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
-                    ap.currentvars[prefix + "_class"] = sc.PlanetClass.ToNullSafeString().Replace("II", " 2").Replace("IV", " 4");
+                    ap.currentvars[prefix + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
+                    ap.currentvars[prefix + "_volcanism"] = sc.Volcanism.ToNullSafeString();
+                    ap.currentvars[prefix + "_gravity"] = sc.nSurfaceGravity.ToNANNullSafeString("0.###");
+                    ap.currentvars[prefix + "_pressure"] = sc.nSurfacePressure.ToNANNullSafeString("0.###");
+                    ap.currentvars[prefix + "_mass"] = sc.nMassEM.ToNANNullSafeString("0.###");
+                    ap.currentvars.AddDataOfType(sc.Materials, typeof(Dictionary<string,double>), prefix + "_Materials");
                 }
+
+                ap.currentvars[prefix + "_text"] = sc.DisplayString(true);
             }
 
             if ( subname != null )
