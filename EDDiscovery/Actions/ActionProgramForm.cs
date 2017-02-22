@@ -606,7 +606,8 @@ namespace EDDiscovery.Actions
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(dlg.FileName))
                 {
                     string err;
-                    ActionProgram ap = ActionProgram.FromFile(dlg.FileName, System.IO.Path.GetFileNameWithoutExtension(dlg.FileName), out err);
+                    ActionProgram ap = ActionProgram.FromFile(dlg.FileName, out err);
+
                     if (ap == null)
                         Forms.MessageBoxTheme.Show(this,"Failed to load text file" + Environment.NewLine + err);
                     else
@@ -649,12 +650,13 @@ namespace EDDiscovery.Actions
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     curprog.Name = textBoxBorderName.Text;
+                    if ( associate )
+                        curprog.StoredInFile = dlg.FileName;        // now
 
                     if (!curprog.SaveText(dlg.FileName))
                         Forms.MessageBoxTheme.Show(this, "Failed to save text file - check file path");
                     else if (associate)
                     {
-                        curprog.StoredInFile = dlg.FileName;        // now
                         DialogResult = DialogResult.OK;
                         Close();
                     }

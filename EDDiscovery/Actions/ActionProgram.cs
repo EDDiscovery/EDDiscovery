@@ -30,17 +30,11 @@ namespace EDDiscovery.Actions
         public string StoredInFile { get; set; }                              // if set, stored in a file not in JSON.. for debugging
         public int Count { get { return programsteps.Count; } }
 
-        public ActionProgram(string n = "", string f = null)
+        public ActionProgram(string n = "", string f = null, List<Action> steps = null)
         {
             Name = n;
             StoredInFile = f;
-            programsteps = new List<Action>();
-        }
-
-        public ActionProgram(string n , List<Action> steps)
-        {
-            Name = n;
-            programsteps = steps;
+            programsteps = (steps!=null) ? steps : new List<Action>();
         }
 
         public void Add(Action ap)
@@ -157,9 +151,12 @@ namespace EDDiscovery.Actions
 
                 if ( file != null )
                 {
-                    ap = FromFile(file, progname, out errlist);
-                    if ( ap != null )
+                    ap = FromFile(file, out errlist);
+                    if (ap != null)
+                    {
                         ap.StoredInFile = file;
+                        ap.Name = progname;         // override, we have priority
+                    }   
                 }
             }
 
@@ -170,13 +167,13 @@ namespace EDDiscovery.Actions
 
         #region to/from File
 
-        static public ActionProgram FromFile(string file, string progname, out string err)
+        static public ActionProgram FromFile(string file, out string err)
         {
             try
             {
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(file))
                 {
-                    return FromTextReader(sr, progname, out err);
+                    return FromTextReader(sr, out err);
                 }
             }
             catch
@@ -186,15 +183,15 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public ActionProgram FromString(string text, string progname, out string err)
+        static public ActionProgram FromString(string text, out string err)
         {
             using (System.IO.TextReader sr = new System.IO.StringReader(text))
             {
-                return FromTextReader(sr, progname, out err);
+                return FromTextReader(sr, out err);
             }
         }
 
-        static public ActionProgram FromTextReader(System.IO.TextReader sr, string progname, out string err)
+        static public ActionProgram FromTextReader(System.IO.TextReader sr, out string err)
         {
             err = "";
             List<Action> prog = new List<Action>();
@@ -205,6 +202,8 @@ namespace EDDiscovery.Actions
 
             string completeline;
             int lineno = 1;
+
+            string progname = "", storedinfile = null;
 
             while (( completeline = sr.ReadLine() )!=null)
             {
@@ -220,6 +219,8 @@ namespace EDDiscovery.Actions
 
                     if (cmd.Equals("Name", StringComparison.InvariantCultureIgnoreCase))
                         progname = line;
+                    else if (cmd.Equals("File", StringComparison.InvariantCultureIgnoreCase))
+                        storedinfile = line;
                     else
                     {
                         Action a = Action.CreateAction(cmd, line, 0);
@@ -293,7 +294,7 @@ namespace EDDiscovery.Actions
             if (prog.Count == 0)
                 err += progname + ":No valid statements" + Environment.NewLine;
 
-            return (err.Length == 0) ? new ActionProgram(progname, prog) : null;
+            return (err.Length == 0 && progname.Length>0) ? new ActionProgram(progname, storedinfile, prog) : null;
         }
 
         public bool SaveText(string file)
@@ -304,7 +305,11 @@ namespace EDDiscovery.Actions
             {
                 using (System.IO.StreamWriter sr = new System.IO.StreamWriter(file))
                 {
-                    sr.WriteLine("NAME " + Name + Environment.NewLine);
+                    sr.WriteLine("NAME " + Name);
+                    if ( StoredInFile != null )
+                        sr.WriteLine("FILE " + StoredInFile);
+
+                    sr.WriteLine("");
 
                     foreach (Action act in programsteps)
                     {
@@ -484,7 +489,7 @@ namespace EDDiscovery.Actions
                     p.WaitForExit();
 
                     string err;
-                    ActionProgram apin = ActionProgram.FromFile(file, Name, out err);
+                    ActionProgram apin = ActionProgram.FromFile(file, out err);
 
                     if (apin == null)
                     {
@@ -498,6 +503,8 @@ namespace EDDiscovery.Actions
                     else
                     {
                         programsteps = apin.programsteps;
+                        Name = apin.Name;
+                        StoredInFile = apin.StoredInFile;
                         return true;
                     }
                 }
