@@ -40,8 +40,9 @@ namespace EDDiscovery.Actions
         static string startname = "StartEvent";
         static string finishname = "FinishEvent";
         static string culturename = "Culture";
+        static string literalname = "Literal";
 
-        public bool FromString(string s, out string saying, out ConditionVariables vars )
+        public bool FromString(string s, out string saying, out ConditionVariables vars)
         {
             vars = new ConditionVariables();
 
@@ -56,7 +57,7 @@ namespace EDDiscovery.Actions
                 saying = p.NextQuotedWord(", ");        // stop at space or comma..
 
                 if (saying != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma))))   // normalise variable names (true)
-                     return true;
+                    return true;
 
                 saying = "";
                 return false;
@@ -86,19 +87,19 @@ namespace EDDiscovery.Actions
 
             Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
             cfg.Init(discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
-                        "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command", 
+                        "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command",
                         saying,
                         vars.ContainsKey(waitname),
                         Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
-                        vars.GetString(startname,""),
+                        vars.GetString(startname, ""),
                         vars.GetString(finishname, ""),
                         vars.GetString(voicename, "Default"),
-                        vars.GetString(volumename,"Default"),
-                        vars.GetString(ratename,"Default"),
+                        vars.GetString(volumename, "Default"),
+                        vars.GetString(ratename, "Default"),
                         vars
                         );
 
-            if ( cfg.ShowDialog(parent) == DialogResult.OK)
+            if (cfg.ShowDialog(parent) == DialogResult.OK)
             {
                 ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge
                 cond.SetOrRemove(cfg.Wait, waitname, "1");
@@ -153,6 +154,7 @@ namespace EDDiscovery.Actions
 
                     string culture = vars.ContainsKey(culturename) ? vars[culturename] : (ap.currentvars.ContainsKey(globalvarspeechculture) ? ap.currentvars[globalvarspeechculture] : "Default");
 
+                    bool literal = vars.GetInt(literalname, 0) != 0;
 
                     Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
@@ -164,49 +166,49 @@ namespace EDDiscovery.Actions
                     string expsay;
                     if (ap.functions.ExpandString(say, ap.currentvars, out expsay) != EDDiscovery.ConditionLists.ExpandResult.Failed)
                     {
-                        expsay = expsay.PickOneOfGroups(rnd);
+                        if ( !literal ) 
+                            expsay = expsay.PickOneOfGroups(rnd);       // expand grouping if not literal
 
+#if true
                         if (ap.currentvars.ContainsKey("SpeechDebug") && ap.currentvars["SpeechDebug"].Contains("Print"))
                         {
                             ap.actioncontroller.LogLine("Say: " + expsay);
+                            expsay = "";
                         }
-                        else
+
+                        System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(expsay, culture, voice, rate);
+
+                        if (ms != null)
                         {
-#if true
-                            System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(expsay, culture, voice, rate);
+                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
 
-                            if (ms != null)
+                            if (audio != null)
                             {
-                                Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
-
-                                if (audio != null)
+                                if (start != null)
                                 {
-                                    if (start != null)
-                                    {
-                                        System.Diagnostics.Debug.WriteLine("Say start trigger set up");
-                                        audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
-                                        audio.sampleStartEvent += Audio_sampleEvent;
+                                    System.Diagnostics.Debug.WriteLine("Say start trigger set up");
+                                    audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
+                                    audio.sampleStartEvent += Audio_sampleEvent;
 
-                                    }
-                                    if (wait || finish != null)       // if waiting, or finish call
-                                    {
-                                        System.Diagnostics.Debug.WriteLine("Say finish trigger set up");
-                                        audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
-                                        audio.sampleOverEvent += Audio_sampleEvent;
-                                    }
-
-                                    ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
-                                    return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
                                 }
-                                else
-                                    ap.ReportError("Say could not create audio, check Effects settings");
+                                if (wait || finish != null)       // if waiting, or finish call
+                                {
+                                    System.Diagnostics.Debug.WriteLine("Say finish trigger set up");
+                                    audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
+                                    audio.sampleOverEvent += Audio_sampleEvent;
+                                }
+
+                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
+                                return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
                             }
-#else
-                            synth.SelectVoice(voice);
-                            synth.Rate = 0;
-                            synth.SpeakAsync(phrase);       // for checking quality..
-#endif
+                            else
+                                ap.ReportError("Say could not create audio, check Effects settings");
                         }
+#else
+                        synth.SelectVoice(voice);
+                        synth.Rate = 0;
+                        synth.SpeakAsync(phrase);       // for checking quality..
+#endif
                     }
                     else
                         ap.ReportError(expsay);
@@ -235,4 +237,3 @@ namespace EDDiscovery.Actions
         }
     }
 }
-

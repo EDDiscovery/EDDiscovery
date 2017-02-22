@@ -462,34 +462,44 @@ namespace EDDiscovery
 
             try // just to make sure a strange type does not barfe it
             {
-                if (o == null)
+                if (rettype.UnderlyingSystemType.Name.Contains("Dictionary"))
                 {
-                    values[name] = "";
-                }
-                else if (rettype.UnderlyingSystemType.Name.Contains("Dictionary"))
-                {
-                    var data = (System.Collections.IDictionary)o;       // lovely to work out
-
-                    values[name + "Count"] = data.Count.ToString(ct);       // purposely not putting a _ to distinguish it from the entries
-
-                    foreach (Object k in data.Keys)
+                    if (o == null)
+                        values[name + "Count"] = "0";                           // we always get a NameCount so we can tell..
+                    else
                     {
-                        if (k is string)
+                        var data = (System.Collections.IDictionary)o;           // lovely to work out
+
+                        values[name + "Count"] = data.Count.ToString(ct);       // purposely not putting a _ to distinguish it from the entries
+
+                        foreach (Object k in data.Keys)
                         {
-                            Object v = data[k as string];
-                            Extract(v, v.GetType(), name + "_" + (string)k);
+                            if (k is string)
+                            {
+                                Object v = data[k as string];
+                                Extract(v, v.GetType(), name + "_" + (string)k);
+                            }
                         }
                     }
                 }
                 else if (rettype.IsArray)
                 {
-                    Object[] array = (Object[])o;
-
-                    values[name + "_Length"] = array.Length.ToString(ct);
-                    for (int i = 0; i < array.Length; i++)
+                    if (o == null)
+                        values[name + "_Length"] = "0";                         // always get a length
+                    else
                     {
-                        Extract(array[i], array[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]");
+                        Object[] array = (Object[])o;
+
+                        values[name + "_Length"] = array.Length.ToString(ct);
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            Extract(array[i], array[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]");
+                        }
                     }
+                }
+                else if (o == null)
+                {
+                    values[name] = "";
                 }
                 else if (o is string)     // string is a class, so intercept first
                 {
