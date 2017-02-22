@@ -329,7 +329,6 @@ namespace EDDiscovery2
                 g.actionconfig.Location = new Point(g.actionlist.Right + 8, panelymargin);
                 g.actionconfig.Size = new Size(24, 24);
                 g.actionconfig.Click += ActionListConfig_Clicked;
-                g.actionconfig.MouseUp += ActionListConfig_MouseUp;
                 g.actionconfig.Visible = v;
                 g.actionconfig.Tag = g;
                 g.panel.Controls.Add(g.actionconfig);
@@ -752,29 +751,6 @@ namespace EDDiscovery2
             }
 
             FixUpGroups();       // run  this, it sorts out the group names
-        }
-
-        private void ActionListConfig_MouseUp(object sender, MouseEventArgs e)
-        {
-            ExtendedControls.ButtonExt config = sender as ExtendedControls.ButtonExt;
-            Group g = (Group)config.Tag;
-
-            if ( e.Button == MouseButtons.Right )
-            {
-                ActionProgram p = null;
-
-                if (g.actionlist.SelectedIndex > 0)     // exclude NEW from checking for program
-                    p = actionfilelist.CurPrograms.Get(g.actionlist.Text);
-
-                if (p != null && p.StoredInFile != null)
-                {
-                    DialogResult ok = EDDiscovery.Forms.MessageBoxTheme.Show(this, "Confirm you wish to disassociate this program with the file on disk.\r\nNo program data will be lost","Warning",MessageBoxButtons.OKCancel,MessageBoxIcon.Warning);
-
-                    if (ok == DialogResult.OK)
-                        p.StoreInJSON();
-                }
-
-            }
         }
 
         private void comboBoxCustomProgSet_SelectedIndexChanged(object sender, EventArgs e)
