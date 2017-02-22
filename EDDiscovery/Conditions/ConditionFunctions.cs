@@ -95,7 +95,7 @@ namespace EDDiscovery
             functions.Add("eval",         new FuncEntry(Eval,               1,2,    1,1));   // can be string, can be variable, p2 is not a variable, and can't be a string
             functions.Add("existsdefault",new FuncEntry(ExistsDefault,      2,2,    2,2));   // first is a macro but can not exist, second is a string or macro which must exist
             functions.Add("wordof",       new FuncEntry(WordOf,             2,3,    1+4,1+4));   // first is a macro or string, second is a var or literal, third is a macro or string
-            functions.Add("joinall",      new FuncEntry(JoinAll,            4,5,    2,2+16));   // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+            functions.Add("expandvars",   new FuncEntry(ExpandVars,         4,5,    2,2+16));   // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
         }
 
 #region expander
@@ -832,7 +832,7 @@ namespace EDDiscovery
             return ExpandArrayCommon(paras, vars, out output, recdepth, false);
         }
 
-        private bool JoinAll(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool ExpandVars(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             return ExpandArrayCommon(paras, vars, out output, recdepth, true);
         }
