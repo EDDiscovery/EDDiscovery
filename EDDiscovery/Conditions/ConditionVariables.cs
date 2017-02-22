@@ -100,7 +100,7 @@ namespace EDDiscovery
 
         // Print vars, if altops is passed in, you can output using alternate operators
 
-        public string ToString(Dictionary<string, string> altops = null, string pad = "")
+        public string ToString(Dictionary<string, string> altops = null, string pad = "", bool bracket = false)
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
@@ -109,11 +109,11 @@ namespace EDDiscovery
                     s += ",";
 
                 if ( altops == null )
-                    s += v.Key + pad + "=" + pad + v.Value.QuoteString(comma:true);
+                    s += v.Key + pad + "=" + pad + v.Value.QuoteString(comma:true, bracket: bracket);
                 else
                 {
                     System.Diagnostics.Debug.Assert(altops.ContainsKey(v.Key));
-                    s += v.Key + pad + altops[v.Key] + pad + v.Value.QuoteString(comma:true);
+                    s += v.Key + pad + altops[v.Key] + pad + v.Value.QuoteString(comma:true, bracket: bracket);
                 }
             }
 
@@ -435,7 +435,7 @@ namespace EDDiscovery
             }
         }
 
-        public void AddPropertiesFieldsOfType( Object o, string prefix = "" )
+        public void AddPropertiesFieldsOfClass( Object o, string prefix = "" )
         {
             Type jtype = o.GetType();
 
@@ -445,18 +445,18 @@ namespace EDDiscovery
                 {
                     string name = prefix + pi.Name;
                     System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                    Extract(getter.Invoke(o, null), pi.PropertyType, name);
+                    AddDataOfType(getter.Invoke(o, null), pi.PropertyType, name);
                 }
             }
 
             foreach (System.Reflection.FieldInfo fi in jtype.GetFields())
             {
                 string name = prefix + fi.Name;
-                Extract(fi.GetValue(o), fi.FieldType, name);
+                AddDataOfType(fi.GetValue(o), fi.FieldType, name);
             }
         }
 
-        void Extract(Object o, Type rettype, string name)
+        public void AddDataOfType(Object o, Type rettype, string name)
         {
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -477,7 +477,7 @@ namespace EDDiscovery
                             if (k is string)
                             {
                                 Object v = data[k as string];
-                                Extract(v, v.GetType(), name + "_" + (string)k);
+                                AddDataOfType(v, v.GetType(), name + "_" + (string)k);
                             }
                         }
                     }
@@ -493,7 +493,7 @@ namespace EDDiscovery
                         values[name + "_Length"] = array.Length.ToString(ct);
                         for (int i = 0; i < array.Length; i++)
                         {
-                            Extract(array[i], array[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]");
+                            AddDataOfType(array[i], array[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]");
                         }
                     }
                 }
@@ -509,7 +509,7 @@ namespace EDDiscovery
                 {
                     foreach (System.Reflection.FieldInfo fi in rettype.GetFields())
                     {
-                        Extract(fi.GetValue(o), fi.FieldType, name + "_" + fi.Name);
+                        AddDataOfType(fi.GetValue(o), fi.FieldType, name + "_" + fi.Name);
                     }
                 }
                 else if (o is bool)
@@ -537,7 +537,7 @@ namespace EDDiscovery
 
                     Type nulltype = pvalue.PropertyType;    // its type and value are found..
                     var value = pvalue.GetValue(o);
-                    Extract(value, nulltype, name);         // recurse to decode it
+                    AddDataOfType(value, nulltype, name);         // recurse to decode it
                 }
             }
             catch { }

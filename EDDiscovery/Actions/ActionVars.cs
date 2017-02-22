@@ -62,7 +62,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "EDDBPopulation"] = he.System.population.ToString(ct);
                 vars[prefix + "EDDBNeedsPermit"] = (he.System.needs_permit != 0) ? "1" : "0";
 
-                vars.AddPropertiesFieldsOfType(he.journalEntry, prefix + "Class_");
+                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_");
                 vars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, prefix + "JS_");
             }
         }

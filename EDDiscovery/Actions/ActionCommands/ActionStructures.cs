@@ -423,33 +423,32 @@ namespace EDDiscovery.Actions
     public class ActionCall : Action
     {
 
-        public bool FromString(string s, out string progname, out ConditionVariables vars )
+        public bool FromString(string s, out string progname, out ConditionVariables vars, out Dictionary<string,string> altops )
         {
             StringParser p = new StringParser(s);
-            progname = p.NextWord("( ");        // stop at space or (
             vars = new ConditionVariables();
+            altops = new Dictionary<string, string>();
+
+            progname = p.NextWord("( ");        // stop at space or (
 
             if (progname != null)
             {
                 if (p.IsCharMoveOn('('))       // if (, then
                 {
-                    if (vars.FromString(p,ConditionVariables.FromMode.MultiEntryCommaBracketEnds) && p.IsCharMoveOn(')') && p.IsEOL)      // if para list decodes and we finish on a ) and its EOL
+                    if (vars.FromString(p,ConditionVariables.FromMode.MultiEntryCommaBracketEnds,altops) && p.IsCharMoveOn(')') && p.IsEOL)      // if para list decodes and we finish on a ) and its EOL
                         return true;
                 }
                 else if (p.IsEOL)   // if EOL, its okay, prog name only
                     return true;
             }
 
-            progname = "";
-            vars.Clear();
-
             return false;
         }
 
-        public string ToString(string progname, ConditionVariables cond)
+        public string ToString(string progname, ConditionVariables cond, Dictionary<string,string> altops)
         {
             if (cond.Count > 0)
-                return progname + "(" + cond.ToString() + ")";
+                return progname + "(" + cond.ToString(altops,bracket:true) + ")";
             else
                 return progname;
         }
@@ -458,31 +457,34 @@ namespace EDDiscovery.Actions
         {
             string progname;
             ConditionVariables vars;
-            return FromString(userdata, out progname, out vars) ? progname : null;
+            Dictionary<string, string> altops;
+            return FromString(userdata, out progname, out vars, out altops) ? progname : null;
         }
 
         public override string VerifyActionCorrect()
         {
             string progname;
             ConditionVariables vars;
-            return FromString(userdata, out progname, out vars) ? null : "Call not in correct format: progname (var list v=\"y\")";
+            Dictionary<string, string> altops;
+            return FromString(userdata, out progname, out vars, out altops) ? null : "Call not in correct format: progname (var list v=\"y\")";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             string progname;
             ConditionVariables cond;
-            FromString(UserData, out progname, out cond);
+            Dictionary<string, string> altops;
+            FromString(UserData, out progname, out cond, out altops);
 
             string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command");
             if (promptValue != null)
             {
                 ConditionVariablesForm avf = new ConditionVariablesForm();
-                avf.Init("Variables to pass into called program", discoveryform.theme, cond, showone:true);
+                avf.Init("Variables to pass into called program", discoveryform.theme, cond, showone:true, allownoexpand:true, altops:altops);
 
                 if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
                 {
-                    userdata = ToString(promptValue, avf.result);
+                    userdata = ToString(promptValue, avf.result , avf.result_altops);
                     return true;
                 }
             }
@@ -493,12 +495,70 @@ namespace EDDiscovery.Actions
         //special call for execute, needs to pass back more data
         public bool ExecuteCallAction(ActionProgramRun ap, out string progname, out ConditionVariables vars )
         {
-            FromString(UserData, out progname, out vars);
-
-            if (progname.Length > 0)
-                return true;
-            else
+            Dictionary<string, string> altops;
+            if (FromString(UserData, out progname, out vars, out altops) && progname.Length > 0)
             {
+                List<string> wildcards = new List<string>();
+                ConditionVariables newitems = new ConditionVariables();
+
+                foreach (KeyValuePair<string, string> k in vars.values)
+                {
+                    if (k.Key.Contains("*"))                                    // SEE if any wildcards, if so, add to newitems
+                    {
+                        bool noexpand = altops[k.Key].Contains("$");            // wildcard operator determines expansion state
+
+                        wildcards.Add(k.Key);
+                        string prefix = k.Key.Substring(0,k.Key.IndexOf('*'));
+
+                        foreach( KeyValuePair<string,string> j in ap.currentvars.values )
+                        {
+                            if (j.Key.StartsWith(prefix))
+                            {
+                                if (noexpand)
+                                    newitems[j.Key] = j.Value;
+                                else 
+                                {
+                                    string res;
+                                    if (ap.functions.ExpandString(j.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
+                                    {
+                                        ap.ReportError(res);
+                                        return false;
+                                    }
+
+                                    newitems[j.Key] = res;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                foreach (string w in wildcards)     // remove wildcards
+                    vars.Delete(w);
+
+                //foreach ( stKeyValuePair<string,string> k in vars.values)          // for the rest, before we add in wildcards, expand
+                foreach (string k in vars.values.Keys.ToList())          // for the rest, before we add in wildcards, expand. Note ToList
+                {
+                    bool noexpand = altops[k].Contains("$");            // when required
+
+                    if (!noexpand)
+                    {
+                        string res;
+                        if (ap.functions.ExpandString(vars[k], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
+                        {
+                            ap.ReportError(res);
+                            return false;
+                        }
+
+                        vars[k] = res;
+                    }
+                }
+
+                vars.Add(newitems);         // finally assemble the variables
+
+                return true;
+            }
+            else
+            { 
                 ap.ReportError("Call not configured");
                 return false;
             }

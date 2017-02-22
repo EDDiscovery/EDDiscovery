@@ -35,7 +35,7 @@ namespace EDDiscovery.EliteDangerous
             public bool EDSMAdded = false;
         };
 
-        public enum ScanNodeType { star, barycentre, planet, moon, submoon };
+        public enum ScanNodeType { star, barycentre, body };
 
         public class ScanNode
         {
@@ -220,7 +220,7 @@ namespace EDDiscovery.EliteDangerous
                         if (sublv0.children == null)
                             sublv0.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                        sublv1 = new ScanNode() { ownname = elements[1], fullname = sublv0.fullname + " " + elements[1], ScanData = null, children = null, type = ScanNodeType.planet };
+                        sublv1 = new ScanNode() { ownname = elements[1], fullname = sublv0.fullname + " " + elements[1], ScanData = null, children = null, type = ScanNodeType.body};
                         sublv0.children.Add(elements[1], sublv1);
                     }
 
@@ -233,7 +233,7 @@ namespace EDDiscovery.EliteDangerous
                             if (sublv1.children == null)
                                 sublv1.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                            sublv2 = new ScanNode() { ownname = elements[2], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2], ScanData = null, children = null, type = ScanNodeType.moon };
+                            sublv2 = new ScanNode() { ownname = elements[2], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2], ScanData = null, children = null, type = ScanNodeType.body };
                             sublv1.children.Add(elements[2], sublv2);
                         }
 
@@ -246,7 +246,7 @@ namespace EDDiscovery.EliteDangerous
                                 if (sublv2.children == null)
                                     sublv2.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                                sublv3 = new ScanNode() { ownname = elements[3], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3], ScanData = null, children = null, type = ScanNodeType.submoon };
+                                sublv3 = new ScanNode() { ownname = elements[3], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3], ScanData = null, children = null, type = ScanNodeType.body };
                                 sublv2.children.Add(elements[3], sublv3);
                             }
 

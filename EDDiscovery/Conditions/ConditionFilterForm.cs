@@ -174,7 +174,7 @@ namespace EDDiscovery2
 
             if (!IsActionsActive)        // turn off these if not in use..
             {
-                buttonImport.Visible = buttonExtGlobals.Visible = labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
+                buttonExtGlobals.Visible = labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
                         comboBoxCustomEditProg.Visible = checkBoxCustomSetEnabled.Visible = false;
             }
             else
@@ -887,12 +887,6 @@ namespace EDDiscovery2
                 }
 
             }
-        }
-
-        private void buttonImport_Click(object sender, EventArgs e)
-        {
-            if (actionfilelist.ImportDialog())
-                LoadConditions(actionfilelist.CurConditions);       // just incase we loaded over the top
         }
 
         private void EditProgram(string s)  // Callback by APF to ask to edit another program..

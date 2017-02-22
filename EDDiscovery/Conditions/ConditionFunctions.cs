@@ -78,16 +78,21 @@ namespace EDDiscovery
             functions.Add("roundscale",   new FuncEntry(RoundCommon,        5,5,    1));
             functions.Add("round",        new FuncEntry(RoundCommon,        3,3,    1));
             functions.Add("ifnotempty",   new FuncEntry(Ifnotempty,         2,3,    7,7));   // check var1-3, allow strings var1-3
+
             functions.Add("ifempty",      new FuncEntry(Ifempty,            2,3,    7,7));
             functions.Add("iftrue",       new FuncEntry(Iftrue,             2,3,    7,7));   // check var1-3, allow strings var1-3
             functions.Add("iffalse",      new FuncEntry(Iffalse,            2,3,    7,7));
             functions.Add("ifzero",       new FuncEntry(Ifzero,             2,3,    7,7));   // check var1-3, allow strings var1-3
             functions.Add("ifnonzero",    new FuncEntry(Ifnonzero,          2,3,    7,7));
-            functions.Add("ifcontains",   new FuncEntry(Ifcontains,         3,4,    15,15)); // check var1-4, allow strings var1-4
-            functions.Add("ifnotcontains",new FuncEntry(Ifnotcontains,      3,4,    15,15));
-            functions.Add("ifequal",      new FuncEntry(Ifequal,            3,4,    15,15));
-            functions.Add("ifnotequal",   new FuncEntry(Ifnotequal,         3,4,    15,15));
-            functions.Add("expandarray",  new FuncEntry(ExpandArray,        4,5,    2,2+16));  // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+
+            functions.Add("ifcontains",   new FuncEntry(Ifcontains,         3,5,    31, 31)); // check var1-4, allow strings var1-4
+            functions.Add("ifnotcontains",new FuncEntry(Ifnotcontains,      3,5,    31, 31));
+            functions.Add("ifequal",      new FuncEntry(Ifequal,            3,5,    31, 31));
+            functions.Add("ifnotequal",   new FuncEntry(Ifnotequal,         3,5,    31, 31));
+
+            functions.Add("expandarray",  new FuncEntry(ExpandArray,        4,5,    2,3+16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+            functions.Add("expandvars", new FuncEntry(ExpandVars,           4, 5,   2,3+16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+
             functions.Add("fileexists",   new FuncEntry(FileExists,         1,20,   0xfffffff,0xfffffff));   // check var, can be string
             functions.Add("escapechar",   new FuncEntry(EscapeChar,         1,1,    1,1));   // check var, can be string
             functions.Add("replaceescapechar",new FuncEntry(ReplaceEscapeChar,  1,1,    1,1));   // check var, can be string
@@ -95,7 +100,6 @@ namespace EDDiscovery
             functions.Add("eval",         new FuncEntry(Eval,               1,2,    1,1));   // can be string, can be variable, p2 is not a variable, and can't be a string
             functions.Add("existsdefault",new FuncEntry(ExistsDefault,      2,2,    2,2));   // first is a macro but can not exist, second is a string or macro which must exist
             functions.Add("wordof",       new FuncEntry(WordOf,             2,3,    1+4,1+4));   // first is a macro or string, second is a var or literal, third is a macro or string
-            functions.Add("expandvars",   new FuncEntry(ExpandVars,         4,5,    2,2+16));   // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
         }
 
 #region expander
@@ -750,81 +754,72 @@ namespace EDDiscovery
             if (iftype == IfType.Empty || iftype == IfType.True || iftype == IfType.Zero)         // these, insert a dummy entry to normalise - we don't have a comparitor
                 paras.Insert(1, new Parameter() { value = "", isstring = true });
 
+            // p0 = value, p1 = comparitor, p2 = true expansion, p3 = false expansion, p4 = empty expansion
+
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             string comparitor = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
 
-            bool tres;
+            int pexp = 0;       // 0 = blank, else parameter to expand
 
-            if (iftype == IfType.Contains)     
-            {
-                tres = (value.IndexOf(comparitor, StringComparison.InvariantCultureIgnoreCase) != -1) == test;
-            }
-            else if (iftype == IfType.Equals)  
-            {
-                tres = value.Equals(comparitor, StringComparison.InvariantCultureIgnoreCase) == test;
-            }
-            else if (iftype == IfType.Zero)    
-            {
-                double nres;
-                bool ok = value.InvariantParse(out nres);
-
-                if (!ok)
-                {
-                    output = "Condition value is not an fractional or integer";
-                    return false;
-                }
-
-                tres = (Math.Abs(nres) < 0.000001) == test;
-            }
-            else if (iftype == IfType.Empty)                 // 2 parameters
-            {
-                tres = (value.Length == 0) == test;
-            }
+            if (paras.Count >= 5 && value.Length == 0)        // if we have an empty, and string is empty.
+                pexp = 4;
             else
             {
-                int nres;
-                bool ok = value.InvariantParse(out nres);
+                bool tres;
 
-                if (!ok)
+                if (iftype == IfType.Contains)
                 {
-                    output = "Condition value is not an integer";
-                    return false;
+                    tres = (value.IndexOf(comparitor, StringComparison.InvariantCultureIgnoreCase) != -1) == test;
                 }
-
-                tres = (nres != 0) == test;
-            }
-
-            if (tres)
-            {
-                if (paras[2].isstring)      // string.. already been expanded, don't do it again
+                else if (iftype == IfType.Equals)
                 {
-                    output = paras[2].value;
-                    return true;
+                    tres = value.Equals(comparitor, StringComparison.InvariantCultureIgnoreCase) == test;
+                }
+                else if (iftype == IfType.Zero)
+                {
+                    double nres;
+                    bool ok = value.InvariantParse(out nres);
+
+                    if (!ok)
+                    {
+                        output = "Condition value is not an fractional or integer";
+                        return false;
+                    }
+
+                    tres = (Math.Abs(nres) < 0.000001) == test;
+                }
+                else if (iftype == IfType.Empty)                 // 2 parameters
+                {
+                    tres = (value.Length == 0) == test;
                 }
                 else
                 {
-                    ConditionLists.ExpandResult result = ExpandStringFull(vars[paras[2].value], vars, out output, recdepth + 1);
-                    return (result != ConditionLists.ExpandResult.Failed);
+                    int nres;
+                    bool ok = value.InvariantParse(out nres);
+
+                    if (!ok)
+                    {
+                        output = "Condition value is not an integer";
+                        return false;
+                    }
+
+                    tres = (nres != 0) == test;
                 }
+
+                if (tres)
+                    pexp = 2;
+                else if (paras.Count >= 4)          // if we don't have p4, then use 0, which is empty
+                    pexp = 3;
             }
-            else if (paras.Count == 4)      // if we have an alternate string
-            {
-                if (paras[3].isstring)
-                {
-                    output = paras[3].value;
-                    return true;
-                }
-                else
-                {
-                    ConditionLists.ExpandResult result = ExpandStringFull(vars[paras[3].value], vars, out output, recdepth + 1);
-                    return (result != ConditionLists.ExpandResult.Failed);
-                }
-            }
-            else
-            {
+
+            if (pexp == 0)
                 output = "";
-                return true;
-            }
+            else if (paras[pexp].isstring)      // string.. already been expanded, don't do it again
+                output = paras[pexp].value;
+            else
+                return ExpandStringFull(vars[paras[pexp].value], vars, out output, recdepth + 1) != ConditionLists.ExpandResult.Failed;
+
+            return true;
         }
 
         private bool ExpandArray(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
