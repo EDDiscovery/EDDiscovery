@@ -78,9 +78,9 @@ namespace EDDiscovery
 
             if (vbs != null)
             {
-                foreach (KeyValuePair<string, string> ky in vbs.values)
+                foreach (string key in vbs.Keys)
                 {
-                    CreateEntry(ky.Key, ky.Value, (altops!= null) ? altops[ky.Key] : "=");
+                    CreateEntry(key,vbs[key], (altops!= null) ? altops[key] : "=");
                 }
             }
 

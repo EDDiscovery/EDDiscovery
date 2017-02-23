@@ -82,6 +82,14 @@ namespace EDDiscovery.Actions
                 return null;
         }
 
+        public Action GetLastStep()
+        {
+            if (nextstepnumber > 0 && nextstepnumber <= Count)
+                return programsteps[nextstepnumber-1];
+            else
+                return null;
+        }
+
         public string Location { get { return actionfile.name + "::" + Name + " Step " + nextstepnumber; } }
 
         public int ExecLevel { get { return execlevel; } }
@@ -105,7 +113,7 @@ namespace EDDiscovery.Actions
 
         public bool DoExecute(Action ac)      // execute if control state
         {
-            return execstate[execlevel] == ExecState.On || ac.Type != Action.ActionType.Cmd;
+            return execstate[execlevel] == ExecState.On || ac.Type >= Action.ActionType.If;
         }
 
         public void PushState(Action.ActionType ty, bool res, bool pushpos = false)

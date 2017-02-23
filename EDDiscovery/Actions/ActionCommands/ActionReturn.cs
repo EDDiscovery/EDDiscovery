@@ -39,8 +39,8 @@ namespace EDDiscovery.Actions
 
         public bool ExecuteActionReturn(ActionProgramRun ap , out string retstr )
         {
-            string res;
-            if (ap.functions.ExpandString(UserData.ReplaceEscapeControlChars(), ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+            string res;         // we keep the string escaped, since all strings are normally kept escaped
+            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
             {
                 retstr = res;
                 return true;

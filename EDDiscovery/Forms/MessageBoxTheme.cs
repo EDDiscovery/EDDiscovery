@@ -16,6 +16,7 @@ namespace EDDiscovery.Forms
         static public DialogResult Show(IWin32Window window, string text, string caption = "EDDiscovery Message", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
         {
             MessageBoxTheme msg = new MessageBoxTheme();
+            msg.StartPosition = FormStartPosition.CenterParent;
             msg.Init(text, caption, buttons, icon);
             return msg.ShowDialog(window);
         }
@@ -23,6 +24,7 @@ namespace EDDiscovery.Forms
         static public DialogResult Show(string text, string caption = "EDDiscovery Message", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
         {
             MessageBoxTheme msg = new MessageBoxTheme();
+            msg.StartPosition = FormStartPosition.CenterScreen;
             msg.Init(text, caption, buttons, icon);
             return msg.ShowDialog();
         }

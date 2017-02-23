@@ -26,10 +26,10 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
-        List<string> FromString(string input)       // returns in non escaped form
+        List<string> FromString(string input)       // returns in raw esacped mode
         {
             StringParser sp = new StringParser(input);
-            List<string> s = sp.NextQuotedWordList(replaceescape:true);
+            List<string> s = sp.NextQuotedWordList(replaceescape: true);
             return (s != null && s.Count >=1 && s.Count <= 4) ? s : null;
         }
 
@@ -45,7 +45,7 @@ namespace EDDiscovery.Actions
                             new string[] { "Message" , "Caption" , "Buttons", "Icon"}, l?.ToArray(), true);
 
             if (r != null)
-                userdata = r.ToStringCommaList(1);
+                userdata = r.ToStringCommaList(1,true);     // and escape them back
 
             return (r != null);
         }
@@ -152,8 +152,6 @@ namespace EDDiscovery.Actions
                         if (rootfolder != null)
                             fd.InitialDirectory = rootfolder;
 
-                        System.Diagnostics.Debug.WriteLine("Init dir" + fd.InitialDirectory);
-
                         sp.IsCharMoveOn(',');
                         string filter = sp.NextQuotedWord(", ");
                         if (filter != null)
@@ -247,7 +245,7 @@ namespace EDDiscovery.Actions
         {
             StringParser sp = new StringParser(input);
             List<string> s = sp.NextQuotedWordList();
-            return (s != null && s.Count >= 2 && s.Count <= 4) ? s : null;
+            return (s != null && s.Count >= 2 && s.Count <= 5) ? s : null;
         }
 
         public override string VerifyActionCorrect()
@@ -259,7 +257,8 @@ namespace EDDiscovery.Actions
         {
             List<string> l = FromString(userdata);
             List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure InputBox Dialog",
-                            new string[] { "Caption", "Prompt List", "Default List", "Features" }, l?.ToArray());
+                            new string[] { "Caption", "Prompt List", "Default List", "Features" , "ToolTips" }, l?.ToArray() ,
+                            false,new string[] { "Enter name of menu", "List of entries, semicolon separated", "Default list, semicolon separated", "Feature list: Multiline", "List of tool tips, semocolon separated" });
             if (r != null)
             {
                 userdata = r.ToStringCommaList(2);
@@ -281,9 +280,10 @@ namespace EDDiscovery.Actions
                     string[] prompts = exp[1].Split(';');
                     string[] def = (exp.Count >= 3) ? exp[2].Split(';') : null;
                     bool multiline = (exp.Count >= 4) ? (exp[3].IndexOf("Multiline", StringComparison.InvariantCultureIgnoreCase) >= 0) : false;
+                    string [] tooltips = (exp.Count >= 5) ? exp[4].Split(';') : null;
 
                     List<string> r = Forms.PromptMultiLine.ShowDialog(ap.actioncontroller.DiscoveryForm, exp[0],
-                                        prompts, def, multiline);
+                                        prompts, def, multiline , tooltips);
 
                     ap.currentvars["InputBoxOK"] = (r != null) ? "1" : "0";
                     if ( r != null )

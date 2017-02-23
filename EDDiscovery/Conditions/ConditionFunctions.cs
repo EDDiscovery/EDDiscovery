@@ -23,7 +23,6 @@ namespace EDDiscovery
 {
     public class ConditionFunctions
     {
-        FuncEntry[] flist;
         static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
         class Parameter
@@ -36,69 +35,87 @@ namespace EDDiscovery
 
         class FuncEntry
         {
-            public string name;
             public func fn;
             public int numberparasmin;
             public int numberparasmax;
             public int checkvarmap;           // if not a string, check macro
             public int allowstringmap;          // allow a string
 
-            public FuncEntry(string s, func f, int min, int max, int checkmacromapx, int allowstringmapx = 0 )
+            public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx = 0 )
             {
-                name = s; fn = f; numberparasmin = min; numberparasmax = max;
+                fn = f; numberparasmin = min; numberparasmax = max;
                 checkvarmap = checkmacromapx; allowstringmap = allowstringmapx;
             }
         }
 
+        Dictionary<string, FuncEntry> functions;
+        static Random rnd = new Random();
+
         public ConditionFunctions()
         {
-            flist = new FuncEntry[]                         // first is a bitmap saying if to check for the value is a var
-            {                                               // second is a bitmap saying if a string is allowed in this pos
-                new FuncEntry("exists",Exists,              1,20,   0,0),   // don't check macros, no strings
-                new FuncEntry("expand",Expand,              1,20,   0xfffffff,0xfffffff), // check var, can be string (if so expanded)
-                new FuncEntry("indirect",Indirect,          1,20,   0xfffffff,0xfffffff),   // check var, no strings
-                new FuncEntry("splitcaps",SplitCaps,        1,1,    1,1),   //check var, allow strings
-                new FuncEntry("sc",SplitCaps,               1,1,    1,1),   //shorter alias for above
-                new FuncEntry("ship",Ship,                  1,1,    1,1),   //ship translator
-                new FuncEntry("datehour",DateHour,          1,1,    1),     // first is a var, no strings
-                new FuncEntry("date",DateCnv,               2,2,    1),     // first is a var, second is not, no strings
-                new FuncEntry("findline",FindLine,          2,2,    3,2),   //check var1 and var2, second can be a string
-                new FuncEntry("substring",SubString,        3,3,    1,1),   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
-                new FuncEntry("indexof",IndexOf,            2,2,    3,3),   // check var1 and 2 if normal, allow string in 1 and 2
-                new FuncEntry("lower",Lower,                1,20,   0xfffffff,0xfffffff),   // all can be string, check var
-                new FuncEntry("upper",Upper,                1,20,   0xfffffff,0xfffffff),   // all can be string, check var
-                new FuncEntry("join",Join,                  3,20,   0xfffffff,0xfffffff),   // all can be string, check var
-                new FuncEntry("trim",Trim,                  1,1,    1,1),
-                new FuncEntry("length",Length,              1,1,    1,1),
-                new FuncEntry("version",Version,            1,1,    0),     // don't check first para
-                new FuncEntry("floor",Floor,                2,2,    1),     // check var1, not var 2 no strings
-                new FuncEntry("roundnz",RoundCommon,        4,4,    1),
-                new FuncEntry("roundscale",RoundCommon,     5,5,    1),
-                new FuncEntry("round",RoundCommon,          3,3,    1),
-                new FuncEntry("ifnotempty",Ifnotempty,      2,3,    7,7),   // check var1-3, allow strings var1-3
-                new FuncEntry("ifempty",Ifempty,            2,3,    7,7),
-                new FuncEntry("iftrue",Iftrue,              2,3,    7,7),   // check var1-3, allow strings var1-3
-                new FuncEntry("iffalse",Iffalse,            2,3,    7,7),
-                new FuncEntry("ifzero",Ifzero,              2,3,    7,7),   // check var1-3, allow strings var1-3
-                new FuncEntry("ifnonzero",Ifnonzero,        2,3,    7,7),
-                new FuncEntry("ifcontains",Ifcontains,      3,4,    15,15), // check var1-4, allow strings var1-4
-                new FuncEntry("ifnotcontains",Ifnotcontains,3,4,    15,15),
-                new FuncEntry("ifequal",Ifequal,            3,4,    15,15),
-                new FuncEntry("ifnotequal",Ifnotequal,      3,4,    15,15),
-                new FuncEntry("expandarray",ExpandArray,    4,5,    2,2),  // var 1 is text root, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
-                new FuncEntry("fileexists",FileExists,      1,20,   0xfffffff,0xfffffff),   // check var, can be string
-                new FuncEntry("escapechar",EscapeChar,      1,1,    1,1),   // check var, can be string
-                new FuncEntry("replaceescapechar",ReplaceEscapeChar,      1,1,    1,1),   // check var, can be string
-                new FuncEntry("random",Random,              1,1,    0,0),   // no change var, not string
-                new FuncEntry("eval",Eval,                  1,2,    1,1),   // can be string, can be variable, p2 is not a variable, and can't be a string
-                new FuncEntry("existsdefault",ExistsDefault,2,2,    2,2),   // first is a macro but can not exist, second is a string or macro which must exist
-        };
+            functions = new Dictionary<string, FuncEntry>();
+
+            // first is a bitmap saying if to check for the value is a var
+            // second is a bitmap saying if a string is allowed in this pos
+
+            functions.Add("datehour",       new FuncEntry(DateHour,         1, 1, 1));     // first is a var, no strings
+            functions.Add("date",           new FuncEntry(DateCnv,          2, 2, 1));     // first is a var, second is not, no strings
+
+            functions.Add("escapechar",     new FuncEntry(EscapeChar,       1, 1,   1, 1));   // check var, can be string
+            functions.Add("exist",          new FuncEntry(Exists,           1, 20,  0, 0));
+            functions.Add("expand",         new FuncEntry(Expand,           1,20,   0xfffffff,0xfffffff)); // check var, can be string (if so expanded)
+            functions.Add("expandarray",    new FuncEntry(ExpandArray,      4,5,    2,3+16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+            functions.Add("expandvars",     new FuncEntry(ExpandVars,       4, 5,   2,3+16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+            functions.Add("existsdefault",  new FuncEntry(ExistsDefault,    2, 2,   2, 2));   // first is a macro but can not exist, second is a string or macro which must exist
+            functions.Add("eval",           new FuncEntry(Eval,             1, 2,   1, 1));   // can be string, can be variable, p2 is not a variable, and can't be a string
+
+            functions.Add("fileexists",     new FuncEntry(FileExists,       1, 20, 0xfffffff, 0xfffffff));   // check var, can be string
+            functions.Add("findline",       new FuncEntry(FindLine,         2, 2, 3, 2));   //check var1 and var2, second can be a string
+            functions.Add("floor",          new FuncEntry(Floor,            2,2,    1));     // check var1, not var 2 no strings
+
+            functions.Add("ifnotempty",     new FuncEntry(Ifnotempty,       2,3,    7,7));   // check var1-3, allow strings var1-3
+            functions.Add("ifempty",        new FuncEntry(Ifempty,          2,3,    7,7));
+            functions.Add("iftrue",         new FuncEntry(Iftrue,           2,3,    7,7));   // check var1-3, allow strings var1-3
+            functions.Add("iffalse",        new FuncEntry(Iffalse,          2,3,    7,7));
+            functions.Add("ifzero",         new FuncEntry(Ifzero,           2,3,    7,7));   // check var1-3, allow strings var1-3
+            functions.Add("ifnonzero",      new FuncEntry(Ifnonzero,        2,3,    7,7));
+
+            functions.Add("ifcontains",     new FuncEntry(Ifcontains,       3,5,    31, 31)); // check var1-4, allow strings var1-4
+            functions.Add("ifnotcontains",  new FuncEntry(Ifnotcontains,    3,5,    31, 31));
+            functions.Add("ifequal",        new FuncEntry(Ifequal,          3,5,    31, 31));
+            functions.Add("ifnotequal",     new FuncEntry(Ifnotequal,       3,5,    31, 31));
+            functions.Add("indirect",       new FuncEntry(Indirect,         1,20,   0xfffffff,0xfffffff));   // check var, no strings
+            functions.Add("indexof",        new FuncEntry(IndexOf,          2,2,    3,3));   // check var1 and 2 if normal, allow string in 1 and 2
+
+            functions.Add("join",           new FuncEntry(Join,             3,20,   0xfffffff,0xfffffff));   // all can be string, check var
+
+            functions.Add("lower",          new FuncEntry(Lower,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
+            functions.Add("length",         new FuncEntry(Length,           1,1,    1,1));
+
+            functions.Add("phrase",         new FuncEntry(Phrase,           1,1,    1,1));
+
+            functions.Add("replaceescapechar",new FuncEntry(ReplaceEscapeChar,1,1,  1,1));   // check var, can be string
+            functions.Add("replacevar",     new FuncEntry(ReplaceVar,       2, 2,   3, 3)); // var/string for both
+            functions.Add("replace",        new FuncEntry(Replace,          3, 3,   7, 7)); // var/string for all
+            functions.Add("random",         new FuncEntry(Random,           1,1,    0,0));   // no change var, not string
+            functions.Add("roundnz",        new FuncEntry(RoundCommon,      4,4,    1));
+            functions.Add("roundscale",     new FuncEntry(RoundCommon,      5,5,    1));
+            functions.Add("round",          new FuncEntry(RoundCommon,      3,3,    1));
+
+            functions.Add("sc",             new FuncEntry(SplitCaps,        1, 1,   1, 1));   //shorter alias for above
+            functions.Add("ship",           new FuncEntry(Ship,             1, 1,   1, 1));   //ship translator
+            functions.Add("splitcaps",      new FuncEntry(SplitCaps,        1, 1,   1, 1));   //check var, allow strings
+            functions.Add("substring",      new FuncEntry(SubString,        3, 3,   1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
+
+            functions.Add("trim",           new FuncEntry(Trim,             1, 2,   1,1));
+
+            functions.Add("upper",          new FuncEntry(Upper,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
+
+            functions.Add("version",        new FuncEntry(Version,          1,1,    0));     // don't check first para
+            functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a macro or string, second is a var or literal, third is a macro or string
         }
 
-        #region expander
-
-        // true, expanded, result = string
-        // false, failed, result = error
+#region expander
 
         public ConditionLists.ExpandResult ExpandStrings(List<string> inv , out List<string> outv, ConditionVariables vars)
         {
@@ -276,9 +293,11 @@ namespace EDDiscovery
         // true, output is written.  false, output has error text
         private bool RunFunction(string fname, List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
-            FuncEntry fe = Array.Find(flist, x => x.name.Equals(fname, StringComparison.InvariantCultureIgnoreCase));
-            if (fe != null)
+            string fnl = fname.ToLower();
+            if (functions.ContainsKey(fnl))
             {
+                FuncEntry fe = functions[fnl];
+
                 if (paras.Count < fe.numberparasmin)
                     output = "Too few parameters";
                 else if (paras.Count > fe.numberparasmax)
@@ -311,9 +330,9 @@ namespace EDDiscovery
             return false;
         }
 
-        #endregion
+#endregion
 
-        #region Functions
+#region Functions
 
         private bool Exists(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
@@ -745,84 +764,85 @@ namespace EDDiscovery
             if (iftype == IfType.Empty || iftype == IfType.True || iftype == IfType.Zero)         // these, insert a dummy entry to normalise - we don't have a comparitor
                 paras.Insert(1, new Parameter() { value = "", isstring = true });
 
+            // p0 = value, p1 = comparitor, p2 = true expansion, p3 = false expansion, p4 = empty expansion
+
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             string comparitor = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
 
-            bool tres;
+            int pexp = 0;       // 0 = blank, else parameter to expand
 
-            if (iftype == IfType.Contains)     
-            {
-                tres = (value.IndexOf(comparitor, StringComparison.InvariantCultureIgnoreCase) != -1) == test;
-            }
-            else if (iftype == IfType.Equals)  
-            {
-                tres = value.Equals(comparitor, StringComparison.InvariantCultureIgnoreCase) == test;
-            }
-            else if (iftype == IfType.Zero)    
-            {
-                double nres;
-                bool ok = value.InvariantParse(out nres);
-
-                if (!ok)
-                {
-                    output = "Condition value is not an fractional or integer";
-                    return false;
-                }
-
-                tres = (Math.Abs(nres) < 0.000001) == test;
-            }
-            else if (iftype == IfType.Empty)                 // 2 parameters
-            {
-                tres = (value.Length == 0) == test;
-            }
+            if (paras.Count >= 5 && value.Length == 0)        // if we have an empty, and string is empty.
+                pexp = 4;
             else
             {
-                int nres;
-                bool ok = value.InvariantParse(out nres);
+                bool tres;
 
-                if (!ok)
+                if (iftype == IfType.Contains)
                 {
-                    output = "Condition value is not an integer";
-                    return false;
+                    tres = (value.IndexOf(comparitor, StringComparison.InvariantCultureIgnoreCase) != -1) == test;
                 }
-
-                tres = (nres != 0) == test;
-            }
-
-            if (tres)
-            {
-                if (paras[2].isstring)      // string.. already been expanded, don't do it again
+                else if (iftype == IfType.Equals)
                 {
-                    output = paras[2].value;
-                    return true;
+                    tres = value.Equals(comparitor, StringComparison.InvariantCultureIgnoreCase) == test;
+                }
+                else if (iftype == IfType.Zero)
+                {
+                    double nres;
+                    bool ok = value.InvariantParse(out nres);
+
+                    if (!ok)
+                    {
+                        output = "Condition value is not an fractional or integer";
+                        return false;
+                    }
+
+                    tres = (Math.Abs(nres) < 0.000001) == test;
+                }
+                else if (iftype == IfType.Empty)                 // 2 parameters
+                {
+                    tres = (value.Length == 0) == test;
                 }
                 else
                 {
-                    ConditionLists.ExpandResult result = ExpandStringFull(vars[paras[2].value], vars, out output, recdepth + 1);
-                    return (result != ConditionLists.ExpandResult.Failed);
+                    int nres;
+                    bool ok = value.InvariantParse(out nres);
+
+                    if (!ok)
+                    {
+                        output = "Condition value is not an integer";
+                        return false;
+                    }
+
+                    tres = (nres != 0) == test;
                 }
+
+                if (tres)
+                    pexp = 2;
+                else if (paras.Count >= 4)          // if we don't have p4, then use 0, which is empty
+                    pexp = 3;
             }
-            else if (paras.Count == 4)      // if we have an alternate string
-            {
-                if (paras[3].isstring)
-                {
-                    output = paras[3].value;
-                    return true;
-                }
-                else
-                {
-                    ConditionLists.ExpandResult result = ExpandStringFull(vars[paras[3].value], vars, out output, recdepth + 1);
-                    return (result != ConditionLists.ExpandResult.Failed);
-                }
-            }
-            else
-            {
+
+            if (pexp == 0)
                 output = "";
-                return true;
-            }
+            else if (paras[pexp].isstring)      // string.. already been expanded, don't do it again
+                output = paras[pexp].value;
+            else
+                return ExpandStringFull(vars[paras[pexp].value], vars, out output, recdepth + 1) != ConditionLists.ExpandResult.Failed;
+
+            return true;
         }
 
         private bool ExpandArray(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            return ExpandArrayCommon(paras, vars, out output, recdepth, false);
+        }
+
+        private bool ExpandVars(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            return ExpandArrayCommon(paras, vars, out output, recdepth, true);
+        }
+
+        private bool ExpandArrayCommon(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth, bool join)
         {
             string arrayroot = paras[0].value;
             string separ = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
@@ -833,26 +853,54 @@ namespace EDDiscovery
 
             if (okstart && oklength)
             {
-                bool splitcaps = paras.Count == 5 && paras[4].value.Equals("splitcaps", StringComparison.InvariantCultureIgnoreCase);
+                bool splitcaps = paras.Count == 5 && paras[4].value.IndexOf("splitcaps", StringComparison.InvariantCultureIgnoreCase) >=0;
 
                 output = "";
 
-                for (int i = start; i < start+length; i++)
+                if (join)
                 {
-                    string aname = arrayroot + "[" + i.ToString(ct) + "]";
+                    bool nameonly = paras.Count == 5 && paras[4].value.IndexOf("nameonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
+                    bool valueonly = paras.Count == 5 && paras[4].value.IndexOf("valueonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
 
-                    if (vars.ContainsKey(aname))
+                    int index = 0;
+                    foreach( string key in vars.Keys )
                     {
-                        if (i != start)
-                            output += separ;
+                        if ( key.StartsWith(arrayroot))
+                        {
+                            index++;
+                            if ( index >= start && index < start+length )
+                            {
+                                string value = vars[key];
 
-                        if (splitcaps)
-                            output += vars[aname].SplitCapsWordUnderscoreTitleCase();
-                        else
-                            output += vars[aname];
+                                string entry = (valueonly) ? vars[key] : ( key.Substring(arrayroot.Length) + (nameonly ? "" : (" = "+ vars[key])));
+
+                                if (output.Length > 0)
+                                    output += separ;
+
+                                output += (splitcaps) ? entry.SplitCapsWordUnderscoreTitleCase() : entry;
+                            }
+                        }
                     }
-                    else
-                        break;
+                }
+                else
+                {
+                    for (int i = start; i < start + length; i++)
+                    {
+                        string aname = arrayroot + "[" + i.ToString(ct) + "]";
+
+                        if (vars.ContainsKey(aname))
+                        {
+                            if (i != start)
+                                output += separ;
+
+                            if (splitcaps)
+                                output += vars[aname].SplitCapsWordUnderscoreTitleCase();
+                            else
+                                output += vars[aname];
+                        }
+                        else
+                            break;
+                    }
                 }
 
                 return true;
@@ -894,8 +942,6 @@ namespace EDDiscovery
             return true;
         }
 
-        static Random rnd = new System.Random();
-
         private bool Random(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             int v;
@@ -919,13 +965,70 @@ namespace EDDiscovery
 
             bool evalstate = s.Eval(out output);      // true okay, with output, false bad, with error
 
-            if ( tryit && !evalstate)                   // if try and failed.. NAN without error
+            if (tryit && !evalstate)                   // if try and failed.. NAN without error
             {
                 output = "NAN";
                 return true;
             }
 
             return evalstate;                       // else return error and output
+        }
+
+        private bool WordOf(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            string c = vars.ContainsKey(paras[1].value) ? vars[paras[1].value] : paras[1].value;
+            string splitter = (paras.Count >= 3) ? (paras[2].isstring ? paras[2].value : vars[paras[2].value]) : ";";
+            char splitchar = (splitter.Length > 0) ? splitter[0] : ';';
+
+            int count;
+            if (c.InvariantParse(out count))
+            {
+                string[] split = s.Split(splitchar);
+                count = Math.Max(1, Math.Min(count, split.Length));  // between 1 and split length
+                output = split[count - 1];
+                return true;
+            }
+            else
+            {
+                output = "Parameter should be an integer constant or a variable name with an integer in its value";
+                return false;
+            }
+        }
+
+        private bool Replace(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            string f1 = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+            string f2 = paras[2].isstring ? paras[2].value : vars[paras[2].value];
+            output = s.Replace(f1, f2, StringComparison.InvariantCultureIgnoreCase);
+            return true;
+        }
+
+        private bool Phrase(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            output = s.PickOneOfGroups(rnd);
+            return true;
+        }
+
+        private bool ReplaceVar(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            string varroot = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+
+            foreach( string key in vars.Keys )          // all vars.. starting with varroot
+            {
+                if ( key.StartsWith(varroot))
+                {
+                    string[] subs = vars[key].Split(';');
+                    if (subs.Length == 2 && subs[0].Length > 0 && s.IndexOf(subs[0], StringComparison.InvariantCultureIgnoreCase) >= 0)
+                        s = s.Replace(subs[0], subs[1], StringComparison.InvariantCultureIgnoreCase);
+                }
+            }
+
+            output = s;
+            return true;
         }
 
         #endregion
