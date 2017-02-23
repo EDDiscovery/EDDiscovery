@@ -174,7 +174,7 @@ namespace EDDiscovery2
 
             if (!IsActionsActive)        // turn off these if not in use..
             {
-                buttonImport.Visible = buttonExtGlobals.Visible = labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
+                buttonExtGlobals.Visible = labelProgSet.Visible = comboBoxCustomProgSet.Visible = labelEditProg.Visible =
                         comboBoxCustomEditProg.Visible = checkBoxCustomSetEnabled.Visible = false;
             }
             else
@@ -379,6 +379,7 @@ namespace EDDiscovery2
 
             return g;
         }
+
 
         private void Evlist_SelectedIndexChanged(object sender, EventArgs e)                // EVENT list changed
         {
@@ -632,7 +633,9 @@ namespace EDDiscovery2
             if (IsActionsActive)
             {
                 comboBoxCustomEditProg.Items.Clear();
-                comboBoxCustomEditProg.Items.AddRange(actionfilelist.CurPrograms.GetActionProgramList());
+                List<string> entries = actionfilelist.CurPrograms.GetActionProgramList(true).ToList();
+                entries.Sort();
+                comboBoxCustomEditProg.Items.AddRange(entries.ToArray());
                 comboBoxCustomEditProg.Items.Add("New");
 
                 comboBoxCustomProgSet.Items.Clear();
@@ -690,55 +693,63 @@ namespace EDDiscovery2
             Group g = (Group)config.Tag;
 
             ActionProgram p = null;
-            string suggestedname = null;
 
             if (g.actionlist.SelectedIndex > 0)     // exclude NEW from checking for program
                 p = actionfilelist.CurPrograms.Get(g.actionlist.Text);
 
-            if (p == null)        // if no program, create a new suggested name and clear any action data
+            if (p != null && p.StoredInFile != null)
             {
-                suggestedname = g.evlist.Text;
-                int n = 2;
-                while (actionfilelist.CurPrograms.GetActionProgramList().Contains(suggestedname))
-                {
-                    suggestedname = g.evlist.Text + "_" + n.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    n++;
-                }
-
-                g.actionparas.Text = "";
-            }
-
-            ActionProgramForm apf = new ActionProgramForm();
-            apf.EditProgram += EditProgram;
-
-            // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames
-            // pass in the program if found, and its action data.
-
-            List<string> fieldnames = new List<string>();
-            if (g.evlist != null && g.evlist.Text.Length > 0)
-            {
-                EnsureCached(g.evlist.Text);
-                fieldnames = cachedeventsdecorated[g.evlist.Text];
+                p.EditInEditor(p.StoredInFile);         // Edit in the editor.. this also updated the program steps held internally
             }
             else
-                fieldnames.AddRange(additionalfieldnames);
-
-            apf.Init("Action program", discoveryform, fieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
-
-            DialogResult res = apf.ShowDialog();
-
-            if (res == DialogResult.OK)
             {
-                ActionProgram np = apf.GetProgram();
-                actionfilelist.CurPrograms.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
-                g.actionlist.Enabled = false;
-                g.actionlist.Text = np.Name;
-                g.actionlist.Enabled = true;
-            }
-            else if (res == DialogResult.Abort)   // delete
-            {
-                ActionProgram np2 = apf.GetProgram();
-                actionfilelist.CurPrograms.Delete(np2.Name);
+                string suggestedname = null;
+
+                if (p == null)        // if no program, create a new suggested name and clear any action data
+                {
+                    suggestedname = g.evlist.Text;
+                    int n = 2;
+                    while (actionfilelist.CurPrograms.GetActionProgramList().Contains(suggestedname))
+                    {
+                        suggestedname = g.evlist.Text + "_" + n.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        n++;
+                    }
+
+                    g.actionparas.Text = "";
+                }
+
+                ActionProgramForm apf = new ActionProgramForm();
+                apf.EditProgram += EditProgram;
+
+                // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames
+                // pass in the program if found, and its action data.
+
+                List<string> fieldnames = new List<string>();
+                if (g.evlist != null && g.evlist.Text.Length > 0)
+                {
+                    EnsureCached(g.evlist.Text);
+                    fieldnames = cachedeventsdecorated[g.evlist.Text];
+                }
+                else
+                    fieldnames.AddRange(additionalfieldnames);
+
+                apf.Init("Action program", discoveryform, fieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
+
+                DialogResult res = apf.ShowDialog();
+
+                if (res == DialogResult.OK)
+                {
+                    ActionProgram np = apf.GetProgram();
+                    actionfilelist.CurPrograms.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                    g.actionlist.Enabled = false;
+                    g.actionlist.Text = np.Name;
+                    g.actionlist.Enabled = true;
+                }
+                else if (res == DialogResult.Abort)   // delete
+                {
+                    ActionProgram np2 = apf.GetProgram();
+                    actionfilelist.CurPrograms.Delete(np2.Name);
+                }
             }
 
             FixUpGroups();       // run  this, it sorts out the group names
@@ -765,7 +776,7 @@ namespace EDDiscovery2
 
                                 if (actionfilelist.GetList.Contains(newname))
                                 {
-                                    MessageBox.Show(this, "Set already exists");
+                                    EDDiscovery.Forms.MessageBoxTheme.Show(this, "Set already exists");
                                     return;
                                 }
                                 else
@@ -786,28 +797,34 @@ namespace EDDiscovery2
         {
             if (comboBoxCustomEditProg.Enabled)
             {
-                string progname = comboBoxCustomEditProg.Text;
-                ActionProgramForm apf = new ActionProgramForm();
-                apf.EditProgram += EditProgram;
+                string progname = comboBoxCustomEditProg.Text.Replace(" (Ext)","");     // remove the EXT marker
 
                 ActionProgram p = null;
-
                 if (!progname.Equals("New"))
-                    p = actionfilelist.CurPrograms.Get(comboBoxCustomEditProg.Text);
+                    p = actionfilelist.CurPrograms.Get(progname);
 
-                apf.Init("Action program", discoveryform, additionalfieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), "", ModifierKeys.HasFlag(Keys.Shift));
-
-                DialogResult res = apf.ShowDialog();
-
-                if (res == DialogResult.OK)
+                if ( p != null && p.StoredInFile != null )
                 {
-                    ActionProgram np = apf.GetProgram();
-                    actionfilelist.CurPrograms.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                    p.EditInEditor(p.StoredInFile);         // Edit in the editor..
                 }
-                else if (res == DialogResult.Abort)   // delete
+                else
                 {
-                    ActionProgram np2 = apf.GetProgram();
-                    actionfilelist.CurPrograms.Delete(np2.Name);
+                    ActionProgramForm apf = new ActionProgramForm();
+                    apf.EditProgram += EditProgram;
+                    apf.Init("Action program", discoveryform, additionalfieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), "", ModifierKeys.HasFlag(Keys.Shift));
+
+                    DialogResult res = apf.ShowDialog();
+
+                    if (res == DialogResult.OK)
+                    {
+                        ActionProgram np = apf.GetProgram();
+                        actionfilelist.CurPrograms.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                    }
+                    else if (res == DialogResult.Abort)   // delete
+                    {
+                        ActionProgram np2 = apf.GetProgram();
+                        actionfilelist.CurPrograms.Delete(np2.Name);
+                    }
                 }
 
                 FixUpGroups();       // run  this, it sorts out the group names
@@ -841,19 +858,13 @@ namespace EDDiscovery2
             {
                 userglobalvariables = avf.result;
 
-                foreach (KeyValuePair<string, string> k in userglobalvariables.values)     // add them in in case..
+                foreach (string key in userglobalvariables.Keys)     // add them in in case..
                 {
-                    if (!additionalfieldnames.Contains(k.Key))
-                        additionalfieldnames.Add(k.Key);
+                    if (!additionalfieldnames.Contains(key))
+                        additionalfieldnames.Add(key);
                 }
 
             }
-        }
-
-        private void buttonImport_Click(object sender, EventArgs e)
-        {
-            if (actionfilelist.ImportDialog())
-                LoadConditions(actionfilelist.CurConditions);       // just incase we loaded over the top
         }
 
         private void EditProgram(string s)  // Callback by APF to ask to edit another program..
@@ -862,21 +873,28 @@ namespace EDDiscovery2
 
             if (p != null)
             {
-                ActionProgramForm apf = new ActionProgramForm();
-                apf.EditProgram += EditProgram;
-
-                apf.Init("Action program", discoveryform, additionalfieldnames, p.Item1.name, p.Item2, p.Item1.actionprogramlist.GetActionProgramList(), "");
-
-                DialogResult res = apf.ShowDialog();
-
-                if (res == DialogResult.OK)
+                if (p.Item2.StoredInFile != null)
                 {
-                    ActionProgram np = apf.GetProgram();
-                    actionfilelist.CurPrograms.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                    p.Item2.EditInEditor(p.Item2.StoredInFile);         // Edit in the editor..
+                }
+                else
+                {
+                    ActionProgramForm apf = new ActionProgramForm();
+                    apf.EditProgram += EditProgram;
+
+                    apf.Init("Action program", discoveryform, additionalfieldnames, p.Item1.name, p.Item2, p.Item1.actionprogramlist.GetActionProgramList(), "");
+
+                    DialogResult res = apf.ShowDialog();
+
+                    if (res == DialogResult.OK)
+                    {
+                        ActionProgram np = apf.GetProgram();
+                        actionfilelist.CurPrograms.AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                    }
                 }
             }
             else
-                MessageBox.Show("Unknown program " + s);
+                EDDiscovery.Forms.MessageBoxTheme.Show(this, "Unknown program " + s);
         }
 
 #endregion
@@ -957,7 +975,7 @@ namespace EDDiscovery2
             {
                 string acceptstr = "Click Retry to correct errors, Abort to cancel, Ignore to accept valid entries";
 
-                DialogResult dr = MessageBox.Show("Filters produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + res + Environment.NewLine + acceptstr,
+                DialogResult dr = EDDiscovery.Forms.MessageBoxTheme.Show(this, "Filters produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + res + Environment.NewLine + acceptstr,
                                                   "Warning", MessageBoxButtons.AbortRetryIgnore );
 
                 if (dr == DialogResult.Retry)

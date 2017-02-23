@@ -46,14 +46,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     [JournalEntryType(JournalTypeEnum.FSDJump)]
     public class JournalFSDJump : JournalLocOrJump
     {
-        public JournalFSDJump(JObject evt ) : base(evt, JournalTypeEnum.FSDJump)
+        public JournalFSDJump(JObject evt) : base(evt, JournalTypeEnum.FSDJump)
         {
             Body = JSONHelper.GetStringDef(evt["body"], "Unknown");
             JumpDist = JSONHelper.GetDouble(evt["JumpDist"]);
             FuelUsed = JSONHelper.GetDouble(evt["FuelUsed"]);
             FuelLevel = JSONHelper.GetDouble(evt["FuelLevel"]);
             BoostUsed = JSONHelper.GetBool(evt["BoostUsed"]);
-            Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            Faction = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction"});
             FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
             Allegiance = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
             Economy = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });

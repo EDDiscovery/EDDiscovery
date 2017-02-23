@@ -206,6 +206,11 @@ namespace EDDiscovery.Actions
 
                         ap.currentvars[prefix + "URL"] = url;
                     }
+                    else if (cmdname.Equals("info"))
+                    {
+                        HistoryEntry he = hl.EntryOrder[jidindex];
+                        ActionVars.HistoryEventFurtherInfo(ap.currentvars, hl, he, prefix);
+                    }
                     else
                         ap.ReportError("Unknown command " + cmdname + " in Event");
                 }
@@ -235,28 +240,8 @@ namespace EDDiscovery.Actions
             try
             {
                 ConditionVariables values = new ConditionVariables();
-                values.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, prefix + "JS_");
                 ActionVars.HistoryEventVars(values, he, prefix);
                 ap.currentvars.Add(values);
-
-                System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
-
-                ap.currentvars[prefix + "JID"] = he.Journalid.ToString(ct);
-
-                ap.currentvars[prefix + "EDSMID"] = he.System.id_edsm.ToString(ct);
-                ap.currentvars[prefix + "xpos"] = he.System.x.ToNANSafeString("0.###");
-                ap.currentvars[prefix + "ypos"] = he.System.y.ToNANSafeString("0.###");
-                ap.currentvars[prefix + "zpos"] = he.System.z.ToNANSafeString("0.###");
-
-                ap.currentvars[prefix + "EDDBID"] = he.System.id_eddb.ToString(ct);
-                ap.currentvars[prefix + "EDDBGovernment"] = he.System.government.ToNullUnknownString();
-                ap.currentvars[prefix + "EDDBAllegiance"] = he.System.allegiance.ToNullUnknownString();
-                ap.currentvars[prefix + "EDDBState"] = he.System.state.ToNullUnknownString();
-                ap.currentvars[prefix + "EDDBSecurity"] = he.System.security.ToNullUnknownString();
-                ap.currentvars[prefix + "EDDBPrimaryEconomy"] = he.System.primary_economy.ToNullUnknownString();
-                ap.currentvars[prefix + "EDDBFaction"] = he.System.faction.ToNullUnknownString();
-                ap.currentvars[prefix + "EDDBPopulation"] = he.System.population.ToString(ct);
-                ap.currentvars[prefix + "EDDBNeedsPermit"] = (he.System.needs_permit != 0) ? "1" : "0";
             }
             catch { }
         }

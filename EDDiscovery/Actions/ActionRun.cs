@@ -88,7 +88,8 @@ namespace EDDiscovery.Actions
                 {
                     if (progcurrent.GetErrorList != null)       // any errors pending, handle
                     {
-                        actioncontroller.LogLine("Error at " + progcurrent.Location + ":" + Environment.NewLine + progcurrent.GetErrorList);
+                        actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ": "+ progcurrent.GetLastStep().Name +  Environment.NewLine + 
+                                                    progcurrent.GetErrorList);
                         progcurrent = null; // terminate current program..
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it
@@ -140,7 +141,7 @@ namespace EDDiscovery.Actions
                         ConditionVariables paravars;
                         if (acall.ExecuteCallAction(progcurrent, out prog, out paravars)) // if execute ok
                         {
-                            System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + paravars.ToString());
+                            //System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + paravars.ToString());
 
                             Tuple<ActionFile, ActionProgram> ap = actionfilelist.FindProgram(prog, progcurrent.actionfile);          // find program using this name, prefer this action file first
 
