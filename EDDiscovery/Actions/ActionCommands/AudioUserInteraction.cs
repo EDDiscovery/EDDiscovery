@@ -78,7 +78,7 @@ namespace EDDiscovery.Actions
 
                     DialogResult res = Forms.MessageBoxTheme.Show(ap.actioncontroller.DiscoveryForm, exp[0], caption, but, icon);
 
-                    // debug MessageBox.Show(exp[0], caption, but, icon);
+                    // debug Forms.MessageBoxTheme.Show(exp[0], caption, but, icon);
 
                     ap.currentvars["DialogResult"] = res.ToString();
                 }

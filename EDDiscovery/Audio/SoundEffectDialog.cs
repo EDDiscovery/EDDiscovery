@@ -32,18 +32,14 @@ namespace EDDiscovery.Audio
         public delegate void StopTestSettings(SoundEffectsDialog sender);
         public event StopTestSettings StopTestSettingEvent;
 
-        EDDiscovery2.EDDTheme theme;
-
         public SoundEffectsDialog()
         {
             InitializeComponent();
             comboBoxCustomVoices.Items.AddRange(defaulteffects);
         }
 
-        public void Init(ConditionVariables cv, bool shownone, EDDiscovery2.EDDTheme th)
+        public void Init(ConditionVariables cv, bool shownone)
         {
-            theme = th;
-
             if (!shownone)
                 checkBoxCustomNone.Visible = false;
 
@@ -106,7 +102,7 @@ namespace EDDiscovery.Audio
 
             checkBoxCustomNone.Checked = ap.OverrideNone;
 
-            theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            EDDiscovery2.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         public ConditionVariables GetEffects()
