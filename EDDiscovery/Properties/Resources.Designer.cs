@@ -2020,7 +2020,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://forums.frontier.co.uk/showthread.php?t=138155&amp;amp;p=2113535#post2113535.
+        ///   Looks up a localized string similar to https://forums.frontier.co.uk/showthread.php?t=329643&amp;amp;p=5154370#post5154370.
         /// </summary>
         internal static string URLProjectEDForumPost {
             get {
