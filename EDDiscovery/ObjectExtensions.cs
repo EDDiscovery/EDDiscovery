@@ -151,7 +151,7 @@ public static class ObjectExtensions
         return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(file), System.IO.Path.GetFileNameWithoutExtension(file) + suffix) + System.IO.Path.GetExtension(file);
     }
 
-    public static string ToStringCommaList( this System.Collections.Generic.List<string> list , int mincount = 100000)
+    public static string ToStringCommaList( this System.Collections.Generic.List<string> list , int mincount = 100000 , bool escapectrl = false)
     {
         string r = "";
         for (int i = 0; i < list.Count; i++)
@@ -169,7 +169,10 @@ public static class ObjectExtensions
             if (i > 0)
                 r += ", ";
 
-            r += list[i].QuoteString(comma: true);
+            if ( escapectrl )
+                r += list[i].EscapeControlChars().QuoteString(comma: true);
+            else
+                r += list[i].QuoteString(comma: true);
         }
 
         return r;
