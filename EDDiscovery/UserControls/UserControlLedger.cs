@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
         public void Display(MaterialCommoditiesLedger mc)
         {
             dataGridViewLedger.Rows.Clear();
-            bool utctime = EDDConfig.DisplayUTC;
+            bool utctime = EDDConfig.Instance.DisplayUTC;
 
             current_mc = mc;
             

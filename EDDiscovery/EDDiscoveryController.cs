@@ -112,17 +112,8 @@ namespace EDDiscovery
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
 
-            string proc64 = Environment.Is64BitProcess ? "64-bit" : "32-bit";
-            string os64 = Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit";
-            Trace.WriteLine("************************************************");
-            Trace.WriteLine($"EDDiscovery Initializing: {EDDConfig.Options.VersionDisplayString} {proc64}");
-            Trace.WriteLine($"OS: {Environment.OSVersion.VersionString} {os64}");
-            Trace.WriteLine("************************************************");
-            Trace.WriteLine($"Config: {EDDConfig.Options.ToString()}");
-            Trace.WriteLine("************************************************");
-
             SQLiteConnectionUser.EarlyReadRegister();
-            EDDConfig.Load(write: false);
+            EDDConfig.Instance.Load(false);
 
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
@@ -148,7 +139,7 @@ namespace EDDiscovery
         public void PostInit_Loaded()
         {
             EliteDangerousClass.CheckED();
-            EDDConfig.Load();
+            EDDConfig.Instance.Load();
             CheckIfEliteDangerousIsRunning();
         }
 

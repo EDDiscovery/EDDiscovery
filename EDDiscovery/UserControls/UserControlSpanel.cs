@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
             List<int> tooltipattach = new List<int>();
 
             if (Config(Configuration.showTime))
-                coldata.Add((EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal).ToString("HH:mm.ss"));
+                coldata.Add((EDDConfig.Instance.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal).ToString("HH:mm.ss"));
 
             if (Config(Configuration.showIcon))
                 coldata.Add("`!!ICON!!");                // dummy place holder..

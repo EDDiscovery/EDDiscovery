@@ -28,9 +28,11 @@ namespace EDDiscovery2
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                DataBindings.Clear();
+                _tbl?.Dispose();
+                components?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -70,7 +72,7 @@ namespace EDDiscovery2
             this.checkBoxUTC = new ExtendedControls.CheckBoxCustom();
             this.checkBoxOrderRowsInverted = new ExtendedControls.CheckBoxCustom();
             this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
-            this.checkboxSkipSlowUpdates = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxSkipSlowUpdates = new ExtendedControls.CheckBoxCustom();
             this.groupBox4 = new ExtendedControls.GroupBoxCustom();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
@@ -218,7 +220,6 @@ namespace EDDiscovery2
             this.checkBoxKeepOnTop.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxKeepOnTop, "This window, and its children, top");
             this.checkBoxKeepOnTop.UseVisualStyleBackColor = true;
-            this.checkBoxKeepOnTop.CheckedChanged += new System.EventHandler(this.checkBoxKeepOnTop_CheckedChanged);
             // 
             // comboBoxTheme
             // 
@@ -426,7 +427,7 @@ namespace EDDiscovery2
             this.groupBox3.Controls.Add(this.checkBoxUTC);
             this.groupBox3.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
-            this.groupBox3.Controls.Add(this.checkboxSkipSlowUpdates);
+            this.groupBox3.Controls.Add(this.checkBoxSkipSlowUpdates);
             this.groupBox3.FillClientAreaWithAlternateColor = false;
             this.groupBox3.Location = new System.Drawing.Point(3, 254);
             this.groupBox3.Name = "groupBox3";
@@ -453,7 +454,6 @@ namespace EDDiscovery2
             this.checkBoxFocusNewSystem.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxFocusNewSystem, "Move the history cursor to the new journal entry automatically when its received");
             this.checkBoxFocusNewSystem.UseVisualStyleBackColor = true;
-            this.checkBoxFocusNewSystem.CheckedChanged += new System.EventHandler(this.checkBoxFocusNewSystem_CheckedChanged);
             // 
             // checkBoxUTC
             // 
@@ -471,7 +471,6 @@ namespace EDDiscovery2
             this.checkBoxUTC.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxUTC, "Display game time (UTC) instead of your local time");
             this.checkBoxUTC.UseVisualStyleBackColor = true;
-            this.checkBoxUTC.CheckedChanged += new System.EventHandler(this.checkBoxUTC_CheckedChanged);
             // 
             // checkBoxOrderRowsInverted
             // 
@@ -507,23 +506,23 @@ namespace EDDiscovery2
             this.toolTip.SetToolTip(this.checkBoxEDSMLog, "Store EDSM queries in a log file");
             this.checkBoxEDSMLog.UseVisualStyleBackColor = true;
             // 
-            // checkboxSkipSlowUpdates
+            // checkBoxSkipSlowUpdates
             // 
-            this.checkboxSkipSlowUpdates.AutoSize = true;
-            this.checkboxSkipSlowUpdates.BackColor = System.Drawing.Color.Transparent;
-            this.checkboxSkipSlowUpdates.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkboxSkipSlowUpdates.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkboxSkipSlowUpdates.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkboxSkipSlowUpdates.FontNerfReduction = 0.5F;
-            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(182, 21);
-            this.checkboxSkipSlowUpdates.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
-            this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
-            this.checkboxSkipSlowUpdates.TabIndex = 4;
-            this.checkboxSkipSlowUpdates.Text = "DEBUG ONLY: Skip slow updates on startup";
-            this.checkboxSkipSlowUpdates.TickBoxReductionSize = 10;
-            this.checkboxSkipSlowUpdates.UseVisualStyleBackColor = false;
-            this.checkboxSkipSlowUpdates.Visible = false;
+            this.checkBoxSkipSlowUpdates.AutoSize = true;
+            this.checkBoxSkipSlowUpdates.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxSkipSlowUpdates.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxSkipSlowUpdates.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxSkipSlowUpdates.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxSkipSlowUpdates.FontNerfReduction = 0.5F;
+            this.checkBoxSkipSlowUpdates.Location = new System.Drawing.Point(182, 21);
+            this.checkBoxSkipSlowUpdates.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxSkipSlowUpdates.Name = "checkBoxSkipSlowUpdates";
+            this.checkBoxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
+            this.checkBoxSkipSlowUpdates.TabIndex = 4;
+            this.checkBoxSkipSlowUpdates.Text = "DEBUG ONLY: Skip slow updates on startup";
+            this.checkBoxSkipSlowUpdates.TickBoxReductionSize = 10;
+            this.checkBoxSkipSlowUpdates.UseVisualStyleBackColor = false;
+            this.checkBoxSkipSlowUpdates.Visible = false;
             // 
             // groupBox4
             // 
@@ -760,7 +759,6 @@ namespace EDDiscovery2
             this.checkBoxUseNotifyIcon.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxUseNotifyIcon, "Show a system notification area (system tray) icon for EDDiscovery.");
             this.checkBoxUseNotifyIcon.UseVisualStyleBackColor = true;
-            this.checkBoxUseNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxUseNotifyIcon_CheckedChanged);
             // 
             // checkBoxMinimizeToNotifyIcon
             // 
@@ -778,7 +776,6 @@ namespace EDDiscovery2
             this.checkBoxMinimizeToNotifyIcon.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxMinimizeToNotifyIcon, "Minimize the main window to the system notification area (system tray) icon.");
             this.checkBoxMinimizeToNotifyIcon.UseVisualStyleBackColor = true;
-            this.checkBoxMinimizeToNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxMinimizeToNotifyIcon_CheckedChanged);
             // 
             // Settings
             // 
@@ -814,7 +811,7 @@ namespace EDDiscovery2
         private System.Windows.Forms.DataGridView dataGridViewCommanders;
         private ExtendedControls.GroupBoxCustom groupBox3;
         private ExtendedControls.CheckBoxCustom checkBoxEDSMLog;
-        public ExtendedControls.CheckBoxCustom checkboxSkipSlowUpdates;
+        public ExtendedControls.CheckBoxCustom checkBoxSkipSlowUpdates;
         private ExtendedControls.GroupBoxCustom groupBox2;
         private ExtendedControls.TextBoxBorder textBoxDefaultZoom;
         private System.Windows.Forms.Label label5;

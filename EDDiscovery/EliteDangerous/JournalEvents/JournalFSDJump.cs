@@ -70,7 +70,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             JToken jm = jEventData["EDDMapColor"];
             if (JSONHelper.IsNullOrEmptyT(jm))
-                MapColor = EDDConfig.DefaultMapColour.ToArgb();      // new entries get this default map colour if its not already there
+                MapColor = EDDConfig.Instance.DefaultMapColour.ToArgb();      // new entries get this default map colour if its not already there
 
 
 

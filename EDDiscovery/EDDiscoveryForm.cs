@@ -60,6 +60,7 @@ namespace EDDiscovery
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
 
+        public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
@@ -239,6 +240,10 @@ namespace EDDiscovery
                     button_test.Visible = true;
                 }
 
+                EDDConfig.DisplayUTCChanged += Config_DisplayUTCChanged;
+                EDDConfig.KeepOnTopChanged += Config_KeepOnTopChanged;
+                EDDConfig.MinimizeToNotifyIconChanged += Config_MinimizeToNotifyIconChanged;
+                EDDConfig.UseNotifyIconChanged += Config_UseNotifyIconChanged;
             }
             catch (Exception ex)
             {
@@ -366,7 +371,7 @@ namespace EDDiscovery
 
             travelHistoryControl1.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
-            if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false)
+            if (EDDConfig.AutoLoadPopouts && EDDConfig.Options.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();
         }
 
@@ -504,7 +509,7 @@ namespace EDDiscovery
             theme.SaveSettings(null);
             travelHistoryControl1.SaveSettings();
             journalViewControl1.SaveSettings();
-            if (EDDConfig.AutoSavePopOuts)
+            if (EDDConfig.AutoSavePopouts)
                 PopOuts.SaveCurrentPopouts();
         }
 
@@ -527,9 +532,38 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        #endregion
 
-#region Buttons, Mouse, Menus, NotifyIcon
+        #region Buttons, Mouse, Menus, NotifyIcon
+
+        private void Config_DisplayUTCChanged(object sender, bool e)
+        {
+            RefreshDisplays();
+        }
+
+        private void Config_KeepOnTopChanged(object sender, bool e)
+        {
+            TopMost = e;
+        }
+
+        private void Config_MinimizeToNotifyIconChanged(object sender, bool e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                if (e)
+                    Hide();
+                else
+                    Show();
+            }
+        }
+
+        private void Config_UseNotifyIconChanged(object sender, bool e)
+        {
+            notifyIcon1.Visible = e;
+            if (!e && !Visible)
+                Show();
+        }
+
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -621,22 +655,6 @@ namespace EDDiscovery
         private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(Properties.Resources.URLProjectFeedback);
-        }
-
-        internal void keepOnTopChanged(bool keepOnTop)
-        {
-            this.TopMost = keepOnTop;
-        }
-
-        /// <summary>
-        /// The settings panel check box for 'Use notification area icon' has changed.
-        /// </summary>
-        /// <param name="useNotifyIcon">Whether or not the setting is enabled.</param>
-        internal void useNotifyIconChanged(bool useNotifyIcon)
-        {
-            notifyIcon1.Visible = useNotifyIcon;
-            if (!useNotifyIcon && !Visible)
-                Show();
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)
@@ -895,8 +913,7 @@ namespace EDDiscovery
 
         private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
         {
-            // Tray icon 'Hide Tray Icon' menu item was clicked.
-            settings.checkBoxUseNotifyIcon.Checked = false;
+            EDDConfig.UseNotifyIcon = false;
         }
 
         private void notifyIconMenu_Open_Click(object sender, EventArgs e)
@@ -915,9 +932,9 @@ namespace EDDiscovery
                 Activate();
         }
 
-#endregion
+        #endregion
 
-#region Window Control
+        #region Window Control
 
         protected override void WndProc(ref Message m)
         {

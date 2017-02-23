@@ -1953,7 +1953,7 @@ namespace EDDiscovery.DB
                 logLine("Indexing systems table");
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
-                if (EDDConfig.CanSkipSlowUpdates)
+                if (EDDConfig.Instance.CanSkipSlowUpdates)
                 {
                     logLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
                 }
