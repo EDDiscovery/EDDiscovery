@@ -26,10 +26,10 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
-        List<string> FromString(string input)       // returns in non escaped form
+        List<string> FromString(string input)       // returns in raw esacped mode
         {
             StringParser sp = new StringParser(input);
-            List<string> s = sp.NextQuotedWordList(replaceescape:true);
+            List<string> s = sp.NextQuotedWordList(replaceescape: true);
             return (s != null && s.Count >=1 && s.Count <= 4) ? s : null;
         }
 
@@ -45,7 +45,7 @@ namespace EDDiscovery.Actions
                             new string[] { "Message" , "Caption" , "Buttons", "Icon"}, l?.ToArray(), true);
 
             if (r != null)
-                userdata = r.ToStringCommaList(1);
+                userdata = r.ToStringCommaList(1,true);     // and escape them back
 
             return (r != null);
         }
