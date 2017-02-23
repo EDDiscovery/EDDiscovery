@@ -60,8 +60,6 @@ namespace EDDiscovery2
             }
             else
                 this.BackColor = msgback;
-
-            TopMost = true;
         }
 
         // xpos = +1 right, -1 left, 0 centre ypos = +1 top -1 bot 0 centre of parent

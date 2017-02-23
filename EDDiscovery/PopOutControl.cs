@@ -192,7 +192,7 @@ namespace EDDiscovery.Forms
                 PopOutInfo poi = popoutinfo.ContainsKey(selected) ? popoutinfo[selected] : new PopOutInfo();
                 string windowtitle = poi.WindowTitlePrefix + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
-                tcf.Init(ctrl, windowtitle, _discoveryForm.theme.WindowsFrame, refname, _discoveryForm.TopMost);
+                tcf.Init(ctrl, windowtitle, _discoveryForm.theme.WindowsFrame, refname, EDDConfig.Instance.KeepOnTop);
                 if (poi.SupportsTransparency)
                 {
                     tcf.InitForTransparency(poi.DefaultTransparent, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);

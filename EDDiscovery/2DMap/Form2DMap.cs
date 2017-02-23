@@ -93,6 +93,9 @@ namespace EDDiscovery2
             toolStripComboBoxTime.SelectedIndex = 0;
             initdone = true;
             ShowSelectedImage();
+
+            TopMost = EDDConfig.Instance.KeepOnTop;
+            EDDConfig.Instance.KeepOnTopChanged += Config_KeepOnTopChanged;
         }
 
         private void FormSagCarinaMission_FormClosing(object sender, FormClosingEventArgs e)
@@ -221,6 +224,11 @@ namespace EDDiscovery2
             return point;
         }
 
+
+        private void Config_KeepOnTopChanged(object sender, bool e)
+        {
+            TopMost = e;
+        }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {

@@ -67,6 +67,7 @@ namespace EDDiscovery2
             this.Name = "TimedMessage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";
+            this.TopMost = true;
             this.ResumeLayout(false);
 
         }

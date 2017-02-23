@@ -365,6 +365,8 @@ namespace EDDiscovery2
 
             textboxFrom.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
+            TopMost = EDDConfig.Instance.KeepOnTop;
+            EDDConfig.Instance.KeepOnTopChanged += Config_KeepOnTopChanged;
         }
 
         private void FormMap_Shown(object sender, EventArgs e)
@@ -396,6 +398,11 @@ namespace EDDiscovery2
                 _systemtimer.Tick += new EventHandler(SystemTick);
                 _systemtimer.Start();
             }
+        }
+
+        private void Config_KeepOnTopChanged(object sender, bool e)
+        {
+            TopMost = e;
         }
 
         private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
