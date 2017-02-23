@@ -37,7 +37,6 @@ namespace EDDiscovery.Audio
 
         ConditionVariables effects;
         AudioQueue queue;
-        EDDiscovery2.EDDTheme theme;
 
         public WaveConfigureDialog()
         {
@@ -46,7 +45,7 @@ namespace EDDiscovery.Audio
 
         public void Init(AudioQueue qu, 
                           bool defaultmode,
-                          string title, string caption, EDDiscovery2.EDDTheme th,
+                          string title, string caption, 
                           string defpath,
                           bool waitcomplete,
                           AudioQueue.Priority prio,
@@ -57,7 +56,6 @@ namespace EDDiscovery.Audio
             comboBoxCustomPriority.Items.AddRange(Enum.GetNames(typeof(AudioQueue.Priority)));
 
             queue = qu;
-            theme = th;
             this.Text = caption;
             labelTitle.Text = title;
             textBoxBorderText.Text = defpath;
@@ -73,6 +71,7 @@ namespace EDDiscovery.Audio
                 comboBoxCustomPriority.SelectedItem = prio.ToString();
                 textBoxBorderStartTrigger.Text = startname;
                 textBoxBorderEndTrigger.Text = endname;
+                buttonExtDevice.Visible = false;
             }
 
             int i;
@@ -90,7 +89,7 @@ namespace EDDiscovery.Audio
 
             effects = ef;
 
-            theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            EDDiscovery2.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
 
@@ -111,7 +110,7 @@ namespace EDDiscovery.Audio
                 }
                 catch
                 {
-                    MessageBox.Show("Unable to play " + textBoxBorderText.Text);
+                    Forms.MessageBoxTheme.Show("Unable to play " + textBoxBorderText.Text);
                 }
             }
         }
@@ -130,7 +129,7 @@ namespace EDDiscovery.Audio
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
             SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(effects,true,theme);
+            sfe.Init(effects,true);
             sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
             sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
             if (sfe.ShowDialog(this) == DialogResult.OK)
@@ -150,7 +149,7 @@ namespace EDDiscovery.Audio
             }
             catch
             {
-                MessageBox.Show("Unable to play " + textBoxBorderText.Text);
+                Forms.MessageBoxTheme.Show("Unable to play " + textBoxBorderText.Text);
             }
 
         }
@@ -183,6 +182,17 @@ namespace EDDiscovery.Audio
         private void checkBoxCustomV_CheckedChanged(object sender, EventArgs e)
         {
             trackBarVolume.Enabled = checkBoxCustomV.Checked;
+        }
+
+        private void buttonExtDevice_Click(object sender, EventArgs e)
+        {
+            AudioDeviceConfigure adc = new AudioDeviceConfigure();
+            adc.Init("Configure wave device", queue.Driver);
+            if (adc.ShowDialog(this) == DialogResult.OK)
+            {
+                if (!queue.SetAudioEndpoint(adc.Selected))
+                    Forms.MessageBoxTheme.Show(this, "Audio Device Selection failed", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
     }
 }

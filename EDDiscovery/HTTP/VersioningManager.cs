@@ -201,12 +201,12 @@ namespace EDDiscovery.HTTP
             return null;
         }
 
-        static public bool SetEnableFlag(string file , bool enable)
+        static public bool SetEnableFlag(DownloadItem item , bool enable, string appfolder)
         {
             try
             { 
                 JObject jo;
-                using (StreamReader sr = new StreamReader(file))         // read directly from file..
+                using (StreamReader sr = new StreamReader(item.localfilename))         // read directly from file..
                 {
                     string json = sr.ReadToEnd();
 
@@ -215,11 +215,15 @@ namespace EDDiscovery.HTTP
 
                 jo["Enabled"] = enable;
 
-                using (StreamWriter sr = new StreamWriter(file))         // read directly from file..
+                using (StreamWriter sr = new StreamWriter(item.localfilename))         // read directly from file..
                 {
                     sr.Write(jo.ToString(Newtonsoft.Json.Formatting.Indented));
-                    return true;
                 }
+
+                if (!item.localmodified)      // if was not local modified, lets set the SHA so it does not appear local modified just because of the enable
+                    WriteOrCheckSHAFile(item, item.localvars, appfolder, true);
+
+                return true;
             }
             catch
             {
@@ -246,7 +250,7 @@ namespace EDDiscovery.HTTP
                         DownloadItem other = downloaditems.Find(x => x.itemname.Equals(k.Value));
 
                         if (other != null)
-                            SetEnableFlag(other.localfilename, false);
+                            SetEnableFlag(other, false, appfolder);
                     }
                 }
 
@@ -289,7 +293,7 @@ namespace EDDiscovery.HTTP
 
         // true for write, for read its true if the same..
 
-        static bool WriteOrCheckSHAFile(DownloadItem it, ConditionVariables vars, string appfolder , bool write)
+        static bool WriteOrCheckSHAFile(DownloadItem it, ConditionVariables vars, string appfolder, bool write)
         {
             try
             {

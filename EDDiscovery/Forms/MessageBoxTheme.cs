@@ -20,6 +20,13 @@ namespace EDDiscovery.Forms
             return msg.ShowDialog(window);
         }
 
+        static public DialogResult Show(string text, string caption = "EDDiscovery Message", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
+        {
+            MessageBoxTheme msg = new MessageBoxTheme();
+            msg.Init(text, caption, buttons, icon);
+            return msg.ShowDialog();
+        }
+
         Font fnt;
         string text;
         Rectangle textarea;

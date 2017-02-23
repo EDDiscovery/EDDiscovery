@@ -41,7 +41,6 @@ namespace EDDiscovery.Audio
         AudioQueue queue;
         SpeechSynthesizer synth;
         ConditionVariables effects;
-        EDDiscovery2.EDDTheme theme;
 
         public SpeechConfigure()
         {
@@ -49,7 +48,7 @@ namespace EDDiscovery.Audio
         }
 
         public void Init(AudioQueue qu, SpeechSynthesizer syn,
-                            string title, string caption, EDDiscovery2.EDDTheme th,
+                            string title, string caption,
                             String text,          // if null, no text box or wait complete
                             bool waitcomplete,
                             AudioQueue.Priority prio,
@@ -63,7 +62,6 @@ namespace EDDiscovery.Audio
 
             queue = qu;
             synth = syn;
-            theme = th;
             this.Text = caption;
             Title.Text = title;
             textBoxBorderTest.Text = "The quick brown fox jumped over the lazy dog";
@@ -91,6 +89,7 @@ namespace EDDiscovery.Audio
                 comboBoxCustomPriority.SelectedItem = prio.ToString();
                 textBoxBorderStartTrigger.Text = startname;
                 textBoxBorderEndTrigger.Text = endname;
+                buttonExtDevice.Visible = false;
             }
 
             comboBoxCustomVoice.Items.Add("Default");
@@ -126,7 +125,7 @@ namespace EDDiscovery.Audio
 
             effects = ef;
 
-            theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            EDDiscovery2.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         private void buttonExtOK_Click(object sender, EventArgs e)
@@ -138,7 +137,7 @@ namespace EDDiscovery.Audio
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
             SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(effects, textBoxBorderText.Visible, theme);           // give them the none option ONLY if we are allowing text
+            sfe.Init(effects, textBoxBorderText.Visible);           // give them the none option ONLY if we are allowing text
             sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
             sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
             if ( sfe.ShowDialog(this) == DialogResult.OK )
@@ -180,6 +179,17 @@ namespace EDDiscovery.Audio
             trackBarRate.Enabled = checkBoxCustomR.Checked;
         }
 
+        private void buttonExtDevice_Click(object sender, EventArgs e)
+        {
+            AudioDeviceConfigure adc = new AudioDeviceConfigure();
+            adc.Init("Configure voice device", queue.Driver);
+            if ( adc.ShowDialog(this) == DialogResult.OK )
+            {
+                if (!queue.SetAudioEndpoint(adc.Selected))
+                    Forms.MessageBoxTheme.Show(this, "Audio Device Selection failed", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
         private void buttonExtTest_Click(object sender, EventArgs e)
         {
             if (buttonExtTest.Text.Equals("Stop"))
@@ -201,7 +211,7 @@ namespace EDDiscovery.Audio
                 }
                 catch
                 {
-                    MessageBox.Show("Unable to play " + textBoxBorderText.Text);
+                    Forms.MessageBoxTheme.Show("Unable to play " + textBoxBorderText.Text);
                 }
             }
         }
@@ -210,5 +220,6 @@ namespace EDDiscovery.Audio
         {
             buttonExtTest.Text = "Test";
         }
+
     }
 }
