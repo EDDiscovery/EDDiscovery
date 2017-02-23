@@ -30,6 +30,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
             Body = JSONHelper.GetStringDef(evt["Body"]);
             BodyType = JSONHelper.GetStringDef(evt["BodyType"]);
+            if (BodyType.Equals("Null", System.StringComparison.InvariantCultureIgnoreCase)) // obv a frontier bug
+                BodyType = "";
         }
         public string StarSystem { get; set; }
         public string Body { get; set; }
