@@ -299,23 +299,28 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public SystemNode UpdateFromEDSM(SystemNode sn, EDDiscovery2.DB.ISystem sys)    // see if EDSM has a valid system, if so, add, return update SN
+        public SystemNode FindSystem(EDDiscovery2.DB.ISystem sys, bool useedsm)    // see if EDSM has a valid system, if so, add, return update SN
         {
-            if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.id_edsm > 0)   // null, or not scanned, and with EDSM ID
+            SystemNode sn = FindSystem(sys);
+
+            if (useedsm)
             {
-                List<JournalScan> jl = EDDiscovery2.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
-
-                if (jl != null)
+                if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.id_edsm > 0)   // null, or not scanned, and with EDSM ID
                 {
-                    foreach (JournalScan js in jl)
-                        Process(js, sys);
+                    List<JournalScan> jl = EDDiscovery2.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
+
+                    if (jl != null)
+                    {
+                        foreach (JournalScan js in jl)
+                            Process(js, sys);
+                    }
+
+                    if (sn == null)
+                        sn = FindSystem(sys);
+
+                    if (sn != null)
+                        sn.EDSMAdded = true;
                 }
-
-                if (sn == null)
-                    sn = FindSystem(sys);
-
-                if (sn != null)
-                    sn.EDSMAdded = true;
             }
 
             return sn;

@@ -49,6 +49,7 @@ namespace EDDiscovery
         }
 
         Dictionary<string, FuncEntry> functions;
+        static Random rnd = new Random();
 
         public ConditionFunctions()
         {
@@ -56,56 +57,65 @@ namespace EDDiscovery
 
             // first is a bitmap saying if to check for the value is a var
             // second is a bitmap saying if a string is allowed in this pos
-            functions.Add("exist",        new FuncEntry(Exists,             1, 20, 0, 0));
-            functions.Add("expand",       new FuncEntry(Expand,             1,20,   0xfffffff,0xfffffff)); // check var, can be string (if so expanded)
-            functions.Add("indirect",     new FuncEntry(Indirect,           1,20,   0xfffffff,0xfffffff));   // check var, no strings
-            functions.Add("splitcaps",    new FuncEntry(SplitCaps,          1,1,    1,1));   //check var, allow strings
-            functions.Add("sc",           new FuncEntry(SplitCaps,          1,1,    1,1));   //shorter alias for above
-            functions.Add("ship",         new FuncEntry(Ship,               1,1,    1,1));   //ship translator
-            functions.Add("datehour",     new FuncEntry(DateHour,           1,1,    1));     // first is a var, no strings
-            functions.Add("date",         new FuncEntry(DateCnv,            2,2,    1));     // first is a var, second is not, no strings
-            functions.Add("findline",     new FuncEntry(FindLine,           2,2,    3,2));   //check var1 and var2, second can be a string
-            functions.Add("substring",    new FuncEntry(SubString,          3,3,    1,1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
-            functions.Add("indexof",      new FuncEntry(IndexOf,            2,2,    3,3));   // check var1 and 2 if normal, allow string in 1 and 2
-            functions.Add("lower",        new FuncEntry(Lower,              1,20,   0xfffffff,0xfffffff));   // all can be string, check var
-            functions.Add("upper",        new FuncEntry(Upper,              1,20,   0xfffffff,0xfffffff));   // all can be string, check var
-            functions.Add("join",         new FuncEntry(Join,               3,20,   0xfffffff,0xfffffff));   // all can be string, check var
-            functions.Add("trim",         new FuncEntry(Trim,               1,1,    1,1));
-            functions.Add("length",       new FuncEntry(Length,             1,1,    1,1));
-            functions.Add("version",      new FuncEntry(Version,            1,1,    0));     // don't check first para
-            functions.Add("floor",        new FuncEntry(Floor,              2,2,    1));     // check var1, not var 2 no strings
-            functions.Add("roundnz",      new FuncEntry(RoundCommon,        4,4,    1));
-            functions.Add("roundscale",   new FuncEntry(RoundCommon,        5,5,    1));
-            functions.Add("round",        new FuncEntry(RoundCommon,        3,3,    1));
-            functions.Add("ifnotempty",   new FuncEntry(Ifnotempty,         2,3,    7,7));   // check var1-3, allow strings var1-3
 
-            functions.Add("ifempty",      new FuncEntry(Ifempty,            2,3,    7,7));
-            functions.Add("iftrue",       new FuncEntry(Iftrue,             2,3,    7,7));   // check var1-3, allow strings var1-3
-            functions.Add("iffalse",      new FuncEntry(Iffalse,            2,3,    7,7));
-            functions.Add("ifzero",       new FuncEntry(Ifzero,             2,3,    7,7));   // check var1-3, allow strings var1-3
-            functions.Add("ifnonzero",    new FuncEntry(Ifnonzero,          2,3,    7,7));
+            functions.Add("datehour",       new FuncEntry(DateHour,         1, 1, 1));     // first is a var, no strings
+            functions.Add("date",           new FuncEntry(DateCnv,          2, 2, 1));     // first is a var, second is not, no strings
 
-            functions.Add("ifcontains",   new FuncEntry(Ifcontains,         3,5,    31, 31)); // check var1-4, allow strings var1-4
-            functions.Add("ifnotcontains",new FuncEntry(Ifnotcontains,      3,5,    31, 31));
-            functions.Add("ifequal",      new FuncEntry(Ifequal,            3,5,    31, 31));
-            functions.Add("ifnotequal",   new FuncEntry(Ifnotequal,         3,5,    31, 31));
+            functions.Add("escapechar",     new FuncEntry(EscapeChar,       1, 1,   1, 1));   // check var, can be string
+            functions.Add("exist",          new FuncEntry(Exists,           1, 20,  0, 0));
+            functions.Add("expand",         new FuncEntry(Expand,           1,20,   0xfffffff,0xfffffff)); // check var, can be string (if so expanded)
+            functions.Add("expandarray",    new FuncEntry(ExpandArray,      4,5,    2,3+16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+            functions.Add("expandvars",     new FuncEntry(ExpandVars,       4, 5,   2,3+16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+            functions.Add("existsdefault",  new FuncEntry(ExistsDefault,    2, 2,   2, 2));   // first is a macro but can not exist, second is a string or macro which must exist
+            functions.Add("eval",           new FuncEntry(Eval,             1, 2,   1, 1));   // can be string, can be variable, p2 is not a variable, and can't be a string
 
-            functions.Add("expandarray",  new FuncEntry(ExpandArray,        4,5,    2,3+16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
-            functions.Add("expandvars", new FuncEntry(ExpandVars,           4, 5,   2,3+16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+            functions.Add("fileexists",     new FuncEntry(FileExists,       1, 20, 0xfffffff, 0xfffffff));   // check var, can be string
+            functions.Add("findline",       new FuncEntry(FindLine,         2, 2, 3, 2));   //check var1 and var2, second can be a string
+            functions.Add("floor",          new FuncEntry(Floor,            2,2,    1));     // check var1, not var 2 no strings
 
-            functions.Add("fileexists",   new FuncEntry(FileExists,         1,20,   0xfffffff,0xfffffff));   // check var, can be string
-            functions.Add("escapechar",   new FuncEntry(EscapeChar,         1,1,    1,1));   // check var, can be string
-            functions.Add("replaceescapechar",new FuncEntry(ReplaceEscapeChar,  1,1,    1,1));   // check var, can be string
-            functions.Add("random",       new FuncEntry(Random,             1,1,    0,0));   // no change var, not string
-            functions.Add("eval",         new FuncEntry(Eval,               1,2,    1,1));   // can be string, can be variable, p2 is not a variable, and can't be a string
-            functions.Add("existsdefault",new FuncEntry(ExistsDefault,      2,2,    2,2));   // first is a macro but can not exist, second is a string or macro which must exist
-            functions.Add("wordof",       new FuncEntry(WordOf,             2,3,    1+4,1+4));   // first is a macro or string, second is a var or literal, third is a macro or string
+            functions.Add("ifnotempty",     new FuncEntry(Ifnotempty,       2,3,    7,7));   // check var1-3, allow strings var1-3
+            functions.Add("ifempty",        new FuncEntry(Ifempty,          2,3,    7,7));
+            functions.Add("iftrue",         new FuncEntry(Iftrue,           2,3,    7,7));   // check var1-3, allow strings var1-3
+            functions.Add("iffalse",        new FuncEntry(Iffalse,          2,3,    7,7));
+            functions.Add("ifzero",         new FuncEntry(Ifzero,           2,3,    7,7));   // check var1-3, allow strings var1-3
+            functions.Add("ifnonzero",      new FuncEntry(Ifnonzero,        2,3,    7,7));
+
+            functions.Add("ifcontains",     new FuncEntry(Ifcontains,       3,5,    31, 31)); // check var1-4, allow strings var1-4
+            functions.Add("ifnotcontains",  new FuncEntry(Ifnotcontains,    3,5,    31, 31));
+            functions.Add("ifequal",        new FuncEntry(Ifequal,          3,5,    31, 31));
+            functions.Add("ifnotequal",     new FuncEntry(Ifnotequal,       3,5,    31, 31));
+            functions.Add("indirect",       new FuncEntry(Indirect,         1,20,   0xfffffff,0xfffffff));   // check var, no strings
+            functions.Add("indexof",        new FuncEntry(IndexOf,          2,2,    3,3));   // check var1 and 2 if normal, allow string in 1 and 2
+
+            functions.Add("join",           new FuncEntry(Join,             3,20,   0xfffffff,0xfffffff));   // all can be string, check var
+
+            functions.Add("lower",          new FuncEntry(Lower,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
+            functions.Add("length",         new FuncEntry(Length,           1,1,    1,1));
+
+            functions.Add("phrase",         new FuncEntry(Phrase,           1,1,    1,1));
+
+            functions.Add("replaceescapechar",new FuncEntry(ReplaceEscapeChar,1,1,  1,1));   // check var, can be string
+            functions.Add("replacevar",     new FuncEntry(ReplaceVar,       2, 2,   3, 3)); // var/string for both
+            functions.Add("replace",        new FuncEntry(Replace,          3, 3,   7, 7)); // var/string for all
+            functions.Add("random",         new FuncEntry(Random,           1,1,    0,0));   // no change var, not string
+            functions.Add("roundnz",        new FuncEntry(RoundCommon,      4,4,    1));
+            functions.Add("roundscale",     new FuncEntry(RoundCommon,      5,5,    1));
+            functions.Add("round",          new FuncEntry(RoundCommon,      3,3,    1));
+
+            functions.Add("sc",             new FuncEntry(SplitCaps,        1, 1,   1, 1));   //shorter alias for above
+            functions.Add("ship",           new FuncEntry(Ship,             1, 1,   1, 1));   //ship translator
+            functions.Add("splitcaps",      new FuncEntry(SplitCaps,        1, 1,   1, 1));   //check var, allow strings
+            functions.Add("substring",      new FuncEntry(SubString,        3, 3,   1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
+
+            functions.Add("trim",           new FuncEntry(Trim,             1, 2,   1,1));
+
+            functions.Add("upper",          new FuncEntry(Upper,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
+
+            functions.Add("version",        new FuncEntry(Version,          1,1,    0));     // don't check first para
+            functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a macro or string, second is a var or literal, third is a macro or string
         }
 
 #region expander
-
-        // true, expanded, result = string
-        // false, failed, result = error
 
         public ConditionLists.ExpandResult ExpandStrings(List<string> inv , out List<string> outv, ConditionVariables vars)
         {
@@ -853,7 +863,7 @@ namespace EDDiscovery
                     bool valueonly = paras.Count == 5 && paras[4].value.IndexOf("valueonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
 
                     int index = 0;
-                    foreach( string key in vars.values.Keys )
+                    foreach( string key in vars.Keys )
                     {
                         if ( key.StartsWith(arrayroot))
                         {
@@ -932,8 +942,6 @@ namespace EDDiscovery
             return true;
         }
 
-        static Random rnd = new System.Random();
-
         private bool Random(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
             int v;
@@ -988,6 +996,41 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        private bool Replace(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            string f1 = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+            string f2 = paras[2].isstring ? paras[2].value : vars[paras[2].value];
+            output = s.Replace(f1, f2, StringComparison.InvariantCultureIgnoreCase);
+            return true;
+        }
+
+        private bool Phrase(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            output = s.PickOneOfGroups(rnd);
+            return true;
+        }
+
+        private bool ReplaceVar(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            string varroot = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+
+            foreach( string key in vars.Keys )          // all vars.. starting with varroot
+            {
+                if ( key.StartsWith(varroot))
+                {
+                    string[] subs = vars[key].Split(';');
+                    if (subs.Length == 2 && subs[0].Length > 0 && s.IndexOf(subs[0], StringComparison.InvariantCultureIgnoreCase) >= 0)
+                        s = s.Replace(subs[0], subs[1], StringComparison.InvariantCultureIgnoreCase);
+                }
+            }
+
+            output = s;
+            return true;
+        }
+
+        #endregion
     }
 }

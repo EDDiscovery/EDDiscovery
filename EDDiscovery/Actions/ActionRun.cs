@@ -141,7 +141,7 @@ namespace EDDiscovery.Actions
                         ConditionVariables paravars;
                         if (acall.ExecuteCallAction(progcurrent, out prog, out paravars)) // if execute ok
                         {
-                            System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + paravars.ToString());
+                            //System.Diagnostics.Debug.WriteLine("Call " + prog + " with " + paravars.ToString());
 
                             Tuple<ActionFile, ActionProgram> ap = actionfilelist.FindProgram(prog, progcurrent.actionfile);          // find program using this name, prefer this action file first
 

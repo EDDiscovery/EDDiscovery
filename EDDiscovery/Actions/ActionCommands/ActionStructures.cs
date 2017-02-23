@@ -501,31 +501,32 @@ namespace EDDiscovery.Actions
                 List<string> wildcards = new List<string>();
                 ConditionVariables newitems = new ConditionVariables();
 
-                foreach (KeyValuePair<string, string> k in vars.values)
+                foreach (string key in vars.Keys)
                 {
-                    if (k.Key.Contains("*"))                                    // SEE if any wildcards, if so, add to newitems
+                    int asterisk = key.IndexOf('*');
+                    if (asterisk >= 0)                                    // SEE if any wildcards, if so, add to newitems
                     {
-                        bool noexpand = altops[k.Key].Contains("$");            // wildcard operator determines expansion state
+                        bool noexpand = altops[key].Contains("$");            // wildcard operator determines expansion state
 
-                        wildcards.Add(k.Key);
-                        string prefix = k.Key.Substring(0,k.Key.IndexOf('*'));
+                        wildcards.Add(key);
+                        string prefix = key.Substring(0,asterisk);
 
-                        foreach( KeyValuePair<string,string> j in ap.currentvars.values )
+                        foreach( string jkey in ap.currentvars.Keys )
                         {
-                            if (j.Key.StartsWith(prefix))
+                            if (jkey.StartsWith(prefix))
                             {
                                 if (noexpand)
-                                    newitems[j.Key] = j.Value;
-                                else 
+                                    newitems[jkey] = ap.currentvars[jkey];
+                                else
                                 {
                                     string res;
-                                    if (ap.functions.ExpandString(j.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
+                                    if (ap.functions.ExpandString(ap.currentvars[jkey], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
                                     {
                                         ap.ReportError(res);
                                         return false;
                                     }
 
-                                    newitems[j.Key] = res;
+                                    newitems[jkey] = res;
                                 }
                             }
                         }
@@ -536,7 +537,7 @@ namespace EDDiscovery.Actions
                     vars.Delete(w);
 
                 //foreach ( stKeyValuePair<string,string> k in vars.values)          // for the rest, before we add in wildcards, expand
-                foreach (string k in vars.values.Keys.ToList())          // for the rest, before we add in wildcards, expand. Note ToList
+                foreach (string k in vars.Keys.ToList())                            // for the rest, before we add in wildcards, expand. Note ToList
                 {
                     bool noexpand = altops[k].Contains("$");            // when required
 

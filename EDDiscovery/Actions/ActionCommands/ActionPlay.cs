@@ -149,14 +149,12 @@ namespace EDDiscovery.Actions
                             {
                                 if (start != null)
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Play start trigger set up");
                                     audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onPlayStarted" };
                                     audio.sampleStartEvent += Audio_sampleEvent;
 
                                 }
                                 if (wait || finish != null)       // if waiting, or finish call
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Play finish trigger set up");
                                     audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onPlayFinished" };
                                     audio.sampleOverEvent += Audio_sampleEvent;
                                 }

@@ -347,14 +347,12 @@ namespace EDDiscovery.Actions
                 {
                     actionfilesmessagefilter = new ActionMessageFilter(discoveryform,this);
                     Application.AddMessageFilter(actionfilesmessagefilter);
-                    System.Diagnostics.Debug.WriteLine("Installed message filter for keys");
                 }
             }
             else if (actionfilesmessagefilter != null)
             {
                 Application.RemoveMessageFilter(actionfilesmessagefilter);
                 actionfilesmessagefilter = null;
-                System.Diagnostics.Debug.WriteLine("Removed message filter for keys");
             }
         }
 

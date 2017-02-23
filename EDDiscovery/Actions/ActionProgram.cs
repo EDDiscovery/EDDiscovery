@@ -537,11 +537,15 @@ namespace EDDiscovery.Actions
             return (existing >= 0) ? programs[existing] : null;
         }
 
-        public string[] GetActionProgramList()
+        public string[] GetActionProgramList(bool markfileasext = false )
         {
             string[] ret = new string[programs.Count];
             for (int i = 0; i < programs.Count; i++)
+            {
                 ret[i] = programs[i].Name;
+                if (markfileasext && programs[i].StoredInFile != null)
+                    ret[i] += " (Ext)";
+            }
 
             return ret;
         }
