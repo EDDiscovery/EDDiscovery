@@ -145,7 +145,7 @@ namespace EDDiscovery.Actions
             Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
             cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
                         "Select voice synthesizer defaults", title, 
-                        null, false, Audio.AudioQueue.Priority.Normal, "", "",
+                        null, false, false, Audio.AudioQueue.Priority.Normal, "", "",
                         voicename,
                         volume,
                         rate, 

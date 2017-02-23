@@ -89,7 +89,7 @@ namespace EDDiscovery.Actions
             cfg.Init(discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
                         "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command",
                         saying,
-                        vars.ContainsKey(waitname),
+                        vars.ContainsKey(waitname), vars.ContainsKey(literalname),
                         Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
                         vars.GetString(startname, ""),
                         vars.GetString(finishname, ""),
@@ -103,6 +103,7 @@ namespace EDDiscovery.Actions
             {
                 ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge
                 cond.SetOrRemove(cfg.Wait, waitname, "1");
+                cond.SetOrRemove(cfg.Literal, literalname, "1");
                 cond.SetOrRemove(cfg.Priority != Audio.AudioQueue.Priority.Normal, priorityname, cfg.Priority.ToString());
                 cond.SetOrRemove(cfg.StartEvent.Length > 0, startname, cfg.StartEvent);
                 cond.SetOrRemove(cfg.StartEvent.Length > 0, finishname, cfg.FinishEvent);
