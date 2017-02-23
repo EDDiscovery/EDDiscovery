@@ -633,7 +633,9 @@ namespace EDDiscovery2
             if (IsActionsActive)
             {
                 comboBoxCustomEditProg.Items.Clear();
-                comboBoxCustomEditProg.Items.AddRange(actionfilelist.CurPrograms.GetActionProgramList());
+                List<string> entries = actionfilelist.CurPrograms.GetActionProgramList(true).ToList();
+                entries.Sort();
+                comboBoxCustomEditProg.Items.AddRange(entries.ToArray());
                 comboBoxCustomEditProg.Items.Add("New");
 
                 comboBoxCustomProgSet.Items.Clear();
@@ -795,7 +797,7 @@ namespace EDDiscovery2
         {
             if (comboBoxCustomEditProg.Enabled)
             {
-                string progname = comboBoxCustomEditProg.Text;
+                string progname = comboBoxCustomEditProg.Text.Replace(" (Ext)","");     // remove the EXT marker
 
                 ActionProgram p = null;
                 if (!progname.Equals("New"))
@@ -856,10 +858,10 @@ namespace EDDiscovery2
             {
                 userglobalvariables = avf.result;
 
-                foreach (KeyValuePair<string, string> k in userglobalvariables.values)     // add them in in case..
+                foreach (string key in userglobalvariables.Keys)     // add them in in case..
                 {
-                    if (!additionalfieldnames.Contains(k.Key))
-                        additionalfieldnames.Add(k.Key);
+                    if (!additionalfieldnames.Contains(key))
+                        additionalfieldnames.Add(key);
                 }
 
             }

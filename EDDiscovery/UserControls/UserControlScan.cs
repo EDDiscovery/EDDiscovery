@@ -47,7 +47,6 @@ namespace EDDiscovery.UserControls
 
         private string DbSave { get { return "ScanPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
-        StarScan.SystemNode last_sn = null;
         HistoryEntry last_he = null;
         Point last_maxdisplayarea;
 
@@ -69,10 +68,12 @@ namespace EDDiscovery.UserControls
             travelhistorycontrol.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
 
+            progchange = true;
             checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Materials", true);
             checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave+"MaterialsRare", false);
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Moons", true);
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
+            progchange = false;
 
             int size = SQLiteDBClass.GetSettingInt(DbSave+"Size", 64);
             SetSizeCheckBoxes(size);
@@ -102,7 +103,7 @@ namespace EDDiscovery.UserControls
             PositionInfo();
             //System.Diagnostics.Debug.WriteLine("Resize panel stars {0} {1}", DisplayRectangle, panelStars.Size);
 
-            if (last_sn != null)
+            if (last_he != null)
             {
                 int newspace = panelStars.Width - panelStars.ScrollBarWidth;
 
@@ -118,28 +119,20 @@ namespace EDDiscovery.UserControls
         #region Display
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
-        {                                                                   // affecting our system
-            StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;  // find node..
-
-            if ( he.EntryType == EliteDangerous.JournalTypeEnum.Scan )  // if on same star system, and its a scan, it may have been updated..
+        {
+            // if he valid, and last is null, or not he, or we have a new scan
+            if (he != null && (last_he == null || he != last_he || he.EntryType == EliteDangerous.JournalTypeEnum.Scan))
             {
-                if (newnode == last_sn || (newnode != null && last_sn != null && newnode.system != null && newnode.system.Equals(last_sn.system)))
-                {
-                    last_he = he;
-                    last_sn = newnode;
-                    DrawSystem();
-                }
+                last_he = he;
+                DrawSystem();
             }
         }
 
         public override void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
-            StarScan.SystemNode newnode = (he != null) ? hl.starscan.FindSystem(he.System) : null;
-            
-            if (newnode != last_sn)
+            if (he != null && (last_he == null || he.System != last_he.System ))
             {
                 last_he = he;
-                last_sn = newnode;
                 DrawSystem();
             }
         }
@@ -150,10 +143,14 @@ namespace EDDiscovery.UserControls
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
 
-            if (last_he != null && checkBoxEDSM.Checked )       //
+            if ( last_he == null )
             {
-                last_sn = discoveryform.history.starscan.UpdateFromEDSM(last_sn, last_he.System);
+                SetControlText("No System");
+                imagebox.Render();
+                return;
             }
+
+            StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, checkBoxEDSM.Checked);
 
             SetControlText((last_sn == null) ? "No Scan" : last_sn.system.name);
 
@@ -536,31 +533,43 @@ namespace EDDiscovery.UserControls
                 HideInfo();
         }
 
+        bool progchange = false;
+
         private void checkBoxMaterials_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool(DbSave + "Materials", checkBoxMaterials.Checked);
-            DrawSystem();
+            if (!progchange)
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "Materials", checkBoxMaterials.Checked);
+                DrawSystem();
+            }
         }
 
         private void checkBoxMaterialsRare_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool(DbSave + "MaterialsRare", checkBoxMaterialsRare.Checked);
-            if (checkBoxMaterials.Checked == false)
-                checkBoxMaterials.Checked = true;       // will trigger above, and cause a redraw.
-            else
+            if (!progchange)
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "MaterialsRare", checkBoxMaterialsRare.Checked);
+
+                progchange = true;
+                checkBoxMaterials.Checked = true;       
+                progchange = false;
+
                 DrawSystem();
+            }
         }
 
         private void checkBoxMoons_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool(DbSave + "Moons", checkBoxMoons.Checked);
-            DrawSystem();
+            if (!progchange)
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "Moons", checkBoxMoons.Checked);
+                DrawSystem();
+            }
         }
 
-        bool userchangesize = true;
-        void SetSizeCheckBoxes(int size)
+        private void SetSizeCheckBoxes(int size)
         {
-            userchangesize = false;
+            progchange = true;
             checkBoxLarge.Checked = (size == 128);
             checkBoxMedium.Checked = (size == 96);
             checkBoxSmall.Checked = (size == 64);
@@ -571,34 +580,44 @@ namespace EDDiscovery.UserControls
                 checkBoxSmall.Checked = true;
                 size = 64;
             }
-            userchangesize = true;
             SetSize(size);
             SQLiteDBClass.PutSettingInt(DbSave + "Size", size);
+            progchange = false;
+
             DrawSystem();
         }
 
         private void checkBoxLarge_CheckedChanged(object sender, EventArgs e)
         {
-            if (userchangesize)
+            if (!progchange)
                 SetSizeCheckBoxes(128);
         }
 
         private void checkBoxMedium_CheckedChanged(object sender, EventArgs e)
         {
-            if (userchangesize)
+            if (!progchange)
                 SetSizeCheckBoxes(96);
         }
 
         private void checkBoxSmall_CheckedChanged(object sender, EventArgs e)
         {
-            if (userchangesize)
+            if (!progchange)
                 SetSizeCheckBoxes(64);
         }
 
         private void checkBoxTiny_CheckedChanged(object sender, EventArgs e)
         {
-            if (userchangesize)
+            if (!progchange)
                 SetSizeCheckBoxes(48);
+        }
+
+        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!progchange)
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "EDSM", checkBoxEDSM.Checked);
+                DrawSystem();
+            }
         }
 
         private void toolStripMenuItemToolbar_Click(object sender, EventArgs e)
@@ -613,12 +632,6 @@ namespace EDDiscovery.UserControls
             richTextBoxInfo.Visible = true;
             richTextBoxInfo.Show();
             PositionInfo();
-        }
-
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            SQLiteDBClass.PutSettingBool(DbSave + "EDSM", checkBoxEDSM.Checked);
-            DrawSystem();
         }
 
         void HideInfo()

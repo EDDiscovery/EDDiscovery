@@ -41,6 +41,7 @@ namespace EDDiscovery.Actions
         static string finishname = "FinishEvent";
         static string culturename = "Culture";
         static string literalname = "Literal";
+        static string dontspeakname = "DontSpeak";
 
         public bool FromString(string s, out string saying, out ConditionVariables vars)
         {
@@ -156,6 +157,7 @@ namespace EDDiscovery.Actions
                     string culture = vars.ContainsKey(culturename) ? vars[culturename] : (ap.currentvars.ContainsKey(globalvarspeechculture) ? ap.currentvars[globalvarspeechculture] : "Default");
 
                     bool literal = vars.GetInt(literalname, 0) != 0;
+                    bool dontspeak = vars.GetInt(dontspeakname, 0) != 0;
 
                     Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
@@ -170,12 +172,16 @@ namespace EDDiscovery.Actions
                         if ( !literal ) 
                             expsay = expsay.PickOneOfGroups(rnd);       // expand grouping if not literal
 
-#if true
-                        if (ap.currentvars.ContainsKey("SpeechDebug") && ap.currentvars["SpeechDebug"].Contains("Print"))
+                        ap.currentvars["SaySaid"] = expsay;
+
+                        if ((ap.currentvars.ContainsKey("SpeechDebug") && ap.currentvars["SpeechDebug"].Contains("Print")))
                         {
                             ap.actioncontroller.LogLine("Say: " + expsay);
                             expsay = "";
                         }
+
+                        if (dontspeak)
+                            expsay = "";
 
                         System.IO.MemoryStream ms = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.Speak(expsay, culture, voice, rate);
 
@@ -187,29 +193,23 @@ namespace EDDiscovery.Actions
                             {
                                 if (start != null)
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Say start trigger set up");
                                     audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
                                     audio.sampleStartEvent += Audio_sampleEvent;
 
                                 }
                                 if (wait || finish != null)       // if waiting, or finish call
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Say finish trigger set up");
                                     audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
                                     audio.sampleOverEvent += Audio_sampleEvent;
                                 }
 
                                 ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
+
                                 return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
                             }
                             else
                                 ap.ReportError("Say could not create audio, check Effects settings");
                         }
-#else
-                        synth.SelectVoice(voice);
-                        synth.Rate = 0;
-                        synth.SpeakAsync(phrase);       // for checking quality..
-#endif
                     }
                     else
                         ap.ReportError(expsay);
@@ -223,8 +223,6 @@ namespace EDDiscovery.Actions
 
             return true;
         }
-
-        //        static System.Speech.Synthesis.SpeechSynthesizer synth = new System.Speech.Synthesis.SpeechSynthesizer(); // debug
 
         private void Audio_sampleEvent(Audio.AudioQueue sender, object tag)
         {

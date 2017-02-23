@@ -77,12 +77,7 @@ namespace EDDiscovery.Actions
                         sc.id_edsm = 0;
                     }
 
-                    EliteDangerous.StarScan.SystemNode sn = scan.FindSystem(sc);
-
-                    if (edsm)       // if check edsm..
-                    {
-                        sn = scan.UpdateFromEDSM(sn, sc);   // do an edsm check
-                    }
+                    EliteDangerous.StarScan.SystemNode sn = scan.FindSystem(sc, edsm);
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -154,7 +149,6 @@ namespace EDDiscovery.Actions
             ap.currentvars[prefix + "_assignedname"] = scannode.Value.ownname;
             ap.currentvars[prefix + "_assignedfullname"] = scannode.Value.fullname;
             ap.currentvars[prefix + "_data"] = (sc != null) ? "1" : "0";
-            System.Diagnostics.Debug.WriteLine("Prefix " + prefix + " Data "  + ap.currentvars[prefix + "_data"]);
 
             if ( sc != null )
             {

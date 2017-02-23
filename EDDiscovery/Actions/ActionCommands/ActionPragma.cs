@@ -53,9 +53,10 @@ namespace EDDiscovery.Actions
 
                         if (rest != null && rest.Length > 0)
                         {
-                            foreach (KeyValuePair<string, string> k in ap.currentvars.FilterVars(rest).values)
+                            ConditionVariables filtered = ap.currentvars.FilterVars(rest);
+                            foreach (string key in filtered.Keys)
                             {
-                                ap.actioncontroller.LogLine(k.Key + "=" + k.Value);
+                                ap.actioncontroller.LogLine(key + "=" + filtered[key]);
                             }
                         }
                         else

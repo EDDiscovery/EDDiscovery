@@ -24,7 +24,7 @@ namespace EDDiscovery
 {
     public class ConditionVariables
     {
-        public Dictionary<string, string> values = new Dictionary<string, string>();
+        private Dictionary<string, string> values = new Dictionary<string, string>();
 
         public ConditionVariables()
         {
@@ -59,9 +59,10 @@ namespace EDDiscovery
         }
 
         public string this[string s] { get { return values[s]; } set { values[s] = value; } }
+
         public int Count { get { return values.Count; } }
 
-        public KeyValuePair<string, string> First() { return values.First(); }
+        public IEnumerable<string> Keys { get { return values.Keys; } }
         public List<string> KeyList { get { return values.Keys.ToList(); } }
         public bool ContainsKey(string s) { return values.ContainsKey(s); }
 

@@ -152,8 +152,6 @@ namespace EDDiscovery.Actions
                         if (rootfolder != null)
                             fd.InitialDirectory = rootfolder;
 
-                        System.Diagnostics.Debug.WriteLine("Init dir" + fd.InitialDirectory);
-
                         sp.IsCharMoveOn(',');
                         string filter = sp.NextQuotedWord(", ");
                         if (filter != null)
