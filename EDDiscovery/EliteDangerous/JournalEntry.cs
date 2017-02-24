@@ -142,6 +142,7 @@ namespace EDDiscovery.EliteDangerous
         SellDrones = 800,
         SellExplorationData = 810,
         SendText = 820,
+        SetUserShipName = 825,
         ShieldState = 830,
         ShipyardBuy = 840,
         ShipyardNew = 850,
