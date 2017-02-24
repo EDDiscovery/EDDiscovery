@@ -62,7 +62,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
 
             Latitude = JSONHelper.GetStringDef(evt["Latitude"]);
-            Longitude = JSONHelper.GetStringDef(evt["Longitude"]);•	(if landed)
+            Longitude = JSONHelper.GetStringDef(evt["Longitude"]);
 
         }
 
