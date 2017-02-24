@@ -301,6 +301,7 @@
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
