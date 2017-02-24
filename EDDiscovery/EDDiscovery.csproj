@@ -303,6 +303,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberJoins.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJoinACrew.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalQuitACrew.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
