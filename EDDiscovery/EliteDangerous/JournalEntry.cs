@@ -82,6 +82,7 @@ namespace EDDiscovery.EliteDangerous
         Interdiction = 350,
         JetConeBoost = 354,
         JetConeDamage = 355,
+        KickCrewMember = 357,
         LaunchFighter = 360,
         LaunchSRV = 370,
         Liftoff = 380,
