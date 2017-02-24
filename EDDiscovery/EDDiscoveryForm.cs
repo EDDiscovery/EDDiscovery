@@ -550,7 +550,7 @@ namespace EDDiscovery
         {
             if (WindowState == FormWindowState.Minimized)
             {
-                if (e)
+                if (e && notifyIcon1.Visible)
                     Hide();
                 else
                     Show();

@@ -59,10 +59,6 @@ namespace EDDiscovery
 
         private bool _AutoLoadPopouts = false;
         /// <summary>
-        /// The <see cref="AutoLoadPopouts"/> property changed event.
-        /// </summary>
-        public event EventHandler<bool> AutoLoadPopoutsChanged;
-        /// <summary>
         /// Whether we should automatically load popout (S-Panel) windows at startup.
         /// </summary>
         public bool AutoLoadPopouts
@@ -73,15 +69,11 @@ namespace EDDiscovery
             }
             set
             {
-                SetBool(ref _AutoLoadPopouts, value, AutoLoadPopoutsChanged);
+                SetBool(ref _AutoLoadPopouts, value, null);
             }
         }
 
         private bool _AutoSavePopouts = false;
-        /// <summary>
-        /// The <see cref="AutoSavePopouts"/> property changed event.
-        /// </summary>
-        public event EventHandler<bool> AutoSavePopoutsChanged;
         /// <summary>
         /// Whether we should automatically save popout (S-Panel) windows at exit.
         /// </summary>
@@ -93,7 +85,7 @@ namespace EDDiscovery
             }
             set
             {
-                SetBool(ref _AutoSavePopouts, value, AutoSavePopoutsChanged);
+                SetBool(ref _AutoSavePopouts, value, null);
             }
         }
 
@@ -319,10 +311,6 @@ namespace EDDiscovery
 
         private bool _FocusOnNewSystem = false;
         /// <summary>
-        /// The <see cref="FocusOnNewSystem"/> property changed event.
-        /// </summary>
-        public event EventHandler<bool> FocusOnNewSystemChanged;
-        /// <summary>
         /// Whether to automatically scroll (up/down) to new events in the journal and history log views.
         /// </summary>
         public bool FocusOnNewSystem
@@ -333,7 +321,7 @@ namespace EDDiscovery
             }
             set
             {
-                SetBool(ref _FocusOnNewSystem, value, FocusOnNewSystemChanged);
+                SetBool(ref _FocusOnNewSystem, value, null);
             }
         }
 
@@ -466,6 +454,7 @@ namespace EDDiscovery
         #region Boilerplate Properties
 
         /// <summary>
+        /// You should probably not use this event directly, instead see <see cref="ThreadedBindingList"/>.
         /// An event handler to allow for binding properties of this class to controls.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
