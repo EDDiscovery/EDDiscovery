@@ -141,6 +141,7 @@ namespace EDDiscovery.EliteDangerous
         ShipyardSell = 860,
         ShipyardSwap = 870,
         ShipyardTransfer = 880,
+        StartJump = 885,
         SupercruiseEntry = 890,
         SupercruiseExit = 900,
         Synthesis = 910,
