@@ -30,6 +30,11 @@ public static class ObjectExtensions
         return (obj != double.NaN) ? obj.ToString(format) : string.Empty;
     }
 
+    public static string ToNANNullSafeString(this double? obj, string format)
+    {
+        return (obj.HasValue && obj != double.NaN) ? obj.Value.ToString(format) : string.Empty;
+    }
+
     public static string ToNullUnknownString(this object obj)
     {
         if (obj == null)
@@ -61,6 +66,26 @@ public static class ObjectExtensions
         string s = obj.Replace(@"\n", "\n");
         s = s.Replace(@"\r", "\r");
         return s.Replace(@"\\","\\");
+    }
+
+    public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder(str.Length*4);
+
+        int previousIndex = 0;
+        int index = str.IndexOf(oldValue, comparison);
+        while (index != -1)
+        {
+            sb.Append(str.Substring(previousIndex, index - previousIndex));
+            sb.Append(newValue);
+            index += oldValue.Length;
+
+            previousIndex = index;
+            index = str.IndexOf(oldValue, index, comparison);
+        }
+        sb.Append(str.Substring(previousIndex));
+
+        return sb.ToString();
     }
 
     public static int FirstCharNonWhiteSpace(this string obj )
@@ -126,18 +151,28 @@ public static class ObjectExtensions
         return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(file), System.IO.Path.GetFileNameWithoutExtension(file) + suffix) + System.IO.Path.GetExtension(file);
     }
 
-    public static string ToStringCommaList( this System.Collections.Generic.List<string> list , int mincount = 100000)
+    public static string ToStringCommaList( this System.Collections.Generic.List<string> list , int mincount = 100000 , bool escapectrl = false)
     {
         string r = "";
         for (int i = 0; i < list.Count; i++)
         {
-            if (i >= mincount && list[i].Length == 0)
-                break;
+            if (i >= mincount && list[i].Length == 0)           // if >= minimum, and zero
+            {
+                int j = i + 1;
+                while (j < list.Count && list[j].Length == 0)   // if all others are zero
+                    j++;
+
+                if (j == list.Count)        // if so, stop
+                    break;
+            }
 
             if (i > 0)
                 r += ", ";
 
-            r += list[i].QuoteString(comma: true);
+            if ( escapectrl )
+                r += list[i].EscapeControlChars().QuoteString(comma: true);
+            else
+                r += list[i].QuoteString(comma: true);
         }
 
         return r;

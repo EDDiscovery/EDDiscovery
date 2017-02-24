@@ -67,6 +67,7 @@ namespace EDDiscovery.Audio
             this.trackBarRate = new System.Windows.Forms.TrackBar();
             this.checkBoxCustomR = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomV = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomLiteral = new ExtendedControls.CheckBoxCustom();
             this.panelOuter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarRate)).BeginInit();
@@ -139,6 +140,7 @@ namespace EDDiscovery.Audio
             this.panelOuter.Controls.Add(this.buttonExtCancel);
             this.panelOuter.Controls.Add(this.buttonExtOK);
             this.panelOuter.Controls.Add(this.comboBoxCustomVoice);
+            this.panelOuter.Controls.Add(this.checkBoxCustomLiteral);
             this.panelOuter.Controls.Add(this.checkBoxCustomComplete);
             this.panelOuter.Controls.Add(this.textBoxBorderTest);
             this.panelOuter.Controls.Add(this.textBoxBorderText);
@@ -384,6 +386,22 @@ namespace EDDiscovery.Audio
             this.checkBoxCustomV.UseVisualStyleBackColor = true;
             this.checkBoxCustomV.CheckedChanged += new System.EventHandler(this.checkBoxCustomV_CheckedChanged);
             // 
+            // checkBoxCustomLiteral
+            // 
+            this.checkBoxCustomLiteral.AutoSize = true;
+            this.checkBoxCustomLiteral.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomLiteral.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomLiteral.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomLiteral.FontNerfReduction = 0.5F;
+            this.checkBoxCustomLiteral.Location = new System.Drawing.Point(197, 132);
+            this.checkBoxCustomLiteral.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomLiteral.Name = "checkBoxCustomLiteral";
+            this.checkBoxCustomLiteral.Size = new System.Drawing.Size(54, 17);
+            this.checkBoxCustomLiteral.TabIndex = 1;
+            this.checkBoxCustomLiteral.Text = "Literal";
+            this.checkBoxCustomLiteral.TickBoxReductionSize = 10;
+            this.checkBoxCustomLiteral.UseVisualStyleBackColor = true;
+            // 
             // SpeechConfigure
             // 
             this.AcceptButton = this.buttonExtOK;
@@ -429,5 +447,6 @@ namespace EDDiscovery.Audio
         private System.Windows.Forms.Label labelEndTrigger;
         private System.Windows.Forms.Label labelStartTrigger;
         private ExtendedControls.ButtonExt buttonExtDevice;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomLiteral;
     }
 }

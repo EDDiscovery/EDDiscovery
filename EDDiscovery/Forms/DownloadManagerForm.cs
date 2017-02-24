@@ -333,18 +333,18 @@ namespace EDDiscovery.Forms
 
             if (g.di.localmodified)
             {
-                if (MessageBox.Show(this, "Modified locally, do you wish to overwrite the changes", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if (Forms.MessageBoxTheme.Show(this, "Modified locally, do you wish to overwrite the changes", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                     return;
             }
 
             if (mgr.InstallFiles(g.di, Tools.GetAppDataDirectory()))
             {
                 changelist[g.di.itemname] = "+";
-                MessageBox.Show(this, "Add-on updated");
+                Forms.MessageBoxTheme.Show(this, "Add-on updated");
                 ReadyToDisplay();
             }
             else
-                MessageBox.Show(this, "Add-on failed to update. Check files for read only status", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Forms.MessageBoxTheme.Show(this, "Add-on failed to update. Check files for read only status", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void Deletebutton_Click(object sender, EventArgs e)
@@ -352,7 +352,7 @@ namespace EDDiscovery.Forms
             ExtendedControls.ButtonExt cb = sender as ExtendedControls.ButtonExt;
             Group g = cb.Tag as Group;
 
-            if (MessageBox.Show(this, "Do you really want to delete " + g.di.itemname, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (Forms.MessageBoxTheme.Show(this, "Do you really want to delete " + g.di.itemname, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 VersioningManager.DeleteInstall(g.di, Tools.GetAppDataDirectory());
                 ReadyToDisplay();

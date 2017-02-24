@@ -48,8 +48,11 @@ namespace EDDiscovery.Actions
         public string name;
         public bool enabled;
 
-        public static ActionFile ReadFile( string filename )
+        public static string ReadFile( string filename , out ActionFile af)
         {
+            af = null;
+            string errlist = "";
+
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
             {
                 string json = sr.ReadToEnd();
@@ -74,17 +77,26 @@ namespace EDDiscovery.Actions
                     ConditionLists cond = new ConditionLists();
                     ActionProgramList prog = new ActionProgramList();
 
-                    if (cond.FromJSON(jcond) && prog.FromJSONObject(jprog))
+                    if (cond.FromJSON(jcond))
                     {
-                        return new ActionFile(cond, prog, filename, Path.GetFileNameWithoutExtension(filename), en, ivars );
+                        errlist = prog.FromJSONObject(jprog);
+
+                        if (errlist.Length == 0)
+                        {
+                            af = new ActionFile(cond, prog, filename, Path.GetFileNameWithoutExtension(filename), en, ivars);
+                        }
                     }
+                    else
+                        errlist = "Bad JSON in conditions";
+                        
                 }
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine("Dump:" + ex.StackTrace);
+                    errlist = "Bad JSON in File";
                 }
 
-                return null;
+                return errlist;
             }
         }
 
@@ -312,7 +324,7 @@ namespace EDDiscovery.Actions
             return null;
         }
 
-        public void LoadAllActionFiles()
+        public string LoadAllActionFiles()
         {
             string appfolder = Path.Combine(Tools.GetAppDataDirectory(), "Actions");
 
@@ -321,23 +333,32 @@ namespace EDDiscovery.Actions
 
             FileInfo[] allFiles = Directory.EnumerateFiles(appfolder, "*.act", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
+            string errlist = "";
+
             foreach (FileInfo f in allFiles)
             {
-                ActionFile af = ActionFile.ReadFile(f.FullName);
-                if (af != null)
+                ActionFile af;
+                string err = ActionFile.ReadFile(f.FullName, out af);
+                if (err.Length == 0 )
                     actionfiles.Add(af);
+                else
+                    errlist += "File " + f.FullName + " failed to load: " + err;
             }
 
             if (actionfiles.Count == 0)           // need a default
                 CreateSet("Default");
 
             current = actionfiles.Count - 1;        // always the latest.
+
+            return errlist;
         }
 
-        public bool LoadFile(string filename)
+        public string LoadFile(string filename)
         {
-            ActionFile af = ActionFile.ReadFile(filename);
-            if (af != null)
+            ActionFile af;
+            string err = ActionFile.ReadFile(filename, out af);
+
+            if (err.Length == 0 )
             {
                 int indexof = actionfiles.FindIndex(x => x.name.Equals(af.name));
 
@@ -345,11 +366,9 @@ namespace EDDiscovery.Actions
                     actionfiles[indexof] = af;
                 else
                     actionfiles.Add(af);
-
-                return true;
             }
-            else
-                return false;
+
+            return err;
         }
 
         public void SaveCurrentActionFile()
@@ -377,64 +396,5 @@ namespace EDDiscovery.Actions
 
         #endregion
 
-            #region Dialog helps
-
-        public bool ImportDialog()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-
-            dlg.DefaultExt = "act";
-            dlg.AddExtension = true;
-            dlg.Filter = "Action Files (*.act)|*.act|All files (*.*)|*.*";
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                string importdir = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Actions");
-                if (!System.IO.Directory.Exists(importdir))
-                    System.IO.Directory.CreateDirectory(importdir);
-
-                ActionFile af = ActionFile.ReadFile(dlg.FileName);
-
-                if (af != null)
-                {
-                    if (GetList.Contains(af.name))
-                    {
-                        string acceptstr = "Already have an action file called " + af.name + Environment.NewLine + "Click Cancel to abort, OK to overwrite";
-
-                        DialogResult dr = Forms.MessageBoxTheme.Show(acceptstr, "Duplicate File Warning", MessageBoxButtons.OKCancel);
-
-                        if (dr == DialogResult.Cancel)
-                            return false;
-                    }
-
-                    string destfile = System.IO.Path.Combine(importdir, af.name + ".act");
-
-                    try
-                    {
-                        System.IO.File.Copy(dlg.FileName, destfile, true);
-
-                        if (LoadFile(destfile))
-                        {
-                            Forms.MessageBoxTheme.Show("Action file " + af.name + " loaded.  Note if action file relies on start up events, you will need to quit and rerun EDDiscovery to make the file work correctly");
-                            return true;
-                        }
-                        else
-                            Forms.MessageBoxTheme.Show("Failed to load in");
-                    }
-                    catch
-                    {
-                        Forms.MessageBoxTheme.Show("File IO error copying file " + dlg.FileName + " to " + destfile + " check permissions");
-                    }
-                }
-                else
-                {
-                    Forms.MessageBoxTheme.Show("Action file does not read - check file " + dlg.FileName);
-                }
-            }
-
-            return false;
-        }
-
-        #endregion
     }
 }

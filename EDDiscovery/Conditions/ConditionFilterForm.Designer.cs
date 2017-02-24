@@ -56,7 +56,6 @@ namespace EDDiscovery2
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
             this.panelOK = new System.Windows.Forms.Panel();
-            this.buttonImport = new ExtendedControls.ButtonExt();
             this.buttonExtGlobals = new ExtendedControls.ButtonExt();
             this.checkBoxCustomSetEnabled = new ExtendedControls.CheckBoxCustom();
             this.comboBoxCustomProgSet = new ExtendedControls.ComboBoxCustom();
@@ -229,7 +228,6 @@ namespace EDDiscovery2
             // 
             // panelOK
             // 
-            this.panelOK.Controls.Add(this.buttonImport);
             this.panelOK.Controls.Add(this.buttonExtGlobals);
             this.panelOK.Controls.Add(this.checkBoxCustomSetEnabled);
             this.panelOK.Controls.Add(this.comboBoxCustomProgSet);
@@ -243,19 +241,6 @@ namespace EDDiscovery2
             this.panelOK.Name = "panelOK";
             this.panelOK.Size = new System.Drawing.Size(1098, 30);
             this.panelOK.TabIndex = 8;
-            // 
-            // buttonImport
-            // 
-            this.buttonImport.BorderColorScaling = 1.25F;
-            this.buttonImport.ButtonColorScaling = 0.5F;
-            this.buttonImport.ButtonDisabledScaling = 0.5F;
-            this.buttonImport.Location = new System.Drawing.Point(615, 4);
-            this.buttonImport.Name = "buttonImport";
-            this.buttonImport.Size = new System.Drawing.Size(75, 23);
-            this.buttonImport.TabIndex = 12;
-            this.buttonImport.Text = "Import";
-            this.buttonImport.UseVisualStyleBackColor = true;
-            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
             // 
             // buttonExtGlobals
             // 
@@ -453,7 +438,6 @@ namespace EDDiscovery2
         private System.Windows.Forms.Label labelProgSet;
         private ExtendedControls.CheckBoxCustom checkBoxCustomSetEnabled;
         private ExtendedControls.ButtonExt buttonExtGlobals;
-        private ExtendedControls.ButtonExt buttonImport;
         private ExtendedControls.ButtonExt buttonSort;
         private ExtendedControls.ButtonExt buttonSort2;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBottom;

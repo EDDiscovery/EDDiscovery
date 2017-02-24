@@ -27,9 +27,9 @@ namespace EDDiscovery.Audio
 {
     public partial class SpeechConfigure : Form
     {
-        public bool Wait { get { return checkBoxCustomComplete.Checked; } }
-
         public string SayText { get { return textBoxBorderText.Text; } }
+        public bool Wait { get { return checkBoxCustomComplete.Checked; } }
+        public bool Literal { get { return checkBoxCustomLiteral.Checked; } }
         public AudioQueue.Priority Priority { get { return (AudioQueue.Priority)Enum.Parse(typeof(AudioQueue.Priority), comboBoxCustomPriority.Text); } }
         public string StartEvent { get { return textBoxBorderStartTrigger.Text; } }
         public string FinishEvent { get { return textBoxBorderEndTrigger.Text; } }
@@ -50,7 +50,7 @@ namespace EDDiscovery.Audio
         public void Init(AudioQueue qu, SpeechSynthesizer syn,
                             string title, string caption,
                             String text,          // if null, no text box or wait complete
-                            bool waitcomplete,
+                            bool waitcomplete, bool literal, 
                             AudioQueue.Priority prio,
                             string startname, string endname,
                             string voicename,
@@ -71,7 +71,7 @@ namespace EDDiscovery.Audio
             if (defaultmode)
             {
                 textBoxBorderText.Visible = checkBoxCustomComplete.Visible = comboBoxCustomPriority.Visible = labelStartTrigger.Visible = labelEndTrigger.Visible =
-                textBoxBorderStartTrigger.Visible = checkBoxCustomV.Visible = checkBoxCustomR.Visible = textBoxBorderEndTrigger.Visible = false;
+                checkBoxCustomLiteral.Visible = textBoxBorderStartTrigger.Visible = checkBoxCustomV.Visible = checkBoxCustomR.Visible = textBoxBorderEndTrigger.Visible = false;
 
                 int offset = comboBoxCustomVoice.Top - textBoxBorderText.Top;
                 foreach (Control c in panelOuter.Controls )
@@ -86,6 +86,7 @@ namespace EDDiscovery.Audio
             {
                 textBoxBorderText.Text = text;
                 checkBoxCustomComplete.Checked = waitcomplete;
+                checkBoxCustomLiteral.Checked = literal;
                 comboBoxCustomPriority.SelectedItem = prio.ToString();
                 textBoxBorderStartTrigger.Text = startname;
                 textBoxBorderEndTrigger.Text = endname;
@@ -211,7 +212,7 @@ namespace EDDiscovery.Audio
                 }
                 catch
                 {
-                    Forms.MessageBoxTheme.Show("Unable to play " + textBoxBorderText.Text);
+                    Forms.MessageBoxTheme.Show(this,"Unable to play " + textBoxBorderText.Text);
                 }
             }
         }

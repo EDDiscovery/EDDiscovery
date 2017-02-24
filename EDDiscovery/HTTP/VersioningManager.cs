@@ -235,19 +235,19 @@ namespace EDDiscovery.HTTP
         {
             try
             {
-                foreach (KeyValuePair<string, string> k in item.downloadedvars.values)  // these first, they are not the controller files
+                foreach (string key in item.downloadedvars.Keys)  // these first, they are not the controller files
                 {
-                    if (k.Key.StartsWith("OtherFile"))
+                    if (key.StartsWith("OtherFile"))
                     {
-                        string[] parts = k.Value.Split(';');
+                        string[] parts = item.downloadedvars[key].Split(';');
                         string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
                         string s = Path.Combine(item.downloadedpath, parts[0]);
                         File.Copy(s, o, true);
                     }
 
-                    if (k.Key.StartsWith("DisableOther"))
+                    if (key.StartsWith("DisableOther"))
                     {
-                        DownloadItem other = downloaditems.Find(x => x.itemname.Equals(k.Value));
+                        DownloadItem other = downloaditems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
 
                         if (other != null)
                             SetEnableFlag(other, false, appfolder);
@@ -270,11 +270,11 @@ namespace EDDiscovery.HTTP
         {
             try
             {
-                foreach (KeyValuePair<string, string> k in item.localvars.values)  // these first, they are not the controller files
+                foreach (string key in item.localvars.Keys)  // these first, they are not the controller files
                 {
-                    if (k.Key.StartsWith("OtherFile"))
+                    if (key.StartsWith("OtherFile"))
                     {
-                        string[] parts = k.Value.Split(';');
+                        string[] parts = item.localvars[key].Split(';');
                         string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
                         File.Delete(o);
                     }
@@ -299,11 +299,11 @@ namespace EDDiscovery.HTTP
             {
                 List<string> filelist = new List<string>() { it.localfilename };
 
-                foreach (KeyValuePair<string, string> k in vars.values)  // these first, they are not the controller files
+                foreach (string key in vars.Keys)  // these first, they are not the controller files
                 {
-                    if (k.Key.StartsWith("OtherFile"))
+                    if (key.StartsWith("OtherFile"))
                     {
-                        string[] parts = k.Value.Split(';');
+                        string[] parts = vars[key].Split(';');
                         string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
                         filelist.Add(o);
                     }
