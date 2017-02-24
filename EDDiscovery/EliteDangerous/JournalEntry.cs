@@ -53,6 +53,7 @@ namespace EDDiscovery.EliteDangerous
         CrewAssign = 126,
         CrewFire = 127,
         CrewHire = 128,
+        CrewMemberJoins = 1270,
         CrewMemberQuits = 1280,
         DataScanned = 1030,
         DatalinkScan = 130,
