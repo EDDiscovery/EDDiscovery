@@ -60,6 +60,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (!JSONHelper.IsNullOrEmptyT(evt["Powers"]))
                 Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
 
+
+            Latitude = JSONHelper.GetStringDef(evt["Latitude"]);
+            Longitude = JSONHelper.GetStringDef(evt["Longitude"]);•	(if landed)
+
         }
 
         public string Body { get; set; }
@@ -78,6 +82,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string BodyType { get; set; }
         public string PowerplayState { get; set; }
         public string[] Powers { get; set; }
+
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
 
 
         public override void FillInformation(out string summary, out string info, out string detailed)
