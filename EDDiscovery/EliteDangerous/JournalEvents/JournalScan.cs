@@ -186,7 +186,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
                                                                                     // Fix naming to standard and fix case..
                 PlanetClass = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii", "II").Replace("Iv", "IV");
+                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii ", "II ").Replace("Iv ", "IV ").Replace("Iii ", "III ");
             }
 
 

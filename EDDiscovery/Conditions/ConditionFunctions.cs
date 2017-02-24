@@ -95,12 +95,14 @@ namespace EDDiscovery
             functions.Add("phrase",         new FuncEntry(Phrase,           1,1,    1,1));
 
             functions.Add("replaceescapechar",new FuncEntry(ReplaceEscapeChar,1,1,  1,1));   // check var, can be string
-            functions.Add("replacevar",     new FuncEntry(ReplaceVar,       2, 2,   3, 3)); // var/string for both
+            functions.Add("replacevar",     new FuncEntry(ReplaceVar,       2, 2,   1, 3)); // var/string, literal/var/string
             functions.Add("replace",        new FuncEntry(Replace,          3, 3,   7, 7)); // var/string for all
             functions.Add("random",         new FuncEntry(Random,           1,1,    0,0));   // no change var, not string
             functions.Add("roundnz",        new FuncEntry(RoundCommon,      4,4,    1));
             functions.Add("roundscale",     new FuncEntry(RoundCommon,      5,5,    1));
             functions.Add("round",          new FuncEntry(RoundCommon,      3,3,    1));
+            functions.Add("rv",             new FuncEntry(ReplaceVar,       2, 2,   1, 3)); // var/string, literal/var/string
+            functions.Add("rs",             new FuncEntry(ReplaceVarSC,     2, 2,   1, 3)); // var/string, literal/var/string
 
             functions.Add("sc",             new FuncEntry(SplitCaps,        1, 1,   1, 1));   //shorter alias for above
             functions.Add("ship",           new FuncEntry(Ship,             1, 1,   1, 1));   //ship translator
@@ -1014,8 +1016,18 @@ namespace EDDiscovery
 
         private bool ReplaceVar(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
         {
+            return ReplaceVarCommon(paras, vars, out output, recdepth,false);
+        }
+
+        private bool ReplaceVarSC(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            return ReplaceVarCommon(paras, vars, out output, recdepth,true);
+        }
+
+        private bool ReplaceVarCommon(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth, bool sc)
+        {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            string varroot = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+            string varroot = paras[1].isstring ? paras[1].value : ( vars.ContainsKey(paras[1].value) ? vars[paras[1].value] : paras[1].value);
 
             foreach( string key in vars.Keys )          // all vars.. starting with varroot
             {
@@ -1027,7 +1039,11 @@ namespace EDDiscovery
                 }
             }
 
-            output = s;
+            if ( sc )
+                output = s;
+            else
+                output = s.SplitCapsWordUnderscoreTitleCase();
+
             return true;
         }
 

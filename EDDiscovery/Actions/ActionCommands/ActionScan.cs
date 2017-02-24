@@ -172,7 +172,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    ap.currentvars[prefix + "_class"] = sc.PlanetClass.ToNullSafeString().Replace("II", " 2").Replace("IV", " 4");
+                    ap.currentvars[prefix + "_class"] = sc.PlanetClass.ToNullSafeString();
                     ap.currentvars[prefix + "_landable"] = sc.IsLandable ? "Landable" : "Not Landable";
                     ap.currentvars[prefix + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
                     ap.currentvars[prefix + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
