@@ -122,6 +122,7 @@ namespace EDDiscovery.EliteDangerous
         Progress = 660,
         Promotion = 670,
         PVPKill = 675,
+        QuitACrew = 677,
         Rank = 680,
         RebootRepair = 690,
         ReceiveText = 700,
