@@ -24,6 +24,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name: name of mission
     //•	Faction: faction offering mission
+    //•	MissionID
+    //•	Influence: effect on influence(None/Low/Med/High)
+    //•	Reputation: effect on reputation(None/Low/Med/High)
+
     //Optional Parameters (depending on mission type)
     //•	Commodity: $Commodity_Name;
     //•	Commodity_Localised: commodity type
@@ -47,12 +51,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Name = JournalEntry.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
             Faction = JSONHelper.GetStringDef(evt["Faction"]);
+            MissionId = JSONHelper.GetInt(evt["MissionID"]);
+
+            Influence = JSONHelper.GetStringDef(evt["Influence"]);
+            Reputation = JSONHelper.GetStringDef(evt["Reputation"]);
+
             Commodity = NormalizeCommodity(JSONHelper.GetStringDef(evt["Commodity"]));
             Count = JSONHelper.GetIntNull(evt["Count"]);
             Target = JSONHelper.GetStringDef(evt["Target"]);
             TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
             TargetFaction = JSONHelper.GetStringDef(evt["TargetFaction"]);
-            MissionId = JSONHelper.GetInt(evt["MissionID"]);
 
             if (!JSONHelper.IsNullOrEmptyT(evt["Expiry"]))
                 Expiry = DateTime.Parse(evt.Value<string>("Expiry"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
@@ -70,6 +78,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string Name { get; set; }
         public string Faction { get; set; }
+        public string Influence { get; set; }
+        public string Reputation { get; set; }
         public string Commodity { get; set; }
         public int? Count { get; set; }
         public string Target { get; set; }
