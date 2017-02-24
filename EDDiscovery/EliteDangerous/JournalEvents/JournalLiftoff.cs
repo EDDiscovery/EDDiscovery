@@ -18,10 +18,13 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    //When written: when taking off from planet surface
-    //Parameters:
-    //•	Latitude
-    //•	Longitude
+//    When written: when taking off from planet surface
+//Parameters:
+//•	Latitude(only if player flying in ship)
+//•	Longitude(only if player flying in ship)
+//•	PlayerControlled: (bool) false if ship dismissed when player is in SRV, true if player is taking off
+
+
     [JournalEntryType(JournalTypeEnum.Liftoff)]
     public class JournalLiftoff : JournalEntry
     {
@@ -29,10 +32,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Latitude = JSONHelper.GetDouble(evt["Latitude"]);
             Longitude = JSONHelper.GetDouble(evt["Longitude"]);
+            PlayerControlled = JSONHelper.GetBoolNull(evt["PlayerControlled"]);
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-
+        public bool? PlayerControlled { get; set; }
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.liftoff; } }
 
     }
