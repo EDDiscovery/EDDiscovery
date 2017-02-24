@@ -129,6 +129,7 @@ namespace EDDiscovery.EliteDangerous
         RestockVehicle = 750,
         Resurrect = 760,
         Scan = 770,
+        Scanned = 772,
         ScientificResearch = 775,
         Screenshot = 780,
         SelfDestruct = 790,
