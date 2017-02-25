@@ -24,7 +24,7 @@ namespace EDDiscovery
 {
     public class ConditionVariables
     {
-        public Dictionary<string, string> values = new Dictionary<string, string>();
+        private Dictionary<string, string> values = new Dictionary<string, string>();
 
         public ConditionVariables()
         {
@@ -59,9 +59,10 @@ namespace EDDiscovery
         }
 
         public string this[string s] { get { return values[s]; } set { values[s] = value; } }
+
         public int Count { get { return values.Count; } }
 
-        public KeyValuePair<string, string> First() { return values.First(); }
+        public IEnumerable<string> Keys { get { return values.Keys; } }
         public List<string> KeyList { get { return values.Keys.ToList(); } }
         public bool ContainsKey(string s) { return values.ContainsKey(s); }
 
@@ -100,7 +101,7 @@ namespace EDDiscovery
 
         // Print vars, if altops is passed in, you can output using alternate operators
 
-        public string ToString(Dictionary<string, string> altops = null, string pad = "")
+        public string ToString(Dictionary<string, string> altops = null, string pad = "", bool bracket = false)
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
@@ -109,11 +110,11 @@ namespace EDDiscovery
                     s += ",";
 
                 if ( altops == null )
-                    s += v.Key + pad + "=" + pad + v.Value.QuoteString(comma:true);
+                    s += v.Key + pad + "=" + pad + v.Value.QuoteString(comma:true, bracket: bracket);
                 else
                 {
                     System.Diagnostics.Debug.Assert(altops.ContainsKey(v.Key));
-                    s += v.Key + pad + altops[v.Key] + pad + v.Value.QuoteString(comma:true);
+                    s += v.Key + pad + altops[v.Key] + pad + v.Value.QuoteString(comma:true, bracket: bracket);
                 }
             }
 
@@ -435,7 +436,7 @@ namespace EDDiscovery
             }
         }
 
-        public void AddPropertiesFieldsOfType( Object o, string prefix = "" )
+        public void AddPropertiesFieldsOfClass( Object o, string prefix = "" )
         {
             Type jtype = o.GetType();
 
@@ -444,59 +445,75 @@ namespace EDDiscovery
                 if (pi.GetIndexParameters().GetLength(0) == 0)      // only properties with zero parameters are called
                 {
                     string name = prefix + pi.Name;
-                    Type rettype = pi.PropertyType;
-
-                    if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
-                    {
-                        string[] array = (string[])pi.GetValue(o);
-
-                        if (array == null)
-                            values[name + "_Length"] = "0";
-                        else
-                        {
-                            values[name + "_Length"] = array.Length.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                            for (int i = 0; i < array.Length; i++)
-                                values[name + "[" + i.ToString(System.Globalization.CultureInfo.InvariantCulture) + "]"] = array[i];
-                        }
-                    }
-                    else
-                    {
-                        System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                        Extract(getter.Invoke(o, null), rettype, name);
-                    }
+                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                    AddDataOfType(getter.Invoke(o, null), pi.PropertyType, name);
                 }
             }
 
             foreach (System.Reflection.FieldInfo fi in jtype.GetFields())
             {
                 string name = prefix + fi.Name;
-                Type rettype = fi.FieldType;
-
-                if (rettype.UnderlyingSystemType.Name.Equals("String[]"))
-                {
-                    string[] array = (string[])fi.GetValue(o);
-                    if (array == null)
-                        values[name + "_Length"] = "0";
-                    else
-                    {
-                        values[name + "_Length"] = array.Length.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        for (int i = 0; i < array.Length; i++)
-                            values[name + "[" + i.ToString(System.Globalization.CultureInfo.InvariantCulture) + "]"] = array[i];
-                    }
-                }
-                else
-                    Extract(fi.GetValue(o), fi.FieldType, name);
+                AddDataOfType(fi.GetValue(o), fi.FieldType, name);
             }
-
         }
 
-        void Extract(Object o, Type rettype, string name)
+        public void AddDataOfType(Object o, Type rettype, string name)
         {
+            System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+
             try // just to make sure a strange type does not barfe it
             {
-                if (o == null)
+                if (rettype.UnderlyingSystemType.Name.Contains("Dictionary"))
+                {
+                    if (o == null)
+                        values[name + "Count"] = "0";                           // we always get a NameCount so we can tell..
+                    else
+                    {
+                        var data = (System.Collections.IDictionary)o;           // lovely to work out
+
+                        values[name + "Count"] = data.Count.ToString(ct);       // purposely not putting a _ to distinguish it from the entries
+
+                        foreach (Object k in data.Keys)
+                        {
+                            if (k is string)
+                            {
+                                Object v = data[k as string];
+                                AddDataOfType(v, v.GetType(), name + "_" + (string)k);
+                            }
+                        }
+                    }
+                }
+                else if (rettype.IsArray)
+                {
+                    if (o == null)
+                        values[name + "_Length"] = "0";                         // always get a length
+                    else
+                    {
+                        Object[] array = (Object[])o;
+
+                        values[name + "_Length"] = array.Length.ToString(ct);
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            AddDataOfType(array[i], array[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]");
+                        }
+                    }
+                }
+                else if (o == null)
+                {
                     values[name] = "";
-                else if ( o is bool)
+                }
+                else if (o is string)     // string is a class, so intercept first
+                {
+                    values[name] = o as string;
+                }
+                else if (rettype.IsClass)
+                {
+                    foreach (System.Reflection.FieldInfo fi in rettype.GetFields())
+                    {
+                        AddDataOfType(fi.GetValue(o), fi.FieldType, name + "_" + fi.Name);
+                    }
+                }
+                else if (o is bool)
                 {
                     values[name] = ((bool)o) ? "1" : "0";
                 }
@@ -505,15 +522,15 @@ namespace EDDiscovery
                     var v = Convert.ChangeType(o, rettype);
 
                     if (v is Double)
-                        values[name] = ((double)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        values[name] = ((double)v).ToString(ct);
                     else if (v is int)
-                        values[name] = ((int)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        values[name] = ((int)v).ToString(ct);
                     else if (v is long)
-                        values[name] = ((long)v).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        values[name] = ((long)v).ToString(ct);
                     else if (v is DateTime)
                         values[name] = ((DateTime)v).ToString(System.Globalization.CultureInfo.CreateSpecificCulture("en-us"));
                     else
-                        values[name] = v.ToString(  );
+                        values[name] = v.ToString();
                 }
                 else
                 {                                                               // generic, get value type
@@ -521,9 +538,7 @@ namespace EDDiscovery
 
                     Type nulltype = pvalue.PropertyType;    // its type and value are found..
                     var value = pvalue.GetValue(o);
-
-//                    System.Diagnostics.Debug.WriteLine("Type is" + nulltype);
-                    Extract(value, nulltype, name);         // recurse to decode it
+                    AddDataOfType(value, nulltype, name);         // recurse to decode it
                 }
             }
             catch { }

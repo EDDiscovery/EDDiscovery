@@ -303,7 +303,7 @@ namespace EDDiscovery2
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(EDDConfig.Options.AppFolder))
+            if (!string.IsNullOrWhiteSpace(EDDConfig.Options.AppDataDirectory))
             {
                 JObject jo = new JObject();
                 foreach (EDCommander cmdr in _commandersDict.Values)
@@ -314,7 +314,7 @@ namespace EDDiscovery2
                         );
                 }
 
-                using (Stream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppFolder, "CommanderPaths.json.tmp")))
+                using (Stream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp")))
                 {
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
@@ -325,8 +325,8 @@ namespace EDDiscovery2
                     }
                 }
 
-                File.Delete(Path.Combine(EDDConfig.Options.AppFolder, "CommanderPaths.json"));
-                File.Move(Path.Combine(EDDConfig.Options.AppFolder, "CommanderPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppFolder, "CommanderPaths.json"));
+                File.Delete(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
+                File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
             }
         }
 
@@ -428,11 +428,11 @@ namespace EDDiscovery2
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(EDDConfig.Options.AppFolder) && File.Exists(Path.Combine(EDDConfig.Options.AppFolder, "CommanderPaths.json")))
+            if (!string.IsNullOrWhiteSpace(EDDConfig.Options.AppDataDirectory) && File.Exists(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json")))
             {
                 JObject jo;
 
-                using (Stream stream = File.OpenRead(Path.Combine(EDDConfig.Options.AppFolder, "CommanderPaths.json")))
+                using (Stream stream = File.OpenRead(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json")))
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {

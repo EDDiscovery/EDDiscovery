@@ -86,23 +86,22 @@ namespace EDDiscovery.Actions
             if (av == null)
                 FromString(userdata, out av, out operations);
 
-            foreach (KeyValuePair<string, string> k in av.values)
+            foreach (string key in av.Keys)
             {
-                string vname = k.Key;
                 string res;
 
-                if (operations[vname].Contains("$"))
-                    res = k.Value;
-                else if ( ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                if (operations[key].Contains("$"))
+                    res = av[key];
+                else if (ap.functions.ExpandString(av[key], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
                     ap.ReportError(res);
                     break;
                 }
 
-                if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
-                    ap.currentvars[vname] += res;
+                if (operations[key].Contains("+") && ap.currentvars.ContainsKey(key))
+                    ap.currentvars[key] += res;
                 else
-                    ap.currentvars[vname] = res;
+                    ap.currentvars[key] = res;
             }
 
             if (av.Count == 0)
@@ -128,14 +127,13 @@ namespace EDDiscovery.Actions
             if (av == null)
                 FromString(userdata, out av, out operations);
 
-            foreach (KeyValuePair<string, string> k in av.values)
+            foreach (string key in av.Keys)
             {
-                string vname = k.Key;
                 string res;
 
-                if (operations[vname].Contains("$"))
-                    res = k.Value;
-                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
+                if (operations[key].Contains("$"))
+                    res = av[key];
+                else if (ap.functions.ExpandString(av[key], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
                 {
                     ap.ReportError(res);
                     break;
@@ -148,7 +146,7 @@ namespace EDDiscovery.Actions
                     break;
                 }
 
-                ap.currentvars[vname] = value;
+                ap.currentvars[key] = value;
             }
 
             if (av.Count == 0)
@@ -174,28 +172,27 @@ namespace EDDiscovery.Actions
             if (av == null)
                 FromString(userdata, out av, out operations);
 
-            foreach (KeyValuePair<string, string> k in av.values)
+            foreach (string key in av.Keys)
             {
-                string vname = k.Key;
                 string res;
 
-                if (operations[vname].Contains("$"))
-                    res = k.Value;
-                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                if (operations[key].Contains("$"))
+                    res = av[key];
+                else if (ap.functions.ExpandString(av[key], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
                 {
                     ap.ReportError(res);
                     break;
                 }
 
-                if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
+                if (operations[key].Contains("+") && ap.currentvars.ContainsKey(key))
                 {
-                    ap.currentvars[vname] += res;
-                    ap.actioncontroller.SetNonPersistentGlobal(vname, ap.currentvars[vname]);
+                    ap.currentvars[key] += res;
+                    ap.actioncontroller.SetNonPersistentGlobal(key, ap.currentvars[key]);
                 }
                 else 
                 {
-                    ap.currentvars[vname] = res;
-                    ap.actioncontroller.SetNonPersistentGlobal(vname, res);
+                    ap.currentvars[key] = res;
+                    ap.actioncontroller.SetNonPersistentGlobal(key, res);
                 }
             }
 
@@ -222,28 +219,27 @@ namespace EDDiscovery.Actions
             if (av == null)
                 FromString(userdata, out av, out operations);
 
-            foreach (KeyValuePair<string, string> k in av.values)
+            foreach (string key in av.Keys)
             {
-                string vname = k.Key;
                 string res;
 
-                if (operations[vname].Contains("$"))
-                    res = k.Value;
-                else if (ap.functions.ExpandString(k.Value, ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                if (operations[key].Contains("$"))
+                    res = av[key];
+                else if (ap.functions.ExpandString(av[key], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
                     ap.ReportError(res);
                     break;
                 }
 
-                if (operations[vname].Contains("+") && ap.currentvars.ContainsKey(vname))
+                if (operations[key].Contains("+") && ap.currentvars.ContainsKey(key))
                 {
-                    ap.currentvars[vname] += res;
-                    ap.actioncontroller.SetPeristentGlobal(vname, ap.currentvars[vname]);
+                    ap.currentvars[key] += res;
+                    ap.actioncontroller.SetPeristentGlobal(key, ap.currentvars[key]);
                 }
                 else
                 {
-                    ap.currentvars[vname] = res;
-                    ap.actioncontroller.SetPeristentGlobal(vname, res);
+                    ap.currentvars[key] = res;
+                    ap.actioncontroller.SetPeristentGlobal(key, res);
                 }
             }
 

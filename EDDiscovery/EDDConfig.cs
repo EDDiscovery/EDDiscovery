@@ -881,11 +881,11 @@ namespace EDDiscovery
                 ImageHandlerOutputDir = SQLiteConnectionUser.GetSettingString("ImageHandlerOutputDir", null, conn);
                 ImageHandlerScreenshotsDir = SQLiteConnectionUser.GetSettingString("ImageHandlerScreenshotDir", null, conn);
 
-                if (!string.IsNullOrWhiteSpace(Options.AppFolder) && File.Exists(Path.Combine(Options.AppFolder, "UserPaths.json")))
+                if (!string.IsNullOrWhiteSpace(Options.AppDataDirectory) && File.Exists(Path.Combine(Options.AppDataDirectory, "UserPaths.json")))
                 {
                     JObject jo;
 
-                    using (FileStream stream = File.OpenRead(Path.Combine(Options.AppFolder, "UserPaths.json")))
+                    using (FileStream stream = File.OpenRead(Path.Combine(Options.AppDataDirectory, "UserPaths.json")))
                     {
                         using (StreamReader rdr = new StreamReader(stream))
                         {
@@ -912,7 +912,7 @@ namespace EDDiscovery
                 SQLiteConnectionUser.PutSettingString("ImageHandlerOutputDir", ImageHandlerOutputDir, conn);
                 SQLiteConnectionUser.PutSettingString("ImageHandlerScreenshotsDir", ImageHandlerScreenshotsDir, conn);
 
-                if (!string.IsNullOrWhiteSpace(Options.AppFolder))
+                if (!string.IsNullOrWhiteSpace(Options.AppDataDirectory))
                 {
                     JObject jo = new JObject(
                         new JProperty("EDDirectory", EDDirectory),
@@ -920,7 +920,7 @@ namespace EDDiscovery
                         new JProperty("ImageHandlerScreenshotsDir", ImageHandlerScreenshotsDir)
                     );
 
-                    using (FileStream stream = File.OpenWrite(Path.Combine(Options.AppFolder, "UserPaths.json.tmp")))
+                    using (FileStream stream = File.OpenWrite(Path.Combine(Options.AppDataDirectory, "UserPaths.json.tmp")))
                     {
                         using (StreamWriter writer = new StreamWriter(stream))
                         {
@@ -931,8 +931,8 @@ namespace EDDiscovery
                         }
                     }
 
-                    File.Delete(Path.Combine(Options.AppFolder, "UserPaths.json"));
-                    File.Move(Path.Combine(Options.AppFolder, "UserPaths.json.tmp"), Path.Combine(Options.AppFolder, "UserPaths.json"));
+                    File.Delete(Path.Combine(Options.AppDataDirectory, "UserPaths.json"));
+                    File.Move(Path.Combine(Options.AppDataDirectory, "UserPaths.json.tmp"), Path.Combine(Options.AppDataDirectory, "UserPaths.json"));
                 }
             }
 

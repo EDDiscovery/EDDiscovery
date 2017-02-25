@@ -86,6 +86,8 @@ namespace EDDiscovery.Actions
                     ap.actioncontroller.EditAddOnActionFile();
                 else if (cmdname.Equals("editspeechtext"))
                     ap.actioncontroller.EditSpeechText();
+                else if (cmdname.Equals("editlasttext"))
+                    ap.actioncontroller.EditLastTextFile();
                 else if (cmdname.Equals("configurewave"))
                     ap.actioncontroller.ConfigureWave(sp.NextQuotedWord() ?? "Configure Wave Output");
                 else
