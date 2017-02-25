@@ -271,12 +271,13 @@ namespace EDDiscovery
 
                     if (f.matchtype == MatchType.IsPresent)         // these use f.itemname without any expansion
                     {
-                        if (values.ContainsKey(f.itemname))
+                        if (values.ContainsKey(f.itemname) && values[f.itemname] != null )
                             matched = true;
                     }
                     else if (f.matchtype == MatchType.IsNotPresent)
                     {
-                        if (!values.ContainsKey(f.itemname))
+                        //System.Diagnostics.Debug.WriteLine("Value " + f.itemname + ":" + values[f.itemname]);
+                        if (!values.ContainsKey(f.itemname) || values[f.itemname] == null)
                             matched = true;
                     }
                     else if (f.matchtype == MatchType.AlwaysTrue)
@@ -872,7 +873,9 @@ namespace EDDiscovery
             if (fel != null)        // if we have matching filters..
             {
                 bool? v = CheckJSON(fel,json, othervars, out errlist, passed);  // true means filter matched
-                return !v.HasValue || v.Value == false; // no value, true .. false did not match, thus true
+                bool res = !v.HasValue || v.Value == false;
+                //System.Diagnostics.Debug.WriteLine("Event " + eventname + " res " + res + " v " + v + " v.hv " + v.HasValue);
+                return res; // no value, true .. false did not match, thus true
             }
             else
             {

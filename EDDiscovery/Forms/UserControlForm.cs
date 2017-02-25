@@ -453,7 +453,7 @@ namespace EDDiscovery.Forms
                         panel_transparency_Click(null, null);
                     }
                     else
-                        MessageBox.Show("This panel does not support transparency");
+                        Forms.MessageBoxTheme.Show("This panel does not support transparency");
                 }
                 else if (cmd == SYSMENU_TASKBAR)
                 {
