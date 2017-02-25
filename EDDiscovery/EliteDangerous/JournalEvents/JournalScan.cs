@@ -156,6 +156,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             nTidalLock = JSONHelper.GetBoolNull(evt["TidalLock"]);
             TerraformState = JSONHelper.GetStringNull(evt["TerraformState"]);
+            if (TerraformState != null && TerraformState.Equals("Not Terraformable", StringComparison.InvariantCultureIgnoreCase)) // EDSM returns this, normalise to journal
+                TerraformState = String.Empty;
             PlanetClass = JSONHelper.GetStringNull(evt["PlanetClass"]);
 
             Atmosphere = JSONHelper.GetStringNull(evt["Atmosphere"]);
