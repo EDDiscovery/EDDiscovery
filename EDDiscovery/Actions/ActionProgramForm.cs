@@ -28,6 +28,9 @@ namespace EDDiscovery.Actions
 {
     public partial class ActionProgramForm : Form
     {
+        static public string LastTextEditedFile;
+
+        string filesetname;
         string initialprogname;
         string[] definedprograms;                                   // list of programs already defined, to detect rename over..
 
@@ -76,7 +79,7 @@ namespace EDDiscovery.Actions
 
         public void Init(string t, EDDiscoveryForm form,
                             List<string> vbs,              // list any variables you want in condition statements - passed to config menu, passed back up to condition, not null
-                            string filesetname,             // file set name
+                            string pfilesetname,             // file set name
                             ActionProgram prog = null,     // give the program to display
                             string[] defprogs = null,      // list any default program names
                             string suggestedname = null, bool edittext = false)   // give a suggested name, if prog is null
@@ -90,6 +93,7 @@ namespace EDDiscovery.Actions
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
+            filesetname = pfilesetname;
             labelSet.Text = filesetname + "::";
             textBoxBorderName.Location = new Point(labelSet.Location.X + labelSet.Width + 8, textBoxBorderName.Location.Y);
 
@@ -106,6 +110,10 @@ namespace EDDiscovery.Actions
             panelVScroll.MouseDown += panelVScroll_MouseDown;
 
             editastextimmediately = edittext;
+
+#if !DEBUG
+            buttonExtDisk.Visible = false;
+#endif
         }
 
         void LoadProgram(ActionProgram prog)
@@ -154,7 +162,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        #region Steps
+#region Steps
 
         Group CreateStep(int insertpos, Action step = null)
         {
@@ -269,6 +277,7 @@ namespace EDDiscovery.Actions
             {
                 int indentlevel = 0;
                 int whitespace = 0;
+                int lineno = 0;
                 Action act = curprog.GetStep(actstep++);
 
                 if (act != null)
@@ -278,6 +287,7 @@ namespace EDDiscovery.Actions
                     g.right.Enabled = act.calcAllowRight;
                     indentlevel = act.calcDisplayLevel;
                     whitespace = act.Whitespace;
+                    lineno = act.LineNumber;
                     g.prog.Visible = act.Type == Action.ActionType.Call & EditProgram != null;
                     g.config.Visible = act.ConfigurationMenuInUse;
                 }
@@ -304,7 +314,11 @@ namespace EDDiscovery.Actions
 
                 g.panel.ResumeLayout();
 
-                string tt1 = "Step " + actstep.ToString(System.Globalization.CultureInfo.InvariantCulture) + " Level " + indentlevel;
+                string tt1 = "Step " + actstep;
+                if ( indentlevel>0)
+                    tt1 += " Lv " + indentlevel;
+                if ( lineno > 0 )
+                    tt1 += " Ln " + lineno;
                 if ( act != null )
                     tt1 += " SL " + act.calcStructLevel + " LU" + act.LevelUp ;
 
@@ -428,7 +442,7 @@ namespace EDDiscovery.Actions
                 if (pname != null)
                     EditProgram(curact.UserData);
                 else
-                    Forms.MessageBoxTheme.Show("No program name assigned");
+                    Forms.MessageBoxTheme.Show(this,"No program name assigned");
             }
         }
 
@@ -478,11 +492,11 @@ namespace EDDiscovery.Actions
                 curact.UpdateUserData(tb.Text);
         }
 
-        #endregion
+#endregion
 
-        #region OK and Finish
+#region OK and Finish
 
-        private void buttonOK_Click(object sender, EventArgs e)
+        private string ErrorList()
         {
             string errorlist = "";
 
@@ -499,12 +513,19 @@ namespace EDDiscovery.Actions
             if (groups.Count == 0)
                 errorlist += "No action steps have been defined" + Environment.NewLine;
             else
-                errorlist += curprog.CalculateLevels(); 
+                errorlist += curprog.CalculateLevels();
+
+            return errorlist;
+        }
+
+        private void buttonOK_Click(object sender, EventArgs e)
+        {
+            string errorlist = ErrorList();
 
             if (errorlist.Length > 0)
             {
                 string acceptstr = "Click Retry to correct errors, Abort to cancel, Ignore to accept what steps are valid";
-                DialogResult dr = Forms.MessageBoxTheme.Show("Actions produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + errorlist + Environment.NewLine + acceptstr,
+                DialogResult dr = Forms.MessageBoxTheme.Show(this,"Actions produced the following warnings and errors" + Environment.NewLine + Environment.NewLine + errorlist + Environment.NewLine + acceptstr,
                                         "Warning", MessageBoxButtons.AbortRetryIgnore);
 
                 if (dr == DialogResult.Retry)
@@ -518,12 +539,13 @@ namespace EDDiscovery.Actions
             }
 
             DialogResult = DialogResult.OK;
+            curprog.Name = textBoxBorderName.Text;
             Close();
         }
 
         public ActionProgram GetProgram()      // call only when OK returned
         {
-            ActionProgram ap = new ActionProgram(textBoxBorderName.Text);
+            ActionProgram ap = new ActionProgram(curprog.Name,curprog.StoredInFile);
 
             Action ac;
             int step = 0;
@@ -552,13 +574,14 @@ namespace EDDiscovery.Actions
             }
         }
 
-        #endregion
+#endregion
 
-        #region Text editing
+#region Text editing
 
         private void buttonExtEdit_Click(object sender, EventArgs e)
         {
             curprog.Name = textBoxBorderName.Text;
+            LastTextEditedFile = filesetname + "::" + curprog.Name;
             if ( curprog.EditInEditor())
             {
                 LoadProgram(curprog);
@@ -583,9 +606,10 @@ namespace EDDiscovery.Actions
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(dlg.FileName))
                 {
                     string err;
-                    ActionProgram ap = ActionProgram.FromFile(dlg.FileName, System.IO.Path.GetFileNameWithoutExtension(dlg.FileName), out err);
+                    ActionProgram ap = ActionProgram.FromFile(dlg.FileName, out err);
+
                     if (ap == null)
-                        Forms.MessageBoxTheme.Show("Failed to load text file" + Environment.NewLine + err);
+                        Forms.MessageBoxTheme.Show(this,"Failed to load text file" + Environment.NewLine + err);
                     else
                     {
                         LoadProgram(ap);
@@ -596,27 +620,53 @@ namespace EDDiscovery.Actions
 
         private void buttonExtSave_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.InitialDirectory = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Actions");
+            SaveFileDialog(false);
+        }
 
-            if (!System.IO.Directory.Exists(dlg.InitialDirectory))
-                System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
+        private void buttonExtDisk_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog(true);
+        }
 
-            dlg.DefaultExt = ".atf";
-            dlg.AddExtension = true;
-            dlg.Filter = "Action Text Files (*.atf)|*.atf|All files (*.*)|*.*";
-
-            if (dlg.ShowDialog() == DialogResult.OK)
+        private void SaveFileDialog(bool associate)
+        {
+            string errlist = ErrorList();
+            if ( errlist.Length > 0 )
             {
-                curprog.Name = textBoxBorderName.Text;
-                if (!curprog.SaveText(dlg.FileName))
-                    Forms.MessageBoxTheme.Show("Failed to save text file - check file path");
+                Forms.MessageBoxTheme.Show(this, "Program contains errors, correct first\r\n" + errlist);
+            }
+            else
+            { 
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.InitialDirectory = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Actions");
+
+                if (!System.IO.Directory.Exists(dlg.InitialDirectory))
+                    System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
+
+                dlg.DefaultExt = ".atf";
+                dlg.AddExtension = true;
+                dlg.Filter = "Action Text Files (*.atf)|*.atf|All files (*.*)|*.*";
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    curprog.Name = textBoxBorderName.Text;
+                    if ( associate )
+                        curprog.StoredInFile = dlg.FileName;        // now
+
+                    if (!curprog.SaveText(dlg.FileName))
+                        Forms.MessageBoxTheme.Show(this, "Failed to save text file - check file path");
+                    else if (associate)
+                    {
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
+                }
             }
         }
 
-        #endregion
+#endregion
 
-        #region cut copy paste
+#region cut copy paste
 
         bool indrag = false;
         Point mouselogicalpos;      // used to offset return pos dep on which control first captured the mouse
@@ -689,7 +739,7 @@ namespace EDDiscovery.Actions
             deleteToolStripMenuItem.Enabled = copyToolStripMenuItem.Enabled = validrightclick || IsMarked;
             pasteToolStripMenuItem.Enabled = ActionProgramCopyBuffer.Count > 0 && rightclickstep >=0;
 
-            System.Diagnostics.Debug.WriteLine("Rightclick at " + rightclickstep + " marked " + IsMarked);
+//            System.Diagnostics.Debug.WriteLine("Rightclick at " + rightclickstep + " marked " + IsMarked);
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -824,10 +874,10 @@ namespace EDDiscovery.Actions
             }
         }
 
-        #endregion
+#endregion
 
 
-        #region Window Control
+#region Window Control
 
         // Mono compatibility
         private bool _window_dragging = false;
@@ -929,7 +979,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        #endregion
+#endregion
 
     }
 }
