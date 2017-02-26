@@ -136,7 +136,7 @@ namespace ExtendedControls
                 //Console.WriteLine("{0} finish func ret {1} restart {2}", Environment.TickCount % 10000, autocompletestrings.Count, restartautocomplete);
             } while (restartautocomplete == true);
 
-            Invoke((MethodInvoker)delegate { AutoCompleteFinished(); });
+            this.BeginInvoke((MethodInvoker)delegate { AutoCompleteFinished(); });
         }
 
         private void AutoCompleteFinished()

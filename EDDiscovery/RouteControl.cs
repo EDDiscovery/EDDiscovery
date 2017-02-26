@@ -147,7 +147,7 @@ namespace EDDiscovery
                             tosys, usingcoordsto, coordsto,
                               maxrange, routemethod);
 
-            this.Invoke(new Action(() => ToggleButtons(true)));
+            this.BeginInvoke(new Action(() => ToggleButtons(true)));
         }
 
         private void ToggleButtons(bool state)
