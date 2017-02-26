@@ -160,7 +160,6 @@ namespace EDDiscovery
             Controller.Init();
 
             InitializeComponent();
-            _initialized = true;
 
             label_version.Text = EDDConfig.Options.VersionDisplayString;
 
@@ -266,6 +265,7 @@ namespace EDDiscovery
 
             actioncontroller.ActionRun("onStartup", "ProgramEvent");
             splashform.Hide();
+            _initialized = true;
         }
 
         private Task CheckForNewInstallerAsync()
@@ -1015,7 +1015,7 @@ namespace EDDiscovery
                 {
                     if (FormWindowState.Minimized == WindowState)
                         Hide();
-                    else
+                    else if (!Visible)
                         Show();
                 }
                 RecordPosition();
