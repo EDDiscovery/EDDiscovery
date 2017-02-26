@@ -115,7 +115,6 @@ namespace EDDiscovery
 
         public void PostInit_Shown()
         {
-            downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
             readyForInitialLoad.Set();
         }
         #endregion
@@ -300,6 +299,7 @@ namespace EDDiscovery
         private void BackgroundInit()
         {
             readyForInitialLoad.WaitOne();
+            downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
             CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
             ReportProgress(-1, "");
             InvokeSyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
