@@ -23,59 +23,38 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Collections.Concurrent;
+using EDDiscovery2;
+using System.Threading.Tasks;
 
 namespace EDDiscovery.Forms
 {
     public partial class SplashForm : Form
     {
-        private Thread _thread;
+        private Task inittask;
+        private EDDiscoveryForm mainform;
 
         public SplashForm()
         {
-            _thread = Thread.CurrentThread;
             InitializeComponent();
             this.label_version.Text = "EDDiscovery " + System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            inittask = EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift)).ContinueWith(t => InitComplete(t));
         }
 
-        [STAThread]
-        private static void _ShowForm(object param)
+        private void InitComplete(Task t)
         {
-            BlockingCollection<SplashForm> queue = (BlockingCollection<SplashForm>)param;
-            using (SplashForm splash = new SplashForm())
+            this.BeginInvoke(new Action(() =>
             {
-                queue.Add(splash);
-                Application.Run(splash);
-            }
-        }
-
-        public void CloseForm()
-        {
-            if (!this.IsDisposed)
-            {
-                if (this.InvokeRequired)
+                if (t.IsCompleted)
                 {
-                    this.Invoke(new Action(() => this.CloseForm()));
+                    mainform = new EDDiscoveryForm(this);
+                    mainform.Show();
                 }
-                else
+                else if (t.IsFaulted)
                 {
-                    this.Close();
-                    Application.ExitThread();
+                    MessageBox.Show($"Error initializing database:\n{t.Exception.InnerExceptions.FirstOrDefault()?.ToString()}", "Error initializing database");
+                    Application.Exit();
                 }
-            }
-        }
-
-        public static SplashForm ShowAsync()
-        {
-            // Mono doesn't support having forms running on multiple threads.
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
-            {
-                return null;
-            }
-
-            BlockingCollection<SplashForm> queue = new BlockingCollection<SplashForm>();
-            Thread thread = new Thread(_ShowForm);
-            thread.Start(queue);
-            return queue.Take();
+            }));
         }
     }
 }

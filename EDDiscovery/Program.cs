@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,20 +43,26 @@ namespace EDDiscovery
             {
                 using (new SingleGlobalInstance(1000))
                 {
-                    Application.Run(new EDDiscoveryForm());
+                    Run();
                 }
             }
             catch (TimeoutException)
             {
                 if (MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Application.Run(new EDDiscoveryForm());
+                    Run();
                 }
 
                 /* Could not lock the app-global mutex, which means another copy of the App is running.
                  * TODO: show a dialog and/or bring the current instance's window to the foreground.
                  */
             }
+        }
+
+        static void Run()
+        {
+            SplashForm splash = new SplashForm();
+            Application.Run(splash);
         }
     }
 
