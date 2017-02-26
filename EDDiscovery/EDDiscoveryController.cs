@@ -453,6 +453,10 @@ namespace EDDiscovery
             {
                 SystemClass.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
             }
+            catch (OperationCanceledException)
+            {
+                // Swallow Operation Cancelled exceptions
+            }
             catch (Exception ex)
             {
                 LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
