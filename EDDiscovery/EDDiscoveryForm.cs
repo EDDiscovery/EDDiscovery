@@ -90,6 +90,7 @@ namespace EDDiscovery
 
         public PopOutControl PopOuts;
 
+        private bool _shownOnce = false;
         private bool _formMax;
         private int _formWidth;
         private int _formHeight;
@@ -260,6 +261,7 @@ namespace EDDiscovery
 
             actioncontroller.ActionRun("onStartup", "ProgramEvent");
             splashform.Hide();
+            _shownOnce = true;
         }
 
         private Task CheckForNewInstallerAsync()
@@ -993,13 +995,13 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             // We may be getting called by this.ResumeLayout() from InitializeComponent().
-            if (EDDConfig != null)
+            if (EDDConfig != null && _shownOnce)
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                 {
                     if (FormWindowState.Minimized == WindowState)
                         Hide();
-                    else
+                    else if (!Visible)
                         Show();
                 }
                 RecordPosition();
