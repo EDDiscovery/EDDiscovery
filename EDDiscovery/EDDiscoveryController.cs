@@ -51,7 +51,6 @@ namespace EDDiscovery
         public event Action<JournalEntry> OnNewJournalEntry;
         public event Action<string, Color> OnNewLogEntry;
 
-        public event Action OnDbInitComplete;
         public event Action OnBgSafeClose;
         public event Action OnFinalClose;
         public event Action OnRefreshStarting;
@@ -74,46 +73,22 @@ namespace EDDiscovery
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
         }
 
-        public void Init(bool noreposition)
+        public static Task Initialize(bool noreposition)
         {
-            EDDConfig.Options.Init(noreposition);
+            InitializeConfig(noreposition);
 
-            if (EDDConfig.Options.ReadJournal != null)
+            return Task.Factory.StartNew(InitializeDatabases);
+        }
+
+        public void Init()
+        {
+            if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
             {
-                EDJournalClass.ReadCmdLineJournal(EDDConfig.Options.ReadJournal);
-            }
-
-            string logpath = "";
-            try
-            {
-                logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
-                if (!Directory.Exists(logpath))
+                TraceLog.LogFileWriterException += ex =>
                 {
-                    Directory.CreateDirectory(logpath);
-                }
-
-                if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
-                {
-                    TraceLog.LogFileWriterException += ex =>
-                    {
-                        LogLineHighlight($"Log Writer Exception: {ex}");
-                    };
-                    TraceLog.Init();
-                }
-
-                if (EDDConfig.Options.LogExceptions)
-                {
-                    TraceLog.RegisterFirstChanceExceptionHandler();
-                }
+                    LogLineHighlight($"Log Writer Exception: {ex}");
+                };
             }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"Unable to create the folder '{logpath}'");
-                Trace.WriteLine($"Exception: {ex.Message}");
-            }
-
-            SQLiteConnectionUser.EarlyReadRegister();
-            EDDConfig.Instance.Update(write: false);
 
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
@@ -129,11 +104,6 @@ namespace EDDiscovery
             journalmonitor.OnNewJournalEntry += NewPosition;
 
             history.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
-        }
-
-        public void PostInit_Loading()
-        {
-            readyForUiInvoke.Set();
         }
 
         public void PostInit_Loaded()
@@ -310,7 +280,6 @@ namespace EDDiscovery
 
         private ManualResetEvent closeRequested = new ManualResetEvent(false);
         private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
-        private ManualResetEvent readyForUiInvoke = new ManualResetEvent(false);
         private ManualResetEvent readyForNewRefresh = new ManualResetEvent(false);
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
@@ -330,9 +299,6 @@ namespace EDDiscovery
         #region Initialization
         private void BackgroundInit()
         {
-            InitializeDatabases();
-            readyForUiInvoke.WaitOne();
-            InvokeAsyncOnUiThread(() => OnDbInitComplete?.Invoke());
             readyForInitialLoad.WaitOne();
             CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
             ReportProgress(-1, "");
@@ -362,13 +328,51 @@ namespace EDDiscovery
             }
         }
 
-        private void InitializeDatabases()
+        private static void InitializeDatabases()
         {
             Trace.WriteLine("Initializing database");
             SQLiteConnectionOld.Initialize();
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
             Trace.WriteLine("Database initialization complete");
+        }
+
+        private static void InitializeConfig(bool noreposition)
+        {
+            EDDConfig.Options.Init(noreposition);
+
+            if (EDDConfig.Options.ReadJournal != null)
+            {
+                EDJournalClass.ReadCmdLineJournal(EDDConfig.Options.ReadJournal);
+            }
+
+            string logpath = "";
+            try
+            {
+                logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
+                if (!Directory.Exists(logpath))
+                {
+                    Directory.CreateDirectory(logpath);
+                }
+
+                if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
+                {
+                    TraceLog.Init();
+                }
+
+                if (EDDConfig.Options.LogExceptions)
+                {
+                    TraceLog.RegisterFirstChanceExceptionHandler();
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Unable to create the folder '{logpath}'");
+                Trace.WriteLine($"Exception: {ex.Message}");
+            }
+
+            SQLiteConnectionUser.EarlyReadRegister();
+            EDDConfig.Instance.Update(false);
         }
 
         private void CheckIfEliteDangerousIsRunning()
