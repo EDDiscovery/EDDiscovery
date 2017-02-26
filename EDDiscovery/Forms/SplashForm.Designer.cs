@@ -90,12 +90,14 @@ namespace EDDiscovery.Forms
             this.Controls.Add(this.label_version);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel_eddiscovery);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.ForeColor = System.Drawing.Color.Orange;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SplashForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EDDiscovery Loading";
+            this.TopMost = true;
             this.ResumeLayout(false);
 
         }
