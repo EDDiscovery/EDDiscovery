@@ -346,7 +346,7 @@ namespace EDDiscovery
 
         private void NewStarListComputed(string name, SortedList<double, ISystem> csl)      // thread..
         {
-            Invoke((MethodInvoker)delegate
+            BeginInvoke((MethodInvoker)delegate
             {
                 lastclosestname = name;
                 lastclosestsystems = csl;

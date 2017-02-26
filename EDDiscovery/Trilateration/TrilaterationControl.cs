@@ -462,8 +462,11 @@ namespace EDDiscovery
 
                     if (string.IsNullOrEmpty(commanderName))
                     {
-                        MessageBox.Show("Please enter commander name before submitting the system!");
-                        UnfreezeTrilaterationUI();
+                        this.BeginInvoke(new MethodInvoker(() =>
+                        {
+                            MessageBox.Show("Please enter commander name before submitting the system!");
+                            UnfreezeTrilaterationUI();
+                        }));
                         return;
                     }
                     edsm.commanderName = commanderName;
@@ -502,11 +505,15 @@ namespace EDDiscovery
 
                 Console.WriteLine(infoM);
 
-                Invoke((MethodInvoker)delegate
+                BeginInvoke((MethodInvoker)delegate
                {
+                   UnfreezeTrilaterationUI();
+
                    if (responseOkM && trilaterationOkM)
                    {
                        LogTextSuccess("EDSM submission succeeded, trilateration successful." + Environment.NewLine);
+                       _discoveryForm.RefreshHistoryAsync();
+                       checkForUnknownSystemsNowKnown();
                    }
                    else if (responseOkM)
                    {
@@ -516,23 +523,7 @@ namespace EDDiscovery
                    {
                        LogTextHighlight("EDSM submission failed." + Environment.NewLine);
                    }
-
                });
-
-                if (responseOkM && trilaterationOkM)
-                {
-                    Invoke((MethodInvoker)delegate
-                   {
-                        UnfreezeTrilaterationUI();
-                        _discoveryForm.RefreshHistoryAsync();
-                        checkForUnknownSystemsNowKnown();
-                   });
-                }
-                else
-                {
-                    Invoke((MethodInvoker)UnfreezeTrilaterationUI);
-                }
-
             }
             catch (Exception ex)
             {
