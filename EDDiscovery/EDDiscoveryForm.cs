@@ -142,11 +142,12 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryForm()
+        public EDDiscoveryForm(SplashForm splash)
         {
+            this.Owner = splash;
+            this.splashform = splash;
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => Invoke(a), a => BeginInvoke(a));
             Controller.OnNewEntry += (he, hl) => actioncontroller.ActionRunOnEntry(he, "NewEntry");
-            Controller.OnDbInitComplete += Controller_DbInitComplete;
             Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
             Controller.OnInitialSyncComplete += Controller_InitialSyncComplete;
@@ -156,7 +157,7 @@ namespace EDDiscovery
             Controller.OnReportProgress += Controller_ReportProgress;
             Controller.OnSyncComplete += Controller_SyncComplete;
             Controller.OnSyncStarting += Controller_SyncStarting;
-            Controller.Init(Control.ModifierKeys.HasFlag(Keys.Shift));
+            Controller.Init();
 
             InitializeComponent();
             _initialized = true;
@@ -219,14 +220,6 @@ namespace EDDiscovery
         {
             try
             {
-                Controller.PostInit_Loading();
-
-                if (!(SQLiteConnectionUser.IsInitialized && SQLiteConnectionSystem.IsInitialized))
-                {
-                    splashform = new SplashForm();
-                    splashform.ShowDialog(this);
-                }
-
                 Controller.PostInit_Loaded();
 
                 RepositionForm();
@@ -272,6 +265,7 @@ namespace EDDiscovery
             }
 
             actioncontroller.ActionRun("onStartup", "ProgramEvent");
+            splashform.Hide();
         }
 
         private Task CheckForNewInstallerAsync()
@@ -405,14 +399,6 @@ namespace EDDiscovery
 #endregion
 
 #region Controller event handlers
-        private void Controller_DbInitComplete()
-        {
-            if (splashform != null)
-            {
-                splashform.Close();
-            }
-        }
-
         private void Controller_InitialSyncComplete()
         {
             imageHandler1.StartWatcher();
