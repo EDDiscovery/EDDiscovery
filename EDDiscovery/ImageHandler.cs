@@ -67,7 +67,10 @@ namespace EDDiscovery2.ImageHandler
             "MM-DD-YYYY",
             "YYYY-MM-DD Sysname",
             "DD-MM-YYYY Sysname",
-            "MM-DD-YYYY Sysname"
+            "MM-DD-YYYY Sysname",
+            "CMDRName",
+            "CMDRName Sysname",
+            "YYYY-MM-DD CMDRName Sysname"
             });
 
             this.comboBoxScanFor.Items.AddRange(new string[] { "bmp -ED Launcher", "jpg -Steam" , "png -Steam" });
@@ -112,7 +115,12 @@ namespace EDDiscovery2.ImageHandler
             checkBoxHires.Checked = SQLiteDBClass.GetSettingBool("checkBoxHires", false);
 
             textBoxOutputDir.Text = EDDConfig.UserPaths.ImageHandlerOutputDir ?? OutputDirdefault;
+            if (!Directory.Exists(textBoxOutputDir.Text))
+                textBoxOutputDir.Text = OutputDirdefault;
+
             textBoxScreenshotsDir.Text = EDDConfig.UserPaths.ImageHandlerScreenshotsDir ?? ScreenshotsDirdefault;
+            if (!Directory.Exists(textBoxScreenshotsDir.Text))
+                textBoxScreenshotsDir.Text = ScreenshotsDirdefault;
 
             checkBoxCopyClipboard.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerClipboard", false);
             checkBoxPreview.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerPreview", false);
@@ -309,9 +317,11 @@ namespace EDDiscovery2.ImageHandler
 
                 using (Bitmap bmp = GetScreenshot(inputfile, cur_sysname, cmdrid, ref ss, ref store_name, ref finalsize, ref fi))
                 {
+                    cmdrid = ss.CommanderId;            // reload in case GetScreenshot changed it..
+
                     DateTime filetime = fi.CreationTimeUtc;
 
-                    ConvertParams cp = GetConversionParams(cur_sysname, filetime);
+                    ConvertParams cp = GetConversionParams(cur_sysname, filetime , cmdrid);
 
                     if (cp.cannotexecute)
                     {
@@ -319,8 +329,6 @@ namespace EDDiscovery2.ImageHandler
                         bmp.Dispose();
                         return;
                     }
-
-                    cmdrid = ss.CommanderId;
 
                     if (store_name == null || cp.reconvert)
                     {
@@ -500,7 +508,7 @@ namespace EDDiscovery2.ImageHandler
             public bool reconvert = true;
         }
 
-        private ConvertParams GetConversionParams(string cur_sysname, DateTime timestamp)
+        private ConvertParams GetConversionParams(string cur_sysname, DateTime timestamp, int cmdrid)
         {
             ConvertParams p = new ConvertParams();
 
@@ -537,6 +545,19 @@ namespace EDDiscovery2.ImageHandler
                     case 7: //"MM-DD-YYYY Sysname"
                         p.output_folder += "\\" + timestamp.ToString("MM-dd-yyyy") + " " + Tools.SafeFileString(cur_sysname);
                         break;
+
+                    case 8: // CMDR name
+                        p.output_folder += "\\" + Tools.SafeFileString(cmdrid >= 0 ? EDCommander.GetCommander(cmdrid).Name : "UnknownCmdr");
+                        break;
+
+                    case 9: // CMDR name sysname
+                        p.output_folder += "\\" + Tools.SafeFileString(cmdrid >= 0 ? EDCommander.GetCommander(cmdrid).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(cur_sysname);
+                        break;
+
+                    case 10: // YYYY - MM - DD CMDR name sysname
+                        p.output_folder += "\\" + timestamp.ToString("yyyy-MM-dd") + " " +
+                                     Tools.SafeFileString(cmdrid >= 0 ? EDCommander.GetCommander(cmdrid).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(cur_sysname);
+                        break;
                 }
 
                 if (!Directory.Exists(p.output_folder))
@@ -559,7 +580,7 @@ namespace EDDiscovery2.ImageHandler
             return p;
         }
 
-        private Bitmap ConvertImage(ConvertParams cp, string inputfile, Bitmap bmp, string cur_sysname, DateTime timestamp, JournalScreenshot ss, int cmdrid, ref string store_name)
+        private Bitmap ConvertImage(ConvertParams cp, string inputfile, Bitmap bmp, string cur_sysname, DateTime timestamp, JournalScreenshot unusedss, int unusedcmdrid, ref string store_name)
         {
             int index = 0;
             do                                          // add _N on the filename for index>0, to make them unique.

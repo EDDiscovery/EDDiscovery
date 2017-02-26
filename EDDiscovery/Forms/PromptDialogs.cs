@@ -11,9 +11,9 @@ namespace EDDiscovery.Forms
     public static class PromptSingleLine
     {
         public static string ShowDialog(Form p, 
-                            string lab1, string defaultValue1, string caption, bool multiline = false)
+                            string lab1, string defaultValue1, string caption, bool multiline = false, string tooltip = null)
         {
-            List<string> r = PromptMultiLine.ShowDialog(p, caption, new string[] { lab1 }, new string[] { defaultValue1 }, multiline);
+            List<string> r = PromptMultiLine.ShowDialog(p, caption, new string[] { lab1 }, new string[] { defaultValue1 }, multiline , tooltip != null ? new string[] { tooltip } : null);
 
             return (r != null) ? r[0] : null;
         }
@@ -22,9 +22,9 @@ namespace EDDiscovery.Forms
     public static class PromptDoubleLine
     {
         public static Tuple<string, string> ShowDialog(Form p, 
-                            string lab1, string lab2, string defaultValue1, string defaultValue2, string caption, bool multiline = false)
+                            string lab1, string lab2, string defaultValue1, string defaultValue2, string caption, bool multiline = false , string[] tooltip = null)
         {
-            List<string> r = PromptMultiLine.ShowDialog(p, caption, new string[] { lab1, lab2 }, new string[] { defaultValue1, defaultValue2 }, multiline);
+            List<string> r = PromptMultiLine.ShowDialog(p, caption, new string[] { lab1, lab2 }, new string[] { defaultValue1, defaultValue2 }, multiline , tooltip );
 
             return (r != null) ? new Tuple<string, string>(r[0], r[1]) : null;
         }
@@ -33,7 +33,7 @@ namespace EDDiscovery.Forms
     public static class PromptMultiLine
     {
         // lab sets the items, def can be less or null
-        public static List<string> ShowDialog(Form p, string caption, string[] lab, string[] def, bool multiline = false)
+        public static List<string> ShowDialog(Form p, string caption, string[] lab, string[] def, bool multiline = false, string[] tooltips = null)
         {
             EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
 
@@ -63,6 +63,9 @@ namespace EDDiscovery.Forms
             Label[] lbs = new Label[lab.Length];
             ExtendedControls.TextBoxBorder[] tbs = new ExtendedControls.TextBoxBorder[lab.Length];
 
+            ToolTip tt = new ToolTip();
+            tt.ShowAlways = true;
+
             int y = vstart;
 
             for (int i = 0; i < lab.Length; i++)
@@ -81,6 +84,13 @@ namespace EDDiscovery.Forms
                 };
                 outer.Controls.Add(lbs[i]);
                 outer.Controls.Add(tbs[i]);
+
+                if (tooltips != null && i < tooltips.Length)
+                {
+                    tt.SetToolTip(lbs[i], tooltips[i]);
+                    tt.SetToolTip(tbs[i], tooltips[i]);
+                }
+
                 y += vspacing;
             }
 

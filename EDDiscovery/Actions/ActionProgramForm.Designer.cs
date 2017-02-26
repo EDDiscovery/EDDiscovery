@@ -46,12 +46,24 @@ namespace EDDiscovery.Actions
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionProgramForm));
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.panelVScroll = new ExtendedControls.PanelVScroll();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.buttonMore = new ExtendedControls.ButtonExt();
             this.panelName = new System.Windows.Forms.Panel();
+            this.buttonExtDelete = new ExtendedControls.ButtonExt();
+            this.textBoxBorderName = new ExtendedControls.TextBoxBorder();
             this.labelSet = new System.Windows.Forms.Label();
             this.labelName = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOK = new System.Windows.Forms.Panel();
+            this.buttonExtLoad = new ExtendedControls.ButtonExt();
+            this.buttonExtSave = new ExtendedControls.ButtonExt();
+            this.buttonExtEdit = new ExtendedControls.ButtonExt();
+            this.buttonCancel = new ExtendedControls.ButtonExt();
+            this.buttonOK = new ExtendedControls.ButtonExt();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,25 +72,14 @@ namespace EDDiscovery.Actions
             this.whitespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeWhitespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panelVScroll = new ExtendedControls.PanelVScroll();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.buttonMore = new ExtendedControls.ButtonExt();
-            this.buttonExtDelete = new ExtendedControls.ButtonExt();
-            this.textBoxBorderName = new ExtendedControls.TextBoxBorder();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
-            this.buttonExtLoad = new ExtendedControls.ButtonExt();
-            this.buttonExtSave = new ExtendedControls.ButtonExt();
-            this.buttonExtEdit = new ExtendedControls.ButtonExt();
-            this.buttonCancel = new ExtendedControls.ButtonExt();
-            this.buttonOK = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.buttonExtDisk = new ExtendedControls.ButtonExt();
             this.panelOuter.SuspendLayout();
+            this.panelVScroll.SuspendLayout();
             this.panelName.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
-            this.panelVScroll.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelOuter
@@ -91,130 +92,6 @@ namespace EDDiscovery.Actions
             this.panelOuter.Padding = new System.Windows.Forms.Padding(3);
             this.panelOuter.Size = new System.Drawing.Size(862, 388);
             this.panelOuter.TabIndex = 9;
-            // 
-            // panelName
-            // 
-            this.panelName.Controls.Add(this.buttonExtDelete);
-            this.panelName.Controls.Add(this.textBoxBorderName);
-            this.panelName.Controls.Add(this.labelSet);
-            this.panelName.Controls.Add(this.labelName);
-            this.panelName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelName.Location = new System.Drawing.Point(3, 24);
-            this.panelName.Name = "panelName";
-            this.panelName.Size = new System.Drawing.Size(862, 36);
-            this.panelName.TabIndex = 8;
-            // 
-            // labelSet
-            // 
-            this.labelSet.AutoSize = true;
-            this.labelSet.Location = new System.Drawing.Point(53, 7);
-            this.labelSet.Name = "labelSet";
-            this.labelSet.Size = new System.Drawing.Size(33, 13);
-            this.labelSet.TabIndex = 23;
-            this.labelSet.Text = "<set>";
-            // 
-            // labelName
-            // 
-            this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(3, 7);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(38, 13);
-            this.labelName.TabIndex = 23;
-            this.labelName.Text = "Name:";
-            // 
-            // panelTop
-            // 
-            this.panelTop.Controls.Add(this.panel_close);
-            this.panelTop.Controls.Add(this.panel_minimize);
-            this.panelTop.Controls.Add(this.label_index);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(3, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(862, 24);
-            this.panelTop.TabIndex = 29;
-            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
-            // 
-            // label_index
-            // 
-            this.label_index.AutoSize = true;
-            this.label_index.Location = new System.Drawing.Point(3, 8);
-            this.label_index.Name = "label_index";
-            this.label_index.Size = new System.Drawing.Size(27, 13);
-            this.label_index.TabIndex = 23;
-            this.label_index.Text = "N/A";
-            this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
-            // 
-            // panelOK
-            // 
-            this.panelOK.Controls.Add(this.buttonExtLoad);
-            this.panelOK.Controls.Add(this.buttonExtSave);
-            this.panelOK.Controls.Add(this.buttonExtEdit);
-            this.panelOK.Controls.Add(this.buttonCancel);
-            this.panelOK.Controls.Add(this.buttonOK);
-            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(3, 448);
-            this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(862, 30);
-            this.panelOK.TabIndex = 9;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem,
-            this.deleteToolStripMenuItem,
-            this.insertEntryAboveToolStripMenuItem,
-            this.whitespaceToolStripMenuItem,
-            this.removeWhitespaceToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 136);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
-            // 
-            // pasteToolStripMenuItem
-            // 
-            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.pasteToolStripMenuItem.Text = "Paste";
-            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
-            // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
-            // 
-            // insertEntryAboveToolStripMenuItem
-            // 
-            this.insertEntryAboveToolStripMenuItem.Name = "insertEntryAboveToolStripMenuItem";
-            this.insertEntryAboveToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.insertEntryAboveToolStripMenuItem.Text = "Insert Entry above";
-            this.insertEntryAboveToolStripMenuItem.Click += new System.EventHandler(this.insertEntryAboveToolStripMenuItem_Click);
-            // 
-            // whitespaceToolStripMenuItem
-            // 
-            this.whitespaceToolStripMenuItem.Name = "whitespaceToolStripMenuItem";
-            this.whitespaceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.whitespaceToolStripMenuItem.Text = "Insert whitespace below";
-            this.whitespaceToolStripMenuItem.Click += new System.EventHandler(this.whitespaceToolStripMenuItem_Click);
-            // 
-            // removeWhitespaceToolStripMenuItem
-            // 
-            this.removeWhitespaceToolStripMenuItem.Name = "removeWhitespaceToolStripMenuItem";
-            this.removeWhitespaceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.removeWhitespaceToolStripMenuItem.Text = "Remove whitespace";
-            this.removeWhitespaceToolStripMenuItem.Click += new System.EventHandler(this.removeWhitespaceToolStripMenuItem_Click);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.ShowAlways = true;
             // 
             // panelVScroll
             // 
@@ -275,6 +152,18 @@ namespace EDDiscovery.Actions
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
+            // panelName
+            // 
+            this.panelName.Controls.Add(this.buttonExtDelete);
+            this.panelName.Controls.Add(this.textBoxBorderName);
+            this.panelName.Controls.Add(this.labelSet);
+            this.panelName.Controls.Add(this.labelName);
+            this.panelName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelName.Location = new System.Drawing.Point(3, 24);
+            this.panelName.Name = "panelName";
+            this.panelName.Size = new System.Drawing.Size(862, 36);
+            this.panelName.TabIndex = 8;
+            // 
             // buttonExtDelete
             // 
             this.buttonExtDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -297,6 +186,36 @@ namespace EDDiscovery.Actions
             this.textBoxBorderName.Name = "textBoxBorderName";
             this.textBoxBorderName.Size = new System.Drawing.Size(154, 20);
             this.textBoxBorderName.TabIndex = 0;
+            // 
+            // labelSet
+            // 
+            this.labelSet.AutoSize = true;
+            this.labelSet.Location = new System.Drawing.Point(53, 7);
+            this.labelSet.Name = "labelSet";
+            this.labelSet.Size = new System.Drawing.Size(33, 13);
+            this.labelSet.TabIndex = 23;
+            this.labelSet.Text = "<set>";
+            // 
+            // labelName
+            // 
+            this.labelName.AutoSize = true;
+            this.labelName.Location = new System.Drawing.Point(3, 7);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(38, 13);
+            this.labelName.TabIndex = 23;
+            this.labelName.Text = "Name:";
+            // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.panel_close);
+            this.panelTop.Controls.Add(this.panel_minimize);
+            this.panelTop.Controls.Add(this.label_index);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(3, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(862, 24);
+            this.panelTop.TabIndex = 29;
+            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // panel_close
             // 
@@ -333,6 +252,30 @@ namespace EDDiscovery.Actions
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 26;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            // 
+            // label_index
+            // 
+            this.label_index.AutoSize = true;
+            this.label_index.Location = new System.Drawing.Point(3, 8);
+            this.label_index.Name = "label_index";
+            this.label_index.Size = new System.Drawing.Size(27, 13);
+            this.label_index.TabIndex = 23;
+            this.label_index.Text = "N/A";
+            this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            // 
+            // panelOK
+            // 
+            this.panelOK.Controls.Add(this.buttonExtDisk);
+            this.panelOK.Controls.Add(this.buttonExtLoad);
+            this.panelOK.Controls.Add(this.buttonExtSave);
+            this.panelOK.Controls.Add(this.buttonExtEdit);
+            this.panelOK.Controls.Add(this.buttonCancel);
+            this.panelOK.Controls.Add(this.buttonOK);
+            this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelOK.Location = new System.Drawing.Point(3, 448);
+            this.panelOK.Name = "panelOK";
+            this.panelOK.Size = new System.Drawing.Size(862, 30);
+            this.panelOK.TabIndex = 9;
             // 
             // buttonExtLoad
             // 
@@ -401,6 +344,65 @@ namespace EDDiscovery.Actions
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.deleteToolStripMenuItem,
+            this.insertEntryAboveToolStripMenuItem,
+            this.whitespaceToolStripMenuItem,
+            this.removeWhitespaceToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 136);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // insertEntryAboveToolStripMenuItem
+            // 
+            this.insertEntryAboveToolStripMenuItem.Name = "insertEntryAboveToolStripMenuItem";
+            this.insertEntryAboveToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.insertEntryAboveToolStripMenuItem.Text = "Insert Entry above";
+            this.insertEntryAboveToolStripMenuItem.Click += new System.EventHandler(this.insertEntryAboveToolStripMenuItem_Click);
+            // 
+            // whitespaceToolStripMenuItem
+            // 
+            this.whitespaceToolStripMenuItem.Name = "whitespaceToolStripMenuItem";
+            this.whitespaceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.whitespaceToolStripMenuItem.Text = "Insert whitespace below";
+            this.whitespaceToolStripMenuItem.Click += new System.EventHandler(this.whitespaceToolStripMenuItem_Click);
+            // 
+            // removeWhitespaceToolStripMenuItem
+            // 
+            this.removeWhitespaceToolStripMenuItem.Name = "removeWhitespaceToolStripMenuItem";
+            this.removeWhitespaceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.removeWhitespaceToolStripMenuItem.Text = "Remove whitespace";
+            this.removeWhitespaceToolStripMenuItem.Click += new System.EventHandler(this.removeWhitespaceToolStripMenuItem_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
             // statusStripCustom
             // 
             this.statusStripCustom.Location = new System.Drawing.Point(3, 478);
@@ -408,6 +410,19 @@ namespace EDDiscovery.Actions
             this.statusStripCustom.Size = new System.Drawing.Size(862, 22);
             this.statusStripCustom.TabIndex = 28;
             this.statusStripCustom.Text = "statusStripCustom1";
+            // 
+            // buttonExtDisk
+            // 
+            this.buttonExtDisk.BorderColorScaling = 1.25F;
+            this.buttonExtDisk.ButtonColorScaling = 0.5F;
+            this.buttonExtDisk.ButtonDisabledScaling = 0.5F;
+            this.buttonExtDisk.Location = new System.Drawing.Point(275, 4);
+            this.buttonExtDisk.Name = "buttonExtDisk";
+            this.buttonExtDisk.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtDisk.TabIndex = 11;
+            this.buttonExtDisk.Text = "As File";
+            this.buttonExtDisk.UseVisualStyleBackColor = true;
+            this.buttonExtDisk.Click += new System.EventHandler(this.buttonExtDisk_Click);
             // 
             // ActionProgramForm
             // 
@@ -426,13 +441,13 @@ namespace EDDiscovery.Actions
             this.Text = "ActionProgramForm";
             this.Shown += new System.EventHandler(this.ActionProgramForm_Shown);
             this.panelOuter.ResumeLayout(false);
+            this.panelVScroll.ResumeLayout(false);
             this.panelName.ResumeLayout(false);
             this.panelName.PerformLayout();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelOK.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
-            this.panelVScroll.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -468,5 +483,6 @@ namespace EDDiscovery.Actions
         private System.Windows.Forms.ToolStripMenuItem removeWhitespaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertEntryAboveToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip1;
+        private ExtendedControls.ButtonExt buttonExtDisk;
     }
 }

@@ -567,6 +567,7 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
+            actioncontroller.ReLoad();
             actioncontroller.ActionRun("onStartup", "ProgramEvent");
         }
 
