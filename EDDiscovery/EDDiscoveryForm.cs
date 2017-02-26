@@ -471,6 +471,7 @@ namespace EDDiscovery
             audiodriverwave.Dispose();
 
             Close();
+            splashform.Close();
             Application.Exit();
         }
 
