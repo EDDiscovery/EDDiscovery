@@ -35,6 +35,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Group = JSONHelper.GetStringDef(evt["Group"]);
             Credits = JSONHelper.GetLong(evt["Credits"]);
             Loan = JSONHelper.GetLong(evt["Loan"]);
+
+            ShipName = JSONHelper.GetStringDef(evt["ShipName"]);
+            ShipIdent = JSONHelper.GetStringDef(evt["ShipIdent"]);
+            FuelLevel = JSONHelper.GetDouble(evt["FuelLevel"]);
+            FuelCapacity = JSONHelper.GetDouble(evt["FuelCapacity"]);
         }
 
         public string LoadGameCommander { get; set; }
@@ -46,6 +51,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Group { get; set; }
         public long Credits { get; set; }
         public long Loan { get; set; }
+
+        public string ShipName { get; set; } // : user-defined ship name
+        public string ShipIdent { get; set; } //   user-defined ship ID string
+        public double FuelLevel { get; set; }
+        public double FuelCapacity { get; set; }
+
 
         public override string DefaultRemoveItems()
         {

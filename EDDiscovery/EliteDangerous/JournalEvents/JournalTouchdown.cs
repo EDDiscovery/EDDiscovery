@@ -17,10 +17,12 @@ using Newtonsoft.Json.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    //When written: landing on a planet surface
-    //Parameters:
-    //•	Latitude
-    //•	Longitude
+//    When written: landing on a planet surface
+//    Parameters:
+//•	Latitude(only if player is landing)
+//•	Longitude(only if player is landing)
+//•	PlayerControlled: (bool) false if ship was recalled from SRV, true if player is landing
+
     [JournalEntryType(JournalTypeEnum.Touchdown)]
     public class JournalTouchdown : JournalEntry
     {
@@ -28,8 +30,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Latitude = JSONHelper.GetDouble(evt["Latitude"]);
             Longitude = JSONHelper.GetDouble(evt["Longitude"]);
+            PlayerControlled = JSONHelper.GetBoolNull(evt["PlayerControlled"]);
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public bool? PlayerControlled { get; set; }
     }
 }

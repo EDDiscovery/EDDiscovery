@@ -18,11 +18,12 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-//    When Written: when claiming payment for combat bounties and bonds
-//Parameters:
-//•	Type
-//•	Amount: (Net amount received, after any broker fee)
-//•	BrokerPercenentage
+    //    When Written: when claiming payment for combat bounties and bonds
+    //Parameters:
+    //•	Type
+    //•	Amount: (Net amount received, after any broker fee)
+    //•	Faction: name of faction
+    //•	BrokerPercenentage
     [JournalEntryType(JournalTypeEnum.RedeemVoucher)]
     public class JournalRedeemVoucher : JournalEntry, ILedgerJournalEntry
     {
@@ -30,10 +31,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Type = JSONHelper.GetStringDef(evt["Type"]);
             Amount = JSONHelper.GetLong(evt["Amount"]);
+            Faction = JSONHelper.GetStringDef(evt["Faction"]);
             BrokerPercentage = JSONHelper.GetDouble(evt["BrokerPercentage"]);
         }
         public string Type { get; set; }
         public long Amount { get; set; }
+        public string Faction { get; set; }
         public double BrokerPercentage { get; set; }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
