@@ -98,6 +98,7 @@ namespace EDDiscovery.EliteDangerous
         MaterialCollected = 430,
         MaterialDiscarded = 440,
         MaterialDiscovered = 450,
+        Materials = 455,
         MiningRefined = 460,
         MissionAbandoned = 470,
         MissionAccepted = 480,
