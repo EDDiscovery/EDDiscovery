@@ -36,7 +36,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public class Material
         {
             public string Name { get; set; }
-            public string Count { get; set; }
+            public int Count { get; set; }
         }
 
         public JornalMaterials(JObject evt) : base(evt, JournalTypeEnum.Materials)

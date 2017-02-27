@@ -21,31 +21,33 @@ using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-//    When written: at startup, when loading from main menu
-//Parameters:
-//•	Inventory: array of cargo, with Name and Count for each
+//The "Passengers" event contains:
 
-//Example:
-//{ "timestamp":"2017-02-10T14:25:51Z", "event":"Cargo", "Inventory":[ { "Name":"syntheticmeat", "Count":2 }, { "Name":"evacuationshelter", "Count":1 }, { "Name":"progenitorcells", "Count":3 }, { "Name":"bioreducinglichen", "Count":1 }, { "Name":"neofabricinsulation", "Count":2 } ] }
-
-    [JournalEntryType(JournalTypeEnum.Cargo)]
-    public class JournalCargo : JournalEntry
+//"Manifest": array of passenger records, each containing:
+//o MissionID (int)
+//o Type (string)
+//o VIP (bool)
+//o Wanted (bool)
+//o Count (int)
+//from hchalkley
+    [JournalEntryType(JournalTypeEnum.Passengers)]
+    public class JournalPassengers : JournalEntry
     {
-        public class Cargo
+        public class Passengers
         {
-            public string Name { get; set; }
+            public int MissionID { get; set; }
+            public string Type { get; set; }
+            public bool VIP { get; set; }
+            public bool Wanted { get; set; }
             public int Count { get; set; }
         }
 
-        public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
+        public JournalPassengers(JObject evt) : base(evt, JournalTypeEnum.Passengers)
         {
-            Inventory = evt["Inventory"]?.ToObject<Cargo[]>();
+            Manifest = evt["Manifest"]?.ToObject<Passengers[]>();
         }
 
-        public Cargo[] Inventory { get; set; }
-
-
-
+        public Passengers[] Manifest { get; set; }
 
         //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
 
