@@ -90,6 +90,7 @@ namespace EDDiscovery.EliteDangerous
         LaunchSRV = 370,
         Liftoff = 380,
         LoadGame = 390,
+        Loadout = 395,
         Location = 400,
         MassModuleStore = 1010,
         MarketBuy = 410,

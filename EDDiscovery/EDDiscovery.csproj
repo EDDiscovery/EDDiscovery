@@ -305,6 +305,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalJoinACrew.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLoadout.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalQuitACrew.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
