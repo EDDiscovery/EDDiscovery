@@ -79,6 +79,7 @@ namespace EDDiscovery
 
         public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
         public ShipListModules ShipListModules { get { return shiplistmodules; } }
+        public PassengersList PassengersList { get { return passengerslist; } }
 
         // Calculated values, not from JE
 
@@ -100,6 +101,7 @@ namespace EDDiscovery
 
         MaterialCommoditiesList materialscommodities;
         ShipListModules shiplistmodules;
+        PassengersList passengerslist;
 
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
@@ -359,7 +361,8 @@ namespace EDDiscovery
         public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl , SQLiteConnectionUser conn )      // called after above with a USER connection
         {
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
-            shiplistmodules = ShipListModules.Process(je, prev?.shiplistmodules, conn);
+            shiplistmodules = ShipListModules.Process(je, prev?.shiplistmodules,conn);
+            passengerslist = PassengersList.Process(je, prev?.passengerslist,conn);
 
             snc = SystemNoteClass.GetNoteOnJournalEntry(Journalid);
 
