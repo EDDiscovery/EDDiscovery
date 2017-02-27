@@ -73,9 +73,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-        public void Loadout(ShipListModules shp, DB.SQLiteConnectionUser conn)
+        public void Module(ShipListModules shp, DB.SQLiteConnectionUser conn)
         {
-            shp.SetCurrentShip(Ship,ShipId);
+            shp.SetCurrentShip(Ship, ShipId);
         }
     }
 }

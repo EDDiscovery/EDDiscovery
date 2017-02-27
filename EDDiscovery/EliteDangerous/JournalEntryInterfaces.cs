@@ -40,6 +40,6 @@ namespace EDDiscovery.EliteDangerous
 
     public interface IModuleJournalEntry
     {
-        void Loadout(ShipListModules shp, SQLiteConnectionUser conn);
+        void Module(ShipListModules shp, SQLiteConnectionUser conn);
     }
 }
