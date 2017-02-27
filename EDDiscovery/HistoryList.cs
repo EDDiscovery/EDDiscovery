@@ -76,7 +76,9 @@ namespace EDDiscovery
                 if ((EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) && EventTimeUTC>ed22 ) return true; else return false;
             }
         }
+
         public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
+        public ShipListModules ShipListModules { get { return shiplistmodules; } }
 
         // Calculated values, not from JE
 
@@ -97,6 +99,7 @@ namespace EDDiscovery
         int travelled_jumps;
 
         MaterialCommoditiesList materialscommodities;
+        ShipListModules shiplistmodules;
 
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
@@ -356,6 +359,7 @@ namespace EDDiscovery
         public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl , SQLiteConnectionUser conn )      // called after above with a USER connection
         {
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
+            shiplistmodules = ShipListModules.Process(je, prev?.shiplistmodules, conn);
 
             snc = SystemNoteClass.GetNoteOnJournalEntry(Journalid);
 

@@ -38,7 +38,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //{ "timestamp":"2017-02-10T14:25:51Z", "event":"Loadout", "Modules":[ { "Slot":"HugeHardpoint1", "Item":"Hpt_MultiCannon_Gimbal_Huge", "On":true, "Priority":0, "AmmoInClip":90, "AmmoInHopper":2010 }, { "Slot":"MediumHardpoint1", "Item":"Hpt_BeamLaser_Turret_Medium", "On":true, "Priority":0 }, { "Slot":"MediumHardpoint2", "Item":"Hpt_BeamLaser_Turret_Medium", "On":true, "Priority":0, { "Slot":"TinyHardpoint1", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":9940 }, { "Slot":"Armour", "Item":"FerDeLance_Armour_Grade1", "On":true, "Priority":1 }, { "Slot":"PaintJob", "Item":"PaintJob_FerDeLance_Tactical_White", "On":true, "Priority":1 }, { "Slot":"PowerPlant", "Item":"Int_Powerplant_Size6_Class5", "On":true, "Priority":1 }, { "Slot":"MainEngines", "Item":"Int_Engine_Size5_Class5", "On":true, "Priority":0 }, { "Slot":"FrameShiftDrive", "Item":"Int_Hyperdrive_Size4_Class5", "On":true, "Priority":0, "EngineerBlueprint":"FSD_LongRange", "EngineerLevel":5 }, { "Slot":"LifeSupport", "Item":"Int_LifeSupport_Size4_Class2", "On":true, "Priority":0 }, { "Slot":"PowerDistributor", "Item":"Int_PowerDistributor_Size6_Class5", "On":true, "Priority":0, "EngineerBlueprint":"PowerDistributor_PriorityWeapons", "EngineerLevel":1 }, { "Slot":"Radar", "Item":"Int_Sensors_Size4_Class5", 
 
     [JournalEntryType(JournalTypeEnum.Loadout)]
-    public class JournalLoadout : JournalEntry
+    public class JournalLoadout : JournalEntry, IModuleJournalEntry
     {
         public class ShipModule
         {
@@ -52,6 +52,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public int BlueprintLevel { get; set; }         // or 0
 
             public string ItemFriendlyName { get { return Item.SplitCapsWordUnderscoreTitleCase(); } }
+            public string SlotFriendlyName { get { return Slot.SplitCapsWordUnderscoreTitleCase(); } }
+
+            public ShipModule()
+            { }
+            public ShipModule(string s, string i, bool e, int p, int ac, int ah, string b, int bl)
+            {
+                Slot = s; Item = i; Enabled = e; Priority = p; AmmoClip = ac; AmmoHopper = ah; Blueprint = b; BlueprintLevel = bl;
+            }
+
+            public ShipModule Clone()
+            {
+                return new ShipModule(Slot, Item, Enabled, Priority, AmmoClip, AmmoHopper, Blueprint, BlueprintLevel);
+            }
         }
 
         public JournalLoadout(JObject evt) : base(evt, JournalTypeEnum.Loadout)
@@ -77,6 +90,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public List<ShipModule> ShipModules;
 
+        public void Module(ShipListModules shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.UpdateModules(ShipModules);
+        }
 
         //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
 
