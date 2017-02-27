@@ -51,6 +51,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	OrbitalPeriod (seconds)
     //•	RotationPeriod (seconds)
     //•	Rings [ array of info ] - if rings present
+    //•	ReserveLevel: (Pristine/Major/Common/Low/Depleted) – if rings present
     //
     // Rings properties
     //•	Name
@@ -108,6 +109,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
         public Dictionary<string, double> Materials { get; set; }   
+
+        public EDReserve ReserveLevel { get;  set; }
+        public string ReserveLevelStr
+        {
+            get
+            {
+                return ReserveLevel.ToString();
+            }
+            set
+            {
+                ReserveLevel = Bodies.ReserveStr2Enum(value);
+            }
+        }
 
         // Classes
 
@@ -172,6 +186,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             nSurfaceTemperature = JSONHelper.GetDoubleNull(evt["SurfaceTemperature"]);
             nSurfacePressure = JSONHelper.GetDoubleNull(evt["SurfacePressure"]);
             nLandable = JSONHelper.GetBoolNull(evt["Landable"]);
+
+            ReserveLevelStr = JSONHelper.GetStringDef(evt["ReserveLevel"]);
 
             if (IsStar)
             {
