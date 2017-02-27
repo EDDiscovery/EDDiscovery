@@ -37,4 +37,9 @@ namespace EDDiscovery.EliteDangerous
     {
         void LedgerNC(MaterialCommoditiesLedger mcl, SQLiteConnectionUser conn);
     }
+
+    public interface IModuleJournalEntry
+    {
+        void Loadout(ShipListModules shp, SQLiteConnectionUser conn);
+    }
 }

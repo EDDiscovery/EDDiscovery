@@ -309,6 +309,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
+    <Compile Include="EliteDangerous\Modules.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>

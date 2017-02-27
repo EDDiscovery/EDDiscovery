@@ -22,7 +22,7 @@ using System.Text;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.LoadGame)]
-    public class JournalLoadGame : JournalEntry, ILedgerJournalEntry
+    public class JournalLoadGame : JournalEntry, ILedgerJournalEntry, IModuleJournalEntry
     {
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
@@ -65,7 +65,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadgame; } }
 
-
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {
             if (mcl.CashTotal != Credits)
@@ -74,5 +73,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
+        public void Loadout(ShipListModules shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.SetCurrentShip(Ship,ShipId);
+        }
     }
 }
