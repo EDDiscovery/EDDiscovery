@@ -42,4 +42,9 @@ namespace EDDiscovery.EliteDangerous
     {
         void Module(ShipListModules shp, SQLiteConnectionUser conn);
     }
+
+    public interface IPassengersJournalEntry
+    {
+        void UpdatePassengers(PassengersList shp, SQLiteConnectionUser conn);
+    }
 }

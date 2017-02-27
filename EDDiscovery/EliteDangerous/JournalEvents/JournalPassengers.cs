@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //o Count (int)
 //from hchalkley
     [JournalEntryType(JournalTypeEnum.Passengers)]
-    public class JournalPassengers : JournalEntry
+    public class JournalPassengers : JournalEntry, IPassengersJournalEntry
     {
         public class Passengers
         {
@@ -40,6 +40,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public bool VIP { get; set; }
             public bool Wanted { get; set; }
             public int Count { get; set; }
+
+            public Passengers()
+            { }
+            public Passengers(int i, string t, bool v, bool w, int c)
+            {
+                MissionID = i; Type = t; VIP = v; Wanted = w; Count = c;
+            }
+            public Passengers Clone()
+            {
+                return new Passengers(MissionID, Type, VIP, Wanted, Count);
+            }
         }
 
         public JournalPassengers(JObject evt) : base(evt, JournalTypeEnum.Passengers)
@@ -48,6 +59,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public Passengers[] Manifest { get; set; }
+
+        public void UpdatePassengers(PassengersList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.SetPassengers(Manifest);
+        }
 
         //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
 
