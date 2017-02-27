@@ -112,6 +112,7 @@ namespace EDDiscovery.EliteDangerous
         ModuleStore = 525,
         ModuleSwap = 530,
         NewCommander = 540,
+        Passengers = 545,
         PayFines = 550,
         PayLegacyFines = 560,
         PowerplayCollect = 570,
