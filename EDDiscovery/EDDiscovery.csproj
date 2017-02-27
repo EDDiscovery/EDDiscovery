@@ -300,7 +300,8 @@
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JornalMaterials.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalMaterials.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCargo.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberJoins.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />

@@ -41,6 +41,7 @@ namespace EDDiscovery.EliteDangerous
         BuyExplorationData = 40,
         BuyTradeData = 50,
         CapShipBond = 60,
+        Cargo = 63,
         ChangeCrewRole = 65,
         ClearSavedGame = 70,
         CockpitBreached = 80,
