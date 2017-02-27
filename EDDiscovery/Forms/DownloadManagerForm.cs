@@ -132,7 +132,7 @@ namespace EDDiscovery.Forms
 #endif
 #endif
 
-            Invoke((MethodInvoker)ReadyToDisplay);
+            BeginInvoke((MethodInvoker)ReadyToDisplay);
         }
 
         private void DownloadManagerForm_FormClosing(object sender, FormClosingEventArgs e)
