@@ -846,9 +846,23 @@ namespace EDDiscovery.UserControls
                 discoveryform.ActionRunOnEntry(rightclicksystem, "UserRightClick");
         }
 
-#endregion
+        private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
+                {
+                    if (noteform.ShowDialog() == DialogResult.OK)
+                    {
+                        discoveryform.StoreSystemNote(rightclicksystem, noteform.NoteText, true);
+                    }
+                }
+            }
+        }
 
-#region Event Filter
+        #endregion
+
+        #region Event Filter
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
@@ -882,8 +896,6 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
-
-
     }
 
 }
