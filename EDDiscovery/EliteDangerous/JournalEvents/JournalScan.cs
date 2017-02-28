@@ -377,8 +377,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
-            int low, hi;
-            int estvalue = EstimatedValue(out low, out hi);
+            
+            int estvalue = EstimatedValue();
             if (estvalue > 0)
                 scanText.AppendFormat("\nEstimated value: {0}", estvalue);
 
@@ -688,8 +688,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return radius_metres / 300000000;
         }
 
-        public int EstimatedValue(out int low, out int high)
+        public int EstimatedValue()
         {
+            int low;
+            int high;
+
             if (IsStar)
             {
                 switch (StarTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
