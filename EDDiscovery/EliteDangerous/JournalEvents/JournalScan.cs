@@ -750,7 +750,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.AeBe:    // Herbig
                         //                ??
                         low = high = 0;
-                        return 0;
+                        return 2500;
                     case EDStar.TTS:
                         low = 2881;
                         high = 2922;
@@ -778,7 +778,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.S:   // seen in log
                                      //                ??
                         low = high = 0;
-                        return 0;
+                        return 2000;
 
 
                     // white dwarf
@@ -823,7 +823,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     default:
                         low = 0;
                         high = 0;
-                        return 0;
+                        return 2000;
                 }
             }
             else   // Planet
@@ -919,11 +919,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDPlanet.Helium_gas_giant:
                         low = 0;
                         high = 0;
-                        return 0;
+                        return 2000;
 
                     default:
                         low = 0;
-                        high = 0;
+                        high = 2000;
                         return 0;
                 }
 
