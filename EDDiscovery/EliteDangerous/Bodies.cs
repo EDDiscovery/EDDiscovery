@@ -181,6 +181,17 @@ namespace EDDiscovery.EliteDangerous
         Rocky_Magma = 1500,
     }
 
+    public enum EDReserve
+    {
+        None = 0,
+        Depleted,
+        Low,
+        Common,
+        Major,
+        Pristine,
+    }
+
+
 
     public class Bodies
     {
@@ -298,6 +309,26 @@ namespace EDDiscovery.EliteDangerous
             }
 
             return EDVolcanism.Unknown;
+        }
+
+
+        public static EDReserve ReserveStr2Enum(string star)
+        {
+            if (star == null)
+                return EDReserve.None;
+
+            var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLower();
+
+
+            foreach (EDReserve atm in Enum.GetValues(typeof(EDReserve)))
+            {
+                string str = atm.ToString().Replace("_", "").ToLower();
+
+                if (searchstr.Equals(str))
+                    return atm;
+            }
+
+            return EDReserve.None;
         }
 
 
