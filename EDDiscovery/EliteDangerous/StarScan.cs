@@ -14,8 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery.HTTP;
+using EDDiscovery2;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +30,9 @@ namespace EDDiscovery.EliteDangerous
     {
         Dictionary<Tuple<string, long>, SystemNode> scandata = new Dictionary<Tuple<string, long>, SystemNode>();
         Dictionary<string, List<SystemNode>> scandataByName = new Dictionary<string, List<SystemNode>>();
+        private static Dictionary<string, Dictionary<string, string>> planetDesignationMap = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
+        private static Dictionary<string, Dictionary<string, string>> starDesignationMap = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
+        private static Dictionary<string, List<JournalScan>> primaryStarScans = new Dictionary<string, List<JournalScan>>(StringComparer.InvariantCultureIgnoreCase);
 
         public class SystemNode
         {
@@ -42,6 +48,7 @@ namespace EDDiscovery.EliteDangerous
             public ScanNodeType type;
             public string fullname;                 // full name
             public string ownname;                  // own name              
+            public string customname;               // e.g. Earth
             public SortedList<string, ScanNode> children;         // kids
 
             private JournalScan scandata;            // can be null if no scan, its a place holder.
@@ -105,16 +112,87 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
+        public string GetBodyDesignation(JournalScan je, string system)
+        {
+            Dictionary<string, Dictionary<string, string>> desigmap = je.IsStar ? starDesignationMap : planetDesignationMap;
+
+            // Special case for m Centauri
+            if (je.IsStar && system.ToLowerInvariant() == "m centauri")
+            {
+                if (je.BodyName == "m Centauri")
+                {
+                    return "m Centauri A";
+                }
+                else if (je.BodyName == "M Centauri")
+                {
+                    return "m Centauri B";
+                }
+            }
+
+            if (desigmap.ContainsKey(system) && desigmap[system].ContainsKey(je.BodyName))
+            {
+                return desigmap[system][je.BodyName];
+            }
+
+            if (je.IsStar && je.BodyName == system && je.nOrbitalPeriod != null)
+            {
+                if (!primaryStarScans.ContainsKey(system))
+                {
+                    primaryStarScans[system] = new List<JournalScan>();
+                }
+
+                if (!primaryStarScans[system].Any(s => s.nAge == je.nAge &&
+                                                       s.nEccentricity == je.nEccentricity &&
+                                                       s.nOrbitalInclination == je.nOrbitalInclination &&
+                                                       s.nOrbitalPeriod == je.nOrbitalPeriod &&
+                                                       s.nPeriapsis == je.nPeriapsis &&
+                                                       s.nRadius == je.nRadius &&
+                                                       s.nRotationPeriod == je.nRotationPeriod &&
+                                                       s.nSemiMajorAxis == je.nSemiMajorAxis &&
+                                                       s.nStellarMass == je.nStellarMass))
+                {
+                    primaryStarScans[system].Add(je);
+                }
+
+                return system + " A";
+            }
+
+            if (je.BodyName.Equals(system, StringComparison.InvariantCultureIgnoreCase) || je.BodyName.StartsWith(system + " ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return je.BodyName;
+            }
+
+            if (je.IsStar && primaryStarScans.ContainsKey(system))
+            {
+                foreach (JournalScan primary in primaryStarScans[system])
+                {
+                    if (je.nOrbitalPeriod == primary.nOrbitalPeriod &&
+                        (je.nPeriapsis == null || primary.nPeriapsis == null || Math.Abs((double)je.nPeriapsis - (((double)primary.nPeriapsis + 180) % 360.0)) < 0.1) &&
+                        je.nOrbitalInclination == primary.nOrbitalInclination &&
+                        je.nEccentricity == primary.nEccentricity &&
+                        !je.BodyName.Equals(primary.BodyName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return system + " B";
+                    }
+                }
+            }
+
+            return je.BodyName;
+        }
+
         public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl)
         {
             for (int j = startindex; j >= 0; j--)
             {
-                if (je.IsStarNameRelated(hl[j].System.name))       // if its part of the name, use it
+                string designation = GetBodyDesignation(je, hl[j].System.name);
+                if (je.IsStarNameRelated(hl[j].System.name, designation))       // if its part of the name, use it
                 {
+                    je.BodyDesignation = designation;
                     return Process(je, hl[j].System);
                 }
             }
 
+            je.BodyDesignation = GetBodyDesignation(je, hl[startindex].System.name);
             return Process(je, hl[startindex].System);         // no relationship, add..
         }
 
@@ -192,6 +270,26 @@ namespace EDDiscovery.EliteDangerous
                 elements.Insert(0, "Main Star");                     // insert the MAIN designator as the star designator
             }
 
+            string customname = null;
+
+            if (sc.BodyName.StartsWith(sys.name, StringComparison.InvariantCultureIgnoreCase))
+            {
+                customname = sc.BodyName.Substring(sys.name.Length).TrimStart(' ', '-');
+
+                if (customname == "" && !sc.IsStar)
+                {
+                    customname = sc.BodyName;
+                }
+                else if (customname == "" || customname == rest)
+                {
+                    customname = null;
+                }
+            }
+            else if (rest == null || !sc.BodyName.EndsWith(rest))
+            {
+                customname = sc.BodyName;
+            }
+
             if (elements.Count >= 1)                          // okay, we have an element.. first is the star..
             {
                 ScanNode sublv0;
@@ -251,7 +349,10 @@ namespace EDDiscovery.EliteDangerous
                             }
 
                             if (elements.Count == 4)            // okay, need only 4 elements now.. if not, we have not coped..
+                            {
+                                sublv3.customname = customname;
                                 sublv3.ScanData = sc;
+                            }
                             else
                             {
                                 System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " too long");
@@ -260,16 +361,19 @@ namespace EDDiscovery.EliteDangerous
                         }
                         else
                         {
+                            sublv2.customname = customname;
                             sublv2.ScanData = sc;
                         }
                     }
                     else
                     {
+                        sublv1.customname = customname;
                         sublv1.ScanData = sc;
                     }
                 }
                 else
                 {
+                    sublv0.customname = customname;
                     sublv0.ScanData = sc;
                 }
 
@@ -312,7 +416,10 @@ namespace EDDiscovery.EliteDangerous
                     if (jl != null)
                     {
                         foreach (JournalScan js in jl)
+                        {
+                            js.BodyDesignation = GetBodyDesignation(js, sys.name);
                             Process(js, sys);
+                        }
                     }
 
                     if (sn == null)
@@ -324,6 +431,71 @@ namespace EDDiscovery.EliteDangerous
             }
 
             return sn;
+        }
+
+        public static void LoadBodyDesignationMap()
+        {
+            string desigmappath = Path.Combine(EDDConfig.Options.AppDataDirectory, "bodydesignations.csv");
+
+            if (!File.Exists(desigmappath))
+            {
+                desigmappath = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "bodydesignations.csv");
+            }
+
+            if (File.Exists(desigmappath))
+            {
+                foreach (string line in File.ReadLines(desigmappath))
+                {
+                    string[] fields = line.Split(',').Select(s => s.Trim('"')).ToArray();
+                    if (fields.Length == 3)
+                    {
+                        string sysname = fields[0];
+                        string bodyname = fields[1];
+                        string desig = fields[2];
+                        Dictionary<string, Dictionary<string, string>> desigmap = planetDesignationMap;
+
+                        if (desig == sysname || (desig.Length == sysname.Length + 2 && desig[sysname.Length + 1] >= 'A' && desig[sysname.Length + 1] <= 'F'))
+                        {
+                            desigmap = starDesignationMap;
+                        }
+
+                        if (!desigmap.ContainsKey(sysname))
+                        {
+                            desigmap[sysname] = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                        }
+
+                        desigmap[sysname][bodyname] = desig;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var skvp in BodyDesignations.Stars)
+                {
+                    if (!starDesignationMap.ContainsKey(skvp.Key))
+                    {
+                        starDesignationMap[skvp.Key] = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                    }
+
+                    foreach (var bkvp in skvp.Value)
+                    {
+                        starDesignationMap[skvp.Key][bkvp.Key] = bkvp.Value;
+                    }
+                }
+
+                foreach (var skvp in BodyDesignations.Planets)
+                {
+                    if (!planetDesignationMap.ContainsKey(skvp.Key))
+                    {
+                        planetDesignationMap[skvp.Key] = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                    }
+
+                    foreach (var bkvp in skvp.Value)
+                    {
+                        planetDesignationMap[skvp.Key][bkvp.Key] = bkvp.Value;
+                    }
+                }
+            }
         }
     }
 }

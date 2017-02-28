@@ -64,6 +64,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     public class JournalScan : JournalEntry
     {
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
+        public string BodyDesignation { get; set; }
 
         // ALL
         public string BodyName { get; set; }                        // direct (meaning no translation)
@@ -234,7 +235,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             EventTimeUTC = DateTime.UtcNow;
             throw new NotImplementedException();
         }
-
 
         public override void FillInformation(out string summary, out string info, out string detailed)
         {
@@ -650,11 +650,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scan; } }
 
-        public bool IsStarNameRelated(string starname)
+        public bool IsStarNameRelated(string starname, string designation = null)
         {
-            if (BodyName.Length >= starname.Length)
+            if (designation == null)
             {
-                string s = BodyName.Substring(0, starname.Length);
+                designation = BodyName;
+            }
+
+            if (designation.Length >= starname.Length)
+            {
+                string s = designation.Substring(0, starname.Length);
                 return starname.Equals(s, StringComparison.InvariantCultureIgnoreCase);
             }
             else
@@ -663,11 +668,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string IsStarNameRelatedReturnRest(string starname)          // null if not related, else rest of string
         {
-            if (BodyName.Length >= starname.Length)
+            string designation = BodyDesignation ?? BodyName;
+            if (designation.Length >= starname.Length)
             {
-                string s = BodyName.Substring(0, starname.Length);
+                string s = designation.Substring(0, starname.Length);
                 if (starname.Equals(s, StringComparison.InvariantCultureIgnoreCase))
-                    return BodyName.Substring(starname.Length).Trim();
+                    return designation.Substring(starname.Length).Trim();
             }
 
             return null;
