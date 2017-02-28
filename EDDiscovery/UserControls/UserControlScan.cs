@@ -314,7 +314,7 @@ namespace EDDiscovery.UserControls
                 {
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1, 
                                                 new Point(curpos.X+offset, curpos.Y + alignv) ,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);          // and the label needs to be a quarter height below it..
+                                                size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);          // and the label needs to be a quarter height below it..
 
                     if ( sc.HasRings )
                     {
@@ -370,13 +370,13 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.ownname, tip, labelvoff, sc.IsEDSMBody);
+                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.customname ?? sn.ownname, tip, labelvoff, sc.IsEDSMBody);
                         offset = size.Width;                                        // return that the middle is now this
                     }
                     else
                     {
                         endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size, 
-                                                    sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);
+                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);
                         offset += size.Width / 2;
                     }
 
@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + "\n\nNo scan data available";
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff, false);
+                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip , alignv + labelvoff, false);
                 offset += size.Width / 2;       // return the middle used was this..
             }
 
