@@ -290,6 +290,20 @@ namespace EDDiscovery.UserControls
                 strarr[2] = hl.GetFuelScoopedTons(DateTime.Now.AddDays(-30), DateTime.Now).ToString("0.00");
                 strarr[3] = hl.GetFuelScoopedTons(new DateTime(2012, 1, 1), DateTime.Now).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
+
+                strarr[0] = hl.GetNrScans(DateTime.Now.AddDays(-1), DateTime.Now).ToString("0");
+                strarr[1] = hl.GetNrScans(DateTime.Now.AddDays(-7), DateTime.Now).ToString("0");
+                strarr[2] = hl.GetNrScans(DateTime.Now.AddDays(-30), DateTime.Now).ToString("0");
+                strarr[3] = hl.GetNrScans(new DateTime(2012, 1, 1), DateTime.Now).ToString("0");
+                StatToDGV(dataGridViewTravel, "Scans", strarr);
+
+                strarr[0] = hl.GetScanValue(DateTime.Now.AddDays(-1), DateTime.Now).ToString("0");
+                strarr[1] = hl.GetScanValue(DateTime.Now.AddDays(-7), DateTime.Now).ToString("0");
+                strarr[2] = hl.GetScanValue(DateTime.Now.AddDays(-30), DateTime.Now).ToString("0");
+                strarr[3] = hl.GetScanValue(new DateTime(2012, 1, 1), DateTime.Now).ToString("0");
+                StatToDGV(dataGridViewTravel, "Scan value", strarr);
+
+
             }
             else
             {
@@ -385,6 +399,15 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetFuelScoopedTons(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00"); 
                 StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetNrScans(timeintervals[ii + 1], timeintervals[ii]).ToString("0");
+                StatToDGV(dataGridViewTravel, "Scans", strarr);
+
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetScanValue(timeintervals[ii + 1], timeintervals[ii]).ToString("0");
+                StatToDGV(dataGridViewTravel, "Scan value", strarr);
 
 
 
