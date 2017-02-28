@@ -575,6 +575,7 @@ namespace EDDiscovery.UserControls
         {
             Col2.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
             Col2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            Col2.SortMode = DataGridViewColumnSortMode.NotSortable;
         }
 
         void SizeControls()
@@ -665,6 +666,21 @@ namespace EDDiscovery.UserControls
         private void userControlStatsTimeScan_TimeModeChanged(object sender, EventArgs e)
         {
             Stats(null, null);
+        }
+
+        private void dataGridViewStats_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            
+        }
+
+        private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridViewSorter2.DataGridSort2(dataGridViewTravel, e.ColumnIndex);
+        }
+
+        private void dataGridViewScan_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridViewSorter2.DataGridSort2(dataGridViewScan, e.ColumnIndex);
         }
     }
 }
