@@ -299,6 +299,7 @@ namespace EDDiscovery
         private void BackgroundInit()
         {
             readyForInitialLoad.WaitOne();
+            StarScan.LoadBodyDesignationMap();
             downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
             CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
             ReportProgress(-1, "");
