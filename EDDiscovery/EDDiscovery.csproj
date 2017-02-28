@@ -302,6 +302,8 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
+    <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
     <Compile Include="CompanionAPI\CompanionCredentials.cs" />
@@ -311,6 +313,20 @@
     <Compile Include="CompanionAPI\CShip.cs" />
     <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
     <Compile Include="CompanionAPI\CCommander.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalMaterials.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCargo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberJoins.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJoinACrew.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLoadout.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPassengers.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalQuitACrew.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
+    <Compile Include="EliteDangerous\Modules.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>

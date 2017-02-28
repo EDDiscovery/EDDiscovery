@@ -22,7 +22,7 @@ using System.Text;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.LoadGame)]
-    public class JournalLoadGame : JournalEntry, ILedgerJournalEntry
+    public class JournalLoadGame : JournalEntry, ILedgerJournalEntry, IModuleJournalEntry
     {
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
@@ -35,6 +35,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Group = JSONHelper.GetStringDef(evt["Group"]);
             Credits = JSONHelper.GetLong(evt["Credits"]);
             Loan = JSONHelper.GetLong(evt["Loan"]);
+
+            ShipName = JSONHelper.GetStringDef(evt["ShipName"]);
+            ShipIdent = JSONHelper.GetStringDef(evt["ShipIdent"]);
+            FuelLevel = JSONHelper.GetDouble(evt["FuelLevel"]);
+            FuelCapacity = JSONHelper.GetDouble(evt["FuelCapacity"]);
         }
 
         public string LoadGameCommander { get; set; }
@@ -47,13 +52,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Credits { get; set; }
         public long Loan { get; set; }
 
+        public string ShipName { get; set; } // : user-defined ship name
+        public string ShipIdent { get; set; } //   user-defined ship ID string
+        public double FuelLevel { get; set; }
+        public double FuelCapacity { get; set; }
+
+
         public override string DefaultRemoveItems()
         {
             return base.DefaultRemoveItems() + ";ShipID";
         }
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadgame; } }
-
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -63,5 +73,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
+        public void Module(ShipListModules shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.SetCurrentShip(Ship, ShipId);
+        }
     }
 }
