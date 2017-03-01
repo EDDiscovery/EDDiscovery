@@ -82,7 +82,7 @@ namespace EDDiscovery.Actions
                 }
 
                 string errlist;
-                bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
+                bool? condres = condition.CheckAll(ap.functions.vars, out errlist, null, ap.functions);     // may return null.. and will return errlist
 
                 if (errlist == null)
                 {
@@ -121,7 +121,7 @@ namespace EDDiscovery.Actions
                     }
 
                     string errlist;
-                    bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
+                    bool? condres = condition.CheckAll(ap.functions.vars, out errlist, null, ap.functions);     // may return null.. and will return errlist
 
                     if (errlist == null)
                     {
@@ -183,7 +183,7 @@ namespace EDDiscovery.Actions
                 }
 
                 string errlist;
-                bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
+                bool? condres = condition.CheckAll(ap.functions.vars, out errlist, null, ap.functions);     // may return null.. and will return errlist
 
                 if (errlist == null)
                 {
@@ -214,7 +214,7 @@ namespace EDDiscovery.Actions
                 }
 
                 string errlist;
-                bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
+                bool? condres = condition.CheckAll(ap.functions.vars, out errlist, null, ap.functions);     // may return null.. and will return errlist
 
                 if (errlist == null)
                 {
@@ -283,13 +283,13 @@ namespace EDDiscovery.Actions
                 if (!inloop)            // if not in a loop
                 {
                     string res;
-                    if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+                    if (ap.functions.ExpandString(UserData,out res) != ConditionFunctions.ExpandResult.Failed)
                     {
                         if (res.InvariantParse(out loopcount))
                         {
                             inloop = true;
                             ap.PushState(Type, (loopcount > 0), true);   // set execute to On (if loop count is >0) and push the position of the LOOP
-                            ap.currentvars["Loop" + ap.ExecLevel] = "1";
+                            ap["Loop" + ap.ExecLevel] = "1";
                         }
                         else
                             ap.ReportError("Loop count must be an integer");
@@ -319,8 +319,8 @@ namespace EDDiscovery.Actions
                     ap.Goto(ap.PushPos + 1);                    // back to LOOP+1, keep level
 
                     int c = 0;
-                    if (ap.currentvars["Loop" + ap.ExecLevel].InvariantParse(out c)) // update LOOP level variable.. don't if they have mucked it up
-                        ap.currentvars["Loop" + ap.ExecLevel] = (c + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    if (ap["Loop" + ap.ExecLevel].InvariantParse(out c)) // update LOOP level variable.. don't if they have mucked it up
+                        ap["Loop" + ap.ExecLevel] = (c + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     return true;
                 }
@@ -404,7 +404,7 @@ namespace EDDiscovery.Actions
             }
 
             string errlist;
-            bool? condres = condition.CheckAll(ap.currentvars, out errlist, null, ap.functions.ExpandString);     // may return null.. and will return errlist
+            bool? condres = condition.CheckAll(ap.functions.vars, out errlist, null, ap.functions);     // may return null.. and will return errlist
 
             if (errlist == null)
             {
@@ -501,7 +501,7 @@ namespace EDDiscovery.Actions
                 List<string> wildcards = new List<string>();
                 ConditionVariables newitems = new ConditionVariables();
 
-                foreach (string key in vars.Keys)
+                foreach (string key in vars.NameEnumuerable)
                 {
                     int asterisk = key.IndexOf('*');
                     if (asterisk >= 0)                                    // SEE if any wildcards, if so, add to newitems
@@ -511,16 +511,16 @@ namespace EDDiscovery.Actions
                         wildcards.Add(key);
                         string prefix = key.Substring(0,asterisk);
 
-                        foreach( string jkey in ap.currentvars.Keys )
+                        foreach( string jkey in ap.variables.NameEnumuerable )
                         {
                             if (jkey.StartsWith(prefix))
                             {
                                 if (noexpand)
-                                    newitems[jkey] = ap.currentvars[jkey];
+                                    newitems[jkey] = ap[jkey];
                                 else
                                 {
                                     string res;
-                                    if (ap.functions.ExpandString(ap.currentvars[jkey], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
+                                    if (ap.functions.ExpandString(ap[jkey],out res) == ConditionFunctions.ExpandResult.Failed)
                                     {
                                         ap.ReportError(res);
                                         return false;
@@ -537,14 +537,14 @@ namespace EDDiscovery.Actions
                     vars.Delete(w);
 
                 //foreach ( stKeyValuePair<string,string> k in vars.values)          // for the rest, before we add in wildcards, expand
-                foreach (string k in vars.Keys.ToList())                            // for the rest, before we add in wildcards, expand. Note ToList
+                foreach (string k in vars.NameEnumuerable.ToList())                            // for the rest, before we add in wildcards, expand. Note ToList
                 {
                     bool noexpand = altops[k].Contains("$");            // when required
 
                     if (!noexpand)
                     {
                         string res;
-                        if (ap.functions.ExpandString(vars[k], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
+                        if (ap.functions.ExpandString(vars[k],out res) == ConditionFunctions.ExpandResult.Failed)
                         {
                             ap.ReportError(res);
                             return false;

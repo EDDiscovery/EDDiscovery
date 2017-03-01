@@ -53,7 +53,7 @@ namespace EDDiscovery.Actions
                     progqueue.Insert(0, progcurrent);
 
                 progcurrent = new ActionProgramRun(fileset, r, inputparas, this, actioncontroller);   // now we run this.. no need to push to stack
-                progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, actioncontroller.Globals); // set up its vars..
+                progcurrent.PrepareToRun(new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals));
             }
             else
                 progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, actioncontroller));
@@ -90,7 +90,7 @@ namespace EDDiscovery.Actions
                     {
                         actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ": "+ progcurrent.GetLastStep().Name +  Environment.NewLine + 
                                                     progcurrent.GetErrorList);
-                        progcurrent = null; // terminate current program..
+                        TerminateCurrent();
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it
                     {
@@ -98,7 +98,7 @@ namespace EDDiscovery.Actions
                         if (progcurrent.ExecLevel > 0 && progcurrent.LevelUp(progcurrent.ExecLevel, null)) // see if we have any pending LOOP (or a DO without a while) and continue..
                             continue;       // errors or movement causes it to go back.. errors will be picked up above
 
-                        progcurrent = null;         // cancel it
+                        TerminateCurrent();
                     }
                 }
 
@@ -107,14 +107,14 @@ namespace EDDiscovery.Actions
                     progcurrent = progqueue[0];
                     progqueue.RemoveAt(0);
 
-                    if (progcurrent.currentvars != null)      // if not null, its because its just been restarted after a call.. reset globals
-                        progcurrent.currentvars.Add(actioncontroller.Globals); // in case they have been updated...
+                    if (progcurrent.variables != null)      // if not null, its because its just been restarted after a call.. reset globals
+                        progcurrent.Add(actioncontroller.Globals); // in case they have been updated...
                     else
-                        progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, actioncontroller.Globals); // set them up
+                        progcurrent.PrepareToRun(new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals));
 
                     if (progcurrent.IsProgramFinished)          // reject empty programs..
                     {
-                        progcurrent = null;
+                        TerminateCurrent();
                         continue;       // and try again
                     }
                 }
@@ -159,9 +159,10 @@ namespace EDDiscovery.Actions
                         string retstr;
                         if ( ar.ExecuteActionReturn(progcurrent,out retstr) )
                         {
-                            progcurrent = null;
+                            TerminateCurrent();
+
                             if (progqueue.Count > 0)        // pass return value if program is there..
-                                progqueue[0].currentvars["ReturnValue"] = retstr;
+                                progqueue[0]["ReturnValue"] = retstr;
 
                             continue;       // back to top, next action from returned function.
                         }
@@ -193,9 +194,18 @@ namespace EDDiscovery.Actions
 
         public void TerminateAll()          // halt everything
         {
-            progcurrent = null;
+            TerminateCurrent();
             progqueue.Clear();
             executing = false;
+        }
+
+        public void TerminateCurrent()
+        {
+            if (progcurrent != null)
+            {
+                progcurrent.Terminated();
+                progcurrent = null;
+            }
         }
 
         public void WaitTillFinished(int timeout)           // Could be IN ANOTHER THREAD BEWARE

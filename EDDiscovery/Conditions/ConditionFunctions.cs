@@ -24,139 +24,44 @@ namespace EDDiscovery
 {
     public class ConditionFunctions
     {
-        static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+        public ConditionVariables vars;
+        public Dictionary<int, FileStream> filehandles;
 
-        class Parameter
+        public ConditionFunctions(ConditionVariables v, Dictionary<int, FileStream> f)
         {
-            public string value;
-            public bool isstring;
-        };
-
-        delegate bool func(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth);
-
-        class FuncEntry
-        {
-            public func fn;
-            public int numberparasmin;
-            public int numberparasmax;
-            public int checkvarmap;           // if not a string, check macro
-            public int allowstringmap;          // allow a string
-
-            public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx = 0 )
-            {
-                fn = f; numberparasmin = min; numberparasmax = max;
-                checkvarmap = checkmacromapx; allowstringmap = allowstringmapx;
-            }
-        }
-
-        Dictionary<string, FuncEntry> functions;
-        static Random rnd = new Random();
-
-        public ConditionFunctions()
-        {
-            functions = new Dictionary<string, FuncEntry>();
-
-            // first is a bitmap saying if to check for the value is a var
-            // second is a bitmap saying if a string is allowed in this pos
-            functions.Add("abs",            new FuncEntry(Abs,              2,2,    1,0));  // first is var or literal or string
-            functions.Add("closefile",      new FuncEntry(CloseFile,        1,1,    1,0));  // first is a var
-
-            functions.Add("datehour",       new FuncEntry(DateHour,         1, 1,   1));     // first is a var, no strings
-            functions.Add("date",           new FuncEntry(DateCnv,          2, 2,   1));     // first is a var, second is not, no strings
-            functions.Add("direxists",      new FuncEntry(DirExists,        1, 20,  0xfffffff, 0xfffffff));   // check var, can be string
-
-            functions.Add("escapechar",     new FuncEntry(EscapeChar,       1, 1,   1, 1));   // check var, can be string
-            functions.Add("eval",           new FuncEntry(Eval,             1, 2,   1, 1));   // can be string, can be variable, p2 is not a variable, and can't be a string
-            functions.Add("exist",          new FuncEntry(Exists,           1, 20,  0, 0));
-            functions.Add("existsdefault",  new FuncEntry(ExistsDefault,    2, 2,   2, 2));   // first is a macro but can not exist, second is a string or macro which must exist
-            functions.Add("expand",         new FuncEntry(Expand,           1,20,   0xfffffff,0xfffffff)); // check var, can be string (if so expanded)
-            functions.Add("expandarray",    new FuncEntry(ExpandArray,      4,5,    2,3+16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
-            functions.Add("expandvars",     new FuncEntry(ExpandVars,       4, 5,   2,3+16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
-            
-            functions.Add("fileexists",     new FuncEntry(FileExists,       1, 20, 0xfffffff, 0xfffffff));   // check var, can be string
-            functions.Add("findline",       new FuncEntry(FindLine,         2, 2, 3, 2));   //check var1 and var2, second can be a string
-            functions.Add("floor",          new FuncEntry(Floor,            2,2,    1));     // check var1, not var 2 no strings
-
-            functions.Add("ifnotempty",     new FuncEntry(Ifnotempty,       2,3,    7,7));   // check var1-3, allow strings var1-3
-            functions.Add("ifempty",        new FuncEntry(Ifempty,          2,3,    7,7));
-            functions.Add("iftrue",         new FuncEntry(Iftrue,           2,3,    7,7));   // check var1-3, allow strings var1-3
-            functions.Add("iffalse",        new FuncEntry(Iffalse,          2,3,    7,7));
-            functions.Add("ifzero",         new FuncEntry(Ifzero,           2,3,    7,7));   // check var1-3, allow strings var1-3
-            functions.Add("ifnonzero",      new FuncEntry(Ifnonzero,        2,3,    7,7));
-
-            functions.Add("ifcontains",     new FuncEntry(Ifcontains,       3,5,    31, 31)); // check var1-4, allow strings var1-4
-            functions.Add("ifnotcontains",  new FuncEntry(Ifnotcontains,    3,5,    31, 31));
-            functions.Add("ifequal",        new FuncEntry(Ifequal,          3,5,    31, 31));
-            functions.Add("ifnotequal",     new FuncEntry(Ifnotequal,       3,5,    31, 31));
-
-            functions.Add("indexof",        new FuncEntry(IndexOf,          2,2,    3,3));   // check var1 and 2 if normal, allow string in 1 and 2
-            functions.Add("indirect",       new FuncEntry(Indirect,         1,20,   0xfffffff,0xfffffff));   // check var, no strings
-
-            functions.Add("join",           new FuncEntry(Join,             3,20,   0xfffffff,0xfffffff));   // all can be string, check var
-
-            functions.Add("length",         new FuncEntry(Length,           1,1,    1,1));
-            functions.Add("lower",          new FuncEntry(Lower,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
-
-            functions.Add("mkdir",          new FuncEntry(MkDir,            1, 1,   1,1));   // check var, can be string
-
-            functions.Add("openfile",       new FuncEntry(OpenFile,         3,3,    2,2));
-
-            functions.Add("phrase",         new FuncEntry(Phrase,           1,1,    1,1));
-
-            functions.Add("random",         new FuncEntry(Random,           1,1,    0,0));   // no change var, not string
-            functions.Add("readline",       new FuncEntry(ReadLineFile,     2,2,    1,0));   // first must be a macro, second is a literal varname only
-            functions.Add("replace",        new FuncEntry(Replace,          3, 3,   7, 7)); // var/string for all
-            functions.Add("replaceescapechar",new FuncEntry(ReplaceEscapeChar,1,1,  1,1));   // check var, can be string
-            functions.Add("replacevar",     new FuncEntry(ReplaceVar,       2, 2,   1, 3)); // var/string, literal/var/string
-            functions.Add("round",          new FuncEntry(RoundCommon,      3,3,    1));
-            functions.Add("roundnz",        new FuncEntry(RoundCommon,      4,4,    1));
-            functions.Add("roundscale",     new FuncEntry(RoundCommon,      5,5,    1));
-            functions.Add("rs",             new FuncEntry(ReplaceVarSC,     2, 2,   1, 3)); // var/string, literal/var/string
-            functions.Add("rv",             new FuncEntry(ReplaceVar,       2, 2,   1, 3)); // var/string, literal/var/string
-
-            functions.Add("sc",             new FuncEntry(SplitCaps,        1, 1,   1, 1));   //shorter alias for above
-            functions.Add("ship",           new FuncEntry(Ship,             1, 1,   1, 1));   //ship translator
-            functions.Add("splitcaps",      new FuncEntry(SplitCaps,        1, 1,   1, 1));   //check var, allow strings
-            functions.Add("substring",      new FuncEntry(SubString,        3, 3,   1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
-
-            functions.Add("trim",           new FuncEntry(Trim,             1, 2,   1,1));
-
-            functions.Add("upper",          new FuncEntry(Upper,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
-
-            functions.Add("version",        new FuncEntry(Version,          1,1,    0));     // don't check first para
-
-            functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a var or string, second is a var or literal, third is a macro or string
-            functions.Add("write",          new FuncEntry(WriteLineFile,    2, 2,   3, 2));      // first must be a var, second can be macro or string
-            functions.Add("writeline",      new FuncEntry(WriteLineFile,    2, 2,   3, 2));      // first must be a var, second can be macro or string
+            vars = v;
+            filehandles = f;
         }
 
         #region expander
 
-        public ConditionLists.ExpandResult ExpandStrings(List<string> inv , out List<string> outv, ConditionVariables vars)
+        public enum ExpandResult { Failed, NoExpansion, Expansion };
+
+        public ExpandResult ExpandStrings(List<string> inv , out List<string> outv )
         {
             outv = new List<string>();
 
             foreach( string s in inv )
             {
                 string r;
-                if ( ExpandString(s,vars, out r) == ConditionLists.ExpandResult.Failed )
+                if ( ExpandString(s, out r) == ExpandResult.Failed )
                 {
                     outv = new List<string>() { r };
-                    return ConditionLists.ExpandResult.Failed;
+                    return ExpandResult.Failed;
                 }
 
                 outv.Add(r);
             }
 
-            return ConditionLists.ExpandResult.Expansion;
+            return ExpandResult.Expansion;
         }
 
-        public ConditionLists.ExpandResult ExpandString(string line, ConditionVariables vars, out string result)
+        public ExpandResult ExpandString(string line, out string result)
         {
-            return ExpandStringFull(line, vars, out result, 1);
+            return ExpandStringFull(line, out result, 1);
         }
 
-        public ConditionLists.ExpandResult ExpandStringFull(string line, ConditionVariables vars, out string result, int recdepth)
+        public ExpandResult ExpandStringFull(string line, out string result, int recdepth)
         {
             int noexpansion = 0;
             int pos = 0;
@@ -182,14 +87,14 @@ namespace EDDiscovery
                             string funcname = line.Substring(pos, apos - pos);
                             apos++;     // past the (
 
-                            List<Parameter> varnames = new List<Parameter>();
+                            ConditionFunctionHandlers cfh = new ConditionFunctionHandlers(this,vars, filehandles,recdepth);
 
                             while (true)
                             {
                                 while (apos < line.Length && char.IsWhiteSpace(line[apos])) // remove white space
                                     apos++;
 
-                                if (apos < line.Length && line[apos] == ')' && varnames.Count == 0)        // ) here must be on first only, and is valid
+                                if (apos < line.Length && line[apos] == ')' && cfh.paras.Count == 0)        // ) here must be on first only, and is valid
                                 {
                                     apos++; // skip by
                                     break;
@@ -214,21 +119,21 @@ namespace EDDiscovery
                                     if (apos >= line.Length)
                                     {
                                         result = "Terminal quote missing at '" + line.Substring(startexpression, apos - startexpression) + "'";
-                                        return ConditionLists.ExpandResult.Failed;
+                                        return ExpandResult.Failed;
                                     }
 
                                     apos++;     // remove quote
 
                                     string resexp;          // expand out any strings.. recursion
-                                    ConditionLists.ExpandResult sexpresult = ExpandStringFull(res, vars, out resexp, recdepth + 1);
+                                    ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
 
-                                    if (sexpresult == ConditionLists.ExpandResult.Failed)
+                                    if (sexpresult == ExpandResult.Failed)
                                     {
                                         result = resexp;
                                         return sexpresult;
                                     }
 
-                                    varnames.Add(new Parameter() { value = resexp, isstring = true });
+                                    cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = resexp, isstring = true });
                                 }
                                 else
                                 {
@@ -238,10 +143,10 @@ namespace EDDiscovery
                                     if (apos == start)
                                     {
                                         result = "Missing variable name at '" + line.Substring(startexpression, apos - startexpression) + "'";
-                                        return ConditionLists.ExpandResult.Failed;
+                                        return ExpandResult.Failed;
                                     }
 
-                                    varnames.Add(new Parameter() { value = line.Substring(start, apos - start), isstring = false });
+                                    cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = line.Substring(start, apos - start), isstring = false });
                                 }
 
                                 while (apos < line.Length && char.IsWhiteSpace(line[apos]))
@@ -255,7 +160,7 @@ namespace EDDiscovery
                                 if (c != ',')     // must be ,
                                 {
                                     result = "Incorrectly formed parameter list at '" + line.Substring(startexpression, apos - startexpression) + "'";
-                                    return ConditionLists.ExpandResult.Failed;
+                                    return ExpandResult.Failed;
                                 }
                             }
 
@@ -263,30 +168,30 @@ namespace EDDiscovery
 
                             if (funcname.Length > 0)
                             {
-                                if (!RunFunction(funcname, varnames, vars, out expand, recdepth))
+                                if (!cfh.RunFunction(funcname, out expand))
                                 {
                                     result = "Function " + funcname + ": " + expand;
-                                    return ConditionLists.ExpandResult.Failed;
+                                    return ExpandResult.Failed;
                                 }
                             }
-                            else if (varnames.Count > 1)
+                            else if (cfh.paras.Count > 1)
                             {
                                 result = "Only functions can have multiple comma separated items at '" + line.Substring(startexpression, apos - startexpression) + "'";
-                                return ConditionLists.ExpandResult.Failed;
+                                return ExpandResult.Failed;
                             }
                             else
                             {
-                                if (varnames[0].isstring)
+                                if (cfh.paras[0].isstring)
                                 {
                                     result = "Must be a variable not a string for non function expansions";
-                                    return ConditionLists.ExpandResult.Failed;
+                                    return ExpandResult.Failed;
                                 }
-                                else if (vars.ContainsKey(varnames[0].value))
-                                    expand = vars[varnames[0].value];
+                                else if (vars.Exists(cfh.paras[0].value))
+                                    expand = vars[cfh.paras[0].value];
                                 else
                                 {
-                                    result = "Variable " + varnames[0].value + " does not exist";
-                                    return ConditionLists.ExpandResult.Failed;
+                                    result = "Variable " + cfh.paras[0].value + " does not exist";
+                                    return ExpandResult.Failed;
                                 }
                             }
 
@@ -302,11 +207,136 @@ namespace EDDiscovery
             } while (pos != -1);
 
             result = line;
-            return (noexpansion > 0) ? ConditionLists.ExpandResult.Expansion : ConditionLists.ExpandResult.NoExpansion;
+            return (noexpansion > 0) ? ExpandResult.Expansion : ExpandResult.NoExpansion;
         }
 
         // true, output is written.  false, output has error text
-        private bool RunFunction(string fname, List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        #endregion
+    }
+
+    public class ConditionFunctionHandlers
+    {
+        public class Parameter
+        {
+            public string value;
+            public bool isstring;
+        };
+
+        ConditionFunctions caller;
+        public List<Parameter> paras;
+        ConditionVariables vars;
+        Dictionary<int, FileStream> filehandles;
+        int recdepth;
+
+        delegate bool func(out string output);
+
+        class FuncEntry
+        {
+            public func fn;
+            public int numberparasmin;
+            public int numberparasmax;
+            public int checkvarmap;           // if not a string, check macro
+            public int allowstringmap;          // allow a string
+
+            public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx = 0)
+            {
+                fn = f; numberparasmin = min; numberparasmax = max;
+                checkvarmap = checkmacromapx; allowstringmap = allowstringmapx;
+            }
+        }
+
+        static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
+        static Random rnd = new Random();
+
+        static Dictionary<string, FuncEntry> functions = null;
+
+        public ConditionFunctionHandlers(ConditionFunctions c, ConditionVariables v, Dictionary<int, FileStream> f , int recd)
+        {
+            caller = c;
+            vars = v;
+            filehandles = f;
+            recdepth = recd;
+            paras = new List<Parameter>();
+
+            if ( functions == null )        // one time init, done like this cause can't do it in {}
+            {
+                functions = new Dictionary<string, FuncEntry>();
+
+                functions.Add("abs",            new FuncEntry(Abs,              2,2,    1,0));  // first is var or literal or string
+
+                functions.Add("closefile",      new FuncEntry(CloseFile,        1,1,    1,0));  // first is a var
+
+                functions.Add("datehour",       new FuncEntry(DateHour,         1, 1,   1));     // first is a var, no strings
+                functions.Add("date",           new FuncEntry(DateCnv,          2, 2,   1));     // first is a var, second is not, no strings
+                functions.Add("direxists",      new FuncEntry(DirExists,        1, 20,  0xfffffff, 0xfffffff));   // check var, can be string
+
+                functions.Add("escapechar",     new FuncEntry(EscapeChar,       1, 1,   1, 1));   // check var, can be string
+                functions.Add("eval",           new FuncEntry(Eval,             1, 2,   1, 1));   // can be string, can be variable, p2 is not a variable, and can't be a string
+                functions.Add("exist",          new FuncEntry(Exists,           1, 20,  0, 0));
+                functions.Add("existsdefault",  new FuncEntry(ExistsDefault,    2, 2,   2, 2));   // first is a macro but can not exist, second is a string or macro which must exist
+                functions.Add("expand",         new FuncEntry(Expand,           1,20,   0xfffffff,0xfffffff)); // check var, can be string (if so expanded)
+                functions.Add("expandarray",    new FuncEntry(ExpandArray,      4,5,    2,3+16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                functions.Add("expandvars",     new FuncEntry(ExpandVars,       4, 5,   2,3+16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+
+                functions.Add("fileexists",     new FuncEntry(FileExists,       1, 20, 0xfffffff, 0xfffffff));   // check var, can be string
+                functions.Add("findline",       new FuncEntry(FindLine,         2, 2, 3, 2));   //check var1 and var2, second can be a string
+                functions.Add("floor",          new FuncEntry(Floor,            2,2,    1));     // check var1, not var 2 no strings
+
+                functions.Add("ifnotempty",     new FuncEntry(Ifnotempty,       2,3,    7,7));   // check var1-3, allow strings var1-3
+                functions.Add("ifempty",        new FuncEntry(Ifempty,          2,3,    7,7));
+                functions.Add("iftrue",         new FuncEntry(Iftrue,           2,3,    7,7));   // check var1-3, allow strings var1-3
+                functions.Add("iffalse",        new FuncEntry(Iffalse,          2,3,    7,7));
+                functions.Add("ifzero",         new FuncEntry(Ifzero,           2,3,    7,7));   // check var1-3, allow strings var1-3
+                functions.Add("ifnonzero",      new FuncEntry(Ifnonzero,        2,3,    7,7));
+
+                functions.Add("ifcontains",     new FuncEntry(Ifcontains,       3,5,    31, 31)); // check var1-4, allow strings var1-4
+                functions.Add("ifnotcontains",  new FuncEntry(Ifnotcontains,    3,5,    31, 31));
+                functions.Add("ifequal",        new FuncEntry(Ifequal,          3,5,    31, 31));
+                functions.Add("ifnotequal",     new FuncEntry(Ifnotequal,       3,5,    31, 31));
+
+                functions.Add("indexof",        new FuncEntry(IndexOf,          2,2,    3,3));   // check var1 and 2 if normal, allow string in 1 and 2
+                functions.Add("indirect",       new FuncEntry(Indirect,         1,20,   0xfffffff,0xfffffff));   // check var, no strings
+
+                functions.Add("join",           new FuncEntry(Join,             3,20,   0xfffffff,0xfffffff));   // all can be string, check var
+
+                functions.Add("length",         new FuncEntry(Length,           1,1,    1,1));
+                functions.Add("lower",          new FuncEntry(Lower,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
+
+                functions.Add("mkdir",          new FuncEntry(MkDir,            1, 1,   1,1));   // check var, can be string
+
+                functions.Add("openfile",       new FuncEntry(OpenFile,         3,3,    2,2));
+
+                functions.Add("phrase",         new FuncEntry(Phrase,           1,1,    1,1));
+
+                functions.Add("random",         new FuncEntry(Random,           1,1,    0,0));   // no change var, not string
+                functions.Add("readline",       new FuncEntry(ReadLineFile,     2,2,    1,0));   // first must be a macro, second is a literal varname only
+                functions.Add("replace",        new FuncEntry(Replace,          3, 3,   7, 7)); // var/string for all
+                functions.Add("replaceescapechar",new FuncEntry(ReplaceEscapeChar,1,1,  1,1));   // check var, can be string
+                functions.Add("replacevar",     new FuncEntry(ReplaceVar,       2, 2,   1, 3)); // var/string, literal/var/string
+                functions.Add("round",          new FuncEntry(RoundCommon,      3,3,    1));
+                functions.Add("roundnz",        new FuncEntry(RoundCommon,      4,4,    1));
+                functions.Add("roundscale",     new FuncEntry(RoundCommon,      5,5,    1));
+                functions.Add("rs",             new FuncEntry(ReplaceVarSC,     2, 2,   1, 3)); // var/string, literal/var/string
+                functions.Add("rv",             new FuncEntry(ReplaceVar,       2, 2,   1, 3)); // var/string, literal/var/string
+
+                functions.Add("sc",             new FuncEntry(SplitCaps,        1, 1,   1, 1));   //shorter alias for above
+                functions.Add("ship",           new FuncEntry(Ship,             1, 1,   1, 1));   //ship translator
+                functions.Add("splitcaps",      new FuncEntry(SplitCaps,        1, 1,   1, 1));   //check var, allow strings
+                functions.Add("substring",      new FuncEntry(SubString,        3, 3,   1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
+
+                functions.Add("trim",           new FuncEntry(Trim,             1, 2,   1,1));
+
+                functions.Add("upper",          new FuncEntry(Upper,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
+
+                functions.Add("version",        new FuncEntry(Version,          1,1,    0));     // don't check first para
+
+                functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a var or string, second is a var or literal, third is a macro or string
+                functions.Add("write",          new FuncEntry(WriteLineFile,    2, 2,   3, 2));      // first must be a var, second can be macro or string
+                functions.Add("writeline",      new FuncEntry(WriteLineFile,    2, 2,   3, 2));      // first must be a var, second can be macro or string
+            }
+        }
+
+        public bool RunFunction(string fname, out string output)
         {
             string fnl = fname.ToLower();
             if (functions.ContainsKey(fnl))
@@ -329,14 +359,15 @@ namespace EDDiscovery
                                 return false;
                             }
                         }
-                        else if (((fe.checkvarmap >> i) & 1) == 1 && !vars.ContainsKey(paras[i].value))
+                        else if (((fe.checkvarmap >> i) & 1) == 1 && !vars.Exists(paras[i].value))
                         {
                             output = "Variable " + paras[i].value + " does not exist in parameter " + (i + 1).ToString(ct);
                             return false;
                         }
                     }
 
-                    return fe.fn(paras, vars, out output, recdepth);
+                    func fptr = (func)Delegate.CreateDelegate(typeof(func), this, GetType().GetMethod(fname, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance));      // need to attach to this instance
+                    fptr(out output);
                 }
             }
             else
@@ -345,15 +376,13 @@ namespace EDDiscovery
             return false;
         }
 
-#endregion
-
         #region Macro Functions
 
-        private bool Exists(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Exists(out string output)
         {
             foreach (Parameter s in paras)
             {
-                if (!vars.ContainsKey(s.value))
+                if (!vars.Exists(s.value))
                 {
                     output = "0";
                     return true;
@@ -364,9 +393,9 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool ExistsDefault(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool ExistsDefault(out string output)
         {
-            if (vars.ContainsKey(paras[0].value))
+            if (vars.Exists(paras[0].value))
                 output = vars[paras[0].value];
             else
                 output = paras[1].isstring ? paras[1].value : vars[paras[1].value];
@@ -374,17 +403,17 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool Expand(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Expand(out string output)
         {
-            return ExpandCore(paras, vars, out output, recdepth, false);
+            return ExpandCore(out output, false);
         }
 
-        private bool Indirect(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Indirect(out string output)
         {
-            return ExpandCore(paras, vars, out output, recdepth, true);
+            return ExpandCore(out output, true);
         }
 
-        private bool ExpandCore(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth, bool indirect)
+        private bool ExpandCore(out string output, bool indirect)
         {
             if (recdepth > 9)
             {
@@ -400,7 +429,7 @@ namespace EDDiscovery
 
                 if (indirect)
                 {
-                    if (vars.ContainsKey(value))
+                    if (vars.Exists(value))
                         value = vars[value];
                     else
                     {
@@ -410,9 +439,9 @@ namespace EDDiscovery
                 }
 
                 string res;
-                ConditionLists.ExpandResult result = ExpandStringFull(value, vars, out res, recdepth + 1);
+                ConditionFunctions.ExpandResult result = caller.ExpandStringFull(value, out res, recdepth + 1);
 
-                if (result == ConditionLists.ExpandResult.Failed)
+                if (result == ConditionFunctions.ExpandResult.Failed)
                 {
                     output = res;
                     return false;
@@ -428,14 +457,14 @@ namespace EDDiscovery
 
         #region Formatters
 
-        private bool SplitCaps(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool SplitCaps(out string output)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             output = value.SplitCapsWordUnderscoreTitleCase();
             return true;
         }
 
-        private bool Ship(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ship(out string output)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             output = EliteDangerous.JournalEntry.PhoneticShipName(value);
@@ -447,7 +476,7 @@ namespace EDDiscovery
 
         #region Dates
 
-        private bool DateCnv(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool DateCnv(out string output)
         {
             string s = paras[0].value;
 
@@ -492,7 +521,7 @@ namespace EDDiscovery
             return false;
         }
 
-        private bool DateHour(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool DateHour(out string output)
         {
             DateTime res;
 
@@ -512,12 +541,12 @@ namespace EDDiscovery
 
         #region String Manip
 
-        private bool SubString(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool SubString(out string output)
         {
             int start, length;
 
-            bool okstart = paras[1].value.InvariantParse(out start) || (vars.ContainsKey(paras[1].value) && vars[paras[1].value].InvariantParse(out start));
-            bool oklength = paras[2].value.InvariantParse(out length) || (vars.ContainsKey(paras[2].value) && vars[paras[2].value].InvariantParse(out length));
+            bool okstart = paras[1].value.InvariantParse(out start) || (vars.Exists(paras[1].value) && vars[paras[1].value].InvariantParse(out start));
+            bool oklength = paras[2].value.InvariantParse(out length) || (vars.Exists(paras[2].value) && vars[paras[2].value].InvariantParse(out length));
 
             if (okstart && oklength)
             {
@@ -541,7 +570,7 @@ namespace EDDiscovery
             return false;
         }
 
-        private bool IndexOf(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool IndexOf(out string output)
         {
             string test = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             string value = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
@@ -549,7 +578,7 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool Lower(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Lower(out string output)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             string delim = (paras.Count > 1) ? ((paras[1].isstring) ? paras[1].value : vars[paras[1].value]) : "";
@@ -561,7 +590,7 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool Upper(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Upper(out string output)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             string delim = (paras.Count > 1) ? ((paras[1].isstring) ? paras[1].value : vars[paras[1].value]) : "";
@@ -573,7 +602,7 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool Join(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Join(out string output)
         {
             string delim = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             string value = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
@@ -585,38 +614,38 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool Trim(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Trim(out string output)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             output = value.Trim();
             return true;
         }
 
-        private bool Length(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Length(out string output)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             output = value.Length.ToString(ct);
             return true;
         }
 
-        private bool EscapeChar(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool EscapeChar(out string output)
         {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
             output = s.EscapeControlChars();
             return true;
         }
 
-        private bool ReplaceEscapeChar(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool ReplaceEscapeChar(out string output)
         {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
             output = s.ReplaceEscapeControlChars();
             return true;
         }
 
-        private bool WordOf(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool WordOf(out string output)
         {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            string c = vars.ContainsKey(paras[1].value) ? vars[paras[1].value] : paras[1].value;
+            string c = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
             string splitter = (paras.Count >= 3) ? (paras[2].isstring ? paras[2].value : vars[paras[2].value]) : ";";
             char splitchar = (splitter.Length > 0) ? splitter[0] : ';';
 
@@ -635,7 +664,7 @@ namespace EDDiscovery
             }
         }
 
-        private bool Replace(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Replace(out string output)
         {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
             string f1 = paras[1].isstring ? paras[1].value : vars[paras[1].value];
@@ -644,22 +673,22 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool ReplaceVar(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool ReplaceVar(out string output)
         {
-            return ReplaceVarCommon(paras, vars, out output, recdepth, false);
+            return ReplaceVarCommon(out output, false);
         }
 
-        private bool ReplaceVarSC(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool ReplaceVarSC(out string output)
         {
-            return ReplaceVarCommon(paras, vars, out output, recdepth, true);
+            return ReplaceVarCommon(out output, true);
         }
 
-        private bool ReplaceVarCommon(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth, bool sc)
+        private bool ReplaceVarCommon(out string output, bool sc)
         {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            string varroot = paras[1].isstring ? paras[1].value : (vars.ContainsKey(paras[1].value) ? vars[paras[1].value] : paras[1].value);
+            string varroot = paras[1].isstring ? paras[1].value : (vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);
 
-            foreach (string key in vars.Keys)          // all vars.. starting with varroot
+            foreach (string key in vars.NameEnumuerable)          // all vars.. starting with varroot
             {
                 if (key.StartsWith(varroot))
                 {
@@ -677,7 +706,7 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool Phrase(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Phrase(out string output)
         {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
             output = s.PickOneOfGroups(rnd);
@@ -688,7 +717,7 @@ namespace EDDiscovery
 
         #region Versions
 
-        private bool Version(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Version(out string output)
         {
             int[] edversion = Tools.GetEDVersion();
 
@@ -709,12 +738,12 @@ namespace EDDiscovery
 
         #region Numbers
 
-        private bool Abs(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Abs(out string output)
         {
             double para;
             if (vars[paras[0].value].InvariantParse(out para))
             {
-                string fmt = vars.ContainsKey(paras[1].value) ? vars[paras[1].value] : paras[1].value;
+                string fmt = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
                 if (FormatIt(Math.Abs(para), fmt, out output))
                     return true;
             }
@@ -724,12 +753,12 @@ namespace EDDiscovery
             return false;
         }
 
-        private bool Floor(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Floor(out string output)
         {
             double para;
             if (vars[paras[0].value].InvariantParse(out para))
             {
-                string fmt = vars.ContainsKey(paras[1].value) ? vars[paras[1].value] : paras[1].value;
+                string fmt = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
                 if (FormatIt(Math.Floor(para), fmt, out output))
                     return true;
             }
@@ -739,13 +768,13 @@ namespace EDDiscovery
             return false;
         }
 
-        private bool RoundCommon(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool RoundCommon(out string output)
         {
             int extradigits = 0;
 
             if (paras.Count >= 4)
             {
-                if (!paras[3].value.InvariantParse(out extradigits) && !(vars.ContainsKey(paras[3].value) && vars[paras[3].value].InvariantParse(out extradigits)))
+                if (!paras[3].value.InvariantParse(out extradigits) && !(vars.Exists(paras[3].value) && vars[paras[3].value].InvariantParse(out extradigits)))
                 {
                     output = "The variable " + paras[3] + " does not exist or the value is not an integer";
                     return false;
@@ -755,7 +784,7 @@ namespace EDDiscovery
             double scale = 1.0;
             if (paras.Count >= 5)       // round scale.
             {
-                if (!paras[4].value.InvariantParse(out scale) && !(vars.ContainsKey(paras[4].value) && vars[paras[4].value].InvariantParse(out scale)))
+                if (!paras[4].value.InvariantParse(out scale) && !(vars.Exists(paras[4].value) && vars[paras[4].value].InvariantParse(out scale)))
                 {
                     output = "The variable " + paras[4] + " does not exist of the value is not a fractional";
                     return false;
@@ -769,9 +798,9 @@ namespace EDDiscovery
                 value *= scale;
 
                 int digits = 0;
-                if (paras[1].value.InvariantParse(out digits) || (vars.ContainsKey(paras[1].value) && vars[paras[1].value].InvariantParse(out digits)))
+                if (paras[1].value.InvariantParse(out digits) || (vars.Exists(paras[1].value) && vars[paras[1].value].InvariantParse(out digits)))
                 {
-                    string fmt = vars.ContainsKey(paras[2].value) ? vars[paras[2].value] : paras[2].value;
+                    string fmt = vars.Exists(paras[2].value) ? vars[paras[2].value] : paras[2].value;
 
                     double res = Math.Round(value, digits);
 
@@ -821,10 +850,10 @@ namespace EDDiscovery
             }
         }
 
-        private bool Random(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Random(out string output)
         {
             int v;
-            if (paras[0].value.InvariantParse(out v) || (vars.ContainsKey(paras[0].value) && vars[paras[0].value].InvariantParse(out v)))
+            if (paras[0].value.InvariantParse(out v) || (vars.Exists(paras[0].value) && vars[paras[0].value].InvariantParse(out v)))
             {
                 output = rnd.Next(v).ToString(ct);
                 return true;
@@ -836,7 +865,7 @@ namespace EDDiscovery
             }
         }
 
-        private bool Eval(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Eval(out string output)
         {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
 
@@ -857,51 +886,51 @@ namespace EDDiscovery
 
         #region Conditionals
 
-        private bool Ifnotempty(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ifnotempty(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.Empty, false);
+            return IfCommon(out output, IfType.Empty, false);
         }
-        private bool Ifempty(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ifempty(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.Empty, true);
+            return IfCommon(out output, IfType.Empty, true);
         }
-        private bool Iftrue(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Iftrue(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.True, true);
+            return IfCommon( out output, IfType.True, true);
         }
-        private bool Iffalse(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Iffalse(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.True, false);
+            return IfCommon( out output, IfType.True, false);
         }
-        private bool Ifzero(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ifzero(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.Zero, true);
+            return IfCommon(out output, IfType.Zero, true);
         }
-        private bool Ifnonzero(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ifnonzero(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.Zero, false);
+            return IfCommon(out output, IfType.Zero, false);
         }
-        private bool Ifcontains(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ifcontains(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.Contains, true);
+            return IfCommon(out output, IfType.Contains, true);
         }
-        private bool Ifnotcontains(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ifnotcontains(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.Contains, false);
+            return IfCommon(out output, IfType.Contains, false);
         }
-        private bool Ifequal(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ifequal(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.Equals, true);
+            return IfCommon(out output, IfType.Equals, true);
         }
-        private bool Ifnotequal(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool Ifnotequal(out string output)
         {
-            return IfCommon(paras, vars, out output, recdepth, IfType.Equals, false);
+            return IfCommon(out output, IfType.Equals, false);
 
         }
 
-        enum IfType { True, Contains, Equals, Empty , Zero };
+        enum IfType { True, Contains, Equals, Empty, Zero };
 
-        private bool IfCommon(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth,
+        private bool IfCommon(out string output,
                               IfType iftype, bool test)
         {
             if (iftype == IfType.Empty || iftype == IfType.True || iftype == IfType.Zero)         // these, insert a dummy entry to normalise - we don't have a comparitor
@@ -970,7 +999,7 @@ namespace EDDiscovery
             else if (paras[pexp].isstring)      // string.. already been expanded, don't do it again
                 output = paras[pexp].value;
             else
-                return ExpandStringFull(vars[paras[pexp].value], vars, out output, recdepth + 1) != ConditionLists.ExpandResult.Failed;
+                return caller.ExpandStringFull(vars[paras[pexp].value], out output, recdepth + 1) != ConditionFunctions.ExpandResult.Failed;
 
             return true;
         }
@@ -979,28 +1008,28 @@ namespace EDDiscovery
 
         #region Arrays
 
-        private bool ExpandArray(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool ExpandArray(out string output)
         {
-            return ExpandArrayCommon(paras, vars, out output, recdepth, false);
+            return ExpandArrayCommon(out output, false);
         }
 
-        private bool ExpandVars(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool ExpandVars(out string output)
         {
-            return ExpandArrayCommon(paras, vars, out output, recdepth, true);
+            return ExpandArrayCommon(out output, true);
         }
 
-        private bool ExpandArrayCommon(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth, bool join)
+        private bool ExpandArrayCommon(out string output, bool join)
         {
             string arrayroot = paras[0].value;
             string separ = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
 
             int start, length;
-            bool okstart = paras[2].value.InvariantParse(out start) || (vars.ContainsKey(paras[2].value) && vars[paras[2].value].InvariantParse(out start));
-            bool oklength = paras[3].value.InvariantParse(out length) || (vars.ContainsKey(paras[3].value) && vars[paras[3].value].InvariantParse(out length));
+            bool okstart = paras[2].value.InvariantParse(out start) || (vars.Exists(paras[2].value) && vars[paras[2].value].InvariantParse(out start));
+            bool oklength = paras[3].value.InvariantParse(out length) || (vars.Exists(paras[3].value) && vars[paras[3].value].InvariantParse(out length));
 
             if (okstart && oklength)
             {
-                bool splitcaps = paras.Count == 5 && paras[4].value.IndexOf("splitcaps", StringComparison.InvariantCultureIgnoreCase) >=0;
+                bool splitcaps = paras.Count == 5 && paras[4].value.IndexOf("splitcaps", StringComparison.InvariantCultureIgnoreCase) >= 0;
 
                 output = "";
 
@@ -1010,16 +1039,16 @@ namespace EDDiscovery
                     bool valueonly = paras.Count == 5 && paras[4].value.IndexOf("valueonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
 
                     int index = 0;
-                    foreach( string key in vars.Keys )
+                    foreach (string key in vars.NameEnumuerable)
                     {
-                        if ( key.StartsWith(arrayroot))
+                        if (key.StartsWith(arrayroot))
                         {
                             index++;
-                            if ( index >= start && index < start+length )
+                            if (index >= start && index < start + length)
                             {
                                 string value = vars[key];
 
-                                string entry = (valueonly) ? vars[key] : ( key.Substring(arrayroot.Length) + (nameonly ? "" : (" = "+ vars[key])));
+                                string entry = (valueonly) ? vars[key] : (key.Substring(arrayroot.Length) + (nameonly ? "" : (" = " + vars[key])));
 
                                 if (output.Length > 0)
                                     output += separ;
@@ -1035,7 +1064,7 @@ namespace EDDiscovery
                     {
                         string aname = arrayroot + "[" + i.ToString(ct) + "]";
 
-                        if (vars.ContainsKey(aname))
+                        if (vars.Exists(aname))
                         {
                             if (i != start)
                                 output += separ;
@@ -1062,14 +1091,11 @@ namespace EDDiscovery
 
         #region File Functions
 
-        static private int filenextid = 1;
-        static private Dictionary<int, FileStream> filehandles = new Dictionary<int, FileStream>();
-
-        private bool OpenFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool OpenFile(out string output)
         {
             string handle = paras[0].value;
             string file = paras[1].isstring ? paras[1].value : vars[paras[1].value];
-            string mode = vars.ContainsKey(paras[2].value) ? vars[paras[2].value] : paras[2].value;
+            string mode = vars.Exists(paras[2].value) ? vars[paras[2].value] : paras[2].value;
 
             FileMode fm;
             if (Enum.TryParse<FileMode>(mode, true, out fm))
@@ -1079,7 +1105,7 @@ namespace EDDiscovery
                     try
                     {
                         FileStream f = File.Open(file, fm);
-                        int id = filenextid++;
+                        int id = 20; // TBD filenextid++;
                         filehandles[id] = f;
                         vars[handle] = id.ToString();
                         output = "1";
@@ -1101,7 +1127,7 @@ namespace EDDiscovery
             return false;
         }
 
-        private bool CloseFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool CloseFile(out string output)
         {
             int? hv = vars[paras[0].value].InvariantParseIntNull();
             if (hv != null && filehandles.ContainsKey(hv.Value))
@@ -1124,7 +1150,7 @@ namespace EDDiscovery
             }
         }
 
-        private bool ReadLineFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool ReadLineFile(out string output)
         {
             int? hv = vars[paras[0].value].InvariantParseIntNull();
 
@@ -1156,15 +1182,15 @@ namespace EDDiscovery
             }
         }
 
-        private bool WriteLineFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool WriteLineFile(out string output)
         {
-            return WriteToFile(paras, vars, out output, recdepth, true);
+            return WriteToFile(out output, true);
         }
-        private bool WriteFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool WriteFile(out string output)
         {
-            return WriteToFile(paras, vars, out output, recdepth, false);
+            return WriteToFile(out output, false);
         }
-        private bool WriteToFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth, bool lf)
+        private bool WriteToFile(out string output, bool lf)
         {
             int? hv = vars[paras[0].value].InvariantParseIntNull();
             string line = paras[1].isstring ? paras[1].value : vars[paras[1].value];
@@ -1198,7 +1224,7 @@ namespace EDDiscovery
             }
         }
 
-        private bool FileExists(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool FileExists(out string output)
         {
             foreach (Parameter p in paras)
             {
@@ -1215,7 +1241,7 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool DirExists(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool DirExists(out string output)
         {
             foreach (Parameter p in paras)
             {
@@ -1232,7 +1258,7 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool MkDir(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool MkDir(out string output)
         {
             string line = paras[0].isstring ? paras[0].value : vars[paras[0].value];
 
@@ -1248,9 +1274,9 @@ namespace EDDiscovery
             return true;
         }
 
-        private bool FindLine(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        private bool FindLine(out string output)
         {
-            string value = (paras[1].isstring) ? paras[1].value : (vars.ContainsKey(paras[1].value) ? vars[paras[1].value] : null);
+            string value = (paras[1].isstring) ? paras[1].value : (vars.Exists(paras[1].value) ? vars[paras[1].value] : null);
 
             if (value != null)
             {
@@ -1276,7 +1302,7 @@ namespace EDDiscovery
             return false;
         }
 
-        private bool VerifyAllowed( string file, FileMode fm)
+        private bool VerifyAllowed(string file, FileMode fm)
         {
             if (fm != FileMode.Open)
             {
@@ -1307,5 +1333,7 @@ namespace EDDiscovery
         }
 
         #endregion
+
+
     }
 }

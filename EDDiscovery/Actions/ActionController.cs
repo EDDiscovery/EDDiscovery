@@ -98,7 +98,7 @@ namespace EDDiscovery.Actions
             events.Add("onPlayFinished");
             events.Add("onMenuItem");
 
-            frm.InitAction("Actions: Define actions", events, globalvariables.KeyList, persistentglobalvariables, actionfiles, discoveryform);
+            frm.InitAction("Actions: Define actions", events, globalvariables.NameList, persistentglobalvariables, actionfiles, discoveryform);
             frm.TopMost = discoveryform.FindForm().TopMost;
 
             frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
@@ -186,7 +186,7 @@ namespace EDDiscovery.Actions
 
         public void EditSpeechText()
         {
-            if (programrunglobalvariables.ContainsKey("SpeechDefinitionFile"))
+            if (programrunglobalvariables.Exists("SpeechDefinitionFile"))
             {
                 string prog = programrunglobalvariables["SpeechDefinitionFile"];
 
@@ -218,7 +218,7 @@ namespace EDDiscovery.Actions
 
         public void ActionRunOnRefresh()
         {
-            string prevcommander = programrunglobalvariables.ContainsKey("Commander") ? programrunglobalvariables["Commander"] : "None";
+            string prevcommander = programrunglobalvariables.Exists("Commander") ? programrunglobalvariables["Commander"] : "None";
             string commander = (discoverycontroller.history.CommanderId < 0) ? "Hidden" : EDDConfig.Instance.CurrentCommander.Name;
 
             string refreshcount = prevcommander.Equals(commander) ? programrunglobalvariables.AddToVar("RefreshCount", 1, 1) : "1";
@@ -254,9 +254,9 @@ namespace EDDiscovery.Actions
                 ConditionVariables testvars = new ConditionVariables(globalvariables);
                 testvars.Add(eventvars);
 
-                ConditionFunctions functions = new ConditionFunctions();
+                ConditionFunctions functions = new ConditionFunctions(testvars,null);
 
-                if (actionfiles.CheckActions(ale, (he!=null) ? he.journalEntry.EventDataString : null, testvars, functions.ExpandString) > 0)
+                if (actionfiles.CheckActions(ale, (he!=null) ? he.journalEntry.EventDataString : null, testvars, functions) > 0)
                 {
                     actionfiles.RunActions(now, ale, actionrunasync, eventvars);  // add programs to action run
 
