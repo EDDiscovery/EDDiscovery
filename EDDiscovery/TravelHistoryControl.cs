@@ -439,7 +439,7 @@ namespace EDDiscovery
             {
                 textBoxSystem.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
-                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = "";
+                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = textBoxSolDist.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
             }
             else
@@ -471,6 +471,7 @@ namespace EDDiscovery
                     double zdist = syspos.System.z - homesys.z;
 
                     textBoxHomeDist.Text = Math.Sqrt(xdist * xdist + ydist * ydist + zdist * zdist).ToString("0.00");
+                    textBoxSolDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
                 }
                 else
                 {
@@ -478,6 +479,7 @@ namespace EDDiscovery
                     textBoxY.Text = "?";
                     textBoxZ.Text = "?";
                     textBoxHomeDist.Text = "";
+                    textBoxSolDist.Text = "";
                 }
 
                 int count = _discoveryForm.history.GetVisitsCount(syspos.System.name, syspos.System.id_edsm);
