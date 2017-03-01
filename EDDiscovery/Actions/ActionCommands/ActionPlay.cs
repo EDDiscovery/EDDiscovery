@@ -81,7 +81,7 @@ namespace EDDiscovery.Actions
 
             WaveConfigureDialog cfg = new WaveConfigureDialog();
             cfg.Init(discoveryform.AudioQueueWave, false, "Select file, volume and effects", "Configure Play Command", path,
-                        vars.ContainsKey(waitname),
+                        vars.Exists(waitname),
                         Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
                         vars.GetString(startname, ""),
                         vars.GetString(finishname, ""),
@@ -118,12 +118,12 @@ namespace EDDiscovery.Actions
             if (FromString(userdata, out pathunexpanded, out statementvars))
             {
                 string errlist = null;
-                ConditionVariables vars = statementvars.ExpandAll(ap.functions.ExpandString, ap.currentvars, out errlist);
+                ConditionVariables vars = statementvars.ExpandAll(ap.functions,statementvars,out errlist);
 
                 if (errlist == null)
                 {
                     string path;
-                    if (ap.functions.ExpandString(pathunexpanded, ap.currentvars, out path) != ConditionLists.ExpandResult.Failed)
+                    if (ap.functions.ExpandString(pathunexpanded, out path) != ConditionFunctions.ExpandResult.Failed)
                     {
                         if (System.IO.File.Exists(path))
                         {
@@ -134,13 +134,13 @@ namespace EDDiscovery.Actions
 
                             int vol = vars.GetInt(volumename, -999);
                             if (vol == -999)
-                                vol = ap.currentvars.GetInt(globalvarplayvolume, 60);
+                                vol = ap.variables.GetInt(globalvarplayvolume, 60);
 
                             Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
-                            if (!ses.Any && !ses.OverrideNone && ap.currentvars.ContainsKey(globalvarplayeffects))  // if can't see any, and override none if off, and we have a global, use that
+                            if (!ses.Any && !ses.OverrideNone && ap.VarExist(globalvarplayeffects))  // if can't see any, and override none if off, and we have a global, use that
                             {
-                                vars = new ConditionVariables(ap.currentvars[globalvarplayeffects], ConditionVariables.FromMode.MultiEntryComma);
+                                vars = new ConditionVariables(ap[globalvarplayeffects], ConditionVariables.FromMode.MultiEntryComma);
                             }
 
                             Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(path, vars);

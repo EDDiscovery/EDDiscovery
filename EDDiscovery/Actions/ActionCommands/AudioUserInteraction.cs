@@ -58,7 +58,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
                     string caption = (exp.Count>=2) ? exp[1] : "EDDiscovery Program Message";
 
@@ -80,7 +80,7 @@ namespace EDDiscovery.Actions
 
                     // debug Forms.MessageBoxTheme.Show(exp[0], caption, but, icon);
 
-                    ap.currentvars["DialogResult"] = res.ToString();
+                    ap["DialogResult"] = res.ToString();
                 }
                 else
                     ap.ReportError(exp[0]);
@@ -110,7 +110,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
                 string cmdname = sp.NextWord(", ", true);
@@ -137,7 +137,7 @@ namespace EDDiscovery.Actions
                     }
 
                     string fileret = (fbd.ShowDialog(ap.actioncontroller.DiscoveryForm) == DialogResult.OK) ? fbd.SelectedPath : "";
-                    ap.currentvars["FolderName"] = fileret;
+                    ap["FolderName"] = fileret;
                 }
                 else if (cmdname.Equals("openfile"))
                 {
@@ -168,7 +168,7 @@ namespace EDDiscovery.Actions
                             fd.CheckFileExists = fd.CheckPathExists = true;
 
                         string fileret = (fd.ShowDialog(ap.actioncontroller.DiscoveryForm) == DialogResult.OK) ? fd.FileName : "";
-                        ap.currentvars["FileName"] = fileret;
+                        ap["FileName"] = fileret;
                     }
                     catch
                     {
@@ -222,7 +222,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
                     if (!ap.actioncontroller.DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count>=4) ? exp[3] : "None", exp[0], ap.actionfile.name))
                         ap.ReportError("MenuItem cannot add to menu, check menu");
@@ -275,7 +275,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
                     string[] prompts = exp[1].Split(';');
                     string[] def = (exp.Count >= 3) ? exp[2].Split(';') : null;
@@ -285,11 +285,11 @@ namespace EDDiscovery.Actions
                     List<string> r = Forms.PromptMultiLine.ShowDialog(ap.actioncontroller.DiscoveryForm, exp[0],
                                         prompts, def, multiline, tooltips);
 
-                    ap.currentvars["InputBoxOK"] = (r != null) ? "1" : "0";
+                    ap["InputBoxOK"] = (r != null) ? "1" : "0";
                     if (r != null)
                     {
                         for (int i = 0; i < r.Count; i++)
-                            ap.currentvars["InputBox" + (i + 1).ToString()] = r[i];
+                            ap["InputBox" + (i + 1).ToString()] = r[i];
                     }
                 }
                 else
@@ -342,13 +342,13 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
-                    ConditionVariables cv = ap.currentvars.FilterVars(exp[3] + "*");
+                    ConditionVariables cv = ap.variables.FilterVars(exp[3] + "*");
 
                     List<Forms.ConfigurableDialog.Entry> entries = new List<Forms.ConfigurableDialog.Entry>();
 
-                    foreach( string k in cv.KeyList )
+                    foreach( string k in cv.NameList )
                     {
                         StringParser sp = new StringParser(cv[k]);
 
@@ -432,7 +432,7 @@ namespace EDDiscovery.Actions
         private void Cd_Trigger(string lname, string res, Object tag)
         {
             ActionProgramRun apr = tag as ActionProgramRun;
-            apr.currentvars[lname] = res;
+            apr[lname] = res;
             apr.ResumeAfterPause();
         }
     }
@@ -456,7 +456,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string exp;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out exp) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out exp) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(exp);
                 string handle = sp.NextWordComma();
@@ -480,7 +480,7 @@ namespace EDDiscovery.Actions
 
                         if (control != null && (r = f.Get(control)) != null)
                         {
-                            ap.currentvars["Value"] = r;
+                            ap["Value"] = r;
                         }
                         else
                             ap.ReportError("Missing or invalid dialog name in DialogControl get");

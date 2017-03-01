@@ -26,11 +26,13 @@ namespace EDDiscovery.Actions
     public class ActionProgramRun : ActionProgram
     {
         // used during execution.. filled in on program objects associated with an execution
-        public ActionFile actionfile;                       // what file it came from..
         public ActionController actioncontroller;
-        public ConditionVariables currentvars;      // set up by ActionRun at invokation so they have the latest globals, see Run line 87 ish
         public ConditionFunctions functions;                   // function handler
-        public ConditionVariables inputvars;        // input vars to this program, never changed
+        public ActionFile actionfile;                       // what file it came from..
+
+        private ConditionVariables currentvars;      // set up by ActionRun at invokation so they have the latest globals, see Run line 87 ish
+        private Dictionary<int, System.IO.FileStream> currentfiles;
+        private ConditionVariables inputvars;        // input vars to this program, never changed
 
         private ActionRun actionrun;                         // who is running it..
 
@@ -38,7 +40,7 @@ namespace EDDiscovery.Actions
 
         public enum ExecState { On, Off, OffForGood }
         private ExecState[] execstate = new ExecState[50];
-        Action.ActionType[] exectype = new Action.ActionType[50];   // type of level
+        private Action.ActionType[] exectype = new Action.ActionType[50];   // type of level
         private int[] execlooppos = new int[50];            // if not -1, on level down, go back to this step.
         private int execlevel = 0;
 
@@ -47,14 +49,13 @@ namespace EDDiscovery.Actions
 
         public ActionProgramRun(ActionFile af, // associated file
                                 ActionProgram r,  // the program
-                                ConditionVariables iparas ,             // input variables to the program only.. not globals
+                                ConditionVariables iparas,             // input variables to the program only.. not globals
                                 ActionRun runner, // who is running it..
-                                ActionController ed ): base(r.Name)      // allow a pause
+                                ActionController ed) : base(r.Name)      // allow a pause
         {
             actionfile = af;
             actionrun = runner;
             actioncontroller = ed;
-            functions = new ConditionFunctions();
             execlevel = 0;
             execstate[execlevel] = ExecState.On;
             nextstepnumber = 0;
@@ -72,7 +73,33 @@ namespace EDDiscovery.Actions
             programsteps = psteps;
         }
 
+        public ConditionVariables inputvariables { get { return inputvars; } }
+
+        #region Variables
+
+        public ConditionVariables variables { get { return currentvars; } }
+        public string this[string s] { get { return currentvars[s]; } set { currentvars[s] = value; } }
+        public void DeleteVar(string v) { currentvars.Delete(v); }
+        public bool VarExist(string v) { return currentvars.Exists(v); }
+        public void Add(ConditionVariables v) { currentvars.Add(v); }
+        public void AddDataOfType(Object o, Type t, string n) { currentvars.AddDataOfType(o, t, n); }
+
+        #endregion
+
         #region Exec control
+
+        public void PrepareToRun( ConditionVariables v )
+        {
+            currentvars = v;
+            functions = new ConditionFunctions(currentvars, currentfiles);           // point the functions at our variables and our files..
+            currentfiles = new Dictionary<int, System.IO.FileStream>();                 // clean slate..
+        }
+
+        public void Terminated()
+        {
+            System.Diagnostics.Debug.WriteLine("Program " + actionfile.name + "::" + Name + " terminated");
+            // TBD
+        }
 
         public Action GetNextStep()
         {

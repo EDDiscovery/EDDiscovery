@@ -67,7 +67,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public void HistoryEventFurtherInfo(ConditionVariables vars, HistoryList hl, HistoryEntry he, string prefix)
+        static public void HistoryEventFurtherInfo(ActionProgramRun vars, HistoryList hl, HistoryEntry he, string prefix)
         {
             if (he != null)
             {

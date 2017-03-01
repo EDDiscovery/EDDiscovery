@@ -204,7 +204,7 @@ namespace EDDiscovery.Actions
         // if se is set passed enabled string expansion of arguments in condition of event..
 
         public int CheckActions(List<Actions.ActionFileList.MatchingSets> ale, string eventjson , ConditionVariables othervars,
-                                            ConditionLists.ExpandString se = null)
+                                            ConditionFunctions se = null)
         {
             ConditionVariables valuesneeded = new ConditionVariables();
 
@@ -222,6 +222,8 @@ namespace EDDiscovery.Actions
             valuesneeded.Add(othervars);
 
             int progs = 0;
+
+            ConditionFunctions cf = new ConditionFunctions(valuesneeded, null);
             
             foreach (MatchingSets ae in ale)       // for all files
             {
@@ -231,7 +233,7 @@ namespace EDDiscovery.Actions
                 //System.Diagnostics.Debug.WriteLine("Check `" + ae.af.name + ae.af.actionfieldfilter.ToString() + "`");
                 //ActionData.DumpVars(valuesneeded, " Test var:");
 
-                ae.af.actionfieldfilter.CheckConditions(ae.cl, valuesneeded, out errlist, ae.passed, se);   // indicate which ones passed
+                ae.af.actionfieldfilter.CheckConditions(ae.cl, valuesneeded, out errlist, ae.passed, cf);   // indicate which ones passed
                 progs += ae.passed.Count;
             }
 

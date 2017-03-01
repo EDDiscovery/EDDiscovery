@@ -38,7 +38,7 @@ namespace EDDiscovery.HTTP
         public class DownloadItem
         {
             public bool HasDownloadedCopy { get { return downloadedfilename != null;  } }
-            public string LongDownloadedDescription { get { return downloadedvars != null && downloadedvars.ContainsKey("LongDescription") ? downloadedvars["LongDescription"] : ""; } }
+            public string LongDownloadedDescription { get { return downloadedvars != null && downloadedvars.Exists("LongDescription") ? downloadedvars["LongDescription"] : ""; } }
 
             public string downloadedpath;
             public string downloadedfilename;
@@ -46,8 +46,8 @@ namespace EDDiscovery.HTTP
             public ConditionVariables downloadedvars;
 
             public bool HasLocalCopy { get { return localfound; } }
-            public string LongLocalDescription { get { return localvars != null && localvars.ContainsKey("LongDescription") ? localvars["LongDescription"] : ""; } }
-            public string ShortLocalDescription { get { return localvars != null && localvars.ContainsKey("ShortDescription") ? localvars["ShortDescription"] : ""; } }
+            public string LongLocalDescription { get { return localvars != null && localvars.Exists("LongDescription") ? localvars["LongDescription"] : ""; } }
+            public string ShortLocalDescription { get { return localvars != null && localvars.Exists("ShortDescription") ? localvars["ShortDescription"] : ""; } }
 
             public bool localfound;             // if scanned locally
             public string localfilename;        // always set
@@ -94,7 +94,7 @@ namespace EDDiscovery.HTTP
                     it.state = ItemState.LocalOnly;
                     it.localvars = ReadVarsFromFile(f.FullName , out it.localenable);
 
-                    if (it.localvars != null && it.localvars.ContainsKey("Version"))     // gotta have some
+                    if (it.localvars != null && it.localvars.Exists("Version"))     // gotta have some
                     {
                         it.localversion = Tools.VersionFromString(it.localvars["Version"]);
                         it.localmodified = !WriteOrCheckSHAFile(it, it.localvars, appfolder, false);
@@ -123,9 +123,9 @@ namespace EDDiscovery.HTTP
                     {
                         int[] version;
 
-                        if (cv.ContainsKey("LongDescription") && cv.ContainsKey("ShortDescription") &&
-                            cv.ContainsKey("Version") && cv.ContainsKey("Location") &&
-                            cv.ContainsKey("MinEDVersion") &&
+                        if (cv.Exists("LongDescription") && cv.Exists("ShortDescription") &&
+                            cv.Exists("Version") && cv.Exists("Location") &&
+                            cv.Exists("MinEDVersion") &&
                             (version = Tools.VersionFromString(cv["Version"])) != null
                             )
                         {
@@ -235,7 +235,7 @@ namespace EDDiscovery.HTTP
         {
             try
             {
-                foreach (string key in item.downloadedvars.Keys)  // these first, they are not the controller files
+                foreach (string key in item.downloadedvars.NameEnumuerable)  // these first, they are not the controller files
                 {
                     if (key.StartsWith("OtherFile"))
                     {
@@ -270,7 +270,7 @@ namespace EDDiscovery.HTTP
         {
             try
             {
-                foreach (string key in item.localvars.Keys)  // these first, they are not the controller files
+                foreach (string key in item.localvars.NameEnumuerable)  // these first, they are not the controller files
                 {
                     if (key.StartsWith("OtherFile"))
                     {
@@ -299,7 +299,7 @@ namespace EDDiscovery.HTTP
             {
                 List<string> filelist = new List<string>() { it.localfilename };
 
-                foreach (string key in vars.Keys)  // these first, they are not the controller files
+                foreach (string key in vars.NameEnumuerable)  // these first, they are not the controller files
                 {
                     if (key.StartsWith("OtherFile"))
                     {
