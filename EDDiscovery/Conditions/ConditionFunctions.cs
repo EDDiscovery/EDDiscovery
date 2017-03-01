@@ -15,6 +15,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +58,7 @@ namespace EDDiscovery
 
             // first is a bitmap saying if to check for the value is a var
             // second is a bitmap saying if a string is allowed in this pos
+            functions.Add("closefile",      new FuncEntry(CloseFile,        1,1,    1,0));  // first is a var
 
             functions.Add("datehour",       new FuncEntry(DateHour,         1, 1, 1));     // first is a var, no strings
             functions.Add("date",           new FuncEntry(DateCnv,          2, 2, 1));     // first is a var, second is not, no strings
@@ -92,7 +94,11 @@ namespace EDDiscovery
             functions.Add("lower",          new FuncEntry(Lower,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
             functions.Add("length",         new FuncEntry(Length,           1,1,    1,1));
 
+            functions.Add("openfile",       new FuncEntry(OpenFile,         3,3,    2,2));
+
             functions.Add("phrase",         new FuncEntry(Phrase,           1,1,    1,1));
+
+            functions.Add("readline",       new FuncEntry(ReadLineFile,     1,1,    1,0));      // first must be a macro
 
             functions.Add("replaceescapechar",new FuncEntry(ReplaceEscapeChar,1,1,  1,1));   // check var, can be string
             functions.Add("replacevar",     new FuncEntry(ReplaceVar,       2, 2,   1, 3)); // var/string, literal/var/string
@@ -114,7 +120,9 @@ namespace EDDiscovery
             functions.Add("upper",          new FuncEntry(Upper,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
 
             functions.Add("version",        new FuncEntry(Version,          1,1,    0));     // don't check first para
-            functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a macro or string, second is a var or literal, third is a macro or string
+
+            functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a var or string, second is a var or literal, third is a macro or string
+            functions.Add("writeline",      new FuncEntry(WriteLineFile,    2,2,    3,2));      // first must be a var, second can be macro or string
         }
 
 #region expander
@@ -1045,6 +1053,79 @@ namespace EDDiscovery
                 output = s.SplitCapsWordUnderscoreTitleCase();
 
             return true;
+        }
+
+        static private int filenextid = 1;
+        static private Dictionary<int,FileStream> filehandles = new Dictionary<int, FileStream>();
+
+        private bool OpenFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            string handle = paras[0].value;
+            string file = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+            string mode = vars.ContainsKey(paras[2].value) ? vars[paras[2].value] : paras[2].value;
+
+            FileMode fm;
+            if (Enum.TryParse<FileMode>(mode, true, out fm))
+            {
+                try
+                {
+                    FileStream f = File.Open(file, fm);
+                    int id = filenextid++;
+                    filehandles[id] = f;
+                    vars[handle] = id.ToString();
+                    output = "1";
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    vars[handle] = ex.Message;
+                    output = "0";
+                    return true;
+                }
+            }
+            else
+                output = "Unknown File Mode";
+
+            return false;
+        }
+
+        private bool CloseFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            if (hv != null && filehandles.ContainsKey(hv.Value))
+            {
+                FileStream f = filehandles[hv.Value];
+                f.Close();
+                filehandles.Remove(hv.Value);
+                output = "1";
+                return true;
+            }
+            else
+            {
+                output = "File handle not found or invalid";
+                return false;
+            }
+        }
+
+        private bool ReadLineFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            if (hv != null && filehandles.ContainsKey(hv.Value))
+            {
+                FileStream f = filehandles[hv.Value];
+            }
+            output = "";
+            return false;
+        }
+        private bool WriteLineFile(List<Parameter> paras, ConditionVariables vars, out string output, int recdepth)
+        {
+            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            if (hv != null && filehandles.ContainsKey(hv.Value))
+            {
+                FileStream f = filehandles[hv.Value];
+            }
+            output = "";
+            return false;
         }
 
         #endregion

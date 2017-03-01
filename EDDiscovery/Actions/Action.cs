@@ -79,6 +79,8 @@ namespace EDDiscovery.Actions
         {
             new Commands("Call", typeof(ActionCall) , ActionType.Call),
             new Commands("Commodities", typeof(ActionCommodities) , ActionType.Cmd),
+            new Commands("Dialog", typeof(ActionDialog) , ActionType.Cmd),
+            new Commands("DialogControl", typeof(ActionDialogControl) , ActionType.Cmd),
             new Commands("Do", typeof(ActionDo) , ActionType.Do),
             new Commands("DeleteVariable", typeof(ActionDeleteVariable) , ActionType.Cmd),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
