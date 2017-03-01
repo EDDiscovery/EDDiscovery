@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        jid = sp.GetLong();
+                        jid = sp.NextWord().InvariantParseLongNull();
                         if (!jid.HasValue)
                         {
                             ap.ReportError("Non integer JID after FROM in Event");

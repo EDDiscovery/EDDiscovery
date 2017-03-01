@@ -130,13 +130,10 @@ namespace EDDiscovery.Actions
                             ucf.WindowState = FormWindowState.Maximized;
                         else if (nextcmd.Equals("location"))
                         {
-                            int? x = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? y = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? w = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? h = sp.GetInt();
+                            int? x = sp.NextWordComma().InvariantParseIntNull();
+                            int? y = sp.NextWordComma().InvariantParseIntNull();
+                            int? w = sp.NextWordComma().InvariantParseIntNull();
+                            int? h = sp.NextWord().InvariantParseIntNull();
 
                             if (x.HasValue && y.HasValue && w.HasValue && h.HasValue)
                             {
@@ -148,10 +145,8 @@ namespace EDDiscovery.Actions
                         }
                         else if (nextcmd.Equals("position"))
                         {
-                            int? x = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? y = sp.GetInt();
-                            sp.IsCharMoveOn(',');
+                            int? x = sp.NextWordComma().InvariantParseIntNull();
+                            int? y = sp.NextWord().InvariantParseIntNull();
 
                             if (x.HasValue && y.HasValue)
                                 ucf.Location = new Point(x.Value, y.Value);
@@ -160,9 +155,8 @@ namespace EDDiscovery.Actions
                         }
                         else if (nextcmd.Equals("size"))
                         {
-                            int? w = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? h = sp.GetInt();
+                            int? w = sp.NextWordComma().InvariantParseIntNull();
+                            int? h = sp.NextWord().InvariantParseIntNull();
 
                             if (w.HasValue && h.HasValue)
                                 ucf.Size = new Size(w.Value, h.Value);

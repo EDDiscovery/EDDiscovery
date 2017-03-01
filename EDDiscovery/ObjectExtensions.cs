@@ -223,14 +223,41 @@ public static class ObjectExtensions
         return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
     }
 
+    static public int? InvariantParseIntNull(this string s)     // s can be null
+    {
+        int i;
+        if (s!=null && int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
     static public bool InvariantParse(this string s, out double i)
     {
         return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i);
     }
 
+    static public double? InvariantParseDoubleNull(this string s)
+    {
+        double i;
+        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
     static public bool InvariantParse(this string s, out long i)
     {
         return long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public long? InvariantParseLongNull(this string s)
+    {
+        long i;
+        if (s != null && long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
     }
 
     public static string FixTitleCase(this string s)
