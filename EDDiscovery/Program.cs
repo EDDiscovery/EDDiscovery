@@ -35,7 +35,7 @@ namespace EDDiscovery
         [STAThread]
         static void Main()
         {
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions { EnableHighResolution = false });
+            var tk = OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions { EnableHighResolution = false });
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -57,6 +57,7 @@ namespace EDDiscovery
                  * TODO: show a dialog and/or bring the current instance's window to the foreground.
                  */
             }
+            tk.Dispose();
         }
 
         static void Run()
