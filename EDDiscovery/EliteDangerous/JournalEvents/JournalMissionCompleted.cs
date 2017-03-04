@@ -87,7 +87,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return base.DefaultRemoveItems() + ";MissionID";
         }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.missioncompleted; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.missioncompleted; } }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

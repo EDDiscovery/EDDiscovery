@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Progress { get; set; }
         public int? Rank { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineerprogress; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineerprogress; } }
 
     }
 }

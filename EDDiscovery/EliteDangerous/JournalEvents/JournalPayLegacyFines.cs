@@ -33,7 +33,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Amount { get; set; }
         public double BrokerPercentage { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.payfines; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.payfines; } }
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {

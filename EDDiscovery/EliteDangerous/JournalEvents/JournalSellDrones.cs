@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long SellPrice { get; set; }
         public long TotalSale { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.selldrones; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.selldrones; } }
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {

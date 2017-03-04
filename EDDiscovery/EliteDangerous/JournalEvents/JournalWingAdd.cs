@@ -29,7 +29,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Name = JSONHelper.GetStringDef(evt["Name"]);
 
         }
+
         public string Name { get; set; }
+
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
     }
 }

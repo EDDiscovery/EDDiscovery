@@ -35,9 +35,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string ScanType { get; set; }
 
-
-        //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.repair; } }
-
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
     }
 }

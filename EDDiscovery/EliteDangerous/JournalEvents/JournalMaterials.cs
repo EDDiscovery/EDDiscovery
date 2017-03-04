@@ -53,10 +53,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public Material[] Encoded { get; set; }
 
 
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
 
 
-        //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
+        //public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
 
     }
 }

@@ -32,7 +32,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public string[] Modules { get; set; }
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rebootrepair; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rebootrepair; } }
     }
 }
 

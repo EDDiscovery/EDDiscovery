@@ -40,7 +40,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool Abandoned { get; set; }
         public string PowerplayOrigin { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ejectcargo; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ejectcargo; } }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
