@@ -296,50 +296,8 @@ namespace EDDiscovery.EliteDangerous
         #endregion
 
         #region Static properties and fields
-        private static Dictionary<JournalTypeEnum, Func<string, System.Drawing.Bitmap>> JournalTypeIcons = GetJournalTypeIcons();
         private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();
         #endregion
-
-        /// <summary>
-        /// Gets all of the journal type icons
-        /// </summary>
-        /// <returns>Map of journal type icon accessors</returns>
-        private static Dictionary<JournalTypeEnum, Func<string, System.Drawing.Bitmap>> GetJournalTypeIcons()
-        {
-            Dictionary<JournalTypeEnum, Func<string, System.Drawing.Bitmap>> icons = new Dictionary<JournalTypeEnum, Func<string, System.Drawing.Bitmap>>();
-            var asm = System.Reflection.Assembly.GetExecutingAssembly();
-            var types = asm.GetTypes().Where(t => typeof(JournalEntry).IsAssignableFrom(t) && !t.IsAbstract).ToList();
-
-            foreach (Type type in types)
-            {
-                JournalEntryTypeAttribute typeattrib = type.GetCustomAttributes(false).OfType<JournalEntryTypeAttribute>().FirstOrDefault();
-                if (typeattrib != null)
-                {
-                    System.Drawing.Bitmap defbmp = EDDiscovery.Properties.Resources.genericevent;
-                    Func<string, System.Drawing.Bitmap> bmpfunc = (d) => defbmp;
-
-                    System.Reflection.MethodInfo mi = type.GetMethod("SelectIcon");
-                    if (mi != null)
-                    {
-                        var p = System.Linq.Expressions.Expression.Parameter(typeof(string));
-                        bmpfunc = System.Linq.Expressions.Expression.Lambda<Func<string, System.Drawing.Bitmap>>(System.Linq.Expressions.Expression.Call(mi, p), p).Compile();
-                    }
-                    else
-                    {
-                        System.Reflection.PropertyInfo pi = type.GetProperty("Icon");
-                        if (pi != null)
-                        {
-                            System.Drawing.Bitmap bmp = (System.Drawing.Bitmap)pi.GetValue(null);
-                            bmpfunc = (d) => bmp;
-                        }
-                    }
-
-                    icons[typeattrib.EntryType] = bmpfunc;
-                }
-            }
-
-            return icons;
-        }
 
         /// <summary>
         /// Gets the mapping of journal type value to JournalEntry type
@@ -394,6 +352,8 @@ namespace EDDiscovery.EliteDangerous
         {
             return "timestamp;event;EDDMapColor";
         }
+
+        public abstract System.Drawing.Bitmap Icon { get; }
 
         private static JSONConverters jsonconvcache;     //cache it
 
@@ -1015,38 +975,6 @@ namespace EDDiscovery.EliteDangerous
                 return (JournalEntry)Activator.CreateInstance(jtype, jo);
         }
 
-        public virtual System.Drawing.Bitmap GetIcon()
-        {
-            return GetIcon(this.EventTypeID);
-        }
-
-        static public System.Drawing.Bitmap GetIcon(JournalTypeEnum eventtype, string seltext = null)    // get ICON associated with the event type.
-        {
-            if (JournalTypeIcons.ContainsKey(eventtype))
-            {
-                return JournalTypeIcons[eventtype].Invoke(seltext);
-            }
-
-            Type jtype = TypeOfJournalEntry(eventtype);
-
-            if (jtype == null)
-            {
-                return EDDiscovery.Properties.Resources.genericevent;
-            }
-
-            System.Reflection.MethodInfo m = jtype.GetMethod("IconSelect");                 // first we see if the class defines this function..
-
-            if (m != null)
-            {
-                return (System.Drawing.Bitmap)m.Invoke(null, new Object[] { seltext });    // if so, pass it the string and let it pick the icon
-            }
-            else
-            {
-                System.Reflection.PropertyInfo p = jtype.GetProperty("Icon");               // else use the Icon property, or if its not defined, its a generic event
-                System.Reflection.MethodInfo getter = p?.GetGetMethod();
-                return (getter != null) ? ((System.Drawing.Bitmap)getter.Invoke(null, null)) : EDDiscovery.Properties.Resources.genericevent;
-            }
-        }
 
         static public JournalTypeEnum JournalString2Type(string str)
         {
@@ -1290,7 +1218,8 @@ namespace EDDiscovery.EliteDangerous
                 { "type9",                      "Type 9 Heavy" },
                 { "viper",                      "Viper Mk. III" },
                 { "viper_mkiv",                 "Viper Mk. IV" },
-                { "vulture",                    "Vulture" }
+                { "vulture",                    "Vulture" },
+                { "testbuggy",                  "SRV" },
         };
 
         static public string GetBetterShipName(string inname)

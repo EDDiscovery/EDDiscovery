@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Faction { get; set; }
         public double BrokerPercentage { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {

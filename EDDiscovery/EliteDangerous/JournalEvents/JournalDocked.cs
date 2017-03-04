@@ -69,7 +69,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         //public string Security { get; set; }
         //public string Security_Localised { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)
         {

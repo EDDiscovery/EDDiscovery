@@ -40,7 +40,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketbuy; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketbuy; } }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

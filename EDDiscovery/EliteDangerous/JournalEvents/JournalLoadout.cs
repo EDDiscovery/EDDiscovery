@@ -81,6 +81,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 return new ShipModule(Slot, Item, Enabled, Priority, AmmoClip, AmmoHopper, Blueprint, BlueprintLevel);
             }
+
         }
 
         public JournalLoadout(JObject evt) : base(evt, JournalTypeEnum.Loadout)
@@ -111,7 +112,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.UpdateModules(ShipModules);
         }
 
-        //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
     }
 }

@@ -37,6 +37,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Type { get; set; }
         public int Count { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplaydeliver; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplaydeliver; } }
     }
 }

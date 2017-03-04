@@ -30,5 +30,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public int Part { get; set; }
+
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
     }
 }

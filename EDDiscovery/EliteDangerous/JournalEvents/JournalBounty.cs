@@ -50,7 +50,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool SharedWithOthers { get; set; }
         public BountyReward[] Rewards { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
 
         public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {
