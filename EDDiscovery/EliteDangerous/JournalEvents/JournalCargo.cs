@@ -44,6 +44,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public Cargo[] Inventory { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.cargomanifest; } }
     }
 }
