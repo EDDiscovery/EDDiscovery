@@ -392,7 +392,7 @@ namespace EDDiscovery
             {   // try is a bit old, probably do not need it.
                 if (he.IsFSDJump)
                 {
-                    int count = _discoveryForm.history.GetVisitsCount(he.System.name, he.System.id_edsm);
+                    int count = _discoveryForm.history.GetVisitsCount(he.System.name);
                     _discoveryForm.LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
 
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
@@ -482,7 +482,7 @@ namespace EDDiscovery
                     textBoxSolDist.Text = "";
                 }
 
-                int count = _discoveryForm.history.GetVisitsCount(syspos.System.name, syspos.System.id_edsm);
+                int count = _discoveryForm.history.GetVisitsCount(syspos.System.name);
                 textBoxVisits.Text = count.ToString();
 
                 bool enableedddross = (syspos.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about

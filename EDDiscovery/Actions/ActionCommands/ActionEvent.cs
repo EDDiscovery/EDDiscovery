@@ -210,6 +210,7 @@ namespace EDDiscovery.Actions
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
                         ActionVars.HistoryEventFurtherInfo(ap, hl, he, prefix);
+                        ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);
                     }
                     else
                         ap.ReportError("Unknown command " + cmdname + " in Event");
@@ -241,6 +242,7 @@ namespace EDDiscovery.Actions
             {
                 ConditionVariables values = new ConditionVariables();
                 ActionVars.HistoryEventVars(values, he, prefix);
+                ActionVars.SystemVars(values, he.System, prefix);
                 ap.Add(values);
             }
             catch { }
