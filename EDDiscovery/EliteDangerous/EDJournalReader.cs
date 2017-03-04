@@ -132,9 +132,10 @@ namespace EDDiscovery.EliteDangerous
 
         public bool ReadJournalLog(out JournalEntry jent, bool resetOnError = false)
         {
-            if (StartEntries.Count != 0)
+            if (StartEntries.Count != 0 && this.TravelLogUnit.CommanderId != null && this.TravelLogUnit.CommanderId >= 0)
             {
                 jent = StartEntries.Dequeue();
+                jent.CommanderId = (int)TravelLogUnit.CommanderId;
                 return true;
             }
 
