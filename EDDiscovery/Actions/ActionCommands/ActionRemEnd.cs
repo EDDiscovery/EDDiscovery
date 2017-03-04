@@ -37,6 +37,11 @@ namespace EDDiscovery.Actions
         public override bool ConfigurationMenuInUse { get { return false; } }
         public override string DisplayedUserData { get { return null; } }        // null if you dont' want to display
 
+        public override string VerifyActionCorrect()
+        {
+            return (UserData.Length == 0) ? null : " Text after end is not allowed";
+        }
+
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             ap.TerminateCurrentProgram();

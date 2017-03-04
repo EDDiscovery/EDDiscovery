@@ -33,8 +33,10 @@ namespace EDDiscovery.Actions
         protected string userdata;
         protected int levelup;              // indicates for control structures that this entry is N levels up (ie. to the left).
         protected int whitespace;           // optional whitespace.. lines
+        protected string comment;
 
         public string Name { get { return actionname; } }
+        public string Comment { get { return comment; } set { comment = value; } }
         public ActionType Type { get { return actiontype; } }
         public string UserData { get { return userdata; } }
         public int LevelUp { get { return levelup; } set { levelup = value; } }
@@ -77,12 +79,14 @@ namespace EDDiscovery.Actions
 
         static private Commands[] cmdlist = new Commands[]
         {
+            new Commands("Break", typeof(ActionBreak) , ActionType.Cmd),
             new Commands("Call", typeof(ActionCall) , ActionType.Call),
             new Commands("Commodities", typeof(ActionCommodities) , ActionType.Cmd),
             new Commands("Dialog", typeof(ActionDialog) , ActionType.Cmd),
             new Commands("DialogControl", typeof(ActionDialogControl) , ActionType.Cmd),
             new Commands("Do", typeof(ActionDo) , ActionType.Do),
             new Commands("DeleteVariable", typeof(ActionDeleteVariable) , ActionType.Cmd),
+            new Commands("Expr", typeof(ActionExpr), ActionType.Cmd),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
             new Commands("ElseIf", typeof(ActionElseIf) , ActionType.ElseIf),
             new Commands("End", typeof(ActionEnd) , ActionType.Cmd),
@@ -116,6 +120,8 @@ namespace EDDiscovery.Actions
             new Commands("While", typeof(ActionWhile) , ActionType.While),
         };
 
+        static Dictionary<string, Commands> cmdlookup = null;
+
         public static string[] GetActionNameList()
         {
             string[] list = new string[cmdlist.Length];
@@ -126,23 +132,29 @@ namespace EDDiscovery.Actions
 
         // FACTORY make the correct class from name.
 
-        public static Action CreateAction( string name, string user = null , int lu = 0 , int ws = 0 )       
+        public static Action CreateAction( string name, string user = null , string comment = null, int lu = 0 , int ws = 0 )       
         {
-            for (int i = 0; i < cmdlist.Length; i++)
+            if ( cmdlookup == null )                                // first go, create the mapping dictionary.. 
             {
-                if ( name.Equals(cmdlist[i].name, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (user == null)
-                        user = "";
+                cmdlookup = new Dictionary<string, Commands>();
+                for (int i = 0; i < cmdlist.Length; i++)
+                    cmdlookup[cmdlist[i].name.ToLower()] = cmdlist[i];
+            }
 
-                    Action a = (Action)Activator.CreateInstance(cmdlist[i].type, new Object[] { });
-                    a.actionname = name;
-                    a.userdata = user;
-                    a.levelup = lu;
-                    a.whitespace = ws;
-                    a.actiontype = cmdlist[i].at;
-                    return a;
-                }
+            string nname = name.ToLower();
+
+            if ( cmdlookup.ContainsKey(nname))
+            {
+                Commands c = cmdlookup[nname];
+
+                Action a = (Action)Activator.CreateInstance(c.type, new Object[] { });
+                a.actionname = c.name;
+                a.userdata = user ?? "";
+                a.comment = comment ?? "";
+                a.levelup = lu;
+                a.whitespace = ws;
+                a.actiontype = c.at;
+                return a;
             }
 
             return null;
@@ -156,6 +168,7 @@ namespace EDDiscovery.Actions
             Action a = (Action)Activator.CreateInstance(ty, new Object[] { });
             a.actionname = r.actionname;
             a.userdata = r.userdata;
+            a.comment = r.comment;
             a.levelup = r.levelup;
             a.whitespace = r.whitespace;
             a.actiontype = r.actiontype;

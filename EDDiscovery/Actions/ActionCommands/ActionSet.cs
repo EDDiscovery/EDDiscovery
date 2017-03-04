@@ -253,6 +253,8 @@ namespace EDDiscovery.Actions
 
     public class ActionDeleteVariable: Action
     {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }
+
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Variable name", UserData, "Configure DeleteVariable Command");
@@ -278,6 +280,35 @@ namespace EDDiscovery.Actions
                     ap.DeleteVar(v);
                     p.IsCharMoveOn(',');
                 }
+            }
+            else
+                ap.ReportError(res);
+
+            return true;
+        }
+    }
+
+    public class ActionExpr: Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Expression", UserData, "Configure Function Expression");
+            if (promptValue != null)
+            {
+                userdata = promptValue;
+            }
+
+            return (promptValue != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            string res;
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            {
+                ap["Result"] = res;
             }
             else
                 ap.ReportError(res);

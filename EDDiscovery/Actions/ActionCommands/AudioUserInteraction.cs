@@ -121,12 +121,11 @@ namespace EDDiscovery.Actions
 
                     FolderBrowserDialog fbd = new FolderBrowserDialog();
 
-                    string descr = sp.NextQuotedWord(", ");
+                    string descr = sp.NextQuotedWordComma();
                     if (descr != null)
                         fbd.Description = descr;
 
-                    sp.IsCharMoveOn(',');
-                    string rootfolder = sp.NextQuotedWord(", ");
+                    string rootfolder = sp.NextQuotedWordComma();
                     if (rootfolder != null)
                     {
                         Environment.SpecialFolder sf;
@@ -145,27 +144,57 @@ namespace EDDiscovery.Actions
 
                     OpenFileDialog fd = new OpenFileDialog();
                     fd.Multiselect = false;
+                    fd.CheckPathExists = true;
 
                     try
                     {
-                        string rootfolder = sp.NextQuotedWord(", ");
+                        string rootfolder = sp.NextQuotedWordComma();
                         if (rootfolder != null)
                             fd.InitialDirectory = rootfolder;
 
-                        sp.IsCharMoveOn(',');
-                        string filter = sp.NextQuotedWord(", ");
+                        string filter = sp.NextQuotedWordComma();
                         if (filter != null)
                             fd.Filter = filter;
 
-                        sp.IsCharMoveOn(',');
-                        string defext = sp.NextQuotedWord(", ");
+                        string defext = sp.NextQuotedWordComma();
                         if (defext != null)
                             fd.DefaultExt = defext;
 
-                        sp.IsCharMoveOn(',');
-                        string check = sp.NextQuotedWord(", ");
+                        string check = sp.NextQuotedWordComma();
                         if (check != null && check.Equals("On", StringComparison.InvariantCultureIgnoreCase))
-                            fd.CheckFileExists = fd.CheckPathExists = true;
+                            fd.CheckFileExists = true;
+
+                        string fileret = (fd.ShowDialog(ap.actioncontroller.DiscoveryForm) == DialogResult.OK) ? fd.FileName : "";
+                        ap["FileName"] = fileret;
+                    }
+                    catch
+                    {
+                        ap.ReportError("FileDialog file failed to generate dialog, check options");
+                    }
+                }
+                else if (cmdname.Equals("savefile"))
+                {
+                    sp.IsCharMoveOn(',');
+
+                    SaveFileDialog fd = new SaveFileDialog();
+
+                    try
+                    {
+                        string rootfolder = sp.NextQuotedWordComma();
+                        if (rootfolder != null)
+                            fd.InitialDirectory = rootfolder;
+
+                        string filter = sp.NextQuotedWordComma();
+                        if (filter != null)
+                            fd.Filter = filter;
+
+                        string defext = sp.NextQuotedWordComma();
+                        if (defext != null)
+                            fd.DefaultExt = defext;
+
+                        string check = sp.NextQuotedWordComma();
+                        if (check != null && check.Equals("On", StringComparison.InvariantCultureIgnoreCase))
+                            fd.OverwritePrompt = true;
 
                         string fileret = (fd.ShowDialog(ap.actioncontroller.DiscoveryForm) == DialogResult.OK) ? fd.FileName : "";
                         ap["FileName"] = fileret;
@@ -304,8 +333,6 @@ namespace EDDiscovery.Actions
 
     public class ActionDialog : Action
     {
-        static public Dictionary<string, Forms.ConfigurableDialog> dialogs = new Dictionary<string, Forms.ConfigurableDialog>();
-
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
         List<string> FromString(string input)
@@ -346,62 +373,14 @@ namespace EDDiscovery.Actions
                 {
                     ConditionVariables cv = ap.variables.FilterVars(exp[3] + "*");
 
-                    List<Forms.ConfigurableDialog.Entry> entries = new List<Forms.ConfigurableDialog.Entry>();
+                    List<Forms.ConfigurableForm.Entry> entries = new List<Forms.ConfigurableForm.Entry>();
 
                     foreach( string k in cv.NameList )
                     {
-                        StringParser sp = new StringParser(cv[k]);
-
-                        string name = sp.NextQuotedWordComma();
-
-                        if (name == null)
-                            return ap.ReportError("Missing name in " + k + " variable for Dialog");
-
-                        string type = sp.NextWordComma(lowercase:true);
-                        if ( type == null )
-                            return ap.ReportError("Missing type in " + k + " variable for Dialog");
-                        else if (type.Equals("button"))
-                            type = "ExtendedControls.ButtonExt";
-                        else if (type.Equals("textbox"))
-                            type = "ExtendedControls.TextBoxBorder";
-                        else if (type.Equals("checkbox"))
-                            type = "ExtendedControls.CheckBoxCustom";
-                        else
-                            return ap.ReportError("Unknown control type in " + k + " variable for Dialog");
-
-                        string text = sp.NextQuotedWordComma();
-
-                        if (text == null)
-                            return ap.ReportError("Missing text in " + k + " variable for Dialog");
-
-                        int? x = sp.NextWordComma().InvariantParseIntNull();
-                        int? y = sp.NextWordComma().InvariantParseIntNull();
-                        int? w = sp.NextWordComma().InvariantParseIntNull();
-                        int? h = sp.NextWordComma().InvariantParseIntNull();
-
-                        if (x == null || y == null || w == null || h == null)
-                            return ap.ReportError("Missing position/size in " + k + " variable for Dialog");
-
-                        string tip = sp.NextQuotedWordComma();
-
-                        if ( tip == null )
-                            return ap.ReportError("Missing tool tip in " + k + " variable for Dialog");
-
-                        Forms.ConfigurableDialog.Entry entry = new Forms.ConfigurableDialog.Entry(name, System.Type.GetType(type, false, false), 
-                                    text, new System.Drawing.Point(x.Value, y.Value), new System.Drawing.Size(w.Value, h.Value), tip);
-
-                        if (type.Contains("TextBox"))
-                        {
-                            int? v = sp.NextWordComma().InvariantParseIntNull();
-                            entry.textboxmultiline = v.HasValue && v.Value != 0;
-                        }
-
-                        if (type.Contains("CheckBox"))
-                        {
-                            int? v = sp.NextWordComma().InvariantParseIntNull();
-                            entry.checkboxchecked = v.HasValue && v.Value != 0;
-                        }
-
+                        Forms.ConfigurableForm.Entry entry;
+                        string errmsg =Forms.ConfigurableForm.MakeEntry(cv[k], out entry);
+                        if (errmsg != null)
+                            return ap.ReportError(errmsg + " in " + k + " variable for Dialog");
                         entries.Add(entry);
                     }
 
@@ -411,10 +390,10 @@ namespace EDDiscovery.Actions
 
                     if (dw != null && dh != null)
                     {
-                        Forms.ConfigurableDialog cd = new Forms.ConfigurableDialog();
-                        dialogs[exp[0]] = cd;
+                        Forms.ConfigurableForm cd = new Forms.ConfigurableForm();
+                        ap.dialogs[exp[0]] = cd;
                         cd.Trigger += Cd_Trigger;
-                        cd.Show(ap.actioncontroller.DiscoveryForm, exp[0], new System.Drawing.Size(400, 400), exp[1], entries.ToArray(), ap);
+                        cd.Show(ap.actioncontroller.DiscoveryForm, exp[0], new System.Drawing.Size(dw.Value, dh.Value), exp[1], entries.ToArray(), ap);
                         return false;       // STOP, wait input
                     }
                     else
@@ -461,9 +440,9 @@ namespace EDDiscovery.Actions
                 StringParser sp = new StringParser(exp);
                 string handle = sp.NextWordComma();
 
-                if (handle != null && ActionDialog.dialogs.ContainsKey(handle))
+                if (handle != null && ap.dialogs.ContainsKey(handle))
                 {
-                    Forms.ConfigurableDialog f = ActionDialog.dialogs[handle];
+                    Forms.ConfigurableForm f = ap.dialogs[handle];
 
                     string cmd = sp.NextWord(lowercase: true);
 
@@ -480,7 +459,7 @@ namespace EDDiscovery.Actions
 
                         if (control != null && (r = f.Get(control)) != null)
                         {
-                            ap["Value"] = r;
+                            ap["DialogResult"] = r;
                         }
                         else
                             ap.ReportError("Missing or invalid dialog name in DialogControl get");
@@ -500,7 +479,7 @@ namespace EDDiscovery.Actions
                     else if (cmd.Equals("close"))
                     {
                         f.Close();
-                        ActionDialog.dialogs.Remove(handle);
+                        ap.dialogs.Remove(handle);
                     }
                     else
                         ap.ReportError("Unknown command in DialogControl");

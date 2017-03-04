@@ -269,6 +269,23 @@ public static class ObjectExtensions
         return s;
     }
 
+    public static bool InQuotes( this string s, int max = 0)            // left true if quote left over on line, taking care of any escapes..
+    {
+        if (max <= 0)
+            max = s.Length;
+
+        bool inquote = false;
+        for (int i = 0; i < max; i++)
+        {
+            if (s[i] == '\\' && i < max-1 && s[i + 1] == '"') 
+                i += 1;     // ignore this, ingore "
+            else if (s[i] == '"')
+                inquote = !inquote;
+        }
+
+        return inquote;
+    }
+
     static public string SplitCapsWordUnderscoreTitleCase(this string capslower)     // one_two goes to One_Two
     {
         string s = Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"); //Upper(rep)UpperLower = Upper(rep) UpperLower

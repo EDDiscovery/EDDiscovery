@@ -147,13 +147,13 @@ namespace EDDiscovery.Actions
 
                             if (audio != null)
                             {
-                                if (start != null)
+                                if (start != null && start.Length > 0)
                                 {
                                     audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onPlayStarted" };
                                     audio.sampleStartEvent += Audio_sampleEvent;
 
                                 }
-                                if (wait || finish != null)       // if waiting, or finish call
+                                if (wait || (finish != null && finish.Length > 0))       // if waiting, or finish call
                                 {
                                     audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onPlayFinished" };
                                     audio.sampleOverEvent += Audio_sampleEvent;
@@ -184,7 +184,7 @@ namespace EDDiscovery.Actions
         {
             AudioEvent af = tag as AudioEvent;
 
-            if (af.eventname != null)
+            if (af.eventname != null && af.eventname.Length>0)
                 af.apr.actioncontroller.ActionRun(af.triggername, "ActionProgram", null, new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
 
             if (af.wait)

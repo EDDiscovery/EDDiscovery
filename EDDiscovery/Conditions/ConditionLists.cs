@@ -153,7 +153,7 @@ namespace EDDiscovery
 
         public enum LogicalCondition
         {
-            Or,     // any true
+            Or,     // any true     (DEFAULT)
             And,    // all true
             Nor,    // any true produces a false
             Nand,   // any not true produces a true
@@ -195,8 +195,8 @@ namespace EDDiscovery
                     eventname = e;
                     action = a;
                     actiondata = d;
-                    innercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), i.Replace(" ", ""));       // must work, exception otherwise
-                    outercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), o.Replace(" ", ""));       // must work, exception otherwise
+                    innercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), i.Replace(" ", ""),true);       // must work, exception otherwise
+                    outercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), o.Replace(" ", ""),true);       // must work, exception otherwise
                     return true;
                 }
                 catch { }
@@ -527,10 +527,14 @@ namespace EDDiscovery
             {
                 JObject j1 = new JObject();
                 j1["EventName"] = f.eventname;
-                j1["ICond"] = f.innercondition.ToString();
-                j1["OCond"] = f.outercondition.ToString();
-                j1["Actions"] = f.action;
-                j1["ActionData"] = f.actiondata;
+                if (f.innercondition != LogicalCondition.Or)
+                    j1["ICond"] = f.innercondition.ToString();
+                if (f.outercondition != LogicalCondition.Or)
+                    j1["OCond"] = f.outercondition.ToString();
+                if ( f.action.Length>0)
+                    j1["Actions"] = f.action;
+                if ( f.actiondata.Length>0)
+                    j1["ActionData"] = f.actiondata;
 
                 JArray jfields = new JArray();
 
@@ -579,10 +583,10 @@ namespace EDDiscovery
                 foreach (JObject j in jf)
                 {
                     string evname = (string)j["EventName"];
-                    LogicalCondition ftinner = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), (string)j["ICond"]);
-                    LogicalCondition ftouter = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), (string)j["OCond"]);
-                    string act = (string)j["Actions"];
-                    string actd = (string)j["ActionData"];
+                    LogicalCondition ftinner = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), JSONHelper.GetStringDef(j["ICond"], "Or"));
+                    LogicalCondition ftouter = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), JSONHelper.GetStringDef(j["OCond"], "Or"));
+                    string act = JSONHelper.GetStringDef(j["Actions"],"");
+                    string actd = JSONHelper.GetStringDef(j["ActionData"],"");
 
                     JArray filset = (JArray)j["Filters"];
 
@@ -751,7 +755,7 @@ namespace EDDiscovery
 
                     if (innercond == null)
                         innercond = condi;
-                    else if (!innercond.Equals(condi))
+                    else if (!innercond.Equals(condi,StringComparison.InvariantCultureIgnoreCase))
                         return "Differing inner conditions incorrect";
 
                 }
