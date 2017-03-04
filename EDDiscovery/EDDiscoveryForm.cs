@@ -1160,7 +1160,7 @@ namespace EDDiscovery
 
 #endregion
 
-        private void cAPIToolStripMenuItem_Click(object sender, EventArgs e)
+        private void companionAPILoginToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormCAPI frm = new FormCAPI();
 
