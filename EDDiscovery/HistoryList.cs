@@ -388,13 +388,11 @@ namespace EDDiscovery
             get
             {
                 if (journalEntry != null)
-                {
-                    return journalEntry.GetIcon();
-                }
+                    return journalEntry.Icon;
+                else if (EntryType == JournalTypeEnum.FSDJump)
+                    return EDDiscovery.Properties.Resources.hyperspace;
                 else
-                {
-                    return EliteDangerous.JournalEntry.GetIcon(EntryType, EventDescription);
-                }
+                    return EDDiscovery.Properties.Resources.genericevent;
             }
         }
 

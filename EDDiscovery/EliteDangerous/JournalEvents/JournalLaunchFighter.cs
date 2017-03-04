@@ -33,7 +33,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Loadout { get; set; }
         public bool PlayerControlled { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.fighter; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.fighter; } }
 
     }
 }

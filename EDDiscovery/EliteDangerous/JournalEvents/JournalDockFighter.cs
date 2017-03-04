@@ -29,7 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.fighter; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.fighter; } }
 
     }
 }

@@ -56,6 +56,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, StoredItemLocalised + " on " + Ship, -TransferCost);
         }
 
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
     }
 }

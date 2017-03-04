@@ -30,20 +30,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string To { get; set; }
 
-        public static System.Drawing.Bitmap IconSelect(string desc)
+        public override System.Drawing.Bitmap Icon
         {
-            if (desc.Contains("Mothership"))
-                return EDDiscovery.Properties.Resources.mothership;
-            else
-                return EDDiscovery.Properties.Resources.fighter;
-        }
-
-        public override System.Drawing.Bitmap GetIcon()
-        {
-            if (To.Contains("Mothership"))
-                return EDDiscovery.Properties.Resources.mothership;
-            else
-                return EDDiscovery.Properties.Resources.fighter;
+            get
+            {
+                if (To.Contains("Mothership"))
+                    return EDDiscovery.Properties.Resources.mothership;
+                else
+                    return EDDiscovery.Properties.Resources.fighter;
+            }
         }
     }
 }
