@@ -64,6 +64,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     public class JournalScan : JournalEntry
     {
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
+        public string BodyDesignation { get; set; }
 
         // ALL
         public string BodyName { get; set; }                        // direct (meaning no translation)
@@ -199,12 +200,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
                 }
             }
-            else
+            else if (PlanetClass != null)
             {
                 PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
                                                                                     // Fix naming to standard and fix case..
                 PlanetClass = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
                                         ToTitleCase(PlanetClass.ToLower()).Replace("Ii ", "II ").Replace("Iv ", "IV ").Replace("Iii ", "III ");
+            }
+            else
+            {
+                PlanetTypeID = EDPlanet.Unknown;
             }
 
 
@@ -234,7 +239,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             EventTimeUTC = DateTime.UtcNow;
             throw new NotImplementedException();
         }
-
 
         public override void FillInformation(out string summary, out string info, out string detailed)
         {
@@ -377,8 +381,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
-            int low, hi;
-            int estvalue = EstimatedValue(out low, out hi);
+            
+            int estvalue = EstimatedValue();
             if (estvalue > 0)
                 scanText.AppendFormat("\nEstimated value: {0}", estvalue);
 
@@ -650,11 +654,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scan; } }
 
-        public bool IsStarNameRelated(string starname)
+        public bool IsStarNameRelated(string starname, string designation = null)
         {
-            if (BodyName.Length >= starname.Length)
+            if (designation == null)
             {
-                string s = BodyName.Substring(0, starname.Length);
+                designation = BodyName;
+            }
+
+            if (designation.Length >= starname.Length)
+            {
+                string s = designation.Substring(0, starname.Length);
                 return starname.Equals(s, StringComparison.InvariantCultureIgnoreCase);
             }
             else
@@ -663,11 +672,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string IsStarNameRelatedReturnRest(string starname)          // null if not related, else rest of string
         {
-            if (BodyName.Length >= starname.Length)
+            string designation = BodyDesignation ?? BodyName;
+            if (designation.Length >= starname.Length)
             {
-                string s = BodyName.Substring(0, starname.Length);
+                string s = designation.Substring(0, starname.Length);
                 if (starname.Equals(s, StringComparison.InvariantCultureIgnoreCase))
-                    return BodyName.Substring(starname.Length).Trim();
+                    return designation.Substring(starname.Length).Trim();
             }
 
             return null;
@@ -682,8 +692,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return radius_metres / 300000000;
         }
 
-        public int EstimatedValue(out int low, out int high)
+        public int EstimatedValue()
         {
+            int low;
+            int high;
+
             if (IsStar)
             {
                 switch (StarTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
@@ -741,7 +754,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.AeBe:    // Herbig
                         //                ??
                         low = high = 0;
-                        return 0;
+                        return 2500;
                     case EDStar.TTS:
                         low = 2881;
                         high = 2922;
@@ -769,7 +782,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.S:   // seen in log
                                      //                ??
                         low = high = 0;
-                        return 0;
+                        return 2000;
 
 
                     // white dwarf
@@ -814,7 +827,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     default:
                         low = 0;
                         high = 0;
-                        return 0;
+                        return 2000;
                 }
             }
             else   // Planet
@@ -910,11 +923,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDPlanet.Helium_gas_giant:
                         low = 0;
                         high = 0;
-                        return 0;
+                        return 2000;
 
                     default:
                         low = 0;
-                        high = 0;
+                        high = 2000;
                         return 0;
                 }
 

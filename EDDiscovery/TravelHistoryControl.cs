@@ -431,7 +431,7 @@ namespace EDDiscovery
 
         public void ShowSystemInformation(DataGridViewRow rw)
         {
-            StoreSystemNote();      // save any previous note
+            StoreSystemNote(true);      // save any previous note
 
             HistoryEntry syspos = null;
 
@@ -439,7 +439,7 @@ namespace EDDiscovery
             {
                 textBoxSystem.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
-                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = "";
+                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = textBoxSolDist.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
             }
             else
@@ -471,6 +471,7 @@ namespace EDDiscovery
                     double zdist = syspos.System.z - homesys.z;
 
                     textBoxHomeDist.Text = Math.Sqrt(xdist * xdist + ydist * ydist + zdist * zdist).ToString("0.00");
+                    textBoxSolDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
                 }
                 else
                 {
@@ -478,6 +479,7 @@ namespace EDDiscovery
                     textBoxY.Text = "?";
                     textBoxZ.Text = "?";
                     textBoxHomeDist.Text = "";
+                    textBoxSolDist.Text = "";
                 }
 
                 int count = _discoveryForm.history.GetVisitsCount(syspos.System.name, syspos.System.id_edsm);
@@ -498,6 +500,20 @@ namespace EDDiscovery
 
             if (OnTravelSelectionChanged != null)
                 OnTravelSelectionChanged(syspos, _discoveryForm.history);
+        }
+
+        public void UpdateNoteJID(long jid, string txt)
+        {
+            userControlTravelGrid.UpdateNoteJID(jid, txt);
+            if (notedisplayedhe != null && notedisplayedhe.Journalid == jid)
+            {
+                string oldtext = richTextBoxNote.Text.Trim();
+
+                if (oldtext != txt)
+                {
+                    richTextBoxNote.Text = txt;
+                }
+            }
         }
 
         #endregion
@@ -626,32 +642,17 @@ namespace EDDiscovery
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
-            StoreSystemNote();
+            StoreSystemNote(true);
         }
 
         private void richTextBoxNote_TextChanged(object sender, EventArgs e)
         {
-            userControlTravelGrid.UpdateCurrentNote(richTextBoxNote.Text);
-            if (userControlTravelGrid.GetCurrentHistoryEntry != null )
-                _discoveryForm.PopOuts.UpdateNoteJID(userControlTravelGrid.GetCurrentHistoryEntry.Journalid, richTextBoxNote.Text);
+            StoreSystemNote(false);
         }
 
-        private void StoreSystemNote()
+        private void StoreSystemNote(bool send)
         {
-            if (this.notedisplayedhe != null)
-            {
-                string txt = richTextBoxNote.Text.Trim();
-
-                if ( notedisplayedhe.UpdateSystemNote(txt) )
-                { 
-                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm && notedisplayedhe.IsFSDJump)       // only send on FSD jumps
-                        EDSMSync.SendComments(notedisplayedhe.snc.Name, notedisplayedhe.snc.Note, notedisplayedhe.snc.EdsmId);
-
-                    _discoveryForm.Map.UpdateNote();
-                }
-
-                notedisplayedhe = null; // now not longer need to remember, note has been updated
-            }
+            _discoveryForm.StoreSystemNote(notedisplayedhe, richTextBoxNote.Text.Trim(), send);
         }
 
         public void buttonSync_Click(object sender, EventArgs e)

@@ -299,6 +299,7 @@
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="EDDiscoveryController.cs" />
+    <Compile Include="EliteDangerous\BodyDesignations.cs" />
     <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
@@ -336,6 +337,12 @@
       <DependentUpon>MessageBoxTheme.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PromptDialogs.cs" />
+    <Compile Include="Forms\SetNoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetNoteForm.Designer.cs">
+      <DependentUpon>SetNoteForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="PopOutControl.cs" />
@@ -890,6 +897,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MessageBoxTheme.resx">
       <DependentUpon>MessageBoxTheme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetNoteForm.resx">
+      <DependentUpon>SetNoteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>

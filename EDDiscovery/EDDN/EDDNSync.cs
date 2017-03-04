@@ -137,9 +137,17 @@ namespace EDDiscovery2.EDSM
             if (he.Commander != null)
             {
                 eddn.commanderName = he.Commander.EdsmName;
+                if (string.IsNullOrEmpty(eddn.commanderName))
+                    eddn.commanderName = he.Commander.Name;
             }
 
-            JournalEntry je = JournalEntry.Get(he.Journalid);
+            JournalEntry je = he.journalEntry;
+
+            if (je == null)
+            {
+                je = JournalEntry.Get(he.Journalid);
+            }
+
             JObject msg = null;
 
             if (je.EventTypeID == JournalTypeEnum.FSDJump)

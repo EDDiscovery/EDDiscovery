@@ -92,6 +92,8 @@ namespace EDDiscovery
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
             this.tabStripMiddleRight = new ExtendedControls.TabStrip();
             this.tabStripBottomRight = new ExtendedControls.TabStrip();
+            this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
+            this.labelSolDist = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -467,6 +469,8 @@ namespace EDDiscovery
             // 
             // panel_system
             // 
+            this.panel_system.Controls.Add(this.labelSolDist);
+            this.panel_system.Controls.Add(this.textBoxSolDist);
             this.panel_system.Controls.Add(this.buttonEDSM);
             this.panel_system.Controls.Add(this.labelHomeSystem);
             this.panel_system.Controls.Add(this.textBoxHomeDist);
@@ -761,6 +765,28 @@ namespace EDDiscovery
             this.tabStripBottomRight.StripAtTop = true;
             this.tabStripBottomRight.TabIndex = 0;
             // 
+            // textBoxSolDist
+            // 
+            this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSolDist.BorderColorScaling = 0.5F;
+            this.textBoxSolDist.Location = new System.Drawing.Point(50, 102);
+            this.textBoxSolDist.Name = "textBoxSolDist";
+            this.textBoxSolDist.ReadOnly = true;
+            this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
+            this.textBoxSolDist.TabIndex = 44;
+            this.textBoxSolDist.TabStop = false;
+            this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to home planet");
+            // 
+            // labelSolDist
+            // 
+            this.labelSolDist.AutoSize = true;
+            this.labelSolDist.Location = new System.Drawing.Point(2, 102);
+            this.labelSolDist.Name = "labelSolDist";
+            this.labelSolDist.Size = new System.Drawing.Size(22, 13);
+            this.labelSolDist.TabIndex = 45;
+            this.labelSolDist.Text = "Sol";
+            this.labelSolDist.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -846,5 +872,7 @@ namespace EDDiscovery
         private ExtendedControls.TabStrip tabStripBottom;
         private ExtendedControls.TabStrip tabStripMiddleRight;
         private ExtendedControls.TabStrip tabStripBottomRight;
+        private System.Windows.Forms.Label labelSolDist;
+        private ExtendedControls.TextBoxBorder textBoxSolDist;
     }
 }

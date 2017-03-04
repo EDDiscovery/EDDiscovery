@@ -35,27 +35,29 @@ namespace EDDiscovery
         [STAThread]
         static void Main()
         {
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions { EnableHighResolution = false });
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            try
+            using (OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions { EnableHighResolution = false }))
             {
-                using (new SingleGlobalInstance(1000))
-                {
-                    Run();
-                }
-            }
-            catch (TimeoutException)
-            {
-                if (MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    Run();
-                }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-                /* Could not lock the app-global mutex, which means another copy of the App is running.
-                 * TODO: show a dialog and/or bring the current instance's window to the foreground.
-                 */
+                try
+                {
+                    using (new SingleGlobalInstance(1000))
+                    {
+                        Run();
+                    }
+                }
+                catch (TimeoutException)
+                {
+                    if (MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        Run();
+                    }
+
+                    /* Could not lock the app-global mutex, which means another copy of the App is running.
+                     * TODO: show a dialog and/or bring the current instance's window to the foreground.
+                     */
+                }
             }
         }
 

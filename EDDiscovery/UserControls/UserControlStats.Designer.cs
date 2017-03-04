@@ -90,6 +90,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStats.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewStats.Size = new System.Drawing.Size(156, 336);
             this.dataGridViewStats.TabIndex = 2;
+            this.dataGridViewStats.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewStats_ColumnHeaderMouseClick);
             // 
             // ItemName
             // 
@@ -227,6 +228,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewTravel.Size = new System.Drawing.Size(156, 336);
             this.dataGridViewTravel.TabIndex = 3;
+            this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTravel_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -283,6 +285,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridViewScan.Size = new System.Drawing.Size(551, 367);
             this.dataGridViewScan.TabIndex = 4;
+            this.dataGridViewScan.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewScan_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn3
             // 
