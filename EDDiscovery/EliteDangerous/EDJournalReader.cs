@@ -143,7 +143,7 @@ namespace EDDiscovery.EliteDangerous
                 if (jent == null)
                     continue;
 
-                if (this.TravelLogUnit.CommanderId < 0 && jent.EventTypeID != JournalTypeEnum.LoadGame)
+                if ((this.TravelLogUnit.CommanderId == null || this.TravelLogUnit.CommanderId < 0) && jent.EventTypeID != JournalTypeEnum.LoadGame)
                 {
                     StartEntries.Enqueue(jent);
                     continue;
