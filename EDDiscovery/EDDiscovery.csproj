@@ -1072,6 +1072,7 @@
     <None Include="Resources\edsmblue.png" />
     <None Include="Resources\edsmred.png" />
     <None Include="Resources\edsmown.png" />
+    <None Include="Resources\cargomanifest.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

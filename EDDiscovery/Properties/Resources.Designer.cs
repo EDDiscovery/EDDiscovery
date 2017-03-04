@@ -293,6 +293,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cargomanifest {
+            get {
+                object obj = ResourceManager.GetObject("cargomanifest", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Class_I_Gas_Giant_Brown2 {
             get {
                 object obj = ResourceManager.GetObject("Class_I_Gas_Giant_Brown2", resourceCulture);
