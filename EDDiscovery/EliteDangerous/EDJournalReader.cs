@@ -35,6 +35,8 @@ namespace EDDiscovery.EliteDangerous
 
         public static bool disable_beta_commander_check = false;        // strictly for debugging purposes
 
+        private Queue<JournalEntry> StartEntries = new Queue<JournalEntry>();
+
         public EDJournalReader(string filename) : base(filename)
         {
         }
@@ -130,10 +132,22 @@ namespace EDDiscovery.EliteDangerous
 
         public bool ReadJournalLog(out JournalEntry jent, bool resetOnError = false)
         {
+            if (StartEntries.Count != 0)
+            {
+                jent = StartEntries.Dequeue();
+                return true;
+            }
+
             while (ReadLine(out jent, l => ProcessLine(l, resetOnError)))
             {
                 if (jent == null)
                     continue;
+
+                if (this.TravelLogUnit.CommanderId < 0 && jent.EventTypeID != JournalTypeEnum.LoadGame)
+                {
+                    StartEntries.Enqueue(jent);
+                    continue;
+                }
 
                 //System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName));
 
