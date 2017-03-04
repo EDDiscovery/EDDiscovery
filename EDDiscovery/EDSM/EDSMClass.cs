@@ -653,30 +653,50 @@ namespace EDDiscovery2.EDSM
 
         public  static List<JournalScan> GetBodiesList(long edsmid)
         {
-            if (DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
-                return DictEDSMBodies[edsmid];
-
-            List<JournalScan> bodies = new List<JournalScan>();
-
-            EDSMClass edsm = new EDSMClass();
-
-            JObject jo = edsm.GetBodies(edsmid);  // Colonia 
-
-            if (jo != null)
+            try
             {
-                foreach (JObject bodie in jo["bodies"])
-                {
-                    EDSMClass.ConvertFromEDSMBodies(bodie);
-                    JournalScan js = new JournalScan(bodie);
-                    js.EdsmID = edsmid;
-                    
-                    bodies.Add(js);
-                }
-                DictEDSMBodies[edsmid] = bodies;
-                return bodies;
-            }
+                if (DictEDSMBodies!=null &&  DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
+                    return DictEDSMBodies[edsmid];
 
-            DictEDSMBodies[edsmid] = null;
+                List<JournalScan> bodies = new List<JournalScan>();
+
+                EDSMClass edsm = new EDSMClass();
+
+                JObject jo = edsm.GetBodies(edsmid);  // Colonia 
+
+                if (jo != null)
+                {
+                    foreach (JObject bodie in jo["bodies"])
+                    {
+                        try
+                        {
+                            EDSMClass.ConvertFromEDSMBodies(bodie);
+                            JournalScan js = new JournalScan(bodie);
+                            js.EdsmID = edsmid;
+
+                            bodies.Add(js);
+                        }
+                        catch (Exception ex)
+                        {
+                            HttpCom.WriteLog($"Exception Loop: {ex.Message}", "");
+                            HttpCom.WriteLog($"ETrace: {ex.StackTrace}", "");
+                            Trace.WriteLine($"Exception Loop: {ex.Message}");
+                            Trace.WriteLine($"ETrace: {ex.StackTrace}");
+                        }
+                    }
+                    DictEDSMBodies[edsmid] = bodies;
+                    return bodies;
+                }
+
+                DictEDSMBodies[edsmid] = null;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Exception: {ex.Message}");
+                Trace.WriteLine($"ETrace: {ex.StackTrace}");
+                return null;
+
+            }
             return null;
         }
 
