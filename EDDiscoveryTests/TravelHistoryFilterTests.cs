@@ -39,11 +39,19 @@ namespace EDDiscoveryTests
     [TestClass]
     public class TravelHistoryFilterTests
     {
+        private ISystem sol = new EDDiscovery2.DB.InMemory.SystemClass
+        {
+            name = "Sol",
+            x = 0,
+            y = 0,
+            z = 0
+        };
+
         [Test]
         [TestMethod]
         public void No_filter_does_not_filter_anything()
         {
-            var veryOldData = new HistoryEntry { EventTimeUTC = DateTime.UtcNow.Subtract(TimeSpan.FromDays(500000)) };
+            var veryOldData = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(500000)), 0, "", "");
             var input = new HistoryList { veryOldData };
 
             Check.That(TravelHistoryFilter.NoFilter.Filter(input)).ContainsExactly(veryOldData);
@@ -53,8 +61,8 @@ namespace EDDiscoveryTests
         [TestMethod]
         public void Data_age_filter_removes_data_older_than_the_limit_and_keeps_data_more_recent_than_the_limit()
         {
-            var now = new HistoryEntry { EventTimeUTC = DateTime.UtcNow };
-            var fourDaysAgo = new HistoryEntry { EventTimeUTC = DateTime.UtcNow.Subtract(TimeSpan.FromDays(4))};
+            var now = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow, 0, "", "");
+            var fourDaysAgo = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(4)), 0, "", "");
             var input = new HistoryList { fourDaysAgo, now };
 
             Check.That(TravelHistoryFilter.FromDays(2).Filter(input)).ContainsExactly(now);
@@ -64,9 +72,9 @@ namespace EDDiscoveryTests
         [TestMethod]
         public void Last_2_items_filter_returns_the_2_most_recent_items_sorted_by_most_recent_and_removes_the_older_items()
         {
-            var twentyDaysAgo = new HistoryEntry { EventTimeUTC = DateTime.UtcNow.Subtract(TimeSpan.FromDays(20)) };
-            var tenDaysAgo = new HistoryEntry { EventTimeUTC = DateTime.UtcNow.Subtract(TimeSpan.FromDays(10)) };
-            var thirtyDaysAgo = new HistoryEntry { EventTimeUTC = DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)) };
+            var twentyDaysAgo = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(20)), 0, "", "");
+            var tenDaysAgo = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(10)), 0, "", "");
+            var thirtyDaysAgo = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)), 0, "", "");
             var input = new HistoryList { twentyDaysAgo, tenDaysAgo, thirtyDaysAgo };
 
             Check.That(TravelHistoryFilter.Last(2).Filter(input)).ContainsExactly(tenDaysAgo, twentyDaysAgo);
