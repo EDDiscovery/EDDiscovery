@@ -90,7 +90,7 @@ namespace EDDiscovery.Actions
             cfg.Init(discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
                         "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command",
                         saying,
-                        vars.ContainsKey(waitname), vars.ContainsKey(literalname),
+                        vars.Exists(waitname), vars.Exists(literalname),
                         Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
                         vars.GetString(startname, ""),
                         vars.GetString(finishname, ""),
@@ -136,7 +136,7 @@ namespace EDDiscovery.Actions
             if (FromString(userdata, out say, out statementvars))
             {
                 string errlist = null;
-                ConditionVariables vars = statementvars.ExpandAll(ap.functions.ExpandString, ap.currentvars, out errlist);
+                ConditionVariables vars = statementvars.ExpandAll(ap.functions,statementvars, out errlist);
 
                 if (errlist == null)
                 {
@@ -144,37 +144,37 @@ namespace EDDiscovery.Actions
                     Audio.AudioQueue.Priority priority = Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal"));
                     string start = vars.GetString(startname);
                     string finish = vars.GetString(finishname);
-                    string voice = vars.ContainsKey(voicename) ? vars[voicename] : (ap.currentvars.ContainsKey(globalvarspeechvoice) ? ap.currentvars[globalvarspeechvoice] : "Default");
+                    string voice = vars.Exists(voicename) ? vars[voicename] : (ap.VarExist(globalvarspeechvoice) ? ap[globalvarspeechvoice] : "Default");
 
                     int vol = vars.GetInt(volumename, -999);
                     if (vol == -999)
-                        vol = ap.currentvars.GetInt(globalvarspeechvolume, 60);
+                        vol = ap.variables.GetInt(globalvarspeechvolume, 60);
 
                     int rate = vars.GetInt(ratename, -999);
                     if (rate == -999)
-                        rate = ap.currentvars.GetInt(globalvarspeechrate, 0);
+                        rate = ap.variables.GetInt(globalvarspeechrate, 0);
 
-                    string culture = vars.ContainsKey(culturename) ? vars[culturename] : (ap.currentvars.ContainsKey(globalvarspeechculture) ? ap.currentvars[globalvarspeechculture] : "Default");
+                    string culture = vars.Exists(culturename) ? vars[culturename] : (ap.VarExist(globalvarspeechculture) ? ap[globalvarspeechculture] : "Default");
 
                     bool literal = vars.GetInt(literalname, 0) != 0;
                     bool dontspeak = vars.GetInt(dontspeakname, 0) != 0;
 
                     Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
-                    if (!ses.Any && !ses.OverrideNone && ap.currentvars.ContainsKey(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
+                    if (!ses.Any && !ses.OverrideNone && ap.VarExist(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
                     {
-                        vars = new ConditionVariables(ap.currentvars[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
+                        vars = new ConditionVariables(ap[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
                     }
 
                     string expsay;
-                    if (ap.functions.ExpandString(say, ap.currentvars, out expsay) != EDDiscovery.ConditionLists.ExpandResult.Failed)
+                    if (ap.functions.ExpandString(say, out expsay) != EDDiscovery.ConditionFunctions.ExpandResult.Failed)
                     {
                         if ( !literal ) 
                             expsay = expsay.PickOneOfGroups(rnd);       // expand grouping if not literal
 
-                        ap.currentvars["SaySaid"] = expsay;
+                        ap["SaySaid"] = expsay;
 
-                        if ((ap.currentvars.ContainsKey("SpeechDebug") && ap.currentvars["SpeechDebug"].Contains("Print")))
+                        if ((ap.VarExist("SpeechDebug") && ap["SpeechDebug"].Contains("Print")))
                         {
                             ap.actioncontroller.LogLine("Say: " + expsay);
                             expsay = "";
@@ -191,13 +191,13 @@ namespace EDDiscovery.Actions
 
                             if (audio != null)
                             {
-                                if (start != null)
+                                if (start != null && start.Length > 0)
                                 {
                                     audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
                                     audio.sampleStartEvent += Audio_sampleEvent;
 
                                 }
-                                if (wait || finish != null)       // if waiting, or finish call
+                                if (wait || (finish != null && finish.Length > 0))       // if waiting, or finish call
                                 {
                                     audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
                                     audio.sampleOverEvent += Audio_sampleEvent;
@@ -228,7 +228,7 @@ namespace EDDiscovery.Actions
         {
             AudioEvent af = tag as AudioEvent;
 
-            if (af.eventname != null)
+            if (af.eventname != null && af.eventname.Length>0)
                 af.apr.actioncontroller.ActionRun(af.triggername, "ActionProgram", null, new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
 
             if (af.wait)

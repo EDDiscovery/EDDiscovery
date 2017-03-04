@@ -239,6 +239,7 @@
     <Compile Include="Audio\WaveConfigureDialog.Designer.cs">
       <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Conditions\ConditionFileHandles.cs" />
     <Compile Include="Conditions\ConditionFunctions.cs" />
     <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
     <Compile Include="Actions\ActionCommands\ActionPrint.cs" />

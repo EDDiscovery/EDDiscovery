@@ -153,7 +153,7 @@ namespace EDDiscovery
 
         public enum LogicalCondition
         {
-            Or,     // any true
+            Or,     // any true     (DEFAULT)
             And,    // all true
             Nor,    // any true produces a false
             Nand,   // any not true produces a true
@@ -195,8 +195,8 @@ namespace EDDiscovery
                     eventname = e;
                     action = a;
                     actiondata = d;
-                    innercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), i.Replace(" ", ""));       // must work, exception otherwise
-                    outercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), o.Replace(" ", ""));       // must work, exception otherwise
+                    innercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), i.Replace(" ", ""),true);       // must work, exception otherwise
+                    outercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), o.Replace(" ", ""),true);       // must work, exception otherwise
                     return true;
                 }
                 catch { }
@@ -239,11 +239,9 @@ namespace EDDiscovery
 
         public int Count { get { return conditionlist.Count; } }
 
-        public enum ExpandResult { Failed, NoExpansion, Expansion };
-        public delegate ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
 
         // check all conditions against these values.
-        public bool? CheckAll(ConditionVariables values, out string errlist , List<Condition> passed = null , ExpandString se = null )            // Check all conditions..
+        public bool? CheckAll(ConditionVariables values, out string errlist , List<Condition> passed = null , ConditionFunctions cf = null )            // Check all conditions..
         {
             if (conditionlist.Count == 0)            // no filters match, null
             {
@@ -251,11 +249,10 @@ namespace EDDiscovery
                 return null;
             }
 
-            return CheckConditions(conditionlist, values, out errlist, passed, se);
+            return CheckConditions(conditionlist, values, out errlist, passed, cf);
         }
 
-        public bool? CheckConditions(List<Condition> fel, ConditionVariables values, out string errlist, List<Condition> passed = null,
-                                        ExpandString se = null)            // null nothing trigged, false/true otherwise. 
+        public bool? CheckConditions(List<Condition> fel, ConditionVariables values, out string errlist, List<Condition> passed = null, ConditionFunctions cf = null )
         {
             errlist = null;
 
@@ -271,13 +268,13 @@ namespace EDDiscovery
 
                     if (f.matchtype == MatchType.IsPresent)         // these use f.itemname without any expansion
                     {
-                        if (values.ContainsKey(f.itemname) && values[f.itemname] != null )
+                        if (values.Exists(f.itemname) && values[f.itemname] != null )
                             matched = true;
                     }
                     else if (f.matchtype == MatchType.IsNotPresent)
                     {
                         //System.Diagnostics.Debug.WriteLine("Value " + f.itemname + ":" + values[f.itemname]);
-                        if (!values.ContainsKey(f.itemname) || values[f.itemname] == null)
+                        if (!values.Exists(f.itemname) || values[f.itemname] == null)
                             matched = true;
                     }
                     else if (f.matchtype == MatchType.AlwaysTrue)
@@ -287,13 +284,13 @@ namespace EDDiscovery
                     else
                     {
                         string leftside = null;
-                        ExpandResult er = ExpandResult.NoExpansion;
+                        ConditionFunctions.ExpandResult er = ConditionFunctions.ExpandResult.NoExpansion;
 
-                        if (se != null)     // if we have a string expander, try the left side
+                        if (cf != null)     // if we have a string expander, try the left side
                         {
-                            er = se(f.itemname, values, out leftside);
+                            er = cf.ExpandString(f.itemname, out leftside);
 
-                            if (er == ExpandResult.Failed)        // stop on error
+                            if (er == ConditionFunctions.ExpandResult.Failed)        // stop on error
                             {
                                 errlist += leftside;     // add on errors..
                                 innerres = false;   // stop loop, false
@@ -301,9 +298,9 @@ namespace EDDiscovery
                             }
                         }
 
-                        if (er == ExpandResult.NoExpansion)     // no expansion, must be a variable name
+                        if (er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
                         {
-                            leftside = values.ContainsKey(f.itemname) ? values[f.itemname] : null;
+                            leftside = values.Exists(f.itemname) ? values[f.itemname] : null;
                             if (leftside == null)
                             {
                                 errlist += "Item " + f.itemname + " is not available" + Environment.NewLine;
@@ -314,11 +311,11 @@ namespace EDDiscovery
 
                         string rightside;
 
-                        if (se != null)         // if we have a string expander, pass it thru
+                        if (cf != null)         // if we have a string expander, pass it thru
                         {
-                            er = se(f.matchstring, values, out rightside);
+                            er = cf.ExpandString(f.matchstring, out rightside);
 
-                            if (er == ExpandResult.Failed )        //  if error, abort
+                            if (er == ConditionFunctions.ExpandResult.Failed )        //  if error, abort
                             {
                                 errlist += rightside;     // add on errors..
                                 innerres = false;   // stop loop, false
@@ -530,10 +527,14 @@ namespace EDDiscovery
             {
                 JObject j1 = new JObject();
                 j1["EventName"] = f.eventname;
-                j1["ICond"] = f.innercondition.ToString();
-                j1["OCond"] = f.outercondition.ToString();
-                j1["Actions"] = f.action;
-                j1["ActionData"] = f.actiondata;
+                if (f.innercondition != LogicalCondition.Or)
+                    j1["ICond"] = f.innercondition.ToString();
+                if (f.outercondition != LogicalCondition.Or)
+                    j1["OCond"] = f.outercondition.ToString();
+                if ( f.action.Length>0)
+                    j1["Actions"] = f.action;
+                if ( f.actiondata.Length>0)
+                    j1["ActionData"] = f.actiondata;
 
                 JArray jfields = new JArray();
 
@@ -582,10 +583,10 @@ namespace EDDiscovery
                 foreach (JObject j in jf)
                 {
                     string evname = (string)j["EventName"];
-                    LogicalCondition ftinner = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), (string)j["ICond"]);
-                    LogicalCondition ftouter = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), (string)j["OCond"]);
-                    string act = (string)j["Actions"];
-                    string actd = (string)j["ActionData"];
+                    LogicalCondition ftinner = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), JSONHelper.GetStringDef(j["ICond"], "Or"));
+                    LogicalCondition ftouter = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), JSONHelper.GetStringDef(j["OCond"], "Or"));
+                    string act = JSONHelper.GetStringDef(j["Actions"],"");
+                    string actd = JSONHelper.GetStringDef(j["ActionData"],"");
 
                     JArray filset = (JArray)j["Filters"];
 
@@ -754,7 +755,7 @@ namespace EDDiscovery
 
                     if (innercond == null)
                         innercond = condi;
-                    else if (!innercond.Equals(condi))
+                    else if (!innercond.Equals(condi,StringComparison.InvariantCultureIgnoreCase))
                         return "Differing inner conditions incorrect";
 
                 }
