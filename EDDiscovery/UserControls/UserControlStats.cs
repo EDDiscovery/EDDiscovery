@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                StatToDGV("Visits", hl.GetVisitsCount(he.System.name, he.System.id_edsm) + " to system " + he.System.name);
+                StatToDGV("Visits", hl.GetVisitsCount(he.System.name) + " to system " + he.System.name);
                 StatToDGV("Jumps Before System", hl.GetFSDJumpsBeforeUTC(he.EventTimeUTC));
             }
 

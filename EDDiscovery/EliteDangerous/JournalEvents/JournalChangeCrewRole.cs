@@ -31,7 +31,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string Role { get; set; }
 
-        //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ammunition; } }
-
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
     }
 }

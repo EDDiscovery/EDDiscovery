@@ -45,7 +45,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long? Fine { get; set; }
         public long? Bounty { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.commitcrime; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.commitcrime; } }
 
         public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {

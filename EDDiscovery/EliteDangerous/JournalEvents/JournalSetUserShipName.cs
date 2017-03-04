@@ -44,7 +44,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string UserShipName { get; set; }
         public string UserShipId { get; set; }
 
-        //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ammunition; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
     }
 }

@@ -55,7 +55,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public FederationRank Federation { get; set; }
         public CQCRank CQC { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rank; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rank; } }
 
     }
 }

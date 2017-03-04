@@ -59,7 +59,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Level { get; set; }
         public Dictionary<string,int> Ingredients { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineercraft; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineercraft; } }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

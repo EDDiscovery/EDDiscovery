@@ -35,7 +35,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string StationName { get; set; }
         public string Reason { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.dockingdenied; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.dockingdenied; } }
 
     }
 }

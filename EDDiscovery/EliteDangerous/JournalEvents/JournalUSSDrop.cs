@@ -34,5 +34,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string USSType { get; set; }
         public int USSThreat { get; set; }
         public string USSTypeLocalised { get; set; }
+
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
     }
 }

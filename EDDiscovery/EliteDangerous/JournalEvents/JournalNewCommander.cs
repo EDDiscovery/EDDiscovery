@@ -33,6 +33,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Name { get; set; }
         public string Package { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.newcommander; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.newcommander; } }
     }
 }

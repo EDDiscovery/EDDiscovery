@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Body { get; set; }
         public string BodyType { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.supercruiseexit; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.supercruiseexit; } }
 
     }
 }

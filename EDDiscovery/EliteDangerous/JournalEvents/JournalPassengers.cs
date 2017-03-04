@@ -65,7 +65,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.SetPassengers(Manifest);
         }
 
-        //public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
     }
 }

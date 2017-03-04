@@ -33,7 +33,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string To { get; set; }
         public string Message { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.textsent; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.textsent; } }
 
     }
 }
