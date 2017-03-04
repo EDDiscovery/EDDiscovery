@@ -855,6 +855,26 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
+        public void StoreSystemNote(HistoryEntry he, string txt, bool send = false)
+        {
+            if (he != null && txt != null)
+            {
+                if (he.UpdateSystemNote(txt))
+                {
+                    if (send)
+                    {
+                        if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
+                            EDSMSync.SendComments(he.snc.Name, he.snc.Note, he.snc.EdsmId);
+                    }
+
+                    Map.UpdateNote();
+
+                    travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
+                    PopOuts.UpdateNoteJID(he.Journalid, txt);
+                }
+            }
+        }
+
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEDDNSynced;        // first entry is oldest

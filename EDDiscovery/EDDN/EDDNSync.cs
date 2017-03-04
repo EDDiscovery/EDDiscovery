@@ -137,6 +137,8 @@ namespace EDDiscovery2.EDSM
             if (he.Commander != null)
             {
                 eddn.commanderName = he.Commander.EdsmName;
+                if (string.IsNullOrEmpty(eddn.commanderName))
+                    eddn.commanderName = he.Commander.Name;
             }
 
             JournalEntry je = he.journalEntry;
