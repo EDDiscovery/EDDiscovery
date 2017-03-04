@@ -223,14 +223,41 @@ public static class ObjectExtensions
         return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
     }
 
+    static public int? InvariantParseIntNull(this string s)     // s can be null
+    {
+        int i;
+        if (s!=null && int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
     static public bool InvariantParse(this string s, out double i)
     {
         return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i);
     }
 
+    static public double? InvariantParseDoubleNull(this string s)
+    {
+        double i;
+        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
     static public bool InvariantParse(this string s, out long i)
     {
         return long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public long? InvariantParseLongNull(this string s)
+    {
+        long i;
+        if (s != null && long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
     }
 
     public static string FixTitleCase(this string s)
@@ -240,6 +267,23 @@ public static class ObjectExtensions
             s = s.Substring(0, 1).ToUpper() + s.Substring(1).ToLower();
         }
         return s;
+    }
+
+    public static bool InQuotes( this string s, int max = 0)            // left true if quote left over on line, taking care of any escapes..
+    {
+        if (max <= 0)
+            max = s.Length;
+
+        bool inquote = false;
+        for (int i = 0; i < max; i++)
+        {
+            if (s[i] == '\\' && i < max-1 && s[i + 1] == '"') 
+                i += 1;     // ignore this, ingore "
+            else if (s[i] == '"')
+                inquote = !inquote;
+        }
+
+        return inquote;
     }
 
     static public string SplitCapsWordUnderscoreTitleCase(this string capslower)     // one_two goes to One_Two

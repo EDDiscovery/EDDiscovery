@@ -59,6 +59,7 @@ namespace EDDiscovery.Actions
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOK = new System.Windows.Forms.Panel();
+            this.buttonExtDisk = new ExtendedControls.ButtonExt();
             this.buttonExtLoad = new ExtendedControls.ButtonExt();
             this.buttonExtSave = new ExtendedControls.ButtonExt();
             this.buttonExtEdit = new ExtendedControls.ButtonExt();
@@ -73,7 +74,7 @@ namespace EDDiscovery.Actions
             this.removeWhitespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
-            this.buttonExtDisk = new ExtendedControls.ButtonExt();
+            this.editCommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelOuter.SuspendLayout();
             this.panelVScroll.SuspendLayout();
             this.panelName.SuspendLayout();
@@ -277,6 +278,19 @@ namespace EDDiscovery.Actions
             this.panelOK.Size = new System.Drawing.Size(862, 30);
             this.panelOK.TabIndex = 9;
             // 
+            // buttonExtDisk
+            // 
+            this.buttonExtDisk.BorderColorScaling = 1.25F;
+            this.buttonExtDisk.ButtonColorScaling = 0.5F;
+            this.buttonExtDisk.ButtonDisabledScaling = 0.5F;
+            this.buttonExtDisk.Location = new System.Drawing.Point(275, 4);
+            this.buttonExtDisk.Name = "buttonExtDisk";
+            this.buttonExtDisk.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtDisk.TabIndex = 11;
+            this.buttonExtDisk.Text = "As File";
+            this.buttonExtDisk.UseVisualStyleBackColor = true;
+            this.buttonExtDisk.Click += new System.EventHandler(this.buttonExtDisk_Click);
+            // 
             // buttonExtLoad
             // 
             this.buttonExtLoad.BorderColorScaling = 1.25F;
@@ -352,9 +366,10 @@ namespace EDDiscovery.Actions
             this.deleteToolStripMenuItem,
             this.insertEntryAboveToolStripMenuItem,
             this.whitespaceToolStripMenuItem,
-            this.removeWhitespaceToolStripMenuItem});
+            this.removeWhitespaceToolStripMenuItem,
+            this.editCommentToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 136);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 180);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // copyToolStripMenuItem
@@ -411,18 +426,12 @@ namespace EDDiscovery.Actions
             this.statusStripCustom.TabIndex = 28;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
-            // buttonExtDisk
+            // editCommentToolStripMenuItem
             // 
-            this.buttonExtDisk.BorderColorScaling = 1.25F;
-            this.buttonExtDisk.ButtonColorScaling = 0.5F;
-            this.buttonExtDisk.ButtonDisabledScaling = 0.5F;
-            this.buttonExtDisk.Location = new System.Drawing.Point(275, 4);
-            this.buttonExtDisk.Name = "buttonExtDisk";
-            this.buttonExtDisk.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtDisk.TabIndex = 11;
-            this.buttonExtDisk.Text = "As File";
-            this.buttonExtDisk.UseVisualStyleBackColor = true;
-            this.buttonExtDisk.Click += new System.EventHandler(this.buttonExtDisk_Click);
+            this.editCommentToolStripMenuItem.Name = "editCommentToolStripMenuItem";
+            this.editCommentToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.editCommentToolStripMenuItem.Text = "Edit Comment";
+            this.editCommentToolStripMenuItem.Click += new System.EventHandler(this.editCommentToolStripMenuItem_Click);
             // 
             // ActionProgramForm
             // 
@@ -484,5 +493,6 @@ namespace EDDiscovery.Actions
         private System.Windows.Forms.ToolStripMenuItem insertEntryAboveToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.ButtonExt buttonExtDisk;
+        private System.Windows.Forms.ToolStripMenuItem editCommentToolStripMenuItem;
     }
 }

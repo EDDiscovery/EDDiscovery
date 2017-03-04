@@ -39,7 +39,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -84,7 +84,7 @@ namespace EDDiscovery.Actions
                     if ( sn != null )
                     {
                         int starno = 1;
-                        ap.currentvars[prefix + "Stars"] = sn.starnodes.Count.ToString(ct);
+                        ap[prefix + "Stars"] = sn.starnodes.Count.ToString(ct);
 
                         foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> scannode in sn.starnodes)
                         {
@@ -128,7 +128,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        ap.currentvars[prefix + "Stars"] = "0";
+                        ap[prefix + "Stars"] = "0";
                     }
                 }
                 else
@@ -144,52 +144,52 @@ namespace EDDiscovery.Actions
         {
             EliteDangerous.JournalEvents.JournalScan sc = scannode.Value.ScanData;
 
-            ap.currentvars[prefix] = scannode.Key;
-            ap.currentvars[prefix + "_type"] = scannode.Value.type.ToString();
-            ap.currentvars[prefix + "_assignedname"] = scannode.Value.ownname;
-            ap.currentvars[prefix + "_assignedfullname"] = scannode.Value.fullname;
-            ap.currentvars[prefix + "_data"] = (sc != null) ? "1" : "0";
+            ap[prefix] = scannode.Key;
+            ap[prefix + "_type"] = scannode.Value.type.ToString();
+            ap[prefix + "_assignedname"] = scannode.Value.ownname;
+            ap[prefix + "_assignedfullname"] = scannode.Value.fullname;
+            ap[prefix + "_data"] = (sc != null) ? "1" : "0";
 
             if ( sc != null )
             {
-                ap.currentvars[prefix + "_isstar"] = sc.IsStar ? "1" : "0";
-                ap.currentvars[prefix + "_edsmbody"] = sc.IsEDSMBody ? "1" : "0";
-                ap.currentvars[prefix + "_bodyname"] = sc.BodyName;
-                ap.currentvars[prefix + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.###");
-                ap.currentvars[prefix + "_rotationperiod"] = sc.nRotationPeriod.ToNANNullSafeString("0.###");
-                ap.currentvars[prefix + "_surfacetemperature"] = sc.nSurfaceTemperature.ToNANNullSafeString("0.###");
-                ap.currentvars[prefix + "_distls"] = sc.DistanceFromArrivalLS.ToNANSafeString("0.###");
+                ap[prefix + "_isstar"] = sc.IsStar ? "1" : "0";
+                ap[prefix + "_edsmbody"] = sc.IsEDSMBody ? "1" : "0";
+                ap[prefix + "_bodyname"] = sc.BodyName;
+                ap[prefix + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.###");
+                ap[prefix + "_rotationperiod"] = sc.nRotationPeriod.ToNANNullSafeString("0.###");
+                ap[prefix + "_surfacetemperature"] = sc.nSurfaceTemperature.ToNANNullSafeString("0.###");
+                ap[prefix + "_distls"] = sc.DistanceFromArrivalLS.ToNANSafeString("0.###");
 
                 if ( sc.IsStar )
                 {
-                    ap.currentvars[prefix + "_startype"] = sc.StarType;
-                    ap.currentvars[prefix + "_startypetext"] = sc.StarTypeText;
-                    ap.currentvars[prefix + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.###");
-                    ap.currentvars[prefix + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
-                    ap.currentvars[prefix + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
-                    ap.currentvars[prefix + "_habinner"] = sc.HabitableZoneInner.ToNANNullSafeString("0.##");
-                    ap.currentvars[prefix + "_habouter"] = sc.HabitableZoneOuter.ToNANNullSafeString("0.##");
+                    ap[prefix + "_startype"] = sc.StarType;
+                    ap[prefix + "_startypetext"] = sc.StarTypeText;
+                    ap[prefix + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.###");
+                    ap[prefix + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
+                    ap[prefix + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
+                    ap[prefix + "_habinner"] = sc.HabitableZoneInner.ToNANNullSafeString("0.##");
+                    ap[prefix + "_habouter"] = sc.HabitableZoneOuter.ToNANNullSafeString("0.##");
                 }
                 else
                 {
-                    ap.currentvars[prefix + "_class"] = sc.PlanetClass.ToNullSafeString();
-                    ap.currentvars[prefix + "_landable"] = sc.IsLandable ? "Landable" : "Not Landable";
-                    ap.currentvars[prefix + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
-                    ap.currentvars[prefix + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
-                    ap.currentvars[prefix + "_volcanism"] = sc.Volcanism.ToNullSafeString();
-                    ap.currentvars[prefix + "_gravity"] = sc.nSurfaceGravity.ToNANNullSafeString("0.###");
-                    ap.currentvars[prefix + "_pressure"] = sc.nSurfacePressure.ToNANNullSafeString("0.###");
-                    ap.currentvars[prefix + "_mass"] = sc.nMassEM.ToNANNullSafeString("0.###");
-                    ap.currentvars.AddDataOfType(sc.Materials, typeof(Dictionary<string,double>), prefix + "_Materials");
+                    ap[prefix + "_class"] = sc.PlanetClass.ToNullSafeString();
+                    ap[prefix + "_landable"] = sc.IsLandable ? "Landable" : "Not Landable";
+                    ap[prefix + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
+                    ap[prefix + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
+                    ap[prefix + "_volcanism"] = sc.Volcanism.ToNullSafeString();
+                    ap[prefix + "_gravity"] = sc.nSurfaceGravity.ToNANNullSafeString("0.###");
+                    ap[prefix + "_pressure"] = sc.nSurfacePressure.ToNANNullSafeString("0.###");
+                    ap[prefix + "_mass"] = sc.nMassEM.ToNANNullSafeString("0.###");
+                    ap.AddDataOfType(sc.Materials, typeof(Dictionary<string,double>), prefix + "_Materials");
                 }
 
-                ap.currentvars[prefix + "_text"] = sc.DisplayString(true);
+                ap[prefix + "_text"] = sc.DisplayString(true);
             }
 
             if ( subname != null )
             {
                 int totalchildren = (scannode.Value.children != null) ? scannode.Value.children.Count : 0;
-                ap.currentvars[prefix + subname] = totalchildren.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                ap[prefix + subname] = totalchildren.ToString(System.Globalization.CultureInfo.InvariantCulture);
             }
         }
     }

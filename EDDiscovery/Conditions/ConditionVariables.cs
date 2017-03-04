@@ -62,9 +62,10 @@ namespace EDDiscovery
 
         public int Count { get { return values.Count; } }
 
-        public IEnumerable<string> Keys { get { return values.Keys; } }
-        public List<string> KeyList { get { return values.Keys.ToList(); } }
-        public bool ContainsKey(string s) { return values.ContainsKey(s); }
+        public IEnumerable<string> NameEnumuerable { get { return values.Keys; } }
+        public List<string> NameList { get { return values.Keys.ToList(); } }
+
+        public bool Exists(string s) { return values.ContainsKey(s); }
 
         public void Clear() { values.Clear(); }
 
@@ -305,10 +306,8 @@ namespace EDDiscovery
             { System.Diagnostics.Debug.WriteLine(prefix + k.Key + "=" + k.Value); }
         }
 
-        public delegate ConditionLists.ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
-
         // all variables, expand out thru macro expander.  does not alter these ones
-        public ConditionVariables ExpandAll(ExpandString e, ConditionVariables vars, out string errlist)
+        public ConditionVariables ExpandAll(ConditionFunctions e, ConditionVariables vars, out string errlist)
         {
             errlist = null;
 
@@ -316,7 +315,7 @@ namespace EDDiscovery
 
             foreach( KeyValuePair<string,string> k in values)
             {
-                if (e(values[k.Key], vars, out errlist) == ConditionLists.ExpandResult.Failed)
+                if (e.ExpandString(values[k.Key], out errlist) == ConditionFunctions.ExpandResult.Failed)
                     return null;
 
                 exp[k.Key] = errlist;

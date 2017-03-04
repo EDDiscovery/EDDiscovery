@@ -58,7 +58,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
                     string caption = (exp.Count>=2) ? exp[1] : "EDDiscovery Program Message";
 
@@ -80,7 +80,7 @@ namespace EDDiscovery.Actions
 
                     // debug Forms.MessageBoxTheme.Show(exp[0], caption, but, icon);
 
-                    ap.currentvars["DialogResult"] = res.ToString();
+                    ap["DialogResult"] = res.ToString();
                 }
                 else
                     ap.ReportError(exp[0]);
@@ -110,7 +110,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
                 string cmdname = sp.NextWord(", ", true);
@@ -121,12 +121,11 @@ namespace EDDiscovery.Actions
 
                     FolderBrowserDialog fbd = new FolderBrowserDialog();
 
-                    string descr = sp.NextQuotedWord(", ");
+                    string descr = sp.NextQuotedWordComma();
                     if (descr != null)
                         fbd.Description = descr;
 
-                    sp.IsCharMoveOn(',');
-                    string rootfolder = sp.NextQuotedWord(", ");
+                    string rootfolder = sp.NextQuotedWordComma();
                     if (rootfolder != null)
                     {
                         Environment.SpecialFolder sf;
@@ -137,7 +136,7 @@ namespace EDDiscovery.Actions
                     }
 
                     string fileret = (fbd.ShowDialog(ap.actioncontroller.DiscoveryForm) == DialogResult.OK) ? fbd.SelectedPath : "";
-                    ap.currentvars["FolderName"] = fileret;
+                    ap["FolderName"] = fileret;
                 }
                 else if (cmdname.Equals("openfile"))
                 {
@@ -145,30 +144,60 @@ namespace EDDiscovery.Actions
 
                     OpenFileDialog fd = new OpenFileDialog();
                     fd.Multiselect = false;
+                    fd.CheckPathExists = true;
 
                     try
                     {
-                        string rootfolder = sp.NextQuotedWord(", ");
+                        string rootfolder = sp.NextQuotedWordComma();
                         if (rootfolder != null)
                             fd.InitialDirectory = rootfolder;
 
-                        sp.IsCharMoveOn(',');
-                        string filter = sp.NextQuotedWord(", ");
+                        string filter = sp.NextQuotedWordComma();
                         if (filter != null)
                             fd.Filter = filter;
 
-                        sp.IsCharMoveOn(',');
-                        string defext = sp.NextQuotedWord(", ");
+                        string defext = sp.NextQuotedWordComma();
                         if (defext != null)
                             fd.DefaultExt = defext;
 
-                        sp.IsCharMoveOn(',');
-                        string check = sp.NextQuotedWord(", ");
+                        string check = sp.NextQuotedWordComma();
                         if (check != null && check.Equals("On", StringComparison.InvariantCultureIgnoreCase))
-                            fd.CheckFileExists = fd.CheckPathExists = true;
+                            fd.CheckFileExists = true;
 
                         string fileret = (fd.ShowDialog(ap.actioncontroller.DiscoveryForm) == DialogResult.OK) ? fd.FileName : "";
-                        ap.currentvars["FileName"] = fileret;
+                        ap["FileName"] = fileret;
+                    }
+                    catch
+                    {
+                        ap.ReportError("FileDialog file failed to generate dialog, check options");
+                    }
+                }
+                else if (cmdname.Equals("savefile"))
+                {
+                    sp.IsCharMoveOn(',');
+
+                    SaveFileDialog fd = new SaveFileDialog();
+
+                    try
+                    {
+                        string rootfolder = sp.NextQuotedWordComma();
+                        if (rootfolder != null)
+                            fd.InitialDirectory = rootfolder;
+
+                        string filter = sp.NextQuotedWordComma();
+                        if (filter != null)
+                            fd.Filter = filter;
+
+                        string defext = sp.NextQuotedWordComma();
+                        if (defext != null)
+                            fd.DefaultExt = defext;
+
+                        string check = sp.NextQuotedWordComma();
+                        if (check != null && check.Equals("On", StringComparison.InvariantCultureIgnoreCase))
+                            fd.OverwritePrompt = true;
+
+                        string fileret = (fd.ShowDialog(ap.actioncontroller.DiscoveryForm) == DialogResult.OK) ? fd.FileName : "";
+                        ap["FileName"] = fileret;
                     }
                     catch
                     {
@@ -222,7 +251,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
                     if (!ap.actioncontroller.DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count>=4) ? exp[3] : "None", exp[0], ap.actionfile.name))
                         ap.ReportError("MenuItem cannot add to menu, check menu");
@@ -257,8 +286,8 @@ namespace EDDiscovery.Actions
         {
             List<string> l = FromString(userdata);
             List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure InputBox Dialog",
-                            new string[] { "Caption", "Prompt List", "Default List", "Features" , "ToolTips" }, l?.ToArray() ,
-                            false,new string[] { "Enter name of menu", "List of entries, semicolon separated", "Default list, semicolon separated", "Feature list: Multiline", "List of tool tips, semocolon separated" });
+                            new string[] { "Caption", "Prompt List", "Default List", "Features", "ToolTips" }, l?.ToArray(),
+                            false, new string[] { "Enter name of menu", "List of entries, semicolon separated", "Default list, semicolon separated", "Feature list: Multiline", "List of tool tips, semocolon separated" });
             if (r != null)
             {
                 userdata = r.ToStringCommaList(2);
@@ -275,21 +304,21 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
                     string[] prompts = exp[1].Split(';');
                     string[] def = (exp.Count >= 3) ? exp[2].Split(';') : null;
                     bool multiline = (exp.Count >= 4) ? (exp[3].IndexOf("Multiline", StringComparison.InvariantCultureIgnoreCase) >= 0) : false;
-                    string [] tooltips = (exp.Count >= 5) ? exp[4].Split(';') : null;
+                    string[] tooltips = (exp.Count >= 5) ? exp[4].Split(';') : null;
 
                     List<string> r = Forms.PromptMultiLine.ShowDialog(ap.actioncontroller.DiscoveryForm, exp[0],
-                                        prompts, def, multiline , tooltips);
+                                        prompts, def, multiline, tooltips);
 
-                    ap.currentvars["InputBoxOK"] = (r != null) ? "1" : "0";
-                    if ( r != null )
+                    ap["InputBoxOK"] = (r != null) ? "1" : "0";
+                    if (r != null)
                     {
                         for (int i = 0; i < r.Count; i++)
-                            ap.currentvars["InputBox" + (i+1).ToString()] = r[i];
+                            ap["InputBox" + (i + 1).ToString()] = r[i];
                     }
                 }
                 else
@@ -300,7 +329,168 @@ namespace EDDiscovery.Actions
 
             return true;
         }
-
     }
 
+    public class ActionDialog : Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
+        List<string> FromString(string input)
+        {
+            StringParser sp = new StringParser(input);
+            List<string> s = sp.NextQuotedWordList();
+            return (s != null && s.Count == 4) ? s : null;
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            return (FromString(userdata) != null) ? null : " command line not in correct format";
+        }
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            List<string> l = FromString(userdata);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure Dialog",
+                            new string[] { "Logical Name" , "Caption", "Size", "Var Prefix" }, l?.ToArray(),
+                            false, new string[] { "Handle name of menu" , "Enter title of menu", "Size, as w,h (200,300)", "Variable Prefix" });
+            if (r != null)
+            {
+                userdata = r.ToStringCommaList(2);
+            }
+
+            return (r != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            List<string> ctrl = FromString(UserData);
+
+            if (ctrl != null)
+            {
+                List<string> exp;
+
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
+                {
+                    ConditionVariables cv = ap.variables.FilterVars(exp[3] + "*");
+
+                    List<Forms.ConfigurableForm.Entry> entries = new List<Forms.ConfigurableForm.Entry>();
+
+                    foreach( string k in cv.NameList )
+                    {
+                        Forms.ConfigurableForm.Entry entry;
+                        string errmsg =Forms.ConfigurableForm.MakeEntry(cv[k], out entry);
+                        if (errmsg != null)
+                            return ap.ReportError(errmsg + " in " + k + " variable for Dialog");
+                        entries.Add(entry);
+                    }
+
+                    StringParser sp2 = new StringParser(exp[2]);
+                    int? dw = sp2.NextWordComma().InvariantParseIntNull();
+                    int? dh = sp2.NextWord().InvariantParseIntNull();
+
+                    if (dw != null && dh != null)
+                    {
+                        Forms.ConfigurableForm cd = new Forms.ConfigurableForm();
+                        ap.dialogs[exp[0]] = cd;
+                        cd.Trigger += Cd_Trigger;
+                        cd.Show(ap.actioncontroller.DiscoveryForm, exp[0], new System.Drawing.Size(dw.Value, dh.Value), exp[1], entries.ToArray(), ap);
+                        return false;       // STOP, wait input
+                    }
+                    else
+                        ap.ReportError("Width/Height not specified in Dialog");
+                }
+                else
+                    ap.ReportError(exp[0]);
+            }
+            else
+                ap.ReportError("Dialog command line not in correct format");
+
+            return true;
+        }
+
+        private void Cd_Trigger(string lname, string res, Object tag)
+        {
+            ActionProgramRun apr = tag as ActionProgramRun;
+            apr[lname] = res;
+            apr.ResumeAfterPause();
+        }
+    }
+
+
+    public class ActionDialogControl : Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "DialogControl command", UserData, "Configure DialogControl Command");
+            if (promptValue != null)
+            {
+                userdata = promptValue;
+            }
+
+            return (promptValue != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            string exp;
+            if (ap.functions.ExpandString(UserData, out exp) != ConditionFunctions.ExpandResult.Failed)
+            {
+                StringParser sp = new StringParser(exp);
+                string handle = sp.NextWordComma();
+
+                if (handle != null && ap.dialogs.ContainsKey(handle))
+                {
+                    Forms.ConfigurableForm f = ap.dialogs[handle];
+
+                    string cmd = sp.NextWord(lowercase: true);
+
+                    if (cmd == null)
+                        ap.ReportError("Missing command in DialogControl");
+                    else if (cmd.Equals("continue"))
+                    {
+                        return false;
+                    }
+                    else if (cmd.Equals("get"))
+                    {
+                        string control = sp.NextWord();
+                        string r;
+
+                        if (control != null && (r = f.Get(control)) != null)
+                        {
+                            ap["DialogResult"] = r;
+                        }
+                        else
+                            ap.ReportError("Missing or invalid dialog name in DialogControl get");
+                    }
+                    else if (cmd.Equals("set"))
+                    {
+                        string control = sp.NextWord(" =");
+                        string value = sp.IsCharMoveOn('=') ? sp.NextQuotedWord() : null;
+                        if (control != null && value != null)
+                        {
+                            if ( !f.Set(control, value) )
+                                ap.ReportError("Cannot set control " + control + " in DialogControl set");
+                        }
+                        else
+                            ap.ReportError("Missing or invalid dialog name and/or value in DialogControl set");
+                    }
+                    else if (cmd.Equals("close"))
+                    {
+                        f.Close();
+                        ap.dialogs.Remove(handle);
+                    }
+                    else
+                        ap.ReportError("Unknown command in DialogControl");
+                }
+                else
+                    ap.ReportError("Missing handle in DialogControl");
+            }
+            else
+                ap.ReportError(exp);
+
+            return true;
+        }
+    }
 }

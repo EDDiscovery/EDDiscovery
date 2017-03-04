@@ -858,7 +858,7 @@ namespace EDDiscovery2
             {
                 userglobalvariables = avf.result;
 
-                foreach (string key in userglobalvariables.Keys)     // add them in in case..
+                foreach (string key in userglobalvariables.NameEnumuerable)     // add them in in case..
                 {
                     if (!additionalfieldnames.Contains(key))
                         additionalfieldnames.Add(key);
@@ -1174,8 +1174,8 @@ namespace EDDiscovery2
                         varsdecorated.GetJSONFieldNamesAndValues(ev.EventDataString, "EventJS_");        // for all events, add to field list
                     }
 
-                    cachedevents[evtype].AddRange(vars.KeyList);
-                    cachedeventsdecorated[evtype].AddRange(varsdecorated.KeyList);
+                    cachedevents[evtype].AddRange(vars.NameList);
+                    cachedeventsdecorated[evtype].AddRange(varsdecorated.NameList);
                 }
 
                 List<string> classnames = Tools.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(evtype), "EventClass_");
