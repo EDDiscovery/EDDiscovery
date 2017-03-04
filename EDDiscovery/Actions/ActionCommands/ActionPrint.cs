@@ -40,7 +40,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData.ReplaceEscapeControlChars(), ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData.ReplaceEscapeControlChars(), out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 ap.actioncontroller.LogLine(res);
                 System.Diagnostics.Debug.WriteLine("PRINT " + res);

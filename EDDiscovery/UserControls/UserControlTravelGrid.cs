@@ -879,7 +879,7 @@ namespace EDDiscovery.UserControls
         private void buttonField_Click(object sender, EventArgs e)
         {
             EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
-            frm.InitFilter("History: Filter out fields", discoveryform.Globals.KeyList, discoveryform, fieldfilter);
+            frm.InitFilter("History: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

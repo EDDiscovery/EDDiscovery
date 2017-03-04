@@ -100,8 +100,12 @@ namespace EDDiscovery.Actions
                     JObject step = new JObject();
                     step["StepName"] = ac.Name;
                     step["StepUC"] = ac.UserData;
-                    step["StepLevelUp"] = ac.LevelUp;
-                    step["StepWhitespace"] = ac.Whitespace;
+                    if ( ac.LevelUp != 0 )                      // reduces file size
+                        step["StepLevelUp"] = ac.LevelUp;
+                    if ( ac.Whitespace != 0 )
+                        step["StepWhitespace"] = ac.Whitespace;
+                    if (ac.Comment.Length > 0)
+                        step["StepComment"] = ac.Comment;
 
                     jf.Add(step);
                 }
@@ -130,10 +134,11 @@ namespace EDDiscovery.Actions
                 {
                     string stepname = (string)js["StepName"];
                     string stepUC = (string)js["StepUC"];
-                    int stepLU = (int)js["StepLevelUp"];
-                    int whitespace = JSONHelper.GetInt(js["StepWhitespace"], 0);     // was not in earlier version, optional
+                    int stepLU = JSONHelper.GetInt(js["StepLevelUp"],0);                // optional
+                    int whitespace = JSONHelper.GetInt(js["StepWhitespace"], 0);        // was not in earlier version, optional
+                    string comment = JSONHelper.GetStringDef(js["StepComment"], "");    // was not in earlier version, optional
 
-                    Action cmd = Action.CreateAction(stepname, stepUC, stepLU, whitespace);
+                    Action cmd = Action.CreateAction(stepname, stepUC, comment, stepLU, whitespace);
 
                     if (cmd != null && cmd.VerifyActionCorrect() == null)                  // throw away ones with bad names
                     {
@@ -208,7 +213,6 @@ namespace EDDiscovery.Actions
             while (( completeline = sr.ReadLine() )!=null)
             {
                 completeline = completeline.Replace("\t", "    ");  // detab, to spaces, tabs are worth 4.
-
                 StringParser p = new StringParser(completeline);
 
                 if (!p.IsEOL)
@@ -217,13 +221,23 @@ namespace EDDiscovery.Actions
                     string cmd = p.NextWord();      // space separ
                     string line = p.LineLeft;       // and the rest of the line..
 
+                    int commentpos = line.LastIndexOf("//");
+                    string comment = "";
+
+                    if (commentpos >= 0 && !line.InQuotes(commentpos))
+                    {
+                        comment = line.Substring(commentpos + 2).Trim();
+                        line = line.Substring(0, commentpos).TrimEnd();
+                        System.Diagnostics.Debug.WriteLine("Line <" + line + "> <" + comment + ">");
+                    }
+
                     if (cmd.Equals("Name", StringComparison.InvariantCultureIgnoreCase))
                         progname = line;
                     else if (cmd.Equals("File", StringComparison.InvariantCultureIgnoreCase))
                         storedinfile = line;
                     else
                     {
-                        Action a = Action.CreateAction(cmd, line, 0);
+                        Action a = Action.CreateAction(cmd, line, comment);
                         string vmsg;
 
                         if (a == null)
@@ -315,8 +329,12 @@ namespace EDDiscovery.Actions
                     {
                         if (act != null)    // don't include ones not set..
                         {
-                            sr.Write(new String(' ', act.calcDisplayLevel * 4));
-                            sr.WriteLine(act.Name + " " + act.UserData);
+                            string output = new String(' ', act.calcDisplayLevel * 4) + act.Name + " " + act.UserData;
+
+                            if (act.Comment.Length > 0)
+                                output += new string(' ', output.Length < 64 ? (64 - output.Length) : 4) + "// " + act.Comment;
+
+                            sr.WriteLine(output);
                             if (act.Whitespace > 0)
                                 sr.WriteLine("");
                         }

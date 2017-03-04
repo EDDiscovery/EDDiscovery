@@ -51,7 +51,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string delay;
-            if (ap.functions.ExpandString(userdata, ap.currentvars, out delay) == EDDiscovery.ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+            if (ap.functions.ExpandString(userdata, out delay) == EDDiscovery.ConditionFunctions.ExpandResult.Failed)       //Expand out.. and if no errors
             {
                 ap.ReportError(delay);
                 return true;
