@@ -26,19 +26,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     [JournalEntryType(JournalTypeEnum.StartJump)]
     public class JournalStartJump : JournalEntry
     {
-
         public JournalStartJump(JObject evt) : base(evt, JournalTypeEnum.StartJump)
         {
             JumpType = JSONHelper.GetStringDef(evt["JumpType"]);
+            StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
             StarClass = JSONHelper.GetStringDef(evt["StarClass"]);
-      
-
         }
-        public string JumpType { get; set; }
-        public string StarClass { get; set; }
-   
 
-//        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.un; } }
+        public string JumpType { get; set; }            // Hyperspace, Supercruise
+        public string StarSystem { get; set; }
+        public string StarClass { get; set; }
+
+        //        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.un; } }
 
     }
 }
