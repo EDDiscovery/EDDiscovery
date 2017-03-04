@@ -28,6 +28,22 @@ namespace EDDiscovery.CompanionAPI
                 id = JSONHelper.GetLong(jo["id"]);
                 name = JSONHelper.GetStringDef(jo["name"]);
                 faction = JSONHelper.GetStringDef(jo["faction"]);
+
+                JArray jcommodities = (JArray)jo["commodities"];
+
+
+                if (jcommodities != null)
+                {
+                    commodities = new List<CCommodities>();
+                    foreach (JObject commodity in jcommodities)
+                    {
+                        CCommodities com = new CCommodities(commodity);
+
+
+                        commodities.Add(com);
+                    }
+                }
+
                 return true;
             }
             catch

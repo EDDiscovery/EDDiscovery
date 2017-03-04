@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace EDDiscovery.CompanionAPI
 {
@@ -16,6 +17,11 @@ namespace EDDiscovery.CompanionAPI
         public int demand { get; set; }
         public string categoryname { get; set; }
 
+
+        public int? avgprice { get; set; }
+        public bool? rare { get; set; }
+
+        public List<string> StatusFlags { get; set; }
 
         public CCommodities(JObject jo)
         {
@@ -39,6 +45,13 @@ namespace EDDiscovery.CompanionAPI
                 stock = JSONHelper.GetInt(jo["stock"]);
                 demand = JSONHelper.GetInt(jo["demand"]);
                 categoryname = JSONHelper.GetStringDef(jo["categoryname"]);
+
+                List<string> StatusFlags = new List<string>();
+                foreach (dynamic statusFlag in jo["statusFlags"])
+                {
+                    StatusFlags.Add((string)statusFlag);
+                }
+                this.StatusFlags = StatusFlags;
 
                 return true;
             }
