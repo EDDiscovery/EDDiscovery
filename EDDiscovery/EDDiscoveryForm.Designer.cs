@@ -116,6 +116,7 @@ namespace EDDiscovery
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.companionAPILoginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -141,7 +142,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(314, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -156,7 +157,7 @@ namespace EDDiscovery
             this.showAllPopoutsInTaskBarToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // show2DMapsToolStripMenuItem
@@ -213,7 +214,7 @@ namespace EDDiscovery
             // 
             this.showAllInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.textsent;
             this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
-            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.showAllInTaskBarToolStripMenuItem.Text = "&Show All In Task Bar";
             this.showAllInTaskBarToolStripMenuItem.Click += new System.EventHandler(this.showAllInTaskBarToolStripMenuItem_Click);
             // 
@@ -221,7 +222,7 @@ namespace EDDiscovery
             // 
             this.turnOffAllTransparencyToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.dockinggranted;
             this.turnOffAllTransparencyToolStripMenuItem.Name = "turnOffAllTransparencyToolStripMenuItem";
-            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.turnOffAllTransparencyToolStripMenuItem.Text = "&Turn Off All Transparency";
             this.turnOffAllTransparencyToolStripMenuItem.Click += new System.EventHandler(this.turnOffAllTransparencyToolStripMenuItem_Click);
             // 
@@ -245,7 +246,8 @@ namespace EDDiscovery
             this.rescanAllJournalFilesToolStripMenuItem,
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem,
             this.sendUnsuncedEDDNEventsToolStripMenuItem,
-            this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem});
+            this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem,
+            this.companionAPILoginToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "A&dmin";
@@ -789,6 +791,13 @@ namespace EDDiscovery
             this.notifyIconMenu_Exit.Text = "E&xit";
             this.notifyIconMenu_Exit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // companionAPILoginToolStripMenuItem
+            // 
+            this.companionAPILoginToolStripMenuItem.Name = "companionAPILoginToolStripMenuItem";
+            this.companionAPILoginToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
+            this.companionAPILoginToolStripMenuItem.Text = "Companion API Login";
+            this.companionAPILoginToolStripMenuItem.Click += new System.EventHandler(this.companionAPILoginToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -908,5 +917,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem stopCurrentlyRunningActionProgramToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
+        private System.Windows.Forms.ToolStripMenuItem companionAPILoginToolStripMenuItem;
     }
 }
