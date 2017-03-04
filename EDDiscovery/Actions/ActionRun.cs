@@ -44,8 +44,10 @@ namespace EDDiscovery.Actions
             actionfilelist = afl;
         }
 
-        // now = true, run it immediately, else run at end of queue
-        public void Run(bool now, ActionFile fileset, ActionProgram r, ConditionVariables inputparas)
+        // now = true, run it immediately, else run at end of queue.  Optionally pass in handles and dialogs in case its a sub prog
+
+        public void Run(bool now, ActionFile fileset, ActionProgram r, ConditionVariables inputparas,
+                                ConditionFileHandles fh = null, Dictionary<string, Forms.ConfigurableForm> d = null, bool closeatend = true)
         {
             if (now)
             {
@@ -53,7 +55,9 @@ namespace EDDiscovery.Actions
                     progqueue.Insert(0, progcurrent);
 
                 progcurrent = new ActionProgramRun(fileset, r, inputparas, this, actioncontroller);   // now we run this.. no need to push to stack
-                progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, actioncontroller.Globals); // set up its vars..
+
+                progcurrent.PrepareToRun(new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals),
+                                                fh == null ? new ConditionFileHandles() : fh, d == null ? new Dictionary<string, Forms.ConfigurableForm>() : d, closeatend);        // if no filehandles, make them and close at end
             }
             else
                 progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, actioncontroller));
@@ -90,7 +94,7 @@ namespace EDDiscovery.Actions
                     {
                         actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ": "+ progcurrent.GetLastStep().Name +  Environment.NewLine + 
                                                     progcurrent.GetErrorList);
-                        progcurrent = null; // terminate current program..
+                        TerminateCurrent();
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it
                     {
@@ -98,7 +102,7 @@ namespace EDDiscovery.Actions
                         if (progcurrent.ExecLevel > 0 && progcurrent.LevelUp(progcurrent.ExecLevel, null)) // see if we have any pending LOOP (or a DO without a while) and continue..
                             continue;       // errors or movement causes it to go back.. errors will be picked up above
 
-                        progcurrent = null;         // cancel it
+                        TerminateCurrent();
                     }
                 }
 
@@ -107,14 +111,15 @@ namespace EDDiscovery.Actions
                     progcurrent = progqueue[0];
                     progqueue.RemoveAt(0);
 
-                    if (progcurrent.currentvars != null)      // if not null, its because its just been restarted after a call.. reset globals
-                        progcurrent.currentvars.Add(actioncontroller.Globals); // in case they have been updated...
+                    if (progcurrent.variables != null)      // if not null, its because its just been restarted after a call.. reset globals
+                        progcurrent.Add(actioncontroller.Globals); // in case they have been updated...
                     else
-                        progcurrent.currentvars = new ConditionVariables(progcurrent.inputvars, actioncontroller.Globals); // set them up
+                        progcurrent.PrepareToRun(new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals),
+                                                new ConditionFileHandles(), new Dictionary<string,Forms.ConfigurableForm>(), true); // with new file handles and close at end..
 
                     if (progcurrent.IsProgramFinished)          // reject empty programs..
                     {
-                        progcurrent = null;
+                        TerminateCurrent();
                         continue;       // and try again
                     }
                 }
@@ -147,7 +152,7 @@ namespace EDDiscovery.Actions
 
                             if (ap != null)
                             {
-                                Run(true,ap.Item1, ap.Item2, paravars );   // run now with these para vars
+                                Run(true,ap.Item1, ap.Item2, paravars , progcurrent.functions.handles,progcurrent.dialogs, false);   // run now with these para vars
                             }
                             else
                                 progcurrent.ReportError("Call cannot find " + prog);
@@ -159,9 +164,10 @@ namespace EDDiscovery.Actions
                         string retstr;
                         if ( ar.ExecuteActionReturn(progcurrent,out retstr) )
                         {
-                            progcurrent = null;
+                            TerminateCurrent();
+
                             if (progqueue.Count > 0)        // pass return value if program is there..
-                                progqueue[0].currentvars["ReturnValue"] = retstr;
+                                progqueue[0]["ReturnValue"] = retstr;
 
                             continue;       // back to top, next action from returned function.
                         }
@@ -193,9 +199,21 @@ namespace EDDiscovery.Actions
 
         public void TerminateAll()          // halt everything
         {
+            foreach (ActionProgramRun p in progqueue)       // ensure all have a chance to clean up
+                p.Terminated();
+
             progcurrent = null;
             progqueue.Clear();
             executing = false;
+        }
+
+        public void TerminateCurrent()
+        {
+            if (progcurrent != null)
+            {
+                progcurrent.Terminated();
+                progcurrent = null;
+            }
         }
 
         public void WaitTillFinished(int timeout)           // Could be IN ANOTHER THREAD BEWARE

@@ -67,7 +67,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp, ap.currentvars) != ConditionLists.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
                     int time;
                     if (exp[1].InvariantParse(out time))

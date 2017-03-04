@@ -41,7 +41,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -73,13 +73,10 @@ namespace EDDiscovery.Actions
                     ap.actioncontroller.DiscoveryForm.WindowState = FormWindowState.Maximized;
                 else if (nextcmd.Equals("location"))
                 {
-                    int? x = sp.GetInt();
-                    sp.IsCharMoveOn(',');
-                    int? y = sp.GetInt();
-                    sp.IsCharMoveOn(',');
-                    int? w = sp.GetInt();
-                    sp.IsCharMoveOn(',');
-                    int? h = sp.GetInt();
+                    int? x = sp.NextWordComma().InvariantParseIntNull();
+                    int? y = sp.NextWordComma().InvariantParseIntNull();
+                    int? w = sp.NextWordComma().InvariantParseIntNull();
+                    int? h = sp.NextWord().InvariantParseIntNull();
 
                     if (x.HasValue && y.HasValue && w.HasValue && h.HasValue)
                     {
@@ -91,10 +88,8 @@ namespace EDDiscovery.Actions
                 }
                 else if (nextcmd.Equals("position"))
                 {
-                    int? x = sp.GetInt();
-                    sp.IsCharMoveOn(',');
-                    int? y = sp.GetInt();
-                    sp.IsCharMoveOn(',');
+                    int? x = sp.NextWordComma().InvariantParseIntNull();
+                    int? y = sp.NextWord().InvariantParseIntNull();
 
                     if (x.HasValue && y.HasValue)
                         ap.actioncontroller.DiscoveryForm.Location = new Point(x.Value, y.Value);
@@ -103,9 +98,8 @@ namespace EDDiscovery.Actions
                 }
                 else if (nextcmd.Equals("size"))
                 {
-                    int? w = sp.GetInt();
-                    sp.IsCharMoveOn(',');
-                    int? h = sp.GetInt();
+                    int? w = sp.NextWordComma().InvariantParseIntNull();
+                    int? h = sp.NextWord().InvariantParseIntNull();
 
                     if (w.HasValue && h.HasValue)
                         ap.actioncontroller.DiscoveryForm.Size = new Size(w.Value, h.Value);
