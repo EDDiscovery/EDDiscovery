@@ -31,7 +31,11 @@ namespace EDDiscovery.Actions
         public ActionFile actionfile;                       // what file it came from..
 
         private ConditionVariables currentvars;      // set up by ActionRun at invokation so they have the latest globals, see Run line 87 ish
-        private Dictionary<int, System.IO.FileStream> currentfiles;
+
+        private ConditionFileHandles currentfiles;
+        public Dictionary<string, Forms.ConfigurableForm> dialogs;
+        private bool closehandlesatend;
+
         private ConditionVariables inputvars;        // input vars to this program, never changed
 
         private ActionRun actionrun;                         // who is running it..
@@ -88,17 +92,27 @@ namespace EDDiscovery.Actions
 
         #region Exec control
 
-        public void PrepareToRun( ConditionVariables v )
+        public void PrepareToRun( ConditionVariables v , ConditionFileHandles fh , Dictionary<string, Forms.ConfigurableForm> d, bool chae = true)
         {
             currentvars = v;
+            currentfiles = fh;
+            closehandlesatend = chae;
             functions = new ConditionFunctions(currentvars, currentfiles);           // point the functions at our variables and our files..
-            currentfiles = new Dictionary<int, System.IO.FileStream>();                 // clean slate..
+            dialogs = d; 
         }
 
         public void Terminated()
         {
-            System.Diagnostics.Debug.WriteLine("Program " + actionfile.name + "::" + Name + " terminated");
-            // TBD
+            if (closehandlesatend)
+            {
+                currentfiles.CloseAll();
+                foreach (string s in dialogs.Keys)
+                    dialogs[s].Close();
+
+                dialogs.Clear();
+            }
+
+            System.Diagnostics.Debug.WriteLine("Program " + actionfile.name + "::" + Name + " terminated, handle close " + closehandlesatend);
         }
 
         public Action GetNextStep()
@@ -171,6 +185,25 @@ namespace EDDiscovery.Actions
             execlevel = Math.Max(execlevel - 1, 0);
         }
 
+        public void Break()
+        {
+            for (int i = execlevel; i > 0; i--)
+            {
+                if (exectype[i] == Action.ActionType.While || exectype[i] == Action.ActionType.Loop )             
+                {
+                    execlooppos[i] = -1;            // while/Loop.. expecting to loop back to WHILE or LOOP on next down push, instead don't
+                    execstate[i] = ExecState.OffForGood;        // and we are off for good at the While/Loop level
+                    execstate[execlevel] = ExecState.OffForGood;        // and we are off for good at this level.. levels in between must be IFs which won't execute because we executed
+                    break;  // ironic break
+                }
+                else if ( exectype[i] == Action.ActionType.Do )
+                {
+                    execstate[i] = ExecState.OffForGood;                // DO level is off for good.. this stops ExecutEndDo (at while) trying to loop around
+                    execstate[execlevel] = ExecState.OffForGood;        // and we are off for good.
+                }
+            }
+        }
+
         // true is reported on an error, or we need to get the next action.
 
         public bool LevelUp(int up, Action action)      // action may be null at end of program
@@ -204,10 +237,9 @@ namespace EDDiscovery.Actions
                     }
                 }
                 else if (IsExecutingType(Action.ActionType.Loop) ) // active loop, need to consider if we need to go back
-                {
-                    ActionLoop l = GetStep(PushPos) as ActionLoop;  // go back and get the Loop position
-
-                    if (l.ExecuteEndLoop(this))      // if true, it wants to move back, so go back and get next value.
+                {   
+                                                                   // break may have cancelled this
+                    if (PushPos >= 0 && ((ActionLoop)GetStep(PushPos)).ExecuteEndLoop(this))      // if true, it wants to move back, so go back and get next value.
                     {
                         return true;
                     }

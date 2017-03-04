@@ -148,6 +148,11 @@ namespace EDDiscovery.Actions
         public override bool ConfigurationMenuInUse { get { return false; } }
         public override string DisplayedUserData { get { return null; } }
 
+        public override string VerifyActionCorrect()
+        {
+            return (UserData.Length == 0) ? null : " Text after else is not allowed";
+        }
+
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             if (ap.IsExecutingType(Action.ActionType.If))
@@ -259,21 +264,32 @@ namespace EDDiscovery.Actions
     {
         private bool inloop = false;
         private int loopcount = 0;
+        private string loopvar;
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
+        List<string> FromString(string input)       // returns in raw esacped mode
+        {
+            StringParser sp = new StringParser(input);
+            List<string> s = sp.NextQuotedWordList(replaceescape: true);
+            return (s != null && s.Count >= 1 && s.Count <= 2) ? s : null;
+        }
+
         public override string VerifyActionCorrect()
         {
-            return (UserData.Length > 0) ? null : "Loop missing loop count";
+            return (FromString(userdata) != null) ? null : "Loop command line not in correct format";
         }
 
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-             string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Enter integer count", UserData, "Configure Loop");
-             if (promptValue != null)
-                userdata = promptValue;
+            List<string> l = FromString(userdata);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure Loop",
+                            new string[] { "Loop count", "Optional var name" }, l?.ToArray(), true);
 
-            return (promptValue != null);
+            if (r != null)
+                userdata = r.ToStringCommaList(1, true);     // and escape them back
+
+            return (r != null);
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)     // LOOP when encountered
@@ -282,20 +298,23 @@ namespace EDDiscovery.Actions
             {
                 if (!inloop)            // if not in a loop
                 {
-                    string res;
-                    if (ap.functions.ExpandString(UserData,out res) != ConditionFunctions.ExpandResult.Failed)
+                    List<string> ctrl = FromString(UserData);
+                    List<string> exp;
+
+                    if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                     {
-                        if (res.InvariantParse(out loopcount))
+                        if (exp[0].InvariantParse(out loopcount))
                         {
                             inloop = true;
                             ap.PushState(Type, (loopcount > 0), true);   // set execute to On (if loop count is >0) and push the position of the LOOP
-                            ap["Loop" + ap.ExecLevel] = "1";
+                            loopvar = (exp.Count >= 2 && exp[1].Length > 0) ? exp[1] : ("Loop" + ap.ExecLevel);     // pick name.. if not given, use backwards compat name
+                            ap[loopvar] = "1";
                         }
                         else
                             ap.ReportError("Loop count must be an integer");
                     }
                     else
-                        ap.ReportError(res);
+                        ap.ReportError(exp[0]);
                 }
                 else
                     ap.ReportError("Internal error - Loop is saying counting when run");
@@ -319,8 +338,8 @@ namespace EDDiscovery.Actions
                     ap.Goto(ap.PushPos + 1);                    // back to LOOP+1, keep level
 
                     int c = 0;
-                    if (ap["Loop" + ap.ExecLevel].InvariantParse(out c)) // update LOOP level variable.. don't if they have mucked it up
-                        ap["Loop" + ap.ExecLevel] = (c + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    if (ap[loopvar].InvariantParse(out c)) // update LOOP level variable.. don't if they have mucked it up
+                        ap[loopvar] = (c + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     return true;
                 }
@@ -563,6 +582,18 @@ namespace EDDiscovery.Actions
                 ap.ReportError("Call not configured");
                 return false;
             }
+        }
+    }
+
+    public class ActionBreak : Action
+    {
+        public override bool ConfigurationMenuInUse { get { return false; } }
+        public override string DisplayedUserData { get { return null; } }        // null if you dont' want to display
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            ap.Break();
+            return true;
         }
     }
 }

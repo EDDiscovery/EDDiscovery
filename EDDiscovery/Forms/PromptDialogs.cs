@@ -120,14 +120,12 @@ namespace EDDiscovery.Forms
         }
     }
 
-
-    public class ConfigurableDialog
+    public class ConfigurableForm : Form
     {
         private Entry[] entries;
         private Object tag;
         private string logicalname;
-
-        Form prompt;
+        public event Action<string, string, Object> Trigger;
 
         public class Entry
         {
@@ -136,11 +134,11 @@ namespace EDDiscovery.Forms
             public string text;
             public System.Drawing.Point pos;
             public System.Drawing.Size size;
-            public string tooltip;
+            public string tooltip;                      // can be null.
 
             public Control control;
 
-            public Entry( string nam, Type c , string t, System.Drawing.Point p, System.Drawing.Size s, string tt)
+            public Entry(string nam, Type c, string t, System.Drawing.Point p, System.Drawing.Size s, string tt)
             {
                 controltype = c; text = t; pos = p; size = s; tooltip = tt; name = nam;
             }
@@ -149,9 +147,71 @@ namespace EDDiscovery.Forms
             public bool textboxmultiline;
         }
 
-        public event Action<string,string,Object> Trigger;
+        static public string MakeEntry(string instr , out Entry entry )
+        {
+            entry = null;
 
-        public void Show(Form p, string lname, System.Drawing.Size size, string caption, Entry[] e , Object t)
+            StringParser sp = new StringParser(instr);
+
+            string name = sp.NextQuotedWordComma();
+
+            if (name == null)
+                return "Missing name";
+
+            string type = sp.NextWordComma(lowercase: true);
+
+            Type ctype = null;
+
+            if (type == null)
+                return "Missing type";
+            else if (type.Equals("button"))
+                ctype = typeof(ExtendedControls.ButtonExt);
+            else if (type.Equals("textbox"))
+                ctype = typeof(ExtendedControls.TextBoxBorder);
+            else if (type.Equals("checkbox"))
+                ctype = typeof(ExtendedControls.CheckBoxCustom);
+            else if (type.Equals("label"))
+                ctype = typeof(System.Windows.Forms.Label);
+            else
+                return "Unknown control type " + type;
+
+            string text = sp.NextQuotedWordComma();
+
+            if (text == null)
+                return "Missing text";
+
+            int? x = sp.NextWordComma().InvariantParseIntNull();
+            int? y = sp.NextWordComma().InvariantParseIntNull();
+            int? w = sp.NextWordComma().InvariantParseIntNull();
+            int? h = sp.NextWordComma().InvariantParseIntNull();
+
+            if (x == null || y == null || w == null || h == null)
+                return "Missing position/size";
+
+            string tip = sp.NextQuotedWordComma();      // tip can be null
+
+            entry = new Forms.ConfigurableForm.Entry(name, ctype,
+                        text, new System.Drawing.Point(x.Value, y.Value), new System.Drawing.Size(w.Value, h.Value), tip);
+
+            if (tip != null)        // if we had a tip, we could have..
+            {
+                if (type.Contains("textbox"))
+                {
+                    int? v = sp.NextWordComma().InvariantParseIntNull();
+                    entry.textboxmultiline = v.HasValue && v.Value != 0;
+                }
+
+                if (type.Contains("checkbox"))
+                {
+                    int? v = sp.NextWordComma().InvariantParseIntNull();
+                    entry.checkboxchecked = v.HasValue && v.Value != 0;
+                }
+            }
+
+            return null;
+        }
+
+        public void Show(Form p, string lname, System.Drawing.Size size, string caption, Entry[] e, Object t)
         {
             logicalname = lname;
             entries = e;
@@ -159,18 +219,15 @@ namespace EDDiscovery.Forms
 
             EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
 
-            prompt = new Form()
-            {
-                Size = size,
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = caption,
-                StartPosition = FormStartPosition.CenterScreen,
-            };
+            Size = size;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Text = caption;
+            StartPosition = FormStartPosition.CenterScreen;
 
             Panel outer = new Panel() { Dock = DockStyle.Fill, BorderStyle = BorderStyle.FixedSingle };
-            prompt.Controls.Add(outer);
+            Controls.Add(outer);
 
-            Label textLabel = new Label() { Left = 4, Top = 8, Width = prompt.Width - 50, Text = caption };
+            Label textLabel = new Label() { Left = 4, Top = 8, Width = Width - 50, Text = caption };
 
             if (!theme.WindowsFrame)
                 outer.Controls.Add(textLabel);
@@ -186,7 +243,8 @@ namespace EDDiscovery.Forms
                 c.Text = entries[i].text;
                 c.Tag = entries[i];
                 outer.Controls.Add(c);
-                tt.SetToolTip(c, entries[i].tooltip);
+                if (entries[i].tooltip != null)
+                    tt.SetToolTip(c, entries[i].tooltip);
 
                 if (c is ExtendedControls.ButtonExt)
                 {
@@ -194,7 +252,8 @@ namespace EDDiscovery.Forms
                     b.Click += (sender, ev) =>
                     {
                         Entry en = (Entry)(((Control)sender).Tag);
-                        Trigger(logicalname, en.name, tag);
+                        if (Trigger != null)
+                            Trigger(logicalname, en.name, tag);
                     };
                 }
 
@@ -211,21 +270,28 @@ namespace EDDiscovery.Forms
                     cb.Click += (sender, ev) =>
                     {
                         Entry en = (Entry)(((Control)sender).Tag);
-                        Trigger(logicalname, en.name, tag);
+                        if (Trigger != null)
+                            Trigger(logicalname, en.name, tag);
                     };
                 }
             }
 
-            prompt.ShowInTaskbar = false;
+            ShowInTaskbar = false;
 
-            theme.ApplyToForm(prompt, System.Drawing.SystemFonts.DefaultFont);
+            theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
 
-            prompt.Show(p);
+            Show(p);
         }
 
-        public void Close()
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            prompt.Close();
+            if (keyData == Keys.Escape)
+            {
+                Trigger(logicalname, "Escape", tag);
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         public string Get(string name)
@@ -263,6 +329,5 @@ namespace EDDiscovery.Forms
 
             return false;
         }
-
     }
 }

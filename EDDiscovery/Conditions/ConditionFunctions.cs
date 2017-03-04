@@ -25,26 +25,26 @@ namespace EDDiscovery
     public class ConditionFunctions
     {
         public ConditionVariables vars;
-        public Dictionary<int, FileStream> filehandles;
+        public ConditionFileHandles handles;
 
-        public ConditionFunctions(ConditionVariables v, Dictionary<int, FileStream> f)
+        public ConditionFunctions(ConditionVariables v, ConditionFileHandles f)
         {
             vars = v;
-            filehandles = f;
+            handles = f;
         }
 
         #region expander
 
         public enum ExpandResult { Failed, NoExpansion, Expansion };
 
-        public ExpandResult ExpandStrings(List<string> inv , out List<string> outv )
+        public ExpandResult ExpandStrings(List<string> inv, out List<string> outv)
         {
             outv = new List<string>();
 
-            foreach( string s in inv )
+            foreach (string s in inv)
             {
                 string r;
-                if ( ExpandString(s, out r) == ExpandResult.Failed )
+                if (ExpandString(s, out r) == ExpandResult.Failed)
                 {
                     outv = new List<string>() { r };
                     return ExpandResult.Failed;
@@ -77,131 +77,128 @@ namespace EDDiscovery
 
                     int apos = pos;
 
-                    if (apos < line.Length)
+                    while (apos < line.Length && char.IsLetter(line[apos]))
+                        apos++;
+
+                    if (apos < line.Length && line[apos] == '(')     // now must be bracket..  if not, its not in form, ignore %, or its past the EOL
                     {
-                        while (apos < line.Length && char.IsLetter(line[apos]))
-                            apos++;
+                        string funcname = line.Substring(pos, apos - pos);
+                        apos++;     // past the (
 
-                        if (line[apos] == '(')     // now must be bracket..  if not, its not in form, ignore $
+                        ConditionFunctionHandlers cfh = new ConditionFunctionHandlers(this, vars, handles, recdepth);
+
+                        while (true)
                         {
-                            string funcname = line.Substring(pos, apos - pos);
-                            apos++;     // past the (
+                            while (apos < line.Length && char.IsWhiteSpace(line[apos])) // remove white space
+                                apos++;
 
-                            ConditionFunctionHandlers cfh = new ConditionFunctionHandlers(this,vars, filehandles,recdepth);
-
-                            while (true)
+                            if (apos < line.Length && line[apos] == ')' && cfh.paras.Count == 0)        // ) here must be on first only, and is valid
                             {
-                                while (apos < line.Length && char.IsWhiteSpace(line[apos])) // remove white space
-                                    apos++;
+                                apos++; // skip by
+                                break;
+                            }
 
-                                if (apos < line.Length && line[apos] == ')' && cfh.paras.Count == 0)        // ) here must be on first only, and is valid
+                            int start = apos;
+
+                            if (apos < line.Length && line[apos] == '"')
+                            {
+                                string res = "";
+                                apos++;
+                                while (apos < line.Length && line[apos] != '"')
                                 {
-                                    apos++; // skip by
-                                    break;
-                                }
-
-                                int start = apos;
-
-                                if (apos < line.Length && line[apos] == '"')
-                                {
-                                    string res = "";
-                                    apos++;
-                                    while (apos < line.Length && line[apos] != '"')
+                                    if (line[apos] == '\\' && (apos + 1) < line.Length && line[apos + 1] == '"')  // if \"
                                     {
-                                        if (line[apos] == '\\' && (apos + 1) < line.Length && line[apos + 1] == '"')  // if \"
-                                        {
-                                            apos++;
-                                        }
-
-                                        res += line[apos++];
-                                    }
-
-                                    if (apos >= line.Length)
-                                    {
-                                        result = "Terminal quote missing at '" + line.Substring(startexpression, apos - startexpression) + "'";
-                                        return ExpandResult.Failed;
-                                    }
-
-                                    apos++;     // remove quote
-
-                                    string resexp;          // expand out any strings.. recursion
-                                    ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
-
-                                    if (sexpresult == ExpandResult.Failed)
-                                    {
-                                        result = resexp;
-                                        return sexpresult;
-                                    }
-
-                                    cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = resexp, isstring = true });
-                                }
-                                else
-                                {
-                                    while (apos < line.Length && "), ".IndexOf(line[apos]) == -1)
                                         apos++;
-
-                                    if (apos == start)
-                                    {
-                                        result = "Missing variable name at '" + line.Substring(startexpression, apos - startexpression) + "'";
-                                        return ExpandResult.Failed;
                                     }
 
-                                    cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = line.Substring(start, apos - start), isstring = false });
+                                    res += line[apos++];
                                 }
 
-                                while (apos < line.Length && char.IsWhiteSpace(line[apos]))
-                                    apos++;
-
-                                char c = (apos < line.Length) ? line[apos++] : '-';
-
-                                if (c == ')')     // must be )
-                                    break;
-
-                                if (c != ',')     // must be ,
+                                if (apos >= line.Length)
                                 {
-                                    result = "Incorrectly formed parameter list at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                                    result = "Terminal quote missing at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ExpandResult.Failed;
                                 }
-                            }
 
-                            string expand = null;
+                                apos++;     // remove quote
 
-                            if (funcname.Length > 0)
-                            {
-                                if (!cfh.RunFunction(funcname, out expand))
+                                string resexp;          // expand out any strings.. recursion
+                                ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
+
+                                if (sexpresult == ExpandResult.Failed)
                                 {
-                                    result = "Function " + funcname + ": " + expand;
-                                    return ExpandResult.Failed;
+                                    result = resexp;
+                                    return sexpresult;
                                 }
-                            }
-                            else if (cfh.paras.Count > 1)
-                            {
-                                result = "Only functions can have multiple comma separated items at '" + line.Substring(startexpression, apos - startexpression) + "'";
-                                return ExpandResult.Failed;
+
+                                cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = resexp, isstring = true });
                             }
                             else
                             {
-                                if (cfh.paras[0].isstring)
+                                while (apos < line.Length && "), ".IndexOf(line[apos]) == -1)
+                                    apos++;
+
+                                if (apos == start)
                                 {
-                                    result = "Must be a variable not a string for non function expansions";
+                                    result = "Missing variable name at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ExpandResult.Failed;
                                 }
-                                else if (vars.Exists(cfh.paras[0].value))
-                                    expand = vars[cfh.paras[0].value];
-                                else
-                                {
-                                    result = "Variable " + cfh.paras[0].value + " does not exist";
-                                    return ExpandResult.Failed;
-                                }
+
+                                cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = line.Substring(start, apos - start), isstring = false });
                             }
 
-                            noexpansion++;
-                            line = line.Substring(0, pos - 1) + expand + line.Substring(apos);
+                            while (apos < line.Length && char.IsWhiteSpace(line[apos]))
+                                apos++;
 
-                            pos = (pos - 1) + expand.Length;
+                            char c = (apos < line.Length) ? line[apos++] : '-';
 
-                            //                            System.Diagnostics.Debug.WriteLine("<" + funcname + "> var <" + varnames[0] + ">" + "  line <" + line + "> left <" + line.Substring(pos) + ">");
+                            if (c == ')')     // must be )
+                                break;
+
+                            if (c != ',')     // must be ,
+                            {
+                                result = "Incorrectly formed parameter list at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                                return ExpandResult.Failed;
+                            }
                         }
+
+                        string expand = null;
+
+                        if (funcname.Length > 0)
+                        {
+                            if (!cfh.RunFunction(funcname, out expand))
+                            {
+                                result = "Function " + funcname + ": " + expand;
+                                return ExpandResult.Failed;
+                            }
+                        }
+                        else if (cfh.paras.Count > 1)
+                        {
+                            result = "Only functions can have multiple comma separated items at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                            return ExpandResult.Failed;
+                        }
+                        else
+                        {
+                            if (cfh.paras[0].isstring)
+                            {
+                                result = "Must be a variable not a string for non function expansions";
+                                return ExpandResult.Failed;
+                            }
+                            else if (vars.Exists(cfh.paras[0].value))
+                                expand = vars[cfh.paras[0].value];
+                            else
+                            {
+                                result = "Variable " + cfh.paras[0].value + " does not exist";
+                                return ExpandResult.Failed;
+                            }
+                        }
+
+                        noexpansion++;
+                        line = line.Substring(0, pos - 1) + expand + line.Substring(apos);
+
+                        pos = (pos - 1) + expand.Length;
+
+                        //                            System.Diagnostics.Debug.WriteLine("<" + funcname + "> var <" + varnames[0] + ">" + "  line <" + line + "> left <" + line.Substring(pos) + ">");
                     }
                 }
             } while (pos != -1);
@@ -225,14 +222,14 @@ namespace EDDiscovery
         ConditionFunctions caller;
         public List<Parameter> paras;
         ConditionVariables vars;
-        Dictionary<int, FileStream> filehandles;
+        ConditionFileHandles handles;
         int recdepth;
 
         delegate bool func(out string output);
 
         class FuncEntry
         {
-            public func fn;
+            public string fname;
             public int numberparasmin;
             public int numberparasmax;
             public int checkvarmap;           // if not a string, check macro
@@ -240,7 +237,8 @@ namespace EDDiscovery
 
             public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx = 0)
             {
-                fn = f; numberparasmin = min; numberparasmax = max;
+                fname = f.Method.Name;
+                numberparasmin = min; numberparasmax = max;
                 checkvarmap = checkmacromapx; allowstringmap = allowstringmapx;
             }
         }
@@ -250,24 +248,24 @@ namespace EDDiscovery
 
         static Dictionary<string, FuncEntry> functions = null;
 
-        public ConditionFunctionHandlers(ConditionFunctions c, ConditionVariables v, Dictionary<int, FileStream> f , int recd)
+        public ConditionFunctionHandlers(ConditionFunctions c, ConditionVariables v, ConditionFileHandles h, int recd)
         {
             caller = c;
             vars = v;
-            filehandles = f;
+            handles = h;
             recdepth = recd;
             paras = new List<Parameter>();
 
-            if ( functions == null )        // one time init, done like this cause can't do it in {}
+            if (functions == null)        // one time init, done like this cause can't do it in {}
             {
                 functions = new Dictionary<string, FuncEntry>();
 
                 functions.Add("abs",            new FuncEntry(Abs,              2,2,    1,0));  // first is var or literal or string
-
                 functions.Add("closefile",      new FuncEntry(CloseFile,        1,1,    1,0));  // first is a var
 
-                functions.Add("datehour",       new FuncEntry(DateHour,         1, 1,   1));     // first is a var, no strings
-                functions.Add("date",           new FuncEntry(DateCnv,          2, 2,   1));     // first is a var, second is not, no strings
+                functions.Add("datetimenow",    new FuncEntry(DateTimeNow,      1, 1,   0));     // literal type
+                functions.Add("datehour",       new FuncEntry(DateHour,         1, 1,   1,1));   // first is a var or string
+                functions.Add("date",           new FuncEntry(Date,             2, 2,   1,1));   // first is a var or string, second is literal
                 functions.Add("direxists",      new FuncEntry(DirExists,        1, 20,  0xfffffff, 0xfffffff));   // check var, can be string
 
                 functions.Add("escapechar",     new FuncEntry(EscapeChar,       1, 1,   1, 1));   // check var, can be string
@@ -278,6 +276,7 @@ namespace EDDiscovery
                 functions.Add("expandarray",    new FuncEntry(ExpandArray,      4,5,    2,3+16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
                 functions.Add("expandvars",     new FuncEntry(ExpandVars,       4, 5,   2,3+16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
 
+                functions.Add("filelength",     new FuncEntry(FileLength,       1, 1,   1,1));   // check var, can be string
                 functions.Add("fileexists",     new FuncEntry(FileExists,       1, 20, 0xfffffff, 0xfffffff));   // check var, can be string
                 functions.Add("findline",       new FuncEntry(FindLine,         2, 2, 3, 2));   //check var1 and var2, second can be a string
                 functions.Add("floor",          new FuncEntry(Floor,            2,2,    1));     // check var1, not var 2 no strings
@@ -287,12 +286,19 @@ namespace EDDiscovery
                 functions.Add("iftrue",         new FuncEntry(Iftrue,           2,3,    7,7));   // check var1-3, allow strings var1-3
                 functions.Add("iffalse",        new FuncEntry(Iffalse,          2,3,    7,7));
                 functions.Add("ifzero",         new FuncEntry(Ifzero,           2,3,    7,7));   // check var1-3, allow strings var1-3
-                functions.Add("ifnonzero",      new FuncEntry(Ifnonzero,        2,3,    7,7));
+                functions.Add("ifnonzero",      new FuncEntry(Ifnonzero,        2,3,    7,7));   // check var1-3, allow strings var1-3
 
-                functions.Add("ifcontains",     new FuncEntry(Ifcontains,       3,5,    31, 31)); // check var1-4, allow strings var1-4
+                functions.Add("ifcontains",     new FuncEntry(Ifcontains,       3,5,    31, 31)); // check var1-5, allow strings var1-5
                 functions.Add("ifnotcontains",  new FuncEntry(Ifnotcontains,    3,5,    31, 31));
                 functions.Add("ifequal",        new FuncEntry(Ifequal,          3,5,    31, 31));
                 functions.Add("ifnotequal",     new FuncEntry(Ifnotequal,       3,5,    31, 31));
+
+                functions.Add("ifgt",           new FuncEntry(Ifnumgreater,     3,5,    31, 31)); // check var1-5, allow strings var1-5
+                functions.Add("iflt",           new FuncEntry(Ifnumless,        3,5,    31, 31)); 
+                functions.Add("ifge",           new FuncEntry(Ifnumgreaterequal,3,5,    31, 31)); 
+                functions.Add("ifle",           new FuncEntry(Ifnumlessequal,   3,5,    31, 31)); 
+                functions.Add("ifeq",           new FuncEntry(Ifnumequal,       3,5,    31, 31)); 
+                functions.Add("ifne",           new FuncEntry(Ifnumnotequal,    3,5,    31, 31)); 
 
                 functions.Add("indexof",        new FuncEntry(IndexOf,          2,2,    3,3));   // check var1 and 2 if normal, allow string in 1 and 2
                 functions.Add("indirect",       new FuncEntry(Indirect,         1,20,   0xfffffff,0xfffffff));   // check var, no strings
@@ -319,11 +325,14 @@ namespace EDDiscovery
                 functions.Add("rs",             new FuncEntry(ReplaceVarSC,     2, 2,   1, 3)); // var/string, literal/var/string
                 functions.Add("rv",             new FuncEntry(ReplaceVar,       2, 2,   1, 3)); // var/string, literal/var/string
 
-                functions.Add("sc",             new FuncEntry(SplitCaps,        1, 1,   1, 1));   //shorter alias for above
+                functions.Add("seek",           new FuncEntry(SeekFile,         2, 2,   1, 0));   //first is macro, second is literal or macro
+
+                functions.Add("sc",             new FuncEntry(SplitCaps,        1, 1,   1, 1));   //shorter alias 
                 functions.Add("ship",           new FuncEntry(Ship,             1, 1,   1, 1));   //ship translator
                 functions.Add("splitcaps",      new FuncEntry(SplitCaps,        1, 1,   1, 1));   //check var, allow strings
                 functions.Add("substring",      new FuncEntry(SubString,        3, 3,   1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
 
+                functions.Add("tell",           new FuncEntry(TellFile,         1, 1,   1, 0));   //first is macro
                 functions.Add("trim",           new FuncEntry(Trim,             1, 2,   1,1));
 
                 functions.Add("upper",          new FuncEntry(Upper,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
@@ -331,7 +340,7 @@ namespace EDDiscovery
                 functions.Add("version",        new FuncEntry(Version,          1,1,    0));     // don't check first para
 
                 functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a var or string, second is a var or literal, third is a macro or string
-                functions.Add("write",          new FuncEntry(WriteLineFile,    2, 2,   3, 2));      // first must be a var, second can be macro or string
+                functions.Add("write",          new FuncEntry(WriteFile,        2, 2,   3, 2));      // first must be a var, second can be macro or string
                 functions.Add("writeline",      new FuncEntry(WriteLineFile,    2, 2,   3, 2));      // first must be a var, second can be macro or string
             }
         }
@@ -366,8 +375,9 @@ namespace EDDiscovery
                         }
                     }
 
-                    func fptr = (func)Delegate.CreateDelegate(typeof(func), this, GetType().GetMethod(fname, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance));      // need to attach to this instance
-                    fptr(out output);
+                    System.Reflection.MethodInfo mi = GetType().GetMethod(fe.fname, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    func fptr = (func)Delegate.CreateDelegate(typeof(func), this, mi);      // need a delegate which is attached to this instance..
+                    return fptr(out output);
                 }
             }
             else
@@ -476,13 +486,21 @@ namespace EDDiscovery
 
         #region Dates
 
-        private bool DateCnv(out string output)
+        private bool DateTimeNow(out string output)
         {
-            string s = paras[0].value;
+            paras.Add(new Parameter() { isstring = false, value = paras[0].value });            // move P1 to P2
+            paras[0].value = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss");
+            paras[0].isstring = true;
+            return Date(out output);
+        }
+
+        private bool Date(out string output)
+        {
+            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
 
             DateTime res;
 
-            if (DateTime.TryParse(vars[s], System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+            if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
                                     System.Globalization.DateTimeStyles.None, out res))
             {
                 string t = paras[1].value.ToLower();
@@ -503,9 +521,25 @@ namespace EDDiscovery
                 {
                     output = res.ToLongDateString() + " " + res.ToLongTimeString();
                 }
+                else if (t.Equals("datetime"))
+                {
+                    output = res.ToShortDateString() + " " + res.ToLongTimeString();
+                }
                 else if (t.Equals("shortdate"))
                 {
                     output = res.ToShortDateString();
+                }
+                else if (t.Equals("utc"))
+                {
+                    output = res.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss");
+                }
+                else if (t.Equals("local"))
+                {
+                    output = res.ToString("yyyy/MM/dd HH:mm:ss");
+                }
+                else if (t.Equals(""))
+                {
+                    output = res.ToUniversalTime().ToString("yyyy/mm/dd HH:mm:ss");
                 }
                 else
                 {
@@ -523,9 +557,11 @@ namespace EDDiscovery
 
         private bool DateHour(out string output)
         {
+            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+
             DateTime res;
 
-            if (DateTime.TryParse(vars[paras[0].value], System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+            if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
                                     System.Globalization.DateTimeStyles.None, out res))
             {
                 output = res.Hour.ToString(ct);
@@ -886,49 +922,24 @@ namespace EDDiscovery
 
         #region Conditionals
 
-        private bool Ifnotempty(out string output)
-        {
-            return IfCommon(out output, IfType.Empty, false);
-        }
-        private bool Ifempty(out string output)
-        {
-            return IfCommon(out output, IfType.Empty, true);
-        }
-        private bool Iftrue(out string output)
-        {
-            return IfCommon( out output, IfType.True, true);
-        }
-        private bool Iffalse(out string output)
-        {
-            return IfCommon( out output, IfType.True, false);
-        }
-        private bool Ifzero(out string output)
-        {
-            return IfCommon(out output, IfType.Zero, true);
-        }
-        private bool Ifnonzero(out string output)
-        {
-            return IfCommon(out output, IfType.Zero, false);
-        }
-        private bool Ifcontains(out string output)
-        {
-            return IfCommon(out output, IfType.Contains, true);
-        }
-        private bool Ifnotcontains(out string output)
-        {
-            return IfCommon(out output, IfType.Contains, false);
-        }
-        private bool Ifequal(out string output)
-        {
-            return IfCommon(out output, IfType.Equals, true);
-        }
-        private bool Ifnotequal(out string output)
-        {
-            return IfCommon(out output, IfType.Equals, false);
+        private bool Ifnotempty(out string output) { return IfCommon(out output, IfType.Empty, false);       }
+        private bool Ifempty(out string output) {return IfCommon(out output, IfType.Empty, true);       }
+        private bool Iftrue(out string output)  {return IfCommon(out output, IfType.True, true);       }
+        private bool Iffalse(out string output) { return IfCommon(out output, IfType.True, false);       }
+        private bool Ifzero(out string output)  { return IfCommon(out output, IfType.Zero, true);       }
+        private bool Ifnonzero(out string output) { return IfCommon(out output, IfType.Zero, false);       }
+        private bool Ifcontains(out string output) { return IfCommon(out output, IfType.Contains, true);       }
+        private bool Ifnotcontains(out string output) { return IfCommon(out output, IfType.Contains, false);       }
+        private bool Ifequal(out string output) { return IfCommon(out output, IfType.StrEquals, true);       }
+        private bool Ifnotequal(out string output) { return IfCommon(out output, IfType.StrEquals, false);       }
+        private bool Ifnumgreater(out string output) { return IfCommon(out output, IfType.Greater, false); }
+        private bool Ifnumless(out string output) { return IfCommon(out output, IfType.Less, false); }
+        private bool Ifnumgreaterequal(out string output) { return IfCommon(out output, IfType.GreaterEqual, false); }
+        private bool Ifnumlessequal(out string output) { return IfCommon(out output, IfType.LessEqual, false); }
+        private bool Ifnumequal(out string output) { return IfCommon(out output, IfType.NumEqual, true); }
+        private bool Ifnumnotequal(out string output) { return IfCommon(out output, IfType.NumEqual, false); }
 
-        }
-
-        enum IfType { True, Contains, Equals, Empty, Zero };
+        enum IfType { True, Contains, StrEquals, Empty, Zero , Greater, Less, GreaterEqual, LessEqual, NumEqual };
 
         private bool IfCommon(out string output,
                               IfType iftype, bool test)
@@ -949,13 +960,30 @@ namespace EDDiscovery
             {
                 bool tres;
 
+                if (iftype == IfType.True)
+                {
+                    int nres;
+                    bool ok = value.InvariantParse(out nres);
+
+                    if (!ok)
+                    {
+                        output = "Condition value is not an integer";
+                        return false;
+                    }
+
+                    tres = (nres != 0) == test;
+                }
                 if (iftype == IfType.Contains)
                 {
                     tres = (value.IndexOf(comparitor, StringComparison.InvariantCultureIgnoreCase) != -1) == test;
                 }
-                else if (iftype == IfType.Equals)
+                else if (iftype == IfType.StrEquals)
                 {
                     tres = value.Equals(comparitor, StringComparison.InvariantCultureIgnoreCase) == test;
+                }
+                else if (iftype == IfType.Empty)                 // 2 parameters
+                {
+                    tres = (value.Length == 0) == test;
                 }
                 else if (iftype == IfType.Zero)
                 {
@@ -970,22 +998,27 @@ namespace EDDiscovery
 
                     tres = (Math.Abs(nres) < 0.000001) == test;
                 }
-                else if (iftype == IfType.Empty)                 // 2 parameters
+                else 
                 {
-                    tres = (value.Length == 0) == test;
-                }
-                else
-                {
-                    int nres;
-                    bool ok = value.InvariantParse(out nres);
+                    double nleft,nright = 0;
+                    bool ok = value.InvariantParse(out nleft) && comparitor.InvariantParse(out nright);
 
                     if (!ok)
                     {
-                        output = "Condition value is not an integer";
+                        output = "Condition value is not an fractional or integer on one or both sides";
                         return false;
                     }
 
-                    tres = (nres != 0) == test;
+                    if (iftype == IfType.Greater)
+                        tres = nleft > nright;
+                    else if (iftype == IfType.GreaterEqual)
+                        tres = nleft >= nright;
+                    else if (iftype == IfType.Less)
+                        tres = nleft < nright;
+                    else if (iftype == IfType.LessEqual)
+                        tres = nleft < nright;
+                    else 
+                        tres = (Math.Abs(nleft-nright) < 0.000001) == test;
                 }
 
                 if (tres)
@@ -1093,6 +1126,12 @@ namespace EDDiscovery
 
         private bool OpenFile(out string output)
         {
+            if (handles == null)
+            {
+                output = "File access not supported";
+                return false;
+            }
+
             string handle = paras[0].value;
             string file = paras[1].isstring ? paras[1].value : vars[paras[1].value];
             string mode = vars.Exists(paras[2].value) ? vars[paras[2].value] : paras[2].value;
@@ -1102,21 +1141,15 @@ namespace EDDiscovery
             {
                 if (VerifyAllowed(file, fm))
                 {
-                    try
-                    {
-                        FileStream f = File.Open(file, fm);
-                        int id = 20; // TBD filenextid++;
-                        filehandles[id] = f;
+                    string errmsg;
+                    int id = handles.Open(file, fm, fm == FileMode.Open ? FileAccess.Read : FileAccess.Write, out errmsg);
+                    if (id > 0)
                         vars[handle] = id.ToString();
-                        output = "1";
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        vars[handle] = ex.Message;
-                        output = "0";
-                        return true;
-                    }
+                    else
+                        output = errmsg;
+
+                    output = (id > 0) ? "1" : "0";
+                    return true;
                 }
                 else
                     output = "Permission denied access to " + file;
@@ -1130,16 +1163,10 @@ namespace EDDiscovery
         private bool CloseFile(out string output)
         {
             int? hv = vars[paras[0].value].InvariantParseIntNull();
-            if (hv != null && filehandles.ContainsKey(hv.Value))
+
+            if (hv != null && handles != null)
             {
-                FileStream f = filehandles[hv.Value];
-                try
-                {
-                    f.Close();
-                    f.Dispose();
-                }
-                catch { }
-                filehandles.Remove(hv.Value);
+                handles.Close(hv.Value);
                 output = "1";
                 return true;
             }
@@ -1154,26 +1181,21 @@ namespace EDDiscovery
         {
             int? hv = vars[paras[0].value].InvariantParseIntNull();
 
-            if (hv != null && filehandles.ContainsKey(hv.Value))
+            if (hv != null && handles != null)
             {
-                FileStream f = filehandles[hv.Value];
-                string s = null;
-
-                try
+                if (handles.ReadLine(hv.Value, out output))
                 {
-                    using (StreamReader sr = new StreamReader(f))
+                    if (output == null)
+                        output = "0";
+                    else
                     {
-                        s = sr.ReadLine();
-
-                        if (s != null)
-                            vars[paras[1].value] = s;
+                        vars[paras[1].value] = output;
+                        output = "1";
                     }
+                    return true;
                 }
-                catch
-                { }
-
-                output = (s != null) ? "1" : "0";
-                return true;
+                else
+                    return false;
             }
             else
             {
@@ -1195,27 +1217,57 @@ namespace EDDiscovery
             int? hv = vars[paras[0].value].InvariantParseIntNull();
             string line = paras[1].isstring ? paras[1].value : vars[paras[1].value];
 
-            if (hv != null && filehandles.ContainsKey(hv.Value))
+            if (hv != null && handles != null)
             {
-                FileStream f = filehandles[hv.Value];
-
-                try
+                if (handles.WriteLine(hv.Value, line, lf, out output))
                 {
-                    using (StreamWriter sr = new StreamWriter(f))
-                    {
-                        if (lf)
-                            sr.WriteLine(line);
-                        else
-                            sr.Write(line);
-
-                        output = "1";
-                        return true;
-                    }
+                    output = "1";
+                    return true;
                 }
-                catch { }
-
-                output = "0";
+                else
+                    return false;
+            }
+            else
+            {
+                output = "File handle not found or invalid";
                 return false;
+            }
+        }
+
+        private bool SeekFile(out string output)
+        {
+            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            long? pos = paras[1].value.InvariantParseLongNull();
+            if (pos == null && vars.Exists(paras[1].value))
+                pos = vars[paras[1].value].InvariantParseLongNull();
+
+            if (hv != null && pos != null && handles != null)
+            {
+                if (handles.Seek(hv.Value, pos.Value, out output))
+                {
+                    output = "1";
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                output = "File handle not found or invalid, or position invalid";
+                return false;
+            }
+        }
+        private bool TellFile(out string output)
+        {
+            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            if (hv != null && handles != null)
+            {
+                if (handles.Tell(hv.Value, out output))
+                {
+                    return true;
+                }
+                else
+                    return false;
             }
             else
             {
@@ -1257,6 +1309,25 @@ namespace EDDiscovery
             output = "1";
             return true;
         }
+
+
+        private bool FileLength(out string output)
+        {
+            string line = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+
+            try
+            {
+                FileInfo fi = new FileInfo(line);
+                output = fi.Length.ToString(ct);
+                return true;
+            }
+            catch { }
+            {
+                output = "-1";
+                return true;
+            }
+        }
+
 
         private bool MkDir(out string output)
         {
@@ -1311,11 +1382,13 @@ namespace EDDiscovery
 
                 if (!actionfolderperms.Contains(folder + ";"))
                 {
-                    bool ok = Forms.MessageBoxTheme.Show("Warning - Write File access requested to " + Path.GetFileName(file) + Environment.NewLine + " in " + folder + Environment.NewLine +
-                                               "!!! Verify you are happy for EDDiscovery to write to that file !!!",
-                                               "WARNING - WRITE FILE ACCESS REQUESTED",
-                                                System.Windows.Forms.MessageBoxButtons.YesNo,
-                                                System.Windows.Forms.MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes;
+                    bool ok = Forms.MessageBoxTheme.Show("Warning - EDDiscovery is attempting to write to folder" + Environment.NewLine + Environment.NewLine +
+                                                         folder + Environment.NewLine + Environment.NewLine +
+                                                         "with file " + Path.GetFileName(file) + Environment.NewLine + Environment.NewLine +
+                                                           "!!! Verify you are happy for EDDiscovery to write to ANY files in that folder!!!",
+                                                           "WARNING - WRITE FILE ACCESS REQUESTED",
+                                                        System.Windows.Forms.MessageBoxButtons.YesNo,
+                                                        System.Windows.Forms.MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes;
 
                     if (ok)
                     {
@@ -1333,7 +1406,6 @@ namespace EDDiscovery
         }
 
         #endregion
-
-
     }
+
 }

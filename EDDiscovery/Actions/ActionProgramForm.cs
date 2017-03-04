@@ -273,6 +273,8 @@ namespace EDDiscovery.Actions
             int voff = panelheightmargin;
             int actstep = 0;
 
+            toolTip1.RemoveAll();
+
             foreach (Group g in groups)
             {
                 int indentlevel = 0;
@@ -324,6 +326,8 @@ namespace EDDiscovery.Actions
 
                 toolTip1.SetToolTip(g.stepname, tt1);
                 toolTip1.SetToolTip(g.stepname.GetInternalSystemControl, tt1);
+                if (act != null && act.Comment.Length > 0)
+                    toolTip1.SetToolTip(g.value, "Comment: " + act.Comment);
 
                 //DEBUG Keep this useful for debugging structure levels
                 //                if (g.programstep != null)
@@ -738,6 +742,7 @@ namespace EDDiscovery.Actions
             insertEntryAboveToolStripMenuItem.Enabled = whitespaceToolStripMenuItem.Enabled = removeWhitespaceToolStripMenuItem.Enabled = validrightclick || IsMarked;
             deleteToolStripMenuItem.Enabled = copyToolStripMenuItem.Enabled = validrightclick || IsMarked;
             pasteToolStripMenuItem.Enabled = ActionProgramCopyBuffer.Count > 0 && rightclickstep >=0;
+            editCommentToolStripMenuItem.Enabled = validrightclick && curprog.GetStep(rightclickstep) != null;
 
 //            System.Diagnostics.Debug.WriteLine("Rightclick at " + rightclickstep + " marked " + IsMarked);
         }
@@ -874,10 +879,21 @@ namespace EDDiscovery.Actions
             }
         }
 
-#endregion
+        private void editCommentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Action c = curprog.GetStep(rightclickstep);         // we know step and ACT is valid since it would be disabled otherwise
+            string r = Forms.PromptSingleLine.ShowDialog(this, "Comment", c.Comment, "Edit Comment for " + c.Name, false, "Enter comment for action");
+            if (r != null)
+            {
+                c.Comment = r;
+                RepositionGroups();
+            }
+        }
+
+        #endregion
 
 
-#region Window Control
+        #region Window Control
 
         // Mono compatibility
         private bool _window_dragging = false;
@@ -979,7 +995,7 @@ namespace EDDiscovery.Actions
         }
 
 
-#endregion
+        #endregion
 
     }
 }

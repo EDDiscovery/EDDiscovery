@@ -175,7 +175,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             PlanetClass = JSONHelper.GetStringNull(evt["PlanetClass"]);
 
             Atmosphere = JSONHelper.GetStringNull(evt["Atmosphere"]);
-            if ( Atmosphere == null || Atmosphere.Length == 0 )             // Earthlikes appear to have empty atmospheres but AtmosphereType
+            if (Atmosphere == null || Atmosphere.Length == 0)             // Earthlikes appear to have empty atmospheres but AtmosphereType
                 Atmosphere = JSONHelper.GetStringNull(evt["AtmosphereType"]);
 
             AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
