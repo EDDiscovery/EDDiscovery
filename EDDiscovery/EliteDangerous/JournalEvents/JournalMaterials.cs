@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //{ "timestamp":"2017-02-10T14:25:51Z", "event":"Materials", "Raw":[ { "Name":"chromium", "Count":28 }, { "Name":"zinc", "Count":18 }, { "Name":"iron", "Count":23 }, { "Name":"sulphur", "Count":19 } ], "Manufactured":[ { "Name":"refinedfocuscrystals", "Count":10 }, { "Name":"highdensitycomposites", "Count":3 }, { "Name":"mechanicalcomponents", "Count":3 } ], "Encoded":[ { "Name":"emissiondata", "Count":32 }, { "Name":"shielddensityreports", "Count":23 } } ] }
 
     [JournalEntryType(JournalTypeEnum.Materials)]
-    public class JornalMaterials : JournalEntry
+    public class JournalMaterials : JournalEntry
     {
         public class Material
         {
@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public int Count { get; set; }
         }
 
-        public JornalMaterials(JObject evt) : base(evt, JournalTypeEnum.Materials)
+        public JournalMaterials(JObject evt) : base(evt, JournalTypeEnum.Materials)
         {
             Raw = evt["Raw"]?.ToObject<Material[]>();
             Manufactured = evt["Manufactured"]?.ToObject<Material[]>();
