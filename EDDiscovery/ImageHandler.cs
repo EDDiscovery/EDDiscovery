@@ -66,7 +66,8 @@ namespace EDDiscovery2.ImageHandler
             "MM-DD-YYYY Sysname",
             "CMDRName",
             "CMDRName Sysname",
-            "YYYY-MM-DD CMDRName Sysname"
+            "YYYY-MM-DD CMDRName Sysname",
+            "CMDRName\\Sysname"
             });
 
             this.comboBoxScanFor.Items.AddRange(new string[] { "bmp -ED Launcher", "jpg -Steam" , "png -Steam" });
@@ -815,13 +816,17 @@ namespace EDDiscovery2.ImageHandler
                     OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr");
                     break;
 
-                case 9: // CMDR name sysname
+                case 9: // CMDR name at sysname
                     OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(SystemName);
                     break;
 
-                case 10: // YYYY - MM - DD CMDR name sysname
+                case 10: // YYYY - MM - DD CMDR name at sysname
                     OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " +
                                     Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(SystemName);
+                    break;
+
+                case 11: // CMDR Name \ SystemName
+                    OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + "\\" + Tools.SafeFileString(SystemName);
                     break;
             }
 
