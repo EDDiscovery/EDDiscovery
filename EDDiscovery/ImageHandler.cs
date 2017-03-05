@@ -66,6 +66,7 @@ namespace EDDiscovery2.ImageHandler
             "MM-DD-YYYY Sysname",
             "CMDRName",
             "CMDRName Sysname",
+	    "CMDRName, Sysname",
             "YYYY-MM-DD CMDRName Sysname"
             });
 
@@ -819,7 +820,11 @@ namespace EDDiscovery2.ImageHandler
                     OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(SystemName);
                     break;
 
-                case 10: // YYYY - MM - DD CMDR name sysname
+		case 10: // CMDR name, sysname
+                    OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + "\\" + Tools.SafeFileString(SystemName);
+                    break;
+
+                case 11: // YYYY - MM - DD CMDR name sysname
                     OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " +
                                     Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(SystemName);
                     break;
