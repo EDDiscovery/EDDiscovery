@@ -193,4 +193,65 @@ namespace EDDiscovery.Actions
             }
         }
     }
+
+    class ActionStar : Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }
+
+        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Star system name", UserData, "Configure Star Command");
+            if (promptValue != null)
+            {
+                userdata = promptValue;
+            }
+
+            return (promptValue != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            string res;
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            {
+                StringParser sp = new StringParser(res);
+
+                string prefix = "ST_";
+                string cmdname = sp.NextQuotedWord();
+
+                if (cmdname != null && cmdname.Equals("PREFIX", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    prefix = sp.NextWord();
+
+                    if (prefix == null)
+                    {
+                        ap.ReportError("Missing name after Prefix in Ledger");
+                        return true;
+                    }
+
+                    cmdname = sp.NextQuotedWord();
+                }
+
+                if (cmdname != null)
+                {
+                    DB.SystemClass sc = DB.SystemClass.GetSystem(cmdname);
+                    ap[prefix + "Found"] = sc != null ? "1" : "0";
+
+                    if (sc != null)
+                    {
+                        ConditionVariables vars = new ConditionVariables();
+                        ActionVars.SystemVars(vars, sc, prefix);
+                        ap.Add(vars);
+                        ActionVars.SystemVarsFurtherInfo(ap, ap.actioncontroller.HistoryList, sc, prefix);
+                    }
+                }
+                else
+                    ap.ReportError("Missing starname in Star");
+            }
+            else
+                ap.ReportError(res);
+
+            return true;
+        }
+    }
 }

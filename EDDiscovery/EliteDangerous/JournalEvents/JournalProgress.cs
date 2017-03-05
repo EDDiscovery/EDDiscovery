@@ -47,7 +47,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Federation { get; set; }
         public int CQC { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.progress; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.progress; } }
 
     }
 }

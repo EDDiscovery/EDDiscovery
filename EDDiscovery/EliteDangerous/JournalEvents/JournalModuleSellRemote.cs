@@ -47,7 +47,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             return base.DefaultRemoveItems() + ";ShipID;ServerID";
         }
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulesell; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulesell; } }
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {

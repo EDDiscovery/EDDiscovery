@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string System { get; set; }
         public string Body { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.screenshot; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.screenshot; } }
 
         public void SetConvertedFilename(string input_filename, string output_filename, int width, int height)
         {

@@ -29,7 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRestockVehicle(JObject evt ) : base(evt, JournalTypeEnum.RestockVehicle)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Type = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Type"]));
             Loadout = JSONHelper.GetStringDef(evt["Loadout"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
             Count = JSONHelper.GetInt(evt["Count"]);
@@ -39,18 +39,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Cost { get; set; }
         public int Count { get; set; }
 
-        public static System.Drawing.Bitmap IconSelect(string desc)
-        {
-            if (desc.Contains("SRV"))
-                return EDDiscovery.Properties.Resources.srv;
-            else
-                return EDDiscovery.Properties.Resources.fighter;
-        }
-
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count.ToString(), -Cost);
         }
 
+        public override System.Drawing.Bitmap Icon { get
+            {
+                if (Type.Contains("SRV") )
+                    return EDDiscovery.Properties.Resources.srv;
+                else
+                    return EDDiscovery.Properties.Resources.fighter;
+            } }
     }
 }

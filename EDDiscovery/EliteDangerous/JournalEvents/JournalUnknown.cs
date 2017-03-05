@@ -28,6 +28,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             EventTypeStr = typestr;
         }
+
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
     }
 
 }

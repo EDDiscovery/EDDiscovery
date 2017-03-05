@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Cost { get; set; }
         public CombatRank CombatRank { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crew; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crew; } }
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {

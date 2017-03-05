@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Cost { get; set; }
         public bool Bankrupt { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ressurect; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.ressurect; } }
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
         {

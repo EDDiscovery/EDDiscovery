@@ -652,7 +652,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return Materials[v.ToLower()];
         }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scan; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scan; } }
 
         public bool IsStarNameRelated(string starname, string designation = null)
         {

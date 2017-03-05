@@ -62,6 +62,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public FederationRank? Federation { get; set; }
         public EmpireRank? Empire { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.promotion; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.promotion; } }
     }
 }

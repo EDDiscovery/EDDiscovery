@@ -52,7 +52,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool StolenGoods { get; set; }
         public bool BlackMarket { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketsell; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketsell; } }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

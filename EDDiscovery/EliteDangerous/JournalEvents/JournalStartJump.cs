@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string StarSystem { get; set; }
         public string StarClass { get; set; }
 
-        //        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.un; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
     }
 }

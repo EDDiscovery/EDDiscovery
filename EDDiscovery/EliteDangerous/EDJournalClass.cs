@@ -318,7 +318,7 @@ namespace EDDiscovery.EliteDangerous
 
                 System.Diagnostics.Trace.WriteLine("Net tick exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                throw;
+                return new List<JournalEntry>();
             }
         }
 

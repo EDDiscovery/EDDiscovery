@@ -40,6 +40,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int Level { get; set; }
         public string Override { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineerapply; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineerapply; } }
     }
 }

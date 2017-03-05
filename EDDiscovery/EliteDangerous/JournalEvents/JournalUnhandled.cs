@@ -27,5 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalUnhandled(JObject jo, string journaltypestr ) : base(jo, JournalUnhandled.JournalString2Type(journaltypestr))
         {
         }
+
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
+
     }
 }

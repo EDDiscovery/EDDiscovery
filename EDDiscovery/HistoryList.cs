@@ -19,6 +19,7 @@ using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -119,19 +120,27 @@ namespace EDDiscovery
 
         #region Constructors
 
-        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
+        private HistoryEntry()
+        {
+
+        }
+
+        public static HistoryEntry MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
         {
             Debug.Assert(sys != null);
-            EntryType = EliteDangerous.JournalTypeEnum.FSDJump;
-            System = sys;
-            EventTimeUTC = eventt;
-            EventSummary = "Jump to " + System.name;
-            EventDescription = dist;
-            EventDetailedInfo = info;
-            MapColour = m;
-            Journalid = journalid;
-            IsEDSMFirstDiscover = firstdiscover;
-            EdsmSync = true; 
+            return new HistoryEntry
+            {
+                EntryType = EliteDangerous.JournalTypeEnum.FSDJump,
+                System = sys,
+                EventTimeUTC = eventt,
+                EventSummary = "Jump to " + sys.name,
+                EventDescription = dist,
+                EventDetailedInfo = info,
+                MapColour = m,
+                Journalid = journalid,
+                IsEDSMFirstDiscover = firstdiscover,
+                EdsmSync = true
+            };
         }
 
         public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
@@ -388,13 +397,11 @@ namespace EDDiscovery
             get
             {
                 if (journalEntry != null)
-                {
-                    return journalEntry.GetIcon();
-                }
+                    return journalEntry.Icon;
+                else if (EntryType == JournalTypeEnum.FSDJump)
+                    return EDDiscovery.Properties.Resources.hyperspace;
                 else
-                {
-                    return EliteDangerous.JournalEntry.GetIcon(EntryType, EventDescription);
-                }
+                    return EDDiscovery.Properties.Resources.genericevent;
             }
         }
 
