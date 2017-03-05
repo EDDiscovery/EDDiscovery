@@ -816,7 +816,7 @@ namespace EDDiscovery2.ImageHandler
                     break;
 
                 case 9: // CMDR name sysname
-                    OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + "\\" + Tools.SafeFileString(SystemName);
                     break;
 
                 case 10: // YYYY - MM - DD CMDR name sysname
