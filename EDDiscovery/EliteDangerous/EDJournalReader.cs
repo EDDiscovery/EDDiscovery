@@ -89,6 +89,17 @@ namespace EDDiscovery.EliteDangerous
                 {
                     TravelLogUnit.type |= 0x8000;
                 }
+
+                if (header.Part > 1)
+                {
+                    JournalEvents.JournalContinued contd = JournalEntry.GetLast<JournalEvents.JournalContinued>(je.EventTimeUTC.AddSeconds(1), e => e.Part == header.Part);
+
+                    // Carry commander over from previous log if it ends with a Continued event.
+                    if (contd != null && Math.Abs(header.EventTimeUTC.Subtract(contd.EventTimeUTC).TotalSeconds) < 5 && contd.CommanderId >= 0)
+                    {
+                        TravelLogUnit.CommanderId = contd.CommanderId;
+                    }
+                }
             }
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {

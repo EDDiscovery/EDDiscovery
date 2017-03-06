@@ -814,10 +814,40 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
-        public static T GetLast<T>(int cmdrid, DateTime before)
+        public static JournalEntry GetLast(DateTime before, Func<JournalEntry, bool> filter)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE EventTime < @time ORDER BY EventTime DESC"))
+                {
+                    cmd.AddParameterWithValue("@time", before);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            JournalEntry ent = CreateJournalEntry(reader);
+                            if (filter(ent))
+                            {
+                                return ent;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static T GetLast<T>(int cmdrid, DateTime before, Func<T, bool> filter = null)
             where T : JournalEntry
         {
-            return (T)GetLast(cmdrid, before, e => e is T);
+            return (T)GetLast(cmdrid, before, e => e is T && (filter == null || filter((T)e)));
+        }
+
+        public static T GetLast<T>(DateTime before, Func<T, bool> filter = null)
+            where T : JournalEntry
+        {
+            return (T)GetLast(before, e => e is T && (filter == null || filter((T)e)));
         }
 
         public static void RemoveGeneratedKeys(JObject obj, bool removeLocalised)
