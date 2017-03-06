@@ -578,6 +578,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public System.Drawing.Image GetPlanetClassImage()
         {
+            if (PlanetClass == null)
+            {
+                return EDDiscovery.Properties.Resources.Globe;
+            }
+
             string name = PlanetClass.ToLower();
 
             if (name.Contains("gas"))
