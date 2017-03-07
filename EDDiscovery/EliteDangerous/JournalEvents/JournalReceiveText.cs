@@ -41,7 +41,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string MessageLocalised { get; set; }
         public string Channel { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.textreceived; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.receivetext; } }
 
     }
 }

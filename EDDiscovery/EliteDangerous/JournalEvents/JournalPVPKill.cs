@@ -35,6 +35,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Victim { get; set; }
         public CombatRank CombatRank { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.pvpkill; } }
     }
 }
