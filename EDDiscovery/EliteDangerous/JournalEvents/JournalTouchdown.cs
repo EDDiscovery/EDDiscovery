@@ -36,6 +36,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double Longitude { get; set; }
         public bool? PlayerControlled { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.touchdown; } }
     }
 }

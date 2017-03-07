@@ -61,6 +61,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.synthesis; } }
     }
 }

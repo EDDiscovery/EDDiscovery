@@ -112,7 +112,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.UpdateModules(ShipModules);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadout; } }
 
     }
 }

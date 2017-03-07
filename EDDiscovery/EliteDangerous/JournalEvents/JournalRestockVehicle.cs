@@ -47,9 +47,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override System.Drawing.Bitmap Icon { get
             {
                 if (Type.Contains("SRV") )
-                    return EDDiscovery.Properties.Resources.srv;
+                    return EDDiscovery.Properties.Resources.restocksrv;
                 else
-                    return EDDiscovery.Properties.Resources.fighter;
+                    return EDDiscovery.Properties.Resources.restockfighter;
             } }
     }
 }

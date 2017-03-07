@@ -247,9 +247,6 @@
   <data name="commitcrime" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\commitcrime.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="textreceived" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\textreceived.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="bookmarkgreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bookmarkgreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -454,9 +451,6 @@
   <data name="Black_Hole" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Black_Hole.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="textsent" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\textsent.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="marketsell" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\marketsell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -498,9 +492,6 @@
   </data>
   <data name="SizeSelectorsMedium" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SizeSelectorsMedium.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="shields" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\shields.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Rocky_Ice_World_Sol_Titan" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Rocky_Ice_World_Sol_Titan.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -732,5 +723,140 @@
   </data>
   <data name="cargomanifest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cargomanifest.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fetchremotemodule" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fetchremotemodule.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="capshipbond" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\capshipbond.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="changecrewrole" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\changecrewrole.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="communitygoaldiscard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\communitygoaldiscard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="communitygoaljoin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\communitygoaljoin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="communitygoalreward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\communitygoalreward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="crewassign" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\crewassign.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="crewfire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\crewfire.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="crewhire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\crewhire.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="crewmemberjoins" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\crewmemberjoins.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="crewmemberquits" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\crewmemberquits.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="datalinkscan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\datalinkscan.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="datalinkvoucher" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\datalinkvoucher.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="datascanned" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\datascanned.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dockfighter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dockfighter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="docksrv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\docksrv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="factionkillbond" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\factionkillbond.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="jetconeboost" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\jetconeboost.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="jetconedamage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\jetconedamage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="joinacrew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\joinacrew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="kickcrewmember" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\kickcrewmember.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="launchfighter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\launchfighter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="launchsrv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\launchsrv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="loadout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loadout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="materials" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\materials.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="miningrefined" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\miningrefined.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="passengers" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\passengers.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pvpkill" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pvpkill.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="quitacrew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\quitacrew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="receivetext" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\receivetext.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="restockfighter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\restockfighter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="restocksrv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\restocksrv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="scanned" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\scanned.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="scientificresearch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\scientificresearch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sendtext" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sendtext.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="setusershipname" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\setusershipname.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="startjump" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\startjump.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="synthesis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\synthesis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="touchdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\touchdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="uss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\uss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wingadd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wingadd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wingjoin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wingjoin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wingleave" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wingleave.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="clearsavedgame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clearsavedgame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fileheader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fileheader.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

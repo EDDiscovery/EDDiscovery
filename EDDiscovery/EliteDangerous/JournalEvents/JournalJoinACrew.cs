@@ -32,7 +32,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string Captain { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.joinacrew; } }
 
     }
 }
