@@ -314,7 +314,7 @@ namespace EDDiscovery.UserControls
                 {
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1, 
                                                 new Point(curpos.X+offset, curpos.Y + alignv) ,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);          // and the label needs to be a quarter height below it..
+                                                size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
 
                     if ( sc.HasRings )
                     {
@@ -332,7 +332,7 @@ namespace EDDiscovery.UserControls
 
                             endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt, 
                                 new Point( curpos.X, curpos.Y + alignv ), new Size(size.Width/2,size.Height), name,
-                                                                sc.RingInformationMoons(i), alignv + labelvoff, sc.IsEDSMBody);
+                                                                sc.RingInformationMoons(i), alignv + labelvoff, sc.IsEDSMBody, false);
 
                             curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
                         }
@@ -463,13 +463,13 @@ namespace EDDiscovery.UserControls
         }
 
         Point CreateImageLabel(List<PictureBoxHotspot.ImageElement> c, Image i, Point postopright, Size size, string label,
-                                    string ttext , int labelhoff, bool fromEDSM)
+                                    string ttext , int labelhoff, bool fromEDSM, bool imgowned = true)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
             if (fromEDSM)
                 ttext = "From EDSM" + Environment.NewLine + ttext;
 
-            PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext);
+            PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext, imgowned);
 
             Point max = new Point(postopright.X + size.Width, postopright.Y + size.Height);
 
