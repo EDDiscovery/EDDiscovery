@@ -93,6 +93,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     ShipModule module = new ShipModule();
 
                     module.Slot = JournalEntry.GetBetterSlotName(JSONHelper.GetStringDef(jo["Slot"]));
+                    module.Item = JournalEntry.GetBetterItemName(JSONHelper.GetStringDef(jo["Item"]));
                     module.Enabled = JSONHelper.GetBool(jo["On"]);
                     module.Priority = JSONHelper.GetInt(jo["Priority"]);
                     module.AmmoClip = JSONHelper.GetInt(jo["AmmoInClip"]);
