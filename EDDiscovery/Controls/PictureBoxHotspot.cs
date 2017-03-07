@@ -35,14 +35,14 @@ namespace ExtendedControls
             {
             }
 
-            public ImageElement(Rectangle p, Image i, Object t = null, string tt = null)
+            public ImageElement(Rectangle p, Image i, Object t = null, string tt = null, bool imgowned = true)
             {
-                pos = p; img = i; tag = t; tooltip = tt;
+                pos = p; img = i; tag = t; tooltip = tt; this.imgowned = imgowned;
             }
 
-            public void Image(Rectangle p, Image i, Object t = null, string tt = null)
+            public void Image(Rectangle p, Image i, Object t = null, string tt = null, bool imgowned = true)
             {
-                pos = p; img = i; tag = t; tooltip = tt;
+                pos = p; img = i; tag = t; tooltip = tt; this.imgowned = imgowned;
             }
 
             // centred, autosized
@@ -74,11 +74,12 @@ namespace ExtendedControls
                 tooltip = tt;
             }
 
-            public void SetAlternateImage(Image i, Rectangle p, bool mo = false)
+            public void SetAlternateImage(Image i, Rectangle p, bool mo = false, bool imgowned = true)
             {
                 altimg = i;
                 altpos = p;
                 mouseover = mo;
+                altimgowned = imgowned;
             }
 
             public bool SwapImages(Image surface)           // swap to alternative, optionally, draw to surface
@@ -115,10 +116,12 @@ namespace ExtendedControls
 
             public Rectangle pos;
             public Image img;
+            public bool imgowned;
             public Object tag;
             public string tooltip;
 
             public Image altimg;
+            public bool altimgowned;
             public Rectangle altpos;
             public bool inaltimg = false;
 
@@ -196,7 +199,7 @@ namespace ExtendedControls
             return lab;
         }
 
-        public ImageElement AddImage(Rectangle p, Image img , Object tag = null, string tiptext = null)
+        public ImageElement AddImage(Rectangle p, Image img, Object tag = null, string tiptext = null, bool imgowned = true)
         {
             ImageElement lab = new ImageElement();
             lab.Image(p,img,tag,tiptext);
@@ -210,8 +213,10 @@ namespace ExtendedControls
             {
                 foreach (var e in elements)
                 {
-                    e.img?.Dispose();
-                    e.altimg?.Dispose();
+                    if (e.imgowned)
+                        e.img?.Dispose();
+                    if (e.altimgowned)
+                        e.altimg?.Dispose();
                     e.tag = null;
                 }
                 elements.Clear();
