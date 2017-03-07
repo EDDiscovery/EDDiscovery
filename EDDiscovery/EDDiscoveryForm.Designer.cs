@@ -212,7 +212,7 @@ namespace EDDiscovery
             // 
             // showAllInTaskBarToolStripMenuItem
             // 
-            this.showAllInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.textsent;
+            this.showAllInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.sendtext;
             this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
             this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.showAllInTaskBarToolStripMenuItem.Text = "&Show All In Task Bar";

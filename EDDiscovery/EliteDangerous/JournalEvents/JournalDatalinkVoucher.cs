@@ -42,6 +42,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, PayeeFaction + " " + Reward.ToString("N0"));
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.datalinkvoucher; } }
     }
 }
