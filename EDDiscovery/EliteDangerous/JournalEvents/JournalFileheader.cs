@@ -30,11 +30,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             GameVersion = JSONHelper.GetStringDef(evt["gameversion"]);
             Build = JSONHelper.GetStringDef(evt["build"]);
             Language = JSONHelper.GetStringDef(evt["language"]);
+            Part = JSONHelper.GetInt(evt["part"]);
         }
 
         public string GameVersion { get; set; }
         public string Build { get; set; }
         public string Language { get; set; }
+        public int Part { get; set; }
 
         public bool Beta
         {

@@ -219,15 +219,74 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        private void ScanReader(EDJournalReader nfi, List<JournalEntry> entries)
+        {
+            int netlogpos = 0;
+
+            try
+            {
+                if (nfi.TravelLogUnit.id == 0)
+                {
+                    nfi.TravelLogUnit.type = 3;
+                    nfi.TravelLogUnit.Add();
+                }
+
+                netlogpos = nfi.TravelLogUnit.Size;
+
+                List<JournalEntry> ents = nfi.ReadJournalLog().ToList();
+
+                if (ents.Count > 0)
+                {
+                    using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                    {
+                        using (DbTransaction txn = cn.BeginTransaction())
+                        {
+                            ents = ents.Where(je => JournalEntry.FindEntry(je).Count == 0).ToList();
+
+                            foreach (JournalEntry je in ents)
+                            {
+                                entries.Add(je);
+                                je.Add(cn, txn);
+                                ticksNoActivity = 0;
+                            }
+
+                            nfi.TravelLogUnit.Update(cn);
+
+                            txn.Commit();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Revert and re-read the failed entries
+                if (nfi != null && nfi.TravelLogUnit != null)
+                {
+                    nfi.TravelLogUnit.Size = netlogpos;
+                }
+
+                throw;
+            }
+        }
+
         public List<JournalEntry> ScanForNewEntries()
         {
             var entries = new List<JournalEntry>();
-            int netlogpos = 0;
             EDJournalReader nfi = null;
 
             try
             {
                 string filename = null;
+
+                if (lastnfi != null)
+                {
+                    ScanReader(lastnfi, entries);
+                }
+
+                if (entries.Count != 0)
+                {
+                    return entries;
+                }
 
                 if (m_netLogFileQueue.TryDequeue(out filename))      // if a new one queued, we swap to using it
                 {
@@ -274,48 +333,13 @@ namespace EDDiscovery.EliteDangerous
 
                 if (nfi != null)
                 {
-                    if (nfi.TravelLogUnit.id == 0)
-                    {
-                        nfi.TravelLogUnit.type = 3;
-                        nfi.TravelLogUnit.Add();
-                    }
-
-                    netlogpos = nfi.TravelLogUnit.Size;
-                    List<JournalEntry> ents = nfi.ReadJournalLog().ToList();
-
-                    if (ents.Count > 0)
-                    {
-                        using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-                        {
-                            using (DbTransaction txn = cn.BeginTransaction())
-                            {
-                                ents = ents.Where(je => JournalEntry.FindEntry(je).Count == 0).ToList();
-
-                                foreach (JournalEntry je in ents)
-                                {
-                                    entries.Add(je);
-                                    je.Add(cn, txn);
-                                    ticksNoActivity = 0;
-                                }
-
-                                nfi.TravelLogUnit.Update(cn);
-
-                                txn.Commit();
-                            }
-                        }
-                    }
+                    ScanReader(nfi, entries);
                 }
 
                 return entries;
             }
             catch (Exception ex)
             {
-                // Revert and re-read the failed entries
-                if (nfi != null && nfi.TravelLogUnit != null)
-                {
-                    nfi.TravelLogUnit.Size = netlogpos;
-                }
-
                 System.Diagnostics.Trace.WriteLine("Net tick exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 return new List<JournalEntry>();
