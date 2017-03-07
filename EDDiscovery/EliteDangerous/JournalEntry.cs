@@ -1171,6 +1171,13 @@ namespace EDDiscovery.EliteDangerous
                 jc.AddPrePostfix("Count", "; items", "", materials);
             }
 
+            {
+                string slots = JL(new[] { JournalTypeEnum.MassModuleStore, JournalTypeEnum.ModuleBuy, JournalTypeEnum.ModuleRetrieve, JournalTypeEnum.ModuleSell, JournalTypeEnum.ModuleStore , JournalTypeEnum.Loadout });
+                jc.AddSpecial("Slot", JSONConverters.Types.TSlotName, "Slot ;", "", slots);
+                jc.AddSpecial("FromSlot", JSONConverters.Types.TSlotName, "From ;", "", "ModuleSwap");
+                jc.AddSpecial("ToSlot", JSONConverters.Types.TSlotName, "To ;", "", "ModuleSwap");
+            }
+
             return jc;
         }
 
@@ -1183,7 +1190,7 @@ namespace EDDiscovery.EliteDangerous
             return s;
         }
 
-        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
+        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null )
         {
             List<string> ret = new List<string>();
 
@@ -1264,7 +1271,17 @@ namespace EDDiscovery.EliteDangerous
 
         static public string GetBetterMissionName(string inname)
         {
-            return inname.Replace("_name", "").SplitCapsWordUnderscoreTitleCase();
+            return inname.Replace("_name", "").SplitCapsWordUnderscoreTitleCaseNumbers();
+        }
+
+        static public string GetBetterSlotName(string s)
+        {
+            return s.SplitCapsWordUnderscoreTitleCaseNumbers();
+        }
+
+        static public string GetBetterItemName(string s)
+        {
+            return s.SplitCapsWordUnderscoreTitleCaseNumbers();
         }
     }
 }

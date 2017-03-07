@@ -470,7 +470,7 @@ namespace EDDiscovery
         private bool SplitCaps(out string output)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = value.SplitCapsWordUnderscoreTitleCase();
+            output = value.SplitCapsWordUnderscoreTitleCaseNumbers();
             return true;
         }
 
@@ -478,7 +478,7 @@ namespace EDDiscovery
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             output = EliteDangerous.JournalEntry.PhoneticShipName(value);
-            output = output.SplitCapsWordUnderscoreTitleCase();
+            output = output.SplitCapsWordUnderscoreTitleCaseNumbers();
             return true;
         }
 
@@ -737,7 +737,7 @@ namespace EDDiscovery
             if (sc)
                 output = s;
             else
-                output = s.SplitCapsWordUnderscoreTitleCase();
+                output = s.SplitCapsWordUnderscoreTitleCaseNumbers();
 
             return true;
         }
@@ -1086,7 +1086,7 @@ namespace EDDiscovery
                                 if (output.Length > 0)
                                     output += separ;
 
-                                output += (splitcaps) ? entry.SplitCapsWordUnderscoreTitleCase() : entry;
+                                output += (splitcaps) ? entry.SplitCapsWordUnderscoreTitleCaseNumbers() : entry;
                             }
                         }
                     }
@@ -1103,7 +1103,7 @@ namespace EDDiscovery
                                 output += separ;
 
                             if (splitcaps)
-                                output += vars[aname].SplitCapsWordUnderscoreTitleCase();
+                                output += vars[aname].SplitCapsWordUnderscoreTitleCaseNumbers();
                             else
                                 output += vars[aname];
                         }

@@ -32,10 +32,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleRetrieve(JObject evt) : base(evt, JournalTypeEnum.ModuleRetrieve)
         {
-            Slot = JSONHelper.GetStringDef(evt["Slot"]);
+            Slot = JournalEntry.GetBetterSlotName(JSONHelper.GetStringDef(evt["Slot"]));
             Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            RetrievedItem = JSONHelper.GetStringDef(evt["RetrievedItem"]);
+            RetrievedItem = JournalEntry.GetBetterItemName(JSONHelper.GetStringDef(evt["RetrievedItem"]));
             RetrievedItemLocalised = JSONHelper.GetStringDef(evt["RetrievedItem_Localised"]);
             EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]);
             SwapOutItem = JSONHelper.GetStringDef(evt["SwapOutItem"]);

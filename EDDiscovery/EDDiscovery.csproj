@@ -1374,7 +1374,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EliteDangerous\CompanionAPI\" />
     <Folder Include="Maps\" />
     <Folder Include="SQLite\" />
   </ItemGroup>
