@@ -232,6 +232,11 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
             string tip = item.EventSummary + Environment.NewLine + item.EventDescription + Environment.NewLine + item.EventDetailedInfo;
+
+#if DEBUG
+            tip += Environment.NewLine + item.journalEntry.EventDataString;
+#endif
+
             dataGridViewTravel.Rows[rownr].Cells[0].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[1].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[2].ToolTipText = tip;

@@ -286,20 +286,45 @@ public static class ObjectExtensions
         return inquote;
     }
 
+    static public string SplitCapsWordUnderscoreTitleCaseNumbers(this string capslower)     // Slot04 goes to  Slot 4
+    {
+        if (capslower == null || capslower.Length == 0)
+            return "";
+
+        string s = capslower.SplitCapsWordUnderscoreTitleCase();
+
+        s = Regex.Replace(s, @"([A-Za-z]+)([0-9])", "$1 $2");       // Any ascii followed by number, split
+        s = Regex.Replace(s, @"(^0)(0+)", "");     // any 000 at start of line, remove
+        s = Regex.Replace(s, @"( 0)(0+)", " ");     // any space 000 in middle of line, remove
+        s = Regex.Replace(s, @"(0)([0-9]+)", "$2");   // any 0Ns left, remove 0
+
+        return s;
+    }
+
     static public string SplitCapsWordUnderscoreTitleCase(this string capslower)     // one_two goes to One_Two
     {
-        string s = Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"); //Upper(rep)UpperLower = Upper(rep) UpperLower
-        s = Regex.Replace(s, @"([a-z\d])([A-Z])", "$1 $2");     // lowerdecUpper split
-        s = Regex.Replace(s, @"[-\s]", " ");                    // -orwhitespace with spc
+        if (capslower == null || capslower.Length == 0)
+            return "";
+
+        string s = SplitCapsWord(capslower);
+
         // fix word_word to Word Word
         s = Regex.Replace(s, @"([A-Za-z]+)([_])([A-Za-z]+)", m => { return m.Groups[1].Value.FixTitleCase() + " " + m.Groups[3].Value.FixTitleCase(); });
         // fix _word to spc Word
         s = Regex.Replace(s, @"([_])([A-Za-z]+)", m => { return " " + m.Groups[2].Value.FixTitleCase(); });
+
         return s;
     }
 
+    // regexp of below : string s = Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"); //Upper(rep)UpperLower = Upper(rep) UpperLower
+    // s = Regex.Replace(s, @"([a-z\d])([A-Z])", "$1 $2");     // lowerdecUpper split
+    // s = Regex.Replace(s, @"[-\s]", " "); // -orwhitespace with spc
+
     public static string SplitCapsWord(this string capslower)
     {
+        if (capslower == null || capslower.Length == 0)
+            return "";
+
         List<int> positions = new List<int>();
         List<string> words = new List<string>();
 
