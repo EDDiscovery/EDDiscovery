@@ -34,12 +34,15 @@ namespace EDDiscovery
             TLong,      // format as a long 10 E/W degree 20'30. format can be empty or prefix;postfix as above
             TShip,      // ship name
             TMissionName, // mission name
+            TSlotName,  // and slot
             TMaterialCommodity, // see if the stupid fdname can be resolved to something better.  format can be empty or prefix;postfix as above
         };
 
+        delegate string Replacer(string s);
+
         class Converters
         {
-            public Converters(string fn, string nname, Types t , double s, string f, string[] q )
+            public Converters(string fn, string nname, Types t , double s, string f, string[] q , Replacer r = null )
             {
                 fieldnames = fn;
                 newname = nname;
@@ -48,6 +51,7 @@ namespace EDDiscovery
                 format = f;
                 formatsplit = f.Split(';');
                 eventqual = q == null ? null : new HashSet<string>(q);
+                replacer = r;
             }
 
             public string fieldnames;     // match on any part of this (List searched in backward order)
@@ -57,6 +61,7 @@ namespace EDDiscovery
             public string format;    // format info
             public string[] formatsplit;
             public HashSet<string> eventqual; // null for none, else has to match eventqual passed in to match
+            public Replacer replacer;
         }
 
         Dictionary<string, List<Converters>> convertersdict;
@@ -114,7 +119,7 @@ namespace EDDiscovery
 
         public string Convert(string pname, string value , string eventname)
         {
-            string displayname = pname.SplitCapsWord();
+            string displayname = null;          // null means use default pname, if set, override with own name
 
             if (convertersdict.ContainsKey(pname))
             {
@@ -157,6 +162,14 @@ namespace EDDiscovery
 
                         case Types.TMissionName:
                             value = EliteDangerous.JournalEntry.GetBetterMissionName(value);
+                            if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
+                                value = formatsplit[0] + value;
+                            if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
+                                value += formatsplit[1];
+                            break;
+
+                        case Types.TSlotName:
+                            value = EliteDangerous.JournalEntry.GetBetterSlotName(value);
                             if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
                                 value = formatsplit[0] + value;
                             if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
@@ -224,6 +237,9 @@ namespace EDDiscovery
                     break;
                 }
             }
+
+            if ( displayname == null )          // not set by converter, use own name split
+                displayname = pname.SplitCapsWord();
 
             //System.Diagnostics.Trace.WriteLine(string.Format("{0} {1} ", displayname , value ));
 
@@ -310,9 +326,9 @@ namespace EDDiscovery
 
                 return sb.ToString();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "Report problem to EDDiscovery team, did not print properly";
+                return "Report problem to EDDiscovery team, did not print properly: " + ex.Message + ex.StackTrace;
             }
         }
 
