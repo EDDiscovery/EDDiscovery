@@ -32,13 +32,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {
-            Slot = JournalEntry.GetBetterSlotName(JSONHelper.GetStringDef(evt["Slot"]));
-            BuyItem = JournalEntry.GetBetterItemName(JSONHelper.GetStringDef(evt["BuyItem"]));
+            Slot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(evt["Slot"]));
+            BuyItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["BuyItem"]));
             BuyItemLocalised = JSONHelper.GetStringDef(evt["BuyItem_Localised"]);
             BuyPrice = JSONHelper.GetLong(evt["BuyPrice"]);
-            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
+            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            SellItem = JournalEntry.GetBetterItemName(JSONHelper.GetStringDef(evt["SellItem"]));
+            SellItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["SellItem"]));
             SellItemLocalised = JSONHelper.GetStringDef(evt["SellItem_Localised"]);
             SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
 

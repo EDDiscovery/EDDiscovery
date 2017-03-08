@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionAbandoned(JObject evt ) : base(evt, JournalTypeEnum.MissionAbandoned)
         {
-            Name = JournalEntry.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
+            Name = JournalFieldNaming.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
             MissionId = JSONHelper.GetInt(evt["MissionID"]);
         }
         public string Name { get; set; }

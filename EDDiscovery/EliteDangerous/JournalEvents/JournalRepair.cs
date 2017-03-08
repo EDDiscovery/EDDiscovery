@@ -27,11 +27,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
-            Item = JournalEntry.GetBetterItemName(JSONHelper.GetStringDef(evt["Item"]));
+            Item = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["Item"]));
+            ItemLocalised = JSONHelper.GetStringDef(evt["Item_Localised"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
-
         }
+
         public string Item { get; set; }
+        public string ItemLocalised { get; set; }
         public long Cost { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.repair; } }

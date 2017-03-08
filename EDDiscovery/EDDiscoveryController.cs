@@ -344,7 +344,7 @@ namespace EDDiscovery
 
             if (EDDConfig.Options.ReadJournal != null)
             {
-                EDJournalClass.ReadCmdLineJournal(EDDConfig.Options.ReadJournal);
+                DebugCode.ReadCmdLineJournal(EDDConfig.Options.ReadJournal);
             }
 
             string logpath = "";

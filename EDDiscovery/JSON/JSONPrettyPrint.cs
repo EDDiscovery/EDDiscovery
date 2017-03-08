@@ -23,26 +23,20 @@ namespace EDDiscovery
 {
     public class JSONConverters
     {
-        public enum Types
+        private enum Types
         {
             TScale,     // treat as a double, scale, then print using the string format as per string.Format.  "'text'0.0'more text'"
             TBool,      // Replace a bool/1/0 with true/false value in format is "falsetext;truetext";
             TState,     // if value is empty, use this name in format
             TPrePost,   // prepostfix, format is "Prefix;postfix"   ;postfix can be not given.
             TIndex,     // prepostindex "Prefix;postfix;index offset;value;value;value etc" 
-            TLat,       // format as a lat 10 N/S degree 20'30. format can be empty or prefix;postfix as above
-            TLong,      // format as a long 10 E/W degree 20'30. format can be empty or prefix;postfix as above
-            TShip,      // ship name
-            TMissionName, // mission name
-            TSlotName,  // and slot
-            TMaterialCommodity, // see if the stupid fdname can be resolved to something better.  format can be empty or prefix;postfix as above
         };
 
-        delegate string Replacer(string s);
+        public delegate string Replacer(string s);
 
         class Converters
         {
-            public Converters(string fn, string nname, Types t , double s, string f, string[] q , Replacer r = null )
+            public Converters(string fn, string nname, Types t , double s, string f, string[] q , Replacer r )
             {
                 fieldnames = fn;
                 newname = nname;
@@ -89,32 +83,27 @@ namespace EDDiscovery
 
         public void AddScale(string name, double s, string f = "0.0", string nname = null, string eventq = null)
         {
-            Add(new Converters(name, nname, Types.TScale, s, f, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TScale, s, f, (eventq != null) ? eventq.Split(';') : null , null));
         }
 
         public void AddBool(string name, string falsevalue , string truevalue , string nname = null, string eventq = null)    // converts a true/false bool into these string, with an optional name removal
         {
-            Add(new Converters(name, nname, Types.TBool, 0, falsevalue + ";" + truevalue, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TBool, 0, falsevalue + ";" + truevalue, (eventq != null) ? eventq.Split(';') : null, null));
         }
 
         public void AddState(string name, string emptyvalue, string nname = null, string eventq = null)    // adds an empty state and allows the name to be removed
         {
-            Add(new Converters(name, nname, Types.TState, 0, emptyvalue, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TState, 0, emptyvalue, (eventq != null) ? eventq.Split(';') : null , null));
         }
         
-        public void AddPrePostfix(string name, string prepostfix, string nname = null, string eventq = null)    // adds an postfix string to the value and allows the name to be removed
+        public void AddPrePostfix(string name, string prepostfix, string nname = null, string eventq = null, Replacer replacer = null)    // adds an postfix string to the value and allows the name to be removed
         {
-            Add(new Converters(name, nname, Types.TPrePost, 0, prepostfix, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TPrePost, 0, prepostfix, (eventq != null) ? eventq.Split(';') : null , replacer));
         }
         
         public void AddIndex(string name, string prepostindex, string nname = null, string eventq = null)    // indexer
         {
-            Add(new Converters(name, nname, Types.TIndex, 0, prepostindex, (eventq != null) ? eventq.Split(';') : null));
-        }
-
-        public void AddSpecial(string name, Types t, string format, string nname = null, string eventq = null)    // indexer
-        {
-            Add(new Converters(name, nname, t, 0, format, (eventq != null) ? eventq.Split(';') : null));
+            Add(new Converters(name, nname, Types.TIndex, 0, prepostindex, (eventq != null) ? eventq.Split(';') : null , null));
         }
 
         public string Convert(string pname, string value , string eventname)
@@ -152,31 +141,10 @@ namespace EDDiscovery
                                 value = formatsplit[0];
                             break;
 
-                        case Types.TShip:
-                            value = EliteDangerous.JournalEntry.GetBetterShipName(value);
-                            if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
-                                value = formatsplit[0] + value;
-                            if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
-                                value += formatsplit[1];
-                            break;
-
-                        case Types.TMissionName:
-                            value = EliteDangerous.JournalEntry.GetBetterMissionName(value);
-                            if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
-                                value = formatsplit[0] + value;
-                            if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
-                                value += formatsplit[1];
-                            break;
-
-                        case Types.TSlotName:
-                            value = EliteDangerous.JournalEntry.GetBetterSlotName(value);
-                            if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
-                                value = formatsplit[0] + value;
-                            if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
-                                value += formatsplit[1];
-                            break;
-
                         case Types.TPrePost:
+                            if (cv.replacer != null)                                            // supports replacer.. call if required.
+                                value = cv.replacer(value);
+
                             if (formatsplit.Length >= 1 && !value.Contains(formatsplit[0]))       // don't repeat
                                 value = formatsplit[0] + value;
                             if (formatsplit.Length >= 2 && !value.Contains(formatsplit[1]))       // don't repeat
@@ -192,33 +160,6 @@ namespace EDDiscovery
                                     value = formatsplit[0] + formatsplit[ix - offset + 3] + formatsplit[1];
                                 }
                             }
-                            break;
-
-                        case Types.TLat:
-                        case Types.TLong:
-                            double lv;
-                            if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lv))        // if it does parse, we can convert it
-                            {
-                                long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
-
-                                string marker = (arcsec < 0) ? "S" : "N";       // presume lat
-                                if (cv.converttype == Types.TLong )
-                                    marker = (arcsec < 0) ? "W" : "E";       // presume lat
-                                arcsec = Math.Abs(arcsec);
-                                value = string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60 );
-                                if (formatsplit.Length >= 2)
-                                    value = formatsplit[0] + value + formatsplit[1];
-                            }
-                            break;
-
-                        case Types.TMaterialCommodity:
-                            EDDiscovery2.DB.MaterialCommodity mc = EDDiscovery2.DB.MaterialCommodity.GetCachedMaterial(value);
-                            if (mc != null)
-                                value = mc.name;
-
-                            if (formatsplit.Length >= 2)
-                                value = formatsplit[0] + value + formatsplit[1];
-
                             break;
 
                         default:
@@ -261,8 +202,8 @@ namespace EDDiscovery
         public JSONPrettyPrint( JSONConverters c , string removeit , string duplist , string eventp)
         {
             jconvertvalue = c;
-            removeitems = removeit.Split(';');
-            duplicatepostfixremove = duplist.Split(';');
+            removeitems = removeit?.Split(';');
+            duplicatepostfixremove = duplist?.Split(';');
             eventtype = eventp;
         }
 
