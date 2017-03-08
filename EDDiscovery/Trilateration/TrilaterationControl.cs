@@ -464,7 +464,7 @@ namespace EDDiscovery
                     {
                         this.BeginInvoke(new MethodInvoker(() =>
                         {
-                            MessageBox.Show("Please enter commander name before submitting the system!");
+                            EDDiscovery.Forms.MessageBoxTheme.Show("Please enter commander name before submitting the system!");
                             UnfreezeTrilaterationUI();
                         }));
                         return;

@@ -56,7 +56,6 @@ namespace EDDiscovery.Forms
 
         List<Group> groups = new List<Group>();
         VersioningManager mgr;
-        EDDiscovery2.EDDTheme theme;
 
         int panelheightmargin = 1;
         int labelheightmargin = 6;
@@ -74,9 +73,9 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-        public void Init(EDDiscovery2.EDDTheme th)
+        public void Init()
         {
-            theme = th;
+            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
             font = new Font(theme.FontName, 10);
             bool winborder = theme.ApplyToForm(this, font);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
@@ -284,7 +283,9 @@ namespace EDDiscovery.Forms
                 panelVScroll.Controls.Add(g.panel);
             }
 
-            theme.ApplyToControls(panelVScroll, font);
+            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            if ( theme != null )
+                theme.ApplyToControls(panelVScroll, font);
 
             panelVScroll.ResumeLayout();
         }

@@ -46,7 +46,7 @@ namespace EDDiscovery.Forms
                     }
                     else if (LinkSystem.HasCoordinate)
                     {
-                        return $"{LinkSystem.name} ({LinkSystem.x},{LinkSystem.y},{LinkSystem.z}) #{LinkSystem.id_edsm}";
+                        return $"{LinkSystem.name} ({LinkSystem.x:0.00},{LinkSystem.y:0.00},{LinkSystem.z:0.00}) #{LinkSystem.id_edsm}";
                     }
                     else
                     {
@@ -77,9 +77,9 @@ namespace EDDiscovery.Forms
 
             this.tbLogSystemName.Text = refsys.name;
             this.tbVisitedDate.Text = visited == null ? "-" : visited.ToString();
-            this.tbLogCoordX.Text = refsys.HasCoordinate ? refsys.x.ToString("0.000") : "?";
-            this.tbLogCoordY.Text = refsys.HasCoordinate ? refsys.y.ToString("0.000") : "?";
-            this.tbLogCoordZ.Text = refsys.HasCoordinate ? refsys.z.ToString("0.000") : "?";
+            this.tbLogCoordX.Text = refsys.HasCoordinate ? refsys.x.ToString("0.00") : "?";
+            this.tbLogCoordY.Text = refsys.HasCoordinate ? refsys.y.ToString("0.00") : "?";
+            this.tbLogCoordZ.Text = refsys.HasCoordinate ? refsys.z.ToString("0.00") : "?";
             this.tbLogCoordX.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
             this.tbLogCoordY.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
             this.tbLogCoordZ.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
@@ -89,6 +89,9 @@ namespace EDDiscovery.Forms
             tbManualSystemName.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
             tbManualSystemName.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+
+            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            theme.ApplyToForm(this);
         }
 
         protected void UpdateLinkedSystemList(ISystem focus = null, List<ISystem> othersystems = null)
@@ -127,9 +130,9 @@ namespace EDDiscovery.Forms
                 }
             }
 
-            this.cbSystemLink.DataSource = _systemLinkList;
             this.cbSystemLink.DisplayMember = "DisplayName";
             this.cbSystemLink.ValueMember = "Id";
+            this.cbSystemLink.DataSource = _systemLinkList;
             this.cbSystemLink.Refresh();
 
             if (focus != null && _systemLinks.ContainsKey(focus.id))

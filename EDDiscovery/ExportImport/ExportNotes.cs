@@ -67,7 +67,7 @@ namespace EDDiscovery.Export
             }
             catch (IOException )
             {
-                MessageBox.Show(String.Format("Is file {0} open?", filename), TITLE,
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE,
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }

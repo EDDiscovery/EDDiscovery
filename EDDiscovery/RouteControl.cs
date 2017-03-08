@@ -109,7 +109,7 @@ namespace EDDiscovery
 
             if (plotter.possiblejumps > 100)
             {
-                DialogResult res = MessageBox.Show(_discoveryForm, "This will result in a large number (" + plotter.possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
+                DialogResult res = EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "This will result in a large number (" + plotter.possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
                 {
                     ToggleButtons(true);
@@ -542,7 +542,7 @@ namespace EDDiscovery
             }
             else
             {
-                MessageBox.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
+                EDDiscovery.Forms.MessageBoxTheme.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
                 return;
             }
         }

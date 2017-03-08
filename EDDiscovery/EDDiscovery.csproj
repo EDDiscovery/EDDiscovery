@@ -528,12 +528,6 @@
     <Compile Include="Conditions\ConditionFilterForm.Designer.cs">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TextBoxEntry.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TextBoxEntry.Designer.cs">
-      <DependentUpon>TextBoxEntry.cs</DependentUpon>
-    </Compile>
     <Compile Include="JSON\JSONPrettyPrint.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
@@ -749,10 +743,10 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SystemViewForm.cs">
+    <Compile Include="Forms\Obsolete\SystemViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SystemViewForm.Designer.cs">
+    <Compile Include="Forms\Obsolete\SystemViewForm.Designer.cs">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools.cs" />
@@ -931,9 +925,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TextBoxEntry.resx">
-      <DependentUpon>TextBoxEntry.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
@@ -1318,7 +1309,7 @@
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SystemViewForm.resx">
+    <EmbeddedResource Include="Forms\Obsolete\SystemViewForm.resx">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SavedRouteExpeditionControl.resx">

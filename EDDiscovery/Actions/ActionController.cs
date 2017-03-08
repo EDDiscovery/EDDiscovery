@@ -114,7 +114,7 @@ namespace EDDiscovery.Actions
         {
             using (DownloadManagerForm dmf = new DownloadManagerForm())
             {
-                dmf.Init(discoveryform.theme);
+                dmf.Init();
                 dmf.ShowDialog(discoveryform);
                 if (dmf.changelist.Count > 0)
                 {

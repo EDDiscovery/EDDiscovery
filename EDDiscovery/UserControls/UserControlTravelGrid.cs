@@ -648,9 +648,9 @@ namespace EDDiscovery.UserControls
 
             EDDiscovery2.MoveToCommander movefrm = new EDDiscovery2.MoveToCommander();
 
-            movefrm.Init(listsyspos.Count > 1);
+            movefrm.Init();
 
-            DialogResult red = movefrm.ShowDialog();
+            DialogResult red = movefrm.ShowDialog(this);
             if (red == DialogResult.OK)
             {
                 foreach (HistoryEntry sp in listsyspos)
@@ -744,7 +744,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                MessageBox.Show("System could not be found - has not been synched or EDSM is unavailable");
+                EDDiscovery.Forms.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }
@@ -799,7 +799,7 @@ namespace EDDiscovery.UserControls
 
             if (journalent == null)
             {
-                MessageBox.Show("Could not find Location or FSDJump entry associated with selected journal entry");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Could not find Location or FSDJump entry associated with selected journal entry");
                 return;
             }
 
@@ -830,7 +830,7 @@ namespace EDDiscovery.UserControls
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclicksystem.Journalid);
                 discoveryform.RefreshHistoryAsync();
@@ -857,7 +857,7 @@ namespace EDDiscovery.UserControls
             {
                 using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
                 {
-                    if (noteform.ShowDialog() == DialogResult.OK)
+                    if (noteform.ShowDialog(this) == DialogResult.OK)
                     {
                         discoveryform.StoreSystemNote(rightclicksystem, noteform.NoteText, true);
                     }

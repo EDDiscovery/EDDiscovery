@@ -55,7 +55,7 @@ namespace EDDiscovery2
             if (AppConfig.Network.VerboseLogging != 1)
             {
                 var setLog =
-                    MessageBox.Show(
+                    EDDiscovery.Forms.MessageBoxTheme.Show(
                         "Verbose logging isn't set in your Elite Dangerous AppConfig.xml, so I can't read system names. Would you like me to set it for you?",
                         "Set verbose logging?", MessageBoxButtons.YesNo);
 
@@ -88,7 +88,7 @@ namespace EDDiscovery2
 
                     doc.Save(appconfig);
 
-                    MessageBox.Show(
+                    EDDiscovery.Forms.MessageBoxTheme.Show(
                         "AppConfig.xml updated.  You'll need to restart Elite Dangerous if it's already running.");
                 }
 
