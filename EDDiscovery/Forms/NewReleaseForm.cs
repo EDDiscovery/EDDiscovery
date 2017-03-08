@@ -33,6 +33,8 @@ namespace EDDiscovery.Forms
         public NewReleaseForm()
         {
             InitializeComponent();
+            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            theme.ApplyToForm(this);
         }
 
 
@@ -83,6 +85,11 @@ namespace EDDiscovery.Forms
         {
             Process.Start(release.MsiInstallerLink);
 
+        }
+
+        private void buttonExtCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

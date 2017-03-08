@@ -616,7 +616,7 @@ namespace EDDiscovery
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(_discoveryForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (DeleteIsPermanent)
                 {
@@ -657,7 +657,7 @@ namespace EDDiscovery
             }
             catch (IOException)
             {
-                MessageBox.Show(String.Format("There has been an error openning file {0}", ofd.FileName), "Import file",
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("There has been an error openning file {0}", ofd.FileName), "Import file",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -685,7 +685,7 @@ namespace EDDiscovery
             }
             if (systems.Count == 0)
             {
-                MessageBox.Show(_discoveryForm,
+                EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm,
                 String.Format("There are no known system names in the file import", countunknown),
                 "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -710,7 +710,7 @@ namespace EDDiscovery
                 if (dataGridViewExplore.Rows.Count == 0
                     || (dataGridViewExplore.Rows.Count == 1 && dataGridViewExplore[0, 0].Value == null))
                 {
-                    MessageBox.Show(_discoveryForm,
+                    EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm,
                     "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
@@ -742,11 +742,11 @@ namespace EDDiscovery
                             writer.WriteLine(sysname);
                     }
                 }
-                MessageBox.Show(String.Format("Export complete {0}", filename), "Export route");
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Export complete {0}", filename), "Export route");
             }
             catch (IOException)
             {
-                MessageBox.Show(String.Format("Is file {0} open?", filename), "Export route",
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export route",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -778,7 +778,7 @@ namespace EDDiscovery
             SystemClass sc = SystemClass.GetSystem((string)obj);
             if (sc == null)
             {
-                MessageBox.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                EDDiscovery.Forms.MessageBoxTheme.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
                 RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
@@ -797,12 +797,12 @@ namespace EDDiscovery
                 return;
             if (String.IsNullOrWhiteSpace(systemName))
             {
-                MessageBox.Show("System name not set");
+                EDDiscovery.Forms.MessageBoxTheme.Show("System name not set");
                 return;
             }
 
             if (radius < 0 || radius > 1000.0) { 
-                MessageBox.Show("Radius should be a number 0.0 and 1000.0");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Radius should be a number 0.0 and 1000.0");
                 return;
             }
 
@@ -835,7 +835,7 @@ namespace EDDiscovery
             }
             if (systems.Count == 0)
             {
-                MessageBox.Show(_discoveryForm,
+                EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm,
                 String.Format("There are no known system names in the import", countunknown),
                 "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;

@@ -29,6 +29,9 @@ namespace EDDiscovery.Forms
             this.labelSystem.Text = he.System.name;
             this.labelSummary.Text = he.EventSummary;
             this.labelDetails.Text = he.EventDescription;
+
+            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            theme.ApplyToForm(this);
         }
 
         private void buttonSave_Click(object sender, EventArgs e)

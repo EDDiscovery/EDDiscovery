@@ -661,7 +661,7 @@ namespace EDDiscovery
 
             if (!edsm.IsApiKeySet)
             {
-                MessageBox.Show("Please ensure a commander is selected and it has a EDSM API key set");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
                 return;
             }
 
@@ -718,7 +718,7 @@ namespace EDDiscovery
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         Process.Start(url);
                     else
-                        MessageBox.Show("System unknown to EDSM");
+                        EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
                 }
             }
         }

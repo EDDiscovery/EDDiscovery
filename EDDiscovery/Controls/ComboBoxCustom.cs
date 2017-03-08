@@ -274,6 +274,7 @@ namespace ExtendedControls
         public override Font Font { get { return base.Font; } set { base.Font = value; _cbsystem.Font = value; } }
         public override string Text { get { return base.Text; } set { base.Text = value; _cbsystem.Text = value; } }
 
+        // BEWARE SET value/display before DATA SOURCE
         public object DataSource { get { return _cbsystem.DataSource; } set { _cbsystem.DataSource = value; } }
         public string ValueMember { get { return _cbsystem.ValueMember; } set { _cbsystem.ValueMember = value; } }
         public string DisplayMember { get { return _cbsystem.DisplayMember; } set { _cbsystem.DisplayMember = value; } }

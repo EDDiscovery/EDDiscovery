@@ -235,7 +235,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message + "\n" + "Trace: " + ex.StackTrace);
+                MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message + "\n" + "Trace: " + ex.StackTrace);
             }
         }
 
@@ -593,13 +593,13 @@ namespace EDDiscovery
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
-                MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
-                MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
@@ -678,7 +678,7 @@ namespace EDDiscovery
 
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
+            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
                                 " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
                                 "This will not change your history, but when you next refresh, it will try and reassign EDSM systems to " +
                                 "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
@@ -749,7 +749,7 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 EliteDangerous.JournalEntry.ResetCommanderID(-1, EDDConfig.CurrentCommander.Nr);
                 Controller.RefreshHistoryAsync();
@@ -764,7 +764,7 @@ namespace EDDiscovery
 
         private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (CheckForNewinstaller())
+            if (CheckForNewinstaller() )
             {
                 if (newRelease != null)
                 {
@@ -776,13 +776,13 @@ namespace EDDiscovery
             }
             else
             {
-                MessageBox.Show("No new release found", "EDDiscovery", MessageBoxButtons.OK);
+                EDDiscovery.Forms.MessageBoxTheme.Show(this,"No new release found", "EDDiscovery", MessageBoxButtons.OK);
             }
         }
 
         private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 int n = EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDDConfig.CurrentCommander.Nr);
                 Controller.LogLine("Removed " + n + " FSD entries");

@@ -496,7 +496,7 @@ namespace EDDiscovery.UserControls
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        MessageBox.Show("System " + he.System.name + " unknown to EDSM");
+                        EDDiscovery.Forms.MessageBoxTheme.Show("System " + he.System.name + " unknown to EDSM");
                 }
             }
         }

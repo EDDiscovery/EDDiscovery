@@ -34,9 +34,17 @@ namespace EDDiscovery2
         }
 
 
-        public bool Init(bool multisystems)
+        public bool Init()
         {
-            //checkBoxAllInNetlog.Visible = multisystems;
+            List<EDCommander> commanders = EDDiscovery.EDDiscoveryForm.EDDConfig.ListOfCommanders;
+
+            comboBoxCommanders.DisplayMember = "Name";
+            comboBoxCommanders.ValueMember = "Nr";
+            comboBoxCommanders.DataSource = commanders;
+
+            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            theme.ApplyToForm(this);
+
             return true;
         }
 
@@ -46,18 +54,15 @@ namespace EDDiscovery2
             Close();
         }
 
-        private void MoveToCommander_Load(object sender, EventArgs e)
-        {
-            List<EDCommander>  commanders = EDDiscovery.EDDiscoveryForm.EDDConfig.ListOfCommanders;
-
-            comboBoxCommanders.DataSource = commanders;
-            comboBoxCommanders.DisplayMember = "Name";
-            comboBoxCommanders.ValueMember = "Nr";
-        }
-
         private void comboBoxCommanders_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectedCommander = (EDCommander)comboBoxCommanders.SelectedItem;
+        }
+
+        private void buttonExtCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

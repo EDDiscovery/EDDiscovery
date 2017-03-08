@@ -90,7 +90,7 @@ namespace EDDiscovery.DB
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("UpgradeSystemsDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    EDDiscovery.Forms.MessageBoxTheme.Show("UpgradeSystemsDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return false;
                 }
             }

@@ -322,7 +322,7 @@ namespace EDDiscovery2.ImageHandler
 
             if (!StartWatcher())
             {
-                MessageBox.Show("Folder specified does not exist, image conversion is now off");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Folder specified does not exist, image conversion is now off");
             }
         }
 
