@@ -30,13 +30,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleSwap(JObject evt ) : base(evt, JournalTypeEnum.ModuleSwap)
         {
-            FromSlot = JSONHelper.GetStringDef(evt["FromSlot"]);
-            ToSlot = JSONHelper.GetStringDef(evt["ToSlot"]);
-            FromItem = JSONHelper.GetStringDef(evt["FromItem"]);
+            FromSlot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(evt["FromSlot"]));
+            ToSlot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(evt["ToSlot"]));
+            FromItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["FromItem"]));
             FromItemLocalised = JSONHelper.GetStringDef(evt["FromItem_Localised"]);
-            ToItem = JSONHelper.GetStringDef(evt["ToItem"]);
+            ToItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["ToItem"]));
             ToItemLocalised = JSONHelper.GetStringDef(evt["ToItem_Localised"]);
-            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
+            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
 
         }

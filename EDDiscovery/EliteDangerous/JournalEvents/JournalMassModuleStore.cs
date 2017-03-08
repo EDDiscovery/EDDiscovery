@@ -32,10 +32,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)
         {
-            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
+            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             ModuleItems = evt["Items"]?.ToObject<ModuleItem[]>();
+
+            if ( ModuleItems != null )
+            {
+                foreach (ModuleItem i in ModuleItems)
+                {
+                    i.Slot = JournalFieldNaming.GetBetterSlotName(i.Slot);
+                    i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
+                }
+            }
         }
+
         public string Ship { get; set; }
         public int ShipId { get; set; }
 
@@ -47,7 +57,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulestore; } }
-
     }
 
 
@@ -55,7 +64,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public string Slot;
         public string Name;
-        public double EngineerModifications;
+        public string EngineerModifications;
     }
 
 }

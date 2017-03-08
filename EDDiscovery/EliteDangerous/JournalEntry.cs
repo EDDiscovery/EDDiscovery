@@ -362,7 +362,7 @@ namespace EDDiscovery.EliteDangerous
             if (jc == null)
             {
                 if (jsonconvcache == null)
-                    jsonconvcache = StandardConverters();
+                    jsonconvcache = JournalFieldNaming.StandardConverters();
 
                 jc = jsonconvcache;
             }
@@ -1036,154 +1036,7 @@ namespace EDDiscovery.EliteDangerous
             return true;
         }
 
-        public static JSONConverters StandardConverters()
-        {
-            JSONConverters jc = new JSONConverters();
-
-            {           // unique field names across multiple entries.  First up so later ones can override if required
-
-                jc.AddScale("MassEM", 1.0, "0.0000'em'", "Mass");
-                jc.AddScale("MassMT", 1.0, "0.0'mt'", "Mass");
-                jc.AddScale("SurfacePressure", 1.0, "0.0'p'");
-                jc.AddScale("Radius", 1.0 / 1000, "0.0'km'");
-                jc.AddScale("InnerRad", 1.0 / 1000, "0.0'km'", "Inner Radius");
-                jc.AddScale("OuterRad", 1.0 / 1000, "0.0'km'", "Outer Radius");
-                jc.AddScale("SemiMajorAxis", 1.0 / 1000, "0.0'km'", "Semi Major Axis");
-                jc.AddScale("OrbitalPeriod;RotationPeriod", 1.0 / 86400, "0.0' days orbit'", "");
-                jc.AddScale("SurfaceGravity", 1.0 / 9.8, "0.0'g'");
-                jc.AddScale("SurfaceTemperature", 1.0, "0.0'K'");
-                jc.AddScale("Scooped", 1.0, "'Scooped '0.0't'", "", "FuelScoop");
-                jc.AddScale("Total", 1.0, "'Fuel Level '0.0't'", "", "FuelScoop");
-                jc.AddScale("FuelUsed", 1.0, "'Fuel Used '0.0't'", "");
-                jc.AddScale("FuelLevel", 1.0, "'Fuel Level Left '0.0't'", "");
-                jc.AddScale("Amount", 1.0, "'Fuel Bought '0.0't'", "", "RefuelAll");
-                jc.AddScale("BoostValue", 1.0, "0.0' boost'", "", "JetConeBoost");
-                jc.AddScale("StarPos", 1.0, "0.0", "");          // any entry StarPos loses it name (inside arrays). StarPos as an array name gets printed sep.
-
-                jc.AddBool("TidalLock", "Not Tidally Locked", "Tidally Locked", ""); // remove name
-                jc.AddBool("Landable", "Not Landable", "Landable", ""); // remove name
-                jc.AddBool("ShieldsUp", "Shields Down", "Shields Up Captain", ""); // remove name
-                jc.AddState("TerraformState", "Not Terrraformable", "");    // remove name
-                jc.AddState("Atmosphere", "No Atmosphere", "");
-                jc.AddState("Volcanism", "No Volcanism", "");
-                jc.AddPrePostfix("StationType", "; Type", "");
-                jc.AddPrePostfix("StationName", "; Station", "");
-                jc.AddPrePostfix("DestinationSystem", "; Destination Star System", "");
-                jc.AddPrePostfix("DestinationStation", "; Destination Station", "");
-                jc.AddPrePostfix("StarSystem;System", "; Star System", "");
-                jc.AddPrePostfix("Allegiance", "; Allegiance", "");
-                jc.AddPrePostfix("Security", "; Security", "");
-                jc.AddPrePostfix("Faction", "; Faction", "");
-                jc.AddPrePostfix("Government", "Government Type ", "");
-                jc.AddPrePostfix("Economy", "Economy Type ", "");
-                jc.AddBool("Docked", "Not Docked", "Docked", "");   // remove name
-                jc.AddBool("PlayerControlled", "NPC Controlled", "Player Controlled", ""); // remove name
-
-                jc.AddPrePostfix("Body", "At ", "");
-
-                jc.AddPrePostfix("To", "To ", "", "VehicleSwitch");
-                jc.AddPrePostfix("Name", "", "", "CrewAssign");
-
-                jc.AddPrePostfix("Role", "; role", "", "CrewAssign");
-                jc.AddPrePostfix("Cost;ShipPrice;BaseValue", "; credits", "");
-                jc.AddPrePostfix("Bonus", "; credits bonus", "");
-                jc.AddPrePostfix("Amount", "; credits", "", "PayLegacyFines");
-                jc.AddPrePostfix("BuyPrice", "Bought for ; credits", "");
-                jc.AddPrePostfix("SellPrice", "Sold for ; credits", "");
-                jc.AddPrePostfix("TotalCost", "Total cost ; credits", "");
-
-                jc.AddPrePostfix("LandingPad", "On pad ", "");
-
-                jc.AddPrePostfix("BuyItem", "; bought", "");
-                jc.AddPrePostfix("SellItem", "; sold", "");
-
-                jc.AddPrePostfix("Credits", "; credits", "", "LoadGame");
-
-                jc.AddSpecial("Ship;ShipType", JSONConverters.Types.TShip, "Ship ;", "");
-                jc.AddSpecial("StoreOldShip;SellOldShip", JSONConverters.Types.TShip, "; stored", "");
-
-                jc.AddScale("Health", 100.0, "'Health' 0.0'%'", "");
-
-                jc.AddSpecial("Latitude", JSONConverters.Types.TLat, "");
-                jc.AddSpecial("Longitude", JSONConverters.Types.TLong, "");
-
-                jc.AddPrePostfix("Reward", "; credits", "");
-            }
-
-            {           //missions
-                jc.AddSpecial("Name", JSONConverters.Types.TMissionName, "", "", "MissionAccepted;MissionAbandoned;MissionCompleted;MissionFailed");
-            }
-
-            {           // transfers
-                string transfer = JL(new[] { JournalTypeEnum.ShipyardTransfer });
-                jc.AddScale("Distance", 1.0 / 299792458.0 / 365 / 24 / 60 / 60, "'Distance' 0.0'ly'", "", transfer);
-                jc.AddPrePostfix("TransferPrice", "; credits", "", transfer);
-            }
-
-            {           // misc
-                jc.AddPrePostfix("Name", "; settlement", "", "ApproachSettlement");
-                jc.AddPrePostfix("Item", ";", "", "Repair");
-            }
-
-            {           // scans
-                string scan = JL(new[] { JournalTypeEnum.Scan });
-                jc.AddPrePostfix("BodyName", "Scan ", "", scan);
-                jc.AddScale("DistanceFromArrivalLS", 1.0, "0.0' ls from arrival point'", "", scan);
-                jc.AddPrePostfix("StarType", "; type star", "", scan);
-                jc.AddScale("StellarMass", 1.0, "0.0' stellar masses'", "", scan);
-                jc.AddScale("Radius", 1.0 / 1000.0, "0.0' km radius'", "", scan);
-                jc.AddScale("AbsoluteMagnitude", 1.0, "0.0' absolute magnitude'", "", scan);
-                jc.AddScale("OrbitalPeriod", 1.0 / 86400, "0.0' days orbit'", "", scan);
-                jc.AddScale("RotationPeriod", 1.0 / 86400, "0.0' days rotation'", "", scan);
-                jc.AddPrePostfix("PlanetClass", "; planet class", "", scan);
-
-            }
-
-            {           // engineering
-                string engineer = JL(new[] { JournalTypeEnum.EngineerProgress, JournalTypeEnum.EngineerApply, JournalTypeEnum.EngineerCraft });
-                jc.AddPrePostfix("Engineer", "From ", "", engineer);
-                jc.AddPrePostfix("Progress", "", "", engineer);
-            }
-
-            {           // bounties
-            }
-
-            {
-                string rank = JL(new[] { JournalTypeEnum.Rank });
-                jc.AddIndex("Combat", "; combat;0;Harmless;Mostly Harmless;Novice;Competent;Expert;Master;Dangerous;Deadly;Elite", "", rank);
-                jc.AddIndex("Trade", "; trader;0;Penniless;Mostly Penniless;Peddler;Dealer;Merchant;Broker;Entrepreneur;Tycoon;Elite", "", rank);
-                jc.AddIndex("Explore", "; explorer;0;Aimless;Mostly Aimless;Scout;Surveyor;Trailblazer;Pathfinder;Ranger;Pioneer;Elite", "", rank);
-                jc.AddIndex("Empire", "; Empire;0;None;Outsider;Serf;Master;Squire;Knight;Lord;Baron;Viscount;Count;Earl;Marquis;Duke;Prince;King", "", rank);
-                jc.AddIndex("Federation", "; Federation;0;None;Recruit;Cadet;Midshipman;Petty Officer;Chief Pretty Officer;Warren Officer;Ensign;Lieutenant;Lieutenant Commander;Post Commander;Post Captain;Rear Admiral;Vice Admiral;Admiral", "", rank);
-            }
-
-
-            {       // places where commodities occur
-                string commodities = JL(new[] { JournalTypeEnum.MarketBuy, JournalTypeEnum.MarketSell, JournalTypeEnum.MiningRefined });
-                jc.AddSpecial("Type", JSONConverters.Types.TMaterialCommodity, ";", "", commodities);
-                jc.AddPrePostfix("Count", ";", "", commodities);
-            }
-
-            {
-                string materials = JL(new[] { JournalTypeEnum.MaterialCollected, JournalTypeEnum.MaterialDiscarded, JournalTypeEnum.MaterialDiscovered });
-                jc.AddSpecial("Name", JSONConverters.Types.TMaterialCommodity, ";", "", materials);
-                jc.AddPrePostfix("Category", ";", "", materials);
-                jc.AddPrePostfix("Count", "; items", "", materials);
-            }
-
-            return jc;
-        }
-
-        static string JL(JournalTypeEnum[] ar)
-        {
-            string s = "";
-            foreach (JournalTypeEnum a in ar)
-                s += ((s.Length > 0) ? ";" : "") + a.ToString();
-
-            return s;
-        }
-
-        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
+        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null )
         {
             List<string> ret = new List<string>();
 
@@ -1215,57 +1068,6 @@ namespace EDDiscovery.EliteDangerous
             return ret;
         }
 
-        private static Dictionary<string, string> shipnames = new Dictionary<string, string>()
-        {
-                { "adder" ,                     "Adder"},
-                { "anaconda",                   "Anaconda" },
-                { "asp",                        "Asp Explorer" },
-                { "asp_scout",                  "Asp Scout" },
-                { "belugaliner",                "Beluga Liner" },
-                { "cobramkiii",                 "Cobra Mk. III" },
-                { "cobramkiv",                  "Cobra Mk. IV" },
-                { "cutter",                     "Imperial Cutter" },
-                { "diamondback",                "Diamondback Scout" },
-                { "diamondbackxl",              "Diamondback Explorer" },
-                { "eagle",                      "Eagle" },
-                { "empire_courier",             "Imperial Courier" },
-                { "empire_eagle",               "Imperial Eagle" },
-                { "empire_fighter",             "Imperial Fighter" },
-                { "empire_trader",              "Imperial Clipper" },
-                { "federation_corvette",        "Federal Corvette" },
-                { "federation_dropship",        "Federal Dropship" },
-                { "federation_dropship_mkii",   "Federal Assault Ship" },
-                { "federation_gunship",         "Federal Gunship" },
-                { "federation_fighter",         "F63 Condor" },
-                { "ferdelance",                 "Fer-de-Lance" },
-                { "hauler",                     "Hauler" },
-                { "independant_trader",         "Keelback" },
-                { "orca",                       "Orca" },
-                { "python",                     "Python" },
-                { "sidewinder",                 "Sidewinder" },
-                { "type6",                      "Type 6 Transporter" },
-                { "type7",                      "Type 7 Transporter" },
-                { "type9",                      "Type 9 Heavy" },
-                { "viper",                      "Viper Mk. III" },
-                { "viper_mkiv",                 "Viper Mk. IV" },
-                { "vulture",                    "Vulture" },
-                { "testbuggy",                  "SRV" },
-        };
-
-        static public string GetBetterShipName(string inname)
-        {
-            return shipnames.ContainsKey(inname.ToLower()) ? shipnames[inname.ToLower()] : inname;
-        }
-
-        static public string PhoneticShipName(string inname)
-        {
-            return inname.Replace("Mk. IV", "Mark 4").Replace("Mk. III", "Mark 3");
-        }
-
-        static public string GetBetterMissionName(string inname)
-        {
-            return inname.Replace("_name", "").SplitCapsWordUnderscoreTitleCase();
-        }
     }
 }
      

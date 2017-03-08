@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 public static class ObjectExtensions
@@ -260,15 +261,6 @@ public static class ObjectExtensions
             return null;
     }
 
-    public static string FixTitleCase(this string s)
-    {
-        if (s.Length > 0)
-        {
-            s = s.Substring(0, 1).ToUpper() + s.Substring(1).ToLower();
-        }
-        return s;
-    }
-
     public static bool InQuotes( this string s, int max = 0)            // left true if quote left over on line, taking care of any escapes..
     {
         if (max <= 0)
@@ -286,20 +278,123 @@ public static class ObjectExtensions
         return inquote;
     }
 
-    static public string SplitCapsWordUnderscoreTitleCase(this string capslower)     // one_two goes to One_Two
+
+    // fix word_word to Word Word
+    //  s = Regex.Replace(s, @"([A-Za-z]+)([_])([A-Za-z]+)", m => { return m.Groups[1].Value.FixTitleCase() + " " + m.Groups[3].Value.FixTitleCase(); });
+    // fix _word to spc Word
+    //  s = Regex.Replace(s, @"([_])([A-Za-z]+)", m => { return " " + m.Groups[2].Value.FixTitleCase(); });
+    // fix zeros
+    //  s = Regex.Replace(s, @"([A-Za-z]+)([0-9])", "$1 $2");       // Any ascii followed by number, split
+    //  s = Regex.Replace(s, @"(^0)(0+)", "");     // any 000 at start of line, remove
+    //  s = Regex.Replace(s, @"( 0)(0+)", " ");     // any space 000 in middle of line, remove
+    //  s = Regex.Replace(s, @"(0)([0-9]+)", "$2");   // any 0Ns left, remove 0
+
+    enum State { space, alpha, nonalpha, digits0, digits };
+    static public string SplitCapsWordFull(this string capslower, Dictionary<string, string> namerep = null)     // one_two goes to One_Two
     {
-        string s = Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"); //Upper(rep)UpperLower = Upper(rep) UpperLower
-        s = Regex.Replace(s, @"([a-z\d])([A-Z])", "$1 $2");     // lowerdecUpper split
-        s = Regex.Replace(s, @"[-\s]", " ");                    // -orwhitespace with spc
-        // fix word_word to Word Word
-        s = Regex.Replace(s, @"([A-Za-z]+)([_])([A-Za-z]+)", m => { return m.Groups[1].Value.FixTitleCase() + " " + m.Groups[3].Value.FixTitleCase(); });
-        // fix _word to spc Word
-        s = Regex.Replace(s, @"([_])([A-Za-z]+)", m => { return " " + m.Groups[2].Value.FixTitleCase(); });
-        return s;
+        if (capslower == null || capslower.Length == 0)
+            return "";
+
+        string s = SplitCapsWord(capslower);
+
+        System.Text.StringBuilder sb = new System.Text.StringBuilder(256);
+
+        State state = State.space;
+
+        for (int i = 0; i < s.Length; i++)
+        {
+            char c = s[i];
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+            {
+                if (state != State.alpha)
+                {
+                    if (state != State.space)
+                        sb.Append(' ');
+
+                    state = State.alpha;
+
+                    if (namerep != null)           // at alpha start, see if we have any global subs
+                    {
+                        int j = i + 1;
+                        for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z')); j++)
+                            ;
+
+                        string keyname = s.Substring(i, j - i);
+
+                        //                        string keyname = namekeys.Find(x => s.Substring(i).StartsWith(x));
+
+                        if ( namerep.ContainsKey(keyname))
+                        {
+                            sb.Append(namerep[keyname]);
+                            i += keyname.Length - 1;                  // skip this, we are in alpha, -1 because of i++ at top
+                        }
+                        else
+                            sb.Append(char.ToUpper(c));
+                    }
+                    else
+                        sb.Append(char.ToUpper(c));
+                }
+                else
+                    sb.Append(c);
+            }
+            else
+            {
+                if (c == '_')
+                    c = ' ';
+
+                if (c == ' ')
+                {
+                    state = State.space;
+                    sb.Append(c);
+                }
+                else if (c >= '0' && c <= '9')
+                {
+                    if (state != State.digits)
+                    {
+                        if (state != State.space && state != State.digits0)
+                            sb.Append(' ');
+
+                        if (c == '0')
+                        {
+                            state = State.digits0;          // 0, don't append
+                        }
+                        else
+                        {
+                            state = State.digits;
+                            sb.Append(c);
+                        }
+                    }
+                    else
+                        sb.Append(c);
+                }
+                else
+                {
+                    if (state != State.nonalpha)
+                    {
+                        if (state != State.space)
+                            sb.Append(' ');
+
+                        state = State.nonalpha;
+                    }
+
+                    sb.Append(c);
+                }
+
+            }
+        }
+
+        return sb.ToString();
     }
+
+    // regexp of below : string s = Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"); //Upper(rep)UpperLower = Upper(rep) UpperLower
+    // s = Regex.Replace(s, @"([a-z\d])([A-Z])", "$1 $2");     // lowerdecUpper split
+    // s = Regex.Replace(s, @"[-\s]", " "); // -orwhitespace with spc
 
     public static string SplitCapsWord(this string capslower)
     {
+        if (capslower == null || capslower.Length == 0)
+            return "";
+
         List<int> positions = new List<int>();
         List<string> words = new List<string>();
 

@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionCompleted(JObject evt ) : base(evt, JournalTypeEnum.MissionCompleted)
         {
-            Name = JournalEntry.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
+            Name = JournalFieldNaming.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
             Faction = JSONHelper.GetStringDef(evt["Faction"]);
             Commodity = NormalizeCommodity(JSONHelper.GetStringDef(evt["Commodity"]));
             Count = JSONHelper.GetIntNull(evt["Count"]);
