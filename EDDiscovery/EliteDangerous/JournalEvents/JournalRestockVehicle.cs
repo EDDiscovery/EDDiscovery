@@ -29,7 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRestockVehicle(JObject evt ) : base(evt, JournalTypeEnum.RestockVehicle)
         {
-            Type = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Type"]));
+            Type = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Type"]));
             Loadout = JSONHelper.GetStringDef(evt["Loadout"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
             Count = JSONHelper.GetInt(evt["Count"]);

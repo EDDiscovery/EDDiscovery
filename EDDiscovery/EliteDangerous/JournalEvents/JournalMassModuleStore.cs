@@ -32,7 +32,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)
         {
-            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
+            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             ModuleItems = evt["Items"]?.ToObject<ModuleItem[]>();
 
@@ -40,8 +40,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 foreach (ModuleItem i in ModuleItems)
                 {
-                    i.Slot = JournalEntry.GetBetterSlotName(i.Slot);
-                    i.Name = JournalEntry.GetBetterItemName(i.Name);
+                    i.Slot = JournalFieldNaming.GetBetterSlotName(i.Slot);
+                    i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
                 }
             }
         }

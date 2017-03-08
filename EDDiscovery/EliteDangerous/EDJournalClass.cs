@@ -371,47 +371,6 @@ namespace EDDiscovery.EliteDangerous
             frontierfolder = GetDefaultJournalDir();
         }
 
-        public static void ReadCmdLineJournal(string file)
-        {
-            System.IO.StreamReader filejr = new System.IO.StreamReader(file);
-            string line;
-            string system = "";
-            StarScan ss = new StarScan();
-
-            while ((line = filejr.ReadLine()) != null)
-            {
-                if (line.Equals("END"))
-                    break;
-                //System.Diagnostics.Trace.WriteLine(line);
-                if (line.Length > 0)
-                {
-                    JObject jo = (JObject)JObject.Parse(line);
-                    JSONPrettyPrint jpp = new JSONPrettyPrint(EliteDangerous.JournalEntry.StandardConverters(), "event;timestamp", "_Localised", (string)jo["event"]);
-                    string s = jpp.PrettyPrint(line, 80);
-                    //System.Diagnostics.Trace.WriteLine(s);
-
-                    EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
-                    //System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
-
-                    if (je.EventTypeID == JournalTypeEnum.Location)
-                    {
-                        EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
-                        system = jl.StarSystem;
-                    }
-                    else if (je.EventTypeID == JournalTypeEnum.FSDJump)
-                    {
-                        EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
-                        system = jfsd.StarSystem;
-
-                    }
-                    else if (je.EventTypeID == JournalTypeEnum.Scan)
-                    {
-                        ss.Process(je as JournalEvents.JournalScan, new SystemClass(system));
-                    }
-                }
-            }
-        }
-
         public static string GetDefaultJournalDir()
         {
             string path;

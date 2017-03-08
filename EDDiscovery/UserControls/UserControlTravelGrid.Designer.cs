@@ -79,6 +79,7 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -331,9 +332,10 @@ namespace EDDiscovery.UserControls
             this.removeJournalEntryToolStripMenuItem,
             this.sendUnsyncedScanToEDDNToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
-            this.setNoteToolStripMenuItem});
+            this.setNoteToolStripMenuItem,
+            this.writeEventInfoToLogDebugToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 268);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 312);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -454,10 +456,17 @@ namespace EDDiscovery.UserControls
             // 
             // toolTip1
             // 
-            this.toolTip1.AutoPopDelay = 120000;
+            this.toolTip1.AutoPopDelay = 30000;
             this.toolTip1.InitialDelay = 250;
             this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ShowAlways = true;
+            // 
+            // writeEventInfoToLogDebugToolStripMenuItem
+            // 
+            this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
             // 
             // UserControlTravelGrid
             // 
@@ -513,5 +522,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setNoteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem writeEventInfoToLogDebugToolStripMenuItem;
     }
 }

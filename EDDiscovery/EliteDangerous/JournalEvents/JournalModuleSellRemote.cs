@@ -29,10 +29,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalModuleSellRemote(JObject evt) : base(evt, JournalTypeEnum.ModuleSellRemote)
         {
             Slot = JSONHelper.GetStringDef(evt["StorageSlot"]);         // this is NOT a ship slot name, just a index
-            SellItem = JournalEntry.GetBetterItemName(JSONHelper.GetStringDef(evt["SellItem"]));
+            SellItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["SellItem"]));
             SellItemLocalised = JSONHelper.GetStringDef(evt["SellItem_Localised"]);
             SellPrice = JSONHelper.GetLong(evt["SellPrice"]);
-            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
+            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             ServerId = JSONHelper.GetInt(evt["ServerId"]);
         }

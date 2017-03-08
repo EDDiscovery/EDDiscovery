@@ -49,7 +49,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionAccepted(JObject evt ) : base(evt, JournalTypeEnum.MissionAccepted)
         {
-            Name = JournalEntry.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
+            Name = JournalFieldNaming.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
             Faction = JSONHelper.GetStringDef(evt["Faction"]);
             MissionId = JSONHelper.GetInt(evt["MissionID"]);
 

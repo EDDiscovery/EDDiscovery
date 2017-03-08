@@ -116,6 +116,10 @@ namespace EDDiscovery.UserControls
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length>0)
                 fieldfilter.FromJSON(filter);        // load filter
+
+#if !DEBUG
+            writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
+#endif
         }
 
         public void NoHistoryIcon()
@@ -232,10 +236,6 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
             string tip = item.EventSummary + Environment.NewLine + item.EventDescription + Environment.NewLine + item.EventDetailedInfo;
-
-#if DEBUG
-            tip += Environment.NewLine + item.journalEntry.EventDataString;
-#endif
 
             dataGridViewTravel.Rows[rownr].Cells[0].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[1].ToolTipText = tip;
@@ -865,6 +865,13 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
+        {
+            ConditionVariables cv = new ConditionVariables();
+            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "" , new Type[] { typeof(System.Drawing.Bitmap) } , 5);
+            discoveryform.LogLine(cv.ToString(separ: Environment.NewLine, quoteit: false));
+        }
+
         #endregion
 
         #region Event Filter
@@ -901,6 +908,7 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
+
     }
 
 }
