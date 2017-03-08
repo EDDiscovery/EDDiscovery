@@ -67,9 +67,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public string Blueprint { get; set; }           // or null
             public int BlueprintLevel { get; set; }         // or 0
 
-            public string ItemFriendlyName { get { return Item.SplitCapsWordUnderscoreTitleCase(); } }
-            public string SlotFriendlyName { get { return Slot.SplitCapsWordUnderscoreTitleCase(); } }
-
             public ShipModule()
             { }
             public ShipModule(string s, string i, bool e, int p, int ac, int ah, string b, int bl)
@@ -86,22 +83,27 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalLoadout(JObject evt) : base(evt, JournalTypeEnum.Loadout)
         {
-            JArray jmodules = (JArray)evt["Modules"];
             ShipModules = new List<ShipModule>();
 
-            foreach (JObject jo in jmodules)
-            {
-                ShipModule module = new ShipModule();
+            System.Diagnostics.Debug.WriteLine("LOAD OUT DECODE");
 
-                module.Slot = JSONHelper.GetStringDef(jo["Slot"]);
-                module.Item = JSONHelper.GetStringDef(jo["Item"]);
-                module.Enabled = JSONHelper.GetBool(jo["On"]);
-                module.Priority = JSONHelper.GetInt(jo["Priority"]);
-                module.AmmoClip = JSONHelper.GetInt(jo["AmmoInClip"]);
-                module.AmmoHopper = JSONHelper.GetInt(jo["AmmoInHopper"]);
-                module.Blueprint = JSONHelper.GetStringDef(jo["EngineerBlueprint"]);
-                module.BlueprintLevel = JSONHelper.GetInt(jo["EngineerLevel"]);
-                ShipModules.Add(module);
+            JArray jmodules = (JArray)evt["Modules"];
+            if (jmodules != null)       // paranoia
+            {
+                foreach (JObject jo in jmodules)
+                {
+                    ShipModule module = new ShipModule();
+
+                    module.Slot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(jo["Slot"]));
+                    module.Item = JournalFieldNaming.GetBetterItemNameLoadout(JSONHelper.GetStringDef(jo["Item"]));
+                    module.Enabled = JSONHelper.GetBool(jo["On"]);
+                    module.Priority = JSONHelper.GetInt(jo["Priority"]);
+                    module.AmmoClip = JSONHelper.GetInt(jo["AmmoInClip"]);
+                    module.AmmoHopper = JSONHelper.GetInt(jo["AmmoInHopper"]);
+                    module.Blueprint = JSONHelper.GetStringDef(jo["EngineerBlueprint"]);
+                    module.BlueprintLevel = JSONHelper.GetInt(jo["EngineerLevel"]);
+                    ShipModules.Add(module);
+                }
             }
         }
 

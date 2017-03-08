@@ -46,7 +46,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "IndexOf"] = he.Indexno.ToString(ct);
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
 
-                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_");
+                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Bitmap) } , 5);      //depth seems good enough
                 vars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, prefix + "JS_");
             }
         }

@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
         public void DeleteVar(string v) { currentvars.Delete(v); }
         public bool VarExist(string v) { return currentvars.Exists(v); }
         public void Add(ConditionVariables v) { currentvars.Add(v); }
-        public void AddDataOfType(Object o, Type t, string n) { currentvars.AddDataOfType(o, t, n); }
+        public void AddDataOfType(Object o, Type t, string n) { currentvars.AddDataOfType(o, t, n, 5); }
 
         #endregion
 

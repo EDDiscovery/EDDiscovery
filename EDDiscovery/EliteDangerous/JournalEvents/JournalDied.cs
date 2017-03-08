@@ -61,7 +61,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (Killers != null)
             {
                 foreach (Killer k in Killers)
-                    k.Ship = JournalEntry.GetBetterShipName(k.Ship);
+                    k.Ship = JournalFieldNaming.GetBetterShipName(k.Ship);
             }
         }
 

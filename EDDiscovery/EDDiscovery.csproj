@@ -302,8 +302,10 @@
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
+    <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
     <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
@@ -1374,7 +1376,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EliteDangerous\CompanionAPI\" />
     <Folder Include="Maps\" />
     <Folder Include="SQLite\" />
   </ItemGroup>

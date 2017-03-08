@@ -29,11 +29,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleSell(JObject evt ) : base(evt, JournalTypeEnum.ModuleSell)
         {
-            Slot = JSONHelper.GetStringDef(evt["Slot"]);
-            SellItem = JSONHelper.GetStringDef(evt["SellItem"]);
+            Slot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(evt["Slot"]));
+            SellItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["SellItem"]));
             SellItemLocalised = JSONHelper.GetStringDef(evt["SellItem_Localised"]);
             SellPrice = JSONHelper.GetLong(evt["SellPrice"]);
-            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
+            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
 
         }

@@ -356,7 +356,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolTip1
             // 
-            this.toolTip1.AutoPopDelay = 20000;
+            this.toolTip1.AutoPopDelay = 120000;
             this.toolTip1.InitialDelay = 250;
             this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ShowAlways = true;

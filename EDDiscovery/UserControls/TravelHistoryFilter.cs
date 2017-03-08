@@ -144,7 +144,9 @@ namespace EDDiscovery
 
         public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent)
         {
-            FilterButton(db, ctr, back, fore, parent, JournalEntry.GetListOfEventsWithOptMethod(true));
+            List<string> events = JournalEntry.GetListOfEventsWithOptMethod(towords: true);
+            events.Sort();
+            FilterButton(db, ctr, back, fore, parent, events);
         }
 
         public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent, List<string> list)
@@ -154,7 +156,9 @@ namespace EDDiscovery
 
         public void FilterButton(string db, Point p, Size s, Color back, Color fore, Form parent)
         {
-            FilterButton(db, p, s, back, fore, parent, JournalEntry.GetListOfEventsWithOptMethod(true));
+            List<string> events = JournalEntry.GetListOfEventsWithOptMethod(towords: true);
+            events.Sort();
+            FilterButton(db, p, s, back, fore, parent, events);
         }
 
         public void FilterButton(string db, Point p, Size s, Color back, Color fore, Form parent, List<string> list)

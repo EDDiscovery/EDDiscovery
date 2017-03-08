@@ -78,7 +78,8 @@ namespace EDDiscovery.Actions
         {
             EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
 
-            List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false);
+            List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(towords:false);
+            events.Sort();
             events.Add("All");
             events.Add("onRefreshStart");
             events.Add("onRefreshEnd");
