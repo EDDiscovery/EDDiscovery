@@ -52,7 +52,7 @@ namespace EDDiscovery2
             {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMap));
-            this.glControlContainer = new Panel();
+            this.glControlContainer = new System.Windows.Forms.Panel();
             this.textboxFrom = new ExtendedControls.AutoCompleteTextBox();
             this.labelSystemCoords = new System.Windows.Forms.Label();
             this.toolStripShowAllStars = new System.Windows.Forms.ToolStrip();
@@ -461,6 +461,7 @@ namespace EDDiscovery2
             this.toolStripDropDownButtonGalObjects.Name = "toolStripDropDownButtonGalObjects";
             this.toolStripDropDownButtonGalObjects.Size = new System.Drawing.Size(29, 37);
             this.toolStripDropDownButtonGalObjects.Text = "toolStripDropDownButton1";
+            this.toolStripDropDownButtonGalObjects.ToolTipText = "Enable or Disable the Display of Galactic Objects and other POIs";
             // 
             // toolStripButtonGrid
             // 
