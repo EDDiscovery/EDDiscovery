@@ -182,15 +182,37 @@ namespace EDDiscovery.EliteDangerous
 
         public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl)
         {
+            HistoryEntry he;
+            JournalLocOrJump jl;
+            return AddScanToBestSystem(je, startindex, hl, out he, out jl);
+        }
+
+        public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl, out HistoryEntry he, out JournalLocOrJump jl)
+        {
             for (int j = startindex; j >= 0; j--)
             {
-                string designation = GetBodyDesignation(je, hl[j].System.name);
-                if (je.IsStarNameRelated(hl[j].System.name, designation))       // if its part of the name, use it
+                he = hl[j];
+
+                if (he.IsLocOrJump)
                 {
-                    je.BodyDesignation = designation;
-                    return Process(je, hl[j].System);
+                    jl = (JournalLocOrJump)he.journalEntry;
+                    string designation = GetBodyDesignation(je, he.System.name);
+
+                    if (je.IsStarNameRelated(he.System.name, designation))       // if its part of the name, use it
+                    {
+                        je.BodyDesignation = designation;
+                        return Process(je, he.System);
+                    }
+                    else if (jl != null && je.IsStarNameRelated(jl.StarSystem, designation))
+                    {
+                        // Ignore scans where the system name has changed
+                        return false;
+                    }
                 }
             }
+
+            jl = null;
+            he = null;
 
             je.BodyDesignation = GetBodyDesignation(je, hl[startindex].System.name);
             return Process(je, hl[startindex].System);         // no relationship, add..
