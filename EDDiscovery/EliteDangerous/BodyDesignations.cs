@@ -1899,8 +1899,8 @@ namespace EDDiscovery.EliteDangerous
                 { "PER - G8XBE", "Kepler-20 1" },
                 { "Maxine's World", "Kepler-20 3" },
             } },
-            { "MOA-2007-BGL-400L", new Dictionary<string, string> {
-                { "MOA-2007-BGL-400L b", "MOA-2007-BGL-400L 1" }
+            { "MOA-2007-BLG-400L", new Dictionary<string, string> {
+                { "MOA-2007-BLG-400L b", "MOA-2007-BLG-400L 1" }
             } },
         };
     }
