@@ -156,7 +156,7 @@ namespace EDDiscovery
         {
             try
             {
-                InvokeSyncOnUiThread(() =>
+                InvokeAsyncOnUiThread(() =>
                 {
                     logtext += text + Environment.NewLine;      // keep this, may be the only log showing
 
@@ -714,7 +714,7 @@ namespace EDDiscovery
                                 SystemClass.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
                                 if (!PendingClose)
                                 {
-                                    InvokeSyncOnUiThread(() =>
+                                    InvokeAsyncOnUiThread(() =>
                                     {
                                         history.CalculateSqDistances(closestsystemlist, sys.x, sys.y, sys.z, 50, true);
                                         stardistreq.Callback(sys, closestsystemlist);
