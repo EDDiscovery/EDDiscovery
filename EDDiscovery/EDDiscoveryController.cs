@@ -303,7 +303,7 @@ namespace EDDiscovery
             downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
             CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
             ReportProgress(-1, "");
-            InvokeSyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
+            InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
             if (PendingClose) return;
 
             if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
@@ -651,10 +651,10 @@ namespace EDDiscovery
                     case 0:  // Close Requested
                         break;
                     case 1:  // Refresh Requested
-                        InvokeSyncOnUiThread(() =>
+                        journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+                        InvokeAsyncOnUiThread(() =>
                         {
                             OnRefreshStarting?.Invoke();
-                            journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
                         });
 
 
