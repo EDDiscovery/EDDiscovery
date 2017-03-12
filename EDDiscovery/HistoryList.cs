@@ -1137,10 +1137,16 @@ namespace EDDiscovery
                 if (je.EventTypeID == JournalTypeEnum.Scan)
                 {
                     JournalScan js = je as JournalScan;
-                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder))
+                    JournalLocOrJump jl;
+                    HistoryEntry jlhe;
+                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
                     {
-                        logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                         "Scan object " + js.BodyName + " in " + he.System.name);
+                        // Ignore scans where the system name has been changed
+                        if (jl == null || jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                             "Scan object " + js.BodyName + " in " + he.System.name);
+                        }
                     }
                 }
 
