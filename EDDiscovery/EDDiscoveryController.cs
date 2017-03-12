@@ -64,12 +64,11 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryController(Func<Color> getNormalTextColor, Func<Color> getHighlightTextColor, Func<Color> getSuccessTextColor, Action<Action> invokeSyncOnUiThread, Action<Action> invokeAsyncOnUiThread)
+        public EDDiscoveryController(Func<Color> getNormalTextColor, Func<Color> getHighlightTextColor, Func<Color> getSuccessTextColor, Action<Action> invokeAsyncOnUiThread)
         {
             GetNormalTextColour = getNormalTextColor;
             GetHighlightTextColour = getHighlightTextColor;
             GetSuccessTextColour = getSuccessTextColor;
-            InvokeSyncOnUiThread = invokeSyncOnUiThread;
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
         }
 
@@ -291,7 +290,6 @@ namespace EDDiscovery
         private Func<Color> GetNormalTextColour;
         private Func<Color> GetHighlightTextColour;
         private Func<Color> GetSuccessTextColour;
-        private Action<Action> InvokeSyncOnUiThread;
         private Action<Action> InvokeAsyncOnUiThread;
         #endregion
 
