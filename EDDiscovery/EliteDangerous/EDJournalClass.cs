@@ -361,13 +361,13 @@ namespace EDDiscovery.EliteDangerous
 
         private Thread ScanThread;
         private ManualResetEvent StopRequested;
-        private Action<Action> InvokeOnUiThread;
+        private Action<Action> InvokeAsyncOnUiThread;
         private List<MonitorWatcher> watchers = new List<MonitorWatcher>();
         private string frontierfolder;
 
-        public EDJournalClass(Action<Action> invokeOnUiThread)
+        public EDJournalClass(Action<Action> invokeAsyncOnUiThread)
         {
-            InvokeOnUiThread = invokeOnUiThread;
+            InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
             frontierfolder = GetDefaultJournalDir();
         }
 
@@ -502,7 +502,7 @@ namespace EDDiscovery.EliteDangerous
 
                 if (jl != null && jl.Count != 0 && !stopRequested.WaitOne(0))
                 {
-                    InvokeOnUiThread(() => ScanTickDone(jl));
+                    InvokeAsyncOnUiThread(() => ScanTickDone(jl));
                 }
             }
         }
