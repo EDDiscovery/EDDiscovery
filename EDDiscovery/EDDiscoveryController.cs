@@ -707,7 +707,8 @@ namespace EDDiscovery
                         {
                             if (!stardistreq.IgnoreOnDuplicate || closestsystem_queue.Count == 0)
                             {
-                                ISystem sys = stardistreq.System;
+                                StardistRequest req = stardistreq;
+                                ISystem sys = req.System;
                                 SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
                                 SystemClass.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
                                 if (!PendingClose)
@@ -715,7 +716,7 @@ namespace EDDiscovery
                                     InvokeAsyncOnUiThread(() =>
                                     {
                                         history.CalculateSqDistances(closestsystemlist, sys.x, sys.y, sys.z, 50, true);
-                                        stardistreq.Callback(sys, closestsystemlist);
+                                        req.Callback(sys, closestsystemlist);
                                     });
                                 }
                             }
