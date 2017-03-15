@@ -345,36 +345,9 @@ namespace EDDiscovery.EliteDangerous
 
         #region Formatting control and Icons
 
-        private static JSONConverters jsonconvcache;     //cache it
-
         public abstract System.Drawing.Bitmap Icon { get; }
 
-        public virtual void FillInformation(out string summary, out string info, out string detailed)
-        {
-            summary = EventTypeStr.SplitCapsWord();
-            info = ToShortString();
-            detailed = "";
-        }
-
-        public virtual string DefaultRemoveItems()
-        {
-            return "timestamp;event;EDDMapColor";
-        }
-
-        public string ToShortString(string additionalremoves = null, JSONConverters jc = null)
-        {
-            if (jc == null)
-            {
-                if (jsonconvcache == null)
-                    jsonconvcache = JournalFieldNaming.StandardConverters();
-
-                jc = jsonconvcache;
-            }
-
-            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), "_Localised", EventTypeStr);
-
-            return jpp.PrettyPrint(jEventData, 80);
-        }
+        public abstract void FillInformation(out string summary, out string info, out string detailed);
 
         #endregion
 
@@ -1082,6 +1055,19 @@ namespace EDDiscovery.EliteDangerous
         }
 
         #endregion
-    }
+
+        private static JSONConverters jsonconvcache;     //cache it
+        public string ToOld()
+        {
+            if (jsonconvcache == null)
+                jsonconvcache = JournalFieldNaming.StandardConverters();
+
+            JSONPrettyPrint jpp = new JSONPrettyPrint(jsonconvcache, "timestamp;event;EDDMapColor", "_Localised", EventTypeStr);
+            return jpp.PrettyPrint(jEventData, 80);
+        }
+
+
+
+}
 }
      
