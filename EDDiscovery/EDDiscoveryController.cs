@@ -64,12 +64,11 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryController(Func<Color> getNormalTextColor, Func<Color> getHighlightTextColor, Func<Color> getSuccessTextColor, Action<Action> invokeSyncOnUiThread, Action<Action> invokeAsyncOnUiThread)
+        public EDDiscoveryController(Func<Color> getNormalTextColor, Func<Color> getHighlightTextColor, Func<Color> getSuccessTextColor, Action<Action> invokeAsyncOnUiThread)
         {
             GetNormalTextColour = getNormalTextColor;
             GetHighlightTextColour = getHighlightTextColor;
             GetSuccessTextColour = getSuccessTextColor;
-            InvokeSyncOnUiThread = invokeSyncOnUiThread;
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
         }
 
@@ -100,7 +99,7 @@ namespace EDDiscovery
             EdsmSync = new EDSMSync(this);
             EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
 
-            journalmonitor = new EliteDangerous.EDJournalClass(InvokeSyncOnUiThread);
+            journalmonitor = new EliteDangerous.EDJournalClass(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewPosition;
 
             history.CommanderId = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
@@ -156,7 +155,7 @@ namespace EDDiscovery
         {
             try
             {
-                InvokeSyncOnUiThread(() =>
+                InvokeAsyncOnUiThread(() =>
                 {
                     logtext += text + Environment.NewLine;      // keep this, may be the only log showing
 
@@ -291,7 +290,6 @@ namespace EDDiscovery
         private Func<Color> GetNormalTextColour;
         private Func<Color> GetHighlightTextColour;
         private Func<Color> GetSuccessTextColour;
-        private Action<Action> InvokeSyncOnUiThread;
         private Action<Action> InvokeAsyncOnUiThread;
         #endregion
 
@@ -303,7 +301,7 @@ namespace EDDiscovery
             downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
             CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
             ReportProgress(-1, "");
-            InvokeSyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
+            InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
             if (PendingClose) return;
 
             if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
@@ -652,10 +650,10 @@ namespace EDDiscovery
                     case 0:  // Close Requested
                         break;
                     case 1:  // Refresh Requested
-                        InvokeSyncOnUiThread(() =>
+                        journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+                        InvokeAsyncOnUiThread(() =>
                         {
                             OnRefreshStarting?.Invoke();
-                            journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
                         });
 
 
@@ -710,15 +708,16 @@ namespace EDDiscovery
                         {
                             if (!stardistreq.IgnoreOnDuplicate || closestsystem_queue.Count == 0)
                             {
-                                ISystem sys = stardistreq.System;
+                                StardistRequest req = stardistreq;
+                                ISystem sys = req.System;
                                 SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
                                 SystemClass.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
                                 if (!PendingClose)
                                 {
-                                    InvokeSyncOnUiThread(() =>
+                                    InvokeAsyncOnUiThread(() =>
                                     {
                                         history.CalculateSqDistances(closestsystemlist, sys.x, sys.y, sys.z, 50, true);
-                                        stardistreq.Callback(sys, closestsystemlist);
+                                        req.Callback(sys, closestsystemlist);
                                     });
                                 }
                             }
