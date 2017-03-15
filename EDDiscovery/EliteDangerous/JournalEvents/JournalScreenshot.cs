@@ -39,6 +39,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.screenshot; } }
 
+        public override void FillInformation(out string summary, out string info, out string detailed)
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = "";// NOT DONE
+            detailed = "";
+        }
+
         public void SetConvertedFilename(string input_filename, string output_filename, int width, int height)
         {
             this.jEventData["EDDInputFile"] = input_filename;

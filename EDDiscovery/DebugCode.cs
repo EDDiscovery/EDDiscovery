@@ -46,8 +46,8 @@ namespace EDDiscovery
                 {
                     JObject jo = (JObject)JObject.Parse(line);
 
-                    JSONPrettyPrint jpp = new JSONPrettyPrint(EliteDangerous.JournalFieldNaming.StandardConverters(), "event;timestamp", "_Localised", (string)jo["event"]);
-                    string s = jpp.PrettyPrintStr(line, 80);
+                    //JSONPrettyPrint jpp = new JSONPrettyPrint(EliteDangerous.JournalFieldNaming.StandardConverters(), "event;timestamp", "_Localised", (string)jo["event"]);
+                    //string s = jpp.PrettyPrintStr(line, 80);
                     //System.Diagnostics.Trace.WriteLine(s);
 
                     EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
