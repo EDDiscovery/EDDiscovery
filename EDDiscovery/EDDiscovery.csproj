@@ -329,7 +329,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
-    <Compile Include="EliteDangerous\Modules.cs" />
+    <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>
@@ -775,6 +775,12 @@
     <Compile Include="UserControls\UserControlExploration.Designer.cs">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlModules.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlModules.Designer.cs">
+      <DependentUpon>UserControlModules.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlNotePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -937,6 +943,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlModules.resx">
+      <DependentUpon>UserControlModules.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlLog.resx">
       <DependentUpon>UserControlLog.cs</DependentUpon>

@@ -549,6 +549,7 @@ namespace EDDiscovery
 
                     history.materialcommodititiesledger = hist.materialcommodititiesledger;
                     history.starscan = hist.starscan;
+                    history.shipinformationlist = hist.shipinformationlist;
                     history.CommanderId = hist.CommanderId;
 
                     ReportProgress(-1, "");

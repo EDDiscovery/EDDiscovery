@@ -21,11 +21,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when docking an SRV with the ship
     //Parameters: none
     [JournalEntryType(JournalTypeEnum.DockSRV)]
-    public class JournalDockSRV : JournalEntry
+    public class JournalDockSRV : JournalEntry, IShipInformation
     {
         public JournalDockSRV(JObject evt ) : base(evt, JournalTypeEnum.DockSRV)
         {
 
+        }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.DockSRV();
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.docksrv; } }

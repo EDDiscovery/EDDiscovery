@@ -33,8 +33,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     [JournalEntryType(JournalTypeEnum.Docked)]
     public class JournalDocked : JournalEntry
     {
-
-
         public JournalDocked(JObject evt ) : base(evt, JournalTypeEnum.Docked)
         {
             StationName = JSONHelper.GetStringDef(evt["StationName"]);

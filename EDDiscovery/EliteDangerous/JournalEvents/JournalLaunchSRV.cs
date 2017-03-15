@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Loadout
     [JournalEntryType(JournalTypeEnum.LaunchSRV)]
-    public class JournalLaunchSRV : JournalEntry
+    public class JournalLaunchSRV : JournalEntry, IShipInformation
     {
         public JournalLaunchSRV(JObject evt ) : base(evt, JournalTypeEnum.LaunchSRV)
         {
@@ -34,6 +34,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string PlayerControlled { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.launchsrv; } }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.LaunchSRV();
+        }
 
     }
 }

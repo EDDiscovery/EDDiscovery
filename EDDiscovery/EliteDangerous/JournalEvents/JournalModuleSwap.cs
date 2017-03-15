@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	ToItem
     //•	Ship
     [JournalEntryType(JournalTypeEnum.ModuleSwap)]
-    public class JournalModuleSwap : JournalEntry
+    public class JournalModuleSwap : JournalEntry, IShipInformation
     {
         public JournalModuleSwap(JObject evt ) : base(evt, JournalTypeEnum.ModuleSwap)
         {
@@ -55,6 +55,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.moduleswap; } }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ModuleSwap(this);
+        }
 
     }
 }

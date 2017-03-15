@@ -1,0 +1,229 @@
+﻿/*
+ * Copyright © 2016 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using EDDiscovery.Controls;
+using EDDiscovery2.DB;
+using EDDiscovery.EliteDangerous;
+
+namespace EDDiscovery.UserControls
+{
+    public partial class UserControlModules : UserControlCommonBase
+    {
+        private int displaynumber = 0;
+        private EDDiscoveryForm discoveryform;
+        
+        private string DbFilterSave { get { return "ModulesGridEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbShipSave { get { return "ModulesGridShipSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+
+        #region Init
+
+        public UserControlModules()
+        {
+            InitializeComponent();
+            Name = "Modules";
+        }
+
+        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        {
+            discoveryform = ed;
+            displaynumber = vn;
+
+            dataGridViewModules.MakeDoubleBuffered();
+            dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dataGridViewModules.RowTemplate.Height = 26;
+
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            ed.TravelControl.OnTravelSelectionChanged += Display;
+        }
+
+        #endregion
+
+        #region Display
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            Discoveryform_OnHistoryChange(hl);
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        {
+            ShipInformationList shm = hl.shipinformationlist;
+            string cursel = comboBoxShips.Text;
+
+            comboBoxShips.Items.Clear();
+            comboBoxShips.Items.Add("Travel History Entry");
+            comboBoxShips.Items.Add("Stored Modules");
+            foreach ( int id in shm.Ships.Keys)
+            {
+                ShipInformation sm = shm.Ships[id];
+                comboBoxShips.Items.Add(sm.ShipShortName);
+            }
+
+            if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
+                cursel = "Travel History Entry";
+
+            comboBoxShips.Enabled = false;
+            comboBoxShips.SelectedItem = cursel;
+            comboBoxShips.Enabled = true;
+        }
+
+        HistoryEntry last_he = null;
+        public override void Display(HistoryEntry he, HistoryList hl)
+        {
+            last_he = he;
+            Display();
+        }
+
+        public void Display()
+        {
+            DataGridViewColumn sortcol = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortedColumn : dataGridViewModules.Columns[0];
+            SortOrder sortorder = dataGridViewModules.SortOrder;
+
+            dataGridViewModules.Rows.Clear();
+
+            labelVehicle.Text = "Unknown";
+
+            if (comboBoxShips.Text.Contains("Stored"))
+            {
+                if (last_he != null && last_he.StoredModules != null)
+                {
+                    ModulesInStore mi = last_he.StoredModules;
+                    labelVehicle.Text = "";
+                    foreach(EliteDangerous.JournalEvents.JournalLoadout.ShipModule sm in mi.StoredModules )
+                    {
+                        object[] rowobj = { "", sm.Item, sm.LocalisedItem.ToNullSafeString() };
+                        dataGridViewModules.Rows.Add(rowobj);
+                    }
+                }
+            }
+            else if (comboBoxShips.Text.Contains("Travel") || comboBoxShips.Text.Length == 0 )  // second is due to the order History gets called vs this on start
+            {
+                if (last_he != null && last_he.ShipInformation != null)
+                {
+                    Display(last_he.ShipInformation);
+                }
+            }
+            else
+            {
+                ShipInformation si = discoveryform.history.shipinformationlist.GetShipByShortName(comboBoxShips.Text);
+                if (si != null)
+                    Display(si);
+            }
+
+            dataGridViewModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewModules.Columns[0].HeaderCell.SortGlyphDirection = sortorder;
+        }
+
+        public void Display(ShipInformation si)
+        {
+            foreach (string key in si.Modules.Keys)
+            {
+                EliteDangerous.JournalEvents.JournalLoadout.ShipModule sm = si.Modules[key];
+
+                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() };
+                dataGridViewModules.Rows.Add(rowobj);
+
+            }
+
+            labelVehicle.Text = si.ShipFullName;
+        }
+
+        #endregion
+
+        #region Layout
+
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewModules, DbColumnSave);
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewModules, DbColumnSave);
+            discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+        }
+
+        #endregion
+
+        private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxShips.Enabled)
+            {
+                DB.SQLiteDBClass.PutSettingInt(DbShipSave, comboBoxShips.SelectedIndex);
+                Display();
+            }
+        }
+
+#region right clicks
+
+        int rightclickrow = -1;
+        int leftclickrow = -1;
+
+        private void dataGridViewLedger_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+            {
+                rightclickrow = -1;
+            }
+            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
+            {
+                leftclickrow = -1;
+            }
+
+            if (dataGridViewModules.SelectedCells.Count < 2 || dataGridViewModules.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+            {
+                DataGridView.HitTestInfo hti = dataGridViewModules.HitTest(e.X, e.Y);
+                if (hti.Type == DataGridViewHitTestType.Cell)
+                {
+                    dataGridViewModules.ClearSelection();                // select row under cursor.
+                    dataGridViewModules.Rows[hti.RowIndex].Selected = true;
+
+                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+                    {
+                        rightclickrow = hti.RowIndex;
+                    }
+                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
+                    {
+                        leftclickrow = hti.RowIndex;
+                    }
+                }
+            }
+        }
+
+        private void toolStripMenuItemGotoItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickrow != -1)
+            {
+                long v = (long)dataGridViewModules.Rows[rightclickrow].Tag;
+            }
+        }
+
+        #endregion
+
+    }
+}

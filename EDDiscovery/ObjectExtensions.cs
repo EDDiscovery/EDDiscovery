@@ -69,6 +69,16 @@ public static class ObjectExtensions
         return s.Replace(@"\\","\\");
     }
 
+    public static void AppendPrePad(this System.Text.StringBuilder sb , string other , string prepad = " ")
+    {
+        if (other != null && other.Length > 0)
+        {
+            if (sb.Length > 0)
+                sb.Append(prepad);
+            sb.Append(other);
+        }
+    }
+
     public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
     {
         System.Text.StringBuilder sb = new System.Text.StringBuilder(str.Length*4);

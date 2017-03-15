@@ -22,7 +22,8 @@ using System.Text;
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.LoadGame)]
-    public class JournalLoadGame : JournalEntry, ILedgerJournalEntry, IModuleJournalEntry
+    [System.Diagnostics.DebuggerDisplay("{LoadGameCommander} {ShipId} {Ship} {GameMode}")]
+    public class JournalLoadGame : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
@@ -43,7 +44,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public string LoadGameCommander { get; set; }
-        public string Ship { get; set; }
+        public string Ship { get; set; }        // type, fer-de-lance
         public int ShipId { get; set; }
         public bool StartLanded { get; set; }
         public bool StartDead { get; set; }
@@ -73,9 +74,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-        public void Module(ShipListModules shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
-            shp.SetCurrentShip(Ship, ShipId);
+            shp.LoadGame(ShipId, Ship, ShipName, ShipIdent, FuelCapacity);
         }
     }
 }

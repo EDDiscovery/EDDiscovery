@@ -87,8 +87,8 @@ namespace EDDiscovery.EliteDangerous
 
                 jc.AddPrePostfix("Credits", "; credits", "", "LoadGame");
 
-                jc.AddPrePostfix("Ship;ShipType", "Ship ;", "", replacer: RShip);
-                jc.AddPrePostfix("StoreOldShip;SellOldShip", "; stored", "", replacer: RShip);
+                jc.AddPrePostfix("Ship;ShipType", "Ship ;", "", replacer: GetBetterShipName);
+                jc.AddPrePostfix("StoreOldShip;SellOldShip", "; stored", "", replacer: GetBetterShipName);
 
                 jc.AddScale("Health", 100.0, "'Health' 0.0'%'", "");
 
@@ -99,7 +99,7 @@ namespace EDDiscovery.EliteDangerous
             }
 
             {           //missions
-                jc.AddPrePostfix("Name", "", "", "MissionAccepted;MissionAbandoned;MissionCompleted;MissionFailed", RMission);
+                jc.AddPrePostfix("Name", "", "", "MissionAccepted;MissionAbandoned;MissionCompleted;MissionFailed", GetBetterMissionName);
             }
 
             {           // transfers
@@ -161,8 +161,8 @@ namespace EDDiscovery.EliteDangerous
 
             {
                 string slots = JL(new[] { JournalTypeEnum.MassModuleStore, JournalTypeEnum.ModuleBuy, JournalTypeEnum.ModuleRetrieve, JournalTypeEnum.ModuleSell, JournalTypeEnum.ModuleStore, JournalTypeEnum.Loadout });
-                jc.AddPrePostfix("Slot", "Slot ;", "", slots, RSlot);
-                jc.AddPrePostfix("FromSlot;ToSlot", "From ;", "", "ModuleSwap", RSlot);
+                jc.AddPrePostfix("Slot", "Slot ;", "", slots, GetBetterSlotName);
+                jc.AddPrePostfix("FromSlot;ToSlot", "From ;", "", "ModuleSwap", GetBetterSlotName);
             }
 
             {
@@ -188,21 +188,6 @@ namespace EDDiscovery.EliteDangerous
 
 
             return jc;
-        }
-
-        static string RMission(string s)            // replacer for pretty print
-        {
-            return GetBetterMissionName(s);
-        }
-
-        static string RShip(string s)            // replacer for pretty print
-        {
-            return GetBetterShipName(s);
-        }
-
-        static string RSlot(string s)            // replacer for pretty print
-        {
-            return GetBetterSlotName(s);
         }
 
         static string RMat(string s)            // replacer for pretty print
@@ -295,6 +280,21 @@ namespace EDDiscovery.EliteDangerous
         static public string GetBetterShipName(string inname)
         {
             return shipnames.ContainsKey(inname.ToLower()) ? shipnames[inname.ToLower()] : inname;
+        }
+
+        static public bool IsSRV(string inname) // better name
+        {
+            return inname.Contains("SRV");
+        }
+
+        static public bool IsFighter(string inname) // better name
+        {
+            return inname.Contains("F63") || inname.Contains("Fighter");
+        }
+
+        static public bool IsSRVOrFighter(string inname )
+        {
+            return IsSRV(inname) || IsFighter(inname);
         }
 
         static public string PhoneticShipName(string inname)
