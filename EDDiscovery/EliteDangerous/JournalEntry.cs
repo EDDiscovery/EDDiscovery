@@ -276,19 +276,20 @@ namespace EDDiscovery.EliteDangerous
         public long TLUId;                       // this ID of the journal tlu (aka TravelLogId)
         public int CommanderId;                 // commander Id of entry
 
-        public string EventTypeStr;          // these two duplicate each other, string if for debuggin in the db view of a browser
+        public string EventTypeStr;             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
         public JournalTypeEnum EventTypeID;
 
         public DateTime EventTimeUTC;
 
         public long EdsmID;                      // 0 = unassigned, >0 = assigned
 
-        protected JObject jEventData;           // event string from the log
+        public JObject jEventData { get; protected set; }       // event objects
+        public string EventDataString { get { return jEventData.ToString(); } }     // Get only, functions will modify them to add additional data on
+
         private int Synced;                     // sync flags
 
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
-        public string EventDataString { get { return jEventData.ToString(); } }     // Get only, functions will modify them to add additional data on
-
+        
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
@@ -297,7 +298,6 @@ namespace EDDiscovery.EliteDangerous
 
         #region Static properties and fields
         private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();
-        #endregion
 
         /// <summary>
         /// Gets the mapping of journal type value to JournalEntry type
@@ -341,6 +341,14 @@ namespace EDDiscovery.EliteDangerous
             return (ret.ToString().ToLowerInvariant());
         }
 
+        #endregion
+
+        #region Formatting control and Icons
+
+        private static JSONConverters jsonconvcache;     //cache it
+
+        public abstract System.Drawing.Bitmap Icon { get; }
+
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
             summary = EventTypeStr.SplitCapsWord();
@@ -353,9 +361,10 @@ namespace EDDiscovery.EliteDangerous
             return "timestamp;event;EDDMapColor";
         }
 
-        public abstract System.Drawing.Bitmap Icon { get; }
-
-        private static JSONConverters jsonconvcache;     //cache it
+        public virtual string DefaultDuplicateRemove()
+        {
+            return "_Localised";
+        }
 
         public string ToShortString(string additionalremoves = null, JSONConverters jc = null)
         {
@@ -367,13 +376,14 @@ namespace EDDiscovery.EliteDangerous
                 jc = jsonconvcache;
             }
 
+            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), DefaultDuplicateRemove(), EventTypeStr);
 
-//TBD
-            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), "_111Localised", EventTypeStr);
-// TBD
-
-            return jpp.PrettyPrint(EventDataString, 80);
+            return jpp.PrettyPrint(jEventData, 80);
         }
+
+        #endregion
+
+        #region Creation
 
         public JournalEntry(JObject jo, JournalTypeEnum jtype)
         {
@@ -381,15 +391,6 @@ namespace EDDiscovery.EliteDangerous
             EventTypeID = jtype;
             EventTypeStr = jtype.ToString();
             EventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-            TLUId = 0;
-        }
-
-        public JournalEntry(JournalTypeEnum jtype)
-        {
-            jEventData = null;
-            EventTypeID = jtype;
-            EventTypeStr = jtype.ToString();
-            EventTimeUTC = DateTime.UtcNow;
             TLUId = 0;
         }
 
@@ -441,6 +442,10 @@ namespace EDDiscovery.EliteDangerous
             je.Synced = syncflag;
             return je;
         }
+
+        #endregion
+
+        #region DB
 
         public bool Add()
         {
@@ -535,7 +540,7 @@ namespace EDDiscovery.EliteDangerous
 
                 if (ent != null)
                 {
-                    JObject jo = (JObject)JObject.Parse(ent.EventDataString);
+                    JObject jo = ent.jEventData;
 
                     if (jsonpos)
                     {
@@ -574,7 +579,7 @@ namespace EDDiscovery.EliteDangerous
 
                 if (ent != null)
                 {
-                    JObject jo = (JObject)JObject.Parse(ent.EventDataString);
+                    JObject jo = ent.jEventData;
 
                     jo["EDDMapColor"] = mapcolour;
 
@@ -638,8 +643,10 @@ namespace EDDiscovery.EliteDangerous
                     jis = (JournalEDDItemSet)Get(jidofitemset, cn);
                 else
                 {
-                    jis = new JournalEDDItemSet();
-                    jis.EventTimeUTC = dt;
+                    JObject jo = new JObject();
+                    jo["timestamp"] = dt;
+                    jo["event"] = JournalTypeEnum.EDDItemSet.ToString();
+                    jis = new JournalEDDItemSet(jo);
                     jis.CommanderId = cmdrid;
                 }
 
@@ -977,6 +984,10 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        #endregion
+
+        #region Factory creation
+
         static public Type TypeOfJournalEntry(string text)
         {
             //foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum))) // check code only to make sure names match
@@ -1009,6 +1020,9 @@ namespace EDDiscovery.EliteDangerous
                 return (JournalEntry)Activator.CreateInstance(jtype, jo);
         }
 
+        #endregion
+        
+        #region Misc
 
         static public JournalTypeEnum JournalString2Type(string str)
         {
@@ -1072,6 +1086,7 @@ namespace EDDiscovery.EliteDangerous
             return ret;
         }
 
+        #endregion
     }
 }
      

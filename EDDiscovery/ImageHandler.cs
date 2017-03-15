@@ -765,7 +765,7 @@ namespace EDDiscovery2.ImageHandler
 
                 if (ss != null)
                 {
-                    JObject jo = JObject.Parse(ss.EventDataString);
+                    JObject jo = ss.jEventData;
                     if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
                     {
                         store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);
