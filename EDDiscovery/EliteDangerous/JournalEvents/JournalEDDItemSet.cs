@@ -28,20 +28,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Commodities = new CommodityList(evt["Commodities"]?.ToObject<CommodityItem[]>().ToList());
         }
 
-        public JournalEDDItemSet() : base( JournalTypeEnum.EDDItemSet)
-        {
-            Materials = new MaterialList();
-            Commodities = new CommodityList();
-        }
-
         public MaterialList Materials { get; set; }
         public CommodityList Commodities { get; set; }
 
-        public string UpdateState()                      // calculates the JSON string and returns it, plus updates the class so as it would look when loaded
+        public void UpdateState()                      // calculates the JSON string and returns it, plus updates the class so as it would look when loaded
         {
-            JObject evt = new JObject();
-            evt["timestamp"] = EventTimeUTC;
-            evt["event"] = EventTypeStr;
+            JObject evt = jEventData;
 
             if (Materials != null)
             {
@@ -76,7 +68,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
 
             jEventData = evt;
-            return evt.ToString();
         }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
@@ -121,7 +112,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public MaterialList(System.Collections.Generic.List<MaterialItem> ma )
         {
-            Materials = ma;
+            Materials = ma ?? new System.Collections.Generic.List<MaterialItem>();
         }
 
         public System.Collections.Generic.List<MaterialItem> Materials { get; protected set; }
@@ -150,7 +141,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public CommodityList(System.Collections.Generic.List<CommodityItem> ma)
         {
-            Commodities = ma;
+            Commodities = ma ?? new System.Collections.Generic.List<CommodityItem>();
         }
 
         public System.Collections.Generic.List<CommodityItem> Commodities { get; protected set; }
