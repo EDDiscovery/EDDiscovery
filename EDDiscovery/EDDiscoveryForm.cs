@@ -146,7 +146,7 @@ namespace EDDiscovery
         {
             this.Owner = splash;
             this.splashform = splash;
-            Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => Invoke(a), a => BeginInvoke(a));
+            Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
             Controller.OnNewEntry += (he, hl) => actioncontroller.ActionRunOnEntry(he, "NewEntry");
             Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
