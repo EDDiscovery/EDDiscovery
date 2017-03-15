@@ -868,7 +868,7 @@ namespace EDDiscovery.UserControls
         private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
         {
             ConditionVariables cv = new ConditionVariables();
-            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "" , new Type[] { typeof(System.Drawing.Bitmap) } , 5);
+            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "" , new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) } , 5);
             discoveryform.LogLine(cv.ToString(separ: Environment.NewLine, quoteit: false));
             if (rightclicksystem.ShipInformation != null)
                 discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());

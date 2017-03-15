@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	Ship
 //•	ShipId
     [JournalEntryType(JournalTypeEnum.FetchRemoteModule)]
-    public class JournalFetchRemoteModule : JournalEntry, ILedgerJournalEntry, IShipInformation
+    public class JournalFetchRemoteModule : JournalEntry, ILedgerJournalEntry
     {
         public JournalFetchRemoteModule(JObject evt) : base(evt, JournalTypeEnum.FetchRemoteModule)
         {
@@ -57,11 +57,5 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.fetchremotemodule; } }
-
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
-        {
-            shp.FetchRemoteModule(this);
-        }
-
     }
 }

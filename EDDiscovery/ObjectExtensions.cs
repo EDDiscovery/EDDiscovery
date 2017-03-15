@@ -323,10 +323,10 @@ public static class ObjectExtensions
 
                     state = State.alpha;
 
-                    if (namerep != null)           // at alpha start, see if we have any global subs
+                    if (namerep != null)           // at alpha start, see if we have any global subs of alpha numerics
                     {
                         int j = i + 1;
-                        for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z')); j++)
+                        for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z') || (s[j]>='0' && s[j]<='9') ); j++)
                             ;
 
                         string keyname = s.Substring(i, j - i);

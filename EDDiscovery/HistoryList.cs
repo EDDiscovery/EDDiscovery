@@ -1019,10 +1019,12 @@ namespace EDDiscovery
 
                     Debug.Assert(he.MaterialCommodity != null);
 
-                    this.materialcommodititiesledger.Process(je, conn);            // update the ledger
+                    // **** REMEMBER NEW Journal entry needs this too *****************
+
+                    materialcommodititiesledger.Process(je, conn);            // update the ledger     
                     Tuple<ShipInformation,ModulesInStore> ret = shipinformationlist.Process(je, conn);
                     he.ShipInformation = ret.Item1;
-                    he.StoredModules = ret.Item2;
+                    he.StoredModules = ret.Item2;                           
 
                     if (je.EventTypeID == JournalTypeEnum.Scan)
                     {
@@ -1131,6 +1133,10 @@ namespace EDDiscovery
                     he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
 
                     materialcommodititiesledger.Process(je, conn);
+
+                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                    he.ShipInformation = ret.Item1;
+                    he.StoredModules = ret.Item2;
                 }
 
                 Add(he);
