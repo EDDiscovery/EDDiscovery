@@ -46,13 +46,6 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewModules = new System.Windows.Forms.DataGridView();
-            this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
@@ -63,6 +56,13 @@ namespace EDDiscovery.UserControls
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxShips = new ExtendedControls.ComboBoxCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ammo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BluePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.contextMenuStripLedger.SuspendLayout();
@@ -92,10 +92,10 @@ namespace EDDiscovery.UserControls
             this.SlotCol,
             this.ItemCol,
             this.ItemLocalised,
-            this.Credits,
-            this.Debits,
-            this.Balance,
-            this.NormProfit});
+            this.Ammo,
+            this.BluePrint,
+            this.Value,
+            this.PriorityEnable});
             this.dataGridViewModules.ContextMenuStrip = this.contextMenuStripLedger;
             this.dataGridViewModules.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewModules.Name = "dataGridViewModules";
@@ -103,59 +103,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewModules.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewModules.TabIndex = 1;
-            // 
-            // SlotCol
-            // 
-            this.SlotCol.HeaderText = "Slot";
-            this.SlotCol.MinimumWidth = 50;
-            this.SlotCol.Name = "SlotCol";
-            this.SlotCol.ReadOnly = true;
-            // 
-            // ItemCol
-            // 
-            this.ItemCol.FillWeight = 120F;
-            this.ItemCol.HeaderText = "Item";
-            this.ItemCol.MinimumWidth = 100;
-            this.ItemCol.Name = "ItemCol";
-            this.ItemCol.ReadOnly = true;
-            // 
-            // ItemLocalised
-            // 
-            this.ItemLocalised.HeaderText = "Name";
-            this.ItemLocalised.MinimumWidth = 100;
-            this.ItemLocalised.Name = "ItemLocalised";
-            this.ItemLocalised.ReadOnly = true;
-            // 
-            // Credits
-            // 
-            this.Credits.FillWeight = 20F;
-            this.Credits.HeaderText = "Credits";
-            this.Credits.MinimumWidth = 20;
-            this.Credits.Name = "Credits";
-            this.Credits.ReadOnly = true;
-            // 
-            // Debits
-            // 
-            this.Debits.FillWeight = 20F;
-            this.Debits.HeaderText = "Debits";
-            this.Debits.MinimumWidth = 20;
-            this.Debits.Name = "Debits";
-            this.Debits.ReadOnly = true;
-            // 
-            // Balance
-            // 
-            this.Balance.FillWeight = 20F;
-            this.Balance.HeaderText = "Balance";
-            this.Balance.MinimumWidth = 20;
-            this.Balance.Name = "Balance";
-            this.Balance.ReadOnly = true;
-            // 
-            // NormProfit
-            // 
-            this.NormProfit.FillWeight = 20F;
-            this.NormProfit.HeaderText = "X";
-            this.NormProfit.MinimumWidth = 20;
-            this.NormProfit.Name = "NormProfit";
             // 
             // contextMenuStripLedger
             // 
@@ -270,7 +217,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.SelectedIndex = -1;
             this.comboBoxShips.SelectedItem = null;
             this.comboBoxShips.SelectedValue = null;
-            this.comboBoxShips.Size = new System.Drawing.Size(218, 20);
+            this.comboBoxShips.Size = new System.Drawing.Size(218, 24);
             this.comboBoxShips.TabIndex = 0;
             this.toolTip1.SetToolTip(this.comboBoxShips, "Select the entries by age");
             this.comboBoxShips.ValueMember = "";
@@ -279,6 +226,59 @@ namespace EDDiscovery.UserControls
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
+            // 
+            // SlotCol
+            // 
+            this.SlotCol.HeaderText = "Slot";
+            this.SlotCol.MinimumWidth = 50;
+            this.SlotCol.Name = "SlotCol";
+            this.SlotCol.ReadOnly = true;
+            // 
+            // ItemCol
+            // 
+            this.ItemCol.FillWeight = 120F;
+            this.ItemCol.HeaderText = "Item";
+            this.ItemCol.MinimumWidth = 100;
+            this.ItemCol.Name = "ItemCol";
+            this.ItemCol.ReadOnly = true;
+            // 
+            // ItemLocalised
+            // 
+            this.ItemLocalised.HeaderText = "Name";
+            this.ItemLocalised.MinimumWidth = 100;
+            this.ItemLocalised.Name = "ItemLocalised";
+            this.ItemLocalised.ReadOnly = true;
+            // 
+            // Ammo
+            // 
+            this.Ammo.FillWeight = 50F;
+            this.Ammo.HeaderText = "Ammo";
+            this.Ammo.MinimumWidth = 20;
+            this.Ammo.Name = "Ammo";
+            this.Ammo.ReadOnly = true;
+            // 
+            // BluePrint
+            // 
+            this.BluePrint.FillWeight = 50F;
+            this.BluePrint.HeaderText = "BluePrint";
+            this.BluePrint.MinimumWidth = 20;
+            this.BluePrint.Name = "BluePrint";
+            this.BluePrint.ReadOnly = true;
+            // 
+            // Value
+            // 
+            this.Value.FillWeight = 50F;
+            this.Value.HeaderText = "Value";
+            this.Value.MinimumWidth = 20;
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
+            // 
+            // PriorityEnable
+            // 
+            this.PriorityEnable.FillWeight = 50F;
+            this.PriorityEnable.HeaderText = "P/E";
+            this.PriorityEnable.MinimumWidth = 20;
+            this.PriorityEnable.Name = "PriorityEnable";
             // 
             // UserControlModules
             // 
@@ -314,9 +314,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Credits;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Debits;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Balance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Ammo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BluePrint;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
     }
 }

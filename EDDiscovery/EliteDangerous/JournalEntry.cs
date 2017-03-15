@@ -361,11 +361,6 @@ namespace EDDiscovery.EliteDangerous
             return "timestamp;event;EDDMapColor";
         }
 
-        public virtual string DefaultDuplicateRemove()
-        {
-            return "_Localised";
-        }
-
         public string ToShortString(string additionalremoves = null, JSONConverters jc = null)
         {
             if (jc == null)
@@ -376,7 +371,7 @@ namespace EDDiscovery.EliteDangerous
                 jc = jsonconvcache;
             }
 
-            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), DefaultDuplicateRemove(), EventTypeStr);
+            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), "_Localised", EventTypeStr);
 
             return jpp.PrettyPrint(jEventData, 80);
         }

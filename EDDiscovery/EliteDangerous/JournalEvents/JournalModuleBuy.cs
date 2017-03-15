@@ -42,16 +42,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             SellItemLocalised = JSONHelper.GetStringDef(evt["SellItem_Localised"]);
             SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
 
+            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["StoredItem"]));
+            StoredItemLocalised = JSONHelper.GetStringDef(evt["StoredItem_Localised"]);
         }
+
         public string Slot { get; set; }
+
+        public string Ship { get; set; }
+        public int ShipId { get; set; }
+
         public string BuyItem { get; set; }
         public string BuyItemLocalised { get; set; }
         public long BuyPrice { get; set; }
-        public string Ship { get; set; }
-        public int ShipId { get; set; }
-        public string SellItem { get; set; }
+
+        public string SellItem { get; set; }                    // if sold previous one
         public string SellItemLocalised { get; set; }
         public long? SellPrice { get; set; }
+
+        public string StoredItem { get; set; }                  // if stored previous one
+        public string StoredItemLocalised { get; set; }         // if stored previous one
 
         public override string DefaultRemoveItems()
         {

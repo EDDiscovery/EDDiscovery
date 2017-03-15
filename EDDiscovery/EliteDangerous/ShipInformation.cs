@@ -31,7 +31,6 @@ namespace EDDiscovery.EliteDangerous
         public string Ship { get; private set; }            // ship type name, fer-de-lance, etc.           can be null
         public string ShipName { get; private set; }        // ship name, may be empty or null
         public string ShipIdent { get; private set; }       // ship ident, may be empty or null
-        public double FuelCapacity { get; private set; }   // fuel capacity, 0 unknown
 
         public enum SubVehicleType
         {
@@ -42,7 +41,7 @@ namespace EDDiscovery.EliteDangerous
 
         public Dictionary<string, JournalLoadout.ShipModule> Modules { get; private set; }
 
-        public string ShipFullName
+        public string ShipFullInfo
         {
             get                  // unique ID
             {
@@ -55,8 +54,15 @@ namespace EDDiscovery.EliteDangerous
 
                 if (SubVehicle == SubVehicleType.SRV)
                     sb.AppendPrePad(" in SRV");
-                if (SubVehicle == SubVehicleType.Fighter)
+                else if (SubVehicle == SubVehicleType.Fighter)
                     sb.AppendPrePad(" Control Fighter");
+                else
+                {
+                    int cap = FuelCapacity();
+                    if ( cap > 0 )
+                        sb.Append(" Fuel Cap " + cap);
+                }
+
                 return sb.ToString();
             }
         }
@@ -79,6 +85,22 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public int FuelCapacity()
+        {
+            int cap = 0;
+            foreach(JournalLoadout.ShipModule sm in Modules.Values )
+            {
+                int classpos;
+                if ( sm.Item.Contains("Fuel Tank") && (classpos = sm.Item.IndexOf("Class "))!=-1)
+                {
+                    char digit = sm.Item[classpos + 6];
+                    cap += (1 << (digit - '0'));        // 1<<1 = 2.. 1<<2 = 4, etc.
+                }
+            }
+
+            return cap;
+        }
+
         public ShipInformation(int id)
         {
             ID = id;
@@ -92,7 +114,6 @@ namespace EDDiscovery.EliteDangerous
             sm.Ship = this.Ship;
             sm.ShipName = this.ShipName;
             sm.ShipIdent = this.ShipIdent;
-            sm.FuelCapacity = this.FuelCapacity;
             sm.SubVehicle = this.SubVehicle;
             sm.Modules = new Dictionary<string, JournalLoadout.ShipModule>(this.Modules);
             return sm;
@@ -130,11 +151,10 @@ namespace EDDiscovery.EliteDangerous
             Modules[sm.Slot] = sm;
         }
 
-        public ShipInformation Set(string ship, string name = null, string ident = null, double capacity = -1 )
+        public ShipInformation Set(string ship, string name = null, string ident = null)
         {
             if (ship != Ship || (name != null && name != ShipName) || 
-                            (ident != null && ident != ShipIdent) || 
-                            (capacity >= 0 && capacity != FuelCapacity) )
+                                (ident != null && ident != ShipIdent) )
             {
                 ShipInformation sm = this.ShallowClone();
 
@@ -143,8 +163,6 @@ namespace EDDiscovery.EliteDangerous
                     sm.ShipName = name;
                 if (ident != null)
                     sm.ShipIdent = ident;
-                if (capacity >= 0)
-                    sm.FuelCapacity = capacity;
 
                 return sm;
             }
@@ -186,19 +204,44 @@ namespace EDDiscovery.EliteDangerous
             return this;
         }
 
-        public ShipInformation SwapModule(string fromslot, string fromitem, string fromitemlocalised,
-                                          string toslot, string toitem, string toitemlocalised )
+        public ShipInformation RemoveModules(ModuleItem[] items)
+        {
+            ShipInformation sm = null;
+            foreach (ModuleItem it in items)
+            {
+                if (Modules.ContainsKey(it.Slot))       // if has it..
+                {
+                    if (sm == null)
+                        sm = this.ShallowClone();
+
+                    sm.Modules.Remove(it.Slot);
+                }
+            }
+
+            return sm ?? this;
+        }
+
+        public ShipInformation SwapModule(string fromslot, string fromitem , string fromiteml, string toslot , string toitem, string toiteml ) 
         {
             ShipInformation sm = this.ShallowClone();
-            sm.Modules[fromslot] = new JournalLoadout.ShipModule(fromslot, toitem, toitemlocalised);
-            sm.Modules[toslot] = new JournalLoadout.ShipModule(toslot, fromitem, fromitemlocalised);
+            if ( Modules.ContainsKey(fromslot))
+            {
+                if (Modules.ContainsKey(toslot))
+                {
+                    sm.Modules[fromslot] = new JournalLoadout.ShipModule(fromslot, toitem, toiteml);
+                }
+                else
+                    sm.Modules.Remove(fromslot);
+
+                sm.Modules[toslot] = new JournalLoadout.ShipModule(toslot, fromitem, fromiteml);
+            }
             return sm;
         }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(256);
-            sb.AppendFormat("Ship {0}", ShipFullName);
+            sb.AppendFormat("Ship {0}", ShipFullInfo);
             sb.Append(Environment.NewLine);
             foreach (JournalLoadout.ShipModule sm in Modules.Values)
             {
@@ -228,6 +271,17 @@ namespace EDDiscovery.EliteDangerous
         {
             ModulesInStore mis = this.ShallowClone();
             mis.StoredModules.Add(new JournalLoadout.ShipModule("", item, itemlocalised));
+            return mis;
+        }
+
+        public ModulesInStore StoreModule(ModuleItem[] items, Dictionary<string, string> itemlocalisation)
+        {
+            ModulesInStore mis = this.ShallowClone();
+            foreach (ModuleItem it in items)
+            {
+                string local = itemlocalisation.ContainsKey(it.Name) ? itemlocalisation[it.Name] : "";
+                mis.StoredModules.Add(new JournalLoadout.ShipModule("", it.Name, local));
+            }
             return mis;
         }
 
@@ -287,7 +341,7 @@ namespace EDDiscovery.EliteDangerous
         {
             ShipInformation sm = EnsureShip(id);            // this either gets current ship or makes a new one.
             sm.Set(ship, name, ident);
-            System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.Ship);
+            //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.Ship);
 
             ShipInformation newsm = null;
 
@@ -309,13 +363,13 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public void LoadGame(int id, string ship, string name, string ident, double capacity)        // LoadGame..
+        public void LoadGame(int id, string ship, string name, string ident)        // LoadGame..
         {
             ShipInformation sm = EnsureShip(id);            // this either gets current ship or makes a new one.
 
-            Ships[id] = sm = sm.Set(ship, name, ident, capacity);   // this makes a shallow copy if any data has changed..
+            Ships[id] = sm = sm.Set(ship, name, ident);   // this makes a shallow copy if any data has changed..
 
-            System.Diagnostics.Debug.WriteLine("Load Game " + sm.ID + " " + sm.Ship);
+            //System.Diagnostics.Debug.WriteLine("Load Game " + sm.ID + " " + sm.Ship);
 
             if (!JournalFieldNaming.IsSRVOrFighter(ship))
                 currentid = sm.ID;
@@ -323,28 +377,28 @@ namespace EDDiscovery.EliteDangerous
 
         public void LaunchSRV()
         {
-            System.Diagnostics.Debug.WriteLine("Launch SRV");
+            //System.Diagnostics.Debug.WriteLine("Launch SRV");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.SRV);
         }
 
         public void DockSRV()
         {
-            System.Diagnostics.Debug.WriteLine("Dock SRV");
+            //System.Diagnostics.Debug.WriteLine("Dock SRV");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
         }
 
         public void LaunchFighter(bool pc)
         {
-            System.Diagnostics.Debug.WriteLine("Launch Fighter");
+            //System.Diagnostics.Debug.WriteLine("Launch Fighter");
             if (HaveCurrentShip && pc==true)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.Fighter);
         }
 
         public void DockFighter()
         {
-            System.Diagnostics.Debug.WriteLine("Dock Fighter");
+            //System.Diagnostics.Debug.WriteLine("Dock Fighter");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
         }
@@ -391,12 +445,19 @@ namespace EDDiscovery.EliteDangerous
 
         public void ModuleBuy(JournalModuleBuy e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(e.ShipId);              // this either gets current ship or makes a new one.
+
+            if ( e.StoredItem.Length>0)                             // if we stored something
+                StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
+
+                                                                    // if we sold it, who cares?
             Ships[e.ShipId] = sm.AddModule(e.Slot,e.BuyItem,e.BuyItemLocalised);      // replace the slot with this
 
-            itemlocalisation[e.BuyItem] = e.BuyItemLocalised;
-            if (e.SellItem != null)
+            itemlocalisation[e.BuyItem] = e.BuyItemLocalised;       // record any localisations
+            if (e.SellItem.Length>0)
                 itemlocalisation[e.SellItem] = e.SellItemLocalised;
+            if (e.StoredItem.Length>0)
+                itemlocalisation[e.StoredItem] = e.StoredItemLocalised;
 
             currentid = e.ShipId;           // must be in it to do this
         }
@@ -406,7 +467,7 @@ namespace EDDiscovery.EliteDangerous
             ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
             Ships[e.ShipId] = sm.RemoveModule(e.Slot);
 
-            if (e.SellItem != null)
+            if (e.SellItem.Length>0)
                 itemlocalisation[e.SellItem] = e.SellItemLocalised;
 
             currentid = e.ShipId;           // must be in it to do this
@@ -415,7 +476,7 @@ namespace EDDiscovery.EliteDangerous
         public void ModuleSwap(JournalModuleSwap e)
         {
             ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
-            Ships[e.ShipId] = sm.SwapModule(e.FromSlot, e.FromItem, e.FromItemLocalised, e.ToSlot, e.ToItem, e.ToItemLocalised);
+            Ships[e.ShipId] = sm.SwapModule(e.FromSlot, e.FromItem, e.FromItemLocalised, e.ToSlot , e.ToItem , e.ToItemLocalised);
             currentid = e.ShipId;           // must be in it to do this
         }
 
@@ -432,15 +493,15 @@ namespace EDDiscovery.EliteDangerous
             currentid = e.ShipId;           // must be in it to do this
         }
 
-        public void FetchRemoteModule(JournalFetchRemoteModule e)
-        {
-
-        }
-
         public void ModuleRetrieve(JournalModuleRetrieve e)
         {
             ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
+
+            if ( e.SwapOutItem.Length>0 )
+                StoredModules = StoredModules.StoreModule(e.SwapOutItem, e.SwapOutItemLocalised);
+
             Ships[e.ShipId] = sm.AddModule(e.Slot, e.RetrievedItem, e.RetrievedItemLocalised);
+
             StoredModules = StoredModules.RemoveModule(e.RetrievedItem);
         }
 
@@ -451,7 +512,9 @@ namespace EDDiscovery.EliteDangerous
 
         public void MassModuleStore(JournalMassModuleStore e)
         {
-
+            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
+            Ships[e.ShipId] = sm.RemoveModules(e.ModuleItems);
+            StoredModules = StoredModules.StoreModule(e.ModuleItems, itemlocalisation);
         }
 
         #region Helpers
@@ -491,10 +554,5 @@ namespace EDDiscovery.EliteDangerous
 
         #endregion
     }
-
 }
 
-
-#if false
-
-#endif

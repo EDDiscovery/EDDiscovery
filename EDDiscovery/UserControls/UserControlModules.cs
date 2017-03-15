@@ -104,7 +104,8 @@ namespace EDDiscovery.UserControls
 
             dataGridViewModules.Rows.Clear();
 
-            labelVehicle.Text = "Unknown";
+            LabelVehicleText.Visible = false;
+            labelVehicle.Visible = false;
 
             if (comboBoxShips.Text.Contains("Stored"))
             {
@@ -112,10 +113,12 @@ namespace EDDiscovery.UserControls
                 {
                     ModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
+                    int i = 1;
                     foreach(EliteDangerous.JournalEvents.JournalLoadout.ShipModule sm in mi.StoredModules )
                     {
-                        object[] rowobj = { "", sm.Item, sm.LocalisedItem.ToNullSafeString() };
+                        object[] rowobj = { i.ToString(), sm.Item, sm.LocalisedItem.ToNullSafeString() };
                         dataGridViewModules.Rows.Add(rowobj);
+                        i++;
                     }
                 }
             }
@@ -143,12 +146,37 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerous.JournalEvents.JournalLoadout.ShipModule sm = si.Modules[key];
 
-                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() };
+                string ammo = "";
+                if (sm.AmmoHopper.HasValue)
+                {
+                    ammo = sm.AmmoHopper.Value.ToString();
+                    if (sm.AmmoClip.HasValue)
+                        ammo += "/" + sm.AmmoClip.ToString();
+                }
+
+                string blueprint = "";
+                if (sm.Blueprint!=null)
+                {
+                    blueprint = sm.Blueprint;
+                    if (sm.BlueprintLevel.HasValue)
+                        blueprint += ":" + sm.BlueprintLevel.ToString();
+                }
+
+                string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+
+                string pe = "";
+                if (sm.Priority.HasValue)
+                    pe = "P" + sm.Priority.Value.ToString();
+                if (sm.Enabled.HasValue)
+                    pe += "E";
+
+                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, pe };
                 dataGridViewModules.Rows.Add(rowobj);
 
             }
 
-            labelVehicle.Text = si.ShipFullName;
+            LabelVehicleText.Visible = labelVehicle.Visible = true;
+            labelVehicle.Text = si.ShipFullInfo;
         }
 
         #endregion

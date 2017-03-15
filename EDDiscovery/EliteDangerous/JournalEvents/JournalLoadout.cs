@@ -45,12 +45,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         [System.Diagnostics.DebuggerDisplay("{Slot} {Item} {LocalisedItem}")]
         public class ShipModule
         {
-            public string Slot { get; private set; }
-            public string Item { get; private set; }
+            public string Slot { get; private set; }        // never null
+            public string Item { get; private set; }        // never null
 
             public string LocalisedItem { get; set; }       // Modulex events only.  may be null
 
-            public bool? Enabled { get; private set; }              // Loadout events, may be null if only seen in modules
+            public bool? Enabled { get; private set; }      // Loadout events, may be null
             public int? Priority { get; private set; }
             public int? AmmoClip { get; private set; }              
             public int? AmmoHopper { get; private set; }            
@@ -62,9 +62,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public ShipModule()
             { }
 
-            public ShipModule(string s, string i, bool e, int p, int ac, int ah, string b, int bl, int h, long v)
+            public ShipModule(string s, string i, bool? e, int? p, int? ac, int? ah, string b, int? bl, double? h, long? v)
             {
-                Slot = s; Item = i; Enabled = e; Priority = p; AmmoClip = ac; AmmoHopper = ah; Blueprint = b; BlueprintLevel = bl; Health = h; Value = v;
+                Slot = s; Item = i; Enabled = e; Priority = p; AmmoClip = ac; AmmoHopper = ah; Blueprint = b; BlueprintLevel = bl;
+                if (h.HasValue)
+                    Health = (int)(h * 100.0);
+                Value = v;
             }
 
             public ShipModule(string s, string i, string l )
@@ -108,14 +111,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 {
                     ShipModule module = new ShipModule( JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(jo["Slot"])),
                                                         JournalFieldNaming.GetBetterItemNameLoadout(JSONHelper.GetStringDef(jo["Item"])),
-                                                        JSONHelper.GetBool(jo["On"]),
-                                                        JSONHelper.GetInt(jo["Priority"]),
-                                                        JSONHelper.GetInt(jo["AmmoInClip"]),
-                                                        JSONHelper.GetInt(jo["AmmoInHopper"]),
-                                                        JSONHelper.GetStringDef(jo["EngineerBlueprint"]),
-                                                        JSONHelper.GetInt(jo["EngineerLevel"]),
-                                                        (int)(JSONHelper.GetDouble(jo["Health"])*100.0),
-                                                        JSONHelper.GetInt(jo["Value"]) );
+                                                        JSONHelper.GetBoolNull(jo["On"]),
+                                                        JSONHelper.GetIntNull(jo["Priority"]),
+                                                        JSONHelper.GetIntNull(jo["AmmoInClip"]),
+                                                        JSONHelper.GetIntNull(jo["AmmoInHopper"]),
+                                                        JSONHelper.GetStringNull(jo["EngineerBlueprint"]),
+                                                        JSONHelper.GetIntNull(jo["EngineerLevel"]),
+                                                        JSONHelper.GetDoubleNull(jo["Health"]),
+                                                        JSONHelper.GetIntNull(jo["Value"]) );
                     ShipModules.Add(module);
                 }
             }

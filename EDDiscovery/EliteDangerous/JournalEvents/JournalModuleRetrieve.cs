@@ -38,7 +38,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             RetrievedItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["RetrievedItem"]));
             RetrievedItemLocalised = JSONHelper.GetStringDef(evt["RetrievedItem_Localised"]);
             EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]);
-            SwapOutItem = JSONHelper.GetStringDef(evt["SwapOutItem"]);
+            SwapOutItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["SwapOutItem"]));
             SwapOutItemLocalised = JSONHelper.GetStringDef(evt["SwapOutItem_Localised"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
         }

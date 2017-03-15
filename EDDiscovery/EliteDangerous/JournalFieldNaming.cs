@@ -162,7 +162,8 @@ namespace EDDiscovery.EliteDangerous
             {
                 string slots = JL(new[] { JournalTypeEnum.MassModuleStore, JournalTypeEnum.ModuleBuy, JournalTypeEnum.ModuleRetrieve, JournalTypeEnum.ModuleSell, JournalTypeEnum.ModuleStore, JournalTypeEnum.Loadout });
                 jc.AddPrePostfix("Slot", "Slot ;", "", slots, GetBetterSlotName);
-                jc.AddPrePostfix("FromSlot;ToSlot", "From ;", "", "ModuleSwap", GetBetterSlotName);
+                jc.AddPrePostfix("FromSlot", "From ;", "", "ModuleSwap", GetBetterSlotName);
+                jc.AddPrePostfix("ToSlot", "To ;", "", "ModuleSwap", GetBetterSlotName);
             }
 
             {
@@ -312,7 +313,7 @@ namespace EDDiscovery.EliteDangerous
             return s.SplitCapsWordFull();
         }
 
-        static Dictionary<string, string> replace = new Dictionary<string, string>
+        static Dictionary<string, string> replaceevents = new Dictionary<string, string>
         {
             // see the program folder win64\items\shipmodule
 
@@ -379,6 +380,21 @@ namespace EDDiscovery.EliteDangerous
             {"defencecrimescanner",     "Defence Crime Scanner"},
             {"refinery",     "Refinery"},
             {"stellarbodydiscoveryscanner",     "Stellar Body Discovery Scanner"}, // V
+
+            {"class1" , "Rating E" },
+            {"class2" , "Rating D" },
+            {"class3" , "Rating C" },
+            {"class4" , "Rating B" },
+            {"class5" , "Rating A" },
+
+            {"size1" , "Class 1" },
+            {"size2" , "Class 2" },
+            {"size3" , "Class 3" },
+            {"size4" , "Class 4" },
+            {"size5" , "Class 5" },
+            {"size6" , "Class 6" },
+            {"size7" , "Class 7" },
+            {"size8" , "Class 8" },
         };
 
         static public string GetBetterItemNameEvents(string s)            // for all except loadout.. has to deal with $int and $hpt
@@ -389,17 +405,35 @@ namespace EDDiscovery.EliteDangerous
             if (s.EndsWith("_name;"))
                 s = s.Substring(0, s.Length - 6);
 
-            s = s.SplitCapsWordFull(replace);
+            s = s.SplitCapsWordFull(replaceevents);
             //System.Diagnostics.Debug.WriteLine("PP Item " + x + " >> " + s);
             return s;
         }
+
+        static Dictionary<string, string> replaceloadouts = new Dictionary<string, string>
+        {
+            {"Class1" , "Rating E" },
+            {"Class2" , "Rating D" },
+            {"Class3" , "Rating C" },
+            {"Class4" , "Rating B" },
+            {"Class5" , "Rating A" },
+
+            {"Size1" , "Class 1" },
+            {"Size2" , "Class 2" },
+            {"Size3" , "Class 3" },
+            {"Size4" , "Class 4" },
+            {"Size5" , "Class 5" },
+            {"Size6" , "Class 6" },
+            {"Size7" , "Class 7" },
+            {"Size8" , "Class 8" },
+        };
 
         static public string GetBetterItemNameLoadout(string s)
         {
             //string x = s;
             if (s.StartsWith("Int_") || s.StartsWith("Hpt_"))
                 s = s.Substring(4);
-            s = s.SplitCapsWordFull();
+            s = s.SplitCapsWordFull(replaceloadouts);
             //System.Diagnostics.Debug.WriteLine("LO Item " + x + " >> " + s);
             return s;
         }
