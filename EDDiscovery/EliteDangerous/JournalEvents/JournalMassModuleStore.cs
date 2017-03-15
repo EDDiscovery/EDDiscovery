@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //o   EngineerModifications(only present if modified)
 
     [JournalEntryType(JournalTypeEnum.MassModuleStore)]
-    public class JournalMassModuleStore : JournalEntry
+    public class JournalMassModuleStore : JournalEntry, IShipInformation
     {
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)
         {
@@ -57,6 +57,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulestore; } }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.MassModuleStore(this);
+        }
+
     }
 
 

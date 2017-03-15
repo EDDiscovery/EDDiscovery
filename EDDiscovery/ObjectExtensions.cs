@@ -69,6 +69,16 @@ public static class ObjectExtensions
         return s.Replace(@"\\","\\");
     }
 
+    public static void AppendPrePad(this System.Text.StringBuilder sb , string other , string prepad = " ")
+    {
+        if (other != null && other.Length > 0)
+        {
+            if (sb.Length > 0)
+                sb.Append(prepad);
+            sb.Append(other);
+        }
+    }
+
     public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
     {
         System.Text.StringBuilder sb = new System.Text.StringBuilder(str.Length*4);
@@ -313,10 +323,10 @@ public static class ObjectExtensions
 
                     state = State.alpha;
 
-                    if (namerep != null)           // at alpha start, see if we have any global subs
+                    if (namerep != null)           // at alpha start, see if we have any global subs of alpha numerics
                     {
                         int j = i + 1;
-                        for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z')); j++)
+                        for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z') || (s[j]>='0' && s[j]<='9') ); j++)
                             ;
 
                         string keyname = s.Substring(i, j - i);

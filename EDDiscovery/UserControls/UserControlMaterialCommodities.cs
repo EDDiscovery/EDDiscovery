@@ -36,7 +36,6 @@ namespace EDDiscovery.UserControls
         private int displaynumber = 0;
         private int namecol, abvcol, catcol, typecol, numcol, pricecol;
         List<MaterialCommodities> last_mc = null;
-        bool editing = false;
 
         public delegate void ChangedCount(List<MaterialCommodities> ls);
         public event ChangedCount OnChangedCount;
@@ -110,7 +109,7 @@ namespace EDDiscovery.UserControls
             Dictionary<string, MaterialCommodities> mcchanges = new Dictionary<string, MaterialCommodities>();
             Dictionary<string, MaterialCommodities> mcorig = new Dictionary<string, MaterialCommodities>();
 
-            if (editing)
+            if (buttonExtApply.Enabled)
             {
                 foreach (MaterialCommodities m in GetMatCommodChanges())
                 {
@@ -313,7 +312,6 @@ namespace EDDiscovery.UserControls
         {
             if (buttonExtApply.Enabled)     // then its cancel
             {
-                editing = false;
                 DisableEditing();
                 Display(last_mc);
             }
@@ -329,7 +327,6 @@ namespace EDDiscovery.UserControls
                 buttonExtModify.Text = "Cancel";
 
                 ResetCombo();
-                editing = true;
             }
         }
 

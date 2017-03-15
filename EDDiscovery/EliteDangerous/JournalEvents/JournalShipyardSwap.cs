@@ -25,12 +25,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	ShipType: type of ship being switched to
     //•	ShipID
-    //•	StoreOldShip: (if storing old ship) type of ship being stored
+    //•	StoreOldShip: (if storing old ship) type of ship being stored       
     //•	StoreShipID
-    //•	SellOldShip: (if selling old ship) type of ship being sold
-    //•	SellShipID
+    //•	SellOldShip: (if selling old ship) type of ship being sold      -- NO EVIDENCE
+    //•	SellShipID -- NO EVIDENCE
     [JournalEntryType(JournalTypeEnum.ShipyardSwap)]
-    public class JournalShipyardSwap : JournalEntry
+    public class JournalShipyardSwap : JournalEntry, IShipInformation
     {
         public JournalShipyardSwap(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSwap)
         {
@@ -38,18 +38,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             StoreOldShip = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["StoreOldShip"]));
             StoreShipId = JSONHelper.GetIntNull(evt["StoreShipID"]);
-            //SellOldShip = JSONHelper.GetStringDef(evt["SellOldShip"]);        // NO EVIDENCE OF THESE
-            //SellShipId = JSONHelper.GetIntNull(evt["SellShipID"]);
-            //SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
         }
 
         public string ShipType { get; set; }
         public int ShipId { get; set; }
         public string StoreOldShip { get; set; }
         public int? StoreShipId { get; set; }
-//        public string SellOldShip { get; set; }
-//        public int? SellShipId { get; set; }
-//        public long? SellPrice { get; set; }
 
         public override string DefaultRemoveItems()
         {
@@ -57,6 +51,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.shipyardswap; } }
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ShipyardSwap(this);
+        }
 
     }
 }

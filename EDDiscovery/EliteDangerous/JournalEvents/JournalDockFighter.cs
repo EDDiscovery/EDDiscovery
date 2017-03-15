@@ -21,12 +21,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //When written: when docking a fighter back with the mothership
     //Parameters: none
     [JournalEntryType(JournalTypeEnum.DockFighter)]
-    public class JournalDockFighter : JournalEntry
+    public class JournalDockFighter : JournalEntry,  IShipInformation
     {
         public JournalDockFighter(JObject evt ) : base(evt, JournalTypeEnum.DockFighter)
         {
+        }
 
-
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.DockFighter();
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.dockfighter; } }

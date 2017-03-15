@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SwapOutItem (if slot was not empty)
     //•	Cost
     [JournalEntryType(JournalTypeEnum.ModuleRetrieve)]
-    public class JournalModuleRetrieve : JournalEntry, ILedgerJournalEntry
+    public class JournalModuleRetrieve : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalModuleRetrieve(JObject evt) : base(evt, JournalTypeEnum.ModuleRetrieve)
         {
@@ -38,7 +38,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             RetrievedItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["RetrievedItem"]));
             RetrievedItemLocalised = JSONHelper.GetStringDef(evt["RetrievedItem_Localised"]);
             EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]);
-            SwapOutItem = JSONHelper.GetStringDef(evt["SwapOutItem"]);
+            SwapOutItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["SwapOutItem"]));
+            SwapOutItemLocalised = JSONHelper.GetStringDef(evt["SwapOutItem_Localised"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
         }
         public string Slot { get; set; }
@@ -48,6 +49,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string RetrievedItemLocalised { get; set; }
         public string EngineerModifications { get; set; }
         public string SwapOutItem { get; set; }
+        public string SwapOutItemLocalised { get; set; }
         public long Cost { get; set; }
 
         public override string DefaultRemoveItems()
@@ -61,6 +63,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             string s = (RetrievedItemLocalised.Length > 0) ? RetrievedItemLocalised : RetrievedItem;
 
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s + " on " + Ship, -Cost);
+        }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ModuleRetrieve(this);
         }
 
     }

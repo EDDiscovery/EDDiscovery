@@ -40,6 +40,8 @@ namespace EDDiscovery
     {
         private int displaynumber = 0;
 
+        private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+
         public static bool DeleteIsPermanent = true;
 
         private List<ExplorationSetClass> _savedExplorationSets;
@@ -59,6 +61,7 @@ namespace EDDiscovery
             InitializeComponent();
             _currentExplorationSet = new ExplorationSetClass();
             ColumnSystemName.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
+            Name = "Exploration";
         }
 
         public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
@@ -73,8 +76,14 @@ namespace EDDiscovery
             travelhistorycontrol.OnTravelSelectionChanged += Display;
         }
 
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewExplore, DbColumnSave);
+        }
+
         public override void Closing()
         {
+            DGVSaveColumnLayout(dataGridViewExplore, DbColumnSave);
             travelhistorycontrol.OnTravelSelectionChanged -= Display;
             _discoveryForm.OnNewEntry -= NewEntry;
         }

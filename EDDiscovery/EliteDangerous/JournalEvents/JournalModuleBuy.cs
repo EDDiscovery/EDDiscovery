@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellItem: item being sold
     //•	SellPrice: sale price
     [JournalEntryType(JournalTypeEnum.ModuleBuy)]
-    public class JournalModuleBuy : JournalEntry, ILedgerJournalEntry
+    public class JournalModuleBuy : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {
@@ -42,16 +42,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             SellItemLocalised = JSONHelper.GetStringDef(evt["SellItem_Localised"]);
             SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
 
+            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["StoredItem"]));
+            StoredItemLocalised = JSONHelper.GetStringDef(evt["StoredItem_Localised"]);
         }
+
         public string Slot { get; set; }
+
+        public string Ship { get; set; }
+        public int ShipId { get; set; }
+
         public string BuyItem { get; set; }
         public string BuyItemLocalised { get; set; }
         public long BuyPrice { get; set; }
-        public string Ship { get; set; }
-        public int ShipId { get; set; }
-        public string SellItem { get; set; }
+
+        public string SellItem { get; set; }                    // if sold previous one
         public string SellItemLocalised { get; set; }
         public long? SellPrice { get; set; }
+
+        public string StoredItem { get; set; }                  // if stored previous one
+        public string StoredItemLocalised { get; set; }         // if stored previous one
 
         public override string DefaultRemoveItems()
         {
@@ -67,5 +76,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s + " on " + Ship, -BuyPrice + ( SellPrice??0) );
         }
 
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ModuleBuy(this);
+        }
     }
 }

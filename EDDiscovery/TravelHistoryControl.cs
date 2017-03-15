@@ -50,6 +50,41 @@ namespace EDDiscovery
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
 
+        string[] spanelbuttonlist = new string[]            // MUST match PopOuts list order
+        {
+            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
+            "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
+            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Modules" , "Exploration",
+        };
+
+        Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
+                                        EDDiscovery.Properties.Resources.star,
+                                        EDDiscovery.Properties.Resources.material ,
+                                        EDDiscovery.Properties.Resources.commodities,
+                                        EDDiscovery.Properties.Resources.ledger ,
+                                        EDDiscovery.Properties.Resources.journal ,
+                                        EDDiscovery.Properties.Resources.travelgrid ,
+                                        EDDiscovery.Properties.Resources.screenshot,
+                                        EDDiscovery.Properties.Resources.stats,
+                                        EDDiscovery.Properties.Resources.scan,
+                                        EDDiscovery.Properties.Resources.module,
+                                        EDDiscovery.Properties.Resources.sellexplorationdata,
+                                        };
+
+        string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
+                                               "Display the nearest stars to the currently selected entry",
+                                               "Display the material count at the currently selected entry",
+                                               "Display the commodity count at the currently selected entry",
+                                               "Display a ledger of cash related entries",
+                                               "Display the journal grid view",
+                                               "Display the history grid view",
+                                               "Display the screen shot view",
+                                               "Display statistics from the history",
+                                               "Display scan data",
+                                               "Display Module data for ship",
+                                               "Display Exploration view",
+                                            };
+
         HistoryEntry notedisplayedhe = null;            // remember the particulars of the note displayed, so we can save it later
 
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
@@ -74,37 +109,6 @@ namespace EDDiscovery
         public delegate void NearestStarList(string name, SortedList<double, ISystem> csl); // called when star computation has a new list
         public event NearestStarList OnNearestStarListChanged;
 
-        string[] tabbuttonlist = new string[] 
-        {
-            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", "Exploration", // not in tabs
-            "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
-            "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
-        };
-
-        Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
-                                        EDDiscovery.Properties.Resources.star,      
-                                        EDDiscovery.Properties.Resources.material , 
-                                        EDDiscovery.Properties.Resources.commodities,
-                                        EDDiscovery.Properties.Resources.ledger , 
-                                        EDDiscovery.Properties.Resources.journal ,
-                                        EDDiscovery.Properties.Resources.travelgrid , 
-                                        EDDiscovery.Properties.Resources.screenshot,
-                                        EDDiscovery.Properties.Resources.stats, 
-                                        EDDiscovery.Properties.Resources.scan,
-                                        };
-
-        string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
-                                               "Display the nearest stars to the currently selected entry",
-                                               "Display the material count at the currently selected entry",
-                                               "Display the commodity count at the currently selected entry",
-                                               "Display a ledger of cash related entries",
-                                               "Display the journal grid view",
-                                               "Display the history grid view",
-                                               "Display the screen shot view",
-                                               "Display statistics from the history",
-                                               "Display scan data",
-                                            };
-
 
         #region Initialisation
 
@@ -124,7 +128,7 @@ namespace EDDiscovery
 
             comboBoxCustomPopOut.Enabled = false;
 
-            comboBoxCustomPopOut.Items.AddRange(tabbuttonlist);
+            comboBoxCustomPopOut.Items.AddRange(spanelbuttonlist);
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
@@ -173,7 +177,7 @@ namespace EDDiscovery
 
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
-            PopOutControl.PopOuts i = (PopOutControl.PopOuts)si;
+            PopOutControl.PopOuts i = (PopOutControl.PopOuts)(si + PopOutControl.PopOuts.StartTabButtons);
 
             _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
 
@@ -245,7 +249,7 @@ namespace EDDiscovery
 
         void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
         {
-            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)i);
+            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(i+ PopOutControl.PopOuts.StartTabButtons));
         }
 
         #endregion
@@ -538,9 +542,9 @@ namespace EDDiscovery
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)PopOutControl.PopOuts.Scan );
-            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)PopOutControl.PopOuts.Log );
-            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)PopOutControl.PopOuts.StarDistance);
+            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons));
+            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons) );
+            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons));
         }
 
         public void SaveSettings()     // called by form when closing
@@ -745,18 +749,7 @@ namespace EDDiscovery
             if (!comboBoxCustomPopOut.Enabled)
                 return;
 
-            if (comboBoxCustomPopOut.SelectedIndex == 0)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.Spanel);
-            else if (comboBoxCustomPopOut.SelectedIndex == 1)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.Trippanel);
-            else if (comboBoxCustomPopOut.SelectedIndex == 2)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.NotePanel);
-            else if (comboBoxCustomPopOut.SelectedIndex == 3)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.RouteTracker);
-            else if (comboBoxCustomPopOut.SelectedIndex == 4)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.Exploration);
-            else
-                _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex - 5));
+            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;

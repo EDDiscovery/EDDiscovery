@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //•	ReplacementItem(if a core module)
 //•	Cost(if any)
     [JournalEntryType(JournalTypeEnum.ModuleStore)]
-    public class JournalModuleStore : JournalEntry, ILedgerJournalEntry
+    public class JournalModuleStore : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalModuleStore(JObject evt) : base(evt, JournalTypeEnum.ModuleStore)
         {
@@ -64,5 +64,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             string s = (StoredItemLocalised.Length > 0) ? StoredItemLocalised : StoredItem;
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s +" on " + Ship, -Cost);
         }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ModuleStore(this);
+        }
+
     }
 }
