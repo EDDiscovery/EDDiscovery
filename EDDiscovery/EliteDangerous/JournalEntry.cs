@@ -367,7 +367,11 @@ namespace EDDiscovery.EliteDangerous
                 jc = jsonconvcache;
             }
 
-            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), "_Localised", EventTypeStr);
+
+//TBD
+            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), "_111Localised", EventTypeStr);
+// TBD
+
             return jpp.PrettyPrint(EventDataString, 80);
         }
 

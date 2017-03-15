@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellPrice
     //•	Ship
     [JournalEntryType(JournalTypeEnum.ModuleSellRemote)]
-    public class JournalModuleSellRemote : JournalEntry, ILedgerJournalEntry
+    public class JournalModuleSellRemote : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalModuleSellRemote(JObject evt) : base(evt, JournalTypeEnum.ModuleSellRemote)
         {
@@ -54,6 +54,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             string s = (SellItemLocalised.Length > 0) ? SellItemLocalised : SellItem;
 
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, SellItemLocalised + " on " + Ship, SellPrice);
+        }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ModuleSellRemote(this);
         }
 
     }

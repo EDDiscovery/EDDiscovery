@@ -30,21 +30,26 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
 
 [JournalEntryType(JournalTypeEnum.SetUserShipName)]
-    public class JournalSetUserShipName : JournalEntry
+    public class JournalSetUserShipName : JournalEntry , IShipInformation
     {
         public JournalSetUserShipName(JObject evt) : base(evt, JournalTypeEnum.SetUserShipName)
         {
-            Ship = JSONHelper.GetStringDef(evt["Ship"]);
+            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
             ShipID = JSONHelper.GetInt(evt["ShipID"]);
-            UserShipName = JSONHelper.GetStringDef(evt["UserShipName"]);
-            UserShipId = JSONHelper.GetStringDef(evt["UserShipId"]);
+            ShipName = JSONHelper.GetStringDef(evt["UserShipName"]);// name to match LoadGame
+            ShipIdent = JSONHelper.GetStringDef(evt["UserShipId"]);     // name to match LoadGame
         }
         public string Ship { get; set; }
         public int ShipID { get; set; }
-        public string UserShipName { get; set; }
-        public string UserShipId { get; set; }
+        public string ShipName { get; set; }
+        public string ShipIdent { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.setusershipname; } }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.SetUserShipName(this);
+        }
 
     }
 }

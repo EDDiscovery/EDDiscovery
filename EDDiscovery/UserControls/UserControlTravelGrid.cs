@@ -870,6 +870,8 @@ namespace EDDiscovery.UserControls
             ConditionVariables cv = new ConditionVariables();
             cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "" , new Type[] { typeof(System.Drawing.Bitmap) } , 5);
             discoveryform.LogLine(cv.ToString(separ: Environment.NewLine, quoteit: false));
+            if (rightclicksystem.ShipInformation != null)
+                discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
         }
 
         #endregion

@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellItem: item being sold
     //•	SellPrice: sale price
     [JournalEntryType(JournalTypeEnum.ModuleBuy)]
-    public class JournalModuleBuy : JournalEntry, ILedgerJournalEntry
+    public class JournalModuleBuy : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {
@@ -67,5 +67,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s + " on " + Ship, -BuyPrice + ( SellPrice??0) );
         }
 
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ModuleBuy(this);
+        }
     }
 }

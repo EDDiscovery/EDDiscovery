@@ -23,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Loadout
     //•	PlayerControlled: whether player is controlling the fighter from launch
     [JournalEntryType(JournalTypeEnum.LaunchFighter)]
-    public class JournalLaunchFighter : JournalEntry
+    public class JournalLaunchFighter : JournalEntry, IShipInformation
     {
         public JournalLaunchFighter(JObject evt) : base(evt, JournalTypeEnum.LaunchFighter)
         {
@@ -35,5 +35,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.launchfighter; } }
 
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.LaunchFighter(PlayerControlled);
+        }
     }
 }

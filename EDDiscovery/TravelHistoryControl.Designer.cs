@@ -58,6 +58,7 @@ namespace EDDiscovery
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
+            this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.userControlTravelGrid = new EDDiscovery.UserControls.UserControlTravelGrid();
@@ -68,6 +69,7 @@ namespace EDDiscovery
             this.panelNoteArea = new System.Windows.Forms.Panel();
             this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
             this.panel_system = new System.Windows.Forms.Panel();
+            this.labelSolDist = new System.Windows.Forms.Label();
             this.labelHomeSystem = new System.Windows.Forms.Label();
             this.textBoxState = new ExtendedControls.TextBoxBorder();
             this.textBoxEconomy = new ExtendedControls.TextBoxBorder();
@@ -92,8 +94,6 @@ namespace EDDiscovery
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
             this.tabStripMiddleRight = new ExtendedControls.TabStrip();
             this.tabStripBottomRight = new ExtendedControls.TabStrip();
-            this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
-            this.labelSolDist = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -241,7 +241,7 @@ namespace EDDiscovery
             this.comboBoxCustomPopOut.DataSource = null;
             this.comboBoxCustomPopOut.DisplayMember = "";
             this.comboBoxCustomPopOut.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomPopOut.DropDownHeight = 200;
+            this.comboBoxCustomPopOut.DropDownHeight = 250;
             this.comboBoxCustomPopOut.DropDownWidth = 150;
             this.comboBoxCustomPopOut.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomPopOut.ItemHeight = 13;
@@ -344,6 +344,18 @@ namespace EDDiscovery
             this.toolTipEddb.SetToolTip(this.buttonSync, "Send history to your EDSM account (make sure the EDSM ID is set in settings)");
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
+            // 
+            // textBoxSolDist
+            // 
+            this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSolDist.BorderColorScaling = 0.5F;
+            this.textBoxSolDist.Location = new System.Drawing.Point(50, 102);
+            this.textBoxSolDist.Name = "textBoxSolDist";
+            this.textBoxSolDist.ReadOnly = true;
+            this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
+            this.textBoxSolDist.TabIndex = 44;
+            this.textBoxSolDist.TabStop = false;
+            this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to home planet");
             // 
             // splitContainerLeftRight
             // 
@@ -499,6 +511,16 @@ namespace EDDiscovery
             this.panel_system.Name = "panel_system";
             this.panel_system.Size = new System.Drawing.Size(337, 134);
             this.panel_system.TabIndex = 6;
+            // 
+            // labelSolDist
+            // 
+            this.labelSolDist.AutoSize = true;
+            this.labelSolDist.Location = new System.Drawing.Point(2, 102);
+            this.labelSolDist.Name = "labelSolDist";
+            this.labelSolDist.Size = new System.Drawing.Size(22, 13);
+            this.labelSolDist.TabIndex = 45;
+            this.labelSolDist.Text = "Sol";
+            this.labelSolDist.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelHomeSystem
             // 
@@ -764,28 +786,6 @@ namespace EDDiscovery
             this.tabStripBottomRight.Size = new System.Drawing.Size(337, 157);
             this.tabStripBottomRight.StripAtTop = true;
             this.tabStripBottomRight.TabIndex = 0;
-            // 
-            // textBoxSolDist
-            // 
-            this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSolDist.BorderColorScaling = 0.5F;
-            this.textBoxSolDist.Location = new System.Drawing.Point(50, 102);
-            this.textBoxSolDist.Name = "textBoxSolDist";
-            this.textBoxSolDist.ReadOnly = true;
-            this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
-            this.textBoxSolDist.TabIndex = 44;
-            this.textBoxSolDist.TabStop = false;
-            this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to home planet");
-            // 
-            // labelSolDist
-            // 
-            this.labelSolDist.AutoSize = true;
-            this.labelSolDist.Location = new System.Drawing.Point(2, 102);
-            this.labelSolDist.Name = "labelSolDist";
-            this.labelSolDist.Size = new System.Drawing.Size(22, 13);
-            this.labelSolDist.TabIndex = 45;
-            this.labelSolDist.Text = "Sol";
-            this.labelSolDist.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // TravelHistoryControl
             // 
