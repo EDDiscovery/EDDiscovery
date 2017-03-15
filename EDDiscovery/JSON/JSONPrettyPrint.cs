@@ -241,14 +241,26 @@ namespace EDDiscovery
             return false;
         }
 
-        public string PrettyPrint(string json , int maxlinel)
+        public string PrettyPrintStr(string json, int maxlinel)
+        {
+            try
+            {
+                JObject jo = JObject.Parse(json);  // Create a clone
+                return PrettyPrint(jo, maxlinel);
+            }
+            catch ( Exception ex )
+            {
+                return "Report problem to EDDiscovery team, did not print properly: " + ex.Message + ex.StackTrace;
+            }
+        }
+
+        public string PrettyPrint(JObject jo, int maxlinel)
         {
             try
             {
                 StringBuilder sb = new StringBuilder();
 
                 maxlinelen = maxlinel;
-                JObject jo = JObject.Parse(json);  // Create a clone
                 int linelen = 0;
                 int nc = 1;
 

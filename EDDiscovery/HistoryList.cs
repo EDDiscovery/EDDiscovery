@@ -79,8 +79,10 @@ namespace EDDiscovery
         }
 
         public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
-        public ShipListModules ShipListModules { get { return shiplistmodules; } }
-        public PassengersList PassengersList { get { return passengerslist; } }
+        public ShipInformation ShipInformation { get { return shipmodules; } set { shipmodules = value; } }     // may be null if not set up yet
+        public ModulesInStore StoredModules { get { return storedmodules; } set { storedmodules = value; } }
+//        public PassengersList PassengersList { get { return passengerslist; } }
+  //      PassengersList passengerslist;
 
         // Calculated values, not from JE
 
@@ -101,8 +103,8 @@ namespace EDDiscovery
         int travelled_jumps;
 
         MaterialCommoditiesList materialscommodities;
-        ShipListModules shiplistmodules;
-        PassengersList passengerslist;
+        ShipInformation shipmodules;
+        ModulesInStore storedmodules;
 
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
@@ -370,8 +372,6 @@ namespace EDDiscovery
         public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl , SQLiteConnectionUser conn )      // called after above with a USER connection
         {
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
-            shiplistmodules = ShipListModules.Process(je, prev?.shiplistmodules,conn);
-            passengerslist = PassengersList.Process(je, prev?.passengerslist,conn);
 
             snc = SystemNoteClass.GetNoteOnJournalEntry(Journalid);
 
@@ -503,6 +503,7 @@ namespace EDDiscovery
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
 
         public MaterialCommoditiesLedger materialcommodititiesledger = new MaterialCommoditiesLedger();       // and the ledger..
+        public ShipInformationList shipinformationlist = new ShipInformationList();
 
         public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
 
@@ -1018,7 +1019,12 @@ namespace EDDiscovery
 
                     Debug.Assert(he.MaterialCommodity != null);
 
-                    this.materialcommodititiesledger.Process(je, conn);            // update the ledger
+                    // **** REMEMBER NEW Journal entry needs this too *****************
+
+                    materialcommodititiesledger.Process(je, conn);            // update the ledger     
+                    Tuple<ShipInformation,ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                    he.ShipInformation = ret.Item1;
+                    he.StoredModules = ret.Item2;                           
 
                     if (je.EventTypeID == JournalTypeEnum.Scan)
                     {
@@ -1029,9 +1035,6 @@ namespace EDDiscovery
                     }
                 }
             }
-
-            
-          
         }
 
         static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
@@ -1130,6 +1133,10 @@ namespace EDDiscovery
                     he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
 
                     materialcommodititiesledger.Process(je, conn);
+
+                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                    he.ShipInformation = ret.Item1;
+                    he.StoredModules = ret.Item2;
                 }
 
                 Add(he);

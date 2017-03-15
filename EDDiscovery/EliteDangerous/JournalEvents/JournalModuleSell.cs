@@ -25,7 +25,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellPrice
     //•	Ship
     [JournalEntryType(JournalTypeEnum.ModuleSell)]
-    public class JournalModuleSell : JournalEntry, ILedgerJournalEntry
+    public class JournalModuleSell : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalModuleSell(JObject evt ) : base(evt, JournalTypeEnum.ModuleSell)
         {
@@ -48,6 +48,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             return base.DefaultRemoveItems() + ";ShipID";
         }
+
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulesell; } }
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
@@ -55,6 +56,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             string s = (SellItemLocalised.Length > 0) ? SellItemLocalised : SellItem;
 
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s + " on " + Ship, SellPrice);
+        }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ModuleSell(this);
         }
 
     }

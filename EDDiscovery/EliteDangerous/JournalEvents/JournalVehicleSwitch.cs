@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	To: ( Mothership/Fighter)
     [JournalEntryType(JournalTypeEnum.VehicleSwitch)]
-    public class JournalVehicleSwitch : JournalEntry
+    public class JournalVehicleSwitch : JournalEntry, IShipInformation
     {
         public JournalVehicleSwitch(JObject evt ) : base(evt, JournalTypeEnum.VehicleSwitch)
         {
@@ -40,5 +40,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     return EDDiscovery.Properties.Resources.fighter;
             }
         }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.VehicleSwitch(To);
+        }
+
     }
 }

@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	ShipType
     //•	ShipID
     [JournalEntryType(JournalTypeEnum.ShipyardNew)]
-    public class JournalShipyardNew : JournalEntry
+    public class JournalShipyardNew : JournalEntry , IShipInformation
     {
         public JournalShipyardNew(JObject evt ) : base(evt, JournalTypeEnum.ShipyardNew)
         {
@@ -43,6 +43,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.shipyardnew; } }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.ShipyardNew(this);
+        }
 
     }
 }

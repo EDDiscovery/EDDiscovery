@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Cost: the price paid
     //•	Bankrupt: whether the commander declared bankruptcy
     [JournalEntryType(JournalTypeEnum.Resurrect)]
-    public class JournalResurrect : JournalEntry, ILedgerJournalEntry
+    public class JournalResurrect : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
         {
@@ -33,6 +33,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Bankrupt = JSONHelper.GetBool(evt["Bankrupt"]);
 
         }
+
         public string Option { get; set; }
         public long Cost { get; set; }
         public bool Bankrupt { get; set; }
@@ -44,5 +45,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Option, -Cost);
         }
 
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.Resurrect();
+        }
     }
 }
