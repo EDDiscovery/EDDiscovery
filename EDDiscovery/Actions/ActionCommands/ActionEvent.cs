@@ -154,7 +154,7 @@ namespace EDDiscovery.Actions
                         hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
                     
                     if (cond.Count > 0)     // if we have filters, apply, filter out, true only stays
-                        hltest = cond.FilterHistoryOut(hltest, new ConditionVariables()); // apply filter..
+                        hltest = cond.CheckFilterTrue(hltest, new ConditionVariables()); // apply filter..
 
                     if (fwd)
                         ReportEntry(ap, hltest, 0, prefix);

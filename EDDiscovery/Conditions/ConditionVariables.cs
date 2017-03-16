@@ -335,113 +335,45 @@ namespace EDDiscovery
             return initial.ToString();
         }
 
-        public bool GetJSONFieldNamesAndValues(string json, string prefix = "")
-        {
-            try
-            {
-                JObject jo = JObject.Parse(json);  // Create a clone
+        #region Object values to this class
 
-                foreach (JToken jc in jo.Children())
+        public bool GetValuesIndicated(Object o)                                            // get the ones set up in the class
+        {
+            Type jtype = o.GetType();
+
+            foreach ( string k in values.Keys.ToList())
+            {
+                System.Reflection.PropertyInfo pi = jtype.GetProperty(k);
+                if ( pi != null )
                 {
-                    ExpandTokensA(jc, prefix);
+                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                    AddDataOfType(getter.Invoke(o, null), pi.PropertyType, k, 0);
                 }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private void ExpandTokensA(JToken jt, string prefix)
-        {
-            if (jt.HasValues)
-            {
-                JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
-
-                foreach (JToken jc in jt.Children())
+                else
                 {
-                    if (jc.HasValues)
+                    System.Reflection.FieldInfo fi = jtype.GetField(k);
+                    if ( fi != null )
                     {
-                        ExpandTokensA(jc, prefix);
-                    }
-                    else if (Array.FindIndex(decodeable, x => x == jc.Type) != -1)
-                    {
-                        values[prefix + jc.Path] = jc.Value<string>();
+                        AddDataOfType(fi.GetValue(o), fi.FieldType, k, 0);
                     }
                 }
             }
+
+            return true;
         }
 
-        // given a set of valuesneeded, fill in the values.. only fills in the ones in valuesneeded
 
-        public bool GetJSONFieldValuesIndicated(string json)
-        {
-            try
-            {
-                JObject jo = JObject.Parse(json);
-
-                int togo = values.Count;
-
-                foreach (JToken jc in jo.Children())
-                {
-                    ExpandTokensB(jc, ref togo);
-                    if (togo == 0)
-                        break;
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-
-        }
-
-        private void ExpandTokensB(JToken jt, ref int togo)
-        {
-            JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
-
-            if (jt.HasValues && togo > 0)
-            {
-                foreach (JToken jc in jt.Children())
-                {
-                    if (jc.HasValues)
-                    {
-                        ExpandTokensB(jc, ref togo);
-                    }
-                    else
-                    {
-                        string name = jc.Path;
-
-                        if (values.ContainsKey(name) && Array.FindIndex(decodeable, x => x == jc.Type) != -1)
-                        {
-                            values[name] = jc.Value<string>();
-                            togo--;
-
-                            // System.Diagnostics.Debug.WriteLine("Found "+ name);
-                        }
-                    }
-
-                    if (togo == 0)  // if we have all values, stop
-                        break;
-                }
-            }
-        }
-
-        public void AddPropertiesFieldsOfClass( Object o, string prefix , Type[] propexcluded , int maxdepth )
+        public void AddPropertiesFieldsOfClass( Object o, string prefix , Type[] propexcluded , int maxdepth )      // get all data in the class
         {
             Type jtype = o.GetType();
 
             foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
             {
-                if (pi.GetIndexParameters().GetLength(0) == 0 && (propexcluded ==null || !propexcluded.Contains(pi.PropertyType)) )      // only properties with zero parameters are called
+                if (pi.GetIndexParameters().GetLength(0) == 0 && (propexcluded == null || !propexcluded.Contains(pi.PropertyType)))      // only properties with zero parameters are called
                 {
                     string name = prefix + pi.Name;
                     System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                    AddDataOfType(getter.Invoke(o, null), pi.PropertyType, name,maxdepth);
+                    AddDataOfType(getter.Invoke(o, null), pi.PropertyType, name, maxdepth);
                 }
             }
 
@@ -566,5 +498,7 @@ namespace EDDiscovery
             }
             catch { }
         }
+
+        #endregion
     }
 }

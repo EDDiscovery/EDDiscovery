@@ -243,9 +243,9 @@ namespace EDDiscovery.Actions
         public int ActionRun(string triggername, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null ,
                                 string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
         {
-            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(triggername, flagstart);
+            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(triggername, flagstart);      // look thru all actions, find matching ones
 
-            if (ale.Count > 0)
+            if (ale.Count > 0)                  
             {
                 ConditionVariables eventvars = new ConditionVariables();
                 Actions.ActionVars.TriggerVars(eventvars, triggername, triggertype);
@@ -258,7 +258,7 @@ namespace EDDiscovery.Actions
 
                 ConditionFunctions functions = new ConditionFunctions(testvars,null);
 
-                if (actionfiles.CheckActions(ale, (he!=null) ? he.journalEntry.EventDataString : null, testvars, functions) > 0)
+                if (actionfiles.CheckActions(ale, he.journalEntry, testvars, functions) > 0)
                 {
                     actionfiles.RunActions(now, ale, actionrunasync, eventvars);  // add programs to action run
 
