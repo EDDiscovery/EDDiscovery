@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -33,14 +33,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);
-            Count = JSONHelper.GetInt(evt["Count"]);
-            SellPrice = JSONHelper.GetLong(evt["SellPrice"]);
-            TotalSale = JSONHelper.GetLong(evt["TotalSale"]);
-            AvgPricePaid = JSONHelper.GetLong(evt["AvgPricePaid"]);
-            IllegalGoods = JSONHelper.GetBool(evt["IllegalGoods"]);
-            StolenGoods = JSONHelper.GetBool(evt["StolenGoods"]);
-            BlackMarket = JSONHelper.GetBool(evt["BlackMarket"]);
+            Type = evt["Type"].Str();
+            Count = evt["Count"].Int();
+            SellPrice = evt["SellPrice"].Long();
+            TotalSale = evt["TotalSale"].Long();
+            AvgPricePaid = evt["AvgPricePaid"].Long();
+            IllegalGoods = evt["IllegalGoods"].Bool();
+            StolenGoods = evt["StolenGoods"].Bool();
+            BlackMarket = evt["BlackMarket"].Bool();
+            FriendlyType = JournalFieldNaming.RMat(Type);
         }
 
         public string Type { get; set; }
@@ -51,6 +52,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool IllegalGoods { get; set; }
         public bool StolenGoods { get; set; }
         public bool BlackMarket { get; set; }
+        public string FriendlyType { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketsell; } }
 
@@ -65,5 +67,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, mc.name + " " + Count + " Avg " + AvgPricePaid, TotalSale, (double)(SellPrice - AvgPricePaid));
         }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            long profit = TotalSale - (AvgPricePaid * Count);
+            info = Tools.FieldBuilder("", FriendlyType, "", Count, "<at ; credits", SellPrice, "Total:", TotalSale, "Profit:", profit);
+            detailed = Tools.FieldBuilder("Legal;Illegal", IllegalGoods, "Not Stolen;Stolen", StolenGoods, "Market;BlackMarket", BlackMarket);
+        }
     }
 }

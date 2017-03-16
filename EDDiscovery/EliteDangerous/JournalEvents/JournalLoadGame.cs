@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -27,20 +27,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
-            LoadGameCommander = JSONHelper.GetStringDef(evt["Commander"]);
-            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            StartLanded = JSONHelper.GetBool(evt["StartLanded"]);
-            StartDead = JSONHelper.GetBool(evt["StartDead"]);
-            GameMode = JSONHelper.GetStringDef(evt["GameMode"]);
-            Group = JSONHelper.GetStringDef(evt["Group"]);
-            Credits = JSONHelper.GetLong(evt["Credits"]);
-            Loan = JSONHelper.GetLong(evt["Loan"]);
+            LoadGameCommander = evt["Commander"].Str();
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
+            StartLanded = evt["StartLanded"].Bool();
+            StartDead = evt["StartDead"].Bool();
+            GameMode = evt["GameMode"].Str();
+            Group = evt["Group"].Str();
+            Credits = evt["Credits"].Long();
+            Loan = evt["Loan"].Long();
 
-            ShipName = JSONHelper.GetStringDef(evt["ShipName"]);
-            ShipIdent = JSONHelper.GetStringDef(evt["ShipIdent"]);
-            FuelLevel = JSONHelper.GetDouble(evt["FuelLevel"]);
-            FuelCapacity = JSONHelper.GetDouble(evt["FuelCapacity"]);
+            ShipName = evt["ShipName"].Str();
+            ShipIdent = evt["ShipIdent"].Str();
+            FuelLevel = evt["FuelLevel"].Double();
+            FuelCapacity = evt["FuelCapacity"].Double();
         }
 
         public string LoadGameCommander { get; set; }
@@ -58,10 +58,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double FuelLevel { get; set; }
         public double FuelCapacity { get; set; }
 
-
-        public override string DefaultRemoveItems()
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
-            return base.DefaultRemoveItems() + ";ShipID";
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("Commander:", LoadGameCommander, "Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Credits:", Credits);
+            detailed = Tools.FieldBuilder("Mode:", GameMode , "Group:" , Group , "Not Landed;Landed" , StartLanded , "Fuel Level:;;0.0", FuelLevel , "Capacity:;;0.0" , FuelCapacity);
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadgame; } }
@@ -78,5 +79,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             shp.LoadGame(ShipId, Ship, ShipName, ShipIdent);
         }
+
     }
 }

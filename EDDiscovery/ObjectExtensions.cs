@@ -13,11 +13,151 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
+
+public static class JSONObjectExtensions
+{
+    static public bool Empty(this JToken token)
+    {
+        return (token == null) ||
+               (token.Type == JTokenType.Array && !token.HasValues) ||
+               (token.Type == JTokenType.Object && !token.HasValues) ||
+               (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
+               (token.Type == JTokenType.Null);
+    }
+
+    static public string StrNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<string>();
+        }
+        catch { return null; }
+    }
+
+    static public string Str(this JToken jToken, string def = "")
+    {
+        if (jToken.Empty())
+            return def;
+        try
+        {
+            return jToken.Value<string>();
+        }
+        catch { return def; }
+    }
+
+    static public int Int(this JToken jToken, int def = 0)
+    {
+        int? f = jToken.IntNull();
+        return (f != null) ? f.Value : def;
+    }
+
+    static public int? IntNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<int>();
+        }
+        catch { return null; }
+    }
+
+    static public long Long(this JToken jToken, long def = 0)
+    {
+        long? f = jToken.LongNull();
+        return (f != null) ? f.Value : def;
+    }
+
+    static public long? LongNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<long>();
+        }
+        catch { return null; }
+    }
+
+    static public float Float(this JToken jToken, float def = 0)
+    {
+        float? f = jToken.FloatNull();
+        return (f != null) ? f.Value : def;
+    }
+
+    static public float? FloatNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<float>();
+
+        }
+        catch { return null; }
+    }
+
+    static public double Double(this JToken jToken, double def = 0)
+    {
+        double? f = jToken.DoubleNull();
+        return (f != null) ? f.Value : def;
+    }
+
+    static public double? DoubleNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<double>();
+        }
+        catch { return null; }
+    }
+
+    static public bool Bool(this JToken jToken, bool def = false)
+    {
+        bool? b = jToken.BoolNull();
+        return (b != null) ? b.Value : def;
+    }
+
+    static public bool? BoolNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<bool>();
+        }
+        catch { return null; }
+    }
+
+    static public string GetMultiStringDef(JObject evt, string[] names, string def = "")
+    {
+        foreach (string s in names)
+        {
+            JToken jt = evt[s];
+
+            if (!jt.Empty())
+            {
+                try
+                {
+                    return jt.Value<string>();
+                }
+                catch { }
+            }
+        }
+        return def;
+    }
+
+}
 
 public static class ObjectExtensions
 {
@@ -34,6 +174,11 @@ public static class ObjectExtensions
     public static string ToNANNullSafeString(this double? obj, string format)
     {
         return (obj.HasValue && obj != double.NaN) ? obj.Value.ToString(format) : string.Empty;
+    }
+
+    public static string Alt(this string obj, string alt)
+    {
+        return (obj == null || obj.Length == 0) ? alt : obj;
     }
 
     public static string ToNullUnknownString(this object obj)
@@ -78,6 +223,22 @@ public static class ObjectExtensions
             sb.Append(other);
         }
     }
+
+    public static bool AppendPrePad(this System.Text.StringBuilder sb, string other, string prefix, string prepad = " ")
+    {
+        if (other != null && other.Length > 0)
+        {
+            if (sb.Length > 0)
+                sb.Append(prepad);
+            if (prefix.Length > 0)
+                sb.Append(prefix);
+            sb.Append(other);
+            return true;
+        }
+        else
+            return false;
+    }
+
 
     public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
     {

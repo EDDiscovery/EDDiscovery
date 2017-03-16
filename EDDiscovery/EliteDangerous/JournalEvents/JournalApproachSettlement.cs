@@ -27,11 +27,21 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalApproachSettlement(JObject evt) : base(evt, JournalTypeEnum.ApproachSettlement)
         {
-            Name = JSONHelper.GetStringDef(evt["Name"]);
-
+            Name = evt["Name"].Str();
+            Name_Localised = evt["Name_Localised"].Str();
         }
+
         public string Name { get; set; }
+        public string Name_Localised { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.approachsettlement; } }
+
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Name_Localised.Alt(Name);
+            detailed = "";
+        }
+
     }
 }

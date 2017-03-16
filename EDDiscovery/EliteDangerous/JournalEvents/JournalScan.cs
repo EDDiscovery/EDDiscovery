@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
@@ -35,7 +35,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	RotationPeriod (seconds)
     //•	Rings: [ array ] - if present
     //
-    //Parameters(Planet/Moon) 
+    //Parameters(Planet/Moon)
     //•	Bodyname: name of body
     //•	DistanceFromArrivalLS
     //•	TidalLock: 1 if tidally locked
@@ -87,10 +87,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         // All orbiting bodies (Stars/Planets), not main star
         public double? nSemiMajorAxis;                              // direct
-        public double? nEccentricity;                               // direct    
+        public double? nEccentricity;                               // direct
         public double? nOrbitalInclination;                         // direct
-        public double? nPeriapsis;                                  // direct    
-        public double? nOrbitalPeriod { get; set; }                 // direct    
+        public double? nPeriapsis;                                  // direct
+        public double? nOrbitalPeriod { get; set; }                 // direct
 
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
@@ -109,7 +109,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
-        public Dictionary<string, double> Materials { get; set; }   
+        public Dictionary<string, double> Materials { get; set; }
 
         public EDReserve ReserveLevel { get;  set; }
         public string ReserveLevelStr
@@ -139,7 +139,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             get
             {
-                return JSONHelper.GetBool(jEventData["EDDFromEDSMBodie"], false);
+                return jEventData["EDDFromEDSMBodie"].Bool(false);
             }
         }
 
@@ -150,45 +150,47 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
-            BodyName = JSONHelper.GetStringDef(evt["BodyName"]);
-            StarType = JSONHelper.GetStringNull(evt["StarType"]);
+            BodyName = evt["BodyName"].Str();
+            StarType = evt["StarType"].StrNull();
 
-            DistanceFromArrivalLS = JSONHelper.GetDouble(evt["DistanceFromArrivalLS"]);
+            DistanceFromArrivalLS = evt["DistanceFromArrivalLS"].Double();
 
-            nAge = JSONHelper.GetDoubleNull(evt["Age_MY"]);
-            nStellarMass = JSONHelper.GetDoubleNull(evt["StellarMass"]);
-            nRadius = JSONHelper.GetDoubleNull(evt["Radius"]);
-            nAbsoluteMagnitude = JSONHelper.GetDoubleNull(evt["AbsoluteMagnitude"]);
-            nRotationPeriod = JSONHelper.GetDoubleNull(evt["RotationPeriod"]);
+            nAge = evt["Age_MY"].DoubleNull();
+            nStellarMass = evt["StellarMass"].DoubleNull();
+            nRadius = evt["Radius"].DoubleNull();
+            nAbsoluteMagnitude = evt["AbsoluteMagnitude"].DoubleNull();
+            nRotationPeriod = evt["RotationPeriod"].DoubleNull();
 
-            nOrbitalPeriod = JSONHelper.GetDoubleNull(evt["OrbitalPeriod"]);
-            nSemiMajorAxis = JSONHelper.GetDoubleNull(evt["SemiMajorAxis"]);
-            nEccentricity = JSONHelper.GetDoubleNull(evt["Eccentricity"]);
-            nOrbitalInclination = JSONHelper.GetDoubleNull(evt["OrbitalInclination"]);
-            nPeriapsis = JSONHelper.GetDoubleNull(evt["Periapsis"]);
+            nOrbitalPeriod = evt["OrbitalPeriod"].DoubleNull();
+            nSemiMajorAxis = evt["SemiMajorAxis"].DoubleNull();
+            nEccentricity = evt["Eccentricity"].DoubleNull();
+            nOrbitalInclination = evt["OrbitalInclination"].DoubleNull();
+            nPeriapsis = evt["Periapsis"].DoubleNull();
 
             Rings = evt["Rings"]?.ToObject<StarPlanetRing[]>();
 
-            nTidalLock = JSONHelper.GetBoolNull(evt["TidalLock"]);
-            TerraformState = JSONHelper.GetStringNull(evt["TerraformState"]);
+            nTidalLock = evt["TidalLock"].Bool();
+            TerraformState = evt["TerraformState"].StrNull();
             if (TerraformState != null && TerraformState.Equals("Not Terraformable", StringComparison.InvariantCultureIgnoreCase)) // EDSM returns this, normalise to journal
                 TerraformState = String.Empty;
-            PlanetClass = JSONHelper.GetStringNull(evt["PlanetClass"]);
+            PlanetClass = evt["PlanetClass"].StrNull();
 
-            Atmosphere = JSONHelper.GetStringNull(evt["Atmosphere"]);
+            Atmosphere = evt["Atmosphere"].StrNull();
             if (Atmosphere == null || Atmosphere.Length == 0)             // Earthlikes appear to have empty atmospheres but AtmosphereType
-                Atmosphere = JSONHelper.GetStringNull(evt["AtmosphereType"]);
+                Atmosphere = evt["AtmosphereType"].StrNull();
+            if (Atmosphere != null)
+                Atmosphere = Atmosphere.SplitCapsWordFull();
 
             AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
-            Volcanism = JSONHelper.GetStringNull(evt["Volcanism"]);
+            Volcanism = evt["Volcanism"].StrNull();
             VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
-            nMassEM = JSONHelper.GetDoubleNull(evt["MassEM"]);
-            nSurfaceGravity = JSONHelper.GetDoubleNull(evt["SurfaceGravity"]);
-            nSurfaceTemperature = JSONHelper.GetDoubleNull(evt["SurfaceTemperature"]);
-            nSurfacePressure = JSONHelper.GetDoubleNull(evt["SurfacePressure"]);
-            nLandable = JSONHelper.GetBoolNull(evt["Landable"]);
+            nMassEM = evt["MassEM"].DoubleNull();
+            nSurfaceGravity = evt["SurfaceGravity"].DoubleNull();
+            nSurfaceTemperature = evt["SurfaceTemperature"].DoubleNull();
+            nSurfacePressure = evt["SurfacePressure"].DoubleNull();
+            nLandable = evt["Landable"].BoolNull();
 
-            ReserveLevelStr = JSONHelper.GetStringDef(evt["ReserveLevel"]);
+            ReserveLevelStr = evt["ReserveLevel"].Str();
 
             if (IsStar)
             {
@@ -226,12 +228,38 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     Materials = new Dictionary<string, double>();
                     foreach (JObject jo in mats)
                     {
-                        Materials[(string)jo["Name"]] = JSONHelper.GetDouble(jo["Percent"]);
+                        Materials[(string)jo["Name"]] = jo["Percent"].Double();
                     }
                 }
             }
         }
 
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        {
+            summary = $"Scan of {BodyName}";
+
+            if ( IsStar )
+            {
+                double? r = nRadius;
+                if (r.HasValue)
+                    r = r / solarRadius_m;
+
+                info = Tools.FieldBuilder("", GetStarTypeImage().Item2, "Mass:;SM;0.00", nStellarMass, "Age:;my;0.0", nAge, "Radius:;SR;0.00", r );
+            }
+            else
+            {
+                double? r = nRadius;
+                if (r.HasValue)
+                    r = r / 1000;
+                double? g = nSurfaceGravity;
+                if (g.HasValue)
+                    g = g / 9.8;
+
+                info = Tools.FieldBuilder("", PlanetClass, "Mass:;EM;0.00", nMassEM, "<;Landable", IsLandable, "", Atmosphere, "Gravity:;G;0.0", g, "Radius:;km;0", r);
+            }
+
+            detailed = DisplayString(0, false);
+        }
 
 
         private void ConvertFromEDSMBodies()
@@ -240,13 +268,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             throw new NotImplementedException();
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
-        {
-            base.FillInformation(out summary, out info, out detailed);
-            summary = $"Scan of {BodyName}";
-        }
-
-        public string DisplayString(bool printbodyname = true, int indent = 0)
+        public string DisplayString(int indent = 0 , bool includefront = true)
         {
             string inds = new string(' ' , indent);
 
@@ -254,45 +276,45 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             scanText.Append(inds);
 
-            if (printbodyname)
+            if (includefront)
+            {
                 scanText.AppendFormat("{0}\n\n", BodyName);
 
-            if (IsStar)
-            {
-                scanText.AppendFormat(GetStarTypeImage().Item2);
-            }
-            else
-            {
-                scanText.AppendFormat("{0}", PlanetClass);
-            }
-
-            if (PlanetClass != null && !PlanetClass.ToLower().Contains("gas"))
-            {
-                scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere" : ( ", " + 
-                                                            System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Atmosphere.ToLower()) )
-                                     );
-            }
-
-            if (IsLandable)
-                scanText.AppendFormat(", Landable");
-
-            scanText.AppendFormat("\n");
-
-            if (nAge.HasValue)
-                scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
-
-            if (nStellarMass.HasValue)
-                scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
-
-            if (nMassEM.HasValue)
-                scanText.AppendFormat("Earth Masses: {0:0.0000}\n", nMassEM.Value);
-
-            if (nRadius.HasValue)
-            {
-                if ( IsStar )
-                    scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n", (nRadius.Value / solarRadius_m));
+                if (IsStar)
+                {
+                    scanText.AppendFormat(GetStarTypeImage().Item2);
+                }
                 else
-                    scanText.AppendFormat("Body Radius: {0:0.00}km\n", (nRadius.Value / 1000));
+                {
+                    scanText.AppendFormat("{0}", PlanetClass);
+
+                    if (!PlanetClass.ToLower().Contains("gas"))
+                    {
+                        scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere" : (", " + Atmosphere));
+                    }
+                }
+
+                if (IsLandable)
+                    scanText.AppendFormat(", Landable");
+
+                scanText.AppendFormat("\n");
+
+                if (nAge.HasValue)
+                    scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
+
+                if (nStellarMass.HasValue)
+                    scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
+
+                if (nMassEM.HasValue)
+                    scanText.AppendFormat("Earth Masses: {0:0.0000}\n", nMassEM.Value);
+
+                if (nRadius.HasValue)
+                {
+                    if (IsStar)
+                        scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n", (nRadius.Value / solarRadius_m));
+                    else
+                        scanText.AppendFormat("Body Radius: {0:0.00}km\n", (nRadius.Value / 1000));
+                }
             }
 
             if (nSurfaceTemperature.HasValue)
@@ -341,7 +363,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (nTidalLock.HasValue && nTidalLock.Value)
                 scanText.Append("Tidally locked\n");
 
-            if ( TerraformState != null && TerraformState == "Terraformable") 
+            if ( TerraformState != null && TerraformState == "Terraformable")
                 scanText.Append("Candidate for terraforming\n");
 
             if (HasRings)
@@ -381,7 +403,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
-            
+
             int estvalue = EstimatedValue();
             if (estvalue > 0)
                 scanText.AppendFormat("\nEstimated value: {0}", estvalue);
@@ -542,7 +564,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Neutron_Star, "Neutron Star");
 
                 case EDStar.H:
-                    
+
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Black Hole");
 
                 case EDStar.X:
@@ -553,7 +575,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
                 //case EDStar.b"supermassiveblackhole":
                  //   return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Super Massive Black Hole");
-                case EDStar.A_BlueWhiteSuperGiant:   
+                case EDStar.A_BlueWhiteSuperGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.A9III_White, "Blue White Super Giant");
                 case EDStar.F_WhiteSuperGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "F White Super Giant");
@@ -941,6 +963,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
     }
-    
+
 }
 

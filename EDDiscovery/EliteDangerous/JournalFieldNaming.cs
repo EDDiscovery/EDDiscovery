@@ -24,221 +24,40 @@ namespace EDDiscovery.EliteDangerous
 {
     class JournalFieldNaming
     {
-        public static JSONConverters StandardConverters()
-        {
-            JSONConverters jc = new JSONConverters();
-
-            {           // unique field names across multiple entries.  First up so later ones can override if required
-
-                jc.AddScale("MassEM", 1.0, "0.0000'em'", "Mass");
-                jc.AddScale("MassMT", 1.0, "0.0'mt'", "Mass");
-                jc.AddScale("SurfacePressure", 1.0, "0.0'p'");
-                jc.AddScale("Radius", 1.0 / 1000, "0.0'km'");
-                jc.AddScale("InnerRad", 1.0 / 1000, "0.0'km'", "Inner Radius");
-                jc.AddScale("OuterRad", 1.0 / 1000, "0.0'km'", "Outer Radius");
-                jc.AddScale("SemiMajorAxis", 1.0 / 1000, "0.0'km'", "Semi Major Axis");
-                jc.AddScale("OrbitalPeriod;RotationPeriod", 1.0 / 86400, "0.0' days orbit'", "");
-                jc.AddScale("SurfaceGravity", 1.0 / 9.8, "0.0'g'");
-                jc.AddScale("SurfaceTemperature", 1.0, "0.0'K'");
-                jc.AddScale("Scooped", 1.0, "'Scooped '0.0't'", "", "FuelScoop");
-                jc.AddScale("Total", 1.0, "'Fuel Level '0.0't'", "", "FuelScoop");
-                jc.AddScale("FuelUsed", 1.0, "'Fuel Used '0.0't'", "");
-                jc.AddScale("FuelLevel", 1.0, "'Fuel Level Left '0.0't'", "");
-                jc.AddScale("Amount", 1.0, "'Fuel Bought '0.0't'", "", "RefuelAll");
-                jc.AddScale("BoostValue", 1.0, "0.0' boost'", "", "JetConeBoost");
-                jc.AddScale("StarPos", 1.0, "0.0", "");          // any entry StarPos loses it name (inside arrays). StarPos as an array name gets printed sep.
-
-                jc.AddBool("TidalLock", "Not Tidally Locked", "Tidally Locked", ""); // remove name
-                jc.AddBool("Landable", "Not Landable", "Landable", ""); // remove name
-                jc.AddBool("ShieldsUp", "Shields Down", "Shields Up Captain", ""); // remove name
-                jc.AddState("TerraformState", "Not Terrraformable", "");    // remove name
-                jc.AddState("Atmosphere", "No Atmosphere", "");
-                jc.AddState("Volcanism", "No Volcanism", "");
-                jc.AddPrePostfix("StationType", "; Type", "");
-                jc.AddPrePostfix("StationName", "; Station", "");
-                jc.AddPrePostfix("DestinationSystem", "; Destination Star System", "");
-                jc.AddPrePostfix("DestinationStation", "; Destination Station", "");
-                jc.AddPrePostfix("StarSystem;System", "; Star System", "");
-                jc.AddPrePostfix("Allegiance", "; Allegiance", "");
-                jc.AddPrePostfix("Security", "; Security", "");
-                jc.AddPrePostfix("Faction", "; Faction", "");
-                jc.AddPrePostfix("Government", "Government Type ", "");
-                jc.AddPrePostfix("Economy", "Economy Type ", "");
-                jc.AddBool("Docked", "Not Docked", "Docked", "");   // remove name
-                jc.AddBool("PlayerControlled", "NPC Controlled", "Player Controlled", ""); // remove name
-
-                jc.AddPrePostfix("Body", "At ", "");
-
-                jc.AddPrePostfix("To", "To ", "", "VehicleSwitch");
-                jc.AddPrePostfix("Name", "", "", "CrewAssign");
-
-                jc.AddPrePostfix("Role", "; role", "", "CrewAssign");
-                jc.AddPrePostfix("Cost;ShipPrice;BaseValue", "; credits", "");
-                jc.AddPrePostfix("Bonus", "; credits bonus", "");
-                jc.AddPrePostfix("Amount", "; credits", "", "PayLegacyFines");
-                jc.AddPrePostfix("BuyPrice", "Bought for ; credits", "");
-                jc.AddPrePostfix("SellPrice", "Sold for ; credits", "");
-                jc.AddPrePostfix("TotalCost", "Total cost ; credits", "");
-
-                jc.AddPrePostfix("LandingPad", "On pad ", "");
-
-                jc.AddPrePostfix("BuyItem", "; bought", "");
-                jc.AddPrePostfix("SellItem", "; sold", "");
-
-                jc.AddPrePostfix("Credits", "; credits", "", "LoadGame");
-
-                jc.AddPrePostfix("Ship;ShipType", "Ship ;", "", replacer: GetBetterShipName);
-                jc.AddPrePostfix("StoreOldShip;SellOldShip", "; stored", "", replacer: GetBetterShipName);
-
-                jc.AddScale("Health", 100.0, "'Health' 0.0'%'", "");
-
-                jc.AddPrePostfix("Latitude", "", replacer: RLat);
-                jc.AddPrePostfix("Longitude", "", replacer: RLong);
-
-                jc.AddPrePostfix("Reward", "; credits", "");
-            }
-
-            {           //missions
-                jc.AddPrePostfix("Name", "", "", "MissionAccepted;MissionAbandoned;MissionCompleted;MissionFailed", GetBetterMissionName);
-            }
-
-            {           // transfers
-                string transfer = JL(new[] { JournalTypeEnum.ShipyardTransfer });
-                jc.AddScale("Distance", 1.0 / 299792458.0 / 365 / 24 / 60 / 60, "'Distance' 0.0'ly'", "", transfer);
-                jc.AddPrePostfix("TransferPrice", "; credits", "", transfer);
-            }
-
-            {           // misc
-                jc.AddPrePostfix("Name", "; settlement", "", "ApproachSettlement");
-                jc.AddPrePostfix("Item", ";", "", "Repair");
-            }
-
-            {           // scans
-                string scan = JL(new[] { JournalTypeEnum.Scan });
-                jc.AddPrePostfix("BodyName", "Scan ", "", scan);
-                jc.AddScale("DistanceFromArrivalLS", 1.0, "0.0' ls from arrival point'", "", scan);
-                jc.AddPrePostfix("StarType", "; type star", "", scan);
-                jc.AddScale("StellarMass", 1.0, "0.0' stellar masses'", "", scan);
-                jc.AddScale("Radius", 1.0 / 1000.0, "0.0' km radius'", "", scan);
-                jc.AddScale("AbsoluteMagnitude", 1.0, "0.0' absolute magnitude'", "", scan);
-                jc.AddScale("OrbitalPeriod", 1.0 / 86400, "0.0' days orbit'", "", scan);
-                jc.AddScale("RotationPeriod", 1.0 / 86400, "0.0' days rotation'", "", scan);
-                jc.AddPrePostfix("PlanetClass", "; planet class", "", scan);
-
-            }
-
-            {           // engineering
-                string engineer = JL(new[] { JournalTypeEnum.EngineerProgress, JournalTypeEnum.EngineerApply, JournalTypeEnum.EngineerCraft });
-                jc.AddPrePostfix("Engineer", "From ", "", engineer);
-                jc.AddPrePostfix("Progress", "", "", engineer);
-            }
-
-            {           // bounties
-            }
-
-            {
-                string rank = JL(new[] { JournalTypeEnum.Rank });
-                jc.AddIndex("Combat", "; combat;0;Harmless;Mostly Harmless;Novice;Competent;Expert;Master;Dangerous;Deadly;Elite", "", rank);
-                jc.AddIndex("Trade", "; trader;0;Penniless;Mostly Penniless;Peddler;Dealer;Merchant;Broker;Entrepreneur;Tycoon;Elite", "", rank);
-                jc.AddIndex("Explore", "; explorer;0;Aimless;Mostly Aimless;Scout;Surveyor;Trailblazer;Pathfinder;Ranger;Pioneer;Elite", "", rank);
-                jc.AddIndex("Empire", "; Empire;0;None;Outsider;Serf;Master;Squire;Knight;Lord;Baron;Viscount;Count;Earl;Marquis;Duke;Prince;King", "", rank);
-                jc.AddIndex("Federation", "; Federation;0;None;Recruit;Cadet;Midshipman;Petty Officer;Chief Pretty Officer;Warren Officer;Ensign;Lieutenant;Lieutenant Commander;Post Commander;Post Captain;Rear Admiral;Vice Admiral;Admiral", "", rank);
-            }
-
-
-            {       // places where commodities occur
-                string commodities = JL(new[] { JournalTypeEnum.MarketBuy, JournalTypeEnum.MarketSell, JournalTypeEnum.MiningRefined });
-                jc.AddPrePostfix("Type", ";", "", commodities, RMat);
-                jc.AddPrePostfix("Count", ";", "", commodities);
-            }
-
-            {
-                string materials = JL(new[] { JournalTypeEnum.MaterialCollected, JournalTypeEnum.MaterialDiscarded, JournalTypeEnum.MaterialDiscovered });
-                jc.AddPrePostfix("Name", ";", "", materials, RMat);
-                jc.AddPrePostfix("Category", ";", "", materials);
-                jc.AddPrePostfix("Count", "; items", "", materials);
-            }
-
-            {
-                string slots = JL(new[] { JournalTypeEnum.MassModuleStore, JournalTypeEnum.ModuleBuy, JournalTypeEnum.ModuleRetrieve, JournalTypeEnum.ModuleSell, JournalTypeEnum.ModuleStore, JournalTypeEnum.Loadout });
-                jc.AddPrePostfix("Slot", "Slot ;", "", slots, GetBetterSlotName);
-                jc.AddPrePostfix("FromSlot", "From ;", "", "ModuleSwap", GetBetterSlotName);
-                jc.AddPrePostfix("ToSlot", "To ;", "", "ModuleSwap", GetBetterSlotName);
-            }
-
-            {
-                // localised.. so localised will print, don't need converters
-                // FetchRemoveModule StoreItem
-                // ModuleBuy: BuyItem, SellItem
-                // Retrieve: RetrievedItem
-                // Repair: Item
-                // Sell: SellItem
-                // SellRemote: SellItem
-                // Store: StoredItem, Replacement item (I'm guessing)
-                // Swap: FromItem ToItem
-
-                // Not normally shown due to _Localised, but keep for debugging purposes, turn off the _localised bit in the journal entry to see them printed
-                // jc.AddPrePostfix("BuyItem", "BI:;", "", JL(new[] { JournalTypeEnum.ModuleBuy }), GetBetterItemNameEvents);
-                // jc.AddPrePostfix("SellItem", "SI:;", "", JL(new[] { JournalTypeEnum.ModuleBuy, JournalTypeEnum.ModuleSell }), GetBetterItemNameEvents);
-                // jc.AddPrePostfix("RetrievedItem", "RI:;", "", JL(new[] { JournalTypeEnum.ModuleRetrieve }), GetBetterItemNameEvents);
-
-                // needed 
-                jc.AddPrePostfix("Item", "Item ;", "", JL(new[] { JournalTypeEnum.Loadout }), GetBetterItemNameLoadout);
-                jc.AddPrePostfix("Name", "Item ;", "", JL(JournalTypeEnum.MassModuleStore), GetBetterItemNameEvents);
-            }
-
-
-            return jc;
-        }
-
-        static string RMat(string s)            // replacer for pretty print
+        public static string RMat(string s)            // replacer for pretty print
         {
             EDDiscovery2.DB.MaterialCommodity mc = EDDiscovery2.DB.MaterialCommodity.GetCachedMaterial(s);
+
             if (mc != null)
-                s = mc.name;
-            return s;
-        }
-
-        static string RLat(string value)      // replacer for pretty print
-        {
-            double lv;
-            if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lv))        // if it does parse, we can convert it
+                return mc.name;
+            else
             {
-                long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
-                string marker = (arcsec < 0) ? "S" : "N";       // presume lat
-                arcsec = Math.Abs(arcsec);
-                value = string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60);
+                StringBuilder ret = new StringBuilder();        //Phroggsters method
+
+                if (s.Length >= 8 && s.StartsWith("$") && s.EndsWith("_name;", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ret.Append(s.Substring(1, s.Length - 7)); // 1 for '$' plus 6 for '_name;'
+                    return ret.ToString().ToLowerInvariant();
+                }
+                else
+                    return s;
             }
-
-            return value;
         }
 
-        static string RLong(string value)      // replacer for pretty print
+        public static string RLat(double lv)      
         {
-            double lv;
-            if (double.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lv))        // if it does parse, we can convert it
-            {
-                long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
-                string marker = (arcsec < 0) ? "W" : "E";       // presume lat
-                arcsec = Math.Abs(arcsec);
-                value = string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60);
-            }
-
-            return value;
+            long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
+            string marker = (arcsec < 0) ? "S" : "N";       // presume lat
+            arcsec = Math.Abs(arcsec);
+            return string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60);
         }
 
-        static string JL(JournalTypeEnum ar)
+        public static string RLong(double lv)      
         {
-            return ar.ToString();
-        }
-
-        static string JL(JournalTypeEnum[] ar)
-        {
-            string s = "";
-            foreach (JournalTypeEnum a in ar)
-                s += ((s.Length > 0) ? ";" : "") + a.ToString();
-
-            return s;
+            long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
+            string marker = (arcsec < 0) ? "W" : "E";       // presume lat
+            arcsec = Math.Abs(arcsec);
+            return string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60);
         }
 
         private static Dictionary<string, string> shipnames = new Dictionary<string, string>()

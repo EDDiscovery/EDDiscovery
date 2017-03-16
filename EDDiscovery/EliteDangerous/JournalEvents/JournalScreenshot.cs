@@ -25,11 +25,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScreenshot(JObject evt ) : base(evt, JournalTypeEnum.Screenshot)
         {
-            Filename = JSONHelper.GetStringDef(evt["Filename"]);
-            Width = JSONHelper.GetInt(evt["Width"]);
-            Height = JSONHelper.GetInt(evt["Height"]);
-            System = JSONHelper.GetStringDef(evt["System"]);
-            Body = JSONHelper.GetStringDef(evt["Body"]);
+            Filename = evt["Filename"].Str();
+            Width = evt["Width"].Int();
+            Height = evt["Height"].Int();
+            System = evt["System"].Str();
+            Body = evt["Body"].Str();
         }
         public string Filename { get; set; }
         public int Width { get; set; }
@@ -38,6 +38,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Body { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.screenshot; } }
+
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("At " , Body , "<in " , System , "File:", Filename, "Width:", Width , "Height:", Height);
+            detailed = "";
+        }
 
         public void SetConvertedFilename(string input_filename, string output_filename, int width, int height)
         {

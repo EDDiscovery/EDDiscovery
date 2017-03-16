@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -31,12 +31,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommitCrime(JObject evt ) : base(evt, JournalTypeEnum.CommitCrime)
         {
-            CrimeType = JSONHelper.GetStringDef(evt["CrimeType"]);
-            Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            Victim = JSONHelper.GetStringDef(evt["Victim"]);
-            VictimLocalised = JSONHelper.GetStringDef(evt["Victim_Localised"]);
-            Fine = JSONHelper.GetLongNull(evt["Fine"]);
-            Bounty = JSONHelper.GetLongNull(evt["Bounty"]);
+            CrimeType = evt["CrimeType"].Str();
+            Faction = evt["Faction"].Str();
+            Victim = evt["Victim"].Str();
+            VictimLocalised = evt["Victim_Localised"].Str();
+            Fine = evt["Fine"].LongNull();
+            Bounty = evt["Bounty"].LongNull();
         }
         public string CrimeType { get; set; }
         public string Faction { get; set; }
@@ -63,5 +63,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, CrimeType + " on " + v);
         }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("", CrimeType, "<on faction ", Faction, "Against ", VictimLocalised.Alt(Victim), "Cost ; credits", Fine, "Bounty ; credits", Bounty);
+            detailed = "";
+        }
     }
 }

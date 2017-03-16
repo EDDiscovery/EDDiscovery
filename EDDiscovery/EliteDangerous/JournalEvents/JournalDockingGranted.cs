@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -35,13 +35,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingGranted(JObject evt ) : base(evt, JournalTypeEnum.DockingGranted)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
-            LandingPad = JSONHelper.GetInt(evt["LandingPad"]);
+            StationName = evt["StationName"].Str();
+            LandingPad = evt["LandingPad"].Int();
         }
         public string StationName { get; set; }
         public int LandingPad { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.dockinggranted; } }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("At ", StationName, "<on pad ", LandingPad);
+            detailed = "";
+        }
     }
 }
