@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -48,6 +49,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long TotalReward { get; set; }
         public string VictimFaction { get; set; }
         public string VictimFactionLocalised { get; set; }
+        public string Target { get; set; }
         public bool SharedWithOthers { get; set; }
         public BountyReward[] Rewards { get; set; }
 
@@ -61,71 +63,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, n);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            //info = FieldBuilder("; credits",TotalReward,"Victim faction:" , VictimFactionLocalised.Length>0 ? VictimFactionLocalised : VictimFaction);
-            info = ToOld();
+            info = Tools.FieldBuilder("; credits", TotalReward, "Target:", (string)Target, "Victim faction:", VictimFactionLocalised.Alt(VictimFaction));
+
             detailed = "";
-        }
-
-        // prefix;postfix value [if double,format]
-        // if bool, prefix;postfix is true/false
-
-        public string FieldBuilder(params System.Object[] values)
-        {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder(64);
-            for( int i = 0; i < values.Length; )
+            if ( Rewards!=null)
             {
-                System.Diagnostics.Debug.Assert(i + 2 <= values.Length);
-
-                string[] fieldnames = ((string)values[i]).Split(';');
-                object value = values[i + 1];
-                i += 2;
-
-                if (value is bool)
+                foreach (BountyReward r in Rewards)
                 {
-                    sb.Append(((bool)value) ? fieldnames[0] : fieldnames[1]);
+                    if (detailed.Length > 0)
+                        detailed += ", ";
+
+                    detailed += Tools.FieldBuilder("Faction:", r.Faction, "; credits", r.Reward);
                 }
-                else
-                {
-                    if (fieldnames[0].Length > 0)
-                        sb.Append(fieldnames[0]);
-
-                    if (value is string)
-                        sb.Append((string)value);
-                    else if (value is double)
-                    {
-                        System.Diagnostics.Debug.Assert(i < values.Length);
-                        sb.Append(((double)value).ToString((string)values[i++]));
-                    }
-                    else if (value is int)
-                        sb.Append(((int)value).ToString(System.Globalization.CultureInfo.InvariantCulture));
-                    else if (value is long)
-                        sb.Append(((long)value).ToString(System.Globalization.CultureInfo.InvariantCulture));
-                    else if (value is double?)
-                    {
-                        System.Diagnostics.Debug.Assert(i < values.Length);
-                        sb.Append(((double?)value).Value.ToString((string)values[i++]));
-                    }
-                    else if (value is int?)
-                        sb.Append(((int?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                    else if (value is long?)
-                        sb.Append(((long?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                    else
-                        System.Diagnostics.Debug.Assert(false);
-
-                    if (fieldnames.Length >= 2 && fieldnames[1].Length > 0)
-                        sb.Append(fieldnames[1]);
-                }
-
-                sb.Append(' ');
             }
-
-            return sb.ToString();
         }
-
     }
-
-
 }

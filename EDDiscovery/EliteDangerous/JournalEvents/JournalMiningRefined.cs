@@ -27,10 +27,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMiningRefined(JObject evt ) : base(evt, JournalTypeEnum.MiningRefined)
         {
-            Type = NormalizeCommodity(JSONHelper.GetStringDef(evt["Type"]));
+            Type = JSONHelper.GetStringDef(evt["Type"]);
+            FriendlyType = JournalFieldNaming.RMat(Type);
         }
 
         public string Type { get; set; }
+        public string FriendlyType { get; set; }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
@@ -45,10 +47,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.miningrefined; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = FriendlyType;
             detailed = "";
         }
     }

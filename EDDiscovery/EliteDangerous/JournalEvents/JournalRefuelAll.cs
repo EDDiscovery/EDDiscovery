@@ -29,10 +29,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalRefuelAll(JObject evt ) : base(evt, JournalTypeEnum.RefuelAll)
         {
             Cost = JSONHelper.GetLong(evt["Cost"]);
-            Amount = JSONHelper.GetInt(evt["Amount"]);
+            Amount = JSONHelper.GetDouble(evt["Amount"]);
         }
+
         public long Cost { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.refuelall; } }
 
@@ -41,10 +42,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Amount " + Amount.ToString() + "t", -Cost);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Cost:; credits", Cost, "Fuel:;;0.0", Amount);
             detailed = "";
         }
     }

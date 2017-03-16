@@ -52,10 +52,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     return EDDiscovery.Properties.Resources.restockfighter;
             } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("",Type , "Cost:; credits" , Cost , "Count:" , Count , "Loadout:" , Loadout);
             detailed = "";
         }
     }

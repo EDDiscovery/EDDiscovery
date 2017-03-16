@@ -44,10 +44,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.ShipyardNew(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = ShipType;
             detailed = "";
         }
     }

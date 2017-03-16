@@ -43,10 +43,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.communitygoalreward; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", Name, "<at ; Star System", System, "Reward ; credits", Reward);
             detailed = "";
         }
     }

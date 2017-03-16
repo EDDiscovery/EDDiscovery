@@ -30,7 +30,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Materials = null;
 
-            Name = JSONHelper.GetStringDef(evt["Name"]);
+            Name = JSONHelper.GetStringDef(evt["Name"]).SplitCapsWordFull();
             JToken mats = (JToken)evt["Materials"];
 
             if (mats != null)
@@ -63,10 +63,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.synthesis; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Name;
+            if (Materials != null)
+                foreach (KeyValuePair<string, int> k in Materials)
+                    info += ", " + k.Key + ":" + k.Value.ToString();
+
             detailed = "";
         }
     }

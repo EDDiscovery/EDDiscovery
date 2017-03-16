@@ -58,10 +58,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.MassModuleStore(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = "";
+            foreach (ModuleItem m in ModuleItems)
+            {
+                if (info.Length>0)
+                    info += ", ";
+                info += m.Name;
+            }
+                
             detailed = "";
         }
     }

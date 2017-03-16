@@ -41,10 +41,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Amoubt " + Amount.ToString() +"t", -Cost);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Cost:; credits", Cost, "Fuel:;;0.0", Amount);
             detailed = "";
         }
     }

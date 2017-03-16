@@ -36,10 +36,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplayvoucher; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //U
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Power;
+            if ( Systems!=null)
+            {
+                info += ", Systems:";
+
+                bool comma = false;
+                foreach( string s in Systems)
+                {
+                    if (comma)
+                        info += ", ";
+                    comma = true;
+                    info += s;
+                }
+            }
+
             detailed = "";
         }
     }

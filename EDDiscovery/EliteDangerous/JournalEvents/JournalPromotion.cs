@@ -64,10 +64,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.promotion; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Combat:", Combat.HasValue ? Combat.ToString() : null,
+                                      "Trade:", Trade.HasValue ? Trade.ToString() : null,
+                                      "Exploration:", Explore.HasValue ? Explore.ToString() : null,
+                                      "Empire:", Empire.HasValue ? Empire.ToString() : null,
+                                      "Federation:", Federation.HasValue ? Federation.ToString() : null,
+                                      "CQC:", CQC.HasValue ? CQC.ToString() : null);
             detailed = "";
         }
     }

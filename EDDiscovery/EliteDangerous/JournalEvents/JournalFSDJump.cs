@@ -48,7 +48,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalFSDJump(JObject evt) : base(evt, JournalTypeEnum.FSDJump)
         {
-            Body = JSONHelper.GetStringDef(evt["body"], "Unknown");
+            Body = JSONHelper.GetStringDef(evt["body"]);
             JumpDist = JSONHelper.GetDouble(evt["JumpDist"]);
             FuelUsed = JSONHelper.GetDouble(evt["FuelUsed"]);
             FuelLevel = JSONHelper.GetDouble(evt["FuelLevel"]);
@@ -93,15 +93,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string PowerplayState { get; set; }
         public string[] Powers { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = "Jump to " + StarSystem;
             info = "";
             if (JumpDist > 0)
                 info += JumpDist.ToString("0.00") + " ly";
-            if ( FuelUsed > 0 )
-                info += " Fuel " + FuelUsed.ToString("0.0") + "t";
-            detailed = "";// TBD ToShortString("StarSystem;JumpDist;FuelUsed");       // don't repeat these.
+            if (FuelUsed > 0)
+                info += ", Fuel " + FuelUsed.ToString("0.0") + "t";
+            if (FuelLevel > 0)
+                info += " left " + FuelLevel.ToString("0.0") + "t";
+
+            string econ = Economy_Localised.Alt(Economy);
+            if (econ.Equals("None"))
+                econ = "";
+
+            info += " ";
+            info += Tools.FieldBuilder("Body:", Body, "Faction:", Faction, "<state:", FactionState, "Allegiance:", Allegiance, "Economy:", econ);
+            detailed = "";
         }
 
         public bool RealJournalEvent  // True if real ED 2.2+ journal event and not pre 2.2 imported.

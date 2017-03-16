@@ -51,10 +51,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.SetUserShipName(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("",ShipName,"", ShipIdent, "On:" , Ship);
             detailed = "";
         }
     }

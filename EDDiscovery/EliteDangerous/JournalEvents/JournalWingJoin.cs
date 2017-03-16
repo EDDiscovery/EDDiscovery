@@ -35,10 +35,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.wingjoin; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = "";
+            if (Others != null)
+                foreach (string s in Others)
+                {
+                    if (info.Length > 0)
+                        info += ", ";
+                    info += s;
+                }
             detailed = "";
         }
     }

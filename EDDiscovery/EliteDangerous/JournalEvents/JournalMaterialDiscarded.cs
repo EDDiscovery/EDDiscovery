@@ -26,11 +26,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Category = JSONHelper.GetStringDef(evt["Category"]);
             Name = JSONHelper.GetStringDef(evt["Name"]);
             Count = JSONHelper.GetInt(evt["Count"]);
-
+            FriendlyName = JournalFieldNaming.RMat(Name);
         }
+
         public string Category { get; set; }
         public string Name { get; set; }
         public int Count { get; set; }
+        public string FriendlyName { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.materialdiscarded; } }
 
@@ -39,10 +41,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mc.Change(Category, Name, -Count, 0, conn);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", FriendlyName, "<; items", Count);
             detailed = "";
         }
     }

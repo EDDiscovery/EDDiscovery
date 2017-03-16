@@ -76,10 +76,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.ModuleBuy(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", BuyItemLocalised.Alt(BuyItem), "<into ", Slot, "Cost:; credits", BuyPrice);
+            if (SellItem.Length > 0)
+                info += ", " + Tools.FieldBuilder("Sold:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
+            if (StoredItem.Length > 0)
+                info += ", " + Tools.FieldBuilder("Stored:", StoredItemLocalised.Alt(StoredItem));
+
             detailed = "";
         }
     }

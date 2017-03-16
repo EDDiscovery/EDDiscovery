@@ -31,17 +31,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Category = JSONHelper.GetStringDef(evt["Category"]);
             Name = JSONHelper.GetStringDef(evt["Name"]);
             DiscoveryNumber = JSONHelper.GetInt(evt["DiscoveryNumber"]);
+            FriendlyName = JournalFieldNaming.RMat(Name);
         }
+
         public string Category { get; set; }
         public string Name { get; set; }
         public int DiscoveryNumber { get; set; }
+        public string FriendlyName { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.materialdiscovered; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", FriendlyName );
             detailed = "";
         }
     }

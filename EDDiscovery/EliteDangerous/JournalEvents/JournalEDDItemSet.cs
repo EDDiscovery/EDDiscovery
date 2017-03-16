@@ -87,10 +87,32 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = "";
+            bool comma = false;
+            if (Materials != null)
+            {
+                foreach (MaterialItem m in Materials.Materials)
+                {
+                    if (comma)
+                        info += ", ";
+                    comma = true;
+                    info += Tools.FieldBuilder("Name:", m.Name, "", m.Count);
+                }
+            }
+
+            if (Commodities != null)
+            {
+                foreach (CommodityItem m in Commodities.Commodities)
+                {
+                    if (comma)
+                        info += ", ";
+                    comma = true;
+                    info += Tools.FieldBuilder("Name:", m.Name, "", m.Count);
+                }
+            }
             detailed = "";
         }
 

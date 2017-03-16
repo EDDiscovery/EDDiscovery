@@ -29,16 +29,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
         {
             StationName = JSONHelper.GetStringDef(evt["StationName"]);
+            StationType = JSONHelper.GetStringDef(evt["StationType"]);
 
         }
         public string StationName { get; set; }
+        public string StationType { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationexit; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", StationName, "Type:", StationType);
             detailed = "";
         }
     }

@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             RetrievedItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["RetrievedItem"]));
             RetrievedItemLocalised = JSONHelper.GetStringDef(evt["RetrievedItem_Localised"]);
-            EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]);
+            EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]).SplitCapsWordFull();
             SwapOutItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["SwapOutItem"]));
             SwapOutItemLocalised = JSONHelper.GetStringDef(evt["SwapOutItem_Localised"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
@@ -66,10 +66,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.ModuleRetrieve(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", RetrievedItemLocalised.Alt(RetrievedItem), "<into ", Slot);
+            if ( Cost>0)
+                info += " " + Tools.FieldBuilder("Cost:; credits", Cost);
+
+            if (SwapOutItem.Length > 0)
+                info += ", " + Tools.FieldBuilder("Stored:", SwapOutItemLocalised.Alt(SwapOutItem));
             detailed = "";
         }
 

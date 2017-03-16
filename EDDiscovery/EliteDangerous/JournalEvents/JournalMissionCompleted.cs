@@ -39,14 +39,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Name = JournalFieldNaming.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
             Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            Commodity = NormalizeCommodity(JSONHelper.GetStringDef(evt["Commodity"]));
+            Commodity = JSONHelper.GetStringDef(evt["Commodity"]);
             Count = JSONHelper.GetIntNull(evt["Count"]);
             Target = JSONHelper.GetStringDef(evt["Target"]);
             TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
             TargetFaction = JSONHelper.GetStringDef(evt["TargetFaction"]);
-            Reward = JSONHelper.GetLongNull(evt["Reward"]) ?? 0;
-            Donation = JSONHelper.GetLongNull(evt["Donation"]) ?? 0;
+            Reward = JSONHelper.GetLongNull(evt["Reward"]);
+            Donation = JSONHelper.GetLongNull(evt["Donation"]);
             MissionId = JSONHelper.GetInt(evt["MissionID"]);
+
+            DestinationSystem = JSONHelper.GetStringDef(evt["DestinationSystem"]);
+            DestinationStation = JSONHelper.GetStringDef(evt["DestinationStation"]);
 
             if (!JSONHelper.IsNullOrEmptyT(evt["PermitsAwarded"]))
                 PermitsAwarded = evt.Value<JArray>("PermitsAwarded").Values<string>().ToArray();
@@ -68,14 +71,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     }
                 }
             }
+
+            FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
         }
+
         public string Name { get; set; }
         public string Faction { get; set; }
         public string Commodity { get; set; }
+        public string FriendlyCommodity { get; set; }
         public int? Count { get; set; }
         public string Target { get; set; }
         public string TargetType { get; set; }
         public string TargetFaction { get; set; }
+        public string DestinationSystem { get; set; }
+        public string DestinationStation { get; set; }
         public long? Reward { get; set; }
         public long? Donation { get; set; }
         public string[] PermitsAwarded { get; set; }
@@ -99,11 +108,23 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (Reward - Donation) , 0);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
-            detailed = "";
+            info = Tools.FieldBuilder("", Name, "<from ", Faction, "Reward:" , Reward , "Donation:" , Donation , "System:", DestinationSystem, "Station:", DestinationStation);
+            detailed = Tools.FieldBuilder("Commodity:", FriendlyCommodity, "Target:", Target, "Type:", TargetType, "Target Faction:", TargetFaction);       // TBD
+
+            if (PermitsAwarded != null)
+            {
+                foreach (string s in PermitsAwarded)
+                    detailed += System.Environment.NewLine + "Permit: " + s;
+            }
+
+            if (CommodityReward != null)
+            {
+                foreach (System.Tuple<string,int> t in CommodityReward)
+                    detailed += System.Environment.NewLine + "Commodity: " + t.Item1 + " " + t.Item2.ToString();
+            }
         }
     }
 }

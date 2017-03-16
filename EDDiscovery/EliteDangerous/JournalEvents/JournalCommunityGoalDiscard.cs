@@ -29,14 +29,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Name = JSONHelper.GetStringDef(evt["Name"]);
             System = JSONHelper.GetStringDef(evt["System"]);
         }
+
         public string Name { get; set; }
         public string System { get; set; }
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.communitygoaldiscard; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", Name, "<at ; Star System", System);
             detailed = "";
         }
     }

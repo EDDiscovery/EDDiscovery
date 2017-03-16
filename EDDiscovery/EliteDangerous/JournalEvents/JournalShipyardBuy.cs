@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardBuy(JObject evt ) : base(evt, JournalTypeEnum.ShipyardBuy)
         {
-            ShipType = JSONHelper.GetStringDef(evt["ShipType"]);
+            ShipType = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["ShipType"]));
             ShipPrice = JSONHelper.GetLong(evt["ShipPrice"]);
             StoreOldShip = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["StoreOldShip"]));
             StoreShipId = JSONHelper.GetIntNull(evt["StoreShipID"]);
@@ -61,10 +61,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, -ShipPrice + (SellPrice ?? 0));
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", ShipType, "Amount:; credits", ShipPrice);
+            if (StoreOldShip.Length > 0)
+                info += ", " + Tools.FieldBuilder("Stored:", StoreOldShip);
+            if (SellOldShip.Length > 0)
+                info += ", " + Tools.FieldBuilder("Sold:", StoreOldShip, "Amount:; credits", SellPrice);
             detailed = "";
         }
 

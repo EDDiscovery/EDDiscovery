@@ -41,16 +41,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             CockpitBreach = JSONHelper.GetBool(evt["CockpitBreach"]);
 
             Faction = JSONHelper.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
-            FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
+            FactionState = JSONHelper.GetStringDef(evt["FactionState"]).SplitCapsWord();
 
             Allegiance = JSONHelper.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
             Economy = JSONHelper.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
             Economy_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
             Government = JSONHelper.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
             Government_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
-
-            //Security = JSONHelper.GetMultiStringDef(evt["Security"]);
-            //Security_Localised = JSONHelper.GetMultiStringDef(evt["Security_Localised"]);
         }
 
         public string StationName { get; set; }
@@ -64,17 +61,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Economy_Localised { get; set; }
         public string Government { get; set; }
         public string Government_Localised { get; set; }
-        //public string Security { get; set; }
-        //public string Security_Localised { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
 
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
-            summary = $"Docked at {StationName}";
-            info = "";;// NOT DONE
-            detailed = "";
+            summary = $"At {StationName}";
+            info = Tools.FieldBuilder("Type ", StationType, "<in system ", StarSystem, "Faction:", Faction, "<in state ", FactionState);
+            detailed = Tools.FieldBuilder("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government));
         }
 
     }

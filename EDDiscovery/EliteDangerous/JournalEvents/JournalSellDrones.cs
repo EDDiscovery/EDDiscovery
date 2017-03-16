@@ -46,10 +46,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Count.ToString() + " drones", TotalSale);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("",Type, "Count:" , Count , "Each:; credits" , SellPrice, "Amount:; credits" , TotalSale);
             detailed = "";
         }
     }

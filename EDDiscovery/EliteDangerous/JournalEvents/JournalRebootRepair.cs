@@ -34,10 +34,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string[] Modules { get; set; }
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rebootrepair; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = "";
+            if (Modules != null)
+            {
+                foreach (string s in Modules)
+                {
+                    if (info.Length > 0)
+                        info += ", ";
+
+                    info += s;
+                }
+            }
             detailed = "";
         }
     }
