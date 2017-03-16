@@ -199,16 +199,16 @@ namespace EDDiscovery.Actions
             return apl;
         }
 
-        // if eventjson = null meaning not associated with an event.
-        // work out which ones passed
+        // triage found actions and see which ones are runnable
+        // cls = object from which to get any needed values from
         // if se is set passed enabled string expansion of arguments in condition of event..
 
-        public int CheckActions(List<Actions.ActionFileList.MatchingSets> ale, string eventjson , ConditionVariables othervars,
+        public int CheckActions(List<Actions.ActionFileList.MatchingSets> ale, Object cls , ConditionVariables othervars,
                                             ConditionFunctions se = null)
         {
             ConditionVariables valuesneeded = new ConditionVariables();
 
-            if ( eventjson != null )
+            if ( cls != null )
             {
                 foreach (MatchingSets ae in ale)       // for all files
                 {
@@ -216,7 +216,7 @@ namespace EDDiscovery.Actions
                         fe.IndicateValuesNeeded(ref valuesneeded);
                 }
 
-                valuesneeded.GetJSONFieldValuesIndicated(eventjson);     // get the values needed for the conditions
+                valuesneeded.GetValuesIndicated(cls);     // get the values needed for the conditions
             }
 
             valuesneeded.Add(othervars);

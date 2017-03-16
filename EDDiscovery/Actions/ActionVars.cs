@@ -47,7 +47,6 @@ namespace EDDiscovery.Actions
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
 
                 vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) } , 5);      //depth seems good enough
-                vars.GetJSONFieldNamesAndValues(he.journalEntry.EventDataString, prefix + "JS_");
             }
         }
 

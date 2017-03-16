@@ -75,11 +75,11 @@ namespace EDDiscovery
             return MatchTypeFromString(matchname, out mt) && IsUnaryOperation(mt);
         }
 
-        static public bool MatchTypeFromString(string s, out MatchType mt )
+        static public bool MatchTypeFromString(string s, out MatchType mt)
         {
             int indexof = Array.FindIndex(MatchNames, x => x.Equals(s, StringComparison.InvariantCultureIgnoreCase));
 
-            if ( indexof == -1)
+            if (indexof == -1)
                 indexof = Array.FindIndex(OperatorNames, x => x.Equals(s, StringComparison.InvariantCultureIgnoreCase));
 
             if (indexof >= 0)
@@ -95,7 +95,7 @@ namespace EDDiscovery
                 return false;
             }
         }
-        
+
         static public string[] MatchNames = { "Contains",       // used for display
                                        "Not Contains",
                                        "== (Str)",
@@ -195,8 +195,8 @@ namespace EDDiscovery
                     eventname = e;
                     action = a;
                     actiondata = d;
-                    innercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), i.Replace(" ", ""),true);       // must work, exception otherwise
-                    outercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), o.Replace(" ", ""),true);       // must work, exception otherwise
+                    innercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), i.Replace(" ", ""), true);       // must work, exception otherwise
+                    outercondition = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), o.Replace(" ", ""), true);       // must work, exception otherwise
                     return true;
                 }
                 catch { }
@@ -241,7 +241,7 @@ namespace EDDiscovery
 
 
         // check all conditions against these values.
-        public bool? CheckAll(ConditionVariables values, out string errlist , List<Condition> passed = null , ConditionFunctions cf = null )            // Check all conditions..
+        public bool? CheckAll(ConditionVariables values, out string errlist, List<Condition> passed = null, ConditionFunctions cf = null)            // Check all conditions..
         {
             if (conditionlist.Count == 0)            // no filters match, null
             {
@@ -252,7 +252,7 @@ namespace EDDiscovery
             return CheckConditions(conditionlist, values, out errlist, passed, cf);
         }
 
-        public bool? CheckConditions(List<Condition> fel, ConditionVariables values, out string errlist, List<Condition> passed = null, ConditionFunctions cf = null )
+        public bool? CheckConditions(List<Condition> fel, ConditionVariables values, out string errlist, List<Condition> passed = null, ConditionFunctions cf = null)
         {
             errlist = null;
 
@@ -268,7 +268,7 @@ namespace EDDiscovery
 
                     if (f.matchtype == MatchType.IsPresent)         // these use f.itemname without any expansion
                     {
-                        if (values.Exists(f.itemname) && values[f.itemname] != null )
+                        if (values.Exists(f.itemname) && values[f.itemname] != null)
                             matched = true;
                     }
                     else if (f.matchtype == MatchType.IsNotPresent)
@@ -315,7 +315,7 @@ namespace EDDiscovery
                         {
                             er = cf.ExpandString(f.matchstring, out rightside);
 
-                            if (er == ConditionFunctions.ExpandResult.Failed )        //  if error, abort
+                            if (er == ConditionFunctions.ExpandResult.Failed)        //  if error, abort
                             {
                                 errlist += rightside;     // add on errors..
                                 innerres = false;   // stop loop, false
@@ -328,14 +328,14 @@ namespace EDDiscovery
                         if (f.matchtype == MatchType.DateBefore || f.matchtype == MatchType.DateAfter)
                         {
                             DateTime tmevalue, tmecontent;
-                            if (!DateTime.TryParse(leftside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmevalue) )
+                            if (!DateTime.TryParse(leftside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmevalue))
                             {
                                 errlist += "Date time not in correct format on left side" + Environment.NewLine;
                                 innerres = false;
                                 break;
 
                             }
-                            else if ( !DateTime.TryParse(rightside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmecontent))
+                            else if (!DateTime.TryParse(rightside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmecontent))
                             {
                                 errlist += "Date time not in correct format on right side" + Environment.NewLine;
                                 innerres = false;
@@ -373,7 +373,7 @@ namespace EDDiscovery
                             StringParser p = new StringParser(rightside);
                             List<string> ret = p.NextQuotedWordList();
 
-                            if ( ret == null)
+                            if (ret == null)
                             {
                                 errlist += "IsOneOf value list is not in a optionally quoted comma separated form" + Environment.NewLine;
                                 innerres = false;
@@ -415,7 +415,7 @@ namespace EDDiscovery
                                 innerres = false;
                                 break;
                             }
-                            else if (!rightside.InvariantParse(out fnum) )
+                            else if (!rightside.InvariantParse(out fnum))
                             {
                                 errlist += "Number not in correct format on right side" + Environment.NewLine;
                                 innerres = false;
@@ -531,9 +531,9 @@ namespace EDDiscovery
                     j1["ICond"] = f.innercondition.ToString();
                 if (f.outercondition != LogicalCondition.Or)
                     j1["OCond"] = f.outercondition.ToString();
-                if ( f.action.Length>0)
+                if (f.action.Length > 0)
                     j1["Actions"] = f.action;
-                if ( f.actiondata.Length>0)
+                if (f.actiondata.Length > 0)
                     j1["ActionData"] = f.actiondata;
 
                 JArray jfields = new JArray();
@@ -585,8 +585,8 @@ namespace EDDiscovery
                     string evname = (string)j["EventName"];
                     LogicalCondition ftinner = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), JSONHelper.GetStringDef(j["ICond"], "Or"));
                     LogicalCondition ftouter = (LogicalCondition)Enum.Parse(typeof(LogicalCondition), JSONHelper.GetStringDef(j["OCond"], "Or"));
-                    string act = JSONHelper.GetStringDef(j["Actions"],"");
-                    string actd = JSONHelper.GetStringDef(j["ActionData"],"");
+                    string act = JSONHelper.GetStringDef(j["Actions"], "");
+                    string actd = JSONHelper.GetStringDef(j["ActionData"], "");
 
                     JArray filset = (JArray)j["Filters"];
 
@@ -648,10 +648,10 @@ namespace EDDiscovery
                         ret += "Condition " + OperatorNames[(int)f.fields[i].matchtype];
                     else
                     {
-                        ret += (f.fields[i].itemname).QuoteString(bracket:multi) + " " + OperatorNames[(int)f.fields[i].matchtype];
+                        ret += (f.fields[i].itemname).QuoteString(bracket: multi) + " " + OperatorNames[(int)f.fields[i].matchtype];
 
                         if (!IsUnaryOperation(f.fields[i].matchtype))
-                            ret += " " + f.fields[i].matchstring.QuoteString(bracket:multi);
+                            ret += " " + f.fields[i].matchstring.QuoteString(bracket: multi);
                     }
                 }
             }
@@ -662,7 +662,7 @@ namespace EDDiscovery
             return ret;
         }
 
-        public string FromString(string line )
+        public string FromString(string line)
         {
             StringParser sp = new StringParser(line);
 
@@ -677,7 +677,7 @@ namespace EDDiscovery
 
             List<Condition> cllist = new List<Condition>();
             List<ConditionEntry> ed = new List<ConditionEntry>();
-            string innercond = null,outercond = "Or";       // innercond == null until we have one, then it needs to be the same every time
+            string innercond = null, outercond = "Or";       // innercond == null until we have one, then it needs to be the same every time
 
             while (true)
             {
@@ -733,15 +733,15 @@ namespace EDDiscovery
                         if (!sp.IsCharMoveOn('(')) // must have another (
                             return "Missing multiple condition after " + outercond;
                     }
-                    
+
                 }
-                else if ( sp.IsEOL ) // last condition
+                else if (sp.IsEOL) // last condition
                 {
                     if (multi)
                         return "Missing closing braket in multiple condition";
 
                     Condition cl = new Condition();
-                    if (!cl.Create("Default", "", "", innercond??"Or", "Or"))
+                    if (!cl.Create("Default", "", "", innercond ?? "Or", "Or"))
                         return "Could not create condition - check inner and outer condition names";
 
                     cl.fields = ed;
@@ -755,7 +755,7 @@ namespace EDDiscovery
 
                     if (innercond == null)
                         innercond = condi;
-                    else if (!innercond.Equals(condi,StringComparison.InvariantCultureIgnoreCase))
+                    else if (!innercond.Equals(condi, StringComparison.InvariantCultureIgnoreCase))
                         return "Differing inner conditions incorrect";
 
                 }
@@ -798,16 +798,16 @@ namespace EDDiscovery
             return (fel.Count == 0) ? null : fel;
         }
 
-        public List<Tuple<string,MatchType>> ReturnValuesOfSpecificConditions(string itemname , List<MatchType> matchtypes)      // given itemname, give me a list of values it is matched against
+        public List<Tuple<string, MatchType>> ReturnValuesOfSpecificConditions(string itemname, List<MatchType> matchtypes)      // given itemname, give me a list of values it is matched against
         {
-            List<Tuple<string,MatchType>> ret = new List<Tuple<string,MatchType>>();
+            List<Tuple<string, MatchType>> ret = new List<Tuple<string, MatchType>>();
 
             foreach (Condition fe in conditionlist)        // find all values needed
             {
                 foreach (ConditionEntry ce in fe.fields)
                 {
                     if (ce.itemname.Equals(itemname) && matchtypes.Contains(ce.matchtype))
-                        ret.Add(new Tuple<string,MatchType>(ce.matchstring,ce.matchtype));
+                        ret.Add(new Tuple<string, MatchType>(ce.matchstring, ce.matchtype));
                 }
             }
 
@@ -816,14 +816,14 @@ namespace EDDiscovery
 
         #endregion
 
-        #region JSON as the vars - used for the filter out system..
+        #region Filtering system using the filter set up in this class
 
         // take conditions and JSON, decode it, execute..
-        private bool? CheckJSON(List<Condition> fel, 
-                                    string eventjson,        // JSON of the event 
-                                    ConditionVariables othervars,   // any other variables to present to the condition, in addition to the JSON variables
-                                    out string errlist,     // null if okay..
-                                    List<Condition> passed)            // null or conditions passed
+        private bool? CheckCondition(   List<Condition> fel, 
+                                        Object cls , // object with data in it
+                                        ConditionVariables othervars,   // any other variables to present to the condition, in addition to the JSON variables
+                                        out string errlist,     // null if okay..
+                                        List<Condition> passed)            // null or conditions passed
         {
             errlist = null;
 
@@ -834,9 +834,8 @@ namespace EDDiscovery
 
             try
             {
-                valuesneeded.GetJSONFieldValuesIndicated(eventjson);
+                valuesneeded.GetValuesIndicated(cls);
                 valuesneeded.Add(othervars);
-
                 return CheckConditions(fel, valuesneeded, out errlist, passed);    // and check, passing in the values collected against the conditions to test.
             }
             catch (Exception)
@@ -845,35 +844,37 @@ namespace EDDiscovery
                 return null;
             }
         }
-        
-        // Filter IN if condition matches..
 
-        private bool CheckFilterTrueIn(string json, ConditionVariables othervars, out string errlist, List<Condition> passed)      // if none, true, if false, true.. 
+        // TRUE if filter is True and has value
+
+        private bool CheckFilterTrue(Object cls, ConditionVariables othervars, out string errlist, List<Condition> passed)      // if none, true, if false, true.. 
         {                                                                                         // only if the filter passes do we get a false..
-            bool? v = CheckJSON(conditionlist, json, othervars, out errlist, passed);
+            bool? v = CheckCondition(conditionlist, cls, othervars, out errlist, passed);
             return (v.HasValue && v.Value);     // true IF we have a positive result
         }
 
-        public List<HistoryEntry> FilterHistoryOut(List<HistoryEntry> he , ConditionVariables othervars)    // conditions match for item to stay
+        // Filter out if condition matches
+
+        public List<HistoryEntry> CheckFilterTrue(List<HistoryEntry> he , ConditionVariables othervars)    // conditions match for item to stay
         {
             if (Count == 0)       // no filters, all in
                 return he;
             else
             {
                 string er;
-                List<HistoryEntry> ret = (from s in he where CheckFilterTrueIn(s.journalEntry.EventDataString, othervars, out er, null) select s).ToList();
+                List<HistoryEntry> ret = (from s in he where CheckFilterTrue(s.journalEntry, othervars, out er, null) select s).ToList();
                 return ret;
             }
         }
 
         // Filter OUT if condition matches..
 
-        private bool CheckFilterTrueOut(string json, string eventname, ConditionVariables othervars,  out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
+        private bool CheckFilterFalse(Object cls, string eventname, ConditionVariables othervars,  out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
         {
             List<Condition> fel = GetConditionListByEventName(eventname);
             if (fel != null)        // if we have matching filters..
             {
-                bool? v = CheckJSON(fel,json, othervars, out errlist, passed);  // true means filter matched
+                bool? v = CheckCondition(fel, cls, othervars, out errlist, passed);  // true means filter matched
                 bool res = !v.HasValue || v.Value == false;
                 //System.Diagnostics.Debug.WriteLine("Event " + eventname + " res " + res + " v " + v + " v.hv " + v.HasValue);
                 return res; // no value, true .. false did not match, thus true
@@ -888,7 +889,7 @@ namespace EDDiscovery
         public bool FilterHistory(HistoryEntry he, ConditionVariables othervars)                // true if it should be included
         {
             string er;
-            return CheckFilterTrueOut(he.journalEntry.EventDataString, he.journalEntry.EventTypeStr, othervars, out er, null);     // true it should be included
+            return CheckFilterFalse(he.journalEntry, he.journalEntry.EventTypeStr, othervars, out er, null);     // true it should be included
         }
 
         public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, ConditionVariables othervars , out int count)    // filter in all entries
@@ -899,7 +900,7 @@ namespace EDDiscovery
             else
             {
                 string er;
-                List<HistoryEntry> ret = (from s in he where CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, othervars, out er, null) select s).ToList();
+                List<HistoryEntry> ret = (from s in he where CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr, othervars, out er, null) select s).ToList();
 
                 count = he.Count - ret.Count;
                 return ret;
@@ -926,7 +927,7 @@ namespace EDDiscovery
 
                     string er;
 
-                    if (!CheckFilterTrueOut(s.journalEntry.EventDataString, s.journalEntry.EventTypeStr, othervars, out er, list))
+                    if (!CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr, othervars, out er, list))
                     {
                         //System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
                         s.EventDescription = "!" + list[0].eventname + ":::" + s.EventDescription;
@@ -941,6 +942,5 @@ namespace EDDiscovery
         }
 
         #endregion
-
     }
 }
