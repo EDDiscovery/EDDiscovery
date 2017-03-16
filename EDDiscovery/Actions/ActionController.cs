@@ -258,6 +258,7 @@ namespace EDDiscovery.Actions
 
                 ConditionFunctions functions = new ConditionFunctions(testvars,null);
 
+                if (actionfiles.CheckActions(ale, he.journalEntry, testvars, functions) > 0)
                 {
                     actionfiles.RunActions(now, ale, actionrunasync, eventvars);  // add programs to action run
 
