@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -32,8 +32,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)
         {
-            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
             ModuleItems = evt["Items"]?.ToObject<ModuleItem[]>();
 
             if ( ModuleItems != null )
@@ -51,11 +51,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public ModuleItem[] ModuleItems { get; set; }
 
-        public override string DefaultRemoveItems()
-        {
-            return base.DefaultRemoveItems() + ";ShipID";
-        }
-
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulestore; } }
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
@@ -63,6 +58,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.MassModuleStore(this);
         }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = "";
+            foreach (ModuleItem m in ModuleItems)
+            {
+                if (info.Length>0)
+                    info += ", ";
+                info += m.Name;
+            }
+                
+            detailed = "";
+        }
     }
 
 

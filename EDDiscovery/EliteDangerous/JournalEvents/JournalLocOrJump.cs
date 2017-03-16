@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -33,13 +33,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype ) : base(jo, jtype)
         {
-            StarSystem = JSONHelper.GetStringDef(jo["StarSystem"],"Unknown!");
-            StarPosFromEDSM = JSONHelper.GetBool(jo["StarPosFromEDSM"], false);
-            EDSMFirstDiscover = JSONHelper.GetBool(jo["EDD_EDSMFirstDiscover"], false);
+            StarSystem = jo["StarSystem"].Str();
+            StarPosFromEDSM = jo["StarPosFromEDSM"].Bool(false);
+            EDSMFirstDiscover = jo["EDD_EDSMFirstDiscover"].Bool(false);
 
             Vector3 pos = new Vector3();
 
-            if (!JSONHelper.IsNullOrEmptyT(jo["StarPos"]))            // if its an old VS entry, may not have co-ords
+            if (!jo["StarPos"].Empty())            // if its an old VS entry, may not have co-ords
             {
                 JArray coords = jo["StarPos"] as JArray;
                 pos.X = coords[0].Value<float>();

@@ -308,7 +308,7 @@ namespace EDDiscovery.UserControls
 
             if (sc != null && (!sc.IsEDSMBody || checkBoxEDSM.Checked))     // if got one, and its our scan, or we are showing EDSM
             {
-                tip = sc.DisplayString(true);
+                tip = sc.DisplayString();
 
                 if (sc.IsStar)
                 {

@@ -321,60 +321,13 @@ namespace EDDiscovery.EliteDangerous
             return typedict;
         }
 
-        /// <summary>
-        /// Normalize commodity names for MiningRefined, MissionAccepted, and MissionCompleted entries.
-        /// "$Indite_Name;" will become "indite", and "$uraninite_name;" will become "uraninite", etc.
-        /// </summary>
-        /// <param name="commodity">The raw commodity name.</param>
-        /// <returns>A normalized, lower-cased representation of the commodity name.</returns>
-        protected static string NormalizeCommodity(string commodity)
-        {
-            if (string.IsNullOrWhiteSpace(commodity))
-                return string.Empty;
-
-            StringBuilder ret = new StringBuilder();
-
-            if (commodity.Length >= 8 && commodity.StartsWith("$") && commodity.EndsWith("_name;", StringComparison.InvariantCultureIgnoreCase))
-                ret.Append(commodity.Substring(1, commodity.Length - 7)); // 1 for '$' plus 6 for '_name;'
-            else
-                ret.Append(commodity);
-            return (ret.ToString().ToLowerInvariant());
-        }
-
         #endregion
 
         #region Formatting control and Icons
 
-        private static JSONConverters jsonconvcache;     //cache it
-
         public abstract System.Drawing.Bitmap Icon { get; }
 
-        public virtual void FillInformation(out string summary, out string info, out string detailed)
-        {
-            summary = EventTypeStr.SplitCapsWord();
-            info = ToShortString();
-            detailed = "";
-        }
-
-        public virtual string DefaultRemoveItems()
-        {
-            return "timestamp;event;EDDMapColor";
-        }
-
-        public string ToShortString(string additionalremoves = null, JSONConverters jc = null)
-        {
-            if (jc == null)
-            {
-                if (jsonconvcache == null)
-                    jsonconvcache = JournalFieldNaming.StandardConverters();
-
-                jc = jsonconvcache;
-            }
-
-            JSONPrettyPrint jpp = new JSONPrettyPrint(jc, DefaultRemoveItems() + ((additionalremoves != null) ? (";" + additionalremoves) : ""), "_Localised", EventTypeStr);
-
-            return jpp.PrettyPrint(jEventData, 80);
-        }
+        public abstract void FillInformation(out string summary, out string info, out string detailed);
 
         #endregion
 
@@ -1082,6 +1035,7 @@ namespace EDDiscovery.EliteDangerous
         }
 
         #endregion
+
     }
 }
      
