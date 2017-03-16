@@ -51,11 +51,23 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", Bonus + BaseValue);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Amount:; credits", BaseValue, "Bonus:; credits", Bonus);
             detailed = "";
+            if (Systems != null)
+            {
+                detailed += "Scanned:";
+                foreach (string s in Systems)
+                    detailed += s + " ";
+            }
+            if (Discovered != null)
+            {
+                detailed += System.Environment.NewLine + "Discovered:";
+                foreach (string s in Discovered)
+                    detailed += s + " ";
+            }
         }
     }
 }

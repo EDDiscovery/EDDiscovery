@@ -31,16 +31,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScanned(JObject evt) : base(evt, JournalTypeEnum.Scanned)
         {
-            ScanType = JSONHelper.GetStringDef(evt["Item"]);
+            ScanType = JSONHelper.GetStringDef(evt["ScanType"]).SplitCapsWordFull();
         }
         public string ScanType { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scanned; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = ScanType;
             detailed = "";
         }
     }

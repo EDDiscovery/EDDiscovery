@@ -30,11 +30,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalEngineerApply(JObject evt ) : base(evt, JournalTypeEnum.EngineerApply)
         {
             Engineer = JSONHelper.GetStringDef(evt["Engineer"]);
-            Blueprint = JSONHelper.GetStringDef(evt["Blueprint"]);
+            Blueprint = JSONHelper.GetStringDef(evt["Blueprint"]).SplitCapsWordFull();
             Level = JSONHelper.GetInt(evt["Level"]);
             Override = JSONHelper.GetStringDef("Override");
-
         }
+
         public string Engineer { get; set; }
         public string Blueprint { get; set; }
         public int Level { get; set; }
@@ -42,10 +42,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineerapply; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", Engineer, "Blueprint:", Blueprint, "Level:", Level, "Override:", Override);
             detailed = "";
         }
     }

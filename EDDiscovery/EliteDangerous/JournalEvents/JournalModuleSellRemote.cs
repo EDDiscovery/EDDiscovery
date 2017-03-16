@@ -58,11 +58,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.ModuleSellRemote(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
-            detailed = "";
+            info = Tools.FieldBuilder("Item:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
+            detailed = Tools.FieldBuilder("Ship:", Ship);
         }
     }
 }

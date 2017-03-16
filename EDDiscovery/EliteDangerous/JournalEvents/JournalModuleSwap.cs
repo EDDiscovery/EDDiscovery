@@ -56,10 +56,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.ModuleSwap(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("From ", FromSlot , "<to " , ToSlot , "Item:" , FromItemLocalised.Alt(FromItem));
+            if (ToItem.Length > 0 && !ToItem.Equals("Null"))            // Null if a frontier thing in 2.3 beta
+                info += ", Swapped with " + ToItemLocalised.Alt(ToItem);
             detailed = "";
         }
     }

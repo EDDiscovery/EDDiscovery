@@ -29,7 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRedeemVoucher(JObject evt) : base(evt, JournalTypeEnum.RedeemVoucher)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Type = JSONHelper.GetStringDef(evt["Type"]).SplitCapsWordFull();
             Amount = JSONHelper.GetLong(evt["Amount"]);
             Faction = JSONHelper.GetStringDef(evt["Faction"]);
             BrokerPercentage = JSONHelper.GetDouble(evt["BrokerPercentage"]);
@@ -46,10 +46,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " Broker " + BrokerPercentage.ToString("0.0") + "%", Amount);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Type:" , Type , "Amount:; credits", Amount, "Faction:" , Faction);
+            if (BrokerPercentage > 0)
+                info += ", Broker took " + BrokerPercentage.ToString("0") + "%";
             detailed = "";
         }
     }

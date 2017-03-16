@@ -30,15 +30,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Interdictor = JSONHelper.GetStringDef(evt["Interdictor"]);
             IsPlayer = JSONHelper.GetBool(evt["IsPlayer"]);
         }
+
         public string Interdictor { get; set; }
         public bool IsPlayer { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.escapeinterdiction; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("By ", Interdictor, "<(NPC);(Player)", IsPlayer);
             detailed = "";
         }
     }

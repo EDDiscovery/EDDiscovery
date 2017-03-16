@@ -30,12 +30,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             System = JSONHelper.GetStringDef(evt["System"]);
             Cost = JSONHelper.GetLong(evt["Cost"]);
-            Count = JSONHelper.GetLong(evt["Count"]);       //TBD NO EVIDENCE
         }
 
         public string System { get; set; }
         public long Cost { get; set; }
-        public long Count { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.buytradedata; } }
 
@@ -44,10 +42,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, System, -Cost);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)  //U
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("System:", System, "Cost:; credits", Cost);
             detailed = "";
         }
     }

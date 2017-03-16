@@ -183,7 +183,7 @@ namespace EDDiscovery.Actions
                     ap.AddDataOfType(sc.Materials, typeof(Dictionary<string,double>), prefix + "_Materials");
                 }
 
-                ap[prefix + "_text"] = sc.DisplayString(true);
+                ap[prefix + "_text"] = sc.DisplayString();
             }
 
             if ( subname != null )

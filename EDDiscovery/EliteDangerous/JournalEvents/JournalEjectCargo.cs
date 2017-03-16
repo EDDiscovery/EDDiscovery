@@ -53,10 +53,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, mc.name + " " + Count);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", Type, "Count:", Count, ";Abandoned", Abandoned, "PowerPlay:", PowerplayOrigin);
             detailed = "";
         }
     }

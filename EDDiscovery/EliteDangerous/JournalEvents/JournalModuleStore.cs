@@ -37,10 +37,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             ShipId = JSONHelper.GetInt(evt["ShipID"]);
             StoredItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["StoredItem"]));
             StoredItemLocalised = JSONHelper.GetStringDef(evt["StoredItem_Localised"]);
-            EngineerModifications = JSONHelper.GetStringDef(evt["EngineerModifications"]);
+            EngineerModifications = JSONHelper.GetStringNull(evt["EngineerModifications"]).SplitCapsWordFull();
             ReplacementItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["ReplacementItem"]));
             ReplacementItemLocalised = JSONHelper.GetStringDef(evt["ReplacementItem_Localised"]);
-            Cost = JSONHelper.GetLong(evt["Cost"]);
+            Cost = JSONHelper.GetLongNull(evt["Cost"]);
         }
         public string Slot { get; set; }
         public string Ship { get; set; }
@@ -50,7 +50,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string EngineerModifications { get; set; }
         public string ReplacementItem { get; set; }
         public string ReplacementItemLocalised { get; set; }
-        public long Cost { get; set; }
+        public long? Cost { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulestore; } }
 
@@ -65,11 +65,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.ModuleStore(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
-            detailed = "";
+            info = Tools.FieldBuilder("", StoredItemLocalised.Alt(StoredItem), "<from ", Slot , "Cost:" , Cost);
+            if (ReplacementItem.Length > 0)
+                info = ", " + Tools.FieldBuilder("Replaced by:", ReplacementItemLocalised.Alt(ReplacementItem));
+            detailed = Tools.FieldBuilder("Modifications:", EngineerModifications);
         }
     }
 }

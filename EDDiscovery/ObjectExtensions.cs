@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -21,6 +22,27 @@ using System.Text.RegularExpressions;
 
 public static class ObjectExtensions
 {
+    static public bool IsNullOrEmptyT(this JToken token)
+    {
+        return (token == null) ||
+               (token.Type == JTokenType.Array && !token.HasValues) ||
+               (token.Type == JTokenType.Object && !token.HasValues) ||
+               (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
+               (token.Type == JTokenType.Null);
+    }
+
+    static public string GetStringDef(this JToken jToken , string def = "")
+    {
+        if (jToken.IsNullOrEmptyT())
+            return def;
+        try
+        {
+            return jToken.Value<string>();
+        }
+        catch { return def; }
+    }
+
+
     public static string ToNullSafeString(this object obj)
     {
         return (obj ?? string.Empty).ToString();
@@ -34,6 +56,11 @@ public static class ObjectExtensions
     public static string ToNANNullSafeString(this double? obj, string format)
     {
         return (obj.HasValue && obj != double.NaN) ? obj.Value.ToString(format) : string.Empty;
+    }
+
+    public static string Alt(this string obj, string alt)
+    {
+        return (obj == null || obj.Length == 0) ? alt : obj;
     }
 
     public static string ToNullUnknownString(this object obj)
@@ -78,6 +105,22 @@ public static class ObjectExtensions
             sb.Append(other);
         }
     }
+
+    public static bool AppendPrePad(this System.Text.StringBuilder sb, string other, string prefix, string prepad = " ")
+    {
+        if (other != null && other.Length > 0)
+        {
+            if (sb.Length > 0)
+                sb.Append(prepad);
+            if (prefix.Length > 0)
+                sb.Append(prefix);
+            sb.Append(other);
+            return true;
+        }
+        else
+            return false;
+    }
+
 
     public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
     {

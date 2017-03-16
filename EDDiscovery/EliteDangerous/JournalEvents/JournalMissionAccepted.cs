@@ -56,7 +56,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Influence = JSONHelper.GetStringDef(evt["Influence"]);
             Reputation = JSONHelper.GetStringDef(evt["Reputation"]);
 
-            Commodity = NormalizeCommodity(JSONHelper.GetStringDef(evt["Commodity"]));
+            Commodity = JSONHelper.GetStringDef(evt["Commodity"]);
             Count = JSONHelper.GetIntNull(evt["Count"]);
             Target = JSONHelper.GetStringDef(evt["Target"]);
             TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
@@ -67,20 +67,21 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             DestinationSystem = JSONHelper.GetStringDef(evt["DestinationSystem"]);
             DestinationStation = JSONHelper.GetStringDef(evt["DestinationStation"]);
-            PassengerType = JSONHelper.GetStringDef(evt["PassengerType"]);
 
-            PassengerCount = JSONHelper.GetInt(evt["PassengerCount"]);
-            PassengerVIPs = JSONHelper.GetBool(evt["PassengerVIPs"]);
-            PassengerWanted = JSONHelper.GetBool(evt["PassengerWanted"]);
+            PassengerCount = JSONHelper.GetIntNull(evt["PassengerCount"]);
+            PassengerVIPs = JSONHelper.GetBoolNull(evt["PassengerVIPs"]);
+            PassengerWanted = JSONHelper.GetBoolNull(evt["PassengerWanted"]);
+            PassengerType = JSONHelper.GetStringNull(evt["PassengerType"]);
 
-
-
+            FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
         }
+
         public string Name { get; set; }
         public string Faction { get; set; }
         public string Influence { get; set; }
         public string Reputation { get; set; }
         public string Commodity { get; set; }
+        public string FriendlyCommodity { get; set; }
         public int? Count { get; set; }
         public string Target { get; set; }
         public string TargetType { get; set; }
@@ -90,18 +91,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public DateTime Expiry { get; set; }
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
-        public int PassengerCount { get; set; }
-        public bool PassengerVIPs { get; set; }
-        public bool PassengerWanted { get; set; }
+        public int? PassengerCount { get; set; }
+        public bool? PassengerVIPs { get; set; }
+        public bool? PassengerWanted { get; set; }
         public string PassengerType { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.missionaccepted; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
-            detailed = "";
+            info = Tools.FieldBuilder("", Name, "<from ", Faction, "System:", DestinationSystem, "Station:", DestinationStation, "Expiry:", Expiry, "Influence:", Influence, "Reputation:", Reputation);
+            detailed = Tools.FieldBuilder("Commodity:", FriendlyCommodity, "Target:", Target, "Type:", TargetType, "Target Faction:", TargetFaction,
+                                           "Passengers:", PassengerCount);
         }
     }
 

@@ -28,17 +28,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalSendText(JObject evt) : base(evt, JournalTypeEnum.SendText)
         {
             To = JSONHelper.GetStringDef(evt["To"]);
+            To_Localised = JSONHelper.GetStringDef(evt["To_Localised"]);
             Message = JSONHelper.GetStringDef(evt["Message"]);
         }
         public string To { get; set; }
+        public string To_Localised { get; set; }
         public string Message { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.sendtext; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("To:", To_Localised.Alt(To), "Msg:", Message);
             detailed = "";
         }
     }

@@ -60,12 +60,5 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Update();
             EDSMFirstDiscover = firstdiscover;
         }
-
-        public override void FillInformation(out string summary, out string info, out string detailed)
-        {
-            summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
-            detailed = "";
-        }
     }
 }

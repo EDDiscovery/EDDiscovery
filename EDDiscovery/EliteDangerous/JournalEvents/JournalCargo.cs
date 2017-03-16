@@ -46,10 +46,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.cargomanifest; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = "No Cargo";
+
+            if (Inventory != null && Inventory.Length>0)
+            {
+                info = "";
+                foreach (Cargo c in Inventory)
+                {
+                    if (info.Length > 0)
+                        info += ", ";
+                    info += Tools.FieldBuilder("Name:", c.Name, "Count:", c.Count);
+                }
+            }
+
             detailed = "";
         }
     }

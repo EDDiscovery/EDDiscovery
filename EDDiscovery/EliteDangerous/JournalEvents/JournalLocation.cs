@@ -38,14 +38,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     [JournalEntryType(JournalTypeEnum.Location)]
     public class JournalLocation : JournalLocOrJump
     {
-        public JournalLocation(JObject evt ) : base(evt, JournalTypeEnum.Location)
+        public JournalLocation(JObject evt ) : base(evt, JournalTypeEnum.Location)      // all have evidence 16/3/2017
         {
-            Body = JSONHelper.GetStringDef(evt["Body"]);
-            Docked = evt.Value < bool ?>("Docked") ?? false;
+            Docked = evt.Value<bool?>("Docked") ?? false;
             StationName = JSONHelper.GetStringDef(evt["StationName"]);
             StationType = JSONHelper.GetStringDef(evt["StationType"]);
+            Body = JSONHelper.GetStringDef(evt["Body"]);
+            BodyType = JSONHelper.GetStringDef(evt["BodyType"]);
             Faction = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
-            FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
+
             Allegiance = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance"});
             Economy = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
             Economy_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
@@ -53,23 +54,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Government_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemGovernment_Localised", "Government_Localised" });
             Security = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
             Security_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "SystemSecurity_Localised", "Security_Localised" });
-            BodyType = JSONHelper.GetStringDef(evt["BodyType"]);
-
-            PowerplayState = JSONHelper.GetStringDef(evt["PowerplayState"]);
-
-            if (!JSONHelper.IsNullOrEmptyT(evt["Powers"]))
-                Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
 
             Latitude = JSONHelper.GetDoubleNull(evt["Latitude"]);
             Longitude = JSONHelper.GetDoubleNull(evt["Longitude"]);
+
+            Factions = evt["Factions"]?.ToObject<FactionInfo[]>();
+
+            PowerplayState = JSONHelper.GetStringDef(evt["PowerplayState"]);            // NO evidence
+            if (!JSONHelper.IsNullOrEmptyT(evt["Powers"]))
+                Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
         }
 
-        public string Body { get; set; }
         public bool Docked { get; set; }
         public string StationName { get; set; }
         public string StationType { get; set; }
+        public string Body { get; set; }
+        public string BodyType { get; set; }
         public string Faction { get; set; }
-        public string FactionState { get; set; }
+
         public string Allegiance { get; set; }
         public string Economy { get; set; }
         public string Economy_Localised { get; set; }
@@ -77,25 +79,57 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Government_Localised { get; set; }
         public string Security { get; set; }
         public string Security_Localised { get; set; }
-        public string BodyType { get; set; }
-        public string PowerplayState { get; set; }
-        public string[] Powers { get; set; }
 
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
-        {
-            summary = "At " + StarSystem;
-            if (Docked)
-                info = "Docked at " + StationName + " " + StationType + " Type (" + Economy_Localised + ")";
-            else
-                info = "In space";
+        public string PowerplayState { get; set; }
+        public string[] Powers { get; set; }
 
-            detailed = ""; //TBD ToShortString("StarSystem;StationName;StationType;Docked;Economy_Localised");
+        public FactionInfo[] Factions { get; set; }
+
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            if (Docked)
+            {
+                summary = "At " + StationName;
+                info = Tools.FieldBuilder("Type ", StationType, "<in system ", StarSystem);
+                detailed = Tools.FieldBuilder("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government) , "Security:" , Security_Localised.Alt(Security));
+                
+                if ( Factions != null )
+                    foreach( FactionInfo f in Factions)
+                    {
+                        detailed += Environment.NewLine;
+                        detailed += Tools.FieldBuilder("", f.Name, "State:" , f.FactionState, "Gov:" , f.Government , "Inf:;%" , (int)(f.Influence*100), "Allegiance:" , f.Allegiance);
+                    }
+            }
+            else if (Latitude.HasValue && Longitude.HasValue)
+            {
+                summary = "Landed on " + Body;
+                info = "At " + JournalFieldNaming.RLat(Latitude.Value) + " " + JournalFieldNaming.RLong(Longitude.Value);
+                detailed = "";
+            }
+            else
+            {
+                summary = "At " + StarSystem;
+                info = Tools.FieldBuilder("In space near ", Body, "<of type ", BodyType);
+                detailed = "";
+            }
         }
 
+            
+
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
+
+        public class FactionInfo
+        {
+            public string Name { get; set; }
+            public string FactionState { get; set; }
+            public string Government { get; set; }
+            public double Influence { get; set; }
+            public string Allegiance { get; set; }
+        }
+
 
     }
 }

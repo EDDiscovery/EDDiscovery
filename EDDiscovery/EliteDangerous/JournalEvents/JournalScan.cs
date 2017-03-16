@@ -178,6 +178,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Atmosphere = JSONHelper.GetStringNull(evt["Atmosphere"]);
             if (Atmosphere == null || Atmosphere.Length == 0)             // Earthlikes appear to have empty atmospheres but AtmosphereType
                 Atmosphere = JSONHelper.GetStringNull(evt["AtmosphereType"]);
+            if (Atmosphere != null)
+                Atmosphere = Atmosphere.SplitCapsWordFull();
 
             AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
             Volcanism = JSONHelper.GetStringNull(evt["Volcanism"]);
@@ -232,13 +234,31 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = $"Scan of {BodyName}";
-            info = "";// NOT DONE
-            detailed = "";
-//            base.FillInformation(out summary, out info, out detailed);
 
+            if ( IsStar )
+            {
+                double? r = nRadius;
+                if (r.HasValue)
+                    r = r / solarRadius_m;
+
+                info = Tools.FieldBuilder("", GetStarTypeImage().Item2, "Mass:;SM;0.00", nStellarMass, "Age:;my;0.0", nAge, "Radius:;SR;0.00", r );
+            }
+            else
+            {
+                double? r = nRadius;
+                if (r.HasValue)
+                    r = r / 1000;
+                double? g = nSurfaceGravity;
+                if (g.HasValue)
+                    g = g / 9.8;
+
+                info = Tools.FieldBuilder("", PlanetClass, "Mass:;EM;0.00", nMassEM, "<;Landable", IsLandable, "", Atmosphere, "Gravity:;G;0.0", g, "Radius:;km;0", r);
+            }
+
+            detailed = DisplayString(0, false);
         }
 
 
@@ -248,7 +268,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             throw new NotImplementedException();
         }
 
-        public string DisplayString(bool printbodyname = true, int indent = 0)
+        public string DisplayString(int indent = 0 , bool includefront = true)
         {
             string inds = new string(' ' , indent);
 
@@ -256,45 +276,45 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             scanText.Append(inds);
 
-            if (printbodyname)
+            if (includefront)
+            {
                 scanText.AppendFormat("{0}\n\n", BodyName);
 
-            if (IsStar)
-            {
-                scanText.AppendFormat(GetStarTypeImage().Item2);
-            }
-            else
-            {
-                scanText.AppendFormat("{0}", PlanetClass);
-            }
-
-            if (PlanetClass != null && !PlanetClass.ToLower().Contains("gas"))
-            {
-                scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere" : ( ", " +
-                                                            System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Atmosphere.ToLower()) )
-                                     );
-            }
-
-            if (IsLandable)
-                scanText.AppendFormat(", Landable");
-
-            scanText.AppendFormat("\n");
-
-            if (nAge.HasValue)
-                scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
-
-            if (nStellarMass.HasValue)
-                scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
-
-            if (nMassEM.HasValue)
-                scanText.AppendFormat("Earth Masses: {0:0.0000}\n", nMassEM.Value);
-
-            if (nRadius.HasValue)
-            {
-                if ( IsStar )
-                    scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n", (nRadius.Value / solarRadius_m));
+                if (IsStar)
+                {
+                    scanText.AppendFormat(GetStarTypeImage().Item2);
+                }
                 else
-                    scanText.AppendFormat("Body Radius: {0:0.00}km\n", (nRadius.Value / 1000));
+                {
+                    scanText.AppendFormat("{0}", PlanetClass);
+
+                    if (!PlanetClass.ToLower().Contains("gas"))
+                    {
+                        scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere" : (", " + Atmosphere));
+                    }
+                }
+
+                if (IsLandable)
+                    scanText.AppendFormat(", Landable");
+
+                scanText.AppendFormat("\n");
+
+                if (nAge.HasValue)
+                    scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
+
+                if (nStellarMass.HasValue)
+                    scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
+
+                if (nMassEM.HasValue)
+                    scanText.AppendFormat("Earth Masses: {0:0.0000}\n", nMassEM.Value);
+
+                if (nRadius.HasValue)
+                {
+                    if (IsStar)
+                        scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n", (nRadius.Value / solarRadius_m));
+                    else
+                        scanText.AppendFormat("Body Radius: {0:0.00}km\n", (nRadius.Value / 1000));
+                }
             }
 
             if (nSurfaceTemperature.HasValue)

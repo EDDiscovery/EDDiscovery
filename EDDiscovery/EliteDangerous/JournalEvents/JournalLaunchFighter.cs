@@ -40,10 +40,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.LaunchFighter(PlayerControlled);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Loadout:", Loadout);
+            if (!PlayerControlled)
+                info += ", NPC Controlled";
             detailed = "";
         }
     }

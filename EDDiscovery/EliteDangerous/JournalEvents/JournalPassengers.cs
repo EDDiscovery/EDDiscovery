@@ -56,6 +56,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalPassengers(JObject evt) : base(evt, JournalTypeEnum.Passengers)
         {
             Manifest = evt["Manifest"]?.ToObject<Passengers[]>();
+
+            if (Manifest != null )
+            {
+                foreach (Passengers p in Manifest)
+                    p.Type = p.Type.SplitCapsWordFull();
+            }
         }
 
         public Passengers[] Manifest { get; set; }
@@ -67,11 +73,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.passengers; } }
 
-
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //U
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = "No Passengers";
+
+            if (Manifest != null && Manifest.Length > 0)
+            {
+                info = "";
+                foreach (Passengers p in Manifest)
+                {
+                    if (info.Length > 0)
+                        info += ", ";
+                    info += Tools.FieldBuilder("", p.Type , "> ", p.Count , "; (VIP)" , p.VIP , "; (Wanted)" , p.Wanted);
+                }
+            }
+
             detailed = "";
         }
     }

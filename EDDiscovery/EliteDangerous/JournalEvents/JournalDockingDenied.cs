@@ -30,17 +30,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalDockingDenied(JObject evt ) : base(evt, JournalTypeEnum.DockingDenied)
         {
             StationName = JSONHelper.GetStringDef(evt["StationName"]);
-            Reason = JSONHelper.GetStringDef(evt["Reason"]);
+            Reason = JSONHelper.GetStringDef(evt["Reason"]).SplitCapsWord();
         }
         public string StationName { get; set; }
         public string Reason { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.dockingdenied; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("At ", StationName, "", Reason);
             detailed = "";
         }
     }

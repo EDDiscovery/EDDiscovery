@@ -115,7 +115,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                                                         JSONHelper.GetIntNull(jo["Priority"]),
                                                         JSONHelper.GetIntNull(jo["AmmoInClip"]),
                                                         JSONHelper.GetIntNull(jo["AmmoInHopper"]),
-                                                        JSONHelper.GetStringNull(jo["EngineerBlueprint"]),
+                                                        JSONHelper.GetStringNull(jo["EngineerBlueprint"]).SplitCapsWordFull(),
                                                         JSONHelper.GetIntNull(jo["EngineerLevel"]),
                                                         JSONHelper.GetDoubleNull(jo["Health"]),
                                                         JSONHelper.GetIntNull(jo["Value"]) );
@@ -138,11 +138,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadout; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count);
             detailed = "";
+            foreach (ShipModule m in ShipModules)
+            {
+                if (detailed.Length > 0)
+                    detailed += Environment.NewLine;
+                detailed += Tools.FieldBuilder("Slot:", m.Slot, "Name:", m.Item);
+            }
         }
     }
 }

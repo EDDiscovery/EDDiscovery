@@ -26,7 +26,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalFileheader(JObject evt ) : base(evt, JournalTypeEnum.Fileheader)
         {
-
             GameVersion = JSONHelper.GetStringDef(evt["gameversion"]);
             Build = JSONHelper.GetStringDef(evt["build"]);
             Language = JSONHelper.GetStringDef(evt["language"]);
@@ -54,10 +53,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.fileheader; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Version:", GameVersion , "Build:" , Build , "Part:", Part);
             detailed = "";
         }
     }

@@ -32,6 +32,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public class Killer
         {
             public string Name;
+            public string Name_Localised;
             public string Ship;
             public string Rank;
         }
@@ -41,7 +42,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             string killerName = JSONHelper.GetStringDef(evt["KillerName"]);
             if (string.IsNullOrEmpty(killerName))
             {
-                if (evt["Killers"]!=null)
+                if (evt["Killers"] != null)
                     Killers = evt["Killers"].ToObject<Killer[]>();
             }
             else
@@ -52,6 +53,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                         new Killer
                         {
                             Name = killerName,
+                            Name_Localised = JSONHelper.GetStringDef(evt["KillerName_Localised"]),
                             Ship = JSONHelper.GetStringDef(evt["KillerShip"]),
                             Rank = JSONHelper.GetStringDef(evt["KillerRank"])
                         }
@@ -69,10 +71,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Coffinicon; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = "";
+            if (Killers != null)
+            {
+                info = "Killed by ";
+                bool comma = false;
+
+                foreach (Killer k in Killers)
+                {
+                    if (comma)
+                        info += ", ";
+                    comma = true;
+                    info += k.Name_Localised.Alt(k.Name) + " in ship type " + k.Ship + " rank " + k.Rank;
+                }
+            }
+
             detailed = "";
         }
 

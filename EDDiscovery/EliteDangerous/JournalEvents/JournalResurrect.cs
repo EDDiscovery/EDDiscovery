@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
         {
-            Option = JSONHelper.GetStringDef(evt["Option"]);
+            Option = JSONHelper.GetStringDef(evt["Option"]).SplitCapsWordFull();
             Cost = JSONHelper.GetLong(evt["Cost"]);
             Bankrupt = JSONHelper.GetBool(evt["Bankrupt"]);
 
@@ -50,10 +50,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.Resurrect();
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Option:",Option, "Cost:; credits" , Cost, ";Bankrupt" , Bankrupt);
             detailed = "";
         }
     }

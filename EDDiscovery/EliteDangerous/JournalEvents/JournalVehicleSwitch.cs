@@ -46,10 +46,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.VehicleSwitch(To);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = (To.Length==0) ? "Mothership" : To;          // BUG in frontier.. sometimes TO is not there
             detailed = "";
         }
     }

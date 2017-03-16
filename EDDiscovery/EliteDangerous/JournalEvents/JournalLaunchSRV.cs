@@ -27,11 +27,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalLaunchSRV(JObject evt ) : base(evt, JournalTypeEnum.LaunchSRV)
         {
             Loadout = JSONHelper.GetStringDef(evt["Loadout"]);
-            PlayerControlled = JSONHelper.GetStringDef(evt["PlayerControlled"]);
+            PlayerControlled = JSONHelper.GetBool(evt["PlayerControlled"],true);
 
         }
         public string Loadout { get; set; }
-        public string PlayerControlled { get; set; }
+        public bool PlayerControlled { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.launchsrv; } }
 
@@ -40,10 +40,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.LaunchSRV();
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Loadout:", Loadout);
+            if (!PlayerControlled)
+                info += ", NPC Controlled";
             detailed = "";
         }
     }

@@ -58,6 +58,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double FuelLevel { get; set; }
         public double FuelCapacity { get; set; }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("Commander:", LoadGameCommander, "Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Credits:", Credits);
+            detailed = Tools.FieldBuilder("Mode:", GameMode , "Group:" , Group , "Not Landed;Landed" , StartLanded , "Fuel Level:;;0.0", FuelLevel , "Capacity:;;0.0" , FuelCapacity);
+        }
+
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadgame; } }
 
         public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
@@ -73,11 +80,5 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             shp.LoadGame(ShipId, Ship, ShipName, ShipIdent);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
-        {
-            summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
-            detailed = "";
-        }
     }
 }

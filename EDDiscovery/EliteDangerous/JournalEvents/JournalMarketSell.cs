@@ -41,6 +41,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             IllegalGoods = JSONHelper.GetBool(evt["IllegalGoods"]);
             StolenGoods = JSONHelper.GetBool(evt["StolenGoods"]);
             BlackMarket = JSONHelper.GetBool(evt["BlackMarket"]);
+            FriendlyType = JournalFieldNaming.RMat(Type);
         }
 
         public string Type { get; set; }
@@ -51,6 +52,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool IllegalGoods { get; set; }
         public bool StolenGoods { get; set; }
         public bool BlackMarket { get; set; }
+        public string FriendlyType { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketsell; } }
 
@@ -65,11 +67,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, mc.name + " " + Count + " Avg " + AvgPricePaid, TotalSale, (double)(SellPrice - AvgPricePaid));
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
-            detailed = "";
+            long profit = TotalSale - (AvgPricePaid * Count);
+            info = Tools.FieldBuilder("", FriendlyType, "", Count, "<at ; credits", SellPrice, "Total:", TotalSale, "Profit:", profit);
+            detailed = Tools.FieldBuilder("Legal;Illegal", IllegalGoods, "Not Stolen;Stolen", StolenGoods, "Market;BlackMarket", BlackMarket);
         }
     }
 }

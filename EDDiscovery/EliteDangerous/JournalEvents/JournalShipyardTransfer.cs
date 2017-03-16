@@ -38,6 +38,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             System = JSONHelper.GetStringDef(evt["System"]);
             Distance = JSONHelper.GetDouble(evt["Distance"]);
             TransferPrice = JSONHelper.GetLong(evt["TransferPrice"]);
+
+            if (Distance > 100000.0)       // previously, it was in m, now they have changed it to LY per 2.3. So if its large (over 100k ly, impossible) convert
+                Distance = Distance / 299792458.0 / 365 / 24 / 60 / 60;
         }
 
         public string ShipType { get; set; }
@@ -53,10 +56,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, -TransferPrice);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Of ", ShipType, "<from " , System , "Distance:; ly;0.0" , Distance , "Price:; credits", TransferPrice);
             detailed = "";
         }
     }

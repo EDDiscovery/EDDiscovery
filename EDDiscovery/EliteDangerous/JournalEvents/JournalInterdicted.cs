@@ -49,10 +49,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.interdicted; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder(";Submitted", Submitted, "<To ", Interdictor, "<(NPC);(Player)", IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:", Faction, "Power:", Power);
             detailed = "";
         }
     }

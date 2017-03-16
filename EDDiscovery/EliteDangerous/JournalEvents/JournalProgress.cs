@@ -38,9 +38,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Empire = JSONHelper.GetInt(evt["Empire"]);
             Federation = JSONHelper.GetInt(evt["Federation"]);
             CQC = JSONHelper.GetInt(evt["CQC"]);
-
         }
-        public int Combat { get; set; }
+
+        public int Combat { get; set; }         // keep ints for backwards compat
         public int Trade { get; set; }
         public int Explore { get; set; }
         public int Empire { get; set; }
@@ -49,10 +49,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.progress; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Combat:;%", Combat,
+                                      "Trade:;%", Trade,
+                                      "Exploration:;%", Explore,
+                                      "Federation:;%", Federation,
+                                      "Empire:;%", Empire,
+                                      "CQC:;%", CQC);
             detailed = "";
         }
     }

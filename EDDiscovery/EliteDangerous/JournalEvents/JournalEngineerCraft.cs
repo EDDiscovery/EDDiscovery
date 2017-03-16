@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalEngineerCraft(JObject evt ) : base(evt, JournalTypeEnum.EngineerCraft)
         {
             Engineer = JSONHelper.GetStringDef(evt["Engineer"]);
-            Blueprint = JSONHelper.GetStringDef(evt["Blueprint"]);
+            Blueprint = JSONHelper.GetStringDef(evt["Blueprint"]).SplitCapsWordFull();
             Level = JSONHelper.GetInt(evt["Level"]);
 
             JToken mats = (JToken)evt["Ingredients"];
@@ -70,11 +70,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", Engineer, "Blueprint:", Blueprint, "Level:", Level);
+
             detailed = "";
+            if (Ingredients != null)
+            {
+                foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials
+                    detailed += Tools.FieldBuilder("Name:", k.Key, "", k.Value) + "; ";
+            }
         }
     }
 }

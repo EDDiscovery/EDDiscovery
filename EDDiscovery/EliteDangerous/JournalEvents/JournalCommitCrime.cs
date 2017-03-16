@@ -63,10 +63,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, CrimeType + " on " + v);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("", CrimeType, "<on faction ", Faction, "Against ", VictimLocalised.Alt(Victim), "Cost ; credits", Fine, "Bounty ; credits", Bounty);
             detailed = "";
         }
     }

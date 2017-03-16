@@ -46,10 +46,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + Faction, -Cost);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// NOT DONE
+            info = Tools.FieldBuilder("Hired ;", Name, "<of faction ", Faction, " Rank ", CombatRank.ToString().SplitCapsWord(), "Cost ; credits", Cost);
             detailed = "";
         }
     }
