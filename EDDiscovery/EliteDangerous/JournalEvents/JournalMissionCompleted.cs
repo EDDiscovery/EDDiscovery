@@ -112,7 +112,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             info = Tools.FieldBuilder("", Name, "<from ", Faction, "Reward:" , Reward , "Donation:" , Donation , "System:", DestinationSystem, "Station:", DestinationStation);
-            detailed = Tools.FieldBuilder("Commodity:", FriendlyCommodity, "Target:", Target, "Type:", TargetType, "Target Faction:", TargetFaction);       // TBD
+            detailed = Tools.FieldBuilder("Commodity:", FriendlyCommodity, "Target:", Target, "Type:", TargetType, "Target Faction:", TargetFaction);       
 
             if (PermitsAwarded != null)
             {
