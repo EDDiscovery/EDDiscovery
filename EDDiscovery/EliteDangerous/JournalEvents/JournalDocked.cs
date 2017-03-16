@@ -35,19 +35,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDocked(JObject evt ) : base(evt, JournalTypeEnum.Docked)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
-            StationType = JSONHelper.GetStringDef(evt["StationType"]);
-            StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
-            CockpitBreach = JSONHelper.GetBool(evt["CockpitBreach"]);
+            StationName = evt["StationName"].Str();
+            StationType = evt["StationType"].Str();
+            StarSystem = evt["StarSystem"].Str();
+            CockpitBreach = evt["CockpitBreach"].Bool();
 
-            Faction = JSONHelper.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
-            FactionState = JSONHelper.GetStringDef(evt["FactionState"]).SplitCapsWord();
+            Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
+            FactionState = evt["FactionState"].Str().SplitCapsWord();
 
-            Allegiance = JSONHelper.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
-            Economy = JSONHelper.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
-            Economy_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
-            Government = JSONHelper.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
-            Government_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
+            Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
+            Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
+            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
+            Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
+            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
         }
 
         public string StationName { get; set; }

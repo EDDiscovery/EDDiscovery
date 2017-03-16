@@ -28,9 +28,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplayVote(JObject evt) : base(evt, JournalTypeEnum.PowerplayVote)
         {
-            Power = JSONHelper.GetStringDef(evt["Power"]);
-            System = JSONHelper.GetStringDef(evt["System"]);
-            Votes = JSONHelper.GetInt(evt["Votes"]);
+            Power = evt["Power"].Str();
+            System = evt["System"].Str();
+            Votes = evt["Votes"].Int();
         }
         public string Power { get; set; }
         public string System { get; set; }

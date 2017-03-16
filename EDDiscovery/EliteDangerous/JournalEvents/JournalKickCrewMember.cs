@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalKickCrewMember(JObject evt) : base(evt, JournalTypeEnum.KickCrewMember)
         {
-            Crew = JSONHelper.GetStringDef(evt["Crew"]);
+            Crew = evt["Crew"].Str();
 
         }
         public string Crew { get; set; }

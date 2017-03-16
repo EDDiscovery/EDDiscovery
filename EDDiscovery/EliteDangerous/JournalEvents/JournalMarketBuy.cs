@@ -29,10 +29,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMarketBuy(JObject evt ) : base(evt, JournalTypeEnum.MarketBuy)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);        // must be FD name
-            Count = JSONHelper.GetInt(evt["Count"]);
-            BuyPrice = JSONHelper.GetLong(evt["BuyPrice"]);
-            TotalCost = JSONHelper.GetLong(evt["TotalCost"]);
+            Type = evt["Type"].Str();        // must be FD name
+            Count = evt["Count"].Int();
+            BuyPrice = evt["BuyPrice"].Long();
+            TotalCost = evt["TotalCost"].Long();
             FriendlyType = JournalFieldNaming.RMat(Type);
         }
         public string Type { get; set; }

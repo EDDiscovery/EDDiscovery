@@ -28,9 +28,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
         {
-            Option = JSONHelper.GetStringDef(evt["Option"]).SplitCapsWordFull();
-            Cost = JSONHelper.GetLong(evt["Cost"]);
-            Bankrupt = JSONHelper.GetBool(evt["Bankrupt"]);
+            Option = evt["Option"].Str().SplitCapsWordFull();
+            Cost = evt["Cost"].Long();
+            Bankrupt = evt["Bankrupt"].Bool();
 
         }
 

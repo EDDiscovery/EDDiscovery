@@ -37,12 +37,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalBounty(JObject evt) : base(evt, JournalTypeEnum.Bounty)
         {
-            TotalReward = JSONHelper.GetLong(evt["TotalReward"]);     // others of them..
+            TotalReward = evt["TotalReward"].Long();     // others of them..
 
-            VictimFaction = JSONHelper.GetStringDef(evt["VictimFaction"]);
-            VictimFactionLocalised = JSONHelper.GetStringDef(evt["VictimFaction_Localised"]); // may not be present
+            VictimFaction = evt["VictimFaction"].Str();
+            VictimFactionLocalised = evt["VictimFaction_Localised"].Str(); // may not be present
 
-            SharedWithOthers = JSONHelper.GetBool(evt["SharedWithOthers"], false);
+            SharedWithOthers = evt["SharedWithOthers"].Bool(false);
             Rewards = evt["Rewards"]?.ToObject<BountyReward[]>();
         }
 

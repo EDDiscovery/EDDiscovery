@@ -27,8 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLaunchFighter(JObject evt) : base(evt, JournalTypeEnum.LaunchFighter)
         {
-            Loadout = JSONHelper.GetStringDef(evt["Loadout"]);
-            PlayerControlled = JSONHelper.GetBool(evt["PlayerControlled"]);
+            Loadout = evt["Loadout"].Str();
+            PlayerControlled = evt["PlayerControlled"].Bool();
         }
         public string Loadout { get; set; }
         public bool PlayerControlled { get; set; }

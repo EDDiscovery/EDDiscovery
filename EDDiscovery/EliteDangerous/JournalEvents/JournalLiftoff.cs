@@ -30,9 +30,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLiftoff(JObject evt ) : base(evt, JournalTypeEnum.Liftoff)
         {
-            Latitude = JSONHelper.GetDouble(evt["Latitude"]);
-            Longitude = JSONHelper.GetDouble(evt["Longitude"]);
-            PlayerControlled = JSONHelper.GetBoolNull(evt["PlayerControlled"]);
+            Latitude = evt["Latitude"].Double();
+            Longitude = evt["Longitude"].Double();
+            PlayerControlled = evt["PlayerControlled"].BoolNull();
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }

@@ -32,8 +32,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)
         {
-            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
             ModuleItems = evt["Items"]?.ToObject<ModuleItem[]>();
 
             if ( ModuleItems != null )

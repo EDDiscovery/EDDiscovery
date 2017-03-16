@@ -33,14 +33,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);
-            Count = JSONHelper.GetInt(evt["Count"]);
-            SellPrice = JSONHelper.GetLong(evt["SellPrice"]);
-            TotalSale = JSONHelper.GetLong(evt["TotalSale"]);
-            AvgPricePaid = JSONHelper.GetLong(evt["AvgPricePaid"]);
-            IllegalGoods = JSONHelper.GetBool(evt["IllegalGoods"]);
-            StolenGoods = JSONHelper.GetBool(evt["StolenGoods"]);
-            BlackMarket = JSONHelper.GetBool(evt["BlackMarket"]);
+            Type = evt["Type"].Str();
+            Count = evt["Count"].Int();
+            SellPrice = evt["SellPrice"].Long();
+            TotalSale = evt["TotalSale"].Long();
+            AvgPricePaid = evt["AvgPricePaid"].Long();
+            IllegalGoods = evt["IllegalGoods"].Bool();
+            StolenGoods = evt["StolenGoods"].Bool();
+            BlackMarket = evt["BlackMarket"].Bool();
             FriendlyType = JournalFieldNaming.RMat(Type);
         }
 

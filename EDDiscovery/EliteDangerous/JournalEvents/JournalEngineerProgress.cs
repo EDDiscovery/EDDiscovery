@@ -28,9 +28,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)
         {
-            Engineer = JSONHelper.GetStringDef(evt["Engineer"]);
-            Rank = JSONHelper.GetIntNull(evt["Rank"]);
-            Progress = JSONHelper.GetStringDef(evt["Progress"]);
+            Engineer = evt["Engineer"].Str();
+            Rank = evt["Rank"].IntNull();
+            Progress = evt["Progress"].Str();
         }
 
         public string Engineer { get; set; }

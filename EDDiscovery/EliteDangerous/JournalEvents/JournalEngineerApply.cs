@@ -29,10 +29,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEngineerApply(JObject evt ) : base(evt, JournalTypeEnum.EngineerApply)
         {
-            Engineer = JSONHelper.GetStringDef(evt["Engineer"]);
-            Blueprint = JSONHelper.GetStringDef(evt["Blueprint"]).SplitCapsWordFull();
-            Level = JSONHelper.GetInt(evt["Level"]);
-            Override = JSONHelper.GetStringDef("Override");
+            Engineer = evt["Engineer"].Str();
+            Blueprint = evt["Blueprint"].Str().SplitCapsWordFull();
+            Level = evt["Level"].Int();
+            Override = evt["Override"].Str();
         }
 
         public string Engineer { get; set; }

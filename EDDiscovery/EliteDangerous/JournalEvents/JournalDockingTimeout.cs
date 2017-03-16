@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingTimeout(JObject evt ) : base(evt, JournalTypeEnum.DockingTimeout)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
+            StationName = evt["StationName"].Str();
         }
         public string StationName { get; set; }
 

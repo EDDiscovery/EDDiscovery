@@ -27,9 +27,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
-            Item = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["Item"]));
-            ItemLocalised = JSONHelper.GetStringDef(evt["Item_Localised"]);
-            Cost = JSONHelper.GetLong(evt["Cost"]);
+            Item = JournalFieldNaming.GetBetterItemNameEvents(evt["Item"].Str());
+            ItemLocalised = evt["Item_Localised"].Str();
+            Cost = evt["Cost"].Long();
         }
 
         public string Item { get; set; }

@@ -30,27 +30,27 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalPromotion(JObject evt) : base(evt, JournalTypeEnum.Promotion)
         {
-            int? c = JSONHelper.GetIntNull(evt["Combat"]);
+            int? c = evt["Combat"].IntNull();
             if (c.HasValue)
                 Combat = (CombatRank)c.Value;
 
-            int? t = JSONHelper.GetIntNull(evt["Trade"]);
+            int? t = evt["Trade"].IntNull();
             if ( t.HasValue)
                 Trade = (TradeRank)t;
 
-            int? e = JSONHelper.GetIntNull(evt["Explore"]);
+            int? e = evt["Explore"].IntNull();
             if (e.HasValue)
                 Explore = (ExplorationRank)e;
 
-            int? q = JSONHelper.GetIntNull(evt["CQC"]);
+            int? q = evt["CQC"].IntNull();
             if ( q.HasValue)
                 CQC = (CQCRank)q;
 
-            int? f = JSONHelper.GetIntNull(evt["Federation"]);
+            int? f = evt["Federation"].IntNull();
             if ( f.HasValue)
                 Federation = (FederationRank)f;
 
-            int? evilempire = JSONHelper.GetIntNull(evt["Empire"]);
+            int? evilempire = evt["Empire"].IntNull();
             if ( evilempire.HasValue)
                 Empire = (EmpireRank)evilempire;
         }

@@ -29,10 +29,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRedeemVoucher(JObject evt) : base(evt, JournalTypeEnum.RedeemVoucher)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]).SplitCapsWordFull();
-            Amount = JSONHelper.GetLong(evt["Amount"]);
-            Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            BrokerPercentage = JSONHelper.GetDouble(evt["BrokerPercentage"]);
+            Type = evt["Type"].Str().SplitCapsWordFull();
+            Amount = evt["Amount"].Long();
+            Faction = evt["Faction"].Str();
+            BrokerPercentage = evt["BrokerPercentage"].Double();
         }
         public string Type { get; set; }
         public long Amount { get; set; }

@@ -30,9 +30,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEngineerCraft(JObject evt ) : base(evt, JournalTypeEnum.EngineerCraft)
         {
-            Engineer = JSONHelper.GetStringDef(evt["Engineer"]);
-            Blueprint = JSONHelper.GetStringDef(evt["Blueprint"]).SplitCapsWordFull();
-            Level = JSONHelper.GetInt(evt["Level"]);
+            Engineer = evt["Engineer"].Str();
+            Blueprint = evt["Blueprint"].Str().SplitCapsWordFull();
+            Level = evt["Level"].Int();
 
             JToken mats = (JToken)evt["Ingredients"];
 
@@ -47,7 +47,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     Ingredients = new Dictionary<string, int>();
                     foreach (JObject jo in (JArray)mats)
                     {
-                        Ingredients[(string)jo["Name"]] = JSONHelper.GetInt(jo["Count"]);
+                        Ingredients[(string)jo["Name"]] = jo["Count"].Int();
                     }
                 }
             }

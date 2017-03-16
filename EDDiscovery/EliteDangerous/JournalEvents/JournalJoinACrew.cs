@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalJoinACrew(JObject evt) : base(evt, JournalTypeEnum.JoinACrew)
         {
-            Captain = JSONHelper.GetStringDef(evt["Captain"]);
+            Captain = evt["Captain"].Str();
 
         }
         public string Captain { get; set; }

@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalBuyAmmo(JObject evt ) : base(evt, JournalTypeEnum.BuyAmmo)
         {
-            Cost = JSONHelper.GetLong(evt["Cost"]);
+            Cost = evt["Cost"].Long();
 
         }
         public long Cost { get; set; }

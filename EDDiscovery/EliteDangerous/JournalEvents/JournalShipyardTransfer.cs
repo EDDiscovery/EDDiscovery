@@ -33,11 +33,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardTransfer(JObject evt ) : base(evt, JournalTypeEnum.ShipyardTransfer)
         {
-            ShipType = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["ShipType"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            System = JSONHelper.GetStringDef(evt["System"]);
-            Distance = JSONHelper.GetDouble(evt["Distance"]);
-            TransferPrice = JSONHelper.GetLong(evt["TransferPrice"]);
+            ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
+            ShipId = evt["ShipID"].Int();
+            System = evt["System"].Str();
+            Distance = evt["Distance"].Double();
+            TransferPrice = evt["TransferPrice"].Long();
 
             if (Distance > 100000.0)       // previously, it was in m, now they have changed it to LY per 2.3. So if its large (over 100k ly, impossible) convert
                 Distance = Distance / 299792458.0 / 365 / 24 / 60 / 60;

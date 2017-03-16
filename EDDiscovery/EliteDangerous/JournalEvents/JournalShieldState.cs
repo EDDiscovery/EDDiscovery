@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShieldState(JObject evt ) : base(evt, JournalTypeEnum.ShieldState)
         {
-            ShieldsUp = JSONHelper.GetBool(evt["ShieldsUp"]);
+            ShieldsUp = evt["ShieldsUp"].Bool();
 
         }
         public bool ShieldsUp { get; set; }

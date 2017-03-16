@@ -25,11 +25,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScreenshot(JObject evt ) : base(evt, JournalTypeEnum.Screenshot)
         {
-            Filename = JSONHelper.GetStringDef(evt["Filename"]);
-            Width = JSONHelper.GetInt(evt["Width"]);
-            Height = JSONHelper.GetInt(evt["Height"]);
-            System = JSONHelper.GetStringDef(evt["System"]);
-            Body = JSONHelper.GetStringDef(evt["Body"]);
+            Filename = evt["Filename"].Str();
+            Width = evt["Width"].Int();
+            Height = evt["Height"].Int();
+            System = evt["System"].Str();
+            Body = evt["Body"].Str();
         }
         public string Filename { get; set; }
         public int Width { get; set; }

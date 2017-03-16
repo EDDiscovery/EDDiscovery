@@ -27,20 +27,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
-            LoadGameCommander = JSONHelper.GetStringDef(evt["Commander"]);
-            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            StartLanded = JSONHelper.GetBool(evt["StartLanded"]);
-            StartDead = JSONHelper.GetBool(evt["StartDead"]);
-            GameMode = JSONHelper.GetStringDef(evt["GameMode"]);
-            Group = JSONHelper.GetStringDef(evt["Group"]);
-            Credits = JSONHelper.GetLong(evt["Credits"]);
-            Loan = JSONHelper.GetLong(evt["Loan"]);
+            LoadGameCommander = evt["Commander"].Str();
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
+            StartLanded = evt["StartLanded"].Bool();
+            StartDead = evt["StartDead"].Bool();
+            GameMode = evt["GameMode"].Str();
+            Group = evt["Group"].Str();
+            Credits = evt["Credits"].Long();
+            Loan = evt["Loan"].Long();
 
-            ShipName = JSONHelper.GetStringDef(evt["ShipName"]);
-            ShipIdent = JSONHelper.GetStringDef(evt["ShipIdent"]);
-            FuelLevel = JSONHelper.GetDouble(evt["FuelLevel"]);
-            FuelCapacity = JSONHelper.GetDouble(evt["FuelCapacity"]);
+            ShipName = evt["ShipName"].Str();
+            ShipIdent = evt["ShipIdent"].Str();
+            FuelLevel = evt["FuelLevel"].Double();
+            FuelCapacity = evt["FuelCapacity"].Double();
         }
 
         public string LoadGameCommander { get; set; }

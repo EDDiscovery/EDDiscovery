@@ -97,10 +97,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalLoadout(JObject evt) : base(evt, JournalTypeEnum.Loadout)
         {
-            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            ShipName = JSONHelper.GetStringDef(evt["ShipName"]);
-            ShipIdent = JSONHelper.GetStringDef(evt["ShipIdent"]);
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
+            ShipName = evt["ShipName"].Str();
+            ShipIdent = evt["ShipIdent"].Str();
 
             ShipModules = new List<ShipModule>();
 
@@ -109,16 +109,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 foreach (JObject jo in jmodules)
                 {
-                    ShipModule module = new ShipModule( JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(jo["Slot"])),
-                                                        JournalFieldNaming.GetBetterItemNameLoadout(JSONHelper.GetStringDef(jo["Item"])),
-                                                        JSONHelper.GetBoolNull(jo["On"]),
-                                                        JSONHelper.GetIntNull(jo["Priority"]),
-                                                        JSONHelper.GetIntNull(jo["AmmoInClip"]),
-                                                        JSONHelper.GetIntNull(jo["AmmoInHopper"]),
-                                                        JSONHelper.GetStringNull(jo["EngineerBlueprint"]).SplitCapsWordFull(),
-                                                        JSONHelper.GetIntNull(jo["EngineerLevel"]),
-                                                        JSONHelper.GetDoubleNull(jo["Health"]),
-                                                        JSONHelper.GetIntNull(jo["Value"]) );
+                    ShipModule module = new ShipModule( JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
+                                                        JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
+                                                        jo["On"].BoolNull(),
+                                                        jo["Priority"].IntNull(),
+                                                        jo["AmmoInClip"].IntNull(),
+                                                        jo["AmmoInHopper"].IntNull(),
+                                                        jo["EngineerBlueprint"].Str().SplitCapsWordFull(),
+                                                        jo["EngineerLevel"].IntNull(),
+                                                        jo["Health"].DoubleNull(),
+                                                        jo["Value"].IntNull() );
                     ShipModules.Add(module);
                 }
             }

@@ -27,9 +27,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSendText(JObject evt) : base(evt, JournalTypeEnum.SendText)
         {
-            To = JSONHelper.GetStringDef(evt["To"]);
-            To_Localised = JSONHelper.GetStringDef(evt["To_Localised"]);
-            Message = JSONHelper.GetStringDef(evt["Message"]);
+            To = evt["To"].Str();
+            To_Localised = evt["To_Localised"].Str();
+            Message = evt["Message"].Str();
         }
         public string To { get; set; }
         public string To_Localised { get; set; }

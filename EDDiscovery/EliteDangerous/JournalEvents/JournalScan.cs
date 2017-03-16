@@ -139,7 +139,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             get
             {
-                return JSONHelper.GetBool(jEventData["EDDFromEDSMBodie"], false);
+                return jEventData["EDDFromEDSMBodie"].Bool(false);
             }
         }
 
@@ -150,47 +150,47 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
-            BodyName = JSONHelper.GetStringDef(evt["BodyName"]);
-            StarType = JSONHelper.GetStringNull(evt["StarType"]);
+            BodyName = evt["BodyName"].Str();
+            StarType = evt["StarType"].StrNull();
 
-            DistanceFromArrivalLS = JSONHelper.GetDouble(evt["DistanceFromArrivalLS"]);
+            DistanceFromArrivalLS = evt["DistanceFromArrivalLS"].Double();
 
-            nAge = JSONHelper.GetDoubleNull(evt["Age_MY"]);
-            nStellarMass = JSONHelper.GetDoubleNull(evt["StellarMass"]);
-            nRadius = JSONHelper.GetDoubleNull(evt["Radius"]);
-            nAbsoluteMagnitude = JSONHelper.GetDoubleNull(evt["AbsoluteMagnitude"]);
-            nRotationPeriod = JSONHelper.GetDoubleNull(evt["RotationPeriod"]);
+            nAge = evt["Age_MY"].DoubleNull();
+            nStellarMass = evt["StellarMass"].DoubleNull();
+            nRadius = evt["Radius"].DoubleNull();
+            nAbsoluteMagnitude = evt["AbsoluteMagnitude"].DoubleNull();
+            nRotationPeriod = evt["RotationPeriod"].DoubleNull();
 
-            nOrbitalPeriod = JSONHelper.GetDoubleNull(evt["OrbitalPeriod"]);
-            nSemiMajorAxis = JSONHelper.GetDoubleNull(evt["SemiMajorAxis"]);
-            nEccentricity = JSONHelper.GetDoubleNull(evt["Eccentricity"]);
-            nOrbitalInclination = JSONHelper.GetDoubleNull(evt["OrbitalInclination"]);
-            nPeriapsis = JSONHelper.GetDoubleNull(evt["Periapsis"]);
+            nOrbitalPeriod = evt["OrbitalPeriod"].DoubleNull();
+            nSemiMajorAxis = evt["SemiMajorAxis"].DoubleNull();
+            nEccentricity = evt["Eccentricity"].DoubleNull();
+            nOrbitalInclination = evt["OrbitalInclination"].DoubleNull();
+            nPeriapsis = evt["Periapsis"].DoubleNull();
 
             Rings = evt["Rings"]?.ToObject<StarPlanetRing[]>();
 
-            nTidalLock = JSONHelper.GetBoolNull(evt["TidalLock"]);
-            TerraformState = JSONHelper.GetStringNull(evt["TerraformState"]);
+            nTidalLock = evt["TidalLock"].Bool();
+            TerraformState = evt["TerraformState"].StrNull();
             if (TerraformState != null && TerraformState.Equals("Not Terraformable", StringComparison.InvariantCultureIgnoreCase)) // EDSM returns this, normalise to journal
                 TerraformState = String.Empty;
-            PlanetClass = JSONHelper.GetStringNull(evt["PlanetClass"]);
+            PlanetClass = evt["PlanetClass"].StrNull();
 
-            Atmosphere = JSONHelper.GetStringNull(evt["Atmosphere"]);
+            Atmosphere = evt["Atmosphere"].StrNull();
             if (Atmosphere == null || Atmosphere.Length == 0)             // Earthlikes appear to have empty atmospheres but AtmosphereType
-                Atmosphere = JSONHelper.GetStringNull(evt["AtmosphereType"]);
+                Atmosphere = evt["AtmosphereType"].StrNull();
             if (Atmosphere != null)
                 Atmosphere = Atmosphere.SplitCapsWordFull();
 
             AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
-            Volcanism = JSONHelper.GetStringNull(evt["Volcanism"]);
+            Volcanism = evt["Volcanism"].StrNull();
             VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
-            nMassEM = JSONHelper.GetDoubleNull(evt["MassEM"]);
-            nSurfaceGravity = JSONHelper.GetDoubleNull(evt["SurfaceGravity"]);
-            nSurfaceTemperature = JSONHelper.GetDoubleNull(evt["SurfaceTemperature"]);
-            nSurfacePressure = JSONHelper.GetDoubleNull(evt["SurfacePressure"]);
-            nLandable = JSONHelper.GetBoolNull(evt["Landable"]);
+            nMassEM = evt["MassEM"].DoubleNull();
+            nSurfaceGravity = evt["SurfaceGravity"].DoubleNull();
+            nSurfaceTemperature = evt["SurfaceTemperature"].DoubleNull();
+            nSurfacePressure = evt["SurfacePressure"].DoubleNull();
+            nLandable = evt["Landable"].BoolNull();
 
-            ReserveLevelStr = JSONHelper.GetStringDef(evt["ReserveLevel"]);
+            ReserveLevelStr = evt["ReserveLevel"].Str();
 
             if (IsStar)
             {
@@ -228,7 +228,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     Materials = new Dictionary<string, double>();
                     foreach (JObject jo in mats)
                     {
-                        Materials[(string)jo["Name"]] = JSONHelper.GetDouble(jo["Percent"]);
+                        Materials[(string)jo["Name"]] = jo["Percent"].Double();
                     }
                 }
             }

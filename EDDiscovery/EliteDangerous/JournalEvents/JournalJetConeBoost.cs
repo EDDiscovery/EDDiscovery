@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalJetConeBoost(JObject evt ) : base(evt, JournalTypeEnum.JetConeBoost)
         {
-            BoostValue = JSONHelper.GetDouble(evt["BoostValue"]);
+            BoostValue = evt["BoostValue"].Double();
 
         }
         public double BoostValue { get; set; }

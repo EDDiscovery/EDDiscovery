@@ -27,9 +27,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSupercruiseExit(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseExit)
         {
-            StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
-            Body = JSONHelper.GetStringDef(evt["Body"]);
-            BodyType = JSONHelper.GetStringDef(evt["BodyType"]);
+            StarSystem = evt["StarSystem"].Str();
+            Body = evt["Body"].Str();
+            BodyType = evt["BodyType"].Str();
             if (BodyType.Equals("Null", System.StringComparison.InvariantCultureIgnoreCase)) // obv a frontier bug
                 BodyType = "";
         }

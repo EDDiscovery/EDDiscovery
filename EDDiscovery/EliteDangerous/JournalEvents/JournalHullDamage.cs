@@ -25,7 +25,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalHullDamage(JObject evt ) : base(evt, JournalTypeEnum.HullDamage)
         {
-            Health = JSONHelper.GetDouble(evt["Health"]);
+            Health = evt["Health"].Double();
 
         }
         public double Health { get; set; }

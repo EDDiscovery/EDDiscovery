@@ -28,9 +28,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplayDeliver(JObject evt) : base(evt, JournalTypeEnum.PowerplayDeliver)
         {
-            Power = JSONHelper.GetStringDef(evt["Power"]);
-            Type = JSONHelper.GetStringDef(evt["Type"]);
-            Count = JSONHelper.GetInt(evt["Count"]);
+            Power = evt["Power"].Str();
+            Type = evt["Type"].Str();
+            Count = evt["Count"].Int();
 
         }
         public string Power { get; set; }

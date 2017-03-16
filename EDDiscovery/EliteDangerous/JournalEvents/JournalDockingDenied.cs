@@ -29,8 +29,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingDenied(JObject evt ) : base(evt, JournalTypeEnum.DockingDenied)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
-            Reason = JSONHelper.GetStringDef(evt["Reason"]).SplitCapsWord();
+            StationName = evt["StationName"].Str();
+            Reason = evt["Reason"].Str().SplitCapsWord();
         }
         public string StationName { get; set; }
         public string Reason { get; set; }

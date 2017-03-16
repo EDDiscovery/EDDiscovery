@@ -31,12 +31,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommitCrime(JObject evt ) : base(evt, JournalTypeEnum.CommitCrime)
         {
-            CrimeType = JSONHelper.GetStringDef(evt["CrimeType"]);
-            Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            Victim = JSONHelper.GetStringDef(evt["Victim"]);
-            VictimLocalised = JSONHelper.GetStringDef(evt["Victim_Localised"]);
-            Fine = JSONHelper.GetLongNull(evt["Fine"]);
-            Bounty = JSONHelper.GetLongNull(evt["Bounty"]);
+            CrimeType = evt["CrimeType"].Str();
+            Faction = evt["Faction"].Str();
+            Victim = evt["Victim"].Str();
+            VictimLocalised = evt["Victim_Localised"].Str();
+            Fine = evt["Fine"].LongNull();
+            Bounty = evt["Bounty"].LongNull();
         }
         public string CrimeType { get; set; }
         public string Faction { get; set; }

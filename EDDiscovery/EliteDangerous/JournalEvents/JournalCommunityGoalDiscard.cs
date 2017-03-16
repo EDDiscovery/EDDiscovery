@@ -26,8 +26,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommunityGoalDiscard(JObject evt) : base(evt, JournalTypeEnum.CommunityGoalDiscard)
         {
-            Name = JSONHelper.GetStringDef(evt["Name"]);
-            System = JSONHelper.GetStringDef(evt["System"]);
+            Name = evt["Name"].Str();
+            System = evt["System"].Str();
         }
 
         public string Name { get; set; }
