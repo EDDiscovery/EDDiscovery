@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRebootRepair(JObject evt) : base(evt, JournalTypeEnum.RebootRepair)
         {
-            if (!JSONHelper.IsNullOrEmptyT(evt["Modules"]))
+            if (!evt["Modules"].Empty())
                 Modules = evt.Value<JArray>("Modules").Values<string>().ToArray();
         }
 

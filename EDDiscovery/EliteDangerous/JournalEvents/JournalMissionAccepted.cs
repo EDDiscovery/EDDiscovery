@@ -49,29 +49,29 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionAccepted(JObject evt ) : base(evt, JournalTypeEnum.MissionAccepted)
         {
-            Name = JournalFieldNaming.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
-            Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            MissionId = JSONHelper.GetInt(evt["MissionID"]);
+            Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
+            Faction = evt["Faction"].Str();
+            MissionId = evt["MissionID"].Int();
 
-            Influence = JSONHelper.GetStringDef(evt["Influence"]);
-            Reputation = JSONHelper.GetStringDef(evt["Reputation"]);
+            Influence = evt["Influence"].Str();
+            Reputation = evt["Reputation"].Str();
 
-            Commodity = JSONHelper.GetStringDef(evt["Commodity"]);
-            Count = JSONHelper.GetIntNull(evt["Count"]);
-            Target = JSONHelper.GetStringDef(evt["Target"]);
-            TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
-            TargetFaction = JSONHelper.GetStringDef(evt["TargetFaction"]);
+            Commodity = evt["Commodity"].Str();
+            Count = evt["Count"].IntNull();
+            Target = evt["Target"].Str();
+            TargetType = evt["TargetType"].Str();
+            TargetFaction = evt["TargetFaction"].Str();
 
-            if (!JSONHelper.IsNullOrEmptyT(evt["Expiry"]))
+            if (!evt["Expiry"].Empty())
                 Expiry = DateTime.Parse(evt.Value<string>("Expiry"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 
-            DestinationSystem = JSONHelper.GetStringDef(evt["DestinationSystem"]);
-            DestinationStation = JSONHelper.GetStringDef(evt["DestinationStation"]);
+            DestinationSystem = evt["DestinationSystem"].Str();
+            DestinationStation = evt["DestinationStation"].Str();
 
-            PassengerCount = JSONHelper.GetIntNull(evt["PassengerCount"]);
-            PassengerVIPs = JSONHelper.GetBoolNull(evt["PassengerVIPs"]);
-            PassengerWanted = JSONHelper.GetBoolNull(evt["PassengerWanted"]);
-            PassengerType = JSONHelper.GetStringNull(evt["PassengerType"]);
+            PassengerCount = evt["PassengerCount"].IntNull();
+            PassengerVIPs = evt["PassengerVIPs"].BoolNull();
+            PassengerWanted = evt["PassengerWanted"].BoolNull();
+            PassengerType = evt["PassengerType"].StrNull();
 
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
         }

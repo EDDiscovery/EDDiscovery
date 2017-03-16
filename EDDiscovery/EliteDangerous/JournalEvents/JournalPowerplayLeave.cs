@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplayLeave(JObject evt) : base(evt, JournalTypeEnum.PowerplayLeave)
         {
-            Power = JSONHelper.GetStringDef(evt["Power"]);
+            Power = evt["Power"].Str();
 
         }
         public string Power { get; set; }

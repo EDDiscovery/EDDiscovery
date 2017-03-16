@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalDied(JObject evt ) : base(evt, JournalTypeEnum.Died)
         {
-            string killerName = JSONHelper.GetStringDef(evt["KillerName"]);
+            string killerName = evt["KillerName"].Str();
             if (string.IsNullOrEmpty(killerName))
             {
                 if (evt["Killers"] != null)
@@ -53,9 +53,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                         new Killer
                         {
                             Name = killerName,
-                            Name_Localised = JSONHelper.GetStringDef(evt["KillerName_Localised"]),
-                            Ship = JSONHelper.GetStringDef(evt["KillerShip"]),
-                            Rank = JSONHelper.GetStringDef(evt["KillerRank"])
+                            Name_Localised = evt["KillerName_Localised"].Str(),
+                            Ship = evt["KillerShip"].Str(),
+                            Rank = evt["KillerRank"].Str()
                         }
                 };
             }

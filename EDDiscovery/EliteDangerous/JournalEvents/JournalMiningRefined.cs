@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMiningRefined(JObject evt ) : base(evt, JournalTypeEnum.MiningRefined)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);
+            Type = evt["Type"].Str();
             FriendlyType = JournalFieldNaming.RMat(Type);
         }
 

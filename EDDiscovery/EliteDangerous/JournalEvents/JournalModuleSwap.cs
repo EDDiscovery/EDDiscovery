@@ -30,14 +30,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleSwap(JObject evt ) : base(evt, JournalTypeEnum.ModuleSwap)
         {
-            FromSlot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(evt["FromSlot"]));
-            ToSlot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(evt["ToSlot"]));
-            FromItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["FromItem"]));
-            FromItemLocalised = JSONHelper.GetStringDef(evt["FromItem_Localised"]);
-            ToItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["ToItem"]));
-            ToItemLocalised = JSONHelper.GetStringDef(evt["ToItem_Localised"]);
-            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            FromSlot = JournalFieldNaming.GetBetterSlotName(evt["FromSlot"].Str());
+            ToSlot = JournalFieldNaming.GetBetterSlotName(evt["ToSlot"].Str());
+            FromItem = JournalFieldNaming.GetBetterItemNameEvents(evt["FromItem"].Str());
+            FromItemLocalised = evt["FromItem_Localised"].Str();
+            ToItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ToItem"].Str());
+            ToItemLocalised = evt["ToItem_Localised"].Str();
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
 
         }
         public string FromSlot { get; set; }

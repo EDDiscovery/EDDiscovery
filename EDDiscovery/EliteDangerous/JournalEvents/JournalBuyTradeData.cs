@@ -28,8 +28,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalBuyTradeData(JObject evt ) : base(evt, JournalTypeEnum.BuyTradeData)
         {
-            System = JSONHelper.GetStringDef(evt["System"]);
-            Cost = JSONHelper.GetLong(evt["Cost"]);
+            System = evt["System"].Str();
+            Cost = evt["Cost"].Long();
         }
 
         public string System { get; set; }

@@ -27,9 +27,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPVPKill(JObject evt) : base(evt, JournalTypeEnum.PVPKill)
         {
-            Victim = JSONHelper.GetStringDef(evt["Victim"]);
+            Victim = evt["Victim"].Str();
 
-            CombatRank = (CombatRank)JSONHelper.GetInt(evt["CombatRank"]);
+            CombatRank = (CombatRank)evt["CombatRank"].Int();
 
         }
         public string Victim { get; set; }

@@ -34,10 +34,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardSwap(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSwap)
         {
-            ShipType = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["ShipType"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            StoreOldShip = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["StoreOldShip"]));
-            StoreShipId = JSONHelper.GetIntNull(evt["StoreShipID"]);
+            ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
+            ShipId = evt["ShipID"].Int();
+            StoreOldShip = JournalFieldNaming.GetBetterShipName(evt["StoreOldShip"].Str());
+            StoreShipId = evt["StoreShipID"].IntNull();
         }
 
         public string ShipType { get; set; }

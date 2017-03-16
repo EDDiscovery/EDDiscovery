@@ -26,10 +26,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalFileheader(JObject evt ) : base(evt, JournalTypeEnum.Fileheader)
         {
-            GameVersion = JSONHelper.GetStringDef(evt["gameversion"]);
-            Build = JSONHelper.GetStringDef(evt["build"]);
-            Language = JSONHelper.GetStringDef(evt["language"]);
-            Part = JSONHelper.GetInt(evt["part"]);
+            GameVersion = evt["gameversion"].Str();
+            Build = evt["build"].Str();
+            Language = evt["language"].Str();
+            Part = evt["part"].Int();
         }
 
         public string GameVersion { get; set; }

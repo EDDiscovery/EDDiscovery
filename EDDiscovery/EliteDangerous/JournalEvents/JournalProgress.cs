@@ -32,12 +32,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalProgress(JObject evt ) : base(evt, JournalTypeEnum.Progress)
         {
-            Combat = JSONHelper.GetInt(evt["Combat"]);
-            Trade = JSONHelper.GetInt(evt["Trade"]);
-            Explore = JSONHelper.GetInt(evt["Explore"]);
-            Empire = JSONHelper.GetInt(evt["Empire"]);
-            Federation = JSONHelper.GetInt(evt["Federation"]);
-            CQC = JSONHelper.GetInt(evt["CQC"]);
+            Combat = evt["Combat"].Int();
+            Trade = evt["Trade"].Int();
+            Explore = evt["Explore"].Int();
+            Empire = evt["Empire"].Int();
+            Federation = evt["Federation"].Int();
+            CQC = evt["CQC"].Int();
         }
 
         public int Combat { get; set; }         // keep ints for backwards compat

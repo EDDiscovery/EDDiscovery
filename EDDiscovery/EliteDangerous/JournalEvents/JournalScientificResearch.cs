@@ -23,9 +23,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScientificResearch(JObject evt) : base(evt, JournalTypeEnum.ScientificResearch)
         {
-            Name = JSONHelper.GetStringDef(evt["Name"]);
-            Count = JSONHelper.GetInt(evt["Count"]);
-            Category = JSONHelper.GetStringDef(evt["Category"]);
+            Name = evt["Name"].Str();
+            Count = evt["Count"].Int();
+            Category = evt["Category"].Str();
         }
         public string Name { get; set; }
         public int Count { get; set; }

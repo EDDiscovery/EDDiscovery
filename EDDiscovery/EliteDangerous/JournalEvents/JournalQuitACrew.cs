@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalQuitACrew(JObject evt) : base(evt, JournalTypeEnum.QuitACrew)
         {
-            Captain = JSONHelper.GetStringDef(evt["Captain"]);
+            Captain = evt["Captain"].Str();
 
         }
         public string Captain { get; set; }

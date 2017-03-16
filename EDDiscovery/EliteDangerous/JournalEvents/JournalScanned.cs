@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScanned(JObject evt) : base(evt, JournalTypeEnum.Scanned)
         {
-            ScanType = JSONHelper.GetStringDef(evt["ScanType"]).SplitCapsWordFull();
+            ScanType = evt["ScanType"].Str().SplitCapsWordFull();
         }
         public string ScanType { get; set; }
 

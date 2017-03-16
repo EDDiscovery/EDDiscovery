@@ -26,8 +26,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalJetConeDamage(JObject evt ) : base(evt, JournalTypeEnum.JetConeDamage)
         {
-            Module = JSONHelper.GetStringDef(evt["Module"]);
-            ModuleLocalised = JSONHelper.GetStringDef(evt["_Localised"]);       //TBD - jet cone boost entries are bugged in journal at the moment.
+            Module = evt["Module"].Str();
+            ModuleLocalised = evt["_Localised"].Str();       //TBD - jet cone boost entries are bugged in journal at the moment.
 
         }
         public string Module { get; set; }

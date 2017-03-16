@@ -37,24 +37,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionCompleted(JObject evt ) : base(evt, JournalTypeEnum.MissionCompleted)
         {
-            Name = JournalFieldNaming.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
-            Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            Commodity = JSONHelper.GetStringDef(evt["Commodity"]);
-            Count = JSONHelper.GetIntNull(evt["Count"]);
-            Target = JSONHelper.GetStringDef(evt["Target"]);
-            TargetType = JSONHelper.GetStringDef(evt["TargetType"]);
-            TargetFaction = JSONHelper.GetStringDef(evt["TargetFaction"]);
-            Reward = JSONHelper.GetLongNull(evt["Reward"]);
-            Donation = JSONHelper.GetLongNull(evt["Donation"]);
-            MissionId = JSONHelper.GetInt(evt["MissionID"]);
+            Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
+            Faction = evt["Faction"].Str();
+            Commodity = evt["Commodity"].Str();
+            Count = evt["Count"].IntNull();
+            Target = evt["Target"].Str();
+            TargetType = evt["TargetType"].Str();
+            TargetFaction = evt["TargetFaction"].Str();
+            Reward = evt["Reward"].LongNull();
+            Donation = evt["Donation"].LongNull();
+            MissionId = evt["MissionID"].Int();
 
-            DestinationSystem = JSONHelper.GetStringDef(evt["DestinationSystem"]);
-            DestinationStation = JSONHelper.GetStringDef(evt["DestinationStation"]);
+            DestinationSystem = evt["DestinationSystem"].Str();
+            DestinationStation = evt["DestinationStation"].Str();
 
-            if (!JSONHelper.IsNullOrEmptyT(evt["PermitsAwarded"]))
+            if (!evt["PermitsAwarded"].Empty())
                 PermitsAwarded = evt.Value<JArray>("PermitsAwarded").Values<string>().ToArray();
 
-            if (!JSONHelper.IsNullOrEmptyT(evt["CommodityReward"]))
+            if (!evt["CommodityReward"].Empty())
             {
                 JArray rewards = (JArray)evt["CommodityReward"];
 
@@ -64,7 +64,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     int i = 0;
                     foreach (JToken jc in rewards.Children())
                     {
-                        if (!JSONHelper.IsNullOrEmptyT(jc["Name"]) && !JSONHelper.IsNullOrEmptyT(jc["Count"]))
+                        if (!jc["Name"].Empty() && !jc["Count"].Empty())
                             CommodityReward[i++] = new System.Tuple<string, int>(jc["Name"].Value<string>(), jc["Count"].Value<int>());
 
                         //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} {1}", jc.Path, jc.Type.ToString()));

@@ -28,9 +28,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommunityGoalReward(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalReward)
         {
-            Name = JSONHelper.GetStringDef(evt["Name"]);
-            System = JSONHelper.GetStringDef(evt["System"]);
-            Reward = JSONHelper.GetLong(evt["Reward"]);
+            Name = evt["Name"].Str();
+            System = evt["System"].Str();
+            Reward = evt["Reward"].Long();
         }
         public string Name { get; set; }
         public string System { get; set; }

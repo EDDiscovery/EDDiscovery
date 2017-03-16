@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalWingAdd(JObject evt ) : base(evt, JournalTypeEnum.WingAdd)
         {
-            Name = JSONHelper.GetStringDef(evt["Name"]);
+            Name = evt["Name"].Str();
 
         }
 

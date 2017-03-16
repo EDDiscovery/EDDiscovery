@@ -27,8 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplayFastTrack(JObject evt) : base(evt, JournalTypeEnum.PowerplayFastTrack)
         {
-            Power = JSONHelper.GetStringDef(evt["Power"]);
-            Cost = JSONHelper.GetLong(evt["Cost"]);
+            Power = evt["Power"].Str();
+            Cost = evt["Cost"].Long();
 
         }
         public string Power { get; set; }

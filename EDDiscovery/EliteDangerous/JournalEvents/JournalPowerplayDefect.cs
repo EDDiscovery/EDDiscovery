@@ -27,8 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalPowerplayDefect(JObject evt) : base(evt, JournalTypeEnum.PowerplayDefect)
         {
-            FromPower = JSONHelper.GetStringDef(evt["FromPower"]);
-            ToPower = JSONHelper.GetStringDef(evt["ToPower"]);
+            FromPower = evt["FromPower"].Str();
+            ToPower = evt["ToPower"].Str();
 
         }
 

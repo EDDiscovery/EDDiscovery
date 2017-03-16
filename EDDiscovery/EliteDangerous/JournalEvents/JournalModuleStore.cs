@@ -32,15 +32,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleStore(JObject evt) : base(evt, JournalTypeEnum.ModuleStore)
         {
-            Slot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(evt["Slot"]));
-            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["StoredItem"]));
-            StoredItemLocalised = JSONHelper.GetStringDef(evt["StoredItem_Localised"]);
-            EngineerModifications = JSONHelper.GetStringNull(evt["EngineerModifications"]).SplitCapsWordFull();
-            ReplacementItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["ReplacementItem"]));
-            ReplacementItemLocalised = JSONHelper.GetStringDef(evt["ReplacementItem_Localised"]);
-            Cost = JSONHelper.GetLongNull(evt["Cost"]);
+            Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
+            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
+            StoredItemLocalised = evt["StoredItem_Localised"].Str();
+            EngineerModifications = evt["EngineerModifications"].StrNull().SplitCapsWordFull();
+            ReplacementItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ReplacementItem"].Str());
+            ReplacementItemLocalised = evt["ReplacementItem_Localised"].Str();
+            Cost = evt["Cost"].LongNull();
         }
         public string Slot { get; set; }
         public string Ship { get; set; }

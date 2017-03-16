@@ -28,9 +28,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMaterialDiscovered(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscovered)
         {
-            Category = JSONHelper.GetStringDef(evt["Category"]);
-            Name = JSONHelper.GetStringDef(evt["Name"]);
-            DiscoveryNumber = JSONHelper.GetInt(evt["DiscoveryNumber"]);
+            Category = evt["Category"].Str();
+            Name = evt["Name"].Str();
+            DiscoveryNumber = evt["DiscoveryNumber"].Int();
             FriendlyName = JournalFieldNaming.RMat(Name);
         }
 

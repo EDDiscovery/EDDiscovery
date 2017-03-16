@@ -28,8 +28,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRefuelPartial(JObject evt ) : base(evt, JournalTypeEnum.RefuelPartial)
         {
-            Cost = JSONHelper.GetLong(evt["Cost"]);
-            Amount = JSONHelper.GetInt(evt["Amount"]);
+            Cost = evt["Cost"].Long();
+            Amount = evt["Amount"].Int();
         }
         public long Cost { get; set; }
         public int Amount { get; set; }

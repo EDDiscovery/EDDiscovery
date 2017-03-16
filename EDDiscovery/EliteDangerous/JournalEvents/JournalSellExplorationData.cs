@@ -29,14 +29,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSellExplorationData(JObject evt ) : base(evt, JournalTypeEnum.SellExplorationData)
         {
-            if (!JSONHelper.IsNullOrEmptyT(evt["Systems"]))
+            if (!evt["Systems"].Empty())
                 Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
 
-            if (!JSONHelper.IsNullOrEmptyT(evt["Discovered"]))
+            if (!evt["Discovered"].Empty())
                 Discovered = evt.Value<JArray>("Discovered").Values<string>().ToArray();
 
-            BaseValue = JSONHelper.GetLong(evt["BaseValue"]);
-            Bonus = JSONHelper.GetLong(evt["Bonus"]);
+            BaseValue = evt["BaseValue"].Long();
+            Bonus = evt["Bonus"].Long();
         }
         public string[] Systems { get; set; }
         public string[] Discovered { get; set; }

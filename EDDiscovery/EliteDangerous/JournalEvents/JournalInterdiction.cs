@@ -31,14 +31,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalInterdiction(JObject evt ) : base(evt, JournalTypeEnum.Interdiction)
         {
-            Success = JSONHelper.GetBool(evt["Success"]);
-            Interdicted = JSONHelper.GetStringDef(evt["Interdicted"]);
-            IsPlayer = JSONHelper.GetBool(evt["IsPlayer"]);
+            Success = evt["Success"].Bool();
+            Interdicted = evt["Interdicted"].Str();
+            IsPlayer = evt["IsPlayer"].Bool();
             CombatRank = CombatRank.Harmless;
-            if (!JSONHelper.IsNullOrEmptyT(evt["CombatRank"]))
-                CombatRank = (CombatRank)(JSONHelper.GetIntNull(evt["CombatRank"]));
-            Faction = JSONHelper.GetStringDef(evt["Faction"]);
-            Power = JSONHelper.GetStringDef(evt["Power"]);
+            if (!evt["CombatRank"].Empty())
+                CombatRank = (CombatRank)(evt["CombatRank"].IntNull());
+            Faction = evt["Faction"].Str();
+            Power = evt["Power"].Str();
         }
         public bool Success { get; set; }
         public string Interdicted { get; set; }

@@ -32,18 +32,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {
-            Slot = JournalFieldNaming.GetBetterSlotName(JSONHelper.GetStringDef(evt["Slot"]));
-            BuyItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["BuyItem"]));
-            BuyItemLocalised = JSONHelper.GetStringDef(evt["BuyItem_Localised"]);
-            BuyPrice = JSONHelper.GetLong(evt["BuyPrice"]);
-            Ship = JournalFieldNaming.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            SellItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["SellItem"]));
-            SellItemLocalised = JSONHelper.GetStringDef(evt["SellItem_Localised"]);
-            SellPrice = JSONHelper.GetLongNull(evt["SellPrice"]);
+            Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
+            BuyItem = JournalFieldNaming.GetBetterItemNameEvents(evt["BuyItem"].Str());
+            BuyItemLocalised = evt["BuyItem_Localised"].Str();
+            BuyPrice = evt["BuyPrice"].Long();
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
+            SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
+            SellItemLocalised = evt["SellItem_Localised"].Str();
+            SellPrice = evt["SellPrice"].LongNull();
 
-            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["StoredItem"]));
-            StoredItemLocalised = JSONHelper.GetStringDef(evt["StoredItem_Localised"]);
+            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
+            StoredItemLocalised = evt["StoredItem_Localised"].Str();
         }
 
         public string Slot { get; set; }

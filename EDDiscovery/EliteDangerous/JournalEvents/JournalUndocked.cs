@@ -28,8 +28,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
-            StationType = JSONHelper.GetStringDef(evt["StationType"]);
+            StationName = evt["StationName"].Str();
+            StationType = evt["StationType"].Str();
 
         }
         public string StationName { get; set; }

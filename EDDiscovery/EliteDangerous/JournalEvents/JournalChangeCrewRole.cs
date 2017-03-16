@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalChangeCrewRole(JObject evt) : base(evt, JournalTypeEnum.ChangeCrewRole)
         {
-            Role = JSONHelper.GetStringDef(evt["Role"]);
+            Role = evt["Role"].Str();
 
         }
         public string Role { get; set; }

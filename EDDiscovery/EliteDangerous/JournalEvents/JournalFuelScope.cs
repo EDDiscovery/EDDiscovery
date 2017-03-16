@@ -27,8 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalFuelScoop(JObject evt ) : base(evt, JournalTypeEnum.FuelScoop)
         {
-            Scooped = JSONHelper.GetDouble(evt["Scooped"]);
-            Total = JSONHelper.GetDouble(evt["Total"]);
+            Scooped = evt["Scooped"].Double();
+            Total = evt["Total"].Double();
         }
         public double Scooped { get; set; }
         public double Total { get; set; }

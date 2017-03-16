@@ -30,13 +30,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalFetchRemoteModule(JObject evt) : base(evt, JournalTypeEnum.FetchRemoteModule)
         {
-            StorageSlot = JSONHelper.GetStringDef(evt["StorageSlot"]);          // Slot number, not a slot on our ship
-            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(JSONHelper.GetStringDef(evt["StoredItem"]));
-            StoredItemLocalised = JSONHelper.GetStringDef(evt["StoredItem_Localised"]);
-            TransferCost = JSONHelper.GetLong(evt["TransferCost"]);
-            Ship = JournalFieldNaming.GetBetterShipName( JSONHelper.GetStringDef(evt["Ship"]) );
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
-            ServerId = JSONHelper.GetInt(evt["ServerId"]);
+            StorageSlot = evt["StorageSlot"].Str();          // Slot number, not a slot on our ship
+            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
+            StoredItemLocalised = evt["StoredItem_Localised"].Str();
+            TransferCost = evt["TransferCost"].Long();
+            Ship = JournalFieldNaming.GetBetterShipName( evt["Ship"].Str() );
+            ShipId = evt["ShipID"].Int();
+            ServerId = evt["ServerId"].Int();
         }
         public string StorageSlot { get; set; }
         public string StoredItem { get; set; }

@@ -20,9 +20,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-public static class ObjectExtensions
+public static class JSONObjectExtensions
 {
-    static public bool IsNullOrEmptyT(this JToken token)
+    static public bool Empty(this JToken token)
     {
         return (token == null) ||
                (token.Type == JTokenType.Array && !token.HasValues) ||
@@ -31,9 +31,20 @@ public static class ObjectExtensions
                (token.Type == JTokenType.Null);
     }
 
-    static public string GetStringDef(this JToken jToken , string def = "")
+    static public string StrNull(this JToken jToken)
     {
-        if (jToken.IsNullOrEmptyT())
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<string>();
+        }
+        catch { return null; }
+    }
+
+    static public string Str(this JToken jToken, string def = "")
+    {
+        if (jToken.Empty())
             return def;
         try
         {
@@ -42,7 +53,114 @@ public static class ObjectExtensions
         catch { return def; }
     }
 
+    static public int Int(this JToken jToken, int def = 0)
+    {
+        int? f = jToken.IntNull();
+        return (f != null) ? f.Value : def;
+    }
 
+    static public int? IntNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<int>();
+        }
+        catch { return null; }
+    }
+
+    static public long Long(this JToken jToken, long def = 0)
+    {
+        long? f = jToken.LongNull();
+        return (f != null) ? f.Value : def;
+    }
+
+    static public long? LongNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<long>();
+        }
+        catch { return null; }
+    }
+
+    static public float Float(this JToken jToken, float def = 0)
+    {
+        float? f = jToken.FloatNull();
+        return (f != null) ? f.Value : def;
+    }
+
+    static public float? FloatNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<float>();
+
+        }
+        catch { return null; }
+    }
+
+    static public double Double(this JToken jToken, double def = 0)
+    {
+        double? f = jToken.DoubleNull();
+        return (f != null) ? f.Value : def;
+    }
+
+    static public double? DoubleNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<double>();
+        }
+        catch { return null; }
+    }
+
+    static public bool Bool(this JToken jToken, bool def = false)
+    {
+        bool? b = jToken.BoolNull();
+        return (b != null) ? b.Value : def;
+    }
+
+    static public bool? BoolNull(this JToken jToken)
+    {
+        if (jToken.Empty())
+            return null;
+        try
+        {
+            return jToken.Value<bool>();
+        }
+        catch { return null; }
+    }
+
+    static public string GetMultiStringDef(JObject evt, string[] names, string def = "")
+    {
+        foreach (string s in names)
+        {
+            JToken jt = evt[s];
+
+            if (!jt.Empty())
+            {
+                try
+                {
+                    return jt.Value<string>();
+                }
+                catch { }
+            }
+        }
+        return def;
+    }
+
+}
+
+public static class ObjectExtensions
+{
     public static string ToNullSafeString(this object obj)
     {
         return (obj ?? string.Empty).ToString();

@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSupercruiseEntry(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseEntry)
         {
-            StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
+            StarSystem = evt["StarSystem"].Str();
 
         }
         public string StarSystem { get; set; }

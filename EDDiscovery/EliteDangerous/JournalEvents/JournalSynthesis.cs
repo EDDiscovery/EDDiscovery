@@ -30,7 +30,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Materials = null;
 
-            Name = JSONHelper.GetStringDef(evt["Name"]).SplitCapsWordFull();
+            Name = evt["Name"].Str().SplitCapsWordFull();
             JToken mats = (JToken)evt["Materials"];
 
             if (mats != null)
@@ -44,7 +44,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     Materials = new Dictionary<string, int>();
                     foreach (JObject ja in (JArray)mats)
                     {
-                        Materials[(string)ja["Name"]] = JSONHelper.GetInt(ja["Count"]);
+                        Materials[(string)ja["Name"]] = ja["Count"].Int();
                     }
                 }
             }

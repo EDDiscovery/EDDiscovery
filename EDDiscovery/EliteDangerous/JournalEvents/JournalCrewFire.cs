@@ -29,7 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCrewFire(JObject evt) : base(evt, JournalTypeEnum.CrewFire)
         {
-            Name = JSONHelper.GetStringDef(evt["Name"]);
+            Name = evt["Name"].Str();
 
         }
         public string Name { get; set; }

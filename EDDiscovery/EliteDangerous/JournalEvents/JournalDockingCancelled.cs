@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingCancelled(JObject evt ) : base(evt, JournalTypeEnum.DockingCancelled)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
+            StationName = evt["StationName"].Str();
         }
         public string StationName { get; set; }
 

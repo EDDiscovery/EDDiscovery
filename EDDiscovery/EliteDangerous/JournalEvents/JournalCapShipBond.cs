@@ -31,9 +31,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCapShipBond(JObject evt) : base(evt, JournalTypeEnum.CapShipBond)
         {
-            AwardingFaction = JSONHelper.GetStringDef(evt["AwardingFaction"]);
-            VictimFaction = JSONHelper.GetStringDef(evt["VictimFaction"]);
-            Reward = JSONHelper.GetLong(evt["Reward"]);
+            AwardingFaction = evt["AwardingFaction"].Str();
+            VictimFaction = evt["VictimFaction"].Str();
+            Reward = evt["Reward"].Long();
         }
         public string AwardingFaction { get; set; }
         public string VictimFaction { get; set; }
