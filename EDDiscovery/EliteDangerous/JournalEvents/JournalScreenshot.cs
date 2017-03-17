@@ -46,14 +46,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             detailed = "";
         }
 
-        public JObject SetConvertedFilename(string input_filename, string output_filename, int width, int height)
+        public void SetConvertedFilename(string input_filename, string output_filename, int width, int height)
         {
             JObject jo = GetJson();
             jo["EDDInputFile"] = input_filename;
             jo["EDDOutputFile"] = output_filename;
             jo["EDDOutputWidth"] = width;
             jo["EDDOutputHeight"] = height;
-            return jo;
+            UpdateJson(jo);
         }
 
         public static JournalScreenshot GetScreenshot(string filename, int width, int height, DateTime timestamp, string sysname, int cmdrid)

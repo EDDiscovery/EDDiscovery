@@ -459,7 +459,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public bool UpdateJson(JObject jo)
+        protected bool UpdateJson(JObject jo)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {

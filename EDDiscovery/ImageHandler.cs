@@ -700,8 +700,7 @@ namespace EDDiscovery2.ImageHandler
 
                 if (JournalScreenShot != null)
                 {
-                    JObject jo = JournalScreenShot.SetConvertedFilename(InputFilename, OutputFilename, FinalSize.X, FinalSize.Y);
-                    JournalScreenShot.UpdateJson(jo);
+                    JournalScreenShot.SetConvertedFilename(InputFilename, OutputFilename, FinalSize.X, FinalSize.Y);
                 }
 
                 Controller.LogLine("Converted " + Path.GetFileName(InputFilename) + " to " + Path.GetFileName(OutputFilename));
