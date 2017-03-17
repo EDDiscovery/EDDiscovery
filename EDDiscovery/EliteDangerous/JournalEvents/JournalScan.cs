@@ -110,6 +110,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
         public Dictionary<string, double> Materials { get; set; }
+        public bool IsEDSMBody { get; private set; }
 
         public EDReserve ReserveLevel { get;  set; }
         public string ReserveLevelStr
@@ -133,14 +134,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public double MassMT;
             public double InnerRad;
             public double OuterRad;
-        }
-
-        public bool IsEDSMBody
-        {
-            get
-            {
-                return jEventData["EDDFromEDSMBodie"].Bool(false);
-            }
         }
 
         private const double solarRadius_m = 695700000;
@@ -232,6 +225,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     }
                 }
             }
+
+            IsEDSMBody = evt["EDDFromEDSMBodie"].Bool(false);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V

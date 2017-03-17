@@ -89,7 +89,7 @@ namespace EDDiscovery.EDDN
             msg["header"] = Header();
             msg["$schemaRef"] = GetEDDNSchemaRef();
 
-            JObject message = (JObject) JObject.Parse(journal.EventDataString);
+            JObject message = journal.GetJson();
 
             if (JSONHelper.IsNullOrEmptyT(message["FuelUsed"]))  // Old ED 2.1 messages has no Fuel used fields
                 return null;
@@ -113,7 +113,7 @@ namespace EDDiscovery.EDDN
             msg["header"] = Header();
             msg["$schemaRef"] = GetEDDNSchemaRef();
 
-            JObject message = (JObject)JObject.Parse(journal.EventDataString);
+            JObject message = journal.GetJson();
 
             message = RemoveCommonKeys(message);
             message.Remove("CockpitBreach");
@@ -131,7 +131,7 @@ namespace EDDiscovery.EDDN
             msg["header"] = Header();
             msg["$schemaRef"] = GetEDDNSchemaRef();
 
-            JObject message = (JObject)JObject.Parse(journal.EventDataString);
+            JObject message = journal.GetJson();
 
             message["StarSystem"] = starSystem;
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
