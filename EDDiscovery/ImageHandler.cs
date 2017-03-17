@@ -701,7 +701,6 @@ namespace EDDiscovery2.ImageHandler
                 if (JournalScreenShot != null)
                 {
                     JournalScreenShot.SetConvertedFilename(InputFilename, OutputFilename, FinalSize.X, FinalSize.Y);
-                    JournalScreenShot.Update();
                 }
 
                 Controller.LogLine("Converted " + Path.GetFileName(InputFilename) + " to " + Path.GetFileName(OutputFilename));
@@ -765,7 +764,7 @@ namespace EDDiscovery2.ImageHandler
 
                 if (ss != null)
                 {
-                    JObject jo = ss.jEventData;
+                    JObject jo = ss.GetJson();
                     if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
                     {
                         store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);

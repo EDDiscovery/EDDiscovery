@@ -51,6 +51,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Body = evt["body"].Str();
             JumpDist = evt["JumpDist"].Double();
             FuelUsed = evt["FuelUsed"].Double();
+            RealJournalEvent = evt["FuelUsed"].Empty(); // Old pre ED 2.2 messages has no Fuel used fields
             FuelLevel = evt["FuelLevel"].Double();
             BoostUsed = evt["BoostUsed"].Bool();
             Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction"});
@@ -67,9 +68,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (!evt["Powers"].Empty())
                 Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
 
-            JToken jm = jEventData["EDDMapColor"];
+            JToken jm = evt["EDDMapColor"];
+            MapColor = jm.Int(EDDiscovery2.EDDConfig.Instance.DefaultMapColour);
             if (jm.Empty())
-                MapColor = EDDiscovery2.EDDConfig.Instance.DefaultMapColour;      // new entries get this default map colour if its not already there
+                evt["EDDMapColor"] = EDDiscovery2.EDDConfig.Instance.DefaultMapColour;      // new entries get this default map colour if its not already there
         }
 
         public string Body { get; set; }
@@ -88,6 +90,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Security_Localised { get; set; }
         public string PowerplayState { get; set; }
         public string[] Powers { get; set; }
+        public int MapColor { get; set; }
+        public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
@@ -107,30 +111,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             info += " ";
             info += Tools.FieldBuilder("Body:", Body, "Faction:", Faction, "<state:", FactionState, "Allegiance:", Allegiance, "Economy:", econ);
             detailed = "";
-        }
-
-        public bool RealJournalEvent  // True if real ED 2.2+ journal event and not pre 2.2 imported.
-        {
-            get
-            {
-                if (jEventData["FuelUsed"].Empty())  // Old pre ED 2.2 messages has no Fuel used fields
-                    return false;
-                else
-                    return true;
-            }
-        }
-
-
-        public int MapColor
-        {
-            get
-            {
-                return jEventData["EDDMapColor"].Int(Color.Red.ToArgb());
-            }
-            set
-            {
-                jEventData["EDDMapColor"] = value;
-            }
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.hyperspace; } }
