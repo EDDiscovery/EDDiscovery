@@ -31,9 +31,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public MaterialList Materials { get; set; }
         public CommodityList Commodities { get; set; }
 
-        public void UpdateState()                      // calculates the JSON string and returns it, plus updates the class so as it would look when loaded
+        public JObject UpdateState(JObject evt = null)                      // calculates the JSON string and returns it, plus updates the class so as it would look when loaded
         {
-            JObject evt = jEventData;
+            if (evt == null)
+            {
+                evt = GetJson();
+            }
 
             if (Materials != null)
             {
@@ -67,7 +70,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 evt["Commodities"] = ja;
             }
 
-            jEventData = evt;
+            return evt;
         }
 
         public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)

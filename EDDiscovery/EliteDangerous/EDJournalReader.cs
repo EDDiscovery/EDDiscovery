@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace EDDiscovery.EliteDangerous
 {
@@ -35,7 +36,7 @@ namespace EDDiscovery.EliteDangerous
 
         public static bool disable_beta_commander_check = false;        // strictly for debugging purposes
 
-        private Queue<JournalEntry> StartEntries = new Queue<JournalEntry>();
+        private Queue<JournalReaderEntry> StartEntries = new Queue<JournalReaderEntry>();
 
         public EDJournalReader(string filename) : base(filename)
         {
@@ -48,7 +49,7 @@ namespace EDDiscovery.EliteDangerous
         // Journal ID
         public int JournalId { get { return (int)TravelLogUnit.id; } }
 
-        protected JournalEntry ProcessLine(string line, bool resetOnError)
+        protected JournalReaderEntry ProcessLine(string line, bool resetOnError)
         {
             int cmdrid = -2;        //-1 is hidden, -2 is never shown
 
@@ -61,11 +62,13 @@ namespace EDDiscovery.EliteDangerous
             if (line.Length == 0)
                 return null;
 
+            JObject jo = null;
             JournalEntry je = null;
 
             try
             {
-                je = JournalEntry.CreateJournalEntry(line);
+                jo = JObject.Parse(line);
+                je = JournalEntry.CreateJournalEntry(jo);
             }
             catch
             {
@@ -138,15 +141,15 @@ namespace EDDiscovery.EliteDangerous
             je.TLUId = (int)TravelLogUnit.id;
             je.CommanderId = cmdrid;
 
-            return je;
+            return new JournalReaderEntry { JournalEntry = je, Json = jo };
         }
 
-        public bool ReadJournalLog(out JournalEntry jent, bool resetOnError = false)
+        public bool ReadJournalLog(out JournalReaderEntry jent, bool resetOnError = false)
         {
             if (StartEntries.Count != 0 && this.TravelLogUnit.CommanderId != null && this.TravelLogUnit.CommanderId >= 0)
             {
                 jent = StartEntries.Dequeue();
-                jent.CommanderId = (int)TravelLogUnit.CommanderId;
+                jent.JournalEntry.CommanderId = (int)TravelLogUnit.CommanderId;
                 return true;
             }
 
@@ -155,7 +158,7 @@ namespace EDDiscovery.EliteDangerous
                 if (jent == null)
                     continue;
 
-                if ((this.TravelLogUnit.CommanderId == null || this.TravelLogUnit.CommanderId < 0) && jent.EventTypeID != JournalTypeEnum.LoadGame)
+                if ((this.TravelLogUnit.CommanderId == null || this.TravelLogUnit.CommanderId < 0) && jent.JournalEntry.EventTypeID != JournalTypeEnum.LoadGame)
                 {
                     StartEntries.Enqueue(jent);
                     continue;
@@ -170,9 +173,9 @@ namespace EDDiscovery.EliteDangerous
             return false;
         }
 
-        public IEnumerable<JournalEntry> ReadJournalLog(bool continueOnError = false)
+        public IEnumerable<JournalReaderEntry> ReadJournalLog(bool continueOnError = false)
         {
-            JournalEntry entry;
+            JournalReaderEntry entry;
             bool resetOnError = false;
             while (ReadJournalLog(out entry, resetOnError: resetOnError))
             {

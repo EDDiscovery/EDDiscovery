@@ -48,10 +48,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void SetConvertedFilename(string input_filename, string output_filename, int width, int height)
         {
-            this.jEventData["EDDInputFile"] = input_filename;
-            this.jEventData["EDDOutputFile"] = output_filename;
-            this.jEventData["EDDOutputWidth"] = width;
-            this.jEventData["EDDOutputHeight"] = height;
+            JObject jo = GetJson();
+            jo["EDDInputFile"] = input_filename;
+            jo["EDDOutputFile"] = output_filename;
+            jo["EDDOutputWidth"] = width;
+            jo["EDDOutputHeight"] = height;
+            UpdateJson(jo);
         }
 
         public static JournalScreenshot GetScreenshot(string filename, int width, int height, DateTime timestamp, string sysname, int cmdrid)
@@ -100,7 +102,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 });
 
                 ss = JournalEntry.CreateJournalEntry(jo.ToString()) as JournalScreenshot;
-                ss.Add();
+                ss.Add(jo);
             }
 
             return ss;

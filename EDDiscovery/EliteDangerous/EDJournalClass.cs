@@ -32,6 +32,12 @@ using System.Threading;
 
 namespace EDDiscovery.EliteDangerous
 {
+    public class JournalReaderEntry
+    {
+        public JournalEntry JournalEntry;
+        public JObject Json;
+    }
+
     public class MonitorWatcher
     {
         public string m_watcherfolder;
@@ -95,17 +101,17 @@ namespace EDDiscovery.EliteDangerous
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
-                    List<JournalEntry> entries = reader.ReadJournalLog(true).ToList();      // this may create new commanders, and may write to the TLU db
+                    List<JournalReaderEntry> entries = reader.ReadJournalLog(true).ToList();      // this may create new commanders, and may write to the TLU db
                     ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
 
                     using (DbTransaction tn = cn.BeginTransaction())
                     {
-                        foreach (JournalEntry je in entries)
+                        foreach (JournalReaderEntry jre in entries)
                         {
-                            if (!existing[je.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(je, e)))
+                            if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
                             {
-                                System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", je.EventTimeUTC, je.EventTypeStr));
-                                je.Add(cn, tn);
+                                System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
+                                jre.JournalEntry.Add(jre.Json, cn, tn);
                             }
                         }
 
@@ -233,7 +239,7 @@ namespace EDDiscovery.EliteDangerous
 
                 netlogpos = nfi.TravelLogUnit.Size;
 
-                List<JournalEntry> ents = nfi.ReadJournalLog().ToList();
+                List<JournalReaderEntry> ents = nfi.ReadJournalLog().ToList();
 
                 if (ents.Count > 0)
                 {
@@ -241,12 +247,12 @@ namespace EDDiscovery.EliteDangerous
                     {
                         using (DbTransaction txn = cn.BeginTransaction())
                         {
-                            ents = ents.Where(je => JournalEntry.FindEntry(je).Count == 0).ToList();
+                            ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry).Count == 0).ToList();
 
-                            foreach (JournalEntry je in ents)
+                            foreach (JournalReaderEntry jre in ents)
                             {
-                                entries.Add(je);
-                                je.Add(cn, txn);
+                                entries.Add(jre.JournalEntry);
+                                jre.JournalEntry.Add(jre.Json, cn, txn);
                                 ticksNoActivity = 0;
                             }
 
