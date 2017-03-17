@@ -395,7 +395,7 @@ namespace EDDiscovery2
 
         private T GetSetting<T>(string key, Func<string, T, T> getter)
         {
-            System.Diagnostics.Debug.WriteLine("GetSetting " + key);
+            //System.Diagnostics.Debug.WriteLine("GetSetting " + key);
             if (!settings.ContainsKey(key))
             {
                 T defval = default(T);
