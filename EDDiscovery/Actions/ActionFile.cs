@@ -200,7 +200,7 @@ namespace EDDiscovery.Actions
         }
 
         // triage found actions and see which ones are runnable
-        // cls = object from which to get any needed values from
+        // cls = object from which to get any needed values from, can be null
         // if se is set passed enabled string expansion of arguments in condition of event..
 
         public int CheckActions(List<Actions.ActionFileList.MatchingSets> ale, Object cls , ConditionVariables othervars,
