@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Cost { get; set; }
         public int Count { get; set; }
 
-        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count.ToString(), -Cost);
         }

@@ -625,7 +625,7 @@ namespace EDDiscovery.EliteDangerous
 
                 foreach (MaterialCommodities mc in changelist)              // reset the list to these.. or add on if there are more
                 {
-                    if (mc.category.Equals(MaterialCommodities.CommodityCategory))
+                    if (mc.category.Equals(MaterialCommodityDB.CommodityCategory))
                         jis.Commodities.Set(mc.fdname, mc.count, mc.price);
                     else
                         jis.Materials.Set(mc.category, mc.fdname, mc.count);

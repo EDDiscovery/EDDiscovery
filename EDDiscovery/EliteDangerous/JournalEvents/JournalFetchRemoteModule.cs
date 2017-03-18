@@ -46,7 +46,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int ShipId { get; set; }
         public int ServerId { get; set; }
 
-        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, StoredItemLocalised + " on " + Ship, -TransferCost);
         }

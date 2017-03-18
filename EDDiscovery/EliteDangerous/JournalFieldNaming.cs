@@ -26,7 +26,7 @@ namespace EDDiscovery.EliteDangerous
     {
         public static string RMat(string s)            // replacer for pretty print
         {
-            EDDiscovery2.DB.MaterialCommodity mc = EDDiscovery2.DB.MaterialCommodity.GetCachedMaterial(s);
+            EDDiscovery2.DB.MaterialCommodityDB mc = EDDiscovery2.DB.MaterialCommodityDB.GetCachedMaterial(s);
 
             if (mc != null)
                 return mc.name;

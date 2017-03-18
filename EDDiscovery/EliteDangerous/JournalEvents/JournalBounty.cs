@@ -55,7 +55,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
 
-        public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string n = (VictimFactionLocalised.Length > 0) ? VictimFactionLocalised : VictimFaction;
             n += " total " + TotalReward.ToString("N0");

@@ -502,7 +502,7 @@ namespace EDDiscovery
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
 
-        public MaterialCommoditiesLedger materialcommodititiesledger = new MaterialCommoditiesLedger();       // and the ledger..
+        public Ledger materialcommodititiesledger = new Ledger();       // and the ledger..
         public ShipInformationList shipinformationlist = new ShipInformationList();
 
         public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
