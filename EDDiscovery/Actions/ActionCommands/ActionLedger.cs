@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.EliteDangerous;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,8 +77,8 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    EDDiscovery2.DB.MaterialCommoditiesLedger ml = ap.actioncontroller.HistoryList.materialcommodititiesledger;
-                    EDDiscovery2.DB.MaterialCommoditiesLedger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
+                    Ledger ml = ap.actioncontroller.HistoryList.materialcommodititiesledger;
+                    Ledger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
                     int jidindex = ap.actioncontroller.HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);    // find it in the journal
 
                     if ( tx == null && nextvalidentry ) // if not directly found..

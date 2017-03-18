@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.materialcollected; } }
 
-        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(Category, Name, Count, 0, conn);
         }

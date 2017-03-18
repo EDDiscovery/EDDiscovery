@@ -30,12 +30,12 @@ namespace EDDiscovery.EliteDangerous
 
     public interface ILedgerJournalEntry
     {
-        void Ledger(MaterialCommoditiesLedger mcl, SQLiteConnectionUser conn);
+        void Ledger(Ledger mcl, SQLiteConnectionUser conn);
     }
 
     public interface ILedgerNoCashJournalEntry
     {
-        void LedgerNC(MaterialCommoditiesLedger mcl, SQLiteConnectionUser conn);
+        void LedgerNC(Ledger mcl, SQLiteConnectionUser conn);
     }
 
     public interface IShipInformation

@@ -27,36 +27,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery2.DB
 {
-    public struct MaterialCommodities
-    {
-        public int count { get; set; }
-        public double price { get; set; }
-        public int flags { get; set; }
-        public MaterialCommodity Details { get; set; }
-
-        public MaterialCommodities(MaterialCommodity c, int? flags = null, int? count = 0, double? price = 0)
-        {
-            this.count = count ?? 0;
-            this.price =  price ?? 0;
-            this.flags = flags ?? c.flags;
-            this.Details = c;
-        }
-
-        public long id { get { return Details.id; } }
-        public string category { get { return Details.category; } }
-        public string name { get { return Details.name; } }
-        public string fdname { get { return Details.fdname; } }
-        public string type { get { return Details.type; } }
-        public string shortname { get { return Details.shortname; } }
-        public Color colour { get { return Details.colour; } }
-
-        #region Static properties and methods linking to MaterialCommodity
-        public static string CommodityCategory { get { return MaterialCommodity.CommodityCategory; } }
-        public static string MaterialRawCategory { get { return MaterialCommodity.MaterialRawCategory; } }
-        #endregion
-    }
-
-    public class MaterialCommodity
+    public class MaterialCommodityDB
     {
         public long id { get; set; }
         public string category { get; set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
@@ -69,14 +40,16 @@ namespace EDDiscovery2.DB
 
         public static string CommodityCategory = "Commodity";
         public static string MaterialRawCategory = "Raw";
+        public static string MaterialEncodedCategory = "Encoded";
+        public static string MaterialManufacturedCategory = "Manufactured";
 
         // Helpers
 
-        public MaterialCommodity()
+        public MaterialCommodityDB()
         {
         }
 
-        public MaterialCommodity(long i, string cs, string n, string fd, string t, string shortn, Color cl, int fl)
+        public MaterialCommodityDB(long i, string cs, string n, string fd, string t, string shortn, Color cl, int fl)
         {
             id = i;
             category = cs;
@@ -162,7 +135,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodity GetCatFDName(string cat, string fdname)
+        public static MaterialCommodityDB GetCatFDName(string cat, string fdname)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
@@ -171,7 +144,7 @@ namespace EDDiscovery2.DB
         }
 
         // if cat is null, fdname only
-        public static MaterialCommodity GetCatFDName(string cat , string fdname, SQLiteConnectionUser cn)
+        public static MaterialCommodityDB GetCatFDName(string cat , string fdname, SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities WHERE FDName=@name"))
             {
@@ -187,7 +160,7 @@ namespace EDDiscovery2.DB
                 {
                     if (reader.Read())           // already sorted, and already limited to max items
                     {
-                        return new MaterialCommodity((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
+                        return new MaterialCommodityDB((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
                     }
                     else
                         return null;
@@ -195,7 +168,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodity GetCatName(string cat, string name)
+        public static MaterialCommodityDB GetCatName(string cat, string name)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
             {
@@ -203,7 +176,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodity GetCatName(string cat, string name, SQLiteConnectionUser cn)      // by NAME and CAT
+        public static MaterialCommodityDB GetCatName(string cat, string name, SQLiteConnectionUser cn)      // by NAME and CAT
         {
             using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities WHERE Name=@name AND Category==@cat"))
             {
@@ -214,7 +187,7 @@ namespace EDDiscovery2.DB
                 {
                     if (reader.Read())           // already sorted, and already limited to max items
                     {
-                        return new MaterialCommodity((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
+                        return new MaterialCommodityDB((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
                     }
                     else
                         return null;
@@ -222,17 +195,17 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static List<MaterialCommodity> GetAll(SQLiteConnectionUser cn)
+        public static List<MaterialCommodityDB> GetAll(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities Order by Name"))
             {
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
-                    List<MaterialCommodity> list = new List<MaterialCommodity>();
+                    List<MaterialCommodityDB> list = new List<MaterialCommodityDB>();
 
                     while (reader.Read())           // already sorted, and already limited to max items
                     {
-                        list.Add(new MaterialCommodity((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]));
+                        list.Add(new MaterialCommodityDB((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]));
                     }
 
                     return list;
@@ -256,14 +229,14 @@ namespace EDDiscovery2.DB
                 {
                     string fdname = EDDiscovery.Tools.FDName(name);
 
-                    MaterialCommodity mc = GetCatFDName(null, fdname, cn);
+                    MaterialCommodityDB mc = GetCatFDName(null, fdname, cn);
 
                     if (mc == null)
                     {
-                        mc = new MaterialCommodity(0, c, name, fdname, t, sn, cl, 0);
+                        mc = new MaterialCommodityDB(0, c, name, fdname, t, sn, cl, 0);
                         mc.Add(cn);
                     }               // don't change any user changed fields
-                    else if (mc.flags == 0 && (!mc.name.Equals(name) && !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || !mc.colour.IsEqual(cl)))
+                    else if (mc.flags == 0 && (!mc.name.Equals(name) || !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || !mc.colour.IsEqual(cl)))
                     {
                         mc.name = name;
                         mc.shortname = sn;          // So, name is there, update the others
@@ -278,7 +251,7 @@ namespace EDDiscovery2.DB
 
         public static bool ChangeDbText(string fdname, string name, string abv, string cat, string type)
         {
-            MaterialCommodity mc = GetCatName(cat, name);             // is the name,cat duplex there?
+            MaterialCommodityDB mc = GetCatName(cat, name);             // is the name,cat duplex there?
 
             if (mc != null && !mc.fdname.Equals(fdname))                // yes, so entry is there with name/cat, and fdname is the same, ok.  else abort
                 return false;                                           // if fdname is different to the one we want to modify, but cat/name is there, its a duplicate
@@ -356,29 +329,30 @@ namespace EDDiscovery2.DB
                 AddNewType(cn, CommodityCategory, "Biowaste;Chemical Waste;Scrap;Toxic Waste", "Waste");
                 AddNewType(cn, CommodityCategory, "Battle Weapons;Landmines;Non-lethal Weapons;Personal Weapons;Reactive Armour", "Weapons");
 
-                AddNewType(cn, "Encoded", "Scan Data Banks;Disrupted Wake Echoes;Datamined Wake;Hyperspace Trajectories;Wake Solutions", "");
-                AddNewType(cn, "Encoded", "Shield Density Reports;Shield Pattern Analysis;Shield Cycle Recordings;Emission Data;Bulk Scan Data;Consumer Firmware;Shield Soak Analysis;Legacy Firmware", "");
-                AddNewType(cn, "Encoded", "Aberrant Shield Pattern Analysis;Abnormal Compact Emission Data;Adaptive Encryptors Capture;", "");
-                AddNewType(cn, "Encoded", "Anomalous Bulk Scan Data;Anomalous FSD Telemetry;Atypical Disrupted Wake Echoes;Atypical Encryption Archives;Classified Scan Databanks", "");
-                AddNewType(cn, "Encoded", "Classified Scan Fragment;Cracked Industrial Firmware;Datamined Wake Exceptions;Decoded Emission Data;Distorted Shield Cycle Recordings", "");
-                AddNewType(cn, "Encoded", "Divergent Scan Data;Eccentric Hyperspace Trajectories;Exceptional Scrambled Emission Data;Inconsistent Shield Soak Analysis;Irregular Emission Data", "");
-                AddNewType(cn, "Encoded", "Modified Consumer Firmware;Modified Embedded Firmware;Open Symmetric Keys;Peculiar Shield Frequency Data;Security Firmware Patch;Specialised Legacy Firmware", "");
-                AddNewType(cn, "Encoded", "Strange Wake Solutions;Tagged Encryption Codes;Unexpected Emission Data;Unidentified Scan Archives;Untypical Shield Scans;Unusual Encrypted Files", "");
+                AddNewType(cn, MaterialEncodedCategory, "Scan Data Banks;Disrupted Wake Echoes;Datamined Wake;Hyperspace Trajectories;Wake Solutions", "");
+                AddNewType(cn, MaterialEncodedCategory, "Shield Density Reports;Shield Pattern Analysis;Shield Cycle Recordings;Emission Data;Bulk Scan Data;Consumer Firmware;Shield Soak Analysis;Legacy Firmware", "");
+                AddNewType(cn, MaterialEncodedCategory, "Aberrant Shield Pattern Analysis;Abnormal Compact Emission Data;Adaptive Encryptors Capture;", "");
+                AddNewType(cn, MaterialEncodedCategory, "Anomalous Bulk Scan Data;Anomalous FSD Telemetry;Atypical Disrupted Wake Echoes;Atypical Encryption Archives;Classified Scan Databanks", "");
+                AddNewType(cn, MaterialEncodedCategory, "Classified Scan Fragment;Cracked Industrial Firmware;Datamined Wake Exceptions;Decoded Emission Data;Distorted Shield Cycle Recordings", "");
+                AddNewType(cn, MaterialEncodedCategory, "Divergent Scan Data;Eccentric Hyperspace Trajectories;Exceptional Scrambled Emission Data;Inconsistent Shield Soak Analysis;Irregular Emission Data", "");
+                AddNewType(cn, MaterialEncodedCategory, "Modified Consumer Firmware;Modified Embedded Firmware;Open Symmetric Keys;Peculiar Shield Frequency Data;Security Firmware Patch;Specialised Legacy Firmware", "");
+                AddNewType(cn, MaterialEncodedCategory, "Strange Wake Solutions;Tagged Encryption Codes;Unexpected Emission Data;Unidentified Scan Archives;Untypical Shield Scans;Unusual Encrypted Files", "");
+                AddNewType(cn, MaterialEncodedCategory, "Archived Emission Data", "");
 
-                AddNewType(cn, "Manufactured", "Uncut Focus Crystals;Basic Conductors;Biotech Conductors;Chemical Distillery;Chemical Manipulators;Chemical Processors;Chemical Storage Units", "");
-                AddNewType(cn, "Manufactured", "Refined Focus Crystals;Compact Composites;Compound Shielding;Conductive Ceramics;Conductive Components;Conductive Polymers;Configurable Components", "");
-                AddNewType(cn, "Manufactured", "Core Dynamics Composites;Crystal Shards;Electrochemical Arrays;Exquisite Focus Crystals;Filament Composites;Flawed Focus Crystals", "");
-                AddNewType(cn, "Manufactured", "Focus Crystals;Galvanising Alloys;Grid Resistors;Heat Conduction Wiring;Heat Dispersion Plate;Heat Exchangers;Heat Resistant Ceramics", "");
-                AddNewType(cn, "Manufactured", "Heat Vanes;High Density Composites;Hybrid Capacitors;Imperial Shielding;Improvised Components;Mechanical Components;Mechanical Equipment", "");
-                AddNewType(cn, "Manufactured", "Mechanical Scrap;Military Grade Alloys;Military Supercapacitors;Pharmaceutical Isolators;Phase Alloys;Polymer Capacitors;Precipitated Alloys", "");
-                AddNewType(cn, "Manufactured", "Proprietary Composites;Proto Heat Radiators;Proto Light Alloys;Proto Radiolic Alloys;Salvaged Alloys", "");
-                AddNewType(cn, "Manufactured", "Shield Emitters;Shielding Sensors;Tempered Alloys;Thermic Alloys;Unknown Fragment;Worn Shield Emitters", "");
+                AddNewType(cn, MaterialManufacturedCategory, "Uncut Focus Crystals;Basic Conductors;Biotech Conductors;Chemical Distillery;Chemical Manipulators;Chemical Processors;Chemical Storage Units", "");
+                AddNewType(cn, MaterialManufacturedCategory, "Core Dynamics Composites;Crystal Shards;Electrochemical Arrays;Exquisite Focus Crystals;Filament Composites;Flawed Focus Crystals", "");
+                AddNewType(cn, MaterialManufacturedCategory, "Refined Focus Crystals;Compact Composites;Compound Shielding;Conductive Ceramics;Conductive Components;Conductive Polymers;Configurable Components", "");
+                AddNewType(cn, MaterialManufacturedCategory, "Focus Crystals;Galvanising Alloys;Grid Resistors;Heat Conduction Wiring;Heat Dispersion Plate;Heat Exchangers;Heat Resistant Ceramics", "");
+                AddNewType(cn, MaterialManufacturedCategory, "Heat Vanes;High Density Composites;Hybrid Capacitors;Imperial Shielding;Improvised Components;Mechanical Components;Mechanical Equipment", "");
+                AddNewType(cn, MaterialManufacturedCategory, "Mechanical Scrap;Military Grade Alloys;Military Supercapacitors;Pharmaceutical Isolators;Phase Alloys;Polymer Capacitors;Precipitated Alloys", "");
+                AddNewType(cn, MaterialManufacturedCategory, "Proprietary Composites;Proto Heat Radiators;Proto Light Alloys;Proto Radiolic Alloys;Salvaged Alloys", "");
+                AddNewType(cn, MaterialManufacturedCategory, "Shield Emitters;Shielding Sensors;Tempered Alloys;Thermic Alloys;Unknown Fragment;Worn Shield Emitters", "");
 
                 loadedlist = GetAll(cn);
             }
         }
 
-        static List<MaterialCommodity> loadedlist;
+        static List<MaterialCommodityDB> loadedlist;
 
         public static void LoadCacheList()
         {
@@ -388,214 +362,12 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static MaterialCommodity GetCachedMaterial(string fdname)
+        public static MaterialCommodityDB GetCachedMaterial(string fdname)
         {
             return loadedlist?.Find(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public static List<MaterialCommodity> GetMaterialsCommoditiesList { get { return loadedlist; } }
+        public static List<MaterialCommodityDB> GetMaterialsCommoditiesList { get { return loadedlist; } }
     }
 
-    public class MaterialCommoditiesList
-    {
-        private List<MaterialCommodities> list;
-
-        public MaterialCommoditiesList()
-        {
-            list = new List<MaterialCommodities>();
-        }
-
-        public MaterialCommoditiesList Clone( bool clearzeromaterials, bool clearzerocommodities )       // returns a new copy of this class.. all items a copy
-        {
-            MaterialCommoditiesList mcl = new MaterialCommoditiesList();
-
-            mcl.list = new List<MaterialCommodities>(list.Count);
-            list.ForEach(item => 
-            {
-                bool commodity = item.category.Equals(MaterialCommodities.CommodityCategory);
-                // if items, or commodity and not clear zero, or material and not clear zero, add
-                if (item.count > 0 || (commodity && !clearzerocommodities) || (!commodity && !clearzeromaterials))
-                    mcl.list.Add(item);
-            });
-
-            return mcl;
-        }
-
-        public List<MaterialCommodities> Sort(bool commodity)
-        {
-            List<MaterialCommodities> ret = new List<MaterialCommodities>();
-
-            if (commodity)
-                ret = list.Where(x => x.category.Equals(MaterialCommodities.CommodityCategory)).OrderBy(x => x.type)
-                           .ThenBy(x => x.name).ToList();
-            else
-                ret = list.Where(x => !x.category.Equals(MaterialCommodities.CommodityCategory)).OrderBy(x => x.name).ToList();
-
-            return ret;
-        }
-
-        // ifnorecatonsearch is used if you don't know if its a material or commodity.. for future use.
-
-        private int EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn , bool ignorecatonsearch = false)
-        {
-            int index = list.FindIndex(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
-
-            if (index >= 0)
-            {
-                return index;
-            }
-            else
-            {
-                MaterialCommodity mcdb = MaterialCommodity.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
-
-                if (mcdb == null)             // no record of this, add as Unknown to db
-                {
-                    mcdb = new MaterialCommodity(0,cat, fdname, fdname, "","",Color.Green,0);
-                    mcdb.Add();                 // and add to data base
-                }
-
-                MaterialCommodities mc = new MaterialCommodities(mcdb, 0);        // make a new entry
-                list.Add(mc);
-                return list.Count - 1;
-            }
-        }
-
-        // ignore cat is only used if you don't know what it is 
-        public void Change(string cat, string name, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
-        {
-            int index = EnsurePresent(cat, name, conn, ignorecatonsearch);
-            MaterialCommodities mc = list[index];
-
-            double costprev = mc.count * mc.price;
-            double costnew = num * price;
-            mc.count = Math.Max(mc.count + num, 0); ;
-
-            if ( mc.count > 0 && num > 0 )      // if bought (defensive with mc.count)
-                mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
-
-            list[index] = mc;
-        }
-
-        public void Craft(string name, int num)
-        {
-            int index = list.FindIndex(x => x.fdname.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-
-            if (index >= 0)
-            {
-                MaterialCommodities mc = list[index];
-                mc.count = Math.Max(mc.count - num, 0);
-                list[index] = mc;
-            }
-        }
-
-        public void Set(string cat, string name, int num , double price , SQLiteConnectionUser conn, bool ignorecatonsearch = false)
-        {
-            int index = EnsurePresent(cat, name, conn);
-            MaterialCommodities mc = list[index];
-
-            mc.count = num;
-            if ( price>0 )
-                mc.price = price;
-
-            list[index] = mc;
-        }
-
-        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn , 
-                                                        bool clearzeromaterials, bool clearzerocommodities)
-        {
-            MaterialCommoditiesList newmc = (oldml == null) ? new MaterialCommoditiesList() : oldml;
-
-            if (je is IMaterialCommodityJournalEntry)
-            {
-                IMaterialCommodityJournalEntry e = je as IMaterialCommodityJournalEntry;
-                newmc = newmc.Clone(clearzeromaterials,clearzerocommodities);          // so we need a new one
-                e.MaterialList(newmc, conn);
-            }
-
-            return newmc;
-        }
-    }
-
-    public class MaterialCommoditiesLedger
-    {
-        public class Transaction
-        {
-            public long jid;
-            public DateTime utctime;                               // when it was done.
-            public JournalTypeEnum jtype;                          // what caused it..
-            public string notes;                                   // notes about the entry
-            public long cashadjust;                                // any profit, 0 if none (negative for cost, positive for profit)
-            public double profitperunit;                             // profit per unit
-            public long cash;                                      // cash total at this point
-
-            public bool IsJournalEventInEventFilter(string[] events)
-            {
-                return events.Contains(jtype.ToString().SplitCapsWord());
-            }
-        }
-
-        private List<Transaction> transactions;
-        public long CashTotal = 0;
-
-        public MaterialCommoditiesLedger()
-        {
-            transactions = new List<Transaction>();
-        }
-
-        public List<Transaction> Transactions { get { return transactions; } }
-        
-        public MaterialCommodities GetMaterialCommodity(string cat, string fdname, SQLiteConnectionUser conn)
-        {
-            MaterialCommodity mcdb = MaterialCommodity.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
-
-            if (mcdb != null)
-                return new MaterialCommodities(mcdb, 0);
-            else
-                return new MaterialCommodities(new MaterialCommodity(0, cat, fdname, fdname, "", "", Color.Green, 0));
-        }
-
-        public void AddEvent(long jidn, DateTime t, JournalTypeEnum j, string n, long? ca, double ppu = 0)
-        {
-            AddEventCash(jidn, t, j, n, ca.HasValue ? ca.Value : 0, ppu);
-        }
-
-        public void AddEventNoCash(long jidn, DateTime t, JournalTypeEnum j, string n)
-        {
-            AddEventCash(jidn, t, j, n, 0, 0);
-        }
-
-        public void AddEventCash(long jidn, DateTime t, JournalTypeEnum j, string n, long ca , double ppu = 0)
-        {
-            long newcashtotal = CashTotal + ca;
-            //System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3} = {4}", j.ToString(), n, CashTotal, ca , newcashtotal);
-            CashTotal = newcashtotal;
-
-            Transaction tr = new Transaction
-            {
-                jid = jidn,
-                utctime = t,
-                jtype = j,
-                notes = n,
-                cashadjust = ca,
-                cash = CashTotal,
-                profitperunit = ppu
-            };
-
-            transactions.Add(tr);
-        }
-
-
-        public void Process(JournalEntry je, SQLiteConnectionUser conn )
-        {
-            if (je is ILedgerJournalEntry)
-            {
-                ((ILedgerJournalEntry)je).Ledger(this, conn);
-            }
-            else if (je is ILedgerNoCashJournalEntry)
-            {
-                ((ILedgerNoCashJournalEntry)je).LedgerNC(this, conn);
-            }
-        }
-
-    }
 }

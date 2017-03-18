@@ -47,7 +47,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.commitcrime; } }
 
-        public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string v = (VictimLocalised.Length > 0) ? VictimLocalised : Victim;
 

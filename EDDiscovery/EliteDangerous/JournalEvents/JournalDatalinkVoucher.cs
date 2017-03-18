@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long Reward { get; set; }
         public string VictimFaction { get; set; }
 
-        public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, PayeeFaction + " " + Reward.ToString("N0"));
         }

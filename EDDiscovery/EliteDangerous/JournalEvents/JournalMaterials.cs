@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //{ "timestamp":"2017-02-10T14:25:51Z", "event":"Materials", "Raw":[ { "Name":"chromium", "Count":28 }, { "Name":"zinc", "Count":18 }, { "Name":"iron", "Count":23 }, { "Name":"sulphur", "Count":19 } ], "Manufactured":[ { "Name":"refinedfocuscrystals", "Count":10 }, { "Name":"highdensitycomposites", "Count":3 }, { "Name":"mechanicalcomponents", "Count":3 } ], "Encoded":[ { "Name":"emissiondata", "Count":32 }, { "Name":"shielddensityreports", "Count":23 } } ] }
 
     [JournalEntryType(JournalTypeEnum.Materials)]
-    public class JournalMaterials : JournalEntry
+    public class JournalMaterials : JournalEntry, IMaterialCommodityJournalEntry
     {
         public class Material
         {
@@ -78,7 +78,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-        public string List(Material[] mat )
+        public string List(Material[] mat)
         {
             StringBuilder sb = new StringBuilder(64);
 
@@ -88,6 +88,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 sb.Append(Tools.FieldBuilder(" ", m.Name, "<; items", m.Count));
             }
             return sb.ToString();
+        }
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
+            foreach (Material m in Raw)
+                mc.Absolute(MaterialCommodities.MaterialRawCategory, m.Name, m.Count, conn);
+            foreach (Material m in Manufactured)
+                mc.Absolute(MaterialCommodities.MaterialManufacturedCategory, m.Name, m.Count, conn);
+            foreach (Material m in Encoded)
+                mc.Absolute(MaterialCommodities.MaterialEncodedCategory, m.Name, m.Count, conn);
         }
     }
 }

@@ -306,6 +306,8 @@
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
+    <Compile Include="EliteDangerous\Ledger.cs" />
+    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
     <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />

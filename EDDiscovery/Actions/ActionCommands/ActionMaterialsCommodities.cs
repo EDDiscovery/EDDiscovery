@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.EliteDangerous;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,8 +80,8 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    EDDiscovery2.DB.MaterialCommoditiesList mcl = ap.actioncontroller.HistoryList.EntryOrder[jidindex].MaterialCommodity;
-                    List<EDDiscovery2.DB.MaterialCommodities> list = mcl.Sort(commodities);
+                    MaterialCommoditiesList mcl = ap.actioncontroller.HistoryList.EntryOrder[jidindex].MaterialCommodity;
+                    List<MaterialCommodities> list = mcl.Sort(commodities);
 
                     ap[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     ap[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);

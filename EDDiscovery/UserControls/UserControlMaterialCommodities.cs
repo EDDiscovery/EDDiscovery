@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EDDiscovery2.DB;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {
@@ -332,12 +333,12 @@ namespace EDDiscovery.UserControls
 
         private void ResetCombo()
         {
-            List<MaterialCommodity> list = MaterialCommodity.GetMaterialsCommoditiesList;
+            List<MaterialCommodityDB> list = MaterialCommodityDB.GetMaterialsCommoditiesList;
             comboBoxCustomAdd.Items.Clear();
             mclist.Clear();
-            foreach (MaterialCommodity mc in list)
+            foreach (MaterialCommodityDB mc in list)
             {
-                if (!mc.category.Equals(MaterialCommodity.CommodityCategory) == materials)
+                if (!mc.category.Equals(MaterialCommodityDB.CommodityCategory) == materials)
                 {
                     mclist.Add(new MaterialCommodities(mc));
                     comboBoxCustomAdd.Items.Add(mc.name);
@@ -386,7 +387,7 @@ namespace EDDiscovery.UserControls
                     if (updatedb && (mc.name != name || mc.shortname != abv || mc.category != cat || mc.type != type))
                     {
                         //System.Diagnostics.Debug.WriteLine("Row " + i + " changed text");
-                        MaterialCommodity.ChangeDbText(mc.fdname, name, abv, cat, type);
+                        MaterialCommodityDB.ChangeDbText(mc.fdname, name, abv, cat, type);
                         dbupdated = true;
                     }
 
@@ -404,7 +405,7 @@ namespace EDDiscovery.UserControls
 
                     if (mc.count != numvalue || pricechange)
                     {
-                        mcchange.Add(new MaterialCommodities(new MaterialCommodity(0, mc.category, mc.name, mc.fdname, mc.type, mc.shortname, Color.Red, 0), 0, numvalue, (pricechange) ? price : 0));
+                        mcchange.Add(new MaterialCommodities(new MaterialCommodityDB(0, mc.category, mc.name, mc.fdname, mc.type, mc.shortname, Color.Red, 0), 0, numvalue, (pricechange) ? price : 0));
                         //System.Diagnostics.Debug.WriteLine("Row " + i + " changed number");
                     }
                 }
@@ -422,7 +423,7 @@ namespace EDDiscovery.UserControls
 
                     if (numok && cat.Length > 0 && name.Length > 0)
                     {
-                        mcchange.Add(new MaterialCommodities(new MaterialCommodity(0, cat, name, fdname, type, abv, Color.Red, 0), 0, numvalue, price));
+                        mcchange.Add(new MaterialCommodities(new MaterialCommodityDB(0, cat, name, fdname, type, abv, Color.Red, 0), 0, numvalue, price));
                     }
                 }
             }

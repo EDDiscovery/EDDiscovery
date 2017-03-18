@@ -52,7 +52,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Name { get; set; }
         public Dictionary<string, int> Materials { get; set; }
 
-        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Materials != null)
             {

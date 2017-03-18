@@ -9,6 +9,6 @@ namespace EDDiscovery.CompanionAPI
 {
     public class CModules
     {
-        private JObject _jo;
+        //private JObject _jo;
     }
 }

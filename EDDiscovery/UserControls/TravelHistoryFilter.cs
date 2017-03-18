@@ -90,7 +90,7 @@ namespace EDDiscovery
             }
         }
 
-        public List<MaterialCommoditiesLedger.Transaction> Filter(List<MaterialCommoditiesLedger.Transaction> txlist )
+        public List<Ledger.Transaction> Filter(List<Ledger.Transaction> txlist )
         {
             if (MaximumDataAge.HasValue)
             {

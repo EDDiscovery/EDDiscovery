@@ -73,7 +73,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return evt;
         }
 
-        public void MaterialList(EDDiscovery2.DB.MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Materials != null)
             {
@@ -84,7 +84,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (Commodities != null)
             {
                 foreach (CommodityItem m in Commodities.Commodities)
-                    mc.Set(EDDiscovery2.DB.MaterialCommodities.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
+                    mc.Set(MaterialCommodities.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
             }
         }
 

@@ -67,7 +67,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadgame; } }
 
-        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             if (mcl.CashTotal != Credits)
             {
