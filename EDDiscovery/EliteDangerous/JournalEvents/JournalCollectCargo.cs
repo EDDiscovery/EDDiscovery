@@ -27,10 +27,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCollectCargo(JObject evt ) : base(evt, JournalTypeEnum.CollectCargo)
         {
-            Type = evt["Type"].Str();
+            Type = evt["Type"].Str();                               //FDNAME
+            FriendlyType = JournalFieldNaming.RMat(Type);
             Stolen = evt["Stolen"].Bool();
         }
-        public string Type { get; set; }
+
+        public string Type { get; set; }            // FDNAME..
+        public string FriendlyType { get; set; }            // translated name
         public bool Stolen { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.collectcargo; } }
@@ -42,14 +45,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            MaterialCommodities mc = mcl.GetMaterialCommodity(MaterialCommodities.CommodityCategory, Type, conn);
-            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, mc.name );
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType );
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Type, ";Stolen", Stolen);
+            info = Tools.FieldBuilder("", FriendlyType, ";Stolen", Stolen);
             detailed = "";
         }
     }

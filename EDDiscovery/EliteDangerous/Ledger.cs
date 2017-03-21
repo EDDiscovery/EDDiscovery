@@ -37,16 +37,6 @@ namespace EDDiscovery.EliteDangerous
 
         public List<Transaction> Transactions { get { return transactions; } }
 
-        public MaterialCommodities GetMaterialCommodity(string cat, string fdname, SQLiteConnectionUser conn)
-        {
-            MaterialCommodityDB mcdb = MaterialCommodityDB.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
-
-            if (mcdb != null)
-                return new MaterialCommodities(mcdb, 0);
-            else
-                return new MaterialCommodities(new MaterialCommodityDB(0, cat, fdname, fdname, "", "", Color.Green, 0));
-        }
-
         public void AddEvent(long jidn, DateTime t, JournalTypeEnum j, string n, long? ca, double ppu = 0)
         {
             AddEventCash(jidn, t, j, n, ca.HasValue ? ca.Value : 0, ppu);

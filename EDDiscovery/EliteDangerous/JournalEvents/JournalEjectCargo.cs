@@ -31,11 +31,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalEjectCargo(JObject evt) : base(evt, JournalTypeEnum.EjectCargo)
         {
             Type = evt["Type"].Str();
+            FriendlyType = JournalFieldNaming.RMat(Type);
             Count = evt["Count"].Int();
             Abandoned = evt["Abandoned"].Bool();
             PowerplayOrigin = evt["PowerplayOrigin"].Str();
         }
-        public string Type { get; set; }
+        public string Type { get; set; }                    // FDName
+        public string FriendlyType { get; set; }            // translated name
         public int Count { get; set; }
         public bool Abandoned { get; set; }
         public string PowerplayOrigin { get; set; }
@@ -49,14 +51,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            MaterialCommodities mc = mcl.GetMaterialCommodity(MaterialCommodities.CommodityCategory, Type, conn);
-            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, mc.name + " " + Count);
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Type, "Count:", Count, ";Abandoned", Abandoned, "PowerPlay:", PowerplayOrigin);
+            info = Tools.FieldBuilder("", FriendlyType, "Count:", Count, ";Abandoned", Abandoned, "PowerPlay:", PowerplayOrigin);
             detailed = "";
         }
     }

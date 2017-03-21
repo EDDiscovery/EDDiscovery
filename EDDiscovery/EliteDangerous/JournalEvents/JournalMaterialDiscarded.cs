@@ -24,15 +24,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalMaterialDiscarded(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscarded)
         {
             Category = evt["Category"].Str();
-            Name = evt["Name"].Str();
-            Count = evt["Count"].Int();
+            Name = evt["Name"].Str();           // FDNAME
             FriendlyName = JournalFieldNaming.RMat(Name);
+            Count = evt["Count"].Int();
         }
 
         public string Category { get; set; }
+        public string FriendlyName { get; set; }
         public string Name { get; set; }
         public int Count { get; set; }
-        public string FriendlyName { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.materialdiscarded; } }
 

@@ -29,11 +29,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //{ "timestamp":"2017-02-10T14:25:51Z", "event":"Cargo", "Inventory":[ { "Name":"syntheticmeat", "Count":2 }, { "Name":"evacuationshelter", "Count":1 }, { "Name":"progenitorcells", "Count":3 }, { "Name":"bioreducinglichen", "Count":1 }, { "Name":"neofabricinsulation", "Count":2 } ] }
 
     [JournalEntryType(JournalTypeEnum.Cargo)]
-    public class JournalCargo : JournalEntry
+    public class JournalCargo : JournalEntry, IMaterialCommodityJournalEntry
     {
         public class Cargo
         {
-            public string Name { get; set; }
+            public string Name { get; set; }            // FDNAME
             public int Count { get; set; }
         }
 
@@ -50,19 +50,31 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             info = "No Cargo";
+            detailed = "";
 
-            if (Inventory != null && Inventory.Length>0)
+            if (Inventory != null && Inventory.Length > 0)
             {
-                info = "";
+                int total = 0;
+                foreach (Cargo c in Inventory)
+                    total += c.Count;
+
+                info = "Cargo, " + total + " items";
+                detailed = "";
+
                 foreach (Cargo c in Inventory)
                 {
-                    if (info.Length > 0)
-                        info += ", ";
-                    info += Tools.FieldBuilder("Name:", c.Name, "Count:", c.Count);
+                    if (detailed.Length > 0)
+                        detailed += Environment.NewLine;
+                    detailed += Tools.FieldBuilder("", JournalFieldNaming.RMat(c.Name), "; items", c.Count);
                 }
             }
+        }
 
-            detailed = "";
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            //System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
+            foreach (Cargo c in Inventory)
+                mc.Set(MaterialCommodities.CommodityCategory, c.Name, c.Count, 0, conn);
         }
     }
 }

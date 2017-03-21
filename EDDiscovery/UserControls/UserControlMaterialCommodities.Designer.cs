@@ -55,11 +55,8 @@ namespace EDDiscovery.UserControls
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.comboBoxCustomAdd = new ExtendedControls.ComboBoxCustom();
-            this.buttonExtApply = new ExtendedControls.ButtonExt();
-            this.buttonExtModify = new ExtendedControls.ButtonExt();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxClear = new ExtendedControls.CheckBoxCustom();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -107,7 +104,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewMC.Size = new System.Drawing.Size(684, 532);
             this.dataGridViewMC.TabIndex = 1;
-            this.dataGridViewMC.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellEndEdit);
             this.dataGridViewMC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMC_SortCompare);
             // 
             // NameCol
@@ -184,76 +180,11 @@ namespace EDDiscovery.UserControls
             // panelButtons
             // 
             this.panelButtons.Controls.Add(this.checkBoxClear);
-            this.panelButtons.Controls.Add(this.comboBoxCustomAdd);
-            this.panelButtons.Controls.Add(this.buttonExtApply);
-            this.panelButtons.Controls.Add(this.buttonExtModify);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(704, 32);
             this.panelButtons.TabIndex = 2;
-            // 
-            // comboBoxCustomAdd
-            // 
-            this.comboBoxCustomAdd.ArrowWidth = 1;
-            this.comboBoxCustomAdd.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomAdd.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomAdd.DataSource = null;
-            this.comboBoxCustomAdd.DisplayMember = "";
-            this.comboBoxCustomAdd.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomAdd.DropDownHeight = 106;
-            this.comboBoxCustomAdd.DropDownWidth = 1;
-            this.comboBoxCustomAdd.Enabled = false;
-            this.comboBoxCustomAdd.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomAdd.ItemHeight = 13;
-            this.comboBoxCustomAdd.Location = new System.Drawing.Point(96, 4);
-            this.comboBoxCustomAdd.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomAdd.Name = "comboBoxCustomAdd";
-            this.comboBoxCustomAdd.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomAdd.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomAdd.ScrollBarWidth = 16;
-            this.comboBoxCustomAdd.SelectedIndex = -1;
-            this.comboBoxCustomAdd.SelectedItem = null;
-            this.comboBoxCustomAdd.SelectedValue = null;
-            this.comboBoxCustomAdd.Size = new System.Drawing.Size(147, 23);
-            this.comboBoxCustomAdd.TabIndex = 1;
-            this.comboBoxCustomAdd.Text = "Add new";
-            this.toolTip1.SetToolTip(this.comboBoxCustomAdd, "Select new entries to add to table");
-            this.comboBoxCustomAdd.ValueMember = "";
-            this.comboBoxCustomAdd.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomAdd_SelectedIndexChanged);
-            // 
-            // buttonExtApply
-            // 
-            this.buttonExtApply.BorderColorScaling = 1.25F;
-            this.buttonExtApply.ButtonColorScaling = 0.5F;
-            this.buttonExtApply.ButtonDisabledScaling = 0.5F;
-            this.buttonExtApply.Enabled = false;
-            this.buttonExtApply.Location = new System.Drawing.Point(263, 4);
-            this.buttonExtApply.Name = "buttonExtApply";
-            this.buttonExtApply.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtApply.TabIndex = 0;
-            this.buttonExtApply.Text = "Apply";
-            this.toolTip1.SetToolTip(this.buttonExtApply, "Apply changes entered into grid list");
-            this.buttonExtApply.UseVisualStyleBackColor = true;
-            this.buttonExtApply.Click += new System.EventHandler(this.buttonExtApply_Click);
-            // 
-            // buttonExtModify
-            // 
-            this.buttonExtModify.BorderColorScaling = 1.25F;
-            this.buttonExtModify.ButtonColorScaling = 0.5F;
-            this.buttonExtModify.ButtonDisabledScaling = 0.5F;
-            this.buttonExtModify.Location = new System.Drawing.Point(4, 4);
-            this.buttonExtModify.Name = "buttonExtModify";
-            this.buttonExtModify.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtModify.TabIndex = 0;
-            this.buttonExtModify.Text = "Modify";
-            this.toolTip1.SetToolTip(this.buttonExtModify, "Enable modification or cancel modification to entries");
-            this.buttonExtModify.UseVisualStyleBackColor = true;
-            this.buttonExtModify.Click += new System.EventHandler(this.buttonExtModify_Click);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.ShowAlways = true;
             // 
             // checkBoxClear
             // 
@@ -262,7 +193,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxClear.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxClear.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxClear.FontNerfReduction = 0.5F;
-            this.checkBoxClear.Location = new System.Drawing.Point(355, 8);
+            this.checkBoxClear.Location = new System.Drawing.Point(6, 9);
             this.checkBoxClear.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxClear.Name = "checkBoxClear";
             this.checkBoxClear.Size = new System.Drawing.Size(116, 17);
@@ -271,6 +202,10 @@ namespace EDDiscovery.UserControls
             this.checkBoxClear.TickBoxReductionSize = 10;
             this.checkBoxClear.UseVisualStyleBackColor = true;
             this.checkBoxClear.CheckStateChanged += new System.EventHandler(this.checkBoxClear_CheckStateChanged);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // UserControlMaterialCommodities
             // 
@@ -295,15 +230,12 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewMC;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        private ExtendedControls.ButtonExt buttonExtModify;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ShortName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Category;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Number;
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
-        private ExtendedControls.ButtonExt buttonExtApply;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomAdd;
         private System.Windows.Forms.Label labelNoItems;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.CheckBoxCustom checkBoxClear;
