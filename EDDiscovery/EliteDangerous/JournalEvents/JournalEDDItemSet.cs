@@ -28,7 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Commodities = new CommodityList(evt["Commodities"]?.ToObject<CommodityItem[]>().ToList());
         }
 
-        public MaterialList Materials { get; set; }
+        public MaterialList Materials { get; set; }             // FDNAMES
         public CommodityList Commodities { get; set; }
 
         public JObject UpdateState(JObject evt = null)                      // calculates the JSON string and returns it, plus updates the class so as it would look when loaded
@@ -102,7 +102,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += Tools.FieldBuilder("Name:", m.Name, "", m.Count);
+                    info += Tools.FieldBuilder("Name:", JournalFieldNaming.RMat(m.Name), "", m.Count);
                 }
             }
 
@@ -113,7 +113,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += Tools.FieldBuilder("Name:", m.Name, "", m.Count);
+                    info += Tools.FieldBuilder("Name:", JournalFieldNaming.RMat(m.Name), "", m.Count);
                 }
             }
             detailed = "";

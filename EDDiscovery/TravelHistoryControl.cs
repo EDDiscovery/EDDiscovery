@@ -219,14 +219,10 @@ namespace EDDiscovery
             else if (ctrl is UserControlMaterials)
             {
                 UserControlMaterials ucm = ctrl as UserControlMaterials;
-                ucm.OnChangedCount += MaterialCommodityChangeCount;
-                ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
             }
             else if (ctrl is UserControlCommodities)
             {
                 UserControlCommodities ucm = ctrl as UserControlCommodities;
-                ucm.OnChangedCount += MaterialCommodityChangeCount;
-                ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
             }
             else if (ctrl is UserControlLedger)
             {
@@ -358,25 +354,6 @@ namespace EDDiscovery
                 if (OnNearestStarListChanged != null)
                     OnNearestStarListChanged(name, csl);
             });
-        }
-
-        #endregion
-
-        #region Material Commodities changers
-
-        void MaterialCommodityChangeCount(List<MaterialCommodities> changelist)
-        {
-            HistoryEntry he = userControlTravelGrid.GetCurrentHistoryEntry;
-            long jid = JournalEntry.AddEDDItemSet(EDDiscoveryForm.EDDConfig.CurrentCommander.Nr, he.EventTimeUTC, (he.EntryType == JournalTypeEnum.EDDItemSet) ? he.Journalid : 0, changelist);
-            userControlTravelGrid.SetPreferredJIDAfterRefresh(jid);         // tell the main grid, please find and move here
-            MaterialCommodityDB.LoadCacheList();        // in case we did anything..
-            _discoveryForm.RefreshHistoryAsync();
-        }
-
-        void MaterialCommodityRequireRefresh()
-        {
-            MaterialCommodityDB.LoadCacheList();        // in case we did anything..
-            _discoveryForm.RefreshHistoryAsync();
         }
 
         #endregion

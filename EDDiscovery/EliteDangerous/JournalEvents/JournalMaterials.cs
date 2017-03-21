@@ -46,7 +46,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Encoded = evt["Encoded"]?.ToObject<Material[]>();
         }
 
-        public Material[] Raw { get; set; }
+        public Material[] Raw { get; set; }             //FDNAMES
         public Material[] Manufactured { get; set; }
         public Material[] Encoded { get; set; }
 
@@ -85,20 +85,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             foreach (Material m in mat)
             {
                 sb.Append(Environment.NewLine);
-                sb.Append(Tools.FieldBuilder(" ", m.Name, "<; items", m.Count));
+                sb.Append(Tools.FieldBuilder(" ", JournalFieldNaming.RMat(m.Name), "; items", m.Count));
             }
             return sb.ToString();
         }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
-            foreach (Material m in Raw)
-                mc.Absolute(MaterialCommodities.MaterialRawCategory, m.Name, m.Count, conn);
-            foreach (Material m in Manufactured)
-                mc.Absolute(MaterialCommodities.MaterialManufacturedCategory, m.Name, m.Count, conn);
-            foreach (Material m in Encoded)
-                mc.Absolute(MaterialCommodities.MaterialEncodedCategory, m.Name, m.Count, conn);
+            //System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
+            if ( Raw != null )
+                foreach (Material m in Raw)
+                    mc.Set(MaterialCommodities.MaterialRawCategory, m.Name, m.Count, 0, conn);
+
+            if ( Manufactured != null )
+                foreach (Material m in Manufactured)
+                    mc.Set(MaterialCommodities.MaterialManufacturedCategory, m.Name, m.Count, 0, conn);
+
+            if ( Encoded != null )
+                foreach (Material m in Encoded)
+                    mc.Set(MaterialCommodities.MaterialEncodedCategory, m.Name, m.Count, 0, conn);
         }
     }
 }

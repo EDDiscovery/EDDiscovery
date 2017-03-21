@@ -30,16 +30,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalMarketBuy(JObject evt ) : base(evt, JournalTypeEnum.MarketBuy)
         {
             Type = evt["Type"].Str();        // must be FD name
+            FriendlyType = JournalFieldNaming.RMat(Type);
             Count = evt["Count"].Int();
             BuyPrice = evt["BuyPrice"].Long();
             TotalCost = evt["TotalCost"].Long();
-            FriendlyType = JournalFieldNaming.RMat(Type);
         }
-        public string Type { get; set; }
+        public string Type { get; set; }        // FDNAME
+        public string FriendlyType { get; set; }            // translated name
         public int Count { get; set; }
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
-        public string FriendlyType { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketbuy; } }
 
@@ -50,8 +50,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            MaterialCommodities mc = mcl.GetMaterialCommodity(MaterialCommodities.CommodityCategory, Type, conn);
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, mc.name + " " + Count,-TotalCost);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count,-TotalCost);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

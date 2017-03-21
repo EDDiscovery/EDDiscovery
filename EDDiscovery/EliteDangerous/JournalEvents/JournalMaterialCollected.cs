@@ -29,13 +29,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Category = evt["Category"].Str();
             Name = evt["Name"].Str();            // MUST BE FD NAME
-            Count = evt["Count"].Int(1);
             FriendlyName = JournalFieldNaming.RMat(Name);
+            Count = evt["Count"].Int(1);
         }
         public string Category { get; set; }
+        public string FriendlyName { get; set; }
         public string Name { get; set; }
         public int Count { get; set; }
-        public string FriendlyName { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.materialcollected; } }
 

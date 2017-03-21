@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommitCrime(JObject evt ) : base(evt, JournalTypeEnum.CommitCrime)
         {
-            CrimeType = evt["CrimeType"].Str();
+            CrimeType = evt["CrimeType"].Str().SplitCapsWordFull();
             Faction = evt["Faction"].Str();
             Victim = evt["Victim"].Str();
             VictimLocalised = evt["Victim_Localised"].Str();

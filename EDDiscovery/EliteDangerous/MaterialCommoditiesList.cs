@@ -13,14 +13,12 @@ namespace EDDiscovery.EliteDangerous
     {
         public int count { get; set; }
         public double price { get; set; }
-        public int flags { get; set; }
         public MaterialCommodityDB Details { get; set; }
 
-        public MaterialCommodities(MaterialCommodityDB c, int? flags = null, int? count = 0, double? price = 0)
+        public MaterialCommodities(MaterialCommodityDB c)
         {
-            this.count = count ?? 0;
-            this.price = price ?? 0;
-            this.flags = flags ?? c.flags;
+            count = 0;
+            price = 0;
             this.Details = c;
         }
 
@@ -91,24 +89,17 @@ namespace EDDiscovery.EliteDangerous
             }
             else
             {
-                MaterialCommodityDB mcdb = MaterialCommodityDB.GetCatFDName(cat, fdname, conn);    // look up in DB and see if we have a record of this type of item
-
-                if (mcdb == null)             // no record of this, add as Unknown to db
-                {
-                    mcdb = new MaterialCommodityDB(0, cat, fdname, fdname, "", "", Color.Green, 0);
-                    mcdb.Add();                 // and add to data base
-                }
-
-                MaterialCommodities mc = new MaterialCommodities(mcdb, 0);        // make a new entry
+                MaterialCommodityDB mcdb = MaterialCommodityDB.EnsurePresent(cat,fdname, conn);    // get a MCDB of this
+                MaterialCommodities mc = new MaterialCommodities(mcdb);        // make a new entry
                 list.Add(mc);
                 return list.Count - 1;
             }
         }
 
         // ignore cat is only used if you don't know what it is 
-        public void Change(string cat, string name, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
+        public void Change(string cat, string fdname, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            int index = EnsurePresent(cat, name, conn, ignorecatonsearch);
+            int index = EnsurePresent(cat, fdname, conn, ignorecatonsearch);
             MaterialCommodities mc = list[index];
 
             double costprev = mc.count * mc.price;
@@ -121,22 +112,9 @@ namespace EDDiscovery.EliteDangerous
             list[index] = mc;
         }
 
-        // ignore cat is only used if you don't know what it is 
-        public void Absolute(string cat, string name, int num, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
+        public void Craft(string fdname, int num)
         {
-            int index = EnsurePresent(cat, name, conn, ignorecatonsearch);
-            MaterialCommodities mc = list[index];
-
-          //  if (mc.count != num)   System.Diagnostics.Debug.WriteLine("Difference " + cat + ":" + name + " " + num + " prev " + mc.count);
-
-            mc.count = num;
-
-            list[index] = mc;
-        }
-
-        public void Craft(string name, int num)
-        {
-            int index = list.FindIndex(x => x.fdname.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            int index = list.FindIndex(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
 
             if (index >= 0)
             {
@@ -146,9 +124,9 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public void Set(string cat, string name, int num, double price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
+        public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            int index = EnsurePresent(cat, name, conn);
+            int index = EnsurePresent(cat, fdname, conn);
             MaterialCommodities mc = list[index];
 
             mc.count = num;

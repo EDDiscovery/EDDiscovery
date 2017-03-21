@@ -33,7 +33,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {
-            Type = evt["Type"].Str();
+            Type = evt["Type"].Str();                           // FDNAME
+            FriendlyType = JournalFieldNaming.RMat(Type);
             Count = evt["Count"].Int();
             SellPrice = evt["SellPrice"].Long();
             TotalSale = evt["TotalSale"].Long();
@@ -41,10 +42,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             IllegalGoods = evt["IllegalGoods"].Bool();
             StolenGoods = evt["StolenGoods"].Bool();
             BlackMarket = evt["BlackMarket"].Bool();
-            FriendlyType = JournalFieldNaming.RMat(Type);
         }
 
         public string Type { get; set; }
+        public string FriendlyType { get; set; }
         public int Count { get; set; }
         public long SellPrice { get; set; }
         public long TotalSale { get; set; }
@@ -52,7 +53,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool IllegalGoods { get; set; }
         public bool StolenGoods { get; set; }
         public bool BlackMarket { get; set; }
-        public string FriendlyType { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.marketsell; } }
 
@@ -63,8 +63,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            MaterialCommodities mc = mcl.GetMaterialCommodity(MaterialCommodities.CommodityCategory, Type, conn);
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, mc.name + " " + Count + " Avg " + AvgPricePaid, TotalSale, (double)(SellPrice - AvgPricePaid));
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count + " Avg " + AvgPricePaid, TotalSale, (double)(SellPrice - AvgPricePaid));
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

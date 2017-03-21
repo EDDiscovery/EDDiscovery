@@ -30,14 +30,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Category = evt["Category"].Str();
             Name = evt["Name"].Str();
-            DiscoveryNumber = evt["DiscoveryNumber"].Int();
             FriendlyName = JournalFieldNaming.RMat(Name);
+            DiscoveryNumber = evt["DiscoveryNumber"].Int();
         }
 
         public string Category { get; set; }
         public string Name { get; set; }
-        public int DiscoveryNumber { get; set; }
         public string FriendlyName { get; set; }
+        public int DiscoveryNumber { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.materialdiscovered; } }
 

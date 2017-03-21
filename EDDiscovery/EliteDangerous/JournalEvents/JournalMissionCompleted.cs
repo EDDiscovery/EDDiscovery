@@ -123,7 +123,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (CommodityReward != null)
             {
                 foreach (System.Tuple<string,int> t in CommodityReward)
-                    detailed += System.Environment.NewLine + "Commodity: " + t.Item1 + " " + t.Item2.ToString();
+                    detailed += System.Environment.NewLine + "Commodity: " + JournalFieldNaming.RMat(t.Item1) + " " + t.Item2.ToString();
             }
         }
     }

@@ -24,24 +24,14 @@ namespace EDDiscovery.EliteDangerous
 {
     class JournalFieldNaming
     {
-        public static string RMat(string s)            // replacer for pretty print
+        public static string RMat(string fdname)            // replacer for pretty print
         {
-            EDDiscovery2.DB.MaterialCommodityDB mc = EDDiscovery2.DB.MaterialCommodityDB.GetCachedMaterial(s);
+            EDDiscovery2.DB.MaterialCommodityDB mc = EDDiscovery2.DB.MaterialCommodityDB.GetCachedMaterial(fdname);
 
             if (mc != null)
                 return mc.name;
             else
-            {
-                StringBuilder ret = new StringBuilder();        //Phroggsters method
-
-                if (s.Length >= 8 && s.StartsWith("$") && s.EndsWith("_name;", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    ret.Append(s.Substring(1, s.Length - 7)); // 1 for '$' plus 6 for '_name;'
-                    return ret.ToString().ToLowerInvariant();
-                }
-                else
-                    return s;
-            }
+                return fdname.SplitCapsWordFull();
         }
 
         public static string RLat(double lv)      

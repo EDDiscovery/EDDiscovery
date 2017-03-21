@@ -79,7 +79,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (Ingredients != null)
             {
                 foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials
-                    detailed += Tools.FieldBuilder("Name:", k.Key, "", k.Value) + "; ";
+                    detailed += Tools.FieldBuilder("Name:", JournalFieldNaming.RMat(k.Key), "", k.Value) + "; ";
             }
         }
     }

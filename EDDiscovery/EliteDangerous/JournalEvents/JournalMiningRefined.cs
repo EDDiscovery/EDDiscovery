@@ -28,6 +28,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalMiningRefined(JObject evt ) : base(evt, JournalTypeEnum.MiningRefined)
         {
             Type = evt["Type"].Str();
+
+            // instances in log on mining only of $item_name; .. fix
+
+            if (Type.Length >= 8 && Type.StartsWith("$") && Type.EndsWith("_name;", System.StringComparison.InvariantCultureIgnoreCase))
+            {
+                Type = Type.Substring(1, Type.Length - 7); // 1 for '$' plus 6 for '_name;'
+            }
+
             FriendlyType = JournalFieldNaming.RMat(Type);
         }
 
@@ -41,8 +49,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            MaterialCommodities mc = mcl.GetMaterialCommodity(MaterialCommodities.CommodityCategory, Type, conn);
-            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, mc.name );
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType );
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.miningrefined; } }

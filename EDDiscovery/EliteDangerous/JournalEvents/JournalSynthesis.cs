@@ -69,7 +69,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             info = Name;
             if (Materials != null)
                 foreach (KeyValuePair<string, int> k in Materials)
-                    info += ", " + k.Key + ":" + k.Value.ToString();
+                    info += ", " + JournalFieldNaming.RMat(k.Key) + ":" + k.Value.ToString();
 
             detailed = "";
         }

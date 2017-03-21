@@ -294,7 +294,7 @@
       <DependentUpon>TabStrip.cs</DependentUpon>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
-    <Compile Include="DB\MaterialCommodities.cs" />
+    <Compile Include="DB\MaterialCommoditiesDB.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
