@@ -247,7 +247,7 @@ namespace EDDiscovery.EliteDangerous
                     {
                         using (DbTransaction txn = cn.BeginTransaction())
                         {
-                            ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry).Count == 0).ToList();
+                            ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry, jre.Json).Count == 0).ToList();
 
                             foreach (JournalReaderEntry jre in ents)
                             {
