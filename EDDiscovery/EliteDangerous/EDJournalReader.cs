@@ -84,6 +84,12 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
+            if (je == null)
+            {
+                System.Diagnostics.Trace.WriteLine($"Bad journal line:\n{line}");
+                return null;
+            }
+
             if (je.EventTypeID == JournalTypeEnum.Fileheader)
             {
                 JournalEvents.JournalFileheader header = (JournalEvents.JournalFileheader)je;
