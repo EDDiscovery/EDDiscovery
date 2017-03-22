@@ -37,6 +37,8 @@ namespace EDDiscovery2.ImageHandler
         private EDDiscoveryForm _discoveryForm;
         private bool initialized = false;
         private ScreenshotDirectoryWatcher Watcher;
+        private string ScreenshotsDirdefault;
+        private string OutputDirdefault;
 
         public delegate void ScreenShot(string path, Point size);
         public event ScreenShot OnScreenShot;
@@ -79,8 +81,8 @@ namespace EDDiscovery2.ImageHandler
             this.Watcher = new ScreenshotDirectoryWatcher(_discoveryForm, CallWithConverter);
             this.Watcher.OnScreenshot += ConvertCompleted;
 
-            string ScreenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
-            string OutputDirdefault = Path.Combine(ScreenshotsDirdefault, "Converted");
+            ScreenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+            OutputDirdefault = Path.Combine(ScreenshotsDirdefault, "Converted");
 
             try
             {
@@ -177,6 +179,8 @@ namespace EDDiscovery2.ImageHandler
         {
             ImageConverter p = new ImageConverter();
             p.OutputFolder = textBoxOutputDir.Text;
+            if (String.IsNullOrWhiteSpace(p.OutputFolder))
+                p.OutputFolder = OutputDirdefault;
             p.InputFolder = textBoxScreenshotsDir.Text;
             p.FolderFormatIndex = comboBoxSubFolder.SelectedIndex;
             p.FilenameFormatIndex = comboBoxFileNameFormat.SelectedIndex;
@@ -783,6 +787,11 @@ namespace EDDiscovery2.ImageHandler
 
         private bool GetOutputSubFolder()
         {
+            if (String.IsNullOrWhiteSpace(OutputFolder))
+            {
+                OutputFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous", "Converted");
+            }
+
             switch (FolderFormatIndex)
             {
                 case 1:     // system name
