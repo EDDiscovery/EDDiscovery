@@ -32,11 +32,18 @@ namespace EDDiscovery.Forms
     {
         private Task inittask;
         private EDDiscoveryForm mainform;
+        public ApplicationContext Context;
 
-        public SplashForm()
+        public SplashForm(EDDiscoveryForm mainform)
         {
             InitializeComponent();
             this.label_version.Text = "EDDiscovery " + System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            this.mainform = mainform;
+            this.Owner = mainform;
+        }
+
+        public void Init()
+        {
             inittask = EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift)).ContinueWith(t => InitComplete(t));
         }
 
@@ -46,8 +53,16 @@ namespace EDDiscovery.Forms
             {
                 if (t.IsCompleted)
                 {
-                    mainform = new EDDiscoveryForm(this);
-                    mainform.Show();
+                    try
+                    {
+                        mainform.Init();
+                        mainform.Show();
+                        Context.MainForm = mainform;
+                    }
+                    finally
+                    {
+                        this.Close();
+                    }
                 }
                 else if (t.IsFaulted)
                 {
