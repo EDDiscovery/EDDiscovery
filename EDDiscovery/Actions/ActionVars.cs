@@ -47,6 +47,15 @@ namespace EDDiscovery.Actions
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
 
                 vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) } , 5);      //depth seems good enough
+
+                // being backwards compatible to actions packs BEFORE the V3 change to remove JS vars
+                // these were the ones used in the pack..
+
+                vars[prefix + "JS_event"] = he.EntryType.ToString();        
+                if (he.journalEntry is EliteDangerous.JournalEvents.JournalReceiveText)
+                    vars[prefix + "JS_Channel"] = (he.journalEntry as EliteDangerous.JournalEvents.JournalReceiveText).Channel;
+                if (he.journalEntry is EliteDangerous.JournalEvents.JournalBuyAmmo)
+                    vars[prefix + "JS_Cost"] = (he.journalEntry as EliteDangerous.JournalEvents.JournalBuyAmmo).Cost.ToString(System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 

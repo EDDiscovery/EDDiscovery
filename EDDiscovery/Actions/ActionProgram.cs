@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionProgram
+    public class ActionProgram              // HOLDS the program, can write it JSON or Text FILES
     {
         protected List<Action> programsteps;
         public string Name { get; set; }
@@ -84,7 +84,7 @@ namespace EDDiscovery.Actions
 
         #region to/from JSON
 
-        public JObject ToJSON()
+        public JObject ToJSON()                         // write to JSON the program..
         {
             JObject prog = new JObject();
             prog["Name"] = Name;
@@ -116,7 +116,7 @@ namespace EDDiscovery.Actions
             return prog;
         }
 
-        static public string FromJSON(JObject j , out ActionProgram ap )
+        static public string FromJSON(JObject j , out ActionProgram ap )        // Read from JSON the program
         {
             ap = null;
             string errlist = "";
@@ -172,7 +172,7 @@ namespace EDDiscovery.Actions
 
         #region to/from File
 
-        static public ActionProgram FromFile(string file, out string err)
+        static public ActionProgram FromFile(string file, out string err)               // Read from File the program
         {
             try
             {
@@ -183,7 +183,7 @@ namespace EDDiscovery.Actions
             }
             catch
             {
-                err = "File IO failure";
+                err = "File " + file + " missing or IO failure";
                 return null;
             }
         }
@@ -311,7 +311,7 @@ namespace EDDiscovery.Actions
             return (err.Length == 0 && progname.Length>0) ? new ActionProgram(progname, storedinfile, prog) : null;
         }
 
-        public bool SaveText(string file)
+        public bool SaveText(string file)                       // write to file the program
         {
             CalculateLevels();
 
@@ -349,7 +349,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        public bool StoreOnDisk(string filename)
+        public bool StoreOnDisk(string filename)    // indicate to save on disk
         {
             if (SaveText(filename))
             {
@@ -534,129 +534,5 @@ namespace EDDiscovery.Actions
         }
 
         #endregion
-    }
-
-
-    // holder of programs
-
-    public class ActionProgramList
-    {
-        public ActionProgramList()
-        {
-            Clear();
-        }
-
-        private List<ActionProgram> programs;
-
-        public ActionProgram Get(string name)
-        {
-            int existing = programs.FindIndex(x => x.Name.Equals(name));
-
-            return (existing >= 0) ? programs[existing] : null;
-        }
-
-        public string[] GetActionProgramList(bool markfileasext = false )
-        {
-            string[] ret = new string[programs.Count];
-            for (int i = 0; i < programs.Count; i++)
-            {
-                ret[i] = programs[i].Name;
-                if (markfileasext && programs[i].StoredInFile != null)
-                    ret[i] += " (Ext)";
-            }
-
-            return ret;
-        }
-
-        public void Clear()
-        {
-            programs = new List<ActionProgram>();
-        }
-
-        public string ToJSON()
-        {
-            return ToJSONObject().ToString();
-        }
-
-        public JObject ToJSONObject()
-        {
-            JObject evt = new JObject();
-
-            JArray jf = new JArray();
-
-            foreach (ActionProgram ap in programs)
-            {
-                JObject j1 = ap.ToJSON();
-                jf.Add(j1);
-            }
-
-            evt["ProgramSet"] = jf;
-
-            return evt;
-        }
-
-        public string FromJSON(string s)
-        {
-            try
-            {
-                JObject jo = (JObject)JObject.Parse(s);
-                return FromJSONObject(jo);
-            }
-            catch
-            {
-                return "Exception Bad JSON";
-            }
-        }
-
-        public string FromJSONObject(JObject jo)
-        {
-            string errlist = "";
-
-            try
-            {
-                Clear();
-
-                JArray jf = (JArray)jo["ProgramSet"];
-
-
-                foreach (JObject j in jf)
-                {
-                    ActionProgram ap;
-                    string err = ActionProgram.FromJSON(j, out ap);
-
-                    if (err.Length == 0 && ap!=null)         // if can't load, we can't trust the pack, so indicate error so we can let the user manually sort it out
-                        programs.Add(ap);
-                    else
-                        errlist += err;
-                }
-
-                return errlist;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Dump:" + ex.StackTrace);
-                errlist = "Exception bad JSON";
-            }
-
-            return errlist;
-        }
-
-        public void AddOrChange(ActionProgram ap)
-        {
-            int existing = programs.FindIndex(x => x.Name.Equals(ap.Name));
-
-            if (existing >= 0)
-                programs[existing] = ap;
-            else
-                programs.Add(ap);
-        }
-
-        public void Delete(string name)
-        {
-            int existing = programs.FindIndex(x => x.Name.Equals(name));
-
-            if (existing >= 0)
-                programs.RemoveAt(existing);
-        }
     }
 }
