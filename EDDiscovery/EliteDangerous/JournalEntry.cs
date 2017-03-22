@@ -443,7 +443,7 @@ namespace EDDiscovery.EliteDangerous
 
         private bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id", tn))
+            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EdsmId=@EdsmId, Synced=@Synced where ID=@id", tn))
             {
                 cmd.AddParameterWithValue("@ID", Id);
                 cmd.AddParameterWithValue("@EventTime", EventTimeUTC);  // MUST use UTC connection
@@ -469,7 +469,7 @@ namespace EDDiscovery.EliteDangerous
 
         protected bool UpdateJson(JObject jo, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id", tn))
+            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventData=@EventData where ID=@id", tn))
             {
                 cmd.AddParameterWithValue("@ID", Id);
                 cmd.AddParameterWithValue("@EventData", jo.ToString());
