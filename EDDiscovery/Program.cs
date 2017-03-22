@@ -63,8 +63,18 @@ namespace EDDiscovery
 
         static void Run()
         {
-            SplashForm splash = new SplashForm();
-            Application.Run(splash);
+            using (EDDiscoveryForm mainform = new EDDiscoveryForm())
+            {
+                using (SplashForm splash = new SplashForm(mainform))
+                {
+                    using (ApplicationContext context = new ApplicationContext(splash))
+                    {
+                        splash.Context = context;
+                        splash.Init();
+                        Application.Run(context);
+                    }
+                }
+            }
         }
     }
 

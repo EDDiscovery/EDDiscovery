@@ -84,13 +84,13 @@ namespace EDDiscovery
 
         Task checkInstallerTask = null;
         private bool themeok = true;
-        private Forms.SplashForm splashform = null;
 
         GitHubRelease newRelease;
 
         public PopOutControl PopOuts;
 
         private bool _shownOnce = false;
+        private bool _initialised = false;
         private bool _formMax;
         private int _formWidth;
         private int _formHeight;
@@ -142,10 +142,8 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryForm(SplashForm splash)
+        public EDDiscoveryForm()
         {
-            this.Owner = splash;
-            this.splashform = splash;
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
             Controller.OnNewEntry += (he, hl) => actioncontroller.ActionRunOnEntry(he, "NewEntry");
             Controller.OnBgSafeClose += Controller_BgSafeClose;
@@ -157,8 +155,14 @@ namespace EDDiscovery
             Controller.OnReportProgress += Controller_ReportProgress;
             Controller.OnSyncComplete += Controller_SyncComplete;
             Controller.OnSyncStarting += Controller_SyncStarting;
+        }
+
+        public void Init()
+        {
+            _initialised = true;
             Controller.Init();
 
+            // Some components require the controller to be initialized
             InitializeComponent();
 
             label_version.Text = EDDConfig.Options.VersionDisplayString;
@@ -215,10 +219,16 @@ namespace EDDiscovery
         {
         }
 
+        // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
             try
             {
+                if (!_initialised)
+                {
+                    Init();
+                }
+
                 Controller.PostInit_Loaded();
 
                 RepositionForm();
@@ -249,6 +259,7 @@ namespace EDDiscovery
             PopOuts.LoadSavedPopouts();
         }
 
+        // OnShown is called every time Show is called
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
             Controller.PostInit_Shown();
@@ -260,7 +271,6 @@ namespace EDDiscovery
             }
 
             actioncontroller.ActionRun("onStartup", "ProgramEvent");
-            splashform.Hide();
             _shownOnce = true;
         }
 
@@ -471,7 +481,6 @@ namespace EDDiscovery
             audiodriverwave.Dispose();
 
             Close();
-            splashform.Close();
             Application.Exit();
         }
 
