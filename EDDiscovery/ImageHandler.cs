@@ -821,20 +821,20 @@ namespace EDDiscovery2.ImageHandler
                     break;
 
                 case 8: // CMDR name
-                    OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr");
+                    OutputFolder += "\\" + Tools.SafeFileString(EDDConfig.Instance.Commander(CommanderID)?.Name ?? $"CmdrId{CommanderID}");
                     break;
 
                 case 9: // CMDR name at sysname
-                    OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + Tools.SafeFileString(EDDConfig.Instance.Commander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + " at " + Tools.SafeFileString(SystemName);
                     break;
 
                 case 10: // YYYY - MM - DD CMDR name at sysname
                     OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " +
-                                    Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + " at " + Tools.SafeFileString(SystemName);
+                                    Tools.SafeFileString(EDDConfig.Instance.Commander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + " at " + Tools.SafeFileString(SystemName);
                     break;
 
                 case 11: // CMDR Name \ SystemName
-                    OutputFolder += "\\" + Tools.SafeFileString(CommanderID >= 0 ? EDDConfig.Instance.Commander(CommanderID).Name : "UnknownCmdr") + "\\" + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + Tools.SafeFileString(EDDConfig.Instance.Commander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + "\\" + Tools.SafeFileString(SystemName);
                     break;
             }
 
