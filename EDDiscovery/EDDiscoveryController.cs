@@ -76,6 +76,8 @@ namespace EDDiscovery
         {
             InitializeConfig(noreposition);
 
+            Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDConfig.Options.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
+
             return Task.Factory.StartNew(InitializeDatabases);
         }
 
