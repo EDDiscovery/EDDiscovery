@@ -35,7 +35,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             FromItem = JournalFieldNaming.GetBetterItemNameEvents(evt["FromItem"].Str());
             FromItemLocalised = evt["FromItem_Localised"].Str();
             ToItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ToItem"].Str());
-            ToItemLocalised = evt["ToItem_Localised"].Str();
+            if (ToItem.Equals("Null"))      // Frontier bug.. something Null is here.. remove
+                ToItem = "";
+            ToItemLocalised = evt["ToItem_Localised"].Str();        // if ToItem is null or not there, this won't be
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
 
@@ -60,7 +62,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             info = Tools.FieldBuilder("From ", FromSlot , "<to " , ToSlot , "Item:" , FromItemLocalised.Alt(FromItem));
-            if (ToItem.Length > 0 && !ToItem.Equals("Null"))            // Null if a frontier thing in 2.3 beta
+            if (ToItem.Length > 0 )                         
                 info += ", Swapped with " + ToItemLocalised.Alt(ToItem);
             detailed = "";
         }

@@ -294,18 +294,20 @@ public static class ObjectExtensions
         string res = "";
         exp = exp.Trim();
 
-        while (true)
+        while (exp.Length>0)
         {
             if (exp[0] == '{')
             {
                 int end = exp.IndexOf('}');
 
-                if (end >= 0)
-                {
-                    string pl = exp.Substring(1, end - 1);
-                    res += pl.PickOneOf(';', rx) + " ";
-                    exp = exp.Substring(end + 1).Trim();
-                }
+                if (end == -1)              // missing end bit, assume the lot..
+                    end = exp.Length;
+
+                string pl = exp.Substring(1, end - 1);
+
+                exp = (end < exp.Length) ? exp.Substring(end + 1) : "";
+
+                res += pl.PickOneOf(';', rx);
             }
             else
             {

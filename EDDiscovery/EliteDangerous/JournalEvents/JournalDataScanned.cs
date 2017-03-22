@@ -27,19 +27,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDataScanned(JObject evt) : base(evt, JournalTypeEnum.DataScanned)
         {
-            Message = evt["Message"].Str();
-            MessageLocalised = evt["Message_Localised"].Str();
+            Type = evt["Type"].Str().SplitCapsWordFull();
         }
 
-        public string Message { get; set; }
-        public string MessageLocalised { get; set; }
+        public string Type { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.datascanned; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = MessageLocalised.Alt(Message);
+            info = Type;
             detailed = "";
         }
     }

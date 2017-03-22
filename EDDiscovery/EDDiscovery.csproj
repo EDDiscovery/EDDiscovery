@@ -206,6 +206,8 @@
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
     <Compile Include="Actions\ActionCommands\ActionScanStar.cs" />
     <Compile Include="Actions\ActionFile.cs" />
+    <Compile Include="Actions\ActionFileList.cs" />
+    <Compile Include="Actions\ActionProgramList.cs" />
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="CompanionAPI\CCommodities.cs" />
     <Compile Include="Audio\AudioDeviceConfigure.cs">

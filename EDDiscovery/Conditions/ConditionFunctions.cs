@@ -735,9 +735,9 @@ namespace EDDiscovery
             }
 
             if (sc)
-                output = s;
-            else
                 output = s.SplitCapsWordFull();
+            else
+                output = s;
 
             return true;
         }
@@ -973,7 +973,7 @@ namespace EDDiscovery
 
                     tres = (nres != 0) == test;
                 }
-                if (iftype == IfType.Contains)
+                else if (iftype == IfType.Contains)
                 {
                     tres = (value.IndexOf(comparitor, StringComparison.InvariantCultureIgnoreCase) != -1) == test;
                 }
