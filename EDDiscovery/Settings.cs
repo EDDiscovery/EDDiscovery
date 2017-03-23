@@ -178,7 +178,7 @@ namespace EDDiscovery2
             if (rowindexes.Count == 1)
             {
                 var row = dataGridViewCommanders.Rows[rowindexes.Single()].DataBoundItem as EDCommander;
-                var result = MessageBox.Show("Do you wish to delete commander " + row.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = EDDiscovery.Forms.MessageBoxTheme.Show("Do you wish to delete commander " + row.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (result == DialogResult.Yes)
                 {
                     EDCommander.Delete(row);
@@ -211,7 +211,7 @@ namespace EDDiscovery2
             string fontwanted = null;                                               // don't check custom, only a stored theme..
             if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                DialogResult res = MessageBox.Show("The font used by this theme is not available on your system" + Environment.NewLine +
+                DialogResult res = EDDiscovery.Forms.MessageBoxTheme.Show("The font used by this theme is not available on your system" + Environment.NewLine +
                       "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
                       "Install this font and you can use this scheme." + Environment.NewLine +
                       "EuroCaps font is available www.edassets.org.",

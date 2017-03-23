@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EDDiscovery2.DB;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {
@@ -34,15 +35,7 @@ namespace EDDiscovery.UserControls
 
         public bool materials = false;
         private int displaynumber = 0;
-        private int namecol, abvcol, catcol, typecol, numcol, pricecol;
         List<MaterialCommodities> last_mc = null;
-        bool editing = false;
-
-        public delegate void ChangedCount(List<MaterialCommodities> ls);
-        public event ChangedCount OnChangedCount;
-
-        public delegate void RequestRefresh();
-        public event RequestRefresh OnRequestRefresh;
 
         private string DbColumnSave { get { return ((materials) ? "MaterialsGrid" : "CommoditiesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
@@ -70,13 +63,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //shortname
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //then category to give name,type,number, avg price
             }
-
-            namecol = 0;
-            abvcol = (materials) ? 1 : -1;
-            catcol = (materials) ? 2 : -1;
-            typecol = (materials) ? 3 : 1;
-            numcol = (materials) ? 4 : 2;
-            pricecol = (materials) ? -1 : 3;
 
             travelhistorycontrol.OnTravelSelectionChanged += Display;
 
@@ -107,77 +93,29 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            Dictionary<string, MaterialCommodities> mcchanges = new Dictionary<string, MaterialCommodities>();
-            Dictionary<string, MaterialCommodities> mcorig = new Dictionary<string, MaterialCommodities>();
-
-            if (editing)
-            {
-                foreach (MaterialCommodities m in GetMatCommodChanges())
-                {
-                    mcchanges[m.fdname] = m;
-                }
-
-                for (int i = 0; i < dataGridViewMC.Rows.Count; i++)
-                {
-                    if (dataGridViewMC.Rows[i].Tag != null && dataGridViewMC.Rows[i].Tag is MaterialCommodities)
-                    {
-                        MaterialCommodities rowmc = (MaterialCommodities)dataGridViewMC.Rows[i].Tag;
-                        mcorig[rowmc.fdname] = rowmc;
-                    }
-                }
-            }
-            else
-            {
-                SetCheckBoxes();
-
-                DisableEditing();
-            }
-
-            foreach (MaterialCommodities m in mc)
-            {
-                if (mcorig.ContainsKey(m.fdname) && mcchanges.ContainsKey(m.fdname))
-                {
-                    if (mcorig[m.fdname].count != m.count)
-                    {
-                        MaterialCommodities mcc = mcchanges[m.fdname];
-                        mcc.count += m.count - mcorig[m.fdname].count;
-                        mcchanges[m.fdname] = mcc;
-                    }
-                }
-
-                mcorig[m.fdname] = m;
-            }
-
             last_mc = mc;
 
             dataGridViewMC.Rows.Clear();
 
-            if (mcorig.Count > 0)
+            if (mc.Count > 0)
             {
                 labelNoItems.Visible = false;
 
-                foreach (MaterialCommodities m in mcorig.Values)
+                foreach (MaterialCommodities m in mc)
                 {
-                    MaterialCommodities _m = m;
-
-                    if (mcchanges.ContainsKey(m.fdname))
-                    {
-                        _m = mcchanges[m.fdname];
-                    }
-
                     object[] rowobj;
 
                     if (materials)
                     {
-                        rowobj = new[] { _m.name, _m.shortname, _m.category, _m.type, _m.count.ToString() };
+                        rowobj = new[] { m.name, m.shortname, m.category, m.type, m.count.ToString() };
                     }
                     else
                     {
-                        rowobj = new[] { _m.name, _m.type, _m.count.ToString(), _m.price.ToString("0.#") };
+                        rowobj = new[] { m.name, m.type, m.count.ToString(), m.price.ToString("0.#") };
                     }
 
                     int idx = dataGridViewMC.Rows.Add(rowobj);
-                    dataGridViewMC.Rows[idx].Tag = m;
+                    //dataGridViewMC.Rows[idx].Tag = m;
                 }
 
                 if (dataGridViewMC.SortedColumn != null && dataGridViewMC.SortOrder != SortOrder.None)
@@ -208,64 +146,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
-        bool ignoresi = false;
-        private void comboBoxCustomAdd_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ignoresi)
-                return;
-
-            int i = comboBoxCustomAdd.SelectedIndex;
-
-            if (i < mclist.Count)
-            {
-                MaterialCommodities mc = mclist[i];
-
-                int j = 0;
-
-                for (; j < dataGridViewMC.Rows.Count; j++)
-                {
-                    if (((string)(dataGridViewMC.Rows[j].Cells[namecol].Value)).Equals(mc.name))
-                        break;
-                }
-
-                if (j == dataGridViewMC.Rows.Count)
-                {
-                    object[] rowobj;
-
-                    if (materials)
-                    {
-                        rowobj = new[] { mc.name, mc.shortname, mc.category, mc.type, "0" };
-                    }
-                    else
-                    {
-                        rowobj = new[] { mc.name, mc.type, "0", "0" };
-                    }
-
-                    int idx = dataGridViewMC.Rows.Add(rowobj);
-                    dataGridViewMC.Rows[idx].Tag = mc;
-
-                    labelNoItems.Visible = false;
-                }
-            }
-            else
-            {
-                dataGridViewMC.Rows.Add();
-                DataGridViewRow rw = dataGridViewMC.Rows[dataGridViewMC.Rows.Count - 1];
-                rw.Cells[typecol].ReadOnly = true;
-                if (materials)
-                    rw.Cells[abvcol].ReadOnly = true;
-
-                labelNoItems.Visible = false;
-            }
-
-            ignoresi = true;
-            comboBoxCustomAdd.SelectedIndex = -1;
-            comboBoxCustomAdd.Text = "Select another";
-            ignoresi = false;
-        }
-
-        List<MaterialCommodities> mclist = new List<MaterialCommodities>();
 
         private void checkBoxClear_CheckStateChanged(object sender, EventArgs e)
         {
@@ -306,163 +186,6 @@ namespace EDDiscovery.UserControls
 
                     e.Handled = true;
                 }
-            }
-        }
-
-        private void buttonExtModify_Click(object sender, EventArgs e)
-        {
-            if (buttonExtApply.Enabled)     // then its cancel
-            {
-                editing = false;
-                DisableEditing();
-                Display(last_mc);
-            }
-            else
-            {
-                dataGridViewMC.Columns[0].ReadOnly = dataGridViewMC.Columns[1].ReadOnly =
-                    dataGridViewMC.Columns[3].ReadOnly = dataGridViewMC.Columns[2].ReadOnly = false;
-                if (materials)
-                    dataGridViewMC.Columns[4].ReadOnly = false;
-
-                buttonExtApply.Enabled = true;
-                comboBoxCustomAdd.Enabled = true;
-                buttonExtModify.Text = "Cancel";
-
-                ResetCombo();
-                editing = true;
-            }
-        }
-
-        private void ResetCombo()
-        {
-            List<MaterialCommodity> list = MaterialCommodity.GetMaterialsCommoditiesList;
-            comboBoxCustomAdd.Items.Clear();
-            mclist.Clear();
-            foreach (MaterialCommodity mc in list)
-            {
-                if (!mc.category.Equals(MaterialCommodity.CommodityCategory) == materials)
-                {
-                    mclist.Add(new MaterialCommodities(mc));
-                    comboBoxCustomAdd.Items.Add(mc.name);
-                }
-            }
-
-            comboBoxCustomAdd.Items.Add("User defined");
-        }
-
-        private void DisableEditing()
-        {
-            if (buttonExtApply.Enabled)
-            {
-                foreach (DataGridViewColumn c in dataGridViewMC.Columns)
-                    c.ReadOnly = true;
-
-                comboBoxCustomAdd.Enabled = false;
-                buttonExtApply.Enabled = false;
-                buttonExtModify.Text = "Modify";
-            }
-        }
-
-        private List<MaterialCommodities> GetMatCommodChanges(bool updatedb, out bool dbupdated)
-        {
-            List<MaterialCommodities> mcchange = new List<MaterialCommodities>();
-
-            dbupdated = false;
-
-            for (int i = 0; i < dataGridViewMC.Rows.Count; i++)
-            {
-                object tag = dataGridViewMC.Rows[i].Tag;
-                string name = (string)dataGridViewMC.Rows[i].Cells[namecol].Value;
-                string type = (string)dataGridViewMC.Rows[i].Cells[typecol].Value;
-                string abv = (abvcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[abvcol].Value : "";
-                string cat = (catcol >= 0) ? (string)dataGridViewMC.Rows[i].Cells[catcol].Value : (materials ? MaterialCommodities.MaterialRawCategory : MaterialCommodities.CommodityCategory);
-
-                if (tag != null && tag is MaterialCommodities)
-                {
-                    MaterialCommodities mc = (MaterialCommodities)tag;
-
-                    if (abvcol < 0)
-                        abv = mc.shortname ?? "";
-                    if (catcol < 0)
-                        cat = mc.category ?? (materials ? MaterialCommodities.MaterialRawCategory : MaterialCommodities.CommodityCategory);
-
-                    if (updatedb && (mc.name != name || mc.shortname != abv || mc.category != cat || mc.type != type))
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Row " + i + " changed text");
-                        MaterialCommodity.ChangeDbText(mc.fdname, name, abv, cat, type);
-                        dbupdated = true;
-                    }
-
-                    int numvalue = 0;
-                    int.TryParse((string)dataGridViewMC.Rows[i].Cells[numcol].Value, out numvalue);
-
-                    double price = 0;
-                    bool pricechange = false;
-
-                    if (!materials)
-                    {
-                        double.TryParse((string)dataGridViewMC.Rows[i].Cells[pricecol].Value, out price);
-                        pricechange = Math.Abs(mc.price - price) >= 0.01;
-                    }
-
-                    if (mc.count != numvalue || pricechange)
-                    {
-                        mcchange.Add(new MaterialCommodities(new MaterialCommodity(0, mc.category, mc.name, mc.fdname, mc.type, mc.shortname, Color.Red, 0), 0, numvalue, (pricechange) ? price : 0));
-                        //System.Diagnostics.Debug.WriteLine("Row " + i + " changed number");
-                    }
-                }
-                else
-                {
-                    string fdname = Tools.FDName(name);
-
-                    int numvalue = 0;
-                    bool numok = int.TryParse((string)dataGridViewMC.Rows[i].Cells[numcol].Value, out numvalue);
-
-                    double price = 0;
-
-                    if (!materials)
-                        double.TryParse((string)dataGridViewMC.Rows[i].Cells[pricecol].Value, out price);
-
-                    if (numok && cat.Length > 0 && name.Length > 0)
-                    {
-                        mcchange.Add(new MaterialCommodities(new MaterialCommodity(0, cat, name, fdname, type, abv, Color.Red, 0), 0, numvalue, price));
-                    }
-                }
-            }
-
-            return mcchange;
-        }
-
-        private List<MaterialCommodities> GetMatCommodChanges()
-        {
-            bool updateddb;
-            return GetMatCommodChanges(false, out updateddb);
-        }
-
-        private void buttonExtApply_Click(object sender, EventArgs e)
-        {
-            bool updateddb = false;
-            List<MaterialCommodities> mcchange = GetMatCommodChanges(true, out updateddb);
-
-            DisableEditing();
-
-            if (OnChangedCount != null)
-                OnChangedCount(mcchange);
-            else if ( updateddb && OnRequestRefresh != null)
-                OnRequestRefresh();
-        }
-
-        private void dataGridViewMC_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            //System.Diagnostics.Debug.WriteLine("End edit");
-            DataGridViewCell c = dataGridViewMC.Rows[e.RowIndex].Cells[e.ColumnIndex];
-
-            if (e.ColumnIndex == numcol)
-            {
-                int originalvalue = (e.RowIndex < last_mc.Count) ? last_mc[e.RowIndex].count : 0;
-                int newvalue = 0;
-                if (!int.TryParse((string)c.Value, out newvalue) && newvalue >= 0)
-                    c.Value = originalvalue.ToString();
             }
         }
     }

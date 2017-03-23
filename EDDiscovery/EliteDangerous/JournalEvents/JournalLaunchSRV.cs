@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -22,18 +22,31 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Loadout
     [JournalEntryType(JournalTypeEnum.LaunchSRV)]
-    public class JournalLaunchSRV : JournalEntry
+    public class JournalLaunchSRV : JournalEntry, IShipInformation
     {
         public JournalLaunchSRV(JObject evt ) : base(evt, JournalTypeEnum.LaunchSRV)
         {
-            Loadout = JSONHelper.GetStringDef(evt["Loadout"]);
-            PlayerControlled = JSONHelper.GetStringDef(evt["PlayerControlled"]);
+            Loadout = evt["Loadout"].Str();
+            PlayerControlled = evt["PlayerControlled"].Bool(true);
 
         }
         public string Loadout { get; set; }
-        public string PlayerControlled { get; set; }
+        public bool PlayerControlled { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.srv; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.launchsrv; } }
 
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.LaunchSRV();
+        }
+
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("Loadout:", Loadout);
+            if (!PlayerControlled)
+                info += ", NPC Controlled";
+            detailed = "";
+        }
     }
 }

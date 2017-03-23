@@ -32,20 +32,43 @@ namespace EDDiscovery.Forms
     {
         private Task inittask;
         private EDDiscoveryForm mainform;
+        public ApplicationContext Context;
 
-        public SplashForm()
+        public SplashForm(EDDiscoveryForm mainform)
         {
             InitializeComponent();
             this.label_version.Text = "EDDiscovery " + System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
-            inittask = EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift)).ContinueWith(t => InitComplete(), TaskContinuationOptions.OnlyOnRanToCompletion);
+            this.mainform = mainform;
+            this.Owner = mainform;
         }
 
-        private void InitComplete()
+        public void Init()
+        {
+            inittask = EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift)).ContinueWith(t => InitComplete(t));
+        }
+
+        private void InitComplete(Task t)
         {
             this.BeginInvoke(new Action(() =>
             {
-                mainform = new EDDiscoveryForm(this);
-                mainform.Show();
+                if (t.IsCompleted)
+                {
+                    try
+                    {
+                        mainform.Init();
+                        mainform.Show();
+                        Context.MainForm = mainform;
+                    }
+                    finally
+                    {
+                        this.Close();
+                    }
+                }
+                else if (t.IsFaulted)
+                {
+                    MessageBox.Show($"Error initializing database:\n{t.Exception.InnerExceptions.FirstOrDefault()?.ToString()}", "Error initializing database");
+                    Application.Exit();
+                }
             }));
         }
     }

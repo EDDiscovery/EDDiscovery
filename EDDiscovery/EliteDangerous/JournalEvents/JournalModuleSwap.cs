@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -26,18 +26,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	ToItem
     //•	Ship
     [JournalEntryType(JournalTypeEnum.ModuleSwap)]
-    public class JournalModuleSwap : JournalEntry
+    public class JournalModuleSwap : JournalEntry, IShipInformation
     {
         public JournalModuleSwap(JObject evt ) : base(evt, JournalTypeEnum.ModuleSwap)
         {
-            FromSlot = JSONHelper.GetStringDef(evt["FromSlot"]);
-            ToSlot = JSONHelper.GetStringDef(evt["ToSlot"]);
-            FromItem = JSONHelper.GetStringDef(evt["FromItem"]);
-            FromItemLocalised = JSONHelper.GetStringDef(evt["FromItem_Localised"]);
-            ToItem = JSONHelper.GetStringDef(evt["ToItem"]);
-            ToItemLocalised = JSONHelper.GetStringDef(evt["ToItem_Localised"]);
-            Ship = JournalEntry.GetBetterShipName(JSONHelper.GetStringDef(evt["Ship"]));
-            ShipId = JSONHelper.GetInt(evt["ShipID"]);
+            FromSlot = JournalFieldNaming.GetBetterSlotName(evt["FromSlot"].Str());
+            ToSlot = JournalFieldNaming.GetBetterSlotName(evt["ToSlot"].Str());
+            FromItem = JournalFieldNaming.GetBetterItemNameEvents(evt["FromItem"].Str());
+            FromItemLocalised = evt["FromItem_Localised"].Str();
+            ToItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ToItem"].Str());
+            if (ToItem.Equals("Null"))      // Frontier bug.. something Null is here.. remove
+                ToItem = "";
+            ToItemLocalised = evt["ToItem_Localised"].Str();        // if ToItem is null or not there, this won't be
+            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipId = evt["ShipID"].Int();
 
         }
         public string FromSlot { get; set; }
@@ -49,12 +51,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Ship { get; set; }
         public int ShipId { get; set; }
 
-        public override string DefaultRemoveItems()
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.moduleswap; } }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
-            return base.DefaultRemoveItems() + ";ShipID";
+            shp.ModuleSwap(this);
         }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.moduleswap; } }
-
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("From ", FromSlot , "<to " , ToSlot , "Item:" , FromItemLocalised.Alt(FromItem));
+            if (ToItem.Length > 0 )                         
+                info += ", Swapped with " + ToItemLocalised.Alt(ToItem);
+            detailed = "";
+        }
     }
 }

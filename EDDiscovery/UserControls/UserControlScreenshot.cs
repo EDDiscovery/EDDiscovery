@@ -73,7 +73,7 @@ namespace EDDiscovery.UserControls
                 {
                     JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
 
-                    JObject jo = JObject.Parse(ss.EventDataString);
+                    JObject jo = ss.GetJson();
                     if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
                     {
                         string store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);

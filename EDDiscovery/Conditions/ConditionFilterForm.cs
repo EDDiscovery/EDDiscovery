@@ -721,7 +721,7 @@ namespace EDDiscovery2
                 ActionProgramForm apf = new ActionProgramForm();
                 apf.EditProgram += EditProgram;
 
-                // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames
+                // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames)
                 // pass in the program if found, and its action data.
 
                 List<string> fieldnames = new List<string>();
@@ -858,7 +858,7 @@ namespace EDDiscovery2
             {
                 userglobalvariables = avf.result;
 
-                foreach (string key in userglobalvariables.Keys)     // add them in in case..
+                foreach (string key in userglobalvariables.NameEnumuerable)     // add them in in case..
                 {
                     if (!additionalfieldnames.Contains(key))
                         additionalfieldnames.Add(key);
@@ -1162,37 +1162,20 @@ namespace EDDiscovery2
                 cachedevents[evtype] = new List<string>();
                 cachedeventsdecorated[evtype] = new List<string>();
 
-                List<EDDiscovery.EliteDangerous.JournalEntry> jel = EDDiscovery.EliteDangerous.JournalEntry.Get(evtype);        // get all events of this type
-
-                if (jel != null)            // may not find it, if event is not in history
-                {
-                    ConditionVariables vars = new ConditionVariables();
-                    ConditionVariables varsdecorated = new ConditionVariables();
-                    foreach (EDDiscovery.EliteDangerous.JournalEntry ev in jel)
-                    {
-                        vars.GetJSONFieldNamesAndValues(ev.EventDataString);        // for all events, add to field list
-                        varsdecorated.GetJSONFieldNamesAndValues(ev.EventDataString, "EventJS_");        // for all events, add to field list
-                    }
-
-                    cachedevents[evtype].AddRange(vars.KeyList);
-                    cachedeventsdecorated[evtype].AddRange(varsdecorated.KeyList);
-                }
-
-                List<string> classnames = Tools.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(evtype), "EventClass_");
+                List<string> classnames = Tools.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(evtype));
                 if (classnames != null)
-                {
                     cachedevents[evtype].AddRange(classnames);
-                    cachedeventsdecorated[evtype].AddRange(classnames);
-                }
+
+                List<string> classnamesdecorated = Tools.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(evtype), "EventClass_");
+                if (classnamesdecorated != null)
+                    cachedeventsdecorated[evtype].AddRange(classnamesdecorated);
 
                 cachedevents[evtype].AddRange(additionalfieldnames);
                 cachedeventsdecorated[evtype].AddRange(additionalfieldnames);
             }
-
         }
 
-
-        #endregion
+        #endregion  
 
         private void configureInstallationValuesToolStripMenuItem_Click(object sender, EventArgs e)
         {

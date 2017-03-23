@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
@@ -35,7 +35,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	RotationPeriod (seconds)
     //•	Rings: [ array ] - if present
     //
-    //Parameters(Planet/Moon) 
+    //Parameters(Planet/Moon)
     //•	Bodyname: name of body
     //•	DistanceFromArrivalLS
     //•	TidalLock: 1 if tidally locked
@@ -51,6 +51,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	OrbitalPeriod (seconds)
     //•	RotationPeriod (seconds)
     //•	Rings [ array of info ] - if rings present
+    //•	ReserveLevel: (Pristine/Major/Common/Low/Depleted) – if rings present
     //
     // Rings properties
     //•	Name
@@ -63,6 +64,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     public class JournalScan : JournalEntry
     {
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
+        public string BodyDesignation { get; set; }
 
         // ALL
         public string BodyName { get; set; }                        // direct (meaning no translation)
@@ -85,10 +87,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         // All orbiting bodies (Stars/Planets), not main star
         public double? nSemiMajorAxis;                              // direct
-        public double? nEccentricity;                               // direct    
+        public double? nEccentricity;                               // direct
         public double? nOrbitalInclination;                         // direct
-        public double? nPeriapsis;                                  // direct    
-        public double? nOrbitalPeriod { get; set; }                 // direct    
+        public double? nPeriapsis;                                  // direct
+        public double? nOrbitalPeriod { get; set; }                 // direct
 
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
@@ -107,7 +109,21 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
-        public Dictionary<string, double> Materials { get; set; }   
+        public Dictionary<string, double> Materials { get; set; }
+        public bool IsEDSMBody { get; private set; }
+
+        public EDReserve ReserveLevel { get;  set; }
+        public string ReserveLevelStr
+        {
+            get
+            {
+                return ReserveLevel.ToString();
+            }
+            set
+            {
+                ReserveLevel = Bodies.ReserveStr2Enum(value);
+            }
+        }
 
         // Classes
 
@@ -120,14 +136,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public double OuterRad;
         }
 
-        public bool IsEDSMBody
-        {
-            get
-            {
-                return JSONHelper.GetBool(jEventData["EDDFromEDSMBodie"], false);
-            }
-        }
-
         private const double solarRadius_m = 695700000;
         private const double oneAU_m = 149597870000;
         private const double oneDay_s = 86400;
@@ -135,41 +143,47 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
-            BodyName = JSONHelper.GetStringDef(evt["BodyName"]);
-            StarType = JSONHelper.GetStringNull(evt["StarType"]);
+            BodyName = evt["BodyName"].Str();
+            StarType = evt["StarType"].StrNull();
 
-            DistanceFromArrivalLS = JSONHelper.GetDouble(evt["DistanceFromArrivalLS"]);
+            DistanceFromArrivalLS = evt["DistanceFromArrivalLS"].Double();
 
-            nAge = JSONHelper.GetDoubleNull(evt["Age_MY"]);
-            nStellarMass = JSONHelper.GetDoubleNull(evt["StellarMass"]);
-            nRadius = JSONHelper.GetDoubleNull(evt["Radius"]);
-            nAbsoluteMagnitude = JSONHelper.GetDoubleNull(evt["AbsoluteMagnitude"]);
-            nRotationPeriod = JSONHelper.GetDoubleNull(evt["RotationPeriod"]);
+            nAge = evt["Age_MY"].DoubleNull();
+            nStellarMass = evt["StellarMass"].DoubleNull();
+            nRadius = evt["Radius"].DoubleNull();
+            nAbsoluteMagnitude = evt["AbsoluteMagnitude"].DoubleNull();
+            nRotationPeriod = evt["RotationPeriod"].DoubleNull();
 
-            nOrbitalPeriod = JSONHelper.GetDoubleNull(evt["OrbitalPeriod"]);
-            nSemiMajorAxis = JSONHelper.GetDoubleNull(evt["SemiMajorAxis"]);
-            nEccentricity = JSONHelper.GetDoubleNull(evt["Eccentricity"]);
-            nOrbitalInclination = JSONHelper.GetDoubleNull(evt["OrbitalInclination"]);
-            nPeriapsis = JSONHelper.GetDoubleNull(evt["Periapsis"]);
+            nOrbitalPeriod = evt["OrbitalPeriod"].DoubleNull();
+            nSemiMajorAxis = evt["SemiMajorAxis"].DoubleNull();
+            nEccentricity = evt["Eccentricity"].DoubleNull();
+            nOrbitalInclination = evt["OrbitalInclination"].DoubleNull();
+            nPeriapsis = evt["Periapsis"].DoubleNull();
 
             Rings = evt["Rings"]?.ToObject<StarPlanetRing[]>();
 
-            nTidalLock = JSONHelper.GetBoolNull(evt["TidalLock"]);
-            TerraformState = JSONHelper.GetStringNull(evt["TerraformState"]);
-            PlanetClass = JSONHelper.GetStringNull(evt["PlanetClass"]);
+            nTidalLock = evt["TidalLock"].Bool();
+            TerraformState = evt["TerraformState"].StrNull();
+            if (TerraformState != null && TerraformState.Equals("Not Terraformable", StringComparison.InvariantCultureIgnoreCase)) // EDSM returns this, normalise to journal
+                TerraformState = String.Empty;
+            PlanetClass = evt["PlanetClass"].StrNull();
 
-            Atmosphere = JSONHelper.GetStringNull(evt["Atmosphere"]);
-            if ( Atmosphere == null || Atmosphere.Length == 0 )             // Earthlikes appear to have empty atmospheres but AtmosphereType
-                Atmosphere = JSONHelper.GetStringNull(evt["AtmosphereType"]);
+            Atmosphere = evt["Atmosphere"].StrNull();
+            if (Atmosphere == null || Atmosphere.Length == 0)             // Earthlikes appear to have empty atmospheres but AtmosphereType
+                Atmosphere = evt["AtmosphereType"].StrNull();
+            if (Atmosphere != null)
+                Atmosphere = Atmosphere.SplitCapsWordFull();
 
             AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
-            Volcanism = JSONHelper.GetStringNull(evt["Volcanism"]);
+            Volcanism = evt["Volcanism"].StrNull();
             VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
-            nMassEM = JSONHelper.GetDoubleNull(evt["MassEM"]);
-            nSurfaceGravity = JSONHelper.GetDoubleNull(evt["SurfaceGravity"]);
-            nSurfaceTemperature = JSONHelper.GetDoubleNull(evt["SurfaceTemperature"]);
-            nSurfacePressure = JSONHelper.GetDoubleNull(evt["SurfacePressure"]);
-            nLandable = JSONHelper.GetBoolNull(evt["Landable"]);
+            nMassEM = evt["MassEM"].DoubleNull();
+            nSurfaceGravity = evt["SurfaceGravity"].DoubleNull();
+            nSurfaceTemperature = evt["SurfaceTemperature"].DoubleNull();
+            nSurfacePressure = evt["SurfacePressure"].DoubleNull();
+            nLandable = evt["Landable"].BoolNull();
+
+            ReserveLevelStr = evt["ReserveLevel"].Str();
 
             if (IsStar)
             {
@@ -181,12 +195,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
                 }
             }
-            else
+            else if (PlanetClass != null)
             {
                 PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
                                                                                     // Fix naming to standard and fix case..
                 PlanetClass = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
                                         ToTitleCase(PlanetClass.ToLower()).Replace("Ii ", "II ").Replace("Iv ", "IV ").Replace("Iii ", "III ");
+            }
+            else
+            {
+                PlanetTypeID = EDPlanet.Unknown;
             }
 
 
@@ -203,12 +221,40 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     Materials = new Dictionary<string, double>();
                     foreach (JObject jo in mats)
                     {
-                        Materials[(string)jo["Name"]] = JSONHelper.GetDouble(jo["Percent"]);
+                        Materials[(string)jo["Name"]] = jo["Percent"].Double();
                     }
                 }
             }
+
+            IsEDSMBody = evt["EDDFromEDSMBodie"].Bool(false);
         }
 
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        {
+            summary = $"Scan of {BodyName}";
+
+            if ( IsStar )
+            {
+                double? r = nRadius;
+                if (r.HasValue)
+                    r = r / solarRadius_m;
+
+                info = Tools.FieldBuilder("", GetStarTypeImage().Item2, "Mass:;SM;0.00", nStellarMass, "Age:;my;0.0", nAge, "Radius:;SR;0.00", r );
+            }
+            else
+            {
+                double? r = nRadius;
+                if (r.HasValue)
+                    r = r / 1000;
+                double? g = nSurfaceGravity;
+                if (g.HasValue)
+                    g = g / 9.8;
+
+                info = Tools.FieldBuilder("", PlanetClass, "Mass:;EM;0.00", nMassEM, "<;Landable", IsLandable, "", Atmosphere, "Gravity:;G;0.0", g, "Radius:;km;0", r);
+            }
+
+            detailed = DisplayString(0, false);
+        }
 
 
         private void ConvertFromEDSMBodies()
@@ -217,14 +263,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             throw new NotImplementedException();
         }
 
-
-        public override void FillInformation(out string summary, out string info, out string detailed)
-        {
-            base.FillInformation(out summary, out info, out detailed);
-            summary = $"Scan of {BodyName}";
-        }
-
-        public string DisplayString(bool printbodyname = true, int indent = 0)
+        public string DisplayString(int indent = 0 , bool includefront = true)
         {
             string inds = new string(' ' , indent);
 
@@ -232,45 +271,45 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             scanText.Append(inds);
 
-            if (printbodyname)
+            if (includefront)
+            {
                 scanText.AppendFormat("{0}\n\n", BodyName);
 
-            if (IsStar)
-            {
-                scanText.AppendFormat(GetStarTypeImage().Item2);
-            }
-            else
-            {
-                scanText.AppendFormat("{0}", PlanetClass);
-            }
+                if (IsStar)
+                {
+                    scanText.AppendFormat(GetStarTypeImage().Item2);
+                }
+                else if ( PlanetClass != null )
+                {
+                    scanText.AppendFormat("{0}", PlanetClass);
 
-            if (PlanetClass != null && !PlanetClass.ToLower().Contains("gas"))
-            {
-                scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere" : ( ", " + 
-                                                            System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Atmosphere.ToLower()) )
-                                     );
-            }
+                    if (!PlanetClass.ToLower().Contains("gas"))
+                    {
+                        scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere" : (", " + Atmosphere));
+                    }
+                }
 
-            if (IsLandable)
-                scanText.AppendFormat(", Landable");
+                if (IsLandable)
+                    scanText.AppendFormat(", Landable");
 
-            scanText.AppendFormat("\n");
+                scanText.AppendFormat("\n");
 
-            if (nAge.HasValue)
-                scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
+                if (nAge.HasValue)
+                    scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
 
-            if (nStellarMass.HasValue)
-                scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
+                if (nStellarMass.HasValue)
+                    scanText.AppendFormat("Solar Masses: {0:0.00}\n", nStellarMass.Value);
 
-            if (nMassEM.HasValue)
-                scanText.AppendFormat("Earth Masses: {0:0.0000}\n", nMassEM.Value);
+                if (nMassEM.HasValue)
+                    scanText.AppendFormat("Earth Masses: {0:0.0000}\n", nMassEM.Value);
 
-            if (nRadius.HasValue)
-            {
-                if ( IsStar )
-                    scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n", (nRadius.Value / solarRadius_m));
-                else
-                    scanText.AppendFormat("Body Radius: {0:0.00}km\n", (nRadius.Value / 1000));
+                if (nRadius.HasValue)
+                {
+                    if (IsStar)
+                        scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n", (nRadius.Value / solarRadius_m));
+                    else
+                        scanText.AppendFormat("Body Radius: {0:0.00}km\n", (nRadius.Value / 1000));
+                }
             }
 
             if (nSurfaceTemperature.HasValue)
@@ -319,7 +358,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (nTidalLock.HasValue && nTidalLock.Value)
                 scanText.Append("Tidally locked\n");
 
-            if ( TerraformState != null && TerraformState == "Terraformable") 
+            if ( TerraformState != null && TerraformState == "Terraformable")
                 scanText.Append("Candidate for terraforming\n");
 
             if (HasRings)
@@ -359,8 +398,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
-            int low, hi;
-            int estvalue = EstimatedValue(out low, out hi);
+
+            int estvalue = EstimatedValue();
             if (estvalue > 0)
                 scanText.AppendFormat("\nEstimated value: {0}", estvalue);
 
@@ -375,7 +414,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             scanText.Append("Materials:\n");
             foreach (KeyValuePair<string, double> mat in Materials)
             {
-                EDDiscovery2.DB.MaterialCommodity mc = EDDiscovery2.DB.MaterialCommodity.GetCachedMaterial(mat.Key);
+                EDDiscovery2.DB.MaterialCommodityDB mc = EDDiscovery2.DB.MaterialCommodityDB.GetCachedMaterial(mat.Key);
                 if (mc != null)
                     scanText.AppendFormat(indents + "{0} ({1}) {2} {3}%\n", mc.name, mc.shortname, mc.type, mat.Value.ToString("N1"));
                 else
@@ -520,7 +559,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Neutron_Star, "Neutron Star");
 
                 case EDStar.H:
-                    
+
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Black Hole");
 
                 case EDStar.X:
@@ -531,7 +570,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
                 //case EDStar.b"supermassiveblackhole":
                  //   return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Super Massive Black Hole");
-                case EDStar.A_BlueWhiteSuperGiant:   
+                case EDStar.A_BlueWhiteSuperGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.A9III_White, "Blue White Super Giant");
                 case EDStar.F_WhiteSuperGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, "F White Super Giant");
@@ -556,6 +595,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public System.Drawing.Image GetPlanetClassImage()
         {
+            if (PlanetClass == null)
+            {
+                return EDDiscovery.Properties.Resources.Globe;
+            }
+
             string name = PlanetClass.ToLower();
 
             if (name.Contains("gas"))
@@ -630,13 +674,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return Materials[v.ToLower()];
         }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scan; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scan; } }
 
-        public bool IsStarNameRelated(string starname)
+        public bool IsStarNameRelated(string starname, string designation = null)
         {
-            if (BodyName.Length >= starname.Length)
+            if (designation == null)
             {
-                string s = BodyName.Substring(0, starname.Length);
+                designation = BodyName;
+            }
+
+            if (designation.Length >= starname.Length)
+            {
+                string s = designation.Substring(0, starname.Length);
                 return starname.Equals(s, StringComparison.InvariantCultureIgnoreCase);
             }
             else
@@ -645,11 +694,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string IsStarNameRelatedReturnRest(string starname)          // null if not related, else rest of string
         {
-            if (BodyName.Length >= starname.Length)
+            string designation = BodyDesignation ?? BodyName;
+            if (designation.Length >= starname.Length)
             {
-                string s = BodyName.Substring(0, starname.Length);
+                string s = designation.Substring(0, starname.Length);
                 if (starname.Equals(s, StringComparison.InvariantCultureIgnoreCase))
-                    return BodyName.Substring(starname.Length).Trim();
+                    return designation.Substring(starname.Length).Trim();
             }
 
             return null;
@@ -664,69 +714,72 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             return radius_metres / 300000000;
         }
 
-        public int EstimatedValue(out int low, out int high)
+        public int EstimatedValue()
         {
+            //int low;
+            //int high;
+
             if (IsStar)
             {
                 switch (StarTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
                 {
                     case EDStar.O:
-                        low = 3677;
-                        high = 4465;
+                        //low = 3677;
+                        //high = 4465;
                         return 4170;
 
                     case EDStar.B:
-                        low = 2992;
-                        high = 3456;
+                        //low = 2992;
+                        //high = 3456;
                         return 3098;
 
                     case EDStar.A:
-                        low = 2938;
-                        high = 2986;
+                        //low = 2938;
+                        //high = 2986;
                         return 2950;
 
                     case EDStar.F:
-                        low = 2915;
-                        high = 2957;
+                        //low = 2915;
+                        //high = 2957;
                         return 2932;
 
                     case EDStar.G:
-                        low = 2912;
-                        high = 2935;
+                        //low = 2912;
+                        //high = 2935;
                         // also have a G8V
                         return 2923;
 
                     case EDStar.K:
-                        low = 2898;
-                        high = 2923;
+                        //low = 2898;
+                        //high = 2923;
                         return 2911;
                     case EDStar.M:
-                        low = 2887;
-                        high = 2905;
+                        //low = 2887;
+                        //high = 2905;
                         return 2911;
 
                     // dwarfs
                     case EDStar.L:
-                        low = 2884;
-                        high = 2890;
+                        //low = 2884;
+                        //high = 2890;
                         return 2887;
                     case EDStar.T:
-                        low = 2881;
-                        high = 2885;
+                        //low = 2881;
+                        //high = 2885;
                         return 2883;
                     case EDStar.Y:
-                        low = 2880;
-                        high = 2882;
+                        //low = 2880;
+                        //high = 2882;
                         return 2881;
 
                     // proto stars
                     case EDStar.AeBe:    // Herbig
                         //                ??
-                        low = high = 0;
-                        return 0;
+                        //low = //high = 0;
+                        return 2500;
                     case EDStar.TTS:
-                        low = 2881;
-                        high = 2922;
+                        //low = 2881;
+                        //high = 2922;
                         return 2900;
 
                     // wolf rayet
@@ -735,7 +788,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.WNC:
                     case EDStar.WC:
                     case EDStar.WO:
-                        low = high = 7794;
+                        //low = //high = 7794;
                         return 7794;
 
                     // Carbon
@@ -744,14 +797,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.CN:
                     case EDStar.CJ:
                     case EDStar.CHd:
-                        low = high = 2920;
+                        //low = //high = 2920;
                         return 2920;
 
                     case EDStar.MS: //seen in log
                     case EDStar.S:   // seen in log
                                      //                ??
-                        low = high = 0;
-                        return 0;
+                        //low = //high = 0;
+                        return 2000;
 
 
                     // white dwarf
@@ -770,19 +823,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.DC:
                     case EDStar.DCV:
                     case EDStar.DX:
-                        low = 25000;
-                        high = 27000;
+                        //low = 25000;
+                        //high = 27000;
 
                         return 26000;
 
                     case EDStar.N:
-                        low = 43276;
-                        high = 44619;
+                        //low = 43276;
+                        //high = 44619;
                         return 43441;
 
                     case EDStar.H:
-                        low = 44749;
-                        high = 80305;
+                        //low = 44749;
+                        //high = 80305;
                         return 61439;
 
                     case EDStar.X:
@@ -794,9 +847,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.RoguePlanet:
 
                     default:
-                        low = 0;
-                        high = 0;
-                        return 0;
+                        //low = 0;
+                        //high = 0;
+                        return 2000;
                 }
             }
             else   // Planet
@@ -804,82 +857,82 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 switch (PlanetTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
                 {
                     case EDPlanet.Icy_body:
-                        low = 792; // (0.0001 EM)
-                        high = 1720; // 89.17
+                        //low = 792; // (0.0001 EM)
+                        //high = 1720; // 89.17
                         return 933; // 0.04
 
                     case EDPlanet.Rocky_ice_body:
-                        low = 792; // (0.0001 EM)
-                        high = 1720; // 89.17
+                        //low = 792; // (0.0001 EM)
+                        //high = 1720; // 89.17
                         return 933; // 0.04
 
                     case EDPlanet.Rocky_body:
                         if (TerraformState != null && TerraformState.ToLower().Equals("terraformable"))
                         {
-                            low = 36000;
-                            high = 36500;
+                            //low = 36000;
+                            //high = 36500;
                             return 37000;
                         }
                         else
                         {
-                            low = 792; // (0.0001 EM)
-                            high = 1720; // 89.17
+                            //low = 792; // (0.0001 EM)
+                            //high = 1720; // 89.17
                             return 933; // 0.04
                         }
                     case EDPlanet.Metal_rich_body:
-                        low = 9145; // (0.0002 EM)
-                        high = 14562; // (4.03 EM)
+                        //low = 9145; // (0.0002 EM)
+                        //high = 14562; // (4.03 EM)
                         return 12449; // 0.51 EM
                     case EDPlanet.High_metal_content_body:
                         if (TerraformState!=null && TerraformState.ToLower().Equals("terraformable"))
                         {
-                            low = 36000;
-                            high = 54000;
+                            //low = 36000;
+                            //high = 54000;
                             return 42000;
                         }
                         else
                         {
-                            low = 4966; // (0.0015 EM)
-                            high = 9632;  // 31.52 EM
+                            //low = 4966; // (0.0015 EM)
+                            //high = 9632;  // 31.52 EM
                             return 6670; // 0.41
                         }
 
                     case EDPlanet.Earthlike_body:
-                        low = 65000; // 0.24 EM
-                        high = 71885; // 196.60 EM
+                        //low = 65000; // 0.24 EM
+                        //high = 71885; // 196.60 EM
                         return 67798; // 0.47 EM
 
                     case EDPlanet.Water_world:
-                        low = 26589; // (0.09 EM)
-                        high = 43437; // (42.77 EM)
+                        //low = 26589; // (0.09 EM)
+                        //high = 43437; // (42.77 EM)
                         return 30492; // (0.82 EM)
                     case EDPlanet.Ammonia_world:
-                        low = 37019; // 0.09 EM
-                        high = 71885; //(196.60 EM)
+                        //low = 37019; // 0.09 EM
+                        //high = 71885; //(196.60 EM)
                         return 40322; // (0.41 EM)
                     case EDPlanet.Sudarsky_class_I_gas_giant:
-                        low = 2472; // (2.30 EM)
-                        high = 4514; // (620.81 EM
+                        //low = 2472; // (2.30 EM)
+                        //high = 4514; // (620.81 EM
                         return 3400;  // 62.93 EM
 
                     case EDPlanet.Sudarsky_class_II_gas_giant:
-                        low = 8110; // (5.37 EM)
-                        high = 14618; // (949.98 EM)
+                        //low = 8110; // (5.37 EM)
+                        //high = 14618; // (949.98 EM)
                         return 12319;  // 260.84 EM
 
                     case EDPlanet.Sudarsky_class_III_gas_giant:
-                        low = 1368; // (10.16 EM)
-                        high = 2731; // (2926 EM)
+                        //low = 1368; // (10.16 EM)
+                        //high = 2731; // (2926 EM)
                         return 2339; // 990.92 EM
 
                     case EDPlanet.Sudarsky_class_IV_gas_giant:
-                        low = 2739; //(2984 EM)
-                        high = 2827; // (3697 EM)
+                        //low = 2739; //(2984 EM)
+                        //high = 2827; // (3697 EM)
                         return 2782; // 3319 em
 
                     case EDPlanet.Sudarsky_class_V_gas_giant:
-                        low = 2225; // 688.2 EM
-                        high = 2225;
+                        //low = 2225; // 688.2 EM
+                        //high = 2225;
                         return 2225;
 
 
@@ -890,13 +943,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDPlanet.Gas_giant_with_ammonia_based_life:
                     case EDPlanet.Helium_rich_gas_giant:
                     case EDPlanet.Helium_gas_giant:
-                        low = 0;
-                        high = 0;
-                        return 0;
+                        //low = 0;
+                        //high = 0;
+                        return 2000;
 
                     default:
-                        low = 0;
-                        high = 0;
+                        //low = 0;
+                        //high = 2000;
                         return 0;
                 }
 
@@ -905,6 +958,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
     }
-    
+
 }
 

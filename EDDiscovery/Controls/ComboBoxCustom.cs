@@ -274,6 +274,7 @@ namespace ExtendedControls
         public override Font Font { get { return base.Font; } set { base.Font = value; _cbsystem.Font = value; } }
         public override string Text { get { return base.Text; } set { base.Text = value; _cbsystem.Text = value; } }
 
+        // BEWARE SET value/display before DATA SOURCE
         public object DataSource { get { return _cbsystem.DataSource; } set { _cbsystem.DataSource = value; } }
         public string ValueMember { get { return _cbsystem.ValueMember; } set { _cbsystem.ValueMember = value; } }
         public string DisplayMember { get { return _cbsystem.DisplayMember; } set { _cbsystem.DisplayMember = value; } }
@@ -331,7 +332,9 @@ namespace ExtendedControls
                 Brush textb;
                 Pen p, p2;
 
-                if (Enabled)
+                bool todraw = Enabled && Items.Count > 0;
+
+                if (todraw)
                 {
                     textb = new SolidBrush(this.ForeColor);
                     p = new Pen(BorderColor);
@@ -349,7 +352,7 @@ namespace ExtendedControls
 
                 Color bck;
 
-                if (Enabled)
+                if (todraw)
                     bck = (mouseover) ? MouseOverBackgroundColor : BackColor;
                 else
                     bck = BackColor.Multiply(0.5F);
@@ -369,7 +372,7 @@ namespace ExtendedControls
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                if (p2 != null)
+                if (p2 != null )
                 {
                     if (isActivated)
                     {
@@ -476,7 +479,10 @@ namespace ExtendedControls
         }
 
         private void Activate()
-        { 
+        {
+            if (Items.Count == 0 || !Enabled)
+                return;
+
             _cbdropdown = new ComboBoxCustomDropdown(this.Name);
 
             int fittableitems = this.DropDownHeight / this.ItemHeight;

@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.EliteDangerous;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -76,8 +77,8 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    EDDiscovery2.DB.MaterialCommoditiesLedger ml = ap.actioncontroller.HistoryList.materialcommodititiesledger;
-                    EDDiscovery2.DB.MaterialCommoditiesLedger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
+                    Ledger ml = ap.actioncontroller.HistoryList.materialcommodititiesledger;
+                    Ledger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
                     int jidindex = ap.actioncontroller.HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);    // find it in the journal
 
                     if ( tx == null && nextvalidentry ) // if not directly found..
@@ -98,14 +99,14 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    ap.currentvars[prefix + "JID"] = jid.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap.currentvars[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap.currentvars[prefix + "UTCTime"] = tx.utctime.ToString("MM/dd/yyyy HH:mm:ss");
-                    ap.currentvars[prefix + "EntryType"] = tx.jtype.ToString();
-                    ap.currentvars[prefix + "Notes"] = tx.notes;
-                    ap.currentvars[prefix + "Value"] = tx.cashadjust.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap.currentvars[prefix + "PPU"] = tx.profitperunit.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap.currentvars[prefix + "Credits"] = tx.cash.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "JID"] = jid.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "UTCTime"] = tx.utctime.ToString("MM/dd/yyyy HH:mm:ss");
+                    ap[prefix + "EntryType"] = tx.jtype.ToString();
+                    ap[prefix + "Notes"] = tx.notes;
+                    ap[prefix + "Value"] = tx.cashadjust.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "PPU"] = tx.profitperunit.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "Credits"] = tx.cash.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 }
                 else
                     ap.ReportError("Missing JID in Ledger");

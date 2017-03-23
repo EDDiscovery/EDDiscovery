@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -33,26 +33,21 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     [JournalEntryType(JournalTypeEnum.Docked)]
     public class JournalDocked : JournalEntry
     {
-
-
         public JournalDocked(JObject evt ) : base(evt, JournalTypeEnum.Docked)
         {
-            StationName = JSONHelper.GetStringDef(evt["StationName"]);
-            StationType = JSONHelper.GetStringDef(evt["StationType"]);
-            StarSystem = JSONHelper.GetStringDef(evt["StarSystem"]);
-            CockpitBreach = JSONHelper.GetBool(evt["CockpitBreach"]);
+            StationName = evt["StationName"].Str();
+            StationType = evt["StationType"].Str();
+            StarSystem = evt["StarSystem"].Str();
+            CockpitBreach = evt["CockpitBreach"].Bool();
 
-            Faction = JSONHelper.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
-            FactionState = JSONHelper.GetStringDef(evt["FactionState"]);
+            Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
+            FactionState = evt["FactionState"].Str().SplitCapsWord();
 
-            Allegiance = JSONHelper.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
-            Economy = JSONHelper.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
-            Economy_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
-            Government = JSONHelper.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
-            Government_Localised = JSONHelper.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
-
-            //Security = JSONHelper.GetMultiStringDef(evt["Security"]);
-            //Security_Localised = JSONHelper.GetMultiStringDef(evt["Security_Localised"]);
+            Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
+            Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
+            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
+            Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
+            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
         }
 
         public string StationName { get; set; }
@@ -66,15 +61,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Economy_Localised { get; set; }
         public string Government { get; set; }
         public string Government_Localised { get; set; }
-        //public string Security { get; set; }
-        //public string Security_Localised { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.Stationenter; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+
+        public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
-            base.FillInformation(out summary, out info, out detailed);
-            summary = $"Docked at {StationName}";
+            summary = $"At {StationName}";
+            info = Tools.FieldBuilder("Type ", StationType, "<in system ", StarSystem, "Faction:", Faction, "<in state ", FactionState);
+            detailed = Tools.FieldBuilder("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government));
         }
 
     }

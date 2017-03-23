@@ -192,6 +192,7 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Actions\ActionCommands\ActionShip.cs" />
     <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
     <Compile Include="Actions\ActionCommands\AudioUserInteraction.cs" />
     <Compile Include="Actions\ActionController.cs" />
@@ -204,9 +205,12 @@
     <Compile Include="Actions\ActionCommands\ActionPopout.cs" />
     <Compile Include="Actions\ActionCommands\ActionProgramwindow.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
-    <Compile Include="Actions\ActionCommands\ActionScan.cs" />
+    <Compile Include="Actions\ActionCommands\ActionScanStar.cs" />
     <Compile Include="Actions\ActionFile.cs" />
+    <Compile Include="Actions\ActionFileList.cs" />
+    <Compile Include="Actions\ActionProgramList.cs" />
     <Compile Include="Actions\ActionVars.cs" />
+    <Compile Include="CompanionAPI\CCommodities.cs" />
     <Compile Include="Audio\AudioDeviceConfigure.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -239,6 +243,10 @@
     <Compile Include="Audio\WaveConfigureDialog.Designer.cs">
       <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="CompanionAPI\CModules.cs" />
+    <Compile Include="CompanionAPI\CStarport.cs" />
+    <Compile Include="CompanionAPI\CSystem.cs" />
+    <Compile Include="Conditions\ConditionFileHandles.cs" />
     <Compile Include="Conditions\ConditionFunctions.cs" />
     <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
     <Compile Include="Actions\ActionCommands\ActionPrint.cs" />
@@ -289,7 +297,7 @@
       <DependentUpon>TabStrip.cs</DependentUpon>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
-    <Compile Include="DB\MaterialCommodities.cs" />
+    <Compile Include="DB\MaterialCommoditiesDB.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
@@ -297,15 +305,48 @@
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\TargetClass.cs" />
+    <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
+    <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
+    <Compile Include="EliteDangerous\Ledger.cs" />
+    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
+    <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
+    <Compile Include="CompanionAPI\CompanionCredentials.cs" />
+    <Compile Include="CompanionAPI\CompanionException.cs" />
+    <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
+    <Compile Include="CompanionAPI\CProfile.cs" />
+    <Compile Include="CompanionAPI\CShip.cs" />
+    <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
+    <Compile Include="CompanionAPI\CCommander.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalMaterials.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCargo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberJoins.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJoinACrew.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLoadout.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPassengers.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalQuitACrew.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
+    <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\DownloadManagerForm.Designer.cs">
       <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormCAPI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCAPI.Designer.cs">
+      <DependentUpon>FormCAPI.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ImportSphere.cs">
       <SubType>Form</SubType>
@@ -320,6 +361,12 @@
       <DependentUpon>MessageBoxTheme.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PromptDialogs.cs" />
+    <Compile Include="Forms\SetNoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetNoteForm.Designer.cs">
+      <DependentUpon>SetNoteForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="PopOutControl.cs" />
@@ -485,12 +532,6 @@
     </Compile>
     <Compile Include="Conditions\ConditionFilterForm.Designer.cs">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\TextBoxEntry.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TextBoxEntry.Designer.cs">
-      <DependentUpon>TextBoxEntry.cs</DependentUpon>
     </Compile>
     <Compile Include="JSON\JSONPrettyPrint.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
@@ -707,10 +748,10 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SystemViewForm.cs">
+    <Compile Include="Forms\Obsolete\SystemViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SystemViewForm.Designer.cs">
+    <Compile Include="Forms\Obsolete\SystemViewForm.Designer.cs">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools.cs" />
@@ -738,6 +779,12 @@
     </Compile>
     <Compile Include="UserControls\UserControlExploration.Designer.cs">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlModules.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlModules.Designer.cs">
+      <DependentUpon>UserControlModules.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlNotePanel.cs">
       <SubType>UserControl</SubType>
@@ -869,11 +916,17 @@
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCAPI.resx">
+      <DependentUpon>FormCAPI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MessageBoxTheme.resx">
       <DependentUpon>MessageBoxTheme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetNoteForm.resx">
+      <DependentUpon>SetNoteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
@@ -883,9 +936,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TextBoxEntry.resx">
-      <DependentUpon>TextBoxEntry.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
@@ -898,6 +948,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlModules.resx">
+      <DependentUpon>UserControlModules.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlLog.resx">
       <DependentUpon>UserControlLog.cs</DependentUpon>
@@ -1026,6 +1079,27 @@
     <None Include="Resources\edsmblue.png" />
     <None Include="Resources\edsmred.png" />
     <None Include="Resources\edsmown.png" />
+    <None Include="Resources\cargomanifest.png" />
+    <None Include="Resources\fetchremotemodule.png" />
+    <None Include="Resources\crewmemberjoins.png" />
+    <None Include="Resources\crewmemberquits.png" />
+    <None Include="Resources\capshipbond.png" />
+    <None Include="Resources\changecrewrols.png" />
+    <None Include="Resources\factionkillbond.png" />
+    <None Include="Resources\docksrv.png" />
+    <None Include="Resources\dockfighter.png" />
+    <None Include="Resources\datalinkscan.png" />
+    <None Include="Resources\datalinkvoucher.png" />
+    <None Include="Resources\crewhire.png" />
+    <None Include="Resources\crewfire.png" />
+    <None Include="Resources\crewassign.png" />
+    <None Include="Resources\communitygoaldiscard.png" />
+    <None Include="Resources\communitygoaljoin.png" />
+    <None Include="Resources\communitygoalreward.png" />
+    <None Include="Resources\changecrewrole.png" />
+    <None Include="Resources\datascanned.png" />
+    <None Include="Resources\fileheader.png" />
+    <None Include="Resources\clearsavedgame.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -1063,8 +1137,6 @@
     <None Include="Resources\repairall.png" />
     <None Include="Resources\repair.png" />
     <None Include="Resources\refuel.png" />
-    <None Include="Resources\moduleswap.png" />
-    <None Include="Resources\moduleretrieve.png" />
     <None Include="Resources\modulestore.png" />
     <None Include="Resources\modulesell.png" />
     <None Include="Resources\modulebuy.png" />
@@ -1076,7 +1148,6 @@
     <None Include="Resources\rank.png" />
     <None Include="Resources\progress.png" />
     <None Include="Resources\interdicted.png" />
-    <None Include="Resources\interdiction.png" />
     <None Include="Resources\screenshot.png" />
     <None Include="Resources\payfines.png" />
     <None Include="Resources\textreceived.png" />
@@ -1145,6 +1216,35 @@
     <None Include="Resources\ImportHelp.txt" />
     <None Include="Resources\speaker.png" />
     <None Include="Resources\microphone.png" />
+    <None Include="Resources\moduleretrieve.png" />
+    <None Include="Resources\moduleswap.png" />
+    <None Include="Resources\touchdown.png" />
+    <None Include="Resources\uss.png" />
+    <None Include="Resources\wingadd.png" />
+    <None Include="Resources\wingjoin.png" />
+    <None Include="Resources\wingleave.png" />
+    <None Include="Resources\synthesis.png" />
+    <None Include="Resources\scientificresearch.png" />
+    <None Include="Resources\scanned.png" />
+    <None Include="Resources\restocksrv.png" />
+    <None Include="Resources\restockfighter.png" />
+    <None Include="Resources\pvpkill.png" />
+    <None Include="Resources\quitacrew.png" />
+    <None Include="Resources\passengers.png" />
+    <None Include="Resources\materials.png" />
+    <None Include="Resources\launchsrv.png" />
+    <None Include="Resources\launchfighter.png" />
+    <None Include="Resources\interdiction.png" />
+    <None Include="Resources\jetconeboost.png" />
+    <None Include="Resources\jetconedamage.png" />
+    <None Include="Resources\joinacrew.png" />
+    <None Include="Resources\kickcrewmember.png" />
+    <None Include="Resources\miningrefined.png" />
+    <None Include="Resources\startjump.png" />
+    <None Include="Resources\loadout.png" />
+    <None Include="Resources\setusershipname.png" />
+    <None Include="Resources\sendtext.png" />
+    <None Include="Resources\receivetext.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
@@ -1223,7 +1323,7 @@
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SystemViewForm.resx">
+    <EmbeddedResource Include="Forms\Obsolete\SystemViewForm.resx">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SavedRouteExpeditionControl.resx">

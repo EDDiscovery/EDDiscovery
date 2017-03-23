@@ -50,6 +50,41 @@ namespace EDDiscovery
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
 
+        string[] spanelbuttonlist = new string[]            // MUST match PopOuts list order
+        {
+            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
+            "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
+            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration",
+        };
+
+        Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
+                                        EDDiscovery.Properties.Resources.star,
+                                        EDDiscovery.Properties.Resources.material ,
+                                        EDDiscovery.Properties.Resources.commodities,
+                                        EDDiscovery.Properties.Resources.ledger ,
+                                        EDDiscovery.Properties.Resources.journal ,
+                                        EDDiscovery.Properties.Resources.travelgrid ,
+                                        EDDiscovery.Properties.Resources.screenshot,
+                                        EDDiscovery.Properties.Resources.stats,
+                                        EDDiscovery.Properties.Resources.scan,
+                                        EDDiscovery.Properties.Resources.module,
+                                        EDDiscovery.Properties.Resources.sellexplorationdata,
+                                        };
+
+        string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
+                                               "Display the nearest stars to the currently selected entry",
+                                               "Display the material count at the currently selected entry",
+                                               "Display the commodity count at the currently selected entry",
+                                               "Display a ledger of cash related entries",
+                                               "Display the journal grid view",
+                                               "Display the history grid view",
+                                               "Display the screen shot view",
+                                               "Display statistics from the history",
+                                               "Display scan data",
+                                               "Display Loadout for current ships and also stored modules",
+                                               "Display Exploration view",
+                                            };
+
         HistoryEntry notedisplayedhe = null;            // remember the particulars of the note displayed, so we can save it later
 
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
@@ -74,37 +109,6 @@ namespace EDDiscovery
         public delegate void NearestStarList(string name, SortedList<double, ISystem> csl); // called when star computation has a new list
         public event NearestStarList OnNearestStarListChanged;
 
-        string[] tabbuttonlist = new string[] 
-        {
-            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", "Exploration", // not in tabs
-            "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
-            "Travel Grid" , "Screen Shot", "Statistics" , "Scan"
-        };
-
-        Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
-                                        EDDiscovery.Properties.Resources.star,      
-                                        EDDiscovery.Properties.Resources.material , 
-                                        EDDiscovery.Properties.Resources.commodities,
-                                        EDDiscovery.Properties.Resources.ledger , 
-                                        EDDiscovery.Properties.Resources.journal ,
-                                        EDDiscovery.Properties.Resources.travelgrid , 
-                                        EDDiscovery.Properties.Resources.screenshot,
-                                        EDDiscovery.Properties.Resources.stats, 
-                                        EDDiscovery.Properties.Resources.scan,
-                                        };
-
-        string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
-                                               "Display the nearest stars to the currently selected entry",
-                                               "Display the material count at the currently selected entry",
-                                               "Display the commodity count at the currently selected entry",
-                                               "Display a ledger of cash related entries",
-                                               "Display the journal grid view",
-                                               "Display the history grid view",
-                                               "Display the screen shot view",
-                                               "Display statistics from the history",
-                                               "Display scan data",
-                                            };
-
 
         #region Initialisation
 
@@ -124,7 +128,7 @@ namespace EDDiscovery
 
             comboBoxCustomPopOut.Enabled = false;
 
-            comboBoxCustomPopOut.Items.AddRange(tabbuttonlist);
+            comboBoxCustomPopOut.Items.AddRange(spanelbuttonlist);
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
@@ -173,7 +177,7 @@ namespace EDDiscovery
 
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
-            PopOutControl.PopOuts i = (PopOutControl.PopOuts)si;
+            PopOutControl.PopOuts i = (PopOutControl.PopOuts)(si + PopOutControl.PopOuts.StartTabButtons);
 
             _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
 
@@ -215,14 +219,10 @@ namespace EDDiscovery
             else if (ctrl is UserControlMaterials)
             {
                 UserControlMaterials ucm = ctrl as UserControlMaterials;
-                ucm.OnChangedCount += MaterialCommodityChangeCount;
-                ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
             }
             else if (ctrl is UserControlCommodities)
             {
                 UserControlCommodities ucm = ctrl as UserControlCommodities;
-                ucm.OnChangedCount += MaterialCommodityChangeCount;
-                ucm.OnRequestRefresh += MaterialCommodityRequireRefresh;
             }
             else if (ctrl is UserControlLedger)
             {
@@ -245,7 +245,7 @@ namespace EDDiscovery
 
         void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
         {
-            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)i);
+            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(i+ PopOutControl.PopOuts.StartTabButtons));
         }
 
         #endregion
@@ -346,7 +346,7 @@ namespace EDDiscovery
 
         private void NewStarListComputed(string name, SortedList<double, ISystem> csl)      // thread..
         {
-            Invoke((MethodInvoker)delegate
+            BeginInvoke((MethodInvoker)delegate
             {
                 lastclosestname = name;
                 lastclosestsystems = csl;
@@ -354,25 +354,6 @@ namespace EDDiscovery
                 if (OnNearestStarListChanged != null)
                     OnNearestStarListChanged(name, csl);
             });
-        }
-
-        #endregion
-
-        #region Material Commodities changers
-
-        void MaterialCommodityChangeCount(List<MaterialCommodities> changelist)
-        {
-            HistoryEntry he = userControlTravelGrid.GetCurrentHistoryEntry;
-            long jid = JournalEntry.AddEDDItemSet(EDCommander.CurrentCmdrID, he.EventTimeUTC, (he.EntryType == JournalTypeEnum.EDDItemSet) ? he.Journalid : 0, changelist);
-            userControlTravelGrid.SetPreferredJIDAfterRefresh(jid);         // tell the main grid, please find and move here
-            MaterialCommodity.LoadCacheList();        // in case we did anything..
-            _discoveryForm.RefreshHistoryAsync();
-        }
-
-        void MaterialCommodityRequireRefresh()
-        {
-            MaterialCommodity.LoadCacheList();        // in case we did anything..
-            _discoveryForm.RefreshHistoryAsync();
         }
 
         #endregion
@@ -392,7 +373,7 @@ namespace EDDiscovery
             {   // try is a bit old, probably do not need it.
                 if (he.IsFSDJump)
                 {
-                    int count = _discoveryForm.history.GetVisitsCount(he.System.name, he.System.id_edsm);
+                    int count = _discoveryForm.history.GetVisitsCount(he.System.name);
                     _discoveryForm.LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
 
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
@@ -431,33 +412,34 @@ namespace EDDiscovery
 
         public void ShowSystemInformation(DataGridViewRow rw)
         {
-            StoreSystemNote();      // save any previous note
+            StoreSystemNote(true);      // save any previous note
 
-            HistoryEntry syspos = null;
+            HistoryEntry he = null;
 
             if (rw == null)
             {
-                textBoxSystem.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
+                textBoxSystem.Text = textBoxBody.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
-                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = "";
+                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = textBoxSolDist.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
             }
             else
             {
-                syspos = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
-                Debug.Assert(syspos != null);
+                he = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
+                Debug.Assert(he != null);
 
-                _discoveryForm.history.FillEDSM(syspos, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
+                _discoveryForm.history.FillEDSM(he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
 
-                notedisplayedhe = syspos;
+                notedisplayedhe = he;
 
-                textBoxSystem.Text = syspos.System.name;
+                textBoxSystem.Text = he.System.name;
+                textBoxBody.Text = he.WhereAmI;
 
-                if (syspos.System.HasCoordinate)         // cursystem has them?
+                if (he.System.HasCoordinate)         // cursystem has them?
                 {
-                    textBoxX.Text = syspos.System.x.ToString(SingleCoordinateFormat);
-                    textBoxY.Text = syspos.System.y.ToString(SingleCoordinateFormat);
-                    textBoxZ.Text = syspos.System.z.ToString(SingleCoordinateFormat);
+                    textBoxX.Text = he.System.x.ToString(SingleCoordinateFormat);
+                    textBoxY.Text = he.System.y.ToString(SingleCoordinateFormat);
+                    textBoxZ.Text = he.System.z.ToString(SingleCoordinateFormat);
 
                     ISystem homesys = _discoveryForm.GetHomeSystem();
 
@@ -466,11 +448,12 @@ namespace EDDiscovery
                         homesys = new SystemClass("Sol", 0, 0, 0);
                     }
 
-                    double xdist = syspos.System.x - homesys.x;
-                    double ydist = syspos.System.y - homesys.y;
-                    double zdist = syspos.System.z - homesys.z;
+                    double xdist = he.System.x - homesys.x;
+                    double ydist = he.System.y - homesys.y;
+                    double zdist = he.System.z - homesys.z;
 
                     textBoxHomeDist.Text = Math.Sqrt(xdist * xdist + ydist * ydist + zdist * zdist).ToString("0.00");
+                    textBoxSolDist.Text = Math.Sqrt(he.System.x * he.System.x + he.System.y * he.System.y + he.System.z * he.System.z).ToString("0.00");
                 }
                 else
                 {
@@ -478,26 +461,41 @@ namespace EDDiscovery
                     textBoxY.Text = "?";
                     textBoxZ.Text = "?";
                     textBoxHomeDist.Text = "";
+                    textBoxSolDist.Text = "";
                 }
 
-                int count = _discoveryForm.history.GetVisitsCount(syspos.System.name, syspos.System.id_edsm);
+                int count = _discoveryForm.history.GetVisitsCount(he.System.name);
                 textBoxVisits.Text = count.ToString();
 
-                bool enableedddross = (syspos.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
+                bool enableedddross = (he.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
 
                 buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
 
-                textBoxAllegiance.Text = syspos.System.allegiance.ToNullUnknownString();
-                textBoxEconomy.Text = syspos.System.primary_economy.ToNullUnknownString();
-                textBoxGovernment.Text = syspos.System.government.ToNullUnknownString();
-                textBoxState.Text = syspos.System.state.ToNullUnknownString();
-                richTextBoxNote.Text = syspos.snc != null ? syspos.snc.Note : "";
+                textBoxAllegiance.Text = he.System.allegiance.ToNullUnknownString();
+                textBoxEconomy.Text = he.System.primary_economy.ToNullUnknownString();
+                textBoxGovernment.Text = he.System.government.ToNullUnknownString();
+                textBoxState.Text = he.System.state.ToNullUnknownString();
+                richTextBoxNote.Text = he.snc != null ? he.snc.Note : "";
 
-                _discoveryForm.CalculateClosestSystems(syspos.System, (s, d) => NewStarListComputed(s.name, d));
+                _discoveryForm.CalculateClosestSystems(he.System, (s, d) => NewStarListComputed(s.name, d));
             }
 
             if (OnTravelSelectionChanged != null)
-                OnTravelSelectionChanged(syspos, _discoveryForm.history);
+                OnTravelSelectionChanged(he, _discoveryForm.history);
+        }
+
+        public void UpdateNoteJID(long jid, string txt)
+        {
+            userControlTravelGrid.UpdateNoteJID(jid, txt);
+            if (notedisplayedhe != null && notedisplayedhe.Journalid == jid)
+            {
+                string oldtext = richTextBoxNote.Text.Trim();
+
+                if (oldtext != txt)
+                {
+                    richTextBoxNote.Text = txt;
+                }
+            }
         }
 
         #endregion
@@ -522,9 +520,9 @@ namespace EDDiscovery
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)PopOutControl.PopOuts.Scan );
-            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)PopOutControl.PopOuts.Log );
-            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)PopOutControl.PopOuts.StarDistance);
+            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons));
+            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons) );
+            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons));
         }
 
         public void SaveSettings()     // called by form when closing
@@ -626,32 +624,17 @@ namespace EDDiscovery
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
-            StoreSystemNote();
+            StoreSystemNote(true);
         }
 
         private void richTextBoxNote_TextChanged(object sender, EventArgs e)
         {
-            userControlTravelGrid.UpdateCurrentNote(richTextBoxNote.Text);
-            if (userControlTravelGrid.GetCurrentHistoryEntry != null )
-                _discoveryForm.PopOuts.UpdateNoteJID(userControlTravelGrid.GetCurrentHistoryEntry.Journalid, richTextBoxNote.Text);
+            StoreSystemNote(false);
         }
 
-        private void StoreSystemNote()
+        private void StoreSystemNote(bool send)
         {
-            if (this.notedisplayedhe != null)
-            {
-                string txt = richTextBoxNote.Text.Trim();
-
-                if ( notedisplayedhe.UpdateSystemNote(txt) )
-                { 
-                    if (EDCommander.Current.SyncToEdsm && notedisplayedhe.IsFSDJump)       // only send on FSD jumps
-                        EDSMSync.SendComments(notedisplayedhe.snc.Name, notedisplayedhe.snc.Note, notedisplayedhe.snc.EdsmId);
-
-                    _discoveryForm.Map.UpdateNote();
-                }
-
-                notedisplayedhe = null; // now not longer need to remember, note has been updated
-            }
+            _discoveryForm.StoreSystemNote(notedisplayedhe, richTextBoxNote.Text.Trim(), send);
         }
 
         public void buttonSync_Click(object sender, EventArgs e)
@@ -660,7 +643,7 @@ namespace EDDiscovery
 
             if (!edsm.IsApiKeySet)
             {
-                MessageBox.Show("Please ensure a commander is selected and it has a EDSM API key set");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
                 return;
             }
 
@@ -717,7 +700,7 @@ namespace EDDiscovery
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         Process.Start(url);
                     else
-                        MessageBox.Show("System unknown to EDSM");
+                        EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
                 }
             }
         }
@@ -744,18 +727,7 @@ namespace EDDiscovery
             if (!comboBoxCustomPopOut.Enabled)
                 return;
 
-            if (comboBoxCustomPopOut.SelectedIndex == 0)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.Spanel);
-            else if (comboBoxCustomPopOut.SelectedIndex == 1)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.Trippanel);
-            else if (comboBoxCustomPopOut.SelectedIndex == 2)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.NotePanel);
-            else if (comboBoxCustomPopOut.SelectedIndex == 3)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.RouteTracker);
-            else if (comboBoxCustomPopOut.SelectedIndex == 4)
-                _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.Exploration);
-            else
-                _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex - 5));
+            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex));
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.SelectedIndex = 0;

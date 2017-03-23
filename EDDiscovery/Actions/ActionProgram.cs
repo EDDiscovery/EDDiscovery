@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionProgram
+    public class ActionProgram              // HOLDS the program, can write it JSON or Text FILES
     {
         protected List<Action> programsteps;
         public string Name { get; set; }
@@ -84,7 +84,7 @@ namespace EDDiscovery.Actions
 
         #region to/from JSON
 
-        public JObject ToJSON()
+        public JObject ToJSON()                         // write to JSON the program..
         {
             JObject prog = new JObject();
             prog["Name"] = Name;
@@ -100,8 +100,12 @@ namespace EDDiscovery.Actions
                     JObject step = new JObject();
                     step["StepName"] = ac.Name;
                     step["StepUC"] = ac.UserData;
-                    step["StepLevelUp"] = ac.LevelUp;
-                    step["StepWhitespace"] = ac.Whitespace;
+                    if ( ac.LevelUp != 0 )                      // reduces file size
+                        step["StepLevelUp"] = ac.LevelUp;
+                    if ( ac.Whitespace != 0 )
+                        step["StepWhitespace"] = ac.Whitespace;
+                    if (ac.Comment.Length > 0)
+                        step["StepComment"] = ac.Comment;
 
                     jf.Add(step);
                 }
@@ -112,7 +116,7 @@ namespace EDDiscovery.Actions
             return prog;
         }
 
-        static public string FromJSON(JObject j , out ActionProgram ap )
+        static public string FromJSON(JObject j , out ActionProgram ap )        // Read from JSON the program
         {
             ap = null;
             string errlist = "";
@@ -130,10 +134,11 @@ namespace EDDiscovery.Actions
                 {
                     string stepname = (string)js["StepName"];
                     string stepUC = (string)js["StepUC"];
-                    int stepLU = (int)js["StepLevelUp"];
-                    int whitespace = JSONHelper.GetInt(js["StepWhitespace"], 0);     // was not in earlier version, optional
+                    int stepLU = JSONHelper.GetInt(js["StepLevelUp"],0);                // optional
+                    int whitespace = JSONHelper.GetInt(js["StepWhitespace"], 0);        // was not in earlier version, optional
+                    string comment = JSONHelper.GetStringDef(js["StepComment"], "");    // was not in earlier version, optional
 
-                    Action cmd = Action.CreateAction(stepname, stepUC, stepLU, whitespace);
+                    Action cmd = Action.CreateAction(stepname, stepUC, comment, stepLU, whitespace);
 
                     if (cmd != null && cmd.VerifyActionCorrect() == null)                  // throw away ones with bad names
                     {
@@ -167,7 +172,7 @@ namespace EDDiscovery.Actions
 
         #region to/from File
 
-        static public ActionProgram FromFile(string file, out string err)
+        static public ActionProgram FromFile(string file, out string err)               // Read from File the program
         {
             try
             {
@@ -178,7 +183,7 @@ namespace EDDiscovery.Actions
             }
             catch
             {
-                err = "File IO failure";
+                err = "File " + file + " missing or IO failure";
                 return null;
             }
         }
@@ -208,7 +213,6 @@ namespace EDDiscovery.Actions
             while (( completeline = sr.ReadLine() )!=null)
             {
                 completeline = completeline.Replace("\t", "    ");  // detab, to spaces, tabs are worth 4.
-
                 StringParser p = new StringParser(completeline);
 
                 if (!p.IsEOL)
@@ -217,13 +221,23 @@ namespace EDDiscovery.Actions
                     string cmd = p.NextWord();      // space separ
                     string line = p.LineLeft;       // and the rest of the line..
 
+                    int commentpos = line.LastIndexOf("//");
+                    string comment = "";
+
+                    if (commentpos >= 0 && !line.InQuotes(commentpos))
+                    {
+                        comment = line.Substring(commentpos + 2).Trim();
+                        line = line.Substring(0, commentpos).TrimEnd();
+                        System.Diagnostics.Debug.WriteLine("Line <" + line + "> <" + comment + ">");
+                    }
+
                     if (cmd.Equals("Name", StringComparison.InvariantCultureIgnoreCase))
                         progname = line;
                     else if (cmd.Equals("File", StringComparison.InvariantCultureIgnoreCase))
                         storedinfile = line;
                     else
                     {
-                        Action a = Action.CreateAction(cmd, line, 0);
+                        Action a = Action.CreateAction(cmd, line, comment);
                         string vmsg;
 
                         if (a == null)
@@ -297,7 +311,7 @@ namespace EDDiscovery.Actions
             return (err.Length == 0 && progname.Length>0) ? new ActionProgram(progname, storedinfile, prog) : null;
         }
 
-        public bool SaveText(string file)
+        public bool SaveText(string file)                       // write to file the program
         {
             CalculateLevels();
 
@@ -315,8 +329,12 @@ namespace EDDiscovery.Actions
                     {
                         if (act != null)    // don't include ones not set..
                         {
-                            sr.Write(new String(' ', act.calcDisplayLevel * 4));
-                            sr.WriteLine(act.Name + " " + act.UserData);
+                            string output = new String(' ', act.calcDisplayLevel * 4) + act.Name + " " + act.UserData;
+
+                            if (act.Comment.Length > 0)
+                                output += new string(' ', output.Length < 64 ? (64 - output.Length) : 4) + "// " + act.Comment;
+
+                            sr.WriteLine(output);
                             if (act.Whitespace > 0)
                                 sr.WriteLine("");
                         }
@@ -331,7 +349,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        public bool StoreOnDisk(string filename)
+        public bool StoreOnDisk(string filename)    // indicate to save on disk
         {
             if (SaveText(filename))
             {
@@ -516,129 +534,5 @@ namespace EDDiscovery.Actions
         }
 
         #endregion
-    }
-
-
-    // holder of programs
-
-    public class ActionProgramList
-    {
-        public ActionProgramList()
-        {
-            Clear();
-        }
-
-        private List<ActionProgram> programs;
-
-        public ActionProgram Get(string name)
-        {
-            int existing = programs.FindIndex(x => x.Name.Equals(name));
-
-            return (existing >= 0) ? programs[existing] : null;
-        }
-
-        public string[] GetActionProgramList(bool markfileasext = false )
-        {
-            string[] ret = new string[programs.Count];
-            for (int i = 0; i < programs.Count; i++)
-            {
-                ret[i] = programs[i].Name;
-                if (markfileasext && programs[i].StoredInFile != null)
-                    ret[i] += " (Ext)";
-            }
-
-            return ret;
-        }
-
-        public void Clear()
-        {
-            programs = new List<ActionProgram>();
-        }
-
-        public string ToJSON()
-        {
-            return ToJSONObject().ToString();
-        }
-
-        public JObject ToJSONObject()
-        {
-            JObject evt = new JObject();
-
-            JArray jf = new JArray();
-
-            foreach (ActionProgram ap in programs)
-            {
-                JObject j1 = ap.ToJSON();
-                jf.Add(j1);
-            }
-
-            evt["ProgramSet"] = jf;
-
-            return evt;
-        }
-
-        public string FromJSON(string s)
-        {
-            try
-            {
-                JObject jo = (JObject)JObject.Parse(s);
-                return FromJSONObject(jo);
-            }
-            catch
-            {
-                return "Exception Bad JSON";
-            }
-        }
-
-        public string FromJSONObject(JObject jo)
-        {
-            string errlist = "";
-
-            try
-            {
-                Clear();
-
-                JArray jf = (JArray)jo["ProgramSet"];
-
-
-                foreach (JObject j in jf)
-                {
-                    ActionProgram ap;
-                    string err = ActionProgram.FromJSON(j, out ap);
-
-                    if (err.Length == 0 && ap!=null)         // if can't load, we can't trust the pack, so indicate error so we can let the user manually sort it out
-                        programs.Add(ap);
-                    else
-                        errlist += err;
-                }
-
-                return errlist;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Dump:" + ex.StackTrace);
-                errlist = "Exception bad JSON";
-            }
-
-            return errlist;
-        }
-
-        public void AddOrChange(ActionProgram ap)
-        {
-            int existing = programs.FindIndex(x => x.Name.Equals(ap.Name));
-
-            if (existing >= 0)
-                programs[existing] = ap;
-            else
-                programs.Add(ap);
-        }
-
-        public void Delete(string name)
-        {
-            int existing = programs.FindIndex(x => x.Name.Equals(name));
-
-            if (existing >= 0)
-                programs.RemoveAt(existing);
-        }
     }
 }

@@ -5,16 +5,18 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
+using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
@@ -33,26 +35,27 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public long Reward;
         }
 
-        public JournalBounty(JObject evt ) : base(evt, JournalTypeEnum.Bounty)
+        public JournalBounty(JObject evt) : base(evt, JournalTypeEnum.Bounty)
         {
-            TotalReward = JSONHelper.GetLong(evt["TotalReward"]);     // others of them..
+            TotalReward = evt["TotalReward"].Long();     // others of them..
 
-            VictimFaction = JSONHelper.GetStringDef(evt["VictimFaction"]);
-            VictimFactionLocalised = JSONHelper.GetStringDef(evt["VictimFaction_Localised"]); // may not be present
+            VictimFaction = evt["VictimFaction"].Str();
+            VictimFactionLocalised = evt["VictimFaction_Localised"].Str(); // may not be present
 
-            SharedWithOthers = JSONHelper.GetBool(evt["SharedWithOthers"],false);
+            SharedWithOthers = evt["SharedWithOthers"].Bool(false);
             Rewards = evt["Rewards"]?.ToObject<BountyReward[]>();
         }
 
         public long TotalReward { get; set; }
         public string VictimFaction { get; set; }
         public string VictimFactionLocalised { get; set; }
+        public string Target { get; set; }
         public bool SharedWithOthers { get; set; }
         public BountyReward[] Rewards { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.bounty; } }
 
-        public void LedgerNC(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string n = (VictimFactionLocalised.Length > 0) ? VictimFactionLocalised : VictimFaction;
             n += " total " + TotalReward.ToString("N0");
@@ -60,7 +63,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, n);
         }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("; credits", TotalReward, "Target:", (string)Target, "Victim faction:", VictimFactionLocalised.Alt(VictimFaction));
+
+            detailed = "";
+            if ( Rewards!=null)
+            {
+                foreach (BountyReward r in Rewards)
+                {
+                    if (detailed.Length > 0)
+                        detailed += ", ";
+
+                    detailed += Tools.FieldBuilder("Faction:", r.Faction, "; credits", r.Reward);
+                }
+            }
+        }
     }
-
-
 }

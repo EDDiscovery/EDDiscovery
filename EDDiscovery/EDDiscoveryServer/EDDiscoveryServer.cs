@@ -84,7 +84,7 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                //MessageBox.Show("Exception in EDSCRequest: " + ex.Message);
+                //EDDiscovery.Forms.MessageBoxTheme.Show("Exception in EDSCRequest: " + ex.Message);
                 return null;
             }
         }
@@ -134,7 +134,7 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                //MessageBox.Show("Exception in EDSCRequest: " + ex.Message);
+                //EDDiscovery.Forms.MessageBoxTheme.Show("Exception in EDSCRequest: " + ex.Message);
                 return null;
             }
 

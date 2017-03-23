@@ -40,7 +40,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser p = new StringParser(res);
 
@@ -53,8 +53,8 @@ namespace EDDiscovery.Actions
 
                         if (rest != null && rest.Length > 0)
                         {
-                            ConditionVariables filtered = ap.currentvars.FilterVars(rest);
-                            foreach (string key in filtered.Keys)
+                            ConditionVariables filtered = ap.variables.FilterVars(rest);
+                            foreach (string key in filtered.NameEnumuerable)
                             {
                                 ap.actioncontroller.LogLine(key + "=" + filtered[key]);
                             }

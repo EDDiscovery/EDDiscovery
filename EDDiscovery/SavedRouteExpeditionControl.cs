@@ -372,7 +372,7 @@ namespace EDDiscovery
 
             if (!newroute.Equals(_currentRoute))
             {
-                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                var result = EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (result == DialogResult.No)
                 {
                     toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
@@ -451,7 +451,7 @@ namespace EDDiscovery
 
             if (String.IsNullOrEmpty(_currentRoute.Name))
             {
-                var result = MessageBox.Show(_discoveryForm, "Please specify a name for the route.", "Unsaved route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                var result = EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "Please specify a name for the route.", "Unsaved route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBoxRouteName.Select();
                 return;
             }
@@ -475,7 +475,7 @@ namespace EDDiscovery
 
             if (!newroute.Equals(_currentRoute))
             {
-                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                var result = EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (result == DialogResult.No)
                 {
                     toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
@@ -520,7 +520,7 @@ namespace EDDiscovery
             }
             else
             {
-                MessageBox.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
+                EDDiscovery.Forms.MessageBoxTheme.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
                 return;
             }
         }
@@ -763,7 +763,7 @@ namespace EDDiscovery
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(_discoveryForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (DeleteIsPermanent)
                 {
@@ -787,7 +787,7 @@ namespace EDDiscovery
             UpdateRouteInfo(newroute);
             if (!newroute.Equals(_currentRoute))
             {
-                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
+                var result = EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
                     + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (result == DialogResult.No)
                     return;
@@ -810,7 +810,7 @@ namespace EDDiscovery
             }
             catch (IOException)
             {
-                MessageBox.Show(String.Format("There was an error reading {0}", ofd.FileName), "Import route",
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("There was an error reading {0}", ofd.FileName), "Import route",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -829,7 +829,7 @@ namespace EDDiscovery
             }
             if (systems.Count == 0)
             {
-                MessageBox.Show(_discoveryForm,
+                EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm,
                     String.Format("The imported file contains no known system names"),
                     "Import route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -847,7 +847,7 @@ namespace EDDiscovery
             if (_discoveryForm.RouteControl.RouteSystems == null
                 || _discoveryForm.RouteControl.RouteSystems.Count == 0)
             {
-                MessageBox.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
                 return;
             }
 
@@ -855,7 +855,7 @@ namespace EDDiscovery
             UpdateRouteInfo(newroute);
             if (!newroute.Equals(_currentRoute))
             {
-                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
+                var result = EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
                     + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (result == DialogResult.No)
                     return;
@@ -880,7 +880,7 @@ namespace EDDiscovery
                 if (dataGridViewRouteSystems.Rows.Count == 0
                     || (dataGridViewRouteSystems.Rows.Count == 1 && dataGridViewRouteSystems[0, 0].Value == null))
                 {
-                    MessageBox.Show(_discoveryForm,
+                    EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm,
                     "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
@@ -912,11 +912,11 @@ namespace EDDiscovery
                             writer.WriteLine(sysname);
                     }
                 }
-                MessageBox.Show(String.Format("Export complete {0}", filename), "Export route");
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Export complete {0}", filename), "Export route");
             }
             catch (IOException)
             {
-                MessageBox.Show(String.Format("Is file {0} open?", filename), "Export route",
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export route",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -948,7 +948,7 @@ namespace EDDiscovery
             SystemClass sc = SystemClass.GetSystem((string)obj);
             if (sc == null)
             {
-                MessageBox.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                EDDiscovery.Forms.MessageBoxTheme.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
                 RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);

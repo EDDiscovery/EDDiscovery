@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -22,28 +22,37 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	To: ( Mothership/Fighter)
     [JournalEntryType(JournalTypeEnum.VehicleSwitch)]
-    public class JournalVehicleSwitch : JournalEntry
+    public class JournalVehicleSwitch : JournalEntry, IShipInformation
     {
         public JournalVehicleSwitch(JObject evt ) : base(evt, JournalTypeEnum.VehicleSwitch)
         {
-            To = JSONHelper.GetStringDef(evt["To"]);
+            To = evt["To"].Str();
+            if (To.Length == 0)             // Frontier BUG, sometimes To is missing
+                To = "Mothership";
         }
         public string To { get; set; }
 
-        public static System.Drawing.Bitmap IconSelect(string desc)
+        public override System.Drawing.Bitmap Icon
         {
-            if (desc.Contains("Mothership"))
-                return EDDiscovery.Properties.Resources.mothership;
-            else
-                return EDDiscovery.Properties.Resources.fighter;
+            get
+            {
+                if (To.Contains("Mothership"))
+                    return EDDiscovery.Properties.Resources.mothership;
+                else
+                    return EDDiscovery.Properties.Resources.fighter;
+            }
         }
 
-        public override System.Drawing.Bitmap GetIcon()
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
-            if (To.Contains("Mothership"))
-                return EDDiscovery.Properties.Resources.mothership;
-            else
-                return EDDiscovery.Properties.Resources.fighter;
+            shp.VehicleSwitch(To);
+        }
+
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = To; 
+            detailed = "";
         }
     }
 }

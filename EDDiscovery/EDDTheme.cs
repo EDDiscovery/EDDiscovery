@@ -299,7 +299,7 @@ namespace EDDiscovery2
 
             if ( themeidstored != -1 && themeidstored != Settings.ThemeID )
             {
-                //DialogResult res = MessageBox.Show("The theme stored has missing colors or other missing information" + Environment.NewLine +
+                //DialogResult res = EDDiscovery.Forms.MessageBoxTheme.Show("The theme stored has missing colors or other missing information" + Environment.NewLine +
                 //      "that this new version of EDDiscovery needs." + Environment.NewLine + Environment.NewLine +
                 //      "Choose OK to use the stored theme, and then correct the missing colors or other information manually using the Theme Editor in Settings" + Environment.NewLine + Environment.NewLine +
                 //      "Choose Cancel to go back to windows default, then pick a new standard theme.", "ED Discovery Theme Warning!" , MessageBoxButtons.OKCancel);

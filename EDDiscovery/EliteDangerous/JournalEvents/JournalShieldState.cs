@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -28,22 +28,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShieldState(JObject evt ) : base(evt, JournalTypeEnum.ShieldState)
         {
-            ShieldsUp = JSONHelper.GetBool(evt["ShieldsUp"]);
+            ShieldsUp = evt["ShieldsUp"].Bool();
 
         }
         public bool ShieldsUp { get; set; }
 
-        public static System.Drawing.Bitmap IconSelect(string desc)
+        public override System.Drawing.Bitmap Icon
         {
-            if (desc.Contains("Down"))
-                return EDDiscovery.Properties.Resources.shieldsdown;
-            else
-                return EDDiscovery.Properties.Resources.shieldsup;
+            get
+            {
+                return ShieldsUp ? EDDiscovery.Properties.Resources.shieldsup : EDDiscovery.Properties.Resources.shieldsdown;
+            }
         }
 
-        public override System.Drawing.Bitmap GetIcon()
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
-            return ShieldsUp ? EDDiscovery.Properties.Resources.shieldsup : EDDiscovery.Properties.Resources.shieldsdown;
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("Shields Down;Shields Up",ShieldsUp);
+            detailed = "";
         }
     }
 }

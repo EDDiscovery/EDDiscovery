@@ -41,7 +41,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
                 string prefix = "P_";
@@ -69,9 +69,9 @@ namespace EDDiscovery.Actions
                 }
                 else if (cmdname.Equals("Status", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    ap.currentvars[prefix + "Count"] = poc.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "Count"] = poc.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     for (int i = 0; i < poc.Count; i++)
-                        ap.currentvars[prefix + i.ToString(System.Globalization.CultureInfo.InvariantCulture)] = poc[i].Name;
+                        ap[prefix + i.ToString(System.Globalization.CultureInfo.InvariantCulture)] = poc[i].Name;
                 }
                 else
                 {
@@ -85,19 +85,19 @@ namespace EDDiscovery.Actions
                     }
                     else if ( nextcmd.Equals("status"))
                     {
-                        ap.currentvars[prefix + "Exists"] = (ucf != null) ? "1" : "0";
+                        ap[prefix + "Exists"] = (ucf != null) ? "1" : "0";
 
                         if ( ucf!= null)
                         {
-                            ap.currentvars[prefix + "Transparent"] = ucf.istransparent ? "1" : "0";
-                            ap.currentvars[prefix + "TopMost"] = ucf.TopMost ? "1" : "0";
-                            ap.currentvars[prefix + "DisplayTitle"] = ucf.displayTitle ? "1" : "0";
-                            ap.currentvars[prefix + "ShowInTaskbar"] = ucf.ShowInTaskbar ? "1" : "0";
-                            ap.currentvars[prefix + "WindowState"] = ucf.WindowState.ToString();
-                            ap.currentvars[prefix + "Top"] = ucf.Top.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                            ap.currentvars[prefix + "Left"] = ucf.Left.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                            ap.currentvars[prefix + "Width"] = ucf.Width.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                            ap.currentvars[prefix + "Height"] = ucf.Height.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            ap[prefix + "Transparent"] = ucf.istransparent ? "1" : "0";
+                            ap[prefix + "TopMost"] = ucf.TopMost ? "1" : "0";
+                            ap[prefix + "DisplayTitle"] = ucf.displayTitle ? "1" : "0";
+                            ap[prefix + "ShowInTaskbar"] = ucf.ShowInTaskbar ? "1" : "0";
+                            ap[prefix + "WindowState"] = ucf.WindowState.ToString();
+                            ap[prefix + "Top"] = ucf.Top.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            ap[prefix + "Left"] = ucf.Left.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            ap[prefix + "Width"] = ucf.Width.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            ap[prefix + "Height"] = ucf.Height.ToString(System.Globalization.CultureInfo.InvariantCulture);
                         }
                     }
                     else if (ucf != null)        // found a panel with the name
@@ -130,13 +130,10 @@ namespace EDDiscovery.Actions
                             ucf.WindowState = FormWindowState.Maximized;
                         else if (nextcmd.Equals("location"))
                         {
-                            int? x = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? y = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? w = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? h = sp.GetInt();
+                            int? x = sp.NextWordComma().InvariantParseIntNull();
+                            int? y = sp.NextWordComma().InvariantParseIntNull();
+                            int? w = sp.NextWordComma().InvariantParseIntNull();
+                            int? h = sp.NextWord().InvariantParseIntNull();
 
                             if (x.HasValue && y.HasValue && w.HasValue && h.HasValue)
                             {
@@ -148,10 +145,8 @@ namespace EDDiscovery.Actions
                         }
                         else if (nextcmd.Equals("position"))
                         {
-                            int? x = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? y = sp.GetInt();
-                            sp.IsCharMoveOn(',');
+                            int? x = sp.NextWordComma().InvariantParseIntNull();
+                            int? y = sp.NextWord().InvariantParseIntNull();
 
                             if (x.HasValue && y.HasValue)
                                 ucf.Location = new Point(x.Value, y.Value);
@@ -160,9 +155,8 @@ namespace EDDiscovery.Actions
                         }
                         else if (nextcmd.Equals("size"))
                         {
-                            int? w = sp.GetInt();
-                            sp.IsCharMoveOn(',');
-                            int? h = sp.GetInt();
+                            int? w = sp.NextWordComma().InvariantParseIntNull();
+                            int? h = sp.NextWord().InvariantParseIntNull();
 
                             if (w.HasValue && h.HasValue)
                                 ucf.Size = new Size(w.Value, h.Value);

@@ -58,13 +58,12 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.labelTime = new System.Windows.Forms.Label();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.labelTime = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.contextMenuStripLedger.SuspendLayout();
@@ -88,7 +87,7 @@ namespace EDDiscovery.UserControls
             // labelNoItems
             // 
             this.labelNoItems.AutoSize = true;
-            this.labelNoItems.Location = new System.Drawing.Point(3, 33);
+            this.labelNoItems.Location = new System.Drawing.Point(3, 78);
             this.labelNoItems.Name = "labelNoItems";
             this.labelNoItems.Size = new System.Drawing.Size(82, 13);
             this.labelNoItems.TabIndex = 2;
@@ -216,7 +215,6 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Controls.Add(this.labelTime);
             this.panelButtons.Controls.Add(this.buttonFilter);
             this.panelButtons.Controls.Add(this.textBoxFilter);
-            this.panelButtons.Controls.Add(this.label2);
             this.panelButtons.Controls.Add(this.label1);
             this.panelButtons.Controls.Add(this.comboBoxHistoryWindow);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
@@ -224,6 +222,15 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
+            // 
+            // labelTime
+            // 
+            this.labelTime.AutoSize = true;
+            this.labelTime.Location = new System.Drawing.Point(64, 7);
+            this.labelTime.Name = "labelTime";
+            this.labelTime.Size = new System.Drawing.Size(30, 13);
+            this.labelTime.TabIndex = 26;
+            this.labelTime.Text = "Time";
             // 
             // buttonFilter
             // 
@@ -249,15 +256,6 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.TabIndex = 1;
             this.toolTip1.SetToolTip(this.textBoxFilter, "Display entries matching this string");
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Ledger";
             // 
             // label1
             // 
@@ -299,15 +297,6 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // labelTime
-            // 
-            this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(64, 7);
-            this.labelTime.Name = "labelTime";
-            this.labelTime.Size = new System.Drawing.Size(30, 13);
-            this.labelTime.TabIndex = 26;
-            this.labelTime.Text = "Time";
-            // 
             // UserControlLedger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -334,7 +323,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.Label labelNoItems;
         private ExtendedControls.ButtonExt buttonFilter;
-        private System.Windows.Forms.Label label2;
         internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
         private System.Windows.Forms.Label label1;
         private ExtendedControls.TextBoxBorder textBoxFilter;

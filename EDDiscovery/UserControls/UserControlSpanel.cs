@@ -354,7 +354,7 @@ namespace EDDiscovery.UserControls
                 if ( coldata[i].Equals("`!!ICON!!") )            // marker for ICON..
                 {
                     Bitmap img = he.GetIcon;
-                    ExtendedControls.PictureBoxHotspot.ImageElement e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum+i], rowpos, img.Width, img.Height), img, null, null);
+                    ExtendedControls.PictureBoxHotspot.ImageElement e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum+i], rowpos, img.Width, img.Height), img, null, null, false);
                     e.Translate(0, (rowheight - e.img.Height) / 2);          // align to centre of rowh..
                 }
                 else
@@ -496,7 +496,7 @@ namespace EDDiscovery.UserControls
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        MessageBox.Show("System " + he.System.name + " unknown to EDSM");
+                        EDDiscovery.Forms.MessageBoxTheme.Show("System " + he.System.name + " unknown to EDSM");
                 }
             }
         }
@@ -842,7 +842,7 @@ namespace EDDiscovery.UserControls
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
-            frm.InitFilter("Summary Panel: Filter out fields", discoveryform.Globals.KeyList, discoveryform, fieldfilter);
+            frm.InitFilter("Summary Panel: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

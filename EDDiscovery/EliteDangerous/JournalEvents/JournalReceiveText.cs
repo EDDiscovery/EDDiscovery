@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -28,11 +28,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalReceiveText(JObject evt) : base(evt, JournalTypeEnum.ReceiveText)
         {
-            From = JSONHelper.GetStringDef(evt["From"]);
-            FromLocalised = JSONHelper.GetStringDef(evt["From_Localised"]);
-            Message = JSONHelper.GetStringDef(evt["Message"]);
-            MessageLocalised = JSONHelper.GetStringDef(evt["Message_Localised"]);
-            Channel = JSONHelper.GetStringDef(evt["Channel"]);
+            From = evt["From"].Str();
+            FromLocalised = evt["From_Localised"].Str();
+            Message = evt["Message"].Str();
+            MessageLocalised = evt["Message_Localised"].Str();
+            Channel = evt["Channel"].Str();
 
         }
         public string From { get; set; }
@@ -41,7 +41,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string MessageLocalised { get; set; }
         public string Channel { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.textreceived; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.receivetext; } }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("From:", FromLocalised.Alt(From), "Msg:", MessageLocalised.Alt(Message), "Channel:", Channel);
+            detailed = "";
+        }
     }
 }

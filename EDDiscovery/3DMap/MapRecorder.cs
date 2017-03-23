@@ -296,11 +296,11 @@ namespace EDDiscovery2._3DMap
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     if ( !SaveToFile(dlg.FileName) )
-                        MessageBox.Show("Failed to save flight - check file path");
+                        EDDiscovery.Forms.MessageBoxTheme.Show("Failed to save flight - check file path");
                 }
             }
             else
-                MessageBox.Show("No flight recorded");
+                EDDiscovery.Forms.MessageBoxTheme.Show("No flight recorded");
         }
 
         public void LoadDialog()
@@ -322,7 +322,7 @@ namespace EDDiscovery2._3DMap
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 if (!ReadFromFile(dlg.FileName))
-                    MessageBox.Show("Failed to load flight " + dlg.FileName + ". Check file path and file contents");
+                    EDDiscovery.Forms.MessageBoxTheme.Show("Failed to load flight " + dlg.FileName + ". Check file path and file contents");
             }
         }
 

@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
         private void buttonField_Click(object sender, EventArgs e)
         {
             EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
-            frm.InitFilter("Journal: Filter out fields", discoveryform.Globals.KeyList, discoveryform, fieldfilter);
+            frm.InitFilter("Journal: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
@@ -354,7 +354,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                MessageBox.Show("System could not be found - has not been synched or EDSM is unavailable");
+                EDDiscovery.Forms.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }

@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                StatToDGV("Visits", hl.GetVisitsCount(he.System.name, he.System.id_edsm) + " to system " + he.System.name);
+                StatToDGV("Visits", hl.GetVisitsCount(he.System.name) + " to system " + he.System.name);
                 StatToDGV("Jumps Before System", hl.GetFSDJumpsBeforeUTC(he.EventTimeUTC));
             }
 
@@ -141,12 +141,12 @@ namespace EDDiscovery.UserControls
                 HistoryEntry down = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.y < l; if (v) l = s.System.y; return v; });
 
-                StatToDGV("Most North", north.System.name + " @ " + north.System.x.ToString("0.0") + "," + north.System.y.ToString("0.0") + "," + north.System.z.ToString("0.0"));
-                StatToDGV("Most South", south.System.name + " @ " + south.System.x.ToString("0.0") + "," + south.System.y.ToString("0.0") + "," + south.System.z.ToString("0.0"));
-                StatToDGV("Most East", east.System.name + " @ " + east.System.x.ToString("0.0") + "," + east.System.y.ToString("0.0") + "," + east.System.z.ToString("0.0"));
-                StatToDGV("Most West", west.System.name + " @ " + west.System.x.ToString("0.0") + "," + west.System.y.ToString("0.0") + "," + west.System.z.ToString("0.0"));
-                StatToDGV("Most Highest", up.System.name + " @ " + up.System.x.ToString("0.0") + "," + up.System.y.ToString("0.0") + "," + up.System.z.ToString("0.0"));
-                StatToDGV("Most Lowest", down.System.name + " @ " + down.System.x.ToString("0.0") + "," + down.System.y.ToString("0.0") + "," + down.System.z.ToString("0.0"));
+                StatToDGV("Most North", north.System.name + " @ " + north.System.x.ToString("0.0") + "; " + north.System.y.ToString("0.0") + "; " + north.System.z.ToString("0.0"));
+                StatToDGV("Most South", south.System.name + " @ " + south.System.x.ToString("0.0") + "; " + south.System.y.ToString("0.0") + "; " + south.System.z.ToString("0.0"));
+                StatToDGV("Most East", east.System.name + " @ " + east.System.x.ToString("0.0") + "; " + east.System.y.ToString("0.0") + "; " + east.System.z.ToString("0.0"));
+                StatToDGV("Most West", west.System.name + " @ " + west.System.x.ToString("0.0") + "; " + west.System.y.ToString("0.0") + "; " + west.System.z.ToString("0.0"));
+                StatToDGV("Most Highest", up.System.name + " @ " + up.System.x.ToString("0.0") + "; " + up.System.y.ToString("0.0") + "; " + up.System.z.ToString("0.0"));
+                StatToDGV("Most Lowest", down.System.name + " @ " + down.System.x.ToString("0.0") + "; " + down.System.y.ToString("0.0") + "; " + down.System.z.ToString("0.0"));
 
 
                 var groupeddata = from data in hl.OrderByDate
@@ -216,15 +216,19 @@ namespace EDDiscovery.UserControls
                 Col1.HeaderText = "Last";
 
                 var Col2 = new DataGridViewTextBoxColumn();
+                ColumnValueAlignment(Col2);
                 Col2.HeaderText = "24 hours";
 
                 var Col3 = new DataGridViewTextBoxColumn();
+                ColumnValueAlignment(Col3);
                 Col3.HeaderText = "week";
 
                 var Col4 = new DataGridViewTextBoxColumn();
+                ColumnValueAlignment(Col4);
                 Col4.HeaderText = "month";
 
                 var Col5 = new DataGridViewTextBoxColumn();
+                ColumnValueAlignment(Col5);
                 Col5.HeaderText = "all";
 
                 dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5 });
@@ -290,6 +294,20 @@ namespace EDDiscovery.UserControls
                 strarr[2] = hl.GetFuelScoopedTons(DateTime.Now.AddDays(-30), DateTime.Now).ToString("0.00");
                 strarr[3] = hl.GetFuelScoopedTons(new DateTime(2012, 1, 1), DateTime.Now).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
+
+                strarr[0] = hl.GetNrScans(DateTime.Now.AddDays(-1), DateTime.Now).ToString("0");
+                strarr[1] = hl.GetNrScans(DateTime.Now.AddDays(-7), DateTime.Now).ToString("0");
+                strarr[2] = hl.GetNrScans(DateTime.Now.AddDays(-30), DateTime.Now).ToString("0");
+                strarr[3] = hl.GetNrScans(new DateTime(2012, 1, 1), DateTime.Now).ToString("0");
+                StatToDGV(dataGridViewTravel, "Scans", strarr);
+
+                strarr[0] = hl.GetScanValue(DateTime.Now.AddDays(-1), DateTime.Now).ToString("0");
+                strarr[1] = hl.GetScanValue(DateTime.Now.AddDays(-7), DateTime.Now).ToString("0");
+                strarr[2] = hl.GetScanValue(DateTime.Now.AddDays(-30), DateTime.Now).ToString("0");
+                strarr[3] = hl.GetScanValue(new DateTime(2012, 1, 1), DateTime.Now).ToString("0");
+                StatToDGV(dataGridViewTravel, "Scan value", strarr);
+
+
             }
             else
             {
@@ -338,6 +356,7 @@ namespace EDDiscovery.UserControls
                 {
                     var Col2 = new DataGridViewTextBoxColumn();
                     Col2.HeaderText = timeintervals[ii+1].ToShortDateString();
+                    ColumnValueAlignment(Col2);
                     dataGridViewTravel.Columns.Add(Col2);
                 }
 
@@ -386,6 +405,15 @@ namespace EDDiscovery.UserControls
                     strarr[ii] = hl.GetFuelScoopedTons(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00"); 
                 StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
 
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetNrScans(timeintervals[ii + 1], timeintervals[ii]).ToString("0");
+                StatToDGV(dataGridViewTravel, "Scans", strarr);
+
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetScanValue(timeintervals[ii + 1], timeintervals[ii]).ToString("0");
+                StatToDGV(dataGridViewTravel, "Scan value", strarr);
+
 
 
 
@@ -408,19 +436,23 @@ namespace EDDiscovery.UserControls
 
 
                 var Col1 = new DataGridViewTextBoxColumn();
-                Col1.HeaderText = "Last";
+                Col1.HeaderText = "Body Type";
 
                 var Col2 = new DataGridViewTextBoxColumn();
                 Col2.HeaderText = "24 hours";
+                ColumnValueAlignment(Col2);
 
                 var Col3 = new DataGridViewTextBoxColumn();
                 Col3.HeaderText = "week";
+                ColumnValueAlignment(Col3);
 
                 var Col4 = new DataGridViewTextBoxColumn();
                 Col4.HeaderText = "month";
+                ColumnValueAlignment(Col4);
 
                 var Col5 = new DataGridViewTextBoxColumn();
                 Col5.HeaderText = "all";
+                ColumnValueAlignment(Col5);
 
                 dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5 });
 
@@ -479,7 +511,7 @@ namespace EDDiscovery.UserControls
 
 
                 var Col1 = new DataGridViewTextBoxColumn();
-                Col1.HeaderText = "";
+                Col1.HeaderText = "Body type";
 
                 dataGridViewScan.Columns.Add(Col1);
 
@@ -487,6 +519,7 @@ namespace EDDiscovery.UserControls
                 {
                     var Col2 = new DataGridViewTextBoxColumn();
                     Col2.HeaderText = timeintervals[ii + 1].ToShortDateString();
+                    ColumnValueAlignment(Col2);
                     dataGridViewScan.Columns.Add(Col2);
                 }
 
@@ -538,6 +571,12 @@ namespace EDDiscovery.UserControls
 
         }
 
+        private static void ColumnValueAlignment(DataGridViewTextBoxColumn Col2)
+        {
+            Col2.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
+            Col2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            Col2.SortMode = DataGridViewColumnSortMode.NotSortable;
+        }
 
         void SizeControls()
         {
@@ -627,6 +666,21 @@ namespace EDDiscovery.UserControls
         private void userControlStatsTimeScan_TimeModeChanged(object sender, EventArgs e)
         {
             Stats(null, null);
+        }
+
+        private void dataGridViewStats_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            
+        }
+
+        private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridViewSorter2.DataGridSort2(dataGridViewTravel, e.ColumnIndex);
+        }
+
+        private void dataGridViewScan_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridViewSorter2.DataGridSort2(dataGridViewScan, e.ColumnIndex);
         }
     }
 }

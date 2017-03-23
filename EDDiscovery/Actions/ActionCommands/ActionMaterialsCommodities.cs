@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.EliteDangerous;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -79,20 +80,20 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    EDDiscovery2.DB.MaterialCommoditiesList mcl = ap.actioncontroller.HistoryList.EntryOrder[jidindex].MaterialCommodity;
-                    List<EDDiscovery2.DB.MaterialCommodities> list = mcl.Sort(commodities);
+                    MaterialCommoditiesList mcl = ap.actioncontroller.HistoryList.EntryOrder[jidindex].MaterialCommodity;
+                    List<MaterialCommodities> list = mcl.Sort(commodities);
 
-                    ap.currentvars[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap.currentvars[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     for ( int i = 0; i < list.Count; i++ )
                     {
                         string postfix = (i + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        ap.currentvars[prefix + "Name" + postfix] = list[i].name;
-                        ap.currentvars[prefix + "Category" + postfix] = list[i].category;
-                        ap.currentvars[prefix + "fdname" + postfix] = list[i].fdname;
-                        ap.currentvars[prefix + "type" + postfix] = list[i].type;
-                        ap.currentvars[prefix + "shortname" + postfix] = list[i].shortname;
+                        ap[prefix + "Name" + postfix] = list[i].name;
+                        ap[prefix + "Category" + postfix] = list[i].category;
+                        ap[prefix + "fdname" + postfix] = list[i].fdname;
+                        ap[prefix + "type" + postfix] = list[i].type;
+                        ap[prefix + "shortname" + postfix] = list[i].shortname;
                     }
                 }
                 else

@@ -1148,7 +1148,7 @@ namespace EDDiscovery2
                     posdir.CameraLookAt(loc,zoomfov.Zoom, 2F);
             }
             else
-                MessageBox.Show("System or Object " + textboxFrom.Text + " not found");
+                EDDiscovery.Forms.MessageBoxTheme.Show("System or Object " + textboxFrom.Text + " not found");
 
             glControl.Focus();
         }
@@ -1161,7 +1161,7 @@ namespace EDDiscovery2
                 SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
             }
             else
-                MessageBox.Show("No travel history is available");
+                EDDiscovery.Forms.MessageBoxTheme.Show("No travel history is available");
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -1172,7 +1172,7 @@ namespace EDDiscovery2
         private void buttonHistory_Click(object sender, EventArgs e)
         {
             if (_historySelection == null)
-                MessageBox.Show("No travel history is available");
+                EDDiscovery.Forms.MessageBoxTheme.Show("No travel history is available");
             else
                 SetCenterSystemTo(_historySelection);
         }
@@ -1188,7 +1188,7 @@ namespace EDDiscovery2
             }
             else
             {
-                MessageBox.Show("No target designated, create a bookmark or region mark, or use a Note mark, right click on it and set it as the target");
+                EDDiscovery.Forms.MessageBoxTheme.Show("No target designated, create a bookmark or region mark, or use a Note mark, right click on it and set it as the target");
             }
         }
         
@@ -1200,7 +1200,7 @@ namespace EDDiscovery2
                 SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
             }
             else
-                MessageBox.Show("No travel history is available");
+                EDDiscovery.Forms.MessageBoxTheme.Show("No travel history is available");
         }
 
         private void toolStripButtonAutoForward_Click(object sender, EventArgs e)
@@ -1216,10 +1216,10 @@ namespace EDDiscovery2
                 if (he != null )
                     SetCenterSystemTo(FindSystem(he.System.name));
                 else
-                    MessageBox.Show("No stars with defined co-ordinates available in travel history");
+                    EDDiscovery.Forms.MessageBoxTheme.Show("No stars with defined co-ordinates available in travel history");
             }
             else
-                MessageBox.Show("No travel history is available");
+                EDDiscovery.Forms.MessageBoxTheme.Show("No travel history is available");
         }
 
         private void drawLinesBetweenStarsWithPositionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1439,7 +1439,7 @@ namespace EDDiscovery2
 
         private void toolStripMenuItemClearRecording_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to clear the current recording", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to clear the current recording", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 maprecorder.Clear();
 
             SetDropDownRecordImage();
@@ -1515,7 +1515,7 @@ namespace EDDiscovery2
             string file = (string)tmsi.Tag;
             if ( !maprecorder.ReadFromFile(file) )
             {
-                MessageBox.Show("Failed to load flight " + file + ". Check file path and file contents");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Failed to load flight " + file + ". Check file path and file contents");
             }
         }
 

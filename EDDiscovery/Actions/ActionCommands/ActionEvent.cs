@@ -40,7 +40,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 HistoryList hl = ap.actioncontroller.HistoryList;
                 StringParser sp = new StringParser(res);
@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        jid = sp.GetLong();
+                        jid = sp.NextWord().InvariantParseLongNull();
                         if (!jid.HasValue)
                         {
                             ap.ReportError("Non integer JID after FROM in Event");
@@ -154,7 +154,7 @@ namespace EDDiscovery.Actions
                         hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
                     
                     if (cond.Count > 0)     // if we have filters, apply, filter out, true only stays
-                        hltest = cond.FilterHistoryOut(hltest, new ConditionVariables()); // apply filter..
+                        hltest = cond.CheckFilterTrue(hltest, new ConditionVariables()); // apply filter..
 
                     if (fwd)
                         ReportEntry(ap, hltest, 0, prefix);
@@ -170,7 +170,7 @@ namespace EDDiscovery.Actions
                     else if (cmdname.Equals("action"))
                     {
                         int count = ap.actioncontroller.ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram", now:true);
-                        ap.currentvars[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        ap[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     else if (cmdname.Equals("edsm"))
                     {
@@ -186,7 +186,7 @@ namespace EDDiscovery.Actions
                         EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
                         string url = edsm.GetUrlToEDSMSystem(he.System.name, id_edsm);
 
-                        ap.currentvars[prefix + "URL"] = url;
+                        ap[prefix + "URL"] = url;
 
                         if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                             System.Diagnostics.Process.Start(url);
@@ -204,12 +204,13 @@ namespace EDDiscovery.Actions
                             System.Diagnostics.Process.Start(url);
                         }
 
-                        ap.currentvars[prefix + "URL"] = url;
+                        ap[prefix + "URL"] = url;
                     }
                     else if (cmdname.Equals("info"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        ActionVars.HistoryEventFurtherInfo(ap.currentvars, hl, he, prefix);
+                        ActionVars.HistoryEventFurtherInfo(ap, hl, he, prefix);
+                        ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);
                     }
                     else
                         ap.ReportError("Unknown command " + cmdname + " in Event");
@@ -226,12 +227,12 @@ namespace EDDiscovery.Actions
             if (hl != null && pos >= 0 && pos < hl.Count)     // if within range.. (1 based)
             {
                 ReportHistoryEntry(ap, hl[pos], prefix);
-                ap.currentvars[prefix + "Count"] = hl.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);     // give a count of matches
+                ap[prefix + "Count"] = hl.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);     // give a count of matches
             }
             else
             {
-                ap.currentvars[prefix + "JID"] = "0";
-                ap.currentvars[prefix + "Count"] = "0";
+                ap[prefix + "JID"] = "0";
+                ap[prefix + "Count"] = "0";
             }
         }
 
@@ -241,7 +242,9 @@ namespace EDDiscovery.Actions
             {
                 ConditionVariables values = new ConditionVariables();
                 ActionVars.HistoryEventVars(values, he, prefix);
-                ap.currentvars.Add(values);
+                ActionVars.ShipInformation(values, he.ShipInformation, prefix, true);
+                ActionVars.SystemVars(values, he.System, prefix);
+                ap.Add(values);
             }
             catch { }
         }

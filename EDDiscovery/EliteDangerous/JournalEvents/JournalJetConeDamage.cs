@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -26,12 +26,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalJetConeDamage(JObject evt ) : base(evt, JournalTypeEnum.JetConeDamage)
         {
-            Module = JSONHelper.GetStringDef(evt["Module"]);
-            ModuleLocalised = JSONHelper.GetStringDef(evt["_Localised"]);       //TBD - jet cone boost entries are bugged in journal at the moment.
-
+            Module = evt["Module"].Str();
+            ModuleLocalised = evt["Module_Localised"].Str();       
+            if ( ModuleLocalised.Length == 0 )
+                ModuleLocalised = evt["_Localised"].Str();       //Frontier bug - jet cone boost entries are bugged in journal at the moment up to 2.2.
         }
+
         public string Module { get; set; }
         public string ModuleLocalised { get; set; }
 
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.jetconedamage; } }
+
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = ModuleLocalised.Alt(Module);
+            detailed = "";
+        }
     }
 }

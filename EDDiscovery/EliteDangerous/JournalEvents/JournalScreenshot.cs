@@ -25,11 +25,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScreenshot(JObject evt ) : base(evt, JournalTypeEnum.Screenshot)
         {
-            Filename = JSONHelper.GetStringDef(evt["Filename"]);
-            Width = JSONHelper.GetInt(evt["Width"]);
-            Height = JSONHelper.GetInt(evt["Height"]);
-            System = JSONHelper.GetStringDef(evt["System"]);
-            Body = JSONHelper.GetStringDef(evt["Body"]);
+            Filename = evt["Filename"].Str();
+            Width = evt["Width"].Int();
+            Height = evt["Height"].Int();
+            System = evt["System"].Str();
+            Body = evt["Body"].Str();
         }
         public string Filename { get; set; }
         public int Width { get; set; }
@@ -37,14 +37,23 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string System { get; set; }
         public string Body { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.screenshot; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.screenshot; } }
+
+        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("At " , Body , "<in " , System , "File:", Filename, "Width:", Width , "Height:", Height);
+            detailed = "";
+        }
 
         public void SetConvertedFilename(string input_filename, string output_filename, int width, int height)
         {
-            this.jEventData["EDDInputFile"] = input_filename;
-            this.jEventData["EDDOutputFile"] = output_filename;
-            this.jEventData["EDDOutputWidth"] = width;
-            this.jEventData["EDDOutputHeight"] = height;
+            JObject jo = GetJson();
+            jo["EDDInputFile"] = input_filename;
+            jo["EDDOutputFile"] = output_filename;
+            jo["EDDOutputWidth"] = width;
+            jo["EDDOutputHeight"] = height;
+            UpdateJson(jo);
         }
 
         public static JournalScreenshot GetScreenshot(string filename, int width, int height, DateTime timestamp, string sysname, int cmdrid)
@@ -93,7 +102,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 });
 
                 ss = JournalEntry.CreateJournalEntry(jo.ToString()) as JournalScreenshot;
-                ss.Add();
+                ss.Add(jo);
             }
 
             return ss;

@@ -276,13 +276,15 @@ namespace EDDiscovery2.EDSM
                         {
                             foreach (HistoryEntry he in toadd)
                             {
-                                EDDiscovery.EliteDangerous.JournalEntry je =
-                                    EDDiscovery.EliteDangerous.JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value, he.EventTimeUTC,
+                                JObject jo = EDDiscovery.EliteDangerous.JournalEntry.CreateFSDJournalEntryJson(he.EventTimeUTC,
                                                                                                   he.System.name, he.System.x, he.System.y, he.System.z,
-                                                                                                  _defmapcolour, (int)EDDiscovery.EliteDangerous.SyncFlags.EDSM);
+                                                                                                  _defmapcolour);
+                                EDDiscovery.EliteDangerous.JournalEntry je =
+                                    EDDiscovery.EliteDangerous.JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
+                                                                                                  (int)EDDiscovery.EliteDangerous.SyncFlags.EDSM, jo);
 
                                 System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", je.EventTimeUTC, he.System.name));
-                                je.Add(cn);
+                                je.Add(jo, cn);
                             }
                         }
 

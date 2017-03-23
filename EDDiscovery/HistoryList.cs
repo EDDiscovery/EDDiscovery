@@ -19,6 +19,7 @@ using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -76,7 +77,12 @@ namespace EDDiscovery
                 if ((EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) && EventTimeUTC>ed22 ) return true; else return false;
             }
         }
+
         public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
+        public ShipInformation ShipInformation { get { return shipmodules; } set { shipmodules = value; } }     // may be null if not set up yet
+        public ModulesInStore StoredModules { get { return storedmodules; } set { storedmodules = value; } }
+//        public PassengersList PassengersList { get { return passengerslist; } }
+  //      PassengersList passengerslist;
 
         // Calculated values, not from JE
 
@@ -97,16 +103,18 @@ namespace EDDiscovery
         int travelled_jumps;
 
         MaterialCommoditiesList materialscommodities;
+        ShipInformation shipmodules;
+        ModulesInStore storedmodules;
 
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
-        private string wheredocked = "";            // empty if in space, else where docked
+        private string whereami = "";               // where we think we are
         private int shipid = -1;                            // ship id, -1 unknown
         private string shiptype = "Unknown";        // and the ship
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
-        public string WhereAmI { get { return wheredocked; } }
+        public string WhereAmI { get { return whereami; } }
         public string ShipType { get { return shiptype; } }
         public int ShipId { get { return shipid; } }
 
@@ -114,19 +122,27 @@ namespace EDDiscovery
 
         #region Constructors
 
-        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
+        private HistoryEntry()
+        {
+
+        }
+
+        public static HistoryEntry MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
         {
             Debug.Assert(sys != null);
-            EntryType = EliteDangerous.JournalTypeEnum.FSDJump;
-            System = sys;
-            EventTimeUTC = eventt;
-            EventSummary = "Jump to " + System.name;
-            EventDescription = dist;
-            EventDetailedInfo = info;
-            MapColour = m;
-            Journalid = journalid;
-            IsEDSMFirstDiscover = firstdiscover;
-            EdsmSync = true; 
+            return new HistoryEntry
+            {
+                EntryType = EliteDangerous.JournalTypeEnum.FSDJump,
+                System = sys,
+                EventTimeUTC = eventt,
+                EventSummary = "Jump to " + sys.name,
+                EventDescription = dist,
+                EventDetailedInfo = info,
+                MapColour = m,
+                Journalid = journalid,
+                IsEDSMFirstDiscover = firstdiscover,
+                EdsmSync = true
+            };
         }
 
         public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
@@ -300,31 +316,33 @@ namespace EDDiscovery
 
                 he.shiptype = prev.shiptype;
                 he.shipid = prev.shipid;
-                he.wheredocked = prev.wheredocked;
+                he.whereami = prev.whereami;
             }
 
             if (je.EventTypeID == JournalTypeEnum.Location)
             {
                 EliteDangerous.JournalEvents.JournalLocation jl = je as EliteDangerous.JournalEvents.JournalLocation;
                 he.docked = jl.Docked;
-                he.wheredocked = jl.Docked ? jl.StationName : "";
+                he.whereami = jl.Docked ? jl.StationName : jl.Body;
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
                 EliteDangerous.JournalEvents.JournalDocked jl = je as EliteDangerous.JournalEvents.JournalDocked;
                 he.docked = true;
-                he.wheredocked = jl.StationName;
+                he.whereami = jl.StationName;
             }
             else if (je.EventTypeID == JournalTypeEnum.Undocked)
-            {
                 he.docked = false;
-            }
             else if (je.EventTypeID == JournalTypeEnum.Touchdown)
-            {
                 he.landed = true;
-            }
             else if (je.EventTypeID == JournalTypeEnum.Liftoff)
                 he.landed = false;
+            else if (je.EventTypeID == JournalTypeEnum.SupercruiseEntry)
+                he.whereami = (je as EliteDangerous.JournalEvents.JournalSupercruiseEntry).StarSystem;
+            else if (je.EventTypeID == JournalTypeEnum.SupercruiseExit)
+                he.whereami = (je as EliteDangerous.JournalEvents.JournalSupercruiseExit).Body;
+            else if (je.EventTypeID == JournalTypeEnum.FSDJump)
+                he.whereami = (je as EliteDangerous.JournalEvents.JournalFSDJump).StarSystem;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
                 EliteDangerous.JournalEvents.JournalLoadGame jl = je as EliteDangerous.JournalEvents.JournalLoadGame;
@@ -381,13 +399,11 @@ namespace EDDiscovery
             get
             {
                 if (journalEntry != null)
-                {
-                    return journalEntry.GetIcon();
-                }
+                    return journalEntry.Icon;
+                else if (EntryType == JournalTypeEnum.FSDJump)
+                    return EDDiscovery.Properties.Resources.hyperspace;
                 else
-                {
-                    return EliteDangerous.JournalEntry.GetIcon(EntryType, EventDescription);
-                }
+                    return EDDiscovery.Properties.Resources.genericevent;
             }
         }
 
@@ -488,7 +504,8 @@ namespace EDDiscovery
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
 
-        public MaterialCommoditiesLedger materialcommodititiesledger = new MaterialCommoditiesLedger();       // and the ledger..
+        public Ledger materialcommodititiesledger = new Ledger();       // and the ledger..
+        public ShipInformationList shipinformationlist = new ShipInformationList();
 
         public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
 
@@ -682,6 +699,18 @@ namespace EDDiscovery
         public int GetFSDJumps(DateTime start, DateTime to)
         {
             return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal<to  select s).Count();
+        }
+
+        public int GetNrScans(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+
+        public int GetScanValue(DateTime start, DateTime to)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
+
+            return (from t in list select t.EstimatedValue()).Sum();
         }
 
         public int GetDocked(DateTime start, DateTime to)
@@ -992,7 +1021,12 @@ namespace EDDiscovery
 
                     Debug.Assert(he.MaterialCommodity != null);
 
-                    this.materialcommodititiesledger.Process(je, conn);            // update the ledger
+                    // **** REMEMBER NEW Journal entry needs this too *****************
+
+                    materialcommodititiesledger.Process(je, conn);            // update the ledger     
+                    Tuple<ShipInformation,ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                    he.ShipInformation = ret.Item1;
+                    he.StoredModules = ret.Item2;                           
 
                     if (je.EventTypeID == JournalTypeEnum.Scan)
                     {
@@ -1003,9 +1037,6 @@ namespace EDDiscovery
                     }
                 }
             }
-
-            
-          
         }
 
         static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
@@ -1104,6 +1135,10 @@ namespace EDDiscovery
                     he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
 
                     materialcommodititiesledger.Process(je, conn);
+
+                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                    he.ShipInformation = ret.Item1;
+                    he.StoredModules = ret.Item2;
                 }
 
                 Add(he);
@@ -1111,10 +1146,16 @@ namespace EDDiscovery
                 if (je.EventTypeID == JournalTypeEnum.Scan)
                 {
                     JournalScan js = je as JournalScan;
-                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder))
+                    JournalLocOrJump jl;
+                    HistoryEntry jlhe;
+                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
                     {
-                        logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                         "Scan object " + js.BodyName + " in " + he.System.name);
+                        // Ignore scans where the system name has been changed
+                        if (jl == null || jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                             "Scan object " + js.BodyName + " in " + he.System.name);
+                        }
                     }
                 }
 
