@@ -26,14 +26,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalChangeCrewRole(JObject evt) : base(evt, JournalTypeEnum.ChangeCrewRole)
         {
-            Role = evt["Role"].Str();
-
+            Role = evt["Role"].Str().SplitCapsWordFull();
         }
+
         public string Role { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.changecrewrole; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //U
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
             info = Role;

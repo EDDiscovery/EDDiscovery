@@ -62,12 +62,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             info = "";
-            foreach (ModuleItem m in ModuleItems)
-            {
-                if (info.Length>0)
-                    info += ", ";
-                info += m.Name;
-            }
+
+            if ( ModuleItems != null )
+                foreach (ModuleItem m in ModuleItems)
+                {
+                    if (info.Length>0)
+                        info += ", ";
+                    info += m.Name;
+                }
                 
             detailed = "";
         }

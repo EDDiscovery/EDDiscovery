@@ -27,6 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalVehicleSwitch(JObject evt ) : base(evt, JournalTypeEnum.VehicleSwitch)
         {
             To = evt["To"].Str();
+            if (To.Length == 0)             // Frontier BUG, sometimes To is missing
+                To = "Mothership";
         }
         public string To { get; set; }
 
@@ -49,7 +51,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = (To.Length==0) ? "Mothership" : To;          // BUG in frontier.. sometimes TO is not there
+            info = To; 
             detailed = "";
         }
     }

@@ -52,7 +52,7 @@ namespace EDDiscovery.Actions
 
                     if (prefix == null)
                     {
-                        ap.ReportError("Missing name after Prefix in Ledger");
+                        ap.ReportError("Missing name after Prefix in Scan");
                         return true;
                     }
 
@@ -225,7 +225,7 @@ namespace EDDiscovery.Actions
 
                     if (prefix == null)
                     {
-                        ap.ReportError("Missing name after Prefix in Ledger");
+                        ap.ReportError("Missing name after Prefix in Star");
                         return true;
                     }
 

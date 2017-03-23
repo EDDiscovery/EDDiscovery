@@ -108,13 +108,13 @@ namespace EDDiscovery
 
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
-        private string wheredocked = "";            // empty if in space, else where docked
+        private string whereami = "";               // where we think we are
         private int shipid = -1;                            // ship id, -1 unknown
         private string shiptype = "Unknown";        // and the ship
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
-        public string WhereAmI { get { return wheredocked; } }
+        public string WhereAmI { get { return whereami; } }
         public string ShipType { get { return shiptype; } }
         public int ShipId { get { return shipid; } }
 
@@ -316,31 +316,33 @@ namespace EDDiscovery
 
                 he.shiptype = prev.shiptype;
                 he.shipid = prev.shipid;
-                he.wheredocked = prev.wheredocked;
+                he.whereami = prev.whereami;
             }
 
             if (je.EventTypeID == JournalTypeEnum.Location)
             {
                 EliteDangerous.JournalEvents.JournalLocation jl = je as EliteDangerous.JournalEvents.JournalLocation;
                 he.docked = jl.Docked;
-                he.wheredocked = jl.Docked ? jl.StationName : "";
+                he.whereami = jl.Docked ? jl.StationName : jl.Body;
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
                 EliteDangerous.JournalEvents.JournalDocked jl = je as EliteDangerous.JournalEvents.JournalDocked;
                 he.docked = true;
-                he.wheredocked = jl.StationName;
+                he.whereami = jl.StationName;
             }
             else if (je.EventTypeID == JournalTypeEnum.Undocked)
-            {
                 he.docked = false;
-            }
             else if (je.EventTypeID == JournalTypeEnum.Touchdown)
-            {
                 he.landed = true;
-            }
             else if (je.EventTypeID == JournalTypeEnum.Liftoff)
                 he.landed = false;
+            else if (je.EventTypeID == JournalTypeEnum.SupercruiseEntry)
+                he.whereami = (je as EliteDangerous.JournalEvents.JournalSupercruiseEntry).StarSystem;
+            else if (je.EventTypeID == JournalTypeEnum.SupercruiseExit)
+                he.whereami = (je as EliteDangerous.JournalEvents.JournalSupercruiseExit).Body;
+            else if (je.EventTypeID == JournalTypeEnum.FSDJump)
+                he.whereami = (je as EliteDangerous.JournalEvents.JournalFSDJump).StarSystem;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
                 EliteDangerous.JournalEvents.JournalLoadGame jl = je as EliteDangerous.JournalEvents.JournalLoadGame;

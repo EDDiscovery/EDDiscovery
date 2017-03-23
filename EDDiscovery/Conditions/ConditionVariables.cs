@@ -440,7 +440,7 @@ namespace EDDiscovery
                         values[name + "_Length"] = array.Length.ToString(ct);
                         for (int i = 0; i < array.Length; i++)
                         {
-                            AddDataOfType(array[i], array[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]" , depth-1);
+                            AddDataOfType(array[i], array[i].GetType(), name + "[" + i.ToString(ct) + "]" , depth-1);
                     }
                     }
                 }
