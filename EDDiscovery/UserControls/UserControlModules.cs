@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls
         public UserControlModules()
         {
             InitializeComponent();
-            Name = "Modules";
+            Name = "Loadout";
         }
 
         public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
@@ -70,6 +70,11 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
+            UpdateComboBox(hl);
+        }
+
+        private void UpdateComboBox(HistoryList hl)
+        { 
             ShipInformationList shm = hl.shipinformationlist;
             string cursel = comboBoxShips.Text;
 
@@ -93,6 +98,9 @@ namespace EDDiscovery.UserControls
         HistoryEntry last_he = null;
         public override void Display(HistoryEntry he, HistoryList hl)
         {
+            if ( comboBoxShips.Items.Count == 0 )
+                UpdateComboBox(hl);
+
             last_he = he;
             Display();
         }

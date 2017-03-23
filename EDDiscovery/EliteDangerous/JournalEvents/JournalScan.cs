@@ -279,7 +279,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 {
                     scanText.AppendFormat(GetStarTypeImage().Item2);
                 }
-                else
+                else if ( PlanetClass != null )
                 {
                     scanText.AppendFormat("{0}", PlanetClass);
 

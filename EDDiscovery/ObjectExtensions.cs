@@ -159,7 +159,7 @@ public static class JSONObjectExtensions
 
 }
 
-public static class ObjectExtensions
+public static class ObjectExtensionsStrings
 {
     public static string ToNullSafeString(this object obj)
     {
@@ -294,18 +294,20 @@ public static class ObjectExtensions
         string res = "";
         exp = exp.Trim();
 
-        while (true)
+        while (exp.Length>0)
         {
             if (exp[0] == '{')
             {
                 int end = exp.IndexOf('}');
 
-                if (end >= 0)
-                {
-                    string pl = exp.Substring(1, end - 1);
-                    res += pl.PickOneOf(';', rx) + " ";
-                    exp = exp.Substring(end + 1).Trim();
-                }
+                if (end == -1)              // missing end bit, assume the lot..
+                    end = exp.Length;
+
+                string pl = exp.Substring(1, end - 1);
+
+                exp = (end < exp.Length) ? exp.Substring(end + 1) : "";
+
+                res += pl.PickOneOf(';', rx);
             }
             else
             {
@@ -388,6 +390,23 @@ public static class ObjectExtensions
             keyname = keyname.Substring(3);
 
         return k + keyname;
+    }
+
+    public static string ToStringInvariant(this bool? v)
+    {
+        return (v.HasValue) ? (v.Value ? "1" : "0") : "";
+    }
+    public static string ToStringInvariant(this double? v, string format)
+    {
+        return (v.HasValue) ? v.Value.ToString(format) : "";
+    }
+    public static string ToStringInvariant(this int? v)
+    {
+        return (v.HasValue) ? v.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+    }
+    public static string ToStringInvariant(this long? v)
+    {
+        return (v.HasValue) ? v.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
     }
 
     static public bool InvariantParse(this string s, out int i)

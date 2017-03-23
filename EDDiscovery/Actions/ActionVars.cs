@@ -47,6 +47,64 @@ namespace EDDiscovery.Actions
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
 
                 vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) } , 5);      //depth seems good enough
+
+                // being backwards compatible to actions packs BEFORE the V3 change to remove JS vars
+                // these were the ones used in the pack..
+
+                vars[prefix + "JS_event"] = he.EntryType.ToString();        
+                if (he.journalEntry is EliteDangerous.JournalEvents.JournalReceiveText)
+                    vars[prefix + "JS_Channel"] = (he.journalEntry as EliteDangerous.JournalEvents.JournalReceiveText).Channel;
+                if (he.journalEntry is EliteDangerous.JournalEvents.JournalBuyAmmo)
+                    vars[prefix + "JS_Cost"] = (he.journalEntry as EliteDangerous.JournalEvents.JournalBuyAmmo).Cost.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+        }
+
+        static public void ShipInformation(ConditionVariables vars, EliteDangerous.ShipInformation si, string prefix, bool modlist)
+        {
+            string ship="Unknown", id="0", name="Unknown", ident="Unknown", sv="None", fullinfo="Unknown", shortname="Unknown", fuel="0", cargo="0";
+
+            if ( si != null )
+            {
+                ship = si.Ship;
+                id = si.ID.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                name = si.ShipName;
+                ident = si.ShipIdent;
+                sv = si.SubVehicle.ToString();
+                fullinfo = si.ShipFullInfo;
+                shortname = si.ShipShortName;
+                fuel = si.FuelCapacity().ToString(System.Globalization.CultureInfo.InvariantCulture);
+                cargo = si.CargoCapacity().ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+
+            vars[prefix + "Ship"] = ship;                   // need to be backwards compatible with older entries..
+            vars[prefix + "Ship_ID"] = id;
+            vars[prefix + "Ship_Name"] = name;
+            vars[prefix + "Ship_Ident"] = ident;
+            vars[prefix + "Ship_SubVehicle"] = sv;
+            vars[prefix + "Ship_FullInfo"] = fullinfo;
+            vars[prefix + "Ship_ShortName"] = shortname;
+            vars[prefix + "Ship_FuelCapacity"] = fuel;
+            vars[prefix + "Ship_CargoCapacity"] = cargo;
+
+            if (modlist && si!= null && si.Modules != null)
+            {
+                vars[prefix + "Ship_Module_Count"] = si.Modules.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+                int ind = 0;
+                foreach (EliteDangerous.JournalEvents.JournalLoadout.ShipModule m in si.Modules.Values)
+                {
+                    string mi = prefix + "Ship_Module[" + ind.ToString() + "]_";
+                    vars[mi + "Slot"] = m.Slot;
+                    vars[mi + "Item"] = m.Item;
+                    vars[mi + "ItemLocalised"] = m.LocalisedItem.Alt(m.Item);
+                    vars[mi + "Enabled"] = m.Enabled.ToStringInvariant();
+                    vars[mi + "AmmoClip"] = m.AmmoClip.ToStringInvariant();
+                    vars[mi + "AmmoHopper"] = m.AmmoHopper.ToStringInvariant();
+                    vars[mi + "Blueprint"] = m.Blueprint.ToNullSafeString();
+                    vars[mi + "Health"] = m.Health.ToStringInvariant();
+                    vars[mi + "Value"] = m.Value.ToStringInvariant();
+                    ind++;
+                }
             }
         }
 

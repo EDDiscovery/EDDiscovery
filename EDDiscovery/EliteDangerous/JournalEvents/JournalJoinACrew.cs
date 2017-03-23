@@ -34,10 +34,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.joinacrew; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //U
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Ships Captain:" , Captain);
+            info = Tools.FieldBuilder("Captain:" , Captain);
             detailed = "";
         }
     }

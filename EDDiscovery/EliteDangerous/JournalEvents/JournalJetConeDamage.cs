@@ -27,9 +27,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalJetConeDamage(JObject evt ) : base(evt, JournalTypeEnum.JetConeDamage)
         {
             Module = evt["Module"].Str();
-            ModuleLocalised = evt["_Localised"].Str();       //TBD - jet cone boost entries are bugged in journal at the moment.
-
+            ModuleLocalised = evt["Module_Localised"].Str();       
+            if ( ModuleLocalised.Length == 0 )
+                ModuleLocalised = evt["_Localised"].Str();       //Frontier bug - jet cone boost entries are bugged in journal at the moment up to 2.2.
         }
+
         public string Module { get; set; }
         public string ModuleLocalised { get; set; }
 
@@ -38,7 +40,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Module:" , ModuleLocalised.Alt(Module));
+            info = ModuleLocalised.Alt(Module);
             detailed = "";
         }
     }

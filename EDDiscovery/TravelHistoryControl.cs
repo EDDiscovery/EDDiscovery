@@ -54,7 +54,7 @@ namespace EDDiscovery
         {
             "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
-            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Modules" , "Exploration",
+            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration",
         };
 
         Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
@@ -81,7 +81,7 @@ namespace EDDiscovery
                                                "Display the screen shot view",
                                                "Display statistics from the history",
                                                "Display scan data",
-                                               "Display Module data for ship",
+                                               "Display Loadout for current ships and also stored modules",
                                                "Display Exploration view",
                                             };
 
@@ -414,31 +414,32 @@ namespace EDDiscovery
         {
             StoreSystemNote(true);      // save any previous note
 
-            HistoryEntry syspos = null;
+            HistoryEntry he = null;
 
             if (rw == null)
             {
-                textBoxSystem.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
+                textBoxSystem.Text = textBoxBody.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
                 textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = textBoxSolDist.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
             }
             else
             {
-                syspos = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
-                Debug.Assert(syspos != null);
+                he = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
+                Debug.Assert(he != null);
 
-                _discoveryForm.history.FillEDSM(syspos, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
+                _discoveryForm.history.FillEDSM(he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
 
-                notedisplayedhe = syspos;
+                notedisplayedhe = he;
 
-                textBoxSystem.Text = syspos.System.name;
+                textBoxSystem.Text = he.System.name;
+                textBoxBody.Text = he.WhereAmI;
 
-                if (syspos.System.HasCoordinate)         // cursystem has them?
+                if (he.System.HasCoordinate)         // cursystem has them?
                 {
-                    textBoxX.Text = syspos.System.x.ToString(SingleCoordinateFormat);
-                    textBoxY.Text = syspos.System.y.ToString(SingleCoordinateFormat);
-                    textBoxZ.Text = syspos.System.z.ToString(SingleCoordinateFormat);
+                    textBoxX.Text = he.System.x.ToString(SingleCoordinateFormat);
+                    textBoxY.Text = he.System.y.ToString(SingleCoordinateFormat);
+                    textBoxZ.Text = he.System.z.ToString(SingleCoordinateFormat);
 
                     ISystem homesys = _discoveryForm.GetHomeSystem();
 
@@ -447,12 +448,12 @@ namespace EDDiscovery
                         homesys = new SystemClass("Sol", 0, 0, 0);
                     }
 
-                    double xdist = syspos.System.x - homesys.x;
-                    double ydist = syspos.System.y - homesys.y;
-                    double zdist = syspos.System.z - homesys.z;
+                    double xdist = he.System.x - homesys.x;
+                    double ydist = he.System.y - homesys.y;
+                    double zdist = he.System.z - homesys.z;
 
                     textBoxHomeDist.Text = Math.Sqrt(xdist * xdist + ydist * ydist + zdist * zdist).ToString("0.00");
-                    textBoxSolDist.Text = Math.Sqrt(syspos.System.x * syspos.System.x + syspos.System.y * syspos.System.y + syspos.System.z * syspos.System.z).ToString("0.00");
+                    textBoxSolDist.Text = Math.Sqrt(he.System.x * he.System.x + he.System.y * he.System.y + he.System.z * he.System.z).ToString("0.00");
                 }
                 else
                 {
@@ -463,24 +464,24 @@ namespace EDDiscovery
                     textBoxSolDist.Text = "";
                 }
 
-                int count = _discoveryForm.history.GetVisitsCount(syspos.System.name);
+                int count = _discoveryForm.history.GetVisitsCount(he.System.name);
                 textBoxVisits.Text = count.ToString();
 
-                bool enableedddross = (syspos.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
+                bool enableedddross = (he.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
 
                 buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
 
-                textBoxAllegiance.Text = syspos.System.allegiance.ToNullUnknownString();
-                textBoxEconomy.Text = syspos.System.primary_economy.ToNullUnknownString();
-                textBoxGovernment.Text = syspos.System.government.ToNullUnknownString();
-                textBoxState.Text = syspos.System.state.ToNullUnknownString();
-                richTextBoxNote.Text = syspos.snc != null ? syspos.snc.Note : "";
+                textBoxAllegiance.Text = he.System.allegiance.ToNullUnknownString();
+                textBoxEconomy.Text = he.System.primary_economy.ToNullUnknownString();
+                textBoxGovernment.Text = he.System.government.ToNullUnknownString();
+                textBoxState.Text = he.System.state.ToNullUnknownString();
+                richTextBoxNote.Text = he.snc != null ? he.snc.Note : "";
 
-                _discoveryForm.CalculateClosestSystems(syspos.System, (s, d) => NewStarListComputed(s.name, d));
+                _discoveryForm.CalculateClosestSystems(he.System, (s, d) => NewStarListComputed(s.name, d));
             }
 
             if (OnTravelSelectionChanged != null)
-                OnTravelSelectionChanged(syspos, _discoveryForm.history);
+                OnTravelSelectionChanged(he, _discoveryForm.history);
         }
 
         public void UpdateNoteJID(long jid, string txt)

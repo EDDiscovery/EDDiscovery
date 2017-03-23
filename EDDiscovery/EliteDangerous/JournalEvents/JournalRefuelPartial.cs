@@ -38,13 +38,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Amoubt " + Amount.ToString() +"t", -Cost);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Amount " + Amount.ToString() +"t", -Cost);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Cost:; credits", Cost, "Fuel:;;0.0", Amount);
+            info = Tools.FieldBuilder("Cost:; credits", Cost, "Fuel:; tons;0.0", Amount);
             detailed = "";
         }
     }
