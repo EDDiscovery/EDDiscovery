@@ -46,16 +46,6 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewModules = new System.Windows.Forms.DataGridView();
-            this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.labelVehicle = new System.Windows.Forms.Label();
-            this.LabelVehicleText = new System.Windows.Forms.Label();
-            this.labelShip = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.comboBoxShips = new ExtendedControls.ComboBoxCustom();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,6 +53,15 @@ namespace EDDiscovery.UserControls
             this.BluePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.labelVehicle = new System.Windows.Forms.Label();
+            this.LabelVehicleText = new System.Windows.Forms.Label();
+            this.labelShip = new System.Windows.Forms.Label();
+            this.comboBoxShips = new ExtendedControls.ComboBoxCustom();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.contextMenuStripLedger.SuspendLayout();
@@ -103,129 +102,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewModules.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewModules.TabIndex = 1;
-            // 
-            // contextMenuStripLedger
-            // 
-            this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemGotoItem});
-            this.contextMenuStripLedger.Name = "contextMenuStripLedger";
-            this.contextMenuStripLedger.Size = new System.Drawing.Size(207, 26);
-            // 
-            // toolStripMenuItemGotoItem
-            // 
-            this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
-            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
-            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
-            this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
-            // 
-            // vScrollBarCustomMC
-            // 
-            this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustomMC.HideScrollBar = false;
-            this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 21);
-            this.vScrollBarCustomMC.Maximum = -1;
-            this.vScrollBarCustomMC.Minimum = 0;
-            this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 519);
-            this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustomMC.SmallChange = 1;
-            this.vScrollBarCustomMC.TabIndex = 0;
-            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
-            this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
-            this.vScrollBarCustomMC.Value = -1;
-            this.vScrollBarCustomMC.ValueLimited = -1;
-            // 
-            // panelButtons
-            // 
-            this.panelButtons.Controls.Add(this.labelVehicle);
-            this.panelButtons.Controls.Add(this.LabelVehicleText);
-            this.panelButtons.Controls.Add(this.labelShip);
-            this.panelButtons.Controls.Add(this.label2);
-            this.panelButtons.Controls.Add(this.comboBoxShips);
-            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelButtons.Location = new System.Drawing.Point(0, 0);
-            this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(800, 32);
-            this.panelButtons.TabIndex = 2;
-            // 
-            // labelVehicle
-            // 
-            this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(420, 7);
-            this.labelVehicle.Name = "labelVehicle";
-            this.labelVehicle.Size = new System.Drawing.Size(53, 13);
-            this.labelVehicle.TabIndex = 28;
-            this.labelVehicle.Text = "Unknown";
-            // 
-            // LabelVehicleText
-            // 
-            this.LabelVehicleText.AutoSize = true;
-            this.LabelVehicleText.Location = new System.Drawing.Point(356, 7);
-            this.LabelVehicleText.Name = "LabelVehicleText";
-            this.LabelVehicleText.Size = new System.Drawing.Size(42, 13);
-            this.LabelVehicleText.TabIndex = 27;
-            this.LabelVehicleText.Text = "Vehicle";
-            // 
-            // labelShip
-            // 
-            this.labelShip.AutoSize = true;
-            this.labelShip.Location = new System.Drawing.Point(64, 7);
-            this.labelShip.Name = "labelShip";
-            this.labelShip.Size = new System.Drawing.Size(28, 13);
-            this.labelShip.TabIndex = 26;
-            this.labelShip.Text = "Ship";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Modules";
-            // 
-            // comboBoxShips
-            // 
-            this.comboBoxShips.ArrowWidth = 1;
-            this.comboBoxShips.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxShips.ButtonColorScaling = 0.5F;
-            this.comboBoxShips.DataSource = null;
-            this.comboBoxShips.DisplayMember = "";
-            this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxShips.DropDownHeight = 200;
-            this.comboBoxShips.DropDownWidth = 1;
-            this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxShips.ItemHeight = 13;
-            this.comboBoxShips.Location = new System.Drawing.Point(110, 4);
-            this.comboBoxShips.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxShips.Name = "comboBoxShips";
-            this.comboBoxShips.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxShips.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxShips.ScrollBarWidth = 16;
-            this.comboBoxShips.SelectedIndex = -1;
-            this.comboBoxShips.SelectedItem = null;
-            this.comboBoxShips.SelectedValue = null;
-            this.comboBoxShips.Size = new System.Drawing.Size(218, 24);
-            this.comboBoxShips.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.comboBoxShips, "Select the entries by age");
-            this.comboBoxShips.ValueMember = "";
-            this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.ShowAlways = true;
             // 
             // SlotCol
             // 
@@ -280,6 +156,119 @@ namespace EDDiscovery.UserControls
             this.PriorityEnable.MinimumWidth = 20;
             this.PriorityEnable.Name = "PriorityEnable";
             // 
+            // contextMenuStripLedger
+            // 
+            this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemGotoItem});
+            this.contextMenuStripLedger.Name = "contextMenuStripLedger";
+            this.contextMenuStripLedger.Size = new System.Drawing.Size(207, 26);
+            // 
+            // toolStripMenuItemGotoItem
+            // 
+            this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
+            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
+            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
+            this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
+            // 
+            // vScrollBarCustomMC
+            // 
+            this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustomMC.HideScrollBar = false;
+            this.vScrollBarCustomMC.LargeChange = 0;
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 21);
+            this.vScrollBarCustomMC.Maximum = -1;
+            this.vScrollBarCustomMC.Minimum = 0;
+            this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 519);
+            this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SmallChange = 1;
+            this.vScrollBarCustomMC.TabIndex = 0;
+            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
+            this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
+            this.vScrollBarCustomMC.Value = -1;
+            this.vScrollBarCustomMC.ValueLimited = -1;
+            // 
+            // panelButtons
+            // 
+            this.panelButtons.Controls.Add(this.labelVehicle);
+            this.panelButtons.Controls.Add(this.LabelVehicleText);
+            this.panelButtons.Controls.Add(this.labelShip);
+            this.panelButtons.Controls.Add(this.comboBoxShips);
+            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelButtons.Location = new System.Drawing.Point(0, 0);
+            this.panelButtons.Name = "panelButtons";
+            this.panelButtons.Size = new System.Drawing.Size(800, 32);
+            this.panelButtons.TabIndex = 2;
+            // 
+            // labelVehicle
+            // 
+            this.labelVehicle.AutoSize = true;
+            this.labelVehicle.Location = new System.Drawing.Point(362, 7);
+            this.labelVehicle.Name = "labelVehicle";
+            this.labelVehicle.Size = new System.Drawing.Size(53, 13);
+            this.labelVehicle.TabIndex = 28;
+            this.labelVehicle.Text = "Unknown";
+            // 
+            // LabelVehicleText
+            // 
+            this.LabelVehicleText.AutoSize = true;
+            this.LabelVehicleText.Location = new System.Drawing.Point(298, 7);
+            this.LabelVehicleText.Name = "LabelVehicleText";
+            this.LabelVehicleText.Size = new System.Drawing.Size(42, 13);
+            this.LabelVehicleText.TabIndex = 27;
+            this.LabelVehicleText.Text = "Vehicle";
+            // 
+            // labelShip
+            // 
+            this.labelShip.AutoSize = true;
+            this.labelShip.Location = new System.Drawing.Point(6, 7);
+            this.labelShip.Name = "labelShip";
+            this.labelShip.Size = new System.Drawing.Size(28, 13);
+            this.labelShip.TabIndex = 26;
+            this.labelShip.Text = "Ship";
+            // 
+            // comboBoxShips
+            // 
+            this.comboBoxShips.ArrowWidth = 1;
+            this.comboBoxShips.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxShips.ButtonColorScaling = 0.5F;
+            this.comboBoxShips.DataSource = null;
+            this.comboBoxShips.DisplayMember = "";
+            this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxShips.DropDownHeight = 200;
+            this.comboBoxShips.DropDownWidth = 1;
+            this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxShips.ItemHeight = 13;
+            this.comboBoxShips.Location = new System.Drawing.Point(52, 4);
+            this.comboBoxShips.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxShips.Name = "comboBoxShips";
+            this.comboBoxShips.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxShips.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxShips.ScrollBarWidth = 16;
+            this.comboBoxShips.SelectedIndex = -1;
+            this.comboBoxShips.SelectedItem = null;
+            this.comboBoxShips.SelectedValue = null;
+            this.comboBoxShips.Size = new System.Drawing.Size(218, 24);
+            this.comboBoxShips.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.comboBoxShips, "Select the entries by age");
+            this.comboBoxShips.ValueMember = "";
+            this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
             // UserControlModules
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -303,7 +292,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewModules;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        private System.Windows.Forms.Label label2;
         internal ExtendedControls.ComboBoxCustom comboBoxShips;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;

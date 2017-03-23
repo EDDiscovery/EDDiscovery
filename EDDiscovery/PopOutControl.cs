@@ -108,7 +108,7 @@ namespace EDDiscovery.Forms
             { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EDDiscovery.Properties.Resources.screenshot, "Display the screen shot view") },
             { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
             { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, "Display scan data", transparent: false) },
-            { PopOuts.Modules, new PopOutInfo("Modules", "Modules", EDDiscovery.Properties.Resources.module, "Display module data") },
+            { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EDDiscovery.Properties.Resources.module, "Display loadout data") },
             { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null, "Explore a collection of systems") },
             { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },

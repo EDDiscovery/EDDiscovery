@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.powerplaydeliver; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //U
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
             info = Tools.FieldBuilder("", Power, "Type:", Type, "Count:", Count);
