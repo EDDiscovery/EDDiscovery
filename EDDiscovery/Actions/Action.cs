@@ -115,6 +115,7 @@ namespace EDDiscovery.Actions
             new Commands("Say", typeof(ActionSay), ActionType.Cmd ),
             new Commands("Scan", typeof(ActionScan) , ActionType.Cmd),
             new Commands("Set", typeof(ActionSet) , ActionType.Cmd),
+            new Commands("Ship", typeof(ActionShip) , ActionType.Cmd),
             new Commands("Star", typeof(ActionStar) , ActionType.Cmd),
             new Commands("Timer", typeof(ActionTimer) , ActionType.Cmd),
             new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd),

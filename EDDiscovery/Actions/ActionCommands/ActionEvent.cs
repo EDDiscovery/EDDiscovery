@@ -242,6 +242,7 @@ namespace EDDiscovery.Actions
             {
                 ConditionVariables values = new ConditionVariables();
                 ActionVars.HistoryEventVars(values, he, prefix);
+                ActionVars.ShipInformation(values, he.ShipInformation, prefix, true);
                 ActionVars.SystemVars(values, he.System, prefix);
                 ap.Add(values);
             }

@@ -41,7 +41,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Power, -Cost);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //U
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
             info = Tools.FieldBuilder("", Power, "Cost:; credits", Cost);

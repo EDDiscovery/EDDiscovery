@@ -59,8 +59,11 @@ namespace EDDiscovery.EliteDangerous
                 else
                 {
                     int cap = FuelCapacity();
-                    if ( cap > 0 )
+                    if (cap > 0)
                         sb.Append(" Fuel Cap " + cap);
+                    cap = CargoCapacity();
+                    if (cap > 0)
+                        sb.Append(" Cargo Cap " + cap);
                 }
 
                 return sb.ToString();
@@ -92,6 +95,22 @@ namespace EDDiscovery.EliteDangerous
             {
                 int classpos;
                 if ( sm.Item.Contains("Fuel Tank") && (classpos = sm.Item.IndexOf("Class "))!=-1)
+                {
+                    char digit = sm.Item[classpos + 6];
+                    cap += (1 << (digit - '0'));        // 1<<1 = 2.. 1<<2 = 4, etc.
+                }
+            }
+
+            return cap;
+        }
+
+        public int CargoCapacity()
+        {
+            int cap = 0;
+            foreach (JournalLoadout.ShipModule sm in Modules.Values)
+            {
+                int classpos;
+                if (sm.Item.Contains("Cargo Rack") && (classpos = sm.Item.IndexOf("Class ")) != -1)
                 {
                     char digit = sm.Item[classpos + 6];
                     cap += (1 << (digit - '0'));        // 1<<1 = 2.. 1<<2 = 4, etc.
@@ -320,10 +339,17 @@ namespace EDDiscovery.EliteDangerous
         public bool HaveCurrentShip { get { return currentid >= 0; } }
         public ShipInformation CurrentShip { get { return (HaveCurrentShip) ? Ships[currentid] : null; } }
 
-        public ShipInformation GetShipByShortName( string sn )
+        public ShipInformation GetShipByShortName(string sn)
         {
             List<ShipInformation> lst = Ships.Values.ToList();
             int index = lst.FindIndex(x => x.ShipShortName.Equals(sn));
+            return (index >= 0) ? lst[index] : null;
+        }
+
+        public ShipInformation GetShipByFullInfoMatch(string sn)
+        {
+            List<ShipInformation> lst = Ships.Values.ToList();
+            int index = lst.FindIndex(x => x.ShipFullInfo.IndexOf(sn, StringComparison.InvariantCultureIgnoreCase)!=-1);
             return (index >= 0) ? lst[index] : null;
         }
 

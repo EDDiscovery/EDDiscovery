@@ -29,6 +29,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Item = JournalFieldNaming.GetBetterItemNameEvents(evt["Item"].Str());
             ItemLocalised = evt["Item_Localised"].Str();
+            if (ItemLocalised.Length == 0)                          // bug frontier in earlier 2.0 journals, no localised
+                ItemLocalised = Item;
+
             Cost = evt["Cost"].Long();
         }
 
