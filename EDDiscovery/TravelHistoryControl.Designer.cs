@@ -58,6 +58,7 @@ namespace EDDiscovery
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
+            this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.userControlTravelGrid = new EDDiscovery.UserControls.UserControlTravelGrid();
@@ -68,6 +69,7 @@ namespace EDDiscovery
             this.panelNoteArea = new System.Windows.Forms.Panel();
             this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
             this.panel_system = new System.Windows.Forms.Panel();
+            this.labelSolDist = new System.Windows.Forms.Label();
             this.labelHomeSystem = new System.Windows.Forms.Label();
             this.textBoxState = new ExtendedControls.TextBoxBorder();
             this.textBoxEconomy = new ExtendedControls.TextBoxBorder();
@@ -92,6 +94,8 @@ namespace EDDiscovery
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
             this.tabStripMiddleRight = new ExtendedControls.TabStrip();
             this.tabStripBottomRight = new ExtendedControls.TabStrip();
+            this.textBoxBody = new ExtendedControls.TextBoxBorder();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -185,7 +189,7 @@ namespace EDDiscovery
             // 
             this.textBoxHomeDist.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxHomeDist.BorderColorScaling = 0.5F;
-            this.textBoxHomeDist.Location = new System.Drawing.Point(50, 84);
+            this.textBoxHomeDist.Location = new System.Drawing.Point(50, 104);
             this.textBoxHomeDist.Name = "textBoxHomeDist";
             this.textBoxHomeDist.ReadOnly = true;
             this.textBoxHomeDist.Size = new System.Drawing.Size(67, 20);
@@ -239,7 +243,7 @@ namespace EDDiscovery
             this.comboBoxCustomPopOut.DataSource = null;
             this.comboBoxCustomPopOut.DisplayMember = "";
             this.comboBoxCustomPopOut.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomPopOut.DropDownHeight = 200;
+            this.comboBoxCustomPopOut.DropDownHeight = 250;
             this.comboBoxCustomPopOut.DropDownWidth = 150;
             this.comboBoxCustomPopOut.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomPopOut.ItemHeight = 13;
@@ -343,6 +347,18 @@ namespace EDDiscovery
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
+            // textBoxSolDist
+            // 
+            this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSolDist.BorderColorScaling = 0.5F;
+            this.textBoxSolDist.Location = new System.Drawing.Point(50, 122);
+            this.textBoxSolDist.Name = "textBoxSolDist";
+            this.textBoxSolDist.ReadOnly = true;
+            this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
+            this.textBoxSolDist.TabIndex = 44;
+            this.textBoxSolDist.TabStop = false;
+            this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to home planet");
+            // 
             // splitContainerLeftRight
             // 
             this.splitContainerLeftRight.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -425,7 +441,7 @@ namespace EDDiscovery
             this.panelTarget.Controls.Add(this.textBoxTarget);
             this.panelTarget.Controls.Add(this.labelTarget);
             this.panelTarget.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTarget.Location = new System.Drawing.Point(0, 284);
+            this.panelTarget.Location = new System.Drawing.Point(0, 294);
             this.panelTarget.Name = "panelTarget";
             this.panelTarget.Size = new System.Drawing.Size(337, 32);
             this.panelTarget.TabIndex = 44;
@@ -445,7 +461,7 @@ namespace EDDiscovery
             this.panelNoteArea.Controls.Add(this.richTextBoxNote);
             this.panelNoteArea.Controls.Add(this.labelNote);
             this.panelNoteArea.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNoteArea.Location = new System.Drawing.Point(0, 234);
+            this.panelNoteArea.Location = new System.Drawing.Point(0, 244);
             this.panelNoteArea.Name = "panelNoteArea";
             this.panelNoteArea.Size = new System.Drawing.Size(337, 50);
             this.panelNoteArea.TabIndex = 44;
@@ -467,6 +483,8 @@ namespace EDDiscovery
             // 
             // panel_system
             // 
+            this.panel_system.Controls.Add(this.labelSolDist);
+            this.panel_system.Controls.Add(this.textBoxSolDist);
             this.panel_system.Controls.Add(this.buttonEDSM);
             this.panel_system.Controls.Add(this.labelHomeSystem);
             this.panel_system.Controls.Add(this.textBoxHomeDist);
@@ -488,18 +506,30 @@ namespace EDDiscovery
             this.panel_system.Controls.Add(this.label5);
             this.panel_system.Controls.Add(this.textBoxY);
             this.panel_system.Controls.Add(this.textBoxX);
+            this.panel_system.Controls.Add(this.label1);
             this.panel_system.Controls.Add(this.label4);
+            this.panel_system.Controls.Add(this.textBoxBody);
             this.panel_system.Controls.Add(this.textBoxSystem);
             this.panel_system.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_system.Location = new System.Drawing.Point(0, 100);
             this.panel_system.Name = "panel_system";
-            this.panel_system.Size = new System.Drawing.Size(337, 134);
+            this.panel_system.Size = new System.Drawing.Size(337, 144);
             this.panel_system.TabIndex = 6;
+            // 
+            // labelSolDist
+            // 
+            this.labelSolDist.AutoSize = true;
+            this.labelSolDist.Location = new System.Drawing.Point(2, 122);
+            this.labelSolDist.Name = "labelSolDist";
+            this.labelSolDist.Size = new System.Drawing.Size(22, 13);
+            this.labelSolDist.TabIndex = 45;
+            this.labelSolDist.Text = "Sol";
+            this.labelSolDist.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelHomeSystem
             // 
             this.labelHomeSystem.AutoSize = true;
-            this.labelHomeSystem.Location = new System.Drawing.Point(1, 84);
+            this.labelHomeSystem.Location = new System.Drawing.Point(1, 104);
             this.labelHomeSystem.Name = "labelHomeSystem";
             this.labelHomeSystem.Size = new System.Drawing.Size(35, 13);
             this.labelHomeSystem.TabIndex = 43;
@@ -510,7 +540,7 @@ namespace EDDiscovery
             // 
             this.textBoxState.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxState.BorderColorScaling = 0.5F;
-            this.textBoxState.Location = new System.Drawing.Point(186, 84);
+            this.textBoxState.Location = new System.Drawing.Point(186, 104);
             this.textBoxState.Name = "textBoxState";
             this.textBoxState.ReadOnly = true;
             this.textBoxState.Size = new System.Drawing.Size(66, 20);
@@ -521,7 +551,7 @@ namespace EDDiscovery
             // 
             this.textBoxEconomy.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxEconomy.BorderColorScaling = 0.5F;
-            this.textBoxEconomy.Location = new System.Drawing.Point(186, 66);
+            this.textBoxEconomy.Location = new System.Drawing.Point(186, 86);
             this.textBoxEconomy.Name = "textBoxEconomy";
             this.textBoxEconomy.ReadOnly = true;
             this.textBoxEconomy.Size = new System.Drawing.Size(66, 20);
@@ -531,7 +561,7 @@ namespace EDDiscovery
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(144, 84);
+            this.label12.Location = new System.Drawing.Point(144, 104);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(32, 13);
             this.label12.TabIndex = 38;
@@ -541,7 +571,7 @@ namespace EDDiscovery
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(149, 102);
+            this.label13.Location = new System.Drawing.Point(149, 122);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(27, 13);
             this.label13.TabIndex = 36;
@@ -552,7 +582,7 @@ namespace EDDiscovery
             // 
             this.textBoxGovernment.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxGovernment.BorderColorScaling = 0.5F;
-            this.textBoxGovernment.Location = new System.Drawing.Point(186, 102);
+            this.textBoxGovernment.Location = new System.Drawing.Point(186, 122);
             this.textBoxGovernment.Name = "textBoxGovernment";
             this.textBoxGovernment.ReadOnly = true;
             this.textBoxGovernment.Size = new System.Drawing.Size(66, 20);
@@ -563,7 +593,7 @@ namespace EDDiscovery
             // 
             this.textBoxAllegiance.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxAllegiance.BorderColorScaling = 0.5F;
-            this.textBoxAllegiance.Location = new System.Drawing.Point(186, 48);
+            this.textBoxAllegiance.Location = new System.Drawing.Point(186, 68);
             this.textBoxAllegiance.Name = "textBoxAllegiance";
             this.textBoxAllegiance.ReadOnly = true;
             this.textBoxAllegiance.Size = new System.Drawing.Size(66, 20);
@@ -573,7 +603,7 @@ namespace EDDiscovery
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(125, 66);
+            this.label11.Location = new System.Drawing.Point(125, 86);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(51, 13);
             this.label11.TabIndex = 34;
@@ -583,7 +613,7 @@ namespace EDDiscovery
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(120, 48);
+            this.label10.Location = new System.Drawing.Point(120, 68);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(56, 13);
             this.label10.TabIndex = 32;
@@ -593,7 +623,7 @@ namespace EDDiscovery
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(145, 30);
+            this.label9.Location = new System.Drawing.Point(145, 50);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(31, 13);
             this.label9.TabIndex = 30;
@@ -604,7 +634,7 @@ namespace EDDiscovery
             // 
             this.textBoxVisits.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxVisits.BorderColorScaling = 0.5F;
-            this.textBoxVisits.Location = new System.Drawing.Point(186, 30);
+            this.textBoxVisits.Location = new System.Drawing.Point(186, 50);
             this.textBoxVisits.Name = "textBoxVisits";
             this.textBoxVisits.ReadOnly = true;
             this.textBoxVisits.Size = new System.Drawing.Size(66, 20);
@@ -614,7 +644,7 @@ namespace EDDiscovery
             // label_Z
             // 
             this.label_Z.AutoSize = true;
-            this.label_Z.Location = new System.Drawing.Point(30, 66);
+            this.label_Z.Location = new System.Drawing.Point(30, 86);
             this.label_Z.Name = "label_Z";
             this.label_Z.Size = new System.Drawing.Size(14, 13);
             this.label_Z.TabIndex = 20;
@@ -625,7 +655,7 @@ namespace EDDiscovery
             // 
             this.textBoxZ.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxZ.BorderColorScaling = 0.5F;
-            this.textBoxZ.Location = new System.Drawing.Point(50, 66);
+            this.textBoxZ.Location = new System.Drawing.Point(50, 86);
             this.textBoxZ.Name = "textBoxZ";
             this.textBoxZ.ReadOnly = true;
             this.textBoxZ.Size = new System.Drawing.Size(67, 20);
@@ -636,7 +666,7 @@ namespace EDDiscovery
             // 
             this.labelDistEnter.AutoSize = true;
             this.labelDistEnter.ForeColor = System.Drawing.Color.Black;
-            this.labelDistEnter.Location = new System.Drawing.Point(30, 48);
+            this.labelDistEnter.Location = new System.Drawing.Point(30, 68);
             this.labelDistEnter.Name = "labelDistEnter";
             this.labelDistEnter.Size = new System.Drawing.Size(14, 13);
             this.labelDistEnter.TabIndex = 18;
@@ -646,7 +676,7 @@ namespace EDDiscovery
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(30, 30);
+            this.label5.Location = new System.Drawing.Point(30, 50);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(14, 13);
             this.label5.TabIndex = 18;
@@ -657,7 +687,7 @@ namespace EDDiscovery
             // 
             this.textBoxY.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxY.BorderColorScaling = 0.5F;
-            this.textBoxY.Location = new System.Drawing.Point(50, 48);
+            this.textBoxY.Location = new System.Drawing.Point(50, 68);
             this.textBoxY.Name = "textBoxY";
             this.textBoxY.ReadOnly = true;
             this.textBoxY.Size = new System.Drawing.Size(67, 20);
@@ -668,7 +698,7 @@ namespace EDDiscovery
             // 
             this.textBoxX.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxX.BorderColorScaling = 0.5F;
-            this.textBoxX.Location = new System.Drawing.Point(50, 30);
+            this.textBoxX.Location = new System.Drawing.Point(50, 50);
             this.textBoxX.Name = "textBoxX";
             this.textBoxX.ReadOnly = true;
             this.textBoxX.Size = new System.Drawing.Size(67, 20);
@@ -761,6 +791,26 @@ namespace EDDiscovery
             this.tabStripBottomRight.StripAtTop = true;
             this.tabStripBottomRight.TabIndex = 0;
             // 
+            // textBoxBody
+            // 
+            this.textBoxBody.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBody.BorderColorScaling = 0.5F;
+            this.textBoxBody.Location = new System.Drawing.Point(50, 30);
+            this.textBoxBody.Name = "textBoxBody";
+            this.textBoxBody.ReadOnly = true;
+            this.textBoxBody.Size = new System.Drawing.Size(152, 20);
+            this.textBoxBody.TabIndex = 15;
+            this.textBoxBody.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Body";
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -846,5 +896,9 @@ namespace EDDiscovery
         private ExtendedControls.TabStrip tabStripBottom;
         private ExtendedControls.TabStrip tabStripMiddleRight;
         private ExtendedControls.TabStrip tabStripBottomRight;
+        private System.Windows.Forms.Label labelSolDist;
+        private ExtendedControls.TextBoxBorder textBoxSolDist;
+        private System.Windows.Forms.Label label1;
+        private ExtendedControls.TextBoxBorder textBoxBody;
     }
 }

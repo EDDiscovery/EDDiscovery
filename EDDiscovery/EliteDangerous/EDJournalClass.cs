@@ -32,6 +32,12 @@ using System.Threading;
 
 namespace EDDiscovery.EliteDangerous
 {
+    public class JournalReaderEntry
+    {
+        public JournalEntry JournalEntry;
+        public JObject Json;
+    }
+
     public class MonitorWatcher
     {
         public string m_watcherfolder;
@@ -95,17 +101,17 @@ namespace EDDiscovery.EliteDangerous
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
-                    List<JournalEntry> entries = reader.ReadJournalLog(true).ToList();      // this may create new commanders, and may write to the TLU db
+                    List<JournalReaderEntry> entries = reader.ReadJournalLog(true).ToList();      // this may create new commanders, and may write to the TLU db
                     ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
 
                     using (DbTransaction tn = cn.BeginTransaction())
                     {
-                        foreach (JournalEntry je in entries)
+                        foreach (JournalReaderEntry jre in entries)
                         {
-                            if (!existing[je.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(je, e)))
+                            if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
                             {
-                                System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", je.EventTimeUTC, je.EventTypeStr));
-                                je.Add(cn, tn);
+                                System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
+                                jre.JournalEntry.Add(jre.Json, cn, tn);
                             }
                         }
 
@@ -219,15 +225,74 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        private void ScanReader(EDJournalReader nfi, List<JournalEntry> entries)
+        {
+            int netlogpos = 0;
+
+            try
+            {
+                if (nfi.TravelLogUnit.id == 0)
+                {
+                    nfi.TravelLogUnit.type = 3;
+                    nfi.TravelLogUnit.Add();
+                }
+
+                netlogpos = nfi.TravelLogUnit.Size;
+
+                List<JournalReaderEntry> ents = nfi.ReadJournalLog().ToList();
+
+                if (ents.Count > 0)
+                {
+                    using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                    {
+                        using (DbTransaction txn = cn.BeginTransaction())
+                        {
+                            ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry, jre.Json).Count == 0).ToList();
+
+                            foreach (JournalReaderEntry jre in ents)
+                            {
+                                entries.Add(jre.JournalEntry);
+                                jre.JournalEntry.Add(jre.Json, cn, txn);
+                                ticksNoActivity = 0;
+                            }
+
+                            nfi.TravelLogUnit.Update(cn);
+
+                            txn.Commit();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Revert and re-read the failed entries
+                if (nfi != null && nfi.TravelLogUnit != null)
+                {
+                    nfi.TravelLogUnit.Size = netlogpos;
+                }
+
+                throw;
+            }
+        }
+
         public List<JournalEntry> ScanForNewEntries()
         {
             var entries = new List<JournalEntry>();
-            int netlogpos = 0;
             EDJournalReader nfi = null;
 
             try
             {
                 string filename = null;
+
+                if (lastnfi != null)
+                {
+                    ScanReader(lastnfi, entries);
+                }
+
+                if (entries.Count != 0)
+                {
+                    return entries;
+                }
 
                 if (m_netLogFileQueue.TryDequeue(out filename))      // if a new one queued, we swap to using it
                 {
@@ -274,51 +339,16 @@ namespace EDDiscovery.EliteDangerous
 
                 if (nfi != null)
                 {
-                    if (nfi.TravelLogUnit.id == 0)
-                    {
-                        nfi.TravelLogUnit.type = 3;
-                        nfi.TravelLogUnit.Add();
-                    }
-
-                    netlogpos = nfi.TravelLogUnit.Size;
-                    List<JournalEntry> ents = nfi.ReadJournalLog().ToList();
-
-                    if (ents.Count > 0)
-                    {
-                        using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-                        {
-                            using (DbTransaction txn = cn.BeginTransaction())
-                            {
-                                ents = ents.Where(je => JournalEntry.FindEntry(je).Count == 0).ToList();
-
-                                foreach (JournalEntry je in ents)
-                                {
-                                    entries.Add(je);
-                                    je.Add(cn, txn);
-                                    ticksNoActivity = 0;
-                                }
-
-                                nfi.TravelLogUnit.Update(cn);
-
-                                txn.Commit();
-                            }
-                        }
-                    }
+                    ScanReader(nfi, entries);
                 }
 
                 return entries;
             }
             catch (Exception ex)
             {
-                // Revert and re-read the failed entries
-                if (nfi != null && nfi.TravelLogUnit != null)
-                {
-                    nfi.TravelLogUnit.Size = netlogpos;
-                }
-
                 System.Diagnostics.Trace.WriteLine("Net tick exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                throw;
+                return new List<JournalEntry>();
             }
         }
 
@@ -337,55 +367,14 @@ namespace EDDiscovery.EliteDangerous
 
         private Thread ScanThread;
         private ManualResetEvent StopRequested;
-        private Action<Action> InvokeOnUiThread;
+        private Action<Action> InvokeAsyncOnUiThread;
         private List<MonitorWatcher> watchers = new List<MonitorWatcher>();
         private string frontierfolder;
 
-        public EDJournalClass(Action<Action> invokeOnUiThread)
+        public EDJournalClass(Action<Action> invokeAsyncOnUiThread)
         {
-            InvokeOnUiThread = invokeOnUiThread;
+            InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
             frontierfolder = GetDefaultJournalDir();
-        }
-
-        public static void ReadCmdLineJournal(string file)
-        {
-            System.IO.StreamReader filejr = new System.IO.StreamReader(file);
-            string line;
-            string system = "";
-            StarScan ss = new StarScan();
-
-            while ((line = filejr.ReadLine()) != null)
-            {
-                if (line.Equals("END"))
-                    break;
-                //System.Diagnostics.Trace.WriteLine(line);
-                if (line.Length > 0)
-                {
-                    JObject jo = (JObject)JObject.Parse(line);
-                    JSONPrettyPrint jpp = new JSONPrettyPrint(EliteDangerous.JournalEntry.StandardConverters(), "event;timestamp", "_Localised", (string)jo["event"]);
-                    string s = jpp.PrettyPrint(line, 80);
-                    //System.Diagnostics.Trace.WriteLine(s);
-
-                    EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
-                    //System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
-
-                    if (je.EventTypeID == JournalTypeEnum.Location)
-                    {
-                        EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
-                        system = jl.StarSystem;
-                    }
-                    else if (je.EventTypeID == JournalTypeEnum.FSDJump)
-                    {
-                        EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
-                        system = jfsd.StarSystem;
-
-                    }
-                    else if (je.EventTypeID == JournalTypeEnum.Scan)
-                    {
-                        ss.Process(je as JournalEvents.JournalScan, new SystemClass(system));
-                    }
-                }
-            }
         }
 
         public static string GetDefaultJournalDir()
@@ -519,7 +508,7 @@ namespace EDDiscovery.EliteDangerous
 
                 if (jl != null && jl.Count != 0 && !stopRequested.WaitOne(0))
                 {
-                    InvokeOnUiThread(() => ScanTickDone(jl));
+                    InvokeAsyncOnUiThread(() => ScanTickDone(jl));
                 }
             }
         }

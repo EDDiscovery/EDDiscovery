@@ -86,22 +86,22 @@ namespace EDDiscovery.Actions
             if (av == null)
                 FromString(userdata, out av, out operations);
 
-            foreach (string key in av.Keys)
+            foreach (string key in av.NameEnumuerable)
             {
                 string res;
 
                 if (operations[key].Contains("$"))
                     res = av[key];
-                else if (ap.functions.ExpandString(av[key], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                else if (ap.functions.ExpandString(av[key], out res) == ConditionFunctions.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
                     ap.ReportError(res);
                     break;
                 }
 
-                if (operations[key].Contains("+") && ap.currentvars.ContainsKey(key))
-                    ap.currentvars[key] += res;
+                if (operations[key].Contains("+") && ap.VarExist(key))
+                    ap[key] += res;
                 else
-                    ap.currentvars[key] = res;
+                    ap[key] = res;
             }
 
             if (av.Count == 0)
@@ -127,13 +127,13 @@ namespace EDDiscovery.Actions
             if (av == null)
                 FromString(userdata, out av, out operations);
 
-            foreach (string key in av.Keys)
+            foreach (string key in av.NameEnumuerable)
             {
                 string res;
 
                 if (operations[key].Contains("$"))
                     res = av[key];
-                else if (ap.functions.ExpandString(av[key], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
+                else if (ap.functions.ExpandString(av[key],out res) == ConditionFunctions.ExpandResult.Failed)
                 {
                     ap.ReportError(res);
                     break;
@@ -146,7 +146,7 @@ namespace EDDiscovery.Actions
                     break;
                 }
 
-                ap.currentvars[key] = value;
+                ap[key] = value;
             }
 
             if (av.Count == 0)
@@ -172,26 +172,26 @@ namespace EDDiscovery.Actions
             if (av == null)
                 FromString(userdata, out av, out operations);
 
-            foreach (string key in av.Keys)
+            foreach (string key in av.NameEnumuerable)
             {
                 string res;
 
                 if (operations[key].Contains("$"))
                     res = av[key];
-                else if (ap.functions.ExpandString(av[key], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)
+                else if (ap.functions.ExpandString(av[key],  out res) == ConditionFunctions.ExpandResult.Failed)
                 {
                     ap.ReportError(res);
                     break;
                 }
 
-                if (operations[key].Contains("+") && ap.currentvars.ContainsKey(key))
+                if (operations[key].Contains("+") && ap.VarExist(key))
                 {
-                    ap.currentvars[key] += res;
-                    ap.actioncontroller.SetNonPersistentGlobal(key, ap.currentvars[key]);
+                    ap[key] += res;
+                    ap.actioncontroller.SetNonPersistentGlobal(key, ap[key]);
                 }
                 else 
                 {
-                    ap.currentvars[key] = res;
+                    ap[key] = res;
                     ap.actioncontroller.SetNonPersistentGlobal(key, res);
                 }
             }
@@ -219,26 +219,26 @@ namespace EDDiscovery.Actions
             if (av == null)
                 FromString(userdata, out av, out operations);
 
-            foreach (string key in av.Keys)
+            foreach (string key in av.NameEnumuerable)
             {
                 string res;
 
                 if (operations[key].Contains("$"))
                     res = av[key];
-                else if (ap.functions.ExpandString(av[key], ap.currentvars, out res) == ConditionLists.ExpandResult.Failed)       //Expand out.. and if no errors
+                else if (ap.functions.ExpandString(av[key],  out res) == ConditionFunctions.ExpandResult.Failed)       //Expand out.. and if no errors
                 {
                     ap.ReportError(res);
                     break;
                 }
 
-                if (operations[key].Contains("+") && ap.currentvars.ContainsKey(key))
+                if (operations[key].Contains("+") && ap.VarExist(key))
                 {
-                    ap.currentvars[key] += res;
-                    ap.actioncontroller.SetPeristentGlobal(key, ap.currentvars[key]);
+                    ap[key] += res;
+                    ap.actioncontroller.SetPeristentGlobal(key, ap[key]);
                 }
                 else
                 {
-                    ap.currentvars[key] = res;
+                    ap[key] = res;
                     ap.actioncontroller.SetPeristentGlobal(key, res);
                 }
             }
@@ -253,6 +253,8 @@ namespace EDDiscovery.Actions
 
     public class ActionDeleteVariable: Action
     {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }
+
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Variable name", UserData, "Configure DeleteVariable Command");
@@ -267,7 +269,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, ap.currentvars, out res) != ConditionLists.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData,  out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser p = new StringParser(res);
 
@@ -275,9 +277,38 @@ namespace EDDiscovery.Actions
                 while ((v = p.NextWord(", ")) != null)
                 {
                     ap.actioncontroller.DeleteVariable(v);
-                    ap.currentvars.Delete(v);
+                    ap.DeleteVar(v);
                     p.IsCharMoveOn(',');
                 }
+            }
+            else
+                ap.ReportError(res);
+
+            return true;
+        }
+    }
+
+    public class ActionExpr: Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Expression", UserData, "Configure Function Expression");
+            if (promptValue != null)
+            {
+                userdata = promptValue;
+            }
+
+            return (promptValue != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            string res;
+            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            {
+                ap["Result"] = res;
             }
             else
                 ap.ReportError(res);

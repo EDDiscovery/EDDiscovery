@@ -62,9 +62,10 @@ namespace EDDiscovery
 
         public int Count { get { return values.Count; } }
 
-        public IEnumerable<string> Keys { get { return values.Keys; } }
-        public List<string> KeyList { get { return values.Keys.ToList(); } }
-        public bool ContainsKey(string s) { return values.ContainsKey(s); }
+        public IEnumerable<string> NameEnumuerable { get { return values.Keys; } }
+        public List<string> NameList { get { return values.Keys.ToList(); } }
+
+        public bool Exists(string s) { return values.ContainsKey(s); }
 
         public void Clear() { values.Clear(); }
 
@@ -101,20 +102,22 @@ namespace EDDiscovery
 
         // Print vars, if altops is passed in, you can output using alternate operators
 
-        public string ToString(Dictionary<string, string> altops = null, string pad = "", bool bracket = false)
+        public string ToString(Dictionary<string, string> altops = null, string pad = "", bool bracket = false , string separ = "," , bool quoteit = true)
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
             {
                 if (s.Length > 0)
-                    s += ",";
+                    s += separ;
+
+                string vs = (quoteit) ? v.Value.QuoteString(comma: true, bracket: bracket) : v.Value;
 
                 if ( altops == null )
-                    s += v.Key + pad + "=" + pad + v.Value.QuoteString(comma:true, bracket: bracket);
+                    s += v.Key + pad + "=" + pad + vs;
                 else
                 {
                     System.Diagnostics.Debug.Assert(altops.ContainsKey(v.Key));
-                    s += v.Key + pad + altops[v.Key] + pad + v.Value.QuoteString(comma:true, bracket: bracket);
+                    s += v.Key + pad + altops[v.Key] + pad + vs;
                 }
             }
 
@@ -299,16 +302,8 @@ namespace EDDiscovery
             return ret;
         }
 
-        public void DumpVars(string prefix = "")
-        {
-            foreach (KeyValuePair<string, string> k in values)
-            { System.Diagnostics.Debug.WriteLine(prefix + k.Key + "=" + k.Value); }
-        }
-
-        public delegate ConditionLists.ExpandResult ExpandString(string input, ConditionVariables vars, out string result);    // callback, if we want to expand the content string
-
         // all variables, expand out thru macro expander.  does not alter these ones
-        public ConditionVariables ExpandAll(ExpandString e, ConditionVariables vars, out string errlist)
+        public ConditionVariables ExpandAll(ConditionFunctions e, ConditionVariables vars, out string errlist)
         {
             errlist = null;
 
@@ -316,7 +311,7 @@ namespace EDDiscovery
 
             foreach( KeyValuePair<string,string> k in values)
             {
-                if (e(values[k.Key], vars, out errlist) == ConditionLists.ExpandResult.Failed)
+                if (e.ExpandString(values[k.Key], out errlist) == ConditionFunctions.ExpandResult.Failed)
                     return null;
 
                 exp[k.Key] = errlist;
@@ -340,125 +335,60 @@ namespace EDDiscovery
             return initial.ToString();
         }
 
-        public bool GetJSONFieldNamesAndValues(string json, string prefix = "")
-        {
-            try
-            {
-                JObject jo = JObject.Parse(json);  // Create a clone
+        #region Object values to this class
 
-                foreach (JToken jc in jo.Children())
+        public bool GetValuesIndicated(Object o)                                            // get the ones set up in the class
+        {
+            Type jtype = o.GetType();
+
+            foreach ( string k in values.Keys.ToList())
+            {
+                System.Reflection.PropertyInfo pi = jtype.GetProperty(k);
+                if ( pi != null )
                 {
-                    ExpandTokensA(jc, prefix);
+                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                    AddDataOfType(getter.Invoke(o, null), pi.PropertyType, k, 0);
                 }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private void ExpandTokensA(JToken jt, string prefix)
-        {
-            if (jt.HasValues)
-            {
-                JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
-
-                foreach (JToken jc in jt.Children())
+                else
                 {
-                    if (jc.HasValues)
+                    System.Reflection.FieldInfo fi = jtype.GetField(k);
+                    if ( fi != null )
                     {
-                        ExpandTokensA(jc, prefix);
-                    }
-                    else if (Array.FindIndex(decodeable, x => x == jc.Type) != -1)
-                    {
-                        values[prefix + jc.Path] = jc.Value<string>();
+                        AddDataOfType(fi.GetValue(o), fi.FieldType, k, 0);
                     }
                 }
             }
+
+            return true;
         }
 
-        // given a set of valuesneeded, fill in the values.. only fills in the ones in valuesneeded
 
-        public bool GetJSONFieldValuesIndicated(string json)
-        {
-            try
-            {
-                JObject jo = JObject.Parse(json);
-
-                int togo = values.Count;
-
-                foreach (JToken jc in jo.Children())
-                {
-                    ExpandTokensB(jc, ref togo);
-                    if (togo == 0)
-                        break;
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-
-        }
-
-        private void ExpandTokensB(JToken jt, ref int togo)
-        {
-            JTokenType[] decodeable = { JTokenType.Boolean, JTokenType.Date, JTokenType.Integer, JTokenType.String, JTokenType.Float, JTokenType.TimeSpan };
-
-            if (jt.HasValues && togo > 0)
-            {
-                foreach (JToken jc in jt.Children())
-                {
-                    if (jc.HasValues)
-                    {
-                        ExpandTokensB(jc, ref togo);
-                    }
-                    else
-                    {
-                        string name = jc.Path;
-
-                        if (values.ContainsKey(name) && Array.FindIndex(decodeable, x => x == jc.Type) != -1)
-                        {
-                            values[name] = jc.Value<string>();
-                            togo--;
-
-                            // System.Diagnostics.Debug.WriteLine("Found "+ name);
-                        }
-                    }
-
-                    if (togo == 0)  // if we have all values, stop
-                        break;
-                }
-            }
-        }
-
-        public void AddPropertiesFieldsOfClass( Object o, string prefix = "" )
+        public void AddPropertiesFieldsOfClass( Object o, string prefix , Type[] propexcluded , int maxdepth )      // get all data in the class
         {
             Type jtype = o.GetType();
 
             foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
             {
-                if (pi.GetIndexParameters().GetLength(0) == 0)      // only properties with zero parameters are called
+                if (pi.GetIndexParameters().GetLength(0) == 0 && (propexcluded == null || !propexcluded.Contains(pi.PropertyType)))      // only properties with zero parameters are called
                 {
                     string name = prefix + pi.Name;
                     System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                    AddDataOfType(getter.Invoke(o, null), pi.PropertyType, name);
+                    AddDataOfType(getter.Invoke(o, null), pi.PropertyType, name, maxdepth);
                 }
             }
 
             foreach (System.Reflection.FieldInfo fi in jtype.GetFields())
             {
                 string name = prefix + fi.Name;
-                AddDataOfType(fi.GetValue(o), fi.FieldType, name);
+                AddDataOfType(fi.GetValue(o), fi.FieldType, name, maxdepth);
             }
         }
 
-        public void AddDataOfType(Object o, Type rettype, string name)
+        public void AddDataOfType(Object o, Type rettype, string name, int depth )
         {
+            if (depth < 0 )      // 0, list, class, object, .. limit depth
+                return;
+
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
             try // just to make sure a strange type does not barfe it
@@ -478,8 +408,24 @@ namespace EDDiscovery
                             if (k is string)
                             {
                                 Object v = data[k as string];
-                                AddDataOfType(v, v.GetType(), name + "_" + (string)k);
+                                AddDataOfType(v, v.GetType(), name + "_" + (string)k, depth-1);
                             }
+                        }
+                    }
+                }
+                else if (rettype.UnderlyingSystemType.Name.Contains("List"))
+                {
+                    if (o == null)
+                        values[name + "Count"] = "0";                           // we always get a NameCount so we can tell..
+                    else
+                    {
+                        var data = (System.Collections.IList)o;           // lovely to work out
+
+                        values[name + "Count"] = data.Count.ToString(ct);       // purposely not putting a _ to distinguish it from the entries
+
+                        for (int i = 0; i < data.Count; i++)
+                        { 
+                            AddDataOfType(data[i], data[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]" , depth-1);
                         }
                     }
                 }
@@ -494,8 +440,8 @@ namespace EDDiscovery
                         values[name + "_Length"] = array.Length.ToString(ct);
                         for (int i = 0; i < array.Length; i++)
                         {
-                            AddDataOfType(array[i], array[i].GetType(), name + "[" + (i + 1).ToString(ct) + "]");
-                        }
+                            AddDataOfType(array[i], array[i].GetType(), name + "[" + i.ToString(ct) + "]" , depth-1);
+                    }
                     }
                 }
                 else if (o == null)
@@ -508,9 +454,18 @@ namespace EDDiscovery
                 }
                 else if (rettype.IsClass)
                 {
+                    foreach (System.Reflection.PropertyInfo pi in rettype.GetProperties())
+                    {
+                        if (pi.GetIndexParameters().GetLength(0) == 0 && pi.PropertyType.IsPublic)      // only properties with zero parameters are called
+                        {
+                            System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                            AddDataOfType(getter.Invoke(o, null), pi.PropertyType, name + "_" + pi.Name , depth-1);
+                        }
+                    }
+
                     foreach (System.Reflection.FieldInfo fi in rettype.GetFields())
                     {
-                        AddDataOfType(fi.GetValue(o), fi.FieldType, name + "_" + fi.Name);
+                        AddDataOfType(fi.GetValue(o), fi.FieldType, name + "_" + fi.Name, depth-1);
                     }
                 }
                 else if (o is bool)
@@ -538,10 +493,12 @@ namespace EDDiscovery
 
                     Type nulltype = pvalue.PropertyType;    // its type and value are found..
                     var value = pvalue.GetValue(o);
-                    AddDataOfType(value, nulltype, name);         // recurse to decode it
+                    AddDataOfType(value, nulltype, name, depth-1);         // recurse to decode it
                 }
             }
             catch { }
         }
+
+        #endregion
     }
 }

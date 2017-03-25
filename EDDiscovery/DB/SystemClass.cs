@@ -1839,7 +1839,7 @@ namespace EDDiscovery.DB
                         }
                         catch
                         {
-                            MessageBox.Show("There is a problem using the EDDB systems file." + Environment.NewLine +
+                            EDDiscovery.Forms.MessageBoxTheme.Show("There is a problem using the EDDB systems file." + Environment.NewLine +
                                             "Please perform a manual EDDB sync (see Admin menu) next time you run the program ", "EDDB Sync Error");
                             break;
                         }

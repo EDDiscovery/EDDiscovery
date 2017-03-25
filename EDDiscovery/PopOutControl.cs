@@ -50,7 +50,10 @@ namespace EDDiscovery.Forms
 
         public enum PopOuts        // id's.. used in tab controls, and in button pop outs button
         {
-            // IN TABS
+            Spanel,
+            Trippanel,
+            NotePanel,
+            RouteTracker,
             Log,
             StarDistance,
             Materials,
@@ -61,12 +64,10 @@ namespace EDDiscovery.Forms
             ScreenShot,
             Statistics,
             Scan,
-            // Not in TABS
-            Spanel,
-            Trippanel,
-            NotePanel,
-            RouteTracker,
-            Exploration
+            Modules,
+            Exploration,
+
+            StartTabButtons = Log,
         };
 
         public class PopOutInfo
@@ -107,11 +108,12 @@ namespace EDDiscovery.Forms
             { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EDDiscovery.Properties.Resources.screenshot, "Display the screen shot view") },
             { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
             { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, "Display scan data", transparent: false) },
+            { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EDDiscovery.Properties.Resources.module, "Display loadout data") },
+            { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null, "Explore a collection of systems") },
             { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
             { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
-            { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null, "Explore a collection of systems") },
         };
 
         public static UserControlCommonBase Create(PopOuts i)
@@ -127,6 +129,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.TravelGrid: return new UserControlTravelGrid();
                 case PopOuts.ScreenShot: return new UserControlScreenshot();
                 case PopOuts.Exploration: return new UserControlExploration();
+                case PopOuts.Modules: return new UserControlModules();
                 case PopOuts.Statistics: return new UserControlStats();
                 case PopOuts.Scan: return new UserControlScan();
                 case PopOuts.Spanel: return new UserControlSpanel();

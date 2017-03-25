@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EDDiscovery2.DB;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {
@@ -76,7 +77,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        MaterialCommoditiesLedger current_mc;
+        Ledger current_mc;
 
         public void Redisplay(HistoryList hl)
         {
@@ -93,7 +94,7 @@ namespace EDDiscovery.UserControls
             Display(history.materialcommodititiesledger);
         }
 
-        public void Display(MaterialCommoditiesLedger mc)
+        public void Display(Ledger mc)
         {
             dataGridViewLedger.Rows.Clear();
             bool utctime = EDDConfig.Instance.DisplayUTC;
@@ -105,7 +106,7 @@ namespace EDDiscovery.UserControls
             if (mc != null && mc.Transactions.Count > 0)
             {
                 var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
-                List<MaterialCommoditiesLedger.Transaction> filteredlist = filter.Filter(mc.Transactions);
+                List<Ledger.Transaction> filteredlist = filter.Filter(mc.Transactions);
 
                 filteredlist = FilterByJournalEvent(filteredlist, DB.SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
 
@@ -113,7 +114,7 @@ namespace EDDiscovery.UserControls
                 {
                     for (int i = filteredlist.Count - 1; i >= 0; i--)
                     {
-                        MaterialCommoditiesLedger.Transaction tx = filteredlist[i];
+                        Ledger.Transaction tx = filteredlist[i];
 
                         object[] rowobj = { utctime ? tx.utctime : tx.utctime.ToLocalTime() ,
                                             tx.jtype.ToString().SplitCapsWord(),
@@ -138,7 +139,7 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.Columns[0].HeaderText = utctime ? "Game Time" : "Time";
         }
 
-        public List<MaterialCommoditiesLedger.Transaction> FilterByJournalEvent(List<MaterialCommoditiesLedger.Transaction> txlist, string eventstring)
+        public List<Ledger.Transaction> FilterByJournalEvent(List<Ledger.Transaction> txlist, string eventstring)
         {
             if (eventstring.Equals("All"))
                 return txlist;

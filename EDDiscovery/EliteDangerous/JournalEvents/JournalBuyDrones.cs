@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -28,10 +28,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalBuyDrones(JObject evt ) : base(evt, JournalTypeEnum.BuyDrones)
         {
-            Type = JSONHelper.GetStringDef(evt["Type"]);
-            Count = JSONHelper.GetInt(evt["Count"]);
-            BuyPrice = JSONHelper.GetLong(evt["BuyPrice"]);
-            TotalCost = JSONHelper.GetLong(evt["TotalCost"]);
+            Type = evt["Type"].Str();
+            Count = evt["Count"].Int();
+            BuyPrice = evt["BuyPrice"].Long();
+            TotalCost = evt["TotalCost"].Long();
 
         }
         public string Type { get; set; }
@@ -39,12 +39,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.buydrones; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.buydrones; } }
 
-        public void Ledger(EDDiscovery2.DB.MaterialCommoditiesLedger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count + " drones", -TotalCost);
         }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("Type:", Type, "Count:", Count, "Total Cost:; credits", TotalCost, "each:; credits", BuyPrice);
+            detailed = "";
+        }
     }
 }

@@ -92,6 +92,15 @@ namespace EDDiscovery
             }
         }
 
+        public string NextWordComma(bool lowercase = false, bool replaceescape = false)           // comma separ
+        {
+            string res = NextWord(" ,", lowercase, replaceescape);
+            if (IsEOL || IsCharMoveOn(','))
+                return res;
+            else
+                return null;
+        }
+
         public string NextQuotedWord(string nonquoteterminators = " ", bool lowercase = false, bool replaceescape = false)
         {
             if (pos < line.Length)
@@ -206,27 +215,5 @@ namespace EDDiscovery
 
             return sl;
         }
-
-        public int? GetInt(string terminators = ", ")
-        {
-            string s = NextWord(terminators);
-            int i;
-            if (s != null && s.InvariantParse(out i))
-                return i;
-            else
-                return null;
-        }
-
-        public long? GetLong(string terminators = ", ")
-        {
-            string s = NextWord(terminators);
-            long i;
-            if (s != null && s.InvariantParse(out i))
-                return i;
-            else
-                return null;
-        }
-
     }
-
 }

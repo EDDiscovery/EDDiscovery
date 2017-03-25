@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -40,13 +40,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalRank(JObject evt ) : base(evt, JournalTypeEnum.Rank)
         {
-            Combat = (CombatRank)JSONHelper.GetInt(evt["Combat"]);
-            Trade = (TradeRank)JSONHelper.GetInt(evt["Trade"]);
-            Explore = (ExplorationRank)JSONHelper.GetInt(evt["Explore"]);
-            Empire = (EmpireRank)JSONHelper.GetInt(evt["Empire"]);
-            Federation = (FederationRank)JSONHelper.GetInt(evt["Federation"]);
-            CQC = (CQCRank)JSONHelper.GetInt(evt["CQC"]);
-  
+            Combat = (CombatRank)evt["Combat"].Int();
+            Trade = (TradeRank)evt["Trade"].Int();
+            Explore = (ExplorationRank)evt["Explore"].Int();
+            Empire = (EmpireRank)evt["Empire"].Int();
+            Federation = (FederationRank)evt["Federation"].Int();
+            CQC = (CQCRank)evt["CQC"].Int();
+
         }
         public CombatRank Combat { get; set; }
         public TradeRank Trade { get; set; }
@@ -55,7 +55,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public FederationRank Federation { get; set; }
         public CQCRank CQC { get; set; }
 
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rank; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rank; } }
 
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        {
+            summary = EventTypeStr.SplitCapsWord();
+            info = Tools.FieldBuilder("", Combat.ToString().SplitCapsWord(),
+                                      "", Trade.ToString().SplitCapsWord(),
+                                      "", Explore.ToString().SplitCapsWord(),
+                                      "", Federation.ToString().SplitCapsWord(),
+                                      "", Empire.ToString().SplitCapsWord(),
+                                      "", CQC.ToString().SplitCapsWord());
+            detailed = "";
+        }
     }
 }

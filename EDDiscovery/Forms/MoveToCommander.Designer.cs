@@ -43,33 +43,43 @@ namespace EDDiscovery2
         /// </summary>
         private void InitializeComponent()
         {
-            this.comboBoxCommanders = new System.Windows.Forms.ComboBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MoveToCommander));
             this.label1 = new System.Windows.Forms.Label();
-            this.buttonTransfer = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonTransfer = new ExtendedControls.ButtonExt();
+            this.comboBoxCommanders = new ExtendedControls.ComboBoxCustom();
+            this.buttonExtCancel = new ExtendedControls.ButtonExt();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // comboBoxCommanders
-            // 
-            this.comboBoxCommanders.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCommanders.FormattingEnabled = true;
-            this.comboBoxCommanders.Location = new System.Drawing.Point(12, 39);
-            this.comboBoxCommanders.Name = "comboBoxCommanders";
-            this.comboBoxCommanders.Size = new System.Drawing.Size(165, 21);
-            this.comboBoxCommanders.TabIndex = 0;
-            this.comboBoxCommanders.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommanders_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 9);
+            this.label1.Location = new System.Drawing.Point(16, 25);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(183, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Move selected history to commander.";
             // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.buttonExtCancel);
+            this.panel1.Controls.Add(this.buttonTransfer);
+            this.panel1.Controls.Add(this.comboBoxCommanders);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(322, 139);
+            this.panel1.TabIndex = 4;
+            // 
             // buttonTransfer
             // 
-            this.buttonTransfer.Location = new System.Drawing.Point(253, 12);
+            this.buttonTransfer.BorderColorScaling = 1.25F;
+            this.buttonTransfer.ButtonColorScaling = 0.5F;
+            this.buttonTransfer.ButtonDisabledScaling = 0.5F;
+            this.buttonTransfer.Location = new System.Drawing.Point(234, 100);
             this.buttonTransfer.Name = "buttonTransfer";
             this.buttonTransfer.Size = new System.Drawing.Size(75, 23);
             this.buttonTransfer.TabIndex = 3;
@@ -77,26 +87,67 @@ namespace EDDiscovery2
             this.buttonTransfer.UseVisualStyleBackColor = true;
             this.buttonTransfer.Click += new System.EventHandler(this.buttonTransfer_Click);
             // 
+            // comboBoxCommanders
+            // 
+            this.comboBoxCommanders.ArrowWidth = 1;
+            this.comboBoxCommanders.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCommanders.ButtonColorScaling = 0.5F;
+            this.comboBoxCommanders.DataSource = null;
+            this.comboBoxCommanders.DisplayMember = "";
+            this.comboBoxCommanders.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCommanders.DropDownHeight = 106;
+            this.comboBoxCommanders.DropDownWidth = 165;
+            this.comboBoxCommanders.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCommanders.ItemHeight = 13;
+            this.comboBoxCommanders.Location = new System.Drawing.Point(19, 58);
+            this.comboBoxCommanders.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCommanders.Name = "comboBoxCommanders";
+            this.comboBoxCommanders.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCommanders.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCommanders.ScrollBarWidth = 16;
+            this.comboBoxCommanders.SelectedIndex = -1;
+            this.comboBoxCommanders.SelectedItem = null;
+            this.comboBoxCommanders.SelectedValue = null;
+            this.comboBoxCommanders.Size = new System.Drawing.Size(290, 21);
+            this.comboBoxCommanders.TabIndex = 0;
+            this.comboBoxCommanders.ValueMember = "";
+            this.comboBoxCommanders.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommanders_SelectedIndexChanged);
+            // 
+            // buttonExtCancel
+            // 
+            this.buttonExtCancel.BorderColorScaling = 1.25F;
+            this.buttonExtCancel.ButtonColorScaling = 0.5F;
+            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
+            this.buttonExtCancel.Location = new System.Drawing.Point(141, 100);
+            this.buttonExtCancel.Name = "buttonExtCancel";
+            this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtCancel.TabIndex = 4;
+            this.buttonExtCancel.Text = "Cancel";
+            this.buttonExtCancel.UseVisualStyleBackColor = true;
+            this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
+            // 
             // MoveToCommander
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(340, 113);
-            this.Controls.Add(this.buttonTransfer);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBoxCommanders);
+            this.ClientSize = new System.Drawing.Size(322, 139);
+            this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MoveToCommander";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MoveToCommander";
-            this.Load += new System.EventHandler(this.MoveToCommander_Load);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ComboBox comboBoxCommanders;
+        private ExtendedControls.ComboBoxCustom comboBoxCommanders;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button buttonTransfer;
+        private ExtendedControls.ButtonExt buttonTransfer;
+        private System.Windows.Forms.Panel panel1;
+        private ExtendedControls.ButtonExt buttonExtCancel;
     }
 }

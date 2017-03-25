@@ -337,7 +337,7 @@ namespace EDDiscovery2
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
 
-            _formmap.Invoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
+            _formmap.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
             {
                 _formmap.ChangeNamedStars();
             });

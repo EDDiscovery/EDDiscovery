@@ -308,13 +308,13 @@ namespace EDDiscovery.UserControls
 
             if (sc != null && (!sc.IsEDSMBody || checkBoxEDSM.Checked))     // if got one, and its our scan, or we are showing EDSM
             {
-                tip = sc.DisplayString(true);
+                tip = sc.DisplayString();
 
                 if (sc.IsStar)
                 {
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1, 
                                                 new Point(curpos.X+offset, curpos.Y + alignv) ,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);          // and the label needs to be a quarter height below it..
+                                                size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
 
                     if ( sc.HasRings )
                     {
@@ -332,7 +332,7 @@ namespace EDDiscovery.UserControls
 
                             endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt, 
                                 new Point( curpos.X, curpos.Y + alignv ), new Size(size.Width/2,size.Height), name,
-                                                                sc.RingInformationMoons(i), alignv + labelvoff, sc.IsEDSMBody);
+                                                                sc.RingInformationMoons(i), alignv + labelvoff, sc.IsEDSMBody, false);
 
                             curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
                         }
@@ -370,13 +370,13 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.ownname, tip, labelvoff, sc.IsEDSMBody);
+                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.customname ?? sn.ownname, tip, labelvoff, sc.IsEDSMBody);
                         offset = size.Width;                                        // return that the middle is now this
                     }
                     else
                     {
                         endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size, 
-                                                    sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);
+                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);
                         offset += size.Width / 2;
                     }
 
@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + "\n\nNo scan data available";
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.ownname, tip , alignv + labelvoff, false);
+                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip , alignv + labelvoff, false);
                 offset += size.Width / 2;       // return the middle used was this..
             }
 
@@ -419,7 +419,7 @@ namespace EDDiscovery.UserControls
                 string tooltip = sd.Key;
                 Color fillc = Color.Yellow;
 
-                EDDiscovery2.DB.MaterialCommodity mc = EDDiscovery2.DB.MaterialCommodity.GetCachedMaterial(sd.Key);
+                EDDiscovery2.DB.MaterialCommodityDB mc = EDDiscovery2.DB.MaterialCommodityDB.GetCachedMaterial(sd.Key);
                 if (mc != null)
                 {
                     abv = mc.shortname;
@@ -463,13 +463,13 @@ namespace EDDiscovery.UserControls
         }
 
         Point CreateImageLabel(List<PictureBoxHotspot.ImageElement> c, Image i, Point postopright, Size size, string label,
-                                    string ttext , int labelhoff, bool fromEDSM)
+                                    string ttext , int labelhoff, bool fromEDSM, bool imgowned = true)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
             if (fromEDSM)
                 ttext = "From EDSM" + Environment.NewLine + ttext;
 
-            PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext);
+            PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext, imgowned);
 
             Point max = new Point(postopright.X + size.Width, postopright.Y + size.Height);
 

@@ -78,7 +78,7 @@ namespace EDDiscovery
 
             if (vbs != null)
             {
-                foreach (string key in vbs.Keys)
+                foreach (string key in vbs.NameEnumuerable)
                 {
                     CreateEntry(key,vbs[key], (altops!= null) ? altops[key] : "=");
                 }

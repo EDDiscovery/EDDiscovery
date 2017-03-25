@@ -197,12 +197,12 @@ namespace EDDiscovery
                         writer.WriteLine(system);
                     }
                 }
-                MessageBox.Show(this, "ImportStars.txt has been created in " + exportfilename + Environment.NewLine
+                EDDiscovery.Forms.MessageBoxTheme.Show(this, "ImportStars.txt has been created in " + exportfilename + Environment.NewLine
                     + (found ? "Restart Elite Dangerous to have this file read into the galaxy map" : ""), "Export visited stars");
             }
             catch (IOException)
             {
-                MessageBox.Show(String.Format("Is file {0} open?", exportfilename), "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", exportfilename), "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -234,7 +234,7 @@ namespace EDDiscovery
             String folder = null;
             if (allFiles.Count<string>() > 1)  // signle account  just export
             {
-                MessageBox.Show("Multiple commanders found. Will export to latest played in Elite Dangerous");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Multiple commanders found. Will export to latest played in Elite Dangerous");
                 DirectoryInfo newesetDi = null;
                 for (int ii = 0; ii < allFiles.Count<string>(); ii++)
                 {
@@ -264,7 +264,7 @@ namespace EDDiscovery
             String folder = findVisitedStarsCacheDirectory();
             if (folder == null)
             {
-                MessageBox.Show("Could not find VisitedStarsCache.dat file, in commander folder","Open folder");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Could not find VisitedStarsCache.dat file, in commander folder","Open folder");
                 return;
             }
             Process.Start(folder);
@@ -295,13 +295,13 @@ namespace EDDiscovery
             long cmdrID = long.Parse(comboBoxCommander.SelectedValue.ToString());
             if (string.IsNullOrEmpty(importFile) || ! File.Exists(importFile))
             {
-                MessageBox.Show("An import file must be specified.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EDDiscovery.Forms.MessageBoxTheme.Show("An import file must be specified.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             string delim = radioButtonTab.Checked ? "\t" : textBoxDelimiter.Text;
             if (string.IsNullOrEmpty(delim))
             {
-                MessageBox.Show("A delimiter must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EDDiscovery.Forms.MessageBoxTheme.Show("A delimiter must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             int? datecol = string.IsNullOrEmpty(textBoxArrivalDate.Text) ? null : (int?)int.Parse(textBoxArrivalDate.Text);
@@ -310,12 +310,12 @@ namespace EDDiscovery
             int? notecol = string.IsNullOrEmpty(textBoxSysNotes.Text) ? null : (int?)int.Parse(textBoxSysNotes.Text);
             if (!namecol.HasValue)
             {
-                MessageBox.Show("System Name column must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EDDiscovery.Forms.MessageBoxTheme.Show("System Name column must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (!datecol.HasValue && !notecol.HasValue)
             {
-                MessageBox.Show("At least one of arrival date and system note columns must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EDDiscovery.Forms.MessageBoxTheme.Show("At least one of arrival date and system note columns must be defined.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             ImportHistory ih = new ImportHistory(importFile, delim, datecol, timecol, namecol, notecol, checkBoxImpHeader.Checked, cmdrID);
@@ -323,12 +323,12 @@ namespace EDDiscovery
             string result;
             if (ih.Import(out result))
             {
-                MessageBox.Show("Import successful.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.None);
+                EDDiscovery.Forms.MessageBoxTheme.Show("Import successful.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.None);
                 _discoveryForm.RefreshHistoryAsync();
             }
             else
             {
-                MessageBox.Show("Import failed: " + result, "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EDDiscovery.Forms.MessageBoxTheme.Show("Import failed: " + result, "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             _discoveryForm.ShowInfoPanel("", false);
             ih = null;

@@ -151,8 +151,8 @@ namespace EDDiscovery
 
                             if (!(previssame || nextissame))
                             {
-                                je.Add(cn, tn);
-                                System.Diagnostics.Debug.WriteLine("Add {0} {1}", je.EventTimeUTC, je.EventDataString);
+                                je.Add(jo, cn, tn);
+                                System.Diagnostics.Debug.WriteLine("Add {0} {1}", je.EventTimeUTC, jo.ToString());
                             }
                         }
 

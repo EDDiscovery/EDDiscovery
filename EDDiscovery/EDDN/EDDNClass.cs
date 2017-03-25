@@ -90,7 +90,7 @@ namespace EDDiscovery.EDDN
             msg["header"] = Header();
             msg["$schemaRef"] = GetEDDNSchemaRef();
 
-            JObject message = (JObject) JObject.Parse(journal.EventDataString);
+            JObject message = journal.GetJson();
 
             if (JSONHelper.IsNullOrEmptyT(message["FuelUsed"]))  // Old ED 2.1 messages has no Fuel used fields
                 return null;
@@ -114,7 +114,7 @@ namespace EDDiscovery.EDDN
             msg["header"] = Header();
             msg["$schemaRef"] = GetEDDNSchemaRef();
 
-            JObject message = (JObject)JObject.Parse(journal.EventDataString);
+            JObject message = journal.GetJson();
 
             message = RemoveCommonKeys(message);
             message.Remove("CockpitBreach");
@@ -132,12 +132,14 @@ namespace EDDiscovery.EDDN
             msg["header"] = Header();
             msg["$schemaRef"] = GetEDDNSchemaRef();
 
-            JObject message = (JObject)JObject.Parse(journal.EventDataString);
+            JObject message = journal.GetJson();
 
             message["StarSystem"] = starSystem;
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
-            if (!journal.BodyName.StartsWith(starSystem))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
+            string bodydesig = journal.BodyDesignation ?? journal.BodyName;
+
+            if (!bodydesig.StartsWith(starSystem))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
             {
                 return null;
             }

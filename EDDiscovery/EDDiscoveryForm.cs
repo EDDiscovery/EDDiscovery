@@ -84,13 +84,13 @@ namespace EDDiscovery
 
         Task checkInstallerTask = null;
         private bool themeok = true;
-        private Forms.SplashForm splashform = null;
 
         GitHubRelease newRelease;
 
         public PopOutControl PopOuts;
 
-        private bool _initialized = false;
+        private bool _shownOnce = false;
+        private bool _initialised = false;
         private bool _formMax;
         private int _formWidth;
         private int _formHeight;
@@ -142,11 +142,9 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryForm(SplashForm splash)
+        public EDDiscoveryForm()
         {
-            this.Owner = splash;
-            this.splashform = splash;
-            Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => Invoke(a), a => BeginInvoke(a));
+            Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
             Controller.OnNewEntry += (he, hl) => actioncontroller.ActionRunOnEntry(he, "NewEntry");
             Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
@@ -157,8 +155,14 @@ namespace EDDiscovery
             Controller.OnReportProgress += Controller_ReportProgress;
             Controller.OnSyncComplete += Controller_SyncComplete;
             Controller.OnSyncStarting += Controller_SyncStarting;
+        }
+
+        public void Init()
+        {
+            _initialised = true;
             Controller.Init();
 
+            // Some components require the controller to be initialized
             InitializeComponent();
 
             label_version.Text = EDDConfig.Options.VersionDisplayString;
@@ -215,10 +219,16 @@ namespace EDDiscovery
         {
         }
 
+        // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
             try
             {
+                if (!_initialised)
+                {
+                    Init();
+                }
+
                 Controller.PostInit_Loaded();
 
                 RepositionForm();
@@ -239,7 +249,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message + "\n" + "Trace: " + ex.StackTrace);
+                MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message + "\n" + "Trace: " + ex.StackTrace);
             }
         }
 
@@ -253,6 +263,7 @@ namespace EDDiscovery
             PopOuts.LoadSavedPopouts();
         }
 
+        // OnShown is called every time Show is called
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
             Controller.PostInit_Shown();
@@ -264,8 +275,7 @@ namespace EDDiscovery
             }
 
             actioncontroller.ActionRun("onStartup", "ProgramEvent");
-            splashform.Hide();
-            _initialized = true;
+            _shownOnce = true;
         }
 
         private Task CheckForNewInstallerAsync()
@@ -625,13 +635,13 @@ namespace EDDiscovery
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
-                MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
-                MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
+                EDDiscovery.Forms.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
@@ -694,7 +704,7 @@ namespace EDDiscovery
 
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
+            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
                                 " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
                                 "This will not change your history, but when you next refresh, it will try and reassign EDSM systems to " +
                                 "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
@@ -765,7 +775,7 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 EliteDangerous.JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
@@ -792,13 +802,13 @@ namespace EDDiscovery
             }
             else
             {
-                MessageBox.Show("No new release found", "EDDiscovery", MessageBoxButtons.OK);
+                EDDiscovery.Forms.MessageBoxTheme.Show(this,"No new release found", "EDDiscovery", MessageBoxButtons.OK);
             }
         }
 
         private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 int n = EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
                 Controller.LogLine("Removed " + n + " FSD entries");
@@ -867,6 +877,26 @@ namespace EDDiscovery
             frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;
+        }
+
+        public void StoreSystemNote(HistoryEntry he, string txt, bool send = false)
+        {
+            if (he != null && txt != null)
+            {
+                if (he.UpdateSystemNote(txt))
+                {
+                    if (send)
+                    {
+                        if (EDCommander.Current.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
+                            EDSMSync.SendComments(he.snc.Name, he.snc.Note, he.snc.EdsmId);
+                    }
+
+                    Map.UpdateNote();
+
+                    travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
+                    PopOuts.UpdateNoteJID(he.Journalid, txt);
+                }
+            }
         }
 
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1009,7 +1039,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             // We may be getting called by this.ResumeLayout() from InitializeComponent().
-            if (_initialized)
+            if (_initialised && _shownOnce)
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                 {
@@ -1153,6 +1183,12 @@ namespace EDDiscovery
 
 #endregion
 
+        private void companionAPILoginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCAPI frm = new FormCAPI();
+
+            frm.Show();
+        }
     }
 }
 

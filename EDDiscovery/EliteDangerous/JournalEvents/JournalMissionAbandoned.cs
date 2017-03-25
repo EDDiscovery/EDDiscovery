@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -26,18 +26,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionAbandoned(JObject evt ) : base(evt, JournalTypeEnum.MissionAbandoned)
         {
-            Name = JournalEntry.GetBetterMissionName(JSONHelper.GetStringDef(evt["Name"]));
-            MissionId = JSONHelper.GetInt(evt["MissionID"]);
+            Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
+            MissionId = evt["MissionID"].Int();
         }
         public string Name { get; set; }
         public int MissionId { get; set; }
 
-        public override string DefaultRemoveItems()
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.missionabandoned; } }
+
+        public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
-            return base.DefaultRemoveItems() + ";MissionID";
+            summary = EventTypeStr.SplitCapsWord();
+            info = Name;
+            detailed = "";
         }
-
-        public static System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.missionabandoned; } }
-
     }
 }
