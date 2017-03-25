@@ -497,27 +497,44 @@ namespace EDDiscovery
 
                 }
 
-                var responseM = edsm.SubmitDistances(edsm.commanderName, TargetSystem.name, distances);
+                bool trilatOk = false;
+                bool respOk = true;
+                List<KeyValuePair<string, double>> distlist = distances.ToList();
 
-                Console.WriteLine(responseM);
+                for (int i = 0; i < distances.Count; i += 20)
+                {
+                    var dists = new Dictionary<string, double>();
+                    for (int j = i; j < i + 20 && j < distances.Count; j++)
+                        dists[distlist[j].Key] = distlist[j].Value;
 
-                string infoM;
-                bool trilaterationOkM;
-                var responseOkM = edsm.ShowDistanceResponse(responseM, out infoM, out trilaterationOkM);
+                    var responseM = edsm.SubmitDistances(edsm.commanderName, TargetSystem.name, dists);
 
-                Console.WriteLine(infoM);
+                    Console.WriteLine(responseM);
+
+                    string infoM;
+                    bool trilaterationOkM;
+                    var responseOkM = edsm.ShowDistanceResponse(responseM, out infoM, out trilaterationOkM);
+
+                    if (trilaterationOkM)
+                        trilatOk = true;
+
+                    if (!responseOkM)
+                        respOk = false;
+
+                    Console.WriteLine(infoM);
+                }
 
                 BeginInvoke((MethodInvoker)delegate
                {
                    UnfreezeTrilaterationUI();
 
-                   if (responseOkM && trilaterationOkM)
+                   if (respOk && trilatOk)
                    {
                        LogTextSuccess("EDSM submission succeeded, trilateration successful." + Environment.NewLine);
                        _discoveryForm.RefreshHistoryAsync();
                        checkForUnknownSystemsNowKnown();
                    }
-                   else if (responseOkM)
+                   else if (respOk)
                    {
                        LogTextHighlight("EDSM submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine);
                    }
