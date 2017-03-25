@@ -237,7 +237,8 @@ namespace EDDiscovery
                     LogTextHighlight("Duplicate system entry is not allowed" + Environment.NewLine);
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
+                        if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
+                            dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                     }));
                     return;
                 }
@@ -247,7 +248,8 @@ namespace EDDiscovery
                 {
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
+                        if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
+                            dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                     }));
                     return;
                 }
@@ -948,6 +950,28 @@ namespace EDDiscovery
                 foreach (string sys in pushed)
                 {
                     AddSystemToDataGridViewDistances(sys);
+                }
+            }
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string txt = Clipboard.GetText(TextDataFormat.UnicodeText);
+            string[] lines = txt.Split('\n').Select(s => s.Trim('\r')).ToArray();
+            foreach (string line in lines)
+            {
+                string[] fields = line.Split('\t');
+                string sysname = fields[0].Trim();
+                string dist = fields.Length >= 2 ? fields[1].Trim() : null;
+
+                if (sysname != "")
+                {
+                    var row = dataGridViewDistances.Rows.Add(sysname, dist);
+                    dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(0, row));
+                    if (dist != "")
+                    {
+                        dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(1, row));
+                    }
                 }
             }
         }
