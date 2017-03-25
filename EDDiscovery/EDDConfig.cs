@@ -24,6 +24,9 @@ using System.Data;
 using System.IO;
 using System.Reflection;
 using EDDiscovery2.EDSM;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using EDDiscovery;
 
 namespace EDDiscovery2
 {
@@ -588,6 +591,97 @@ namespace EDDiscovery2
         }
 
         public static OptionsClass Options { get; } = new OptionsClass();
+
+        #endregion
+
+        #region User Paths
+
+        /// User-specified paths to directories and files on the computer
+        /// </summary>
+        public static UserPathsClass UserPaths { get; } = new UserPathsClass();
+
+        /// <summary>
+        /// Class representing paths to files on the current computer.
+        /// </summary>
+        /// <remarks>
+        /// This exist as there are many people who will share the EDDUser.sqlite between different
+        /// computers, and some of them do not have the same paths to images etc. on those computers.
+        /// </remarks>
+        public class UserPathsClass
+        {
+            #region Properties
+            public string EDDirectory { get; set; }
+            public string ImageHandlerOutputDir { get; set; }
+            public string ImageHandlerScreenshotsDir { get; set; }
+            #endregion
+
+            #region Methods
+
+            /// <summary>
+            /// Loads the paths from the database and from UserPaths.json
+            /// </summary>
+            /// <param name="conn">Optional connection from which to load settings</param>
+            public void Load(SQLiteConnectionUser conn = null)
+            {
+                EDDirectory = SQLiteConnectionUser.GetSettingString("EDDirectory", "", conn);
+                ImageHandlerOutputDir = SQLiteConnectionUser.GetSettingString("ImageHandlerOutputDir", null, conn);
+                ImageHandlerScreenshotsDir = SQLiteConnectionUser.GetSettingString("ImageHandlerScreenshotDir", null, conn);
+
+                if (File.Exists(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json")))
+                {
+                    JObject jo;
+
+                    using (FileStream stream = File.OpenRead(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json")))
+                    {
+                        using (StreamReader rdr = new StreamReader(stream))
+                        {
+                            using (JsonTextReader jrdr = new JsonTextReader(rdr))
+                            {
+                                jo = JObject.Load(jrdr);
+                            }
+                        }
+                    }
+
+                    EDDirectory = JSONHelper.GetStringDef(jo["EDDirectory"], EDDirectory);
+                    ImageHandlerOutputDir = JSONHelper.GetStringDef(jo["ImageHandlerOutputDir"], ImageHandlerOutputDir);
+                    ImageHandlerScreenshotsDir = JSONHelper.GetStringDef(jo["ImageHandlerScreenshotsDir"], ImageHandlerScreenshotsDir);
+                }
+            }
+
+            /// <summary>
+            /// Saves the paths to the database and to UserPaths.json
+            /// </summary>
+            /// <param name="conn">Optional connection with which to save to the database</param>
+            public void Save(SQLiteConnectionUser conn = null)
+            {
+                SQLiteConnectionUser.PutSettingString("EDDirectory", EDDirectory, conn);
+                SQLiteConnectionUser.PutSettingString("ImageHandlerOutputDir", ImageHandlerOutputDir, conn);
+                SQLiteConnectionUser.PutSettingString("ImageHandlerScreenshotsDir", ImageHandlerScreenshotsDir, conn);
+
+                JObject jo = new JObject(new
+                {
+                    EDDirectory = EDDirectory,
+                    ImageHandlerOutputDir = ImageHandlerOutputDir,
+                    ImageHandlerScreenshotsDir = ImageHandlerScreenshotsDir
+                });
+
+                using (FileStream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp")))
+                {
+                    using (StreamWriter writer = new StreamWriter(stream))
+                    {
+                        using (JsonTextWriter jwriter = new JsonTextWriter(writer))
+                        {
+                            jo.WriteTo(jwriter);
+                        }
+                    }
+                }
+
+                File.Delete(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
+                File.Move(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
+            }
+
+            #endregion
+        }
 
         #endregion
     }
