@@ -147,7 +147,7 @@ namespace EDDiscovery2
                         if (!checkedfordefaultfolder)
                         {
                             checkedfordefaultfolder = true;                 // do it once, but no need to keep on doing it.. only this class can set it once the process starts
-                            EDDirectory = SQLiteDBClass.GetSettingString("EDDirectory", "");
+                            EDDirectory = EDDConfig.UserPaths.EDDirectory;
                         }
                     }
                 }
@@ -173,7 +173,8 @@ namespace EDDiscovery2
                         if ( newfolder != null && !newfolder.Equals(EDDirectory) )
                         {
                             EDDirectory = newfolder;
-                            SQLiteDBClass.PutSettingString("EDDirectory", EDDirectory);
+                            EDDConfig.UserPaths.EDDirectory = EDDirectory;
+                            EDDConfig.UserPaths.Save();
                         }
 
                         EDRunning = true;
