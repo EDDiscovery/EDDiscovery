@@ -1,4 +1,19 @@
-﻿using EDDiscovery.DB;
+﻿/*
+ * Copyright © 2015 - 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
@@ -9,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.EliteDangerous
 {
-    public struct MaterialCommodities               // in memory version of it
+    public class MaterialCommodities               // in memory version of it
     {
         public int count { get; set; }
         public double price { get; set; }
@@ -17,7 +32,7 @@ namespace EDDiscovery.EliteDangerous
 
         public MaterialCommodities(MaterialCommodityDB c)
         {
-            count = 0;
+            count = scratchpad_used = 0;
             price = 0;
             this.Details = c;
         }
@@ -36,6 +51,8 @@ namespace EDDiscovery.EliteDangerous
         public static string MaterialEncodedCategory { get { return MaterialCommodityDB.MaterialEncodedCategory; } }
         public static string MaterialManufacturedCategory { get { return MaterialCommodityDB.MaterialManufacturedCategory; } }
         #endregion
+
+        public int scratchpad_used { get; set; }        // for synthesis dialog..
     }
 
 
@@ -150,6 +167,95 @@ namespace EDDiscovery.EliteDangerous
 
             return newmc;
         }
+
+
+        #region Synthesis
+
+        public class Recipe
+        {
+            public string name;
+            public string ingredientsstring;
+            public string[] ingredients;
+            public int[] count;
+
+            public Recipe(string n, string indg)
+            {
+                name = n;
+                ingredientsstring = indg;
+                string[] ilist = indg.Split(',');
+                ingredients = new string[ilist.Length];
+                count = new int[ilist.Length];
+                for (int i = 0; i < ilist.Length; i++)
+                {
+                    ingredients[i] = ilist[i].Substring(1);
+                    count[i] = ilist[i][0] - '0';       // should be good enough
+                }
+            }
+        }
+
+        static public void ResetUsed(List<MaterialCommodities> mcl)
+        {
+            for (int i = 0; i < mcl.Count; i++)
+                mcl[i].scratchpad_used = mcl[i].count;
+        }
+
+        static public Tuple<int,int,string> HowManyLeft(List<MaterialCommodities> list, Recipe r, int tomake = 0)
+        {
+            int max = int.MaxValue;
+            StringBuilder res = new StringBuilder(64);
+
+            for (int i = 0; i < r.ingredients.Length; i++)
+            {
+                int mi = list.FindIndex(x => x.shortname.Equals(r.ingredients[i]));
+                int sets = (mi != -1) ? (list[mi].scratchpad_used / r.count[i]) : 0;
+
+                if (sets>0)
+                    max = Math.Min(max, sets);
+                else
+                {
+                    max = 0;
+                    if (tomake > 0)
+                    {
+                        string s = (r.count[i] * tomake).ToStringInvariant() + r.ingredients[i];
+                        if (res.Length == 0)
+                            res.Append("Need:" + s);
+                        else
+                            res.Append("," + s);
+                    }
+                }
+            }
+
+            int made = 0;
+
+            if (max > 0 && tomake > 0)             // if we have a set, and use it up
+            {
+                made = Math.Min(max, tomake);                // can only make this much
+                StringBuilder needed = new StringBuilder(64);
+
+                for (int i = 0; i < r.ingredients.Length; i++)
+                {
+                    int mi = list.FindIndex(x => x.shortname.Equals(r.ingredients[i]));
+                    System.Diagnostics.Debug.Assert(mi != -1);
+                    int used = r.count[i] * made;
+                    list[mi].scratchpad_used -= used;
+                    res.AppendPrePad(used.ToStringInvariant() + list[mi].shortname, ",");
+
+                    if (made < tomake)                         // if can't make what you want, inform
+                    {
+                        int itemsneeded = r.count[i] * (tomake - made) - list[mi].scratchpad_used;
+                        if (itemsneeded > 0)
+                            needed.AppendPrePad(itemsneeded.ToStringInvariant() + list[mi].shortname, ",");
+                    }
+                }
+
+                res.Insert(0, "Used:");
+                res.AppendPrePad(needed.ToString(), ", Need:");
+            }
+
+            return new Tuple<int,int,string>(max, made, res.ToNullSafeString());
+        }
+
+        #endregion
     }
 
 }

@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlModules
+    partial class UserControlSynthesis
     {
         /// <summary> 
         /// Required designer variable.
@@ -45,19 +45,16 @@ namespace EDDiscovery.UserControls
         {
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewModules = new System.Windows.Forms.DataGridView();
-            this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ammo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BluePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.labelVehicle = new System.Windows.Forms.Label();
-            this.LabelVehicleText = new System.Windows.Forms.Label();
-            this.labelShip = new System.Windows.Forms.Label();
-            this.comboBoxShips = new ExtendedControls.ComboBoxCustom();
+            this.labelTitle = new System.Windows.Forms.Label();
+            this.comboBoxSynthesis = new ExtendedControls.ComboBoxCustom();
+            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Available = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -83,72 +80,19 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewModules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewModules.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.SlotCol,
-            this.ItemCol,
-            this.ItemLocalised,
-            this.Ammo,
-            this.BluePrint,
-            this.Value,
-            this.PriorityEnable});
+            this.UpgradeCol,
+            this.MaxCol,
+            this.WantedCol,
+            this.Available,
+            this.Notes,
+            this.Recipe});
             this.dataGridViewModules.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewModules.Name = "dataGridViewModules";
-            this.dataGridViewModules.RowHeadersVisible = false;
+            this.dataGridViewModules.RowHeadersWidth = 25;
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewModules.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewModules.TabIndex = 1;
-            // 
-            // SlotCol
-            // 
-            this.SlotCol.HeaderText = "Slot";
-            this.SlotCol.MinimumWidth = 50;
-            this.SlotCol.Name = "SlotCol";
-            this.SlotCol.ReadOnly = true;
-            // 
-            // ItemCol
-            // 
-            this.ItemCol.FillWeight = 120F;
-            this.ItemCol.HeaderText = "Item";
-            this.ItemCol.MinimumWidth = 100;
-            this.ItemCol.Name = "ItemCol";
-            this.ItemCol.ReadOnly = true;
-            // 
-            // ItemLocalised
-            // 
-            this.ItemLocalised.HeaderText = "Name";
-            this.ItemLocalised.MinimumWidth = 100;
-            this.ItemLocalised.Name = "ItemLocalised";
-            this.ItemLocalised.ReadOnly = true;
-            // 
-            // Ammo
-            // 
-            this.Ammo.FillWeight = 50F;
-            this.Ammo.HeaderText = "Ammo";
-            this.Ammo.MinimumWidth = 20;
-            this.Ammo.Name = "Ammo";
-            this.Ammo.ReadOnly = true;
-            // 
-            // BluePrint
-            // 
-            this.BluePrint.FillWeight = 50F;
-            this.BluePrint.HeaderText = "BluePrint";
-            this.BluePrint.MinimumWidth = 20;
-            this.BluePrint.Name = "BluePrint";
-            this.BluePrint.ReadOnly = true;
-            // 
-            // Value
-            // 
-            this.Value.FillWeight = 50F;
-            this.Value.HeaderText = "Value";
-            this.Value.MinimumWidth = 20;
-            this.Value.Name = "Value";
-            this.Value.ReadOnly = true;
-            // 
-            // PriorityEnable
-            // 
-            this.PriorityEnable.FillWeight = 50F;
-            this.PriorityEnable.HeaderText = "P/E";
-            this.PriorityEnable.MinimumWidth = 20;
-            this.PriorityEnable.Name = "PriorityEnable";
+            this.dataGridViewModules.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
             // 
             // vScrollBarCustomMC
             // 
@@ -181,76 +125,102 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
-            this.panelButtons.Controls.Add(this.labelVehicle);
-            this.panelButtons.Controls.Add(this.LabelVehicleText);
-            this.panelButtons.Controls.Add(this.labelShip);
-            this.panelButtons.Controls.Add(this.comboBoxShips);
+            this.panelButtons.Controls.Add(this.labelTitle);
+            this.panelButtons.Controls.Add(this.comboBoxSynthesis);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
             // 
-            // labelVehicle
+            // labelTitle
             // 
-            this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(362, 7);
-            this.labelVehicle.Name = "labelVehicle";
-            this.labelVehicle.Size = new System.Drawing.Size(53, 13);
-            this.labelVehicle.TabIndex = 28;
-            this.labelVehicle.Text = "Unknown";
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.Location = new System.Drawing.Point(6, 7);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(52, 13);
+            this.labelTitle.TabIndex = 26;
+            this.labelTitle.Text = "Synthesis";
             // 
-            // LabelVehicleText
+            // comboBoxSynthesis
             // 
-            this.LabelVehicleText.AutoSize = true;
-            this.LabelVehicleText.Location = new System.Drawing.Point(298, 7);
-            this.LabelVehicleText.Name = "LabelVehicleText";
-            this.LabelVehicleText.Size = new System.Drawing.Size(42, 13);
-            this.LabelVehicleText.TabIndex = 27;
-            this.LabelVehicleText.Text = "Vehicle";
+            this.comboBoxSynthesis.ArrowWidth = 1;
+            this.comboBoxSynthesis.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxSynthesis.ButtonColorScaling = 0.5F;
+            this.comboBoxSynthesis.DataSource = null;
+            this.comboBoxSynthesis.DisplayMember = "";
+            this.comboBoxSynthesis.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxSynthesis.DropDownHeight = 200;
+            this.comboBoxSynthesis.DropDownWidth = 1;
+            this.comboBoxSynthesis.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxSynthesis.ItemHeight = 13;
+            this.comboBoxSynthesis.Location = new System.Drawing.Point(93, 4);
+            this.comboBoxSynthesis.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxSynthesis.Name = "comboBoxSynthesis";
+            this.comboBoxSynthesis.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxSynthesis.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxSynthesis.ScrollBarWidth = 16;
+            this.comboBoxSynthesis.SelectedIndex = -1;
+            this.comboBoxSynthesis.SelectedItem = null;
+            this.comboBoxSynthesis.SelectedValue = null;
+            this.comboBoxSynthesis.Size = new System.Drawing.Size(218, 24);
+            this.comboBoxSynthesis.TabIndex = 0;
+            this.comboBoxSynthesis.ValueMember = "";
+            this.comboBoxSynthesis.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // labelShip
+            // UpgradeCol
             // 
-            this.labelShip.AutoSize = true;
-            this.labelShip.Location = new System.Drawing.Point(6, 7);
-            this.labelShip.Name = "labelShip";
-            this.labelShip.Size = new System.Drawing.Size(28, 13);
-            this.labelShip.TabIndex = 26;
-            this.labelShip.Text = "Ship";
+            this.UpgradeCol.HeaderText = "Upgrade";
+            this.UpgradeCol.MinimumWidth = 50;
+            this.UpgradeCol.Name = "UpgradeCol";
+            this.UpgradeCol.ReadOnly = true;
             // 
-            // comboBoxShips
+            // MaxCol
             // 
-            this.comboBoxShips.ArrowWidth = 1;
-            this.comboBoxShips.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxShips.ButtonColorScaling = 0.5F;
-            this.comboBoxShips.DataSource = null;
-            this.comboBoxShips.DisplayMember = "";
-            this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxShips.DropDownHeight = 200;
-            this.comboBoxShips.DropDownWidth = 1;
-            this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxShips.ItemHeight = 13;
-            this.comboBoxShips.Location = new System.Drawing.Point(52, 4);
-            this.comboBoxShips.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxShips.Name = "comboBoxShips";
-            this.comboBoxShips.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxShips.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxShips.ScrollBarWidth = 16;
-            this.comboBoxShips.SelectedIndex = -1;
-            this.comboBoxShips.SelectedItem = null;
-            this.comboBoxShips.SelectedValue = null;
-            this.comboBoxShips.Size = new System.Drawing.Size(218, 24);
-            this.comboBoxShips.TabIndex = 0;
-            this.comboBoxShips.ValueMember = "";
-            this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            this.MaxCol.FillWeight = 25F;
+            this.MaxCol.HeaderText = "Max";
+            this.MaxCol.MinimumWidth = 50;
+            this.MaxCol.Name = "MaxCol";
+            this.MaxCol.ReadOnly = true;
             // 
-            // UserControlModules
+            // WantedCol
+            // 
+            this.WantedCol.FillWeight = 25F;
+            this.WantedCol.HeaderText = "Wanted";
+            this.WantedCol.MinimumWidth = 50;
+            this.WantedCol.Name = "WantedCol";
+            // 
+            // Available
+            // 
+            this.Available.FillWeight = 25F;
+            this.Available.HeaderText = "Avail.";
+            this.Available.MinimumWidth = 50;
+            this.Available.Name = "Available";
+            this.Available.ReadOnly = true;
+            // 
+            // Notes
+            // 
+            this.Notes.FillWeight = 150F;
+            this.Notes.HeaderText = "Notes";
+            this.Notes.MinimumWidth = 50;
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            // 
+            // Recipe
+            // 
+            this.Recipe.FillWeight = 50F;
+            this.Recipe.HeaderText = "Recipe";
+            this.Recipe.MinimumWidth = 15;
+            this.Recipe.Name = "Recipe";
+            this.Recipe.ReadOnly = true;
+            // 
+            // UserControlSynthesis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelButtons);
-            this.Name = "UserControlModules";
+            this.Name = "UserControlSynthesis";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).EndInit();
@@ -266,16 +236,13 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewModules;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        internal ExtendedControls.ComboBoxCustom comboBoxShips;
-        private System.Windows.Forms.Label labelShip;
-        private System.Windows.Forms.Label labelVehicle;
-        private System.Windows.Forms.Label LabelVehicleText;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Ammo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BluePrint;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
+        internal ExtendedControls.ComboBoxCustom comboBoxSynthesis;
+        private System.Windows.Forms.Label labelTitle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn WantedCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Available;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Recipe;
     }
 }
