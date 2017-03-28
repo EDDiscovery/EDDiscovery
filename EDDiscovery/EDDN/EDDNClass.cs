@@ -15,6 +15,7 @@
  */
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery2;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
@@ -41,7 +42,7 @@ namespace EDDiscovery.EDDN
             fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
-            commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+            commanderName = EDCommander.Current.Name;
 
             _serverAddress = EDDNServer;
         }

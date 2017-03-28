@@ -23,6 +23,7 @@ using EDDiscovery.DB;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.DB;
 using ExtendedControls;
+using EDDiscovery2;
 
 namespace EDDiscovery
 {
@@ -50,8 +51,8 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             FreezeTrilaterationUI();
             edsm = new EDSMClass();
-            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
+            edsm.apiKey = EDCommander.Current.APIKey;
+            edsm.commanderName = EDCommander.Current.EdsmName;
             SetTriStatus("Press Start New");
         }
         
@@ -454,13 +455,13 @@ namespace EDDiscovery
         {
             try
             {
-                edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
+                edsm.apiKey = EDCommander.Current.APIKey;
+                edsm.commanderName = EDCommander.Current.EdsmName;
                 
                 var travelHistoryControl = _discoveryForm.TravelControl;
                 if (string.IsNullOrEmpty(edsm.commanderName))
                 {
-                    string commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.EdsmName;
+                    string commanderName = EDCommander.Current.EdsmName;
 
                     if (string.IsNullOrEmpty(commanderName))
                     {
