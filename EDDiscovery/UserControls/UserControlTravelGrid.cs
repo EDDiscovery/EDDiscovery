@@ -751,7 +751,7 @@ namespace EDDiscovery.UserControls
 
         private void selectCorrectSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<JournalEntry> jents = JournalEntry.GetAll(EDDiscovery2.EDDConfig.Instance.CurrentCmdrID).OrderBy(j => j.EventTimeUTC).ThenBy(j => j.Id).ToList();
+            List<JournalEntry> jents = JournalEntry.GetAll(EDCommander.CurrentCmdrID).OrderBy(j => j.EventTimeUTC).ThenBy(j => j.Id).ToList();
             int selindex = jents.FindIndex(j => j.Id == rightclicksystem.Journalid);
             int firstrow = selindex;
             int lastrow = selindex;

@@ -114,11 +114,11 @@ namespace EDDiscovery2.ImageHandler
             checkBoxRemove.Checked = SQLiteDBClass.GetSettingBool("checkBoxRemove", false);
             checkBoxHires.Checked = SQLiteDBClass.GetSettingBool("checkBoxHires", false);
 
-            textBoxOutputDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
+            textBoxOutputDir.Text = EDDConfig.UserPaths.ImageHandlerOutputDir ?? OutputDirdefault;
             if (!Directory.Exists(textBoxOutputDir.Text))
                 textBoxOutputDir.Text = OutputDirdefault;
 
-            textBoxScreenshotsDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
+            textBoxScreenshotsDir.Text = EDDConfig.UserPaths.ImageHandlerScreenshotsDir ?? ScreenshotsDirdefault;
             if (!Directory.Exists(textBoxScreenshotsDir.Text))
                 textBoxScreenshotsDir.Text = ScreenshotsDirdefault;
 
@@ -314,7 +314,8 @@ namespace EDDiscovery2.ImageHandler
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 textBoxScreenshotsDir.Text = dlg.SelectedPath;
-                SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+                EDDConfig.UserPaths.ImageHandlerScreenshotsDir = textBoxScreenshotsDir.Text;
+                EDDConfig.UserPaths.Save();
 
                 StartWatcher();
             }
@@ -322,7 +323,8 @@ namespace EDDiscovery2.ImageHandler
 
         private void textBoxScreenshotsDir_Leave(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+            EDDConfig.UserPaths.ImageHandlerScreenshotsDir = textBoxScreenshotsDir.Text;
+            EDDConfig.UserPaths.Save();
 
             if (!StartWatcher())
             {
@@ -348,13 +350,15 @@ namespace EDDiscovery2.ImageHandler
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 textBoxOutputDir.Text = dlg.SelectedPath;
-                SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+                EDDConfig.UserPaths.ImageHandlerOutputDir = textBoxOutputDir.Text;
+                EDDConfig.UserPaths.Save();
             }
         }
 
         private void textBoxOutputDir_Leave(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+            EDDConfig.UserPaths.ImageHandlerOutputDir = textBoxOutputDir.Text;
+            EDDConfig.UserPaths.Save();
         }
 
         private void textBoxOutputDir_KeyUp(object sender, KeyEventArgs e)
@@ -821,20 +825,20 @@ namespace EDDiscovery2.ImageHandler
                     break;
 
                 case 8: // CMDR name
-                    OutputFolder += "\\" + Tools.SafeFileString(EDDConfig.Instance.Commander(CommanderID)?.Name ?? $"CmdrId{CommanderID}");
+                    OutputFolder += "\\" + Tools.SafeFileString(EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}");
                     break;
 
                 case 9: // CMDR name at sysname
-                    OutputFolder += "\\" + Tools.SafeFileString(EDDConfig.Instance.Commander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + " at " + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + Tools.SafeFileString(EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + " at " + Tools.SafeFileString(SystemName);
                     break;
 
                 case 10: // YYYY - MM - DD CMDR name at sysname
                     OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " +
-                                    Tools.SafeFileString(EDDConfig.Instance.Commander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + " at " + Tools.SafeFileString(SystemName);
+                                    Tools.SafeFileString(EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + " at " + Tools.SafeFileString(SystemName);
                     break;
 
                 case 11: // CMDR Name \ SystemName
-                    OutputFolder += "\\" + Tools.SafeFileString(EDDConfig.Instance.Commander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + "\\" + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + Tools.SafeFileString(EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + "\\" + Tools.SafeFileString(SystemName);
                     break;
             }
 

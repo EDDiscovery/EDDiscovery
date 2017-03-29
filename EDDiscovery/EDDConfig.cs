@@ -24,6 +24,9 @@ using System.Data;
 using System.IO;
 using System.Reflection;
 using EDDiscovery2.EDSM;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using EDDiscovery;
 
 namespace EDDiscovery2
 {
@@ -262,57 +265,6 @@ namespace EDDiscovery2
 
         #endregion
 
-        #region Commanders
-
-        private int currentCmdrID = 0;
-        private List<EDCommander> _ListOfCommanders;
-
-        public List<EDCommander> ListOfCommanders { get { if (_ListOfCommanders == null) Update(); return _ListOfCommanders; } }
-
-        public EDCommander CurrentCommander
-        {
-            get
-            {
-                if (currentCmdrID >= ListOfCommanders.Count)
-                    currentCmdrID = ListOfCommanders.Count - 1;
-
-                return ListOfCommanders[currentCmdrID];
-            }
-        }
-
-        public EDCommander Commander(int i)
-        {
-            return i < 0 ? null : ListOfCommanders.FirstOrDefault(c => c.Nr == i);
-        }
-
-        public int CurrentCmdrID
-        {
-            get
-            {
-                return CurrentCommander.Nr;
-            }
-
-            set
-            {
-                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
-                if (cmdr != null)
-                {
-                    currentCmdrID = cmdr.index;
-                    SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
-                }
-            }
-        }
-
-        public bool CheckCommanderEDSMAPI
-        {
-            get
-            {
-                return CurrentCmdrID >= 0 && CurrentCommander.EdsmName.Length > 0 && CurrentCommander.APIKey.Length > 0;
-            }
-        }
-
-        #endregion
-
         #region Update at start
 
         public void Update(bool write = true, SQLiteConnectionUser conn = null)     // call at start to populate above
@@ -334,16 +286,7 @@ namespace EDDiscovery2
                 _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
                 _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
 
-                LoadCommanders(write, conn);
-
-                int activecommander = SQLiteConnectionUser.GetSettingInt("ActiveCommander", 0, conn);
-
-                var cmdr = _ListOfCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
-
-                if (cmdr != null)
-                {
-                    currentCmdrID = cmdr.index;
-                }
+                EDCommander.Load(write, conn);
             }
             catch (Exception ex)
             {
@@ -651,197 +594,93 @@ namespace EDDiscovery2
 
         #endregion
 
-        #region Commander Functions
+        #region User Paths
 
-        private void LoadCommanders(bool write = true, SQLiteConnectionUser conn = null)
+        /// User-specified paths to directories and files on the computer
+        /// </summary>
+        public static UserPathsClass UserPaths { get; } = new UserPathsClass();
+
+        /// <summary>
+        /// Class representing paths to files on the current computer.
+        /// </summary>
+        /// <remarks>
+        /// This exist as there are many people who will share the EDDUser.sqlite between different
+        /// computers, and some of them do not have the same paths to images etc. on those computers.
+        /// </remarks>
+        public class UserPathsClass
         {
-            if ( _ListOfCommanders == null )
-                _ListOfCommanders = new List<EDCommander>();
+            #region Properties
+            public string EDDirectory { get; set; }
+            public string ImageHandlerOutputDir { get; set; }
+            public string ImageHandlerScreenshotsDir { get; set; }
+            #endregion
 
-            lock (_ListOfCommanders)
+            #region Methods
+
+            /// <summary>
+            /// Loads the paths from the database and from UserPaths.json
+            /// </summary>
+            /// <param name="conn">Optional connection from which to load settings</param>
+            public void Load(SQLiteConnectionUser conn = null)
             {
-                _ListOfCommanders.Clear();
+                EDDirectory = SQLiteConnectionUser.GetSettingString("EDDirectory", "", conn);
+                ImageHandlerOutputDir = SQLiteConnectionUser.GetSettingString("ImageHandlerOutputDir", null, conn);
+                ImageHandlerScreenshotsDir = SQLiteConnectionUser.GetSettingString("ImageHandlerScreenshotDir", null, conn);
 
-                bool migrate = false;
-
-                var cmdrs = SQLiteConnectionUser.GetCommanders(conn);
-
-                if (cmdrs.Count == 0)
+                if (File.Exists(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json")))
                 {
-                    cmdrs = SQLiteConnectionUser.GetCommandersFromRegister(conn);
-                    if (cmdrs.Count != 0)
-                    {
-                        migrate = true;
-                    }
-                }
+                    JObject jo;
 
-                int maxnr = cmdrs.Count == 0 ? 0 : cmdrs.Max(c => c.Nr);
-
-                _ListOfCommanders = cmdrs.Where(c => c.Deleted == false).ToList();
-
-                if (_ListOfCommanders.Count == 0)
-                {
-                    if (write)
+                    using (FileStream stream = File.OpenRead(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json")))
                     {
-                        GetNewCommander("Jameson (Default)");
-                    }
-                    else
-                    {
-                        _ListOfCommanders = new List<EDCommander>
+                        using (StreamReader rdr = new StreamReader(stream))
                         {
-                            new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false)
-                        };
-                    }
-                }
-
-                if (migrate && write)
-                {
-                    bool closeconn = false;
-                    try
-                    {
-                        if (conn == null)
-                        {
-                            conn = new SQLiteConnectionUser();
-                            closeconn = true;
-                        }
-
-                        using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmName, EdsmApiKey, NetLogDir, Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Id, @Name, @EdsmName, @EdsmApiKey, @NetLogDir, @Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
-                        {
-                            cmd.AddParameter("@Id", DbType.Int32);
-                            cmd.AddParameter("@Name", DbType.String);
-                            cmd.AddParameter("@EdsmName", DbType.String);
-                            cmd.AddParameter("@EdsmApiKey", DbType.String);
-                            cmd.AddParameter("@NetLogDir", DbType.String);
-                            cmd.AddParameter("@Deleted", DbType.Boolean);
-                            cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
-                            cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
-                            cmd.AddParameter("@SyncToEddn", DbType.Boolean);
-
-                            foreach (var cmdr in cmdrs)
+                            using (JsonTextReader jrdr = new JsonTextReader(rdr))
                             {
-                                cmd.Parameters["@Id"].Value = cmdr.Nr;
-                                cmd.Parameters["@Name"].Value = cmdr.Name;
-                                cmd.Parameters["@EdsmName"].Value = cmdr.EdsmName;
-                                cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
-                                cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
-                                cmd.Parameters["@Deleted"].Value = cmdr.Deleted;
-                                cmd.Parameters["@SyncToEdsm"].Value = cmdr.SyncToEdsm;
-                                cmd.Parameters["@SyncFromEdsm"].Value = cmdr.SyncFromEdsm;
-                                cmd.Parameters["@SyncToEddn"].Value = cmdr.SyncToEddn;
-
-                                cmd.ExecuteNonQuery();
+                                jo = JObject.Load(jrdr);
                             }
                         }
                     }
-                    finally
-                    {
-                        if (closeconn && conn != null)
-                        {
-                            conn.Dispose();
-                        }
-                    }
+
+                    EDDirectory = JSONHelper.GetStringDef(jo["EDDirectory"], EDDirectory);
+                    ImageHandlerOutputDir = JSONHelper.GetStringDef(jo["ImageHandlerOutputDir"], ImageHandlerOutputDir);
+                    ImageHandlerScreenshotsDir = JSONHelper.GetStringDef(jo["ImageHandlerScreenshotsDir"], ImageHandlerScreenshotsDir);
                 }
             }
-        }
 
-        public void UpdateCommanders(List<EDCommander> cmdrlist, bool reload)
-        {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            /// <summary>
+            /// Saves the paths to the database and to UserPaths.json
+            /// </summary>
+            /// <param name="conn">Optional connection with which to save to the database</param>
+            public void Save(SQLiteConnectionUser conn = null)
             {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn WHERE Id=@Id"))
-                {
-                    cmd.AddParameter("@Id", DbType.Int32);
-                    cmd.AddParameter("@Name", DbType.String);
-                    cmd.AddParameter("@EdsmName", DbType.String);
-                    cmd.AddParameter("@EdsmApiKey", DbType.String);
-                    cmd.AddParameter("@NetLogDir", DbType.String);
-                    cmd.AddParameter("@JournalDir", DbType.String);
-                    cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
-                    cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
-                    cmd.AddParameter("@SyncToEddn", DbType.Boolean);
+                SQLiteConnectionUser.PutSettingString("EDDirectory", EDDirectory, conn);
+                SQLiteConnectionUser.PutSettingString("ImageHandlerOutputDir", ImageHandlerOutputDir, conn);
+                SQLiteConnectionUser.PutSettingString("ImageHandlerScreenshotsDir", ImageHandlerScreenshotsDir, conn);
 
-                    foreach (EDCommander edcmdr in cmdrlist)
+                JObject jo = new JObject(new
+                {
+                    EDDirectory = EDDirectory,
+                    ImageHandlerOutputDir = ImageHandlerOutputDir,
+                    ImageHandlerScreenshotsDir = ImageHandlerScreenshotsDir
+                });
+
+                using (FileStream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp")))
+                {
+                    using (StreamWriter writer = new StreamWriter(stream))
                     {
-                        cmd.Parameters["@Id"].Value = edcmdr.Nr;
-                        cmd.Parameters["@Name"].Value = edcmdr.Name;
-                        cmd.Parameters["@EdsmName"].Value = edcmdr.EdsmName;
-                        cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
-                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "";
-                        cmd.Parameters["@JournalDir"].Value = edcmdr.JournalDir != null ? edcmdr.JournalDir : "";
-                        cmd.Parameters["@SyncToEdsm"].Value = edcmdr.SyncToEdsm;
-                        cmd.Parameters["@SyncFromEdsm"].Value = edcmdr.SyncFromEdsm;
-                        cmd.Parameters["@SyncToEddn"].Value = edcmdr.SyncToEddn;
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    if (reload)
-                        LoadCommanders();       // refresh in-memory copy
-                }
-            }
-        }
-
-
-        public EDCommander GetNewCommander(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null)
-        {
-            EDCommander cmdr;
-
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
-                {
-                    cmd.AddParameterWithValue("@Name", name ?? "");
-                    cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
-                    cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
-                    cmd.AddParameterWithValue("@JournalDir", journalpath ?? "");
-                    cmd.AddParameterWithValue("@Deleted", false);
-                    cmd.AddParameterWithValue("@SyncToEdsm", true);
-                    cmd.AddParameterWithValue("@SyncFromEdsm", false);
-                    cmd.AddParameterWithValue("@SyncToEddn", true);
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (DbCommand cmd = conn.CreateCommand("SELECT Id FROM Commanders WHERE rowid = last_insert_rowid()"))
-                {
-                    int nr = Convert.ToInt32(cmd.ExecuteScalar());
-                }
-                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders WHERE rowid = last_insert_rowid()"))
-                {
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        reader.Read();
+                        using (JsonTextWriter jwriter = new JsonTextWriter(writer))
                         {
-                            cmdr = new EDCommander(reader);
+                            jo.WriteTo(jwriter);
                         }
                     }
                 }
 
-                 if (name == null)
-                {
-                    using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name WHERE rowid = last_insert_rowid()"))
-                    {
-                        cmd.AddParameterWithValue("@Name", cmdr.Name);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                File.Delete(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
+                File.Move(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
             }
 
-            LoadCommanders();       // refresh in-memory copy
-
-            return cmdr;
-        }
-
-        public void DeleteCommander(EDCommander cmdr)
-        {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Deleted = 1 WHERE Id = @Id"))
-                {
-                    cmd.AddParameterWithValue("@Id", cmdr.Nr);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
-            LoadCommanders();       // refresh in-memory copy
+            #endregion
         }
 
         #endregion

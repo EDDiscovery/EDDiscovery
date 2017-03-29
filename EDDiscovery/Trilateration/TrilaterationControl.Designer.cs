@@ -96,6 +96,7 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trilatContextMenu.SuspendLayout();
             this.panelImplementation.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
@@ -119,9 +120,10 @@ namespace EDDiscovery
             // 
             this.trilatContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToWantedSystemsToolStripMenuItem,
-            this.viewOnEDSMToolStripMenuItem});
+            this.viewOnEDSMToolStripMenuItem,
+            this.pasteToolStripMenuItem});
             this.trilatContextMenu.Name = "trilatContextMenu";
-            this.trilatContextMenu.Size = new System.Drawing.Size(198, 48);
+            this.trilatContextMenu.Size = new System.Drawing.Size(198, 92);
             // 
             // addToWantedSystemsToolStripMenuItem
             // 
@@ -546,6 +548,7 @@ namespace EDDiscovery
             // 
             // ColumnSystem
             // 
+            this.ColumnSystem.AutoCompleteGenerator = null;
             this.ColumnSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnSystem.FillWeight = 250F;
             this.ColumnSystem.HeaderText = "System";
@@ -675,6 +678,13 @@ namespace EDDiscovery
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
             // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -758,5 +768,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem deleteAllWithKnownPositionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addAllLocalSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addAllEDSMSystemsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
     }
 }
