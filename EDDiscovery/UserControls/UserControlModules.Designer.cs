@@ -43,7 +43,6 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewModules = new System.Windows.Forms.DataGridView();
             this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,18 +52,14 @@ namespace EDDiscovery.UserControls
             this.BluePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelVehicle = new System.Windows.Forms.Label();
             this.LabelVehicleText = new System.Windows.Forms.Label();
             this.labelShip = new System.Windows.Forms.Label();
             this.comboBoxShips = new ExtendedControls.ComboBoxCustom();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
-            this.contextMenuStripLedger.SuspendLayout();
             this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,7 +90,6 @@ namespace EDDiscovery.UserControls
             this.BluePrint,
             this.Value,
             this.PriorityEnable});
-            this.dataGridViewModules.ContextMenuStrip = this.contextMenuStripLedger;
             this.dataGridViewModules.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewModules.Name = "dataGridViewModules";
             this.dataGridViewModules.RowHeadersVisible = false;
@@ -155,20 +149,6 @@ namespace EDDiscovery.UserControls
             this.PriorityEnable.HeaderText = "P/E";
             this.PriorityEnable.MinimumWidth = 20;
             this.PriorityEnable.Name = "PriorityEnable";
-            // 
-            // contextMenuStripLedger
-            // 
-            this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemGotoItem});
-            this.contextMenuStripLedger.Name = "contextMenuStripLedger";
-            this.contextMenuStripLedger.Size = new System.Drawing.Size(207, 26);
-            // 
-            // toolStripMenuItemGotoItem
-            // 
-            this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
-            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
-            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
-            this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
             // 
             // vScrollBarCustomMC
             // 
@@ -261,13 +241,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.SelectedValue = null;
             this.comboBoxShips.Size = new System.Drawing.Size(218, 24);
             this.comboBoxShips.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.comboBoxShips, "Select the entries by age");
             this.comboBoxShips.ValueMember = "";
             this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.ShowAlways = true;
             // 
             // UserControlModules
             // 
@@ -279,7 +254,6 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).EndInit();
-            this.contextMenuStripLedger.ResumeLayout(false);
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
             this.ResumeLayout(false);
@@ -293,9 +267,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         internal ExtendedControls.ComboBoxCustom comboBoxShips;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label labelShip;
         private System.Windows.Forms.Label labelVehicle;
         private System.Windows.Forms.Label LabelVehicleText;

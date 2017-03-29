@@ -211,10 +211,10 @@ public static class ObjectExtensionsStrings
     {
         string s = obj.Replace(@"\n", "\n");
         s = s.Replace(@"\r", "\r");
-        return s.Replace(@"\\","\\");
+        return s.Replace(@"\\", "\\");
     }
 
-    public static void AppendPrePad(this System.Text.StringBuilder sb , string other , string prepad = " ")
+    public static void AppendPrePad(this System.Text.StringBuilder sb, string other, string prepad = " ")
     {
         if (other != null && other.Length > 0)
         {
@@ -242,7 +242,7 @@ public static class ObjectExtensionsStrings
 
     public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
     {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder(str.Length*4);
+        System.Text.StringBuilder sb = new System.Text.StringBuilder(str.Length * 4);
 
         int previousIndex = 0;
         int index = str.IndexOf(oldValue, comparison);
@@ -260,7 +260,7 @@ public static class ObjectExtensionsStrings
         return sb.ToString();
     }
 
-    public static int FirstCharNonWhiteSpace(this string obj )
+    public static int FirstCharNonWhiteSpace(this string obj)
     {
         int i = 0;
         while (i < obj.Length && char.IsWhiteSpace(obj[i]))
@@ -294,7 +294,7 @@ public static class ObjectExtensionsStrings
         string res = "";
         exp = exp.Trim();
 
-        while (exp.Length>0)
+        while (exp.Length > 0)
         {
             if (exp[0] == '{')
             {
@@ -325,7 +325,7 @@ public static class ObjectExtensionsStrings
         return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(file), System.IO.Path.GetFileNameWithoutExtension(file) + suffix) + System.IO.Path.GetExtension(file);
     }
 
-    public static string ToStringCommaList( this System.Collections.Generic.List<string> list , int mincount = 100000 , bool escapectrl = false)
+    public static string ToStringCommaList(this System.Collections.Generic.List<string> list, int mincount = 100000, bool escapectrl = false)
     {
         string r = "";
         for (int i = 0; i < list.Count; i++)
@@ -343,7 +343,7 @@ public static class ObjectExtensionsStrings
             if (i > 0)
                 r += ", ";
 
-            if ( escapectrl )
+            if (escapectrl)
                 r += list[i].EscapeControlChars().QuoteString(comma: true);
             else
                 r += list[i].QuoteString(comma: true);
@@ -352,10 +352,10 @@ public static class ObjectExtensionsStrings
         return r;
     }
 
-    public static string ToString( this int[] a , string separ)
+    public static string ToString(this int[] a, string separ)
     {
         string outstr = "";
-        if ( a.Length>0)
+        if (a.Length > 0)
         {
             outstr = a[0].ToString(System.Globalization.CultureInfo.InvariantCulture);
 
@@ -366,7 +366,7 @@ public static class ObjectExtensionsStrings
         return outstr;
     }
 
-    public static string ToString(this System.Windows.Forms.Keys key, System.Windows.Forms.Keys modifier )
+    public static string ToString(this System.Windows.Forms.Keys key, System.Windows.Forms.Keys modifier)
     {
         string k = "";
 
@@ -392,6 +392,14 @@ public static class ObjectExtensionsStrings
         return k + keyname;
     }
 
+    public static string ToStringInvariant(this int v)
+    {
+        return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
+    }
+    public static string ToStringInvariant(this long v)
+    {
+        return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
+    }
     public static string ToStringInvariant(this bool? v)
     {
         return (v.HasValue) ? (v.Value ? "1" : "0") : "";
@@ -408,66 +416,6 @@ public static class ObjectExtensionsStrings
     {
         return (v.HasValue) ? v.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
     }
-
-    static public bool InvariantParse(this string s, out int i)
-    {
-        return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
-    }
-
-    static public int? InvariantParseIntNull(this string s)     // s can be null
-    {
-        int i;
-        if (s!=null && int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
-            return i;
-        else
-            return null;
-    }
-
-    static public bool InvariantParse(this string s, out double i)
-    {
-        return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i);
-    }
-
-    static public double? InvariantParseDoubleNull(this string s)
-    {
-        double i;
-        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
-            return i;
-        else
-            return null;
-    }
-
-    static public bool InvariantParse(this string s, out long i)
-    {
-        return long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
-    }
-
-    static public long? InvariantParseLongNull(this string s)
-    {
-        long i;
-        if (s != null && long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
-            return i;
-        else
-            return null;
-    }
-
-    public static bool InQuotes( this string s, int max = 0)            // left true if quote left over on line, taking care of any escapes..
-    {
-        if (max <= 0)
-            max = s.Length;
-
-        bool inquote = false;
-        for (int i = 0; i < max; i++)
-        {
-            if (s[i] == '\\' && i < max-1 && s[i + 1] == '"') 
-                i += 1;     // ignore this, ingore "
-            else if (s[i] == '"')
-                inquote = !inquote;
-        }
-
-        return inquote;
-    }
-
 
     // fix word_word to Word Word
     //  s = Regex.Replace(s, @"([A-Za-z]+)([_])([A-Za-z]+)", m => { return m.Groups[1].Value.FixTitleCase() + " " + m.Groups[3].Value.FixTitleCase(); });
@@ -506,14 +454,14 @@ public static class ObjectExtensionsStrings
                     if (namerep != null)           // at alpha start, see if we have any global subs of alpha numerics
                     {
                         int j = i + 1;
-                        for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z') || (s[j]>='0' && s[j]<='9') ); j++)
+                        for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z') || (s[j] >= '0' && s[j] <= '9')); j++)
                             ;
 
                         string keyname = s.Substring(i, j - i);
 
                         //                        string keyname = namekeys.Find(x => s.Substring(i).StartsWith(x));
 
-                        if ( namerep.ContainsKey(keyname))
+                        if (namerep.ContainsKey(keyname))
                         {
                             sb.Append(namerep[keyname]);
                             i += keyname.Length - 1;                  // skip this, we are in alpha, -1 because of i++ at top
@@ -617,6 +565,26 @@ public static class ObjectExtensionsStrings
         return String.Join(" ", words);
     }
 
+    public static bool InQuotes(this string s, int max = 0)            // left true if quote left over on line, taking care of any escapes..
+    {
+        if (max <= 0)
+            max = s.Length;
+
+        bool inquote = false;
+        for (int i = 0; i < max; i++)
+        {
+            if (s[i] == '\\' && i < max - 1 && s[i + 1] == '"')
+                i += 1;     // ignore this, ingore "
+            else if (s[i] == '"')
+                inquote = !inquote;
+        }
+
+        return inquote;
+    }
+}
+
+public static class ObjectExtensionsNumbersBool
+{
     public static bool Eval(this string ins, out string res)        // true, res = eval.  false, res = error
     {
         System.Data.DataTable dt = new System.Data.DataTable();
@@ -649,15 +617,60 @@ public static class ObjectExtensionsStrings
         }
     }
 
-    #region Colors
+    static public bool InvariantParse(this string s, out int i)
+    {
+        return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
 
+    static public int? InvariantParseIntNull(this string s)     // s can be null
+    {
+        int i;
+        if (s != null && int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
+    static public bool InvariantParse(this string s, out double i)
+    {
+        return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public double? InvariantParseDoubleNull(this string s)
+    {
+        double i;
+        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
+    static public bool InvariantParse(this string s, out long i)
+    {
+        return long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public long? InvariantParseLongNull(this string s)
+    {
+        long i;
+        if (s != null && long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+}
+
+#region Colors
+
+public static class ObjectExtensionsColours
+{
     /// <summary>
     /// Determine if two colors are both fully transparent or are otherwise equal in value, ignoring
     /// any stupid naming comparisons or RGB comparisons when both are fully transparent.
     /// </summary>
     /// <param name="other">The color to compare to.</param>
     /// <returns><c>true</c> if the colors are both fully transparent or are equal in value; <c>false</c> otherwise.</returns>
-    public static bool IsEqual(this Color c, Color other)
+public static bool IsEqual(this Color c, Color other)
     {
         return ((c.A == 0 && other.A == 0) || c.ToArgb() == other.ToArgb());
     }
