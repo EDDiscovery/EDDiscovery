@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.EliteDangerous
 {
+    [System.Diagnostics.DebuggerDisplay("Mat {name} count {count} left {scratchpad_left}")]
     public class MaterialCommodities               // in memory version of it
     {
         public int count { get; set; }
@@ -32,7 +33,7 @@ namespace EDDiscovery.EliteDangerous
 
         public MaterialCommodities(MaterialCommodityDB c)
         {
-            count = scratchpad_used = 0;
+            count = scratchpad_left = 0;
             price = 0;
             this.Details = c;
         }
@@ -52,7 +53,7 @@ namespace EDDiscovery.EliteDangerous
         public static string MaterialManufacturedCategory { get { return MaterialCommodityDB.MaterialManufacturedCategory; } }
         #endregion
 
-        public int scratchpad_used { get; set; }        // for synthesis dialog..
+        public int scratchpad_left { get; set; }        // for synthesis dialog..
     }
 
 
@@ -196,32 +197,31 @@ namespace EDDiscovery.EliteDangerous
         static public void ResetUsed(List<MaterialCommodities> mcl)
         {
             for (int i = 0; i < mcl.Count; i++)
-                mcl[i].scratchpad_used = mcl[i].count;
+                mcl[i].scratchpad_left = mcl[i].count;
         }
 
-        static public Tuple<int,int,string> HowManyLeft(List<MaterialCommodities> list, Recipe r, int tomake = 0)
+        static public Tuple<int, int, string> HowManyLeft(List<MaterialCommodities> list, Recipe r, int tomake = 0)
         {
             int max = int.MaxValue;
-            StringBuilder res = new StringBuilder(64);
+            StringBuilder needed = new StringBuilder(64);
 
             for (int i = 0; i < r.ingredients.Length; i++)
             {
                 int mi = list.FindIndex(x => x.shortname.Equals(r.ingredients[i]));
-                int sets = (mi != -1) ? (list[mi].scratchpad_used / r.count[i]) : 0;
+                int got = (mi > 0) ? list[mi].scratchpad_left : 0;
+                int sets = got / r.count[i];
 
-                if (sets>0)
-                    max = Math.Min(max, sets);
-                else
+                max = Math.Min(max, sets);
+
+                int need = r.count[i] * tomake;
+
+                if (got < need )
                 {
-                    max = 0;
-                    if (tomake > 0)
-                    {
-                        string s = (r.count[i] * tomake).ToStringInvariant() + r.ingredients[i];
-                        if (res.Length == 0)
-                            res.Append("Need:" + s);
-                        else
-                            res.Append("," + s);
-                    }
+                    string s = (need - got).ToStringInvariant() + r.ingredients[i];
+                    if (needed.Length == 0)
+                        needed.Append("Need:" + s);
+                    else
+                        needed.Append("," + s);
                 }
             }
 
@@ -230,29 +230,21 @@ namespace EDDiscovery.EliteDangerous
             if (max > 0 && tomake > 0)             // if we have a set, and use it up
             {
                 made = Math.Min(max, tomake);                // can only make this much
-                StringBuilder needed = new StringBuilder(64);
+                StringBuilder usedstr = new StringBuilder(64);
 
                 for (int i = 0; i < r.ingredients.Length; i++)
                 {
                     int mi = list.FindIndex(x => x.shortname.Equals(r.ingredients[i]));
                     System.Diagnostics.Debug.Assert(mi != -1);
                     int used = r.count[i] * made;
-                    list[mi].scratchpad_used -= used;
-                    res.AppendPrePad(used.ToStringInvariant() + list[mi].shortname, ",");
-
-                    if (made < tomake)                         // if can't make what you want, inform
-                    {
-                        int itemsneeded = r.count[i] * (tomake - made) - list[mi].scratchpad_used;
-                        if (itemsneeded > 0)
-                            needed.AppendPrePad(itemsneeded.ToStringInvariant() + list[mi].shortname, ",");
-                    }
+                    list[mi].scratchpad_left -= used;
+                    usedstr.AppendPrePad(used.ToStringInvariant() + list[mi].shortname, ",");
                 }
 
-                res.Insert(0, "Used:");
-                res.AppendPrePad(needed.ToString(), ", Need:");
+                needed.AppendPrePad("Used: " + usedstr.ToString(), ", ");
             }
 
-            return new Tuple<int,int,string>(max, made, res.ToNullSafeString());
+            return new Tuple<int,int,string>(max, made, needed.ToNullSafeString());
         }
 
         #endregion

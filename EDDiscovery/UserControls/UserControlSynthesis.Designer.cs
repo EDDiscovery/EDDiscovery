@@ -43,26 +43,27 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewModules = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.labelTitle = new System.Windows.Forms.Label();
-            this.comboBoxSynthesis = new ExtendedControls.ComboBoxCustom();
+            this.dataGridViewSynthesis = new System.Windows.Forms.DataGridView();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Available = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.comboBoxSynthesis = new ExtendedControls.ComboBoxCustom();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).BeginInit();
             this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewModules);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewSynthesis);
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
@@ -73,26 +74,84 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
-            // dataGridViewModules
+            // dataGridViewSynthesis
             // 
-            this.dataGridViewModules.AllowUserToAddRows = false;
-            this.dataGridViewModules.AllowUserToDeleteRows = false;
-            this.dataGridViewModules.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewModules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewModules.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewSynthesis.AllowDrop = true;
+            this.dataGridViewSynthesis.AllowUserToAddRows = false;
+            this.dataGridViewSynthesis.AllowUserToDeleteRows = false;
+            this.dataGridViewSynthesis.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewSynthesis.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSynthesis.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.UpgradeCol,
             this.MaxCol,
             this.WantedCol,
             this.Available,
             this.Notes,
             this.Recipe});
-            this.dataGridViewModules.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewModules.Name = "dataGridViewModules";
-            this.dataGridViewModules.RowHeadersWidth = 25;
-            this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewModules.Size = new System.Drawing.Size(780, 540);
-            this.dataGridViewModules.TabIndex = 1;
-            this.dataGridViewModules.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
+            this.dataGridViewSynthesis.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewSynthesis.Name = "dataGridViewSynthesis";
+            this.dataGridViewSynthesis.RowHeadersVisible = false;
+            this.dataGridViewSynthesis.RowHeadersWidth = 25;
+            this.dataGridViewSynthesis.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewSynthesis.Size = new System.Drawing.Size(780, 540);
+            this.dataGridViewSynthesis.TabIndex = 1;
+            this.dataGridViewSynthesis.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
+            this.dataGridViewSynthesis.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewSynthesis_DragDrop);
+            this.dataGridViewSynthesis.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewSynthesis_DragOver);
+            this.dataGridViewSynthesis.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewSynthesis_MouseDown);
+            this.dataGridViewSynthesis.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewSynthesis_MouseMove);
+            // 
+            // UpgradeCol
+            // 
+            this.UpgradeCol.HeaderText = "Upgrade";
+            this.UpgradeCol.MinimumWidth = 50;
+            this.UpgradeCol.Name = "UpgradeCol";
+            this.UpgradeCol.ReadOnly = true;
+            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // MaxCol
+            // 
+            this.MaxCol.FillWeight = 25F;
+            this.MaxCol.HeaderText = "Max";
+            this.MaxCol.MinimumWidth = 50;
+            this.MaxCol.Name = "MaxCol";
+            this.MaxCol.ReadOnly = true;
+            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // WantedCol
+            // 
+            this.WantedCol.FillWeight = 25F;
+            this.WantedCol.HeaderText = "Wanted";
+            this.WantedCol.MinimumWidth = 50;
+            this.WantedCol.Name = "WantedCol";
+            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Available
+            // 
+            this.Available.FillWeight = 25F;
+            this.Available.HeaderText = "Avail.";
+            this.Available.MinimumWidth = 50;
+            this.Available.Name = "Available";
+            this.Available.ReadOnly = true;
+            this.Available.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Notes
+            // 
+            this.Notes.FillWeight = 150F;
+            this.Notes.HeaderText = "Notes";
+            this.Notes.MinimumWidth = 50;
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            this.Notes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Recipe
+            // 
+            this.Recipe.FillWeight = 50F;
+            this.Recipe.HeaderText = "Recipe";
+            this.Recipe.MinimumWidth = 15;
+            this.Recipe.Name = "Recipe";
+            this.Recipe.ReadOnly = true;
+            this.Recipe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // vScrollBarCustomMC
             // 
@@ -125,22 +184,13 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
-            this.panelButtons.Controls.Add(this.labelTitle);
             this.panelButtons.Controls.Add(this.comboBoxSynthesis);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
-            // 
-            // labelTitle
-            // 
-            this.labelTitle.AutoSize = true;
-            this.labelTitle.Location = new System.Drawing.Point(6, 7);
-            this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(52, 13);
-            this.labelTitle.TabIndex = 26;
-            this.labelTitle.Text = "Synthesis";
+            this.toolTip1.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
             // 
             // comboBoxSynthesis
             // 
@@ -154,7 +204,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxSynthesis.DropDownWidth = 1;
             this.comboBoxSynthesis.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxSynthesis.ItemHeight = 13;
-            this.comboBoxSynthesis.Location = new System.Drawing.Point(93, 4);
+            this.comboBoxSynthesis.Location = new System.Drawing.Point(3, 4);
             this.comboBoxSynthesis.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxSynthesis.Name = "comboBoxSynthesis";
             this.comboBoxSynthesis.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -168,51 +218,9 @@ namespace EDDiscovery.UserControls
             this.comboBoxSynthesis.ValueMember = "";
             this.comboBoxSynthesis.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // UpgradeCol
+            // toolTip1
             // 
-            this.UpgradeCol.HeaderText = "Upgrade";
-            this.UpgradeCol.MinimumWidth = 50;
-            this.UpgradeCol.Name = "UpgradeCol";
-            this.UpgradeCol.ReadOnly = true;
-            // 
-            // MaxCol
-            // 
-            this.MaxCol.FillWeight = 25F;
-            this.MaxCol.HeaderText = "Max";
-            this.MaxCol.MinimumWidth = 50;
-            this.MaxCol.Name = "MaxCol";
-            this.MaxCol.ReadOnly = true;
-            // 
-            // WantedCol
-            // 
-            this.WantedCol.FillWeight = 25F;
-            this.WantedCol.HeaderText = "Wanted";
-            this.WantedCol.MinimumWidth = 50;
-            this.WantedCol.Name = "WantedCol";
-            // 
-            // Available
-            // 
-            this.Available.FillWeight = 25F;
-            this.Available.HeaderText = "Avail.";
-            this.Available.MinimumWidth = 50;
-            this.Available.Name = "Available";
-            this.Available.ReadOnly = true;
-            // 
-            // Notes
-            // 
-            this.Notes.FillWeight = 150F;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 50;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            // 
-            // Recipe
-            // 
-            this.Recipe.FillWeight = 50F;
-            this.Recipe.HeaderText = "Recipe";
-            this.Recipe.MinimumWidth = 15;
-            this.Recipe.Name = "Recipe";
-            this.Recipe.ReadOnly = true;
+            this.toolTip1.ShowAlways = true;
             // 
             // UserControlSynthesis
             // 
@@ -223,9 +231,8 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlSynthesis";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).EndInit();
             this.panelButtons.ResumeLayout(false);
-            this.panelButtons.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -233,11 +240,11 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewModules;
+        private System.Windows.Forms.DataGridView dataGridViewSynthesis;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         internal ExtendedControls.ComboBoxCustom comboBoxSynthesis;
-        private System.Windows.Forms.Label labelTitle;
+        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn WantedCol;
