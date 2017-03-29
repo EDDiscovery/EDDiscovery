@@ -148,7 +148,7 @@ namespace EDDiscovery
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
-            buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
+            buttonSync.Enabled = EDCommander.Current.SyncToEdsm | EDCommander.Current.SyncFromEdsm;
         }
 
         public void LoadControl()
@@ -380,13 +380,13 @@ namespace EDDiscovery
 
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
 
-                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm == true)
+                    if (EDCommander.Current.SyncToEdsm == true)
                         EDSMSync.SendTravelLog(he);
                 }
 
                 if (he.ISEDDNMessage)
                 {
-                    if (EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEddn == true)
+                    if (EDCommander.Current.SyncToEddn == true)
                     {
                         EDDNSync.SendEDDNEvents(_discoveryForm, he);
                     }
@@ -554,7 +554,7 @@ namespace EDDiscovery
             commanders = new List<EDCommander>();
 
             commanders.Add(new EDCommander(-1, "Hidden log", "", false, false, false));
-            commanders.AddRange(EDDiscoveryForm.EDDConfig.ListOfCommanders);
+            commanders.AddRange(EDCommander.GetList());
 
             comboBoxCommander.DataSource = null;
             comboBoxCommander.DataSource = commanders;
@@ -564,7 +564,7 @@ namespace EDDiscovery
             if (_discoveryForm.history.CommanderId == -1)
                 comboBoxCommander.SelectedIndex = 0;
             else
-                comboBoxCommander.SelectedItem = EDDiscoveryForm.EDDConfig.CurrentCommander;
+                comboBoxCommander.SelectedItem = EDCommander.Current;
 
             comboBoxCommander.Enabled = true;
         }
@@ -575,9 +575,9 @@ namespace EDDiscovery
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 if (itm.Nr >= 0)
-                    EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
+                    EDCommander.CurrentCmdrID = itm.Nr;
 
-                buttonSync.Enabled = EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm | EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm;
+                buttonSync.Enabled = EDCommander.Current.SyncToEdsm | EDCommander.Current.SyncFromEdsm;
 
                 _discoveryForm.RefreshHistoryAsync(currentcmdr: itm.Nr);                                   // which will cause DIsplay to be called as some point
             }
@@ -651,7 +651,7 @@ namespace EDDiscovery
 
             try
             {
-                _discoveryForm.EdsmSync.StartSync(edsm, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncToEdsm, EDDiscoveryForm.EDDConfig.CurrentCommander.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
+                _discoveryForm.EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
             }
             catch (Exception ex)
             {

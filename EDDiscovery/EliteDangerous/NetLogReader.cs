@@ -406,7 +406,7 @@ namespace EDDiscovery
 
             if (cmdrid < 0)
             {
-                cmdrid = EDDConfig.Instance.CurrentCmdrID;
+                cmdrid = EDCommander.CurrentCmdrID;
             }
 
             JournalLocOrJump last = null;
