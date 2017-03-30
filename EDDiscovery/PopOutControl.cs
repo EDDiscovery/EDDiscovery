@@ -66,6 +66,7 @@ namespace EDDiscovery.Forms
             Scan,
             Modules,
             Exploration,
+            Synthesis,
 
             StartTabButtons = Log,
         };
@@ -109,6 +110,7 @@ namespace EDDiscovery.Forms
             { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
             { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, "Display scan data", transparent: false) },
             { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EDDiscovery.Properties.Resources.module, "Display loadout data") },
+            { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EDDiscovery.Properties.Resources.synthesis, "Synthesis Planner") },
             { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null, "Explore a collection of systems") },
             { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
@@ -120,6 +122,10 @@ namespace EDDiscovery.Forms
         {
             switch (i)
             {
+                case PopOuts.Spanel: return new UserControlSpanel();
+                case PopOuts.Trippanel: return new UserControlTrippanel();
+                case PopOuts.NotePanel: return new UserControlNotePanel();
+                case PopOuts.RouteTracker: return new UserControlRouteTracker();
                 case PopOuts.Log: return new UserControlLog();
                 case PopOuts.StarDistance: return new UserControlStarDistance();
                 case PopOuts.Materials: return new UserControlMaterials();
@@ -128,14 +134,11 @@ namespace EDDiscovery.Forms
                 case PopOuts.Journal: return new UserControlJournalGrid();
                 case PopOuts.TravelGrid: return new UserControlTravelGrid();
                 case PopOuts.ScreenShot: return new UserControlScreenshot();
-                case PopOuts.Exploration: return new UserControlExploration();
-                case PopOuts.Modules: return new UserControlModules();
                 case PopOuts.Statistics: return new UserControlStats();
                 case PopOuts.Scan: return new UserControlScan();
-                case PopOuts.Spanel: return new UserControlSpanel();
-                case PopOuts.Trippanel: return new UserControlTrippanel();
-                case PopOuts.NotePanel: return new UserControlNotePanel();
-                case PopOuts.RouteTracker: return new UserControlRouteTracker();
+                case PopOuts.Modules: return new UserControlModules();
+                case PopOuts.Exploration: return new UserControlExploration();
+                case PopOuts.Synthesis: return new UserControlSynthesis();
                 default: return null;
             }
         }

@@ -24,6 +24,7 @@ using EDDiscovery2.EDSM;
 using EDDiscovery2.DB;
 using EDDiscovery2;
 using ExtendedControls;
+using EDDiscovery2;
 
 namespace EDDiscovery
 {
@@ -238,7 +239,8 @@ namespace EDDiscovery
                     LogTextHighlight("Duplicate system entry is not allowed" + Environment.NewLine);
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
+                        if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
+                            dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                     }));
                     return;
                 }
@@ -248,7 +250,8 @@ namespace EDDiscovery
                 {
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
+                        if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
+                            dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                     }));
                     return;
                 }
@@ -496,27 +499,44 @@ namespace EDDiscovery
 
                 }
 
-                var responseM = edsm.SubmitDistances(edsm.commanderName, TargetSystem.name, distances);
+                bool trilatOk = false;
+                bool respOk = true;
+                List<KeyValuePair<string, double>> distlist = distances.ToList();
 
-                Console.WriteLine(responseM);
+                for (int i = 0; i < distances.Count; i += 20)
+                {
+                    var dists = new Dictionary<string, double>();
+                    for (int j = i; j < i + 20 && j < distances.Count; j++)
+                        dists[distlist[j].Key] = distlist[j].Value;
 
-                string infoM;
-                bool trilaterationOkM;
-                var responseOkM = edsm.ShowDistanceResponse(responseM, out infoM, out trilaterationOkM);
+                    var responseM = edsm.SubmitDistances(edsm.commanderName, TargetSystem.name, dists);
 
-                Console.WriteLine(infoM);
+                    Console.WriteLine(responseM);
+
+                    string infoM;
+                    bool trilaterationOkM;
+                    var responseOkM = edsm.ShowDistanceResponse(responseM, out infoM, out trilaterationOkM);
+
+                    if (trilaterationOkM)
+                        trilatOk = true;
+
+                    if (!responseOkM)
+                        respOk = false;
+
+                    Console.WriteLine(infoM);
+                }
 
                 BeginInvoke((MethodInvoker)delegate
                {
                    UnfreezeTrilaterationUI();
 
-                   if (responseOkM && trilaterationOkM)
+                   if (respOk && trilatOk)
                    {
                        LogTextSuccess("EDSM submission succeeded, trilateration successful." + Environment.NewLine);
                        _discoveryForm.RefreshHistoryAsync();
                        checkForUnknownSystemsNowKnown();
                    }
-                   else if (responseOkM)
+                   else if (respOk)
                    {
                        LogTextHighlight("EDSM submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine);
                    }
@@ -949,6 +969,28 @@ namespace EDDiscovery
                 foreach (string sys in pushed)
                 {
                     AddSystemToDataGridViewDistances(sys);
+                }
+            }
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string txt = Clipboard.GetText(TextDataFormat.UnicodeText);
+            string[] lines = txt.Split('\n').Select(s => s.Trim('\r')).ToArray();
+            foreach (string line in lines)
+            {
+                string[] fields = line.Split('\t');
+                string sysname = fields[0].Trim();
+                string dist = fields.Length >= 2 ? fields[1].Trim() : null;
+
+                if (sysname != "")
+                {
+                    var row = dataGridViewDistances.Rows.Add(sysname, dist);
+                    dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(0, row));
+                    if (dist != "")
+                    {
+                        dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(1, row));
+                    }
                 }
             }
         }

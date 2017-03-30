@@ -303,31 +303,29 @@ namespace EDDiscovery2
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(EDDConfig.Options.AppDataDirectory))
+            JObject jo = new JObject();
+            foreach (EDCommander cmdr in _commandersDict.Values)
             {
-                JObject jo = new JObject();
-                foreach (EDCommander cmdr in _commandersDict.Values)
+                jo[cmdr.Name] = new JObject(new
                 {
-                    jo[cmdr.Name] = new JObject(
-                        new JProperty("NetLogDir", cmdr.NetLogDir),
-                        new JProperty("JournalDir", cmdr.JournalDir)
-                        );
-                }
+                    NetLogDir = cmdr.NetLogDir,
+                    JournalDir = cmdr.JournalDir
+                });
+            }
 
-                using (Stream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp")))
+            using (Stream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp")))
+            {
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
-                    using (StreamWriter writer = new StreamWriter(stream))
+                    using (JsonTextWriter jwriter = new JsonTextWriter(writer))
                     {
-                        using (JsonTextWriter jwriter = new JsonTextWriter(writer))
-                        {
-                            jo.WriteTo(jwriter);
-                        }
+                        jo.WriteTo(jwriter);
                     }
                 }
-
-                File.Delete(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
-                File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
             }
+
+            File.Delete(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
+            File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
         }
 
         /// <summary>
@@ -428,7 +426,7 @@ namespace EDDiscovery2
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(EDDConfig.Options.AppDataDirectory) && File.Exists(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json")))
+            if (File.Exists(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json")))
             {
                 JObject jo;
 

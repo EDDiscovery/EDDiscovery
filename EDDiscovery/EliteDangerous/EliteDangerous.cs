@@ -23,6 +23,7 @@ using System.Management;
 using System.IO;
 using EDDiscovery.DB;
 using Newtonsoft.Json.Linq;
+using EDDiscovery;
 
 namespace EDDiscovery2
 {
@@ -147,7 +148,7 @@ namespace EDDiscovery2
                         if (!checkedfordefaultfolder)
                         {
                             checkedfordefaultfolder = true;                 // do it once, but no need to keep on doing it.. only this class can set it once the process starts
-                            EDDirectory = EDDiscovery.EDDConfig.UserPaths.EDDirectory;
+                            EDDirectory = EDDConfig.UserPaths.EDDirectory;
                         }
                     }
                 }
@@ -173,8 +174,8 @@ namespace EDDiscovery2
                         if ( newfolder != null && !newfolder.Equals(EDDirectory) )
                         {
                             EDDirectory = newfolder;
-                            EDDiscovery.EDDConfig.UserPaths.EDDirectory = EDDirectory;
-                            EDDiscovery.EDDConfig.UserPaths.Save();
+                            EDDConfig.UserPaths.EDDirectory = EDDirectory;
+                            EDDConfig.UserPaths.Save();
                         }
 
                         EDRunning = true;

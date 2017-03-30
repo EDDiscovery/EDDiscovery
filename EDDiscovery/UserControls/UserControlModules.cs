@@ -33,7 +33,6 @@ namespace EDDiscovery.UserControls
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
         
-        private string DbFilterSave { get { return "ModulesGridEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbShipSave { get { return "ModulesGridShipSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
@@ -86,6 +85,9 @@ namespace EDDiscovery.UserControls
                 ShipInformation sm = shm.Ships[id];
                 comboBoxShips.Items.Add(sm.ShipShortName);
             }
+
+            if (cursel == "")
+                cursel = DB.SQLiteDBClass.GetSettingString(DbShipSave, "");
 
             if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
                 cursel = "Travel History Entry";
@@ -210,56 +212,9 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxShips.Enabled)
             {
-                DB.SQLiteDBClass.PutSettingInt(DbShipSave, comboBoxShips.SelectedIndex);
+                DB.SQLiteDBClass.PutSettingString(DbShipSave, comboBoxShips.Text);
                 Display();
             }
         }
-
-#region right clicks
-
-        int rightclickrow = -1;
-        int leftclickrow = -1;
-
-        private void dataGridViewLedger_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickrow = -1;
-            }
-            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-            {
-                leftclickrow = -1;
-            }
-
-            if (dataGridViewModules.SelectedCells.Count < 2 || dataGridViewModules.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewModules.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewModules.ClearSelection();                // select row under cursor.
-                    dataGridViewModules.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                    }
-                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-                    {
-                        leftclickrow = hti.RowIndex;
-                    }
-                }
-            }
-        }
-
-        private void toolStripMenuItemGotoItem_Click(object sender, EventArgs e)
-        {
-            if (rightclickrow != -1)
-            {
-                long v = (long)dataGridViewModules.Rows[rightclickrow].Tag;
-            }
-        }
-
-        #endregion
-
     }
 }
