@@ -993,5 +993,32 @@ namespace EDDiscovery
                 }
             }
         }
+
+        private void dataGridViewDistances_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 1)
+            {
+                double? v1 = DistanceParser.ParseInterstellarDistance(e.CellValue1?.ToString());
+                double? v2 = DistanceParser.ParseInterstellarDistance(e.CellValue2?.ToString());
+
+                if (v1 != null || v2 != null)
+                {
+                    if (v1 == null)
+                    {
+                        e.SortResult = 1;
+                    }
+                    else if (v2 == null)
+                    {
+                        e.SortResult = -1;
+                    }
+                    else
+                    {
+                        e.SortResult = v1.Value.CompareTo(v2.Value);
+                    }
+
+                    e.Handled = true;
+                }
+            }
+        }
     }
 }

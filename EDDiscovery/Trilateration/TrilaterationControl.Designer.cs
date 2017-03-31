@@ -544,6 +544,7 @@ namespace EDDiscovery
             this.dataGridViewDistances.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellLeave);
             this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewDistances_CellValidating);
             this.dataGridViewDistances.CurrentCellChanged += new System.EventHandler(this.dataGridViewDistances_CurrentCellChanged);
+            this.dataGridViewDistances.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewDistances_SortCompare);
             this.dataGridViewDistances.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewDistances_KeyDown);
             // 
             // ColumnSystem
