@@ -217,11 +217,6 @@ namespace EDDiscovery
             debugout.Flush();
         }
 
-        public static string FDName(string normal)
-        {
-            string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
-            return n.ToLower();
-        }
 
         public static string TryReadAllTextFromFile(string filename)
         {
@@ -233,23 +228,6 @@ namespace EDDiscovery
             {
                 return null;
             }
-        }
-
-        public static string SafeFileString(string normal)
-        {
-            normal = normal.Replace("*", "_star");
-            normal = normal.Replace("/", "_slash");
-            normal = normal.Replace("\\", "_slash");
-            normal = normal.Replace(":", "_colon");
-            normal = normal.Replace("?", "_qmark");
-
-            string ret = "";
-            foreach (char c in normal)
-            {
-                if (char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c == '_')
-                    ret += c;
-            }
-            return ret;
         }
 
         [Flags]
@@ -330,51 +308,6 @@ namespace EDDiscovery
             }
             else
                 return null;
-        }
-
-        static public int[] VersionFromString(string s)
-        {
-            string[] list = s.Split('.');
-            return VersionFromStringArray(list);
-        }
-
-        static public int[] VersionFromStringArray(string[] list)
-        { 
-            if (list.Length > 0)
-            {
-                int[] v = new int[list.Length];
-
-                for (int i = 0; i < list.Length; i++)
-                {
-                    if (!list[i].InvariantParse(out v[i]))
-                        return null;
-                }
-
-                return v;
-            }
-
-            return null;
-        }
-
-        static public int CompareVersion(int[] v1, int[] v2)    // is V1>V2, 1, 0 = equals, -1 less
-        {
-            for( int i = 0; i < v1.Length; i++ )
-            {
-                if (i >= v2.Length || v1[i] > v2[i])
-                    return 1;
-                else if (v1[i] < v2[i])
-                    return -1;
-            }
-
-            return 0;
-        }
-
-        static public int[] GetEDVersion()
-        {
-            System.Reflection.Assembly aw = System.Reflection.Assembly.GetExecutingAssembly();
-            string v = aw.FullName.Split(',')[1].Split('=')[1];
-            string[] list = v.Split('.');
-            return VersionFromStringArray(list);
         }
 
         // prefix;postfix;[doubleformat] value 
@@ -461,5 +394,53 @@ namespace EDDiscovery
             return sb.ToString();
         }
 
+        public static string GetDefaultBrowser()
+        {
+            const string userChoice = @"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice";
+            string progId;
+            using (Microsoft.Win32.RegistryKey userChoiceKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(userChoice))
+            {
+                if (userChoiceKey != null)
+                {
+                    object progIdValue = userChoiceKey.GetValue("Progid");
+                    if (progIdValue != null)
+                        return progIdValue.ToString();
+                }
+            }
+
+            return null;
+        }
+
+        public static string GetBrowserPath(string defbrowser)
+        {
+            const string exeSuffix = ".exe";
+            string path = defbrowser + @"\shell\open\command";
+
+            using (Microsoft.Win32.RegistryKey pathKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(path))
+            {
+                if (pathKey == null)
+                {
+                    return null;
+                }
+
+                // Trim parameters.
+                try
+                {
+                    path = pathKey.GetValue(null).ToString().ToLower().Replace("\"", "");
+                    if (!path.EndsWith(exeSuffix))
+                    {
+                        path = path.Substring(0, path.LastIndexOf(exeSuffix, StringComparison.Ordinal) + exeSuffix.Length);
+                        return path;
+                    }
+                }
+                catch
+                {
+                    // Assume the registry value is set incorrectly, or some funky browser is used which currently is unknown.
+                }
+            }
+
+            return null;
+        }
+                    
     }
 }

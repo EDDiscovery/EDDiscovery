@@ -492,7 +492,7 @@ namespace EDDiscovery.Actions
                 if ( file == null)                              // if not associated directly with a file, save to a temp one
                 {
                     string filename = Name.Length > 0 ? Name : "Default";
-                    file = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Tools.SafeFileString(filename) + ".atf");
+                    file = System.IO.Path.Combine(System.IO.Path.GetTempPath(), filename.SafeFileString() + ".atf");
 
                     if (!SaveText(file))
                         return false;

@@ -581,6 +581,30 @@ public static class ObjectExtensionsStrings
 
         return inquote;
     }
+
+    public static string SafeFileString(this string normal)
+    {
+        normal = normal.Replace("*", "_star");
+        normal = normal.Replace("/", "_slash");
+        normal = normal.Replace("\\", "_slash");
+        normal = normal.Replace(":", "_colon");
+        normal = normal.Replace("?", "_qmark");
+
+        string ret = "";
+        foreach (char c in normal)
+        {
+            if (char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c == '_')
+                ret += c;
+        }
+        return ret;
+    }
+
+    public static string FDName(this string normal)
+    {
+        string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
+        return n.ToLower();
+    }
+
 }
 
 public static class ObjectExtensionsNumbersBool
@@ -658,6 +682,51 @@ public static class ObjectExtensionsNumbersBool
         else
             return null;
     }
+
+    static public int[] VersionFromString(this string s)
+    {
+        string[] list = s.Split('.');
+        return VersionFromStringArray(list);
+    }
+
+    static public int[] VersionFromStringArray(this string[] list)
+    {
+        if (list.Length > 0)
+        {
+            int[] v = new int[list.Length];
+
+            for (int i = 0; i < list.Length; i++)
+            {
+                if (!list[i].InvariantParse(out v[i]))
+                    return null;
+            }
+
+            return v;
+        }
+
+        return null;
+    }
+
+    static public int CompareVersion(this int[] v1, int[] v2)    // is V1>V2, 1, 0 = equals, -1 less
+    {
+        for (int i = 0; i < v1.Length; i++)
+        {
+            if (i >= v2.Length || v1[i] > v2[i])
+                return 1;
+            else if (v1[i] < v2[i])
+                return -1;
+        }
+
+        return 0;
+    }
+
+    static public int[] GetEDVersion()
+    {
+        System.Reflection.Assembly aw = System.Reflection.Assembly.GetExecutingAssembly();
+        string v = aw.FullName.Split(',')[1].Split('=')[1];
+        string[] list = v.Split('.');
+        return VersionFromStringArray(list);
+    }
 }
 
 #region Colors
@@ -670,7 +739,7 @@ public static class ObjectExtensionsColours
     /// </summary>
     /// <param name="other">The color to compare to.</param>
     /// <returns><c>true</c> if the colors are both fully transparent or are equal in value; <c>false</c> otherwise.</returns>
-public static bool IsEqual(this Color c, Color other)
+    public static bool IsEqual(this Color c, Color other)
     {
         return ((c.A == 0 && other.A == 0) || c.ToArgb() == other.ToArgb());
     }

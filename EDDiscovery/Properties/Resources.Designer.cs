@@ -453,6 +453,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap coriolis {
+            get {
+                object obj = ResourceManager.GetObject("coriolis", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap crew {
             get {
                 object obj = ResourceManager.GetObject("crew", resourceCulture);
@@ -2370,6 +2380,15 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("Travelicon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://coriolis.edcd.io/import?.
+        /// </summary>
+        internal static string URLCoriolis {
+            get {
+                return ResourceManager.GetString("URLCoriolis", resourceCulture);
             }
         }
         

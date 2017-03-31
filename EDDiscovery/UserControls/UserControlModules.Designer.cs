@@ -54,6 +54,7 @@ namespace EDDiscovery.UserControls
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonExtCoriolis = new ExtendedControls.ButtonExt();
             this.labelVehicle = new System.Windows.Forms.Label();
             this.LabelVehicleText = new System.Windows.Forms.Label();
             this.labelShip = new System.Windows.Forms.Label();
@@ -181,6 +182,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonExtCoriolis);
             this.panelButtons.Controls.Add(this.labelVehicle);
             this.panelButtons.Controls.Add(this.LabelVehicleText);
             this.panelButtons.Controls.Add(this.labelShip);
@@ -191,10 +193,24 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
             // 
+            // buttonExtCoriolis
+            // 
+            this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtCoriolis.BorderColorScaling = 1.25F;
+            this.buttonExtCoriolis.ButtonColorScaling = 0.5F;
+            this.buttonExtCoriolis.ButtonDisabledScaling = 0.5F;
+            this.buttonExtCoriolis.Image = global::EDDiscovery.Properties.Resources.coriolis;
+            this.buttonExtCoriolis.Location = new System.Drawing.Point(255, 3);
+            this.buttonExtCoriolis.Name = "buttonExtCoriolis";
+            this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtCoriolis.TabIndex = 29;
+            this.buttonExtCoriolis.UseVisualStyleBackColor = false;
+            this.buttonExtCoriolis.Click += new System.EventHandler(this.buttonExtCoriolis_Click);
+            // 
             // labelVehicle
             // 
             this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(362, 7);
+            this.labelVehicle.Location = new System.Drawing.Point(340, 9);
             this.labelVehicle.Name = "labelVehicle";
             this.labelVehicle.Size = new System.Drawing.Size(53, 13);
             this.labelVehicle.TabIndex = 28;
@@ -203,7 +219,7 @@ namespace EDDiscovery.UserControls
             // LabelVehicleText
             // 
             this.LabelVehicleText.AutoSize = true;
-            this.LabelVehicleText.Location = new System.Drawing.Point(298, 7);
+            this.LabelVehicleText.Location = new System.Drawing.Point(293, 9);
             this.LabelVehicleText.Name = "LabelVehicleText";
             this.LabelVehicleText.Size = new System.Drawing.Size(42, 13);
             this.LabelVehicleText.TabIndex = 27;
@@ -239,7 +255,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.SelectedIndex = -1;
             this.comboBoxShips.SelectedItem = null;
             this.comboBoxShips.SelectedValue = null;
-            this.comboBoxShips.Size = new System.Drawing.Size(218, 24);
+            this.comboBoxShips.Size = new System.Drawing.Size(188, 22);
             this.comboBoxShips.TabIndex = 0;
             this.comboBoxShips.ValueMember = "";
             this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
@@ -277,5 +293,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn BluePrint;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
+        private ExtendedControls.ButtonExt buttonExtCoriolis;
     }
 }

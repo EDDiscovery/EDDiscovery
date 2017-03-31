@@ -769,15 +769,17 @@ namespace EDDiscovery2
                 ButtonExt MyDgv = (ButtonExt)myControl;
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.button_text];
 
+                //if (MyDgv.Image != null) System.Diagnostics.Debug.WriteLine("iMAGE IN " + MyDgv.Name);
+
                 if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
                 {
-                    MyDgv.FlatStyle = FlatStyle.System;
+                    MyDgv.FlatStyle = (MyDgv.Image != null) ? FlatStyle.Standard : FlatStyle.System;
                     MyDgv.UseVisualStyleBackColor = true;           // this makes it system..
                 }
                 else
                 {
-                    MyDgv.BackColor = currentsettings.colors[Settings.CI.button_back];
-                    MyDgv.FlatAppearance.BorderColor = currentsettings.colors[Settings.CI.button_border];
+                    MyDgv.BackColor = (MyDgv.Image != null) ? currentsettings.colors[Settings.CI.form] : currentsettings.colors[Settings.CI.button_back];
+                    MyDgv.FlatAppearance.BorderColor = (MyDgv.Image != null) ? currentsettings.colors[Settings.CI.form] : currentsettings.colors[Settings.CI.button_border];
                     MyDgv.FlatAppearance.BorderSize = 1;
                     MyDgv.FlatAppearance.MouseOverBackColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
                     MyDgv.FlatAppearance.MouseDownBackColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseselectedscaling);

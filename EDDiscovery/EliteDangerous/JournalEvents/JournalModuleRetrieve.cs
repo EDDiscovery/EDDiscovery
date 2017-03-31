@@ -33,22 +33,32 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalModuleRetrieve(JObject evt) : base(evt, JournalTypeEnum.ModuleRetrieve)
         {
             Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
+            SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
+
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
+
             RetrievedItem = JournalFieldNaming.GetBetterItemNameEvents(evt["RetrievedItem"].Str());
+            RetrievedItemFD = JournalFieldNaming.NormaliseFDItemName(evt["RetrievedItem"].Str());
             RetrievedItemLocalised = evt["RetrievedItem_Localised"].Str();
             EngineerModifications = evt["EngineerModifications"].Str().SplitCapsWordFull();
+
             SwapOutItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SwapOutItem"].Str());
+            SwapOutItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SwapOutItem"].Str());
             SwapOutItemLocalised = evt["SwapOutItem_Localised"].Str();
+
             Cost = evt["Cost"].Long();
         }
         public string Slot { get; set; }
+        public string SlotFD { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public string RetrievedItem { get; set; }
+        public string RetrievedItemFD { get; set; }
         public string RetrievedItemLocalised { get; set; }
         public string EngineerModifications { get; set; }
         public string SwapOutItem { get; set; }
+        public string SwapOutItemFD { get; set; }
         public string SwapOutItemLocalised { get; set; }
         public long Cost { get; set; }
 

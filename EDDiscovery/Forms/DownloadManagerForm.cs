@@ -148,7 +148,7 @@ namespace EDDiscovery.Forms
 
             mgr = new VersioningManager();
 
-            int[] edversion = Tools.GetEDVersion();
+            int[] edversion = ObjectExtensionsNumbersBool.GetEDVersion();
             System.Diagnostics.Debug.Assert(edversion != null);
 
             mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Actions", "*.act", "Action File");

@@ -31,22 +31,34 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalModuleSwap(JObject evt ) : base(evt, JournalTypeEnum.ModuleSwap)
         {
             FromSlot = JournalFieldNaming.GetBetterSlotName(evt["FromSlot"].Str());
+            FromSlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["FromSlot"].Str());
+
             ToSlot = JournalFieldNaming.GetBetterSlotName(evt["ToSlot"].Str());
+            ToSlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["ToSlot"].Str());
+
             FromItem = JournalFieldNaming.GetBetterItemNameEvents(evt["FromItem"].Str());
+            FromItemFD = JournalFieldNaming.NormaliseFDItemName(evt["FromItem"].Str());
             FromItemLocalised = evt["FromItem_Localised"].Str();
+
             ToItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ToItem"].Str());
+            ToItemFD = JournalFieldNaming.NormaliseFDItemName(evt["ToItem"].Str());
             if (ToItem.Equals("Null"))      // Frontier bug.. something Null is here.. remove
-                ToItem = "";
+                ToItem = ToItemFD = "";
             ToItemLocalised = evt["ToItem_Localised"].Str();        // if ToItem is null or not there, this won't be
+
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
 
         }
         public string FromSlot { get; set; }
+        public string FromSlotFD { get; set; }
         public string ToSlot { get; set; }
+        public string ToSlotFD { get; set; }
         public string FromItem { get; set; }
+        public string FromItemFD { get; set; }
         public string FromItemLocalised { get; set; }
         public string ToItem { get; set; }
+        public string ToItemFD { get; set; }
         public string ToItemLocalised { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }

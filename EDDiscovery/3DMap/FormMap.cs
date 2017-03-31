@@ -1377,7 +1377,7 @@ namespace EDDiscovery2
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
         {
-            InfoForm dl = new InfoForm();
+            EDDiscovery.Forms.InfoForm dl = new EDDiscovery.Forms.InfoForm();
             string text = EDDiscovery.Properties.Resources.maphelp3d;
             dl.Info("3D Map Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();

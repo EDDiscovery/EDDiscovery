@@ -33,22 +33,32 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalModuleStore(JObject evt) : base(evt, JournalTypeEnum.ModuleStore)
         {
             Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
+            SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
+
             StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
+            StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
             StoredItemLocalised = evt["StoredItem_Localised"].Str();
+
             EngineerModifications = evt["EngineerModifications"].StrNull().SplitCapsWordFull();
+
             ReplacementItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ReplacementItem"].Str());
+            ReplacementItemFD = JournalFieldNaming.NormaliseFDItemName(evt["ReplacementItem"].Str());
             ReplacementItemLocalised = evt["ReplacementItem_Localised"].Str();
+
             Cost = evt["Cost"].LongNull();
         }
         public string Slot { get; set; }
+        public string SlotFD { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public string StoredItem { get; set; }
+        public string StoredItemFD { get; set; }
         public string StoredItemLocalised { get; set; }
         public string EngineerModifications { get; set; }
         public string ReplacementItem { get; set; }
+        public string ReplacementItemFD { get; set; }
         public string ReplacementItemLocalised { get; set; }
         public long? Cost { get; set; }
 

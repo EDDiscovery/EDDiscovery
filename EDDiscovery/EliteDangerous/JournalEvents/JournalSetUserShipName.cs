@@ -35,11 +35,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalSetUserShipName(JObject evt) : base(evt, JournalTypeEnum.SetUserShipName)
         {
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
             ShipID = evt["ShipID"].Int();
             ShipName = evt["UserShipName"].Str();// name to match LoadGame
             ShipIdent = evt["UserShipId"].Str();     // name to match LoadGame
         }
+
         public string Ship { get; set; }
+        public string ShipFD { get; set; }
         public int ShipID { get; set; }
         public string ShipName { get; set; }
         public string ShipIdent { get; set; }

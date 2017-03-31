@@ -29,6 +29,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             LoadGameCommander = evt["Commander"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
             StartLanded = evt["StartLanded"].Bool();
             StartDead = evt["StartDead"].Bool();
@@ -45,6 +46,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string LoadGameCommander { get; set; }
         public string Ship { get; set; }        // type, fer-de-lance
+        public string ShipFD { get; set; }        // type, fd name
         public int ShipId { get; set; }
         public bool StartLanded { get; set; }
         public bool StartDead { get; set; }
@@ -77,7 +79,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
-            shp.LoadGame(ShipId, Ship, ShipName, ShipIdent);
+            shp.LoadGame(ShipId, Ship, ShipFD, ShipName, ShipIdent);
         }
 
     }

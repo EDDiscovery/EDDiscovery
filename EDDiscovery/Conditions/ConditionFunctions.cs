@@ -755,7 +755,7 @@ namespace EDDiscovery
 
         private bool Version(out string output)
         {
-            int[] edversion = Tools.GetEDVersion();
+            int[] edversion = ObjectExtensionsNumbersBool.GetEDVersion();
 
             int para;
             if (paras[0].value.InvariantParse(out para) && para >= 1 && para <= edversion.Length)

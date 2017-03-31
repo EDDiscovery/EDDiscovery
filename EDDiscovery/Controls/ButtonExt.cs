@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
@@ -120,7 +120,7 @@ namespace ExtendedControls
 
                 if (Image != null)
                 {
-                    pe.Graphics.DrawImage(Image, new Rectangle(ClientRectangle.Width / 2 - Image.Width / 2, ClientRectangle.Height / 2 - Image.Height / 2, Image.Width, Image.Height), 
+                    pe.Graphics.DrawImage(Image, new Rectangle(ClientRectangle.Width / 2 - Image.Width / 2, ClientRectangle.Height / 2 - Image.Height / 2, Image.Width, Image.Height),
                                     0,0, Image.Width, Image.Height, GraphicsUnit.Pixel);
                 }
                 else
