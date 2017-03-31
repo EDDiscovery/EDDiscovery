@@ -397,7 +397,6 @@ namespace EDDiscovery
         public static string GetDefaultBrowser()
         {
             const string userChoice = @"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice";
-            string progId;
             using (Microsoft.Win32.RegistryKey userChoiceKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(userChoice))
             {
                 if (userChoiceKey != null)
