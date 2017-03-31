@@ -53,7 +53,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public string LocalisedItem { get; set; }       // Modulex events only.  may be null
 
             public bool? Enabled { get; private set; }      // Loadout events, may be null
-            public int? Priority { get; private set; }
+            public int? Priority { get; private set; }      // 0..4 not 1..5
             public int? AmmoClip { get; private set; }
             public int? AmmoHopper { get; private set; }
             public string Blueprint { get; private set; }
@@ -94,6 +94,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 StringBuilder sb = new StringBuilder(64);
                 sb.AppendFormat("{0} = {1} {2}", Slot, Item, LocalisedItem);
                 return sb.ToString();
+            }
+
+            public string PE()
+            {
+                string pe = "";
+                if (Priority.HasValue)
+                    pe = "P" + (Priority.Value+1).ToString();
+                if (Enabled.HasValue)
+                    pe += "E";
+
+                return pe;
             }
         }
 
@@ -153,7 +164,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
-                detailed += Tools.FieldBuilder("Slot:", m.Slot, "Name:", m.Item);
+
+                detailed += Tools.FieldBuilder("Slot:", m.Slot, "Name:", m.Item , "" , m.PE() );
             }
         }
     }

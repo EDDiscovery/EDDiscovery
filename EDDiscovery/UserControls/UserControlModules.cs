@@ -178,14 +178,9 @@ namespace EDDiscovery.UserControls
 
                 string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
 
-                string pe = "";
-                if (sm.Priority.HasValue)
-                    pe = "P" + sm.Priority.Value.ToString();
-                if (sm.Enabled.HasValue)
-                    pe += "E";
 
-                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, pe };
-                // debug object[] rowobj = { sm.Slot+":" + sm.SlotFD, sm.Item + ":" + sm.ItemFD, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, pe };
+                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, sm.PE() };
+                // debug object[] rowobj = { sm.Slot+":" + sm.SlotFD, sm.Item + ":" + sm.ItemFD, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, sm.PE() };
                 dataGridViewModules.Rows.Add(rowobj);
 
             }
@@ -273,7 +268,7 @@ namespace EDDiscovery.UserControls
                                 }
                                 catch (Exception ex)
                                 {
-                                    Forms.MessageBoxTheme.Show(this, "Unable to launch browser", "Browser Launch Error");
+                                    Forms.MessageBoxTheme.Show(this, "Unable to launch browser" + ex.Message, "Browser Launch Error");
                                 }
                             }
                         }

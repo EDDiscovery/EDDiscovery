@@ -117,9 +117,14 @@ namespace EDDiscovery.EliteDangerous
             return inname.Replace("_name", "").SplitCapsWordFull();
         }
 
+        static Dictionary<string, string> replaceslots = new Dictionary<string, string>
+        {
+            {"Engines",     "Thrusters"},
+        };
+
         static public string GetBetterSlotName(string s)
         {
-            return s.SplitCapsWordFull();
+            return s.SplitCapsWordFull(replaceslots);
         }
 
         static Dictionary<string, string> replaceevents = new Dictionary<string, string>
@@ -226,7 +231,8 @@ namespace EDDiscovery.EliteDangerous
 
         static Dictionary<string, string> replaceloadouts = new Dictionary<string, string>
         {
-            {"Class1" , "Rating E" },
+
+            { "Class1" , "Rating E" },
             {"Class2" , "Rating D" },
             {"Class3" , "Rating C" },
             {"Class4" , "Rating B" },
@@ -241,6 +247,7 @@ namespace EDDiscovery.EliteDangerous
             {"Size7" , "Class 7" },
             {"Size8" , "Class 8" },
 
+            {"Engine",     "Thrusters"},
             {"Basic",     "Seeker"},
             {"Drunk",     "Pack Hound"},
             {"Slugshot",     "Fragment Cannon"},

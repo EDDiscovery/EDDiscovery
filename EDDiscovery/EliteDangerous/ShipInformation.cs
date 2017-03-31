@@ -186,9 +186,6 @@ namespace EDDiscovery.EliteDangerous
 
         public ShipInformation Set(string ship, string shipfd, string name = null, string ident = null)
         {
-            if ( shipfd == null )
-                System.Diagnostics.Debug.WriteLine("No FD Name!");
-
             if (ship != ShipType || (name != null && name != ShipUserName) || 
                                 (ident != null && ident != ShipUserIdent) )
             {
@@ -323,19 +320,23 @@ namespace EDDiscovery.EliteDangerous
                 int edid = ModuleEDID.Instance.CalcID(sm.ItemFD,ShipFD);
 
                 if (edid == 0)
+                {
                     errstring += sm.Item + ":" + sm.ItemFD + Environment.NewLine;
+                }
+                else
+                {
+                    if (edid > 0)
+                        module["id"] = edid;
 
-                if (edid > 0)
-                    module["id"] = edid;
+                    module["name"] = sm.ItemFD;
+                    module["on"] = sm.Enabled.HasValue ? sm.Enabled : true;
+                    module["priority"] = sm.Priority.HasValue ? sm.Priority : 0;
 
-                module["name"] = sm.ItemFD;
-                module["on"] = sm.Enabled.HasValue ? sm.Enabled : true;
-                module["priority"] = sm.Priority.HasValue ? sm.Priority : 1;
+                    JObject minfo = new JObject();
+                    minfo["module"] = module;
 
-                JObject minfo = new JObject();
-                minfo["module"] = module;
-
-                mlist[sm.SlotFD] = minfo;
+                    mlist[sm.SlotFD] = minfo;
+                }
             }
 
             jo["modules"] = mlist;
