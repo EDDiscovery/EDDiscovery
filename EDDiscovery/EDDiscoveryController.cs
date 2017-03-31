@@ -342,7 +342,7 @@ namespace EDDiscovery
         {
             EDDConfig.Options.Init(noreposition);
 
-            if (EDDConfig.Options.ReadJournal != null)
+            if (EDDConfig.Options.ReadJournal != null && File.Exists(EDDConfig.Options.ReadJournal))
             {
                 DebugCode.ReadCmdLineJournal(EDDConfig.Options.ReadJournal);
             }
