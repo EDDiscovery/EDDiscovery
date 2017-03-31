@@ -29,8 +29,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalModuleSellRemote(JObject evt) : base(evt, JournalTypeEnum.ModuleSellRemote)
         {
             Slot = evt["StorageSlot"].Str();         // this is NOT a ship slot name, just a index
+
             SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
+            SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
             SellItemLocalised = evt["SellItem_Localised"].Str();
+
             SellPrice = evt["SellPrice"].Long();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
@@ -38,6 +41,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
         public string Slot { get; set; }
         public string SellItem { get; set; }
+        public string SellItemFD { get; set; }
         public string SellItemLocalised { get; set; }
         public long SellPrice { get; set; }
         public string Ship { get; set; }

@@ -32,34 +32,45 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {
+            SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
             Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
+
             BuyItem = JournalFieldNaming.GetBetterItemNameEvents(evt["BuyItem"].Str());
+            BuyItemFD = JournalFieldNaming.NormaliseFDItemName(evt["BuyItem"].Str());
             BuyItemLocalised = evt["BuyItem_Localised"].Str();
             BuyPrice = evt["BuyPrice"].Long();
+
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
+
             SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
+            SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
             SellItemLocalised = evt["SellItem_Localised"].Str();
             SellPrice = evt["SellPrice"].LongNull();
 
             StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
+            StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
             StoredItemLocalised = evt["StoredItem_Localised"].Str();
         }
 
         public string Slot { get; set; }
+        public string SlotFD { get; set; }
 
         public string Ship { get; set; }
         public int ShipId { get; set; }
 
         public string BuyItem { get; set; }
+        public string BuyItemFD { get; set; }
         public string BuyItemLocalised { get; set; }
         public long BuyPrice { get; set; }
 
         public string SellItem { get; set; }                    // if sold previous one
+        public string SellItemFD { get; set; }                    // if sold previous one
         public string SellItemLocalised { get; set; }
         public long? SellPrice { get; set; }
 
         public string StoredItem { get; set; }                  // if stored previous one
+        public string StoredItemFD { get; set; }                  // if stored previous one
         public string StoredItemLocalised { get; set; }         // if stored previous one
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.modulebuy; } }

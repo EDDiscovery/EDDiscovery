@@ -31,10 +31,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalShipyardNew(JObject evt ) : base(evt, JournalTypeEnum.ShipyardNew)
         {
             ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
             ShipId = evt["NewShipID"].Int();
-
         }
+
         public string ShipType { get; set; }
+        public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.shipyardnew; } }

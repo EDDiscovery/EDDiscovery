@@ -45,8 +45,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         [System.Diagnostics.DebuggerDisplay("{Slot} {Item} {LocalisedItem}")]
         public class ShipModule
         {
-            public string Slot { get; private set; }        // never null
-            public string Item { get; private set; }        // never null
+            public string Slot { get; private set; }        // never null       - nice name, used to track 
+            public string SlotFD { get; private set; }      // never null       - FD normalised ID name (Int_CargoRack_Size6_Class1)
+            public string Item { get; private set; }        // never null       - nice name, used to track
+            public string ItemFD { get; private set; }        // never null     - FD normalised ID name
 
             public string LocalisedItem { get; set; }       // Modulex events only.  may be null
 
@@ -62,17 +64,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public ShipModule()
             { }
 
-            public ShipModule(string s, string i, bool? e, int? p, int? ac, int? ah, string b, int? bl, double? h, long? v)
+            public ShipModule(string s, string sfd, string i, string ifd, bool? e, int? p, int? ac, int? ah, string b, int? bl, double? h, long? v)
             {
-                Slot = s; Item = i; Enabled = e; Priority = p; AmmoClip = ac; AmmoHopper = ah; Blueprint = b; BlueprintLevel = bl;
+                Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; Enabled = e; Priority = p; AmmoClip = ac; AmmoHopper = ah; Blueprint = b; BlueprintLevel = bl;
                 if (h.HasValue)
                     Health = (int)(h * 100.0);
                 Value = v;
             }
 
-            public ShipModule(string s, string i, string l )
+            public ShipModule(string s, string sfd, string i, string ifd, string l )
             {
-                Slot = s; Item = i; LocalisedItem = l;
+                Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; LocalisedItem = l;
             }
 
             public bool Same(ShipModule other)      // ignore localisased item, it does not occur everywhere..
@@ -98,6 +100,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalLoadout(JObject evt) : base(evt, JournalTypeEnum.Loadout)
         {
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
             ShipName = evt["ShipName"].Str();
             ShipIdent = evt["ShipIdent"].Str();
@@ -110,7 +113,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 foreach (JObject jo in jmodules)
                 {
                     ShipModule module = new ShipModule( JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
+                                                        JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
                                                         JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
+                                                        JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
                                                         jo["On"].BoolNull(),
                                                         jo["Priority"].IntNull(),
                                                         jo["AmmoInClip"].IntNull(),
@@ -124,7 +129,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-        public string Ship { get; set; }        // type, fer-de-lance
+        public string Ship { get; set; }        // type, pretty name fer-de-lance
+        public string ShipFD { get; set; }        // type,  fdname
         public int ShipId { get; set; }
         public string ShipName { get; set; } // : user-defined ship name
         public string ShipIdent { get; set; } //   user-defined ship ID string
@@ -133,7 +139,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
-            shp.Loadout(ShipId, Ship, ShipName, ShipIdent, ShipModules);
+            shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules);
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadout; } }

@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.EliteDangerous
 {
-    class JournalFieldNaming
+    static class JournalFieldNaming
     {
         public static string RMat(string fdname)            // replacer for pretty print
         {
@@ -129,16 +129,16 @@ namespace EDDiscovery.EliteDangerous
             // general
             {"bobbleheads",     "Bobble Heads"},
             {"decal",     "Decal"},
-            {"heatradiator",     "Heat Radiator"},                                     
+            {"heatradiator",     "Heat Radiator"},
 
             // HPTs (also in Hpt_defencemodifier)
             {"advancedtorppylon",     "Advanced Torp Pylon"},
-            {"basicmissilerack",     "Basic Missile Rack"},
+            {"basicmissilerack",     "Seeker Missile Rack"},
             {"beamlaser",     "Beam Laser"},                                     // V
             {"beampointdefence",     "Beam Point Defence"},                                     // V
             {"cannon",     "Cannon"},
             {"chafflauncher",     "Chaff Launcher"},
-            {"drunkmissilerack",     "Drunk Missile Rack"},
+            {"drunkmissilerack",     "Pack Hound Missile Rack"},
             {"dumbfiremissilerack",     "Dumbfire Missile Rack"},
             {"electroniccountermeasure",     "Electronic Counter Measure"},
             {"enforcementlight",     "Enforcement Light"},
@@ -153,15 +153,15 @@ namespace EDDiscovery.EliteDangerous
             {"railgun",     "Rail Gun"},
             {"scanners",     "Scanners"},
             {"shieldbooster",     "Shield Booster"},
-            {"slugshot",     "Slugshot"},
+            {"slugshot",     "Fragment Cannon"},
 
             // Int_
-            {"buggybay",     "Buggy Bay"},                                       // V
+            {"buggybay",     "Planetary Vehicle Hangar"},                                       // V
             {"cargorack",     "Cargo Rack"},                                     // V
             {"detailedsurfacescanner",     "Detailed Surface Scanner"},           // V
             {"dockingcomputer",     "Docking Computer"},
             {"dronecontrol",     "Drone Control"},
-            {"engine",     "Engine"},
+            {"engine",     "Thrusters"},
             {"fighterbay",     "Fighter Bay"},
             {"fsdinterdictor",     "FSD Interdictor"},
             {"fuelscoop",     "Fuel Scoop"},                                     // V
@@ -173,17 +173,18 @@ namespace EDDiscovery.EliteDangerous
             {"passengercabin",     "Passenger Cabin"},
             {"planetapproachsuite",     "Planet Approach Suite"},                 // V
             {"powerdistributor",     "Power Distributor"},                       // V INT_ and $int
-            {"powerplant",     "Powerplant"},                                   // V
-            {"radar",     "Radar"},                                             // V
-            {"repairer",     "Repairer"},
+            {"powerplant",     "Power Plant"},                                   // V
+            {"radar",     "Sensors"},                                             // V
+            {"repairer",     "Auto Field Maintenance"},
             {"sensors",     "Sensors"},
             {"shieldcellbank",     "Shield Cell Bank"},
             {"shieldgenerator",     "Shield Generator"},
+            {"resourcesiphon",     "Hatch Breaker"},
 
             // not in folder but found in logs
 
             {"cargoscanner",     "Cargo Scanner"},
-            {"cloudscanner",     "Cloud Scanner"},
+            {"cloudscanner",     "Hyperspace Cloud Scanner"},
             {"corrosionproofcargorack",     "Corrosion Proof Cargo Rack"},
             {"crimescanner",     "Crime Scanner"},
             {"defencecrimescanner",     "Defence Crime Scanner"},
@@ -215,6 +216,10 @@ namespace EDDiscovery.EliteDangerous
                 s = s.Substring(0, s.Length - 6);
 
             s = s.SplitCapsWordFull(replaceevents);
+
+            if (s.Contains("Planetary Vehicle Hangar"))                 // strange class naming, fix up after above.. don't want two tables
+                s = s.Replace("Rating E", "Rating H").Replace("Rating D", "Rating G");
+
             //System.Diagnostics.Debug.WriteLine("PP Item " + x + " >> " + s);
             return s;
         }
@@ -235,6 +240,16 @@ namespace EDDiscovery.EliteDangerous
             {"Size6" , "Class 6" },
             {"Size7" , "Class 7" },
             {"Size8" , "Class 8" },
+
+            {"Basic",     "Seeker"},
+            {"Drunk",     "Pack Hound"},
+            {"Slugshot",     "Fragment Cannon"},
+            {"Buggy",     "Planetary Vehicle"},              // V
+            {"Bay",     "Hangar"},                        // V
+            {"Resourcesiphon",     "Hatch Breaker"},        //TBD
+            {"Repairer",     "Auto Field Maintenance"},     //TBD
+            {"Cloudscanner",     "Hyperspace Cloud Scanner"}, //TBD
+
         };
 
         static public string GetBetterItemNameLoadout(string s)
@@ -243,7 +258,35 @@ namespace EDDiscovery.EliteDangerous
             if (s.StartsWith("Int_") || s.StartsWith("Hpt_"))
                 s = s.Substring(4);
             s = s.SplitCapsWordFull(replaceloadouts);
+
+            if (s.Contains("Planetary Vehicle Hangar"))                 // strange class naming, fix up after above.. don't want two tables
+                s = s.Replace("Rating E", "Rating H").Replace("Rating D", "Rating G");
             //System.Diagnostics.Debug.WriteLine("LO Item " + x + " >> " + s);
+            return s;
+        }
+
+
+        static public string NormaliseFDItemName(string s)      // has to deal with $int and $hpt.. This takes the FD name and keeps it, but turns it into the form
+        {                                                       // used by Coriolis/Frontier API
+            //string x = s;
+            if (s.StartsWith("$int_"))
+                s = s.Replace("$int_", "Int_");
+            if (s.StartsWith("$hpt_"))
+                s = s.Replace("$hpt_", "Hpt_");
+            if (s.EndsWith("_name;"))
+                s = s.Substring(0, s.Length - 6);
+
+            return s;
+        }
+
+        static public string NormaliseFDSlotName(string s)            // FD slot name, anything to do.. leave in as there might be in the future
+        {
+            return s;
+        }
+
+        static public string NormaliseFDShipName(string s)            // FD ship names.. tend to change case.. Fix
+        {
+            s = ModuleEDID.Instance.NormaliseShipName(s);
             return s;
         }
 

@@ -311,6 +311,7 @@
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
     <Compile Include="EliteDangerous\Ledger.cs" />
     <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
+    <Compile Include="EliteDangerous\ModuleEDID.cs" />
     <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
@@ -1109,6 +1110,7 @@
     <None Include="Resources\datascanned.png" />
     <None Include="Resources\fileheader.png" />
     <None Include="Resources\clearsavedgame.png" />
+    <None Include="Resources\coriolis.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

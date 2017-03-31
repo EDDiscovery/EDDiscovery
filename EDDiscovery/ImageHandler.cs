@@ -799,7 +799,7 @@ namespace EDDiscovery2.ImageHandler
             switch (FolderFormatIndex)
             {
                 case 1:     // system name
-                    OutputFolder += "\\" + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + SystemName.SafeFileString();
                     break;
 
                 case 2:     // "YYYY-MM-DD"
@@ -813,32 +813,32 @@ namespace EDDiscovery2.ImageHandler
                     break;
 
                 case 5:  //"YYYY-MM-DD Sysname",
-                    OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " + SystemName.SafeFileString();
                     break;
 
                 case 6:  //"DD-MM-YYYY Sysname",
-                    OutputFolder += "\\" + Timestamp.ToString("dd-MM-yyyy") + " " + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + Timestamp.ToString("dd-MM-yyyy") + " " + SystemName.SafeFileString();
                     break;
 
                 case 7: //"MM-DD-YYYY Sysname"
-                    OutputFolder += "\\" + Timestamp.ToString("MM-dd-yyyy") + " " + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + Timestamp.ToString("MM-dd-yyyy") + " " + SystemName.SafeFileString();
                     break;
 
                 case 8: // CMDR name
-                    OutputFolder += "\\" + Tools.SafeFileString(EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}");
+                    OutputFolder += "\\" + (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString();
                     break;
 
                 case 9: // CMDR name at sysname
-                    OutputFolder += "\\" + Tools.SafeFileString(EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + " at " + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString() + " at " + SystemName.SafeFileString();
                     break;
 
                 case 10: // YYYY - MM - DD CMDR name at sysname
                     OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " +
-                                    Tools.SafeFileString(EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + " at " + Tools.SafeFileString(SystemName);
+                          (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString() + " at " + SystemName.SafeFileString();
                     break;
 
                 case 11: // CMDR Name \ SystemName
-                    OutputFolder += "\\" + Tools.SafeFileString(EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}") + "\\" + Tools.SafeFileString(SystemName);
+                    OutputFolder += "\\" + (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString() + "\\" + SystemName.SafeFileString();
                     break;
             }
 
@@ -897,7 +897,7 @@ namespace EDDiscovery2.ImageHandler
 
         public static string CreateFileName(string cur_sysname, string inputfile, int formatindex, bool hires, DateTime timestamp)
         {
-            cur_sysname = Tools.SafeFileString(cur_sysname);
+            cur_sysname = cur_sysname.SafeFileString();
 
             string postfix = (hires && Path.GetFileName(inputfile).Contains("HighRes")) ? " (HighRes)" : "";
 

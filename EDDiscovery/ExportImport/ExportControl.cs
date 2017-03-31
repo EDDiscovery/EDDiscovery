@@ -284,7 +284,7 @@ namespace EDDiscovery
 
         private void buttonImportHelp_Click(object sender, EventArgs e)
         {
-            InfoForm dl = new InfoForm();
+            Forms.InfoForm dl = new Forms.InfoForm();
             string text = EDDiscovery.Properties.Resources.ImportHelp;
             dl.Info("Import Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();

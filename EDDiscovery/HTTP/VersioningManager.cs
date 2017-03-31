@@ -96,7 +96,7 @@ namespace EDDiscovery.HTTP
 
                     if (it.localvars != null && it.localvars.Exists("Version"))     // gotta have some
                     {
-                        it.localversion = Tools.VersionFromString(it.localvars["Version"]);
+                        it.localversion = it.localvars["Version"].VersionFromString();
                         it.localmodified = !WriteOrCheckSHAFile(it, it.localvars, appfolder, false);
                         downloaditems.Add(it);
                     }
@@ -126,7 +126,7 @@ namespace EDDiscovery.HTTP
                         if (cv.Exists("LongDescription") && cv.Exists("ShortDescription") &&
                             cv.Exists("Version") && cv.Exists("Location") &&
                             cv.Exists("MinEDVersion") &&
-                            (version = Tools.VersionFromString(cv["Version"])) != null
+                            (version = cv["Version"].VersionFromString()) != null
                             )
                         {
                             string installfolder = System.IO.Path.Combine(appfolder, cv["Location"]);
@@ -141,7 +141,7 @@ namespace EDDiscovery.HTTP
                                 it.downloadedvars = cv;
                                 it.downloadedversion = version;
 
-                                it.state = (Tools.CompareVersion(it.downloadedversion, it.localversion) > 0) ? ItemState.OutOfDate : ItemState.UpToDate;
+                                it.state = (it.downloadedversion.CompareVersion(it.localversion) > 0) ? ItemState.OutOfDate : ItemState.UpToDate;
                             }
                             else
                             {
@@ -164,9 +164,9 @@ namespace EDDiscovery.HTTP
                                 downloaditems.Add(it);
                             }
 
-                            int[] minedversion = Tools.VersionFromString(cv["MinEDVersion"]);
+                            int[] minedversion = cv["MinEDVersion"].VersionFromString();
 
-                            if (Tools.CompareVersion(minedversion, edversion) > 0)
+                            if (minedversion.CompareVersion(edversion) > 0)
                                 it.state = ItemState.EDOutOfDate;
 
                         }

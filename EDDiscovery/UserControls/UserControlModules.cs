@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EDDiscovery2.DB;
 using EDDiscovery.EliteDangerous;
+using System.IO;
 
 namespace EDDiscovery.UserControls
 {
@@ -56,6 +57,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             ed.TravelControl.OnTravelSelectionChanged += Display;
+
+            buttonExtCoriolis.Visible = false;
         }
 
         #endregion
@@ -116,6 +119,7 @@ namespace EDDiscovery.UserControls
 
             LabelVehicleText.Visible = false;
             labelVehicle.Visible = false;
+            buttonExtCoriolis.Visible = false;
 
             if (comboBoxShips.Text.Contains("Stored"))
             {
@@ -132,7 +136,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
-            else if (comboBoxShips.Text.Contains("Travel") || comboBoxShips.Text.Length == 0 )  // second is due to the order History gets called vs this on start
+            else if (comboBoxShips.Text.Contains("Travel") || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
                 if (last_he != null && last_he.ShipInformation != null)
                 {
@@ -181,12 +185,14 @@ namespace EDDiscovery.UserControls
                     pe += "E";
 
                 object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, pe };
+                // debug object[] rowobj = { sm.Slot+":" + sm.SlotFD, sm.Item + ":" + sm.ItemFD, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, pe };
                 dataGridViewModules.Rows.Add(rowobj);
 
             }
 
             LabelVehicleText.Visible = labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo;
+            buttonExtCoriolis.Visible = si.CheckMinimumJSONModules();
         }
 
         #endregion
@@ -214,6 +220,70 @@ namespace EDDiscovery.UserControls
             {
                 DB.SQLiteDBClass.PutSettingString(DbShipSave, comboBoxShips.Text);
                 Display();
+            }
+        }
+
+        private void buttonExtCoriolis_Click(object sender, EventArgs e)
+        {
+            ShipInformation si = null;
+
+            if (comboBoxShips.Text.Contains("Travel") || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            {
+                if (last_he != null && last_he.ShipInformation != null)
+                    si = last_he.ShipInformation;
+            }
+            else 
+                si = discoveryform.history.shipinformationlist.GetShipByShortName(comboBoxShips.Text);
+                     
+            if (si != null)
+            {
+                string errstr;
+                string s = si.ToJSON(out errstr);
+
+                if (errstr.Length > 0)
+                    Forms.MessageBoxTheme.Show(this, errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
+
+                string uri = null;
+
+                var bytes = Encoding.UTF8.GetBytes(s);
+                using (MemoryStream indata = new MemoryStream(bytes))
+                {
+                    using (MemoryStream outdata = new MemoryStream())
+                    {
+                        using (System.IO.Compression.GZipStream gzipStream = new System.IO.Compression.GZipStream(outdata, System.IO.Compression.CompressionLevel.Optimal, true))
+                            indata.CopyTo(gzipStream);      // important to clean up gzip otherwise all the data is not written.. using
+
+                        uri += Properties.Resources.URLCoriolis + "data=" + Uri.EscapeDataString(Convert.ToBase64String(outdata.ToArray()));
+                        uri += "&bn=" + Uri.EscapeDataString(si.Name);
+
+                        string browser = Tools.GetDefaultBrowser();
+
+                        if ( browser != null )
+                        {
+                            string path = Tools.GetBrowserPath(browser);
+
+                            if (path != null)
+                            {
+                                try
+                                {
+                                    System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo(path, uri);
+                                    p.UseShellExecute = false;
+                                    System.Diagnostics.Process.Start(p);
+                                    return;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Forms.MessageBoxTheme.Show(this, "Unable to launch browser", "Browser Launch Error");
+                                }
+                            }
+                        }
+                         
+                    }
+                }
+
+                Forms.InfoForm info = new Forms.InfoForm();
+                info.Info("Cannot launch browser, use this JSON for manual Coriolis import", s, new Font("MS Sans Serif", 10), new int[] { 0, 100 });
+                info.ShowDialog(this);
             }
         }
     }

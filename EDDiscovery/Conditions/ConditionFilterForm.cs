@@ -772,7 +772,7 @@ namespace EDDiscovery2
 
                             if (newname != null)
                             {
-                                newname = Tools.SafeFileString(newname);
+                                newname = newname.SafeFileString();
 
                                 if (actionfilelist.GetList.Contains(newname))
                                 {

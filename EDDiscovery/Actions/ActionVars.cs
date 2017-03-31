@@ -65,10 +65,10 @@ namespace EDDiscovery.Actions
 
             if ( si != null )
             {
-                ship = si.Ship;
+                ship = si.ShipType;
                 id = si.ID.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                name = si.ShipName;
-                ident = si.ShipIdent;
+                name = si.ShipUserName;
+                ident = si.ShipUserIdent;
                 sv = si.SubVehicle.ToString();
                 fullinfo = si.ShipFullInfo;
                 shortname = si.ShipShortName;
