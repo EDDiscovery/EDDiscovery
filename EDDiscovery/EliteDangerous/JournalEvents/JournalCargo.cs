@@ -73,6 +73,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             //System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
+            mc.Clear(true);
+
             foreach (Cargo c in Inventory)
                 mc.Set(MaterialCommodities.CommodityCategory, c.Name, c.Count, 0, conn);
         }
