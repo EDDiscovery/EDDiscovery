@@ -79,7 +79,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
-            shp.LoadGame(ShipId, Ship, ShipFD, ShipName, ShipIdent);
+            shp.LoadGame(ShipId, Ship, ShipFD, ShipName, ShipIdent, FuelLevel, FuelCapacity);
         }
 
     }

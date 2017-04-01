@@ -33,6 +33,8 @@ namespace EDDiscovery.EliteDangerous
         public string ShipFD { get; private set; }          // ship type name, fdname
         public string ShipUserName { get; private set; }    // ship name, may be empty or null
         public string ShipUserIdent { get; private set; }   // ship ident, may be empty or null
+        public double FuelLevel { get; private set; }       // fuel level
+        public double FuelCapacity { get; private set; }       // fuel capacity
 
         public enum SubVehicleType
         {
@@ -60,7 +62,7 @@ namespace EDDiscovery.EliteDangerous
                     sb.AppendPrePad(" Control Fighter");
                 else
                 {
-                    int cap = FuelCapacity();
+                    double cap = FuelCapacity;
                     if (cap > 0)
                         sb.Append(" Fuel Cap " + cap);
                     cap = CargoCapacity();
@@ -101,7 +103,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public int FuelCapacity()
+        public int GetFuelCapacity()
         {
             int cap = 0;
             foreach(JournalLoadout.ShipModule sm in Modules.Values )
@@ -147,6 +149,8 @@ namespace EDDiscovery.EliteDangerous
             sm.ShipFD = this.ShipFD;
             sm.ShipUserName = this.ShipUserName;
             sm.ShipUserIdent = this.ShipUserIdent;
+            sm.FuelLevel = this.FuelLevel;
+            sm.FuelCapacity = this.FuelCapacity;
             sm.SubVehicle = this.SubVehicle;
             sm.Modules = new Dictionary<string, JournalLoadout.ShipModule>(this.Modules);
             return sm;
@@ -171,6 +175,22 @@ namespace EDDiscovery.EliteDangerous
                 return false;
         }
 
+        public bool Equals(ShipInformation si)
+        {
+            if (si == null)
+                return false;
+
+            return si.Sold == this.Sold &&
+                   si.ShipType == this.ShipType &&
+                   si.ShipFD == this.ShipFD &&
+                   si.ShipUserName == this.ShipUserName &&
+                   si.ShipUserIdent == this.ShipUserIdent &&
+                   si.FuelLevel == this.FuelLevel &&
+                   si.FuelCapacity == this.FuelCapacity &&
+                   si.SubVehicle == this.SubVehicle &&
+                   si.Modules.SequenceEqual(this.Modules);
+        }
+
         public void Set(JournalLoadout.ShipModule sm)
         {
             if ( Modules.ContainsKey(sm.Slot) )
@@ -182,12 +202,21 @@ namespace EDDiscovery.EliteDangerous
 
             }
             Modules[sm.Slot] = sm;
+
+            if (sm.Item.Contains("Fuel Tank") && sm.Item.IndexOf("Class ") != -1)
+            {
+                FuelCapacity = GetFuelCapacity();
+                if (FuelLevel > FuelCapacity)
+                    FuelLevel = FuelCapacity;
+            }
         }
 
-        public ShipInformation Set(string ship, string shipfd, string name = null, string ident = null)
+        public ShipInformation Set(string ship, string shipfd, string name = null, string ident = null, double fuellevel = 0, double fueltotal = 0)
         {
             if (ship != ShipType || (name != null && name != ShipUserName) || 
-                                (ident != null && ident != ShipUserIdent) )
+                                (ident != null && ident != ShipUserIdent) ||
+                                (fuellevel != 0 && fuellevel != FuelLevel) ||
+                                (fueltotal != 0 && fueltotal != FuelCapacity) )
             {
                 ShipInformation sm = this.ShallowClone();
 
@@ -197,6 +226,12 @@ namespace EDDiscovery.EliteDangerous
                     sm.ShipUserName = name;
                 if (ident != null)
                     sm.ShipUserIdent = ident;
+                if (fuellevel != 0)
+                    sm.FuelLevel = fuellevel;
+                if (fueltotal == 0 && fuellevel > sm.FuelCapacity)
+                    sm.FuelCapacity = fuellevel;
+                if (fueltotal != 0)
+                    sm.FuelCapacity = fueltotal;
 
                 return sm;
             }
@@ -216,23 +251,56 @@ namespace EDDiscovery.EliteDangerous
                 return this;
         }
 
+        public ShipInformation SetFuelLevel(double fuellevel)
+        {
+            if (fuellevel != 0 && fuellevel != FuelLevel)
+            {
+                ShipInformation sm = this.ShallowClone();
+
+                if (fuellevel != 0)
+                    sm.FuelLevel = fuellevel;
+                if (fuellevel > sm.FuelCapacity)
+                    sm.FuelCapacity = fuellevel;
+
+                return sm;
+            }
+
+            return this;
+        }
+
         public ShipInformation AddModule(string slot, string slotfd, string item, string itemfd, string itemlocalised)
         {
             if (!Modules.ContainsKey(slot) || !Modules[slot].Same(item))       // if does not have it, or item is not the same..
             {
                 ShipInformation sm = this.ShallowClone();
                 sm.Modules[slot] = new JournalLoadout.ShipModule(slot, slotfd, item, itemfd, itemlocalised);
+
+                if (item.Contains("Fuel Tank") && item.IndexOf("Class ") != -1)
+                {
+                    sm.FuelCapacity = sm.GetFuelCapacity();
+                    if (sm.FuelLevel > sm.FuelCapacity)
+                        sm.FuelLevel = sm.FuelCapacity;
+                }
+
                 return sm;
             }
             return this;
         }
 
-        public ShipInformation RemoveModule(string slot)
+        public ShipInformation RemoveModule(string slot, string item)
         {
             if (Modules.ContainsKey(slot))       // if has it..
             {
                 ShipInformation sm = this.ShallowClone();
                 sm.Modules.Remove(slot);
+
+                if (item.Contains("Fuel Tank") && item.IndexOf("Class ") != -1)
+                {
+                    sm.FuelCapacity = sm.GetFuelCapacity();
+                    if (sm.FuelLevel > sm.FuelCapacity)
+                        sm.FuelLevel = sm.FuelCapacity;
+                }
+
                 return sm;
             }
             return this;
@@ -249,6 +317,13 @@ namespace EDDiscovery.EliteDangerous
                         sm = this.ShallowClone();
 
                     sm.Modules.Remove(it.Slot);
+
+                    if (it.Name.Contains("Fuel Tank") && it.Name.IndexOf("Class ") != -1)
+                    {
+                        sm.FuelCapacity = sm.GetFuelCapacity();
+                        if (sm.FuelLevel > sm.FuelCapacity)
+                            sm.FuelLevel = sm.FuelCapacity;
+                    }
                 }
             }
 
@@ -269,6 +344,14 @@ namespace EDDiscovery.EliteDangerous
                     sm.Modules.Remove(fromslot);
 
                 sm.Modules[toslot] = new JournalLoadout.ShipModule(toslot, toslotfd, fromitem, fromitemfd, fromiteml);
+
+                if (fromitem != toitem && ((fromitem.Contains("Fuel Tank") && fromitem.IndexOf("Class ") != -1) ||
+                                           (fromitem.Contains("Fuel Tank") && fromitem.IndexOf("Class ") != -1))) 
+                {
+                    sm.FuelCapacity = sm.GetFuelCapacity();
+                    if (sm.FuelLevel > sm.FuelCapacity)
+                        sm.FuelLevel = sm.FuelCapacity;
+                }
             }
             return sm;
         }
@@ -462,11 +545,11 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public void LoadGame(int id, string ship, string shipfd, string name, string ident)        // LoadGame..
+        public void LoadGame(int id, string ship, string shipfd, string name, string ident, double fuellevel, double fueltotal)        // LoadGame..
         {
             ShipInformation sm = EnsureShip(id);            // this either gets current ship or makes a new one.
 
-            Ships[id] = sm = sm.Set(ship, shipfd, name, ident);   // this makes a shallow copy if any data has changed..
+            Ships[id] = sm = sm.Set(ship, shipfd, name, ident, fuellevel, fueltotal);   // this makes a shallow copy if any data has changed..
 
             //System.Diagnostics.Debug.WriteLine("Load Game " + sm.ID + " " + sm.Ship);
 
@@ -564,7 +647,7 @@ namespace EDDiscovery.EliteDangerous
         public void ModuleSell(JournalModuleSell e)
         {
             ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
-            Ships[e.ShipId] = sm.RemoveModule(e.Slot);
+            Ships[e.ShipId] = sm.RemoveModule(e.Slot, e.SellItem);
 
             if (e.SellItem.Length>0)
                 itemlocalisation[e.SellItem] = e.SellItemLocalised;
@@ -587,7 +670,7 @@ namespace EDDiscovery.EliteDangerous
             if (e.ReplacementItem.Length > 0)
                 Ships[e.ShipId] = sm.AddModule(e.Slot, e.SlotFD, e.ReplacementItem, e.ReplacementItemFD, e.ReplacementItemLocalised);
             else
-                Ships[e.ShipId] = sm.RemoveModule(e.Slot);
+                Ships[e.ShipId] = sm.RemoveModule(e.Slot, e.StoredItem);
 
             StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
             currentid = e.ShipId;           // must be in it to do this
@@ -615,6 +698,22 @@ namespace EDDiscovery.EliteDangerous
             ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
             Ships[e.ShipId] = sm.RemoveModules(e.ModuleItems);
             StoredModules = StoredModules.StoreModule(e.ModuleItems, itemlocalisation);
+        }
+
+        public void FSDJump(JournalFSDJump e)
+        {
+            if (HaveCurrentShip)
+            {
+                Ships[currentid] = CurrentShip.SetFuelLevel(e.FuelLevel);
+            }
+        }
+
+        public void FuelScoop(JournalFuelScoop e)
+        {
+            if (HaveCurrentShip)
+            {
+                Ships[currentid] = CurrentShip.SetFuelLevel(e.Total);
+            }
         }
 
         #region Helpers

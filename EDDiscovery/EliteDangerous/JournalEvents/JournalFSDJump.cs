@@ -44,7 +44,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.FSDJump)]
-    public class JournalFSDJump : JournalLocOrJump
+    public class JournalFSDJump : JournalLocOrJump, IShipInformation
     {
         public JournalFSDJump(JObject evt) : base(evt, JournalTypeEnum.FSDJump)
         {
@@ -115,5 +115,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.hyperspace; } }
 
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.FSDJump(this);
+        }
     }
 }
