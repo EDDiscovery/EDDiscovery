@@ -93,6 +93,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             //System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
+            mc.Clear(false);
+
             if ( Raw != null )
                 foreach (Material m in Raw)
                     mc.Set(MaterialCommodities.MaterialRawCategory, m.Name, m.Count, 0, conn);
