@@ -32,6 +32,7 @@ namespace EDDiscovery.Forms
     {
         private Task inittask;
         private EDDiscoveryForm mainform;
+        private ManualResetEvent readyForInvoke = new ManualResetEvent(false);
         public ApplicationContext Context;
 
         public SplashForm(EDDiscoveryForm mainform)
@@ -42,6 +43,12 @@ namespace EDDiscovery.Forms
             this.Owner = mainform;
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            readyForInvoke.Set();
+        }
+
         public void Init()
         {
             inittask = EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift)).ContinueWith(t => InitComplete(t));
@@ -49,6 +56,7 @@ namespace EDDiscovery.Forms
 
         private void InitComplete(Task t)
         {
+            readyForInvoke.WaitOne();
             this.BeginInvoke(new Action(() =>
             {
                 if (t.IsCompleted)
