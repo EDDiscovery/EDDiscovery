@@ -835,7 +835,7 @@ namespace EDDiscovery2.EDSM
         }
 
 
-        public string CommanderUpdateShip(int shipId, string type)
+        public string CommanderUpdateShip(int shipId, string type, EDDiscovery.EliteDangerous.ShipInformation shipinfo = null, int cargoqty = -1)
         {
             if (!IsApiKeySet)
                 return null;
@@ -843,8 +843,31 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "update-ship?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&shipId=" + shipId.ToString();
-            query = query + "&type=" + type;
+            query = query + "&type=" + Uri.EscapeDataString(type);
 
+            if (shipinfo != null)
+            {
+                int cargocap = shipinfo.CargoCapacity();
+                if (cargocap != 0)
+                    query += "&cargoCapacity=" + cargocap.ToString();
+                if (cargoqty >= 0)
+                    query += "&cargoQty=" + cargoqty.ToString();
+                double fuelcap = shipinfo.FuelCapacity;
+                if (fuelcap != 0)
+                    query += "&fuelMainCapacity=" + fuelcap.ToString();
+                double fuellevel = shipinfo.FuelLevel;
+                if (fuellevel != 0)
+                    query += "&fuelMainLevel=" + fuellevel.ToString();
+                string ident = shipinfo.ShipUserIdent;
+                if (!string.IsNullOrWhiteSpace(ident))
+                    query += "&shipIdent=" + Uri.EscapeDataString(ident);
+                string name = shipinfo.ShipUserName;
+                if (!string.IsNullOrWhiteSpace(name))
+                    query += "&shipName=" + Uri.EscapeDataString(name);
+                string paintjob = shipinfo.Modules.ContainsKey("Paint Job") ? shipinfo.Modules["Paint Job"].ItemFD : null;
+                if (!string.IsNullOrWhiteSpace(paintjob))
+                    query += "&paintJob=" + Uri.EscapeDataString(paintjob);
+            }
 
             var response = RequestGet("api-commander-v1/" + query, handleException: true);
 
