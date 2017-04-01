@@ -716,6 +716,29 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public void RefuelAll(JournalRefuelAll e)
+        {
+            if (HaveCurrentShip)
+            {
+                Ships[currentid] = CurrentShip.SetFuelLevel(CurrentShip.FuelCapacity);
+            }
+        }
+
+        public void RefuelPartial(JournalRefuelPartial e)
+        {
+            if (HaveCurrentShip)
+            {
+                // Amount includes reserve
+                double level = CurrentShip.FuelLevel + e.Amount - 0.1;
+
+                // If amount refuelled is less than 10%, then the tank is full
+                if (e.Amount < CurrentShip.FuelCapacity / 10 || level > CurrentShip.FuelCapacity)
+                    level = CurrentShip.FuelCapacity;
+
+                Ships[currentid] = CurrentShip.SetFuelLevel(level);
+            }
+        }
+
         #region Helpers
 
         private ShipInformation EnsureShip(int id)      // ensure we have an ID of this type..
