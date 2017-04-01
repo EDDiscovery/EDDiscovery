@@ -24,7 +24,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
     //•	Security
     [JournalEntryType(JournalTypeEnum.RefuelPartial)]
-    public class JournalRefuelPartial : JournalEntry, ILedgerJournalEntry
+    public class JournalRefuelPartial : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalRefuelPartial(JObject evt ) : base(evt, JournalTypeEnum.RefuelPartial)
         {
@@ -46,6 +46,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             info = Tools.FieldBuilder("Cost:; credits", Cost, "Fuel:; tons;0.0", Amount);
             detailed = "";
+        }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.RefuelPartial(this);
         }
     }
 }

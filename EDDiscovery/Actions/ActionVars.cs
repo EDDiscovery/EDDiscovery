@@ -72,7 +72,7 @@ namespace EDDiscovery.Actions
                 sv = si.SubVehicle.ToString();
                 fullinfo = si.ShipFullInfo;
                 shortname = si.ShipShortName;
-                fuel = si.FuelCapacity().ToString(System.Globalization.CultureInfo.InvariantCulture);
+                fuel = si.FuelCapacity.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 cargo = si.CargoCapacity().ToString(System.Globalization.CultureInfo.InvariantCulture);
             }
 

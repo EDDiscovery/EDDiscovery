@@ -1040,6 +1040,7 @@ namespace EDDiscovery
         }
 
         static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
+        static private ShipInformation LastShipInfo = null;
         static private long LastEDSMCredtis = -1;
         static private long LastShipID = -1;
 
@@ -1081,6 +1082,25 @@ namespace EDDiscovery
 
                 
                 JournalLoadGame loadgame = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame).journalEntry as JournalLoadGame;
+                HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
+
+                if (shipinfohe != null && !shipinfohe.ShipInformation.Equals(LastShipInfo))
+                {
+                    ShipInformation shipinfo = shipinfohe.ShipInformation;
+                    List<MaterialCommodities> commod = shipinfohe.MaterialCommodity.Sort(true);
+                    int cargoqty = commod.Aggregate(0, (n, c) => n + c.count);
+
+                    edsm.CommanderUpdateShip(shipinfo.ID, shipinfo.ShipType, shipinfo, cargoqty);
+
+                    if (LastShipID != shipinfo.ID)
+                    {
+                        edsm.CommanderSetCurrentShip(loadgame.ShipId);
+                    }
+
+                    LastShipID = shipinfo.ID;
+                    LastShipInfo = shipinfo;
+                }
+
                 if (loadgame != null)
                 {
                     if (LastEDSMCredtis != loadgame.Credits)
@@ -1089,15 +1109,13 @@ namespace EDDiscovery
                     LastEDSMCredtis = loadgame.Credits;
 
 
-                    if (LastShipID != loadgame.ShipId)
+                    if (shipinfohe == null && LastShipID != loadgame.ShipId)
                     {
                         edsm.CommanderUpdateShip(loadgame.ShipId, loadgame.Ship);
                         edsm.CommanderSetCurrentShip(loadgame.ShipId);
-
+                        LastShipID = loadgame.ShipId;
+                        LastShipInfo = null;
                     }
-
-                    LastShipID = loadgame.ShipId;
-
                 }
 
 
