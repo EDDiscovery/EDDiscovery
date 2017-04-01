@@ -154,6 +154,19 @@ namespace EDDiscovery.EliteDangerous
             list[index] = mc;
         }
 
+        public void Clear(bool commodity)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                MaterialCommodities mc = list[i];
+                if (commodity == (mc.category == MaterialCommodities.CommodityCategory))
+                {
+                    mc.count = 0;
+                    list[i] = mc;
+                }
+            }
+        }
+
         static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn,
                                                         bool clearzeromaterials, bool clearzerocommodities)
         {

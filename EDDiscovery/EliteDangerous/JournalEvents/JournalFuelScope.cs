@@ -23,7 +23,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Scooped: tons fuel scooped
     //•	Total: total fuel level after scooping
     [JournalEntryType(JournalTypeEnum.FuelScoop)]
-    public class JournalFuelScoop : JournalEntry
+    public class JournalFuelScoop : JournalEntry, IShipInformation
     {
         public JournalFuelScoop(JObject evt ) : base(evt, JournalTypeEnum.FuelScoop)
         {
@@ -40,6 +40,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             info = Tools.FieldBuilder(";t;0.0" , Scooped, "Total:;t;0.0" , Total);
             detailed = "";
+        }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.FuelScoop(this);
         }
     }
 }
