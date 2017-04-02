@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelHistoryIcon = new System.Windows.Forms.Panel();
             this.buttonField = new ExtendedControls.ButtonExt();
@@ -78,8 +79,8 @@ namespace EDDiscovery.UserControls
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -88,6 +89,7 @@ namespace EDDiscovery.UserControls
             // 
             // TopPanel
             // 
+            this.TopPanel.Controls.Add(this.buttonExtExcel);
             this.TopPanel.Controls.Add(this.drawnPanelPopOut);
             this.TopPanel.Controls.Add(this.panelHistoryIcon);
             this.TopPanel.Controls.Add(this.buttonField);
@@ -101,6 +103,21 @@ namespace EDDiscovery.UserControls
             this.TopPanel.Name = "TopPanel";
             this.TopPanel.Size = new System.Drawing.Size(870, 32);
             this.TopPanel.TabIndex = 27;
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.BorderColorScaling = 1.25F;
+            this.buttonExtExcel.ButtonColorScaling = 0.5F;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(606, 4);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 28;
+            this.toolTip1.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // drawnPanelPopOut
             // 
@@ -335,7 +352,7 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem,
             this.writeEventInfoToLogDebugToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 312);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 290);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -454,19 +471,19 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem.Text = "Set Note";
             this.setNoteToolStripMenuItem.Click += new System.EventHandler(this.setNoteToolStripMenuItem_Click);
             // 
-            // toolTip1
-            // 
-            this.toolTip1.AutoPopDelay = 30000;
-            this.toolTip1.InitialDelay = 250;
-            this.toolTip1.ReshowDelay = 100;
-            this.toolTip1.ShowAlways = true;
-            // 
             // writeEventInfoToLogDebugToolStripMenuItem
             // 
             this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
             this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
             this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 30000;
+            this.toolTip1.InitialDelay = 250;
+            this.toolTip1.ReshowDelay = 100;
+            this.toolTip1.ShowAlways = true;
             // 
             // UserControlTravelGrid
             // 
@@ -523,5 +540,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setNoteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem writeEventInfoToLogDebugToolStripMenuItem;
+        private ExtendedControls.ButtonExt buttonExtExcel;
     }
 }

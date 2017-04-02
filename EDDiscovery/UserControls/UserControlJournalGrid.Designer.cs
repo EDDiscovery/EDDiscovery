@@ -58,6 +58,7 @@ namespace EDDiscovery.UserControls
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.panelJournalIcon = new System.Windows.Forms.Panel();
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.buttonField = new ExtendedControls.ButtonExt();
@@ -218,6 +219,7 @@ namespace EDDiscovery.UserControls
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.buttonExtExcel);
             this.panel1.Controls.Add(this.panelJournalIcon);
             this.panel1.Controls.Add(this.drawnPanelPopOut);
             this.panel1.Controls.Add(this.buttonField);
@@ -232,6 +234,21 @@ namespace EDDiscovery.UserControls
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(804, 32);
             this.panel1.TabIndex = 8;
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.BorderColorScaling = 1.25F;
+            this.buttonExtExcel.ButtonColorScaling = 0.5F;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(606, 4);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 30;
+            this.buttonExtExcel.Text = "Send data on grid to excel";
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // panelJournalIcon
             // 
@@ -275,7 +292,7 @@ namespace EDDiscovery.UserControls
             this.buttonRefresh.BorderColorScaling = 1.25F;
             this.buttonRefresh.ButtonColorScaling = 0.5F;
             this.buttonRefresh.ButtonDisabledScaling = 0.5F;
-            this.buttonRefresh.Location = new System.Drawing.Point(606, 3);
+            this.buttonRefresh.Location = new System.Drawing.Point(636, 3);
             this.buttonRefresh.Name = "buttonRefresh";
             this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
             this.buttonRefresh.TabIndex = 3;
@@ -404,5 +421,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ButtonExt buttonField;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
+        private ExtendedControls.ButtonExt buttonExtExcel;
     }
 }

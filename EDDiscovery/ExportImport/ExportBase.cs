@@ -60,7 +60,7 @@ namespace EDDiscovery.Export
         }
 
         abstract public bool ToCSV(string filename);
-        abstract public bool GetData(EDDiscoveryForm _discoveryForm);
+        virtual public bool GetData(EDDiscoveryForm _discoveryForm) { return false; }
 
         protected string MakeValueCsvFriendly(object value, bool delimit = true)
         {

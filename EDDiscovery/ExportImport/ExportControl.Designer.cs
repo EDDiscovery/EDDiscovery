@@ -890,7 +890,7 @@ namespace EDDiscovery
         private ExtendedControls.CheckBoxCustom checkBoxCustomIncludeHeader;
         private ExtendedControls.LabelExt labelExtSeparator;
         private ExtendedControls.RadioButtonCustom radioButtonCustomUSAUK;
-        private ExtendedControls.RadioButtonCustom radioButtonCustomEU;
+        public ExtendedControls.RadioButtonCustom radioButtonCustomEU;
         private ExtendedControls.GroupBoxCustom groupBoxCustom1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private ExtendedControls.AutoCompleteTextBox txtExportVisited;

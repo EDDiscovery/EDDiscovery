@@ -419,5 +419,37 @@ namespace EDDiscovery.UserControls
 			dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
 		}
 
+        #region Excel
+
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+
+            dlg.Filter = "CSV export| *.csv";
+            dlg.Title = "Export current Journal view to Excel (csv)";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                Export.ExportGrid grd = new Export.ExportGrid();
+                grd.onGetCell += delegate (int r, int c)
+                {
+                    if (c == -1)
+                        return (r < dataGridViewJournal.Rows.Count) ? true : false;
+                    else
+                        return (c < 3 && dataGridViewJournal.Rows[r].Visible) ? dataGridViewJournal.Rows[r].Cells[c + ((c > 0) ? 1 : 0)].Value : null;
+                };
+
+                grd.onGetHeader += delegate (int c)
+                {
+                    return (c < 3) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
+                };
+
+                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? Export.CSVFormat.EU : Export.CSVFormat.USA_UK;
+                if (grd.ToCSV(dlg.FileName))
+                    System.Diagnostics.Process.Start(dlg.FileName);
+            }
+        }
+
+        #endregion
     }
 }
