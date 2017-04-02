@@ -336,6 +336,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
     <Compile Include="EliteDangerous\ShipInformation.cs" />
+    <Compile Include="ExportImport\ExportGrid.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>
@@ -1111,6 +1112,7 @@
     <None Include="Resources\fileheader.png" />
     <None Include="Resources\clearsavedgame.png" />
     <None Include="Resources\coriolis.png" />
+    <None Include="Resources\excel.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

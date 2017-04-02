@@ -28,6 +28,7 @@ using EDDiscovery2.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery2.EDSM;
 using EDDiscovery2;
+using EDDiscovery.Export;
 
 namespace EDDiscovery.UserControls
 {
@@ -39,7 +40,7 @@ namespace EDDiscovery.UserControls
 
         public HistoryEntry GetHistoryEntry(int r) { return dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
 
-        public static HistoryEntry GetHistoryEntry( DataGridViewRow rw) { return rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
+        public static HistoryEntry GetHistoryEntry(DataGridViewRow rw) { return rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
 
         public DataGridViewRow GetRow(int r) { return dataGridViewTravel.Rows[r]; }
 
@@ -49,7 +50,7 @@ namespace EDDiscovery.UserControls
 
         private ConditionLists fieldfilter = new ConditionLists();
 
-        public delegate void ChangedSelection(int rowno, int colno, bool doubleclick , bool note);
+        public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
         public event ChangedSelection OnChangedSelection;
 
         public delegate void Resort();
@@ -80,7 +81,7 @@ namespace EDDiscovery.UserControls
         private const int DefaultRowHeight = 26;
 
         private static EDDiscoveryForm discoveryform;
-        private int displaynumber;                          
+        private int displaynumber;
 
         private string DbFilterSave { get { return "TravelHistoryControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return "TravelControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
@@ -99,7 +100,7 @@ namespace EDDiscovery.UserControls
             Name = "History";
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
             displaynumber = vn;
@@ -114,7 +115,7 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
 
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
-            if (filter.Length>0)
+            if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
 #if !DEBUG
@@ -152,7 +153,7 @@ namespace EDDiscovery.UserControls
             Display(history);
         }
 
-        public void Display( HistoryList hl )           // rowno current.. -1 if nothing
+        public void Display(HistoryList hl)           // rowno current.. -1 if nothing
         {
             if (hl == null)     // just for safety
                 return;
@@ -180,7 +181,7 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
 
-            int rowno = FindGridPosByJID(preferred_jid>=0 ? preferred_jid : pos.Item1);     // either go back to preferred, or to remembered above
+            int rowno = FindGridPosByJID(preferred_jid >= 0 ? preferred_jid : pos.Item1);     // either go back to preferred, or to remembered above
             preferred_jid = -1;                                                             // 1 shot at this
 
             if (rowno >= 0)
@@ -258,7 +259,7 @@ namespace EDDiscovery.UserControls
         {
             return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.Globals);
         }
-        
+
         public void SelectTopRow()
         {
             dataGridViewTravel.ClearSelection();
@@ -273,7 +274,7 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        public void GotoPosByJID(long jid )
+        public void GotoPosByJID(long jid)
         {
             int rowno = FindGridPosByJID(jid);
             if (rowno >= 0)
@@ -334,7 +335,7 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("Cell Enter");
 
-            if ( cursorkeydown )
+            if (cursorkeydown)
             {
                 cursorkeydown = false;
                 currentGridRow = e.RowIndex;
@@ -348,7 +349,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewTravel_KeyDown(object sender, KeyEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine("Key down " + e.KeyCode);
-            cursorkeydown = (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode==Keys.PageDown || e.KeyCode == Keys.PageUp);
+            cursorkeydown = (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.PageDown || e.KeyCode == Keys.PageUp);
         }
 
         public void UpdateCurrentNote(string s)
@@ -360,10 +361,10 @@ namespace EDDiscovery.UserControls
         public void UpdateNoteJID(long r, string s)
         {
             int row = FindGridPosByJID(r);
-            if ( row >= 0 )
+            if (row >= 0)
                 dataGridViewTravel.Rows[row].Cells[TravelHistoryColumns.Note].Value = s;
         }
-        
+
         public void UpdateCurrentNoteTag(Object o)
         {
             if (currentGridRow >= 0)
@@ -543,9 +544,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-#endregion
+        #endregion
 
-#region TravelHistoryRightClick
+        #region TravelHistoryRightClick
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -684,7 +685,7 @@ namespace EDDiscovery.UserControls
 
         private void routeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddSystemToOthers(false,false,true);
+            AddSystemToOthers(false, false, true);
         }
 
         private void AddSystemToOthers(bool dist, bool wanted, bool route)
@@ -847,7 +848,7 @@ namespace EDDiscovery.UserControls
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if ( rightclicksystem!=null)
+            if (rightclicksystem != null)
                 discoveryform.ActionRunOnEntry(rightclicksystem, "UserRightClick");
         }
 
@@ -868,7 +869,7 @@ namespace EDDiscovery.UserControls
         private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
         {
             ConditionVariables cv = new ConditionVariables();
-            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "" , new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) } , 5);
+            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             discoveryform.LogLine(cv.ToString(separ: Environment.NewLine, quoteit: false));
             if (rightclicksystem.ShipInformation != null)
                 discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
@@ -903,7 +904,40 @@ namespace EDDiscovery.UserControls
             }
         }
 
-#endregion
+        #endregion
+
+        #region Excel
+
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+
+            dlg.Filter = "CSV export| *.csv";
+            dlg.Title = "Export current History view to Excel (csv)";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                Export.ExportGrid grd = new ExportGrid();
+                grd.onGetCell += delegate (int r, int c)
+                {
+                    if (c == -1)
+                        return (r < dataGridViewTravel.Rows.Count) ? true : false;
+                    else
+                        return (c < 4 && dataGridViewTravel.Rows[r].Visible) ? dataGridViewTravel.Rows[r].Cells[c + ((c > 0) ? 1 : 0)].Value : null;
+                };
+
+                grd.onGetHeader += delegate (int c)
+                {
+                    return (c < 4) ? dataGridViewTravel.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
+                };
+
+                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? CSVFormat.EU : CSVFormat.USA_UK;
+                if (grd.ToCSV(dlg.FileName))
+                    System.Diagnostics.Process.Start(dlg.FileName);
+            }
+        }
+
+        #endregion
 
         private void drawnPanelPopOut_Click(object sender, EventArgs e)
         {
@@ -912,5 +946,4 @@ namespace EDDiscovery.UserControls
         }
 
     }
-
 }
