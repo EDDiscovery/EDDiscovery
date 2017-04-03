@@ -137,6 +137,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                                                         jo["Value"].IntNull() );
                     ShipModules.Add(module);
                 }
+
+                ShipModules = ShipModules.OrderBy(x => x.Slot).ToList();            // sort for presentation..
             }
         }
 
@@ -160,12 +162,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             info = Tools.FieldBuilder("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count);
             detailed = "";
+
             foreach (ShipModule m in ShipModules)
             {
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
 
-                detailed += Tools.FieldBuilder("Slot:", m.Slot, "Name:", m.Item , "" , m.PE() );
+                detailed += Tools.FieldBuilder("", m.Slot, "<:", m.Item , "" , m.PE() );
             }
         }
     }
