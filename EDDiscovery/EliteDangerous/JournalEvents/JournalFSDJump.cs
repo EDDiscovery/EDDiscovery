@@ -109,7 +109,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 econ = "";
 
             info += " ";
-            info += Tools.FieldBuilder("Body:", Body, "Faction:", Faction, "<state:", FactionState, "Allegiance:", Allegiance, "Economy:", econ);
+            info += Tools.FieldBuilder("Body:", Body, "Faction:", Faction, "< state:", FactionState, "Allegiance:", Allegiance, "Economy:", econ);
             detailed = "";
         }
 

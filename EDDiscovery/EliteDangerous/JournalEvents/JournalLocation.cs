@@ -93,7 +93,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (Docked)
             {
                 summary = "At " + StationName;
-                info = Tools.FieldBuilder("Type ", StationType, "<in system ", StarSystem);
+                info = Tools.FieldBuilder("Type ", StationType, "< in system ", StarSystem);
                 detailed = Tools.FieldBuilder("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government) , "Security:" , Security_Localised.Alt(Security));
                 
                 if ( Factions != null )
@@ -112,7 +112,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             else
             {
                 summary = "At " + StarSystem;
-                info = Tools.FieldBuilder("In space near ", Body, "<of type ", BodyType);
+                info = Tools.FieldBuilder("In space near ", Body, "< of type ", BodyType);
                 detailed = "";
             }
         }

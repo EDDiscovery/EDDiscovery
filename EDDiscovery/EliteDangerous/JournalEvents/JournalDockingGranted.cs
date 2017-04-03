@@ -46,7 +46,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("At ", StationName, "<on pad ", LandingPad);
+            info = Tools.FieldBuilder("At ", StationName, "< on pad ", LandingPad);
             detailed = "";
         }
     }

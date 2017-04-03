@@ -914,21 +914,53 @@ namespace EDDiscovery.UserControls
 
             dlg.Filter = "CSV export| *.csv";
             dlg.Title = "Export current History view to Excel (csv)";
+                            // 0        1       2           3       4       5           6           7                   8       9               10              11              12
+            string[] colh = { "Time", "Event", "System", "Body", "Ship" , "Summary", "Description", "Detailed Info", "Note" , "Travel Dist", "Travel Time" , "Travel Jumps" , "Travelled MisJumps" };
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 Export.ExportGrid grd = new ExportGrid();
                 grd.onGetCell += delegate (int r, int c)
                 {
-                    if (c == -1)
-                        return (r < dataGridViewTravel.Rows.Count) ? true : false;
+                    if (c == -1)    // next line?
+                        return r < dataGridViewTravel.Rows.Count;
+                    else if (c < colh.Length && dataGridViewTravel.Rows[r].Visible)
+                    {
+                        HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                        if (c == 0)
+                            return dataGridViewTravel.Rows[r].Cells[0].Value;
+                        else if (c == 1)
+                            return he.journalEntry.EventTypeStr;
+                        else if (c == 2)
+                            return (he.System != null) ? he.System.name : "Unknown";    // paranoia
+                        else if (c == 3)
+                            return he.WhereAmI;
+                        else if (c == 4)
+                            return he.ShipInformation != null ? he.ShipInformation.Name : "Unknown";
+                        else if (c == 5)
+                            return he.EventSummary;
+                        else if (c == 6)
+                            return he.EventDescription;
+                        else if (c == 7)
+                            return he.EventDetailedInfo;
+                        else if (c == 8)
+                            return dataGridViewTravel.Rows[r].Cells[4].Value;
+                        else if (c == 9)
+                            return he.isTravelling ? he.TravelledDistance.ToString("0.0") : "";
+                        else if (c == 10)
+                            return he.isTravelling ? he.TravelledSeconds.ToString() : "";
+                        else if (c == 11)
+                            return he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "";
+                        else 
+                            return he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "";
+                    }
                     else
-                        return (c < 4 && dataGridViewTravel.Rows[r].Visible) ? dataGridViewTravel.Rows[r].Cells[c + ((c > 0) ? 1 : 0)].Value : null;
+                        return null;
                 };
 
                 grd.onGetHeader += delegate (int c)
                 {
-                    return (c < 4) ? dataGridViewTravel.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
+                    return (c < colh.Length) ? colh[c] : null;
                 };
 
                 grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? CSVFormat.EU : CSVFormat.USA_UK;

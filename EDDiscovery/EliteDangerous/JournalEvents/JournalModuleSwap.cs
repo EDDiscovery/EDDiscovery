@@ -73,7 +73,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("From ", FromSlot , "<to " , ToSlot , "Item:" , FromItemLocalised.Alt(FromItem));
+            info = Tools.FieldBuilder("From ", FromSlot , "< to " , ToSlot , "Item:" , FromItemLocalised.Alt(FromItem));
             if (ToItem.Length > 0 )                         
                 info += ", Swapped with " + ToItemLocalised.Alt(ToItem);
             detailed = "";

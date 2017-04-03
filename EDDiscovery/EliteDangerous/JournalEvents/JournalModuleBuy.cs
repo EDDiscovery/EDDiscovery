@@ -90,7 +90,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", BuyItemLocalised.Alt(BuyItem), "<into ", Slot, "Cost:; credits", BuyPrice);
+            info = Tools.FieldBuilder("", BuyItemLocalised.Alt(BuyItem), "< into ", Slot, "Cost:; credits", BuyPrice);
             if (SellItem.Length > 0)
                 info += ", " + Tools.FieldBuilder("Sold:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
             if (StoredItem.Length > 0)

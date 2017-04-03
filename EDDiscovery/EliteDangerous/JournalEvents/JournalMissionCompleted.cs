@@ -111,7 +111,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Name, "<from ", Faction, "Reward:" , Reward , "Donation:" , Donation , "System:", DestinationSystem, "Station:", DestinationStation);
+            info = Tools.FieldBuilder("", Name, "< from ", Faction, "Reward:" , Reward , "Donation:" , Donation , "System:", DestinationSystem, "Station:", DestinationStation);
             detailed = Tools.FieldBuilder("Commodity:", FriendlyCommodity, "Target:", Target, "Type:", TargetType, "Target Faction:", TargetFaction);       
 
             if (PermitsAwarded != null)

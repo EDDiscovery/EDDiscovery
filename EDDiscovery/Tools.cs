@@ -310,8 +310,12 @@ namespace EDDiscovery
                 return null;
         }
 
-        // prefix;postfix;[doubleformat] value 
-        // if bool, prefix;postfix is true/false
+        // first object = format
+        // second object = data value
+        // if data value null or empty, not printed
+        // if data value is bool, format = false text;true text
+        // else format is prefix;postfix;[doubleformat] value 
+        // if prefix starts with a <, no ,<spc> pad
 
         static public string FieldBuilder(params System.Object[] values)
         {
@@ -327,10 +331,10 @@ namespace EDDiscovery
                 i += 2;
 
                 string pad = ", ";
-                if ( fieldnames[0].Length>0 && fieldnames[0][0] == '<')
+                if (fieldnames[0].Length > 0 && fieldnames[0][0] == '<')
                 {
                     fieldnames[0] = fieldnames[0].Substring(1);
-                    pad = " ";
+                    pad = "";
                 }
 
                 if (value != null)

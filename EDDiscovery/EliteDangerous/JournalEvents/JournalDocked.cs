@@ -68,7 +68,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
             summary = $"At {StationName}";
-            info = Tools.FieldBuilder("Type ", StationType, "<in system ", StarSystem, "Faction:", Faction, "<in state ", FactionState);
+            info = Tools.FieldBuilder("Type ", StationType, "< in system ", StarSystem, "Faction:", Faction, "< in state ", FactionState);
             detailed = Tools.FieldBuilder("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government));
         }
 
