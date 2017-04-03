@@ -330,27 +330,36 @@ namespace EDDiscovery.UserControls
                 OnChangedSelection(e.RowIndex, e.ColumnIndex, false, e.ColumnIndex == TravelHistoryColumns.Note);
         }
 
+        int keyrepeatcount = 0;     // 1 is first down, 2 is second.  on 2+ we call the check selection to update the screen.  The final key up finished the job.
 
-        private void dataGridViewTravel_CellEnter(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewTravel_KeyDown(object sender, KeyEventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine("Cell Enter");
+            //System.Diagnostics.Debug.WriteLine("Key down " + e.KeyCode + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
+            keyrepeatcount++;
+
+            if (keyrepeatcount > 1)
+                CheckForSelection(e.KeyCode);
+        }
+
+        private void dataGridViewTravel_KeyUp(object sender, KeyEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine("Key up " + e.KeyCode + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
+            CheckForSelection(e.KeyCode);
+            keyrepeatcount = 0;
+        }
+
+        void CheckForSelection(Keys code)
+        { 
+            bool cursorkeydown = (code == Keys.Up || code == Keys.Down || code == Keys.PageDown || code == Keys.PageUp || code == Keys.Left || code == Keys.Right);
 
             if (cursorkeydown)
             {
-                cursorkeydown = false;
-                currentGridRow = e.RowIndex;
+                currentGridRow = dataGridViewTravel.CurrentCell.RowIndex;
                 if (OnChangedSelection != null)
-                    OnChangedSelection(e.RowIndex, e.ColumnIndex, false, e.ColumnIndex == TravelHistoryColumns.Note);
+                    OnChangedSelection(dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, false, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
             }
-
         }
 
-        bool cursorkeydown = false;
-        private void dataGridViewTravel_KeyDown(object sender, KeyEventArgs e)
-        {
-            //System.Diagnostics.Debug.WriteLine("Key down " + e.KeyCode);
-            cursorkeydown = (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.PageDown || e.KeyCode == Keys.PageUp);
-        }
 
         public void UpdateCurrentNote(string s)
         {
@@ -395,6 +404,8 @@ namespace EDDiscovery.UserControls
                                              int totalentries, HistoryEntry he,
                                              int hpos, int colwidth, bool showfsdmapcolour)
         {
+            System.Diagnostics.Debug.Assert(he != null);
+
             string rowIdx;
 
             if (discoveryform.settings.OrderRowsInverted)
