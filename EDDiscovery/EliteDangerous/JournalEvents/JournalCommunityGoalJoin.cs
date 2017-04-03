@@ -37,7 +37,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Name, "<at ; Star System", System);
+            info = Tools.FieldBuilder("", Name, "< at ; Star System", System);
             detailed = "";
         }
     }

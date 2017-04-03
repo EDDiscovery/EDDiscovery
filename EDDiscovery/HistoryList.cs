@@ -289,11 +289,11 @@ namespace EDDiscovery
                 else
                 {
                     he.travelling = true;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling";
 
                     if (he.IsFSDJump)
                     {
-                        he.EventDetailedInfo += " distance " + he.travelled_distance.ToString("0.0") + " LY"
+                        he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling" + 
+                                        " distance " + he.travelled_distance.ToString("0.0") + " LY"
                                         + ", " + he.travelled_jumps + " jumps"
                                         + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
                                         ", time " + he.travelled_seconds;

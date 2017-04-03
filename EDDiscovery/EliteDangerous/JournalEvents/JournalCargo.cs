@@ -39,7 +39,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
         {
-            Inventory = evt["Inventory"]?.ToObject<Cargo[]>();
+            Inventory = evt["Inventory"]?.ToObject<Cargo[]>().OrderBy(x => x.Name).ToArray();
         }
 
         public Cargo[] Inventory { get; set; }

@@ -41,9 +41,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalMaterials(JObject evt) : base(evt, JournalTypeEnum.Materials)
         {
-            Raw = evt["Raw"]?.ToObject<Material[]>();
-            Manufactured = evt["Manufactured"]?.ToObject<Material[]>();
-            Encoded = evt["Encoded"]?.ToObject<Material[]>();
+            Raw = evt["Raw"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
+            Manufactured = evt["Manufactured"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
+            Encoded = evt["Encoded"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
         }
 
         public Material[] Raw { get; set; }             //FDNAMES

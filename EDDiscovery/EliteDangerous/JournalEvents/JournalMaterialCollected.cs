@@ -47,7 +47,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", FriendlyName, "<; items", Count);
+            info = Tools.FieldBuilder("", FriendlyName, "< ; items", Count);
             detailed = "";
         }
     }
