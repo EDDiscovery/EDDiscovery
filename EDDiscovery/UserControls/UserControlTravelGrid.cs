@@ -50,6 +50,8 @@ namespace EDDiscovery.UserControls
 
         private ConditionLists fieldfilter = new ConditionLists();
 
+        private Dictionary<long, DataGridViewRow> RowsByJournalID = new Dictionary<long, DataGridViewRow>();
+
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
         public event ChangedSelection OnChangedSelection;
 
@@ -173,6 +175,7 @@ namespace EDDiscovery.UserControls
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewTravel.Rows.Clear();
+            RowsByJournalID.Clear();
 
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
@@ -232,6 +235,7 @@ namespace EDDiscovery.UserControls
                 rownr = dataGridViewTravel.Rows.Count - 1;
             }
 
+            RowsByJournalID[item.Journalid] = dataGridViewTravel.Rows[rownr];
             dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.HistoryTag].Tag = item;
 
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
@@ -286,6 +290,12 @@ namespace EDDiscovery.UserControls
 
         int FindGridPosByJID(long jid)
         {
+            if (RowsByJournalID.ContainsKey(jid))
+            {
+                return RowsByJournalID[jid].Index;
+            }
+
+            /*
             if (dataGridViewTravel.Rows.Count > 0 && jid != 0)
             {
                 foreach (DataGridViewRow r in dataGridViewTravel.Rows)
@@ -296,6 +306,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
+             */
 
             return -1;
         }
@@ -624,12 +635,14 @@ namespace EDDiscovery.UserControls
                 HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 System.Diagnostics.Debug.Assert(sp != null);
                 sp.UpdateCommanderID(-1);
+                RowsByJournalID.Remove(sp.Journalid);
             }
 
             // Remove rows
             if (selectedRows.Count<DataGridViewRow>() == dataGridViewTravel.Rows.Count)
             {
                 dataGridViewTravel.Rows.Clear();
+                RowsByJournalID.Clear();
             }
             else
             {
@@ -656,6 +669,7 @@ namespace EDDiscovery.UserControls
                 HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 System.Diagnostics.Debug.Assert(sp != null);
                 listsyspos.Add(sp);
+                RowsByJournalID.Remove(sp.Journalid);
             }
 
             EDDiscovery2.MoveToCommander movefrm = new EDDiscovery2.MoveToCommander();
