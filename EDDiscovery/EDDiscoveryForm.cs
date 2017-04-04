@@ -97,8 +97,7 @@ namespace EDDiscovery
         private int _formTop;
         private int _formLeft;
 
-        private System.Windows.Forms.Timer _delayedNoteStoreTimer;
-        private HistoryEntry _delayedNoteStoreHistoryEntry;
+        private HistoryEntry _uncommittedNoteHistoryEntry;
 
         #endregion
 
@@ -475,7 +474,7 @@ namespace EDDiscovery
 
         private void Controller_FinalClose()        // run in UI
         {
-            StoreUncommittedNote(this, EventArgs.Empty);
+            StoreUncommittedNote();
             SaveSettings();         // do close now
             notifyIcon1.Visible = false;
 
@@ -872,20 +871,13 @@ namespace EDDiscovery
         {
             if (he != null && txt != null)
             {
-                if (_delayedNoteStoreHistoryEntry != null && _delayedNoteStoreHistoryEntry != he)
+                if (_uncommittedNoteHistoryEntry != null && _uncommittedNoteHistoryEntry != he)
                 {
-                    StoreUncommittedNote(this, EventArgs.Empty);
+                    StoreUncommittedNote();
                 }
 
                 if (he.UpdateSystemNote(txt, send))
                 {
-                    if (_delayedNoteStoreTimer != null)
-                    {
-                        _delayedNoteStoreTimer.Stop();
-                        _delayedNoteStoreTimer.Dispose();
-                        _delayedNoteStoreTimer = null;
-                    }
-
                     if (send)
                     {
                         if (EDCommander.Current.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
@@ -893,11 +885,7 @@ namespace EDDiscovery
                     }
                     else
                     {
-                        _delayedNoteStoreHistoryEntry = he;
-                        _delayedNoteStoreTimer = new System.Windows.Forms.Timer();
-                        _delayedNoteStoreTimer.Tick += StoreUncommittedNote;
-                        _delayedNoteStoreTimer.Interval = 5000; // Store the note after 5s of no activity
-                        _delayedNoteStoreTimer.Start();
+                        _uncommittedNoteHistoryEntry = he;
                     }
 
                     Map.UpdateNote();
@@ -908,19 +896,12 @@ namespace EDDiscovery
             }
         }
 
-        private void StoreUncommittedNote(object sender, EventArgs args)
+        private void StoreUncommittedNote()
         {
-            if (_delayedNoteStoreTimer != null)
+            if (_uncommittedNoteHistoryEntry != null)
             {
-                _delayedNoteStoreTimer.Stop();
-                _delayedNoteStoreTimer.Dispose();
-                _delayedNoteStoreTimer = null;
-            }
-
-            if (_delayedNoteStoreHistoryEntry != null)
-            {
-                _delayedNoteStoreHistoryEntry.CommitSystemNote();
-                _delayedNoteStoreHistoryEntry = null;
+                _uncommittedNoteHistoryEntry.CommitSystemNote();
+                _uncommittedNoteHistoryEntry = null;
             }
         }
 
