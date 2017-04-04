@@ -97,6 +97,9 @@ namespace EDDiscovery
         private int _formTop;
         private int _formLeft;
 
+        private System.Windows.Forms.Timer _delayedNoteStoreTimer;
+        private HistoryEntry _delayedNoteStoreHistoryEntry;
+
         #endregion
 
         #region IDiscoveryController interface
@@ -472,6 +475,7 @@ namespace EDDiscovery
 
         private void Controller_FinalClose()        // run in UI
         {
+            StoreUncommittedNote(this, EventArgs.Empty);
             SaveSettings();         // do close now
             notifyIcon1.Visible = false;
 
@@ -868,12 +872,32 @@ namespace EDDiscovery
         {
             if (he != null && txt != null)
             {
-                if (he.UpdateSystemNote(txt))
+                if (_delayedNoteStoreHistoryEntry != null && _delayedNoteStoreHistoryEntry != he)
                 {
+                    StoreUncommittedNote(this, EventArgs.Empty);
+                }
+
+                if (he.UpdateSystemNote(txt, send))
+                {
+                    if (_delayedNoteStoreTimer != null)
+                    {
+                        _delayedNoteStoreTimer.Stop();
+                        _delayedNoteStoreTimer.Dispose();
+                        _delayedNoteStoreTimer = null;
+                    }
+
                     if (send)
                     {
                         if (EDCommander.Current.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
                             EDSMSync.SendComments(he.snc.Name, he.snc.Note, he.snc.EdsmId);
+                    }
+                    else
+                    {
+                        _delayedNoteStoreHistoryEntry = he;
+                        _delayedNoteStoreTimer = new System.Windows.Forms.Timer();
+                        _delayedNoteStoreTimer.Tick += StoreUncommittedNote;
+                        _delayedNoteStoreTimer.Interval = 5000; // Store the note after 5s of no activity
+                        _delayedNoteStoreTimer.Start();
                     }
 
                     Map.UpdateNote();
@@ -881,6 +905,22 @@ namespace EDDiscovery
                     travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
                     PopOuts.UpdateNoteJID(he.Journalid, txt);
                 }
+            }
+        }
+
+        private void StoreUncommittedNote(object sender, EventArgs args)
+        {
+            if (_delayedNoteStoreTimer != null)
+            {
+                _delayedNoteStoreTimer.Stop();
+                _delayedNoteStoreTimer.Dispose();
+                _delayedNoteStoreTimer = null;
+            }
+
+            if (_delayedNoteStoreHistoryEntry != null)
+            {
+                _delayedNoteStoreHistoryEntry.CommitSystemNote();
+                _delayedNoteStoreHistoryEntry = null;
             }
         }
 
