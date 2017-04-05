@@ -466,7 +466,7 @@ namespace EDDiscovery
             return eventstr == "All" || IsJournalEventInEventFilter(eventstr.Split(';'));
         }
 
-        public bool UpdateSystemNote(string txt)
+        public bool UpdateSystemNote(string txt, bool commit = true)
         {
             if ((snc == null && txt.Length > 0) || (snc != null && !snc.Note.Equals(txt))) // if no system note, and text,  or system not is not text
             {
@@ -477,7 +477,9 @@ namespace EDDiscovery
                     snc.Name = (IsFSDJump) ? System.name : "";
                     snc.Journalid = Journalid;
                     snc.EdsmId = IsFSDJump ? System.id_edsm : 0;
-                    snc.Update();
+
+                    if (commit)
+                        snc.Update();
                 }
                 else
                 {
@@ -496,6 +498,11 @@ namespace EDDiscovery
             }
 
             return false;
+        }
+
+        public void CommitSystemNote()
+        {
+            snc.Update();
         }
     }
 
