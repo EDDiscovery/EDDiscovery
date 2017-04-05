@@ -97,6 +97,8 @@ namespace EDDiscovery
         private int _formTop;
         private int _formLeft;
 
+        private HistoryEntry _uncommittedNoteHistoryEntry;
+
         #endregion
 
         #region IDiscoveryController interface
@@ -472,6 +474,7 @@ namespace EDDiscovery
 
         private void Controller_FinalClose()        // run in UI
         {
+            StoreUncommittedNote();
             SaveSettings();         // do close now
             notifyIcon1.Visible = false;
 
@@ -868,12 +871,21 @@ namespace EDDiscovery
         {
             if (he != null && txt != null)
             {
-                if (he.UpdateSystemNote(txt))
+                if (_uncommittedNoteHistoryEntry != null && _uncommittedNoteHistoryEntry != he)
+                {
+                    StoreUncommittedNote();
+                }
+
+                if (he.UpdateSystemNote(txt, send))
                 {
                     if (send)
                     {
                         if (EDCommander.Current.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
                             EDSMSync.SendComments(he.snc.Name, he.snc.Note, he.snc.EdsmId);
+                    }
+                    else
+                    {
+                        _uncommittedNoteHistoryEntry = he;
                     }
 
                     Map.UpdateNote();
@@ -881,6 +893,15 @@ namespace EDDiscovery
                     travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
                     PopOuts.UpdateNoteJID(he.Journalid, txt);
                 }
+            }
+        }
+
+        private void StoreUncommittedNote()
+        {
+            if (_uncommittedNoteHistoryEntry != null)
+            {
+                _uncommittedNoteHistoryEntry.CommitSystemNote();
+                _uncommittedNoteHistoryEntry = null;
             }
         }
 
