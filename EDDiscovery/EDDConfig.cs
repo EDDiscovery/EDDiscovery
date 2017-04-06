@@ -658,12 +658,12 @@ namespace EDDiscovery2
                 SQLiteConnectionUser.PutSettingString("ImageHandlerOutputDir", ImageHandlerOutputDir, conn);
                 SQLiteConnectionUser.PutSettingString("ImageHandlerScreenshotsDir", ImageHandlerScreenshotsDir, conn);
 
-                JObject jo = new JObject(new
-                {
-                    EDDirectory = EDDirectory,
-                    ImageHandlerOutputDir = ImageHandlerOutputDir,
-                    ImageHandlerScreenshotsDir = ImageHandlerScreenshotsDir
-                });
+                JObject jo = new JObject();
+                jo["EDDirectory"] = EDDirectory;
+                if (ImageHandlerOutputDir != null)
+                    jo["ImageHandlerOutputDir"] = ImageHandlerOutputDir;
+                if (ImageHandlerScreenshotsDir != null)
+                    jo["ImageOutputScreenshotsDir"] = ImageHandlerScreenshotsDir;
 
                 using (FileStream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp")))
                 {
