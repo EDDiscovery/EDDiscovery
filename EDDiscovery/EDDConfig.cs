@@ -665,7 +665,7 @@ namespace EDDiscovery2
                 if (ImageHandlerScreenshotsDir != null)
                     jo["ImageOutputScreenshotsDir"] = ImageHandlerScreenshotsDir;
 
-                using (FileStream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp")))
+                using (FileStream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json.tmp")))
                 {
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
@@ -676,8 +676,8 @@ namespace EDDiscovery2
                     }
                 }
 
-                File.Delete(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
-                File.Move(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
+                File.Delete(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json"));
+                File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json"));
             }
 
             #endregion
