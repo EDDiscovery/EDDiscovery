@@ -33,17 +33,27 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Donation: donation offered (for altruism missions)
     //•	PermitsAwarded:[] (names of any permits awarded, as a JSON array)
     [JournalEntryType(JournalTypeEnum.MissionCompleted)]
-    public class JournalMissionCompleted : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
+    public class JournalMissionCompleted : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry, IMissions
     {
-        public JournalMissionCompleted(JObject evt ) : base(evt, JournalTypeEnum.MissionCompleted)
+        public JournalMissionCompleted(JObject evt) : base(evt, JournalTypeEnum.MissionCompleted)
         {
             Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
             Faction = evt["Faction"].Str();
-            Commodity = evt["Commodity"].Str();
+
+            Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());             // evidence of $_name problem, fix to fdname
+            CommodityLocalised = evt["Commodity_Localised"].Str();
+            FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+
             Count = evt["Count"].IntNull();
-            Target = evt["Target"].Str();
+
             TargetType = evt["TargetType"].Str();
+            TargetTypeFriendly = JournalFieldNaming.GetBetterTargetTypeName(TargetType);        // remove $, underscores etc
+            TargetTypeLocalised = evt["TargetTypeLocalised"].Str();     // may be empty..
             TargetFaction = evt["TargetFaction"].Str();
+            Target = evt["Target"].Str();
+            TargetFriendly = JournalFieldNaming.GetBetterTargetTypeName(Target);        // remove $, underscores etc
+            TargetLocalised = evt["Target_Localised"].Str();        // copied from Accepted.. no evidence
+
             Reward = evt["Reward"].LongNull();
             Donation = evt["Donation"].LongNull();
             MissionId = evt["MissionID"].Int();
@@ -56,40 +66,51 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             if (!evt["CommodityReward"].Empty())
             {
-                JArray rewards = (JArray)evt["CommodityReward"];
+                JArray rewards = (JArray)evt["CommodityReward"];        // does not have the $_name problem, straight FDNAME
 
                 if (rewards.Count > 0)
                 {
-                    CommodityReward = new System.Tuple<string, int>[rewards.Count];
+                    System.Tuple<string, int>[] cr = new System.Tuple<string, int>[rewards.Count];
                     int i = 0;
                     foreach (JToken jc in rewards.Children())
                     {
-                        if (!jc["Name"].Empty() && !jc["Count"].Empty())
-                            CommodityReward[i++] = new System.Tuple<string, int>(jc["Name"].Value<string>(), jc["Count"].Value<int>());
+                        if (!jc["Name"].Empty() && !jc["Count"].Empty())        // evidence of empty values
+                            cr[i++] = new System.Tuple<string, int>(jc["Name"].Value<string>(), jc["Count"].Value<int>());
 
                         //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} {1}", jc.Path, jc.Type.ToString()));
                     }
+                    CommodityReward = new System.Tuple<string, int>[i];
+                    System.Array.Copy(cr, CommodityReward, i);
                 }
             }
 
-            FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
         }
 
         public string Name { get; set; }
         public string Faction { get; set; }
-        public string Commodity { get; set; }
+
+        public string Commodity { get; set; }               // FDNAME, leave, evidence of the $_name problem
+        public string CommodityLocalised { get; set; }
         public string FriendlyCommodity { get; set; }
         public int? Count { get; set; }
+
         public string Target { get; set; }
+        public string TargetLocalised { get; set; }
+        public string TargetFriendly { get; set; }
         public string TargetType { get; set; }
+        public string TargetTypeLocalised { get; set; }
+        public string TargetTypeFriendly { get; set; }
         public string TargetFaction { get; set; }
+
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
+
         public long? Reward { get; set; }
         public long? Donation { get; set; }
         public string[] PermitsAwarded { get; set; }
         public int MissionId { get; set; }
-        public System.Tuple<string, int>[] CommodityReward { get; set; }
+
+        public System.Tuple<string, int>[] CommodityReward { get; set; }            // Verified in fdname, not in $_name. Must be in fdname format
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.missioncompleted; } }
 
@@ -105,26 +126,66 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (Reward - Donation) , 0);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (Reward - Donation), 0);
+        }
+
+        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery2.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        {
+            mlist.Completed(this);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Name, "< from ", Faction, "Reward:" , Reward , "Donation:" , Donation , "System:", DestinationSystem, "Station:", DestinationStation);
-            detailed = Tools.FieldBuilder("Commodity:", FriendlyCommodity, "Target:", Target, "Type:", TargetType, "Target Faction:", TargetFaction);       
+            info = Tools.FieldBuilder("", Name,
+                                        "< from ", Faction,
+                                        "Reward:", Reward,
+                                        "Donation:", Donation,
+                                        "System:", DestinationSystem,
+                                        "Station:", DestinationStation);
 
-            if (PermitsAwarded != null)
-            {
-                foreach (string s in PermitsAwarded)
-                    detailed += System.Environment.NewLine + "Permit: " + s;
-            }
+            detailed = Tools.FieldBuilder("Commodity:", CommodityLocalised.Alt(FriendlyCommodity),
+                                            "Target:", TargetLocalised.Alt(TargetFriendly),
+                                            "Type:", TargetTypeFriendly,
+                                            "Target Faction:", TargetFaction);
 
-            if (CommodityReward != null)
+            detailed += PermitsList();
+            detailed += CommoditiesList();
+        }
+
+        public string PermitsList()
+        {
+            string detailed = "";
+            if (PermitsAwarded != null && PermitsAwarded.Length > 0)
             {
-                foreach (System.Tuple<string,int> t in CommodityReward)
-                    detailed += System.Environment.NewLine + "Commodity: " + JournalFieldNaming.RMat(t.Item1) + " " + t.Item2.ToString();
+                detailed += "Permits:";
+                for (int i = 0; i < PermitsAwarded.Length; i++)
+                    detailed += ((i > 0) ? "," : "") + PermitsAwarded[i];
+
+                detailed += System.Environment.NewLine;
             }
+            return detailed;
+        }
+
+        public string CommoditiesList()
+        {
+            string detailed = "";
+            if (CommodityReward != null && CommodityReward.Length > 0)
+            {
+                detailed += "Rewards:";
+                for (int i = 0; i < CommodityReward.Length; i++)
+                    detailed += ((i > 0) ? "," : "") + JournalFieldNaming.RMat(CommodityReward[i].Item1) + " " + CommodityReward[i].Item2.ToStringInvariant();
+
+                detailed += System.Environment.NewLine;
+            }
+            return detailed;
+        }
+
+        public string RewardOrDonation { get { return Reward.HasValue ? Reward.Value.ToStringInvariant() : (Donation.HasValue ? (-Donation.Value).ToStringInvariant() : ""); } }
+
+        public string MissionInformation()          // other stuff for the mission panel which it does not already cover or accepted has
+        {
+            return PermitsList() + CommoditiesList();
         }
     }
 }

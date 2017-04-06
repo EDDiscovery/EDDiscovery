@@ -81,8 +81,10 @@ namespace EDDiscovery
         public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
         public ShipInformation ShipInformation { get { return shipmodules; } set { shipmodules = value; } }     // may be null if not set up yet
         public ModulesInStore StoredModules { get { return storedmodules; } set { storedmodules = value; } }
-//        public PassengersList PassengersList { get { return passengerslist; } }
-  //      PassengersList passengerslist;
+        public MissionList MissionList { get { return missionlist; } set { missionlist = value; } }
+        
+        // TBD        public PassengersList PassengersList { get { return passengerslist; } }
+        // PassengersList passengerslist;
 
         // Calculated values, not from JE
 
@@ -105,6 +107,7 @@ namespace EDDiscovery
         MaterialCommoditiesList materialscommodities;
         ShipInformation shipmodules;
         ModulesInStore storedmodules;
+        MissionList missionlist;                    // mission state at this point..
 
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
@@ -512,7 +515,8 @@ namespace EDDiscovery
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
 
         public Ledger materialcommodititiesledger = new Ledger();       // and the ledger..
-        public ShipInformationList shipinformationlist = new ShipInformationList();
+        public ShipInformationList shipinformationlist = new ShipInformationList();     // ship info
+        public MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
 
         public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
 
@@ -1031,9 +1035,12 @@ namespace EDDiscovery
                     // **** REMEMBER NEW Journal entry needs this too *****************
 
                     materialcommodititiesledger.Process(je, conn);            // update the ledger     
-                    Tuple<ShipInformation,ModulesInStore> ret = shipinformationlist.Process(je, conn);
+
+                    Tuple<ShipInformation,ModulesInStore> ret = shipinformationlist.Process(je, conn);  // the ships
                     he.ShipInformation = ret.Item1;
-                    he.StoredModules = ret.Item2;                           
+                    he.StoredModules = ret.Item2;
+
+                    he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);                           // the missions
 
                     if (je.EventTypeID == JournalTypeEnum.Scan)
                     {
@@ -1045,6 +1052,66 @@ namespace EDDiscovery
                 }
             }
         }
+
+        public HistoryEntry AddJournalEntry(JournalEntry je, Action<string> logerror)
+        {
+            if (je.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
+            {
+                HistoryEntry last = GetLast;
+
+                bool journalupdate = false;
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
+
+                if (journalupdate)
+                {
+                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+
+                    if (jfsd != null)
+                    {
+                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
+                    }
+                }
+
+                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+                {
+                    he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
+
+                    materialcommodititiesledger.Process(je, conn);
+
+                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                    he.ShipInformation = ret.Item1;
+                    he.StoredModules = ret.Item2;
+
+                    he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
+                }
+
+                Add(he);
+
+                if (je.EventTypeID == JournalTypeEnum.Scan)
+                {
+                    JournalScan js = je as JournalScan;
+                    JournalLocOrJump jl;
+                    HistoryEntry jlhe;
+                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
+                    {
+                        // Ignore scans where the system name has been changed
+                        if (jl == null || jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                             "Scan object " + js.BodyName + " in " + he.System.name);
+                        }
+                    }
+                }
+
+                return he;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
 
         static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
         static private ShipInformation LastShipInfo = null;
@@ -1134,62 +1201,6 @@ namespace EDDiscovery
 
 
 
-        }
-
-        public HistoryEntry AddJournalEntry(JournalEntry je, Action<string> logerror)
-        {
-            if (je.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
-            {
-                HistoryEntry last = GetLast;
-
-                bool journalupdate = false;
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
-
-                if (journalupdate)
-                {
-                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
-
-                    if (jfsd != null)
-                    {
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
-                    }
-                }
-
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-                {
-                    he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
-
-                    materialcommodititiesledger.Process(je, conn);
-
-                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
-                    he.ShipInformation = ret.Item1;
-                    he.StoredModules = ret.Item2;
-                }
-
-                Add(he);
-
-                if (je.EventTypeID == JournalTypeEnum.Scan)
-                {
-                    JournalScan js = je as JournalScan;
-                    JournalLocOrJump jl;
-                    HistoryEntry jlhe;
-                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
-                    {
-                        // Ignore scans where the system name has been changed
-                        if (jl == null || jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                             "Scan object " + js.BodyName + " in " + he.System.name);
-                        }
-                    }
-                }
-
-                return he;
-            }
-            else
-            {
-                return null;
-            }
         }
 
         public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress, string NetLogPath = null, bool ForceNetLogReload = false, bool ForceJournalReload = false, bool CheckEdsm = false, int CurrentCommander = Int32.MinValue)

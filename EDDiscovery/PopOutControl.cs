@@ -50,11 +50,12 @@ namespace EDDiscovery.Forms
 
         public enum PopOuts        // id's.. used in tab controls, and in button pop outs button
         {
-            Spanel,
+            Spanel,                 // pop out only
             Trippanel,
             NotePanel,
             RouteTracker,
-            Log,
+
+            Log,                    // panel and pop out
             StarDistance,
             Materials,
             Commodities,
@@ -67,6 +68,7 @@ namespace EDDiscovery.Forms
             Modules,
             Exploration,
             Synthesis,
+            Missions,
 
             StartTabButtons = Log,
         };
@@ -111,6 +113,7 @@ namespace EDDiscovery.Forms
             { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, "Display scan data", transparent: false) },
             { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EDDiscovery.Properties.Resources.module, "Display loadout data") },
             { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EDDiscovery.Properties.Resources.synthesis, "Synthesis Planner") },
+            { PopOuts.Missions, new PopOutInfo("Missions", "Missions", EDDiscovery.Properties.Resources.missionaccepted, "Missions") },
             { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null, "Explore a collection of systems") },
             { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
@@ -139,6 +142,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.Modules: return new UserControlModules();
                 case PopOuts.Exploration: return new UserControlExploration();
                 case PopOuts.Synthesis: return new UserControlSynthesis();
+                case PopOuts.Missions: return new UserControlMissions();
                 default: return null;
             }
         }
