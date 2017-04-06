@@ -235,7 +235,7 @@ namespace EDDiscovery.UserControls
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
             int rowno = FindGridPosByJID(pos.Item1);
-            if (rowno > 0)
+            if (rowno > 0 && dataGridViewJournal.Rows[rowno].Visible)
                 dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
         }
 

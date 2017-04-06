@@ -311,6 +311,7 @@
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
     <Compile Include="EliteDangerous\Ledger.cs" />
     <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
+    <Compile Include="EliteDangerous\MissionList.cs" />
     <Compile Include="EliteDangerous\ModuleEDID.cs" />
     <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
@@ -669,10 +670,8 @@
     <Compile Include="EDDToolStripRenderer.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
-    <Compile Include="EliteDangerous\AppConfig.cs" />
     <Compile Include="EliteDangerous\EDCommander.cs" />
     <Compile Include="EliteDangerous\EliteDangerous.cs" />
-    <Compile Include="EliteDangerous\GameSettings.cs" />
     <Compile Include="3DMap\FormMap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -782,6 +781,12 @@
     <Compile Include="UserControls\UserControlExploration.Designer.cs">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlMissions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlMissions.Designer.cs">
+      <DependentUpon>UserControlMissions.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSynthesis.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -883,10 +888,6 @@
     </Compile>
     <Compile Include="Vector3.cs" />
     <Compile Include="Win32Constants.cs" />
-    <Content Include="AppConfigLocal.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="edlogo_3mo_icon.ico" />
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -956,6 +957,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlMissions.resx">
+      <DependentUpon>UserControlMissions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSynthesis.resx">
       <DependentUpon>UserControlSynthesis.cs</DependentUpon>
