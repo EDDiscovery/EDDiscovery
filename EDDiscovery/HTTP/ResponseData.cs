@@ -18,7 +18,7 @@ using System;
 using System.Collections.Specialized;
 using System.Net;
 
-namespace EDDiscovery2.HTTP
+namespace EDDiscovery.HTTP
 {
     public struct ResponseData
     {

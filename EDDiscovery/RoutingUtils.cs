@@ -16,9 +16,8 @@
 using System;
 using System.Windows.Forms;
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
 using EDDiscovery.EDSM;
-using EDDiscovery2;
+using EDDiscovery.Forms;
 
 namespace EDDiscovery
 {

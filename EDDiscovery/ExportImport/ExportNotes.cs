@@ -50,9 +50,9 @@ namespace EDDiscovery.Export
                         writer.WriteLine();
                     }
 
-                    EDDiscovery2.DB.SystemNoteClass.GetAllSystemNotes();
+                    EDDiscovery.DB.SystemNoteClass.GetAllSystemNotes();
 
-                    foreach (EDDiscovery2.DB.SystemNoteClass snc in EDDiscovery2.DB.SystemNoteClass.globalSystemNotes)
+                    foreach (EDDiscovery.DB.SystemNoteClass snc in EDDiscovery.DB.SystemNoteClass.globalSystemNotes)
                     {
                         writer.Write(MakeValueCsvFriendly(snc.Name.Length > 0 ? snc.Name : "N/A"));
                         writer.Write(MakeValueCsvFriendly(snc.Journalid > 0 ? snc.Journalid.ToString() : "N/A"));

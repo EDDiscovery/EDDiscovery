@@ -24,8 +24,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EDDiscovery.DB;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 using EDDiscovery.EliteDangerous;
+using EDDiscovery.EDDN;
 
 namespace EDDiscovery.UserControls
 {
@@ -255,7 +256,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
+            EDDiscovery.ConditionFilterForm frm = new EDDiscovery.ConditionFilterForm();
             frm.InitFilter("Journal: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

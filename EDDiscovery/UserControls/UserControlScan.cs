@@ -27,7 +27,7 @@ using ExtendedControls;
 using EDDiscovery.DB;
 using System.Drawing.Drawing2D;
 using EDDiscovery.EliteDangerous;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 
 namespace EDDiscovery.UserControls
 {
@@ -419,7 +419,7 @@ namespace EDDiscovery.UserControls
                 string tooltip = sd.Key;
                 Color fillc = Color.Yellow;
 
-                EDDiscovery2.DB.MaterialCommodityDB mc = EDDiscovery2.DB.MaterialCommodityDB.GetCachedMaterial(sd.Key);
+                EDDiscovery.DB.MaterialCommodityDB mc = EDDiscovery.DB.MaterialCommodityDB.GetCachedMaterial(sd.Key);
                 if (mc != null)
                 {
                     abv = mc.shortname;

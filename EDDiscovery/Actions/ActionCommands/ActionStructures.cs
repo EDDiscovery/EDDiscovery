@@ -37,7 +37,7 @@ namespace EDDiscovery.Actions
 
         public bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars, ref ConditionLists jf)
         {
-            EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
+            EDDiscovery.ConditionFilterForm frm = new EDDiscovery.ConditionFilterForm();
             frm.InitCondition("Define condition", eventvars, discoveryform, jf);
 
             frm.TopMost = parent.FindForm().TopMost;

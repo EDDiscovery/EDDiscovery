@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery.Forms
 {
     public partial class MoveToCommander : Form
     {
@@ -42,7 +42,7 @@ namespace EDDiscovery2
             comboBoxCommanders.ValueMember = "Nr";
             comboBoxCommanders.DataSource = commanders;
 
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             theme.ApplyToForm(this);
 
             return true;

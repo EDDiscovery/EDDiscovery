@@ -15,7 +15,6 @@
  */
 using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
 
 using System;
 using System.Collections.Generic;
@@ -29,7 +28,7 @@ using EDDiscovery.Properties;
 using EDDiscovery.EDSM;
 using System.IO;
 
-namespace EDDiscovery2._3DMap
+namespace EDDiscovery._3DMap
 {
     public class DatasetBuilder
     {

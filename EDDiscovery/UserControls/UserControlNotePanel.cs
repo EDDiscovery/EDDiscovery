@@ -23,7 +23,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using EDDiscovery2.DB;
 using EDDiscovery.DB;
 
 namespace EDDiscovery.UserControls

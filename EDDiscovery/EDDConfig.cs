@@ -23,12 +23,12 @@ using System.Data.Common;
 using System.Data;
 using System.IO;
 using System.Reflection;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using EDDiscovery;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public class EDDConfig
     {

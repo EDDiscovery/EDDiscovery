@@ -25,8 +25,9 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Drawing;
+using EDDiscovery.Forms;
 
-namespace EDDiscovery2._3DMap
+namespace EDDiscovery._3DMap
 {
     public class MapRecorder
     {

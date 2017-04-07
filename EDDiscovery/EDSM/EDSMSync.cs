@@ -16,7 +16,6 @@
 using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EDDiscovery2.EDSM
+namespace EDDiscovery.EDSM
 {  
     public class EDSMSync
     {

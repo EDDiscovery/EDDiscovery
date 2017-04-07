@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery2.DB;
+using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using System.IO;
 

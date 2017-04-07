@@ -15,7 +15,7 @@
  */
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery2;
+
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -15,8 +15,6 @@
  */
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.HTTP;
-using EDDiscovery2;
-using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

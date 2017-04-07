@@ -14,7 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery.Forms
 {
     public partial class BookmarkForm : Form
     {
