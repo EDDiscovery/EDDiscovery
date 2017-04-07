@@ -658,14 +658,19 @@ namespace EDDiscovery2
                 SQLiteConnectionUser.PutSettingString("ImageHandlerOutputDir", ImageHandlerOutputDir, conn);
                 SQLiteConnectionUser.PutSettingString("ImageHandlerScreenshotsDir", ImageHandlerScreenshotsDir, conn);
 
-                JObject jo = new JObject(new
-                {
-                    EDDirectory = EDDirectory,
-                    ImageHandlerOutputDir = ImageHandlerOutputDir,
-                    ImageHandlerScreenshotsDir = ImageHandlerScreenshotsDir
-                });
+                JObject jo = new JObject();
 
-                using (FileStream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp")))
+
+                jo["EDDirectory"] = EDDirectory;
+
+                if (!string.IsNullOrEmpty(ImageHandlerOutputDir))
+                    jo["ImageHandlerOutputDir"] = ImageHandlerOutputDir;
+
+                if (!string.IsNullOrEmpty(ImageHandlerScreenshotsDir))
+                    jo["ImageHandlerScreenshotsDir"] = ImageHandlerScreenshotsDir;
+
+
+                using (FileStream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json.tmp")))
                 {
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
@@ -676,8 +681,8 @@ namespace EDDiscovery2
                     }
                 }
 
-                File.Delete(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
-                File.Move(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json"));
+                File.Delete(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json"));
+                File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json"));
             }
 
             #endregion
