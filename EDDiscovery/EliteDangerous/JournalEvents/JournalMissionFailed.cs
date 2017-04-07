@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name: name of mission
     [JournalEntryType(JournalTypeEnum.MissionFailed)]
-    public class JournalMissionFailed : JournalEntry
+    public class JournalMissionFailed : JournalEntry, IMissions
     {
         public JournalMissionFailed(JObject evt ) : base(evt, JournalTypeEnum.MissionFailed)
         {
@@ -41,5 +41,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             info = Name;
             detailed = "";
         }
+
+        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery2.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        {
+            mlist.Failed(this);
+        }
+
     }
 }

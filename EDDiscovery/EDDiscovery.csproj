@@ -277,6 +277,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\ControlHelpers.cs" />
+    <Compile Include="Controls\CustomDateTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\AutoCompleteTextBox.cs">
       <SubType>Component</SubType>
@@ -311,8 +314,8 @@
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
     <Compile Include="EliteDangerous\Ledger.cs" />
     <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
+    <Compile Include="EliteDangerous\MissionList.cs" />
     <Compile Include="EliteDangerous\ModuleEDID.cs" />
-    <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
     <Compile Include="CompanionAPI\CompanionCredentials.cs" />
@@ -669,10 +672,8 @@
     <Compile Include="EDDToolStripRenderer.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
-    <Compile Include="EliteDangerous\AppConfig.cs" />
     <Compile Include="EliteDangerous\EDCommander.cs" />
     <Compile Include="EliteDangerous\EliteDangerous.cs" />
-    <Compile Include="EliteDangerous\GameSettings.cs" />
     <Compile Include="3DMap\FormMap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -782,6 +783,12 @@
     <Compile Include="UserControls\UserControlExploration.Designer.cs">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlMissions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlMissions.Designer.cs">
+      <DependentUpon>UserControlMissions.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSynthesis.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -883,10 +890,6 @@
     </Compile>
     <Compile Include="Vector3.cs" />
     <Compile Include="Win32Constants.cs" />
-    <Content Include="AppConfigLocal.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="edlogo_3mo_icon.ico" />
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -956,6 +959,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlMissions.resx">
+      <DependentUpon>UserControlMissions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSynthesis.resx">
       <DependentUpon>UserControlSynthesis.cs</DependentUpon>
@@ -1113,6 +1119,7 @@
     <None Include="Resources\clearsavedgame.png" />
     <None Include="Resources\coriolis.png" />
     <None Include="Resources\excel.png" />
+    <None Include="Resources\Calendar.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

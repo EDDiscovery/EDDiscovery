@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 //o Count (int)
 //from hchalkley
     [JournalEntryType(JournalTypeEnum.Passengers)]
-    public class JournalPassengers : JournalEntry, IPassengersJournalEntry
+    public class JournalPassengers : JournalEntry
     {
         public class Passengers
         {
@@ -65,11 +65,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public Passengers[] Manifest { get; set; }
-
-        public void UpdatePassengers(PassengersList shp, DB.SQLiteConnectionUser conn)
-        {
-            shp.SetPassengers(Manifest);
-        }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.passengers; } }
 

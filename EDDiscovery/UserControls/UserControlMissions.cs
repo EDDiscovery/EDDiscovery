@@ -1,0 +1,217 @@
+﻿/*
+ * Copyright © 2016 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using EDDiscovery.Controls;
+using EDDiscovery2.DB;
+using EDDiscovery.EliteDangerous;
+
+namespace EDDiscovery.UserControls
+{
+    public partial class UserControlMissions : UserControlCommonBase
+    {
+        private int displaynumber = 0;
+        private EDDiscoveryForm discoveryform;
+
+        private string DbColumnSaveCurrent { get { return ("MissionsGridCurrent") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbColumnSavePrevious { get { return ("MissionsGridPrevious") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbStartDate { get { return ("MissionsStartDate") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbEndDate { get { return ("MissionsEndDate") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbStartDateChecked { get { return ("MissionsStartDateCheck") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbEndDateChecked { get { return ("MissionsEndDateCheck") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSplitter { get { return ("MissionsSplitter") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+
+        #region Init
+
+        public UserControlMissions()
+        {
+            InitializeComponent();
+            Name = "Missions";
+        }
+
+        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        {
+            discoveryform = ed;
+            displaynumber = vn;
+
+            dataGridViewCurrent.MakeDoubleBuffered();
+            dataGridViewCurrent.RowTemplate.Height = 26;
+            dataGridViewCurrent.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewCurrent.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+
+            dataGridViewPrevious.MakeDoubleBuffered();
+            dataGridViewPrevious.RowTemplate.Height = 26;
+            dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            ed.TravelControl.OnTravelSelectionChanged += Display;
+
+            string start = DB.SQLiteDBClass.GetSettingString(DbStartDate, "");
+            DateTime dt;
+            if (start != "" && DateTime.TryParse(start, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
+                customDateTimePickerStart.Value = dt;
+
+            customDateTimePickerStart.Checked = DB.SQLiteDBClass.GetSettingBool(DbStartDateChecked, false);
+
+            string end = DB.SQLiteDBClass.GetSettingString(DbEndDate, "");
+            if (end != "" && DateTime.TryParse(end, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
+                customDateTimePickerEnd.Value = dt;
+
+            customDateTimePickerEnd.Checked = DB.SQLiteDBClass.GetSettingBool(DbEndDateChecked, false);
+        }
+
+        #endregion
+
+        #region Display
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            last_he = he;
+            Display();
+        }
+
+        HistoryEntry last_he = null;
+        public override void Display(HistoryEntry he, HistoryList hl)
+        {
+            last_he = he;
+            Display();
+        }
+
+        public void Display()
+        {
+            MissionList ml = last_he?.MissionList;
+
+            dataGridViewCurrent.Rows.Clear();
+            dataGridViewPrevious.Rows.Clear();
+
+            if (ml != null)
+            {
+                DateTime hetime = last_he.EventTimeUTC;
+
+                List<MissionState> mcurrent = (from MissionState ms in ml.Missions.Values where ms.InProgressDateTime(hetime) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
+
+                foreach (MissionState ms in mcurrent)
+                {
+                    object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
+                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
+                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
+                                        ms.OriginatingSystem + ":" + ms.OriginatingStation,
+                                        ms.Mission.Faction,
+                                        ms.Mission.DestinationSystem + ((ms.Mission.DestinationStation.Length>0) ? ":" +ms.Mission.DestinationStation :""),
+                                        ms.Mission.TargetFaction,
+                                        ms.Info()
+                    };
+
+                    int rowno = dataGridViewCurrent.Rows.Add(rowobj);
+                    dataGridViewCurrent.Rows[rowno].Tag = ms;
+                }
+
+                List<MissionState> mprev = (from MissionState ms in ml.Missions.Values where !ms.InProgressDateTime(hetime) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
+
+                DateTime startdate = customDateTimePickerStart.Checked ? customDateTimePickerStart.Value : new DateTime(1980, 1, 1);
+                DateTime enddate = customDateTimePickerEnd.Checked ? customDateTimePickerEnd.Value : new DateTime(2999, 1, 1);
+
+                long value = 0;
+
+                foreach (MissionState ms in mprev)
+                {
+                    int cmps = EDDiscoveryForm.EDDConfig.DisplayUTC ? DateTime.Compare(ms.Mission.EventTimeUTC, startdate) : DateTime.Compare(ms.Mission.EventTimeLocal, startdate);
+
+                    //System.Diagnostics.Debug.WriteLine(ms.Mission.EventTimeUTC.ToString() + " " + startdate.ToString() + " " + cmps);
+                    if (cmps >= 0)
+                    {
+                        int cmpe = EDDiscoveryForm.EDDConfig.DisplayUTC ? DateTime.Compare(ms.Mission.EventTimeUTC, enddate) : DateTime.Compare(ms.Mission.EventTimeLocal, enddate);
+
+                        if (cmpe <= 0)
+                        {
+                            object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
+                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
+                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
+                                        ms.OriginatingSystem + ":" + ms.OriginatingStation,
+                                        ms.Mission.Faction,
+                                        ms.Mission.DestinationSystem + ((ms.Mission.DestinationStation.Length>0) ? ":" +ms.Mission.DestinationStation :""),
+                                        ms.Mission.TargetFaction,
+                                        ms.StateText,
+                                        ms.Info()
+                                        };
+
+                            int rowno = dataGridViewPrevious.Rows.Add(rowobj);
+                            dataGridViewPrevious.Rows[rowno].Tag = ms;
+
+                            value += ms.Value;
+                        }
+                    }
+                }
+
+                labelValue.Visible = (value != 0);
+                labelValue.Text = "Value: " + value.ToStringInvariant();
+            }
+        }
+
+        #endregion
+
+        #region Layout
+
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
+            DGVLoadColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
+
+            int splitter = DB.SQLiteDBClass.GetSettingInt(DbSplitter, -1);
+            if (splitter >= 0)
+                splitContainer1.SplitterDistance = Math.Max(splitter,10);
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
+            DGVSaveColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
+
+            discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+
+            DB.SQLiteDBClass.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            DB.SQLiteDBClass.PutSettingString(DbEndDate, customDateTimePickerEnd.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            DB.SQLiteDBClass.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
+            DB.SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
+
+            DB.SQLiteDBClass.PutSettingInt(DbSplitter, splitContainer1.SplitterDistance);
+        }
+
+        #endregion
+
+        private void customDateTimePickerStart_ValueChanged(object sender, EventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine("Start changed");
+            Display();
+        }
+
+        private void customDateTimePickerEnd_ValueChanged(object sender, EventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine("End changed");
+            Display();
+        }
+    }
+}

@@ -54,7 +54,7 @@ namespace EDDiscovery
         {
             "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
-            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis"
+            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis" , "Missions"
         };
 
         Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
@@ -69,7 +69,8 @@ namespace EDDiscovery
                                         EDDiscovery.Properties.Resources.scan,
                                         EDDiscovery.Properties.Resources.module,
                                         EDDiscovery.Properties.Resources.sellexplorationdata,
-                                        EDDiscovery.Properties.Resources.synthesis
+                                        EDDiscovery.Properties.Resources.synthesis,
+                                        EDDiscovery.Properties.Resources.missionaccepted,
                                         };
 
         string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
@@ -84,7 +85,8 @@ namespace EDDiscovery
                                                "Display scan data",
                                                "Display Loadout for current ships and also stored modules",
                                                "Display Exploration view",
-                                               "Display Synthesis planner"
+                                               "Display Synthesis planner",
+                                               "Display Missions",
                                             };
 
         HistoryEntry notedisplayedhe = null;            // remember the particulars of the note displayed, so we can save it later
