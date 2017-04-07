@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
 using OpenTK;
 using System;
 using System.Collections.Concurrent;
@@ -28,7 +27,7 @@ using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public class StarGrid
     {

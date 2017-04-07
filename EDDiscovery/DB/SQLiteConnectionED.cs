@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading;
 using System.IO;
 using System.Windows.Forms;
-using EDDiscovery2;
+using EDDiscovery;
 
 namespace EDDiscovery.DB
 {
@@ -58,7 +58,7 @@ namespace EDDiscovery.DB
             return reg;
         }
 
-        public static new List<EDDiscovery2.EDCommander> GetCommandersFromRegister(SQLiteConnectionOld conn = null)
+        public static new List<EDDiscovery.EDCommander> GetCommandersFromRegister(SQLiteConnectionOld conn = null)
         {
             if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
             {
@@ -83,7 +83,7 @@ namespace EDDiscovery.DB
             }
             else
             {
-                return new List<EDDiscovery2.EDCommander>();
+                return new List<EDDiscovery.EDCommander>();
             }
         }
     }
@@ -405,16 +405,16 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static List<EDDiscovery2.EDCommander> GetCommandersFromRegister(TConn conn = null)
+        public static List<EDDiscovery.EDCommander> GetCommandersFromRegister(TConn conn = null)
         {
-            List<EDDiscovery2.EDCommander> commanders = new List<EDDiscovery2.EDCommander>();
+            List<EDDiscovery.EDCommander> commanders = new List<EDDiscovery.EDCommander>();
 
             string apikey = GetSettingString("EDSMApiKey", "", conn);
             string commanderName = GetSettingString("CommanderName", "", conn);
 
             for (int i = 0; i < 100; i++)
             {
-                EDDiscovery2.EDCommander cmdr = new EDDiscovery2.EDCommander(i,
+                EDDiscovery.EDCommander cmdr = new EDDiscovery.EDCommander(i,
                     GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
                     GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn), true, false, true);
                 cmdr.NetLogDir = GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);

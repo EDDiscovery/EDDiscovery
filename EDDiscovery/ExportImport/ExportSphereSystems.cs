@@ -14,7 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.Export;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EDDiscovery.ExportImport
+namespace EDDiscovery.Export
 {
     class ExportSphereSystems
     {

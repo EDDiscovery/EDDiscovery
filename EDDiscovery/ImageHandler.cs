@@ -24,13 +24,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using EDDiscovery.DB;
-using EDDiscovery;
-using EDDiscovery2.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 
-namespace EDDiscovery2.ImageHandler
+namespace EDDiscovery.ImageHandler
 {
     public partial class ImageHandler : UserControl
     {

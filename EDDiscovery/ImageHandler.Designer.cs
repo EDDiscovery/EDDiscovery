@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery2.ImageHandler
+namespace EDDiscovery.ImageHandler
 {
     partial class ImageHandler
     {

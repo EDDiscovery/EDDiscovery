@@ -108,7 +108,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public void SystemVars(ConditionVariables vars, EDDiscovery2.DB.ISystem s, string prefix )
+        static public void SystemVars(ConditionVariables vars, EDDiscovery.DB.ISystem s, string prefix )
         {
             if (s != null)
             {
@@ -131,7 +131,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public void SystemVarsFurtherInfo(ActionProgramRun vars, HistoryList hl, EDDiscovery2.DB.ISystem s, string prefix)
+        static public void SystemVarsFurtherInfo(ActionProgramRun vars, HistoryList hl, EDDiscovery.DB.ISystem s, string prefix)
         {
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 

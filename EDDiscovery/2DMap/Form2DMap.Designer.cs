@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     partial class Form2DMap
     {
@@ -54,7 +54,7 @@ namespace EDDiscovery2
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonSave = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
+            this.imageViewer1 = new EDDiscovery._2DMap.ImageViewer();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();

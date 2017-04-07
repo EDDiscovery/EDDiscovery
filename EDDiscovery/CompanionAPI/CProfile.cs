@@ -1,5 +1,4 @@
 ﻿using EDDiscovery.EliteDangerous;
-using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

@@ -190,7 +190,7 @@ namespace EDDiscovery.Forms
 
         public void PopOut(PopOutControl.PopOuts selected)
         {
-            UserControlForm tcf = usercontrolsforms.NewForm(EDDiscovery2.EDDConfig.Options.NoWindowReposition);
+            UserControlForm tcf = usercontrolsforms.NewForm(EDDiscovery.EDDConfig.Options.NoWindowReposition);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
             tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 

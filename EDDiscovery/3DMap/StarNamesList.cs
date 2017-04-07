@@ -15,8 +15,7 @@
  */
 using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2._3DMap;
-using EDDiscovery2.DB;
+using EDDiscovery._3DMap;
 using OpenTK;
 using System;
 using System.Collections.Concurrent;
@@ -27,7 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public class StarNames                                      // Holds stars which have been named..
     {

@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery2;
+using EDDiscovery;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;

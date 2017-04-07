@@ -20,7 +20,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public class EDDToolStripRenderer : ToolStripProfessionalRenderer//ToolStripSystemRenderer
     {

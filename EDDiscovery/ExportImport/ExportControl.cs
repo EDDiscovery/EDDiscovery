@@ -27,11 +27,10 @@ using System.Diagnostics;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using System.IO;
 using System.Globalization;
-using EDDiscovery2;
-using EDDiscovery.Import;
-using EDDiscovery.ExportImport;
 
-namespace EDDiscovery
+using EDDiscovery.Import;
+
+namespace EDDiscovery.Export
 {
     public partial class ExportControl : UserControl
     {

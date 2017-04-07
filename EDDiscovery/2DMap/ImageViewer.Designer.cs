@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery2._2DMap
+namespace EDDiscovery._2DMap
 {
     partial class ImageViewer
     {

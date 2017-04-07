@@ -183,7 +183,7 @@ namespace EDDiscovery.Actions
                             id_edsm = null;
                         }
 
-                        EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
+                        EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
                         string url = edsm.GetUrlToEDSMSystem(he.System.name, id_edsm);
 
                         ap[prefix + "URL"] = url;

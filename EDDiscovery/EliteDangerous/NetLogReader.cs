@@ -19,15 +19,15 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using EDDiscovery2.DB;
+using EDDiscovery.DB;
 using System.IO;
-using EDDiscovery2;
+
 using System.Threading;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 
-namespace EDDiscovery
+namespace EDDiscovery.EliteDangerous
 {
     public class NetLogFileReader : LogReaderBase
     {

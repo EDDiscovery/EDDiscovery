@@ -24,7 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public partial class SystemViewForm : Form
     {

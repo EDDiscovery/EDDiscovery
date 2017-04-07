@@ -20,7 +20,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace EDDiscovery2.HTTP
+namespace EDDiscovery.HTTP
 {
     public class HttpCom
     {

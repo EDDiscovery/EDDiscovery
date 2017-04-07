@@ -23,7 +23,7 @@ namespace EDDiscovery.Audio
         {
             comboBoxCustomDevice.Items.AddRange(dr.GetAudioEndpoints().ToArray());
             comboBoxCustomDevice.SelectedItem = dr.GetAudioEndpoint();
-            bool border = EDDiscovery2.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            bool border = EDDiscovery.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
 
             this.Text = title;
             if (!border)

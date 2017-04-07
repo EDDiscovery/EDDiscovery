@@ -15,7 +15,7 @@
  */
 using System;
 
-namespace EDDiscovery2.DB
+namespace EDDiscovery.DB
 {
     public interface IVisitedSystems
     {

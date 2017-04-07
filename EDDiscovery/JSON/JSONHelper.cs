@@ -20,6 +20,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// 
+/// OBSOLETE... USE THE NEWER ObjectExtensions instead!
+
 namespace EDDiscovery
 {
     public  static class JSONHelper

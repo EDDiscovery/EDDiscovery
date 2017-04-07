@@ -69,9 +69,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
 
             JToken jm = evt["EDDMapColor"];
-            MapColor = jm.Int(EDDiscovery2.EDDConfig.Instance.DefaultMapColour);
+            MapColor = jm.Int(EDDiscovery.EDDConfig.Instance.DefaultMapColour);
             if (jm.Empty())
-                evt["EDDMapColor"] = EDDiscovery2.EDDConfig.Instance.DefaultMapColour;      // new entries get this default map colour if its not already there
+                evt["EDDMapColor"] = EDDiscovery.EDDConfig.Instance.DefaultMapColour;      // new entries get this default map colour if its not already there
         }
 
         public string Body { get; set; }

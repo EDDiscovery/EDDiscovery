@@ -24,7 +24,7 @@ using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.Properties;
 
-namespace EDDiscovery2.Forms
+namespace EDDiscovery.Forms
 {
     public partial class AboutForm : Form
     {

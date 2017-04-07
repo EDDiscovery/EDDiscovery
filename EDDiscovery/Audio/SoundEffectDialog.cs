@@ -102,7 +102,7 @@ namespace EDDiscovery.Audio
 
             checkBoxCustomNone.Checked = ap.OverrideNone;
 
-            EDDiscovery2.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            EDDiscovery.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         public ConditionVariables GetEffects()

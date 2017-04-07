@@ -15,7 +15,6 @@
  */
 using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
 using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
 using System;
@@ -28,7 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public partial class Form2DMap : Form
     {

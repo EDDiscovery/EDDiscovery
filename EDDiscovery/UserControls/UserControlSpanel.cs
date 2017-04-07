@@ -28,7 +28,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.DB;
 using EMK.LightGeometry;
-using EDDiscovery2.DB;
 using ExtendedControls;
 
 namespace EDDiscovery.UserControls
@@ -489,7 +488,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (he != null)
                 {
-                    EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
+                    EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
 
                     string url = edsm.GetUrlToEDSMSystem(he.System.name);
 
@@ -841,7 +840,7 @@ namespace EDDiscovery.UserControls
 
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EDDiscovery2.ConditionFilterForm frm = new EDDiscovery2.ConditionFilterForm();
+            EDDiscovery.ConditionFilterForm frm = new EDDiscovery.ConditionFilterForm();
             frm.InitFilter("Summary Panel: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

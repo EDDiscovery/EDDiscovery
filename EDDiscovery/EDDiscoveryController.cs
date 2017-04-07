@@ -15,10 +15,8 @@
  */
 using EDDiscovery.DB;
 using EDDiscovery.EDSM;
+using EDDiscovery.EDDN;
 using EDDiscovery.EliteDangerous;
-using EDDiscovery2;
-using EDDiscovery2.DB;
-using EDDiscovery2.EDSM;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -26,8 +24,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -433,7 +429,7 @@ namespace EDDiscovery
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
-                EDDiscovery2.DB.MaterialCommodityDB.SetUpInitialTable();
+                EDDiscovery.DB.MaterialCommodityDB.SetUpInitialTable();
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 

@@ -145,7 +145,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery2.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
         {
             mlist.Accepted(this,sys,body);
         }

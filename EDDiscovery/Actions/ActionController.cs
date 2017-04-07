@@ -16,7 +16,6 @@
 using EDDiscovery.DB;
 using EDDiscovery.Forms;
 using EDDiscovery.Win32Constants;
-using EDDiscovery2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,7 +75,7 @@ namespace EDDiscovery.Actions
 
         public void EditAddOnActionFile()
         {
-            EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
+            EDDiscovery.ConditionFilterForm frm = new ConditionFilterForm();
 
             List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(towords:false);
             events.Sort();

@@ -15,8 +15,7 @@
  */
 using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
-using EDDiscovery2._3DMap;
+using EDDiscovery._3DMap;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -32,8 +31,9 @@ using System.Drawing.Drawing2D;
 using System.Resources;
 using System.Collections.Concurrent;
 using EDDiscovery.EDSM;
+using EDDiscovery.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public partial class FormMap : Form
     {

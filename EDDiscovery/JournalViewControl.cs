@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.DB;
 using EDDiscovery.Controls;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 using EDDiscovery.UserControls;
 
 namespace EDDiscovery

@@ -17,7 +17,7 @@ using EDDiscovery;
 using EDDiscovery.Actions;
 using EDDiscovery.DB;
 using EDDiscovery.Win32Constants;
-using EDDiscovery2;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,7 +29,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public partial class ConditionFilterForm : Form
     {

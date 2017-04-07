@@ -15,7 +15,6 @@
  */
 using EDDiscovery.EDSM;
 using EDDiscovery.EliteDangerous;
-using EDDiscovery2.EDSM;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
