@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
         partial class FormMap
         {

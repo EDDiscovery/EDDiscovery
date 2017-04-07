@@ -24,7 +24,7 @@ using System.IO;
 using EDDiscovery.DB;
 using Newtonsoft.Json.Linq;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public enum EDGovernment
     {

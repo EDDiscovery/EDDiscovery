@@ -24,11 +24,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
 using EDDiscovery.EliteDangerous;
-using EDDiscovery2.EDSM;
-using EDDiscovery2;
+using EDDiscovery.EDSM;
+
 using EDDiscovery.Export;
+using EDDiscovery.EDDN;
 
 namespace EDDiscovery.UserControls
 {
@@ -672,7 +672,7 @@ namespace EDDiscovery.UserControls
                 RowsByJournalID.Remove(sp.Journalid);
             }
 
-            EDDiscovery2.MoveToCommander movefrm = new EDDiscovery2.MoveToCommander();
+            EDDiscovery.Forms.MoveToCommander movefrm = new EDDiscovery.Forms.MoveToCommander();
 
             movefrm.Init();
 
@@ -761,7 +761,7 @@ namespace EDDiscovery.UserControls
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            EDDiscovery2.EDSM.EDSMClass edsm = new EDSMClass();
+            EDDiscovery.EDSM.EDSMClass edsm = new EDSMClass();
             long? id_edsm = rightclicksystem.System?.id_edsm;
 
             if (id_edsm <= 0)
@@ -918,7 +918,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            EDDiscovery2.ConditionFilterForm frm = new ConditionFilterForm();
+            EDDiscovery.ConditionFilterForm frm = new ConditionFilterForm();
             frm.InitFilter("History: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

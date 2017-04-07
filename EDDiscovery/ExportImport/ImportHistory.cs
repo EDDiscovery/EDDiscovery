@@ -80,7 +80,7 @@ namespace EDDiscovery.Import
                         result = string.Format("System Note import failed at {0}.", sys.SysName);
                         return false;
                     }
-                    EDDiscovery2.DB.SystemNoteClass.GetAllSystemNotes();
+                    EDDiscovery.DB.SystemNoteClass.GetAllSystemNotes();
                 }
             }
             result = "File imported successfully";

@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery.Forms
 {
     public partial class RecordStep : Form
     {
@@ -92,7 +92,7 @@ namespace EDDiscovery2
             textBoxWait.Enabled = !checkBoxWaitForSlew.Checked;
 
             if (checkBoxWaitForSlew.Checked)
-                Elapsed = EDDiscovery2._3DMap.MapRecorder.FlightEntry.WaitForComplete;
+                Elapsed = EDDiscovery._3DMap.MapRecorder.FlightEntry.WaitForComplete;
             else
                 okay = okay && long.TryParse(textBoxWait.Text, out Elapsed);
 
@@ -107,7 +107,7 @@ namespace EDDiscovery2
             }
             else
             {
-                Pos = EDDiscovery2._3DMap.MapRecorder.FlightEntry.NullVector;
+                Pos = EDDiscovery._3DMap.MapRecorder.FlightEntry.NullVector;
                 FlyTime = 0;
             }
 
@@ -122,7 +122,7 @@ namespace EDDiscovery2
             }
             else
             {
-                Dir = EDDiscovery2._3DMap.MapRecorder.FlightEntry.NullVector;
+                Dir = EDDiscovery._3DMap.MapRecorder.FlightEntry.NullVector;
                 PanTime = 0;
             }
 

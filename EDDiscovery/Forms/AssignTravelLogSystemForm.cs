@@ -21,7 +21,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EDDiscovery2.DB;
 using EDDiscovery.DB;
 
 namespace EDDiscovery.Forms
@@ -66,7 +65,7 @@ namespace EDDiscovery.Forms
         private List<SystemLink> _systemLinkList;
 
         public AssignTravelLogSystemForm(EliteDangerous.JournalEvents.JournalLocOrJump vsc)
-            : this(new EDDiscovery2.DB.InMemory.SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
+            : this(new EDDiscovery.DB.InMemory.SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
         {
         }
 
@@ -90,7 +89,7 @@ namespace EDDiscovery.Forms
 
             tbManualSystemName.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             theme.ApplyToForm(this);
         }
 
@@ -197,7 +196,7 @@ namespace EDDiscovery.Forms
         {
             if (_linkSystem != null)
             {
-                var edsm = new EDDiscovery2.EDSM.EDSMClass();
+                var edsm = new EDDiscovery.EDSM.EDSMClass();
                 string url = edsm.GetUrlToEDSMSystem(_linkSystem.name, _linkSystem.id_edsm);
                 System.Diagnostics.Process.Start(url);
             }

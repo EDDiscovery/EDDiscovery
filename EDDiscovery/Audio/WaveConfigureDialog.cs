@@ -89,7 +89,7 @@ namespace EDDiscovery.Audio
 
             effects = ef;
 
-            EDDiscovery2.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            EDDiscovery.EDDTheme.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
 

@@ -59,8 +59,8 @@ namespace EDDiscovery.Actions
                 }
                 else if (cmdname.Equals("edsm"))
                 {
-                    EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
-                    ap.actioncontroller.DiscoveryForm.EdsmSync.StartSync(edsm, EDDiscovery2.EDCommander.Current.SyncToEdsm, EDDiscovery2.EDCommander.Current.SyncFromEdsm, EDDiscovery2.EDDConfig.Instance.DefaultMapColour);
+                    EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
+                    ap.actioncontroller.DiscoveryForm.EdsmSync.StartSync(edsm, EDDiscovery.EDCommander.Current.SyncToEdsm, EDDiscovery.EDCommander.Current.SyncFromEdsm, EDDiscovery.EDDConfig.Instance.DefaultMapColour);
                 }
                 else if (cmdname.Equals("refresh"))
                 {

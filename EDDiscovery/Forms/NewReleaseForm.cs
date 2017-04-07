@@ -33,7 +33,7 @@ namespace EDDiscovery.Forms
         public NewReleaseForm()
         {
             InitializeComponent();
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             theme.ApplyToForm(this);
         }
 

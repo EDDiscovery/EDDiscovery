@@ -13,9 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery2;
-using EDDiscovery2.DB;
-using EDDiscovery2.EDSM;
+
+using EDDiscovery.DB;
+using EDDiscovery.EDSM;
 using EMK.LightGeometry;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -53,7 +53,7 @@ namespace EDDiscovery.DB
 
 
     [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
-    public class SystemClass : EDDiscovery2.DB.InMemory.SystemClass
+    public class SystemClass : EDDiscovery.DB.InMemory.SystemClass
     {
         const float XYZScalar = 128.0F;     // scaling between DB stored values and floats
 
@@ -169,7 +169,7 @@ namespace EDDiscovery.DB
                 return -1;
         }
 
-        public static double Distance(EDDiscovery2.DB.ISystem s1, double x, double y, double z)
+        public static double Distance(EDDiscovery.DB.ISystem s1, double x, double y, double z)
         {
             if (s1 != null && s1.HasCoordinate)
                 return Math.Sqrt((s1.x - x) * (s1.x - x) + (s1.y - y) * (s1.y - y) + (s1.z - z) * (s1.z - z));
@@ -931,7 +931,7 @@ namespace EDDiscovery.DB
 
         public static bool GetSystemAndAlternatives(EliteDangerous.JournalEvents.JournalLocOrJump vsc, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
-            ISystem refsystem = new EDDiscovery2.DB.InMemory.SystemClass
+            ISystem refsystem = new EDDiscovery.DB.InMemory.SystemClass
             {
                 name = vsc.StarSystem,
                 x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN,
@@ -945,7 +945,7 @@ namespace EDDiscovery.DB
 
         public static bool GetSystemAndAlternatives(string sysname, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
-            ISystem refsystem = new EDDiscovery2.DB.InMemory.SystemClass
+            ISystem refsystem = new EDDiscovery.DB.InMemory.SystemClass
             {
                 name = sysname,
                 x = Double.NaN,
@@ -959,7 +959,7 @@ namespace EDDiscovery.DB
 
         public static bool GetSystemAndAlternatives(ISystem refsys, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
-            system = new EDDiscovery2.DB.InMemory.SystemClass
+            system = new EDDiscovery.DB.InMemory.SystemClass
             {
                 name = refsys.name,
                 x = refsys.HasCoordinate ? refsys.x : Double.NaN,
@@ -1203,11 +1203,11 @@ namespace EDDiscovery.DB
                 return ParseEDSMUpdateSystemsReader(jr, ref date, ref outoforder, removenonedsmids, cancelRequested, reportProgress, useCache, useTempSystems);
         }
 
-        private static Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> GetEdsmSystemsLite()
+        private static Dictionary<long, EDDiscovery.DB.InMemory.SystemClassBase> GetEdsmSystemsLite()
         {
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Reader))
             {
-                Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = new Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase>();
+                Dictionary<long, EDDiscovery.DB.InMemory.SystemClassBase> systemsByEdsmId = new Dictionary<long, EDDiscovery.DB.InMemory.SystemClassBase>();
 
                 using (DbCommand cmd = cn.CreateCommand("SELECT s.id, s.EdsmId, n.Name, s.x, s.y, s.z, s.UpdateTimestamp, s.gridid, s.randomid FROM EdsmSystems s JOIN SystemNames n ON n.EdsmId = s.EdsmId"))
                 {
@@ -1215,7 +1215,7 @@ namespace EDDiscovery.DB
                     {
                         while (reader.Read())
                         {
-                            EDDiscovery2.DB.InMemory.SystemClassBase sys = new EDDiscovery2.DB.InMemory.SystemClassBase
+                            EDDiscovery.DB.InMemory.SystemClassBase sys = new EDDiscovery.DB.InMemory.SystemClassBase
                             {
                                 id = (long)reader["id"],
                                 name = (string)reader["name"]
@@ -1257,7 +1257,7 @@ namespace EDDiscovery.DB
                 maxdate = new DateTime(2010, 1, 1);
             }
 
-            Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = useCache ? GetEdsmSystemsLite() : new Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase>();
+            Dictionary<long, EDDiscovery.DB.InMemory.SystemClassBase> systemsByEdsmId = useCache ? GetEdsmSystemsLite() : new Dictionary<long, EDDiscovery.DB.InMemory.SystemClassBase>();
             int count = 0;
             int updatecount = 0;
             int insertcount = 0;
@@ -1393,7 +1393,7 @@ namespace EDDiscovery.DB
                                         else if (updatedate < maxdate - TimeSpan.FromHours(1))
                                             outoforder = true;
 
-                                        EDDiscovery2.DB.InMemory.SystemClassBase dbsys = null;
+                                        EDDiscovery.DB.InMemory.SystemClassBase dbsys = null;
 
                                         if (!useTempSystems)
                                         {
@@ -1407,7 +1407,7 @@ namespace EDDiscovery.DB
                                                 {
                                                     if (reader.Read())
                                                     {
-                                                        dbsys = new EDDiscovery2.DB.InMemory.SystemClassBase
+                                                        dbsys = new EDDiscovery.DB.InMemory.SystemClassBase
                                                         {
                                                             id = (long)reader["id"],
                                                             id_edsm = edsmid
@@ -1523,7 +1523,7 @@ namespace EDDiscovery.DB
 
         public static void RemoveHiddenSystems()
         {
-            EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
+            EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
 
             string strhiddensystems = edsm.GetHiddenSystems();
 
@@ -1640,7 +1640,7 @@ namespace EDDiscovery.DB
             logLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
 
             bool newfile;
-            bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
+            bool success = EDDiscovery.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
             {
                 SQLiteConnectionSystem.CreateTempSystemsTable();
 
@@ -1866,7 +1866,7 @@ namespace EDDiscovery.DB
 
             string systemFileName = Path.Combine(eddbdir, "systems_populated.jsonl");
 
-            bool success = EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl", systemFileName);
+            bool success = EDDiscovery.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl", systemFileName);
 
             if (success)
             {

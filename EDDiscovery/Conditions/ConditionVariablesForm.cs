@@ -42,7 +42,7 @@ namespace EDDiscovery
         };
 
         List<Group> groups;
-        EDDiscovery2.EDDTheme theme;
+        EDDiscovery.EDDTheme theme;
 
         int panelmargin = 3;
         const int vscrollmargin = 10;
@@ -57,7 +57,7 @@ namespace EDDiscovery
 
         // altops, if given, describes the operator of each variable.
 
-        public void Init(string t, EDDiscovery2.EDDTheme th, ConditionVariables vbs , Dictionary<string, string> altops = null,
+        public void Init(string t, EDDiscovery.EDDTheme th, ConditionVariables vbs , Dictionary<string, string> altops = null,
                                                                 bool showone = false ,
                                                                 bool showrefresh = false , bool showrefreshstate = false,
                                                                 bool allowadd = false, bool allownoexpand = false )

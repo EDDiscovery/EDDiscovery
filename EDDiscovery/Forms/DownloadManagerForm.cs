@@ -75,7 +75,7 @@ namespace EDDiscovery.Forms
 
         public void Init()
         {
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             font = new Font(theme.FontName, 10);
             bool winborder = theme.ApplyToForm(this, font);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
@@ -283,7 +283,7 @@ namespace EDDiscovery.Forms
                 panelVScroll.Controls.Add(g.panel);
             }
 
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             if ( theme != null )
                 theme.ApplyToControls(panelVScroll, font);
 

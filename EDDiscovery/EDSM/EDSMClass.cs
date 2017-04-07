@@ -16,8 +16,7 @@
 using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery2.DB;
-using EDDiscovery2.HTTP;
+using EDDiscovery.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -32,7 +31,7 @@ using System.Text;
 using System.Web;
 using System.Windows.Forms;
 
-namespace EDDiscovery2.EDSM
+namespace EDDiscovery.EDSM
 {
     public class EDSMClass : HttpCom
     {

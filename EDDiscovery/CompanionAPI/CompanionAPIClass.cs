@@ -1,4 +1,4 @@
-﻿using EDDiscovery2.HTTP;
+﻿using EDDiscovery.HTTP;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;

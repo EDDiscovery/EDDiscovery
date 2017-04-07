@@ -35,7 +35,7 @@ namespace EDDiscovery.Forms
         // lab sets the items, def can be less or null
         public static List<string> ShowDialog(Form p, string caption, string[] lab, string[] def, bool multiline = false, string[] tooltips = null)
         {
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
 
             int vstart = theme.WindowsFrame ? 20 : 40;
             int vspacing = multiline ? 60 : 40;
@@ -217,7 +217,7 @@ namespace EDDiscovery.Forms
             entries = e;
             tag = t;
 
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
 
             Size = size;
             FormBorderStyle = FormBorderStyle.FixedDialog;

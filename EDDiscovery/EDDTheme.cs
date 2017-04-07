@@ -27,7 +27,7 @@ using System.Diagnostics;
 using ExtendedControls;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public class EDDTheme
     {

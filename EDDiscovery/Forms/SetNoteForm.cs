@@ -1,4 +1,4 @@
-﻿using EDDiscovery2.EDSM;
+﻿using EDDiscovery.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,7 +30,7 @@ namespace EDDiscovery.Forms
             this.labelSummary.Text = he.EventSummary;
             this.labelDetails.Text = he.EventDescription;
 
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             theme.ApplyToForm(this);
         }
 

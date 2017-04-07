@@ -18,9 +18,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using EDDiscovery2.DB;
+using EDDiscovery.DB;
 
-namespace EDDiscovery
+namespace EDDiscovery.EliteDangerous
 {
     public class LogReaderBase
     {

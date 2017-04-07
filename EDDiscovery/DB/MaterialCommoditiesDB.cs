@@ -25,7 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery2.DB
+namespace EDDiscovery.DB
 {
     public class MaterialCommodityDB
     {

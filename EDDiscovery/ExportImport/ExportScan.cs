@@ -16,8 +16,8 @@
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery2;
-using EDDiscovery2.EDSM;
+
+using EDDiscovery.EDSM;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EDDiscovery.UserControls;
 
 namespace EDDiscovery.Export
 {

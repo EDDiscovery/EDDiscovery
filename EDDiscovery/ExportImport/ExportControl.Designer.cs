@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery
+namespace EDDiscovery.Export
 {
     partial class ExportControl
     {

@@ -19,12 +19,9 @@ using EDDiscovery.EDSM;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.Forms;
+using EDDiscovery.Export;
 using EDDiscovery.HTTP;
 using EDDiscovery.Win32Constants;
-using EDDiscovery2;
-using EDDiscovery2.DB;
-using EDDiscovery2.EDSM;
-using EDDiscovery2.Forms;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -66,7 +63,7 @@ namespace EDDiscovery
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1; } }
         public ExportControl ExportControl { get { return exportControl1; } }
-        public EDDiscovery2.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
+        public EDDiscovery.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
         public Audio.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
@@ -78,7 +75,7 @@ namespace EDDiscovery
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
 
-        public EDDiscovery2._3DMap.MapManager Map { get; private set; }
+        public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
         public event Action OnNewTarget;
 
@@ -184,7 +181,7 @@ namespace EDDiscovery
             savedRouteExpeditionControl1.InitControl(this);
             exportControl1.InitControl(this);
 
-            Map = new EDDiscovery2._3DMap.MapManager(EDDConfig.Options.NoWindowReposition, this);
+            Map = new EDDiscovery._3DMap.MapManager(EDDConfig.Options.NoWindowReposition, this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 

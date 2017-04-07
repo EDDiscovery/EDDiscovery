@@ -20,10 +20,9 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery.DB;
-using EDDiscovery2.EDSM;
-using EDDiscovery2.DB;
+using EDDiscovery.EDSM;
 using ExtendedControls;
-using EDDiscovery2;
+
 
 namespace EDDiscovery
 {

@@ -15,7 +15,7 @@
  */
 using System;
 
-namespace EDDiscovery2.DB.InMemory
+namespace EDDiscovery.DB.InMemory
 {
     // For when you need a minimal version and don't want to mess up the database. 
     // Useful for creation of test doubles

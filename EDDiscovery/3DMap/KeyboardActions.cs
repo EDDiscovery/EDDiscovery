@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery2._3DMap
+namespace EDDiscovery._3DMap
 {
     public class KeyboardActions
     {

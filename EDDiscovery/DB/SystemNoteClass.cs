@@ -21,7 +21,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 
-namespace EDDiscovery2.DB
+namespace EDDiscovery.DB
 {
     public class SystemNoteClass
     {

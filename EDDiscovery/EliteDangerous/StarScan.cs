@@ -15,7 +15,7 @@
  */
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.HTTP;
-using EDDiscovery2;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,7 +36,7 @@ namespace EDDiscovery.EliteDangerous
 
         public class SystemNode
         {
-            public EDDiscovery2.DB.ISystem system;
+            public EDDiscovery.DB.ISystem system;
             public SortedList<string, ScanNode> starnodes;
             public bool EDSMAdded = false;
         };
@@ -91,7 +91,7 @@ namespace EDDiscovery.EliteDangerous
         };
 
 
-        public SystemNode FindSystem(EDDiscovery2.DB.ISystem sys)
+        public SystemNode FindSystem(EDDiscovery.DB.ISystem sys)
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
 
@@ -218,7 +218,7 @@ namespace EDDiscovery.EliteDangerous
             return Process(je, hl[startindex].System);         // no relationship, add..
         }
 
-        public bool Process(JournalScan sc, EDDiscovery2.DB.ISystem sys)           // FALSE if you can't process it
+        public bool Process(JournalScan sc, EDDiscovery.DB.ISystem sys)           // FALSE if you can't process it
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
 
@@ -425,7 +425,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public SystemNode FindSystem(EDDiscovery2.DB.ISystem sys, bool useedsm)    // see if EDSM has a valid system, if so, add, return update SN
+        public SystemNode FindSystem(EDDiscovery.DB.ISystem sys, bool useedsm)    // see if EDSM has a valid system, if so, add, return update SN
         {
             SystemNode sn = FindSystem(sys);
 
@@ -433,7 +433,7 @@ namespace EDDiscovery.EliteDangerous
             {
                 if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.id_edsm > 0)   // null, or not scanned, and with EDSM ID
                 {
-                    List<JournalScan> jl = EDDiscovery2.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
+                    List<JournalScan> jl = EDDiscovery.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
 
                     if (jl != null)
                     {
