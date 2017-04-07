@@ -17,10 +17,11 @@ using System;
 using System.Collections.Generic;
 using EDDiscovery;
 using NFluent;
-using EDDiscovery2.DB;
+using EDDiscovery.DB;
 
 namespace EDDiscoveryTests
 {
+    using EDDiscovery.UserControls;
 #if false
     // Visual Studio Test Framework
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -39,7 +40,7 @@ namespace EDDiscoveryTests
     [TestClass]
     public class TravelHistoryFilterTests
     {
-        private ISystem sol = new EDDiscovery2.DB.InMemory.SystemClass
+        private ISystem sol = new EDDiscovery.DB.InMemory.SystemClass
         {
             name = "Sol",
             x = 0,
