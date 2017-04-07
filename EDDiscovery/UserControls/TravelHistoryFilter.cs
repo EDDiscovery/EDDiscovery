@@ -15,14 +15,13 @@
  */
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
-using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
     public class TravelHistoryFilter
     {

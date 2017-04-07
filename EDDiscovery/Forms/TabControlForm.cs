@@ -27,7 +27,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery.Forms
 {
     public partial class TabControlForm : Form          // class to hold one tab control, programatically add tabs, themeable
     {

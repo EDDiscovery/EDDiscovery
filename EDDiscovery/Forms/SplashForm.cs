@@ -23,7 +23,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Collections.Concurrent;
-using EDDiscovery2;
+
 using System.Threading.Tasks;
 
 namespace EDDiscovery.Forms

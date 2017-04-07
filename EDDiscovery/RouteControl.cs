@@ -30,7 +30,6 @@ using EDDiscovery.DB;
 using EDDiscovery;
 using System.Threading;
 using EMK.LightGeometry;
-using EDDiscovery2.DB;
 using EDDiscovery.EDSM;
 using System.Collections.Concurrent;
 

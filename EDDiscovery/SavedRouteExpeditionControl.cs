@@ -22,12 +22,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 using System.IO;
 using EMK.LightGeometry;
-using EDDiscovery.EDSM;
-using EDDiscovery2;
+
 using ExtendedControls;
 
 namespace EDDiscovery

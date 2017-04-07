@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 
-namespace EDDiscovery2.HTTP
+namespace EDDiscovery.HTTP
 {
     class DownloadFileHandler
     {

@@ -20,9 +20,8 @@ using System.Text;
 using System.Windows.Forms;
 using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
 
-namespace EDDiscovery2._3DMap
+namespace EDDiscovery._3DMap
 {
     public class MapManager
     {

@@ -16,8 +16,6 @@
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.DB;
-using EDDiscovery2;
-using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
@@ -34,7 +32,7 @@ using System.Globalization;
 using System.Data.Common;
 using Newtonsoft.Json.Linq;
 
-namespace EDDiscovery
+namespace EDDiscovery.EliteDangerous
 {
     public class NetLogClass
     {

@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EDDiscovery2.DB
+namespace EDDiscovery.DB
 {
     public interface ISystemBase : IEquatable<ISystemBase>
     {

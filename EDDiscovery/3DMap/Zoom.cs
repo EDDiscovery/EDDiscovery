@@ -19,7 +19,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace EDDiscovery2._3DMap
+namespace EDDiscovery._3DMap
 {
     class ZoomFov
     {

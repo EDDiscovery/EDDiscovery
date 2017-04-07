@@ -98,7 +98,7 @@ namespace EDDiscovery.Forms
 
             int ystart = 30;
 
-            EDDiscovery2.EDDTheme theme = EDDiscovery2.EDDTheme.Instance;
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             if (theme != null)  // paranoid
             {
                 fnt = new Font(theme.FontName, 12.0F);

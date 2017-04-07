@@ -129,7 +129,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (Reward - Donation), 0);
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery2.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
         {
             mlist.Completed(this);
         }

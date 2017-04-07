@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public class CameraDirectionMovementTracker       // keeps track of previous and works out how to present bitmaps
     {

@@ -26,7 +26,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using EDDiscovery;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
 
     /// <summary>

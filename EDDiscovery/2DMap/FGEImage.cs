@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using EDDiscovery;
 using System.Threading.Tasks;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public class FGEImage
     {
@@ -493,7 +493,7 @@ namespace EDDiscovery2
             List<Task<bool>> tasks = new List<Task<bool>>();
             foreach (string file in files)
             {
-                var task = EDDiscovery2.HTTP.DownloadFileHandler.BeginDownloadFile(
+                var task = EDDiscovery.HTTP.DownloadFileHandler.BeginDownloadFile(
                     "http://eddiscovery.astronet.se/Maps/" + file,
                     Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
                     (n) =>
@@ -514,7 +514,7 @@ namespace EDDiscovery2
         private static bool DownloadMapFile(string file, Action<string> logLine)
         {
             bool newfile = false;
-            if (EDDiscovery2.HTTP.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
+            if (EDDiscovery.HTTP.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
             {
                 if (newfile)
                     logLine("Downloaded map: " + file);

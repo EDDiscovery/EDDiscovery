@@ -20,7 +20,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace EDDiscovery2._3DMap
+namespace EDDiscovery._3DMap
 {
     
     public class PolygonTriangulator
@@ -389,7 +389,7 @@ namespace EDDiscovery2._3DMap
 
         static public void Test()       
         {
-            ///EDDiscovery2._3DMap.PolygonTriangulator.Test();
+            ///EDDiscovery._3DMap.PolygonTriangulator.Test();
             if (true)
             {
                 List<Vector2> points = new List<Vector2>();

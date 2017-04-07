@@ -24,9 +24,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections.Concurrent;
 using System.Threading;
-using EDDiscovery2.DB;
 using EDDiscovery.DB;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 
 namespace EDDiscovery.UserControls
 {

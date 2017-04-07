@@ -24,7 +24,7 @@ using System.Collections;
 using EDDiscovery;
 using System.Diagnostics;
 
-namespace EDDiscovery2._3DMap
+namespace EDDiscovery._3DMap
 {
     public interface IDrawingPrimative
     {

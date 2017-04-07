@@ -22,11 +22,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery;
-using EDDiscovery2.DB;
 using EDDiscovery.DB;
 using System.IO;
+using EDDiscovery.Forms;
 
-namespace EDDiscovery2
+namespace EDDiscovery
 {
     public partial class Settings : UserControl
     {

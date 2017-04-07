@@ -13,8 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery2;
-using EDDiscovery2.DB;
+
 using EDDiscovery.DB;
 using System;
 using System.Collections.Concurrent;

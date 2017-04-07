@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EDDiscovery
+namespace EDDiscovery.JSON
 {
     public class JSONConverters
     {

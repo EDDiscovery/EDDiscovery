@@ -22,19 +22,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.DB;
-using EDDiscovery2.DB;
-using EDDiscovery2.EDSM;
-using System.IO;
-using EMK.LightGeometry;
 using EDDiscovery.EDSM;
-using EDDiscovery2;
+using System.IO;
 using EDDiscovery.UserControls;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using EDDiscovery.Forms;
 
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
     public partial class UserControlExploration :  UserControlCommonBase
     {

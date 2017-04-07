@@ -16,9 +16,7 @@
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery2;
-using EDDiscovery2.DB;
-using EDDiscovery2.EDSM;
+using EDDiscovery.EDSM;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;

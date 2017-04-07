@@ -25,7 +25,7 @@ namespace EDDiscovery.DB
 {
     public class SQLiteConnectionUser : SQLiteConnectionED<SQLiteConnectionUser>
     {
-        protected static List<EDDiscovery2.EDCommander> EarlyCommanders;
+        protected static List<EDDiscovery.EDCommander> EarlyCommanders;
 
         public SQLiteConnectionUser() : base(EDDSqlDbSelection.EDDUser)
         {
@@ -411,9 +411,9 @@ namespace EDDiscovery.DB
             }
         }
 
-        public List<EDDiscovery2.EDCommander> GetCommanders()
+        public List<EDDiscovery.EDCommander> GetCommanders()
         {
-            List<EDDiscovery2.EDCommander> commanders = new List<EDDiscovery2.EDCommander>();
+            List<EDDiscovery.EDCommander> commanders = new List<EDDiscovery.EDCommander>();
 
             if (GetSettingInt("DBVer", 1) >= 102)
             {
@@ -423,7 +423,7 @@ namespace EDDiscovery.DB
                     {
                         while (reader.Read())
                         {
-                            EDDiscovery2.EDCommander edcmdr = new EDDiscovery2.EDCommander(reader);
+                            EDDiscovery.EDCommander edcmdr = new EDDiscovery.EDCommander(reader);
 
                             string name = Convert.ToString(reader["Name"]);
                             string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
@@ -437,7 +437,7 @@ namespace EDDiscovery.DB
             return commanders;
         }
 
-        public static List<EDDiscovery2.EDCommander> GetCommanders(SQLiteConnectionUser conn = null)
+        public static List<EDDiscovery.EDCommander> GetCommanders(SQLiteConnectionUser conn = null)
         {
             if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
             {
@@ -463,11 +463,11 @@ namespace EDDiscovery.DB
             }
             else
             {
-                return new List<EDDiscovery2.EDCommander>();
+                return new List<EDDiscovery.EDCommander>();
             }
         }
 
-        public static new List<EDDiscovery2.EDCommander> GetCommandersFromRegister(SQLiteConnectionUser conn = null)
+        public static new List<EDDiscovery.EDCommander> GetCommandersFromRegister(SQLiteConnectionUser conn = null)
         {
             if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
             {
@@ -496,7 +496,7 @@ namespace EDDiscovery.DB
             }
             else
             {
-                return new List<EDDiscovery2.EDCommander>();
+                return new List<EDDiscovery.EDCommander>();
             }
         }
 
@@ -517,7 +517,7 @@ namespace EDDiscovery.DB
             List<Object[]> ehl = new List<Object[]>();
             Dictionary<string, Dictionary<string, double>> dists = new Dictionary<string, Dictionary<string, double>>(StringComparer.CurrentCultureIgnoreCase);
 
-            List<EDDiscovery2.DB.TravelLogUnit> tlus = EDDiscovery2.DB.TravelLogUnit.GetAll().Where(t => t.type == 1).ToList();
+            List<EDDiscovery.DB.TravelLogUnit> tlus = EDDiscovery.DB.TravelLogUnit.GetAll().Where(t => t.type == 1).ToList();
 
             using (SQLiteConnectionOld conn = new SQLiteConnectionOld())
             {
@@ -598,7 +598,7 @@ namespace EDDiscovery.DB
                                 continue;
                             }
 
-                            EDDiscovery2.DB.TravelLogUnit tlu = tlus.Find(x => x.Name.Equals(tluname, StringComparison.InvariantCultureIgnoreCase));
+                            EDDiscovery.DB.TravelLogUnit tlu = tlus.Find(x => x.Name.Equals(tluname, StringComparison.InvariantCultureIgnoreCase));
 
                             array[15] = (tlu != null) ? (long)tlu.id : 0;      // even if we don't find it, tlu may be screwed up, still want to import
 

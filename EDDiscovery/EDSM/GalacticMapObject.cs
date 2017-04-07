@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery2._3DMap;
+using EDDiscovery._3DMap;
 using Newtonsoft.Json.Linq;
 using EDDiscovery.Vectors;
 using System;
