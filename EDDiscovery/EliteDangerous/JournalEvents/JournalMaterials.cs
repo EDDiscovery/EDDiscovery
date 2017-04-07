@@ -46,7 +46,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Encoded = evt["Encoded"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
         }
 
-        public Material[] Raw { get; set; }             //FDNAMES
+        public Material[] Raw { get; set; }             //FDNAMES on purpose
         public Material[] Manufactured { get; set; }
         public Material[] Encoded { get; set; }
 

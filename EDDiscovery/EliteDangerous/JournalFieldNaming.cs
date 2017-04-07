@@ -24,7 +24,15 @@ namespace EDDiscovery.EliteDangerous
 {
     static class JournalFieldNaming
     {
-        public static string RMat(string fdname)            // replacer for pretty print
+        public static string FixCommodityName(string fdname)      // instances in log on mining and mission entries of commodities in this form, back into fd form
+        {
+            if (fdname.Length >= 8 && fdname.StartsWith("$") && fdname.EndsWith("_name;", System.StringComparison.InvariantCultureIgnoreCase))
+                fdname = fdname.Substring(1, fdname.Length - 7); // 1 for '$' plus 6 for '_name;'
+
+            return fdname;
+        }
+
+        public static string RMat(string fdname)            // fix up fdname into a nicer name
         {
             EDDiscovery2.DB.MaterialCommodityDB mc = EDDiscovery2.DB.MaterialCommodityDB.GetCachedMaterial(fdname);
 
@@ -115,6 +123,11 @@ namespace EDDiscovery.EliteDangerous
         static public string GetBetterMissionName(string inname)
         {
             return inname.Replace("_name", "").SplitCapsWordFull();
+        }
+
+        static public string ShortenMissionName(string inname)
+        {
+            return inname.Replace("Mission ", "",StringComparison.InvariantCultureIgnoreCase).SplitCapsWordFull();
         }
 
         static Dictionary<string, string> replaceslots = new Dictionary<string, string>
@@ -272,7 +285,6 @@ namespace EDDiscovery.EliteDangerous
             return s;
         }
 
-
         static public string NormaliseFDItemName(string s)      // has to deal with $int and $hpt.. This takes the FD name and keeps it, but turns it into the form
         {                                                       // used by Coriolis/Frontier API
             //string x = s;
@@ -296,6 +308,15 @@ namespace EDDiscovery.EliteDangerous
             s = ModuleEDID.Instance.NormaliseShipName(s);
             return s;
         }
+
+        static public string GetBetterTargetTypeName(string s)      // has to deal with $ and underscored
+        {
+            //string x = s;
+            if (s.StartsWith("$"))
+                s = s.Substring(1);
+            return s.SplitCapsWordFull();
+        }
+
 
     }
 }

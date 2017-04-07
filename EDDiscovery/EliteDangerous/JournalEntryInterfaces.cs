@@ -43,8 +43,8 @@ namespace EDDiscovery.EliteDangerous
         void ShipInformation(ShipInformationList shp, SQLiteConnectionUser conn);
     }
 
-    public interface IPassengersJournalEntry
+    public interface IMissions
     {
-        void UpdatePassengers(PassengersList shp, SQLiteConnectionUser conn);
+        void UpdateMissions(MissionListAccumulator mlist, ISystem sys, string body, SQLiteConnectionUser conn);
     }
 }

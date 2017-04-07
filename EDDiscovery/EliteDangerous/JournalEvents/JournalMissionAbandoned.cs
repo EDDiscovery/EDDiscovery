@@ -22,13 +22,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters:
     //•	Name: name of mission
     [JournalEntryType(JournalTypeEnum.MissionAbandoned)]
-    public class JournalMissionAbandoned : JournalEntry
+    public class JournalMissionAbandoned : JournalEntry, IMissions
     {
         public JournalMissionAbandoned(JObject evt ) : base(evt, JournalTypeEnum.MissionAbandoned)
         {
             Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
             MissionId = evt["MissionID"].Int();
         }
+
         public string Name { get; set; }
         public int MissionId { get; set; }
 
@@ -40,5 +41,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             info = Name;
             detailed = "";
         }
+
+        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery2.DB.ISystem sys, string body , DB.SQLiteConnectionUser conn)
+        {
+            mlist.Abandoned(this);
+        }
+
     }
 }
