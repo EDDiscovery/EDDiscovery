@@ -277,6 +277,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\ControlHelpers.cs" />
+    <Compile Include="Controls\CustomDateTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\AutoCompleteTextBox.cs">
       <SubType>Component</SubType>
@@ -313,7 +316,6 @@
     <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
     <Compile Include="EliteDangerous\MissionList.cs" />
     <Compile Include="EliteDangerous\ModuleEDID.cs" />
-    <Compile Include="EliteDangerous\PassengersList.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
     <Compile Include="CompanionAPI\CompanionCredentials.cs" />
@@ -1117,6 +1119,7 @@
     <None Include="Resources\clearsavedgame.png" />
     <None Include="Resources\coriolis.png" />
     <None Include="Resources\excel.png" />
+    <None Include="Resources\Calendar.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

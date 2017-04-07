@@ -69,14 +69,19 @@ namespace EDDiscovery.UserControls
             this.pColInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomPrev = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.customDateTimePickerEnd = new ExtendedControls.CustomDateTimePicker();
+            this.customDateTimePickerStart = new ExtendedControls.CustomDateTimePicker();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.labelValue = new System.Windows.Forms.Label();
             this.dataViewScrollerPanelCurrent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCurrent)).BeginInit();
             this.panelPrev.SuspendLayout();
             this.dataViewScrollerPanelPrev.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrevious)).BeginInit();
+            this.panelButtons.SuspendLayout();
             this.panelCurrent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -364,12 +369,63 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.labelValue);
+            this.panelButtons.Controls.Add(this.label1);
+            this.panelButtons.Controls.Add(this.customDateTimePickerEnd);
+            this.panelButtons.Controls.Add(this.customDateTimePickerStart);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
             this.toolTip1.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(228, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(16, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "to";
+            // 
+            // customDateTimePickerEnd
+            // 
+            this.customDateTimePickerEnd.BorderColor = System.Drawing.Color.Transparent;
+            this.customDateTimePickerEnd.BorderColorScaling = 0.5F;
+            this.customDateTimePickerEnd.Checked = false;
+            this.customDateTimePickerEnd.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.customDateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.customDateTimePickerEnd.Location = new System.Drawing.Point(251, 3);
+            this.customDateTimePickerEnd.Name = "customDateTimePickerEnd";
+            this.customDateTimePickerEnd.SelectedColor = System.Drawing.Color.Yellow;
+            this.customDateTimePickerEnd.ShowCheckBox = true;
+            this.customDateTimePickerEnd.ShowUpDown = false;
+            this.customDateTimePickerEnd.Size = new System.Drawing.Size(218, 20);
+            this.customDateTimePickerEnd.TabIndex = 0;
+            this.customDateTimePickerEnd.Text = "customDateTimePicker1";
+            this.customDateTimePickerEnd.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.customDateTimePickerEnd.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            this.customDateTimePickerEnd.ValueChanged += new System.EventHandler(this.customDateTimePickerEnd_ValueChanged);
+            // 
+            // customDateTimePickerStart
+            // 
+            this.customDateTimePickerStart.BorderColor = System.Drawing.Color.Transparent;
+            this.customDateTimePickerStart.BorderColorScaling = 0.5F;
+            this.customDateTimePickerStart.Checked = false;
+            this.customDateTimePickerStart.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.customDateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.customDateTimePickerStart.Location = new System.Drawing.Point(4, 3);
+            this.customDateTimePickerStart.Name = "customDateTimePickerStart";
+            this.customDateTimePickerStart.SelectedColor = System.Drawing.Color.Yellow;
+            this.customDateTimePickerStart.ShowCheckBox = true;
+            this.customDateTimePickerStart.ShowUpDown = false;
+            this.customDateTimePickerStart.Size = new System.Drawing.Size(220, 20);
+            this.customDateTimePickerStart.TabIndex = 0;
+            this.customDateTimePickerStart.Text = "customDateTimePicker1";
+            this.customDateTimePickerStart.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.customDateTimePickerStart.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            this.customDateTimePickerStart.ValueChanged += new System.EventHandler(this.customDateTimePickerStart_ValueChanged);
             // 
             // panelCurrent
             // 
@@ -402,6 +458,14 @@ namespace EDDiscovery.UserControls
             this.splitContainer1.SplitterDistance = 266;
             this.splitContainer1.TabIndex = 3;
             // 
+            // labelValue
+            // 
+            this.labelValue.AutoSize = true;
+            this.labelValue.Location = new System.Drawing.Point(487, 7);
+            this.labelValue.Name = "labelValue";
+            this.labelValue.Size = new System.Drawing.Size(0, 13);
+            this.labelValue.TabIndex = 1;
+            // 
             // UserControlMissions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -414,6 +478,8 @@ namespace EDDiscovery.UserControls
             this.panelPrev.ResumeLayout(false);
             this.dataViewScrollerPanelPrev.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrevious)).EndInit();
+            this.panelButtons.ResumeLayout(false);
+            this.panelButtons.PerformLayout();
             this.panelCurrent.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -453,5 +519,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn pColResult;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColInfo;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private ExtendedControls.CustomDateTimePicker customDateTimePickerStart;
+        private System.Windows.Forms.Label label1;
+        private ExtendedControls.CustomDateTimePicker customDateTimePickerEnd;
+        private System.Windows.Forms.Label labelValue;
     }
 }

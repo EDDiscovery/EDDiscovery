@@ -40,6 +40,17 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public long Value
+        {
+            get
+            {
+                if (State != MissionState.StateTypes.Completed)
+                    return 0;
+                else
+                    return Completed.Value;
+            }
+        }
+
         public MissionState(JournalMissionAccepted m, EDDiscovery2.DB.ISystem s, string b)
         {
             Mission = m;

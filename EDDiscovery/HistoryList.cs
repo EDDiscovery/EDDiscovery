@@ -83,9 +83,6 @@ namespace EDDiscovery
         public ModulesInStore StoredModules { get { return storedmodules; } set { storedmodules = value; } }
         public MissionList MissionList { get { return missionlist; } set { missionlist = value; } }
         
-        // TBD        public PassengersList PassengersList { get { return passengerslist; } }
-        // PassengersList passengerslist;
-
         // Calculated values, not from JE
 
         public SystemNoteClass snc;     // system note class found attached to this entry

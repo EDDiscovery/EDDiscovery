@@ -182,6 +182,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         }
 
         public string RewardOrDonation { get { return Reward.HasValue ? Reward.Value.ToStringInvariant() : (Donation.HasValue ? (-Donation.Value).ToStringInvariant() : ""); } }
+        public long Value { get { return Reward.HasValue ? Reward.Value : (Donation.HasValue ? (-Donation.Value) : 0); } }
 
         public string MissionInformation()          // other stuff for the mission panel which it does not already cover or accepted has
         {
