@@ -115,6 +115,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewLedger.TabIndex = 1;
             this.dataGridViewLedger.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewMC_ColumnWidthChanged);
+            this.dataGridViewLedger.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
             this.dataGridViewLedger.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewLedger_MouseDown);
             this.dataGridViewLedger.Resize += new System.EventHandler(this.dataGridViewMC_Resize);
             // 
