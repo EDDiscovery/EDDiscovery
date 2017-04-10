@@ -306,11 +306,12 @@ namespace EDDiscovery
             JObject jo = new JObject();
             foreach (EDCommander cmdr in _commandersDict.Values)
             {
-                jo[cmdr.Name] = new JObject(new
-                {
-                    NetLogDir = cmdr.NetLogDir,
-                    JournalDir = cmdr.JournalDir
-                });
+                JObject j = new JObject();
+                if (cmdr.NetLogDir != null)
+                    jo["NetLogDir"] = cmdr.NetLogDir;
+                if (cmdr.JournalDir != null)
+                    jo["JournalDir"] = cmdr.JournalDir;
+                jo[cmdr.Name] = j;
             }
 
             using (Stream stream = File.OpenWrite(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp")))
