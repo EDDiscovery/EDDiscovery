@@ -133,6 +133,7 @@ namespace EDDiscovery.UserControls
                 DateTime enddate = customDateTimePickerEnd.Checked ? customDateTimePickerEnd.Value : new DateTime(2999, 1, 1);
 
                 long value = 0;
+                int completed = 0, abandonded = 0, failed = 0;
 
                 foreach (MissionState ms in mprev)
                 {
@@ -145,6 +146,13 @@ namespace EDDiscovery.UserControls
 
                         if (cmpe <= 0)
                         {
+                            if (ms.State == MissionState.StateTypes.Abandoned)
+                                abandonded++;
+                            else if (ms.State == MissionState.StateTypes.Completed)
+                                completed++;
+                            else if (ms.State == MissionState.StateTypes.Failed)
+                                failed++;
+
                             object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
@@ -165,7 +173,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 labelValue.Visible = (value != 0);
-                labelValue.Text = "Value: " + value.ToStringInvariant();
+                labelValue.Text = "Value: " + value.ToStringInvariant() + " C:" + completed.ToStringInvariant() + " A:" + abandonded.ToStringInvariant() + " F:" + failed.ToStringInvariant();
             }
         }
 

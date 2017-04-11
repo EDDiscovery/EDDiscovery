@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.EliteDangerous
 {
-    [System.Diagnostics.DebuggerDisplay("Mat {name} count {count} left {scratchpad_left}")]
+    [System.Diagnostics.DebuggerDisplay("Mat {name} count {count} left {scratchpad}")]
     public class MaterialCommodities               // in memory version of it
     {
         public int count { get; set; }
@@ -32,7 +32,7 @@ namespace EDDiscovery.EliteDangerous
 
         public MaterialCommodities(MaterialCommodityDB c)
         {
-            count = scratchpad_left = 0;
+            count = scratchpad = 0;
             price = 0;
             this.Details = c;
         }
@@ -52,7 +52,7 @@ namespace EDDiscovery.EliteDangerous
         public static string MaterialManufacturedCategory { get { return MaterialCommodityDB.MaterialManufacturedCategory; } }
         #endregion
 
-        public int scratchpad_left { get; set; }        // for synthesis dialog..
+        public int scratchpad { get; set; }        // for synthesis dialog..
     }
 
 
@@ -209,18 +209,22 @@ namespace EDDiscovery.EliteDangerous
         static public void ResetUsed(List<MaterialCommodities> mcl)
         {
             for (int i = 0; i < mcl.Count; i++)
-                mcl[i].scratchpad_left = mcl[i].count;
+                mcl[i].scratchpad = mcl[i].count;
         }
 
-        static public Tuple<int, int, string> HowManyLeft(List<MaterialCommodities> list, Recipe r, int tomake = 0)
+        //return maximum can make, how many made, needed string.
+
+        static public Tuple<int, int, string> HowManyLeft(List<MaterialCommodities> list, Recipe r, List<MaterialCommodities> shoppinglist = null, int tomake = 0 )
         {
             int max = int.MaxValue;
             StringBuilder needed = new StringBuilder(64);
 
             for (int i = 0; i < r.ingredients.Length; i++)
             {
-                int mi = list.FindIndex(x => x.shortname.Equals(r.ingredients[i]));
-                int got = (mi > 0) ? list[mi].scratchpad_left : 0;
+                string ingredient = r.ingredients[i];
+
+                int mi = list.FindIndex(x => x.shortname.Equals(ingredient));
+                int got = (mi > 0) ? list[mi].scratchpad : 0;
                 int sets = got / r.count[i];
 
                 max = Math.Min(max, sets);
@@ -229,6 +233,23 @@ namespace EDDiscovery.EliteDangerous
 
                 if (got < need )
                 {
+                    if (shoppinglist != null)
+                    {
+                        int shopentry = shoppinglist.FindIndex(x => x.shortname.Equals(ingredient));
+                        if (shopentry >= 0)
+                            shoppinglist[shopentry].scratchpad += (need - got);
+                        else
+                        {
+                            MaterialCommodityDB db = MaterialCommodityDB.GetCachedMaterialByShortName(ingredient);
+                            if (db != null)       // MUST be there, its well know, but will check..
+                            {
+                                MaterialCommodities mc = new MaterialCommodities(db);        // make a new entry
+                                mc.scratchpad = (need - got);
+                                shoppinglist.Add(mc);
+                            }
+                        }
+                    }
+
                     string s = (need - got).ToStringInvariant() + r.ingredients[i];
                     if (needed.Length == 0)
                         needed.Append("Need:" + s);
@@ -249,7 +270,7 @@ namespace EDDiscovery.EliteDangerous
                     int mi = list.FindIndex(x => x.shortname.Equals(r.ingredients[i]));
                     System.Diagnostics.Debug.Assert(mi != -1);
                     int used = r.count[i] * made;
-                    list[mi].scratchpad_left -= used;
+                    list[mi].scratchpad -= used;
                     usedstr.AppendPrePad(used.ToStringInvariant() + list[mi].shortname, ",");
                 }
 
