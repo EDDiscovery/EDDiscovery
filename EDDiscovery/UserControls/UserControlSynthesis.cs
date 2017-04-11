@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             comboBoxSynthesis.SelectedItem = comboBoxSynthesis.Items.Contains(s) ? s : "All";
             comboBoxSynthesis.Enabled = true;
 
-            for (int i = 0; i < Recipes.Count; i++)         // pre-fill array
+            for (int i = 0; i < Recipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
             {
                 int rno = Order[i];
                 MaterialCommoditiesList.Recipe r = Recipes[rno];
@@ -121,11 +121,13 @@ namespace EDDiscovery.UserControls
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
 
+                int fdrow = dataGridViewSynthesis.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
+
                 MaterialCommoditiesList.ResetUsed(mcl);
 
                 string sel = (string)comboBoxSynthesis.SelectedItem;
 
-                for (int i = 0; i < dataGridViewSynthesis.Rows.Count; i++)
+                for (int i = 0; i < Recipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                     dataGridViewSynthesis.Rows[i].Cells[1].Value = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno]).Item1.ToStringInvariant();
@@ -136,15 +138,18 @@ namespace EDDiscovery.UserControls
                         visible = (rno >= FirstAmmoRow);
                     if (sel == "SRV")
                         visible = (rno>= FirstSRVRow && rno< FirstAmmoRow);
+
                     dataGridViewSynthesis.Rows[i].Visible = visible;
                 }
 
-                for (int i = 0; i < dataGridViewSynthesis.Rows.Count; i++)
+                List<MaterialCommodities> shoppinglist = new List<MaterialCommodities>();
+
+                for (int i = 0; i < Recipes.Count; i++)
                 {
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
                         int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], Wanted[rno]);
+                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], shoppinglist, Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -155,6 +160,20 @@ namespace EDDiscovery.UserControls
                         }
                     }
                 }
+
+                dataGridViewSynthesis.RowCount = Recipes.Count;         // truncate previous shopping list..
+
+                shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.name.CompareTo(right.name); });
+
+                foreach( MaterialCommodities c in shoppinglist )        // and add new..
+                {
+                    Object[] values = { c.name, "", c.scratchpad.ToStringInvariant(), "", c.shortname };
+                    int rn = dataGridViewSynthesis.Rows.Add(values);
+                    dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
+                }
+
+                if ( fdrow>=0 && dataGridViewSynthesis.Rows[fdrow].Visible )        // better check visible, may have changed..
+                    dataGridViewSynthesis.FirstDisplayedScrollingRowIndex = fdrow;
             }
         }
 
@@ -189,9 +208,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #region receipies
-
-
         int[] Restore(string plist, int def , int length)
         {
             int i = 0;
@@ -205,7 +221,6 @@ namespace EDDiscovery.UserControls
 
             return newarray;
         }
-        #endregion
 
         private void dataGridViewModules_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
@@ -234,9 +249,9 @@ namespace EDDiscovery.UserControls
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
             {
                 // If the mouse moves outside the rectangle, start the drag.
-                if (moveMoveDragBox != Rectangle.Empty &&!moveMoveDragBox.Contains(e.X, e.Y))
+                if (moveMoveDragBox != Rectangle.Empty && !moveMoveDragBox.Contains(e.X, e.Y))
                 {
-                    //System.Diagnostics.Debug.WriteLine("move: Drag Start");
+//                    System.Diagnostics.Debug.WriteLine("move: Drag Start");
                     dataGridViewSynthesis.DoDragDrop( dataGridViewSynthesis.Rows[rowFrom], DragDropEffects.Move);
                 }
             }
@@ -246,13 +261,11 @@ namespace EDDiscovery.UserControls
         {
             rowFrom = dataGridViewSynthesis.HitTest(e.X, e.Y).RowIndex;
 
-            if (rowFrom >= 0)
+            if (rowFrom >= 0 && rowFrom < Recipes.Count)        // only can drag recipes area..
             {
                 Size dragSize = SystemInformation.DragSize;
-                //System.Diagnostics.Debug.WriteLine("move: Mouse down");
                 moveMoveDragBox = new Rectangle(new Point(e.X - (dragSize.Width / 2),
-                                                               e.Y - (dragSize.Height / 2)),
-                                                        dragSize);
+                                                               e.Y - (dragSize.Height / 2)), dragSize);
             }
             else
                 moveMoveDragBox = Rectangle.Empty;
@@ -266,19 +279,17 @@ namespace EDDiscovery.UserControls
         private void dataGridViewSynthesis_DragDrop(object sender, DragEventArgs e)
         {
             Point clientPoint = dataGridViewSynthesis.PointToClient(new Point(e.X, e.Y));
-
             int droprow = dataGridViewSynthesis.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
+            //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " drop at " + droprow);
 
             // If the drag operation was a move then remove and insert the row.
-            if (e.Effect == DragDropEffects.Move && droprow>=0 )
+            if (e.Effect == DragDropEffects.Move && droprow>=0 && droprow < Recipes.Count )
             {
                 DataGridViewRow rowTo = e.Data.GetData( typeof(DataGridViewRow)) as DataGridViewRow;
                 dataGridViewSynthesis.Rows.RemoveAt(rowFrom);
                 dataGridViewSynthesis.Rows.Insert(droprow, rowTo);
 
-                System.Diagnostics.Debug.Assert(dataGridViewSynthesis.Rows.Count == Order.Length);
-
-                for (int i = 0; i < dataGridViewSynthesis.Rows.Count; i++)
+                for (int i = 0; i < Recipes.Count; i++)
                     Order[i] = (int)dataGridViewSynthesis.Rows[i].Tag;          // reset the order array
 
                 //for (int i = 0; i < 10; i++)   System.Diagnostics.Debug.WriteLine(i.ToString() + "=" + Order[i]);
@@ -303,7 +314,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.Recipe( "SRV Ammo Standard","1P,1Se,1Mn,1Mo" ),
             new MaterialCommoditiesList.Recipe( "SRV Ammo Basic","1P,2S" ),
 
-            new MaterialCommoditiesList.Recipe( "SRV Repair Premium","2V,1Z,2Cr,1W,1Te" ),
+            new MaterialCommoditiesList.Recipe( "SRV Repair Premium","2V,1Zn,2Cr,1W,1Te" ),
             new MaterialCommoditiesList.Recipe( "SRV Repair Standard","3Ni,2V,1Mn,1Mo" ),
             new MaterialCommoditiesList.Recipe( "SRV Repair Basic","2Fe,1Ni" ),
 
