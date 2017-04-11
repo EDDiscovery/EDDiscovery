@@ -230,6 +230,8 @@ namespace EDDiscovery.EliteDangerous
             //string x = s;
             if (s.StartsWith("$int_") || s.StartsWith("$hpt_"))
                 s = s.Substring(5);
+            else if (s.StartsWith("$"))
+                s = s.Substring(1);
             if (s.EndsWith("_name;"))
                 s = s.Substring(0, s.Length - 6);
 

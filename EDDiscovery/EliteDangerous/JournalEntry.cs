@@ -1035,7 +1035,7 @@ namespace EDDiscovery.EliteDangerous
             if (jtype == null)
             {
                 System.Diagnostics.Trace.WriteLine("Unknown event: " + Eventstr);
-                return new JournalUnknown(jo, Eventstr);
+                return new JournalUnknown(jo);
             }
             else
                 return (JournalEntry)Activator.CreateInstance(jtype, jo);
