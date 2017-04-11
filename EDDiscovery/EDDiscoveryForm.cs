@@ -238,7 +238,7 @@ namespace EDDiscovery
 
                 if (EDDConfig.Options.Debug)
                 {
-                    button_test.Visible = true;
+                    buttonReloadActions.Visible = true;
                 }
 
             }
@@ -528,7 +528,7 @@ namespace EDDiscovery
 
 #region Buttons, Mouse, Menus, NotifyIcon
 
-        private void button_test_Click(object sender, EventArgs e)
+        private void buttonReloadActions_Click(object sender, EventArgs e)
         {
             actioncontroller.ReLoad();
             actioncontroller.ActionRun("onStartup", "ProgramEvent");
