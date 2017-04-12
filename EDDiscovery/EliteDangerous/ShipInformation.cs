@@ -64,7 +64,7 @@ namespace EDDiscovery.EliteDangerous
                 {
                     double cap = FuelCapacity;
                     if (cap > 0)
-                        sb.Append(" Fuel Cap " + cap);
+                        sb.Append(" Fuel Cap " + cap.ToString("0.#"));
                     cap = CargoCapacity();
                     if (cap > 0)
                         sb.Append(" Cargo Cap " + cap);

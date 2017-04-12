@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
             // 
             // UpgradeCol
             // 
-            this.UpgradeCol.HeaderText = "Upgrade";
+            this.UpgradeCol.HeaderText = "Upgrade/Mat";
             this.UpgradeCol.MinimumWidth = 50;
             this.UpgradeCol.Name = "UpgradeCol";
             this.UpgradeCol.ReadOnly = true;

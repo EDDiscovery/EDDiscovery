@@ -163,5 +163,20 @@ namespace EDDiscovery
 
             }
         }
+
+        public static void TestJournal()
+        {
+            foreach (string s in Enum.GetNames(typeof(JournalTypeEnum)))
+            {
+                string json = "{ \"timestamp\":\"2017-04-05T11:16:19Z\", \"event\":\"" + s + "\" }";
+
+                JournalEntry j = JournalEntry.CreateJournalEntry(json);
+
+                Debug.Assert(j.Icon != null);
+
+                string summary, info, detailed;
+                j.FillInformation(out summary, out info, out detailed);
+            }
+        }
     }
 }
