@@ -88,7 +88,11 @@ namespace EDDiscovery
         {
             get
             {
-                return EDDConfig.Options.Debug && _canSkipSlowUpdates;
+#if DEBUG
+                return _canSkipSlowUpdates;
+#else
+                return false;
+#endif               
             }
             set
             {
@@ -263,9 +267,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region Update at start
+#region Update at start
 
         public void Update(bool write = true, SQLiteConnectionUser conn = null)     // call at start to populate above
         {
@@ -296,9 +300,9 @@ namespace EDDiscovery
 
         }
 
-        #endregion
+#endregion
 
-        #region Mapping colours
+#region Mapping colours
 
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
@@ -365,9 +369,9 @@ namespace EDDiscovery
         }
 
 
-        #endregion
+#endregion
 
-        #region Option control
+#region Option control
 
         public enum EDSMServerType
         {
@@ -592,9 +596,9 @@ namespace EDDiscovery
 
         public static OptionsClass Options { get; } = new OptionsClass();
 
-        #endregion
+#endregion
 
-        #region User Paths
+#region User Paths
 
         /// User-specified paths to directories and files on the computer
         /// </summary>
@@ -609,13 +613,13 @@ namespace EDDiscovery
         /// </remarks>
         public class UserPathsClass
         {
-            #region Properties
+#region Properties
             public string EDDirectory { get; set; }
             public string ImageHandlerOutputDir { get; set; }
             public string ImageHandlerScreenshotsDir { get; set; }
-            #endregion
+#endregion
 
-            #region Methods
+#region Methods
 
             /// <summary>
             /// Loads the paths from the database and from UserPaths.json
@@ -685,9 +689,9 @@ namespace EDDiscovery
                 File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json"));
             }
 
-            #endregion
+#endregion
         }
 
-        #endregion
+#endregion
     }
 }

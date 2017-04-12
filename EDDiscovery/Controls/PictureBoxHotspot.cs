@@ -94,6 +94,10 @@ namespace ExtendedControls
                     img = altimg;
                     altimg = i;
 
+                    bool io = imgowned;     // swap tags
+                    imgowned = altimgowned;
+                    altimgowned = io;
+
                     //System.Diagnostics.Debug.WriteLine("Element @ " + pos + " " + inaltimg);
                     if (surface != null)
                     {
@@ -199,10 +203,10 @@ namespace ExtendedControls
             return lab;
         }
 
-        public ImageElement AddImage(Rectangle p, Image img, Object tag = null, string tiptext = null, bool imgowned = true)
+        public ImageElement AddImage(Rectangle p, Image img, Object tag = null, string tiptext = null, bool imgowned = true)    // make sure pushes it in..
         {
             ImageElement lab = new ImageElement();
-            lab.Image(p,img,tag,tiptext);
+            lab.Image(p,img,tag,tiptext,imgowned);
             elements.Add(lab);
             return lab;
         }

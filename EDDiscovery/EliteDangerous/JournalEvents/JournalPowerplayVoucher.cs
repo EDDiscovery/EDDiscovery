@@ -29,8 +29,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Power = evt["Power"].Str();
 
-            Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
+            if ( !evt.Value<JArray>("Systems").Empty() )
+                Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
         }
+
         public string Power { get; set; }
         public string[] Systems { get; set; }
 

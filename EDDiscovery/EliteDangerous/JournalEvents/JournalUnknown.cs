@@ -24,9 +24,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     // For "new" unknown event EDD  not knows.
     public class JournalUnknown : JournalEntry
     {
-        public JournalUnknown(JObject jo, string typestr ) : base(jo, JournalTypeEnum.Unknown)
+        public JournalUnknown(JObject evt) : base(evt, JournalTypeEnum.Unknown)
         {
-            EventTypeStr = typestr;
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.genericevent; } }

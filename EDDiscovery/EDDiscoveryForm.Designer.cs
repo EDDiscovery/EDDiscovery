@@ -106,7 +106,7 @@ namespace EDDiscovery
             this.exportControl1 = new EDDiscovery.Export.ExportControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery.Settings();
-            this.button_test = new ExtendedControls.ButtonExt();
+            this.buttonReloadActions = new ExtendedControls.ButtonExt();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
@@ -142,7 +142,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(222, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -157,7 +157,7 @@ namespace EDDiscovery
             this.showAllPopoutsInTaskBarToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // show2DMapsToolStripMenuItem
@@ -214,7 +214,7 @@ namespace EDDiscovery
             // 
             this.showAllInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.sendtext;
             this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
-            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.showAllInTaskBarToolStripMenuItem.Text = "&Show All In Task Bar";
             this.showAllInTaskBarToolStripMenuItem.Click += new System.EventHandler(this.showAllInTaskBarToolStripMenuItem_Click);
             // 
@@ -222,7 +222,7 @@ namespace EDDiscovery
             // 
             this.turnOffAllTransparencyToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.dockinggranted;
             this.turnOffAllTransparencyToolStripMenuItem.Name = "turnOffAllTransparencyToolStripMenuItem";
-            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.turnOffAllTransparencyToolStripMenuItem.Text = "&Turn Off All Transparency";
             this.turnOffAllTransparencyToolStripMenuItem.Click += new System.EventHandler(this.turnOffAllTransparencyToolStripMenuItem_Click);
             // 
@@ -689,19 +689,19 @@ namespace EDDiscovery
             this.settings.Size = new System.Drawing.Size(979, 665);
             this.settings.TabIndex = 0;
             // 
-            // button_test
+            // buttonReloadActions
             // 
-            this.button_test.BorderColorScaling = 1.25F;
-            this.button_test.ButtonColorScaling = 0.5F;
-            this.button_test.ButtonDisabledScaling = 0.5F;
-            this.button_test.Location = new System.Drawing.Point(772, -1);
-            this.button_test.Name = "button_test";
-            this.button_test.Size = new System.Drawing.Size(41, 23);
-            this.button_test.TabIndex = 1;
-            this.button_test.Text = "Test";
-            this.button_test.UseVisualStyleBackColor = true;
-            this.button_test.Visible = false;
-            this.button_test.Click += new System.EventHandler(this.button_test_Click);
+            this.buttonReloadActions.BorderColorScaling = 1.25F;
+            this.buttonReloadActions.ButtonColorScaling = 0.5F;
+            this.buttonReloadActions.ButtonDisabledScaling = 0.5F;
+            this.buttonReloadActions.Location = new System.Drawing.Point(752, 0);
+            this.buttonReloadActions.Name = "buttonReloadActions";
+            this.buttonReloadActions.Size = new System.Drawing.Size(71, 23);
+            this.buttonReloadActions.TabIndex = 1;
+            this.buttonReloadActions.Text = "Reload-A";
+            this.buttonReloadActions.UseVisualStyleBackColor = true;
+            this.buttonReloadActions.Visible = false;
+            this.buttonReloadActions.Click += new System.EventHandler(this.buttonReloadActions_Click);
             // 
             // panel_minimize
             // 
@@ -808,7 +808,7 @@ namespace EDDiscovery
             this.Controls.Add(this.panel_eddiscovery);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panelInfo);
-            this.Controls.Add(this.button_test);
+            this.Controls.Add(this.buttonReloadActions);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.panel_close);
             this.Controls.Add(this.menuStrip1);
@@ -848,7 +848,7 @@ namespace EDDiscovery
         }
 
         #endregion
-        private ExtendedControls.ButtonExt button_test;
+        private ExtendedControls.ButtonExt buttonReloadActions;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;

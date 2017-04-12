@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.DB
 {
+   // [System.Diagnostics.DebuggerDisplay("MatDB {category} {name} {fdname} {type} {shortname}")]
     public class MaterialCommodityDB
     {
         public long id { get; set; }
@@ -48,6 +49,13 @@ namespace EDDiscovery.DB
         public static MaterialCommodityDB GetCachedMaterial(string fdname)
         {
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
+        }
+
+        public static MaterialCommodityDB GetCachedMaterialByShortName(string shortname)
+        {
+            List<MaterialCommodityDB> lst = cachelist.Values.ToList();
+            int i = lst.FindIndex(x => x.shortname.Equals(shortname));
+            return i >= 0 ? lst[i] : null;
         }
 
         public MaterialCommodityDB()
