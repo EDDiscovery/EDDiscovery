@@ -66,38 +66,29 @@ namespace EDDiscovery
             this.textBoxHomeSystem = new ExtendedControls.AutoCompleteTextBox();
             this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.groupBox3 = new ExtendedControls.GroupBoxCustom();
+            this.checkBoxMinimizeToNotifyIcon = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxUseNotifyIcon = new ExtendedControls.CheckBoxCustom();
             this.checkBoxFocusNewSystem = new ExtendedControls.CheckBoxCustom();
             this.checkBoxUTC = new ExtendedControls.CheckBoxCustom();
             this.checkBoxOrderRowsInverted = new ExtendedControls.CheckBoxCustom();
             this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
             this.checkboxSkipSlowUpdates = new ExtendedControls.CheckBoxCustom();
             this.groupBox4 = new ExtendedControls.GroupBoxCustom();
+            this.buttonEditCommander = new ExtendedControls.ButtonExt();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
-            this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnJournalDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnSyncToEDSM = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColumnSyncFromEDSM = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColumnSyncToEddn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColumnDeleted = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColumnNetLogDirOld = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.checkBoxUseNotifyIcon = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxMinimizeToNotifyIcon = new ExtendedControls.CheckBoxCustom();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
+            this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip
@@ -437,6 +428,42 @@ namespace EDDiscovery
             this.groupBox3.TextPadding = 0;
             this.groupBox3.TextStartPosition = -1;
             // 
+            // checkBoxMinimizeToNotifyIcon
+            // 
+            this.checkBoxMinimizeToNotifyIcon.AutoSize = true;
+            this.checkBoxMinimizeToNotifyIcon.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxMinimizeToNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxMinimizeToNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxMinimizeToNotifyIcon.FontNerfReduction = 0.5F;
+            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(182, 115);
+            this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
+            this.checkBoxMinimizeToNotifyIcon.Size = new System.Drawing.Size(179, 17);
+            this.checkBoxMinimizeToNotifyIcon.TabIndex = 6;
+            this.checkBoxMinimizeToNotifyIcon.Text = "Minimize to notification area icon";
+            this.checkBoxMinimizeToNotifyIcon.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxMinimizeToNotifyIcon, "Minimize the main window to the system notification area (system tray) icon.");
+            this.checkBoxMinimizeToNotifyIcon.UseVisualStyleBackColor = true;
+            this.checkBoxMinimizeToNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxMinimizeToNotifyIcon_CheckedChanged);
+            // 
+            // checkBoxUseNotifyIcon
+            // 
+            this.checkBoxUseNotifyIcon.AutoSize = true;
+            this.checkBoxUseNotifyIcon.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxUseNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxUseNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxUseNotifyIcon.FontNerfReduction = 0.5F;
+            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(17, 115);
+            this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
+            this.checkBoxUseNotifyIcon.Size = new System.Drawing.Size(154, 17);
+            this.checkBoxUseNotifyIcon.TabIndex = 5;
+            this.checkBoxUseNotifyIcon.Text = "Show notification area icon";
+            this.checkBoxUseNotifyIcon.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxUseNotifyIcon, "Show a system notification area (system tray) icon for EDDiscovery.");
+            this.checkBoxUseNotifyIcon.UseVisualStyleBackColor = true;
+            this.checkBoxUseNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxUseNotifyIcon_CheckedChanged);
+            // 
             // checkBoxFocusNewSystem
             // 
             this.checkBoxFocusNewSystem.AutoSize = true;
@@ -531,11 +558,10 @@ namespace EDDiscovery
             this.groupBox4.BackColorScaling = 0.5F;
             this.groupBox4.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox4.BorderColorScaling = 0.5F;
+            this.groupBox4.Controls.Add(this.buttonEditCommander);
             this.groupBox4.Controls.Add(this.dataViewScrollerPanel1);
             this.groupBox4.Controls.Add(this.btnDeleteCommander);
             this.groupBox4.Controls.Add(this.buttonAddCommander);
-            this.groupBox4.Controls.Add(this.label1);
-            this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.FillClientAreaWithAlternateColor = false;
             this.groupBox4.Location = new System.Drawing.Point(0, 4);
             this.groupBox4.Name = "groupBox4";
@@ -546,15 +572,28 @@ namespace EDDiscovery
             this.groupBox4.TextPadding = 0;
             this.groupBox4.TextStartPosition = -1;
             // 
+            // buttonEditCommander
+            // 
+            this.buttonEditCommander.BorderColorScaling = 1.25F;
+            this.buttonEditCommander.ButtonColorScaling = 0.5F;
+            this.buttonEditCommander.ButtonDisabledScaling = 0.5F;
+            this.buttonEditCommander.Location = new System.Drawing.Point(713, 60);
+            this.buttonEditCommander.Name = "buttonEditCommander";
+            this.buttonEditCommander.Size = new System.Drawing.Size(71, 23);
+            this.buttonEditCommander.TabIndex = 5;
+            this.buttonEditCommander.Text = "Edit";
+            this.buttonEditCommander.UseVisualStyleBackColor = true;
+            this.buttonEditCommander.Click += new System.EventHandler(this.buttonEditCommander_Click);
+            // 
             // dataViewScrollerPanel1
             // 
             this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewCommanders);
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(10, 69);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(10, 19);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
             this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(793, 169);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(691, 219);
             this.dataViewScrollerPanel1.TabIndex = 4;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -569,13 +608,13 @@ namespace EDDiscovery
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(773, 23);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(671, 23);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 146);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 196);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 3;
@@ -596,117 +635,30 @@ namespace EDDiscovery
             this.dataGridViewCommanders.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewCommanders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewCommanders.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnNr,
             this.ColumnCommander,
-            this.EdsmName,
-            this.ColumnEDSMAPIKey,
-            this.ColumnJournalDir,
-            this.ColumnSyncToEDSM,
-            this.ColumnSyncFromEDSM,
-            this.ColumnSyncToEddn,
-            this.ColumnDeleted,
-            this.ColumnNetLogDirOld});
+            this.EdsmName});
             this.dataGridViewCommanders.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewCommanders.MultiSelect = false;
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
+            this.dataGridViewCommanders.ReadOnly = true;
+            this.dataGridViewCommanders.RowHeadersVisible = false;
             this.dataGridViewCommanders.RowHeadersWidth = 20;
-            this.dataGridViewCommanders.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.dataGridViewCommanders.Size = new System.Drawing.Size(773, 169);
+            this.dataGridViewCommanders.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewCommanders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewCommanders.Size = new System.Drawing.Size(671, 219);
             this.dataGridViewCommanders.TabIndex = 2;
             this.toolTip.SetToolTip(this.dataGridViewCommanders, "Configure commanders");
-            this.dataGridViewCommanders.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCommanders_CellEndEdit);
-            // 
-            // ColumnNr
-            // 
-            this.ColumnNr.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.ColumnNr.DataPropertyName = "Nr";
-            this.ColumnNr.FillWeight = 15F;
-            this.ColumnNr.HeaderText = "Nr";
-            this.ColumnNr.MinimumWidth = 45;
-            this.ColumnNr.Name = "ColumnNr";
-            this.ColumnNr.ReadOnly = true;
-            this.ColumnNr.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColumnNr.Width = 45;
-            // 
-            // ColumnCommander
-            // 
-            this.ColumnCommander.DataPropertyName = "Name";
-            this.ColumnCommander.HeaderText = "Commander";
-            this.ColumnCommander.MinimumWidth = 150;
-            this.ColumnCommander.Name = "ColumnCommander";
-            // 
-            // EdsmName
-            // 
-            this.EdsmName.DataPropertyName = "EdsmName";
-            this.EdsmName.HeaderText = "EDSM Name";
-            this.EdsmName.Name = "EdsmName";
-            // 
-            // ColumnEDSMAPIKey
-            // 
-            this.ColumnEDSMAPIKey.DataPropertyName = "APIKey";
-            this.ColumnEDSMAPIKey.HeaderText = "EDSM API key";
-            this.ColumnEDSMAPIKey.MinimumWidth = 150;
-            this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
-            // 
-            // ColumnJournalDir
-            // 
-            this.ColumnJournalDir.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnJournalDir.DataPropertyName = "JournalDir";
-            this.ColumnJournalDir.HeaderText = "Override Journal Location";
-            this.ColumnJournalDir.MinimumWidth = 50;
-            this.ColumnJournalDir.Name = "ColumnJournalDir";
-            // 
-            // ColumnSyncToEDSM
-            // 
-            this.ColumnSyncToEDSM.DataPropertyName = "SyncToEDSM";
-            this.ColumnSyncToEDSM.FillWeight = 15F;
-            this.ColumnSyncToEDSM.HeaderText = "Sync to EDSM";
-            this.ColumnSyncToEDSM.MinimumWidth = 45;
-            this.ColumnSyncToEDSM.Name = "ColumnSyncToEDSM";
-            // 
-            // ColumnSyncFromEDSM
-            // 
-            this.ColumnSyncFromEDSM.DataPropertyName = "SyncFromEdsm";
-            this.ColumnSyncFromEDSM.FillWeight = 15F;
-            this.ColumnSyncFromEDSM.HeaderText = "Sync From EDSM";
-            this.ColumnSyncFromEDSM.MinimumWidth = 45;
-            this.ColumnSyncFromEDSM.Name = "ColumnSyncFromEDSM";
-            // 
-            // ColumnSyncToEddn
-            // 
-            this.ColumnSyncToEddn.DataPropertyName = "SyncToEddn";
-            this.ColumnSyncToEddn.FillWeight = 15F;
-            this.ColumnSyncToEddn.HeaderText = "Sync to EDDN";
-            this.ColumnSyncToEddn.MinimumWidth = 45;
-            this.ColumnSyncToEddn.Name = "ColumnSyncToEddn";
-            // 
-            // ColumnDeleted
-            // 
-            this.ColumnDeleted.DataPropertyName = "Deleted";
-            this.ColumnDeleted.FillWeight = 10F;
-            this.ColumnDeleted.HeaderText = "Deleted";
-            this.ColumnDeleted.Name = "ColumnDeleted";
-            this.ColumnDeleted.ReadOnly = true;
-            this.ColumnDeleted.Visible = false;
-            // 
-            // ColumnNetLogDirOld
-            // 
-            this.ColumnNetLogDirOld.DataPropertyName = "NetLogDir";
-            this.ColumnNetLogDirOld.HeaderText = "NetLogDir";
-            this.ColumnNetLogDirOld.Name = "ColumnNetLogDirOld";
-            this.ColumnNetLogDirOld.ReadOnly = true;
-            this.ColumnNetLogDirOld.Visible = false;
             // 
             // btnDeleteCommander
             // 
             this.btnDeleteCommander.BorderColorScaling = 1.25F;
             this.btnDeleteCommander.ButtonColorScaling = 0.5F;
             this.btnDeleteCommander.ButtonDisabledScaling = 0.5F;
-            this.btnDeleteCommander.Location = new System.Drawing.Point(680, 16);
+            this.btnDeleteCommander.Location = new System.Drawing.Point(713, 104);
             this.btnDeleteCommander.Name = "btnDeleteCommander";
-            this.btnDeleteCommander.Size = new System.Drawing.Size(121, 23);
+            this.btnDeleteCommander.Size = new System.Drawing.Size(71, 23);
             this.btnDeleteCommander.TabIndex = 3;
-            this.btnDeleteCommander.Text = "Delete Commander";
+            this.btnDeleteCommander.Text = "Delete";
             this.toolTip.SetToolTip(this.btnDeleteCommander, "Delete an existing commander");
             this.btnDeleteCommander.UseVisualStyleBackColor = true;
             this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
@@ -716,69 +668,32 @@ namespace EDDiscovery
             this.buttonAddCommander.BorderColorScaling = 1.25F;
             this.buttonAddCommander.ButtonColorScaling = 0.5F;
             this.buttonAddCommander.ButtonDisabledScaling = 0.5F;
-            this.buttonAddCommander.Location = new System.Drawing.Point(11, 16);
+            this.buttonAddCommander.Location = new System.Drawing.Point(713, 19);
             this.buttonAddCommander.Name = "buttonAddCommander";
-            this.buttonAddCommander.Size = new System.Drawing.Size(104, 23);
+            this.buttonAddCommander.Size = new System.Drawing.Size(71, 23);
             this.buttonAddCommander.TabIndex = 0;
-            this.buttonAddCommander.Text = "Add commander";
+            this.buttonAddCommander.Text = "Add";
             this.toolTip.SetToolTip(this.buttonAddCommander, "Add a new commander");
             this.buttonAddCommander.UseVisualStyleBackColor = true;
             this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
             // 
-            // label1
+            // ColumnCommander
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(133, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(416, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Leave Override Journal Location blank to use the standard Frontier location for j" +
-    "ournals";
+            this.ColumnCommander.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnCommander.DataPropertyName = "Name";
+            this.ColumnCommander.HeaderText = "Commander";
+            this.ColumnCommander.MinimumWidth = 50;
+            this.ColumnCommander.Name = "ColumnCommander";
+            this.ColumnCommander.ReadOnly = true;
             // 
-            // label2
+            // EdsmName
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(134, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(354, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Get an EDSM API key from https://www.edsm.net in \"My account\" menu";
-            // 
-            // checkBoxUseNotifyIcon
-            // 
-            this.checkBoxUseNotifyIcon.AutoSize = true;
-            this.checkBoxUseNotifyIcon.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxUseNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxUseNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxUseNotifyIcon.FontNerfReduction = 0.5F;
-            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(17, 115);
-            this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
-            this.checkBoxUseNotifyIcon.Size = new System.Drawing.Size(154, 17);
-            this.checkBoxUseNotifyIcon.TabIndex = 5;
-            this.checkBoxUseNotifyIcon.Text = "Show notification area icon";
-            this.checkBoxUseNotifyIcon.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxUseNotifyIcon, "Show a system notification area (system tray) icon for EDDiscovery.");
-            this.checkBoxUseNotifyIcon.UseVisualStyleBackColor = true;
-            this.checkBoxUseNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxUseNotifyIcon_CheckedChanged);
-            // 
-            // checkBoxMinimizeToNotifyIcon
-            // 
-            this.checkBoxMinimizeToNotifyIcon.AutoSize = true;
-            this.checkBoxMinimizeToNotifyIcon.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxMinimizeToNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxMinimizeToNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxMinimizeToNotifyIcon.FontNerfReduction = 0.5F;
-            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(182, 115);
-            this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
-            this.checkBoxMinimizeToNotifyIcon.Size = new System.Drawing.Size(179, 17);
-            this.checkBoxMinimizeToNotifyIcon.TabIndex = 6;
-            this.checkBoxMinimizeToNotifyIcon.Text = "Minimize to notification area icon";
-            this.checkBoxMinimizeToNotifyIcon.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxMinimizeToNotifyIcon, "Minimize the main window to the system notification area (system tray) icon.");
-            this.checkBoxMinimizeToNotifyIcon.UseVisualStyleBackColor = true;
-            this.checkBoxMinimizeToNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxMinimizeToNotifyIcon_CheckedChanged);
+            this.EdsmName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.EdsmName.DataPropertyName = "EdsmName";
+            this.EdsmName.HeaderText = "EDSM Name";
+            this.EdsmName.MinimumWidth = 50;
+            this.EdsmName.Name = "EdsmName";
+            this.EdsmName.ReadOnly = true;
             // 
             // Settings
             // 
@@ -791,7 +706,6 @@ namespace EDDiscovery
             this.Controls.Add(this.groupBox4);
             this.Name = "Settings";
             this.Size = new System.Drawing.Size(937, 725);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.groupBoxPopOuts.ResumeLayout(false);
             this.groupBoxPopOuts.PerformLayout();
             this.groupBoxTheme.ResumeLayout(false);
@@ -801,8 +715,8 @@ namespace EDDiscovery
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.dataViewScrollerPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -810,7 +724,6 @@ namespace EDDiscovery
         #endregion
         private ExtendedControls.GroupBoxCustom groupBox4;
         private ExtendedControls.ButtonExt buttonAddCommander;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dataGridViewCommanders;
         private ExtendedControls.GroupBoxCustom groupBox3;
         private ExtendedControls.CheckBoxCustom checkBoxEDSMLog;
@@ -834,18 +747,7 @@ namespace EDDiscovery
         private ExtendedControls.CheckBoxCustom checkBoxFocusNewSystem;
         private ExtendedControls.CheckBoxCustom checkBoxKeepOnTop;
         private ExtendedControls.ButtonExt btnDeleteCommander;
-        private System.Windows.Forms.Label label1;
         private ExtendedControls.CheckBoxCustom checkBoxUTC;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
-        private System.Windows.Forms.DataGridViewTextBoxColumn EdsmName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnJournalDir;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncToEDSM;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncFromEDSM;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSyncToEddn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnDeleted;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDirOld;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private ExtendedControls.GroupBoxCustom groupBoxPopOuts;
@@ -855,5 +757,8 @@ namespace EDDiscovery
         private ExtendedControls.CheckBoxCustom checkBoxAutoLoad;
         private ExtendedControls.CheckBoxCustom checkBoxMinimizeToNotifyIcon;
         internal ExtendedControls.CheckBoxCustom checkBoxUseNotifyIcon;
+        private ExtendedControls.ButtonExt buttonEditCommander;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EdsmName;
     }
 }
