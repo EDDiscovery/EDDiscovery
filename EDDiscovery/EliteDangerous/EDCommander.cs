@@ -158,6 +158,11 @@ namespace EDDiscovery
             return _Commanders.Values.FirstOrDefault(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public static bool IsCommanderPresent(string name)
+        {
+            return _Commanders.Values.ToList().FindIndex(x=>x.Name.Equals(name,StringComparison.InvariantCultureIgnoreCase)) != -1;
+        }
+
         /// <summary>
         /// Returns all of the commanders
         /// </summary>
@@ -211,22 +216,30 @@ namespace EDDiscovery
         /// <param name="edsmApiKey">The API key to interface with EDSM.</param>
         /// <param name="journalpath">Where EDD should monitor for this commander's logs.</param>
         /// <returns>The newly-generated commander.</returns>
-        public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null)
+
+        public static EDCommander Create(EDCommander other )
+        {
+            return Create(other.name, other.EdsmName, other.APIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm, other.SyncToEddn, other.NetLogDir);
+        }
+
+        public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null, 
+                                        bool toedsm = true, bool fromedsm = false, bool toeddn = true, string netlogdir = null)
         {
             EDCommander cmdr;
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir) VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir)"))
                 {
                     cmd.AddParameterWithValue("@Name", name ?? "");
                     cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
                     cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
                     cmd.AddParameterWithValue("@JournalDir", journalpath ?? "");
                     cmd.AddParameterWithValue("@Deleted", false);
-                    cmd.AddParameterWithValue("@SyncToEdsm", true);
-                    cmd.AddParameterWithValue("@SyncFromEdsm", false);
-                    cmd.AddParameterWithValue("@SyncToEddn", true);
+                    cmd.AddParameterWithValue("@SyncToEdsm", toedsm);
+                    cmd.AddParameterWithValue("@SyncFromEdsm", fromedsm);
+                    cmd.AddParameterWithValue("@SyncToEddn", toeddn);
+                    cmd.AddParameterWithValue("@NetLogDir", netlogdir ?? "");
                     cmd.ExecuteNonQuery();
                 }
 
@@ -282,7 +295,7 @@ namespace EDDiscovery
                     cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
                     cmd.AddParameter("@SyncToEddn", DbType.Boolean);
 
-                    foreach (EDCommander edcmdr in cmdrlist) // potential NRE, if we're being invoked by an idiot.
+                    foreach (EDCommander edcmdr in cmdrlist) // potential NRE
                     {
                         cmd.Parameters["@Id"].Value = edcmdr.Nr;
                         cmd.Parameters["@Name"].Value = edcmdr.Name;
@@ -484,7 +497,7 @@ namespace EDDiscovery
         #endregion
 
         #region Instance
-
+       
         private int nr;
         private bool deleted;
         private string name;
@@ -495,6 +508,10 @@ namespace EDDiscovery
         private bool syncToEdsm;
         private bool syncFromEdsm;
         private bool syncToEddn;
+
+        public EDCommander()
+        {
+        }
 
         public EDCommander(DbDataReader reader)
         {
@@ -509,7 +526,6 @@ namespace EDDiscovery
             syncToEdsm = Convert.ToBoolean(reader["SyncToEdsm"]);
             syncFromEdsm = Convert.ToBoolean(reader["SyncFromEdsm"]);
             syncToEddn = Convert.ToBoolean(reader["SyncToEddn"]);
-
         }
 
         public EDCommander(int id, string Name, string APIKey, bool SyncToEDSM, bool SyncFromEdsm, bool SyncToEddn, string edsmName = null)

@@ -119,14 +119,18 @@ namespace EDDiscovery.Forms
             int bordery = Bounds.Height - ClientRectangle.Height;
             int borderx = Bounds.Width - ClientRectangle.Width;
 
-            SizeF sizef = CreateGraphics().MeasureString(text, fnt);
-
             int left = (ic != MessageBoxIcon.None) ? 80 : 20;
 
-            Height = (int)sizef.Height + ystart + 50 + bordery;
-            Width = Math.Min(Math.Max(300, left + (int)sizef.Width + 20),1800) + borderx;
+            using (Graphics g = CreateGraphics())
+            {
+                SizeF sizeftext = g.MeasureString(text, fnt);
+                SizeF sizefcaption = g.MeasureString(caption, fnt);
 
-            textarea = new Rectangle(left, ystart, (int)(sizef.Width+1), (int)(sizef.Height+1));
+                Height = (int)sizeftext.Height + ystart + 50 + bordery;
+                Width = Math.Min(Math.Max(300, left + (int)Math.Max(sizeftext.Width, sizefcaption.Width) + 20), 1800) + borderx;
+
+                textarea = new Rectangle(left, ystart, (int)(sizeftext.Width + 1), (int)(sizeftext.Height + 1));
+            }
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)

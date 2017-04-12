@@ -341,6 +341,12 @@
     <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="ExportImport\ExportGrid.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
+    <Compile Include="Forms\CommanderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CommanderForm.Designer.cs">
+      <DependentUpon>CommanderForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DownloadManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -919,6 +925,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TabStrip.resx">
       <DependentUpon>TabStrip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CommanderForm.resx">
+      <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DownloadManagerForm.resx">
       <DependentUpon>DownloadManagerForm.cs</DependentUpon>

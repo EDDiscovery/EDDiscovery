@@ -92,17 +92,11 @@ namespace EDDiscovery
             textBoxDefaultZoom.Text = SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
 
             bool selectionCentre = SQLiteDBClass.GetSettingBool("CentreMapOnSelection", true);
-            if (selectionCentre)
-            {
-                radioButtonHistorySelection.Checked = true;
-            }
-            else
-            {
-                radioButtonCentreHome.Checked = true;
-            }
+            radioButtonHistorySelection.Checked = selectionCentre;
+            radioButtonCentreHome.Checked = !selectionCentre;
 
+            dataGridViewCommanders.AutoGenerateColumns = false;             // BEFORE assigned to list..
             dataGridViewCommanders.DataSource = EDCommander.GetList();
-            dataGridViewCommanders.AutoGenerateColumns = false;
 
             panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
 
@@ -145,46 +139,63 @@ namespace EDDiscovery
             dataGridViewCommanders.Update();
         }
 
-        private void dataGridViewCommanders_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
-
-            EDCommander.Update(edcommanders,false);     // DONT update the data source.. that fucks it right up.
-
-            if ( e.ColumnIndex == 5 )                           // if changed journal location
-                _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
-        }
-
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
-            EDCommander.Create();
-            UpdateCommandersListBox();
-            _discoveryForm.TravelControl.LoadCommandersListBox();
-            _discoveryForm.ExportControl.PopulateCommanders();
-            _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+            CommanderForm cf = new CommanderForm();
+
+            if (cf.ShowDialog(this) == DialogResult.OK)
+            {
+                if (cf.Valid && !EDCommander.IsCommanderPresent(cf.CommanderName))
+                {
+                    EDCommander cmdr = new EDCommander();
+                    cf.Update(cmdr);
+                    EDCommander.Create(cmdr);
+                    UpdateCommandersListBox();
+                    _discoveryForm.TravelControl.LoadCommandersListBox();
+                    _discoveryForm.ExportControl.PopulateCommanders();
+                    _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+                }
+                else
+                    Forms.MessageBoxTheme.Show(this, "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+        }
+
+        private void buttonEditCommander_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewCommanders.CurrentCell != null)
+            {
+                int row = dataGridViewCommanders.CurrentCell.RowIndex;
+                EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
+
+                CommanderForm cf = new CommanderForm();
+                cf.Init(cmdr);
+
+                if (cf.ShowDialog(this) == DialogResult.OK)
+                {
+                    string currentjloc = cmdr.JournalDir;
+
+                    cf.Update(cmdr);
+                    List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+                    EDCommander.Update(edcommanders, false);
+
+                    if ( currentjloc != cmdr.JournalDir )
+                        _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+                }
+            }
         }
 
         private void btnDeleteCommander_Click(object sender, EventArgs e)
         {
-            var cells = dataGridViewCommanders.SelectedCells;
-
-            HashSet<int> rowindexes = new HashSet<int>();
-
-            foreach (var cell in cells.OfType<DataGridViewCell>())
+            if (dataGridViewCommanders.CurrentCell != null)
             {
-                if (!rowindexes.Contains(cell.RowIndex))
-                {
-                    rowindexes.Add(cell.RowIndex);
-                }
-            }
+                int row = dataGridViewCommanders.CurrentCell.RowIndex;
+                EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-            if (rowindexes.Count == 1)
-            {
-                var row = dataGridViewCommanders.Rows[rowindexes.Single()].DataBoundItem as EDCommander;
-                var result = EDDiscovery.Forms.MessageBoxTheme.Show("Do you wish to delete commander " + row.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = EDDiscovery.Forms.MessageBoxTheme.Show("Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
                 if (result == DialogResult.Yes)
                 {
-                    EDCommander.Delete(row);
+                    EDCommander.Delete(cmdr);
                     _discoveryForm.TravelControl.LoadCommandersListBox();
                     _discoveryForm.ExportControl.PopulateCommanders();
                     UpdateCommandersListBox();
@@ -322,6 +333,7 @@ namespace EDDiscovery
         {
             _discoveryForm.LoadSavedPopouts();
         }
+
     }
 }
 
