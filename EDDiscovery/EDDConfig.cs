@@ -291,6 +291,7 @@ namespace EDDiscovery
                 _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
 
                 EDCommander.Load(write, conn);
+                UserPaths.Load(conn);
             }
             catch (Exception ex)
             {
