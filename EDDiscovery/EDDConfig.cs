@@ -629,13 +629,13 @@ namespace EDDiscovery
             {
                 EDDirectory = SQLiteConnectionUser.GetSettingString("EDDirectory", "", conn);
                 ImageHandlerOutputDir = SQLiteConnectionUser.GetSettingString("ImageHandlerOutputDir", null, conn);
-                ImageHandlerScreenshotsDir = SQLiteConnectionUser.GetSettingString("ImageHandlerScreenshotDir", null, conn);
+                ImageHandlerScreenshotsDir = SQLiteConnectionUser.GetSettingString("ImageHandlerScreenshotsDir", null, conn);
 
-                if (File.Exists(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json")))
+                if (File.Exists(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json")))
                 {
                     JObject jo;
 
-                    using (FileStream stream = File.OpenRead(Path.Combine(EDDConfig.Options.AppFolder, "UserPaths.json")))
+                    using (FileStream stream = File.OpenRead(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json")))
                     {
                         using (StreamReader rdr = new StreamReader(stream))
                         {
