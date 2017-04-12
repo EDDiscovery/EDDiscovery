@@ -311,6 +311,7 @@
     <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEndCrewSession.cs" />
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
     <Compile Include="EliteDangerous\Ledger.cs" />
     <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
