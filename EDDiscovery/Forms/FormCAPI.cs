@@ -18,6 +18,16 @@ namespace EDDiscovery.Forms
         public FormCAPI()
         {
             InitializeComponent();
+            buttonStoredLogin.Enabled = false;
+
+            if (CompanionAPIClass.CommanderCredentialsState(EDCommander.Current.Name) == CompanionAPIClass.State.NEEDS_CONFIRMATION)
+                setUpConfirm();
+            else if (CompanionAPIClass.CommanderCredentialsState(EDCommander.Current.Name) == CompanionAPIClass.State.READY)
+            {
+                setUpLoggedIn("Credentials ready");
+                buttonStoredLogin.Enabled = true;
+                buttonLogin.Enabled = false;
+            }
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
@@ -44,35 +54,14 @@ namespace EDDiscovery.Forms
         {
             try
             {
-
-                // It is possible that we have valid cookies at this point so don't log in, but we did
-                // need the credentials
-                if (CompanionAPIClass.Instance.CurrentState == CompanionAPIClass.State.NEEDS_LOGIN)
+                if (CompanionAPIClass.Instance.NeedLogin)
                 {
                     CompanionAPIClass.Instance.LoginAs(EDCommander.Current.Name, textBoxMail.Text.Trim(), textBoxPassword.Text.Trim());
                 }
 
-                if (CompanionAPIClass.Instance.CurrentState == CompanionAPIClass.State.NEEDS_CONFIRMATION)
+                if (CompanionAPIClass.Instance.NeedConfirmation)
                 {
                     setUpConfirm();
-                }
-                else if (CompanionAPIClass.Instance.CurrentState == CompanionAPIClass.State.READY)
-                {
-                    if (profileJson == null)
-                    {
-                        profileJson = CompanionAPIClass.Instance.GetProfileString();
-                    }
-                    if (profileJson == null)
-                    {
-                        setUpLoggedIn("Login OK.  Waiting fo user profile");
-                    }
-                    else
-                    {
-                        setUpLoggedIn("ED server connection ok");
-                        richTextBox1.AppendText(profileJson);
-                        //setShipyardFromConfiguration();
-                    }
-
                 }
             }
             catch (CompanionAppAuthenticationException ex)
@@ -97,14 +86,7 @@ namespace EDDiscovery.Forms
             try
             {
                 CompanionAPIClass.Instance.Confirm(code);
-                // All done - see if it works
-                profileJson = CompanionAPIClass.Instance.GetProfileString();
-                if (profileJson != null)
-                {
-                    setUpLoggedIn("Login OK");
-                    richTextBox1.AppendText(profileJson);
-                    //setShipyardFromConfiguration();
-                }
+                setUpLoggedIn("Login OK after confirm");
             }
             catch (CompanionAppAuthenticationException ex)
             {
@@ -171,18 +153,27 @@ namespace EDDiscovery.Forms
             {
                 CompanionAPIClass.Instance.LoginAs(EDCommander.Current.Name);
                 setUpLoggedIn("Logged in");
-
-                profileJson = CompanionAPIClass.Instance.GetProfileString();
-                if (profileJson != null)
-                {
-                    richTextBox1.AppendText(profileJson);
-                }
-
+                buttonStoredLogin.Enabled = false;
             }
             catch (Exception ex)
             {
                 richTextBox1.AppendText(ex.Message);
                 setUpLogin();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            profileJson = CompanionAPIClass.Instance.GetProfileString();
+
+            if (profileJson == null)
+            {
+                setUpLoggedIn("Login OK. No user profile available");
+            }
+            else
+            {
+                richTextBox1.AppendText(profileJson);
+                //setShipyardFromConfiguration();
             }
         }
     }
