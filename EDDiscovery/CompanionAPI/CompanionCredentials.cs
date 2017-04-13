@@ -82,6 +82,32 @@ namespace EDDiscovery.CompanionAPI
             return null;
         }
 
+        public enum State
+        {
+            NO_CREDENTIALS,
+            NEEDS_CONFIRMATION,
+            CONFIRMED,
+        };
+
+        static public State CredentialState(string cmdrname)
+        {
+            CompanionCredentials c = CompanionCredentials.FromFile(cmdrname);
+            if (c != null && c.IsComplete)
+                return c.Confirmed ? State.CONFIRMED : State.NEEDS_CONFIRMATION;
+            else
+                return State.NO_CREDENTIALS;
+        }
+
+        static public void DeleteCredentials(string cmdrname)
+        {
+            CompanionCredentials c = CompanionCredentials.FromFile(cmdrname);
+            if (c != null)
+            {
+                c.Clear();
+                c.ToFile();
+            }
+        }
+
         /// <summary>
         /// Clear the information held by credentials.
         /// </summary>

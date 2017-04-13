@@ -29,6 +29,7 @@ namespace ExtendedControls
         public Color BorderColor { get; set; } = Color.Transparent;
         public float BorderColorScaling { get; set; } = 0.5F;           // Popup style only
         public int BorderOffset = 3;
+        public new virtual bool Visible { get { return base.Visible; } set { base.Visible = value; Parent.Invalidate(); } }
 
         public TextBoxBorder() : base()
         {
@@ -48,7 +49,7 @@ namespace ExtendedControls
 
                     Color color1 = BorderColor;
                     Color color2 = BorderColor.Multiply(BorderColorScaling);
-                    
+
                     GraphicsPath g1 = RectCutCorners(clientborder.X + 1, clientborder.Y+1, clientborder.Width - 2, clientborder.Height - 1, 1, 1);
                     using (Pen pc1 = new Pen(color1, 1.0F))
                         g.DrawPath(pc1, g1);

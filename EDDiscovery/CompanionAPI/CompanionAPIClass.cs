@@ -24,69 +24,19 @@ namespace EDDiscovery.CompanionAPI
         public bool NeedConfirmation { get { return NeedLogin == false && !Credentials.Confirmed; } }
         public CompanionCredentials Credentials;
         
-        private static CompanionAPIClass instance;
-        private static readonly object instanceLock = new object();
-        public static CompanionAPIClass Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (instanceLock)
-                    {
-                        if (instance == null)
-                        {
-                            Trace.WriteLine("No companion API instance: creating one");
-                            instance = new CompanionAPIClass();
-                        }
-                    }
-                }
-                return instance;
-            }
-        }
-
-        private CompanionAPIClass()
+        public CompanionAPIClass()
         {
             NeedLogin = true;
         }
 
         #region Login and Confirmation
 
-        public enum State
-        {
-            NEEDS_LOGIN,
-            NEEDS_CONFIRMATION,
-            READY
-        };
-
-        static public State CommanderCredentialsState( string cmdrname )
-        {
-            CompanionCredentials c = CompanionCredentials.FromFile(cmdrname);
-            if (c != null)
-                return c.Confirmed ? State.READY : State.NEEDS_CONFIRMATION;
-            else
-                return State.NEEDS_LOGIN;
-        }
-
-        /// <summary>
-        /// Log out and remove local credentials
-        /// </summary>
         public void Logout()
         {
             NeedLogin = true;
+            Credentials = null;
         }
-
-        public void RemoveCredentials()
-        {
-            if (Credentials != null)
-            {
-                Credentials.Clear();
-                Credentials.ToFile();
-                Credentials = null;
-                NeedLogin = true;
-            }
-        }
-
+        
         ///<summary>Log in.  Throws an exception if it fails</summary>
 
         public void LoginAs(string cmdrname)                          // login with previous credientials stored
@@ -106,7 +56,7 @@ namespace EDDiscovery.CompanionAPI
                 throw new CompanionAppIllegalStateException("Service in incorrect state to login");
         }
 
-        public void LoginAs(string cmdrname, string emailadr, string password)
+        public void LoginAs(string cmdrname, string emailadr, string password)      // Restart from afresh with new Credentials file
         {
             if (NeedLogin)
             {
@@ -389,10 +339,7 @@ namespace EDDiscovery.CompanionAPI
             {
                 cachedProfileExpires = DateTime.Now.AddSeconds(30);
                 Trace.WriteLine("Profile: " + cachedJsonProfile);
-            }
 
-            if (cachedJsonProfile != null)
-            {
                 JObject jo = JObject.Parse(cachedJsonProfile);
                 profile = new CProfile(jo);
             }
@@ -465,3 +412,29 @@ namespace EDDiscovery.CompanionAPI
         #endregion
     }
 }
+
+#if false
+
+private static CompanionAPIClass instance;
+private static readonly object instanceLock = new object();
+public static CompanionAPIClass Instance
+{
+    get
+    {
+        if (instance == null)
+        {
+            lock (instanceLock)
+            {
+                if (instance == null)
+                {
+                    Trace.WriteLine("No companion API instance: creating one");
+                    instance = new CompanionAPIClass();
+                }
+            }
+        }
+        return instance;
+    }
+}
+
+
+#endif

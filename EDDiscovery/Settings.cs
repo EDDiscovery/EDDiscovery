@@ -142,6 +142,7 @@ namespace EDDiscovery
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
             CommanderForm cf = new CommanderForm();
+            cf.Init(true);
 
             if (cf.ShowDialog(this) == DialogResult.OK)
             {
@@ -168,7 +169,7 @@ namespace EDDiscovery
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
                 CommanderForm cf = new CommanderForm();
-                cf.Init(cmdr);
+                cf.Init(cmdr,false);
 
                 if (cf.ShowDialog(this) == DialogResult.OK)
                 {
