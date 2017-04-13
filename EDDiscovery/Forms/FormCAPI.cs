@@ -15,14 +15,17 @@ namespace EDDiscovery.Forms
     public partial class FormCAPI : Form
     {
         private string profileJson;
+
+        CompanionAPIClass capi = new CompanionAPIClass();
+
         public FormCAPI()
         {
             InitializeComponent();
             buttonStoredLogin.Enabled = false;
 
-            if (CompanionAPIClass.CommanderCredentialsState(EDCommander.Current.Name) == CompanionAPIClass.State.NEEDS_CONFIRMATION)
+            if (CompanionCredentials.CredentialState(EDCommander.Current.Name) == CompanionCredentials.State.NEEDS_CONFIRMATION)
                 setUpConfirm();
-            else if (CompanionAPIClass.CommanderCredentialsState(EDCommander.Current.Name) == CompanionAPIClass.State.READY)
+            else if (CompanionCredentials.CredentialState(EDCommander.Current.Name) == CompanionCredentials.State.CONFIRMED)
             {
                 setUpLoggedIn("Credentials ready");
                 buttonStoredLogin.Enabled = true;
@@ -45,7 +48,7 @@ namespace EDDiscovery.Forms
             if (buttonLogin.Text.Equals("Logout"))
             {
                 // Logged in - handle logout
-                CompanionAPIClass.Instance.Logout();
+                capi.Logout();
                 setUpLogin();
             }
         }
@@ -54,12 +57,12 @@ namespace EDDiscovery.Forms
         {
             try
             {
-                if (CompanionAPIClass.Instance.NeedLogin)
+                if (capi.NeedLogin)
                 {
-                    CompanionAPIClass.Instance.LoginAs(EDCommander.Current.Name, textBoxMail.Text.Trim(), textBoxPassword.Text.Trim());
+                    capi.LoginAs(EDCommander.Current.Name, textBoxMail.Text.Trim(), textBoxPassword.Text.Trim());
                 }
 
-                if (CompanionAPIClass.Instance.NeedConfirmation)
+                if (capi.NeedConfirmation)
                 {
                     setUpConfirm();
                 }
@@ -85,7 +88,7 @@ namespace EDDiscovery.Forms
             string code = textBoxConfirmationCode.Text.Trim();
             try
             {
-                CompanionAPIClass.Instance.Confirm(code);
+                capi.Confirm(code);
                 setUpLoggedIn("Login OK after confirm");
             }
             catch (CompanionAppAuthenticationException ex)
@@ -144,14 +147,15 @@ namespace EDDiscovery.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            CompanionAPIClass.Instance.RemoveCredentials();
+            CompanionCredentials.DeleteCredentials(EDCommander.Current.Name);
+            capi.Logout();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
-                CompanionAPIClass.Instance.LoginAs(EDCommander.Current.Name);
+                capi.LoginAs(EDCommander.Current.Name);
                 setUpLoggedIn("Logged in");
                 buttonStoredLogin.Enabled = false;
             }
@@ -164,7 +168,7 @@ namespace EDDiscovery.Forms
 
         private void button3_Click(object sender, EventArgs e)
         {
-            profileJson = CompanionAPIClass.Instance.GetProfileString();
+            profileJson = capi.GetProfileString();
 
             if (profileJson == null)
             {
