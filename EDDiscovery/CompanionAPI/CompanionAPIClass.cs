@@ -14,30 +14,23 @@ namespace EDDiscovery.CompanionAPI
 {
     public class CompanionAPIClass
     {
- 
-
         private static string BASE_URL = "https://companion.orerve.net";
         private static string ROOT_URL = "/";
         private static string LOGIN_URL = "/user/login";
         private static string CONFIRM_URL = "/user/confirm";
         private static string PROFILE_URL = "/profile";
-
-        // We cache the profile to avoid spamming the service
-        public CProfile profile;
-        private string cachedJsonProfile;
-        private DateTime cachedProfileExpires;
-
+        
         public enum State
         {
             NEEDS_LOGIN,
             NEEDS_CONFIRMATION,
             READY
         };
+
         public State CurrentState;
-
         public CompanionCredentials Credentials;
+        
         private static CompanionAPIClass instance;
-
         private static readonly object instanceLock = new object();
         public static CompanionAPIClass Instance
         {
@@ -57,56 +50,77 @@ namespace EDDiscovery.CompanionAPI
                 return instance;
             }
         }
+
         private CompanionAPIClass()
         {
-            Credentials = CompanionCredentials.FromFile();
-
-            // Need to work out our current state.
-
-            //If we're missing username and password then we need to log in again
-            if (string.IsNullOrEmpty(Credentials.EmailAdr) || string.IsNullOrEmpty(Credentials.Password))
-            {
-                CurrentState = State.NEEDS_LOGIN;
-            }
-            else if (string.IsNullOrEmpty(Credentials.machineId) || string.IsNullOrEmpty(Credentials.machineToken))
-            {
-                CurrentState = State.NEEDS_LOGIN;
-            }
-            else
-            {
-                // Looks like we're ready but test it to find out
-                CurrentState = State.READY;
-                try
-                {
-                    string json = GetProfileString();
-                }
-                catch (CompanionAppException ex)
-                {
-                    Trace.WriteLine("Failed to obtain profile: " + ex.ToString());
-                }
-            }
+            CurrentState = State.NEEDS_LOGIN;
         }
 
-        private void CreateProfile(string json)
+        #region Login and Confirmation
+
+        static public State CommanderCredentialsState( string cmdrname )
         {
-            if (json!=null)
+            CompanionCredentials c = CompanionCredentials.FromFile(cmdrname);
+            if (c != null)
+                return c.Confirmed ? State.READY : State.NEEDS_CONFIRMATION;
+            else
+                return State.NEEDS_LOGIN;
+        }
+
+        /// <summary>
+        /// Log out and remove local credentials
+        /// </summary>
+        public void Logout()
+        {
+            CurrentState = State.NEEDS_LOGIN;
+        }
+
+        public void RemoveCredentials()
+        {
+            if (Credentials != null)
             {
-                JObject jo = JObject.Parse(json);
-
-                profile = new CProfile(jo);
+                Credentials.Clear();
+                Credentials.ToFile();
+                CurrentState = State.NEEDS_LOGIN;
+                Credentials = null;
             }
-
         }
 
         ///<summary>Log in.  Throws an exception if it fails</summary>
-        public void Login()
-        {
-            if (CurrentState != State.NEEDS_LOGIN)
-            {
-                // Shouldn't be here
-                throw new CompanionAppIllegalStateException("Service in incorrect state to login (" + CurrentState + ")");
-            }
 
+        public void LoginAs(string cmdrname)                          // login with previous credientials stored
+        {
+            if (CurrentState == State.NEEDS_LOGIN)
+            {
+                Credentials = CompanionCredentials.FromFile(cmdrname);      // if file name missing, will not be complete for login
+
+                if (Credentials != null )
+                {
+                    if (Credentials.Confirmed)                          // if we have confirmed..
+                        CurrentState = State.READY;
+                    else
+                        CurrentState = State.NEEDS_CONFIRMATION;
+                }
+                else
+                    throw new CompanionAppException("No stored credentials");
+            }
+            else
+                throw new CompanionAppIllegalStateException("Service in incorrect state to login (" + CurrentState + ")");
+        }
+
+        public void LoginAs(string cmdrname, string emailadr, string password)
+        {
+            if (CurrentState == State.NEEDS_LOGIN)
+            {
+                Credentials = new CompanionCredentials(cmdrname, emailadr, password);         // NOW ready for LOGIN
+                Login();
+            }
+            else
+                throw new CompanionAppIllegalStateException("Service in incorrect state to login (" + CurrentState + ")");
+        }
+
+        private void Login()
+        {
             HttpWebRequest request = GetRequest(BASE_URL + LOGIN_URL);
 
             // Send the request
@@ -130,10 +144,12 @@ namespace EDDiscovery.CompanionAPI
                 if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == CONFIRM_URL)
                 {
                     CurrentState = State.NEEDS_CONFIRMATION;
+                    Credentials.SetNeedsConfirmation();
                 }
                 else if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == ROOT_URL)
                 {
                     CurrentState = State.READY;
+                    Credentials.SetConfirmed(); // ensure its marked this way
                 }
                 else
                 {
@@ -182,132 +198,6 @@ namespace EDDiscovery.CompanionAPI
             }
         }
 
-        /// <summary>
-        /// Log out and remove local credentials
-        /// </summary>
-        public void Logout()
-        {
-            // Remove everything other than the local email address
-            Credentials = CompanionCredentials.FromFile();
-            Credentials.machineToken = null;
-            Credentials.machineId = null;
-            Credentials.appId = null;
-            Credentials.Password = null;
-            Credentials.ToFile();
-            CurrentState = State.NEEDS_LOGIN;
-        }
-
-        public string GetProfileString(bool forceRefresh = false)
-        {
-            
-            if (CurrentState != State.READY)
-            {
-                // Shouldn't be here
-                Trace.WriteLine("Service in incorrect state to provide profile (" + CurrentState + ")");
-                
-                throw new CompanionAppIllegalStateException("Service in incorrect state to provide profile (" + CurrentState + ")");
-            }
-            if ((!forceRefresh) && cachedProfileExpires > DateTime.Now)
-            {
-                // return the cached version
-                Trace.WriteLine("Returning cached profile");
-                
-                return cachedJsonProfile;
-            }
-
-            string data = DownloadProfile();
-
-            if (data == null || data == "Profile unavailable")
-            {
-                // Happens if there is a problem with the API.  Logging in again might clear this...
-                relogin();
-                data = DownloadProfile();
-                if (data == null || data == "Profile unavailable")
-                {
-                    // No luck with a relogin; give up
-                    //SpeechService.Instance.Say(null, "Access to companion API data has been lost.  Please update the companion app information to re-establish the connection.", false);
-                    Logout();
-                    throw new CompanionAppException("Failed to obtain data from Frontier server (" + CurrentState + ")");
-                }
-            }
-
-            cachedJsonProfile = data;
-
-            if (cachedJsonProfile != null)
-            {
-                cachedProfileExpires = DateTime.Now.AddSeconds(30);
-                Trace.WriteLine("Profile: " + cachedJsonProfile);
-            }
-
-
-            CreateProfile(cachedJsonProfile);
-
-            return cachedJsonProfile;
-        }
-
-        private string DownloadProfile()
-        {
-            HttpWebRequest request = GetRequest(BASE_URL + PROFILE_URL);
-            using (HttpWebResponse response = GetResponse(request))
-            {
-                if (response == null)
-                {
-                    Trace.WriteLine("Failed to contact API server");
-                    
-                    throw new CompanionAppException("Failed to contact API server");
-                }
-
-                if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == LOGIN_URL)
-                {
-                    return null;
-                }
-
-                return getResponseData(response);
-            }
-        }
-
-        /**
-         * Try to relogin if there is some issue that requires it.
-         * Throws an exception if it failed to log in.
-         */
-        private void relogin()
-        {
-            // Need to log in again.
-            CurrentState = State.NEEDS_LOGIN;
-            Login();
-            if (CurrentState != State.READY)
-            {
-                Trace.WriteLine("Service in incorrect state to provide profile (" + CurrentState + ")");
-                
-                throw new CompanionAppIllegalStateException("Service in incorrect state to provide profile (" + CurrentState + ")");
-            }
-        }
-
-        /**
-         * Obtain the response data from an HTTP web response
-         */
-        private string getResponseData(HttpWebResponse response)
-        {
-            // Obtain and parse our response
-            var encoding = response.CharacterSet == ""
-                    ? Encoding.UTF8
-                    : Encoding.GetEncoding(response.CharacterSet);
-
-            Trace.WriteLine("Reading response");
-            using (var stream = response.GetResponseStream())
-            {
-                var reader = new StreamReader(stream, encoding);
-                string data = reader.ReadToEnd();
-                if (data == null || data.Trim() == "")
-                {
-                    HttpCom.WriteLog("Companion No data returned", "");
-                    return null;
-                }
-                HttpCom.WriteLog("Companion Data is ", data);
-                return data;
-            }
-        }
-
         // Set up a request with the correct parameters for talking to the companion app
         private HttpWebRequest GetRequest(string url)
         {
@@ -328,7 +218,7 @@ namespace EDDiscovery.CompanionAPI
         // Obtain a response, ensuring that we obtain the response's cookies
         private HttpWebResponse GetResponse(HttpWebRequest request)
         {
-            HttpCom.WriteLog("Companion Requesting " , request.RequestUri.ToNullSafeString());
+            HttpCom.WriteLog("Companion Requesting ", request.RequestUri.ToNullSafeString());
             //Trace.WriteLine("Requesting " + request.RequestUri);
             HttpWebResponse response;
             try
@@ -342,9 +232,10 @@ namespace EDDiscovery.CompanionAPI
             }
             HttpCom.WriteLog("Companion Response ", JsonConvert.SerializeObject(response));
             //Trace.WriteLine("Response is " + JsonConvert.SerializeObject(response));
+
             UpdateCredentials(response);
             Credentials.ToFile();
-            
+
             return response;
         }
 
@@ -370,9 +261,8 @@ namespace EDDiscovery.CompanionAPI
                     Credentials.machineToken = machineTokenMatch.Groups[1].Value;
                 }
             }
-
-            
         }
+
 
         private static void AddCompanionAppCookie(CookieContainer cookies, CompanionCredentials credentials)
         {
@@ -456,8 +346,137 @@ namespace EDDiscovery.CompanionAPI
             }
         }
 
- 
-    
+        #endregion
 
+        #region Profile
+        // above does not rely on this bit..really.
+
+        // We cache the profile to avoid spamming the service
+        public CProfile profile;
+        private string cachedJsonProfile;
+        private DateTime cachedProfileExpires;
+        
+        public string GetProfileString(bool forceRefresh = false)
+        {
+            
+            if (CurrentState != State.READY)
+            {
+                // Shouldn't be here
+                Trace.WriteLine("Service in incorrect state to provide profile (" + CurrentState + ")");
+                
+                throw new CompanionAppIllegalStateException("Service in incorrect state to provide profile (" + CurrentState + ")");
+            }
+            if ((!forceRefresh) && cachedProfileExpires > DateTime.Now)
+            {
+                // return the cached version
+                Trace.WriteLine("Returning cached profile");
+                
+                return cachedJsonProfile;
+            }
+
+            string data = DownloadProfile();
+
+            if (data == null || data == "Profile unavailable")
+            {
+                // Happens if there is a problem with the API.  Logging in again might clear this...
+                relogin();
+                data = DownloadProfile();
+                if (data == null || data == "Profile unavailable")
+                {
+                    // No luck with a relogin; give up
+                    //SpeechService.Instance.Say(null, "Access to companion API data has been lost.  Please update the companion app information to re-establish the connection.", false);
+                    Logout();
+                    throw new CompanionAppException("Failed to obtain data from Frontier server (" + CurrentState + ")");
+                }
+            }
+
+            cachedJsonProfile = data;
+
+            if (cachedJsonProfile != null)
+            {
+                cachedProfileExpires = DateTime.Now.AddSeconds(30);
+                Trace.WriteLine("Profile: " + cachedJsonProfile);
+            }
+
+
+            CreateProfile(cachedJsonProfile);
+
+            return cachedJsonProfile;
+        }
+
+        private void CreateProfile(string json)
+        {
+            if (json != null)
+            {
+                JObject jo = JObject.Parse(json);
+
+                profile = new CProfile(jo);
+            }
+        }
+
+        private string DownloadProfile()
+        {
+            HttpWebRequest request = GetRequest(BASE_URL + PROFILE_URL);
+            using (HttpWebResponse response = GetResponse(request))
+            {
+                if (response == null)
+                {
+                    Trace.WriteLine("Failed to contact API server");
+                    
+                    throw new CompanionAppException("Failed to contact API server");
+                }
+
+                if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == LOGIN_URL)
+                {
+                    return null;
+                }
+
+                return getResponseData(response);
+            }
+        }
+
+        /**
+         * Try to relogin if there is some issue that requires it.
+         * Throws an exception if it failed to log in.
+         */
+        private void relogin()
+        {
+            // Need to log in again.
+            CurrentState = State.NEEDS_LOGIN;
+            Login();
+            if (CurrentState != State.READY)
+            {
+                Trace.WriteLine("Service in incorrect state to provide profile (" + CurrentState + ")");
+                
+                throw new CompanionAppIllegalStateException("Service in incorrect state to provide profile (" + CurrentState + ")");
+            }
+        }
+
+        /**
+         * Obtain the response data from an HTTP web response
+         */
+        private string getResponseData(HttpWebResponse response)
+        {
+            // Obtain and parse our response
+            var encoding = response.CharacterSet == ""
+                    ? Encoding.UTF8
+                    : Encoding.GetEncoding(response.CharacterSet);
+
+            Trace.WriteLine("Reading response");
+            using (var stream = response.GetResponseStream())
+            {
+                var reader = new StreamReader(stream, encoding);
+                string data = reader.ReadToEnd();
+                if (data == null || data.Trim() == "")
+                {
+                    HttpCom.WriteLog("Companion No data returned", "");
+                    return null;
+                }
+                HttpCom.WriteLog("Companion Data is ", data);
+                return data;
+            }
+        }
+
+        #endregion
     }
 }

@@ -44,15 +44,14 @@ namespace EDDiscovery.Forms
         {
             try
             {
-                CompanionAPIClass.Instance.Credentials.EmailAdr = textBoxMail.Text.Trim();
-                CompanionAPIClass.Instance.Credentials.Password = textBoxPassword.Text.Trim();
 
                 // It is possible that we have valid cookies at this point so don't log in, but we did
                 // need the credentials
                 if (CompanionAPIClass.Instance.CurrentState == CompanionAPIClass.State.NEEDS_LOGIN)
                 {
-                    CompanionAPIClass.Instance.Login();
+                    CompanionAPIClass.Instance.LoginAs(EDCommander.Current.Name, textBoxMail.Text.Trim(), textBoxPassword.Text.Trim());
                 }
+
                 if (CompanionAPIClass.Instance.CurrentState == CompanionAPIClass.State.NEEDS_CONFIRMATION)
                 {
                     setUpConfirm();
@@ -70,8 +69,10 @@ namespace EDDiscovery.Forms
                     else
                     {
                         setUpLoggedIn("ED server connection ok");
+                        richTextBox1.AppendText(profileJson);
                         //setShipyardFromConfiguration();
                     }
+
                 }
             }
             catch (CompanionAppAuthenticationException ex)
@@ -101,27 +102,29 @@ namespace EDDiscovery.Forms
                 if (profileJson != null)
                 {
                     setUpLoggedIn("Login OK");
+                    richTextBox1.AppendText(profileJson);
                     //setShipyardFromConfiguration();
                 }
             }
             catch (CompanionAppAuthenticationException ex)
             {
-                setUpLogin(ex.Message);
+                richTextBox1.AppendText(ex.Message);
+                setUpLogin();
             }
             catch (CompanionAppErrorException ex)
             {
-                setUpLogin(ex.Message);
+                richTextBox1.AppendText(ex.Message);
+                setUpLogin();
             }
             catch (Exception ex)
             {
-                setUpLogin("Unexpected problem\r\nPlease report this at http://github.com/CmdrMcDonald/EliteDangerousDataProvider/issues\r\n" + ex);
+                richTextBox1.AppendText(ex.Message);
+                setUpLogin();
             }
         }
     
 
-
-
-        private void setUpLogin(string message = null)
+        private void setUpLogin()
         {
             textBoxMail.Enabled = true;
             textBoxPassword.Enabled = true; 
@@ -157,5 +160,30 @@ namespace EDDiscovery.Forms
             buttonLogin.Enabled = true;
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CompanionAPIClass.Instance.RemoveCredentials();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CompanionAPIClass.Instance.LoginAs(EDCommander.Current.Name);
+                setUpLoggedIn("Logged in");
+
+                profileJson = CompanionAPIClass.Instance.GetProfileString();
+                if (profileJson != null)
+                {
+                    richTextBox1.AppendText(profileJson);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                richTextBox1.AppendText(ex.Message);
+                setUpLogin();
+            }
+        }
     }
 }
