@@ -142,7 +142,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(222, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(314, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -336,7 +336,6 @@ namespace EDDiscovery
             this.companionAPILoginToolStripMenuItem.Name = "companionAPILoginToolStripMenuItem";
             this.companionAPILoginToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.companionAPILoginToolStripMenuItem.Text = "Companion API Login";
-            this.companionAPILoginToolStripMenuItem.Visible = false;
             this.companionAPILoginToolStripMenuItem.Click += new System.EventHandler(this.companionAPILoginToolStripMenuItem_Click);
             // 
             // addOnsToolStripMenuItem
