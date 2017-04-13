@@ -19,15 +19,9 @@ namespace EDDiscovery.CompanionAPI
         private static string LOGIN_URL = "/user/login";
         private static string CONFIRM_URL = "/user/confirm";
         private static string PROFILE_URL = "/profile";
-        
-        public enum State
-        {
-            NEEDS_LOGIN,
-            NEEDS_CONFIRMATION,
-            READY
-        };
 
-        public State CurrentState;
+        public bool NeedLogin;
+        public bool NeedConfirmation { get { return NeedLogin == false && !Credentials.Confirmed; } }
         public CompanionCredentials Credentials;
         
         private static CompanionAPIClass instance;
@@ -53,10 +47,17 @@ namespace EDDiscovery.CompanionAPI
 
         private CompanionAPIClass()
         {
-            CurrentState = State.NEEDS_LOGIN;
+            NeedLogin = true;
         }
 
         #region Login and Confirmation
+
+        public enum State
+        {
+            NEEDS_LOGIN,
+            NEEDS_CONFIRMATION,
+            READY
+        };
 
         static public State CommanderCredentialsState( string cmdrname )
         {
@@ -72,7 +73,7 @@ namespace EDDiscovery.CompanionAPI
         /// </summary>
         public void Logout()
         {
-            CurrentState = State.NEEDS_LOGIN;
+            NeedLogin = true;
         }
 
         public void RemoveCredentials()
@@ -81,8 +82,8 @@ namespace EDDiscovery.CompanionAPI
             {
                 Credentials.Clear();
                 Credentials.ToFile();
-                CurrentState = State.NEEDS_LOGIN;
                 Credentials = null;
+                NeedLogin = true;
             }
         }
 
@@ -90,33 +91,30 @@ namespace EDDiscovery.CompanionAPI
 
         public void LoginAs(string cmdrname)                          // login with previous credientials stored
         {
-            if (CurrentState == State.NEEDS_LOGIN)
+            if (NeedLogin)
             {
                 Credentials = CompanionCredentials.FromFile(cmdrname);      // if file name missing, will not be complete for login
 
                 if (Credentials != null )
                 {
-                    if (Credentials.Confirmed)                          // if we have confirmed..
-                        CurrentState = State.READY;
-                    else
-                        CurrentState = State.NEEDS_CONFIRMATION;
+                    NeedLogin = false;
                 }
                 else
                     throw new CompanionAppException("No stored credentials");
             }
             else
-                throw new CompanionAppIllegalStateException("Service in incorrect state to login (" + CurrentState + ")");
+                throw new CompanionAppIllegalStateException("Service in incorrect state to login");
         }
 
         public void LoginAs(string cmdrname, string emailadr, string password)
         {
-            if (CurrentState == State.NEEDS_LOGIN)
+            if (NeedLogin)
             {
                 Credentials = new CompanionCredentials(cmdrname, emailadr, password);         // NOW ready for LOGIN
                 Login();
             }
             else
-                throw new CompanionAppIllegalStateException("Service in incorrect state to login (" + CurrentState + ")");
+                throw new CompanionAppIllegalStateException("Service in incorrect state to login");
         }
 
         private void Login()
@@ -143,13 +141,13 @@ namespace EDDiscovery.CompanionAPI
                 }
                 if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == CONFIRM_URL)
                 {
-                    CurrentState = State.NEEDS_CONFIRMATION;
                     Credentials.SetNeedsConfirmation();
+                    NeedLogin = false;
                 }
                 else if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == ROOT_URL)
                 {
-                    CurrentState = State.READY;
                     Credentials.SetConfirmed(); // ensure its marked this way
+                    NeedLogin = false;
                 }
                 else
                 {
@@ -161,11 +159,8 @@ namespace EDDiscovery.CompanionAPI
         ///<summary>Confirm a login.  Throws an exception if it fails</summary>
         public void Confirm(string code)
         {
-            if (CurrentState != State.NEEDS_CONFIRMATION)
-            {
-                // Shouldn't be here
-                throw new CompanionAppIllegalStateException("Service in incorrect state to confirm login (" + CurrentState + ")");
-            }
+            if (NeedLogin == true)
+                throw new CompanionAppIllegalStateException("Service is not logged in to confirm");
 
             HttpWebRequest request = GetRequest(BASE_URL + CONFIRM_URL);
 
@@ -188,11 +183,12 @@ namespace EDDiscovery.CompanionAPI
 
                 if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == ROOT_URL)
                 {
-                    CurrentState = State.READY;
+                    Credentials.SetConfirmed();
                 }
                 else if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == LOGIN_URL)
                 {
-                    CurrentState = State.NEEDS_LOGIN;
+                    Credentials.SetNeedsConfirmation();
+                    NeedLogin = true;
                     throw new CompanionAppAuthenticationException("Confirmation code incorrect or expired");
                 }
             }
@@ -346,9 +342,9 @@ namespace EDDiscovery.CompanionAPI
             }
         }
 
-        #endregion
+#endregion
 
-        #region Profile
+#region Profile
         // above does not rely on this bit..really.
 
         // We cache the profile to avoid spamming the service
@@ -358,14 +354,12 @@ namespace EDDiscovery.CompanionAPI
         
         public string GetProfileString(bool forceRefresh = false)
         {
-            
-            if (CurrentState != State.READY)
-            {
-                // Shouldn't be here
-                Trace.WriteLine("Service in incorrect state to provide profile (" + CurrentState + ")");
-                
-                throw new CompanionAppIllegalStateException("Service in incorrect state to provide profile (" + CurrentState + ")");
-            }
+            if (NeedLogin == true)
+                throw new CompanionAppIllegalStateException("Service is not logged in to profile");
+
+            if ( !Credentials.Confirmed )
+                throw new CompanionAppIllegalStateException("Credentials are not confirmed");
+
             if ((!forceRefresh) && cachedProfileExpires > DateTime.Now)
             {
                 // return the cached version
@@ -381,12 +375,11 @@ namespace EDDiscovery.CompanionAPI
                 // Happens if there is a problem with the API.  Logging in again might clear this...
                 relogin();
                 data = DownloadProfile();
-                if (data == null || data == "Profile unavailable")
+
+                if (data == null || data == "Profile unavailable")      // uhoh
                 {
-                    // No luck with a relogin; give up
-                    //SpeechService.Instance.Say(null, "Access to companion API data has been lost.  Please update the companion app information to re-establish the connection.", false);
                     Logout();
-                    throw new CompanionAppException("Failed to obtain data from Frontier server (" + CurrentState + ")");
+                    throw new CompanionAppException("Failed to obtain data from Frontier server");
                 }
             }
 
@@ -398,20 +391,13 @@ namespace EDDiscovery.CompanionAPI
                 Trace.WriteLine("Profile: " + cachedJsonProfile);
             }
 
-
-            CreateProfile(cachedJsonProfile);
-
-            return cachedJsonProfile;
-        }
-
-        private void CreateProfile(string json)
-        {
-            if (json != null)
+            if (cachedJsonProfile != null)
             {
-                JObject jo = JObject.Parse(json);
-
+                JObject jo = JObject.Parse(cachedJsonProfile);
                 profile = new CProfile(jo);
             }
+
+            return cachedJsonProfile;
         }
 
         private string DownloadProfile()
@@ -442,13 +428,12 @@ namespace EDDiscovery.CompanionAPI
         private void relogin()
         {
             // Need to log in again.
-            CurrentState = State.NEEDS_LOGIN;
+            NeedLogin = true;
             Login();
-            if (CurrentState != State.READY)
+            if ( NeedLogin == true || !Credentials.Confirmed )
             {
-                Trace.WriteLine("Service in incorrect state to provide profile (" + CurrentState + ")");
-                
-                throw new CompanionAppIllegalStateException("Service in incorrect state to provide profile (" + CurrentState + ")");
+                Trace.WriteLine("Service in incorrect state to provide profile");
+                throw new CompanionAppIllegalStateException("Service in incorrect state to provide profile");
             }
         }
 

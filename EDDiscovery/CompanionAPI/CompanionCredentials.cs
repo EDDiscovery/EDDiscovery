@@ -110,6 +110,7 @@ namespace EDDiscovery.CompanionAPI
                 ToFile();
             }
         }
+
         public void SetNeedsConfirmation()
         {
             if (Confirmed)
