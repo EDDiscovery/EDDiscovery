@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommanderForm));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -38,37 +40,35 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBoxCustom5 = new ExtendedControls.GroupBoxCustom();
-            this.label7 = new System.Windows.Forms.Label();
             this.textBoxBorderTravelLog = new ExtendedControls.TextBoxBorder();
-            this.groupBoxCustom4 = new ExtendedControls.GroupBoxCustom();
-            this.labelCAPIState = new System.Windows.Forms.Label();
             this.buttonExtCAPI = new ExtendedControls.ButtonExt();
             this.textBoxBorderCompanionPassword = new ExtendedControls.TextBoxBorder();
-            this.labelCAPIPassword = new System.Windows.Forms.Label();
             this.textBoxBorderCompanionLogin = new ExtendedControls.TextBoxBorder();
-            this.labelCAPILogin = new System.Windows.Forms.Label();
-            this.groupBoxCustom3 = new ExtendedControls.GroupBoxCustom();
             this.checkBoxCustomEDDNTo = new ExtendedControls.CheckBoxCustom();
-            this.groupBoxCustom2 = new ExtendedControls.GroupBoxCustom();
             this.checkBoxCustomEDSMFrom = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomEDSMTo = new ExtendedControls.CheckBoxCustom();
-            this.label5 = new System.Windows.Forms.Label();
             this.textBoxBorderEDSMName = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderEDSMAPI = new ExtendedControls.TextBoxBorder();
+            this.buttonExtBrowse = new ExtendedControls.ButtonExt();
+            this.textBoxBorderJournal = new ExtendedControls.TextBoxBorder();
+            this.textBoxBorderCmdr = new ExtendedControls.TextBoxBorder();
+            this.groupBoxCustom5 = new ExtendedControls.GroupBoxCustom();
+            this.label7 = new System.Windows.Forms.Label();
+            this.groupBoxCustom4 = new ExtendedControls.GroupBoxCustom();
+            this.labelCAPIState = new System.Windows.Forms.Label();
+            this.labelCAPIPassword = new System.Windows.Forms.Label();
+            this.labelCAPILogin = new System.Windows.Forms.Label();
+            this.groupBoxCustom3 = new ExtendedControls.GroupBoxCustom();
+            this.groupBoxCustom2 = new ExtendedControls.GroupBoxCustom();
+            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBoxCustom1 = new ExtendedControls.GroupBoxCustom();
-            this.buttonExtBrowseJ = new ExtendedControls.ButtonExt();
-            this.textBoxBorderJournal = new ExtendedControls.TextBoxBorder();
-            this.textBoxBorderCmdr = new ExtendedControls.TextBoxBorder();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panelTop.SuspendLayout();
             this.groupBoxCustom5.SuspendLayout();
             this.groupBoxCustom4.SuspendLayout();
@@ -88,6 +88,42 @@
             this.panelTop.Size = new System.Drawing.Size(606, 32);
             this.panelTop.TabIndex = 31;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            // 
+            // panel_close
+            // 
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.DrawnImage = null;
+            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.panel_close.ImageText = null;
+            this.panel_close.Location = new System.Drawing.Point(583, 0);
+            this.panel_close.MarginSize = 6;
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Size = new System.Drawing.Size(24, 24);
+            this.panel_close.TabIndex = 27;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            // 
+            // panel_minimize
+            // 
+            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.DrawnImage = null;
+            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageText = null;
+            this.panel_minimize.Location = new System.Drawing.Point(553, 0);
+            this.panel_minimize.MarginSize = 6;
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
+            this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
+            this.panel_minimize.TabIndex = 26;
+            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // label_index
             // 
@@ -143,34 +179,6 @@
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // groupBoxCustom5
-            // 
-            this.groupBoxCustom5.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom5.BackColorScaling = 0.5F;
-            this.groupBoxCustom5.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom5.BorderColorScaling = 0.5F;
-            this.groupBoxCustom5.Controls.Add(this.label7);
-            this.groupBoxCustom5.Controls.Add(this.textBoxBorderTravelLog);
-            this.groupBoxCustom5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom5.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom5.Location = new System.Drawing.Point(0, 504);
-            this.groupBoxCustom5.Name = "groupBoxCustom5";
-            this.groupBoxCustom5.Size = new System.Drawing.Size(606, 62);
-            this.groupBoxCustom5.TabIndex = 7;
-            this.groupBoxCustom5.TabStop = false;
-            this.groupBoxCustom5.Text = "Pre 2.2 Travel Log (optional)";
-            this.groupBoxCustom5.TextPadding = 0;
-            this.groupBoxCustom5.TextStartPosition = -1;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 30);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(105, 13);
-            this.label7.TabIndex = 2;
-            this.label7.Text = "Travel Log Location:";
-            // 
             // textBoxBorderTravelLog
             // 
             this.textBoxBorderTravelLog.BorderColor = System.Drawing.Color.Transparent;
@@ -181,38 +189,6 @@
             this.textBoxBorderTravelLog.TabIndex = 5;
             this.toolTip1.SetToolTip(this.textBoxBorderTravelLog, "Give the location of pre 2.2 travel logs. Only needed if you want to read these i" +
         "n.");
-            // 
-            // groupBoxCustom4
-            // 
-            this.groupBoxCustom4.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom4.BackColorScaling = 0.5F;
-            this.groupBoxCustom4.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom4.BorderColorScaling = 0.5F;
-            this.groupBoxCustom4.Controls.Add(this.labelCAPIState);
-            this.groupBoxCustom4.Controls.Add(this.buttonExtCAPI);
-            this.groupBoxCustom4.Controls.Add(this.textBoxBorderCompanionPassword);
-            this.groupBoxCustom4.Controls.Add(this.labelCAPIPassword);
-            this.groupBoxCustom4.Controls.Add(this.textBoxBorderCompanionLogin);
-            this.groupBoxCustom4.Controls.Add(this.labelCAPILogin);
-            this.groupBoxCustom4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom4.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom4.Location = new System.Drawing.Point(0, 397);
-            this.groupBoxCustom4.Name = "groupBoxCustom4";
-            this.groupBoxCustom4.Size = new System.Drawing.Size(606, 97);
-            this.groupBoxCustom4.TabIndex = 6;
-            this.groupBoxCustom4.TabStop = false;
-            this.groupBoxCustom4.Text = "Frontier Companion API (optional)";
-            this.groupBoxCustom4.TextPadding = 0;
-            this.groupBoxCustom4.TextStartPosition = -1;
-            // 
-            // labelCAPIState
-            // 
-            this.labelCAPIState.AutoSize = true;
-            this.labelCAPIState.Location = new System.Drawing.Point(10, 30);
-            this.labelCAPIState.Name = "labelCAPIState";
-            this.labelCAPIState.Size = new System.Drawing.Size(93, 13);
-            this.labelCAPIState.TabIndex = 9;
-            this.labelCAPIState.Text = "CAPI current state";
             // 
             // buttonExtCAPI
             // 
@@ -239,15 +215,6 @@
             this.toolTip1.SetToolTip(this.textBoxBorderCompanionPassword, "Enter your Frontier Password");
             this.textBoxBorderCompanionPassword.TextChanged += new System.EventHandler(this.textBoxBorderCompanionPassword_TextChanged);
             // 
-            // labelCAPIPassword
-            // 
-            this.labelCAPIPassword.AutoSize = true;
-            this.labelCAPIPassword.Location = new System.Drawing.Point(190, 60);
-            this.labelCAPIPassword.Name = "labelCAPIPassword";
-            this.labelCAPIPassword.Size = new System.Drawing.Size(85, 13);
-            this.labelCAPIPassword.TabIndex = 6;
-            this.labelCAPIPassword.Text = "Login Password:";
-            // 
             // textBoxBorderCompanionLogin
             // 
             this.textBoxBorderCompanionLogin.BorderColor = System.Drawing.Color.Transparent;
@@ -258,33 +225,6 @@
             this.textBoxBorderCompanionLogin.TabIndex = 5;
             this.toolTip1.SetToolTip(this.textBoxBorderCompanionLogin, "Enter details for API");
             this.textBoxBorderCompanionLogin.TextChanged += new System.EventHandler(this.textBoxBorderCompanionLogin_TextChanged);
-            // 
-            // labelCAPILogin
-            // 
-            this.labelCAPILogin.AutoSize = true;
-            this.labelCAPILogin.Location = new System.Drawing.Point(190, 30);
-            this.labelCAPILogin.Name = "labelCAPILogin";
-            this.labelCAPILogin.Size = new System.Drawing.Size(50, 13);
-            this.labelCAPILogin.TabIndex = 4;
-            this.labelCAPILogin.Text = "Login ID:";
-            // 
-            // groupBoxCustom3
-            // 
-            this.groupBoxCustom3.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom3.BackColorScaling = 0.5F;
-            this.groupBoxCustom3.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom3.BorderColorScaling = 0.5F;
-            this.groupBoxCustom3.Controls.Add(this.checkBoxCustomEDDNTo);
-            this.groupBoxCustom3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom3.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom3.Location = new System.Drawing.Point(0, 321);
-            this.groupBoxCustom3.Name = "groupBoxCustom3";
-            this.groupBoxCustom3.Size = new System.Drawing.Size(606, 66);
-            this.groupBoxCustom3.TabIndex = 5;
-            this.groupBoxCustom3.TabStop = false;
-            this.groupBoxCustom3.Text = "EDDN";
-            this.groupBoxCustom3.TextPadding = 0;
-            this.groupBoxCustom3.TextStartPosition = -1;
             // 
             // checkBoxCustomEDDNTo
             // 
@@ -303,31 +243,6 @@
             this.toolTip1.SetToolTip(this.checkBoxCustomEDDNTo, "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, I" +
         "nara with data from commanders. All data is made anonymised");
             this.checkBoxCustomEDDNTo.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxCustom2
-            // 
-            this.groupBoxCustom2.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom2.BackColorScaling = 0.5F;
-            this.groupBoxCustom2.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom2.BorderColorScaling = 0.5F;
-            this.groupBoxCustom2.Controls.Add(this.checkBoxCustomEDSMFrom);
-            this.groupBoxCustom2.Controls.Add(this.checkBoxCustomEDSMTo);
-            this.groupBoxCustom2.Controls.Add(this.label5);
-            this.groupBoxCustom2.Controls.Add(this.textBoxBorderEDSMName);
-            this.groupBoxCustom2.Controls.Add(this.textBoxBorderEDSMAPI);
-            this.groupBoxCustom2.Controls.Add(this.label6);
-            this.groupBoxCustom2.Controls.Add(this.label1);
-            this.groupBoxCustom2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom2.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom2.Location = new System.Drawing.Point(0, 178);
-            this.groupBoxCustom2.Margin = new System.Windows.Forms.Padding(10);
-            this.groupBoxCustom2.Name = "groupBoxCustom2";
-            this.groupBoxCustom2.Size = new System.Drawing.Size(606, 133);
-            this.groupBoxCustom2.TabIndex = 4;
-            this.groupBoxCustom2.TabStop = false;
-            this.groupBoxCustom2.Text = "EDSM Information (optional)";
-            this.groupBoxCustom2.TextPadding = 0;
-            this.groupBoxCustom2.TextStartPosition = -1;
             // 
             // checkBoxCustomEDSMFrom
             // 
@@ -364,15 +279,6 @@
             this.toolTip1.SetToolTip(this.checkBoxCustomEDSMTo, "Send your travel and ship data to EDSM");
             this.checkBoxCustomEDSMTo.UseVisualStyleBackColor = true;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 30);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(72, 13);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "EDSM Name:";
-            // 
             // textBoxBorderEDSMName
             // 
             this.textBoxBorderEDSMName.BorderColor = System.Drawing.Color.Transparent;
@@ -392,6 +298,171 @@
             this.textBoxBorderEDSMAPI.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderEDSMAPI.TabIndex = 3;
             this.toolTip1.SetToolTip(this.textBoxBorderEDSMAPI, "Enter the API key from the EDSM Website");
+            // 
+            // buttonExtBrowse
+            // 
+            this.buttonExtBrowse.BorderColorScaling = 1.25F;
+            this.buttonExtBrowse.ButtonColorScaling = 0.5F;
+            this.buttonExtBrowse.ButtonDisabledScaling = 0.5F;
+            this.buttonExtBrowse.Location = new System.Drawing.Point(494, 60);
+            this.buttonExtBrowse.Name = "buttonExtBrowse";
+            this.buttonExtBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtBrowse.TabIndex = 4;
+            this.buttonExtBrowse.Text = "Browse";
+            this.toolTip1.SetToolTip(this.buttonExtBrowse, "Browse to the the journal folder");
+            this.buttonExtBrowse.UseVisualStyleBackColor = true;
+            this.buttonExtBrowse.Click += new System.EventHandler(this.buttonExtBrowse_Click);
+            // 
+            // textBoxBorderJournal
+            // 
+            this.textBoxBorderJournal.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorderJournal.BorderColorScaling = 0.5F;
+            this.textBoxBorderJournal.Location = new System.Drawing.Point(160, 60);
+            this.textBoxBorderJournal.Name = "textBoxBorderJournal";
+            this.textBoxBorderJournal.Size = new System.Drawing.Size(310, 20);
+            this.textBoxBorderJournal.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.textBoxBorderJournal, "Enter the journal location folder.  Normally leave this field blank, EDDiscovery " +
+        "knows where the standard location is");
+            // 
+            // textBoxBorderCmdr
+            // 
+            this.textBoxBorderCmdr.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorderCmdr.BorderColorScaling = 0.5F;
+            this.textBoxBorderCmdr.Location = new System.Drawing.Point(160, 30);
+            this.textBoxBorderCmdr.Name = "textBoxBorderCmdr";
+            this.textBoxBorderCmdr.Size = new System.Drawing.Size(231, 20);
+            this.textBoxBorderCmdr.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.textBoxBorderCmdr, "Commander Name");
+            // 
+            // groupBoxCustom5
+            // 
+            this.groupBoxCustom5.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustom5.BackColorScaling = 0.5F;
+            this.groupBoxCustom5.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustom5.BorderColorScaling = 0.5F;
+            this.groupBoxCustom5.Controls.Add(this.label7);
+            this.groupBoxCustom5.Controls.Add(this.textBoxBorderTravelLog);
+            this.groupBoxCustom5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustom5.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustom5.Location = new System.Drawing.Point(0, 504);
+            this.groupBoxCustom5.Name = "groupBoxCustom5";
+            this.groupBoxCustom5.Size = new System.Drawing.Size(606, 62);
+            this.groupBoxCustom5.TabIndex = 7;
+            this.groupBoxCustom5.TabStop = false;
+            this.groupBoxCustom5.Text = "Pre 2.2 Travel Log (optional)";
+            this.groupBoxCustom5.TextPadding = 0;
+            this.groupBoxCustom5.TextStartPosition = -1;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 30);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(105, 13);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "Travel Log Location:";
+            // 
+            // groupBoxCustom4
+            // 
+            this.groupBoxCustom4.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustom4.BackColorScaling = 0.5F;
+            this.groupBoxCustom4.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustom4.BorderColorScaling = 0.5F;
+            this.groupBoxCustom4.Controls.Add(this.labelCAPIState);
+            this.groupBoxCustom4.Controls.Add(this.buttonExtCAPI);
+            this.groupBoxCustom4.Controls.Add(this.textBoxBorderCompanionPassword);
+            this.groupBoxCustom4.Controls.Add(this.labelCAPIPassword);
+            this.groupBoxCustom4.Controls.Add(this.textBoxBorderCompanionLogin);
+            this.groupBoxCustom4.Controls.Add(this.labelCAPILogin);
+            this.groupBoxCustom4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustom4.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustom4.Location = new System.Drawing.Point(0, 397);
+            this.groupBoxCustom4.Name = "groupBoxCustom4";
+            this.groupBoxCustom4.Size = new System.Drawing.Size(606, 97);
+            this.groupBoxCustom4.TabIndex = 6;
+            this.groupBoxCustom4.TabStop = false;
+            this.groupBoxCustom4.Text = "Frontier Companion API (optional)";
+            this.groupBoxCustom4.TextPadding = 0;
+            this.groupBoxCustom4.TextStartPosition = -1;
+            // 
+            // labelCAPIState
+            // 
+            this.labelCAPIState.AutoSize = true;
+            this.labelCAPIState.Location = new System.Drawing.Point(10, 30);
+            this.labelCAPIState.Name = "labelCAPIState";
+            this.labelCAPIState.Size = new System.Drawing.Size(93, 13);
+            this.labelCAPIState.TabIndex = 9;
+            this.labelCAPIState.Text = "CAPI current state";
+            // 
+            // labelCAPIPassword
+            // 
+            this.labelCAPIPassword.AutoSize = true;
+            this.labelCAPIPassword.Location = new System.Drawing.Point(190, 60);
+            this.labelCAPIPassword.Name = "labelCAPIPassword";
+            this.labelCAPIPassword.Size = new System.Drawing.Size(85, 13);
+            this.labelCAPIPassword.TabIndex = 6;
+            this.labelCAPIPassword.Text = "Login Password:";
+            // 
+            // labelCAPILogin
+            // 
+            this.labelCAPILogin.AutoSize = true;
+            this.labelCAPILogin.Location = new System.Drawing.Point(190, 30);
+            this.labelCAPILogin.Name = "labelCAPILogin";
+            this.labelCAPILogin.Size = new System.Drawing.Size(50, 13);
+            this.labelCAPILogin.TabIndex = 4;
+            this.labelCAPILogin.Text = "Login ID:";
+            // 
+            // groupBoxCustom3
+            // 
+            this.groupBoxCustom3.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustom3.BackColorScaling = 0.5F;
+            this.groupBoxCustom3.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustom3.BorderColorScaling = 0.5F;
+            this.groupBoxCustom3.Controls.Add(this.checkBoxCustomEDDNTo);
+            this.groupBoxCustom3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustom3.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustom3.Location = new System.Drawing.Point(0, 321);
+            this.groupBoxCustom3.Name = "groupBoxCustom3";
+            this.groupBoxCustom3.Size = new System.Drawing.Size(606, 66);
+            this.groupBoxCustom3.TabIndex = 5;
+            this.groupBoxCustom3.TabStop = false;
+            this.groupBoxCustom3.Text = "EDDN";
+            this.groupBoxCustom3.TextPadding = 0;
+            this.groupBoxCustom3.TextStartPosition = -1;
+            // 
+            // groupBoxCustom2
+            // 
+            this.groupBoxCustom2.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustom2.BackColorScaling = 0.5F;
+            this.groupBoxCustom2.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustom2.BorderColorScaling = 0.5F;
+            this.groupBoxCustom2.Controls.Add(this.checkBoxCustomEDSMFrom);
+            this.groupBoxCustom2.Controls.Add(this.checkBoxCustomEDSMTo);
+            this.groupBoxCustom2.Controls.Add(this.label5);
+            this.groupBoxCustom2.Controls.Add(this.textBoxBorderEDSMName);
+            this.groupBoxCustom2.Controls.Add(this.textBoxBorderEDSMAPI);
+            this.groupBoxCustom2.Controls.Add(this.label6);
+            this.groupBoxCustom2.Controls.Add(this.label1);
+            this.groupBoxCustom2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustom2.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustom2.Location = new System.Drawing.Point(0, 178);
+            this.groupBoxCustom2.Margin = new System.Windows.Forms.Padding(10);
+            this.groupBoxCustom2.Name = "groupBoxCustom2";
+            this.groupBoxCustom2.Size = new System.Drawing.Size(606, 133);
+            this.groupBoxCustom2.TabIndex = 4;
+            this.groupBoxCustom2.TabStop = false;
+            this.groupBoxCustom2.Text = "EDSM Information (optional)";
+            this.groupBoxCustom2.TextPadding = 0;
+            this.groupBoxCustom2.TextStartPosition = -1;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 30);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(72, 13);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "EDSM Name:";
             // 
             // label6
             // 
@@ -417,7 +488,7 @@
             this.groupBoxCustom1.BackColorScaling = 0.5F;
             this.groupBoxCustom1.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustom1.BorderColorScaling = 0.5F;
-            this.groupBoxCustom1.Controls.Add(this.buttonExtBrowseJ);
+            this.groupBoxCustom1.Controls.Add(this.buttonExtBrowse);
             this.groupBoxCustom1.Controls.Add(this.textBoxBorderJournal);
             this.groupBoxCustom1.Controls.Add(this.textBoxBorderCmdr);
             this.groupBoxCustom1.Controls.Add(this.label3);
@@ -433,40 +504,6 @@
             this.groupBoxCustom1.Text = "Journal Related Information";
             this.groupBoxCustom1.TextPadding = 0;
             this.groupBoxCustom1.TextStartPosition = -1;
-            // 
-            // buttonExtBrowseJ
-            // 
-            this.buttonExtBrowseJ.BorderColorScaling = 1.25F;
-            this.buttonExtBrowseJ.ButtonColorScaling = 0.5F;
-            this.buttonExtBrowseJ.ButtonDisabledScaling = 0.5F;
-            this.buttonExtBrowseJ.Location = new System.Drawing.Point(494, 60);
-            this.buttonExtBrowseJ.Name = "buttonExtBrowseJ";
-            this.buttonExtBrowseJ.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtBrowseJ.TabIndex = 4;
-            this.buttonExtBrowseJ.Text = "Browse";
-            this.toolTip1.SetToolTip(this.buttonExtBrowseJ, "Browse to the the journal folder");
-            this.buttonExtBrowseJ.UseVisualStyleBackColor = true;
-            // 
-            // textBoxBorderJournal
-            // 
-            this.textBoxBorderJournal.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderJournal.BorderColorScaling = 0.5F;
-            this.textBoxBorderJournal.Location = new System.Drawing.Point(160, 60);
-            this.textBoxBorderJournal.Name = "textBoxBorderJournal";
-            this.textBoxBorderJournal.Size = new System.Drawing.Size(310, 20);
-            this.textBoxBorderJournal.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBoxBorderJournal, "Enter the journal location folder.  Normally leave this field blank, EDDiscovery " +
-        "knows where the standard location is");
-            // 
-            // textBoxBorderCmdr
-            // 
-            this.textBoxBorderCmdr.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderCmdr.BorderColorScaling = 0.5F;
-            this.textBoxBorderCmdr.Location = new System.Drawing.Point(160, 30);
-            this.textBoxBorderCmdr.Name = "textBoxBorderCmdr";
-            this.textBoxBorderCmdr.Size = new System.Drawing.Size(231, 20);
-            this.textBoxBorderCmdr.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBoxBorderCmdr, "Commander Name");
             // 
             // label3
             // 
@@ -524,42 +561,6 @@
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
-            // panel_close
-            // 
-            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.DrawnImage = null;
-            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
-            this.panel_close.ImageText = null;
-            this.panel_close.Location = new System.Drawing.Point(583, 0);
-            this.panel_close.MarginSize = 6;
-            this.panel_close.MouseOverColor = System.Drawing.Color.White;
-            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_close.MouseSelectedColorEnable = true;
-            this.panel_close.Name = "panel_close";
-            this.panel_close.Size = new System.Drawing.Size(24, 24);
-            this.panel_close.TabIndex = 27;
-            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
-            // 
-            // panel_minimize
-            // 
-            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.DrawnImage = null;
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.ImageText = null;
-            this.panel_minimize.Location = new System.Drawing.Point(553, 0);
-            this.panel_minimize.MarginSize = 6;
-            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
-            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_minimize.MouseSelectedColorEnable = true;
-            this.panel_minimize.Name = "panel_minimize";
-            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
-            this.panel_minimize.TabIndex = 26;
-            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
-            // 
             // CommanderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -615,7 +616,7 @@
         private ExtendedControls.TextBoxBorder textBoxBorderEDSMAPI;
         private ExtendedControls.TextBoxBorder textBoxBorderEDSMName;
         private ExtendedControls.GroupBoxCustom groupBoxCustom1;
-        private ExtendedControls.ButtonExt buttonExtBrowseJ;
+        private ExtendedControls.ButtonExt buttonExtBrowse;
         private ExtendedControls.GroupBoxCustom groupBoxCustom2;
         private ExtendedControls.GroupBoxCustom groupBoxCustom3;
         private ExtendedControls.CheckBoxCustom checkBoxCustomEDSMFrom;

@@ -95,7 +95,8 @@ namespace EDDiscovery.Forms
                     labelCAPILogin.Text = "Confirm Code:";
                     textBoxBorderCompanionPassword.Visible = labelCAPIPassword.Visible = false;
                     textBoxBorderCompanionLogin.Text = "";
-                    buttonExtCAPI.Text = "Confirm";           // default state.. information needed.
+                    buttonExtCAPI.Text = "Clear";           // default state is clear/abort
+                    buttonExtCAPI.Enabled = true;
                     toolTip1.SetToolTip(textBoxBorderCompanionLogin, "Enter the confirmation code you just received via email from Frontier");
 
                     if ( capi.NeedLogin )
@@ -144,7 +145,7 @@ namespace EDDiscovery.Forms
                 }
                 catch (Exception ex)
                 {
-                    Forms.MessageBoxTheme.Show(this, "Confirm Code Failed:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Forms.MessageBoxTheme.Show(this, "Confirm Failed:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -196,16 +197,26 @@ namespace EDDiscovery.Forms
         {
             if (textBoxBorderCompanionLogin.Visible)
             {
-                if (textBoxBorderCompanionPassword.Visible)
+                if (textBoxBorderCompanionPassword.Visible)     // Login..
                     buttonExtCAPI.Enabled = (textBoxBorderCompanionLogin.Text.Length > 0 && textBoxBorderCompanionPassword.Text.Length > 0);
                 else
-                    buttonExtCAPI.Enabled = textBoxBorderCompanionLogin.Text.Length > 0;
+                    buttonExtCAPI.Text = textBoxBorderCompanionLogin.Text.Length > 0 ? "Confirm" : "Clear";           // single enabled, in confirm, set to confirm if text, else clear
             }
         }
 
         private void textBoxBorderCompanionPassword_TextChanged(object sender, EventArgs e)
         {
             textBoxBorderCompanionLogin_TextChanged(sender, e);
+
+        }
+
+        private void buttonExtBrowse_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = "Select folder where Journal*.log files are stored by Frontier in";
+
+            if (fbd.ShowDialog(this) == DialogResult.OK)
+                textBoxBorderJournal.Text = fbd.SelectedPath;
 
         }
     }

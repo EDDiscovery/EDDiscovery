@@ -138,8 +138,12 @@ namespace EDDiscovery.CompanionAPI
                 else if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == LOGIN_URL)
                 {
                     Credentials.SetNeedsConfirmation();
-                    NeedLogin = true;
                     throw new CompanionAppAuthenticationException("Confirmation code incorrect or expired");
+                }
+                else
+                {
+                    Credentials.SetNeedsConfirmation();
+                    throw new CompanionAppAuthenticationException("Confirmation code not accepted, check");
                 }
             }
         }
