@@ -69,6 +69,7 @@ namespace EDDiscovery.Forms
             Exploration,
             Synthesis,
             Missions,
+            Engineering,
 
             StartTabButtons = Log,
         };
@@ -119,6 +120,7 @@ namespace EDDiscovery.Forms
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
             { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
+            { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EDDiscovery.Properties.Resources.engineerlist, "Engineering Planner") }
         };
 
         public static UserControlCommonBase Create(PopOuts i)
@@ -143,6 +145,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.Exploration: return new UserControlExploration();
                 case PopOuts.Synthesis: return new UserControlSynthesis();
                 case PopOuts.Missions: return new UserControlMissions();
+                case PopOuts.Engineering: return new UserControlEngineering();
                 default: return null;
             }
         }
