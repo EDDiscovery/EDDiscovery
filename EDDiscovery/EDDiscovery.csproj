@@ -765,6 +765,7 @@
     <Compile Include="TravelHistoryControl.Designer.cs">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\EngineeringFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
@@ -789,6 +790,12 @@
     </Compile>
     <Compile Include="UserControls\UserControlMissions.Designer.cs">
       <DependentUpon>UserControlMissions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlEngineering.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlEngineering.Designer.cs">
+      <DependentUpon>UserControlEngineering.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlSynthesis.cs">
       <SubType>UserControl</SubType>
@@ -964,6 +971,9 @@
     <EmbeddedResource Include="UserControls\UserControlMissions.resx">
       <DependentUpon>UserControlMissions.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlEngineering.resx">
+      <DependentUpon>UserControlEngineering.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSynthesis.resx">
       <DependentUpon>UserControlSynthesis.cs</DependentUpon>
     </EmbeddedResource>
@@ -1044,7 +1054,6 @@
     <None Include="Resources\ammunition.png" />
     <None Include="Resources\dockingrequest.png" />
     <None Include="Resources\crew.png" />
-    <None Include="Resources\engineercraft.png" />
     <None Include="Resources\engineerprogress.png" />
     <None Include="Resources\engineerapply.png" />
     <None Include="Resources\dockinggranted.png" />
@@ -1121,6 +1130,7 @@
     <None Include="Resources\coriolis.png" />
     <None Include="Resources\excel.png" />
     <None Include="Resources\Calendar.png" />
+    <None Include="Resources\engineercraft.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
