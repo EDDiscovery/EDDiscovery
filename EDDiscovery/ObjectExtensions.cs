@@ -599,10 +599,66 @@ public static class ObjectExtensionsStrings
         return ret;
     }
 
-    public static string FDName(this string normal)
+    public static string FDMaterialName(this string normal)
     {
-        string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
-        return n.ToLower();
+        switch (normal)
+        {
+            case "Flawed Focus Crystals":
+                return "uncutfocuscrystals";
+            case "Aberrant Shield Pattern Analysis":
+                return "shieldpatternanalysis";
+            case "Adaptive Encryptors Capture":
+                return "adaptiveencryptors";
+            case "Anomalous Bulk Scan Data":
+                return "bulkscandata";
+            case "Anomalous FSD Telemetry":
+                return "fsdtelemetry";
+            case "Atypical Disrupted Wake Echoes":
+                return "disruptedwakeechoes";
+            case "Atypical Encryption Archives":
+                return "encryptionarchives";
+            case "Classified Scan Databanks":
+                return "scandatabanks";
+            case "Cracked Industrial Firmware":
+                return "industrialfirmware";
+            case "Datamined Wake Exceptions":
+                return "dataminedwake";
+            case "Distorted Shield Cycle Recordings":
+                return "shieldcyclerecordings";
+            case "Divergent Scan Data":
+                return "encodedscandata";
+            case "Eccentric Hyperspace Trajectories":
+                return "hyperspacetrajectories";
+            case "Exceptional Scrambled Emission Data":
+                return "scrambledemissiondata";
+            case "Inconsistent Shield Soak Analysis":
+                return "shieldsoakanalysis";
+            case "Irregular Emission Data":
+                return "archivedemissiondata";
+            case "Modified Consumer Firmware":
+                return "consumerfirmware";
+            case "Open Symmetric Keys":
+                return "symmetrickeys";
+            case "Security Firmware Patch":
+                return "securityfirmware";
+            case "Specialised Legacy Firmware":
+                return "legacyfirmware";
+            case "Strange Wake Solutions":
+                return "wakesolutions";
+            case "Tagged Encryption Codes":
+                return "encryptioncodes";
+            case "Unexpected Emission Data":
+                return "emissiondata";
+            case "Unidentified Scan Archives":
+                return "scanarchives";
+            case "Untypical Shield Scans":
+                return "shielddensityreports";
+            case "Unusual Encrypted Files":
+                return "encryptedfiles";
+            default:
+                string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
+                return n.ToLower();
+        }
     }
 
 }
