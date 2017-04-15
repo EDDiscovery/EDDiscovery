@@ -10,10 +10,10 @@ namespace EDDiscovery.CompanionAPI
     public class CLastStarport
     {
         private JObject _jo;
-        long id { get; set; }
-        string name { get; set; }
-        string faction { get; set; }
-        List<CCommodities> commodities;
+        public long id { get; set; }
+        public string name { get; set; }
+        public string faction { get; set; }
+        public List<CCommodities> commodities;
 
         public CLastStarport(JObject jo)
         {

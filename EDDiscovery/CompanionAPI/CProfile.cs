@@ -32,7 +32,17 @@ namespace EDDiscovery.CompanionAPI
         {
         }
 
+        public CProfile(string jsonstring)
+        {
+            JObject jo = JObject.Parse(jsonstring);
+            FromJson(jo);
+        }
         public CProfile(JObject json)
+        {
+            FromJson(json);
+        }
+
+        private void FromJson(JObject json)
         {
             if (json["commander"] != null)
             {
@@ -53,10 +63,6 @@ namespace EDDiscovery.CompanionAPI
                     }
                 }
             }
-
-
-
         }
-
     }
 }
