@@ -67,6 +67,7 @@ namespace EDDiscovery.EliteDangerous
         DockingTimeout = 200,
         DockSRV = 210,
         EjectCargo = 220,
+        EndCrewSession = 225,
         EngineerApply = 230,
         EngineerCraft = 240,
         EngineerProgress = 250,
