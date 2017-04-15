@@ -105,12 +105,14 @@ namespace EDDiscovery.CompanionAPI
 
                 free = JSONHelper.GetBool(jo["free"]);
 
-                healthHull = JSONHelper.GetInt(jo["health"]["hull"]);
-                healthShield = JSONHelper.GetInt(jo["health"]["shield"]);
-                shieldUp = JSONHelper.GetBool(jo["health"]["shieldup"]);
-                integrity = JSONHelper.GetInt(jo["health"]["integrity"]);
-                paintwork= JSONHelper.GetInt(jo["health"]["paintwork"]);
-
+                if (jo["health"] != null)
+                {
+                    healthHull = JSONHelper.GetInt(jo["health"]["hull"]);
+                    healthShield = JSONHelper.GetInt(jo["health"]["shield"]);
+                    shieldUp = JSONHelper.GetBool(jo["health"]["shieldup"]);
+                    integrity = JSONHelper.GetInt(jo["health"]["integrity"]);
+                    paintwork = JSONHelper.GetInt(jo["health"]["paintwork"]);
+                }
                 cockpitBreached = JSONHelper.GetBool(jo["cockpitBreached"]);
                 oxygenRemaining = JSONHelper.GetInt(jo["oxygenRemaining"]);
 
