@@ -74,8 +74,8 @@ namespace EDDiscovery.EDDN
             if (commanderName.StartsWith("[BETA]"))
                 return "http://schemas.elite-markets.net/eddn/commodity/3/test";
             else
-                //return "http://schemas.elite-markets.net/eddn/commodity/3";
-                return "http://schemas.elite-markets.net/eddn/commodity/3/test"; // For testing now.
+                return "http://schemas.elite-markets.net/eddn/commodity/3";
+                //return "http://schemas.elite-markets.net/eddn/commodity/3/test"; // For testing now.
         }
 
 
@@ -180,6 +180,12 @@ namespace EDDiscovery.EDDN
 
             foreach (var commodity in commodities)
             {
+                if (commodity.categoryname.Equals("NonMarketable"))
+                {
+                    continue;
+                }
+
+
                 JObject jo = new JObject();
 
                 jo["demandBracket"] = commodity.demandBracket;
