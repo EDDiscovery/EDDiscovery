@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EDDiscovery.CompanionAPI
 {
-    internal class CCommodities
+    public class CCommodities
     {
         private JObject _jo;
         public int id { get; set; }

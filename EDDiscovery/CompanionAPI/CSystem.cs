@@ -10,9 +10,9 @@ namespace EDDiscovery.CompanionAPI
     public class CLastSystem
     {
         private JObject _jo;
-        long id { get; set; }
-        string name { get; set; }
-        string faction { get; set; }
+        public long id { get; set; }
+        public string name { get; set; }
+        public string faction { get; set; }
 
         public CLastSystem(JObject jo)
         {

@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.CompanionAPI;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 
@@ -22,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Management;
 using System.Reflection;
@@ -59,13 +61,23 @@ namespace EDDiscovery.EDDN
         }
 
 
-        private string GetEDDNSchemaRef()
+        private string GetEDDNJournalSchemaRef()
         {
             if (commanderName.StartsWith("[BETA]"))
                 return "http://schemas.elite-markets.net/eddn/journal/1/test";
             else
                 return "http://schemas.elite-markets.net/eddn/journal/1";
         }
+
+        private string GetEDDNCommoditySchemaRef()
+        {
+            if (commanderName.StartsWith("[BETA]"))
+                return "http://schemas.elite-markets.net/eddn/commodity/3/test";
+            else
+                //return "http://schemas.elite-markets.net/eddn/commodity/3";
+                return "http://schemas.elite-markets.net/eddn/commodity/3/test"; // For testing now.
+        }
+
 
         private JObject RemoveCommonKeys(JObject obj)
         {
@@ -88,7 +100,7 @@ namespace EDDiscovery.EDDN
             JObject msg = new JObject();
             
             msg["header"] = Header();
-            msg["$schemaRef"] = GetEDDNSchemaRef();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
 
             JObject message = journal.GetJson();
 
@@ -112,7 +124,7 @@ namespace EDDiscovery.EDDN
             JObject msg = new JObject();
 
             msg["header"] = Header();
-            msg["$schemaRef"] = GetEDDNSchemaRef();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
 
             JObject message = journal.GetJson();
 
@@ -130,7 +142,7 @@ namespace EDDiscovery.EDDN
             JObject msg = new JObject();
 
             msg["header"] = Header();
-            msg["$schemaRef"] = GetEDDNSchemaRef();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
 
             JObject message = journal.GetJson();
 
@@ -146,6 +158,48 @@ namespace EDDiscovery.EDDN
 
 
             message = RemoveCommonKeys(message);
+            msg["message"] = message;
+            return msg;
+        }
+
+
+        public JObject CreateEDDNCommodityMessage(List<CCommodities> commodities, string systemName, string stationName, DateTime time)
+        {
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNCommoditySchemaRef();
+
+            JObject message = new JObject();
+
+            message["systemName"] = systemName;
+            message["stationName"] = stationName;
+            message["timestamp"] = time.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
+
+            JArray JAcommodities = new JArray();
+
+            foreach (var commodity in commodities)
+            {
+                JObject jo = new JObject();
+
+                jo["demandBracket"] = commodity.demandBracket;
+                jo["name"] = commodity.name;
+                jo["buyPrice"] = commodity.buyPrice;
+                jo["meanPrice"] = commodity.meanPrice;
+                jo["stockBracket"] = commodity.stockBracket;
+                jo["demand"] = commodity.demand;
+                jo["sellPrice"] = commodity.sellPrice;
+                jo["stock"] = commodity.stock;
+
+                if (commodity.StatusFlags!=null && commodity.StatusFlags.Count > 0)
+                {
+                    jo["statusFlags"] = new JArray(commodity.StatusFlags);
+                }
+
+                JAcommodities.Add(jo);
+            }
+
+            message["commodities"] = JAcommodities;
             msg["message"] = message;
             return msg;
         }

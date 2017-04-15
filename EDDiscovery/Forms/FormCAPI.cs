@@ -1,5 +1,6 @@
 ﻿using EDDiscovery.CompanionAPI;
 using EDDiscovery.EliteDangerous;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -179,6 +180,36 @@ namespace EDDiscovery.Forms
                 richTextBox1.AppendText(profileJson);
                 //setShipyardFromConfiguration();
             }
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            profileJson = capi.GetProfileString();
+
+            if (profileJson == null)
+            {
+                setUpLoggedIn("Login OK. No user profile available");
+            }
+            else
+            {
+                CProfile profile = new CProfile(profileJson);
+
+                EDDN.EDDNClass eddn = new EDDN.EDDNClass();
+
+                eddn.commanderName = capi.Credentials.Commander;
+                JObject msg = eddn.CreateEDDNCommodityMessage(profile.StarPort.commodities, profile.CurrentStarSystem.name, profile.StarPort.name, DateTime.UtcNow );
+
+                if (msg != null)
+                {
+                    if (eddn.PostMessage(msg))
+                    {
+                    }
+                }
+            }
+
+            richTextBox1.AppendText(profileJson);
+            
+            
         }
     }
 }
