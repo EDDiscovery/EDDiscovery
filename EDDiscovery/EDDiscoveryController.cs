@@ -35,6 +35,7 @@ namespace EDDiscovery
         #region Variables
         public HistoryList history { get; private set; } = new HistoryList();
         public EDSMSync EdsmSync { get; private set; }
+        public EDSMLogFetcher EdsmLogFetcher { get; private set; }
         public string LogText { get { return logtext; } }
         public bool PendingClose { get; private set; }           // we want to close boys!
         public GalacticMapping galacticMapping { get; private set; }
@@ -95,7 +96,9 @@ namespace EDDiscovery
             galacticMapping = new GalacticMapping();
 
             EdsmSync = new EDSMSync(this);
-            EdsmSync.OnDownloadedSystems += () => RefreshHistoryAsync();
+
+            EdsmLogFetcher = new EDSMLogFetcher(EDCommander.CurrentCmdrID, LogLine);
+            EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EliteDangerous.EDJournalClass(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewPosition;
@@ -124,6 +127,7 @@ namespace EDDiscovery
                 PendingClose = true;
                 EDDNSync.StopSync();
                 EdsmSync.StopSync();
+                EdsmLogFetcher.Stop();
                 journalmonitor.StopMonitor();
                 LogLineHighlight("Closing down, please wait..");
                 Console.WriteLine("Close.. safe close launched");
@@ -548,6 +552,12 @@ namespace EDDiscovery
                     history.shipinformationlist = hist.shipinformationlist;
                     history.CommanderId = hist.CommanderId;
 
+                    if (history.CommanderId != EdsmLogFetcher.CommanderId)
+                    {
+                        EdsmLogFetcher = new EDSMLogFetcher(history.CommanderId, LogLine);
+                        EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
+                    }
+
                     ReportProgress(-1, "");
                     LogLine("Refresh Complete.");
 
@@ -557,6 +567,7 @@ namespace EDDiscovery
                 HistoryRefreshed?.Invoke(this, EventArgs.Empty);
 
                 journalmonitor.StartMonitor();
+                EdsmLogFetcher.Start();
 
                 OnRefreshComplete?.Invoke();
 
@@ -649,6 +660,7 @@ namespace EDDiscovery
                         break;
                     case 1:  // Refresh Requested
                         journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+                        EdsmLogFetcher.Stop();
                         InvokeAsyncOnUiThread(() =>
                         {
                             OnRefreshStarting?.Invoke();
