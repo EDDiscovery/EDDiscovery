@@ -38,9 +38,6 @@ namespace EDDiscovery.EDSM
         int _defmapcolour = 0;
         private IDiscoveryController mainForm;
 
-        public delegate void EDSMDownloadedSystems();         // used for sync from not supported yet.
-        public event EDSMDownloadedSystems OnDownloadedSystems;
-
         public EDSMSync(IDiscoveryController frm)
         {
             mainForm = frm;
@@ -85,18 +82,29 @@ namespace EDDiscovery.EDSM
 
                 if ( _syncTo && hlfsdunsyncedlist.Count > 0 )                   // send systems to edsm (verified with dates, 29/9/2016, utc throughout)
                 {
-                    DateTime utcmin = hlfsdunsyncedlist[0].EventTimeUTC.AddDays(-1);        // 1 days for margin ;-)  only get them back to this date for speed..
+                    DateTime logstarttime = DateTime.MinValue;
+                    DateTime logendtime = DateTime.MinValue;
 
                     mainForm.LogLine("EDSM: Sending " + hlfsdunsyncedlist.Count.ToString() + " flightlog entries");
 
                     List<HistoryEntry> edsmsystemlog = null;
-                    edsm.GetLogs(utcmin, out edsmsystemlog);        // always returns a log, time is in UTC as per HistoryEntry and JournalEntry
 
                     int edsmsystemssent = 0;
 
                     foreach (var he in hlfsdunsyncedlist)
                     {
                         if (Exit)
+                        {
+                            running = false;
+                            return;
+                        }
+
+                        if (edsmsystemlog == null || he.EventTimeUTC >= logendtime.AddDays(-1))
+                        {
+                            edsm.GetLogs(he.EventTimeUTC.AddDays(-1), null, out edsmsystemlog, out logstarttime, out logendtime);        // always returns a log, time is in UTC as per HistoryEntry and JournalEntry
+                        }
+
+                        if (edsmsystemlog == null)
                         {
                             running = false;
                             return;
@@ -203,97 +211,6 @@ namespace EDDiscovery.EDSM
                     }
                 }
 
-                if (_syncFrom )     // verified after struggle 29/9/2016
-                {
-                    List<HistoryEntry> edsmsystemlog = null;
-                    edsm.GetLogs(new DateTime(2011, 1, 1), out edsmsystemlog);        // get the full list of systems
-                    edsmsystemlog = edsmsystemlog.OrderBy(s => s.EventTimeUTC).ToList();
-
-                    List<HistoryEntry> hlfsdlist = mainForm.history.FilterByTravel.Where(h => h.IsLocOrJump).OrderBy(h => h.EventTimeUTC).ToList();  // FSD jumps only
-                    
-                    List<HistoryEntry> toadd = new List<HistoryEntry>();
-
-                    int previdx = -1;
-                    foreach (HistoryEntry he in edsmsystemlog)      // find out list of ones not present
-                    {
-                        int index = hlfsdlist.FindIndex(x => x.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase) && x.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks);
-
-                        if (index < 0)
-                        {
-                            // Look for any entries where DST may have thrown off the time
-                            foreach (var vi in hlfsdlist.Select((v,i) => new {v = v, i = i}).Where(vi => vi.v.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase)))
-                            {
-                                if (vi.i > previdx)
-                                {
-                                    double hdiff = vi.v.EventTimeUTC.Subtract(he.EventTimeUTC).TotalHours;
-                                    if (hdiff >= -2 && hdiff <= 2 && hdiff == Math.Floor(hdiff))
-                                    {
-                                        if (vi.v.System.id_edsm <= 0)
-                                        {
-                                            vi.v.System.id_edsm = 0;
-                                            mainForm.history.FillEDSM(vi.v);
-                                        }
-
-                                        if (vi.v.System.id_edsm <= 0 || vi.v.System.id_edsm == he.System.id_edsm)
-                                        {
-                                            index = vi.i;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (index < 0)
-                        {
-                            toadd.Add(he);
-                        }
-                        else
-                        {
-                            HistoryEntry lhe = hlfsdlist[index];
-
-                            if (he.IsEDSMFirstDiscover && !lhe.IsEDSMFirstDiscover)
-                            {
-                                lhe.SetFirstDiscover();
-                            }
-
-                            previdx = index;
-                        }
-                    }
-
-                    if ( toadd.Count >0 )  // if we have any, we can add 
-                    {
-                        TravelLogUnit tlu = new TravelLogUnit();    // need a tlu for it
-                        tlu.type = 2;  // EDSM
-                        tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        tlu.Size = 0;
-                        tlu.Path = "EDSM";
-                        tlu.CommanderId = EDCommander.CurrentCmdrID;
-                        tlu.Add();  // Add to Database
-
-                        using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-                        {
-                            foreach (HistoryEntry he in toadd)
-                            {
-                                JObject jo = EDDiscovery.EliteDangerous.JournalEntry.CreateFSDJournalEntryJson(he.EventTimeUTC,
-                                                                                                  he.System.name, he.System.x, he.System.y, he.System.z,
-                                                                                                  _defmapcolour);
-                                EDDiscovery.EliteDangerous.JournalEntry je =
-                                    EDDiscovery.EliteDangerous.JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
-                                                                                                  (int)EDDiscovery.EliteDangerous.SyncFlags.EDSM, jo);
-
-                                System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", je.EventTimeUTC, he.System.name));
-                                je.Add(jo, cn);
-                            }
-                        }
-
-                        if (OnDownloadedSystems != null)
-                            OnDownloadedSystems();
-
-                        mainForm.LogLine(string.Format("EDSM downloaded {0} systems", toadd.Count));
-                    }
-                }
-
                 mainForm.LogLine("EDSM sync Done");
             }
             catch (Exception ex)
@@ -345,6 +262,5 @@ namespace EDDiscovery.EDSM
                 edsm.SetComment(star, note, edsmid);
             });
         }
-
     }
 }
