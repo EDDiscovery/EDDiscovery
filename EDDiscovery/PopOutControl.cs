@@ -120,7 +120,7 @@ namespace EDDiscovery.Forms
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
             { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
-            { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EDDiscovery.Properties.Resources.engineerlist, "Engineering Planner") }
+            { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EDDiscovery.Properties.Resources.engineercraft, "Engineering Planner") }
         };
 
         public static UserControlCommonBase Create(PopOuts i)
