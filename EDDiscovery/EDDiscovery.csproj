@@ -310,6 +310,7 @@
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
+    <Compile Include="EDSM\EDSMLogFetcher.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEndCrewSession.cs" />
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />

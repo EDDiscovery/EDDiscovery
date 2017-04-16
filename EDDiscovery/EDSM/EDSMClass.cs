@@ -452,15 +452,22 @@ namespace EDDiscovery.EDSM
             return false;
         }
 
-        public int GetLogs(DateTime starttimeutc, out List<HistoryEntry> log)     
+        public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<HistoryEntry> log, out DateTime logstarttime, out DateTime logendtime)
         {
             log = new List<HistoryEntry>();
+            logstarttime = DateTime.MinValue;
+            logendtime = DateTime.MinValue;
 
             if (!IsApiKeySet)
                 return 0;
 
-            string query = "get-logs?showId=1&startdatetime=" + HttpUtility.UrlEncode(starttimeutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
+            string query = "get-logs?showId=1&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
+
+            if (starttimeutc != null)
+                query += "&startDateTime=" + HttpUtility.UrlEncode(starttimeutc.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+
+            if (endtimeutc != null)
+                query += "&endDateTime=" + HttpUtility.UrlEncode(endtimeutc.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
             var response = RequestGet("api-logs-v1/" + query, handleException: true);
 
@@ -474,6 +481,8 @@ namespace EDDiscovery.EDSM
 
             JObject msg = JObject.Parse(json);
             int msgnr = msg["msgnum"].Value<int>();
+            DateTime.TryParseExact(msg["startDateTime"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logstarttime);
+            DateTime.TryParseExact(msg["endDateTime"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime);
 
             JArray logs = (JArray)msg["logs"];
 
