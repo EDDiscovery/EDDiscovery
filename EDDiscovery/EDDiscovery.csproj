@@ -194,7 +194,7 @@
     <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Actions\ActionCommands\ActionShip.cs" />
     <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
-    <Compile Include="Actions\ActionCommands\AudioUserInteraction.cs" />
+    <Compile Include="Actions\ActionCommands\ActionUserInteraction.cs" />
     <Compile Include="Actions\ActionController.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />

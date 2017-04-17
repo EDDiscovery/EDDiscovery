@@ -169,35 +169,32 @@ namespace EDDiscovery.Forms
 
         private void button3_Click(object sender, EventArgs e)
         {
-            profileJson = capi.GetProfileString();
-
-            if (profileJson == null)
+            try
+            {
+                capi.GetProfile();
+                richTextBox1.AppendText(capi.ProfileString);
+                //setShipyardFromConfiguration();
+            }
+            catch
             {
                 setUpLoggedIn("Login OK. No user profile available");
-            }
-            else
-            {
-                richTextBox1.AppendText(profileJson);
-                //setShipyardFromConfiguration();
             }
         }
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            profileJson = capi.GetProfileString();
+            try
+            {
+                capi.GetProfile();
 
-            if (profileJson == null)
-            {
-                setUpLoggedIn("Login OK. No user profile available");
-            }
-            else
-            {
-                CProfile profile = new CProfile(profileJson);
+                richTextBox1.AppendText(capi.ProfileString);
+
+                CProfile profile = capi.Profile;
 
                 EDDN.EDDNClass eddn = new EDDN.EDDNClass();
 
                 eddn.commanderName = capi.Credentials.Commander;
-                JObject msg = eddn.CreateEDDNCommodityMessage(profile.StarPort.commodities, profile.CurrentStarSystem.name, profile.StarPort.name, DateTime.UtcNow );
+                JObject msg = eddn.CreateEDDNCommodityMessage(profile.StarPort.commodities, profile.CurrentStarSystem.name, profile.StarPort.name, DateTime.UtcNow);
 
                 if (msg != null)
                 {
@@ -206,10 +203,10 @@ namespace EDDiscovery.Forms
                     }
                 }
             }
-
-            richTextBox1.AppendText(profileJson);
-            
-            
+            catch
+            {
+                setUpLoggedIn("Login OK. No user profile available");
+            }
         }
     }
 }
