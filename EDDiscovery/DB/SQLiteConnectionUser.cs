@@ -128,6 +128,9 @@ namespace EDDiscovery.DB
                 if (dbver < 112)
                     UpgradeUserDB112(conn);
 
+                if (dbver < 113)
+                    UpgradeUserDB113(conn);
+
                 CreateUserDBTableIndexes(conn);
 
                 return true;
@@ -362,6 +365,12 @@ namespace EDDiscovery.DB
         {
             string query1 = "DELETE FROM MaterialsCommodities";     // To fix materialcompatibility wuth wrong tables in 5.0.x
             PerformUpgrade(conn, 112, true, false, new[] { query1 });
+        }
+
+        private static void UpgradeUserDB113(SQLiteConnectionUser conn)
+        {
+            string query1 = "DELETE FROM MaterialsCommodities";     // To fix journal name -> in game name mappings for manufactured and encoded commodities
+            PerformUpgrade(conn, 113, true, false, new[] { query1 });
         }
 
 
