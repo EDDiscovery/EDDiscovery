@@ -131,6 +131,9 @@ namespace EDDiscovery.DB
                 if (dbver < 113)
                     UpgradeUserDB113(conn);
 
+                if (dbver < 114)
+                    UpgradeUserDB114(conn);
+
                 CreateUserDBTableIndexes(conn);
 
                 return true;
@@ -371,6 +374,12 @@ namespace EDDiscovery.DB
         {
             string query1 = "DELETE FROM MaterialsCommodities";     // To fix journal name -> in game name mappings for manufactured and encoded commodities
             PerformUpgrade(conn, 113, true, false, new[] { query1 });
+        }
+
+        private static void UpgradeUserDB114(SQLiteConnectionUser conn)
+        {
+            string query1 = "DELETE FROM MaterialsCommodities";     // To fix journal name -> in game name mappings for manufactured and encoded commodities  missmatch between  different 8.0 branches... 
+            PerformUpgrade(conn, 114, true, false, new[] { query1 });
         }
 
 
