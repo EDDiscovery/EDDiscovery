@@ -51,7 +51,7 @@ namespace EDDiscovery
         {
             "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
-            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis" , "Missions"
+            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis" , "Missions", "Engineering"
         };
 
         Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
@@ -68,6 +68,7 @@ namespace EDDiscovery
                                         EDDiscovery.Properties.Resources.sellexplorationdata,
                                         EDDiscovery.Properties.Resources.synthesis,
                                         EDDiscovery.Properties.Resources.missionaccepted,
+                                        EDDiscovery.Properties.Resources.engineercraft,
                                         };
 
         string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
@@ -84,6 +85,7 @@ namespace EDDiscovery
                                                "Display Exploration view",
                                                "Display Synthesis planner",
                                                "Display Missions",
+                                               "Display Engineering planner",
                                             };
 
         HistoryEntry notedisplayedhe = null;            // remember the particulars of the note displayed, so we can save it later
