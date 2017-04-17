@@ -42,20 +42,36 @@ namespace EDDiscovery
         #endregion
 
         #region Events
-        public event Action<HistoryList> OnHistoryChange;
-        public event Action<HistoryEntry, HistoryList> OnNewEntry;
-        public event Action<JournalEntry> OnNewJournalEntry;
-        public event Action<string, Color> OnNewLogEntry;
 
-        public event Action OnBgSafeClose;
-        public event Action OnFinalClose;
-        public event Action OnRefreshStarting;
-        public event Action OnRefreshCommanders;
-        public event Action OnRefreshComplete;
-        public event Action OnInitialSyncComplete;
-        public event Action OnSyncStarting;
-        public event Action OnSyncComplete;
-        public event Action<int, string> OnReportProgress;
+        // IN ORDER OF CALLING DURING A REFRESH
+
+        public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
+        public event Action OnRefreshCommanders;                            // UI. Called when refresh worker completes before final history is made (EDDiscoveryForm uses this to refresh commander stuff).  History is not valid here.
+                                                                            // ALSO called if Loadgame is received.  
+
+        public event Action<HistoryList> OnHistoryChange;                   // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
+        public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
+
+        // DURING A new Journal entry by the monitor
+
+        public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called when journal monitor generates a new position for the CURRENT commander
+        public event Action<JournalEntry> OnNewJournalEntry;                // UI. MAJOR. UC. Mirrored. Called when ANY new journal entry is created by the journal monitor
+
+        // IF a log print occurs
+
+        public event Action<string, Color> OnNewLogEntry;                   // UI. MAJOR. UC. Mirrored. New log entry generated.
+
+        // During a Close
+
+        public event Action OnBgSafeClose;                                  // BK. Background close, in BCK thread
+        public event Action OnFinalClose;                                   // UI. Final close, in UI thread
+
+        // During SYNC events and on start up
+
+        public event Action OnInitialSyncComplete;                          // UI. Called during startup after CheckSystems done.
+        public event Action OnSyncStarting;                                 // BK. EDSM/EDDB sync starting
+        public event Action OnSyncComplete;                                 // BK. SYNC has completed
+        public event Action<int, string> OnReportProgress;                  // UI. SYNC progress reporter
         #endregion
 
         #region Initialisation
@@ -554,18 +570,18 @@ namespace EDDiscovery
                     RefreshDisplays();
                 }
 
-                HistoryRefreshed?.Invoke(this, EventArgs.Empty);
+                HistoryRefreshed?.Invoke(this, EventArgs.Empty);        // Internal hook call
 
                 journalmonitor.StartMonitor();
 
-                OnRefreshComplete?.Invoke();
+                OnRefreshComplete?.Invoke();                            // History is completed
 
                 refreshRequestedFlag = 0;
                 readyForNewRefresh.Set();
             }
         }
 
-        private void NewPosition(EliteDangerous.JournalEntry je)
+        private void NewPosition(EliteDangerous.JournalEntry je)        // hooked into journal monitor and receives new entries
         {
             if (je.CommanderId == history.CommanderId)     // we are only interested at this point accepting ones for the display commander
             {

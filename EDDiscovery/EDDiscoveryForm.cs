@@ -75,6 +75,8 @@ namespace EDDiscovery
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
 
+        public CompanionAPI.CompanionAPIClass Capi { get; private set; } = new CompanionAPI.CompanionAPIClass();
+
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
         public event Action OnNewTarget;
@@ -112,6 +114,7 @@ namespace EDDiscovery
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
+        public event Action<CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
         #endregion
 
         #region Logging
@@ -144,7 +147,7 @@ namespace EDDiscovery
         public EDDiscoveryForm()
         {
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
-            Controller.OnNewEntry += (he, hl) => actioncontroller.ActionRunOnEntry(he, "NewEntry");
+            Controller.OnNewEntry += Controller_NewEntry;
             Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
             Controller.OnInitialSyncComplete += Controller_InitialSyncComplete;
@@ -444,6 +447,59 @@ namespace EDDiscovery
             travelHistoryControl1.RefreshButton(true);
             journalViewControl1.RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
+
+            if (!Capi.IsCommanderLoggedin(EDCommander.Current.Name))
+            {
+                Capi.Logout();
+
+                if (CompanionAPI.CompanionCredentials.CredentialState(EDCommander.Current.Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED)
+                {
+                    try
+                    {
+                        Capi.LoginAs(EDCommander.Current.Name);
+                        LogLine("Logged into Companion API");
+                    }
+                    catch (Exception ex)
+                    {
+                        LogLineHighlight("Companion API log in failed: " + ex.Message);
+                    }
+                }
+            }
+
+            if ( Capi.LoggedIn )
+            {
+                try
+                {
+                    Capi.GetProfile();
+                    OnNewCompanionAPIData?.Invoke(Capi, null);
+                }
+                catch (Exception ex)
+                {
+                    LogLineHighlight("Companion API get failed: " + ex.Message);
+                    // not sure what to do..
+                }
+            }
+        }
+
+        private void Controller_NewEntry(HistoryEntry he, HistoryList hl)
+        {
+            actioncontroller.ActionRunOnEntry(he, "NewEntry");
+            if ( he.EntryType == JournalTypeEnum.Docked )
+            {
+                if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
+                {
+                    System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
+                    try
+                    {
+                        Capi.GetProfile();
+                        OnNewCompanionAPIData?.Invoke(Capi,he);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogLineHighlight("Companion API get failed: " + ex.Message);
+                    }
+                }
+            }
         }
 
         private void Controller_ReportProgress(int percentComplete, string message)

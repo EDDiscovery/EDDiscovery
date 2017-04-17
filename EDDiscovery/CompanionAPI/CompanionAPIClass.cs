@@ -20,7 +20,13 @@ namespace EDDiscovery.CompanionAPI
         private static string CONFIRM_URL = "/user/confirm";
         private static string PROFILE_URL = "/profile";
 
-        public bool NeedLogin;
+        public bool IsCommanderLoggedin( string commandername )
+        {
+            return Credentials != null && !NeedLogin && Credentials.Commander.Equals(commandername, StringComparison.InvariantCultureIgnoreCase) && Credentials.Confirmed;
+        }
+
+        public bool LoggedIn { get { return !NeedLogin;  } }
+        public bool NeedLogin { get; private set; }
         public bool NeedConfirmation { get { return NeedLogin == false && !Credentials.Confirmed; } }
         public CompanionCredentials Credentials;
         
@@ -302,25 +308,16 @@ namespace EDDiscovery.CompanionAPI
         // above does not rely on this bit..really.
 
         // We cache the profile to avoid spamming the service
-        public CProfile profile;
-        private string cachedJsonProfile;
-        private DateTime cachedProfileExpires;
+        public CProfile Profile { get; private set; }
+        public string ProfileString;
         
-        public string GetProfileString(bool forceRefresh = false)
+        public void GetProfile()
         {
             if (NeedLogin == true)
                 throw new CompanionAppIllegalStateException("Service is not logged in to profile");
 
             if ( !Credentials.Confirmed )
                 throw new CompanionAppIllegalStateException("Credentials are not confirmed");
-
-            if ((!forceRefresh) && cachedProfileExpires > DateTime.Now)
-            {
-                // return the cached version
-                Trace.WriteLine("Returning cached profile");
-                
-                return cachedJsonProfile;
-            }
 
             string data = DownloadProfile();
 
@@ -337,18 +334,9 @@ namespace EDDiscovery.CompanionAPI
                 }
             }
 
-            cachedJsonProfile = data;
-
-            if (cachedJsonProfile != null)
-            {
-                cachedProfileExpires = DateTime.Now.AddSeconds(30);
-                Trace.WriteLine("Profile: " + cachedJsonProfile);
-
-                JObject jo = JObject.Parse(cachedJsonProfile);
-                profile = new CProfile(jo);
-            }
-
-            return cachedJsonProfile;
+            ProfileString = data;
+            JObject jo = JObject.Parse(ProfileString);
+            Profile = new CProfile(jo);
         }
 
         private string DownloadProfile()
