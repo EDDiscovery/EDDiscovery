@@ -206,6 +206,23 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public class EngineeringRecipe : Recipe
+        {
+            public int level;
+            public string module;
+            public string engineersstring;
+            public string[] engineers;
+
+            public EngineeringRecipe(string n, string indg, string mod, int lvl, string engnrs)
+                : base(n, indg)
+            {
+                level = lvl;
+                module = mod;
+                engineersstring = engnrs;
+                engineers = engnrs.Split(',');
+            }
+        }
+
         static public void ResetUsed(List<MaterialCommodities> mcl)
         {
             for (int i = 0; i < mcl.Count; i++)
@@ -250,7 +267,15 @@ namespace EDDiscovery.EliteDangerous
                         }
                     }
 
-                    string s = (need - got).ToStringInvariant() + r.ingredients[i];
+                    string dispName;
+                    if (mi > 0)
+                    { dispName = (list[mi].category == MaterialCommodityDB.MaterialEncodedCategory || list[mi].category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname; }
+                    else
+                    {
+                        MaterialCommodityDB db = MaterialCommodityDB.GetCachedMaterialByShortName(ingredient);
+                        dispName = (db.category == MaterialCommodityDB.MaterialEncodedCategory || db.category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + db.name : db.shortname;
+                    }
+                    string s = (need - got).ToStringInvariant() + dispName;
                     if (needed.Length == 0)
                         needed.Append("Need:" + s);
                     else
@@ -271,7 +296,8 @@ namespace EDDiscovery.EliteDangerous
                     System.Diagnostics.Debug.Assert(mi != -1);
                     int used = r.count[i] * made;
                     list[mi].scratchpad -= used;
-                    usedstr.AppendPrePad(used.ToStringInvariant() + list[mi].shortname, ",");
+                    string dispName = (list[mi].category == MaterialCommodityDB.MaterialEncodedCategory || list[mi].category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname;
+                    usedstr.AppendPrePad(used.ToStringInvariant() + dispName, ",");
                 }
 
                 needed.AppendPrePad("Used: " + usedstr.ToString(), ", ");
