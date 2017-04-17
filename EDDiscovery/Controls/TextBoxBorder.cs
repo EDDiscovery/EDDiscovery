@@ -29,7 +29,7 @@ namespace ExtendedControls
         public Color BorderColor { get; set; } = Color.Transparent;
         public float BorderColorScaling { get; set; } = 0.5F;           // Popup style only
         public int BorderOffset = 3;
-        public new virtual bool Visible { get { return base.Visible; } set { base.Visible = value; Parent.Invalidate(); } }
+        public new virtual bool Visible { get { return base.Visible; } set { base.Visible = value; if ( Parent != null) Parent.Invalidate(); } }
 
         public TextBoxBorder() : base()
         {
