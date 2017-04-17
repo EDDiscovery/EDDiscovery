@@ -212,7 +212,7 @@ namespace EDDiscovery.DB
             {
                 if (name.Length > 0)   // just in case a semicolon slips thru
                 {
-                    string fdname = name.FDName();
+                    string fdname = name.FDMaterialName();
 
                     MaterialCommodityDB mc = GetCatFDName(null, fdname, cn);
 
@@ -291,24 +291,106 @@ namespace EDDiscovery.DB
                 AddNewType(cn, CommodityCategory, "Biowaste;Chemical Waste;Scrap;Toxic Waste", "Waste");
                 AddNewType(cn, CommodityCategory, "Battle Weapons;Landmines;Non-lethal Weapons;Personal Weapons;Reactive Armour", "Weapons");
 
-                AddNewType(cn, MaterialEncodedCategory, "Scan Data Banks;Disrupted Wake Echoes;Datamined Wake;Hyperspace Trajectories;Wake Solutions", "");
-                AddNewType(cn, MaterialEncodedCategory, "Shield Density Reports;Shield Pattern Analysis;Shield Cycle Recordings;Emission Data;Bulk Scan Data;Consumer Firmware;Shield Soak Analysis;Legacy Firmware", "");
-                AddNewType(cn, MaterialEncodedCategory, "Aberrant Shield Pattern Analysis;Abnormal Compact Emission Data;Adaptive Encryptors Capture;", "");
-                AddNewType(cn, MaterialEncodedCategory, "Anomalous Bulk Scan Data;Anomalous FSD Telemetry;Atypical Disrupted Wake Echoes;Atypical Encryption Archives;Classified Scan Databanks", "");
-                AddNewType(cn, MaterialEncodedCategory, "Classified Scan Fragment;Cracked Industrial Firmware;Datamined Wake Exceptions;Decoded Emission Data;Distorted Shield Cycle Recordings", "");
-                AddNewType(cn, MaterialEncodedCategory, "Divergent Scan Data;Eccentric Hyperspace Trajectories;Exceptional Scrambled Emission Data;Inconsistent Shield Soak Analysis;Irregular Emission Data", "");
-                AddNewType(cn, MaterialEncodedCategory, "Modified Consumer Firmware;Modified Embedded Firmware;Open Symmetric Keys;Peculiar Shield Frequency Data;Security Firmware Patch;Specialised Legacy Firmware", "");
-                AddNewType(cn, MaterialEncodedCategory, "Strange Wake Solutions;Tagged Encryption Codes;Unexpected Emission Data;Unidentified Scan Archives;Untypical Shield Scans;Unusual Encrypted Files", "");
-                AddNewType(cn, MaterialEncodedCategory, "Archived Emission Data;Encoded Scan Data;Scrambled Emission Data;Scan Archives;Encryption Codes", "");
+                // very common data
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Anomalous Bulk Scan Data", "Very Common", "ABSD");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Atypical Disrupted Wake Echoes", "Very Common", "ADWE");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Distorted Shield Cycle Recordings", "Very Common", "DSCR");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Exceptional Scrambled Emission Data", "Very Common", "ESED");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Specialised Legacy Firmware", "Very Common", "SLF");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Unusual Encrypted Files", "Very Common", "UEF");
+                // common data
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Anomalous FSD Telemetry", "Common", "AFT");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Inconsistent Shield Soak Analysis", "Common", "ISSA");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Irregular Emission Data", "Common", "IED");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Modified Consumer Firmware", "Common", "MCF");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Tagged Encryption Codes", "Common", "TEC");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Unidentified Scan Archives", "Common", "USA");
+                // standard data
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Classified Scan Databanks", "Standard", "CSD");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Cracked Industrial Firmware", "Standard", "CIF");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Open Symmetric Keys", "Standard", "OSK");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Strange Wake Solutions", "Standard", "SWS");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Unexpected Emission Data", "Standard", "UED");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Untypical Shield Scans", "Standard", "USS");
+                // rare data
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Aberrant Shield Pattern Analysis", "Rare", "ASPA");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Atypical Encryption Archives", "Rare", "AEA");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Decoded Emission Data", "Rare", "DED");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Divergent Scan Data", "Rare", "DSD");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Eccentric Hyperspace Trajectories", "Rare", "EHT");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Alpha Obelisk Data", "Rare", "ODA");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Beta Obelisk Data", "Rare", "ODB");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Gamma Obelisk Data", "Rare", "ODG");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Delta Obelisk Data", "Rare", "ODD");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Epsilon Obelisk Data", "Rare", "ODE");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Security Firmware Patch", "Rare", "SFP");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Unknown Ship Signature", "Rare", "USSig");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Unknown Wake Data", "Rare", "UWD");
+                // very rare data
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Abnormal Compact Emission Data", "Very Rare", "ACED");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Adaptive Encryptors Capture", "Very Rare", "AEC");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Classified Scan Fragment", "Very Rare", "CSF");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Datamined Wake Exceptions", "Very Rare", "DWEx");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Modified Embedded Firmware", "Very Rare", "MEF");
+                AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Peculiar Shield Frequency Data", "Very Rare", "PSFD");
 
-                AddNewType(cn, MaterialManufacturedCategory, "Uncut Focus Crystals;Basic Conductors;Biotech Conductors;Chemical Distillery;Chemical Manipulators;Chemical Processors;Chemical Storage Units", "");
-                AddNewType(cn, MaterialManufacturedCategory, "Core Dynamics Composites;Crystal Shards;Electrochemical Arrays;Exquisite Focus Crystals;Filament Composites;Flawed Focus Crystals", "");
-                AddNewType(cn, MaterialManufacturedCategory, "Refined Focus Crystals;Compact Composites;Compound Shielding;Conductive Ceramics;Conductive Components;Conductive Polymers;Configurable Components", "");
-                AddNewType(cn, MaterialManufacturedCategory, "Focus Crystals;Galvanising Alloys;Grid Resistors;Heat Conduction Wiring;Heat Dispersion Plate;Heat Exchangers;Heat Resistant Ceramics", "");
-                AddNewType(cn, MaterialManufacturedCategory, "Heat Vanes;High Density Composites;Hybrid Capacitors;Imperial Shielding;Improvised Components;Mechanical Components;Mechanical Equipment", "");
-                AddNewType(cn, MaterialManufacturedCategory, "Mechanical Scrap;Military Grade Alloys;Military Supercapacitors;Pharmaceutical Isolators;Phase Alloys;Polymer Capacitors;Precipitated Alloys", "");
-                AddNewType(cn, MaterialManufacturedCategory, "Proprietary Composites;Proto Heat Radiators;Proto Light Alloys;Proto Radiolic Alloys;Salvaged Alloys", "");
-                AddNewType(cn, MaterialManufacturedCategory, "Shield Emitters;Shielding Sensors;Tempered Alloys;Thermic Alloys;Unknown Fragment;Worn Shield Emitters", "");
+                //very common manufactured
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Basic Conductors", "Very Common", "BaC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Chemical Storage Units", "Very Common", "CSU");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Compact Composites", "Very Common", "CC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Crystal Shards", "Very Common", "CS");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Grid Resistors", "Very Common", "GR");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Heat Conduction Wiring", "Very Common", "HCW");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Mechanical Scrap", "Very Common", "MS");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Salvaged Alloys", "Very Common", "SAll");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Tempered Alloys", "Very Common", "TeA");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Cyan, "Worn Shield Emitters", "Very Common", "WSE");
+                // common manufactured
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Chemical Processors", "Common", "CP");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Conductive Components", "Common", "CCo");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Filament Composites", "Common", "FiC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Flawed Focus Crystals", "Common", "FFC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Galvanising Alloys", "Common", "GA");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Heat Dispersion Plate", "Common", "HDP");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Heat Resistant Ceramics", "Common", "HRC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Hybrid Capacitors", "Common", "HC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Mechanical Equipment", "Common", "ME");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Shield Emitters", "Common", "SE");
+                // standard manufactured
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Chemical Distillery", "Standard", "CD");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Conductive Ceramics", "Standard", "CCe");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Electrochemical Arrays", "Standard", "EA");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Focus Crystals", "Standard", "FoC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Heat Exchangers", "Standard", "HE");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "High Density Composites", "Standard", "HDC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Mechanical Components", "Standard", "MC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Phase Alloys", "Standard", "PA");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Precipitated Alloys", "Standard", "PAll");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.SandyBrown, "Shielding Sensors", "Standard", "SS");
+                // rare manufactured
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Chemical Manipulators", "Rare", "CM");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Compound Shielding", "Rare", "CoS");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Conductive Polymers", "Rare", "CPo");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Configurable Components", "Rare", "CCom");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Heat Vanes", "Rare", "HV");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Polymer Capacitors", "Rare", "PCa");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Proprietary Composites", "Rare", "PCo");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Proto Light Alloys", "Rare", "PLA");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Refined Focus Crystals", "Rare", "RFC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Yellow, "Thermic Alloys", "Rare", "ThA");
+                // very rare manufactured
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Biotech Conductors", "Very Rare", "BiC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Core Dynamics Composites", "Very Rare", "CDC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Exquisite Focus Crystals", "Very Rare", "EFC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Imperial Shielding", "Very Rare", "IS");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Improvised Components", "Very Rare", "IC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Military Grade Alloys", "Very Rare", "MGA");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Military Supercapacitors", "Very Rare", "MSC");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Pharmaceutical Isolators", "Very Rare", "PI");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Proto Heat Radiators", "Very Rare", "PHR");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Proto Radiolic Alloys", "Very Rare", "PRA");
+                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Unknown Fragment", "Very Rare", "UF");
+                
 
                 using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities Order by Name"))
                 {
