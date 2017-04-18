@@ -590,7 +590,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Increased Range", "1ADWE,1CP", "Frame Shift Drive", 2, "Colonel Bris Dekker,Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Increased Range", "1CP,1P,1SWS", "Frame Shift Drive", 3, "Colonel Bris Dekker,Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Increased Range", "1CD,1EHT,1Mn", "Frame Shift Drive", 4, "Elvira Martuuk,Felicity Farseer"),
-            new MaterialCommoditiesList.EngineeringRecipe("Increased Range", "1As,1CM,1DWE", "Frame Shift Drive", 5, "Elvira Martuuk,Felicity Farseer"),
+            new MaterialCommoditiesList.EngineeringRecipe("Increased Range", "1As,1CM,1DWEx", "Frame Shift Drive", 5, "Elvira Martuuk,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1Ni", "Frame Shift Drive", 1, "Colonel Bris Dekker,Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Frame Shift Drive", 2, "Colonel Bris Dekker,Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SS,1Zn", "Frame Shift Drive", 3, "Colonel Bris Dekker,Elvira Martuuk,Felicity Farseer,Professor Palin"),
