@@ -214,7 +214,7 @@ namespace EDDiscovery.DB
                 {
                     if (name.Length > 0)   // just in case a semicolon slips thru
                     {
-                        string fdname = name.FDMaterialName();
+                        string fdname = JournalFieldNaming.FDMaterialName(name);
 
                         MaterialCommodityDB mc = GetCatFDName(null, fdname, cn);
 
