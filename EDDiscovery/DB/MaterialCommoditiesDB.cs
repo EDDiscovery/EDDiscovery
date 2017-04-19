@@ -57,7 +57,7 @@ namespace EDDiscovery.DB
             int i = lst.FindIndex(x => x.shortname.Equals(shortname));
             return i >= 0 ? lst[i] : null;
         }
-
+        
         public MaterialCommodityDB()
         {
         }
@@ -206,33 +206,42 @@ namespace EDDiscovery.DB
 
         private static bool AddNewTypeC(SQLiteConnectionUser cn, string c, Color cl, string namelist, string t, string sn = "")
         {
-            try
+            string[] list = namelist.Split(';');
+
+            foreach (string name in list)
             {
-                string[] list = namelist.Split(';');
-
-                foreach (string name in list)
+                if (name.Length > 0)   // just in case a semicolon slips thru
                 {
-                    if (name.Length > 0)   // just in case a semicolon slips thru
+                    if (!AddNewTypeF(cn, c, cl, name, t, sn))
                     {
-                        string fdname = JournalFieldNaming.FDMaterialName(name);
-
-                        MaterialCommodityDB mc = GetCatFDName(null, fdname, cn);
-
-                        if (mc == null)
-                        {
-                            mc = new MaterialCommodityDB(0, c, name, fdname, t, sn, cl, 0);
-                            mc.Add(cn);
-                        }               // don't change any user changed fields
-                        else if (mc.flags == 0 && (!mc.name.Equals(name) || !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || !mc.colour.IsEqual(cl)))
-                        {
-                            mc.name = name;
-                            mc.shortname = sn;          // So, name is there, update the others
-                            mc.category = c;
-                            mc.type = t;
-                            mc.colour = cl;
-                            mc.Update(cn);
-                        }
+                        return false;
                     }
+                }
+            }
+            return true;
+        }
+
+        private static bool AddNewTypeF(SQLiteConnectionUser cn, string c, Color cl, string name, string t, string sn = "", string fdName = "")
+        {
+            try
+            { 
+                string fdn = (fdName.Length > 0) ? fdName : name.FDName();
+            
+                MaterialCommodityDB mc = GetCatFDName(null, fdn, cn);
+
+                if (mc == null)
+                {
+                    mc = new MaterialCommodityDB(0, c, name, fdn, t, sn, cl, 0);
+                    mc.Add(cn);
+                }               // don't change any user changed fields
+                else if (mc.flags == 0 && (!mc.name.Equals(name) || !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || !mc.colour.IsEqual(cl)))
+                {
+                    mc.name = name;
+                    mc.shortname = sn;          // So, name is there, update the others
+                    mc.category = c;
+                    mc.type = t;
+                    mc.colour = cl;
+                    mc.Update(cn);
                 }
                 return true;
             }
@@ -249,10 +258,7 @@ namespace EDDiscovery.DB
         public static void SetUpInitialTable()
         {
             bool rebuild = SQLiteConnectionUser.GetSettingBool("RebuildMaterialsCommodities", false);
-
-
-
-
+            
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 if (rebuild)
@@ -313,45 +319,45 @@ namespace EDDiscovery.DB
                 AddNewType(cn, CommodityCategory, "Battle Weapons;Landmines;Non-lethal Weapons;Personal Weapons;Reactive Armour", "Weapons");
 
                 // very common data
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Anomalous Bulk Scan Data", "Very Common", "ABSD");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Atypical Disrupted Wake Echoes", "Very Common", "ADWE");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Distorted Shield Cycle Recordings", "Very Common", "DSCR");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Exceptional Scrambled Emission Data", "Very Common", "ESED");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Specialised Legacy Firmware", "Very Common", "SLF");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Cyan, "Unusual Encrypted Files", "Very Common", "UEF");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Cyan, "Anomalous Bulk Scan Data", "Very Common", "ABSD", "bulkscandata");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Cyan, "Atypical Disrupted Wake Echoes", "Very Common", "ADWE", "disruptedwakeechoes");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Cyan, "Distorted Shield Cycle Recordings", "Very Common", "DSCR", "shieldcyclerecordings");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Cyan, "Exceptional Scrambled Emission Data", "Very Common", "ESED", "scrambledemissiondata");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Cyan, "Specialised Legacy Firmware", "Very Common", "SLF", "legacyfirmware");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Cyan, "Unusual Encrypted Files", "Very Common", "UEF", "encryptedfiles");
                 // common data
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Anomalous FSD Telemetry", "Common", "AFT");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Inconsistent Shield Soak Analysis", "Common", "ISSA");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Irregular Emission Data", "Common", "IED");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Modified Consumer Firmware", "Common", "MCF");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Tagged Encryption Codes", "Common", "TEC");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Green, "Unidentified Scan Archives", "Common", "USA");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Green, "Anomalous FSD Telemetry", "Common", "AFT", "fsdtelemetry");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Green, "Inconsistent Shield Soak Analysis", "Common", "ISSA", "shieldsoakanalysis");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Green, "Irregular Emission Data", "Common", "IED", "archivedemissiondata");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Green, "Modified Consumer Firmware", "Common", "MCF", "consumerfirmware");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Green, "Tagged Encryption Codes", "Common", "TEC", "encryptioncodes");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Green, "Unidentified Scan Archives", "Common", "USA", "scanarchives");
                 // standard data
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Classified Scan Databanks", "Standard", "CSD");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Cracked Industrial Firmware", "Standard", "CIF");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Open Symmetric Keys", "Standard", "OSK");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Strange Wake Solutions", "Standard", "SWS");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Unexpected Emission Data", "Standard", "UED");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.SandyBrown, "Untypical Shield Scans", "Standard", "USS");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.SandyBrown, "Classified Scan Databanks", "Standard", "CSD", "scandatabanks");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.SandyBrown, "Cracked Industrial Firmware", "Standard", "CIF", "industrialfirmware");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.SandyBrown, "Open Symmetric Keys", "Standard", "OSK", "symmetrickeys");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.SandyBrown, "Strange Wake Solutions", "Standard", "SWS", "wakesolutions");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.SandyBrown, "Unexpected Emission Data", "Standard", "UED", "emissiondata");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.SandyBrown, "Untypical Shield Scans", "Standard", "USS", "shielddensityreports");
                 // rare data
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Aberrant Shield Pattern Analysis", "Rare", "ASPA");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Atypical Encryption Archives", "Rare", "AEA");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Yellow, "Aberrant Shield Pattern Analysis", "Rare", "ASPA", "shieldpatternanalysis");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Yellow, "Atypical Encryption Archives", "Rare", "AEA", "encryptionarchives");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Decoded Emission Data", "Rare", "DED");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Divergent Scan Data", "Rare", "DSD");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Eccentric Hyperspace Trajectories", "Rare", "EHT");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Yellow, "Divergent Scan Data", "Rare", "DSD", "encodedscandata");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Yellow, "Eccentric Hyperspace Trajectories", "Rare", "EHT", "hyperspacetrajectories");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Alpha Obelisk Data", "Rare", "ODA");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Beta Obelisk Data", "Rare", "ODB");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Gamma Obelisk Data", "Rare", "ODG");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Delta Obelisk Data", "Rare", "ODD");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Pattern Epsilon Obelisk Data", "Rare", "ODE");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Security Firmware Patch", "Rare", "SFP");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Yellow, "Security Firmware Patch", "Rare", "SFP", "securityfirmware");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Unknown Ship Signature", "Rare", "USSig");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Yellow, "Unknown Wake Data", "Rare", "UWD");
                 // very rare data
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Abnormal Compact Emission Data", "Very Rare", "ACED");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Adaptive Encryptors Capture", "Very Rare", "AEC");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Red, "Adaptive Encryptors Capture", "Very Rare", "AEC", "adaptiveencryptors");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Classified Scan Fragment", "Very Rare", "CSF");
-                AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Datamined Wake Exceptions", "Very Rare", "DWEx");
+                AddNewTypeF(cn, MaterialEncodedCategory, Color.Red, "Datamined Wake Exceptions", "Very Rare", "DWEx", "dataminedwake");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Modified Embedded Firmware", "Very Rare", "MEF");
                 AddNewTypeC(cn, MaterialEncodedCategory, Color.Red, "Peculiar Shield Frequency Data", "Very Rare", "PSFD");
 
@@ -370,7 +376,7 @@ namespace EDDiscovery.DB
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Chemical Processors", "Common", "CP");
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Conductive Components", "Common", "CCo");
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Filament Composites", "Common", "FiC");
-                AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Flawed Focus Crystals", "Common", "FFC");
+                AddNewTypeF(cn, MaterialManufacturedCategory, Color.Green, "Flawed Focus Crystals", "Common", "FFC", "uncutfocuscrystals");
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Galvanising Alloys", "Common", "GA");
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Heat Dispersion Plate", "Common", "HDP");
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Green, "Heat Resistant Ceramics", "Common", "HRC");
