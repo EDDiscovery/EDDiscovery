@@ -520,7 +520,6 @@ namespace EDDiscovery
         public int CommanderId;
 
         public static bool AccumulateFuelScoops { get; set; } = true;
-        public static int FuelScoopAccumPeriod { get; set; } = 10;
 
         public HistoryList() { }
 
@@ -1067,13 +1066,18 @@ namespace EDDiscovery
                             FuelScoopAccum = new JournalFuelScoop(je.GetJson());
                             yield break;
                         }
-                        else if (scoop.EventTimeUTC.Subtract(FuelScoopAccum.EventTimeUTC).TotalSeconds < FuelScoopAccumPeriod)
+                        else
                         {
                             FuelScoopAccum.EventTimeUTC = scoop.EventTimeUTC;
                             FuelScoopAccum.Scooped += scoop.Scooped;
                             FuelScoopAccum.Total = scoop.Total;
                             yield break;
                         }
+                    }
+                    else if (FuelScoopAccum != null)
+                    {
+                        scoop.Scooped += FuelScoopAccum.Scooped;
+                        FuelScoopAccum = null;
                     }
                 }
             }
