@@ -59,13 +59,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 if (c.buyPrice > 0)
                 {
                     if (c.sellPrice > 0)
-                        detailed += string.Format("{0}: {1} sell {2}" + System.Environment.NewLine, c.name, c.buyPrice, c.sellPrice);
+                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%" + System.Environment.NewLine, c.name, c.buyPrice, c.sellPrice , c.buyPrice - c.sellPrice , ((double)(c.buyPrice-c.sellPrice)/(double)c.sellPrice * 100.0).ToString("0.#"));
                     else
                         detailed += string.Format("{0}: {1}" + System.Environment.NewLine, c.name, c.buyPrice);
                 }
             }
 
-            detailed += "Sale only prices:" + System.Environment.NewLine;
+            detailed += "Sell only Items:" + System.Environment.NewLine;
             foreach (CCommodities c in Commodities)
             {
                 if (c.buyPrice <= 0)

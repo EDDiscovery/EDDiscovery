@@ -525,9 +525,10 @@ namespace EDDiscovery
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons));
-            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons) );
-            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons));
+            int max = (int)PopOutControl.PopOuts.MaxTabButtons;
+            tabStripBottom.SelectedIndex = Math.Min( SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons)), max);
+            tabStripBottomRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons) ), max );
+            tabStripMiddleRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons)), max);
         }
 
         public void SaveSettings()     // called by form when closing

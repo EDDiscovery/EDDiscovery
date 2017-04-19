@@ -73,6 +73,7 @@ namespace EDDiscovery.Forms
             MarketData,
 
             StartTabButtons = Log,
+            MaxTabButtons = MarketData - StartTabButtons,
         };
 
         public class PopOutInfo
