@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlLedger
+    partial class UserControlMarketData
     {
         /// <summary> 
         /// Required designer variable.
@@ -45,8 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.labelNoItems = new System.Windows.Forms.Label();
-            this.dataGridViewLedger = new System.Windows.Forms.DataGridView();
+            this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
             this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,21 +58,17 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelTime = new System.Windows.Forms.Label();
-            this.buttonFilter = new ExtendedControls.ButtonExt();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
             this.contextMenuStripLedger.SuspendLayout();
             this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel.Controls.Add(this.labelNoItems);
-            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewLedger);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewMarketData);
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
@@ -84,22 +79,13 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
-            // labelNoItems
+            // dataGridViewMarketData
             // 
-            this.labelNoItems.AutoSize = true;
-            this.labelNoItems.Location = new System.Drawing.Point(3, 78);
-            this.labelNoItems.Name = "labelNoItems";
-            this.labelNoItems.Size = new System.Drawing.Size(82, 13);
-            this.labelNoItems.TabIndex = 2;
-            this.labelNoItems.Text = "No Items Found";
-            // 
-            // dataGridViewLedger
-            // 
-            this.dataGridViewLedger.AllowUserToAddRows = false;
-            this.dataGridViewLedger.AllowUserToDeleteRows = false;
-            this.dataGridViewLedger.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewLedger.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewLedger.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewMarketData.AllowUserToAddRows = false;
+            this.dataGridViewMarketData.AllowUserToDeleteRows = false;
+            this.dataGridViewMarketData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewMarketData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMarketData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TimeCol,
             this.Type,
             this.Notes,
@@ -107,15 +93,14 @@ namespace EDDiscovery.UserControls
             this.Debits,
             this.Balance,
             this.NormProfit});
-            this.dataGridViewLedger.ContextMenuStrip = this.contextMenuStripLedger;
-            this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewLedger.Name = "dataGridViewLedger";
-            this.dataGridViewLedger.RowHeadersVisible = false;
-            this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewLedger.Size = new System.Drawing.Size(780, 540);
-            this.dataGridViewLedger.TabIndex = 1;
-            this.dataGridViewLedger.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
-            this.dataGridViewLedger.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewLedger_MouseDown);
+            this.dataGridViewMarketData.ContextMenuStrip = this.contextMenuStripLedger;
+            this.dataGridViewMarketData.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewMarketData.Name = "dataGridViewMarketData";
+            this.dataGridViewMarketData.RowHeadersVisible = false;
+            this.dataGridViewMarketData.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewMarketData.Size = new System.Drawing.Size(780, 540);
+            this.dataGridViewMarketData.TabIndex = 1;
+            this.dataGridViewMarketData.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
             // 
             // TimeCol
             // 
@@ -212,10 +197,7 @@ namespace EDDiscovery.UserControls
             // panelButtons
             // 
             this.panelButtons.Controls.Add(this.labelTime);
-            this.panelButtons.Controls.Add(this.buttonFilter);
-            this.panelButtons.Controls.Add(this.textBoxFilter);
             this.panelButtons.Controls.Add(this.label1);
-            this.panelButtons.Controls.Add(this.comboBoxHistoryWindow);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
@@ -231,31 +213,6 @@ namespace EDDiscovery.UserControls
             this.labelTime.TabIndex = 26;
             this.labelTime.Text = "Time";
             // 
-            // buttonFilter
-            // 
-            this.buttonFilter.BorderColorScaling = 1.25F;
-            this.buttonFilter.ButtonColorScaling = 0.5F;
-            this.buttonFilter.ButtonDisabledScaling = 0.5F;
-            this.buttonFilter.Location = new System.Drawing.Point(444, 4);
-            this.buttonFilter.Name = "buttonFilter";
-            this.buttonFilter.Size = new System.Drawing.Size(75, 23);
-            this.buttonFilter.TabIndex = 25;
-            this.buttonFilter.Text = "Event Filter";
-            this.toolTip1.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
-            this.buttonFilter.UseVisualStyleBackColor = true;
-            this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
-            // 
-            // textBoxFilter
-            // 
-            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxFilter.BorderColorScaling = 0.5F;
-            this.textBoxFilter.Location = new System.Drawing.Point(278, 6);
-            this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
-            this.textBoxFilter.TabIndex = 1;
-            this.toolTip1.SetToolTip(this.textBoxFilter, "Display entries matching this string");
-            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -265,48 +222,20 @@ namespace EDDiscovery.UserControls
             this.label1.TabIndex = 24;
             this.label1.Text = "Search";
             // 
-            // comboBoxHistoryWindow
-            // 
-            this.comboBoxHistoryWindow.ArrowWidth = 1;
-            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
-            this.comboBoxHistoryWindow.DataSource = null;
-            this.comboBoxHistoryWindow.DisplayMember = "";
-            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxHistoryWindow.DropDownHeight = 200;
-            this.comboBoxHistoryWindow.DropDownWidth = 1;
-            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxHistoryWindow.ItemHeight = 13;
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(110, 4);
-            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
-            this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.ScrollBarWidth = 16;
-            this.comboBoxHistoryWindow.SelectedIndex = -1;
-            this.comboBoxHistoryWindow.SelectedItem = null;
-            this.comboBoxHistoryWindow.SelectedValue = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 20);
-            this.comboBoxHistoryWindow.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
-            this.comboBoxHistoryWindow.ValueMember = "";
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // UserControlLedger
+            // UserControlMarketData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelButtons);
-            this.Name = "UserControlLedger";
+            this.Name = "UserControlMarketData";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
-            this.dataViewScrollerPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).EndInit();
             this.contextMenuStripLedger.ResumeLayout(false);
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
@@ -317,14 +246,10 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewLedger;
+        private System.Windows.Forms.DataGridView dataGridViewMarketData;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        private System.Windows.Forms.Label labelNoItems;
-        private ExtendedControls.ButtonExt buttonFilter;
-        internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
         private System.Windows.Forms.Label label1;
-        private ExtendedControls.TextBoxBorder textBoxFilter;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
         private System.Windows.Forms.ToolTip toolTip1;

@@ -68,11 +68,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += NewEntry;
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList l)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         #region Display
@@ -150,8 +145,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
-
         #endregion
 
         #region Layout
@@ -168,20 +161,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= NewEntry;
         }
 
-        private void dataGridViewMC_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
-        {
-        }
-
-        private void dataGridViewMC_Resize(object sender, EventArgs e)
-        {
-        }
-
         #endregion
-
-        private void checkBoxCustomCashOnly_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
