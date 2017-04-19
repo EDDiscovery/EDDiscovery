@@ -156,6 +156,7 @@ namespace EDDiscovery.EliteDangerous
         SupercruiseEntry = 890,
         SupercruiseExit = 900,
         Synthesis = 910,
+        SystemsShutdown = 915,
         Touchdown = 920,
         Undocked = 930,
         USSDrop = 940,
