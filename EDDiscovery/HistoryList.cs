@@ -1068,6 +1068,10 @@ namespace EDDiscovery
                         }
                         else
                         {
+                            FuelScoopAccum.Id = scoop.Id;
+                            FuelScoopAccum.TLUId = scoop.TLUId;
+                            FuelScoopAccum.CommanderId = scoop.CommanderId;
+                            FuelScoopAccum.EdsmID = scoop.EdsmID;
                             FuelScoopAccum.EventTimeUTC = scoop.EventTimeUTC;
                             FuelScoopAccum.Scooped += scoop.Scooped;
                             FuelScoopAccum.Total = scoop.Total;
