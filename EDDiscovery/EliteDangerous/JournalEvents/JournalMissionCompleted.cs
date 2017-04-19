@@ -126,7 +126,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (Reward - Donation), 0);
+            long rv = Reward.HasValue ? Reward.Value : 0;
+            long dv = Donation.HasValue ? Donation.Value : 0;
+
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (rv-dv), 0);
         }
 
         public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
