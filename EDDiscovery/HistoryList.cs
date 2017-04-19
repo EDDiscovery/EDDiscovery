@@ -1048,6 +1048,22 @@ namespace EDDiscovery
             }
         }
 
+        public static bool Merge(JournalEntry je, HistoryEntry last)
+        {
+            if (last != null && je.EventTypeID == JournalTypeEnum.FuelScoop && last.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop)
+            {
+                System.Diagnostics.Debug.WriteLine("Fuel scoop repeat");
+                EliteDangerous.JournalEvents.JournalFuelScoop c = je as EliteDangerous.JournalEvents.JournalFuelScoop;
+                EliteDangerous.JournalEvents.JournalFuelScoop l = last.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop;
+                l.Total = c.Total;
+                l.Scooped += c.Scooped;
+                l.FillInformation(out last.EventSummary, out last.EventDescription, out last.EventDetailedInfo);
+                return true;
+            }
+            else
+                return false;
+        }
+
         public HistoryEntry AddJournalEntry(JournalEntry je, Action<string> logerror)
         {
             if (je.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
@@ -1225,15 +1241,18 @@ namespace EDDiscovery
                 HistoryEntry prev = null;
                 foreach (EliteDangerous.JournalEntry je in jlist)
                 {
-                    bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
-                    prev = he;
-
-                    hl.Add(he);                        // add to the history list here..
-
-                    if (journalupdate)
+                    if (!Merge(je, prev))
                     {
-                        jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
+                        bool journalupdate = false;
+                        HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
+                        prev = he;
+
+                        hl.Add(he);                        // add to the history list here..
+
+                        if (journalupdate)
+                        {
+                            jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
+                        }
                     }
                 }
             }

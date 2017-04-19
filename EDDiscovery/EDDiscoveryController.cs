@@ -580,10 +580,17 @@ namespace EDDiscovery
         {
             if (je.CommanderId == history.CommanderId)     // we are only interested at this point accepting ones for the display commander
             {
-                HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));
+                if (!HistoryList.Merge(je, history.GetLast))
+                {
+                    HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));
 
-                if (he != null)
-                    OnNewEntry?.Invoke(he, history);
+                    if (he != null)
+                        OnNewEntry?.Invoke(he, history);
+                }
+                else
+                {
+                    OnHistoryChange?.Invoke(history);
+                }
             }
 
             OnNewJournalEntry?.Invoke(je);
