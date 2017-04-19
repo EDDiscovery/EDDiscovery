@@ -659,6 +659,15 @@ namespace EDDiscovery
             return historylist.FindLast(where);
         }
 
+        public HistoryEntry GetLastHistoryEntry(Predicate<HistoryEntry> where, HistoryEntry frominclusive )
+        {
+            int hepos = historylist.FindIndex(x => x.Journalid == frominclusive.Journalid);
+            if (hepos != -1)
+                hepos = historylist.FindLastIndex(hepos, where);
+
+            return (hepos != -1) ? historylist[hepos] : null;
+        }
+
         public HistoryEntry GetLastWithPosition
         {
             get
@@ -1186,16 +1195,10 @@ namespace EDDiscovery
                         LastShipInfo = null;
                     }
                 }
-
-
-
             }
             catch
             {
             }
-
-
-
         }
 
         public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress, string NetLogPath = null, bool ForceNetLogReload = false, bool ForceJournalReload = false, bool CheckEdsm = false, int CurrentCommander = Int32.MinValue)
