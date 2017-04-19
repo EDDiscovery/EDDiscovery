@@ -15,8 +15,6 @@ namespace EDDiscovery.Forms
 {
     public partial class FormCAPI : Form
     {
-        private string profileJson;
-
         CompanionAPIClass capi = new CompanionAPIClass();
 
         public FormCAPI()

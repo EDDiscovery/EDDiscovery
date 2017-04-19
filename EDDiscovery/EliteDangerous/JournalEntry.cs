@@ -165,7 +165,7 @@ namespace EDDiscovery.EliteDangerous
         WingLeave = 980,
 
         EDDItemSet = 2000,
-
+        EDDCommodityPrices = 2010,
     }
 
     public enum CombatRank
@@ -601,43 +601,21 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public static long AddEDDItemSet(int cmdrid, DateTime dt, long jidofitemset, List<MaterialCommodities> changelist)     // add item, return journal ID
+        public static JournalEDDCommodityPrices AddEDDCommodityPrices(int cmdrid, DateTime dt, string station , string faction , JArray jcommodities)     // add item, return journal ID
         {
             JObject jo;
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
-                JournalEDDItemSet jis;
-
-                if (jidofitemset > 0)                                       // 0 means currently not on an item..
-                {
-                    jis = (JournalEDDItemSet)Get(jidofitemset, cn);
-                    jo = jis.GetJson();
-                }
-                else
-                {
-                    jo = new JObject();
-                    jo["timestamp"] = dt;
-                    jo["event"] = JournalTypeEnum.EDDItemSet.ToString();
-                    jis = new JournalEDDItemSet(jo);
-                    jis.CommanderId = cmdrid;
-                }
-
-                foreach (MaterialCommodities mc in changelist)              // reset the list to these.. or add on if there are more
-                {
-                    if (mc.category.Equals(MaterialCommodityDB.CommodityCategory))
-                        jis.Commodities.Set(mc.fdname, mc.count, mc.price);
-                    else
-                        jis.Materials.Set(mc.category, mc.fdname, mc.count);
-                }
-
-                jo = jis.UpdateState(jo);
-
-                if (jidofitemset > 0)
-                    jis.UpdateJson(jo, cn);
-                else
-                    jis.Add(jo, cn);
-
-                return jis.Id;
+                jo = new JObject();
+                jo["timestamp"] = dt;
+                jo["event"] = JournalTypeEnum.EDDCommodityPrices.ToString();
+                jo["station"] = station;
+                jo["faction"] = faction;
+                jo["commodities"] = jcommodities;
+                JournalEDDCommodityPrices jis = new JournalEDDCommodityPrices(jo);
+                jis.CommanderId = cmdrid;
+                jis.Add(jo, cn);
+                return jis;
             }
         }
 

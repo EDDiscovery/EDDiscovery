@@ -109,7 +109,7 @@ namespace EDDiscovery
         public GalacticMapping galacticMapping { get { return Controller.galacticMapping; } }
         #endregion
 
-        #region Events
+        #region Events - see the EDDiscoveryControl for meaning and context
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
@@ -147,7 +147,7 @@ namespace EDDiscovery
         public EDDiscoveryForm()
         {
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
-            Controller.OnNewEntry += Controller_NewEntry;
+            Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
             Controller.OnInitialSyncComplete += Controller_InitialSyncComplete;
@@ -462,6 +462,8 @@ namespace EDDiscovery
                     catch (Exception ex)
                     {
                         LogLineHighlight("Companion API log in failed: " + ex.Message);
+                        if (!(ex is CompanionAPI.CompanionAppException))
+                            LogLineHighlight(ex.StackTrace);
                     }
                 }
             }
@@ -476,14 +478,18 @@ namespace EDDiscovery
                 catch (Exception ex)
                 {
                     LogLineHighlight("Companion API get failed: " + ex.Message);
-                    // not sure what to do..
+                    if (!(ex is CompanionAPI.CompanionAppException))
+                        LogLineHighlight(ex.StackTrace);
+
+                    // what do we do TBD
                 }
             }
         }
 
-        private void Controller_NewEntry(HistoryEntry he, HistoryList hl)
+        private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
         {
             actioncontroller.ActionRunOnEntry(he, "NewEntry");
+
             if ( he.EntryType == JournalTypeEnum.Docked )
             {
                 if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
@@ -492,6 +498,8 @@ namespace EDDiscovery
                     try
                     {
                         Capi.GetProfile();
+                        JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, Capi.Profile.StarPort.jcommodities);
+                        Controller.NewEntry(entry);
                         OnNewCompanionAPIData?.Invoke(Capi,he);
                     }
                     catch (Exception ex)

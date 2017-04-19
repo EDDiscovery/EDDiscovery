@@ -9,10 +9,9 @@ namespace EDDiscovery.CompanionAPI
 {
     public class CLastSystem
     {
-        private JObject _jo;
-        public long id { get; set; }
-        public string name { get; set; }
-        public string faction { get; set; }
+        public long id { get; private set; }
+        public string name { get; private set; }
+        public string faction { get; private set; }
 
         public CLastSystem(JObject jo)
         {
@@ -23,7 +22,6 @@ namespace EDDiscovery.CompanionAPI
         {
             try
             {
-                _jo = jo;
                 id = JSONHelper.GetLong(jo["id"]);
                 name = JSONHelper.GetStringDef(jo["name"]);
                 faction = JSONHelper.GetStringDef(jo["faction"]);

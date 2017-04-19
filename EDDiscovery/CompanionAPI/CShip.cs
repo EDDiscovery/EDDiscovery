@@ -3,85 +3,45 @@ using System.Collections.Generic;
 
 namespace EDDiscovery.CompanionAPI
 {
-
-
     public class CShip
     {
-        // Translations from the internal names used by Frontier to clean human-readable
-        private static Dictionary<string, string> shipTranslations = new Dictionary<string, string>()
-        {
-            { "Adder" , "Adder"},
-            { "Anaconda", "Anaconda" },
-            { "Asp", "Asp Explorer" },
-            { "Asp_Scout", "Asp Scout" },
-            { "BelugaLiner", "Beluga Liner" },
-            { "CobraMkIII", "Cobra Mk. III" },
-            { "CobraMkIV", "Cobra Mk. IV" },
-            { "Cutter", "Imperial Cutter" },
-            { "DiamondBack", "Diamondback Scout" },
-            { "DiamondBackXL", "Diamondback Explorer" },
-            { "Eagle", "Eagle" },
-            { "Empire_Courier", "Imperial Courier" },
-            { "Empire_Eagle", "Imperial Eagle" },
-            { "Empire_Fighter", "Imperial Fighter" },
-            { "Empire_Trader", "Imperial Clipper" },
-            { "Federation_Corvette", "Federal Corvette" },
-            { "Federation_Dropship", "Federal Dropship" },
-            { "Federation_Dropship_MkII", "Federal Assault Ship" },
-            { "Federation_Gunship", "Federal Gunship" },
-            { "Federation_Fighter", "F63 Condor" },
-            { "FerDeLance", "Fer-de-Lance" },
-            { "Hauler", "Hauler" },
-            { "Independant_Trader", "Keelback" },
-            { "Orca", "Orca" },
-            { "Python", "Python" },
-            { "SideWinder", "Sidewinder" },
-            { "Type6", "Type-6 Transporter" },
-            { "Type7", "Type-7 Transporter" },
-            { "Type9", "Type-9 Heavy" },
-            { "Viper", "Viper Mk. III" },
-            { "Viper_MkIV", "Viper Mk. IV" },
-            { "Vulture", "Vulture" }
-        };
-
-        private JObject _jo;
-        public int id { get; set; }
-        public string name { get; set; }
+        public int id { get; private set; }
+        public string name { get; private set; }
         public List<CModules> modules;
-        public long valueHull { get; set; }
-        public long valueModules { get; set; }
-        public long valueCargo { get; set; }
-        public long valueTotal { get; set; }
-        public long valueUnloaned { get; set; }
+        public long valueHull { get; private set; }
+        public long valueModules { get; private set; }
+        public long valueCargo { get; private set; }
+        public long valueTotal { get; private set; }
+        public long valueUnloaned { get; private set; }
 
 
-        public bool free { get; set; }
+        public bool free { get; private set; }
 
-        public int healthHull { get; set; }
-        public int healthShield { get; set; }
-        public bool shieldUp { get; set; }
-        public int integrity { get; set; }
-        public int paintwork { get; set; }
+        public int healthHull { get; private set; }
+        public int healthShield { get; private set; }
+        public bool shieldUp { get; private set; }
+        public int integrity { get; private set; }
+        public int paintwork { get; private set; }
 
 
-        public bool cockpitBreached { get; set; }
-        public int oxygenRemaining { get; set; }
-        public float fuelMainCapacity { get; set; }
-        public float fuelMainLevel { get; set; }
-        public float fuelReserveCapacity { get; set; }
-        public float fuelResrveLevel { get; set; }
+        public bool cockpitBreached { get; private set; }
+        public int oxygenRemaining { get; private set; }
+        public float fuelMainCapacity { get; private set; }
+        public float fuelMainLevel { get; private set; }
+        public float fuelReserveCapacity { get; private set; }
+        public float fuelResrveLevel { get; private set; }
 
-        public int superchargedFSD { get; set; }
-        public int cargoCapacity { get; set; }
-        public int cargoQty { get; set; }
-        public JArray cargoItems { get; set; }
+        public int superchargedFSD { get; private set; }
+        public int cargoCapacity { get; private set; }
+        public int cargoQty { get; private set; }
+        public JArray cargoItems { get; private set; }
         //	"lock" : 643120447,   ???????
         //	"ts" : {
         //		"sec" : 1480776109,
         //		"usec" : 823000
 
-        public JObject refinery { get; set; }
-        public JArray passenger { get; set; }
+        public JObject refinery { get; private set; }
+        public JArray passenger { get; private set; }
 
 
         public CShip(JObject jo)
@@ -93,7 +53,6 @@ namespace EDDiscovery.CompanionAPI
         {
             try
             {
-                _jo = jo;
                 id = JSONHelper.GetInt(jo["id"]);
                 name = JSONHelper.GetStringDef(jo["name"]);
 

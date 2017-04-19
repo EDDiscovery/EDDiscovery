@@ -53,10 +53,11 @@ namespace EDDiscovery
         public event Action<HistoryList> OnHistoryChange;                   // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
         public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
 
-        // DURING A new Journal entry by the monitor
+        // DURING A new Journal entry by the monitor, in order..
 
-        public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called when journal monitor generates a new position for the CURRENT commander
-        public event Action<JournalEntry> OnNewJournalEntry;                // UI. MAJOR. UC. Mirrored. Called when ANY new journal entry is created by the journal monitor
+        public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called before OnNewJournalEntry, when NewEntry is called with a new item for the CURRENT commander
+        public event Action<HistoryEntry, HistoryList> OnNewEntrySecond;    // UI. Called after OnNewEntry, when NewEntry is called with a new item for the CURRENT commander.  Use if you want to do something after the main UI has been updated
+        public event Action<JournalEntry> OnNewJournalEntry;                // UI. MAJOR. UC. Mirrored. Called after OnNewEntry, and when ANY new journal entry is created by the journal monitor
 
         // IF a log print occurs
 
@@ -117,7 +118,7 @@ namespace EDDiscovery
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EliteDangerous.EDJournalClass(InvokeAsyncOnUiThread);
-            journalmonitor.OnNewJournalEntry += NewPosition;
+            journalmonitor.OnNewJournalEntry += NewEntry;
 
             history.CommanderId = EDCommander.CurrentCmdrID;
         }
@@ -592,14 +593,17 @@ namespace EDDiscovery
             }
         }
 
-        private void NewPosition(EliteDangerous.JournalEntry je)        // hooked into journal monitor and receives new entries
+        public void NewEntry(EliteDangerous.JournalEntry je)        // hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
         {
             if (je.CommanderId == history.CommanderId)     // we are only interested at this point accepting ones for the display commander
             {
                 HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));
 
                 if (he != null)
-                    OnNewEntry?.Invoke(he, history);
+                {
+                    OnNewEntry?.Invoke(he, history);            // major hook
+                    OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                }
             }
 
             OnNewJournalEntry?.Invoke(je);
