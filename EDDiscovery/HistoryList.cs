@@ -519,8 +519,8 @@ namespace EDDiscovery
 
         public int CommanderId;
 
-        public bool AccumulateFuelScoops { get; set; } = true;
-        public int FuelScoopAccumPeriod { get; set; } = 10;
+        public static bool AccumulateFuelScoops { get; set; } = true;
+        public static int FuelScoopAccumPeriod { get; set; } = 10;
 
         public HistoryList() { }
 
