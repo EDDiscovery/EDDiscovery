@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
                 string modules = SQLiteDBClass.GetSettingString(DbModFilterSave, "All");
                 string[] modArray = modules.Split(';');
                 string levels = SQLiteDBClass.GetSettingString(DbLevelFilterSave, "All");
-                int[] lvlArray = (levels == "All") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
+                int[] lvlArray = (levels == "All"  || levels == "None") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
                 string upgrades = SQLiteDBClass.GetSettingString(DbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
                 string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
