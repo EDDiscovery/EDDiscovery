@@ -46,13 +46,6 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
-            this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
@@ -60,6 +53,15 @@ namespace EDDiscovery.UserControls
             this.labelTime = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SellCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BuyCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CargoCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DemandCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SupplyCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GalAvgCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitToCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitFromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
             this.contextMenuStripLedger.SuspendLayout();
@@ -86,13 +88,15 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMarketData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewMarketData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMarketData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.TimeCol,
-            this.Type,
-            this.Notes,
-            this.Credits,
-            this.Debits,
-            this.Balance,
-            this.NormProfit});
+            this.NameCol,
+            this.SellCol,
+            this.BuyCol,
+            this.CargoCol,
+            this.DemandCol,
+            this.SupplyCol,
+            this.GalAvgCol,
+            this.ProfitToCol,
+            this.ProfitFromCol});
             this.dataGridViewMarketData.ContextMenuStrip = this.contextMenuStripLedger;
             this.dataGridViewMarketData.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMarketData.Name = "dataGridViewMarketData";
@@ -101,55 +105,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMarketData.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewMarketData.TabIndex = 1;
             this.dataGridViewMarketData.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
-            // 
-            // TimeCol
-            // 
-            this.TimeCol.HeaderText = "Time";
-            this.TimeCol.MinimumWidth = 50;
-            this.TimeCol.Name = "TimeCol";
-            this.TimeCol.ReadOnly = true;
-            // 
-            // Type
-            // 
-            this.Type.HeaderText = "Type";
-            this.Type.MinimumWidth = 80;
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
-            // 
-            // Notes
-            // 
-            this.Notes.FillWeight = 200F;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 80;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            // 
-            // Credits
-            // 
-            this.Credits.HeaderText = "Credits";
-            this.Credits.MinimumWidth = 80;
-            this.Credits.Name = "Credits";
-            this.Credits.ReadOnly = true;
-            // 
-            // Debits
-            // 
-            this.Debits.HeaderText = "Debits";
-            this.Debits.MinimumWidth = 80;
-            this.Debits.Name = "Debits";
-            this.Debits.ReadOnly = true;
-            // 
-            // Balance
-            // 
-            this.Balance.HeaderText = "Balance";
-            this.Balance.MinimumWidth = 80;
-            this.Balance.Name = "Balance";
-            this.Balance.ReadOnly = true;
-            // 
-            // NormProfit
-            // 
-            this.NormProfit.HeaderText = "Profit Per Unit";
-            this.NormProfit.MinimumWidth = 20;
-            this.NormProfit.Name = "NormProfit";
             // 
             // contextMenuStripLedger
             // 
@@ -226,6 +181,77 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip1.ShowAlways = true;
             // 
+            // NameCol
+            // 
+            this.NameCol.HeaderText = "Name";
+            this.NameCol.MinimumWidth = 100;
+            this.NameCol.Name = "NameCol";
+            this.NameCol.ReadOnly = true;
+            // 
+            // SellCol
+            // 
+            this.SellCol.FillWeight = 30F;
+            this.SellCol.HeaderText = "Sell";
+            this.SellCol.MinimumWidth = 50;
+            this.SellCol.Name = "SellCol";
+            this.SellCol.ReadOnly = true;
+            // 
+            // BuyCol
+            // 
+            this.BuyCol.FillWeight = 30F;
+            this.BuyCol.HeaderText = "Buy";
+            this.BuyCol.MinimumWidth = 50;
+            this.BuyCol.Name = "BuyCol";
+            this.BuyCol.ReadOnly = true;
+            // 
+            // CargoCol
+            // 
+            this.CargoCol.FillWeight = 30F;
+            this.CargoCol.HeaderText = "Cargo";
+            this.CargoCol.MinimumWidth = 50;
+            this.CargoCol.Name = "CargoCol";
+            this.CargoCol.ReadOnly = true;
+            // 
+            // DemandCol
+            // 
+            this.DemandCol.FillWeight = 30F;
+            this.DemandCol.HeaderText = "Demand";
+            this.DemandCol.MinimumWidth = 50;
+            this.DemandCol.Name = "DemandCol";
+            this.DemandCol.ReadOnly = true;
+            // 
+            // SupplyCol
+            // 
+            this.SupplyCol.FillWeight = 30F;
+            this.SupplyCol.HeaderText = "Supply";
+            this.SupplyCol.MinimumWidth = 50;
+            this.SupplyCol.Name = "SupplyCol";
+            this.SupplyCol.ReadOnly = true;
+            // 
+            // GalAvgCol
+            // 
+            this.GalAvgCol.FillWeight = 30F;
+            this.GalAvgCol.HeaderText = "Galactic Avg";
+            this.GalAvgCol.MinimumWidth = 50;
+            this.GalAvgCol.Name = "GalAvgCol";
+            this.GalAvgCol.ReadOnly = true;
+            // 
+            // ProfitToCol
+            // 
+            this.ProfitToCol.FillWeight = 30F;
+            this.ProfitToCol.HeaderText = "ProfitTo";
+            this.ProfitToCol.MinimumWidth = 50;
+            this.ProfitToCol.Name = "ProfitToCol";
+            this.ProfitToCol.ReadOnly = true;
+            // 
+            // ProfitFromCol
+            // 
+            this.ProfitFromCol.FillWeight = 30F;
+            this.ProfitFromCol.HeaderText = "Profit From";
+            this.ProfitFromCol.MinimumWidth = 50;
+            this.ProfitFromCol.Name = "ProfitFromCol";
+            this.ProfitFromCol.ReadOnly = true;
+            // 
             // UserControlMarketData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -253,13 +279,15 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TimeCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Type;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Credits;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Debits;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Balance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
         private System.Windows.Forms.Label labelTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SellCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BuyCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CargoCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DemandCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SupplyCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GalAvgCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitToCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitFromCol;
     }
 }
