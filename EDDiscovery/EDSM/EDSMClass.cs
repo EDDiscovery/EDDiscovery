@@ -481,13 +481,14 @@ namespace EDDiscovery.EDSM
 
             JObject msg = JObject.Parse(json);
             int msgnr = msg["msgnum"].Value<int>();
-            DateTime.TryParseExact(msg["startDateTime"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logstarttime);
-            DateTime.TryParseExact(msg["endDateTime"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime);
 
             JArray logs = (JArray)msg["logs"];
 
             if (logs != null)
             {
+                DateTime.TryParseExact(msg["startDateTime"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logstarttime);
+                DateTime.TryParseExact(msg["endDateTime"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime);
+
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     foreach (JObject jo in logs)
