@@ -1059,7 +1059,7 @@ namespace EDDiscovery
                 JournalFuelScoop scoop = je as JournalFuelScoop;
                 if (scoop != null)
                 {
-                    if (scoop.Scooped == 5.0)
+                    if (scoop.Scooped >= 5.0)
                     {
                         if (FuelScoopAccum == null)
                         {
@@ -1272,10 +1272,9 @@ namespace EDDiscovery
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 HistoryEntry prev = null;
-                HistoryList hlist = new HistoryList();
                 foreach (EliteDangerous.JournalEntry inje in jlist)
                 {
-                    foreach (JournalEntry je in hlist.ProcessJournalEntry(inje))
+                    foreach (JournalEntry je in hist.ProcessJournalEntry(inje))
                     {
                         bool journalupdate = false;
                         HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
