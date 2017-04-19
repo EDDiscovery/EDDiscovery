@@ -943,13 +943,13 @@ namespace EDDiscovery
                     {
                         if (EDCommander.Current.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
                             EDSMSync.SendComments(he.snc.Name, he.snc.Note, he.snc.EdsmId);
+
+                        Map.UpdateNote();
                     }
                     else
                     {
                         _uncommittedNoteHistoryEntry = he;
                     }
-
-                    Map.UpdateNote();
 
                     travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
                     PopOuts.UpdateNoteJID(he.Journalid, txt);
