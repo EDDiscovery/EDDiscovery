@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.DB
 {
-   // [System.Diagnostics.DebuggerDisplay("MatDB {category} {name} {fdname} {type} {shortname}")]
+    // [System.Diagnostics.DebuggerDisplay("MatDB {category} {name} {fdname} {type} {shortname}")]
     public class MaterialCommodityDB
     {
         public long id { get; set; }
@@ -152,7 +152,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static MaterialCommodityDB EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn )  // By FDNAME
+        public static MaterialCommodityDB EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn)  // By FDNAME
         {
             if (!cachelist.ContainsKey(fdname.ToLower()))
             {
@@ -199,45 +199,66 @@ namespace EDDiscovery.DB
             }
         }
 
-        private static void AddNewType(SQLiteConnectionUser cn, string c, string namelist, string t)
+        private static bool AddNewType(SQLiteConnectionUser cn, string c, string namelist, string t)
         {
-            AddNewTypeC(cn, c, Color.Green, namelist, t);
+            return AddNewTypeC(cn, c, Color.Green, namelist, t);
         }
 
-        private static void AddNewTypeC(SQLiteConnectionUser cn, string c, Color cl, string namelist, string t, string sn = "")
+        private static bool AddNewTypeC(SQLiteConnectionUser cn, string c, Color cl, string namelist, string t, string sn = "")
         {
-            string[] list = namelist.Split(';');
-
-            foreach (string name in list)
+            try
             {
-                if (name.Length > 0)   // just in case a semicolon slips thru
+                string[] list = namelist.Split(';');
+
+                foreach (string name in list)
                 {
-                    string fdname = JournalFieldNaming.FDMaterialName(name);
-
-                    MaterialCommodityDB mc = GetCatFDName(null, fdname, cn);
-
-                    if (mc == null)
+                    if (name.Length > 0)   // just in case a semicolon slips thru
                     {
-                        mc = new MaterialCommodityDB(0, c, name, fdname, t, sn, cl, 0);
-                        mc.Add(cn);
-                    }               // don't change any user changed fields
-                    else if (mc.flags == 0 && (!mc.name.Equals(name) || !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || !mc.colour.IsEqual(cl)))
-                    {
-                        mc.name = name;
-                        mc.shortname = sn;          // So, name is there, update the others
-                        mc.category = c;
-                        mc.type = t;
-                        mc.colour = cl;
-                        mc.Update(cn);
+                        string fdname = JournalFieldNaming.FDMaterialName(name);
+
+                        MaterialCommodityDB mc = GetCatFDName(null, fdname, cn);
+
+                        if (mc == null)
+                        {
+                            mc = new MaterialCommodityDB(0, c, name, fdname, t, sn, cl, 0);
+                            mc.Add(cn);
+                        }               // don't change any user changed fields
+                        else if (mc.flags == 0 && (!mc.name.Equals(name) || !mc.shortname.Equals(sn) || !mc.category.Equals(c) || !mc.type.Equals(t) || !mc.colour.IsEqual(cl)))
+                        {
+                            mc.name = name;
+                            mc.shortname = sn;          // So, name is there, update the others
+                            mc.category = c;
+                            mc.type = t;
+                            mc.colour = cl;
+                            mc.Update(cn);
+                        }
                     }
                 }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception :" + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Exception :" + ex.StackTrace);
+
+                SQLiteConnectionUser.PutSettingBool("RebuildMaterialsCommodities", true);
+                return false;
             }
         }
 
         public static void SetUpInitialTable()
         {
+            bool rebuild = SQLiteConnectionUser.GetSettingBool("RebuildMaterialsCommodities", false);
+
+
+
+
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
+                if (rebuild)
+                    CleanTable(cn);
+
+
                 AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Antimony", "Very Rare", "Sb");
                 AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Polonium", "Very Rare", "Po");
                 AddNewTypeC(cn, MaterialRawCategory, Color.Red, "Ruthenium", "Very Rare", "Ru");
@@ -390,23 +411,34 @@ namespace EDDiscovery.DB
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Proto Heat Radiators", "Very Rare", "PHR");
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Proto Radiolic Alloys", "Very Rare", "PRA");
                 AddNewTypeC(cn, MaterialManufacturedCategory, Color.Red, "Unknown Fragment", "Very Rare", "UF");
-                
+
 
                 using (DbCommand cmd = cn.CreateCommand("select Id,Category,Name,FDName,Type,ShortName,Colour,Flags from MaterialsCommodities Order by Name"))
                 {
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())           
+                        while (reader.Read())
                         {
                             MaterialCommodityDB mcdb = new MaterialCommodityDB((long)reader[0], (string)reader[1], (string)reader[2], (string)reader[3], (string)reader[4], (string)reader[5], Color.FromArgb((int)reader[6]), (int)reader[7]);
                             cachelist[mcdb.fdname.ToLower()] = mcdb;      // load up cache..
-                           // System.Diagnostics.Debug.WriteLine("Cache " + mcdb.category + ": fd=" + mcdb.fdname + " name=" + mcdb.name);
+                                                                          // System.Diagnostics.Debug.WriteLine("Cache " + mcdb.category + ": fd=" + mcdb.fdname + " name=" + mcdb.name);
                         }
                     }
                 }
             }
         }
 
+        private static void CleanTable(SQLiteConnectionUser cn)
+        {
+            string query = "DELETE FROM MaterialsCommodities";
+
+            using (DbCommand cmd = cn.CreateCommand(query))
+            {
+                cmd.ExecuteNonQuery();
+            }
+
+            SQLiteConnectionUser.PutSettingBool("RebuildMaterialsCommodities", false);
+        }
         #endregion
     }
 }
