@@ -99,6 +99,7 @@ namespace EDDiscovery.UserControls
             List<string> matShortNames = Recipes.SelectMany(r => r.ingredients.ToList()).Distinct().ToList();
             matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
+            matLongNames.Sort();
             matfs = new EngineeringFilterSelector(matLongNames);
             matfs.Changed += FilterChanged;
 
@@ -157,12 +158,12 @@ namespace EDDiscovery.UserControls
                 string modules = SQLiteDBClass.GetSettingString(DbModFilterSave, "All");
                 string[] modArray = modules.Split(';');
                 string levels = SQLiteDBClass.GetSettingString(DbLevelFilterSave, "All");
-                int[] lvlArray = (levels == "All") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
+                int[] lvlArray = (levels == "All"  || levels == "None") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
                 string upgrades = SQLiteDBClass.GetSettingString(DbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
                 string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
                 List<string> matList;
-                if (materials == "All") { matList = new List<string>(); }
+                if (materials == "All" || materials == "None") { matList = new List<string>(); }
                 else { matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList(); }
                 
                 for (int i = 0; i < Recipes.Count; i++)
