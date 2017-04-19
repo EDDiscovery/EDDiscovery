@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
                 string modules = SQLiteDBClass.GetSettingString(DbModFilterSave, "All");
                 string[] modArray = modules.Split(';');
                 string levels = SQLiteDBClass.GetSettingString(DbLevelFilterSave, "All");
-                int[] lvlArray = (levels == "All") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
+                int[] lvlArray = (levels == "All" || levels == "None") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
                 string upgrades = SQLiteDBClass.GetSettingString(DbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
 
@@ -738,7 +738,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1ACED,1Nb,1PCa", "Manifest Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni", "Manifest Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE", "Manifest Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,SE,1W", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
+            new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE,1W", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Mo,1W,1Zn", "Manifest Scanner", 4, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1HDC,1Mo,1Tc", "Manifest Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Manifest Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
@@ -963,7 +963,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Pulse Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Pulse Laser", 3, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Pulse Laser", 4, "Broo Tarquin,The Dweller"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPa,1MEF,1Zr", "Pulse Laser", 5, "Broo Tarquin"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Pulse Laser", 5, "Broo Tarquin"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1MS", "Pulse Laser", 1, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1HDP,1MS", "Pulse Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1ME,1PAll,1SLF", "Pulse Laser", 3, "Broo Tarquin,The Dweller"),
@@ -1046,7 +1046,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1Fe", "Shield Booster", 1, "Didi Vatermann,Felicity Farseer,Lei Cheung"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1Ge,1HCW", "Shield Booster", 2, "Didi Vatermann,Lei Cheung"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1FoC,1HCW,1HDP", "Shield Booster", 3, "Didi Vatermann,Lei Cheung"),
-            new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1HDP,1RF,1USS", "Shield Booster", 4, "Didi Vatermann"),
+            new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1HDP,1RFC,1USS", "Shield Booster", 4, "Didi Vatermann"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1ASPA,1EFC,1HE", "Shield Booster", 5, "Didi Vatermann"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Charge", "1S", "Shield Cell Bank", 1, "Elvira Martuuk,Lori Jameson"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Charge", "1Cr,1GR", "Shield Cell Bank", 2, "Lori Jameson"),
