@@ -101,6 +101,12 @@ namespace EDDiscovery.EDSM
                     EDSMRequestBackoffTime = DateTime.UtcNow + BackoffInterval;
                     BackoffInterval = BackoffInterval + TimeSpan.FromSeconds(60);
                 }
+                else if (logstarttime > LastEventTime && logendtime < FirstEventTime)
+                {
+                    Trace.WriteLine($"Bad start and/or end times returned by EDSM - backing off for {BackoffInterval.TotalSeconds}s");
+                    EDSMRequestBackoffTime = DateTime.UtcNow + BackoffInterval;
+                    BackoffInterval = BackoffInterval + TimeSpan.FromSeconds(60);
+                }
                 else if (res == 100 && edsmlogs != null)
                 {
                     BackoffInterval = TimeSpan.FromSeconds(60);

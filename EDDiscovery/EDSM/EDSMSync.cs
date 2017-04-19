@@ -104,6 +104,12 @@ namespace EDDiscovery.EDSM
                             edsm.GetLogs(he.EventTimeUTC.AddDays(-1), null, out edsmsystemlog, out logstarttime, out logendtime);        // always returns a log, time is in UTC as per HistoryEntry and JournalEntry
                         }
 
+                        if (logendtime < logstarttime)
+                        {
+                            running = false;
+                            return;
+                        }
+
                         if (edsmsystemlog == null)
                         {
                             running = false;
