@@ -455,7 +455,7 @@ namespace EDDiscovery.EDSM
         public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<HistoryEntry> log, out DateTime logstarttime, out DateTime logendtime)
         {
             log = new List<HistoryEntry>();
-            logstarttime = DateTime.MinValue;
+            logstarttime = DateTime.MaxValue;
             logendtime = DateTime.MinValue;
 
             if (!IsApiKeySet)
@@ -486,8 +486,12 @@ namespace EDDiscovery.EDSM
 
             if (logs != null)
             {
-                DateTime.TryParseExact(msg["startDateTime"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logstarttime);
-                DateTime.TryParseExact(msg["endDateTime"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime);
+                string startdatestr = msg["startDateTime"].Value<string>();
+                string enddatestr = msg["endDateTime"].Value<string>();
+                if (startdatestr == null || !DateTime.TryParseExact(startdatestr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logstarttime))
+                    logstarttime = DateTime.MaxValue;
+                if (enddatestr == null || !DateTime.TryParseExact(enddatestr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime))
+                    logendtime = DateTime.MinValue;
 
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
