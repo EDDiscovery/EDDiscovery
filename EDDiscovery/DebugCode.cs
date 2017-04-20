@@ -167,8 +167,11 @@ namespace EDDiscovery
         public static void TestJournal()
         {
             foreach (string s in Enum.GetNames(typeof(JournalTypeEnum)))
+            //string s = "EDDItemSet";
             {
                 string json = "{ \"timestamp\":\"2017-04-05T11:16:19Z\", \"event\":\"" + s + "\" }";
+
+                System.Diagnostics.Debug.WriteLine("Event " + s + ":");
 
                 JournalEntry j = JournalEntry.CreateJournalEntry(json);
 
@@ -176,6 +179,20 @@ namespace EDDiscovery
 
                 string summary, info, detailed;
                 j.FillInformation(out summary, out info, out detailed);
+
+                ConditionVariables vars = new ConditionVariables();
+                vars.AddPropertiesFieldsOfClass(j, "EventClass_", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);      //depth seems good enough
+
+                int n = 0;
+                foreach( string cv in vars.NameList )
+                {
+                    if (n++ >= 1)
+                        System.Diagnostics.Debug.Write(",");
+
+                    System.Diagnostics.Debug.Write(cv);
+                }
+
+                System.Diagnostics.Debug.WriteLine("");
             }
         }
     }

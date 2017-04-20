@@ -70,8 +70,10 @@ namespace EDDiscovery.Forms
             Synthesis,
             Missions,
             Engineering,
+            MarketData,
 
             StartTabButtons = Log,
+            MaxTabButtons = MarketData - StartTabButtons,
         };
 
         public class PopOutInfo
@@ -79,7 +81,6 @@ namespace EDDiscovery.Forms
             public string WindowTitlePrefix;
             public string WindowRefName;
             public Bitmap TabIcon;
-            public string ToolTip;
             public bool SupportsTransparency;
             public bool DefaultTransparent;
 
@@ -89,12 +90,11 @@ namespace EDDiscovery.Forms
                 WindowRefName = "Unknown";
             }
 
-            public PopOutInfo(string prefix, string rf, Bitmap icon = null, string tooltip = null, bool? transparent = null)
+            public PopOutInfo(string prefix, string rf, Bitmap icon = null, bool? transparent = null)
             {
                 WindowTitlePrefix = prefix;
                 WindowRefName = rf;
                 TabIcon = icon;
-                ToolTip = tooltip;
                 SupportsTransparency = transparent != null;
                 DefaultTransparent = transparent ?? false;
             }
@@ -102,25 +102,26 @@ namespace EDDiscovery.Forms
 
         static public Dictionary<PopOuts, PopOutInfo> popoutinfo = new Dictionary<PopOuts, PopOutInfo>
         {
-            { PopOuts.Log, new PopOutInfo("Log", "Log", EDDiscovery.Properties.Resources.Log, "Display the program log") },
-            { PopOuts.StarDistance, new PopOutInfo("Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star, "Display the nearest stars to the currently selected entry") },
-            { PopOuts.Materials, new PopOutInfo("Materials", "Materials", EDDiscovery.Properties.Resources.material, "Display the material count at the currently selected entry") },
-            { PopOuts.Commodities, new PopOutInfo("Commodities", "Commodities", EDDiscovery.Properties.Resources.commodities, "Display the commodity count at the currently selected entry") },
-            { PopOuts.Ledger, new PopOutInfo("Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger, "Display a ledger of cash related entries") },
-            { PopOuts.Journal, new PopOutInfo("Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal, "Display the journal grid view") },
-            { PopOuts.TravelGrid, new PopOutInfo("Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "Display the history grid view") },
-            { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EDDiscovery.Properties.Resources.screenshot, "Display the screen shot view") },
-            { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
-            { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, "Display scan data", transparent: false) },
-            { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EDDiscovery.Properties.Resources.module, "Display loadout data") },
-            { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EDDiscovery.Properties.Resources.synthesis, "Synthesis Planner") },
-            { PopOuts.Missions, new PopOutInfo("Missions", "Missions", EDDiscovery.Properties.Resources.missionaccepted, "Missions") },
-            { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null, "Explore a collection of systems") },
+            { PopOuts.Log, new PopOutInfo("Log", "Log", EDDiscovery.Properties.Resources.Log ) },
+            { PopOuts.StarDistance, new PopOutInfo("Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star) },
+            { PopOuts.Materials, new PopOutInfo("Materials", "Materials", EDDiscovery.Properties.Resources.material ) },
+            { PopOuts.Commodities, new PopOutInfo("Commodities", "Commodities", EDDiscovery.Properties.Resources.commodities) },
+            { PopOuts.Ledger, new PopOutInfo("Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger) },
+            { PopOuts.Journal, new PopOutInfo("Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal) },
+            { PopOuts.TravelGrid, new PopOutInfo("Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid) },
+            { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EDDiscovery.Properties.Resources.screenshot) },
+            { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats) },
+            { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, transparent: false) },
+            { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EDDiscovery.Properties.Resources.module) },
+            { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EDDiscovery.Properties.Resources.synthesis) },
+            { PopOuts.Missions, new PopOutInfo("Missions", "Missions", EDDiscovery.Properties.Resources.missionaccepted) },
+            { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null) },
             { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
             { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
-            { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EDDiscovery.Properties.Resources.engineercraft, "Engineering Planner") }
+            { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EDDiscovery.Properties.Resources.engineercraft) },
+            { PopOuts.MarketData, new PopOutInfo("Market Data", "MarketData", EDDiscovery.Properties.Resources.marketsell ) },
         };
 
         public static UserControlCommonBase Create(PopOuts i)
@@ -146,6 +147,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.Synthesis: return new UserControlSynthesis();
                 case PopOuts.Missions: return new UserControlMissions();
                 case PopOuts.Engineering: return new UserControlEngineering();
+                case PopOuts.MarketData: return new UserControlMarketData();
                 default: return null;
             }
         }

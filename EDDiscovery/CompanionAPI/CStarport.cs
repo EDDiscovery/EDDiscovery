@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDDiscovery.EliteDangerous.JournalEvents;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace EDDiscovery.CompanionAPI
 {
     public class CLastStarport
     {
-        private JObject _jo;
-        public long id { get; set; }
-        public string name { get; set; }
-        public string faction { get; set; }
+        public long id { get; private set; }
+        public string name { get; private set; }
+        public string faction { get; private set; }
+        public JArray jcommodities { get; private set; }
         public List<CCommodities> commodities;
 
         public CLastStarport(JObject jo)
@@ -24,13 +25,11 @@ namespace EDDiscovery.CompanionAPI
         {
             try
             {
-                _jo = jo;
                 id = JSONHelper.GetLong(jo["id"]);
                 name = JSONHelper.GetStringDef(jo["name"]);
                 faction = JSONHelper.GetStringDef(jo["faction"]);
 
-                JArray jcommodities = (JArray)jo["commodities"];
-
+                jcommodities = (JArray)jo["commodities"];
 
                 if (jcommodities != null)
                 {
@@ -38,8 +37,6 @@ namespace EDDiscovery.CompanionAPI
                     foreach (JObject commodity in jcommodities)
                     {
                         CCommodities com = new CCommodities(commodity);
-
-
                         commodities.Add(com);
                     }
                 }

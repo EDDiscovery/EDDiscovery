@@ -31,48 +31,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public MaterialList Materials { get; set; }             // FDNAMES
         public CommodityList Commodities { get; set; }
 
-        public JObject UpdateState(JObject evt = null)                      // calculates the JSON string and returns it, plus updates the class so as it would look when loaded
-        {
-            if (evt == null)
-            {
-                evt = GetJson();
-            }
-
-            if (Materials != null)
-            {
-                JArray ja = new JArray();
-
-                foreach (MaterialItem i in Materials.Materials)
-                {
-                    JObject jo = new JObject();
-                    jo["Name"] = i.Name;
-                    jo["Category"] = i.Category;
-                    jo["Count"] = i.Count;
-                    ja.Add(jo);
-                }
-
-                evt["Materials"] = ja;
-            }
-
-            if (Commodities != null)
-            {
-                JArray ja = new JArray();
-
-                foreach (CommodityItem c in Commodities.Commodities)
-                {
-                    JObject jo = new JObject();
-                    jo["Name"] = c.Name;
-                    jo["Count"] = c.Count;
-                    jo["BuyPrice"] = c.BuyPrice;
-                    ja.Add(jo);
-                }
-
-                evt["Commodities"] = ja;
-            }
-
-            return evt;
-        }
-
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Materials != null)

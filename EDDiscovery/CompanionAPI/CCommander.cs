@@ -5,28 +5,26 @@ namespace EDDiscovery.CompanionAPI
 {
     public class CCommander
     {
-        private JObject _jo;
-        public int id { get; set; }
-        public string name { get; set; }
-        public long credits { get; set; }
-        public long debt { get; set; }
-        public int currentShipId { get; set; }
-        public bool alive { get; set; }
-        public bool docked { get; set; }
+        public int id { get; private set; }
+        public string name { get; private set; }
+        public long credits { get; private set; }
+        public long debt { get; private set; }
+        public int currentShipId { get; private set; }
+        public bool alive { get; private set; }
+        public bool docked { get; private set; }
 
-        public CombatRank combatrank { get; set; }
-        public TradeRank traderank { get; set; }
-        public ExplorationRank explorationrank { get; set; }
-        public int crimeRank { get; set; }  // ?
-        public int serviceRank { get; set; } //?
-        public EmpireRank empirerank { get; set; }
-        public FederationRank federationrank { get; set; }
-        public int powerRank{ get; set; }
-        public CQCRank CQCRank { get; set; }
+        public CombatRank combatrank { get; private set; }
+        public TradeRank traderank { get; private set; }
+        public ExplorationRank explorationrank { get; private set; }
+        public int crimeRank { get; private set; }  // ?
+        public int serviceRank { get; private set; } //?
+        public EmpireRank empirerank { get; private set; }
+        public FederationRank federationrank { get; private set; }
+        public int powerRank{ get; private set; }
+        public CQCRank CQCRank { get; private set; }
 
         public CCommander(JObject json)
         {
-            _jo = json;
             id = JSONHelper.GetInt(json["id"]);
             name =  JSONHelper.GetStringDef(json["name"]);
             credits = JSONHelper.GetLong(json["credits"]);
