@@ -16,6 +16,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
@@ -38,7 +39,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     CCommodities com = new CCommodities(commodity);
                     Commodities.Add(com);
                 }
-                Commodities.Sort(delegate (CCommodities left, CCommodities right) { return left.name.CompareTo(right.name); });
+                Commodities.Sort(delegate (CCommodities left, CCommodities right) 
+                    {
+                        int cat = left.categoryname.CompareTo(right.categoryname);
+                        if ( cat == 0 )
+                            cat = left.name.CompareTo(right.name);
+                        return cat;
+                    });
             }
         }
 
@@ -88,8 +95,6 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int stock { get; private set; }
         public int demand { get; private set; }
         public string categoryname { get; private set; }
-        public int? avgprice { get; private set; }
-        public bool? rare { get; private set; }
 
         public List<string> StatusFlags { get; private set; }
 
@@ -126,6 +131,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 return false;
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} : {1} Buy {2} Sell {3} Mean {4}" + System.Environment.NewLine +
+                                 "Stock {5} Demand {6}", categoryname, name , buyPrice , sellPrice , meanPrice , stock, demand);
         }
     }
 }
