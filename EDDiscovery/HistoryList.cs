@@ -520,7 +520,6 @@ namespace EDDiscovery
         public int CommanderId;
 
         public static bool AccumulateFuelScoops { get; set; } = true;
-        public static int FuelScoopAccumPeriod { get; set; } = 10;
 
         public HistoryList() { }
 
@@ -1060,20 +1059,29 @@ namespace EDDiscovery
                 JournalFuelScoop scoop = je as JournalFuelScoop;
                 if (scoop != null)
                 {
-                    if (scoop.Scooped == 5.0)
+                    if (scoop.Scooped >= 5.0)
                     {
                         if (FuelScoopAccum == null)
                         {
                             FuelScoopAccum = new JournalFuelScoop(je.GetJson());
                             yield break;
                         }
-                        else if (scoop.EventTimeUTC.Subtract(FuelScoopAccum.EventTimeUTC).TotalSeconds < FuelScoopAccumPeriod)
+                        else
                         {
+                            FuelScoopAccum.Id = scoop.Id;
+                            FuelScoopAccum.TLUId = scoop.TLUId;
+                            FuelScoopAccum.CommanderId = scoop.CommanderId;
+                            FuelScoopAccum.EdsmID = scoop.EdsmID;
                             FuelScoopAccum.EventTimeUTC = scoop.EventTimeUTC;
                             FuelScoopAccum.Scooped += scoop.Scooped;
                             FuelScoopAccum.Total = scoop.Total;
                             yield break;
                         }
+                    }
+                    else if (FuelScoopAccum != null)
+                    {
+                        scoop.Scooped += FuelScoopAccum.Scooped;
+                        FuelScoopAccum = null;
                     }
                 }
             }
@@ -1264,10 +1272,9 @@ namespace EDDiscovery
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 HistoryEntry prev = null;
-                HistoryList hlist = new HistoryList();
                 foreach (EliteDangerous.JournalEntry inje in jlist)
                 {
-                    foreach (JournalEntry je in hlist.ProcessJournalEntry(inje))
+                    foreach (JournalEntry je in hist.ProcessJournalEntry(inje))
                     {
                         bool journalupdate = false;
                         HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
