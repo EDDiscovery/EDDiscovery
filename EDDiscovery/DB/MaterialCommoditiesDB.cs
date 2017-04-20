@@ -83,6 +83,7 @@ namespace EDDiscovery.DB
             {
                 MaterialCommodityDB mcdb = new MaterialCommodityDB(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green, 0);
                 mcdb.SetCache();
+                System.Diagnostics.Debug.WriteLine("Material not present: " + cat + "," + fdname );
             }
 
             return cachelist[fdname.ToLower()];
@@ -198,6 +199,10 @@ namespace EDDiscovery.DB
             AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Unexpected Emission Data", "Standard", "UED", "emissiondata");
             AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Untypical Shield Scans", "Standard", "USS", "shielddensityreports");
             AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Shield Frequency Data", "Standard", "SFD", "shieldfrequencydata");
+            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Classified Scan Data", "Standard", "CFSD", "classifiedscandata");
+            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Compact Emissions Data", "Standard", "CED", "compactemissionsdata");
+            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Embedded Firmware", "Standard", "EFW", "embeddedfirmware");
+
             // rare data
             AddNewTypeF(MaterialEncodedCategory, Color.Yellow, "Aberrant Shield Pattern Analysis", "Rare", "ASPA", "shieldpatternanalysis");
             AddNewTypeF(MaterialEncodedCategory, Color.Yellow, "Atypical Encryption Archives", "Rare", "AEA", "encryptionarchives");
@@ -242,6 +247,10 @@ namespace EDDiscovery.DB
             AddNewTypeC(MaterialManufacturedCategory, Color.Green, "Hybrid Capacitors", "Common", "HC");
             AddNewTypeC(MaterialManufacturedCategory, Color.Green, "Mechanical Equipment", "Common", "ME");
             AddNewTypeC(MaterialManufacturedCategory, Color.Green, "Shield Emitters", "Common", "SE");
+            AddNewTypeF(MaterialManufacturedCategory, Color.Green, "Federal Core Composites", "Common", "FCC", "fedcorecomposites");
+            AddNewTypeF(MaterialManufacturedCategory, Color.Green, "Federal Proprietary Composites", "Common", "FPC", "fedproprietarycomposites");
+            AddNewTypeF(MaterialManufacturedCategory, Color.Green, "Unknown Energy Source", "Common", "UES" , "unknownenergysource");
+
             // standard manufactured
             AddNewTypeC(MaterialManufacturedCategory, Color.SandyBrown, "Chemical Distillery", "Standard", "CD");
             AddNewTypeC(MaterialManufacturedCategory, Color.SandyBrown, "Conductive Ceramics", "Standard", "CCe");
