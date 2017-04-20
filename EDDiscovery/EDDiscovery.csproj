@@ -194,7 +194,7 @@
     <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Actions\ActionCommands\ActionShip.cs" />
     <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
-    <Compile Include="Actions\ActionCommands\AudioUserInteraction.cs" />
+    <Compile Include="Actions\ActionCommands\ActionUserInteraction.cs" />
     <Compile Include="Actions\ActionController.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
@@ -210,7 +210,6 @@
     <Compile Include="Actions\ActionFileList.cs" />
     <Compile Include="Actions\ActionProgramList.cs" />
     <Compile Include="Actions\ActionVars.cs" />
-    <Compile Include="CompanionAPI\CCommodities.cs" />
     <Compile Include="Audio\AudioDeviceConfigure.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -312,6 +311,7 @@
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="EDSM\EDSMLogFetcher.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEDDCommodityPrices.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSystemsShutdown.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEndCrewSession.cs" />
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
@@ -792,6 +792,12 @@
     <Compile Include="UserControls\UserControlExploration.Designer.cs">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlMarketData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlMarketData.Designer.cs">
+      <DependentUpon>UserControlMarketData.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlMissions.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -977,6 +983,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlMarketData.resx">
+      <DependentUpon>UserControlMarketData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlMissions.resx">
       <DependentUpon>UserControlMissions.cs</DependentUpon>

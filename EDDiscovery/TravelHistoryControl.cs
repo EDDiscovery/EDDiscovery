@@ -51,7 +51,7 @@ namespace EDDiscovery
         {
             "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
             "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
-            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis" , "Missions", "Engineering"
+            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis" , "Missions", "Engineering", "Market Data"
         };
 
         Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
@@ -69,6 +69,7 @@ namespace EDDiscovery
                                         EDDiscovery.Properties.Resources.synthesis,
                                         EDDiscovery.Properties.Resources.missionaccepted,
                                         EDDiscovery.Properties.Resources.engineercraft,
+                                        EDDiscovery.Properties.Resources.marketsell,
                                         };
 
         string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
@@ -86,6 +87,7 @@ namespace EDDiscovery
                                                "Display Synthesis planner",
                                                "Display Missions",
                                                "Display Engineering planner",
+                                               "Display Market Data (Requires login to Frontier using Commander Frontier log in details)",
                                             };
 
         HistoryEntry notedisplayedhe = null;            // remember the particulars of the note displayed, so we can save it later
@@ -523,9 +525,10 @@ namespace EDDiscovery
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            tabStripBottom.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons));
-            tabStripBottomRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons) );
-            tabStripMiddleRight.SelectedIndex = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons));
+            int max = (int)PopOutControl.PopOuts.MaxTabButtons;
+            tabStripBottom.SelectedIndex = Math.Min( SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons)), max);
+            tabStripBottomRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons) ), max );
+            tabStripMiddleRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons)), max);
         }
 
         public void SaveSettings()     // called by form when closing

@@ -393,7 +393,7 @@ namespace EDDiscovery
 
             try // just to make sure a strange type does not barfe it
             {
-                if (rettype.UnderlyingSystemType.Name.Contains("Dictionary"))
+                if (rettype.UnderlyingSystemType.FullName.Contains("System.Collections.Generic.Dictionary"))
                 {
                     if (o == null)
                         values[name + "Count"] = "0";                           // we always get a NameCount so we can tell..
@@ -413,7 +413,7 @@ namespace EDDiscovery
                         }
                     }
                 }
-                else if (rettype.UnderlyingSystemType.Name.Contains("List"))
+                else if (rettype.UnderlyingSystemType.FullName.Contains("System.Collections.Generic.List"))
                 {
                     if (o == null)
                         values[name + "Count"] = "0";                           // we always get a NameCount so we can tell..

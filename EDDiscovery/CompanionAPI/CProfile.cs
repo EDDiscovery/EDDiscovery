@@ -37,6 +37,7 @@ namespace EDDiscovery.CompanionAPI
             JObject jo = JObject.Parse(jsonstring);
             FromJson(jo);
         }
+
         public CProfile(JObject json)
         {
             FromJson(json);
@@ -46,21 +47,45 @@ namespace EDDiscovery.CompanionAPI
         {
             if (json["commander"] != null)
             {
-                Cmdr = new CCommander((JObject)json["commander"]);
-                CurrentStarSystem = new CLastSystem((JObject)json["lastSystem"]);
-                StarPort = new CLastStarport((JObject)json["lastStarport"]);
-                Ship = new CShip((JObject)json["ship"]);
+                try
+                {           // protect bad json
 
-                JObject jships = (JObject)json["ships"];
-                Ships = new List<CShip>();
+                    Cmdr = new CCommander((JObject)json["commander"]);
+                    CurrentStarSystem = new CLastSystem((JObject)json["lastSystem"]);
+                    StarPort = new CLastStarport((JObject)json["lastStarport"]);
+                    Ship = new CShip((JObject)json["ship"]);
 
-                if (jships != null)
-                {
-                    foreach (JToken tship in jships.Values())
+                    Ships = new List<CShip>();
+
+                    JToken st = json["ships"];
+
+                    if (st != null)
                     {
-                        CShip ship = new CShip((JObject)tship);
-                        Ships.Add(ship);
+                        if (st is JArray)
+                        {
+                            foreach( JObject tship in st )
+                            {
+                                CShip ship = new CShip((JObject)tship);
+                                Ships.Add(ship);
+                            }
+                        }
+                        else
+                        {
+                            JObject jships = (JObject)json["ships"];
+
+                            if (jships != null)
+                            {
+                                foreach (JToken tship in jships.Values())
+                                {
+                                    CShip ship = new CShip((JObject)tship);
+                                    Ships.Add(ship);
+                                }
+                            }
+                        }
                     }
+                }
+                catch
+                {
                 }
             }
         }
