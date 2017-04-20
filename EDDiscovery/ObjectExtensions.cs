@@ -599,6 +599,13 @@ public static class ObjectExtensionsStrings
         return ret;
     }
 
+    public static string FDName(this string normal)
+    {
+        string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
+        return n.ToLower();
+    }
+
+
 }
 
 public static class ObjectExtensionsNumbersBool

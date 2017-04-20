@@ -37,7 +37,6 @@ namespace EDDiscovery.EliteDangerous
             this.Details = c;
         }
 
-        public long id { get { return Details.id; } }
         public string category { get { return Details.category; } }
         public string name { get { return Details.name; } }
         public string fdname { get { return Details.fdname; } }
