@@ -46,13 +46,15 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
-            this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.labelTime = new System.Windows.Forms.Label();
+            this.checkBoxBuyOnly = new ExtendedControls.CheckBoxCustom();
             this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxCustomTo = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxCustomFrom = new ExtendedControls.ComboBoxCustom();
+            this.labelLocation = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.CategoryCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SellCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BuyCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,7 +66,6 @@ namespace EDDiscovery.UserControls
             this.ProfitFromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
-            this.contextMenuStripLedger.SuspendLayout();
             this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,6 +89,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMarketData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewMarketData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMarketData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.CategoryCol,
             this.NameCol,
             this.SellCol,
             this.BuyCol,
@@ -97,28 +99,13 @@ namespace EDDiscovery.UserControls
             this.GalAvgCol,
             this.ProfitToCol,
             this.ProfitFromCol});
-            this.dataGridViewMarketData.ContextMenuStrip = this.contextMenuStripLedger;
             this.dataGridViewMarketData.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMarketData.Name = "dataGridViewMarketData";
             this.dataGridViewMarketData.RowHeadersVisible = false;
             this.dataGridViewMarketData.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewMarketData.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewMarketData.TabIndex = 1;
-            this.dataGridViewMarketData.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
-            // 
-            // contextMenuStripLedger
-            // 
-            this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemGotoItem});
-            this.contextMenuStripLedger.Name = "contextMenuStripLedger";
-            this.contextMenuStripLedger.Size = new System.Drawing.Size(207, 26);
-            // 
-            // toolStripMenuItemGotoItem
-            // 
-            this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
-            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
-            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
-            this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
+            this.dataGridViewMarketData.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMarketData_SortCompare);
             // 
             // vScrollBarCustomMC
             // 
@@ -131,13 +118,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 21);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 34);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 519);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 506);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -151,35 +138,114 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
-            this.panelButtons.Controls.Add(this.labelTime);
+            this.panelButtons.Controls.Add(this.checkBoxBuyOnly);
             this.panelButtons.Controls.Add(this.label1);
+            this.panelButtons.Controls.Add(this.comboBoxCustomTo);
+            this.panelButtons.Controls.Add(this.comboBoxCustomFrom);
+            this.panelButtons.Controls.Add(this.labelLocation);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
             // 
-            // labelTime
+            // checkBoxBuyOnly
             // 
-            this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(64, 7);
-            this.labelTime.Name = "labelTime";
-            this.labelTime.Size = new System.Drawing.Size(30, 13);
-            this.labelTime.TabIndex = 26;
-            this.labelTime.Text = "Time";
+            this.checkBoxBuyOnly.AutoSize = true;
+            this.checkBoxBuyOnly.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxBuyOnly.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxBuyOnly.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxBuyOnly.FontNerfReduction = 0.5F;
+            this.checkBoxBuyOnly.Location = new System.Drawing.Point(584, 9);
+            this.checkBoxBuyOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
+            this.checkBoxBuyOnly.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxBuyOnly.TabIndex = 29;
+            this.checkBoxBuyOnly.Text = "Buy Only";
+            this.checkBoxBuyOnly.TickBoxReductionSize = 10;
+            this.checkBoxBuyOnly.UseVisualStyleBackColor = true;
+            this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(220, 7);
+            this.label1.Location = new System.Drawing.Point(355, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Search";
+            this.label1.Size = new System.Drawing.Size(19, 13);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "Vs";
+            // 
+            // comboBoxCustomTo
+            // 
+            this.comboBoxCustomTo.ArrowWidth = 1;
+            this.comboBoxCustomTo.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomTo.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomTo.DataSource = null;
+            this.comboBoxCustomTo.DisplayMember = "";
+            this.comboBoxCustomTo.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomTo.DropDownHeight = 150;
+            this.comboBoxCustomTo.DropDownWidth = 400;
+            this.comboBoxCustomTo.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomTo.ItemHeight = 13;
+            this.comboBoxCustomTo.Location = new System.Drawing.Point(389, 7);
+            this.comboBoxCustomTo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomTo.Name = "comboBoxCustomTo";
+            this.comboBoxCustomTo.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomTo.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomTo.ScrollBarWidth = 16;
+            this.comboBoxCustomTo.SelectedIndex = -1;
+            this.comboBoxCustomTo.SelectedItem = null;
+            this.comboBoxCustomTo.SelectedValue = null;
+            this.comboBoxCustomTo.Size = new System.Drawing.Size(176, 23);
+            this.comboBoxCustomTo.TabIndex = 27;
+            this.comboBoxCustomTo.ValueMember = "";
+            this.comboBoxCustomTo.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomTo_SelectedIndexChanged);
+            // 
+            // comboBoxCustomFrom
+            // 
+            this.comboBoxCustomFrom.ArrowWidth = 1;
+            this.comboBoxCustomFrom.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomFrom.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomFrom.DataSource = null;
+            this.comboBoxCustomFrom.DisplayMember = "";
+            this.comboBoxCustomFrom.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomFrom.DropDownHeight = 150;
+            this.comboBoxCustomFrom.DropDownWidth = 400;
+            this.comboBoxCustomFrom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomFrom.ItemHeight = 13;
+            this.comboBoxCustomFrom.Location = new System.Drawing.Point(167, 7);
+            this.comboBoxCustomFrom.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomFrom.Name = "comboBoxCustomFrom";
+            this.comboBoxCustomFrom.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomFrom.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomFrom.ScrollBarWidth = 16;
+            this.comboBoxCustomFrom.SelectedIndex = -1;
+            this.comboBoxCustomFrom.SelectedItem = null;
+            this.comboBoxCustomFrom.SelectedValue = null;
+            this.comboBoxCustomFrom.Size = new System.Drawing.Size(176, 23);
+            this.comboBoxCustomFrom.TabIndex = 27;
+            this.comboBoxCustomFrom.ValueMember = "";
+            this.comboBoxCustomFrom.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomFrom_SelectedIndexChanged);
+            // 
+            // labelLocation
+            // 
+            this.labelLocation.AutoSize = true;
+            this.labelLocation.Location = new System.Drawing.Point(3, 7);
+            this.labelLocation.Name = "labelLocation";
+            this.labelLocation.Size = new System.Drawing.Size(47, 13);
+            this.labelLocation.TabIndex = 26;
+            this.labelLocation.Text = "No Data";
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
+            // 
+            // CategoryCol
+            // 
+            this.CategoryCol.FillWeight = 50F;
+            this.CategoryCol.HeaderText = "Category";
+            this.CategoryCol.MinimumWidth = 50;
+            this.CategoryCol.Name = "CategoryCol";
             // 
             // NameCol
             // 
@@ -239,7 +305,7 @@ namespace EDDiscovery.UserControls
             // ProfitToCol
             // 
             this.ProfitToCol.FillWeight = 30F;
-            this.ProfitToCol.HeaderText = "ProfitTo";
+            this.ProfitToCol.HeaderText = "Profit To cr/t";
             this.ProfitToCol.MinimumWidth = 50;
             this.ProfitToCol.Name = "ProfitToCol";
             this.ProfitToCol.ReadOnly = true;
@@ -247,7 +313,7 @@ namespace EDDiscovery.UserControls
             // ProfitFromCol
             // 
             this.ProfitFromCol.FillWeight = 30F;
-            this.ProfitFromCol.HeaderText = "Profit From";
+            this.ProfitFromCol.HeaderText = "Profit From cr/t";
             this.ProfitFromCol.MinimumWidth = 50;
             this.ProfitFromCol.Name = "ProfitFromCol";
             this.ProfitFromCol.ReadOnly = true;
@@ -262,7 +328,6 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).EndInit();
-            this.contextMenuStripLedger.ResumeLayout(false);
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
             this.ResumeLayout(false);
@@ -275,11 +340,13 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewMarketData;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Label labelTime;
+        private System.Windows.Forms.Label labelLocation;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomTo;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomFrom;
+        private System.Windows.Forms.Label label1;
+        private ExtendedControls.CheckBoxCustom checkBoxBuyOnly;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CategoryCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn SellCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn BuyCol;

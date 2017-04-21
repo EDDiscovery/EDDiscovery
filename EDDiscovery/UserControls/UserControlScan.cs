@@ -419,7 +419,7 @@ namespace EDDiscovery.UserControls
                 string tooltip = sd.Key;
                 Color fillc = Color.Yellow;
 
-                EDDiscovery.DB.MaterialCommodityDB mc = EDDiscovery.DB.MaterialCommodityDB.GetCachedMaterial(sd.Key);
+                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(sd.Key);
                 if (mc != null)
                 {
                     abv = mc.shortname;
