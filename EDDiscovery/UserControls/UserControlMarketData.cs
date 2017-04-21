@@ -35,6 +35,7 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         
         private string DbColumnSave { get { return ("MarketDataGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbBuyOnly { get { return "MarketDataBuyOnly" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         #region Init
 
@@ -55,6 +56,10 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewEntry += OnChanged;
             ed.TravelControl.OnTravelSelectionChanged += OnChanged;
+
+            checkBoxBuyOnly.Enabled = false;
+            checkBoxBuyOnly.Checked = DB.SQLiteDBClass.GetSettingBool(DbBuyOnly, false);
+            checkBoxBuyOnly.Enabled = true;
         }
 
         #endregion
@@ -124,6 +129,9 @@ namespace EDDiscovery.UserControls
         {
             last_displayed = he;
 
+            DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
+            SortOrder sortorder = dataGridViewMarketData.SortOrder;
+
             dataGridViewMarketData.Rows.Clear();
             labelLocation.Text = "No Data";
             toolTip1.SetToolTip(labelLocation, null);
@@ -131,31 +139,52 @@ namespace EDDiscovery.UserControls
             if (he != null )       // we know it has a journal entry of EDD commodity..
             {
                 JournalEDDCommodityPrices ecp = he.journalEntry as JournalEDDCommodityPrices;
-                
-                foreach( CCommodities c in ecp.Commodities )
+                List<CCommodities> list = ecp.Commodities;
+
+                if ( last_compared != null && !Object.ReferenceEquals(last_compared, he))   // if got a comparision, and not the same
                 {
-                    object[] rowobj = { c.categoryname ,
-                                        c.name ,
-                                        (c.sellPrice>0) ? c.sellPrice.ToString() : "" ,
-                                        c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
-                                        0,
-                                        c.demand > 1 ? c.demand.ToString() : "" ,
-                                        c.stock > 0 ? c.stock.ToString() : "" ,
-                                        c.meanPrice > 0 ? c.meanPrice.ToString() : "",
-                                        "-",
-                                        "-"
-                                    };
+                    list = CCommodities.Merge(list, ((JournalEDDCommodityPrices)last_compared.journalEntry).Commodities , last_compared.WhereAmI);
+                }
 
-                    int rowno = dataGridViewMarketData.Rows.Add(rowobj);
+                FontFamily ff = new FontFamily(this.Font.Name);
+                bool buyonly = checkBoxBuyOnly.Checked;
 
-                    dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText = 
-                    dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = c.ToString();
+                foreach ( CCommodities c in list )
+                {
+                    if (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy))
+                    {
+                        object[] rowobj = { c.categoryname ,
+                                            c.name ,
+                                            c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
+                                            c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
+                                            0,
+                                            c.demand > 1 ? c.demand.ToString() : "" ,
+                                            c.stock > 0 ? c.stock.ToString() : "" ,
+                                            c.meanPrice > 0 ? c.meanPrice.ToString() : "",
+                                            c.ComparisionLR,
+                                            c.ComparisionRL,
+                                        };
+
+                        int rowno = dataGridViewMarketData.Rows.Add(rowobj);
+
+                        if (c.ComparisionRightOnly && ff != null && ff.IsStyleAvailable(FontStyle.Italic))
+                        {
+                            for (int i = 1; i < dataGridViewMarketData.Columns.Count; i++)
+                                dataGridViewMarketData.Rows[rowno].Cells[i].Style.Font = new Font(this.Font, FontStyle.Italic);
+                        }
+
+                        dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText =
+                        dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = c.ToString();
+                    }
                 }
 
                 labelLocation.Text = he.System.name + ":" + he.WhereAmI;
                 string r = "Recorded at " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? he.EventTimeUTC.ToString() : he.EventTimeLocal.ToString());
                 toolTip1.SetToolTip(labelLocation, r);
             }
+
+            dataGridViewMarketData.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewMarketData.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
         #endregion
@@ -170,53 +199,9 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
+            DB.SQLiteDBClass.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
             discoveryform.OnNewEntry -= OnChanged;
             discoveryform.TravelControl.OnTravelSelectionChanged -= OnChanged;
-        }
-
-        #endregion
-
-        #region right clicks
-
-        int rightclickrow = -1;
-        int leftclickrow = -1;
-
-        private void dataGridViewLedger_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickrow = -1;
-            }
-            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-            {
-                leftclickrow = -1;
-            }
-
-            if (dataGridViewMarketData.SelectedCells.Count < 2 || dataGridViewMarketData.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewMarketData.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewMarketData.ClearSelection();                // select row under cursor.
-                    dataGridViewMarketData.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                    }
-                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-                    {
-                        leftclickrow = hti.RowIndex;
-                    }
-                }
-            }
-        }
-
-        private void toolStripMenuItemGotoItem_Click(object sender, EventArgs e)
-        {
-            if (rightclickrow != -1)
-            {
-            }
         }
 
         #endregion
@@ -227,47 +212,64 @@ namespace EDDiscovery.UserControls
             {
                 double v1;
                 double v2;
-                bool v1hasval = Double.TryParse(e.CellValue1?.ToString(), out v1);
-                bool v2hasval = Double.TryParse(e.CellValue2?.ToString(), out v2);
+                bool v1hasval = Double.TryParse(e.CellValue1?.ToString().Replace("cr/t", ""), out v1);
+                bool v2hasval = Double.TryParse(e.CellValue2?.ToString().Replace("cr/t", ""), out v2);
 
-                if (v1hasval || v2hasval)
+                if (v1hasval)
                 {
-                    if (!v1hasval)
-                    {
-                        e.SortResult = 1;
-                    }
-                    else if (!v2hasval)
-                    {
-                        e.SortResult = -1;
-                    }
-                    else
-                    {
+                    if (v2hasval)
                         e.SortResult = v1.CompareTo(v2);
-                    }
-
-                    e.Handled = true;
+                    else
+                        e.SortResult = 1;
                 }
+                else if (v2hasval)
+                    e.SortResult = -1;
+                else
+                    return;
+
+                e.Handled = true;
+
             }
 
         }
 
         private void comboBoxCustomFrom_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxCustomFrom.Text.Contains("Travel History"))
+            if (comboBoxCustomFrom.Enabled)
             {
-                if (!Object.ReferenceEquals(last_displayed, last_travelselected))
-                    Display(last_travelselected);
-            }
-            else
-            {
-                if (!Object.ReferenceEquals(otherentries[comboBoxCustomFrom.SelectedIndex - 1], last_displayed))
-                    Display(otherentries[comboBoxCustomFrom.SelectedIndex - 1]);
+                if (comboBoxCustomFrom.Text.Contains("Travel History"))
+                {
+                    if (!Object.ReferenceEquals(last_displayed, last_travelselected))
+                        Display(last_travelselected);
+                }
+                else
+                {
+                    if (!Object.ReferenceEquals(otherentries[comboBoxCustomFrom.SelectedIndex - 1], last_displayed))
+                        Display(otherentries[comboBoxCustomFrom.SelectedIndex - 1]);
+                }
             }
         }
 
         private void comboBoxCustomTo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBoxCustomTo.Enabled)
+            {
+                HistoryEntry new_compare = comboBoxCustomTo.SelectedIndex == 0 ? null : otherentries[comboBoxCustomTo.SelectedIndex - 1];
 
+                if (!Object.ReferenceEquals(last_compared, new_compare))
+                {
+                    last_compared = new_compare;
+                    Display(last_displayed);
+                }
+            }
+        }
+
+        private void checkBoxBuyOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if ( checkBoxBuyOnly.Enabled )
+            {
+                Display(last_displayed);
+            }
         }
     }
 }
