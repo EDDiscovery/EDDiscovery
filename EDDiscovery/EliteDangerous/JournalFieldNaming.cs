@@ -34,7 +34,7 @@ namespace EDDiscovery.EliteDangerous
 
         public static string RMat(string fdname)            // fix up fdname into a nicer name
         {
-            EDDiscovery.DB.MaterialCommodityDB mc = EDDiscovery.DB.MaterialCommodityDB.GetCachedMaterial(fdname);
+            MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(fdname);
 
             if (mc != null)
                 return mc.name;

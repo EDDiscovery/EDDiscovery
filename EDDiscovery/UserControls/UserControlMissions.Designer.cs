@@ -69,13 +69,13 @@ namespace EDDiscovery.UserControls
             this.pColInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomPrev = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.labelValue = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.customDateTimePickerEnd = new ExtendedControls.CustomDateTimePicker();
             this.customDateTimePickerStart = new ExtendedControls.CustomDateTimePicker();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.labelValue = new System.Windows.Forms.Label();
             this.dataViewScrollerPanelCurrent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCurrent)).BeginInit();
             this.panelPrev.SuspendLayout();
@@ -266,6 +266,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewPrevious.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewPrevious.Size = new System.Drawing.Size(780, 270);
             this.dataGridViewPrevious.TabIndex = 2;
+            this.dataGridViewPrevious.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewPrevious_SortCompare);
             // 
             // PcolName
             // 
@@ -380,6 +381,14 @@ namespace EDDiscovery.UserControls
             this.panelButtons.TabIndex = 2;
             this.toolTip1.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
             // 
+            // labelValue
+            // 
+            this.labelValue.AutoSize = true;
+            this.labelValue.Location = new System.Drawing.Point(487, 7);
+            this.labelValue.Name = "labelValue";
+            this.labelValue.Size = new System.Drawing.Size(0, 13);
+            this.labelValue.TabIndex = 1;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -457,14 +466,6 @@ namespace EDDiscovery.UserControls
             this.splitContainer1.Size = new System.Drawing.Size(800, 572);
             this.splitContainer1.SplitterDistance = 266;
             this.splitContainer1.TabIndex = 3;
-            // 
-            // labelValue
-            // 
-            this.labelValue.AutoSize = true;
-            this.labelValue.Location = new System.Drawing.Point(487, 7);
-            this.labelValue.Name = "labelValue";
-            this.labelValue.Size = new System.Drawing.Size(0, 13);
-            this.labelValue.TabIndex = 1;
             // 
             // UserControlMissions
             // 

@@ -597,6 +597,15 @@ namespace EDDiscovery
             }
         }
 
+
+        public List<HistoryEntry> FilterByEDDCommodityPricesBackwards
+        {
+            get
+            {
+                return (from s in historylist where s.EntryType == JournalTypeEnum.EDDCommodityPrices orderby s.EventTimeUTC descending select s ).ToList();
+            }
+        }
+
         public List<HistoryEntry> FilterByTravel
         {
             get
