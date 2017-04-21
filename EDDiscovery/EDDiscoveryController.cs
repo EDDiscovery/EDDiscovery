@@ -597,12 +597,12 @@ namespace EDDiscovery
         {
             if (je.CommanderId == history.CommanderId)     // we are only interested at this point accepting ones for the display commander
             {
-                HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));
-
-                if (he != null)
+                foreach (HistoryEntry he in history.AddJournalEntry(je, h => LogLineHighlight(h)))
+                {
                 {
                     OnNewEntry?.Invoke(he, history);            // major hook
                     OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                }
                 }
             }
 

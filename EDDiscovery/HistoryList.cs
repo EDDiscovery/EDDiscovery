@@ -509,6 +509,8 @@ namespace EDDiscovery
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
 
+        private JournalFuelScoop FuelScoopAccum;
+
         public Ledger materialcommodititiesledger = new Ledger();       // and the ledger..
         public ShipInformationList shipinformationlist = new ShipInformationList();     // ship info
         public MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
@@ -516,6 +518,8 @@ namespace EDDiscovery
         public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
 
         public int CommanderId;
+
+        public static bool AccumulateFuelScoops { get; set; } = true;
 
         public HistoryList() { }
 
@@ -1066,61 +1070,106 @@ namespace EDDiscovery
             }
         }
 
-        public HistoryEntry AddJournalEntry(JournalEntry je, Action<string> logerror)
+        private IEnumerable<JournalEntry> ProcessJournalEntry(JournalEntry je)
         {
-            if (je.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
+            if (je.EventTypeID == JournalTypeEnum.FuelScoop)
+            {
+                JournalFuelScoop scoop = je as JournalFuelScoop;
+                if (scoop != null)
+                {
+                    if (scoop.Scooped >= 5.0)
+                    {
+                        if (FuelScoopAccum == null)
+                        {
+                            FuelScoopAccum = new JournalFuelScoop(je.GetJson());
+                            yield break;
+                        }
+                        else
+                        {
+                            FuelScoopAccum.Id = scoop.Id;
+                            FuelScoopAccum.TLUId = scoop.TLUId;
+                            FuelScoopAccum.CommanderId = scoop.CommanderId;
+                            FuelScoopAccum.EdsmID = scoop.EdsmID;
+                            FuelScoopAccum.EventTimeUTC = scoop.EventTimeUTC;
+                            FuelScoopAccum.Scooped += scoop.Scooped;
+                            FuelScoopAccum.Total = scoop.Total;
+                            yield break;
+                        }
+                    }
+                    else if (FuelScoopAccum != null)
+                    {
+                        scoop.Scooped += FuelScoopAccum.Scooped;
+                        FuelScoopAccum = null;
+                    }
+                }
+            }
+
+            if (FuelScoopAccum != null)
+            {
+                yield return FuelScoopAccum;
+                FuelScoopAccum = null;
+            }
+
+            yield return je;
+        }
+
+        public IEnumerable<HistoryEntry> AddJournalEntry(JournalEntry inje, Action<string> logerror)
+        {
+            if (inje.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
             {
                 HistoryEntry last = GetLast;
 
-                bool journalupdate = false;
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
-
-                if (journalupdate)
+                foreach (JournalEntry je in ProcessJournalEntry(inje))
                 {
-                    EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+                    bool journalupdate = false;
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
 
-                    if (jfsd != null)
+                    if (journalupdate)
                     {
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
-                    }
-                }
+                        EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
 
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-                {
-                    he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
-
-                    materialcommodititiesledger.Process(je, conn);
-
-                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
-                    he.ShipInformation = ret.Item1;
-                    he.StoredModules = ret.Item2;
-
-                    he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
-                }
-
-                Add(he);
-
-                if (je.EventTypeID == JournalTypeEnum.Scan)
-                {
-                    JournalScan js = je as JournalScan;
-                    JournalLocOrJump jl;
-                    HistoryEntry jlhe;
-                    if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
-                    {
-                        // Ignore scans where the system name has been changed
-                        if (jl == null || jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase))
+                        if (jfsd != null)
                         {
-                            logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                             "Scan object " + js.BodyName + " in " + he.System.name);
+                            EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
                         }
                     }
-                }
 
-                return he;
-            }
-            else
-            {
-                return null;
+                    using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+                    {
+                        he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
+
+                        materialcommodititiesledger.Process(je, conn);
+
+                        Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                        he.ShipInformation = ret.Item1;
+                        he.StoredModules = ret.Item2;
+
+                        he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
+                    }
+
+
+                    Add(he);
+
+                    if (je.EventTypeID == JournalTypeEnum.Scan)
+                    {
+                        JournalScan js = je as JournalScan;
+                        JournalLocOrJump jl;
+                        HistoryEntry jlhe;
+                        if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
+                        {
+                            // Ignore scans where the system name has been changed
+                            if (jl == null || jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                                 "Scan object " + js.BodyName + " in " + he.System.name);
+                            }
+                        }
+                    }
+
+                    yield return he;
+
+                    last = he;
+                }
             }
         }
 
@@ -1212,7 +1261,7 @@ namespace EDDiscovery
 
         public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress, string NetLogPath = null, bool ForceNetLogReload = false, bool ForceJournalReload = false, bool CheckEdsm = false, int CurrentCommander = Int32.MinValue)
         {
-            List<HistoryEntry> hl = new List<HistoryEntry>();
+            HistoryList hist = new HistoryList();
             EDCommander cmdr = null;
 
             if (CurrentCommander >= 0)
@@ -1235,17 +1284,21 @@ namespace EDDiscovery
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 HistoryEntry prev = null;
-                foreach (EliteDangerous.JournalEntry je in jlist)
+                foreach (EliteDangerous.JournalEntry inje in jlist)
                 {
-                    bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
-                    prev = he;
-
-                    hl.Add(he);                        // add to the history list here..
-
-                    if (journalupdate)
+                    foreach (JournalEntry je in hist.ProcessJournalEntry(inje))
                     {
-                        jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
+                        bool journalupdate = false;
+                        HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
+
+                        prev = he;
+
+                        hist.Add(he);                        // add to the history list here..
+
+                        if (journalupdate)
+                        {
+                            jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
+                        }
                     }
                 }
             }
@@ -1276,7 +1329,6 @@ namespace EDDiscovery
 
             // now database has been updated due to initial fill, now fill in stuff which needs the user database
 
-            HistoryList hist = new HistoryList(hl);
             hist.CommanderId = CurrentCommander;
 
             hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
