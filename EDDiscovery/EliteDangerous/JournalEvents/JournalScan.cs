@@ -414,7 +414,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             scanText.Append("Materials:\n");
             foreach (KeyValuePair<string, double> mat in Materials)
             {
-                EDDiscovery.DB.MaterialCommodityDB mc = EDDiscovery.DB.MaterialCommodityDB.GetCachedMaterial(mat.Key);
+                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(mat.Key);
                 if (mc != null)
                     scanText.AppendFormat(indents + "{0} ({1}) {2} {3}%\n", mc.name, mc.shortname, mc.type, mat.Value.ToString("N1"));
                 else
