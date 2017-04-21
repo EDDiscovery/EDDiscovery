@@ -82,6 +82,8 @@ namespace EDDiscovery
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.JournalDirCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -636,7 +638,9 @@ namespace EDDiscovery
             this.dataGridViewCommanders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewCommanders.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnCommander,
-            this.EdsmName});
+            this.EdsmName,
+            this.JournalDirCol,
+            this.NotesCol});
             this.dataGridViewCommanders.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewCommanders.MultiSelect = false;
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
@@ -681,6 +685,7 @@ namespace EDDiscovery
             // 
             this.ColumnCommander.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnCommander.DataPropertyName = "Name";
+            this.ColumnCommander.FillWeight = 120F;
             this.ColumnCommander.HeaderText = "Commander";
             this.ColumnCommander.MinimumWidth = 50;
             this.ColumnCommander.Name = "ColumnCommander";
@@ -694,6 +699,24 @@ namespace EDDiscovery
             this.EdsmName.MinimumWidth = 50;
             this.EdsmName.Name = "EdsmName";
             this.EdsmName.ReadOnly = true;
+            // 
+            // JournalDirCol
+            // 
+            this.JournalDirCol.DataPropertyName = "JournalDir";
+            this.JournalDirCol.FillWeight = 120F;
+            this.JournalDirCol.HeaderText = "Journal Dir";
+            this.JournalDirCol.MinimumWidth = 50;
+            this.JournalDirCol.Name = "JournalDirCol";
+            this.JournalDirCol.ReadOnly = true;
+            // 
+            // NotesCol
+            // 
+            this.NotesCol.DataPropertyName = "Info";
+            this.NotesCol.FillWeight = 180F;
+            this.NotesCol.HeaderText = "Notes";
+            this.NotesCol.MinimumWidth = 50;
+            this.NotesCol.Name = "NotesCol";
+            this.NotesCol.ReadOnly = true;
             // 
             // Settings
             // 
@@ -760,5 +783,7 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt buttonEditCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn EdsmName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn JournalDirCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NotesCol;
     }
 }

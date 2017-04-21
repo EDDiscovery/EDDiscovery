@@ -69,7 +69,7 @@ namespace EDDiscovery
                                         EDDiscovery.Properties.Resources.synthesis,
                                         EDDiscovery.Properties.Resources.missionaccepted,
                                         EDDiscovery.Properties.Resources.engineercraft,
-                                        EDDiscovery.Properties.Resources.marketsell,
+                                        EDDiscovery.Properties.Resources.marketdata,
                                         };
 
         string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum

@@ -299,7 +299,7 @@
       <DependentUpon>TabStrip.cs</DependentUpon>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
-    <Compile Include="DB\MaterialCommoditiesDB.cs" />
+    <Compile Include="EliteDangerous\MaterialCommodities.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
@@ -1295,6 +1295,7 @@
     <None Include="Resources\setusershipname.png" />
     <None Include="Resources\sendtext.png" />
     <None Include="Resources\receivetext.png" />
+    <None Include="Resources\marketdata.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

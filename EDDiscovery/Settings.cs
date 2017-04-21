@@ -52,6 +52,8 @@ namespace EDDiscovery
 
             textBoxHomeSystem.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
             comboBoxTheme.ItemHeight = 20;
+
+            btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
         }
 
         void SetEntryThemeComboBox()
@@ -155,6 +157,7 @@ namespace EDDiscovery
                     _discoveryForm.TravelControl.LoadCommandersListBox();
                     _discoveryForm.ExportControl.PopulateCommanders();
                     _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+                    btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
                 else
                     Forms.MessageBoxTheme.Show(this, "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -201,6 +204,8 @@ namespace EDDiscovery
                     _discoveryForm.ExportControl.PopulateCommanders();
                     UpdateCommandersListBox();
                     _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+
+                    btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
             }
         }

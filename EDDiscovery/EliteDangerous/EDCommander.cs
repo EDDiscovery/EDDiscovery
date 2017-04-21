@@ -539,134 +539,19 @@ namespace EDDiscovery
             this.syncToEddn = SyncToEddn;
         }
 
-        public int Nr
-        {
-            get
-            {
-                return nr;
-            }
+        public int Nr { get { return nr; }  private set { nr = value;  } }
 
-            set
-            {
-                nr = value;
-            }
-        }
+        public string Name { get { return name; } set { name = value; } }
+        public string EdsmName { get { return edsmname; } set { edsmname = value; } }
+        public string APIKey { get { return apikey; } set { apikey = value; } }
+        public string NetLogDir { get { return netLogDir; } set { netLogDir = value; } }
+        public string JournalDir { get { return journalDir; } set { journalDir = value; } }
+        public bool SyncToEdsm { get { return syncToEdsm; } set { syncToEdsm = value; } }
+        public bool SyncFromEdsm { get { return syncFromEdsm; } set { syncFromEdsm = value; } }
+        public bool SyncToEddn {  get { return syncToEddn; } set { syncToEddn = value;  } }
+        public bool Deleted { get { return deleted; } set { deleted = value; } }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-
-            set
-            {
-                name = value;
-            }
-        }
-
-        public string EdsmName
-        {
-            get
-            {
-                return edsmname;
-            }
-            set
-            {
-                edsmname = value;
-            }
-        }
-
-        public string APIKey
-        {
-            get
-            {
-                return apikey;
-            }
-
-            set
-            {
-                apikey = value;
-            }
-        }
-
-        public string NetLogDir
-        {
-            get
-            {
-                return netLogDir;
-            }
-
-            set
-            {
-                netLogDir = value;
-            }
-        }
-
-        public string JournalDir
-        {
-            get
-            {
-                return journalDir;
-            }
-            set
-            {
-                journalDir = value;
-            }
-        }
-
-        public bool SyncToEdsm
-        {
-            get
-            {
-                return syncToEdsm;
-            }
-
-            set
-            {
-                syncToEdsm = value;
-            }
-        }
-
-        public bool SyncFromEdsm
-        {
-            get
-            {
-                return syncFromEdsm;
-            }
-
-            set
-            {
-                syncFromEdsm = value;
-            }
-        }
-
-        public bool SyncToEddn
-        {
-            get
-            {
-                return syncToEddn;
-            }
-
-            set
-            {
-                syncToEddn = value;
-            }
-        }
-
-        public bool Deleted
-        {
-            get
-            {
-                return deleted;
-            }
-
-            set
-            {
-                deleted = value;
-            }
-        }
-
+        public string Info { get { return Tools.FieldBuilder(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , CompanionAPI.CompanionCredentials.CredentialState(Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED); } }
         #endregion
     }
 }
