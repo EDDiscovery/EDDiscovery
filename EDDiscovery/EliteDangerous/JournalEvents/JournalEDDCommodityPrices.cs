@@ -39,13 +39,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     CCommodities com = new CCommodities(commodity);
                     Commodities.Add(com);
                 }
-                Commodities.Sort(delegate (CCommodities left, CCommodities right) 
-                    {
-                        int cat = left.categoryname.CompareTo(right.categoryname);
-                        if ( cat == 0 )
-                            cat = left.name.CompareTo(right.name);
-                        return cat;
-                    });
+
+                CCommodities.Sort(Commodities);
+
             }
         }
 
@@ -95,12 +91,25 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int stock { get; private set; }
         public int demand { get; private set; }
         public string categoryname { get; private set; }
-
         public List<string> StatusFlags { get; private set; }
+
+        public string ComparisionLR { get; private set; }       // NOT in Frontier data, used for market data UC during merge
+        public string ComparisionRL { get; private set; }       // NOT in Frontier data, used for market data UC during merge
+        public bool ComparisionRightOnly { get; private set; }  // NOT in Frontier data, Exists in right data only
+        public bool ComparisionBuy { get; private set; }        // NOT in Frontier data, You can buy one or both sets
 
         public CCommodities(JObject jo)
         {
             FromJson(jo);
+        }
+
+        public CCommodities(CCommodities other)             // main fields copied, not the extra data ones
+        {
+            id = other.id; name = other.name; buyPrice = other.buyPrice; sellPrice = other.sellPrice; meanPrice = other.meanPrice;
+            demandBracket = other.demandBracket; stockBracket = other.stockBracket; stock = other.stock; demand = other.demand;
+            categoryname = other.categoryname;
+            StatusFlags = new List<string>(other.StatusFlags);
+            ComparisionLR = ComparisionRL = "";
         }
 
         public bool FromJson(JObject jo)
@@ -125,6 +134,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 }
                 this.StatusFlags = StatusFlags;
 
+                ComparisionLR = ComparisionRL = "";
                 return true;
             }
             catch
@@ -136,7 +146,71 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override string ToString()
         {
             return string.Format("{0} : {1} Buy {2} Sell {3} Mean {4}" + System.Environment.NewLine +
-                                 "Stock {5} Demand {6}", categoryname, name , buyPrice , sellPrice , meanPrice , stock, demand);
+                                 "Stock {5} Demand {6}", categoryname, name, buyPrice, sellPrice, meanPrice, stock, demand);
+        }
+
+        public static void Sort(List<CCommodities> list)
+        {
+            list.Sort(delegate (CCommodities left, CCommodities right)
+            {
+                int cat = left.categoryname.CompareTo(right.categoryname);
+                if (cat == 0)
+                    cat = left.name.CompareTo(right.name);
+                return cat;
+            });
+        }
+
+        public static List<CCommodities> Merge(List<CCommodities> left, List<CCommodities> right, string otherstation)
+        {
+            List<CCommodities> merged = new List<CCommodities>();
+
+            foreach (CCommodities l in left)
+            {
+                CCommodities m = new CCommodities(l);
+                CCommodities r = right.Find(x => x.name == l.name);
+                if (r != null)
+                {
+                    if (l.buyPrice > 0)     // if we can buy it..
+                    {
+                        m.ComparisionLR = (r.sellPrice - l.buyPrice).ToString();
+                        m.ComparisionBuy = true;
+                    }
+
+                    if (r.buyPrice > 0)
+                    {
+                        m.ComparisionRL = (l.sellPrice - r.buyPrice).ToString();
+                        m.ComparisionBuy = true;
+                    }
+                }
+                else
+                {                                   // not found in right..
+                    if ( l.buyPrice > 0)            // if we can buy it here, note you can't price it in right
+                        m.ComparisionLR = "No Price";
+                }
+
+                merged.Add(m);
+            }
+
+            foreach (CCommodities r in right)
+            {
+                CCommodities m = merged.Find(x => x.name == r.name);        // see if any in right we have not merged
+                if ( m == null )
+                {
+                    m = new CCommodities(r);
+                    m.name = m.name + " at " + otherstation;
+                    m.ComparisionRightOnly = true;
+
+                    if (r.buyPrice > 0)                             // if we can buy it here, note you can't price it in left
+                    {
+                        m.ComparisionBuy = true;
+                        m.ComparisionRL = "No price";
+                    }
+                    merged.Add(m);
+                }
+            }
+
+            Sort(merged);
+            return merged;
         }
     }
 }

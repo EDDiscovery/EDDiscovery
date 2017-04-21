@@ -46,6 +46,14 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
+            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.checkBoxBuyOnly = new ExtendedControls.CheckBoxCustom();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxCustomTo = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxCustomFrom = new ExtendedControls.ComboBoxCustom();
+            this.labelLocation = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.CategoryCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SellCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,18 +64,8 @@ namespace EDDiscovery.UserControls
             this.GalAvgCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProfitToCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProfitFromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.comboBoxCustomTo = new ExtendedControls.ComboBoxCustom();
-            this.comboBoxCustomFrom = new ExtendedControls.ComboBoxCustom();
-            this.labelLocation = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
-            this.contextMenuStrip.SuspendLayout();
             this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,7 +99,6 @@ namespace EDDiscovery.UserControls
             this.GalAvgCol,
             this.ProfitToCol,
             this.ProfitFromCol});
-            this.dataGridViewMarketData.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewMarketData.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMarketData.Name = "dataGridViewMarketData";
             this.dataGridViewMarketData.RowHeadersVisible = false;
@@ -109,98 +106,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMarketData.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewMarketData.TabIndex = 1;
             this.dataGridViewMarketData.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMarketData_SortCompare);
-            // 
-            // CategoryCol
-            // 
-            this.CategoryCol.FillWeight = 50F;
-            this.CategoryCol.HeaderText = "Category";
-            this.CategoryCol.MinimumWidth = 50;
-            this.CategoryCol.Name = "CategoryCol";
-            // 
-            // NameCol
-            // 
-            this.NameCol.HeaderText = "Name";
-            this.NameCol.MinimumWidth = 100;
-            this.NameCol.Name = "NameCol";
-            this.NameCol.ReadOnly = true;
-            // 
-            // SellCol
-            // 
-            this.SellCol.FillWeight = 30F;
-            this.SellCol.HeaderText = "Sell";
-            this.SellCol.MinimumWidth = 50;
-            this.SellCol.Name = "SellCol";
-            this.SellCol.ReadOnly = true;
-            // 
-            // BuyCol
-            // 
-            this.BuyCol.FillWeight = 30F;
-            this.BuyCol.HeaderText = "Buy";
-            this.BuyCol.MinimumWidth = 50;
-            this.BuyCol.Name = "BuyCol";
-            this.BuyCol.ReadOnly = true;
-            // 
-            // CargoCol
-            // 
-            this.CargoCol.FillWeight = 30F;
-            this.CargoCol.HeaderText = "Cargo";
-            this.CargoCol.MinimumWidth = 50;
-            this.CargoCol.Name = "CargoCol";
-            this.CargoCol.ReadOnly = true;
-            // 
-            // DemandCol
-            // 
-            this.DemandCol.FillWeight = 30F;
-            this.DemandCol.HeaderText = "Demand";
-            this.DemandCol.MinimumWidth = 50;
-            this.DemandCol.Name = "DemandCol";
-            this.DemandCol.ReadOnly = true;
-            // 
-            // SupplyCol
-            // 
-            this.SupplyCol.FillWeight = 30F;
-            this.SupplyCol.HeaderText = "Supply";
-            this.SupplyCol.MinimumWidth = 50;
-            this.SupplyCol.Name = "SupplyCol";
-            this.SupplyCol.ReadOnly = true;
-            // 
-            // GalAvgCol
-            // 
-            this.GalAvgCol.FillWeight = 30F;
-            this.GalAvgCol.HeaderText = "Galactic Avg";
-            this.GalAvgCol.MinimumWidth = 50;
-            this.GalAvgCol.Name = "GalAvgCol";
-            this.GalAvgCol.ReadOnly = true;
-            // 
-            // ProfitToCol
-            // 
-            this.ProfitToCol.FillWeight = 30F;
-            this.ProfitToCol.HeaderText = "ProfitTo";
-            this.ProfitToCol.MinimumWidth = 50;
-            this.ProfitToCol.Name = "ProfitToCol";
-            this.ProfitToCol.ReadOnly = true;
-            // 
-            // ProfitFromCol
-            // 
-            this.ProfitFromCol.FillWeight = 30F;
-            this.ProfitFromCol.HeaderText = "Profit From";
-            this.ProfitFromCol.MinimumWidth = 50;
-            this.ProfitFromCol.Name = "ProfitFromCol";
-            this.ProfitFromCol.ReadOnly = true;
-            // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemGotoItem});
-            this.contextMenuStrip.Name = "contextMenuStripLedger";
-            this.contextMenuStrip.Size = new System.Drawing.Size(207, 26);
-            // 
-            // toolStripMenuItemGotoItem
-            // 
-            this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
-            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
-            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
-            this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
             // 
             // vScrollBarCustomMC
             // 
@@ -233,6 +138,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.checkBoxBuyOnly);
             this.panelButtons.Controls.Add(this.label1);
             this.panelButtons.Controls.Add(this.comboBoxCustomTo);
             this.panelButtons.Controls.Add(this.comboBoxCustomFrom);
@@ -242,6 +148,32 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
+            // 
+            // checkBoxBuyOnly
+            // 
+            this.checkBoxBuyOnly.AutoSize = true;
+            this.checkBoxBuyOnly.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxBuyOnly.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxBuyOnly.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxBuyOnly.FontNerfReduction = 0.5F;
+            this.checkBoxBuyOnly.Location = new System.Drawing.Point(584, 9);
+            this.checkBoxBuyOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
+            this.checkBoxBuyOnly.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxBuyOnly.TabIndex = 29;
+            this.checkBoxBuyOnly.Text = "Buy Only";
+            this.checkBoxBuyOnly.TickBoxReductionSize = 10;
+            this.checkBoxBuyOnly.UseVisualStyleBackColor = true;
+            this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(355, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(19, 13);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "Vs";
             // 
             // comboBoxCustomTo
             // 
@@ -308,14 +240,83 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // label1
+            // CategoryCol
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(355, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(19, 13);
-            this.label1.TabIndex = 28;
-            this.label1.Text = "Vs";
+            this.CategoryCol.FillWeight = 50F;
+            this.CategoryCol.HeaderText = "Category";
+            this.CategoryCol.MinimumWidth = 50;
+            this.CategoryCol.Name = "CategoryCol";
+            // 
+            // NameCol
+            // 
+            this.NameCol.HeaderText = "Name";
+            this.NameCol.MinimumWidth = 100;
+            this.NameCol.Name = "NameCol";
+            this.NameCol.ReadOnly = true;
+            // 
+            // SellCol
+            // 
+            this.SellCol.FillWeight = 30F;
+            this.SellCol.HeaderText = "Sell";
+            this.SellCol.MinimumWidth = 50;
+            this.SellCol.Name = "SellCol";
+            this.SellCol.ReadOnly = true;
+            // 
+            // BuyCol
+            // 
+            this.BuyCol.FillWeight = 30F;
+            this.BuyCol.HeaderText = "Buy";
+            this.BuyCol.MinimumWidth = 50;
+            this.BuyCol.Name = "BuyCol";
+            this.BuyCol.ReadOnly = true;
+            // 
+            // CargoCol
+            // 
+            this.CargoCol.FillWeight = 30F;
+            this.CargoCol.HeaderText = "Cargo";
+            this.CargoCol.MinimumWidth = 50;
+            this.CargoCol.Name = "CargoCol";
+            this.CargoCol.ReadOnly = true;
+            // 
+            // DemandCol
+            // 
+            this.DemandCol.FillWeight = 30F;
+            this.DemandCol.HeaderText = "Demand";
+            this.DemandCol.MinimumWidth = 50;
+            this.DemandCol.Name = "DemandCol";
+            this.DemandCol.ReadOnly = true;
+            // 
+            // SupplyCol
+            // 
+            this.SupplyCol.FillWeight = 30F;
+            this.SupplyCol.HeaderText = "Supply";
+            this.SupplyCol.MinimumWidth = 50;
+            this.SupplyCol.Name = "SupplyCol";
+            this.SupplyCol.ReadOnly = true;
+            // 
+            // GalAvgCol
+            // 
+            this.GalAvgCol.FillWeight = 30F;
+            this.GalAvgCol.HeaderText = "Galactic Avg";
+            this.GalAvgCol.MinimumWidth = 50;
+            this.GalAvgCol.Name = "GalAvgCol";
+            this.GalAvgCol.ReadOnly = true;
+            // 
+            // ProfitToCol
+            // 
+            this.ProfitToCol.FillWeight = 30F;
+            this.ProfitToCol.HeaderText = "Profit To cr/t";
+            this.ProfitToCol.MinimumWidth = 50;
+            this.ProfitToCol.Name = "ProfitToCol";
+            this.ProfitToCol.ReadOnly = true;
+            // 
+            // ProfitFromCol
+            // 
+            this.ProfitFromCol.FillWeight = 30F;
+            this.ProfitFromCol.HeaderText = "Profit From cr/t";
+            this.ProfitFromCol.MinimumWidth = 50;
+            this.ProfitFromCol.Name = "ProfitFromCol";
+            this.ProfitFromCol.ReadOnly = true;
             // 
             // UserControlMarketData
             // 
@@ -327,7 +328,6 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).EndInit();
-            this.contextMenuStrip.ResumeLayout(false);
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
             this.ResumeLayout(false);
@@ -340,10 +340,12 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewMarketData;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label labelLocation;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomTo;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomFrom;
+        private System.Windows.Forms.Label label1;
+        private ExtendedControls.CheckBoxCustom checkBoxBuyOnly;
         private System.Windows.Forms.DataGridViewTextBoxColumn CategoryCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn SellCol;
@@ -354,8 +356,5 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn GalAvgCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitToCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitFromCol;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomTo;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomFrom;
-        private System.Windows.Forms.Label label1;
     }
 }

@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            dataGridViewModules.Columns[0].HeaderCell.SortGlyphDirection = sortorder;
+            dataGridViewModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
         public void Display(ShipInformation si)
