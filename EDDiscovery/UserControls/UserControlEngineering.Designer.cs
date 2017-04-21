@@ -46,13 +46,6 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewEngineering = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.buttonFilterUpgrade = new ExtendedControls.ButtonExt();
-            this.buttonFilterLevel = new ExtendedControls.ButtonExt();
-            this.buttonFilterEngineer = new ExtendedControls.ButtonExt();
-            this.buttonFilterModule = new ExtendedControls.ButtonExt();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Module = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,6 +55,14 @@ namespace EDDiscovery.UserControls
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Engineers = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonFilterUpgrade = new ExtendedControls.ButtonExt();
+            this.buttonFilterLevel = new ExtendedControls.ButtonExt();
+            this.buttonFilterEngineer = new ExtendedControls.ButtonExt();
+            this.buttonFilterModule = new ExtendedControls.ButtonExt();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonFilterMaterial = new ExtendedControls.ButtonExt();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -109,104 +110,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewEngineering_DragOver);
             this.dataGridViewEngineering.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewEngineering_MouseDown);
             this.dataGridViewEngineering.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewEngineering_MouseMove);
-            // 
-            // vScrollBarCustomMC
-            // 
-            this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustomMC.HideScrollBar = false;
-            this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 21);
-            this.vScrollBarCustomMC.Maximum = -1;
-            this.vScrollBarCustomMC.Minimum = 0;
-            this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 519);
-            this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustomMC.SmallChange = 1;
-            this.vScrollBarCustomMC.TabIndex = 0;
-            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
-            this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
-            this.vScrollBarCustomMC.Value = -1;
-            this.vScrollBarCustomMC.ValueLimited = -1;
-            // 
-            // panelButtons
-            // 
-            this.panelButtons.Controls.Add(this.buttonFilterUpgrade);
-            this.panelButtons.Controls.Add(this.buttonFilterLevel);
-            this.panelButtons.Controls.Add(this.buttonFilterEngineer);
-            this.panelButtons.Controls.Add(this.buttonFilterModule);
-            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelButtons.Location = new System.Drawing.Point(0, 0);
-            this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(800, 32);
-            this.panelButtons.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
-            // 
-            // buttonFilterUpgrade
-            // 
-            this.buttonFilterUpgrade.BorderColorScaling = 1.25F;
-            this.buttonFilterUpgrade.ButtonColorScaling = 0.5F;
-            this.buttonFilterUpgrade.ButtonDisabledScaling = 0.5F;
-            this.buttonFilterUpgrade.Location = new System.Drawing.Point(3, 4);
-            this.buttonFilterUpgrade.Name = "buttonFilterUpgrade";
-            this.buttonFilterUpgrade.Size = new System.Drawing.Size(100, 23);
-            this.buttonFilterUpgrade.TabIndex = 3;
-            this.buttonFilterUpgrade.Text = "Filter By Upgrade";
-            this.buttonFilterUpgrade.UseVisualStyleBackColor = true;
-            this.buttonFilterUpgrade.Click += new System.EventHandler(this.buttonFilterUpgrade_Click);
-            // 
-            // buttonFilterLevel
-            // 
-            this.buttonFilterLevel.BorderColorScaling = 1.25F;
-            this.buttonFilterLevel.ButtonColorScaling = 0.5F;
-            this.buttonFilterLevel.ButtonDisabledScaling = 0.5F;
-            this.buttonFilterLevel.Location = new System.Drawing.Point(215, 4);
-            this.buttonFilterLevel.Name = "buttonFilterLevel";
-            this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
-            this.buttonFilterLevel.TabIndex = 2;
-            this.buttonFilterLevel.Text = "Filter By Level";
-            this.buttonFilterLevel.UseVisualStyleBackColor = true;
-            this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
-            // 
-            // buttonFilterEngineer
-            // 
-            this.buttonFilterEngineer.BorderColorScaling = 1.25F;
-            this.buttonFilterEngineer.ButtonColorScaling = 0.5F;
-            this.buttonFilterEngineer.ButtonDisabledScaling = 0.5F;
-            this.buttonFilterEngineer.Location = new System.Drawing.Point(321, 4);
-            this.buttonFilterEngineer.Name = "buttonFilterEngineer";
-            this.buttonFilterEngineer.Size = new System.Drawing.Size(100, 23);
-            this.buttonFilterEngineer.TabIndex = 1;
-            this.buttonFilterEngineer.Text = "Filter By Engineer";
-            this.buttonFilterEngineer.UseVisualStyleBackColor = true;
-            this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
-            // 
-            // buttonFilterModule
-            // 
-            this.buttonFilterModule.BorderColorScaling = 1.25F;
-            this.buttonFilterModule.ButtonColorScaling = 0.5F;
-            this.buttonFilterModule.ButtonDisabledScaling = 0.5F;
-            this.buttonFilterModule.Location = new System.Drawing.Point(109, 4);
-            this.buttonFilterModule.Name = "buttonFilterModule";
-            this.buttonFilterModule.Size = new System.Drawing.Size(100, 23);
-            this.buttonFilterModule.TabIndex = 0;
-            this.buttonFilterModule.Text = "Filter By Module";
-            this.buttonFilterModule.UseVisualStyleBackColor = true;
-            this.buttonFilterModule.Click += new System.EventHandler(this.buttonFilterModule_Click);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.ShowAlways = true;
             // 
             // UpgradeCol
             // 
@@ -282,6 +185,118 @@ namespace EDDiscovery.UserControls
             this.Engineers.ReadOnly = true;
             this.Engineers.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // vScrollBarCustomMC
+            // 
+            this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustomMC.HideScrollBar = false;
+            this.vScrollBarCustomMC.LargeChange = 0;
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 21);
+            this.vScrollBarCustomMC.Maximum = -1;
+            this.vScrollBarCustomMC.Minimum = 0;
+            this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 519);
+            this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SmallChange = 1;
+            this.vScrollBarCustomMC.TabIndex = 0;
+            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
+            this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
+            this.vScrollBarCustomMC.Value = -1;
+            this.vScrollBarCustomMC.ValueLimited = -1;
+            // 
+            // panelButtons
+            // 
+            this.panelButtons.Controls.Add(this.buttonFilterMaterial);
+            this.panelButtons.Controls.Add(this.buttonFilterUpgrade);
+            this.panelButtons.Controls.Add(this.buttonFilterLevel);
+            this.panelButtons.Controls.Add(this.buttonFilterEngineer);
+            this.panelButtons.Controls.Add(this.buttonFilterModule);
+            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelButtons.Location = new System.Drawing.Point(0, 0);
+            this.panelButtons.Name = "panelButtons";
+            this.panelButtons.Size = new System.Drawing.Size(800, 32);
+            this.panelButtons.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
+            // 
+            // buttonFilterUpgrade
+            // 
+            this.buttonFilterUpgrade.BorderColorScaling = 1.25F;
+            this.buttonFilterUpgrade.ButtonColorScaling = 0.5F;
+            this.buttonFilterUpgrade.ButtonDisabledScaling = 0.5F;
+            this.buttonFilterUpgrade.Location = new System.Drawing.Point(3, 4);
+            this.buttonFilterUpgrade.Name = "buttonFilterUpgrade";
+            this.buttonFilterUpgrade.Size = new System.Drawing.Size(100, 23);
+            this.buttonFilterUpgrade.TabIndex = 3;
+            this.buttonFilterUpgrade.Text = "Filter By Upgrade";
+            this.buttonFilterUpgrade.UseVisualStyleBackColor = true;
+            this.buttonFilterUpgrade.Click += new System.EventHandler(this.buttonFilterUpgrade_Click);
+            // 
+            // buttonFilterLevel
+            // 
+            this.buttonFilterLevel.BorderColorScaling = 1.25F;
+            this.buttonFilterLevel.ButtonColorScaling = 0.5F;
+            this.buttonFilterLevel.ButtonDisabledScaling = 0.5F;
+            this.buttonFilterLevel.Location = new System.Drawing.Point(215, 4);
+            this.buttonFilterLevel.Name = "buttonFilterLevel";
+            this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
+            this.buttonFilterLevel.TabIndex = 2;
+            this.buttonFilterLevel.Text = "Filter By Level";
+            this.buttonFilterLevel.UseVisualStyleBackColor = true;
+            this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
+            // 
+            // buttonFilterEngineer
+            // 
+            this.buttonFilterEngineer.BorderColorScaling = 1.25F;
+            this.buttonFilterEngineer.ButtonColorScaling = 0.5F;
+            this.buttonFilterEngineer.ButtonDisabledScaling = 0.5F;
+            this.buttonFilterEngineer.Location = new System.Drawing.Point(321, 4);
+            this.buttonFilterEngineer.Name = "buttonFilterEngineer";
+            this.buttonFilterEngineer.Size = new System.Drawing.Size(100, 23);
+            this.buttonFilterEngineer.TabIndex = 1;
+            this.buttonFilterEngineer.Text = "Filter By Engineer";
+            this.buttonFilterEngineer.UseVisualStyleBackColor = true;
+            this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
+            // 
+            // buttonFilterModule
+            // 
+            this.buttonFilterModule.BorderColorScaling = 1.25F;
+            this.buttonFilterModule.ButtonColorScaling = 0.5F;
+            this.buttonFilterModule.ButtonDisabledScaling = 0.5F;
+            this.buttonFilterModule.Location = new System.Drawing.Point(109, 4);
+            this.buttonFilterModule.Name = "buttonFilterModule";
+            this.buttonFilterModule.Size = new System.Drawing.Size(100, 23);
+            this.buttonFilterModule.TabIndex = 0;
+            this.buttonFilterModule.Text = "Filter By Module";
+            this.buttonFilterModule.UseVisualStyleBackColor = true;
+            this.buttonFilterModule.Click += new System.EventHandler(this.buttonFilterModule_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
+            // buttonFilterMaterial
+            // 
+            this.buttonFilterMaterial.BorderColorScaling = 1.25F;
+            this.buttonFilterMaterial.ButtonColorScaling = 0.5F;
+            this.buttonFilterMaterial.ButtonDisabledScaling = 0.5F;
+            this.buttonFilterMaterial.Location = new System.Drawing.Point(427, 4);
+            this.buttonFilterMaterial.Name = "buttonFilterMaterial";
+            this.buttonFilterMaterial.Size = new System.Drawing.Size(100, 23);
+            this.buttonFilterMaterial.TabIndex = 4;
+            this.buttonFilterMaterial.Text = "Filter By Material";
+            this.buttonFilterMaterial.UseVisualStyleBackColor = true;
+            this.buttonFilterMaterial.Click += new System.EventHandler(this.buttonFilterMaterial_Click);
+            // 
             // UserControlEngineering
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -317,5 +332,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn Recipe;
         private System.Windows.Forms.DataGridViewTextBoxColumn Engineers;
+        private ExtendedControls.ButtonExt buttonFilterMaterial;
     }
 }

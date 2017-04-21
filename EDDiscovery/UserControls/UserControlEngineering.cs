@@ -33,8 +33,10 @@ namespace EDDiscovery.UserControls
         EngineeringFilterSelector mfs;
         EngineeringFilterSelector ufs;
         EngineeringFilterSelector lfs;
+        EngineeringFilterSelector matfs;
 
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5" };
+        private List<Tuple<string, string>> matLookUp;
 
         private string DbColumnSave { get { return ("EngineeringGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbWSave { get { return "EngineeringWanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -44,6 +46,7 @@ namespace EDDiscovery.UserControls
         private string DbModFilterSave { get { return "EngineeringGridControlModuleFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbLevelFilterSave { get { return "EngineeringGridControlLevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbUpgradeFilterSave { get { return "EngineeringGridControlUpgradeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbMaterialFilterSave { get { return "EngineeringGridControlMaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
@@ -92,6 +95,13 @@ namespace EDDiscovery.UserControls
             upgrades.Sort();
             ufs = new EngineeringFilterSelector(upgrades);
             ufs.Changed += FilterChanged;
+
+            List<string> matShortNames = Recipes.SelectMany(r => r.ingredients.ToList()).Distinct().ToList();
+            matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
+            List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
+            matLongNames.Sort();
+            matfs = new EngineeringFilterSelector(matLongNames);
+            matfs.Changed += FilterChanged;
 
             for (int i = 0; i < Recipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
             {
@@ -148,17 +158,21 @@ namespace EDDiscovery.UserControls
                 string modules = SQLiteDBClass.GetSettingString(DbModFilterSave, "All");
                 string[] modArray = modules.Split(';');
                 string levels = SQLiteDBClass.GetSettingString(DbLevelFilterSave, "All");
-                int[] lvlArray = (levels == "All") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
+                int[] lvlArray = (levels == "All"  || levels == "None") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
                 string upgrades = SQLiteDBClass.GetSettingString(DbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
-
+                string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
+                List<string> matList;
+                if (materials == "All" || materials == "None") { matList = new List<string>(); }
+                else { matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList(); }
+                
                 for (int i = 0; i < Recipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
                     dataGridViewEngineering.Rows[i].Cells[3].Value = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno]).Item1.ToStringInvariant();
                     bool visible = true;
                     
-                    if (engineers == "All" && modules == "All" && levels == "All" && upgrades == "All")
+                    if (engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All")
                     { visible = true; }
                     else
                     {
@@ -183,6 +197,12 @@ namespace EDDiscovery.UserControls
                         else
                         {
                             visible = visible && upgArray.Contains(Recipes[rno].name);
+                        }
+                        if (materials == "All") { visible = visible && true; }
+                        else
+                        {
+                            var included = matList.Intersect<string>(Recipes[rno].ingredients.ToList<string>());
+                            visible = visible && included.Count() > 0;
                         }
                     }
 
@@ -738,7 +758,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1ACED,1Nb,1PCa", "Manifest Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni", "Manifest Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE", "Manifest Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,SE,1W", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
+            new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE,1W", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Mo,1W,1Zn", "Manifest Scanner", 4, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1HDC,1Mo,1Tc", "Manifest Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Manifest Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
@@ -963,7 +983,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Pulse Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Pulse Laser", 3, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Pulse Laser", 4, "Broo Tarquin,The Dweller"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPa,1MEF,1Zr", "Pulse Laser", 5, "Broo Tarquin"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Pulse Laser", 5, "Broo Tarquin"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1MS", "Pulse Laser", 1, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1HDP,1MS", "Pulse Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1ME,1PAll,1SLF", "Pulse Laser", 3, "Broo Tarquin,The Dweller"),
@@ -1046,7 +1066,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1Fe", "Shield Booster", 1, "Didi Vatermann,Felicity Farseer,Lei Cheung"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1Ge,1HCW", "Shield Booster", 2, "Didi Vatermann,Lei Cheung"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1FoC,1HCW,1HDP", "Shield Booster", 3, "Didi Vatermann,Lei Cheung"),
-            new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1HDP,1RF,1USS", "Shield Booster", 4, "Didi Vatermann"),
+            new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1HDP,1RFC,1USS", "Shield Booster", 4, "Didi Vatermann"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1ASPA,1EFC,1HE", "Shield Booster", 5, "Didi Vatermann"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Charge", "1S", "Shield Cell Bank", 1, "Elvira Martuuk,Lori Jameson"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Charge", "1Cr,1GR", "Shield Cell Bank", 2, "Lori Jameson"),
@@ -1160,6 +1180,13 @@ namespace EDDiscovery.UserControls
         {
             Button b = sender as Button;
             ufs.FilterButton(DbUpgradeFilterSave, b,
+                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+        }
+
+        private void buttonFilterMaterial_Click(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            matfs.FilterButton(DbMaterialFilterSave, b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
     }
