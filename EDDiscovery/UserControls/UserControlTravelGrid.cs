@@ -226,8 +226,17 @@ namespace EDDiscovery.UserControls
             int rownr;
             if (insert)
             {
-                dataGridViewTravel.Rows.Insert(0, rowobj);
-                rownr = 0;
+				var dgvRowCurrent = dataGridViewTravel.CurrentRow;
+				bool autoscroll = false;
+				if(dgvRowCurrent == null || dgvRowCurrent.Index == 0)
+					autoscroll = true;
+
+				dataGridViewTravel.Rows.Insert(0, rowobj);
+
+				if(autoscroll)
+					dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[0];
+
+				rownr = 0;
             }
             else
             {
