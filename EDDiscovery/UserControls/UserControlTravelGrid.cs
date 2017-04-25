@@ -900,6 +900,19 @@ namespace EDDiscovery.UserControls
                 discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
         }
 
+        private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
+            {
+                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
+                string json = jo?.ToString();
+                if (json != null)
+                {
+                    Clipboard.SetText(json);
+                }
+            }
+        }
+
         #endregion
 
         #region Event Filter
@@ -1001,6 +1014,5 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
-
     }
 }
