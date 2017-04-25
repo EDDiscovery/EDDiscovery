@@ -936,7 +936,10 @@ namespace EDDiscovery
                 // Also notify various "quick" listeners
                 if (he.UpdateSystemNote(txt, send))
                 {
-                    _uncommittedNoteHistoryEntry = he;
+                    if (_uncommittedNoteHistoryEntry == null)
+                    {
+                        _uncommittedNoteHistoryEntry = he;
+                    }
                     travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
                     PopOuts.UpdateNoteJID(he.Journalid, txt);
                     // MKW TODO: Update the Note editor SPanel.
