@@ -932,27 +932,22 @@ namespace EDDiscovery
         {
             if (he != null && txt != null)
             {
-                if (_uncommittedNoteHistoryEntry != null && _uncommittedNoteHistoryEntry != he)
-                {
-                    StoreUncommittedNote();
-                }
-
+                // Update the System Note; and if the text was changed, save our Note for sending and storing later
+                // Also notify various "quick" listeners
                 if (he.UpdateSystemNote(txt, send))
                 {
-                    if (send)
-                    {
-                        if (EDCommander.Current.SyncToEdsm && he.IsFSDJump)       // only send on FSD jumps
-                            EDSMSync.SendComments(he.snc.Name, he.snc.Note, he.snc.EdsmId);
-
-                        Map.UpdateNote();
-                    }
-                    else
-                    {
-                        _uncommittedNoteHistoryEntry = he;
-                    }
-
+                    _uncommittedNoteHistoryEntry = he;
                     travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
                     PopOuts.UpdateNoteJID(he.Journalid, txt);
+                    // MKW TODO: Update the Note editor SPanel.
+                }
+
+                // If we have an uncommitted system note from another entry, or the send flag is set, commit to DB and send to EDSM
+                // Also notify any "slow" listeners
+                if (_uncommittedNoteHistoryEntry != null && (send || _uncommittedNoteHistoryEntry != he))
+                {
+                    StoreUncommittedNote();
+                    Map.UpdateNote();
                 }
             }
         }
@@ -962,6 +957,8 @@ namespace EDDiscovery
             if (_uncommittedNoteHistoryEntry != null)
             {
                 _uncommittedNoteHistoryEntry.CommitSystemNote();
+                    if (EDCommander.Current.SyncToEdsm && _uncommittedNoteHistoryEntry.IsFSDJump)       // only send on FSD jumps
+                        EDSMSync.SendComments(_uncommittedNoteHistoryEntry.snc.Name, _uncommittedNoteHistoryEntry.snc.Note, _uncommittedNoteHistoryEntry.snc.EdsmId);
                 _uncommittedNoteHistoryEntry = null;
             }
         }
