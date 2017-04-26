@@ -49,9 +49,16 @@ namespace EDDiscovery.DB
 
             if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
             {
-                using (SQLiteConnectionOld conn = new SQLiteConnectionOld(true))
+                try
                 {
-                    conn.GetRegister(reg);
+                    using (SQLiteConnectionOld conn = new SQLiteConnectionOld(true))
+                    {
+                        conn.GetRegister(reg);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Unable to read register table from old database\n{ex.ToString()}");
                 }
             }
 
