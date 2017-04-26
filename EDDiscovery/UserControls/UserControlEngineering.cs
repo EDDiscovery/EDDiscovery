@@ -600,7 +600,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Expanded Capture Arc", "1ME,1UEF", "Frame Shift Drive Interdictor", 2, "Colonel Bris Dekker,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Expanded Capture Arc", "1GR,1MC,1TEC", "Frame Shift Drive Interdictor", 3, "Colonel Bris Dekker,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Expanded Capture Arc", "1DSD,1ME,1SWS", "Frame Shift Drive Interdictor", 4, "Colonel Bris Dekker,Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Expanded Capture Arc", "1CSD,1EHT,1MC", "Frame Shift Drive Interdictor", 5, "Colonel Bris Dekker,Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Expanded Capture Arc", "1CSD,1EHT,1MC", "Frame Shift Drive Interdictor", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Longer Range", "1UEF", "Frame Shift Drive Interdictor", 1, "Colonel Bris Dekker,Felicity Farseer,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Longer Range", "1ADWE,1TEC", "Frame Shift Drive Interdictor", 2, "Colonel Bris Dekker,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Longer Range", "1ABSD,1AFT,1OSK", "Frame Shift Drive Interdictor", 3, "Colonel Bris Dekker,Tiana Fortune"),
