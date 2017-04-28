@@ -696,9 +696,16 @@ namespace EDDiscovery.DB
 
             if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
             {
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Reader))
+                try
                 {
-                    conn.GetRegister(reg);
+                    using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Reader))
+                    {
+                        conn.GetRegister(reg);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Unable to read register table from EDDUser.sqlite\n{ex.ToString()}");
                 }
             }
             else

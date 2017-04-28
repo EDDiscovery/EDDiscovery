@@ -383,6 +383,19 @@ namespace EDDiscovery.UserControls
                 discoveryform.ActionRunOnEntry(rightclicksystem, "UserRightClick");
         }
 
+        private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
+            {
+                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
+                string json = jo?.ToString();
+                if (json != null)
+                {
+                    Clipboard.SetText(json);
+                }
+            }
+        }
+
         #endregion
 
         Tuple<long, int> CurrentGridPosByJID()
