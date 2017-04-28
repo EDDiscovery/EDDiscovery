@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Commodities = new List<CCommodities>();
 
             JArray jcommodities=null;
-            if (!JSONHelpers.IsNullOrEmptyT(evt["commodities"]))
+            if (!JSONHelper.IsNullOrEmptyT(evt["commodities"]))
                 jcommodities = (JArray)evt["commodities"];
 
             if (jcommodities != null)
