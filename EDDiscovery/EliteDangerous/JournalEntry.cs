@@ -616,7 +616,11 @@ namespace EDDiscovery.EliteDangerous
                 JournalEDDCommodityPrices jis = new JournalEDDCommodityPrices(jo);
                 jis.CommanderId = cmdrid;
                 jis.Add(jo, cn);
-                return jis;
+
+                if (jis.Commodities.Count == 0)
+                    return null;
+                else
+                    return jis;
             }
         }
 
