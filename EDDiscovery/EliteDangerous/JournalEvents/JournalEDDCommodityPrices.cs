@@ -30,7 +30,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Faction = evt["faction"].Str();
             Commodities = new List<CCommodities>();
 
-            JArray jcommodities = (JArray)evt["commodities"];
+            JArray jcommodities=null;
+            if (!JSONHelpers.IsNullOrEmptyT(evt["commodities"]))
+                jcommodities = (JArray)evt["commodities"];
 
             if (jcommodities != null)
             {

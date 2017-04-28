@@ -499,8 +499,11 @@ namespace EDDiscovery
                     {
                         Capi.GetProfile();
                         JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, Capi.Profile.StarPort.jcommodities);
-                        Controller.NewEntry(entry);
-                        OnNewCompanionAPIData?.Invoke(Capi,he);
+                        if (entry != null)
+                        {
+                            Controller.NewEntry(entry);
+                            OnNewCompanionAPIData?.Invoke(Capi, he);
+                        }
                     }
                     catch (Exception ex)
                     {
