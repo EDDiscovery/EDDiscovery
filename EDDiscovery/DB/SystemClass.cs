@@ -759,7 +759,13 @@ namespace EDDiscovery.DB
 
                                 double dist = dx * dx + dy * dy + dz * dz;
                                 if (dist > 0.001 || !removezerodiststar)
-                                    distlist.Add(dist, GetSystem(edsmid, cn, SystemIDType.EdsmId));
+                                {
+                                    ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                                    if (sys != null && sys.name != null)
+                                    {
+                                        distlist.Add(dist, sys);
+                                    }
+                                }
                             }
                         }
                     }
