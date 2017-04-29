@@ -84,7 +84,7 @@ namespace EDDiscovery.EDDN
             try
             {
                 _running = 1;
-                mainForm.LogLine("Starting EDDN sync thread");
+                //mainForm.LogLine("Starting EDDN sync thread");
 
                 while (hlscanunsyncedlist.Count != 0)
                 {
@@ -116,7 +116,7 @@ namespace EDDiscovery.EDDN
                     }
                 }
 
-                mainForm.LogLine("EDDN sync thread exiting");
+                //mainForm.LogLine("EDDN sync thread exiting");
             }
             catch (Exception ex)
             {
