@@ -797,26 +797,13 @@ namespace EDDiscovery
                 EDCommander cmdr = EDCommander.Current;
                 if (cmdr != null)
                 {
-                    string netlogpath = cmdr.NetLogDir;
                     FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-                    if (netlogpath != null && Directory.Exists(netlogpath))
-                    {
-                        dirdlg.SelectedPath = netlogpath;
-                    }
-
                     DialogResult dlgResult = dirdlg.ShowDialog();
 
                     if (dlgResult == DialogResult.OK)
                     {
                         string logpath = dirdlg.SelectedPath;
 
-                        if (logpath != netlogpath)
-                        {
-                            cmdr.NetLogDir = logpath;
-                            EDCommander.Update(new List<EDCommander> { cmdr }, true);
-                        }
-
-                        //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
                         Controller.RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: force, currentcmdr: cmdr.Nr);
                     }
                 }
