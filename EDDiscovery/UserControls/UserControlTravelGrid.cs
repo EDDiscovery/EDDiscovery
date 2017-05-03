@@ -313,7 +313,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt(DbHistorySave, comboBoxHistoryWindow.SelectedIndex);
+            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_historylist != null)
             {

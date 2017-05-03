@@ -60,7 +60,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             TargetFriendly = JournalFieldNaming.GetBetterTargetTypeName(Target);        // remove $, underscore it
             TargetLocalised = evt["Target_localised"].Str();        // not all
 
-            DestinationSystem = evt["DestinationSystem"].Str();
+            DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",");       // multi missions get this strange list;
             DestinationStation = evt["DestinationStation"].Str();
 
             Influence = evt["Influence"].Str();

@@ -58,7 +58,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Donation = evt["Donation"].LongNull();
             MissionId = evt["MissionID"].Int();
 
-            DestinationSystem = evt["DestinationSystem"].Str();
+            DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",");       // multi missions get this strange list
             DestinationStation = evt["DestinationStation"].Str();
 
             if (!evt["PermitsAwarded"].Empty())
