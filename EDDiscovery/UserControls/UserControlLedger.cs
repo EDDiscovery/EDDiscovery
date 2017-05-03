@@ -96,6 +96,9 @@ namespace EDDiscovery.UserControls
 
         public void Display(Ledger mc)
         {
+            DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
+            SortOrder sortorder = dataGridViewLedger.SortOrder;
+
             dataGridViewLedger.Rows.Clear();
             bool utctime = EDDiscoveryForm.EDDConfig.DisplayUTC;
 
@@ -137,6 +140,8 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewLedger.Columns[0].HeaderText = utctime ? "Game Time" : "Time";
+            dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
         public List<Ledger.Transaction> FilterByJournalEvent(List<Ledger.Transaction> txlist, string eventstring)
@@ -194,7 +199,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DB.SQLiteDBClass.PutSettingInt(DbHistorySave, comboBoxHistoryWindow.SelectedIndex);
+            DB.SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_mc != null)
             {

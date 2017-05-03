@@ -60,17 +60,32 @@ namespace EDDiscovery.UserControls
 
         public static TravelHistoryFilter FromWeeks(int weeks)
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(7 * weeks), weeks == 1 ? "week" : $"{weeks} weeks");
+            return new TravelHistoryFilter(TimeSpan.FromDays(7 * weeks), weeks == 1 ? "One Week" : $"{weeks} weeks");
         }
 
         public static TravelHistoryFilter LastMonth()
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(30), "month");
+            return new TravelHistoryFilter(TimeSpan.FromDays(30), "Month");
+        }
+
+        public static TravelHistoryFilter LastQuarter()
+        {
+            return new TravelHistoryFilter(TimeSpan.FromDays(90), "Quarter");
+        }
+
+        public static TravelHistoryFilter LastHalfYear()
+        {
+            return new TravelHistoryFilter(TimeSpan.FromDays(180), "Half year");
+        }
+
+        public static TravelHistoryFilter LastYear()
+        {
+            return new TravelHistoryFilter(TimeSpan.FromDays(365), "Year");
         }
 
         public static TravelHistoryFilter Last(int number)
         {
-            return new TravelHistoryFilter(number, $"last {number}");
+            return new TravelHistoryFilter(number, $"Last {number} entries");
         }
 
         public List<HistoryEntry> Filter(HistoryList hl )
@@ -91,7 +106,11 @@ namespace EDDiscovery.UserControls
 
         public List<Ledger.Transaction> Filter(List<Ledger.Transaction> txlist )
         {
-            if (MaximumDataAge.HasValue)
+            if (MaximumNumberOfItems.HasValue)
+            {
+                return txlist.OrderByDescending(s => s.utctime).Take(MaximumNumberOfItems.Value).ToList();
+            }
+            else if (MaximumDataAge.HasValue)
             {
                 var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
                 return (from tx in txlist where tx.utctime >= oldestData orderby tx.utctime descending select tx).ToList();
@@ -100,13 +119,13 @@ namespace EDDiscovery.UserControls
                 return txlist;
         }
 
-        public const int DefaultTravelHistoryFilterIndex = 8;
-
         public static void InitaliseComboBox( ExtendedControls.ComboBoxCustom cc , string dbname )
         {
             cc.Enabled = false;
+            cc.DisplayMember = nameof(TravelHistoryFilter.Label);
             cc.DataSource = new[]
             {
+                TravelHistoryFilter.NoFilter,
                 TravelHistoryFilter.FromHours(6),
                 TravelHistoryFilter.FromHours(12),
                 TravelHistoryFilter.FromHours(24),
@@ -114,12 +133,20 @@ namespace EDDiscovery.UserControls
                 TravelHistoryFilter.FromWeeks(1),
                 TravelHistoryFilter.FromWeeks(2),
                 TravelHistoryFilter.LastMonth(),
+                TravelHistoryFilter.LastQuarter(),
+                TravelHistoryFilter.LastHalfYear(),
+                TravelHistoryFilter.LastYear(),
+                TravelHistoryFilter.Last(10),
                 TravelHistoryFilter.Last(20),
-                TravelHistoryFilter.NoFilter,
+                TravelHistoryFilter.Last(100),
+                TravelHistoryFilter.Last(500),
             };
 
-            cc.DisplayMember = nameof(TravelHistoryFilter.Label);
-            cc.SelectedIndex = SQLiteDBClass.GetSettingInt(dbname, DefaultTravelHistoryFilterIndex);
+            string last = SQLiteDBClass.GetSettingString(dbname, "");
+            int entry = Array.FindIndex((TravelHistoryFilter[])cc.DataSource, x => x.Label == last);
+            //System.Diagnostics.Debug.WriteLine(dbname + "=" + last + "=" + entry);
+            cc.SelectedIndex = (entry >=0) ? entry: 0;
+            
             cc.Enabled = true;
         }
     }
