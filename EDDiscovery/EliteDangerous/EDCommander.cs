@@ -316,14 +316,11 @@ namespace EDDiscovery
                 }
             }
 
-            #if false       //TBD what is this code for?  turned off due to it not being understood
-
+            // For  some people sharing their user DB between different computers and having different paths to their journals on those computers.
             JObject jo = new JObject();
             foreach (EDCommander cmdr in _commandersDict.Values)
             {
                 JObject j = new JObject();
-                if (cmdr.NetLogDir != null)
-                    jo["NetLogDir"] = cmdr.NetLogDir;
                 if (cmdr.JournalDir != null)
                     jo["JournalDir"] = cmdr.JournalDir;
                 jo[cmdr.Name] = j;
@@ -343,7 +340,6 @@ namespace EDDiscovery
             File.Delete(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
             File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
 
-            #endif
         }
 
         /// <summary>
@@ -384,10 +380,7 @@ namespace EDDiscovery
                 }
             }
 
-#if false
-
-            // TBD WHY?
-
+            // For  some people sharing their user DB between different computers and having different paths to their journals on those computers.
             if (File.Exists(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json")))
             {
                 JObject jo;
@@ -410,13 +403,10 @@ namespace EDDiscovery
                     EDCommander cmdr = GetCommander(name);
                     if (props != null && cmdr != null)
                     {
-                        cmdr.NetLogDir = JSONHelper.GetStringDef(props["NetLogDir"], cmdr.NetLogDir);
                         cmdr.JournalDir = JSONHelper.GetStringDef(props["JournalDir"], cmdr.JournalDir);
                     }
                 }
             }
-
-#endif
         }
 
 #endregion
