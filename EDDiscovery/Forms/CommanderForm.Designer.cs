@@ -40,7 +40,6 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.textBoxBorderTravelLog = new ExtendedControls.TextBoxBorder();
             this.buttonExtCAPI = new ExtendedControls.ButtonExt();
             this.textBoxBorderCompanionPassword = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderCompanionLogin = new ExtendedControls.TextBoxBorder();
@@ -52,8 +51,6 @@
             this.buttonExtBrowse = new ExtendedControls.ButtonExt();
             this.textBoxBorderJournal = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderCmdr = new ExtendedControls.TextBoxBorder();
-            this.groupBoxCustom5 = new ExtendedControls.GroupBoxCustom();
-            this.label7 = new System.Windows.Forms.Label();
             this.groupBoxCustom4 = new ExtendedControls.GroupBoxCustom();
             this.labelCAPIState = new System.Windows.Forms.Label();
             this.labelCAPIPassword = new System.Windows.Forms.Label();
@@ -70,7 +67,6 @@
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.panelTop.SuspendLayout();
-            this.groupBoxCustom5.SuspendLayout();
             this.groupBoxCustom4.SuspendLayout();
             this.groupBoxCustom3.SuspendLayout();
             this.groupBoxCustom2.SuspendLayout();
@@ -178,17 +174,6 @@
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
-            // 
-            // textBoxBorderTravelLog
-            // 
-            this.textBoxBorderTravelLog.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderTravelLog.BorderColorScaling = 0.5F;
-            this.textBoxBorderTravelLog.Location = new System.Drawing.Point(160, 30);
-            this.textBoxBorderTravelLog.Name = "textBoxBorderTravelLog";
-            this.textBoxBorderTravelLog.Size = new System.Drawing.Size(312, 20);
-            this.textBoxBorderTravelLog.TabIndex = 5;
-            this.toolTip1.SetToolTip(this.textBoxBorderTravelLog, "Give the location of pre 2.2 travel logs. Only needed if you want to read these i" +
-        "n.");
             // 
             // buttonExtCAPI
             // 
@@ -333,34 +318,6 @@
             this.textBoxBorderCmdr.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCmdr.TabIndex = 3;
             this.toolTip1.SetToolTip(this.textBoxBorderCmdr, "Commander Name");
-            // 
-            // groupBoxCustom5
-            // 
-            this.groupBoxCustom5.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom5.BackColorScaling = 0.5F;
-            this.groupBoxCustom5.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom5.BorderColorScaling = 0.5F;
-            this.groupBoxCustom5.Controls.Add(this.label7);
-            this.groupBoxCustom5.Controls.Add(this.textBoxBorderTravelLog);
-            this.groupBoxCustom5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom5.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom5.Location = new System.Drawing.Point(0, 504);
-            this.groupBoxCustom5.Name = "groupBoxCustom5";
-            this.groupBoxCustom5.Size = new System.Drawing.Size(606, 62);
-            this.groupBoxCustom5.TabIndex = 7;
-            this.groupBoxCustom5.TabStop = false;
-            this.groupBoxCustom5.Text = "Pre 2.2 Travel Log (optional)";
-            this.groupBoxCustom5.TextPadding = 0;
-            this.groupBoxCustom5.TextStartPosition = -1;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 30);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(105, 13);
-            this.label7.TabIndex = 2;
-            this.label7.Text = "Travel Log Location:";
             // 
             // groupBoxCustom4
             // 
@@ -539,7 +496,7 @@
             this.buttonCancel.BorderColorScaling = 1.25F;
             this.buttonCancel.ButtonColorScaling = 0.5F;
             this.buttonCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonCancel.Location = new System.Drawing.Point(418, 588);
+            this.buttonCancel.Location = new System.Drawing.Point(418, 516);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -553,7 +510,7 @@
             this.buttonOK.BorderColorScaling = 1.25F;
             this.buttonOK.ButtonColorScaling = 0.5F;
             this.buttonOK.ButtonDisabledScaling = 0.5F;
-            this.buttonOK.Location = new System.Drawing.Point(519, 589);
+            this.buttonOK.Location = new System.Drawing.Point(519, 516);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 0;
@@ -565,8 +522,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 626);
-            this.Controls.Add(this.groupBoxCustom5);
+            this.ClientSize = new System.Drawing.Size(606, 555);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.groupBoxCustom4);
             this.Controls.Add(this.panel2);
@@ -586,8 +542,6 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CommanderForm_FormClosed);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
-            this.groupBoxCustom5.ResumeLayout(false);
-            this.groupBoxCustom5.PerformLayout();
             this.groupBoxCustom4.ResumeLayout(false);
             this.groupBoxCustom4.PerformLayout();
             this.groupBoxCustom3.ResumeLayout(false);
@@ -610,7 +564,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
         private ExtendedControls.TextBoxBorder textBoxBorderJournal;
         private ExtendedControls.TextBoxBorder textBoxBorderCmdr;
         private ExtendedControls.TextBoxBorder textBoxBorderEDSMAPI;
@@ -627,8 +580,6 @@
         private System.Windows.Forms.Label labelCAPIPassword;
         private ExtendedControls.TextBoxBorder textBoxBorderCompanionLogin;
         private System.Windows.Forms.Label labelCAPILogin;
-        private ExtendedControls.GroupBoxCustom groupBoxCustom5;
-        private ExtendedControls.TextBoxBorder textBoxBorderTravelLog;
         private ExtendedControls.ButtonExt buttonExtCAPI;
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.DrawnPanel panel_close;

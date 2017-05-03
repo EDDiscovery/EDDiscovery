@@ -485,39 +485,6 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static new List<EDDiscovery.EDCommander> GetCommandersFromRegister(SQLiteConnectionUser conn = null)
-        {
-            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
-            {
-                bool closeconn = false;
-
-                try
-                {
-                    if (conn == null)
-                    {
-                        closeconn = true;
-                        conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Reader);
-                    }
-                    return SQLiteConnectionED<SQLiteConnectionUser>.GetCommandersFromRegister(conn);
-                }
-                finally
-                {
-                    if (closeconn && conn != null)
-                    {
-                        conn.Dispose();
-                    }
-                }
-            }
-            else if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
-            {
-                return SQLiteConnectionOld.GetCommandersFromRegister(null);
-            }
-            else
-            {
-                return new List<EDDiscovery.EDCommander>();
-            }
-        }
-
         public static void TranferVisitedSystemstoJournalTableIfRequired()
         {
             if (System.IO.File.Exists(SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
