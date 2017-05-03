@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt(DbHistorySave, comboBoxJournalWindow.SelectedIndex);
+            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxJournalWindow.Text);
             Display(current_historylist);
         }
 
