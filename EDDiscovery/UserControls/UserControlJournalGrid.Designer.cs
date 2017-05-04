@@ -430,5 +430,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonExtExcel;
+        private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
     }
 }
