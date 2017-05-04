@@ -69,10 +69,13 @@ namespace EDDiscovery.CompanionAPI
 
             try
             {
-                string credentialsData = File.ReadAllText(filename);
-                CompanionCredentials credentials = new CompanionCredentials();
-                credentials = JsonConvert.DeserializeObject<CompanionCredentials>(credentialsData);
-                return credentials;
+                if (File.Exists(filename))
+                {
+                    string credentialsData = File.ReadAllText(filename);
+                    CompanionCredentials credentials = new CompanionCredentials();
+                    credentials = JsonConvert.DeserializeObject<CompanionCredentials>(credentialsData);
+                    return credentials;
+                }
             }
             catch (Exception ex)
             {
