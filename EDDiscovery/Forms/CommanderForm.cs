@@ -48,7 +48,6 @@ namespace EDDiscovery.Forms
             checkBoxCustomEDSMFrom.Checked = cmdr.SyncFromEdsm;
             checkBoxCustomEDSMTo.Checked = cmdr.SyncToEdsm;
             checkBoxCustomEDDNTo.Checked = cmdr.SyncToEddn;
-            textBoxBorderTravelLog.Text = cmdr.NetLogDir;
 
             UpdateCAPIState();
         }
@@ -62,7 +61,6 @@ namespace EDDiscovery.Forms
             cmdr.SyncFromEdsm = checkBoxCustomEDSMFrom.Checked;
             cmdr.SyncToEdsm = checkBoxCustomEDSMTo.Checked;
             cmdr.SyncToEddn = checkBoxCustomEDDNTo.Checked;
-            cmdr.NetLogDir = textBoxBorderTravelLog.Text;
         }
 
         public bool Valid { get { return textBoxBorderCmdr.Text != ""; } }

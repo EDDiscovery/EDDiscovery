@@ -219,11 +219,11 @@ namespace EDDiscovery
 
         public static EDCommander Create(EDCommander other )
         {
-            return Create(other.name, other.EdsmName, other.APIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm, other.SyncToEddn, other.NetLogDir);
+            return Create(other.name, other.EdsmName, other.APIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm, other.SyncToEddn);
         }
 
         public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null, 
-                                        bool toedsm = true, bool fromedsm = false, bool toeddn = true, string netlogdir = null)
+                                        bool toedsm = true, bool fromedsm = false, bool toeddn = true)
         {
             EDCommander cmdr;
 
@@ -239,7 +239,7 @@ namespace EDDiscovery
                     cmd.AddParameterWithValue("@SyncToEdsm", toedsm);
                     cmd.AddParameterWithValue("@SyncFromEdsm", fromedsm);
                     cmd.AddParameterWithValue("@SyncToEddn", toeddn);
-                    cmd.AddParameterWithValue("@NetLogDir", netlogdir ?? "");
+                    cmd.AddParameterWithValue("@NetLogDir", "");        // Unused field, null out
                     cmd.ExecuteNonQuery();
                 }
 
@@ -301,7 +301,7 @@ namespace EDDiscovery
                         cmd.Parameters["@Name"].Value = edcmdr.Name;
                         cmd.Parameters["@EdsmName"].Value = edcmdr.EdsmName;
                         cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
-                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "";
+                        cmd.Parameters["@NetLogDir"].Value = ""; // unused field
                         cmd.Parameters["@JournalDir"].Value = edcmdr.JournalDir != null ? edcmdr.JournalDir : "";
                         cmd.Parameters["@SyncToEdsm"].Value = edcmdr.SyncToEdsm;
                         cmd.Parameters["@SyncFromEdsm"].Value = edcmdr.SyncFromEdsm;
@@ -316,12 +316,11 @@ namespace EDDiscovery
                 }
             }
 
+            // For  some people sharing their user DB between different computers and having different paths to their journals on those computers.
             JObject jo = new JObject();
             foreach (EDCommander cmdr in _commandersDict.Values)
             {
                 JObject j = new JObject();
-                if (cmdr.NetLogDir != null)
-                    jo["NetLogDir"] = cmdr.NetLogDir;
                 if (cmdr.JournalDir != null)
                     jo["JournalDir"] = cmdr.JournalDir;
                 jo[cmdr.Name] = j;
@@ -340,6 +339,7 @@ namespace EDDiscovery
 
             File.Delete(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
             File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json"));
+
         }
 
         /// <summary>
@@ -356,19 +356,7 @@ namespace EDDiscovery
             {
                 _commandersDict.Clear();
 
-                bool migrate = false;
-
                 var cmdrs = SQLiteConnectionUser.GetCommanders(conn);
-
-                if (cmdrs.Count == 0)
-                {
-                    cmdrs = SQLiteConnectionUser.GetCommandersFromRegister(conn);
-                    if (cmdrs.Count != 0)
-                    {
-                        migrate = true;
-                    }
-                }
-
                 int maxnr = cmdrs.Count == 0 ? 0 : cmdrs.Max(c => c.Nr);
 
                 foreach (EDCommander cmdr in cmdrs)
@@ -390,56 +378,9 @@ namespace EDDiscovery
                         _commandersDict[maxnr + 1] = new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false);
                     }
                 }
-
-                if (migrate && write)
-                {
-                    bool closeconn = false;
-                    try
-                    {
-                        if (conn == null)
-                        {
-                            conn = new SQLiteConnectionUser();
-                            closeconn = true;
-                        }
-
-                        using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmName, EdsmApiKey, NetLogDir, Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn) VALUES (@Id, @Name, @EdsmName, @EdsmApiKey, @NetLogDir, @Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn)"))
-                        {
-                            cmd.AddParameter("@Id", DbType.Int32);
-                            cmd.AddParameter("@Name", DbType.String);
-                            cmd.AddParameter("@EdsmName", DbType.String);
-                            cmd.AddParameter("@EdsmApiKey", DbType.String);
-                            cmd.AddParameter("@NetLogDir", DbType.String);
-                            cmd.AddParameter("@Deleted", DbType.Boolean);
-                            cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
-                            cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
-                            cmd.AddParameter("@SyncToEddn", DbType.Boolean);
-
-                            foreach (var cmdr in cmdrs)
-                            {
-                                cmd.Parameters["@Id"].Value = cmdr.Nr;
-                                cmd.Parameters["@Name"].Value = cmdr.Name;
-                                cmd.Parameters["@EdsmName"].Value = cmdr.EdsmName;
-                                cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
-                                cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
-                                cmd.Parameters["@Deleted"].Value = cmdr.Deleted;
-                                cmd.Parameters["@SyncToEdsm"].Value = cmdr.SyncToEdsm;
-                                cmd.Parameters["@SyncFromEdsm"].Value = cmdr.SyncFromEdsm;
-                                cmd.Parameters["@SyncToEddn"].Value = cmdr.SyncToEddn;
-
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        if (closeconn && conn != null)
-                        {
-                            conn.Dispose();
-                        }
-                    }
-                }
             }
 
+            // For  some people sharing their user DB between different computers and having different paths to their journals on those computers.
             if (File.Exists(Path.Combine(EDDConfig.Options.AppDataDirectory, "CommanderPaths.json")))
             {
                 JObject jo;
@@ -462,18 +403,17 @@ namespace EDDiscovery
                     EDCommander cmdr = GetCommander(name);
                     if (props != null && cmdr != null)
                     {
-                        cmdr.NetLogDir = JSONHelper.GetStringDef(props["NetLogDir"], cmdr.NetLogDir);
                         cmdr.JournalDir = JSONHelper.GetStringDef(props["JournalDir"], cmdr.JournalDir);
                     }
                 }
             }
         }
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
-        #region Private properties and methods
+#region Private properties and methods
         private static Dictionary<int, EDCommander> _commandersDict;
         private static int _CurrentCommanderID = Int32.MinValue;
 
@@ -494,16 +434,15 @@ namespace EDDiscovery
             var e = new CurrentCommanderChangedEventArgs(commanderIndex);
             CurrentCommanderChanged?.Invoke(null, e);
         }
-        #endregion
+#endregion
 
-        #region Instance
+#region Instance
        
         private int nr;
         private bool deleted;
         private string name;
         private string edsmname;
         private string apikey;
-        private string netLogDir;
         private string journalDir;
         private bool syncToEdsm;
         private bool syncFromEdsm;
@@ -520,7 +459,6 @@ namespace EDDiscovery
             edsmname = reader["EDSMName"] == DBNull.Value ? name : Convert.ToString(reader["EDSMName"]) ?? name;
             apikey = Convert.ToString(reader["EdsmApiKey"]);
             deleted = Convert.ToBoolean(reader["Deleted"]);
-            netLogDir = Convert.ToString(reader["NetLogDir"]);
             journalDir = Convert.ToString(reader["JournalDir"]);
 
             syncToEdsm = Convert.ToBoolean(reader["SyncToEdsm"]);
@@ -544,7 +482,6 @@ namespace EDDiscovery
         public string Name { get { return name; } set { name = value; } }
         public string EdsmName { get { return edsmname; } set { edsmname = value; } }
         public string APIKey { get { return apikey; } set { apikey = value; } }
-        public string NetLogDir { get { return netLogDir; } set { netLogDir = value; } }
         public string JournalDir { get { return journalDir; } set { journalDir = value; } }
         public bool SyncToEdsm { get { return syncToEdsm; } set { syncToEdsm = value; } }
         public bool SyncFromEdsm { get { return syncFromEdsm; } set { syncFromEdsm = value; } }
@@ -552,6 +489,7 @@ namespace EDDiscovery
         public bool Deleted { get { return deleted; } set { deleted = value; } }
 
         public string Info { get { return Tools.FieldBuilder(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , CompanionAPI.CompanionCredentials.CredentialState(Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED); } }
-        #endregion
+
+#endregion
     }
 }

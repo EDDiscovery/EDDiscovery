@@ -65,34 +65,6 @@ namespace EDDiscovery.DB
             return reg;
         }
 
-        public static new List<EDDiscovery.EDCommander> GetCommandersFromRegister(SQLiteConnectionOld conn = null)
-        {
-            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
-            {
-                bool closeconn = false;
-
-                try
-                {
-                    if (conn == null)
-                    {
-                        closeconn = true;
-                        conn = new SQLiteConnectionOld(true);
-                    }
-                    return SQLiteConnectionED<SQLiteConnectionOld>.GetCommandersFromRegister(conn);
-                }
-                finally
-                {
-                    if (closeconn && conn != null)
-                    {
-                        conn.Dispose();
-                    }
-                }
-            }
-            else
-            {
-                return new List<EDDiscovery.EDCommander>();
-            }
-        }
     }
 
     /*
@@ -412,32 +384,6 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static List<EDDiscovery.EDCommander> GetCommandersFromRegister(TConn conn = null)
-        {
-            List<EDDiscovery.EDCommander> commanders = new List<EDDiscovery.EDCommander>();
-
-            string apikey = GetSettingString("EDSMApiKey", "", conn);
-            string commanderName = GetSettingString("CommanderName", "", conn);
-
-            for (int i = 0; i < 100; i++)
-            {
-                EDDiscovery.EDCommander cmdr = new EDDiscovery.EDCommander(i,
-                    GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
-                    GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn), true, false, true);
-                cmdr.NetLogDir = GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
-                cmdr.Deleted = GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
-
-                commanderName = "";
-                apikey = "";
-
-                if (cmdr.Name != "" && cmdr.Name != null)
-                {
-                    commanders.Add(cmdr);
-                }
-            }
-
-            return commanders;
-        }
         #endregion
     }
 
