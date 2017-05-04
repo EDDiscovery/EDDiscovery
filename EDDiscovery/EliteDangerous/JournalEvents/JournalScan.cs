@@ -533,9 +533,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 case EDStar.CHd:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.C7III, string.Format("Carbon {0} star", StarType));
 
-                case EDStar.MS: //seen in log
-                case EDStar.S:   // seen in log
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Unknown Type {0} star", StarType));
+                case EDStar.MS: //seen in log https://en.wikipedia.org/wiki/S-type_star
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.M5V, string.Format("Intermediate low Zirconium Monoxide Type {0} star", StarType));
+
+                case EDStar.S:   // seen in log, data from http://elite-dangerous.wikia.com/wiki/Stars
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DefaultStar, string.Format("Cool Giant Zirconium Monoxide rich Type {0} star", StarType));
 
                 // white dwarf
                 case EDStar.D:
@@ -553,7 +555,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 case EDStar.DC:
                 case EDStar.DCV:
                 case EDStar.DX:
-                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DA6VII_White, string.Format("White Dwarf ({0}) star", StarType));
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.DA6VII_White, string.Format("White Dwarf {0} star", StarType));
 
                 case EDStar.N:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Neutron_Star, "Neutron Star");

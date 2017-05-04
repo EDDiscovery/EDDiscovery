@@ -57,6 +57,7 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.panelJournalIcon = new System.Windows.Forms.Panel();
@@ -69,7 +70,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
             this.historyContextMenu.SuspendLayout();
@@ -181,7 +181,7 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 158);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 136);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -218,6 +218,13 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.runActionsOnThisEntryToolStripMenuItem.Text = "Run Actions on this entry";
             this.runActionsOnThisEntryToolStripMenuItem.Click += new System.EventHandler(this.runActionsOnThisEntryToolStripMenuItem_Click);
+            // 
+            // copyJournalEntryToClipboardToolStripMenuItem
+            // 
+            this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
+            this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
+            this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -379,13 +386,6 @@ namespace EDDiscovery.UserControls
             this.toolTip1.InitialDelay = 250;
             this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ShowAlways = true;
-            // 
-            // copyJournalEntryToClipboardToolStripMenuItem
-            // 
-            this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
-            this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
-            this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
             // 
             // UserControlJournalGrid
             // 

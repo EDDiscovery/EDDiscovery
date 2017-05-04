@@ -133,7 +133,7 @@ namespace EDDiscovery.EliteDangerous
             EDJournalReader reader;
             TravelLogUnit tlu;
 
-            System.Diagnostics.Trace.WriteLine(string.Format("File Read {0}", fi.FullName));
+            //System.Diagnostics.Trace.WriteLine(string.Format("File Read {0}", fi.FullName));
 
             if (netlogreaders.ContainsKey(fi.Name))
             {
