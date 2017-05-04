@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
 
         private ConditionLists fieldfilter = new ConditionLists();
 
-        private Dictionary<long, DataGridViewRow> RowsByJournalID = new Dictionary<long, DataGridViewRow>();
+        private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
         public event ChangedSelection OnChangedSelection;
@@ -91,8 +91,6 @@ namespace EDDiscovery.UserControls
         private string DbFieldFilter { get { return "TravelHistoryControlFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
-
-        private long preferred_jid = -1;                        // use Preferred to say, i'm about to refresh you, go here..
 
         EventFilterSelector cfs = new EventFilterSelector();
 
@@ -175,7 +173,7 @@ namespace EDDiscovery.UserControls
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewTravel.Rows.Clear();
-            RowsByJournalID.Clear();
+            rowsbyjournalid.Clear();
 
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
@@ -184,8 +182,7 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
 
-            int rowno = FindGridPosByJID(preferred_jid >= 0 ? preferred_jid : pos.Item1);     // either go back to preferred, or to remembered above
-            preferred_jid = -1;                                                             // 1 shot at this
+            int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
 
             if (rowno >= 0)
             {
@@ -235,7 +232,7 @@ namespace EDDiscovery.UserControls
                 rownr = dataGridViewTravel.Rows.Count - 1;
             }
 
-            RowsByJournalID[item.Journalid] = dataGridViewTravel.Rows[rownr];
+            rowsbyjournalid[item.Journalid] = dataGridViewTravel.Rows[rownr];
             dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.HistoryTag].Tag = item;
 
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
@@ -254,11 +251,6 @@ namespace EDDiscovery.UserControls
 #endif
         }
 
-        public void SetPreferredJIDAfterRefresh(long jid)           // call if after the next Display refresh you would like to go to this jid
-        {
-            preferred_jid = jid;
-        }
-
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
             return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.Globals);
@@ -271,44 +263,29 @@ namespace EDDiscovery.UserControls
             currentGridRow = 0;
         }
 
-        Tuple<long, int> CurrentGridPosByJID()
+        Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
         {
-            long jid = (dataGridViewTravel.CurrentCell != null) ? ((HistoryEntry)(dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag)).Journalid : 0;
+            long jid = (dataGridViewTravel.CurrentCell != null) ? ((HistoryEntry)(dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag)).Journalid : -1;
             int cellno = (dataGridViewTravel.CurrentCell != null) ? dataGridViewTravel.CurrentCell.ColumnIndex : 0;
             return new Tuple<long, int>(jid, cellno);
         }
 
+        int FindGridPosByJID(long jid, bool checkvisible)
+        {
+            if (rowsbyjournalid.ContainsKey(jid) && (!checkvisible || rowsbyjournalid[jid].Visible))
+                return rowsbyjournalid[jid].Index;
+            else
+                return -1;
+        }
+
         public void GotoPosByJID(long jid)
         {
-            int rowno = FindGridPosByJID(jid);
+            int rowno = FindGridPosByJID(jid, true);
             if (rowno >= 0)
             {
                 dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Information];
                 dataGridViewTravel.Rows[rowno].Selected = true;
             }
-        }
-
-        int FindGridPosByJID(long jid)
-        {
-            if (RowsByJournalID.ContainsKey(jid))
-            {
-                return RowsByJournalID[jid].Index;
-            }
-
-            /*
-            if (dataGridViewTravel.Rows.Count > 0 && jid != 0)
-            {
-                foreach (DataGridViewRow r in dataGridViewTravel.Rows)
-                {
-                    if (r.Visible && ((HistoryEntry)(r.Cells[TravelHistoryColumns.HistoryTag].Tag)).Journalid == jid)
-                    {
-                        return r.Index;
-                    }
-                }
-            }
-             */
-
-            return -1;
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
@@ -380,7 +357,7 @@ namespace EDDiscovery.UserControls
 
         public void UpdateNoteJID(long r, string s)
         {
-            int row = FindGridPosByJID(r);
+            int row = FindGridPosByJID(r,false);
             if (row >= 0)
                 dataGridViewTravel.Rows[row].Cells[TravelHistoryColumns.Note].Value = s;
         }
@@ -397,10 +374,9 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
 
-            int rowno = FindGridPosByJID(pos.Item1);
-            if (rowno > 0 && dataGridViewTravel.Rows[rowno].Visible)
+            int rowno = FindGridPosByJID(pos.Item1,true);
+            if (rowno >= 0)
                 dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];
-            // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
         }
 
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -635,14 +611,14 @@ namespace EDDiscovery.UserControls
                 HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 System.Diagnostics.Debug.Assert(sp != null);
                 sp.UpdateCommanderID(-1);
-                RowsByJournalID.Remove(sp.Journalid);
+                rowsbyjournalid.Remove(sp.Journalid);
             }
 
             // Remove rows
             if (selectedRows.Count<DataGridViewRow>() == dataGridViewTravel.Rows.Count)
             {
                 dataGridViewTravel.Rows.Clear();
-                RowsByJournalID.Clear();
+                rowsbyjournalid.Clear();
             }
             else
             {
@@ -669,7 +645,7 @@ namespace EDDiscovery.UserControls
                 HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 System.Diagnostics.Debug.Assert(sp != null);
                 listsyspos.Add(sp);
-                RowsByJournalID.Remove(sp.Journalid);
+                rowsbyjournalid.Remove(sp.Journalid);
             }
 
             EDDiscovery.Forms.MoveToCommander movefrm = new EDDiscovery.Forms.MoveToCommander();

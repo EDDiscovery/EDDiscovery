@@ -36,6 +36,7 @@ namespace EDDiscovery.UserControls
         private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
         EventFilterSelector cfs = new EventFilterSelector();
         private ConditionLists fieldfilter = new ConditionLists();
+        private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         private string DbFilterSave { get { return "JournalGridControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return "JournalGrid" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
@@ -145,6 +146,7 @@ namespace EDDiscovery.UserControls
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewJournal.Rows.Clear();
+            rowsbyjournalid.Clear();
 
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
@@ -153,9 +155,9 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
-            int rowno = FindGridPosByJID(pos.Item1);
+            int rowno = FindGridPosByJID(pos.Item1,true);
 
-            if (rowno > 0)
+            if (rowno >= 0)
             {
                 dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
             }
@@ -185,6 +187,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewJournal.Rows.Add(rowobj);
                 rownr = dataGridViewJournal.Rows.Count - 1;
             }
+
+            rowsbyjournalid[item.Journalid] = dataGridViewJournal.Rows[rownr];
 
             dataGridViewJournal.Rows[rownr].Cells[JournalHistoryColumns.HistoryTag].Tag = item;
         }
@@ -235,8 +239,8 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
-            int rowno = FindGridPosByJID(pos.Item1);
-            if (rowno > 0 && dataGridViewJournal.Rows[rowno].Visible)
+            int rowno = FindGridPosByJID(pos.Item1,true);
+            if (rowno >= 0)
                 dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
         }
 
@@ -398,27 +402,20 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        Tuple<long, int> CurrentGridPosByJID()
+
+        Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
         {
-            long jid = (dataGridViewJournal.CurrentCell != null) ? ((HistoryEntry)(dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag)).Journalid : 0;
+            long jid = (dataGridViewJournal.CurrentCell != null) ? ((HistoryEntry)(dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag)).Journalid : -1;
             int cellno = (dataGridViewJournal.CurrentCell != null) ? dataGridViewJournal.CurrentCell.ColumnIndex : 0;
             return new Tuple<long, int>(jid, cellno);
         }
 
-        int FindGridPosByJID(long jid)
+        int FindGridPosByJID(long jid, bool checkvisible)
         {
-            if (dataGridViewJournal.Rows.Count > 0 && jid != 0)
-            {
-                foreach (DataGridViewRow r in dataGridViewJournal.Rows)
-                {
-                    if (r.Visible && ((HistoryEntry)(r.Cells[JournalHistoryColumns.HistoryTag].Tag)).Journalid == jid)
-                    {
-                        return r.Index;
-                    }
-                }
-            }
-
-            return -1;
+            if (rowsbyjournalid.ContainsKey(jid) && (!checkvisible || rowsbyjournalid[jid].Visible))
+                return rowsbyjournalid[jid].Index;
+            else
+                return -1;
         }
 
         private void drawnPanelPopOut_Click(object sender, EventArgs e)
