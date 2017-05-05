@@ -504,7 +504,8 @@ namespace EDDiscovery
                             Controller.NewEntry(entry);
                             OnNewCompanionAPIData?.Invoke(Capi, he);
 
-                            SendPricestoEDDN();
+                            if (EDCommander.Current.SyncToEddn)
+                                SendPricestoEDDN(he);
 
                         }
                     }
@@ -516,13 +517,17 @@ namespace EDDiscovery
             }
         }
 
-        private void SendPricestoEDDN()
+        private void SendPricestoEDDN(HistoryEntry he)
         {
             try
             {
                 EDDN.EDDNClass eddn = new EDDN.EDDNClass();
 
-                eddn.commanderName = Capi.Credentials.Commander;
+                eddn.commanderName = he.Commander.EdsmName;
+                if (string.IsNullOrEmpty(eddn.commanderName))
+                     eddn.commanderName = Capi.Credentials.Commander;
+
+
                 JObject msg = eddn.CreateEDDNCommodityMessage(Capi.Profile.StarPort.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
 
                 if (msg != null)
