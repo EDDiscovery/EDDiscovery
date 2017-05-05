@@ -64,6 +64,11 @@ namespace EDDiscovery.EliteDangerous
             list = new List<MaterialCommodities>();
         }
 
+        public bool ContainsRares() // function on purpose
+        {
+            return list.FindIndex(x => x.type.Equals(MaterialCommodityDB.CommodityTypeRare)) != -1;
+        }
+
         public MaterialCommoditiesList Clone(bool clearzeromaterials, bool clearzerocommodities)       // returns a new copy of this class.. all items a copy
         {
             MaterialCommoditiesList mcl = new MaterialCommoditiesList();
