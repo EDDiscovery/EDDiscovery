@@ -503,6 +503,9 @@ namespace EDDiscovery
                         {
                             Controller.NewEntry(entry);
                             OnNewCompanionAPIData?.Invoke(Capi, he);
+
+                            SendPricestoEDDN();
+
                         }
                     }
                     catch (Exception ex)
@@ -511,6 +514,30 @@ namespace EDDiscovery
                     }
                 }
             }
+        }
+
+        private void SendPricestoEDDN()
+        {
+            try
+            {
+                EDDN.EDDNClass eddn = new EDDN.EDDNClass();
+
+                eddn.commanderName = Capi.Credentials.Commander;
+                JObject msg = eddn.CreateEDDNCommodityMessage(Capi.Profile.StarPort.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
+
+                if (msg != null)
+                {
+                    LogLine("EDDN: Send commodities prices");
+                    if (eddn.PostMessage(msg))
+                    {
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogLineHighlight("EDDN: Send commodities prices failed: " + ex.Message);
+            }
+
         }
 
         private void Controller_ReportProgress(int percentComplete, string message)
