@@ -39,6 +39,7 @@ namespace EDDiscovery.EliteDangerous
         public int flags { get; set; }                      // now out of date.. keep for now to limit code changes
 
         public static string CommodityCategory = "Commodity";
+        public static string CommodityTypeRare = "Rare";
         public static string MaterialRawCategory = "Raw";
         public static string MaterialEncodedCategory = "Encoded";
         public static string MaterialManufacturedCategory = "Manufactured";
@@ -94,7 +95,7 @@ namespace EDDiscovery.EliteDangerous
 
         private static bool AddNewRare(string fdname, string name)
         {
-            return AddNewTypeF(CommodityCategory, Color.Green, name, "Rare", "", fdname);
+            return AddNewTypeF(CommodityCategory, Color.Green, name, CommodityTypeRare, "", fdname);
         }
 
         private static bool AddNewType(string c, string namelist, string t)
