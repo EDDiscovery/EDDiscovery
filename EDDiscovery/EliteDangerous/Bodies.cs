@@ -80,7 +80,7 @@ namespace EDDiscovery.EliteDangerous
 
         N,   // Neutron
 
-        H,      // currently speculative, not confirmed with actual data...
+        H,   // Black Hole
 
         X,    // currently speculative, not confirmed with actual data... in journal
 
@@ -92,6 +92,7 @@ namespace EDDiscovery.EliteDangerous
         RoguePlanet,
         Nebula,
         StellarRemnantNebula,
+        SuperMassiveBlackHole,
     };
 
 
