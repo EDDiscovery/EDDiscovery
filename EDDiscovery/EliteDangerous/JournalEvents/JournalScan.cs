@@ -570,8 +570,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
                 // Journal.. really?  need evidence these actually are formatted like this.
 
-                //case EDStar.b"supermassiveblackhole":
-                //   return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Super Massive Black Hole");
+                case EDStar.SuperMassiveBlackHole:
+                    return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.Black_Hole, "Super Massive Black Hole");
                 case EDStar.A_BlueWhiteSuperGiant:
                     return new Tuple<System.Drawing.Image, string>(EDDiscovery.Properties.Resources.A9III_White, "Blue White Super Giant");
                 case EDStar.F_WhiteSuperGiant:
