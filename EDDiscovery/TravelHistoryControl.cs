@@ -448,17 +448,9 @@ namespace EDDiscovery
 
                     ISystem homesys = _discoveryForm.GetHomeSystem();
 
-                    if (homesys == null || !homesys.HasCoordinate)
-                    {
-                        homesys = new SystemClass("Sol", 0, 0, 0);
-                    }
-
-                    double xdist = he.System.x - homesys.x;
-                    double ydist = he.System.y - homesys.y;
-                    double zdist = he.System.z - homesys.z;
-
-                    textBoxHomeDist.Text = Math.Sqrt(xdist * xdist + ydist * ydist + zdist * zdist).ToString("0.00");
-                    textBoxSolDist.Text = Math.Sqrt(he.System.x * he.System.x + he.System.y * he.System.y + he.System.z * he.System.z).ToString("0.00");
+                    toolTipEddb.SetToolTip(textBoxHomeDist, $"Distance to home system ({homesys.name})");
+                    textBoxHomeDist.Text = SystemClass.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
+                    textBoxSolDist.Text = SystemClass.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
                 }
                 else
                 {
