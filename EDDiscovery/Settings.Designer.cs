@@ -394,6 +394,7 @@ namespace EDDiscovery
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
             this.textBoxHomeSystem.TabIndex = 0;
             this.toolTip.SetToolTip(this.textBoxHomeSystem, "Select home system for 3d Map");
+            this.textBoxHomeSystem.Validated += new System.EventHandler(this.textBoxHomeSystem_Validated);
             // 
             // panel_defaultmapcolor
             // 

@@ -195,7 +195,7 @@ namespace EDDiscovery
             this.textBoxHomeDist.Size = new System.Drawing.Size(67, 20);
             this.textBoxHomeDist.TabIndex = 42;
             this.textBoxHomeDist.TabStop = false;
-            this.toolTipEddb.SetToolTip(this.textBoxHomeDist, "Distance to home planet");
+            this.toolTipEddb.SetToolTip(this.textBoxHomeDist, "Distance to home system");
             // 
             // buttonRoss
             // 
@@ -357,7 +357,7 @@ namespace EDDiscovery
             this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
             this.textBoxSolDist.TabIndex = 44;
             this.textBoxSolDist.TabStop = false;
-            this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to home planet");
+            this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to Sol");
             // 
             // splitContainerLeftRight
             // 
