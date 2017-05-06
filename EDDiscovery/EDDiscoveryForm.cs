@@ -909,21 +909,7 @@ namespace EDDiscovery
 
         public ISystem GetHomeSystem()
         {
-            string homesysname = settings.MapHomeSystem;
-
-            ISystem homesys = ((homesysname != null) ? SystemClass.GetSystem(homesysname) : null);
-
-            if (homesys == null || !homesys.HasCoordinate)
-            {
-                homesys = SystemClass.GetSystem("Sol");
-
-                if (homesys == null)
-                {
-                    homesys = new SystemClass("Sol", 0, 0, 0);
-                }
-            }
-
-            return homesys;
+            return settings.HomeSystem;
         }
 
         public void Open3DMap(HistoryEntry he)

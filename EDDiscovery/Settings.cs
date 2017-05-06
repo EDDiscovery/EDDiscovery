@@ -31,9 +31,24 @@ namespace EDDiscovery
     public partial class Settings : UserControl
     {
         private EDDiscoveryForm _discoveryForm;
+        private ISystem _homeSystem = new SystemClass("Sol", 0, 0, 0);
         private ThemeEditor themeeditor = null;
 
-        public string MapHomeSystem { get { return textBoxHomeSystem.Text; } }
+        public ISystem HomeSystem
+        {
+            get
+            {
+                return _homeSystem;
+            }
+            private set
+            {
+                if (value != null && value.HasCoordinate)
+                {
+                    _homeSystem = value;
+                    textBoxHomeSystem.Text = value.name;
+                }
+            }
+        }
         public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
         public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
         public bool OrderRowsInverted { get { return checkBoxOrderRowsInverted.Checked; } }
@@ -89,7 +104,7 @@ namespace EDDiscovery
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
-            textBoxHomeSystem.Text = SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol");
+            HomeSystem = SystemClass.GetSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
 
             textBoxDefaultZoom.Text = SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
 
@@ -340,6 +355,13 @@ namespace EDDiscovery
             _discoveryForm.LoadSavedPopouts();
         }
 
+        private void textBoxHomeSystem_Validated(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(textBoxHomeSystem.Text))
+            {
+                HomeSystem = SystemClass.GetSystem(textBoxHomeSystem.Text);
+            }
+        }
     }
 }
 
