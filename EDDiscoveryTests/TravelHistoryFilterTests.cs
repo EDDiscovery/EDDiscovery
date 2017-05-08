@@ -92,7 +92,7 @@ namespace EDDiscoveryTests
         [TestMethod]
         public void last_20_filter_has_correct_label()
         {
-            Check.That(TravelHistoryFilter.Last(20).Label).IsEqualTo("last 20");
+            Check.That(TravelHistoryFilter.Last(20).Label).IsEqualTo("Last 20 entries");
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace EDDiscoveryTests
         [TestMethod]
         public void Last_week_filter_has_correct_label()
         {
-            Check.That(TravelHistoryFilter.FromWeeks(1).Label).IsEqualTo("week");
+            Check.That(TravelHistoryFilter.FromWeeks(1).Label).IsEqualTo("One Week");
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace EDDiscoveryTests
         [TestMethod]
         public void Last_month_filter_has_correct_label()
         {
-            Check.That(TravelHistoryFilter.LastMonth().Label).IsEqualTo("month");
+            Check.That(TravelHistoryFilter.LastMonth().Label).IsEqualTo("Month");
         }
     }
 }
