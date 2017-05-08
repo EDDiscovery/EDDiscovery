@@ -642,7 +642,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 if (name.Contains("rich"))
                     return EDDiscovery.Properties.Resources.metal_rich;
-                else if (nSurfaceTemperature > 400)
+                else if (nSurfaceTemperature > 700)
                     return EDDiscovery.Properties.Resources.High_metal_content_world_Lava1;
                 else if (nSurfaceTemperature > 250)
                     return EDDiscovery.Properties.Resources.High_metal_content_world_Mix3;
