@@ -76,27 +76,38 @@ namespace EDDiscovery
             }
         }
 
+        public double TravelledDistance { get { return travelled_distance; } }
+        public TimeSpan TravelledSeconds { get { return travelled_seconds; } }
+        public bool isTravelling { get { return travelling; } }
+        public int TravelledMissingjump { get { return travelled_missingjump; } }
+        public int Travelledjumps { get { return travelled_jumps; } }
+
+        public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
+        public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
+        public string WhereAmI { get { return whereami; } }
+        public string ShipType { get { return shiptype; } }
+        public int ShipId { get { return shipid; } }
+        public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
+
+        public bool ContainsRares() // function due to debugger and cost of working out
+        {
+            return materialscommodities != null && materialscommodities.ContainsRares();
+        }
+
+        // Calculated values, not from JE
+
         public MaterialCommoditiesList MaterialCommodity { get { return materialscommodities; } }
         public ShipInformation ShipInformation { get { return shipmodules; } set { shipmodules = value; } }     // may be null if not set up yet
         public ModulesInStore StoredModules { get { return storedmodules; } set { storedmodules = value; } }
         public MissionList MissionList { get { return missionlist; } set { missionlist = value; } }
         
-        // Calculated values, not from JE
-
         public SystemNoteClass snc;     // system note class found attached to this entry
 
         private double travelled_distance;  // start/stop distance and time computation
-        public double TravelledDistance { get { return travelled_distance; } }
-
         private TimeSpan travelled_seconds;
-        public TimeSpan TravelledSeconds { get { return travelled_seconds; } }
-
         bool travelling;
-        public bool isTravelling { get { return travelling; } }
 
         int travelled_missingjump;
-        public int TravelledMissingjump { get { return travelled_missingjump; } }
-        public int Travelledjumps { get { return travelled_jumps; } }
         int travelled_jumps;
 
         MaterialCommoditiesList materialscommodities;
@@ -109,19 +120,7 @@ namespace EDDiscovery
         private string whereami = "";               // where we think we are
         private int shipid = -1;                    // ship id, -1 unknown
         private string shiptype = "Unknown";        // and the ship
-        private string onCrewWithCaptain = null;    // if not null, your in another multiplayer ship
-        
-        public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
-        public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
-        public string WhereAmI { get { return whereami; } }
-        public string ShipType { get { return shiptype; } }
-        public int ShipId { get { return shipid; } }
-        public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
-
-        public bool ContainsRares() // function due to debugger and cost of working out
-        {
-            return materialscommodities != null && materialscommodities.ContainsRares();
-        }
+        private string onCrewWithCaptain = null;    // if not null, your in another multiplayer ship      
 
         #endregion
 
@@ -254,63 +253,8 @@ namespace EDDiscovery
                 Commander = cmdr ?? EDCommander.GetCommander(je.CommanderId)
             };
 
-            if (prev != null && prev.travelling)      // if we are travelling..
-            {
-                he.travelled_distance = prev.travelled_distance;
-                he.travelled_missingjump = prev.travelled_missingjump;
-                he.travelled_jumps = prev.travelled_jumps;
 
-                if (he.IsFSDJump)
-                {
-                    double dist = ((EliteDangerous.JournalEvents.JournalFSDJump)je).JumpDist;
-                    if (dist <= 0)
-                        he.travelled_missingjump++;
-                    else
-                    {
-                        he.travelled_distance += dist;
-                        he.travelled_jumps++;
-                    }
-                }
-
-                he.travelled_seconds = prev.travelled_seconds;
-                TimeSpan diff = he.EventTimeUTC.Subtract(prev.EventTimeUTC);
-
-                if (he.EntryType != EliteDangerous.JournalTypeEnum.LoadGame && diff < new TimeSpan(2, 0, 0))   // time between last entry and load game is not real time
-                {
-                    he.travelled_seconds += diff;
-                }
-
-                if (he.StopMarker || he.StartMarker)
-                {
-                    he.travelling = false;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") + " LY"
-                                        + ", " + he.travelled_jumps + " jumps"
-                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
-                                        ", time " + he.travelled_seconds;
-
-                    he.travelled_distance = 0;
-                    he.travelled_seconds = new TimeSpan(0);
-                }
-                else
-                {
-                    he.travelling = true;
-
-                    if (he.IsFSDJump)
-                    {
-                        he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling" + 
-                                        " distance " + he.travelled_distance.ToString("0.0") + " LY"
-                                        + ", " + he.travelled_jumps + " jumps"
-                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
-                                        ", time " + he.travelled_seconds;
-                    }
-                }
-
-            }
-
-            if (he.StartMarker)
-                he.travelling = true;
-
-            // WORK out docked/landed state
+           // WORK out docked/landed state
 
             if (prev != null)
             {
@@ -377,6 +321,61 @@ namespace EDDiscovery
                 he.onCrewWithCaptain = (je as EliteDangerous.JournalEvents.JournalJoinACrew).Captain;
             else if (je.EventTypeID == JournalTypeEnum.QuitACrew || je.EventTypeID == JournalTypeEnum.LoadGame)
                 he.onCrewWithCaptain = null;
+
+            if (prev != null && prev.travelling)      // if we are travelling..
+            {
+                he.travelled_distance = prev.travelled_distance;
+                he.travelled_missingjump = prev.travelled_missingjump;
+                he.travelled_jumps = prev.travelled_jumps;
+
+                if (he.IsFSDJump && !he.MultiPlayer )   // if jump, and not multiplayer..
+                {
+                    double dist = ((EliteDangerous.JournalEvents.JournalFSDJump)je).JumpDist;
+                    if (dist <= 0)
+                        he.travelled_missingjump++;
+                    else
+                    {
+                        he.travelled_distance += dist;
+                        he.travelled_jumps++;
+                    }
+                }
+
+                he.travelled_seconds = prev.travelled_seconds;
+                TimeSpan diff = he.EventTimeUTC.Subtract(prev.EventTimeUTC);
+
+                if (he.EntryType != EliteDangerous.JournalTypeEnum.LoadGame && diff < new TimeSpan(2, 0, 0))   // time between last entry and load game is not real time
+                {
+                    he.travelled_seconds += diff;
+                }
+
+                if (he.StopMarker || he.StartMarker)
+                {
+                    he.travelling = false;
+                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") + " LY"
+                                        + ", " + he.travelled_jumps + " jumps"
+                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
+                                        ", time " + he.travelled_seconds;
+
+                    he.travelled_distance = 0;
+                    he.travelled_seconds = new TimeSpan(0);
+                }
+                else
+                {
+                    he.travelling = true;
+
+                    if (he.IsFSDJump)
+                    {
+                        he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling" +
+                                        " distance " + he.travelled_distance.ToString("0.0") + " LY"
+                                        + ", " + he.travelled_jumps + " jumps"
+                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
+                                        ", time " + he.travelled_seconds;
+                    }
+                }
+            }
+
+            if (he.StartMarker)
+                he.travelling = true;
 
             return he;
         }
