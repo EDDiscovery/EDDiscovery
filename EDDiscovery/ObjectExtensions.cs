@@ -605,6 +605,13 @@ public static class ObjectExtensionsStrings
         return n.ToLower();
     }
 
+    public static bool EqualsAlphaNumOnlyNoCase(this string left, string right )
+    {
+        left = left.Replace("_", "").Replace(" ", "").ToLower();        // remove _, spaces and lower
+        right = right.Replace("_", "").Replace(" ", "").ToLower();
+        return left.Equals(right);
+    }
+
 }
 
 public static class ObjectExtensionsNumbersBool

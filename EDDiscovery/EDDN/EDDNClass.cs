@@ -180,7 +180,7 @@ namespace EDDiscovery.EDDN
 
             foreach (var commodity in commodities)
             {
-                if (commodity.categoryname.Equals("NonMarketable"))
+                if (commodity.type.Equals("NonMarketable"))
                 {
                     continue;
                 }

@@ -66,69 +66,37 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        HistoryEntry last_travelselected;
-        HistoryEntry last_displayed;        // what we are displaying
-        HistoryEntry last_compared;         // what we are comparing with
+        HistoryEntry last_he;           // last HE
+        HistoryEntry last_eddmd;        // last edd market data from last_he
+        HistoryEntry eddmd_left;        // eddmd left comparision, null means use last_he
+        HistoryEntry eddmd_right;       // what we are comparing with, null means none
+
+        List<HistoryEntry> comboboxentries = new List<HistoryEntry>(); // filled by combobox
 
         private void OnChanged(HistoryEntry he, HistoryList hl)
         {
-            // FIND last entry..
-            HistoryEntry new_he = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EDDCommodityPrices, he);       // find, from he, the last market data commodity price
-
-            if (!Object.ReferenceEquals(new_he, last_travelselected))       // if last was null, or new_he has changed, we have a material change to the list
+            if (!Object.ReferenceEquals(he, last_he))       // if last was null, or he has changed, we have a possible change..
             {
                 FillComboBoxes(hl);
+                HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EDDCommodityPrices, he);       // find, from he, the last market data commodity price
 
-                last_travelselected = new_he;
+                bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
+                bool cargochanged = !Object.ReferenceEquals(last_he?.MaterialCommodity, he?.MaterialCommodity); // is cargo different between he and last_he
 
-                if (comboBoxCustomFrom.Text.Contains("Travel History"))
-                    Display(last_travelselected);
+                last_he = he;
+                last_eddmd = new_last_eddmd;
+
+                if (eddmd_left == null)    // if showing travel.. if not, no update due to this.  Need to keep the last_he/last_eddmd going for swapping back
+                {
+                    System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged , cargochanged);
+                    if (eddmdchanged || cargochanged)        // if last_eddmd changed.. or cargo
+                        Display();
+                }
             }
         }
 
-        List<HistoryEntry> otherentries = new List<HistoryEntry>();
-
-        private void FillComboBoxes(HistoryList hl)
+        public void Display()
         {
-            string selfrom = comboBoxCustomFrom.Text;
-            string selto = comboBoxCustomTo.Text;
-
-            comboBoxCustomFrom.Items.Clear();
-            comboBoxCustomTo.Items.Clear();
-
-            comboBoxCustomFrom.Items.Add("Travel History Entry Last");
-            comboBoxCustomTo.Items.Add("None");
-
-            otherentries.Clear();
-
-            List<HistoryEntry> hlcpb = hl.FilterByEDDCommodityPricesBackwards;
-            foreach ( HistoryEntry h in hlcpb )
-            {
-                otherentries.Add(h);
-                string v = h.System.name + ":" + h.WhereAmI + " on " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
-                comboBoxCustomFrom.Items.Add(v);
-                comboBoxCustomTo.Items.Add(v);
-            }
-
-            comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = false;
-
-            if (comboBoxCustomFrom.Items.Contains(selfrom))
-                comboBoxCustomFrom.SelectedItem = selfrom;
-            else
-                comboBoxCustomFrom.SelectedIndex = 0;
-
-            if (comboBoxCustomTo.Items.Contains(selto))
-                comboBoxCustomTo.SelectedItem = selto;
-            else
-                comboBoxCustomTo.SelectedIndex = 0;
-
-            comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = true;
-        }
-
-        public void Display(HistoryEntry he)
-        {
-            last_displayed = he;
-
             DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
             SortOrder sortorder = dataGridViewMarketData.SortOrder;
 
@@ -136,28 +104,42 @@ namespace EDDiscovery.UserControls
             labelLocation.Text = "No Data";
             toolTip1.SetToolTip(labelLocation, null);
 
-            if (he != null )       // we know it has a journal entry of EDD commodity..
+            HistoryEntry left = (eddmd_left != null) ? eddmd_left : last_eddmd;       // if we have a selected left, use it, else use the last eddmd
+            HistoryEntry cargo = (eddmd_left != null) ? eddmd_left : last_he;           // if we have a selected left, use it, else use the last he
+
+            if (left != null )       // we know it has a journal entry of EDD commodity..
             {
-                JournalEDDCommodityPrices ecp = he.journalEntry as JournalEDDCommodityPrices;
+                JournalEDDCommodityPrices ecp = left.journalEntry as JournalEDDCommodityPrices;
                 List<CCommodities> list = ecp.Commodities;
 
-                if ( last_compared != null && !Object.ReferenceEquals(last_compared, he))   // if got a comparision, and not the same
+                if (eddmd_right != null && !Object.ReferenceEquals(eddmd_right, left))   // if got a comparision, and not the same
                 {
-                    list = CCommodities.Merge(list, ((JournalEDDCommodityPrices)last_compared.journalEntry).Commodities , last_compared.WhereAmI);
+                    list = CCommodities.Merge(list, ((JournalEDDCommodityPrices)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
+                }
+
+                List<MaterialCommodities> mclist = cargo.MaterialCommodity.Sort(true);      // stuff we have..  commodities only
+                List<MaterialCommodities> notfound = new List<MaterialCommodities>();
+                foreach (MaterialCommodities m in mclist)
+                {
+                    int index = list.FindIndex(x => x.name.EqualsAlphaNumOnlyNoCase(m.name));   // try and match, remove any spaces/_ and lower case it for matching
+                    if (index >= 0)
+                        list[index].CargoCarried = m.count; // found it, set cargo count..
+                    else
+                        notfound.Add(m);        // not found, add to list for bottom
                 }
 
                 FontFamily ff = new FontFamily(this.Font.Name);
                 bool buyonly = checkBoxBuyOnly.Checked;
 
-                foreach ( CCommodities c in list )
+                foreach (CCommodities c in list)
                 {
                     if (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy))
                     {
-                        object[] rowobj = { c.categoryname ,
+                        object[] rowobj = { c.type ,
                                             c.name ,
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
-                                            0,
+                                            c.CargoCarried,
                                             c.demand > 1 ? c.demand.ToString() : "" ,
                                             c.stock > 0 ? c.stock.ToString() : "" ,
                                             c.meanPrice > 0 ? c.meanPrice.ToString() : "",
@@ -178,13 +160,72 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                labelLocation.Text = he.System.name + ":" + he.WhereAmI;
-                string r = "Recorded at " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? he.EventTimeUTC.ToString() : he.EventTimeLocal.ToString());
+                foreach (MaterialCommodities m in notfound)
+                {
+                    if (m.count > 0)
+                    {
+                        object[] rowobj = {     m.type,
+                                                m.name ,
+                                                "",
+                                                "",
+                                                m.count,
+                                                "",
+                                                "",
+                                                "",
+                                                "",
+                                                "",
+                                            };
+
+                        int rowno = dataGridViewMarketData.Rows.Add(rowobj);
+                        dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText =
+                        dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item";
+                    }
+                }
+
+                labelLocation.Text = left.System.name + ":" + left.WhereAmI;
+                string r = "Recorded at " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? left.EventTimeUTC.ToString() : left.EventTimeLocal.ToString());
                 toolTip1.SetToolTip(labelLocation, r);
             }
 
             dataGridViewMarketData.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewMarketData.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+        }
+
+        private void FillComboBoxes(HistoryList hl)
+        {
+            string selfrom = comboBoxCustomFrom.Text;
+            string selto = comboBoxCustomTo.Text;
+
+            comboBoxCustomFrom.Items.Clear();
+            comboBoxCustomTo.Items.Clear();
+
+            comboBoxCustomFrom.Items.Add("Travel History Entry Last");
+            comboBoxCustomTo.Items.Add("None");
+
+            comboboxentries.Clear();
+
+            List<HistoryEntry> hlcpb = hl.FilterByEDDCommodityPricesBackwards;
+            foreach (HistoryEntry h in hlcpb)
+            {
+                comboboxentries.Add(h);
+                string v = h.System.name + ":" + h.WhereAmI + " on " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
+                comboBoxCustomFrom.Items.Add(v);
+                comboBoxCustomTo.Items.Add(v);
+            }
+
+            comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = false;
+
+            if (comboBoxCustomFrom.Items.Contains(selfrom))
+                comboBoxCustomFrom.SelectedItem = selfrom;
+            else
+                comboBoxCustomFrom.SelectedIndex = 0;
+
+            if (comboBoxCustomTo.Items.Contains(selto))
+                comboBoxCustomTo.SelectedItem = selto;
+            else
+                comboBoxCustomTo.SelectedIndex = 0;
+
+            comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = true;
         }
 
         #endregion
@@ -239,13 +280,13 @@ namespace EDDiscovery.UserControls
             {
                 if (comboBoxCustomFrom.Text.Contains("Travel History"))
                 {
-                    if (!Object.ReferenceEquals(last_displayed, last_travelselected))
-                        Display(last_travelselected);
+                    eddmd_left = null;
+                    Display();
                 }
-                else
+                else if (!Object.ReferenceEquals(comboboxentries[comboBoxCustomFrom.SelectedIndex - 1], eddmd_left))
                 {
-                    if (!Object.ReferenceEquals(otherentries[comboBoxCustomFrom.SelectedIndex - 1], last_displayed))
-                        Display(otherentries[comboBoxCustomFrom.SelectedIndex - 1]);
+                    eddmd_left = comboboxentries[comboBoxCustomFrom.SelectedIndex - 1];
+                    Display();
                 }
             }
         }
@@ -254,12 +295,12 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxCustomTo.Enabled)
             {
-                HistoryEntry new_compare = comboBoxCustomTo.SelectedIndex == 0 ? null : otherentries[comboBoxCustomTo.SelectedIndex - 1];
+                HistoryEntry new_compare = comboBoxCustomTo.SelectedIndex == 0 ? null : comboboxentries[comboBoxCustomTo.SelectedIndex - 1];
 
-                if (!Object.ReferenceEquals(last_compared, new_compare))
+                if (!Object.ReferenceEquals(eddmd_right, new_compare))
                 {
-                    last_compared = new_compare;
-                    Display(last_displayed);
+                    eddmd_right = new_compare;
+                    Display();
                 }
             }
         }
@@ -268,7 +309,7 @@ namespace EDDiscovery.UserControls
         {
             if ( checkBoxBuyOnly.Enabled )
             {
-                Display(last_displayed);
+                Display();
             }
         }
     }
