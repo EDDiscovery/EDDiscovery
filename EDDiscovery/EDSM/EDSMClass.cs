@@ -770,7 +770,7 @@ namespace EDDiscovery.EDSM
             JSONHelper.Rename(jo["distanceToArrival"], "DistanceFromArrivalLS");
             JSONHelper.Rename(jo["absoluteMagnitude"], "AbsoluteMagnitude");
             JSONHelper.Rename(jo["terraformingState"], "TerraformState");
-
+            if (jo["terraformingState"].StrNull())
 
 
 
