@@ -107,14 +107,16 @@ namespace EDDiscovery
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
         private string whereami = "";               // where we think we are
-        private int shipid = -1;                            // ship id, -1 unknown
+        private int shipid = -1;                    // ship id, -1 unknown
         private string shiptype = "Unknown";        // and the ship
-
+        private string onCrewWithCaptain = null;    // if not null, your in another multiplayer ship
+        
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
         public string WhereAmI { get { return whereami; } }
         public string ShipType { get { return shiptype; } }
         public int ShipId { get { return shipid; } }
+        public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
 
         #endregion
 
@@ -315,6 +317,7 @@ namespace EDDiscovery
                 he.shiptype = prev.shiptype;
                 he.shipid = prev.shipid;
                 he.whereami = prev.whereami;
+                he.onCrewWithCaptain = prev.onCrewWithCaptain;
             }
 
             if (je.EventTypeID == JournalTypeEnum.Location)
@@ -365,6 +368,10 @@ namespace EDDiscovery
                 he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipType;
                 he.shipid = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipId;
             }
+            else if (je.EventTypeID == JournalTypeEnum.JoinACrew)
+                he.onCrewWithCaptain = (je as EliteDangerous.JournalEvents.JournalJoinACrew).Captain;
+            else if (je.EventTypeID == JournalTypeEnum.QuitACrew || je.EventTypeID == JournalTypeEnum.LoadGame)
+                he.onCrewWithCaptain = null;
 
             return he;
         }

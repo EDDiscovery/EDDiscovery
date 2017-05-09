@@ -1032,11 +1032,11 @@ namespace EDDiscovery
 
             DatasetBuilder builder = new DatasetBuilder();
 
-            List<HistoryEntry> filtered = _systemlist.Where(s => s.EventTimeLocal >= startTime && s.EventTimeLocal <= endTime).OrderBy(s => s.EventTimeUTC).ToList();
+            List<HistoryEntry> filtered = _systemlist.Where(s => s.EventTimeLocal >= startTime && s.EventTimeLocal <= endTime && s.MultiPlayer == false).OrderBy(s => s.EventTimeUTC).ToList();
 
-            _datasets_systems = builder.BuildSystems(drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked, 
-                            drawADiscOnStarsWithPositionToolStripMenuItem.Checked, 
-                            useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked ? Color.White : Color.Transparent, 
+            _datasets_systems = builder.BuildSystems(drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked,
+                            drawADiscOnStarsWithPositionToolStripMenuItem.Checked,
+                            useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked ? Color.White : Color.Transparent,
                             filtered);
         }
 
