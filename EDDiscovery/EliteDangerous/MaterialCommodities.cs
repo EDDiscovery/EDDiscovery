@@ -43,7 +43,7 @@ namespace EDDiscovery.EliteDangerous
         public static string MaterialEncodedCategory = "Encoded";
         public static string MaterialManufacturedCategory = "Manufactured";
 
-        public static string CommodityTypeRare = "Rare";
+        public static string CommodityTypeRareGoods = "Rare Goods";
 
         private static Dictionary<string, MaterialCommodityDB> cachelist = new Dictionary<string, MaterialCommodityDB>();
 
@@ -96,7 +96,7 @@ namespace EDDiscovery.EliteDangerous
 
         private static bool AddNewRare(string fdname, string name)
         {
-            return AddNewTypeF(CommodityCategory, Color.Green, name, CommodityTypeRare, "", fdname);
+            return AddNewTypeF(CommodityCategory, Color.Green, name, CommodityTypeRareGoods, "", fdname);
         }
 
         private static bool AddNewType(string c, string namelist, string t)
