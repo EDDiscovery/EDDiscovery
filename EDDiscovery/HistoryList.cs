@@ -118,6 +118,11 @@ namespace EDDiscovery
         public int ShipId { get { return shipid; } }
         public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
 
+        public bool ContainsRares() // function due to debugger and cost of working out
+        {
+            return materialscommodities != null && materialscommodities.ContainsRares();
+        }
+
         #endregion
 
         #region Constructors

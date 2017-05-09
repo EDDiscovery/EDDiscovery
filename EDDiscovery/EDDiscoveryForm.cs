@@ -468,20 +468,27 @@ namespace EDDiscovery
                 }
             }
 
-            if ( Capi.LoggedIn )
+            if (Capi.LoggedIn)
             {
-                try
+                if (Controller.history != null && Controller.history.GetLast.ContainsRares())
                 {
-                    Capi.GetProfile();
-                    OnNewCompanionAPIData?.Invoke(Capi, null);
+                    LogLine("Not performing Companion API get due to carrying rares");
                 }
-                catch (Exception ex)
-                {
-                    LogLineHighlight("Companion API get failed: " + ex.Message);
-                    if (!(ex is CompanionAPI.CompanionAppException))
-                        LogLineHighlight(ex.StackTrace);
+                else
+                { 
+                    try
+                    {
+                        Capi.GetProfile();
+                        OnNewCompanionAPIData?.Invoke(Capi, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogLineHighlight("Companion API get failed: " + ex.Message);
+                        if (!(ex is CompanionAPI.CompanionAppException))
+                            LogLineHighlight(ex.StackTrace);
 
-                    // what do we do TBD
+                        // what do we do TBD
+                    }
                 }
             }
         }
@@ -494,24 +501,31 @@ namespace EDDiscovery
             {
                 if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
                 {
-                    System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
-                    try
+                    if (he.ContainsRares())
                     {
-                        Capi.GetProfile();
-                        JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, Capi.Profile.StarPort.jcommodities);
-                        if (entry != null)
-                        {
-                            Controller.NewEntry(entry);
-                            OnNewCompanionAPIData?.Invoke(Capi, he);
-
-                            if (EDCommander.Current.SyncToEddn)
-                                SendPricestoEDDN(he);
-
-                        }
+                        LogLine("Not performing Companion API get due to carrying rares");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        LogLineHighlight("Companion API get failed: " + ex.Message);
+                        System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
+                        try
+                        {
+                            Capi.GetProfile();
+                            JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, Capi.Profile.StarPort.jcommodities);
+                            if (entry != null)
+                            {
+                                Controller.NewEntry(entry);
+                                OnNewCompanionAPIData?.Invoke(Capi, he);
+
+                                if (EDCommander.Current.SyncToEddn)
+                                    SendPricestoEDDN(he);
+
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogLineHighlight("Companion API get failed: " + ex.Message);
+                        }
                     }
                 }
             }
