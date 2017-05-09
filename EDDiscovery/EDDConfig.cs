@@ -56,7 +56,6 @@ namespace EDDiscovery
         #region Discrete Controls
 
         private bool _EDSMLog;
-        private bool _canSkipSlowUpdates = false;
         private bool _useNotifyIcon = false;
         private bool _orderrowsinverted = false;
         private bool _minimizeToNotifyIcon = false;
@@ -84,22 +83,6 @@ namespace EDDiscovery
             }
         }
 
-        public bool CanSkipSlowUpdates
-        {
-            get
-            {
-#if DEBUG
-                return _canSkipSlowUpdates;
-#else
-                return false;
-#endif               
-            }
-            set
-            {
-                _canSkipSlowUpdates = value;
-                SQLiteConnectionUser.PutSettingBool("CanSkipSlowUpdates", value);
-            }
-        }
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -129,7 +112,6 @@ namespace EDDiscovery
                 SQLiteConnectionUser.PutSettingBool("OrderRowsInverted", value);
             }
         }
-
 
         /// <summary>
         /// Controls whether or not the main window will be hidden to the
@@ -277,7 +259,6 @@ namespace EDDiscovery
             {
                 _useNotifyIcon = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", false, conn);
                 _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
-                _canSkipSlowUpdates = SQLiteConnectionUser.GetSettingBool("CanSkipSlowUpdates", false, conn);
                 _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
                 _minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
                 _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
@@ -391,7 +372,9 @@ namespace EDDiscovery
             public string OldDatabasePath { get; private set; }
             public bool StoreDataInProgramDirectory { get; private set; }
             public bool NoWindowReposition { get; private set; }
-            public bool Debug { get; private set; }
+            public bool ActionButton { get; private set; }
+            public bool NoLoad { get; private set; }
+            public bool NoSystemsLoad { get; private set; }
             public bool TraceLog { get; private set; }
             public bool LogExceptions { get; private set; }
             public EDSMServerType EDSMServerType { get; private set; } = EDSMServerType.Normal;
@@ -558,7 +541,9 @@ namespace EDDiscovery
                         case "norepositionwindow": NoWindowReposition = true; break;
                         case "portable": StoreDataInProgramDirectory = true; break;
                         case "nrw": NoWindowReposition = true; break;
-                        case "debug": Debug = true; break;
+                        case "showactionbutton": ActionButton = true; break;
+                        case "noload": NoLoad = true; break;
+                        case "nosystems": NoSystemsLoad = true; break;
                         case "tracelog": TraceLog = true; break;
                         case "logexceptions": LogExceptions = true; break;
                         case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
