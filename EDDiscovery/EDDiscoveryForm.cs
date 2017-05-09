@@ -239,7 +239,7 @@ namespace EDDiscovery
                 savedRouteExpeditionControl1.LoadControl();
                 travelHistoryControl1.LoadControl();
 
-                if (EDDConfig.Options.Debug)
+                if (EDDConfig.Options.ActionButton)
                 {
                     buttonReloadActions.Visible = true;
                 }

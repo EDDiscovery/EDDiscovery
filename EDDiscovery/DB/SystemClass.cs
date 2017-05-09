@@ -1959,21 +1959,14 @@ namespace EDDiscovery.DB
                 logLine("Indexing systems table");
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
 
-                if (EDDConfig.Instance.CanSkipSlowUpdates)
+                lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+                if (DateTime.UtcNow.Subtract(lastmod).TotalHours >= 1)
                 {
-                    logLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
-                }
-                else
-                {
-                    lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
-                    if (DateTime.UtcNow.Subtract(lastmod).TotalHours >= 1)
-                    {
-                        logLine("Checking for new EDSM systems (may take a few moments).");
-                        EDSMClass edsm = new EDSMClass();
-                        long updates = edsm.GetNewSystems(cancelRequested, reportProgress, logLine);
-                        logLine("EDSM updated " + updates + " systems.");
-                        state.performhistoryrefresh |= (updates > 0);
-                    }
+                    logLine("Checking for new EDSM systems (may take a few moments).");
+                    EDSMClass edsm = new EDSMClass();
+                    long updates = edsm.GetNewSystems(cancelRequested, reportProgress, logLine);
+                    logLine("EDSM updated " + updates + " systems.");
+                    state.performhistoryrefresh |= (updates > 0);
                 }
             }
 

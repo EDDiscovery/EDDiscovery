@@ -275,7 +275,8 @@ namespace EDDiscovery
             stardistRequested.Set();
         }
         #endregion
-        #endregion
+
+        #endregion  // MAJOR REGION
 
         #region Implementation
         #region Variables
@@ -313,38 +314,6 @@ namespace EDDiscovery
         #endregion
 
         #region Initialization
-        private void BackgroundInit()
-        {
-            readyForInitialLoad.WaitOne();
-            StarScan.LoadBodyDesignationMap();
-            downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
-            CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
-            ReportProgress(-1, "");
-            InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
-            if (PendingClose) return;
-
-            if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
-            {
-                if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
-                {
-                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
-                }
-            }
-
-            if (PendingClose) return;
-            LogLine("Reading travel history");
-            DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });
-
-            if (PendingClose) return;
-            if (syncstate.performeddbsync || syncstate.performedsmsync)
-            {
-                string databases = (syncstate.performedsmsync && syncstate.performeddbsync) ? "EDSM and EDDB" : ((syncstate.performedsmsync) ? "EDSM" : "EDDB");
-
-                LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
-                                "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
-                                "Please continue running ED Discovery until refresh is complete.");
-            }
-        }
 
         private static void InitializeDatabases()
         {
@@ -618,7 +587,10 @@ namespace EDDiscovery
         #region Background Worker Threads
         private void BackgroundWorkerThread()
         {
+            readyForInitialLoad.WaitOne();
+
             BackgroundInit();
+
             if (!PendingClose)
             {
                 backgroundRefreshWorker = new Thread(BackgroundRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
@@ -628,7 +600,9 @@ namespace EDDiscovery
 
                 try
                 {
-                    DoPerformSync();
+                    if (!EDDConfig.Options.NoSystemsLoad)
+                        DoPerformSync();
+
                     while (!PendingClose)
                     {
                         int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
@@ -661,6 +635,49 @@ namespace EDDiscovery
             {
                 OnFinalClose?.Invoke();
             });
+        }
+
+
+        private void BackgroundInit()
+        {
+            StarScan.LoadBodyDesignationMap();
+            if (!EDDConfig.Options.NoSystemsLoad)
+            {
+                downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
+                CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
+            }
+
+            ReportProgress(-1, "");
+            InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
+
+            if (PendingClose) return;
+
+            if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
+            {
+                if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
+                {
+                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
+                }
+            }
+
+            if (PendingClose) return;
+            LogLine("Reading travel history");
+
+            if (!EDDConfig.Options.NoLoad)
+            {
+                DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });
+            }
+
+            if (PendingClose) return;
+
+            if (syncstate.performeddbsync || syncstate.performedsmsync)
+            {
+                string databases = (syncstate.performedsmsync && syncstate.performeddbsync) ? "EDSM and EDDB" : ((syncstate.performedsmsync) ? "EDSM" : "EDDB");
+
+                LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
+                                "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
+                                "Please continue running ED Discovery until refresh is complete.");
+            }
         }
 
         private void BackgroundRefreshWorkerThread()
@@ -702,6 +719,10 @@ namespace EDDiscovery
                 }
             }
         }
+
+        #endregion
+
+        #region Star Distance
 
         private class StardistRequest
         {

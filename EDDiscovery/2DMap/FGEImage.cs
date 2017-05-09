@@ -423,14 +423,6 @@ namespace EDDiscovery
 
         public static Task<bool> DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
         {
-            if (EDDConfig.Instance.CanSkipSlowUpdates)
-            {
-                logLine("Skipping checking for new maps (DEBUG option).");
-                var tcs = new TaskCompletionSource<bool>();
-                tcs.SetResult(false);
-                return tcs.Task;
-            }
-
             try
             {
                 string mapsdir = Path.Combine(Tools.GetAppDataDirectory(), "Maps");
