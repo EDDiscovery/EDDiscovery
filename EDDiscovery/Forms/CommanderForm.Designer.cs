@@ -66,6 +66,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
+            this.label7 = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.groupBoxCustom4.SuspendLayout();
             this.groupBoxCustom3.SuspendLayout();
@@ -180,7 +181,7 @@
             this.buttonExtCAPI.BorderColorScaling = 1.25F;
             this.buttonExtCAPI.ButtonColorScaling = 0.5F;
             this.buttonExtCAPI.ButtonDisabledScaling = 0.5F;
-            this.buttonExtCAPI.Location = new System.Drawing.Point(12, 60);
+            this.buttonExtCAPI.Location = new System.Drawing.Point(12, 69);
             this.buttonExtCAPI.Name = "buttonExtCAPI";
             this.buttonExtCAPI.Size = new System.Drawing.Size(102, 23);
             this.buttonExtCAPI.TabIndex = 8;
@@ -193,7 +194,7 @@
             // 
             this.textBoxBorderCompanionPassword.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderCompanionPassword.BorderColorScaling = 0.5F;
-            this.textBoxBorderCompanionPassword.Location = new System.Drawing.Point(344, 60);
+            this.textBoxBorderCompanionPassword.Location = new System.Drawing.Point(344, 69);
             this.textBoxBorderCompanionPassword.Name = "textBoxBorderCompanionPassword";
             this.textBoxBorderCompanionPassword.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCompanionPassword.TabIndex = 7;
@@ -204,7 +205,7 @@
             // 
             this.textBoxBorderCompanionLogin.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderCompanionLogin.BorderColorScaling = 0.5F;
-            this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(344, 30);
+            this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(344, 39);
             this.textBoxBorderCompanionLogin.Name = "textBoxBorderCompanionLogin";
             this.textBoxBorderCompanionLogin.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCompanionLogin.TabIndex = 5;
@@ -325,6 +326,7 @@
             this.groupBoxCustom4.BackColorScaling = 0.5F;
             this.groupBoxCustom4.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustom4.BorderColorScaling = 0.5F;
+            this.groupBoxCustom4.Controls.Add(this.label7);
             this.groupBoxCustom4.Controls.Add(this.labelCAPIState);
             this.groupBoxCustom4.Controls.Add(this.buttonExtCAPI);
             this.groupBoxCustom4.Controls.Add(this.textBoxBorderCompanionPassword);
@@ -345,7 +347,7 @@
             // labelCAPIState
             // 
             this.labelCAPIState.AutoSize = true;
-            this.labelCAPIState.Location = new System.Drawing.Point(10, 30);
+            this.labelCAPIState.Location = new System.Drawing.Point(10, 39);
             this.labelCAPIState.Name = "labelCAPIState";
             this.labelCAPIState.Size = new System.Drawing.Size(93, 13);
             this.labelCAPIState.TabIndex = 9;
@@ -354,7 +356,7 @@
             // labelCAPIPassword
             // 
             this.labelCAPIPassword.AutoSize = true;
-            this.labelCAPIPassword.Location = new System.Drawing.Point(190, 60);
+            this.labelCAPIPassword.Location = new System.Drawing.Point(190, 69);
             this.labelCAPIPassword.Name = "labelCAPIPassword";
             this.labelCAPIPassword.Size = new System.Drawing.Size(85, 13);
             this.labelCAPIPassword.TabIndex = 6;
@@ -363,7 +365,7 @@
             // labelCAPILogin
             // 
             this.labelCAPILogin.AutoSize = true;
-            this.labelCAPILogin.Location = new System.Drawing.Point(190, 30);
+            this.labelCAPILogin.Location = new System.Drawing.Point(190, 39);
             this.labelCAPILogin.Name = "labelCAPILogin";
             this.labelCAPILogin.Size = new System.Drawing.Size(50, 13);
             this.labelCAPILogin.TabIndex = 4;
@@ -518,6 +520,17 @@
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(10, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(530, 13);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "WARNING!!  Due to a bug in Elite Dangerous dont use this if you are trading with " +
+    "rare gods!";
+            // 
             // CommanderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -592,5 +605,6 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label labelCAPIState;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label label7;
     }
 }

@@ -142,7 +142,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(314, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -157,7 +157,7 @@ namespace EDDiscovery
             this.showAllPopoutsInTaskBarToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // show2DMapsToolStripMenuItem
@@ -214,7 +214,7 @@ namespace EDDiscovery
             // 
             this.showAllInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.sendtext;
             this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
-            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.showAllInTaskBarToolStripMenuItem.Text = "&Show All In Task Bar";
             this.showAllInTaskBarToolStripMenuItem.Click += new System.EventHandler(this.showAllInTaskBarToolStripMenuItem_Click);
             // 
@@ -222,7 +222,7 @@ namespace EDDiscovery
             // 
             this.turnOffAllTransparencyToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.dockinggranted;
             this.turnOffAllTransparencyToolStripMenuItem.Name = "turnOffAllTransparencyToolStripMenuItem";
-            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.turnOffAllTransparencyToolStripMenuItem.Text = "&Turn Off All Transparency";
             this.turnOffAllTransparencyToolStripMenuItem.Click += new System.EventHandler(this.turnOffAllTransparencyToolStripMenuItem_Click);
             // 
@@ -336,6 +336,7 @@ namespace EDDiscovery
             this.companionAPILoginToolStripMenuItem.Name = "companionAPILoginToolStripMenuItem";
             this.companionAPILoginToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.companionAPILoginToolStripMenuItem.Text = "Companion API Login";
+            this.companionAPILoginToolStripMenuItem.Visible = false;
             this.companionAPILoginToolStripMenuItem.Click += new System.EventHandler(this.companionAPILoginToolStripMenuItem_Click);
             // 
             // addOnsToolStripMenuItem
