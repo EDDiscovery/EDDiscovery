@@ -624,10 +624,15 @@ namespace EDDiscovery
             return false;
         }
 
-        public override string ToString()
+        public override string ToString(bool full)
         {
             string ret = "";
             bool multi = conditionlist.Count > 1;
+
+            if ( full )
+            {
+                ret += eventname +"," + 
+            }
 
             if (multi)
                 ret += "(";

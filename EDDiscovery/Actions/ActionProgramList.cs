@@ -78,6 +78,14 @@ namespace EDDiscovery.Actions
             return evt;
         }
 
+        public override string ToString()
+        {
+            foreach (ActionProgram ap in programs)
+            {
+            }
+            return "";
+        }
+
         public string FromJSON(string s)
         {
             try

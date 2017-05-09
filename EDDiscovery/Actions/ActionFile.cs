@@ -47,6 +47,7 @@ namespace EDDiscovery.Actions
         public string filepath;
         public string name;
         public bool enabled;
+        public bool astext;
 
         public static string ReadFile( string filename , out ActionFile af)
         {
@@ -102,19 +103,27 @@ namespace EDDiscovery.Actions
 
         public bool SaveFile()
         {
-            JObject jo = new JObject();
-            jo["Conditions"] = actionfieldfilter.GetJSONObject();
-            jo["Programs"] = actionprogramlist.ToJSONObject();
-            jo["Enabled"] = enabled;
-            jo["Install"] = installationvariables.ToJSONObject();
-
-            string json = jo.ToString(Formatting.Indented);
-
             try
             {
                 using (StreamWriter sr = new StreamWriter(filepath))
                 {
-                    sr.Write(json);
+                    if (astext)
+                    {
+                        string progs = actionprogramlist.ToString();
+                        sr.Write(progs);
+                    }
+                    else
+                    {
+                        JObject jo = new JObject();
+                        jo["Conditions"] = actionfieldfilter.GetJSONObject();
+                        jo["Programs"] = actionprogramlist.ToJSONObject();
+                        jo["Enabled"] = enabled;
+                        jo["Install"] = installationvariables.ToJSONObject();
+
+                        string json = jo.ToString(Formatting.Indented);
+                        sr.Write(json);
+                    }
+
                     sr.Close();
                 }
 
