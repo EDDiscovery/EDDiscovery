@@ -295,6 +295,8 @@ namespace EDDiscovery
                 he.whereami = (je as EliteDangerous.JournalEvents.JournalFSDJump).StarSystem;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
+                he.onCrewWithCaptain = null;    // can't be in a crew at this point
+
                 EliteDangerous.JournalEvents.JournalLoadGame jl = je as EliteDangerous.JournalEvents.JournalLoadGame;
 
                 he.landed = jl.StartLanded;
@@ -319,7 +321,7 @@ namespace EDDiscovery
             }
             else if (je.EventTypeID == JournalTypeEnum.JoinACrew)
                 he.onCrewWithCaptain = (je as EliteDangerous.JournalEvents.JournalJoinACrew).Captain;
-            else if (je.EventTypeID == JournalTypeEnum.QuitACrew || je.EventTypeID == JournalTypeEnum.LoadGame)
+            else if (je.EventTypeID == JournalTypeEnum.QuitACrew )
                 he.onCrewWithCaptain = null;
 
             if (prev != null && prev.travelling)      // if we are travelling..
