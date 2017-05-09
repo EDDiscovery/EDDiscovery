@@ -235,6 +235,8 @@ namespace EDDiscovery.Actions
                         progname = line;
                     else if (cmd.Equals("File", StringComparison.InvariantCultureIgnoreCase))
                         storedinfile = line;
+                    else if (cmd.Equals("ENDPROGRAM", StringComparison.InvariantCultureIgnoreCase))
+                        break;
                     else
                     {
                         Action a = Action.CreateAction(cmd, line, comment);
@@ -278,7 +280,7 @@ namespace EDDiscovery.Actions
                                         indentpos = indents[tolevel] + 4;       // and our indent should continue 4 in, so we don't match against this when we do indent
                                     }
                                     else
-                                    { 
+                                    {
                                         a.LevelUp = structlevel - level[tolevel];
                                         structlevel = level[tolevel];   // if found, we are at that.. except..
                                         indentpos = indents[tolevel]; // and back to this level
@@ -311,37 +313,48 @@ namespace EDDiscovery.Actions
             return (err.Length == 0 && progname.Length>0) ? new ActionProgram(progname, storedinfile, prog) : null;
         }
 
-        public bool SaveText(string file)                       // write to file the program
+        public override string ToString()
         {
             CalculateLevels();
 
+            StringBuilder sb = new StringBuilder(256);
+
+            sb.AppendLine("NAME " + Name);
+            if (StoredInFile != null)
+                sb.AppendLine("FILE " + StoredInFile);
+
+            sb.AppendLine("");
+
+            foreach (Action act in programsteps)
+            {
+                if (act != null)    // don't include ones not set..
+                {
+                    string output = new String(' ', act.calcDisplayLevel * 4) + act.Name + " " + act.UserData;
+
+                    if (act.Comment.Length > 0)
+                        output += new string(' ', output.Length < 64 ? (64 - output.Length) : 4) + "// " + act.Comment;
+
+                    sb.AppendLine(output);
+                    if (act.Whitespace > 0)
+                        sb.AppendLine("");
+                }
+            }
+
+            sb.AppendLine("");
+            sb.AppendLine("ENDPROGRAM");
+
+            return sb.ToNullSafeString();
+        }
+
+        public bool SaveText(string file)                       // write to file the program
+        {
             try
             {
                 using (System.IO.StreamWriter sr = new System.IO.StreamWriter(file))
                 {
-                    sr.WriteLine("NAME " + Name);
-                    if ( StoredInFile != null )
-                        sr.WriteLine("FILE " + StoredInFile);
-
-                    sr.WriteLine("");
-
-                    foreach (Action act in programsteps)
-                    {
-                        if (act != null)    // don't include ones not set..
-                        {
-                            string output = new String(' ', act.calcDisplayLevel * 4) + act.Name + " " + act.UserData;
-
-                            if (act.Comment.Length > 0)
-                                output += new string(' ', output.Length < 64 ? (64 - output.Length) : 4) + "// " + act.Comment;
-
-                            sr.WriteLine(output);
-                            if (act.Whitespace > 0)
-                                sr.WriteLine("");
-                        }
-                    }
+                    sr.Write(ToString());
+                    return true;
                 }
-
-                return true;
             }
             catch
             {
