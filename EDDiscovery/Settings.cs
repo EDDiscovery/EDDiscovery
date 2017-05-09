@@ -89,7 +89,6 @@ namespace EDDiscovery
         public void InitSettingsTab()
         {
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
-            checkboxSkipSlowUpdates.Checked = EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates;
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxMinimizeToNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon;
             checkBoxFocusNewSystem.Checked = EDDiscoveryForm.EDDConfig.FocusOnNewSystem;
@@ -101,9 +100,6 @@ namespace EDDiscovery
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
-#if DEBUG
-            checkboxSkipSlowUpdates.Visible = true;
-#endif
             HomeSystem = SystemClass.GetSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
 
             textBoxDefaultZoom.Text = SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
@@ -128,7 +124,6 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
 
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
             EDDiscoveryForm.EDDConfig.UseNotifyIcon = checkBoxUseNotifyIcon.Checked;
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
