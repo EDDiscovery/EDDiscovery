@@ -84,7 +84,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     public class CCommodities
     {
         public int id { get; private set; }
-        public string name { get; private set; }
+        public string name { get; private set; }            // NAME as given by the CAPI, which is normal text, not fdname, but is not perfect (some conjoining)
         public int buyPrice { get; private set; }
         public int sellPrice { get; private set; }
         public int meanPrice { get; private set; }
@@ -92,13 +92,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int stockBracket { get; private set; }
         public int stock { get; private set; }
         public int demand { get; private set; }
-        public string categoryname { get; private set; }
+        public string type { get; private set; }            // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
         public List<string> StatusFlags { get; private set; }
 
         public string ComparisionLR { get; private set; }       // NOT in Frontier data, used for market data UC during merge
         public string ComparisionRL { get; private set; }       // NOT in Frontier data, used for market data UC during merge
         public bool ComparisionRightOnly { get; private set; }  // NOT in Frontier data, Exists in right data only
-        public bool ComparisionBuy { get; private set; }        // NOT in Frontier data, You can buy one or both sets
+        public bool ComparisionBuy { get; private set; }        // NOT in Frontier data, its for sale at either left or right
+        public int CargoCarried { get; set; }                  // NOT in Frontier data, cargo currently carried for this item
 
         public CCommodities(JObject jo)
         {
@@ -109,7 +110,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             id = other.id; name = other.name; buyPrice = other.buyPrice; sellPrice = other.sellPrice; meanPrice = other.meanPrice;
             demandBracket = other.demandBracket; stockBracket = other.stockBracket; stock = other.stock; demand = other.demand;
-            categoryname = other.categoryname;
+            type = other.type;
             StatusFlags = new List<string>(other.StatusFlags);
             ComparisionLR = ComparisionRL = "";
         }
@@ -127,7 +128,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 stockBracket = JSONHelper.GetInt(jo["stockBracket"]);
                 stock = JSONHelper.GetInt(jo["stock"]);
                 demand = JSONHelper.GetInt(jo["demand"]);
-                categoryname = JSONHelper.GetStringDef(jo["categoryname"]);
+                type = JSONHelper.GetStringDef(jo["categoryname"]);
 
                 List<string> StatusFlags = new List<string>();
                 foreach (dynamic statusFlag in jo["statusFlags"])
@@ -148,14 +149,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override string ToString()
         {
             return string.Format("{0} : {1} Buy {2} Sell {3} Mean {4}" + System.Environment.NewLine +
-                                 "Stock {5} Demand {6}", categoryname, name, buyPrice, sellPrice, meanPrice, stock, demand);
+                                 "Stock {5} Demand {6}", type, name, buyPrice, sellPrice, meanPrice, stock, demand);
         }
 
         public static void Sort(List<CCommodities> list)
         {
             list.Sort(delegate (CCommodities left, CCommodities right)
             {
-                int cat = left.categoryname.CompareTo(right.categoryname);
+                int cat = left.type.CompareTo(right.type);
                 if (cat == 0)
                     cat = left.name.CompareTo(right.name);
                 return cat;
