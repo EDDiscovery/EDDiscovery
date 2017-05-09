@@ -751,6 +751,10 @@ namespace EDDiscovery.EDSM
                 JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
                 JSONHelper.Rename(jo["subType"], "PlanetClass");
                 JSONHelper.Rename(jo["radius"], "Radius");
+
+                jo["PlanetClass"] = EDSMPlanet2JournalName(jo["PlanetClass"].Str());
+
+
             }
 
             JSONHelper.Rename(jo["belts"], "Rings");
@@ -800,6 +804,23 @@ namespace EDDiscovery.EDSM
 
 
             return jo;
+        }
+
+
+        private static Dictionary<string, string> EDSM2PlanetNames = new Dictionary<string, string>()
+        {
+            // EDSM name    (lower case)            Journal name                        
+            { "high metal content world" ,          "High metal content body"},
+            { "class i gas giant",                  "Sudarsky class IV gas giant"},
+            { "class ii gas giant",                 "Sudarsky class II gas giant"},
+            { "class iii gas giant",                "Sudarsky class III gas giant"},
+            { "class iv gas giant",                 "Sudarsky class IV gas giant"},
+            { "class v gas giant",                  "Sudarsky class V gas giant"},
+        };
+
+        static public string EDSMPlanet2JournalName(string inname)
+        {
+            return EDSM2PlanetNames.ContainsKey(inname.ToLower()) ? EDSM2PlanetNames[inname.ToLower()] : inname;
         }
 
 
