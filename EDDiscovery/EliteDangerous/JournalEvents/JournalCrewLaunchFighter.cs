@@ -1,5 +1,4 @@
-﻿
-/*
+﻿/*
  * Copyright © 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -19,29 +18,27 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    //    When written: When another player leaves your ship's crew
+    //    When written: When another player joins your ship's crew
     //Parameters:
     //•	Crew: player's commander name
-    // Role:
-    // { "timestamp":"2017-04-11T18:11:06Z", "event":"CrewMemberRoleChange", "Crew":"[cmdr name]", "Role":"Idle" }
-    [JournalEntryType(JournalTypeEnum.CrewMemberRoleChange)]
-    public class JournalCrewMemberRoleChange : JournalEntry
+    //{ "timestamp":"2017-04-19T20:12:53Z", "event":"CrewLaunchFighter", "Crew":"[cmdr name]" }
+
+    [JournalEntryType(JournalTypeEnum.CrewLaunchFighter)]
+    public class JournalCrewLaunchFighter : JournalEntry
     {
-        public JournalCrewMemberRoleChange(JObject evt) : base(evt, JournalTypeEnum.CrewMemberRoleChange)
+        public JournalCrewLaunchFighter(JObject evt) : base(evt, JournalTypeEnum.CrewLaunchFighter)
         {
             Crew = evt["Crew"].Str();
-            Role = evt["Role"].Str();
+
         }
         public string Crew { get; set; }
-        public string Role { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crewmemberjoins; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            //info = Crew;
-            info = Tools.FieldBuilder("Crew", Crew, "Role", Role);
+            info = Crew;
             detailed = "";
         }
     }
