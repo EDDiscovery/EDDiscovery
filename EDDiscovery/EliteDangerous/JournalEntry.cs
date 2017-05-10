@@ -54,6 +54,7 @@ namespace EDDiscovery.EliteDangerous
         CrewHire = 128,
         CrewMemberJoins = 1270,
         CrewMemberQuits = 1280,
+        CrewMemberRoleChange = 1285,
         DataScanned = 1030,
         DatalinkScan = 130,
         DatalinkVoucher = 1020,
