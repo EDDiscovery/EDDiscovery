@@ -299,6 +299,7 @@
       <DependentUpon>TabStrip.cs</DependentUpon>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChanged.cs" />
     <Compile Include="EliteDangerous\MaterialCommodities.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
