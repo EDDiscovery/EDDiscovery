@@ -367,7 +367,8 @@ namespace EDDiscovery.EliteDangerous
             jr.CommanderId = (int)(long)dr["CommanderId"];
             if (jr.EventTimeUTC == default(DateTime))
                 jr.EventTimeUTC = ((DateTime)dr["EventTime"]).ToUniversalTime();
-            jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
+            if (jr.EventTypeID == JournalTypeEnum.Unknown)
+                jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
             jr.EdsmID = (long)dr["EdsmID"];
             jr.Synced = (int)(long)dr["Synced"];
             return jr;
