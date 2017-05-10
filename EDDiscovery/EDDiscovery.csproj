@@ -1152,6 +1152,8 @@
     <None Include="Resources\excel.png" />
     <None Include="Resources\Calendar.png" />
     <None Include="Resources\engineercraft.png" />
+    <None Include="Resources\High_metal_content_world_White3.png" />
+    <None Include="Resources\High_metal_content_world_White3.bmp" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
