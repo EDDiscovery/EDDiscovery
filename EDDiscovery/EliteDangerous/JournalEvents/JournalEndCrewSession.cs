@@ -27,7 +27,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEndCrewSession(JObject evt) : base(evt, JournalTypeEnum.EndCrewSession)
         {
-            OnCrime = evt["Name"].Bool();
+            OnCrime = evt["OnCrime"].Bool();
 
         }
         public bool OnCrime { get; set; }
