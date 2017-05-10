@@ -52,6 +52,7 @@ namespace EDDiscovery.EliteDangerous
         CrewAssign = 126,
         CrewFire = 127,
         CrewHire = 128,
+        CrewLaunchFighter = 1268, 
         CrewMemberJoins = 1270,
         CrewMemberQuits = 1280,
         CrewMemberRoleChange = 1285,
