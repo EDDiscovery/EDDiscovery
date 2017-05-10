@@ -262,7 +262,7 @@ namespace EDDiscovery.EliteDangerous
             }
             if (searchstr.Contains("hot"))
             {
-                atmprop |= EDAtmosphereProperty.Thin;
+                atmprop |= EDAtmosphereProperty.Hot;
                 searchstr = searchstr.Replace("hot", "");
             }
 
