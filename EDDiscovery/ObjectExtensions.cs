@@ -612,6 +612,13 @@ public static class ObjectExtensionsStrings
         return left.Equals(right);
     }
 
+    public static string RemoveTrailingCZeros(this string str )
+    {
+        int index = str.IndexOf('\0');
+        if (index >= 0)
+            str = str.Substring(0, index);
+        return str;
+    }
 }
 
 public static class ObjectExtensionsNumbersBool
