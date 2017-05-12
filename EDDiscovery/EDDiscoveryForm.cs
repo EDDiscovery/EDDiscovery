@@ -520,9 +520,9 @@ namespace EDDiscovery
                                 // Todo add a retry later...
                             }
 
-                            if (!dockevt.StationName.Equals(Capi.Profile.StarPort))
+                            if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
                             {
-                                LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort);
+                                LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort.name);
                                 // Todo add a retry later...
                             }
                             else
