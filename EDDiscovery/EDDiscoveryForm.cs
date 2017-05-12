@@ -75,6 +75,9 @@ namespace EDDiscovery
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
 
+        Joystick.JoystickWindows joystick;
+        Joystick.JoystickIntoActions joystickactions;
+
         public CompanionAPI.CompanionAPIClass Capi { get; private set; } = new CompanionAPI.CompanionAPIClass();
 
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
@@ -211,6 +214,11 @@ namespace EDDiscovery
             audioqueuespeech = new Audio.AudioQueue(audiodriverspeech);
 
             actioncontroller = new Actions.ActionController(this, Controller);
+
+            joystick = new Joystick.JoystickWindows();
+            joystickactions = new Joystick.JoystickIntoActions(joystick, actioncontroller);
+            joystickactions.Start();
+            EliteDangerous.BindingsFile bf = new BindingsFile();
 
             ApplyTheme();
 
@@ -592,6 +600,8 @@ namespace EDDiscovery
             audiodriverspeech.Dispose();
             audioqueuewave.Dispose();
             audiodriverwave.Dispose();
+
+            joystickactions.Dispose();
 
             Close();
             Application.Exit();

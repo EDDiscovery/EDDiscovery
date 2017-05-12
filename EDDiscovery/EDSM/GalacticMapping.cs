@@ -32,6 +32,8 @@ namespace EDDiscovery.EDSM
         public List<GalacticMapObject> galacticMapObjects = null;
         public List<GalMapType> galacticMapTypes = null;
 
+        public bool Loaded { get { return galacticMapObjects != null; } }
+
         public GalacticMapping()
         {
             galacticMapTypes = GalMapType.GetTypes();          // we always have the types.
