@@ -69,14 +69,17 @@ namespace EDDiscovery
         public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public Audio.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
 
+        public BindingsFile FrontierBindings { get { return frontierbindings; } }   
+
         Audio.IAudioDriver audiodriverwave;
         Audio.AudioQueue audioqueuewave;
         Audio.IAudioDriver audiodriverspeech;
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
 
-        Joystick.JoystickWindows joystick;
+        Joystick.JoystickInterface joystick;
         Joystick.JoystickIntoActions joystickactions;
+        BindingsFile frontierbindings;
 
         public CompanionAPI.CompanionAPIClass Capi { get; private set; } = new CompanionAPI.CompanionAPIClass();
 
@@ -215,10 +218,13 @@ namespace EDDiscovery
 
             actioncontroller = new Actions.ActionController(this, Controller);
 
+            frontierbindings = new BindingsFile();
+            frontierbindings.LoadBindingsFile();
+
             joystick = new Joystick.JoystickWindows();
-            joystickactions = new Joystick.JoystickIntoActions(joystick, actioncontroller);
+
+            joystickactions = new Joystick.JoystickIntoActions(joystick, frontierbindings, actioncontroller);
             joystickactions.Start();
-            EliteDangerous.BindingsFile bf = new BindingsFile();
 
             ApplyTheme();
 

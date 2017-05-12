@@ -3,30 +3,59 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace EDDiscovery.EliteDangerous
 {
     public class BindingsFile
     {
+        public bool Loaded { get { return devices.Count > 0; } }
+
         public class DeviceKeyPair
         {
             public string device;
             public string key;
         }
 
+        [System.Diagnostics.DebuggerDisplay("Assignment {assignedfunc} {modifiersrequired.Count}")]
         public class Assignment
         {
             public string assignedfunc;
             public List<DeviceKeyPair> modifiersrequired;  // null if none, otherwise list of other keys needed..
+
+            public override string ToString()
+            {
+                StringBuilder s = new StringBuilder(64);
+                s.Append(assignedfunc);
+                if (modifiersrequired != null)
+                {
+                    s.Append("(");
+                    bool comma = false;
+                    foreach (DeviceKeyPair dkp in modifiersrequired)
+                    {
+                        if (comma)
+                            s.Append(",");
+
+                        s.AppendFormat(dkp.device + ":" + dkp.key);
+                        comma = true;
+                    }
+                    s.Append(")");
+                }
+
+                return s.ToNullSafeString();
+            }
         }
 
+        [System.Diagnostics.DebuggerDisplay("Device {name} {assignments.Count}")]
         public class Device
         {
             public string name;
             public Dictionary<string, List<Assignment>> assignments;     // given a primary key, give a list of assignments on it.
+
+            public List<Assignment> Find( string name )
+            {
+                return assignments.ContainsKey(name) ? assignments[name] : null;
+            }
         }
 
         Dictionary<string, Device> devices = new Dictionary<string, Device>();
@@ -80,15 +109,7 @@ namespace EDDiscovery.EliteDangerous
                     List<Assignment> la = devices[devicename].assignments[keyname];
                     foreach (Assignment a in la)
                     {
-                        s.AppendFormat("{0} = {1}", keyname, a.assignedfunc);
-                        if (a.modifiersrequired != null)
-                        {
-                            foreach (DeviceKeyPair dkp in a.modifiersrequired)
-                            {
-                                s.AppendFormat(", " + dkp.device + ":" + dkp.key);
-                            }
-                        }
-
+                        s.AppendFormat("{0} = {1}", keyname, a.ToString());
                         s.AppendLine();
                     }
                 }
@@ -101,7 +122,7 @@ namespace EDDiscovery.EliteDangerous
             return (s == "Value") ? "" : ("." + s);
         }
 
-        public BindingsFile()
+        public bool LoadBindingsFile()
         {
             string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Frontier Developments\Elite Dangerous\Options\Bindings");
 
@@ -110,7 +131,7 @@ namespace EDDiscovery.EliteDangerous
             try
             {
                 string sel = System.IO.File.ReadAllText(optsel);
-                System.Diagnostics.Debug.WriteLine("Bindings file" + sel);
+                System.Diagnostics.Debug.WriteLine("Bindings file " + sel);
 
                 FileInfo[] allFiles = Directory.EnumerateFiles(path, sel + "*.binds", SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTime).ToArray();
 
@@ -123,7 +144,7 @@ namespace EDDiscovery.EliteDangerous
                         //System.Diagnostics.Debug.WriteLine("Reader " + x.NodeType + " " + x.Name);
 
                         if (x.HasElements)
-                        {H
+                        {
                             foreach (XElement y in x.Descendants())
                             {
                                 if (y.Name == "Binding" || y.Name == "Primary" || y.Name == "Secondary")
@@ -148,22 +169,73 @@ namespace EDDiscovery.EliteDangerous
                             }
                         }
                     }
-                }
 
+                    foreach (string s in devices.Keys)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Device " + s + Environment.NewLine + Mappings(s));
+                    }
 
-                foreach (string s in devices.Keys)
-                {
-                    System.Diagnostics.Debug.WriteLine("Device " + s + Environment.NewLine + Mappings(s));
-                }
+                    foreach (string s in values.Keys)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Values " + s + "=" + values[s]);
+                    }
 
-                foreach (string s in values.Keys)
-                {
-                    //System.Diagnostics.Debug.WriteLine("Values " + s + "=" + values[s]);
+                    return true;
                 }
             }
             catch
             {
             }
+
+            return false;
+        }
+
+        public Device FindDevice(string name, Guid instanceguid, Guid productguid )    // best match
+        {
+            Device bestmatch = null;
+            int besttotal = 0;
+
+            foreach( Device dv in devices.Values)
+            {
+                if (dv.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))      // exact match
+                    return dv;
+
+                if (dv.name.Equals(GuidExtract(instanceguid, false), StringComparison.InvariantCultureIgnoreCase))
+                    return dv;
+                if (dv.name.Equals(GuidExtract(instanceguid, true), StringComparison.InvariantCultureIgnoreCase))
+                    return dv;
+                if (dv.name.Equals(GuidExtract(productguid, false), StringComparison.InvariantCultureIgnoreCase))
+                    return dv;
+                if (dv.name.Equals(GuidExtract(productguid, true), StringComparison.InvariantCultureIgnoreCase))
+                    return dv;
+
+                int total = dv.name.ToLower().ApproxMatch(name.ToLower(),4);
+                if ( total > besttotal )
+                {
+                    besttotal = total;
+                    bestmatch = dv;
+                }
+            }
+
+            if (bestmatch != null)
+                return bestmatch;
+
+            return null;
+        }
+
+        string GuidExtract(Guid g, bool rev)
+        {
+            string s = g.ToString();
+            int slash = s.IndexOf('-');
+            if (slash >= 0)
+                s = s.Substring(0, slash);
+
+            if ( rev && s.Length == 8)
+            {
+                s = s.Substring(4, 4) + s.Substring(0, 4);
+            }
+
+            return s;
         }
     }
 }

@@ -11,8 +11,9 @@ namespace EDDiscovery.Joystick
     {
         public class Joy
         {
-            public JoyStickIdentity jsi { get; private set; }
+            public JoystickIdentity jsi { get; private set; }
             public bool[] butstate { get; private set; }
+            public int[] povvalue { get; private set; }
 
             SharpDX.DirectInput.Joystick stick;
 
@@ -20,11 +21,9 @@ namespace EDDiscovery.Joystick
             int[] axisvalue;
             int slidercount;
 
-            int[] povvalue;
-
             public Joy(DirectInput di, DeviceInstance d)
             {
-                jsi = new JoyStickIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = d.InstanceName.RemoveTrailingCZeros() };
+                jsi = new JoystickIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = d.InstanceName.RemoveTrailingCZeros() };
 
                 stick = new SharpDX.DirectInput.Joystick(di, d.InstanceGuid);
                 stick.Acquire();
@@ -87,7 +86,8 @@ namespace EDDiscovery.Joystick
                     if (s != butstate[i])
                     {
                         butstate[i] = s;
-                        list.Add(JoystickEvent.Button(jsi, i, s));
+                        System.Diagnostics.Debug.WriteLine("But " + (i+1) + "=" + s);
+                        list.Add(JoystickEvent.Button(jsi, i+1, s));
                     }
                 }
 
@@ -98,7 +98,7 @@ namespace EDDiscovery.Joystick
                     if (pov[i] != povvalue[i])
                     {
                         povvalue[i] = pov[i];
-                        list.Add(JoystickEvent.POV(jsi, i, pov[i]));
+                        list.Add(JoystickEvent.POV(jsi, i+1, pov[i]));
                     }
                 }
 
@@ -186,10 +186,33 @@ namespace EDDiscovery.Joystick
             return list;
         }
 
-        public bool IsButtonPressed(string devicename, int i)
+        public bool IsButtonPressed(JoystickIdentity id, int i) // i is 1..N not 0..N
         {
-            Joy j = joylist.Find(x => x.jsi.Name.Equals(devicename, StringComparison.InvariantCultureIgnoreCase));
-            return (j != null) ? j.butstate[i] : false;
+            Joy j = joylist.Find(x => x.jsi.Name.Equals(id.Name, StringComparison.InvariantCultureIgnoreCase));
+            return (j != null && i >= 1 && i <= j.butstate.Length) ? j.butstate[i - 1] : false;
+        }
+
+        public bool IsPOVPressed(JoystickIdentity id, int pov, string dir)   // Left, Right, Up, Down
+        {
+            Joy j = joylist.Find(x => x.jsi.Name.Equals(id.Name, StringComparison.InvariantCultureIgnoreCase));
+            if ( j != null )
+            {
+                pov--;
+                if (pov < j.povvalue.Length)
+                {
+                    return JoystickEvent.POV(dir, j.povvalue[pov]);
+                }
+            }
+
+            return false;
+        }
+
+        public List<JoystickIdentity> List()
+        {
+            List<JoystickIdentity> ret = new List<JoystickIdentity>();
+            foreach (Joy j in joylist)
+                ret.Add(j.jsi);
+            return ret;
         }
 
     }
