@@ -811,7 +811,8 @@ namespace EDDiscovery.EDSM
 
         private static Dictionary<string, string> EDSM2PlanetNames = new Dictionary<string, string>()
         {
-            // EDSM name    (lower case)            Journal name                        
+            // EDSM name    (lower case)            Journal name                  
+            { "rocky ice world",                    "Rocky ice body" },
             { "high metal content world" ,          "High metal content body"},
             { "class i gas giant",                  "Sudarsky class IV gas giant"},
             { "class ii gas giant",                 "Sudarsky class II gas giant"},
