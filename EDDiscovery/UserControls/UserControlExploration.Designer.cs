@@ -69,7 +69,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewExplore = new System.Windows.Forms.DataGridView();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.ColumnSystemName = new ExtendedControls.AutoCompleteDGVColumn();
+            this.ColumnSystemName = new ExtendedControls.AutoCompleteSystemsColumn();
             this.ColumnDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -345,7 +345,6 @@ namespace EDDiscovery.UserControls
             // 
             // ColumnSystemName
             // 
-            this.ColumnSystemName.AutoCompleteGenerator = null;
             this.ColumnSystemName.FillWeight = 150F;
             this.ColumnSystemName.HeaderText = "System Name";
             this.ColumnSystemName.MinimumWidth = 50;
@@ -468,7 +467,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripButton tsbImportSphere;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
-        private ExtendedControls.AutoCompleteDGVColumn ColumnSystemName;
+        private ExtendedControls.AutoCompleteSystemsColumn ColumnSystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDist;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnY;
