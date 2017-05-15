@@ -419,7 +419,7 @@ namespace EDDiscovery
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
-                EDDiscovery.EliteDangerous.MaterialCommodityDB.SetUpInitialTable();
+
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
