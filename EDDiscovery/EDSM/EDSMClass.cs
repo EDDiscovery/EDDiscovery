@@ -719,44 +719,48 @@ namespace EDDiscovery.EDSM
             jo["EDDFromEDSMBodie"] = true;
 
             JSONHelper.Rename(jo["name"], "BodyName");
-            if (jo["type"].Value<string>().Equals("Star"))
+
+            if (!JSONHelper.IsNullOrEmptyT(jo["type"]))
             {
-                JSONHelper.Rename(jo["subType"], "StarType");   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
-                string startype = jo["StarType"].Value<string>();
-                if (startype == null)
-                    startype = "unknown";
-                int index = startype.IndexOf("(");
-                if (index > 0)
-                    startype = startype.Substring(0, index).Trim();
-                jo["StarType"] = startype;
 
-                JSONHelper.Rename(jo["age"], "Age_MY");
-                JSONHelper.Rename(jo["solarMasses"], "StellarMass");
-                JSONHelper.Rename(jo["solarRadius"], "Radius");
-                JSONHelper.Rename(jo["orbitalEccentricity"], "Eccentricity");
-                JSONHelper.Rename(jo["argOfPeriapsis"], "Periapsis");
-                JSONHelper.Rename(jo["rotationalPeriod"], "RotationPeriod");
-                JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
+                if (jo["type"].Value<string>().Equals("Star"))
+                {
+                    JSONHelper.Rename(jo["subType"], "StarType");   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
+                    string startype = jo["StarType"].Value<string>();
+                    if (startype == null)
+                        startype = "unknown";
+                    int index = startype.IndexOf("(");
+                    if (index > 0)
+                        startype = startype.Substring(0, index).Trim();
+                    jo["StarType"] = startype;
+
+                    JSONHelper.Rename(jo["age"], "Age_MY");
+                    JSONHelper.Rename(jo["solarMasses"], "StellarMass");
+                    JSONHelper.Rename(jo["solarRadius"], "Radius");
+                    JSONHelper.Rename(jo["orbitalEccentricity"], "Eccentricity");
+                    JSONHelper.Rename(jo["argOfPeriapsis"], "Periapsis");
+                    JSONHelper.Rename(jo["rotationalPeriod"], "RotationPeriod");
+                    JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
+                }
+
+                if (jo["type"].Value<string>().Equals("Planet"))
+                {
+                    JSONHelper.Rename(jo["isLandable"], "Landable");
+                    JSONHelper.Rename(jo["earthMasses"], "MassEM");
+                    JSONHelper.Rename(jo["volcanismType"], "Volcanism");
+                    JSONHelper.Rename(jo["atmosphereType"], "Atmosphere");
+                    JSONHelper.Rename(jo["orbitalEccentricity"], "Eccentricity");
+                    JSONHelper.Rename(jo["argOfPeriapsis"], "Periapsis");
+                    JSONHelper.Rename(jo["rotationalPeriod"], "RotationPeriod");
+                    JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
+                    JSONHelper.Rename(jo["subType"], "PlanetClass");
+                    JSONHelper.Rename(jo["radius"], "Radius");
+
+                    jo["PlanetClass"] = EDSMPlanet2JournalName(jo["PlanetClass"].Str());
+
+
+                }
             }
-
-            if (jo["type"].Value<string>().Equals("Planet"))
-            {
-                JSONHelper.Rename(jo["isLandable"], "Landable");
-                JSONHelper.Rename(jo["earthMasses"], "MassEM");
-                JSONHelper.Rename(jo["volcanismType"], "Volcanism");
-                JSONHelper.Rename(jo["atmosphereType"], "Atmosphere");
-                JSONHelper.Rename(jo["orbitalEccentricity"], "Eccentricity");
-                JSONHelper.Rename(jo["argOfPeriapsis"], "Periapsis");
-                JSONHelper.Rename(jo["rotationalPeriod"], "RotationPeriod");
-                JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
-                JSONHelper.Rename(jo["subType"], "PlanetClass");
-                JSONHelper.Rename(jo["radius"], "Radius");
-
-                jo["PlanetClass"] = EDSMPlanet2JournalName(jo["PlanetClass"].Str());
-
-
-            }
-
             JSONHelper.Rename(jo["belts"], "Rings");
             JSONHelper.Rename(jo["rings"], "Rings");
             JSONHelper.Rename(jo["semiMajorAxis"], "SemiMajorAxis");
