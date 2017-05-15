@@ -231,6 +231,7 @@ namespace EDDiscovery
                     Init();
                 }
 
+                EDDiscovery.EliteDangerous.MaterialCommodityDB.SetUpInitialTable();
                 Controller.PostInit_Loaded();
 
                 RepositionForm();
