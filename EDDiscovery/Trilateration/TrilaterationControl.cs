@@ -42,7 +42,6 @@ namespace EDDiscovery
         public TrilaterationControl()
         {
             InitializeComponent();
-            ColumnSystem.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)

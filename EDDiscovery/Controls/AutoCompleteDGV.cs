@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
+using EDDiscovery.DB;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -21,25 +22,11 @@ using System.Windows.Forms;
 namespace ExtendedControls
 {
     /// <summary>
-    /// Represents a string-backed column capable of autocompletion during editing inside of a <see cref="DataGridView"/> control.
+    /// A string-backed <see cref="DataGridViewColumn"/> capable of autocompletion inside of a <see cref="DataGridView"/> control.
     /// </summary>
-    /// <remarks>Attach this column to your <see cref="DataGridView"/> inside of the editor, then attach an appropriate
-    /// delegate method to the <see cref="AutoCompleteGenerator"/> property during container initialization.</remarks>
-    /// <example><code>using EDDiscovery.ExtendedControls;
-    /// using EDDiscovery.DB;
-    /// using System.Windows.Forms;
-    /// 
-    /// namespace MyProject {
-    ///     public partial class TestForm : Form
-    ///     {
-    ///         public TestForm()
-    ///         {
-    ///             InitializeComponent();
-    ///             // Assuming a designer-generated DataGridView contains a column called autoCompleteDGVColumn, with ColumnType set to AutoCompleteDGVColumn.
-    ///             autoCompleteDGVColumn.AutoCompleteGenerator += SystemClass.ReturnSystemListForAutoComplete;
-    ///         }
-    ///     }</code></example>
-    public class AutoCompleteDGVColumn : DataGridViewColumn
+    /// <remarks>Use one of the specialized variants of this class, such as <see cref="AutoCompleteSystemsColumn"/>,
+    /// or create a new subclass for best results.</remarks>
+    public abstract class AutoCompleteDGVColumn : DataGridViewColumn
     {
         #region AutoCompleteDGVColumn
 
@@ -48,12 +35,13 @@ namespace ExtendedControls
         /// Signature is "<c>List&lt;string&gt; (string, TextBox as object)</c>".
         /// </summary>
         [Browsable(false)]
-        public AutoCompleteTextBox.PerformAutoComplete AutoCompleteGenerator { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public AutoCompleteTextBox.PerformAutoComplete AutoCompleteGenerator { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoCompleteDGVColumn"/> class to the default state.
         /// </summary>
-        public AutoCompleteDGVColumn() : base(new CellDisplayControl()) { }
+        protected AutoCompleteDGVColumn() : base(new CellDisplayControl()) { }
 
         /// <summary>
         /// Gets or sets the template used to create new cells.
@@ -72,15 +60,10 @@ namespace ExtendedControls
             }
         }
 
-        /// <summary>
-        /// Creates an exact copy of this <see cref="AutoCompleteDGVColumn"/>.
-        /// </summary>
-        /// <returns>An <see cref="object"/> that represents the cloned <see cref="AutoCompleteDGVColumn"/>.</returns>
-        public override object Clone()
+        protected override void Dispose(bool disposing)
         {
-            var clone = base.Clone() as AutoCompleteDGVColumn;
-            clone.AutoCompleteGenerator = AutoCompleteGenerator;
-            return clone;
+            AutoCompleteGenerator = null;
+            base.Dispose(disposing);
         }
 
         #endregion // AutoCompleteDGVColumn
@@ -276,4 +259,65 @@ namespace ExtendedControls
 
         #endregion // CellEditControl
     }
+
+    #region Specialized AutoCompleteDGVColumn classes
+
+    /// <summary>
+    /// An <see cref="AutoCompleteDGVColumn"/> specialized for interracting solely with system names.
+    /// </summary>
+    public class AutoCompleteSystemsColumn : AutoCompleteDGVColumn
+    {
+        /// <summary>
+        /// Constructs a new <see cref="AutoCompleteSystemsColumn"/> instance.
+        /// </summary>
+        public AutoCompleteSystemsColumn() : base()
+        {
+            AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
+        }
+
+        /// <summary>
+        /// Creates an exact copy of this <see cref="AutoCompleteSystemsColumn"/>.
+        /// </summary>
+        /// <returns>An <see cref="object"/> that represents the cloned <see cref="AutoCompleteSystemsColumn"/>.</returns>
+        public override object Clone()
+        {
+            return base.Clone() as AutoCompleteSystemsColumn;
+        }
+    }
+
+#if false // Nobody needs these now, but they may come in handy someday.
+    /// <summary>
+    /// An <see cref="AutoCompleteDGVColumn"/> specialized for interracting solely with GalMap objects.
+    /// </summary>
+    public class AutoCompleteGalMapColumn : AutoCompleteDGVColumn
+    {
+        public AutoCompleteGalMapColumn() : base()
+        {
+            AutoCompleteGenerator += SystemClass.ReturnOnlyGalMapListForAutoComplete;
+        }
+
+        public override object Clone()
+        {
+            return base.Clone() as AutoCompleteGalMapColumn;
+        }
+    }
+
+    /// <summary>
+    /// An <see cref="AutoCompleteDGVColumn"/> specialized for interracting with both system names AND GalMap objects.
+    /// </summary>
+    public class AutoCompleteGalMapSysColumn : AutoCompleteDGVColumn
+    {
+        public AutoCompleteGalMapSysColumn() : base()
+        {
+            AutoCompleteGenerator += SystemClass.ReturnSystemListForAutoComplete;
+        }
+
+        public override object Clone()
+        {
+            return base.Clone() as AutoCompleteGalMapSysColumn;
+        }
+    }
+#endif
+
+    #endregion // Specialized AutoCompleteDGVColumn classes
 }

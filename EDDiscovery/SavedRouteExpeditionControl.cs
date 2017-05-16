@@ -129,7 +129,6 @@ namespace EDDiscovery
         {
             InitializeComponent();
             _currentRoute = new SavedRouteClass("");
-            SystemName.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
