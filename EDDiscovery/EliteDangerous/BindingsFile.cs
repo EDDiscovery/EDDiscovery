@@ -13,89 +13,127 @@ namespace EDDiscovery.EliteDangerous
 
         public class DeviceKeyPair
         {
-            public string device;
-            public string key;
+            public Device Device;
+            public string Key;
         }
 
-        [System.Diagnostics.DebuggerDisplay("Assignment {assignedfunc} {modifiersrequired.Count}")]
+        //[System.Diagnostics.DebuggerDisplay("Assignment ")]
         public class Assignment
         {
+            public List<DeviceKeyPair> keys;  // first is always the primary one
             public string assignedfunc;
-            public List<DeviceKeyPair> modifiersrequired;  // null if none, otherwise list of other keys needed..
 
             public override string ToString()
             {
                 StringBuilder s = new StringBuilder(64);
-                s.Append(assignedfunc);
-                if (modifiersrequired != null)
-                {
+                if (keys.Count > 1)
                     s.Append("(");
-                    bool comma = false;
-                    foreach (DeviceKeyPair dkp in modifiersrequired)
-                    {
-                        if (comma)
-                            s.Append(",");
 
-                        s.AppendFormat(dkp.device + ":" + dkp.key);
-                        comma = true;
-                    }
-                    s.Append(")");
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    if (i >= 1)
+                        s.Append(",");
+
+                    s.AppendFormat(keys[i].Device.Name + ":" + keys[i].Key);
                 }
 
+                if (keys.Count > 1)
+                    s.Append(")");
+
+                s.Append("=" + assignedfunc);
+
                 return s.ToNullSafeString();
+            }
+
+            public bool HasKeyAssignment(string key)
+            {
+                foreach( DeviceKeyPair k in keys )
+                {
+                    if (k.Key.Equals(key))
+                        return true;
+                }
+
+                return false;
             }
         }
 
         [System.Diagnostics.DebuggerDisplay("Device {name} {assignments.Count}")]
         public class Device
         {
-            public string name;
-            public Dictionary<string, List<Assignment>> assignments;     // given a primary key, give a list of assignments on it.
+            public string Name;
+            public Dictionary<string, List<Assignment>> Assignments;     // given a primary key, give a list of assignments on it.
 
-            public List<Assignment> Find( string name )
+            public List<Assignment> Find( string name , bool partialmatch )
             {
-                return assignments.ContainsKey(name) ? assignments[name] : null;
+                if (partialmatch)
+                {
+                    var filtered = Assignments.Where(d => d.Key.Contains(name)).Select(k => k.Value);
+                    var singlelist = filtered.SelectMany(x => x).ToList();
+                    return singlelist;
+                }
+                else
+                    return Assignments.ContainsKey(name) ? Assignments[name] : null;
             }
         }
 
         Dictionary<string, Device> devices = new Dictionary<string, Device>();
         Dictionary<string, string> values = new Dictionary<string, string>();
 
-        public Device EnsureDevice(string name )
+        private Device FindOrMakeDevice(string name)
         {
             if (devices.ContainsKey(name))
                 return devices[name];
             else
             {
-                Device d = new Device() { name = name, assignments = new Dictionary<string, List<Assignment>>() };
+                Device d = new Device() { Name = name, Assignments = new Dictionary<string, List<Assignment>>() };
                 devices[name] = d;
                 return d;
             }
         }
 
-        public void AssignToDevice(XElement d, XElement map )
+        private void AssignToDevice(XElement d, XElement map )
         {
-            XAttribute device = map.Attribute("Device");
-            XAttribute key = map.Attribute("Key");
-            if ( device != null && key != null && key.Value.Length>0 )
+            XAttribute xdevice = map.Attribute("Device");
+            XAttribute xkey = map.Attribute("Key");
+            if ( xdevice != null && xkey != null && xkey.Value.Length>0 )
             {
-                Device dv = EnsureDevice(device.Value);
+                string key = xkey.Value;
 
-                if (!dv.assignments.ContainsKey(key.Value))
-                    dv.assignments[key.Value] = new List<Assignment>();
+                int povindex = key.IndexOf("POV");    // pov evil.. frontier code these as primary (l/r/u/d) and modifier (l/r/u/d) in no particular order
+                string povroot = (povindex > 0) ? key.Truncate(0, povindex + 4) : null;
 
                 List<DeviceKeyPair> dvp = new List<DeviceKeyPair>();
 
                 foreach (XElement y in map.Descendants())
                 {
                     if (y.Name == "Modifier")
-                        dvp.Add(new DeviceKeyPair() { device = y.Attribute("Device").Value, key = y.Attribute("Key").Value });
+                    {
+                        string km = y.Attribute("Device").Value;
+                        string vm = y.Attribute("Key").Value;
+
+                        if (povroot != null && vm.Truncate(0,povroot.Length).Equals(povroot))       // POV pair..  lets adjust so its just the major entry.. makes it easier
+                        {
+                            if (key.Contains("Left") || vm.Contains("Left"))
+                                key = povroot + ((key.Contains("Up") || vm.Contains("Up")) ? "UpLeft" : "DownLeft");
+                            else if (key.Contains("Right") || vm.Contains("Right"))
+                                key = povroot + ((key.Contains("Up") || vm.Contains("Up")) ? "UpRight" : "DownRight");
+                        }
+                        else
+                            dvp.Add(new DeviceKeyPair() { Device = FindOrMakeDevice(km), Key = vm });
+                    }
                 }
 
-                string func = d.Name.ToString();
-                Assignment a = new Assignment() { assignedfunc = func, modifiersrequired = (dvp.Count > 0) ? dvp : null };
+                dvp.Insert(0, new DeviceKeyPair() { Device = FindOrMakeDevice(xdevice.Value), Key = key });
 
-                dv.assignments[key.Value].Add(a);
+                Assignment a = new Assignment() { assignedfunc = d.Name.ToString(), keys = dvp };
+
+                foreach (DeviceKeyPair dkp in dvp)      // all keys mentioned need adding
+                {
+                    if (!dkp.Device.Assignments.ContainsKey(dkp.Key))
+                        dkp.Device.Assignments[dkp.Key] = new List<Assignment>();
+
+                    dkp.Device.Assignments[dkp.Key].Add(a);
+                }
             }
         }
 
@@ -104,12 +142,11 @@ namespace EDDiscovery.EliteDangerous
             StringBuilder s = new StringBuilder(128);
             if ( devices.ContainsKey(devicename))
             {
-                foreach( string keyname in devices[devicename].assignments.Keys)
+                foreach( string keyname in devices[devicename].Assignments.Keys)
                 {
-                    List<Assignment> la = devices[devicename].assignments[keyname];
-                    foreach (Assignment a in la)
+                    foreach (Assignment a in devices[devicename].Assignments[keyname])
                     {
-                        s.AppendFormat("{0} = {1}", keyname, a.ToString());
+                        s.Append("Key " + keyname + "=>" + a.ToString());
                         s.AppendLine();
                     }
                 }
@@ -117,7 +154,7 @@ namespace EDDiscovery.EliteDangerous
             return s.ToString();
         }
 
-        string ChkValue(string s)
+        private string ChkValue(string s)
         {
             return (s == "Value") ? "" : ("." + s);
         }
@@ -190,26 +227,31 @@ namespace EDDiscovery.EliteDangerous
             return false;
         }
 
-        public Device FindDevice(string name, Guid instanceguid, Guid productguid )    // best match
+        public Device GetDevice(string name)
+        {
+            return devices.ContainsKey(name) ? devices[name] : null;
+        }
+
+        public Device FindDevice(string name, Guid instanceguid, Guid productguid)    // best match
         {
             Device bestmatch = null;
             int besttotal = 0;
 
             foreach( Device dv in devices.Values)
             {
-                if (dv.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))      // exact match
+                if (dv.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))      // exact match
                     return dv;
 
-                if (dv.name.Equals(GuidExtract(instanceguid, false), StringComparison.InvariantCultureIgnoreCase))
+                if (dv.Name.Equals(GuidExtract(instanceguid, false), StringComparison.InvariantCultureIgnoreCase))
                     return dv;
-                if (dv.name.Equals(GuidExtract(instanceguid, true), StringComparison.InvariantCultureIgnoreCase))
+                if (dv.Name.Equals(GuidExtract(instanceguid, true), StringComparison.InvariantCultureIgnoreCase))
                     return dv;
-                if (dv.name.Equals(GuidExtract(productguid, false), StringComparison.InvariantCultureIgnoreCase))
+                if (dv.Name.Equals(GuidExtract(productguid, false), StringComparison.InvariantCultureIgnoreCase))
                     return dv;
-                if (dv.name.Equals(GuidExtract(productguid, true), StringComparison.InvariantCultureIgnoreCase))
+                if (dv.Name.Equals(GuidExtract(productguid, true), StringComparison.InvariantCultureIgnoreCase))
                     return dv;
 
-                int total = dv.name.ToLower().ApproxMatch(name.ToLower(),4);
+                int total = dv.Name.ToLower().ApproxMatch(name.ToLower(),4);
                 if ( total > besttotal )
                 {
                     besttotal = total;

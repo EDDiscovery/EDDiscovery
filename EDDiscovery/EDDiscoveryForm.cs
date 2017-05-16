@@ -77,8 +77,8 @@ namespace EDDiscovery
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
 
-        Joystick.JoystickInterface joystick;
-        Joystick.JoystickIntoActions joystickactions;
+        InputDevices.InputDeviceList inputdevices;
+        InputDevices.InputDevicesIntoActions inputdevicesactions;
         BindingsFile frontierbindings;
 
         public CompanionAPI.CompanionAPIClass Capi { get; private set; } = new CompanionAPI.CompanionAPIClass();
@@ -221,10 +221,10 @@ namespace EDDiscovery
             frontierbindings = new BindingsFile();
             frontierbindings.LoadBindingsFile();
 
-            joystick = new Joystick.JoystickWindows();
-
-            joystickactions = new Joystick.JoystickIntoActions(joystick, frontierbindings, actioncontroller);
-            joystickactions.Start();
+            inputdevices = new InputDevices.InputDeviceList();
+            InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
+            inputdevicesactions = new InputDevices.InputDevicesIntoActions(inputdevices, frontierbindings, actioncontroller);
+            inputdevicesactions.Start();
 
             ApplyTheme();
 
@@ -607,7 +607,7 @@ namespace EDDiscovery
             audioqueuewave.Dispose();
             audiodriverwave.Dispose();
 
-            joystickactions.Dispose();
+            inputdevicesactions.Dispose();
 
             Close();
             Application.Exit();

@@ -390,9 +390,10 @@
     </Compile>
     <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
-    <Compile Include="Joystick\JoystickInterface.cs" />
-    <Compile Include="Joystick\JoystickIntoActions.cs" />
-    <Compile Include="Joystick\JoystickWindows.cs" />
+    <Compile Include="InputDevices\InputDeviceJoystickWindows.cs" />
+    <Compile Include="InputDevices\InputDeviceList.cs" />
+    <Compile Include="InputDevices\InputDevicesInterface.cs" />
+    <Compile Include="InputDevices\InputDeviceIntoActions.cs" />
     <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>
