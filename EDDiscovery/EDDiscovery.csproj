@@ -391,6 +391,7 @@
     <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="InputDevices\InputDeviceJoystickWindows.cs" />
+    <Compile Include="InputDevices\InputDeviceKeyboard.cs" />
     <Compile Include="InputDevices\InputDeviceList.cs" />
     <Compile Include="InputDevices\InputDevicesInterface.cs" />
     <Compile Include="InputDevices\InputDeviceIntoActions.cs" />

@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.EliteDangerous;
-
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace EDDiscovery.InputDevices
 {
+
     class InputDevicesIntoActions
     {
         InputDeviceList devices;
         Actions.ActionController ac;
         BindingsFile bf;
-        Timer t;
 
         List<BindingsFile.Assignment> assignmentsinonstate = new List<BindingsFile.Assignment>();
 
@@ -26,79 +27,107 @@ namespace EDDiscovery.InputDevices
 
         public void Start()
         {
-            t = new Timer();
-            t.Interval = 100;
-            t.Tick += T_Tick;
-            t.Start();
+            devices.OnNewEvent += Devices_OnNewEvent;
+            devices.Start();
         }
 
-        BindingsFile.Device GetBindingDeviceFromInputDeviceIdentifier(InputDeviceIdentity i)
+        public void Dispose()
         {
-            BindingsFile.Device dv = bf.FindDevice(i.Name, i.Instanceguid, i.Productguid);
-            return dv;
+            devices.Dispose();
         }
 
-        InputDeviceInterface GetInputDeviceFromBindingDevice(BindingsFile.Device dv)
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        private void Devices_OnNewEvent(List<InputDeviceEvent> list)
         {
-            InputDeviceInterface i = devices.inputdevices.Find(x => 
+            IntPtr handle = GetForegroundWindow();
+
+            if ( handle != null )
+            { 
+                StringBuilder Buffer = new StringBuilder(256);
+                if (GetWindowText(handle, Buffer, 256) > 0)
                 {
-                    BindingsFile.Device b = bf.FindDevice(x.ID().Name, x.ID().Instanceguid, x.ID().Productguid);
-                    return b != null && b.Name.Equals(dv.Name);
-                });
+                    System.Diagnostics.Debug.WriteLine("From " + Buffer.ToString());
+                }
+            }
 
-            return i;
-        }
+            Process[] all = Process.GetProcesses();
+            foreach( Process pa in all )
+            {
+                System.Diagnostics.Debug.WriteLine("Process " + pa.ProcessName);
+            }
 
-        private void T_Tick(object sender, EventArgs e)
-        {
-            List<InputDeviceEvent> list = devices.Poll();
+            Process[] processes = Process.GetProcessesByName("EliteDangerous64");
+
+            if ( processes.Length>0)
+            {
+                Process p = processes[0];
+                if (p.MainWindowHandle == handle)
+                {
+                    System.Diagnostics.Debug.WriteLine("Elite Dangerous selected");
+                }
+            }
+
+
+
+
+
             foreach (InputDeviceEvent je in list)
             {
                 string match = je.EventName();              // same as bindings name..
                 System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
 
-                if (je.Pressed) // on event..
+                BindingsFile.Device dv = GetBindingDeviceFromInputDeviceIdentifier(je.Device.ID());
+
+                if (dv != null)
                 {
-                    BindingsFile.Device dv = GetBindingDeviceFromInputDeviceIdentifier(je.Device.ID());
+                    List<BindingsFile.Assignment> assignlist = dv.Find(match, false);
 
-                    if (dv != null)
+                    if ( assignlist != null)
                     {
-                        List<BindingsFile.Assignment> assignlist = dv.Find(match,false);
+                        List<BindingsFile.Assignment> inonstate = new List<BindingsFile.Assignment>();
 
-                        if ( assignlist != null)
+                        foreach (BindingsFile.Assignment a in assignlist)
                         {
-                            foreach(BindingsFile.Assignment a in assignlist)
+                            if ( IsAllPressed(a))
                             {
-                                if ( Verify(a))
+                                System.Diagnostics.Debug.WriteLine("  Rule Matches " + a.assignedfunc);
+                                inonstate.Add(a);
+                            }
+                            else
+                            {
+                                int isonindex = assignmentsinonstate.IndexOf(a);
+                                if ( isonindex != -1 )
                                 {
-                                    System.Diagnostics.Debug.WriteLine("  Pressed " + a.assignedfunc);
-                                    assignmentsinonstate.Add(a);
+                                    System.Diagnostics.Debug.WriteLine("  Rule Inactive " + a.assignedfunc);
+                                    assignmentsinonstate.Remove(a);
                                 }
                             }
-
                         }
-                    }
-                }
-                else
-                {               // off event..
-                    List<BindingsFile.Assignment> updatedassignmentsinonstate = new List<BindingsFile.Assignment>();
 
-                    foreach(BindingsFile.Assignment a in assignmentsinonstate)
-                    {
-                        if (!Verify(a))       // Need to verify all..
+                        foreach(BindingsFile.Assignment a in inonstate)
                         {
-                            System.Diagnostics.Debug.WriteLine("  Released " + a.assignedfunc);
+                            if ( a.KeyAssignementLongerThan(inonstate))  // we have the best key list
+                            {
+                                assignmentsinonstate.Add(a);
+                                System.Diagnostics.Debug.WriteLine("  Rule Active " + a.assignedfunc);
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("  Reject Rule due to others are longer " + a.assignedfunc);
+                            }
                         }
-                        else
-                            updatedassignmentsinonstate.Add(a);
-                    }
 
-                    assignmentsinonstate = updatedassignmentsinonstate;
+                    }
                 }
             }
         }
 
-        public bool Verify(BindingsFile.Assignment a)
+
+        public bool IsAllPressed(BindingsFile.Assignment a)
         {
             foreach (BindingsFile.DeviceKeyPair ma in a.keys)
             {
@@ -111,15 +140,23 @@ namespace EDDiscovery.InputDevices
             return true;
         }
 
-        public void Stop()
+        BindingsFile.Device GetBindingDeviceFromInputDeviceIdentifier(InputDeviceIdentity i)
         {
-            t.Stop();
+            BindingsFile.Device dv = bf.FindDevice(i.Name, i.Instanceguid, i.Productguid);
+            return dv;
         }
 
-        public void Dispose()
+        InputDeviceInterface GetInputDeviceFromBindingDevice(BindingsFile.Device dv)
         {
-            t.Stop();
-            devices.Dispose();
+            InputDeviceInterface i = devices.inputdevices.Find(x =>
+            {
+                BindingsFile.Device b = bf.FindDevice(x.ID().Name, x.ID().Instanceguid, x.ID().Productguid);
+                return b != null && b.Name.Equals(dv.Name);
+            });
+
+            return i;
         }
+
+
     }
 }
