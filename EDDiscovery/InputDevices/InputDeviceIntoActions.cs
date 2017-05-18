@@ -89,13 +89,13 @@ namespace EDDiscovery.InputDevices
                     if ( assignlist != null)
                     {
                         List<BindingsFile.Assignment> inonstate = new List<BindingsFile.Assignment>();
-
+                        
                         foreach (BindingsFile.Assignment a in assignlist)
                         {
                             if ( IsAllPressed(a))
                             {
                                 System.Diagnostics.Debug.WriteLine("  Rule Matches " + a.assignedfunc);
-                                inonstate.Add(a);
+                                inonstate.Add(a);       // but it might not be the best rule..
                             }
                             else
                             {
