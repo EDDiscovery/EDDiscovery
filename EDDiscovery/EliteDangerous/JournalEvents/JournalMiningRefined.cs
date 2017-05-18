@@ -27,7 +27,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMiningRefined(JObject evt ) : base(evt, JournalTypeEnum.MiningRefined)
         {
-            Type = JournalFieldNaming.FixCommodityName(evt["Type"].Str());          // instances of $.._name
+            Type = JournalFieldNaming.FixCommodityName(evt["Type"].Str());          // instances of $.._name, translate to FDNAME
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
         }
 
