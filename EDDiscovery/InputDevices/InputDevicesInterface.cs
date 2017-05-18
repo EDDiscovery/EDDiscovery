@@ -10,7 +10,6 @@ namespace EDDiscovery.InputDevices
     {
         public string Name;
         public Guid Instanceguid, Productguid;
-        public string DevType;      // "JOY" "KEYBOARD"
     }
 
     public class InputDeviceEvent
@@ -28,7 +27,7 @@ namespace EDDiscovery.InputDevices
 
         public string ToString(int trunc = 1000)
         {
-            return string.Format("Name {0} Event {1} Pressed {2} Value {3}", Device.ID().Name.Truncate(0,trunc), EventNumber, Pressed, Value);
+            return string.Format("Device {0} Event {1} Pressed {2} Value {3}", Device.ID().Name.Truncate(0,trunc), EventNumber, Pressed, Value);
         }
 
         //public Tuple<string, bool> BindingsMatch() { return Device.BindingsMatch(this); }
@@ -38,10 +37,11 @@ namespace EDDiscovery.InputDevices
     public interface InputDeviceInterface
     {
         InputDeviceIdentity ID();
-        List<InputDeviceEvent> Poll();
+        System.Threading.AutoResetEvent Eventhandle();          // set when device changes state
+
+        List<InputDeviceEvent> GetEvents();                     // get events after change state
         void Dispose();
 
-        //Tuple<string, bool> BindingsMatch(InputDeviceEvent e);
         string EventName(InputDeviceEvent e);
         bool IsPressed(string eventname);
     }

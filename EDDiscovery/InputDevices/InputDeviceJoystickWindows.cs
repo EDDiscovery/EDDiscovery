@@ -18,8 +18,9 @@ namespace EDDiscovery.InputDevices
         bool[] axispresent;
         int[] axisvalue;
         int slidercount;
-        //System.Threading.WaitHandle hld;
-        //System.Threading.Thread waitfordata;
+
+        System.Threading.AutoResetEvent eventhandle = new System.Threading.AutoResetEvent(false);       // used by joy to signal data
+        public System.Threading.AutoResetEvent Eventhandle() { return eventhandle; }
 
         public enum Axis { X = 0, Y, Z, RX, RY, RZ, U, V };      // frontier names for simplicity
         public const int AxisCount = 8;
@@ -33,9 +34,10 @@ namespace EDDiscovery.InputDevices
 
         public InputDeviceJoystickWindows(DirectInput di, DeviceInstance d)
         {
-            jsi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = d.InstanceName.RemoveTrailingCZeros() , DevType = "JOY" };
+            jsi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = d.InstanceName.RemoveTrailingCZeros()};
 
             stick = new SharpDX.DirectInput.Joystick(di, d.InstanceGuid);
+            stick.SetNotification(eventhandle);
             stick.Acquire();
 
             axispresent = new bool[AxisCount];
@@ -82,13 +84,11 @@ namespace EDDiscovery.InputDevices
                     o.Range = new InputRange(AxisMinRange, AxisMaxRange);
                 }
             }
-
-            //stick.SetNotification(hld);
-
-
         }
 
-        public List<InputDeviceEvent> Poll()
+
+
+        public List<InputDeviceEvent> GetEvents()
         {
             List<InputDeviceEvent> events = new List<InputDeviceEvent>();
 
@@ -148,10 +148,10 @@ namespace EDDiscovery.InputDevices
                     else
                     {
                         int diff = Math.Abs(value - axisvalue[i]);
-                        if (diff >= (AxisMaxRange - AxisMinRange) / 20)
+                        if (diff >= 5 ) // don't report min changes
                         {
                             axisvalue[i] = value;
-                            events.Add(new InputDeviceEvent(this, AxisBase + i, true, value));
+                            events.Add(new InputDeviceEvent(this, AxisBase + i, true, value));      // axis is always pressed
                         }
                     }
                 }
@@ -163,7 +163,10 @@ namespace EDDiscovery.InputDevices
         public void Dispose()
         {
             if (stick != null)
+            {
+                stick.Unacquire();
                 stick.Dispose();
+            }
         }
 
         Dictionary<int, string> povdir = new Dictionary<int, string>() { { 0, "Up" }, { 4500, "UpRight" }, { 9000, "Right" },{ 13500, "DownRight" },{ 18000, "Down" },
@@ -220,8 +223,11 @@ namespace EDDiscovery.InputDevices
 
             foreach (DeviceInstance di in dinput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly))
             {
-                InputDeviceJoystickWindows j = new InputDeviceJoystickWindows(dinput, di);
-                ilist.Add(j);
+                //   if (di.InstanceName.Contains("Logitech"))
+                {
+                    InputDeviceJoystickWindows j = new InputDeviceJoystickWindows(dinput, di);
+                    ilist.Add(j);
+                }
             }
         }
     }

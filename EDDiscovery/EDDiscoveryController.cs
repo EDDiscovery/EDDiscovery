@@ -419,7 +419,6 @@ namespace EDDiscovery
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
-                EDDiscovery.EliteDangerous.MaterialCommodityDB.SetUpInitialTable();
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
@@ -641,6 +640,8 @@ namespace EDDiscovery
         private void BackgroundInit()
         {
             StarScan.LoadBodyDesignationMap();
+            EDDiscovery.EliteDangerous.MaterialCommodityDB.SetUpInitialTable();
+
             if (!EDDConfig.Options.NoSystemsLoad)
             {
                 downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);

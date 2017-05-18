@@ -223,6 +223,7 @@ namespace EDDiscovery
 
             inputdevices = new InputDevices.InputDeviceList();
             InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
+            InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);
             inputdevicesactions = new InputDevices.InputDevicesIntoActions(inputdevices, frontierbindings, actioncontroller);
             inputdevicesactions.Start();
 

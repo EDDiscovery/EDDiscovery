@@ -45,15 +45,45 @@ namespace EDDiscovery.EliteDangerous
                 return s.ToNullSafeString();
             }
 
-            public bool HasKeyAssignment(string key)
+            public bool HasKeyAssignment(string key)        // is key in this list
             {
-                foreach( DeviceKeyPair k in keys )
+                foreach (DeviceKeyPair k in keys)
                 {
                     if (k.Key.Equals(key))
                         return true;
                 }
 
                 return false;
+            }
+
+            public bool HasKeyAssignment(Assignment other)      // do the keys in other clash with our keys
+            {
+                foreach (DeviceKeyPair o in other.keys)
+                {
+                    foreach (DeviceKeyPair k in keys)
+                    {
+                        if (k.Key.Equals(o.Key))
+                            return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public bool KeyAssignementLongerThan(List<BindingsFile.Assignment> others)  // is ours the best keylist (based on length)
+            {
+                foreach (BindingsFile.Assignment a in others)
+                {
+                    if (a != this)  // in case we are in the list
+                    {
+                        if (a.HasKeyAssignment(a))        // do we have a clash of keys, other has keys in our key list..
+                        {
+                            if (keys.Count < a.keys.Count)  // yes, is our key length less.. then its the others.
+                                return false;
+                        }
+                    }
+                }
+                return true;
             }
         }
 
