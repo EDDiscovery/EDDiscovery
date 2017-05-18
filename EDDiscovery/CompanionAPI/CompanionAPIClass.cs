@@ -337,7 +337,7 @@ namespace EDDiscovery.CompanionAPI
             ProfileString = data;
             JObject jo = JObject.Parse(ProfileString);
             ProfileString = jo.ToString(Formatting.Indented);       // nicer
-            System.Diagnostics.Debug.WriteLine(ProfileString);
+            //System.Diagnostics.Debug.WriteLine(ProfileString);
             Profile = new CProfile(jo);
         }
 

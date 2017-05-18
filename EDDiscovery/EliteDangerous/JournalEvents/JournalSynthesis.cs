@@ -35,16 +35,23 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             if (mats != null)
             {
+                Materials = new Dictionary<string, int>();
+
                 if (mats.Type == JTokenType.Object)
                 {
-                    Materials = mats?.ToObject<Dictionary<string, int>>();
+                    Dictionary<string, int> temp = mats?.ToObject<Dictionary<string, int>>();
+
+                    if (temp != null)
+                    {
+                        foreach (string key in temp.Keys)
+                            Materials[JournalFieldNaming.FDNameTranslation(key)] = temp[key];
+                    }
                 }
                 else
                 {
-                    Materials = new Dictionary<string, int>();
                     foreach (JObject ja in (JArray)mats)
                     {
-                        Materials[(string)ja["Name"]] = ja["Count"].Int();
+                        Materials[JournalFieldNaming.FDNameTranslation((string)ja["Name"])] = ja["Count"].Int();
                     }
                 }
             }

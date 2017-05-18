@@ -41,6 +41,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Faction = evt["Faction"].Str();
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());             // evidence of $_name problem, fix to fdname
+            Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
             CommodityLocalised = evt["Commodity_Localised"].Str();
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
 
@@ -75,7 +76,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     foreach (JToken jc in rewards.Children())
                     {
                         if (!jc["Name"].Empty() && !jc["Count"].Empty())        // evidence of empty values
-                            cr[i++] = new System.Tuple<string, int>(jc["Name"].Value<string>(), jc["Count"].Value<int>());
+                            cr[i++] = new System.Tuple<string, int>(JournalFieldNaming.FDNameTranslation(jc["Name"].Value<string>()), jc["Count"].Value<int>());
 
                         //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} {1}", jc.Path, jc.Type.ToString()));
                     }

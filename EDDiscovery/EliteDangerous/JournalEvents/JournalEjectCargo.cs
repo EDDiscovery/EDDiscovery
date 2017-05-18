@@ -30,7 +30,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEjectCargo(JObject evt) : base(evt, JournalTypeEnum.EjectCargo)
         {
-            Type = evt["Type"].Str();
+            Type = evt["Type"].Str();       // fdname
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
             Count = evt["Count"].Int();
             Abandoned = evt["Abandoned"].Bool();

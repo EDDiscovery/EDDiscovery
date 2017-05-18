@@ -35,15 +35,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public class Material
         {
-            public string Name { get; set; }
+            public string Name { get; set; }        //FDNAME
             public int Count { get; set; }
         }
 
         public JournalMaterials(JObject evt) : base(evt, JournalTypeEnum.Materials)
         {
             Raw = evt["Raw"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
+            FixNames(Raw);
             Manufactured = evt["Manufactured"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
+            FixNames(Manufactured);
             Encoded = evt["Encoded"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
+            FixNames(Encoded);
         }
 
         public Material[] Raw { get; set; }             //FDNAMES on purpose
@@ -51,6 +54,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public Material[] Encoded { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.materials; } }
+
+        void FixNames(Material[] a)
+        {
+            foreach (Material m in a)
+                m.Name = JournalFieldNaming.FDNameTranslation(m.Name);
+        }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

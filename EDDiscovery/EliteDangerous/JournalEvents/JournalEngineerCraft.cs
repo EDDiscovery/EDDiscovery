@@ -38,18 +38,26 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             if (mats != null)
             {
+                Ingredients = new Dictionary<string, int>();
+
                 if (mats.Type == JTokenType.Object)
                 {
-                    Ingredients = mats?.ToObject<Dictionary<string, int>>();
+                    Dictionary<string, int> temp = mats?.ToObject<Dictionary<string, int>>();
+
+                    if (temp != null)
+                    {
+                        foreach (string key in temp.Keys)
+                            Ingredients[JournalFieldNaming.FDNameTranslation(key)] = temp[key];
+                    }
                 }
                 else
                 {
-                    Ingredients = new Dictionary<string, int>();
                     foreach (JObject jo in (JArray)mats)
                     {
-                        Ingredients[(string)jo["Name"]] = jo["Count"].Int();
+                        Ingredients[JournalFieldNaming.FDNameTranslation((string)jo["Name"])] = jo["Count"].Int();
                     }
                 }
+
             }
 
         }
@@ -57,7 +65,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Engineer { get; set; }
         public string Blueprint { get; set; }
         public int Level { get; set; }
-        public Dictionary<string,int> Ingredients { get; set; }
+        public Dictionary<string, int> Ingredients { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.engineercraft; } }
 
