@@ -1291,12 +1291,6 @@ namespace EDDiscovery
 
 #endregion
 
-        private void companionAPILoginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormCAPI frm = new FormCAPI();
-
-            frm.Show();
-        }
     }
 }
 

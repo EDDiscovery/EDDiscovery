@@ -84,6 +84,7 @@ namespace EDDiscovery.Forms
                     labelCAPIState.Text = "Confirmed Credentials";
                     textBoxBorderCompanionLogin.Visible = labelCAPILogin.Visible = 
                     textBoxBorderCompanionPassword.Visible = labelCAPIPassword.Visible = false;
+                    textBoxBorderCompanionLogin.Text = textBoxBorderCompanionPassword.Text = "";
                     buttonExtCAPI.Text = "Clear";
                     buttonExtCAPI.Enabled = true;
                 }
@@ -92,7 +93,7 @@ namespace EDDiscovery.Forms
                     labelCAPIState.Text = "Require Confirmation";
                     labelCAPILogin.Text = "Confirm Code:";
                     textBoxBorderCompanionPassword.Visible = labelCAPIPassword.Visible = false;
-                    textBoxBorderCompanionLogin.Text = "";
+                    textBoxBorderCompanionLogin.Text = textBoxBorderCompanionPassword.Text = "";
                     buttonExtCAPI.Text = "Clear";           // default state is clear/abort
                     buttonExtCAPI.Enabled = true;
                     toolTip1.SetToolTip(textBoxBorderCompanionLogin, "Enter the confirmation code you just received via email from Frontier");
@@ -153,6 +154,12 @@ namespace EDDiscovery.Forms
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            if (textBoxBorderCompanionLogin.Text.Length>0 || textBoxBorderCompanionPassword.Text.Length>0)
+            {
+                if (Forms.MessageBoxTheme.Show("You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?", "Warning CAPI Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                    return;
+            }
+
             DialogResult = DialogResult.OK;
             Close();
         }
