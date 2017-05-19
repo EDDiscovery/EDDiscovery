@@ -136,14 +136,12 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeC(MaterialRawCategory, Color.Red, "Ruthenium", "Very Rare", "Ru");
             AddNewTypeC(MaterialRawCategory, Color.Red, "Technetium", "Very Rare", "Tc");
             AddNewTypeC(MaterialRawCategory, Color.Red, "Tellurium", "Very Rare", "Te");
-            AddNewTypeC(MaterialRawCategory, Color.Red, "Yttrium", "Very Rare", "Y");
 
+            AddNewTypeC(MaterialRawCategory, Color.Yellow, "Yttrium", "Rare", "Y");
             AddNewTypeC(MaterialRawCategory, Color.Yellow, "Cadmium", "Rare", "Cd");
             AddNewTypeC(MaterialRawCategory, Color.Yellow, "Mercury", "Rare", "Hg");
             AddNewTypeC(MaterialRawCategory, Color.Yellow, "Molybdenum", "Rare", "Mo");
-            AddNewTypeC(MaterialRawCategory, Color.Yellow, "Niobium", "Rare", "Nb");
             AddNewTypeC(MaterialRawCategory, Color.Yellow, "Tin", "Rare", "Sn");
-            AddNewTypeC(MaterialRawCategory, Color.Yellow, "Tungsten", "Rare", "W");
 
             AddNewTypeC(MaterialRawCategory, Color.Cyan, "Carbon", "Very Common", "C");
             AddNewTypeC(MaterialRawCategory, Color.Cyan, "Iron", "Very Common", "Fe");
@@ -151,14 +149,17 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeC(MaterialRawCategory, Color.Cyan, "Phosphorus", "Very Common", "P");
             AddNewTypeC(MaterialRawCategory, Color.Cyan, "Sulphur", "Very Common", "S");
 
-            AddNewTypeC(MaterialRawCategory, Color.Green, "Arsenic", "Common", "As");
             AddNewTypeC(MaterialRawCategory, Color.Green, "Chromium", "Common", "Cr");
             AddNewTypeC(MaterialRawCategory, Color.Green, "Germanium", "Common", "Ge");
             AddNewTypeC(MaterialRawCategory, Color.Green, "Manganese", "Common", "Mn");
-            AddNewTypeC(MaterialRawCategory, Color.Green, "Selenium", "Common", "Se");
             AddNewTypeC(MaterialRawCategory, Color.Green, "Vanadium", "Common", "V");
             AddNewTypeC(MaterialRawCategory, Color.Green, "Zinc", "Common", "Zn");
-            AddNewTypeC(MaterialRawCategory, Color.Green, "Zirconium", "Common", "Zr");
+
+            AddNewTypeC(MaterialRawCategory, Color.SandyBrown, "Niobium", "Standard", "Nb");        // realign to Anthors standard
+            AddNewTypeC(MaterialRawCategory, Color.SandyBrown, "Tungsten", "Standard", "W");
+            AddNewTypeC(MaterialRawCategory, Color.SandyBrown, "Arsenic", "Standard", "As");
+            AddNewTypeC(MaterialRawCategory, Color.SandyBrown, "Selenium", "Standard", "Se");
+            AddNewTypeC(MaterialRawCategory, Color.SandyBrown, "Zirconium", "Standard", "Zr");
 
             AddNewType(CommodityCategory, "Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
             AddNewType(CommodityCategory, "Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", "Consumer Items");
@@ -344,6 +345,8 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeF(MaterialEncodedCategory, Color.Green, "Modified Consumer Firmware", "Common", "MCF", "consumerfirmware");
             AddNewTypeF(MaterialEncodedCategory, Color.Green, "Tagged Encryption Codes", "Common", "TEC", "encryptioncodes");
             AddNewTypeF(MaterialEncodedCategory, Color.Green, "Unidentified Scan Archives", "Common", "USA", "scanarchives");
+            AddNewTypeF(MaterialEncodedCategory, Color.Green, "Pattern Beta Obelisk Data", "Common", "PBOD", "ancientculturaldata");
+            AddNewTypeF(MaterialEncodedCategory, Color.Green, "Pattern Gamma Obelisk Data", "Common", "PGOD", "ancienthistoricaldata");
             // standard data
             AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Classified Scan Databanks", "Standard", "CSD", "scandatabanks");
             AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Cracked Industrial Firmware", "Standard", "CIF", "industrialfirmware");
@@ -351,10 +354,11 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Strange Wake Solutions", "Standard", "SWS", "wakesolutions");
             AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Unexpected Emission Data", "Standard", "UED", "emissiondata");
             AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Untypical Shield Scans", "Standard", "USS", "shielddensityreports");
-            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Shield Frequency Data", "Standard", "SFD", "shieldfrequencydata");
-            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Classified Scan Data", "Standard", "CFSD", "classifiedscandata");
-            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Compact Emissions Data", "Standard", "CED", "compactemissionsdata");
-            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Embedded Firmware", "Standard", "EFW", "embeddedfirmware");
+            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Peculiar Shield Frequency Data", "Standard", "SFD", "shieldfrequencydata");
+            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Classified Scan Fragment", "Standard", "CFSD", "classifiedscandata");
+            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Abnormal Compact Emission Data", "Standard", "CED", "compactemissionsdata");
+            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Modified Embedded Firmware", "Standard", "EFW", "embeddedfirmware");
+            AddNewTypeF(MaterialEncodedCategory, Color.SandyBrown, "Pattern Alpha Obelisk Data", "Standard", "PAOD", "ancientbiologicaldata");
 
             // rare data
             AddNewTypeF(MaterialEncodedCategory, Color.Yellow, "Aberrant Shield Pattern Analysis", "Rare", "ASPA", "shieldpatternanalysis");
@@ -370,13 +374,16 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeF(MaterialEncodedCategory, Color.Yellow, "Security Firmware Patch", "Rare", "SFP", "securityfirmware");
             AddNewTypeC(MaterialEncodedCategory, Color.Yellow, "Unknown Ship Signature", "Rare", "USSig");
             AddNewTypeC(MaterialEncodedCategory, Color.Yellow, "Unknown Wake Data", "Rare", "UWD");
+            AddNewTypeF(MaterialEncodedCategory, Color.Yellow, "Pattern Delta Obelisk Data", "Rare", "PDOD", "ancientlanguagedata");
             // very rare data
             AddNewTypeC(MaterialEncodedCategory, Color.Red, "Abnormal Compact Emission Data", "Very Rare", "ACED");
             AddNewTypeF(MaterialEncodedCategory, Color.Red, "Adaptive Encryptors Capture", "Very Rare", "AEC", "adaptiveencryptors");
             AddNewTypeC(MaterialEncodedCategory, Color.Red, "Classified Scan Fragment", "Very Rare", "CSF");
             AddNewTypeF(MaterialEncodedCategory, Color.Red, "Datamined Wake Exceptions", "Very Rare", "DWEx", "dataminedwake");
             AddNewTypeC(MaterialEncodedCategory, Color.Red, "Modified Embedded Firmware", "Very Rare", "MEF");
-            AddNewTypeC(MaterialEncodedCategory, Color.Red, "Peculiar Shield Frequency Data", "Very Rare", "PSFD");
+            AddNewTypeF(MaterialEncodedCategory, Color.Red, "Peculiar Shield Frequency Data", "Very Rare", "PSFD", "shieldfrequencydata");
+            AddNewTypeF(MaterialEncodedCategory, Color.Red, "Pattern Epsilon Obelisk Data", "Very Rare", "PSFD", "ancienttechnologicaldata");
+             
 
             //very common manufactured
             AddNewTypeC(MaterialManufacturedCategory, Color.Cyan, "Basic Conductors", "Very Common", "BaC");
@@ -387,8 +394,8 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeC(MaterialManufacturedCategory, Color.Cyan, "Heat Conduction Wiring", "Very Common", "HCW");
             AddNewTypeC(MaterialManufacturedCategory, Color.Cyan, "Mechanical Scrap", "Very Common", "MS");
             AddNewTypeC(MaterialManufacturedCategory, Color.Cyan, "Salvaged Alloys", "Very Common", "SAll");
-            AddNewTypeC(MaterialManufacturedCategory, Color.Cyan, "Tempered Alloys", "Very Common", "TeA");
             AddNewTypeC(MaterialManufacturedCategory, Color.Cyan, "Worn Shield Emitters", "Very Common", "WSE");
+            AddNewTypeC(MaterialManufacturedCategory, Color.Cyan, "Thermic Alloys", "Very Common", "ThA");
             // common manufactured
             AddNewTypeC(MaterialManufacturedCategory, Color.Green, "Chemical Processors", "Common", "CP");
             AddNewTypeC(MaterialManufacturedCategory, Color.Green, "Conductive Components", "Common", "CCo");
@@ -400,9 +407,6 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeC(MaterialManufacturedCategory, Color.Green, "Hybrid Capacitors", "Common", "HC");
             AddNewTypeC(MaterialManufacturedCategory, Color.Green, "Mechanical Equipment", "Common", "ME");
             AddNewTypeC(MaterialManufacturedCategory, Color.Green, "Shield Emitters", "Common", "SE");
-            AddNewTypeF(MaterialManufacturedCategory, Color.Green, "Federal Core Composites", "Common", "FCC", "fedcorecomposites");
-            AddNewTypeF(MaterialManufacturedCategory, Color.Green, "Federal Proprietary Composites", "Common", "FPC", "fedproprietarycomposites");
-            AddNewTypeF(MaterialManufacturedCategory, Color.Green, "Unknown Energy Source", "Common", "UES" , "unknownenergysource");
 
             // standard manufactured
             AddNewTypeC(MaterialManufacturedCategory, Color.SandyBrown, "Chemical Distillery", "Standard", "CD");
@@ -425,8 +429,10 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeC(MaterialManufacturedCategory, Color.Yellow, "Proprietary Composites", "Rare", "PCo");
             AddNewTypeC(MaterialManufacturedCategory, Color.Yellow, "Proto Light Alloys", "Rare", "PLA");
             AddNewTypeC(MaterialManufacturedCategory, Color.Yellow, "Refined Focus Crystals", "Rare", "RFC");
-            AddNewTypeC(MaterialManufacturedCategory, Color.Yellow, "Thermic Alloys", "Rare", "ThA");
+            AddNewTypeC(MaterialManufacturedCategory, Color.Yellow, "Tempered Alloys", "Rare", "TeA");
+            AddNewTypeF(MaterialManufacturedCategory, Color.Yellow, "Proprietary Composites", "Rare", "FPC", "fedproprietarycomposites");
             // very rare manufactured
+            AddNewTypeF(MaterialManufacturedCategory, Color.Red, "Core Dynamics Composites", "Very Rare", "FCC", "fedcorecomposites");
             AddNewTypeC(MaterialManufacturedCategory, Color.Red, "Biotech Conductors", "Very Rare", "BiC");
             AddNewTypeC(MaterialManufacturedCategory, Color.Red, "Core Dynamics Composites", "Very Rare", "CDC");
             AddNewTypeC(MaterialManufacturedCategory, Color.Red, "Exquisite Focus Crystals", "Very Rare", "EFC");
@@ -438,9 +444,353 @@ namespace EDDiscovery.EliteDangerous
             AddNewTypeC(MaterialManufacturedCategory, Color.Red, "Proto Heat Radiators", "Very Rare", "PHR");
             AddNewTypeC(MaterialManufacturedCategory, Color.Red, "Proto Radiolic Alloys", "Very Rare", "PRA");
             AddNewTypeC(MaterialManufacturedCategory, Color.Red, "Unknown Fragment", "Very Rare", "UF");
+            AddNewTypeF(MaterialManufacturedCategory, Color.Red, "Unknown Fragment", "Very Rare", "UES", "unknownenergysource");
         }
 
         #endregion
+
+#if false
+
+#region Anthor check 19 may 2017        - **** KEEP THIS, We will periodically ask Anthor for his files and then we can double check
+
+        static Dictionary<int, string> dataalias = new Dictionary<int, string>()
+    {
+         { 1,  "Aberrant Shield Pattern Analysis"},
+         {    2,  "Abnormal Compact Emission Data"},
+     {    3,  "Adaptive Encryptors Capture"},
+     {    4,  "Anomalous Bulk Scan Data"},
+     {    5,  "Anomalous FSD Telemetry"},
+     {    6,  "Atypical Disrupted Wake Echoes"},
+     {    7,  "Atypical Encryption Archives"},
+     {    8,  "Classified Scan Databanks"},
+     {    9,  "Classified Scan Fragment"},
+     {   10  ,"Cracked Industrial Firmware"},
+     {   11  ,"Datamined Wake Exceptions"},
+     {   12  ,"Decoded Emission Data"},
+     {   13  ,"Distorted Shield Cycle Recordings"},
+     {   14  ,"Divergent Scan Data"},
+     {   15  ,"Eccentric Hyperspace Trajectories"},
+     {   16  ,"Exceptional Scrambled Emission Data"},
+     {   17  ,"Inconsistent Shield Soak Analysis"},
+     {   18  ,"Irregular Emission Data"},
+     {   19  ,"Modified Consumer Firmware"},
+     {   20  ,"Modified Embedded Firmware"},
+     {   21  ,"Open Symmetric Keys"},
+     {   22  ,"Pattern Alpha Obelisk Data"},
+     {   23  ,"Pattern Beta Obelisk Data"},
+     {   24  ,"Pattern Delta Obelisk Data"},
+     {   25  ,"Pattern Epsilon Obelisk Data"},
+     {   26  ,"Pattern Gamma Obelisk Data"},
+     {   27  ,"Peculiar Shield Frequency Data"},
+     {   28  ,"Security Firmware Patch"},
+     {   29  ,"Specialised Legacy Firmware"},
+     {   30  ,"Strange Wake Solutions"},
+     {   31  ,"Tagged Encryption Codes"},
+     {   32  ,"Unexpected Emission Data"},
+     {   33  ,"Unidentified Scan Archives"},
+     {   34  ,"Unknown Fragment"},
+     {   35  ,"Untypical Shield Scans"},
+     {   36  ,"Unusual Encrypted Files"},
+     {   37  ,"Unknown Ship Signature"},
+     {   38  ,"Unknown Wake Data"},
+    };
+
+        static Dictionary<string, int> fddataalias = new Dictionary<string, int>()
+    {
+        {"shieldpatternanalysis"            ,1},
+        {"compactemissionsdata"             ,2},
+        {"adaptiveencryptors"               ,3},
+        {"bulkscandata"                     ,4},
+        {"fsdtelemetry"                     ,5},
+        {"disruptedwakeechoes"              ,6},
+        {"encryptionarchives"               ,7},
+        {"scandatabanks"                    ,8},
+        {"classifiedscandata"               ,9},
+        {"industrialfirmware"               ,10},
+        {"dataminedwake"                    ,11},
+        {"decodedemissiondata"              ,12},
+        {"shieldcyclerecordings"            ,13},
+        {"encodedscandata"                  ,14},
+        {"hyperspacetrajectories"           ,15},
+        {"scrambledemissiondata"            ,16},
+        {"shieldsoakanalysis"               ,17},
+        {"archivedemissiondata"             ,18},
+        {"consumerfirmware"                 ,19},
+        {"embeddedfirmware"                 ,20},
+        {"symmetrickeys"                    ,21},
+        {"ancientbiologicaldata"            ,22},
+        {"ancientculturaldata"              ,23},
+        {"ancientlanguagedata"              ,24},
+        {"ancienttechnologicaldata"         ,25},
+        {"ancienthistoricaldata"            ,26},
+        {"shieldfrequencydata"              ,27},
+        {"securityfirmware"                 ,28},
+        {"legacyfirmware"                   ,29},
+        {"wakesolutions"                    ,30},
+        {"encryptioncodes"                  ,31},
+        {"emissiondata"                     ,32},
+        {"scanarchives"                     ,33},
+        {"unknownenergysource"              ,34},
+        {"shielddensityreports"             ,35},
+        {"encryptedfiles"                   ,36},
+        {"unknownshipsignature"             ,37},
+        {"unknownwakedata"                  ,38}
+    };
+
+        static string getGradeData(string alias)
+        {
+            int number = fddataalias[alias];
+
+            if (Array.IndexOf(new int[] { 2, 3, 9, 11, 20, 25, 27, 38 }, number) >= 0)
+            {
+                return "Very Rare";
+            }
+
+            if (Array.IndexOf(new int[] { 1, 7, 12, 14, 15, 24, 28, 37 }, number) >= 0)
+            {
+                return "Rare";
+            }
+
+            if (Array.IndexOf(new int[] { 8, 10, 21, 22, 30, 32, 35 }, number) >= 0)
+            {
+                return "Standard";
+            }
+
+            if (Array.IndexOf(new int[] { 5, 17, 18, 19, 23, 31, 33 }, number) >= 0)
+            {
+                return "Common";
+            }
+
+            return "Very Common";
+        }
+
+
+        static Dictionary<int, string> matalias = new Dictionary<int, string>()
+    {
+     {    1,  "Antimony"},
+     {    2,  "Arsenic"},
+     {    3,  "Basic Conductors"},
+     {    4,  "Biotech Conductors"},
+     {    5,  "Cadmium"},
+     {    6,  "Carbon"},
+     {    7,  "Chemical Distillery"},
+     {    8,  "Chemical Manipulators"},
+     {    9,  "Chemical Processors"},
+     {   10,  "Chemical Storage Units"},
+     {   11,  "Chromium"},
+     {   12,  "Compact Composites"},
+     {   13,  "Compound Shielding"},
+     {   14,  "Conductive Ceramics"},
+     {   15,  "Conductive Components"},
+     {   16,  "Conductive Polymers"},
+     {   17,  "Configurable Components"},
+     {   18,  "Core Dynamics Composites"},
+     {   19,  "Crystal Shards"},
+     {   20,  "Electrochemical Arrays"},
+     {   21,  "Exquisite Focus Crystals"},
+     {   22,  "Filament Composites"},
+     {   23,  "Flawed Focus Crystals"},
+     {   24,  "Focus Crystals"},
+     {   25,  "Galvanising Alloys"},
+     {   26,  "Germanium"},
+     {   27,  "Grid Resistors"},
+     {   28,  "Heat Conduction Wiring"},
+     {   29,  "Heat Dispersion Plate"},
+     {   30,  "Heat Exchangers"},
+     {   31,  "Heat Resistant Ceramics"},
+     {   32,  "Heat Vanes"},
+     {   33,  "High Density Composites"},
+     {   34,  "Hybrid Capacitors"},
+     {   35,  "Imperial Shielding"},
+     {   36,  "Improvised Components"},
+     {   37,  "Iron"},
+     {   38,  "Manganese"},
+     {   39,  "Mechanical Components"},
+     {   40,  "Mechanical Equipment"},
+     {   41,  "Mechanical Scrap"},
+     {   42,  "Mercury"},
+     {   43,  "Military Grade Alloys"},
+     {   44,  "Military Supercapacitors"},
+     {   45,  "Molybdenum"},
+     {   46,  "Nickel"},
+     {   47,  "Niobium"},
+     {   48,  "Pharmaceutical Isolators"},
+     {   49,  "Phase Alloys"},
+     {   50,  "Phosphorus"},
+     {   51,  "Polonium"},
+     {   52,  "Polymer Capacitors"},
+     {   53,  "Precipitated Alloys"},
+     {   54,  "Proprietary Composites"},
+     {   55,  "Proto Heat Radiators"},
+     {   56,  "Proto Light Alloys"},
+     {   57,  "Proto Radiolic Alloys"},
+     {   58,  "Refined Focus Crystals"},
+     {   59,  "Ruthenium"},
+     {   60,  "Salvaged Alloys"},
+     {   61,  "Selenium"},
+     {   62,  "Shield Emitters"},
+     {   63,  "Shielding Sensors"},
+     {   64,  "Sulphur"},
+     {   65,  "Technetium"},
+     {   66,  "Tellurium"},
+     {   67,  "Tempered Alloys"},
+     {   68,  "Thermic Alloys"},
+     {   69,  "Tin"},
+     {   70,  "Tungsten"},
+     {   71,  "Unknown Fragment"},
+     {   72,  "Vanadium"},
+     {   73,  "Worn Shield Emitters"},
+     {   74,  "Yttrium"},
+     {   75,  "Zinc"},
+     {   76,  "Zirconium"},
+    };
+
+        static Dictionary<string, int> fdmatalias = new Dictionary<string, int>()
+    { 
+        {"antimony"                , 1},
+            {"arsenic"                 , 2},
+        {"basicconductors"         , 3},
+        {"biotechconductors"       , 4},
+        {"cadmium"                 , 5},
+        {"carbon"                  , 6},
+        {"chemicaldistillery"      , 7},
+        {"chemicalmanipulators"    , 8},
+        {"chemicalprocessors"      , 9},
+        {"chemicalstorageunits"    , 10},
+        {"chromium"                , 11},
+        {"compactcomposites"       , 12},
+        {"compoundshielding"       , 13},
+        {"conductiveceramics"      , 14},
+        {"conductivecomponents"    , 15},
+        {"conductivepolymers"      , 16},
+        {"configurablecomponents"  , 17},
+        {"fedcorecomposites"       , 18},
+        {"crystalshards"           , 19},
+        {"electrochemicalarrays"   , 20},
+        {"exquisitefocuscrystals"  , 21},
+        {"filamentcomposites"      , 22},
+        {"uncutfocuscrystals"      , 23},
+        {"focuscrystals"           , 24},
+        {"galvanisingalloys"       , 25},
+        {"germanium"               , 26},
+        {"gridresistors"           , 27},
+        {"heatconductionwiring"    , 28},
+        {"heatdispersionplate"     , 29},
+        {"heatexchangers"          , 30},
+        {"heatresistantceramics"   , 31},
+        {"heatvanes"               , 32},
+        {"highdensitycomposites"   , 33},
+        {"hybridcapacitors"        , 34},
+        {"imperialshielding"       , 35},
+        {"improvisedcomponents"    , 36},
+        {"iron"                    , 37},
+        {"manganese"               , 38},
+        {"mechanicalcomponents"    , 39},
+        {"mechanicalequipment"     , 40},
+        {"mechanicalscrap"         , 41},
+        {"mercury"                 , 42},
+        {"militarygradealloys"     , 43},
+        {"militarysupercapacitors" , 44},
+        {"molybdenum"              , 45},
+        {"nickel"                  , 46},
+        {"niobium"                 , 47},
+        {"pharmaceuticalisolators" , 48},
+        {"phasealloys"             , 49},
+        {"phosphorus"              , 50},
+        {"polonium"                , 51},
+        {"polymercapacitors"       , 52},
+        {"precipitatedalloys"      , 53},
+        {"fedproprietarycomposites", 54},
+        {"protoheatradiators"      , 55},
+        {"protolightalloys"        , 56},
+        {"protoradiolicalloys"     , 57},
+        {"refinedfocuscrystals"    , 58},
+        {"ruthenium"               , 59},
+        {"salvagedalloys"          , 60},
+        {"selenium"                , 61},
+        {"shieldemitters"          , 62},
+        {"shieldingsensors"        , 63},
+        {"sulphur"                 , 64},
+        {"technetium"              , 65},
+        {"tellurium"               , 66},
+        {"temperedalloys"          , 67},
+        {"thermicalloys"           , 68},
+        {"tin"                     , 69},
+        {"tungsten"                , 70},
+        {"unknownenergysource"     , 71},
+        {"vanadium"                , 72},
+        {"wornshieldemitters"      , 73},
+        {"yttrium"                 , 74},
+        {"zinc"                    , 75},
+        {"zirconium"               , 76},
+    };
+
+        static string getGradeMat(string alias)
+        {
+            int number = fdmatalias[alias];
+
+            if (Array.IndexOf(new int[] { 1, 4, 18, 21, 35, 36, 43, 44, 48, 51, 55, 57, 59, 65, 66, 71 }, number )>=0)
+            {
+                return "Very Rare";
+            }
+
+            if (Array.IndexOf(new int[] { 5, 8, 13, 16, 17, 32, 42, 45, 52, 54, 56, 58, 67, 69, 74 }, number) >= 0)
+            {
+                return "Rare";
+            }
+
+            if (Array.IndexOf(new int[] { 2, 7, 14, 20, 24, 30, 33, 39, 47, 49, 53, 61, 63, 70, 76 }, number) >= 0)
+            {
+                return "Standard";
+            }
+
+            if (Array.IndexOf(new int[] { 9, 11, 15, 22, 23, 25, 26, 29, 31, 34, 38, 40, 62, 72, 75 }, number) >= 0)
+            {
+                return "Common";
+            }
+
+            return "Very Common";
+        }
+
+        static void CheckAnthor()
+        {
+            foreach (KeyValuePair<string, int> k in fdmatalias)
+            {
+                string realname = matalias[k.Value];
+                string grade = getGradeMat(k.Key);
+
+                System.Diagnostics.Debug.WriteLine(k.Key + "=" + k.Value + "=" + realname + "=" + grade);
+
+                MaterialCommodityDB db = GetCachedMaterial(k.Key);
+                if (db == null)
+                    System.Diagnostics.Debug.WriteLine("  ** NOT FOUND BY FDNAME");
+                else if (db.name != realname)
+                    System.Diagnostics.Debug.WriteLine("  ** Alias name disagres " + db.name + " vs " + realname);
+                else if (db.type != grade)
+                    System.Diagnostics.Debug.WriteLine("  ** Type disagres " + db.type + " vs " + grade);
+
+            }
+
+            foreach (KeyValuePair<string, int> k in fddataalias)
+            {
+                string realname = dataalias[k.Value];
+                string grade = getGradeData(k.Key);
+                System.Diagnostics.Debug.WriteLine(k.Key + "=" + k.Value + "=" + realname +"=" + grade);
+
+                MaterialCommodityDB db = GetCachedMaterial(k.Key);
+                if (db == null)
+                    System.Diagnostics.Debug.WriteLine("  ** NOT FOUND BY FDNAME");
+                else if (db.name != realname)
+                    System.Diagnostics.Debug.WriteLine("  ** Alias name disagres " + db.name + " vs " + realname);
+            }
+
+        }
+
+#endregion
+
+#endif
+
+
     }
 }
 
