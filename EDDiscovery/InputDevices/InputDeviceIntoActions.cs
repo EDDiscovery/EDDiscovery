@@ -44,100 +44,102 @@ namespace EDDiscovery.InputDevices
         private void Devices_OnNewEvent(List<InputDeviceEvent> list)
         {
             IntPtr handle = GetForegroundWindow();
+            Process[] processes = Process.GetProcessesByName("4NT");//Process.GetProcessesByName("EliteDangerous64");
 
-            if ( handle != null )
-            { 
-                StringBuilder Buffer = new StringBuilder(256);
-                if (GetWindowText(handle, Buffer, 256) > 0)
-                {
-                    System.Diagnostics.Debug.WriteLine("From " + Buffer.ToString());
-                }
-            }
-
-            Process[] all = Process.GetProcesses();
-            foreach( Process pa in all )
+            if (processes.Length == 0 || processes[0].MainWindowHandle != handle)
             {
-                System.Diagnostics.Debug.WriteLine("Process " + pa.ProcessName);
+                return;
             }
-
-            Process[] processes = Process.GetProcessesByName("EliteDangerous64");
-
-            if ( processes.Length>0)
-            {
-                Process p = processes[0];
-                if (p.MainWindowHandle == handle)
-                {
-                    System.Diagnostics.Debug.WriteLine("Elite Dangerous selected");
-                }
-            }
-
-
-
-
 
             foreach (InputDeviceEvent je in list)
             {
                 string match = je.EventName();              // same as bindings name..
-                System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
+                //System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
+
+                ac.ActionRun("onEliteInputRaw", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
+                        { "Device" , je.Device.ID().Name, "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
 
                 BindingsFile.Device dv = GetBindingDeviceFromInputDeviceIdentifier(je.Device.ID());
 
                 if (dv != null)
                 {
-                    List<BindingsFile.Assignment> assignlist = dv.Find(match, false);
+                    List<BindingsFile.Assignment> assignlist = dv.Find(match, false);       // get everything associated with this key..
 
                     if ( assignlist != null)
                     {
                         List<BindingsFile.Assignment> inonstate = new List<BindingsFile.Assignment>();
+                        List<bool> ispressable = new List<bool>();
                         
                         foreach (BindingsFile.Assignment a in assignlist)
                         {
-                            if ( IsAllPressed(a))
+                            Tuple<bool, bool> pressstate = IsAllPressed(a);
+                            if ( pressstate.Item1 )     // if pressed
                             {
-                                System.Diagnostics.Debug.WriteLine("  Rule Matches " + a.assignedfunc);
+                                //System.Diagnostics.Debug.WriteLine("  Rule Matches " + a.assignedfunc);
                                 inonstate.Add(a);       // but it might not be the best rule..
+                                ispressable.Add(pressstate.Item2);
                             }
                             else
                             {
                                 int isonindex = assignmentsinonstate.IndexOf(a);
                                 if ( isonindex != -1 )
                                 {
-                                    System.Diagnostics.Debug.WriteLine("  Rule Inactive " + a.assignedfunc);
+                                    System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc + "-");
                                     assignmentsinonstate.Remove(a);
+                                    ac.ActionRun("onEliteInputOff", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
+                                     { "Binding" , a.assignedfunc }));
                                 }
                             }
                         }
 
-                        foreach(BindingsFile.Assignment a in inonstate)
+                        for( int i = 0; i < inonstate.Count; i++ )
                         {
-                            if ( a.KeyAssignementLongerThan(inonstate))  // we have the best key list
+                            BindingsFile.Assignment a = inonstate[i];
+                            if (a.KeyAssignementLongerThan(inonstate))  // we have the best key list
                             {
-                                assignmentsinonstate.Add(a);
-                                System.Diagnostics.Debug.WriteLine("  Rule Active " + a.assignedfunc);
+                                if ( ispressable[i])
+                                    assignmentsinonstate.Add(a);
+
+                                System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc);
+                                ac.ActionRun("onEliteInput", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
+                                { "Device" , je.Device.ID().Name, "Binding" , a.assignedfunc , "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
                             }
                             else
                             {
-                                System.Diagnostics.Debug.WriteLine("  Reject Rule due to others are longer " + a.assignedfunc);
+                                //System.Diagnostics.Debug.WriteLine("  Reject Rule due to others are longer " + inonstate[i].assignedfunc);
                             }
                         }
 
+                        //System.Diagnostics.Debug.WriteLine("On state " + assignmentsinonstate.Count);
                     }
                 }
             }
         }
 
 
-        public bool IsAllPressed(BindingsFile.Assignment a)
+        public Tuple<bool,bool> IsAllPressed(BindingsFile.Assignment a)     // return if all okay pressed, second if all are pressable
         {
+            bool allpressable = true;
+
             foreach (BindingsFile.DeviceKeyPair ma in a.keys)
             {
                 InputDeviceInterface idi = GetInputDeviceFromBindingDevice(ma.Device);
 
-                if (idi == null || !idi.IsPressed(ma.Key))
-                    return false;
+                if (idi == null )       // no device, false
+                    return new Tuple<bool,bool>(false,false);
+
+                bool? v = idi.IsPressed(ma.Key);        // is it pressed, or not pressable?
+
+                if (v.HasValue)         // is pressable
+                {
+                    if (v.Value == false)     // if it
+                        return new Tuple<bool, bool>(false, false);
+                }
+                else
+                    allpressable = false;   // not pressable
             }
 
-            return true;
+            return new Tuple<bool, bool>(true, allpressable);
         }
 
         BindingsFile.Device GetBindingDeviceFromInputDeviceIdentifier(InputDeviceIdentity i)

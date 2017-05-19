@@ -112,7 +112,7 @@ namespace EDDiscovery.Actions
                 dialogs.Clear();
             }
 
-            System.Diagnostics.Debug.WriteLine("Program " + actionfile.name + "::" + Name + " terminated, handle close " + closehandlesatend);
+            //System.Diagnostics.Debug.WriteLine("Program " + actionfile.name + "::" + Name + " terminated, handle close " + closehandlesatend);
         }
 
         public Action GetNextStep()

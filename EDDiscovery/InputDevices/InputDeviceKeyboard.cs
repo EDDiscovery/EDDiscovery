@@ -94,7 +94,7 @@ namespace EDDiscovery.InputDevices
             return newname;
         }
 
-        public bool IsPressed(string keyname)
+        public bool? IsPressed(string keyname)
         {
             keyname = keyname.Substring(4);
             if (keyname.Length == 1 && (keyname[0] >= '0' && keyname[0] <= '9'))
