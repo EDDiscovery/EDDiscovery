@@ -222,14 +222,23 @@ namespace EDDiscovery
             frontierbindings.LoadBindingsFile();
 
             inputdevices = new InputDevices.InputDeviceList();
-            InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
-            InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);
             inputdevicesactions = new InputDevices.InputDevicesIntoActions(inputdevices, frontierbindings, actioncontroller);
-            inputdevicesactions.Start();
 
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
+        }
+
+        public void EliteInput( bool on )
+        {
+            inputdevicesactions.Stop();
+
+            if ( on )
+            {
+                InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
+                InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);
+                inputdevicesactions.Start();
+            }
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me

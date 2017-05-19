@@ -185,7 +185,7 @@ namespace EDDiscovery.InputDevices
                 return "Joy_" + ((Axis)(e.EventNumber - AxisBase)).ToString() + "Axis";
         }
 
-        public bool IsPressed(string eventname)
+        public bool? IsPressed(string eventname)
         {
             if (eventname.StartsWith("Joy_POV"))
             {
@@ -202,9 +202,9 @@ namespace EDDiscovery.InputDevices
                     }
                 }
             }
-            else if (eventname.Contains("Axis"))
+            else if (eventname.Contains("Axis"))        // axis are always pressed in effect..
             {
-                return true;
+                return null;
             }
             else if (eventname.StartsWith("Joy_"))
             {
@@ -213,7 +213,7 @@ namespace EDDiscovery.InputDevices
                     return butstate[but - 1];
             }
 
-            return false;
+            return null;
         }
 
 

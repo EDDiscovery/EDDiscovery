@@ -97,6 +97,9 @@ namespace EDDiscovery.Actions
             events.Add("onPlayStarted");
             events.Add("onPlayFinished");
             events.Add("onMenuItem");
+            events.Add("onEliteInputRaw");
+            events.Add("onEliteInput");
+            events.Add("onEliteInputOff");
 
             frm.InitAction("Actions: Define actions", events, globalvariables.NameList, persistentglobalvariables, actionfiles, discoveryform);
             frm.TopMost = discoveryform.FindForm().TopMost;
@@ -269,7 +272,7 @@ namespace EDDiscovery.Actions
             return ale.Count;
         }
 
-        public bool ActionRun(string packname, string programname , ConditionVariables runvars , bool now = false )
+        public bool ActionRunProgram(string packname, string programname , ConditionVariables runvars , bool now = false )
         {
             Tuple<ActionFile, ActionProgram> found = actionfiles.FindProgram(packname, programname);
 
