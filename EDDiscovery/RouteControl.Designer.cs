@@ -108,6 +108,7 @@ namespace EDDiscovery
             this.richTextBox_routeresult.HideScrollBar = true;
             this.richTextBox_routeresult.Location = new System.Drawing.Point(0, 137);
             this.richTextBox_routeresult.Name = "richTextBox_routeresult";
+            this.richTextBox_routeresult.RichTextBoxBack.ReadOnly = true;
             this.richTextBox_routeresult.ScrollBarWidth = 20;
             this.richTextBox_routeresult.ShowLineCount = false;
             this.richTextBox_routeresult.Size = new System.Drawing.Size(897, 292);
