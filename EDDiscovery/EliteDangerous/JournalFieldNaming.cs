@@ -32,44 +32,9 @@ namespace EDDiscovery.EliteDangerous
             return fdname;
         }
 
-        //2.2 to 2.3 changed some of the identifier names.. change the 2.2 ones to 2.3!
-
-        static Dictionary<string, string> fdnamemangling = new Dictionary<string, string>()
-        {
-            { "aberrantshieldpatternanalysis"       ,  "shieldpatternanalysis" },
-            { "adaptiveencryptorscapture"           ,  "adaptiveencryptors" },
-            { "anomalousbulkscandata"               ,  "bulkscandata" },
-            { "anomalousfsdtelemetry"               ,  "fsdtelemetry" },
-            { "atypicaldisruptedwakeechoes"         ,  "disruptedwakeechoes" },
-            { "atypicalencryptionarchives"          ,  "encryptionarchives" },
-            { "crackedindustrialfirmware"           ,  "industrialfirmware" },
-            { "dataminedwakeexceptions"             ,  "dataminedwake" },
-            { "distortedshieldcyclerecordings"      ,  "shieldcyclerecordings" },
-            { "eccentrichyperspacetrajectories"     ,  "hyperspacetrajectories" },
-            { "exceptionalscrambledemissiondata"    ,  "scrambledemissiondata" },
-            { "inconsistentshieldsoakanalysis"      ,  "shieldsoakanalysis" },
-            { "modifiedconsumerfirmware"            ,  "consumerfirmware" },
-            { "modifiedembeddedfirmware"            ,  "embeddedfirmware" },
-            { "opensymmetrickeys"                   ,  "symmetrickeys" },
-            { "peculiarshieldfrequencydata"         ,  "shieldfrequencydata" },
-            { "securityfirmwarepatch"               ,  "securityfirmware" },
-            { "specialisedlegacyfirmware"           ,  "legacyfirmware" },
-            { "strangewakesolutions"                ,  "wakesolutions" },
-            { "taggedencryptioncodes"               ,  "encryptioncodes" },
-            { "unidentifiedscanarchives"            ,  "scanarchives" },
-            { "unusualencryptedfiles"               ,  "encryptedfiles" },
-        };
-
         static public string FDNameTranslation(string old)
         {
-            if (fdnamemangling.ContainsKey(old))
-            {
-                System.Diagnostics.Debug.WriteLine("Sub " + old);
-                return fdnamemangling[old];
-            }
-            else
-                return old;
-            //return fdnamemangling.ContainsKey(old) ? fdnamemangling[old] : old;
+            return MaterialCommodityDB.FDNameTranslation(old);
         }
 
         public static string RMat(string fdname)            // fix up fdname into a nicer name
