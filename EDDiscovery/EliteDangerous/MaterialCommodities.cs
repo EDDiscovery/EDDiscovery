@@ -495,18 +495,14 @@ namespace EDDiscovery.EliteDangerous
             // beyond Anthor but seen in logs
             AddCommodity("Drones", "Drones");
 
-            foreach( MaterialCommodityDB d in cachelist.Values)
-            {
-                System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3}", d.fdname, d.name, d.category, d.type));
-            }
+            //foreach (MaterialCommodityDB d in cachelist.Values) System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3}", d.fdname, d.name, d.category, d.type));
         }
 
 
         static Dictionary<string, string> fdnamemangling = new Dictionary<string, string>()
         {
             //2.2 to 2.3 changed some of the identifier names.. change the 2.2 ones to 2.3!  Anthor data from his materials db file
-
-
+            
             { "aberrantshieldpatternanalysis"       ,  "shieldpatternanalysis" },
             { "adaptiveencryptorscapture"           ,  "adaptiveencryptors" },
             { "anomalousbulkscandata"               ,  "bulkscandata" },
@@ -1184,7 +1180,15 @@ namespace EDDiscovery.EliteDangerous
                     }
                 }
 
+                foreach( KeyValuePair<string,string> mk in fdnamemangling )
+                {
+                    MaterialCommodityDB p = GetCachedMaterial(mk.Value);
 
+                    if ( p == null )
+                    {
+                        System.Diagnostics.Debug.WriteLine("Mangle " + mk.Value + " does not exist");
+                    }
+                }
             }
 
         }
