@@ -50,11 +50,11 @@ namespace EDDiscovery.Actions
             programs.Add(p);
         }
 
-        public string[] GetActionProgramList()
+        public string[] GetActionProgramList(bool markext = false)
         {
             string[] ret = new string[programs.Count];
             for (int i = 0; i < programs.Count; i++)
-                ret[i] = programs[i].Name;
+                ret[i] = programs[i].Name + ((markext && programs[i].StoredInSubFile!=null) ? " (Ext)":"");
 
             return ret;
         }
