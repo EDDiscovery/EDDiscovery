@@ -6,43 +6,66 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.InputDevices
 {
+    // list of devices, and main event loop.  Hook to OnNewEvent
+
     class InputDeviceList
     {
-        public List<InputDeviceInterface> inputdevices { get; private set; } = new List<InputDeviceInterface>();
-
-        System.Threading.AutoResetEvent stophandle = new System.Threading.AutoResetEvent(false);        // used by dispose to tell thread to stop
-        System.Threading.Thread waitfordatathread;      // the background worker
         public event Action<List<InputDeviceEvent>> OnNewEvent;
+
+        private System.Threading.AutoResetEvent stophandle = new System.Threading.AutoResetEvent(false);        // used by dispose to tell thread to stop
+        private System.Threading.Thread waitfordatathread;      // the background worker
+        private List<InputDeviceInterface> inputdevices { get; set; } = new List<InputDeviceInterface>();
 
         public void Add(InputDeviceInterface i)
         {
             inputdevices.Add(i);
         }
 
-        public void Dispose()
+        public InputDeviceInterface Find(Predicate<InputDeviceInterface> p)
         {
-            stophandle.Set();
-            waitfordatathread.Join();
-            System.Diagnostics.Debug.WriteLine("Safe to dispose");
-
-            foreach (InputDeviceInterface i in inputdevices)
-                i.Dispose();
+            return inputdevices.Find(p);
         }
 
         public void Start()
         {
-            waitfordatathread = new System.Threading.Thread(waitthread);
-            waitfordatathread.Start();
+            if (waitfordatathread == null)
+            {
+                waitfordatathread = new System.Threading.Thread(waitthread);
+                waitfordatathread.Start();
+            }
         }
 
-        void waitthread()
+        public void Stop()
+        {
+            if (waitfordatathread != null)
+            {
+                stophandle.Set();
+                waitfordatathread.Join();
+                waitfordatathread = null;
+                System.Diagnostics.Debug.WriteLine("IDL Stop");
+            }
+        }
+
+        public void Dispose()       // stop and dispose of all input devices
+        {
+            Stop();
+
+            foreach (InputDeviceInterface i in inputdevices)
+                i.Dispose();
+
+            System.Diagnostics.Debug.WriteLine("IDL Dispose");
+        }
+
+
+        private void waitthread()
         {
             System.Threading.WaitHandle[] wh = new System.Threading.WaitHandle[inputdevices.Count+1];
             for (int i = 0; i < inputdevices.Count; i++)
                 wh[i] = inputdevices[i].Eventhandle();
             wh[inputdevices.Count] = stophandle;
 
-            System.Diagnostics.Debug.WriteLine("Begin thread");
+            System.Diagnostics.Debug.WriteLine("IDL start");
+
             while (true)
             {
                 int hhit = System.Threading.WaitHandle.WaitAny(wh);
@@ -58,7 +81,6 @@ namespace EDDiscovery.InputDevices
                     OnNewEvent?.Invoke(list);
                 }
             }
-            System.Diagnostics.Debug.WriteLine("Stop thread");
         }
     }
 }

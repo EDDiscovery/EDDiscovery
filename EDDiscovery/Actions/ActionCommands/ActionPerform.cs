@@ -90,7 +90,8 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("configurewave"))
                     ap.actioncontroller.ConfigureWave(sp.NextQuotedWord() ?? "Configure Wave Output");
                 else if (cmdname.Equals("enableeliteinput"))
-                    ap.actioncontroller.DiscoveryForm.EliteInput(true);
+                    ap.actioncontroller.DiscoveryForm.
+                        EliteInput(true);
                 else if (cmdname.Equals("disableeliteinput"))
                     ap.actioncontroller.DiscoveryForm.EliteInput(false);
                 else
