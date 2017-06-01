@@ -59,8 +59,8 @@ namespace EDDiscovery.Actions
         public class MatchingSets
         {
             public ActionFile af;                           // file it came from
-            public List<ConditionLists.Condition> cl;       // list of matching events..
-            public List<ConditionLists.Condition> passed;   // list of passed events after condition checked.
+            public List<Condition> cl;       // list of matching events..
+            public List<Condition> passed;   // list of passed events after condition checked.
         }
 
         // any with refresh flag set?
@@ -83,7 +83,7 @@ namespace EDDiscovery.Actions
             {
                 if (af.enabled)         // only enabled files are checked
                 {
-                    List<ConditionLists.Condition> events = af.actionfieldfilter.GetConditionListByEventName(eventname, flagstart);
+                    List<Condition> events = af.actionfieldfilter.GetConditionListByEventName(eventname, flagstart);
 
                     if (events != null)     // and if we have matching event..
                     {
@@ -108,7 +108,7 @@ namespace EDDiscovery.Actions
             {
                 foreach (MatchingSets ae in ale)       // for all files
                 {
-                    foreach (ConditionLists.Condition fe in ae.cl)        // find all values needed
+                    foreach (Condition fe in ae.cl)        // find all values needed
                         fe.IndicateValuesNeeded(ref valuesneeded);
                 }
 
@@ -124,7 +124,7 @@ namespace EDDiscovery.Actions
             foreach (MatchingSets ae in ale)       // for all files
             {
                 string errlist = null;
-                ae.passed = new List<ConditionLists.Condition>();
+                ae.passed = new List<Condition>();
 
                 //System.Diagnostics.Debug.WriteLine("Check `" + ae.af.name + ae.af.actionfieldfilter.ToString() + "`");
                 //ActionData.DumpVars(valuesneeded, " Test var:");
@@ -141,7 +141,7 @@ namespace EDDiscovery.Actions
         {
             foreach (Actions.ActionFileList.MatchingSets ae in ale)          // for every file which passed..
             {
-                foreach (ConditionLists.Condition fe in ae.passed)          // and every condition..
+                foreach (Condition fe in ae.passed)          // and every condition..
                 {
                     Tuple<ActionFile, ActionProgram> ap = FindProgram(fe.action, ae.af);          // find program using this name, prefer this action file first
 
@@ -235,8 +235,8 @@ namespace EDDiscovery.Actions
 
             foreach (FileInfo f in allFiles)
             {
-                ActionFile af;
-                string err = ActionFile.ReadFile(f.FullName, out af);
+                ActionFile af = new ActionFile();
+                string err = af.ReadFile(f.FullName);
                 if (err.Length == 0)
                     actionfiles.Add(af);
                 else
@@ -253,8 +253,8 @@ namespace EDDiscovery.Actions
 
         public string LoadFile(string filename)
         {
-            ActionFile af;
-            string err = ActionFile.ReadFile(filename, out af);
+            ActionFile af = new ActionFile();
+            string err = af.ReadFile(filename);
 
             if (err.Length == 0)
             {
@@ -271,19 +271,19 @@ namespace EDDiscovery.Actions
 
         public void SaveCurrentActionFile()
         {
-            actionfiles[current].SaveFile();
+            actionfiles[current].WriteFile();
         }
 
         #region special helpers
 
-        public List<Tuple<string, ConditionLists.MatchType>> ReturnValuesOfSpecificConditions(string conditions, List<ConditionLists.MatchType> matchtypes)
+        public List<Tuple<string, ConditionEntry.MatchType>> ReturnValuesOfSpecificConditions(string conditions, List<ConditionEntry.MatchType> matchtypes)
         {
-            List<Tuple<string, ConditionLists.MatchType>> ret = new List<Tuple<string, ConditionLists.MatchType>>();
+            List<Tuple<string, ConditionEntry.MatchType>> ret = new List<Tuple<string, ConditionEntry.MatchType>>();
             foreach (ActionFile f in actionfiles)
             {
                 if (f.enabled)
                 {
-                    List<Tuple<string, ConditionLists.MatchType>> fr = f.actionfieldfilter.ReturnValuesOfSpecificConditions(conditions, matchtypes);
+                    List<Tuple<string, ConditionEntry.MatchType>> fr = f.actionfieldfilter.ReturnValuesOfSpecificConditions(conditions, matchtypes);
                     if (fr != null)
                         ret.AddRange(fr);
                 }

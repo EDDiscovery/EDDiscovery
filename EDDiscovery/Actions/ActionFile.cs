@@ -29,14 +29,19 @@ namespace EDDiscovery.Actions
 {
     public class ActionFile         
     {
+        public ActionFile()
+        {
+
+        }
+
         public ActionFile(ConditionLists c, ActionProgramList p , string f , string n, bool e , ConditionVariables ivar = null )
         {
             actionfieldfilter = c;
             actionprogramlist = p;
-            filepath = f;
-            name = n;
             enabled = e;
             installationvariables = new ConditionVariables();
+            filepath = f;
+            name = n;
             if (ivar != null)
                 installationvariables.Add(ivar);
         }
@@ -47,81 +52,239 @@ namespace EDDiscovery.Actions
         public string filepath;
         public string name;
         public bool enabled;
-        public bool astext;
 
-        public static string ReadFile( string filename , out ActionFile af)
+        public string Read(JObject jo)
         {
-            af = null;
             string errlist = "";
 
-            using (StreamReader sr = new StreamReader(filename))         // read directly from file..
+            try
             {
-                string json = sr.ReadToEnd();
-                sr.Close();
+                JArray ivarja = (JArray)jo["Install"];
 
-                try
+                if (!JSONHelper.IsNullOrEmptyT(ivarja))
                 {
-                    JObject jo = (JObject)JObject.Parse(json);
+                    installationvariables.FromJSONObject(ivarja);
+                }
 
-                    JObject jcond = (JObject)jo["Conditions"];
+                JObject jcond = (JObject)jo["Conditions"];
+
+                if (actionfieldfilter.FromJSON(jcond))
+                {
                     JObject jprog = (JObject)jo["Programs"];
-                    bool en = (bool)jo["Enabled"];
+                    JArray jf = (JArray)jprog["ProgramSet"];
 
-                    JArray ivarja = (JArray)jo["Install"];
-
-                    ConditionVariables ivars = new ConditionVariables();
-                    if ( !JSONHelper.IsNullOrEmptyT(ivarja) )
+                    foreach (JObject j in jf)
                     {
-                        ivars.FromJSONObject(ivarja);
+                        ActionProgram ap = new ActionProgram();
+                        string lerr = ap.Read(j);
+
+                        if (lerr.Length == 0)         // if can't load, we can't trust the pack, so indicate error so we can let the user manually sort it out
+                            actionprogramlist.Add(ap);
+                        else
+                            errlist += lerr;
                     }
 
-                    ConditionLists cond = new ConditionLists();
-                    ActionProgramList prog = new ActionProgramList();
-
-                    if (cond.FromJSON(jcond))
-                    {
-                        errlist = prog.FromJSONObject(jprog);
-
-                        if (errlist.Length == 0)
-                        {
-                            af = new ActionFile(cond, prog, filename, Path.GetFileNameWithoutExtension(filename), en, ivars);
-                        }
-                    }
-                    else
-                        errlist = "Bad JSON in conditions";
-                        
+                    return errlist;
                 }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Dump:" + ex.StackTrace);
-                    errlist = "Bad JSON in File";
-                }
+                else
+                    errlist = "Bad JSON in conditions";
+
+                enabled = (bool)jo["Enabled"];
 
                 return errlist;
             }
+            catch
+            {
+                return errlist + " Also Missing JSON fields";
+            }
         }
 
-        public bool SaveFile()
+        public string ReadFile(string filename)     // string, empty if no errors
+        {
+            actionprogramlist = new ActionProgramList();
+            actionfieldfilter = new ConditionLists();
+            installationvariables = new ConditionVariables();
+            enabled = false;
+            filepath = filename;
+            name = Path.GetFileNameWithoutExtension(filename);
+
+            try
+            {
+                using (StreamReader sr = new StreamReader(filename))         // read directly from file..
+                {
+                    string firstline = sr.ReadLine();
+
+                    if (firstline == "{")
+                    {
+                        string json = firstline + Environment.NewLine + sr.ReadToEnd();
+                        sr.Close();
+
+                        try
+                        {
+                            JObject jo = JObject.Parse(json);
+                            return Read(jo);
+                        }
+                        catch
+                        {
+                            return "Invalid JSON" + Environment.NewLine;
+                        }
+                    }
+                    else if (firstline == "ACTIONFILE V4")
+                    {
+                        string line;
+                        int lineno = 1;     // on actionFILE V4
+
+                        while( (line= sr.ReadLine()) != null)
+                        {
+                            lineno++;       // on line of read..
+
+                            line.Trim();
+                            if (line.StartsWith("ENABLED", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                line = line.Substring(7).Trim().ToLower();
+                                if (line == "true")
+                                    enabled = true;
+                                else if (line == "false")
+                                    enabled = false;
+                                else
+                                    return name + " " + lineno + " ENABLED is neither true or false" + Environment.NewLine;
+                            }
+                            else if (line.StartsWith("PROGRAM", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                ActionProgram ap = new ActionProgram();
+                                string err = ap.Read(sr, ref lineno);
+
+                                if (err.Length > 0)
+                                    return name + " " + err;
+
+                                ap.Name = line.Substring(7).Trim();
+
+                                actionprogramlist.Add(ap);
+                            }
+                            else if (line.StartsWith("INCLUDE", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                ActionProgram ap = new ActionProgram();
+
+                                string incfilename = line.Substring(7).Trim();
+                                if (!incfilename.Contains("/") && !incfilename.Contains("\\"))
+                                    incfilename = Path.Combine(Path.GetDirectoryName(filename), incfilename);
+
+                                string err = ap.ReadFile(incfilename);
+
+                                if (err.Length > 0)
+                                    return name + " " + err;
+
+                                ap.StoredInSubFile = incfilename;       // FULL path note..
+                                actionprogramlist.Add(ap);
+                            }
+                            else if (line.StartsWith("EVENT", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                Condition c = new Condition();
+                                string err = c.Read(line.Substring(5).Trim(),true);
+                                if (err.Length > 0)
+                                    return name + " " + lineno + " " + err + Environment.NewLine;
+                                else if (c.action.Length == 0 || c.eventname.Length == 0)
+                                    return name + " " + lineno + " EVENT Missing action" + Environment.NewLine;
+
+                                actionfieldfilter.Add(c);
+                            }
+                            else if (line.StartsWith("INSTALL", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                ConditionVariables c = new ConditionVariables();
+                                if (c.FromString(line.Substring(7).Trim(), ConditionVariables.FromMode.SingleEntry) && c.Count == 1)
+                                {
+                                    installationvariables.Add(c);
+                                }
+                                else
+                                    return name + " " + lineno + " Incorrectly formatted INSTALL variable" + Environment.NewLine;
+                            }
+                            else if ( line.StartsWith("//") || line.Length == 0)
+                            {
+                            }
+                            else
+                                return name + " " + lineno + " Invalid command" + Environment.NewLine;
+                        }
+
+                        return "";
+                    }
+                    else
+                    {
+                        return name + " Header file type not recognised" + Environment.NewLine; 
+                    }
+                }
+            }
+            catch
+            {
+                return filename + " Not readable" + Environment.NewLine;
+            }
+        }
+
+        public void WriteJSON(StreamWriter sr)     
+        {
+            JObject jo = new JObject();
+            jo["Conditions"] = actionfieldfilter.GetJSONObject();
+
+            JObject evt = new JObject();
+            JArray jf = new JArray();
+
+            ActionProgram ap = null;
+            for (int i = 0; (ap = actionprogramlist.Get(i)) != null; i++)
+            {
+                JObject j1 = ap.WriteJSONObject();
+                jf.Add(j1);
+            }
+
+            evt["ProgramSet"] = jf;
+            jo["Programs"] = evt;
+            jo["Enabled"] = enabled;
+            jo["Install"] = installationvariables.ToJSONObject();
+
+            string json = jo.ToString(Formatting.Indented);
+            sr.Write(json);
+        }
+
+        public bool WriteFile(bool json = false)
         {
             try
             {
                 using (StreamWriter sr = new StreamWriter(filepath))
                 {
-                    if (astext)
-                    {
-                        string progs = actionprogramlist.ToString();
-                        sr.Write(progs);
-                    }
+                    string rootpath = Path.GetDirectoryName(filepath) + "\\";
+
+                    if (json)
+                        WriteJSON(sr);
                     else
                     {
-                        JObject jo = new JObject();
-                        jo["Conditions"] = actionfieldfilter.GetJSONObject();
-                        jo["Programs"] = actionprogramlist.ToJSONObject();
-                        jo["Enabled"] = enabled;
-                        jo["Install"] = installationvariables.ToJSONObject();
+                        sr.WriteLine("ACTIONFILE V4");
+                        sr.WriteLine();
+                        sr.WriteLine("ENABLED " + enabled);
+                        sr.WriteLine();
+                        sr.WriteLine(installationvariables.ToString(prefix: "INSTALL ", separ: Environment.NewLine));
+                        sr.WriteLine();
 
-                        string json = jo.ToString(Formatting.Indented);
-                        sr.Write(json);
+                        for (int i = 0; i < actionfieldfilter.Count; i++)
+                            sr.WriteLine("EVENT " + actionfieldfilter.Get(i).ToString(includeaction: true));
+
+                        sr.WriteLine();
+
+                        for (int i = 0; i < actionprogramlist.Count; i++)
+                        {
+                            ActionProgram f = actionprogramlist.Get(i);
+
+                            if (f.StoredInSubFile != null)
+                            {
+                                string full = f.StoredInSubFile;        // try and simplify the path here..
+                                if (full.StartsWith(rootpath))
+                                    full = full.Substring(rootpath.Length);
+
+                                sr.WriteLine("INCLUDE " + full);
+                                f.WriteFile(f.StoredInSubFile);
+                            }
+                            else
+                                f.Write(sr);
+
+                            sr.WriteLine();
+                        }
                     }
 
                     sr.Close();

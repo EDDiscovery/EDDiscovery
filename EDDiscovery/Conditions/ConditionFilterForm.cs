@@ -195,12 +195,13 @@ namespace EDDiscovery
 
                 groups = new List<Group>();
 
-                foreach (ConditionLists.Condition fe in clist.conditionlist)
+                Condition fe = null;
+                for(int i = 0; (fe = clist.Get(i))!=null; i++)
                 {
                     Group g = CreateGroupInternal(fe.eventname, fe.action, fe.actiondata, fe.innercondition.ToString(), fe.outercondition.ToString());
 
-                    foreach (ConditionLists.ConditionEntry f in fe.fields)
-                        CreateConditionInt(g, f.itemname, ConditionLists.MatchNames[(int)f.matchtype], f.matchstring);
+                    foreach (ConditionEntry f in fe.fields)
+                        CreateConditionInt(g, f.itemname, ConditionEntry.MatchNames[(int)f.matchtype], f.matchstring);
 
                     discoveryform.theme.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
@@ -345,7 +346,7 @@ namespace EDDiscovery
             }
 
             g.innercond = new ExtendedControls.ComboBoxCustom();
-            g.innercond.Items.AddRange(Enum.GetNames(typeof(ConditionLists.LogicalCondition)));
+            g.innercond.Items.AddRange(Enum.GetNames(typeof(ConditionEntry.LogicalCondition)));
             g.innercond.SelectedIndex = 0;
             g.innercond.Size = new Size(48, 24);
             g.innercond.Visible = false;
@@ -354,7 +355,7 @@ namespace EDDiscovery
             g.panel.Controls.Add(g.innercond);
 
             g.outercond = new ExtendedControls.ComboBoxCustom();
-            g.outercond.Items.AddRange(Enum.GetNames(typeof(ConditionLists.LogicalCondition)));
+            g.outercond.Items.AddRange(Enum.GetNames(typeof(ConditionEntry.LogicalCondition)));
             g.outercond.SelectedIndex = 0;
             g.outercond.Size = new Size(60, 24);
             g.outercond.Enabled = g.outercond.Visible = false;
@@ -437,7 +438,7 @@ namespace EDDiscovery
             g.panel.Controls.Add(c.fname);                                                // 1st control
 
             c.cond = new ExtendedControls.ComboBoxCustom();
-            c.cond.Items.AddRange(ConditionLists.MatchNames);
+            c.cond.Items.AddRange(ConditionEntry.MatchNames);
             c.cond.SelectedIndex = 0;
             c.cond.Size = new Size(140, 24);
             c.cond.DropDownHeight = 400;
@@ -561,7 +562,7 @@ namespace EDDiscovery
                 {
                     Group.Conditions c = g.condlist[condc];
                     c.fname.Location = new Point(condxoffset, vnextcond + 2);
-                    c.fname.Enabled = !ConditionLists.IsNullOperation(c.cond.Text);
+                    c.fname.Enabled = !ConditionEntry.IsNullOperation(c.cond.Text);
                     if (!c.fname.Enabled)
                         c.fname.Text = "";
 
@@ -569,7 +570,7 @@ namespace EDDiscovery
 
                     c.value.Location = new Point(c.cond.Right + 4, vnextcond + 2);
                     c.value.Size = new Size(panelwidth - condxoffset - c.fname.Width - 4 - c.cond.Width - 4 - c.del.Width - 4 - c.more.Width - 4 - g.innercond.Width - 4 - g.upbutton.Width + 8, 24);
-                    c.value.Enabled = !ConditionLists.IsNullOperation(c.cond.Text) && !ConditionLists.IsUnaryOperation(c.cond.Text);
+                    c.value.Enabled = !ConditionEntry.IsNullOperation(c.cond.Text) && !ConditionEntry.IsUnaryOperation(c.cond.Text);
                     if (!c.value.Enabled)
                         c.value.Text = "";
 
@@ -633,7 +634,7 @@ namespace EDDiscovery
             if (IsActionsActive)
             {
                 comboBoxCustomEditProg.Items.Clear();
-                List<string> entries = actionfilelist.CurPrograms.GetActionProgramList(true).ToList();
+                List<string> entries = actionfilelist.CurPrograms.GetActionProgramList().ToList();
                 entries.Sort();
                 comboBoxCustomEditProg.Items.AddRange(entries.ToArray());
                 comboBoxCustomEditProg.Items.Add("New");
@@ -697,9 +698,9 @@ namespace EDDiscovery
             if (g.actionlist.SelectedIndex > 0)     // exclude NEW from checking for program
                 p = actionfilelist.CurPrograms.Get(g.actionlist.Text);
 
-            if (p != null && p.StoredInFile != null)
+            if (p != null && p.StoredInSubFile != null)
             {
-                p.EditInEditor(p.StoredInFile);         // Edit in the editor.. this also updated the program steps held internally
+                p.EditInEditor(p.StoredInSubFile);         // Edit in the editor.. this also updated the program steps held internally
             }
             else
             {
@@ -803,9 +804,9 @@ namespace EDDiscovery
                 if (!progname.Equals("New"))
                     p = actionfilelist.CurPrograms.Get(progname);
 
-                if ( p != null && p.StoredInFile != null )
+                if ( p != null && p.StoredInSubFile != null )
                 {
-                    p.EditInEditor(p.StoredInFile);         // Edit in the editor..
+                    p.EditInEditor(p.StoredInSubFile);         // Edit in the editor..
                 }
                 else
                 {
@@ -873,9 +874,9 @@ namespace EDDiscovery
 
             if (p != null)
             {
-                if (p.Item2.StoredInFile != null)
+                if (p.Item2.StoredInSubFile != null)
                 {
-                    p.Item2.EditInEditor(p.Item2.StoredInFile);         // Edit in the editor..
+                    p.Item2.EditInEditor(p.Item2.StoredInSubFile);         // Edit in the editor..
                 }
                 else
                 {
@@ -919,7 +920,7 @@ namespace EDDiscovery
 
                 //System.Diagnostics.Debug.WriteLine("Event {0} inner {1} outer {2} action {3} data '{4}'", evt, innerc, outerc, actionname, actiondata );
 
-                ConditionLists.Condition fe = new ConditionLists.Condition();
+                Condition fe = new Condition();
 
                 if (IsActionsActive && actionname.Equals("New"))        // actions, but not selected one..
                     errorlist += "Event " + evt + " does not have an action program defined" + Environment.NewLine;
@@ -936,13 +937,13 @@ namespace EDDiscovery
                             string condn = c.cond.Text;
                             string valuen = c.value.Text;
 
-                            if (fieldn.Length > 0 || ConditionLists.IsNullOperation(condn))
+                            if (fieldn.Length > 0 || ConditionEntry.IsNullOperation(condn))
                             {
-                                ConditionLists.ConditionEntry f = new ConditionLists.ConditionEntry();
+                                ConditionEntry f = new ConditionEntry();
 
                                 if (f.Create(fieldn, condn, valuen))
                                 {
-                                    if (valuen.Length == 0 && !ConditionLists.IsUnaryOperation(condn) && !ConditionLists.IsNullOperation(condn))
+                                    if (valuen.Length == 0 && !ConditionEntry.IsUnaryOperation(condn) && !ConditionEntry.IsNullOperation(condn))
                                         errorlist += "Do you want filter '" + fieldn + "' in group '" + fe.eventname + "' to have an empty value" + Environment.NewLine;
 
                                     fe.Add(f);
