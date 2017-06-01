@@ -634,7 +634,7 @@ namespace EDDiscovery
             if (IsActionsActive)
             {
                 comboBoxCustomEditProg.Items.Clear();
-                List<string> entries = actionfilelist.CurPrograms.GetActionProgramList().ToList();
+                List<string> entries = actionfilelist.CurPrograms.GetActionProgramList(true).ToList();
                 entries.Sort();
                 comboBoxCustomEditProg.Items.AddRange(entries.ToArray());
                 comboBoxCustomEditProg.Items.Add("New");
@@ -693,12 +693,25 @@ namespace EDDiscovery
             ExtendedControls.ButtonExt config = sender as ExtendedControls.ButtonExt;
             Group g = (Group)config.Tag;
 
+            bool shift = ModifierKeys.HasFlag(Keys.Shift);
+
             ActionProgram p = null;
 
             if (g.actionlist.SelectedIndex > 0)     // exclude NEW from checking for program
                 p = actionfilelist.CurPrograms.Get(g.actionlist.Text);
 
-            if (p != null && p.StoredInSubFile != null)
+            if (p != null && p.StoredInSubFile != null && shift)        // if we have a stored in sub file, but we shift hit, cancel it
+            {
+                if (Forms.MessageBoxTheme.Show(this, "Do you want to bring the file back into the main file", "WARNING", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                {
+                    p.StoredInSubFile = null;
+                    shift = false;
+                }
+                else
+                    return; // cancel, abort.
+            }
+
+            if (p != null && p.StoredInSubFile != null )
             {
                 p.EditInEditor(p.StoredInSubFile);         // Edit in the editor.. this also updated the program steps held internally
             }
@@ -734,7 +747,7 @@ namespace EDDiscovery
                 else
                     fieldnames.AddRange(additionalfieldnames);
 
-                apf.Init("Action program", discoveryform, fieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname);
+                apf.Init("Action program", discoveryform, fieldnames, actionfilelist.CurName, p, actionfilelist.CurPrograms.GetActionProgramList(), suggestedname, ModifierKeys.HasFlag(Keys.Shift));
 
                 DialogResult res = apf.ShowDialog();
 

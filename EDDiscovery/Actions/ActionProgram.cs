@@ -37,13 +37,6 @@ namespace EDDiscovery.Actions
                 Name = n;
         }
 
-        //public ActionProgram( ActionProgram other )
-        //{
-        //    Name = other.Name;
-        //    programsteps = other.programsteps;
-        //    StoredInSubFile = other.StoredInSubFile;
-        //}
-
         public void Set( ActionProgram other)
         {
             Name = other.Name;
