@@ -245,6 +245,8 @@
     <Compile Include="CompanionAPI\CModules.cs" />
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
+    <Compile Include="Conditions\Condition.cs" />
+    <Compile Include="Conditions\ConditionEntry.cs" />
     <Compile Include="Conditions\ConditionFileHandles.cs" />
     <Compile Include="Conditions\ConditionFunctions.cs" />
     <Compile Include="Actions\ActionCommands\ActionPragma.cs" />

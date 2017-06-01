@@ -102,7 +102,7 @@ namespace EDDiscovery
 
         // Print vars, if altops is passed in, you can output using alternate operators
 
-        public string ToString(Dictionary<string, string> altops = null, string pad = "", bool bracket = false , string separ = "," , bool quoteit = true)
+        public string ToString(Dictionary<string, string> altops = null, string pad = "", bool bracket = false , string separ = "," , bool quoteit = true, string prefix = "")
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
@@ -113,11 +113,11 @@ namespace EDDiscovery
                 string vs = (quoteit) ? v.Value.QuoteString(comma: true, bracket: bracket) : v.Value;
 
                 if ( altops == null )
-                    s += v.Key + pad + "=" + pad + vs;
+                    s += prefix + v.Key + pad + "=" + pad + vs;
                 else
                 {
                     System.Diagnostics.Debug.Assert(altops.ContainsKey(v.Key));
-                    s += v.Key + pad + altops[v.Key] + pad + vs;
+                    s += prefix + v.Key + pad + altops[v.Key] + pad + vs;
                 }
             }
 
