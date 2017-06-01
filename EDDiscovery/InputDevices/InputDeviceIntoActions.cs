@@ -31,6 +31,12 @@ namespace EDDiscovery.InputDevices
             devices.Start();
         }
 
+        public void Stop()
+        {
+            devices.OnNewEvent -= Devices_OnNewEvent;
+            devices.Stop();
+        }
+
         public void Dispose()
         {
             devices.Dispose();
@@ -38,8 +44,6 @@ namespace EDDiscovery.InputDevices
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
-        [DllImport("user32.dll")]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         private void Devices_OnNewEvent(List<InputDeviceEvent> list)
         {
@@ -150,7 +154,7 @@ namespace EDDiscovery.InputDevices
 
         InputDeviceInterface GetInputDeviceFromBindingDevice(BindingsFile.Device dv)
         {
-            InputDeviceInterface i = devices.inputdevices.Find(x =>
+            InputDeviceInterface i = devices.Find(x =>
             {
                 BindingsFile.Device b = bf.FindDevice(x.ID().Name, x.ID().Instanceguid, x.ID().Productguid);
                 return b != null && b.Name.Equals(dv.Name);

@@ -223,6 +223,8 @@ namespace EDDiscovery
 
             inputdevices = new InputDevices.InputDeviceList();
             inputdevicesactions = new InputDevices.InputDevicesIntoActions(inputdevices, frontierbindings, actioncontroller);
+            InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
+            InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);
 
             ApplyTheme();
 
@@ -234,11 +236,7 @@ namespace EDDiscovery
             inputdevicesactions.Stop();
 
             if ( on )
-            {
-                InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
-                InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);
                 inputdevicesactions.Start();
-            }
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
