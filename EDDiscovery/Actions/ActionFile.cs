@@ -27,14 +27,13 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionFile         
+    public class ActionFile
     {
         public ActionFile()
         {
-
         }
 
-        public ActionFile(ConditionLists c, ActionProgramList p , string f , string n, bool e , ConditionVariables ivar = null )
+        public ActionFile(ConditionLists c, ActionProgramList p, string f, string n, bool e, ConditionVariables ivar = null)
         {
             actionfieldfilter = c;
             actionprogramlist = p;
@@ -46,16 +45,17 @@ namespace EDDiscovery.Actions
                 installationvariables.Add(ivar);
         }
 
-        public ConditionLists actionfieldfilter;
-        public ActionProgramList actionprogramlist;
+        public ConditionLists actionfieldfilter;                        // note we use the list, but not the evaluate between conditions..
+        public ActionProgramList actionprogramlist;                     // programs associated with this pack
         public ConditionVariables installationvariables;                // used to pass to the installer various options, such as disable other packs
-        public string filepath;
-        public string name;
-        public bool enabled;
+        public string filepath;                                         // where it came from
+        public string name;                                             // its logical name
+        public bool enabled;                                            // if enabled.
 
-        public string Read(JObject jo)
+        public string Read(JObject jo , out bool readenable)            // KEEP JSON reader for backwards compatibility.
         {
             string errlist = "";
+            readenable = false;
 
             try
             {
@@ -68,9 +68,13 @@ namespace EDDiscovery.Actions
 
                 JObject jcond = (JObject)jo["Conditions"];
 
-                if (actionfieldfilter.FromJSON(jcond))
+                if (jcond != null)
+                    actionfieldfilter.FromJSON(jcond);
+
+                JObject jprog = (JObject)jo["Programs"];
+
+                if (jprog != null)
                 {
-                    JObject jprog = (JObject)jo["Programs"];
                     JArray jf = (JArray)jprog["ProgramSet"];
 
                     foreach (JObject j in jf)
@@ -83,13 +87,15 @@ namespace EDDiscovery.Actions
                         else
                             errlist += lerr;
                     }
-
-                    return errlist;
                 }
-                else
-                    errlist = "Bad JSON in conditions";
 
-                enabled = (bool)jo["Enabled"];
+                if (jo["Enabled"] != null)
+                {
+                    enabled = (bool)jo["Enabled"];
+                    readenable = true;
+                }
+
+                //System.Diagnostics.Debug.WriteLine("JSON read enable " + enabled);
 
                 return errlist;
             }
@@ -99,12 +105,13 @@ namespace EDDiscovery.Actions
             }
         }
 
-        public string ReadFile(string filename)     // string, empty if no errors
+        public string ReadFile(string filename, out bool readenable)     // string, empty if no errors
         {
             actionprogramlist = new ActionProgramList();
             actionfieldfilter = new ConditionLists();
             installationvariables = new ConditionVariables();
             enabled = false;
+            readenable = false;
             filepath = filename;
             name = Path.GetFileNameWithoutExtension(filename);
 
@@ -122,7 +129,7 @@ namespace EDDiscovery.Actions
                         try
                         {
                             JObject jo = JObject.Parse(json);
-                            return Read(jo);
+                            return Read(jo,out readenable);
                         }
                         catch
                         {
@@ -134,7 +141,7 @@ namespace EDDiscovery.Actions
                         string line;
                         int lineno = 1;     // on actionFILE V4
 
-                        while( (line= sr.ReadLine()) != null)
+                        while ((line = sr.ReadLine()) != null)
                         {
                             lineno++;       // on line of read..
 
@@ -148,6 +155,8 @@ namespace EDDiscovery.Actions
                                     enabled = false;
                                 else
                                     return name + " " + lineno + " ENABLED is neither true or false" + Environment.NewLine;
+
+                                readenable = true;
                             }
                             else if (line.StartsWith("PROGRAM", StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -180,11 +189,11 @@ namespace EDDiscovery.Actions
                             else if (line.StartsWith("EVENT", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 Condition c = new Condition();
-                                string err = c.Read(line.Substring(5).Trim(),true);
+                                string err = c.Read(line.Substring(5).Trim(), true);
                                 if (err.Length > 0)
                                     return name + " " + lineno + " " + err + Environment.NewLine;
                                 else if (c.action.Length == 0 || c.eventname.Length == 0)
-                                    return name + " " + lineno + " EVENT Missing action" + Environment.NewLine;
+                                    return name + " " + lineno + " EVENT Missing event name or action" + Environment.NewLine;
 
                                 actionfieldfilter.Add(c);
                             }
@@ -198,7 +207,7 @@ namespace EDDiscovery.Actions
                                 else
                                     return name + " " + lineno + " Incorrectly formatted INSTALL variable" + Environment.NewLine;
                             }
-                            else if ( line.StartsWith("//") || line.Length == 0)
+                            else if (line.StartsWith("//") || line.Length == 0)
                             {
                             }
                             else
@@ -209,7 +218,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        return name + " Header file type not recognised" + Environment.NewLine; 
+                        return name + " Header file type not recognised" + Environment.NewLine;
                     }
                 }
             }
@@ -219,7 +228,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        public void WriteJSON(StreamWriter sr)     
+        public void WriteJSON(StreamWriter sr)          // kept for reference and debugging..  files are now written in ASCII
         {
             JObject jo = new JObject();
             jo["Conditions"] = actionfieldfilter.GetJSONObject();
@@ -243,7 +252,7 @@ namespace EDDiscovery.Actions
             sr.Write(json);
         }
 
-        public bool WriteFile(bool json = false)
+        public bool WriteFile()
         {
             try
             {
@@ -251,25 +260,68 @@ namespace EDDiscovery.Actions
                 {
                     string rootpath = Path.GetDirectoryName(filepath) + "\\";
 
-                    if (json)
-                        WriteJSON(sr);
-                    else
+                    sr.WriteLine("ACTIONFILE V4");
+                    sr.WriteLine();
+                    sr.WriteLine("ENABLED " + enabled);
+                    sr.WriteLine();
+
+                    if (installationvariables.Count > 0)
                     {
-                        sr.WriteLine("ACTIONFILE V4");
-                        sr.WriteLine();
-                        sr.WriteLine("ENABLED " + enabled);
-                        sr.WriteLine();
                         sr.WriteLine(installationvariables.ToString(prefix: "INSTALL ", separ: Environment.NewLine));
                         sr.WriteLine();
+                    }
 
+                    if (actionfieldfilter.Count > 0)
+                    {
                         for (int i = 0; i < actionfieldfilter.Count; i++)
                             sr.WriteLine("EVENT " + actionfieldfilter.Get(i).ToString(includeaction: true));
 
                         sr.WriteLine();
+                    }
 
+                    if (actionprogramlist.Count > 0)
+                    {
                         for (int i = 0; i < actionprogramlist.Count; i++)
                         {
                             ActionProgram f = actionprogramlist.Get(i);
+
+                            sr.WriteLine("//*************************************************************");
+                            sr.WriteLine("// " + f.Name);
+                            string evl = "";
+
+                            for (int ic = 0; ic < actionfieldfilter.Count; ic++)
+                            {
+                                Condition c = actionfieldfilter.Get(ic);
+                                if (c.action.Equals(f.Name))
+                                {
+                                    evl += c.eventname;
+
+                                    if (!c.AlwaysTrue())
+                                    {
+                                        evl += "?(" + c.ToString() + ")";
+                                    }
+
+                                    if (c.actiondata.Length > 0)
+                                        evl += "(" + c.actiondata + ")";
+
+                                    evl += ", ";
+
+                                    if (evl.Length > 100)
+                                    {
+                                        sr.WriteLine("// Events: " + evl);
+                                        evl = "";
+                                    }
+                                }
+                            }
+
+                            if (evl.Length > 0)
+                            {
+                                evl = evl.Substring(0, evl.Length - 2);
+                                sr.WriteLine("// Events: " + evl);
+                            }
+
+                            sr.WriteLine("//*************************************************************");
+
 
                             if (f.StoredInSubFile != null)
                             {
@@ -287,6 +339,7 @@ namespace EDDiscovery.Actions
                         }
                     }
 
+
                     sr.Close();
                 }
 
@@ -297,6 +350,45 @@ namespace EDDiscovery.Actions
 
             return false;
         }
-    }
 
+        static public bool SetEnableFlag(string file, bool enable)              // change the enable flag. Read in,write out.
+        {
+            try
+            {
+                ActionFile f = new ActionFile();
+
+                bool readenable;
+                if (f.ReadFile(file, out readenable).Length == 0)        // read it in..
+                {
+                    f.enabled = enable;
+                    f.WriteFile();                                // write it out.
+                  //  System.Diagnostics.Debug.WriteLine("Set Enable " + file + " " + enable );
+                    return true;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+
+        static public ConditionVariables ReadVarsAndEnableFromFile(string file, out bool? enable)
+        {
+            ActionFile f = new ActionFile();
+            enable = null;
+
+            bool readenable;
+            if (f.ReadFile(file,out readenable).Length == 0)        // read it in..
+            {
+                if (readenable)
+                    enable = f.enabled;
+                //System.Diagnostics.Debug.WriteLine("Enable vars read " + file + " " + enable);
+                return f.installationvariables;
+            }
+            else
+                return null;
+        }
+
+    }
 }

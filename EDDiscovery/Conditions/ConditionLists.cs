@@ -453,7 +453,7 @@ namespace EDDiscovery
             return ret;
         }
 
-        public string FromString(string line)
+        public string Read(string line)         // decode a set of multi conditions (<cond> Or <cond>) Outer (<cond> And <cond>) etc 
         {
             StringParser sp = new StringParser(line);
 
@@ -467,7 +467,8 @@ namespace EDDiscovery
             }
 
             List<Condition> cllist = new List<Condition>();
-            string outercond = null;
+
+            ConditionEntry.LogicalCondition outercond = ConditionEntry.LogicalCondition.Or;         // first outer condition is ignored in a list.  Or is the default.
 
             while (true)
             {
@@ -477,13 +478,13 @@ namespace EDDiscovery
                 if (err.Length > 0)
                     return err;
 
-                c.SetOuterCondition(outercond ?? "Or");
+                c.outercondition = outercond;
                 cllist.Add(c);      // add..
 
                 if (sp.IsCharMoveOn(')'))      // if closing bracket..
                 {
                     if (!multi)
-                        return "Closing condition bracket found but no opening ( present";
+                        return "Closing condition bracket found but no opening bracket present";
 
                     if (sp.IsEOL)  // EOL, end of  (cond..cond) outercond ( cond cond)
                     {
@@ -492,19 +493,18 @@ namespace EDDiscovery
                     }
                     else
                     {
-                        outercond = sp.NextQuotedWord(delimchars);
-
-                        if (outercond == null)
-                            return "Missing outer condition in multiple conditions between brackets";
+                        err = ConditionEntry.GetLogicalCondition(sp, delimchars, out outercond);
+                        if (err.Length > 0)
+                            return err + " for outer condition";
 
                         if (!sp.IsCharMoveOn('(')) // must have another (
-                            return "Missing multiple condition after " + outercond;
+                            return "Missing opening bracket in multiple condition list after " + outercond.ToString();
                     }
                 }
                 else if (sp.IsEOL) // last condition
                 {
                     if (multi)
-                        return "Missing closing braket in multiple condition";
+                        return "Missing closing braket in multiple condition list";
 
                     conditionlist = cllist;
                     return null;

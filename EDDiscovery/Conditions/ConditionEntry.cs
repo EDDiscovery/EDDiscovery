@@ -143,6 +143,21 @@ namespace EDDiscovery
             Nand,   // any not true produces a true
         }
 
+        static public string GetLogicalCondition(StringParser sp, string delimchars, out LogicalCondition value)
+        {
+            value = LogicalCondition.Or;
+
+            string condi = sp.NextQuotedWord(delimchars);       // next is the inner condition..
+
+            if (condi == null)
+                return "Condition operator missing";
+
+            if (Enum.TryParse<ConditionEntry.LogicalCondition>(condi.Replace(" ", ""), out value))
+                return "";
+            else
+                return "Condition operator " + condi + " is not recognised";
+        }
+
         public string itemname;
         public MatchType matchtype;                     // true: Contents match for true, else contents dont match for true
         public string matchstring;                     // always set

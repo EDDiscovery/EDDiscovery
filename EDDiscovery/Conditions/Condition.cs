@@ -52,7 +52,7 @@ namespace EDDiscovery
             }
         }
 
-        public string ToString(bool includeaction = false, bool multi = false)
+        public string ToString(bool includeaction = false, bool multi = false)          // multi means quoting needed for ) as well as comma space
         {
             string ret = "";
 
@@ -84,13 +84,13 @@ namespace EDDiscovery
             return Read(sp, includeevent, delimchars);
         }
 
-        public string Read(StringParser sp, bool includeevent = false, string delimchars = ", ")
+        public string Read(StringParser sp, bool includeevent = false, string delimchars = ", ")    // if includeevent is set, it must be there..
         {
             fields = new List<ConditionEntry>();
             innercondition = outercondition = ConditionEntry.LogicalCondition.Or;
             eventname = ""; action = ""; actiondata = "";
 
-            if (includeevent)
+            if (includeevent)                                                                   
             {
                 if ((eventname = sp.NextQuotedWord(",")) == null || !sp.IsCharMoveOn(',') ||
                     (action = sp.NextQuotedWord(",")) == null || !sp.IsCharMoveOn(',') ||
@@ -100,48 +100,63 @@ namespace EDDiscovery
                 }
             }
 
-            string innercond = null;
+            ConditionEntry.LogicalCondition? ic = null;
 
             while (true)
             {
-                string var = sp.NextQuotedWord(delimchars);
-                string cond = sp.NextQuotedWord(delimchars);
+                string var = sp.NextQuotedWord(delimchars);             // always has para cond
+                if (var == null)
+                    return "Missing parameter (left side) of condition";
 
-                if (var == null || cond == null)
-                    return "Missing parts of condition";
+                string cond = sp.NextQuotedWord(delimchars);
+                if (cond == null)
+                    return "Missing condition operator";
 
                 ConditionEntry.MatchType mt;
-
                 if (!ConditionEntry.MatchTypeFromString(cond, out mt))
-                    return "Operator is not recognised";
+                    return "Condition operator " + cond + " is not recognised";
 
                 string value = "";
 
-                if (!ConditionEntry.IsUnaryOperation(mt) && !ConditionEntry.IsNullOperation(mt))
+                if (!ConditionEntry.IsUnaryOperation(mt) && !ConditionEntry.IsNullOperation(mt))        // unary detect..
                 {
                     value = sp.NextQuotedWord(delimchars);
                     if (value == null)
-                        return "Missing parts of condition";
+                        return "Missing value part (right side) of condition";
                 }
 
                 ConditionEntry ce = new ConditionEntry() { itemname = var, matchtype = mt, matchstring = value };
                 fields.Add(ce);
 
-                if (sp.IsEOL || sp.PeekChar() == ')')
+                if (sp.IsEOL || sp.PeekChar() == ')')           // end is either ) or EOL
                 {
-                    if (innercond == null)
-                        innercond = "Or";
-                    innercondition = (ConditionEntry.LogicalCondition)Enum.Parse(typeof(ConditionEntry.LogicalCondition), innercond.Replace(" ", ""), true);       // must work, exception otherwise
+                    innercondition = (ic == null) ? ConditionEntry.LogicalCondition.Or : ic.Value;
                     return "";
                 }
+                else
+                {
+                    ConditionEntry.LogicalCondition nic;
+                    string err = ConditionEntry.GetLogicalCondition(sp, delimchars, out nic);
+                    if (err.Length > 0)
+                        return err + " for inner condition";
 
-                string condi = sp.NextQuotedWord(delimchars);
-
-                if (innercond == null)
-                    innercond = condi;
-                else if (!innercond.Equals(condi, StringComparison.InvariantCultureIgnoreCase))
-                    return "Differing inner conditions incorrect";
+                    if (ic == null)
+                        ic = nic;
+                    else if (ic.Value != nic)
+                        return "Cannot specify different inner conditions between expressions";
+                }
             }
+        }
+
+        public bool AlwaysTrue()
+        {
+            foreach( ConditionEntry c in fields)
+            {
+                if (c.matchtype == ConditionEntry.MatchType.AlwaysTrue)
+                    return true;
+            }
+
+            return false;
         }
     }
 }
