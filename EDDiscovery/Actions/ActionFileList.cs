@@ -236,7 +236,8 @@ namespace EDDiscovery.Actions
             foreach (FileInfo f in allFiles)
             {
                 ActionFile af = new ActionFile();
-                string err = af.ReadFile(f.FullName);
+                bool readenable;
+                string err = af.ReadFile(f.FullName, out readenable);
                 if (err.Length == 0)
                     actionfiles.Add(af);
                 else
@@ -254,7 +255,8 @@ namespace EDDiscovery.Actions
         public string LoadFile(string filename)
         {
             ActionFile af = new ActionFile();
-            string err = af.ReadFile(filename);
+            bool readenable;
+            string err = af.ReadFile(filename, out readenable);
 
             if (err.Length == 0)
             {

@@ -133,7 +133,7 @@ namespace EDDiscovery.Actions
                         if ( whereasfirst )     // clear out event names if it was WHERE cond..
                             eventnames.Clear();
 
-                        string resc = cond.FromString(sp.LineLeft);       // rest of it is the condition..
+                        string resc = cond.Read(sp.LineLeft);       // rest of it is the condition..
                         if (resc != null)
                         {
                             ap.ReportError(resc + " in Where of Event");
