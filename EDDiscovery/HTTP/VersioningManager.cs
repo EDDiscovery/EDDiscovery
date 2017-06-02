@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -178,47 +177,14 @@ namespace EDDiscovery.HTTP
 
         private ConditionVariables ReadVarsFromFile(string file, out bool? enable)
         {
-            using (StreamReader sr = new StreamReader(file))         // read directly from file..
-            {
-                string json = sr.ReadToEnd();
-
-                JObject jo = (JObject)JObject.Parse(json);
-
-                enable = null;
-                if (!JSONHelper.IsNullOrEmptyT(jo["Enabled"]))      // if this has an enabled, note it
-                    enable = (bool)jo["Enabled"];
-
-                JArray ivarja = (JArray)jo["Install"];
-
-                if (!JSONHelper.IsNullOrEmptyT(ivarja))
-                {
-                    ConditionVariables cv = new ConditionVariables();
-                    cv.FromJSONObject(ivarja);
-                    return cv;
-                }
-            }
-
-            return null;
+            return Actions.ActionFile.ReadVarsAndEnableFromFile(file, out enable);      // note other files share the actionfile Enabled and INSTALL format.. not the other bits
         }
 
-        static public bool SetEnableFlag(DownloadItem item , bool enable, string appfolder)
+        static public bool SetEnableFlag(DownloadItem item, bool enable, string appfolder)
         {
             try
-            { 
-                JObject jo;
-                using (StreamReader sr = new StreamReader(item.localfilename))         // read directly from file..
-                {
-                    string json = sr.ReadToEnd();
-
-                    jo = (JObject)JObject.Parse(json);
-                }
-
-                jo["Enabled"] = enable;
-
-                using (StreamWriter sr = new StreamWriter(item.localfilename))         // read directly from file..
-                {
-                    sr.Write(jo.ToString(Newtonsoft.Json.Formatting.Indented));
-                }
+            {
+                Actions.ActionFile.SetEnableFlag(item.localfilename, enable);
 
                 if (!item.localmodified)      // if was not local modified, lets set the SHA so it does not appear local modified just because of the enable
                     WriteOrCheckSHAFile(item, item.localvars, appfolder, true);
