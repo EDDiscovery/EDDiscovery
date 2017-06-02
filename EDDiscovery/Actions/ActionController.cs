@@ -197,7 +197,7 @@ namespace EDDiscovery.Actions
 
                 if (ap != null && ap.Item2.EditInEditor())
                 {
-                    ap.Item1.SaveFile();
+                    ap.Item1.WriteFile();
                     return;
                 }
             }
@@ -213,7 +213,7 @@ namespace EDDiscovery.Actions
 
                 if (ap != null && ap.Item2.EditInEditor())
                 {
-                    ap.Item1.SaveFile();
+                    ap.Item1.WriteFile();
                     return;
                 }
             }
@@ -327,14 +327,14 @@ namespace EDDiscovery.Actions
 
         void ActionConfigureKeys()
         {
-            List<Tuple<string, ConditionLists.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionLists.MatchType>() { ConditionLists.MatchType.Equals, ConditionLists.MatchType.IsOneOf });        // need these to decide
+            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.Equals, ConditionEntry.MatchType.IsOneOf });        // need these to decide
 
             if (ret.Count > 0)
             {
                 actionfileskeyevents = "";
-                foreach (Tuple<string, ConditionLists.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
+                foreach (Tuple<string, ConditionEntry.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
                 {
-                    if (t.Item2 == ConditionLists.MatchType.Equals)
+                    if (t.Item2 == ConditionEntry.MatchType.Equals)
                         actionfileskeyevents += "<" + t.Item1 + ">";
                     else
                     {
