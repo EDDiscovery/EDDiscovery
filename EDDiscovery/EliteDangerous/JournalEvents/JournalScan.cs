@@ -100,6 +100,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Atmosphere { get; set; }                      // direct from journal, if not there or blank, tries AtmosphereType (Earthlikes)
         public EDAtmosphereType AtmosphereID { get; }               // Atmosphere -> ID (Ammonia, Carbon etc)
         public EDAtmosphereProperty AtmosphereProperty;             // Atomsphere -> Property (None, Rich, Thick , Thin, Hot)
+        public bool HasAtmosphericComposition { get { return AtmosphereComposition != null && AtmosphereComposition.Any(); } }
+        public Dictionary<string, double> AtmosphereComposition { get; set; }
         public string Volcanism { get; set; }                       // direct from journal
         public EDVolcanism VolcanismID { get; }                     // Volcanism -> ID (Water_Magma, Nitrogen_Magma etc)
         public EDVolcanismProperty VolcanismProperty;               // Volcanism -> Property (None, Major, Minor)
@@ -135,7 +137,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public double InnerRad;
             public double OuterRad;
         }
-
+        
         private const double solarRadius_m = 695700000;
         private const double oneAU_m = 149597870000;
         private const double oneDay_s = 86400;
@@ -173,7 +175,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 Atmosphere = evt["AtmosphereType"].StrNull();
             if (Atmosphere != null)
                 Atmosphere = Atmosphere.SplitCapsWordFull();
-
+            
             AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
             Volcanism = evt["Volcanism"].StrNull();
             VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
@@ -222,6 +224,24 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     foreach (JObject jo in mats)
                     {
                         Materials[(string)jo["Name"]] = jo["Percent"].Double();
+                    }
+                }
+            }
+
+            JToken atmos = (JToken)evt["AtmosphereComposition"];
+
+            if (atmos != null)
+            {
+                if (atmos.Type == JTokenType.Object)
+                {
+                    AtmosphereComposition = atmos?.ToObject<Dictionary<string, double>>();
+                }
+                else
+                {
+                    AtmosphereComposition = new Dictionary<string, double>();
+                    foreach (JObject jo in atmos)
+                    {
+                        AtmosphereComposition[(string)jo["Name"]] = jo["Percent"].Double();
                     }
                 }
             }
@@ -287,6 +307,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     {
                         scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere" : (", " + Atmosphere));
                     }
+                }
+
+                if (HasAtmosphericComposition)
+                {
+                    scanText.Append("\n" + DisplayAtmosphere(2) + "\n");
                 }
 
                 if (IsLandable)
@@ -420,6 +445,23 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 else
                     scanText.AppendFormat(indents + "{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
                                                                 mat.Value.ToString("N1"));
+            }
+
+            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                scanText.Remove(scanText.Length - 1, 1);
+
+            return scanText.ToNullSafeString();
+        }
+
+        public string DisplayAtmosphere(int indent = 0)
+        {
+            StringBuilder scanText = new StringBuilder();
+            string indents = new string(' ', indent);
+
+            scanText.Append(indents + "Atmospheric Composition:\n");
+            foreach (KeyValuePair<string, double> comp in AtmosphereComposition)
+            {
+                scanText.AppendFormat(indents + indents + "{0} - {1}%\n", comp.Key, comp.Value.ToString("N2"));
             }
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
@@ -677,6 +719,18 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 return 0.0;
 
             return Materials[v.ToLower()];
+        }
+
+        internal double? GetAtmosphereComponent(string c)
+        {
+            if (!HasAtmosphericComposition)
+                return null;
+
+            if (!AtmosphereComposition.ContainsKey(c))
+                return 0.0;
+
+            return AtmosphereComposition[c];
+
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.scan; } }
