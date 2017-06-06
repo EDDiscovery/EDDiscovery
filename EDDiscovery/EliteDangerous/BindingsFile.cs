@@ -93,7 +93,7 @@ namespace EDDiscovery.EliteDangerous
             public string Name;
             public Dictionary<string, List<Assignment>> Assignments;     // given a primary key, give a list of assignments on it.
 
-            public List<Assignment> Find( string name , bool partialmatch )
+            public List<Assignment> Find(string name, bool partialmatch)
             {
                 if (partialmatch)
                 {
@@ -121,11 +121,11 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        private void AssignToDevice(XElement d, XElement map )
+        private void AssignToDevice(XElement d, XElement map)
         {
             XAttribute xdevice = map.Attribute("Device");
             XAttribute xkey = map.Attribute("Key");
-            if ( xdevice != null && xkey != null && xkey.Value.Length>0 )
+            if (xdevice != null && xkey != null && xkey.Value.Length > 0)
             {
                 string key = xkey.Value;
 
@@ -141,7 +141,7 @@ namespace EDDiscovery.EliteDangerous
                         string km = y.Attribute("Device").Value;
                         string vm = y.Attribute("Key").Value;
 
-                        if (povroot != null && vm.Truncate(0,povroot.Length).Equals(povroot))       // POV pair..  lets adjust so its just the major entry.. makes it easier
+                        if (povroot != null && vm.Truncate(0, povroot.Length).Equals(povroot))       // POV pair..  lets adjust so its just the major entry.. makes it easier
                         {
                             if (key.Contains("Left") || vm.Contains("Left"))
                                 key = povroot + ((key.Contains("Up") || vm.Contains("Up")) ? "UpLeft" : "DownLeft");
@@ -167,12 +167,12 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public string Mappings(string devicename )
+        public string Mappings(string devicename)
         {
             StringBuilder s = new StringBuilder(128);
-            if ( devices.ContainsKey(devicename))
+            if (devices.ContainsKey(devicename))
             {
-                foreach( string keyname in devices[devicename].Assignments.Keys)
+                foreach (string keyname in devices[devicename].Assignments.Keys)
                 {
                     foreach (Assignment a in devices[devicename].Assignments[keyname])
                     {
@@ -191,6 +191,9 @@ namespace EDDiscovery.EliteDangerous
 
         public bool LoadBindingsFile()
         {
+            devices = new Dictionary<string, Device>();     // clear
+            values = new Dictionary<string, string>();
+
             string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Frontier Developments\Elite Dangerous\Options\Bindings");
 
             string optsel = System.IO.Path.Combine(path, "StartPreset.start");
@@ -267,7 +270,7 @@ namespace EDDiscovery.EliteDangerous
             Device bestmatch = null;
             int besttotal = 0;
 
-            foreach( Device dv in devices.Values)
+            foreach (Device dv in devices.Values)
             {
                 if (dv.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))      // exact match
                     return dv;
@@ -281,8 +284,8 @@ namespace EDDiscovery.EliteDangerous
                 if (dv.Name.Equals(GuidExtract(productguid, true), StringComparison.InvariantCultureIgnoreCase))
                     return dv;
 
-                int total = dv.Name.ToLower().ApproxMatch(name.ToLower(),4);
-                if ( total > besttotal )
+                int total = dv.Name.ToLower().ApproxMatch(name.ToLower(), 4);
+                if (total > besttotal)
                 {
                     besttotal = total;
                     bestmatch = dv;
@@ -302,12 +305,35 @@ namespace EDDiscovery.EliteDangerous
             if (slash >= 0)
                 s = s.Substring(0, slash);
 
-            if ( rev && s.Length == 8)
+            if (rev && s.Length == 8)
             {
                 s = s.Substring(4, 4) + s.Substring(0, 4);
             }
 
             return s;
         }
+
+        public List<Assignment> Find(string name, bool partialmatch)
+        {
+            List<Assignment> ret = new List<Assignment>();
+
+            foreach (Device dv in devices.Values)
+            {
+                List<Assignment> f = dv.Find(name, partialmatch);
+                if (f != null)
+                    ret.AddRange(f);
+            }
+
+            return ret;
+        }
+
+        public Dictionary<string,string> BindingValue(string s,bool partial)
+        {
+            if ( partial )
+                return (from v in values where v.Key.Contains(s) select v).ToDictionary(x => x.Key, x => x.Value);
+            else
+                return (from v in values where v.Key.Equals(s) select v).ToDictionary(x => x.Key, x => x.Value);
+        }
+
     }
 }

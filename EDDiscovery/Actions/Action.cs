@@ -89,10 +89,12 @@ namespace EDDiscovery.Actions
             new Commands("Expr", typeof(ActionExpr), ActionType.Cmd),
             new Commands("Else", typeof(ActionElse), ActionType.Else),
             new Commands("ElseIf", typeof(ActionElseIf) , ActionType.ElseIf),
+            new Commands("EliteBindings", typeof(ActionEliteBindings) , ActionType.Cmd),
             new Commands("End", typeof(ActionEnd) , ActionType.Cmd),
             new Commands("ErrorIf", typeof(ActionErrorIf) , ActionType.Cmd),
             new Commands("Event", typeof(ActionEvent) , ActionType.Cmd),
             new Commands("FileDialog", typeof(ActionFileDialog) , ActionType.Cmd),
+            new Commands("GlobalLet", typeof(ActionGlobalLet) , ActionType.Cmd),
             new Commands("Global", typeof(ActionGlobal) , ActionType.Cmd),
             new Commands("Historytab", typeof(ActionHistoryTab) , ActionType.Cmd),
             new Commands("If", typeof(ActionIf) , ActionType.If),
@@ -120,6 +122,7 @@ namespace EDDiscovery.Actions
             new Commands("Timer", typeof(ActionTimer) , ActionType.Cmd),
             new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd),
             new Commands("While", typeof(ActionWhile) , ActionType.While),
+            new Commands("//", typeof(ActionFullLineComment) , ActionType.Cmd),
         };
 
         static Dictionary<string, Commands> cmdlookup = null;

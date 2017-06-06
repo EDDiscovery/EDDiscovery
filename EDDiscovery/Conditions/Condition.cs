@@ -118,7 +118,13 @@ namespace EDDiscovery
 
                 string value = "";
 
-                if (!ConditionEntry.IsUnaryOperation(mt) && !ConditionEntry.IsNullOperation(mt))        // unary detect..
+                if (ConditionEntry.IsNullOperation(mt)) // null operators (Always..)
+                {
+                    if (!var.Equals("Condition", StringComparison.InvariantCultureIgnoreCase))
+                        return "Condition must preceed fixed result operator";
+                    var = "Condition";  // fix case..
+                }
+                else if (!ConditionEntry.IsUnaryOperation(mt) ) // not unary, require right side
                 {
                     value = sp.NextQuotedWord(delimchars);
                     if (value == null)
