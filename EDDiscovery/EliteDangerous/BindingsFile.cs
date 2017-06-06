@@ -239,7 +239,7 @@ namespace EDDiscovery.EliteDangerous
 
                     foreach (string s in devices.Keys)
                     {
-                        System.Diagnostics.Debug.WriteLine("Device " + s + Environment.NewLine + Mappings(s));
+                        //System.Diagnostics.Debug.WriteLine("Device " + s + Environment.NewLine + Mappings(s));
                     }
 
                     foreach (string s in values.Keys)

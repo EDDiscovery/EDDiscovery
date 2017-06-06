@@ -25,6 +25,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             Category = evt["Category"].Str();
             Name = evt["Name"].Str();           // FDNAME
+            Name = JournalFieldNaming.FDNameTranslation(Name);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyName = JournalFieldNaming.RMat(Name);
             Count = evt["Count"].Int();
         }

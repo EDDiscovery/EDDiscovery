@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
  * Copyright © 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -18,26 +19,29 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-//    When written: when the captain in multicrew disbands the crew
-//Parameters:
-// OnCrime: (bool) true if crew disbanded as a result of a crime in a lawful session
-    // { "timestamp":"2017-04-12T11:32:30Z", "event":"EndCrewSession", "OnCrime":false } 
-    [JournalEntryType(JournalTypeEnum.EndCrewSession)]
-    public class JournalEndCrewSession : JournalEntry
+    //    When written: When another player leaves your ship's crew
+    //Parameters:
+    //•	Crew: player's commander name
+    // Role:
+    // { "timestamp":"2017-04-11T18:11:06Z", "event":"CrewMemberRoleChange", "Crew":"[cmdr name]", "Role":"Idle" }
+    [JournalEntryType(JournalTypeEnum.CrewMemberRoleChange)]
+    public class JournalCrewMemberRoleChange : JournalEntry
     {
-        public JournalEndCrewSession(JObject evt) : base(evt, JournalTypeEnum.EndCrewSession)
+        public JournalCrewMemberRoleChange(JObject evt) : base(evt, JournalTypeEnum.CrewMemberRoleChange)
         {
-            OnCrime = evt["OnCrime"].Bool();
-
+            Crew = evt["Crew"].Str();
+            Role = evt["Role"].Str();
         }
-        public bool OnCrime { get; set; }
+        public string Crew { get; set; }
+        public string Role { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crewmemberquits; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crewmemberjoins; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("; Crime", OnCrime);
+            //info = Crew;
+            info = Tools.FieldBuilder("Crew", Crew, "Role", Role);
             detailed = "";
         }
     }

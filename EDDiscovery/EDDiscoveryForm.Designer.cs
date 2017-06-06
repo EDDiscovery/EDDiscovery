@@ -69,7 +69,6 @@ namespace EDDiscovery
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.companionAPILoginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageAddOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureAddOnActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -246,8 +245,7 @@ namespace EDDiscovery
             this.rescanAllJournalFilesToolStripMenuItem,
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem,
             this.sendUnsuncedEDDNEventsToolStripMenuItem,
-            this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem,
-            this.companionAPILoginToolStripMenuItem});
+            this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "A&dmin";
@@ -330,14 +328,6 @@ namespace EDDiscovery
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Text = "Clear EDSM ID assigned to all records for current commander";
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click);
-            // 
-            // companionAPILoginToolStripMenuItem
-            // 
-            this.companionAPILoginToolStripMenuItem.Name = "companionAPILoginToolStripMenuItem";
-            this.companionAPILoginToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
-            this.companionAPILoginToolStripMenuItem.Text = "Companion API Login";
-            this.companionAPILoginToolStripMenuItem.Visible = false;
-            this.companionAPILoginToolStripMenuItem.Click += new System.EventHandler(this.companionAPILoginToolStripMenuItem_Click);
             // 
             // addOnsToolStripMenuItem
             // 
@@ -918,6 +908,5 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem stopCurrentlyRunningActionProgramToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
-        private System.Windows.Forms.ToolStripMenuItem companionAPILoginToolStripMenuItem;
     }
 }

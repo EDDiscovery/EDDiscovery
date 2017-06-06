@@ -28,6 +28,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalCollectCargo(JObject evt ) : base(evt, JournalTypeEnum.CollectCargo)
         {
             Type = evt["Type"].Str();                               //FDNAME
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
             Stolen = evt["Stolen"].Bool();
         }

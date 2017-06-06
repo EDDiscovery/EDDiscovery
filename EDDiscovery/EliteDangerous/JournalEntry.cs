@@ -52,8 +52,10 @@ namespace EDDiscovery.EliteDangerous
         CrewAssign = 126,
         CrewFire = 127,
         CrewHire = 128,
+        CrewLaunchFighter = 1268, 
         CrewMemberJoins = 1270,
         CrewMemberQuits = 1280,
+        CrewMemberRoleChange = 1285,
         DataScanned = 1030,
         DatalinkScan = 130,
         DatalinkVoucher = 1020,
@@ -365,7 +367,8 @@ namespace EDDiscovery.EliteDangerous
             jr.CommanderId = (int)(long)dr["CommanderId"];
             if (jr.EventTimeUTC == default(DateTime))
                 jr.EventTimeUTC = ((DateTime)dr["EventTime"]).ToUniversalTime();
-            jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
+            if (jr.EventTypeID == JournalTypeEnum.Unknown)
+                jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
             jr.EdsmID = (long)dr["EdsmID"];
             jr.Synced = (int)(long)dr["Synced"];
             return jr;

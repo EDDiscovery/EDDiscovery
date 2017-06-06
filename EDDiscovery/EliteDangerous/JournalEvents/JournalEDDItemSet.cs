@@ -81,76 +81,40 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
     public class MaterialItem
     {
-        public string Name;
+        public string Name;     //FDNAME
         public string Category;
         public int Count;
     }
 
     public class CommodityItem
     {
-        public string Name;
+        public string Name;     //FDNAME
         public int Count;
         public double BuyPrice;
     }
 
     public class MaterialList
     {
-        public MaterialList()
-        {
-            Materials = new System.Collections.Generic.List<MaterialItem>();
-        }
-
         public MaterialList(System.Collections.Generic.List<MaterialItem> ma )
         {
             Materials = ma ?? new System.Collections.Generic.List<MaterialItem>();
+            foreach (MaterialItem i in Materials)
+                i.Name = JournalFieldNaming.FDNameTranslation(i.Name);
         }
 
         public System.Collections.Generic.List<MaterialItem> Materials { get; protected set; }
-
-        public void Set(string cat, string name, int count)
-        {
-            if (Materials == null)
-                Materials = new System.Collections.Generic.List<MaterialItem>();
-
-            int i = Materials.FindIndex(x => x.Name.Equals(name));
-
-            if (i == -1)
-                Materials.Add(new MaterialItem { Category=cat, Name = name, Count = count });
-            else
-                Materials[i].Count = count;
-        }
-
     }
 
     public class CommodityList
     {
-        public CommodityList()
-        {
-            Commodities = new System.Collections.Generic.List<CommodityItem>();
-        }
-
         public CommodityList(System.Collections.Generic.List<CommodityItem> ma)
         {
             Commodities = ma ?? new System.Collections.Generic.List<CommodityItem>();
+            foreach (CommodityItem i in Commodities)
+                i.Name = JournalFieldNaming.FDNameTranslation(i.Name);
         }
 
         public System.Collections.Generic.List<CommodityItem> Commodities { get; protected set; }
-
-        public void Set(string name, int count, double buyprice)
-        {
-            if (Commodities == null)
-                Commodities = new System.Collections.Generic.List<CommodityItem>();
-
-            int i = Commodities.FindIndex(x => x.Name.Equals(name));
-
-            if (i == -1)
-                Commodities.Add(new CommodityItem { Name = name, Count = count, BuyPrice = buyprice });
-            else
-            {
-                Commodities[i].Count = count;
-                Commodities[i].BuyPrice = buyprice;
-            }
-        }
     }
 
 }

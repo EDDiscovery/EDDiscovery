@@ -34,6 +34,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {
             Type = evt["Type"].Str();                           // FDNAME
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
             Count = evt["Count"].Int();
             SellPrice = evt["SellPrice"].Long();

@@ -308,6 +308,8 @@
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="EliteDangerous\BindingsFile.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
     <Compile Include="EliteDangerous\MaterialCommodities.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
@@ -364,12 +366,6 @@
     </Compile>
     <Compile Include="Forms\DownloadManagerForm.Designer.cs">
       <DependentUpon>DownloadManagerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormCAPI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormCAPI.Designer.cs">
-      <DependentUpon>FormCAPI.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ImportSphere.cs">
       <SubType>Form</SubType>
@@ -965,9 +961,6 @@
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormCAPI.resx">
-      <DependentUpon>FormCAPI.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </EmbeddedResource>
@@ -1164,6 +1157,8 @@
     <None Include="Resources\excel.png" />
     <None Include="Resources\Calendar.png" />
     <None Include="Resources\engineercraft.png" />
+    <None Include="Resources\High_metal_content_world_White3.png" />
+    <None Include="Resources\High_metal_content_world_White3.bmp" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -1488,7 +1483,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

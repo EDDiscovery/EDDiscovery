@@ -18,26 +18,27 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-//    When written: when the captain in multicrew disbands the crew
-//Parameters:
-// OnCrime: (bool) true if crew disbanded as a result of a crime in a lawful session
-    // { "timestamp":"2017-04-12T11:32:30Z", "event":"EndCrewSession", "OnCrime":false } 
-    [JournalEntryType(JournalTypeEnum.EndCrewSession)]
-    public class JournalEndCrewSession : JournalEntry
+    //    When written: When another player joins your ship's crew
+    //Parameters:
+    //•	Crew: player's commander name
+    //{ "timestamp":"2017-04-19T20:12:53Z", "event":"CrewLaunchFighter", "Crew":"[cmdr name]" }
+
+    [JournalEntryType(JournalTypeEnum.CrewLaunchFighter)]
+    public class JournalCrewLaunchFighter : JournalEntry
     {
-        public JournalEndCrewSession(JObject evt) : base(evt, JournalTypeEnum.EndCrewSession)
+        public JournalCrewLaunchFighter(JObject evt) : base(evt, JournalTypeEnum.CrewLaunchFighter)
         {
-            OnCrime = evt["OnCrime"].Bool();
+            Crew = evt["Crew"].Str();
 
         }
-        public bool OnCrime { get; set; }
+        public string Crew { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crewmemberquits; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.crewmemberjoins; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("; Crime", OnCrime);
+            info = Crew;
             detailed = "";
         }
     }

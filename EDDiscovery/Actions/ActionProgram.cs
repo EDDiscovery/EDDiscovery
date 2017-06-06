@@ -163,7 +163,7 @@ namespace EDDiscovery.Actions
                     {
                         comment = line.Substring(commentpos + 2).Trim();
                         line = line.Substring(0, commentpos).TrimEnd();
-                        System.Diagnostics.Debug.WriteLine("Line <" + line + "> <" + comment + ">");
+                        //System.Diagnostics.Debug.WriteLine("Line <" + line + "> <" + comment + ">");
                     }
 
                     if (cmd.Equals("PROGRAM", StringComparison.InvariantCultureIgnoreCase))
@@ -238,9 +238,7 @@ namespace EDDiscovery.Actions
                 }
             }
 
-            if (programsteps.Count == 0)
-                err += initiallineno + " " + Name + " No valid statements" + Environment.NewLine;
-            else
+            if (programsteps.Count > 0 )
                 programsteps[programsteps.Count - 1].Whitespace = 0;        // last cannot have whitespace..
 
             return err;

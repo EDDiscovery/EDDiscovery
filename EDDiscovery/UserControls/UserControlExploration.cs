@@ -56,7 +56,6 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             _currentExplorationSet = new ExplorationSetClass();
-            ColumnSystemName.AutoCompleteGenerator += SystemClass.ReturnOnlySystemsListForAutoComplete;
             Name = "Exploration";
         }
 

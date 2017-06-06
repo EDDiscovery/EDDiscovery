@@ -60,7 +60,7 @@ namespace EDDiscovery.InputDevices
                 if ((deviceObject.ObjectId.Flags & DeviceObjectTypeFlags.Axis) != 0)
                 {
                     System.Guid guid = deviceObject.ObjectType;
-                    System.Diagnostics.Debug.WriteLine("  {0} {1} {2} {3} {4}", jsi.Name, deviceObject.UsagePage, deviceObject.Usage, deviceObject.Offset, guid.ToString());
+                    //System.Diagnostics.Debug.WriteLine("  {0} {1} {2} {3} {4}", jsi.Name, deviceObject.UsagePage, deviceObject.Usage, deviceObject.Offset, guid.ToString());
 
                     if (guid == ObjectGuid.XAxis)
                         axispresent[(int)Axis.X] = true;
