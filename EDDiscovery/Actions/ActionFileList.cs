@@ -239,7 +239,10 @@ namespace EDDiscovery.Actions
                 bool readenable;
                 string err = af.ReadFile(f.FullName, out readenable);
                 if (err.Length == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Add pack " + af.name);
                     actionfiles.Add(af);
+                }
                 else
                     errlist += "File " + f.FullName + " failed to load: " + Environment.NewLine + err;
             }

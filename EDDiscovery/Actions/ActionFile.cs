@@ -294,23 +294,25 @@ namespace EDDiscovery.Actions
                                 Condition c = actionfieldfilter.Get(ic);
                                 if (c.action.Equals(f.Name))
                                 {
-                                    evl += c.eventname;
+                                    string e = c.eventname;
 
                                     if (!c.AlwaysTrue())
                                     {
-                                        evl += "?(" + c.ToString() + ")";
+                                        e += "?(" + c.ToString() + ")";
                                     }
 
                                     if (c.actiondata.Length > 0)
-                                        evl += "(" + c.actiondata + ")";
+                                        e += "(" + c.actiondata + ")";
 
-                                    evl += ", ";
+                                    e += ", ";
 
-                                    if (evl.Length > 100)
+                                    if (evl.Length + e.Length > 100)
                                     {
                                         sr.WriteLine("// Events: " + evl);
                                         evl = "";
                                     }
+
+                                    evl += e;
                                 }
                             }
 

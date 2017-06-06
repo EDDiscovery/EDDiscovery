@@ -640,6 +640,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
             else if (name.Contains("metal"))
             {
+                if (AtmosphereProperty == (EDAtmosphereProperty.Hot | EDAtmosphereProperty.Thick))
+                    return EDDiscovery.Properties.Resources.High_metal_content_world_White3;
+
                 if (name.Contains("rich"))
                     return EDDiscovery.Properties.Resources.metal_rich;
                 else if (nSurfaceTemperature > 700)

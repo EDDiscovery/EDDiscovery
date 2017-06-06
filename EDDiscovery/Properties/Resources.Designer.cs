@@ -993,6 +993,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap High_metal_content_world_White3 {
+            get {
+                object obj = ResourceManager.GetObject("High_metal_content_world_White3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Homeicon {
             get {
                 object obj = ResourceManager.GetObject("Homeicon", resourceCulture);

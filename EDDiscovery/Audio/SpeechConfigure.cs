@@ -97,7 +97,10 @@ namespace EDDiscovery.Audio
             comboBoxCustomVoice.Items.Add("Female");
             comboBoxCustomVoice.Items.Add("Male");
             comboBoxCustomVoice.Items.AddRange(synth.GetVoiceNames());
-            comboBoxCustomVoice.SelectedItem = voicename;
+            if (comboBoxCustomVoice.Items.Contains(voicename))
+                comboBoxCustomVoice.SelectedItem = voicename;
+            else
+                comboBoxCustomVoice.SelectedIndex = 0;
 
             int i;
             if (!defaultmode && volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase))  

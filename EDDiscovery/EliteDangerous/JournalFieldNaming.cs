@@ -32,6 +32,11 @@ namespace EDDiscovery.EliteDangerous
             return fdname;
         }
 
+        static public string FDNameTranslation(string old)
+        {
+            return MaterialCommodityDB.FDNameTranslation(old);
+        }
+
         public static string RMat(string fdname)            // fix up fdname into a nicer name
         {
             MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(fdname);

@@ -40,6 +40,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
         {
             Inventory = evt["Inventory"]?.ToObject<Cargo[]>().OrderBy(x => x.Name).ToArray();
+            foreach (Cargo c in Inventory)
+                c.Name = JournalFieldNaming.FDNameTranslation(c.Name);
         }
 
         public Cargo[] Inventory { get; set; }

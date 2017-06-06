@@ -253,6 +253,7 @@ namespace EDDiscovery
                     Init();
                 }
 
+                EDDiscovery.EliteDangerous.MaterialCommodityDB.SetUpInitialTable();
                 Controller.PostInit_Loaded();
 
                 RepositionForm();
@@ -533,15 +534,32 @@ namespace EDDiscovery
                         try
                         {
                             Capi.GetProfile();
-                            JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, Capi.Profile.StarPort.jcommodities);
-                            if (entry != null)
+
+                            JournalDocked dockevt = he.journalEntry as JournalDocked;
+
+                            if (!Capi.Profile.Cmdr.docked)
                             {
-                                Controller.NewEntry(entry);
-                                OnNewCompanionAPIData?.Invoke(Capi, he);
+                                LogLineHighlight("CAPI not docked. Server API lagging!");
+                                // Todo add a retry later...
+                            }
 
-                                if (EDCommander.Current.SyncToEddn)
-                                    SendPricestoEDDN(he);
+                            if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
+                            {
+                                LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort.name);
+                                // Todo add a retry later...
+                            }
+                            else
+                            {
+                                JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, Capi.Profile.StarPort.jcommodities);
+                                if (entry != null)
+                                {
+                                    Controller.NewEntry(entry);
+                                    OnNewCompanionAPIData?.Invoke(Capi, he);
 
+                                    if (EDCommander.Current.SyncToEddn)
+                                        SendPricestoEDDN(he);
+
+                                }
                             }
                         }
                         catch (Exception ex)
@@ -1297,12 +1315,6 @@ namespace EDDiscovery
 
 #endregion
 
-        private void companionAPILoginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormCAPI frm = new FormCAPI();
-
-            frm.Show();
-        }
     }
 }
 

@@ -30,11 +30,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalMarketBuy(JObject evt ) : base(evt, JournalTypeEnum.MarketBuy)
         {
             Type = evt["Type"].Str();        // must be FD name
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
             Count = evt["Count"].Int();
             BuyPrice = evt["BuyPrice"].Long();
             TotalCost = evt["TotalCost"].Long();
         }
+
         public string Type { get; set; }        // FDNAME
         public string FriendlyType { get; set; }            // translated name
         public int Count { get; set; }

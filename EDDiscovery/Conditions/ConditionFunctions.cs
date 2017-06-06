@@ -261,6 +261,7 @@ namespace EDDiscovery
                 functions = new Dictionary<string, FuncEntry>();
 
                 functions.Add("abs",            new FuncEntry(Abs,              2,2,    1,0));  // first is var or literal or string
+                functions.Add("alt",            new FuncEntry(Alt,              2,20,   0xfffffff, 0xfffffff));  // first is var or literal or string, etc.
                 functions.Add("closefile",      new FuncEntry(CloseFile,        1,1,    1,0));  // first is a var
 
                 functions.Add("datetimenow",    new FuncEntry(DateTimeNow,      1, 1,   0));     // literal type
@@ -400,6 +401,24 @@ namespace EDDiscovery
             }
 
             output = "1";
+            return true;
+        }
+
+        private bool Alt(out string output)
+        {
+            output = "";
+
+            foreach (Parameter s in paras)
+            {
+                string sv= s.isstring ? s.value : vars[s.value];
+
+                if (sv.Length > 0)
+                {
+                    output = sv;
+                    break;
+                }
+            }
+
             return true;
         }
 
