@@ -153,13 +153,18 @@ namespace EDDiscovery.Actions
                 if (!p.IsEOL)
                 {
                     int curindent = p.Position;
-                    string cmd = p.NextWord();      // space separ
-                    string line = p.LineLeft;       // and the rest of the line..
+                    string cmd = "";
+                    if (p.IsStringMoveOn("//"))         // special, this is allowed to butt against text and still work
+                        cmd = "//";
+                    else
+                        cmd = p.NextWord();
+
+                    string line = p.LineLeft;           // and the rest of the line..
 
                     int commentpos = line.LastIndexOf("//");
                     string comment = "";
 
-                    if (commentpos >= 0 && !line.InQuotes(commentpos))
+                    if (cmd != "//" && commentpos >= 0 && !line.InQuotes(commentpos))       // if not // command, and we have one..
                     {
                         comment = line.Substring(commentpos + 2).Trim();
                         line = line.Substring(0, commentpos).TrimEnd();

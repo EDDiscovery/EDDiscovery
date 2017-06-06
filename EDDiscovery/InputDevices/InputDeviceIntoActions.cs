@@ -58,7 +58,7 @@ namespace EDDiscovery.InputDevices
             foreach (InputDeviceEvent je in list)
             {
                 string match = je.EventName();              // same as bindings name..
-                //System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
+                System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
 
                 ac.ActionRun("onEliteInputRaw", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
                         { "Device" , je.Device.ID().Name, "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
@@ -96,6 +96,8 @@ namespace EDDiscovery.InputDevices
                             }
                         }
 
+                        List<string> bindingstoexecute = new List<string>();
+
                         for( int i = 0; i < inonstate.Count; i++ )
                         {
                             BindingsFile.Assignment a = inonstate[i];
@@ -104,9 +106,8 @@ namespace EDDiscovery.InputDevices
                                 if ( ispressable[i])
                                     assignmentsinonstate.Add(a);
 
+                                bindingstoexecute.Add(a.assignedfunc);
                                 System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc);
-                                ac.ActionRun("onEliteInput", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
-                                { "Device" , je.Device.ID().Name, "Binding" , a.assignedfunc , "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
                             }
                             else
                             {
@@ -115,6 +116,14 @@ namespace EDDiscovery.InputDevices
                         }
 
                         //System.Diagnostics.Debug.WriteLine("On state " + assignmentsinonstate.Count);
+
+                        foreach (string s in bindingstoexecute)
+                        {
+                            ac.ActionRun("onEliteInput", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
+                            { "Device" , je.Device.ID().Name, "Binding" , s , "BindingList" , String.Join(",",bindingstoexecute),
+                              "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
+                        }
+
                     }
                 }
             }

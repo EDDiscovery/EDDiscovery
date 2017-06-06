@@ -93,6 +93,7 @@ namespace EDDiscovery.Audio
 
         private void Output_Stopped(object sender, PlaybackStoppedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver stopped");
             if (AudioStoppedEvent != null)
                 AudioStoppedEvent();
         }
@@ -110,11 +111,14 @@ namespace EDDiscovery.Audio
 
         public void Start(Object o, int vol)
         {
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver start");
 
             IWaveSource current = o as IWaveSource;
             aout.Initialize(current);
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver Init done");
             aout.Volume = (float)(vol) / 100;
             aout.Play();
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver Play");
         }
 
         public void Stop()

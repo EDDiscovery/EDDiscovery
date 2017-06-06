@@ -32,6 +32,17 @@ namespace EDDiscovery.Actions
         }
     }
 
+    public class ActionFullLineComment : Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }
+        public override bool ConfigurationMenuInUse { get { return false; } }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return true;
+        }
+    }
+
     public class ActionEnd : Action
     {
         public override bool ConfigurationMenuInUse { get { return false; } }

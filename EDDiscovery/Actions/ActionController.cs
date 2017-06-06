@@ -84,6 +84,7 @@ namespace EDDiscovery.Actions
             events.Add("onRefreshEnd");
             events.Add("onInstall");
             events.Add("onStartup");
+            events.Add("onPostStartup");
             events.Add("onShutdown");
             events.Add("onKeyPress");
             events.Add("onTimer");
@@ -285,6 +286,12 @@ namespace EDDiscovery.Actions
             }
             else
                 return false;
+        }
+
+        public void onStartup()
+        {
+            ActionRun("onStartup", "ProgramEvent");
+            ActionRun("onPostStartup", "ProgramEvent");
         }
 
         public void SetPeristentGlobal(string name, string value)     // saved on exit

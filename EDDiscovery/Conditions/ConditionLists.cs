@@ -71,20 +71,19 @@ namespace EDDiscovery
                 {
                     bool matched = false;
 
-                    if (f.matchtype == ConditionEntry.MatchType.IsPresent)         // these use f.itemname without any expansion
+                    if (f.matchtype == ConditionEntry.MatchType.AlwaysTrue || f.matchtype == ConditionEntry.MatchType.AlwaysFalse)
                     {
-                        if (values.Exists(f.itemname) && values[f.itemname] != null)
-                            matched = true;
-                    }
-                    else if (f.matchtype == ConditionEntry.MatchType.IsNotPresent)
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Value " + f.itemname + ":" + values[f.itemname]);
-                        if (!values.Exists(f.itemname) || values[f.itemname] == null)
-                            matched = true;
-                    }
-                    else if (f.matchtype == ConditionEntry.MatchType.AlwaysTrue)
-                    {
-                        matched = true;         // does not matter what the item or value contains
+                        if ( f.itemname.Length == 0 || f.itemname.Equals("Condition", StringComparison.InvariantCultureIgnoreCase))     // empty (legacy) or 
+                        {
+                            if ( f.matchtype == ConditionEntry.MatchType.AlwaysTrue )
+                                matched = true;         // matched, else if false, leave as false.
+                        }
+                        else
+                        {
+                            errlist += "AlwaysFalse/True does not have left side text of Condition";
+                            innerres = false;
+                            break;
+                        }
                     }
                     else
                     {
@@ -103,150 +102,169 @@ namespace EDDiscovery
                             }
                         }
 
-                        if (er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
+                        if (f.matchtype == ConditionEntry.MatchType.IsPresent)         // these use f.itemname without any expansion
                         {
-                            leftside = values.Exists(f.itemname) ? values[f.itemname] : null;
-                            if (leftside == null)
-                            {
-                                errlist += "Item " + f.itemname + " is not available" + Environment.NewLine;
-                                innerres = false;
-                                break;                       // stop the loop, its a false
-                            }
+                            if (leftside == null || er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
+                                leftside = f.itemname;
+
+                            if (values.Exists(leftside) && values[leftside] != null)
+                                matched = true;
                         }
-
-                        string rightside;
-
-                        if (cf != null)         // if we have a string expander, pass it thru
+                        else if (f.matchtype == ConditionEntry.MatchType.IsNotPresent)
                         {
-                            er = cf.ExpandString(f.matchstring, out rightside);
+                            if (leftside == null || er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
+                                leftside = f.itemname;
 
-                            if (er == ConditionFunctions.ExpandResult.Failed)        //  if error, abort
-                            {
-                                errlist += rightside;     // add on errors..
-                                innerres = false;   // stop loop, false
-                                break;
-                            }
-                        }
-                        else
-                            rightside = f.matchstring;
-
-                        if (f.matchtype == ConditionEntry.MatchType.DateBefore || f.matchtype == ConditionEntry.MatchType.DateAfter)
-                        {
-                            DateTime tmevalue, tmecontent;
-                            if (!DateTime.TryParse(leftside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmevalue))
-                            {
-                                errlist += "Date time not in correct format on left side" + Environment.NewLine;
-                                innerres = false;
-                                break;
-
-                            }
-                            else if (!DateTime.TryParse(rightside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmecontent))
-                            {
-                                errlist += "Date time not in correct format on right side" + Environment.NewLine;
-                                innerres = false;
-                                break;
-                            }
-                            else
-                            {
-                                if (f.matchtype == ConditionEntry.MatchType.DateBefore)
-                                    matched = tmevalue.CompareTo(tmecontent) < 0;
-                                else
-                                    matched = tmevalue.CompareTo(tmecontent) >= 0;
-                            }
-                        }
-                        else if (f.matchtype == ConditionEntry.MatchType.Equals)
-                            matched = leftside.Equals(rightside, StringComparison.InvariantCultureIgnoreCase);
-                        else if (f.matchtype == ConditionEntry.MatchType.EqualsCaseSensitive)
-                            matched = leftside.Equals(rightside);
-
-                        else if (f.matchtype == ConditionEntry.MatchType.NotEqual)
-                            matched = !leftside.Equals(rightside, StringComparison.InvariantCultureIgnoreCase);
-                        else if (f.matchtype == ConditionEntry.MatchType.NotEqualCaseSensitive)
-                            matched = !leftside.Equals(rightside);
-
-                        else if (f.matchtype == ConditionEntry.MatchType.Contains)
-                            matched = leftside.IndexOf(rightside, StringComparison.InvariantCultureIgnoreCase) >= 0;
-                        else if (f.matchtype == ConditionEntry.MatchType.ContainsCaseSensitive)
-                            matched = leftside.Contains(rightside);
-
-                        else if (f.matchtype == ConditionEntry.MatchType.DoesNotContain)
-                            matched = leftside.IndexOf(rightside, StringComparison.InvariantCultureIgnoreCase) < 0;
-                        else if (f.matchtype == ConditionEntry.MatchType.DoesNotContainCaseSensitive)
-                            matched = !leftside.Contains(rightside);
-                        else if (f.matchtype == ConditionEntry.MatchType.IsOneOf)
-                        {
-                            StringParser p = new StringParser(rightside);
-                            List<string> ret = p.NextQuotedWordList();
-
-                            if (ret == null)
-                            {
-                                errlist += "IsOneOf value list is not in a optionally quoted comma separated form" + Environment.NewLine;
-                                innerres = false;
-                                break;                       // stop the loop, its a false
-                            }
-                            else
-                            {
-                                matched = ret.Contains(leftside, StringComparer.InvariantCultureIgnoreCase);
-                            }
-                        }
-                        else if (f.matchtype == ConditionEntry.MatchType.IsEmpty)
-                        {
-                            matched = leftside.Length == 0;
-                        }
-                        else if (f.matchtype == ConditionEntry.MatchType.IsNotEmpty)
-                        {
-                            matched = leftside.Length > 0;
-                        }
-                        else if (f.matchtype == ConditionEntry.MatchType.IsTrue || f.matchtype == ConditionEntry.MatchType.IsFalse)
-                        {
-                            int inum = 0;
-
-                            if (leftside.InvariantParse(out inum))
-                                matched = (f.matchtype == ConditionEntry.MatchType.IsTrue) ? (inum != 0) : (inum == 0);
-                            else
-                            {
-                                errlist += "True/False value is not an integer on left side" + Environment.NewLine;
-                                innerres = false;
-                                break;
-                            }
+                            if (!values.Exists(leftside) || values[leftside] == null)
+                                matched = true;
                         }
                         else
                         {
-                            double fnum = 0, num = 0;
-
-                            if (!leftside.InvariantParse(out num))
+                            if (er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
                             {
-                                errlist += "Number not in correct format on left side" + Environment.NewLine;
-                                innerres = false;
-                                break;
+                                leftside = values.Exists(f.itemname) ? values[f.itemname] : null;
+                                if (leftside == null)
+                                {
+                                    errlist += "Item " + f.itemname + " is not available" + Environment.NewLine;
+                                    innerres = false;
+                                    break;                       // stop the loop, its a false
+                                }
                             }
-                            else if (!rightside.InvariantParse(out fnum))
+
+                            string rightside;
+
+                            if (cf != null)         // if we have a string expander, pass it thru
                             {
-                                errlist += "Number not in correct format on right side" + Environment.NewLine;
-                                innerres = false;
-                                break;
+                                er = cf.ExpandString(f.matchstring, out rightside);
+
+                                if (er == ConditionFunctions.ExpandResult.Failed)        //  if error, abort
+                                {
+                                    errlist += rightside;     // add on errors..
+                                    innerres = false;   // stop loop, false
+                                    break;
+                                }
+                            }
+                            else
+                                rightside = f.matchstring;
+
+                            if (f.matchtype == ConditionEntry.MatchType.DateBefore || f.matchtype == ConditionEntry.MatchType.DateAfter)
+                            {
+                                DateTime tmevalue, tmecontent;
+                                if (!DateTime.TryParse(leftside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmevalue))
+                                {
+                                    errlist += "Date time not in correct format on left side" + Environment.NewLine;
+                                    innerres = false;
+                                    break;
+
+                                }
+                                else if (!DateTime.TryParse(rightside, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), System.Globalization.DateTimeStyles.None, out tmecontent))
+                                {
+                                    errlist += "Date time not in correct format on right side" + Environment.NewLine;
+                                    innerres = false;
+                                    break;
+                                }
+                                else
+                                {
+                                    if (f.matchtype == ConditionEntry.MatchType.DateBefore)
+                                        matched = tmevalue.CompareTo(tmecontent) < 0;
+                                    else
+                                        matched = tmevalue.CompareTo(tmecontent) >= 0;
+                                }
+                            }
+                            else if (f.matchtype == ConditionEntry.MatchType.Equals)
+                                matched = leftside.Equals(rightside, StringComparison.InvariantCultureIgnoreCase);
+                            else if (f.matchtype == ConditionEntry.MatchType.EqualsCaseSensitive)
+                                matched = leftside.Equals(rightside);
+
+                            else if (f.matchtype == ConditionEntry.MatchType.NotEqual)
+                                matched = !leftside.Equals(rightside, StringComparison.InvariantCultureIgnoreCase);
+                            else if (f.matchtype == ConditionEntry.MatchType.NotEqualCaseSensitive)
+                                matched = !leftside.Equals(rightside);
+
+                            else if (f.matchtype == ConditionEntry.MatchType.Contains)
+                                matched = leftside.IndexOf(rightside, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                            else if (f.matchtype == ConditionEntry.MatchType.ContainsCaseSensitive)
+                                matched = leftside.Contains(rightside);
+
+                            else if (f.matchtype == ConditionEntry.MatchType.DoesNotContain)
+                                matched = leftside.IndexOf(rightside, StringComparison.InvariantCultureIgnoreCase) < 0;
+                            else if (f.matchtype == ConditionEntry.MatchType.DoesNotContainCaseSensitive)
+                                matched = !leftside.Contains(rightside);
+                            else if (f.matchtype == ConditionEntry.MatchType.IsOneOf)
+                            {
+                                StringParser p = new StringParser(rightside);
+                                List<string> ret = p.NextQuotedWordList();
+
+                                if (ret == null)
+                                {
+                                    errlist += "IsOneOf value list is not in a optionally quoted comma separated form" + Environment.NewLine;
+                                    innerres = false;
+                                    break;                       // stop the loop, its a false
+                                }
+                                else
+                                {
+                                    matched = ret.Contains(leftside, StringComparer.InvariantCultureIgnoreCase);
+                                }
+                            }
+                            else if (f.matchtype == ConditionEntry.MatchType.IsEmpty)
+                            {
+                                matched = leftside.Length == 0;
+                            }
+                            else if (f.matchtype == ConditionEntry.MatchType.IsNotEmpty)
+                            {
+                                matched = leftside.Length > 0;
+                            }
+                            else if (f.matchtype == ConditionEntry.MatchType.IsTrue || f.matchtype == ConditionEntry.MatchType.IsFalse)
+                            {
+                                int inum = 0;
+
+                                if (leftside.InvariantParse(out inum))
+                                    matched = (f.matchtype == ConditionEntry.MatchType.IsTrue) ? (inum != 0) : (inum == 0);
+                                else
+                                {
+                                    errlist += "True/False value is not an integer on left side" + Environment.NewLine;
+                                    innerres = false;
+                                    break;
+                                }
                             }
                             else
                             {
-                                if (f.matchtype == ConditionEntry.MatchType.NumericEquals)
-                                    matched = Math.Abs(num - fnum) < 0.0000000001;  // allow for rounding
+                                double fnum = 0, num = 0;
 
-                                else if (f.matchtype == ConditionEntry.MatchType.NumericNotEquals)
-                                    matched = Math.Abs(num - fnum) >= 0.0000000001;
-
-                                else if (f.matchtype == ConditionEntry.MatchType.NumericGreater)
-                                    matched = num > fnum;
-
-                                else if (f.matchtype == ConditionEntry.MatchType.NumericGreaterEqual)
-                                    matched = num >= fnum;
-
-                                else if (f.matchtype == ConditionEntry.MatchType.NumericLessThan)
-                                    matched = num < fnum;
-
-                                else if (f.matchtype == ConditionEntry.MatchType.NumericLessThanEqual)
-                                    matched = num <= fnum;
+                                if (!leftside.InvariantParse(out num))
+                                {
+                                    errlist += "Number not in correct format on left side" + Environment.NewLine;
+                                    innerres = false;
+                                    break;
+                                }
+                                else if (!rightside.InvariantParse(out fnum))
+                                {
+                                    errlist += "Number not in correct format on right side" + Environment.NewLine;
+                                    innerres = false;
+                                    break;
+                                }
                                 else
-                                    System.Diagnostics.Debug.Assert(false);
+                                {
+                                    if (f.matchtype == ConditionEntry.MatchType.NumericEquals)
+                                        matched = Math.Abs(num - fnum) < 0.0000000001;  // allow for rounding
+
+                                    else if (f.matchtype == ConditionEntry.MatchType.NumericNotEquals)
+                                        matched = Math.Abs(num - fnum) >= 0.0000000001;
+
+                                    else if (f.matchtype == ConditionEntry.MatchType.NumericGreater)
+                                        matched = num > fnum;
+
+                                    else if (f.matchtype == ConditionEntry.MatchType.NumericGreaterEqual)
+                                        matched = num >= fnum;
+
+                                    else if (f.matchtype == ConditionEntry.MatchType.NumericLessThan)
+                                        matched = num < fnum;
+
+                                    else if (f.matchtype == ConditionEntry.MatchType.NumericLessThanEqual)
+                                        matched = num <= fnum;
+                                    else
+                                        System.Diagnostics.Debug.Assert(false);
+                                }
                             }
                         }
                     }
