@@ -182,33 +182,56 @@
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="3DMap\CameraDirectionMovement.cs" />
-    <Compile Include="3DMap\PositionDirection.cs" />
-    <Compile Include="3DMap\MapRecorder.cs" />
-    <Compile Include="3DMap\Polygon.cs" />
     <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="3DMap\DatasetBuilder.cs" />
-    <Compile Include="3DMap\MapManager.cs" />
+    <Compile Include="3DMap\FormMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="3DMap\FormMap.Designer.cs">
+      <DependentUpon>FormMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="3DMap\KeyboardActions.cs" />
+    <Compile Include="3DMap\MapManager.cs" />
+    <Compile Include="3DMap\MapRecorder.cs" />
+    <Compile Include="3DMap\Polygon.cs" />
+    <Compile Include="3DMap\PositionDirection.cs" />
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
-    <Compile Include="Actions\ActionCommands\ActionShip.cs" />
-    <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
-    <Compile Include="Actions\ActionCommands\ActionUserInteraction.cs" />
-    <Compile Include="Actions\ActionController.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
     <Compile Include="Actions\ActionCommands\ActionHistoryTab.cs" />
     <Compile Include="Actions\ActionCommands\ActionLedger.cs" />
     <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
     <Compile Include="Actions\ActionCommands\ActionPerform.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPlay.cs" />
     <Compile Include="Actions\ActionCommands\ActionPopout.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
+    <Compile Include="Actions\ActionCommands\ActionPrint.cs" />
     <Compile Include="Actions\ActionCommands\ActionProgramwindow.cs" />
+    <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
+    <Compile Include="Actions\ActionCommands\ActionSay.cs" />
     <Compile Include="Actions\ActionCommands\ActionScanStar.cs" />
+    <Compile Include="Actions\ActionCommands\ActionSet.cs" />
+    <Compile Include="Actions\ActionCommands\ActionSleep.cs" />
+    <Compile Include="Actions\ActionCommands\ActionShip.cs" />
+    <Compile Include="Actions\ActionCommands\ActionStructures.cs" />
+    <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
+    <Compile Include="Actions\ActionCommands\ActionUserInteraction.cs" />
+    <Compile Include="Actions\ActionController.cs" />
     <Compile Include="Actions\ActionFile.cs" />
     <Compile Include="Actions\ActionFileList.cs" />
+    <Compile Include="Actions\ActionProgram.cs" />
+    <Compile Include="Actions\ActionProgramForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ActionProgramForm.Designer.cs">
+      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\ActionProgramList.cs" />
+    <Compile Include="Actions\ActionProgramRun.cs" />
+    <Compile Include="Actions\ActionRun.cs" />
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Audio\AudioDeviceConfigure.cs">
       <SubType>Form</SubType>
@@ -220,13 +243,13 @@
     <Compile Include="Audio\AudioDriverCSCore.cs" />
     <Compile Include="Audio\AudioDriverDummy.cs" />
     <Compile Include="Audio\AudioQueue.cs" />
-    <Compile Include="Audio\SoundEffectSettings.cs" />
     <Compile Include="Audio\SoundEffectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Audio\SoundEffectDialog.Designer.cs">
       <DependentUpon>SoundEffectDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Audio\SoundEffectSettings.cs" />
     <Compile Include="Audio\SpeechConfigure.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -242,170 +265,79 @@
     <Compile Include="Audio\WaveConfigureDialog.Designer.cs">
       <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="CompanionAPI\CCommander.cs" />
     <Compile Include="CompanionAPI\CModules.cs" />
+    <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
+    <Compile Include="CompanionAPI\CompanionCredentials.cs" />
+    <Compile Include="CompanionAPI\CompanionException.cs" />
+    <Compile Include="CompanionAPI\CProfile.cs" />
     <Compile Include="CompanionAPI\CStarport.cs" />
+    <Compile Include="CompanionAPI\CShip.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
+    <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
     <Compile Include="Conditions\ConditionFileHandles.cs" />
-    <Compile Include="Conditions\ConditionFunctions.cs" />
-    <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
-    <Compile Include="Actions\ActionCommands\ActionPrint.cs" />
-    <Compile Include="Actions\ActionCommands\ActionSet.cs" />
-    <Compile Include="Actions\ActionCommands\ActionSleep.cs" />
-    <Compile Include="Actions\ActionCommands\ActionStructures.cs" />
-    <Compile Include="Actions\ActionCommands\ActionPlay.cs" />
-    <Compile Include="Actions\ActionProgramForm.cs">
+    <Compile Include="Conditions\ConditionFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Actions\ActionProgramForm.Designer.cs">
-      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    <Compile Include="Conditions\ConditionFilterForm.Designer.cs">
+      <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
-    <Compile Include="Actions\ActionProgramRun.cs" />
-    <Compile Include="Actions\ActionRun.cs" />
-    <Compile Include="Actions\ActionCommands\ActionSay.cs" />
-    <Compile Include="Actions\ActionProgram.cs" />
+    <Compile Include="Conditions\ConditionFunctions.cs" />
+    <Compile Include="Conditions\ConditionLists.cs" />
+    <Compile Include="Conditions\ConditionVariables.cs" />
     <Compile Include="Conditions\ConditionVariablesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Conditions\ConditionVariablesForm.Designer.cs">
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Conditions\ConditionVariables.cs" />
-    <Compile Include="Controls\AutoCompleteDGV.cs" />
-    <Compile Include="Controls\CheckedListControlCustom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\ControlHelpers.cs" />
-    <Compile Include="Controls\CustomDateTimePicker.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DataGridViewExtensions.cs" />
-    <Compile Include="Controls\AutoCompleteTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\LabelExt.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\PanelVScroll.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\PictureBoxHotspot.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStrip.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStrip.Designer.cs">
-      <DependentUpon>TabStrip.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Conditions\StringParser.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
-    <Compile Include="EliteDangerous\MaterialCommodities.cs" />
+    <Compile Include="DB\InMemory\SystemClass.cs" />
+    <Compile Include="DB\ISystem.cs" />
+    <Compile Include="DB\IVisitedSystems.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
+    <Compile Include="DB\SavedRouteClass.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
-    <Compile Include="DB\SqLiteDBSchema.cs" />
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
+    <Compile Include="DB\SQLiteDBClass.cs" />
+    <Compile Include="DB\SqLiteDBSchema.cs" />
+    <Compile Include="DB\SystemClass.cs" />
+    <Compile Include="DB\SystemNoteClass.cs" />
     <Compile Include="DB\TargetClass.cs" />
+    <Compile Include="DB\TravelLogUnit.cs" />
+    <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="DebugCode.cs" />
+    <Compile Include="EDDConfig.cs" />
     <Compile Include="EDDiscoveryController.cs" />
-    <Compile Include="EDSM\EDSMLogFetcher.cs" />
-    <Compile Include="EliteDangerous\BodyDesignations.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEDDCommodityPrices.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSystemsShutdown.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEndCrewSession.cs" />
-    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
-    <Compile Include="EliteDangerous\Ledger.cs" />
-    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
-    <Compile Include="EliteDangerous\MissionList.cs" />
-    <Compile Include="EliteDangerous\ModuleEDID.cs" />
-    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
-    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
-    <Compile Include="CompanionAPI\CompanionCredentials.cs" />
-    <Compile Include="CompanionAPI\CompanionException.cs" />
-    <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
-    <Compile Include="CompanionAPI\CProfile.cs" />
-    <Compile Include="CompanionAPI\CShip.cs" />
-    <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
-    <Compile Include="CompanionAPI\CCommander.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterials.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCargo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberJoins.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalJoinACrew.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLoadout.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPassengers.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalQuitACrew.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
-    <Compile Include="EliteDangerous\ShipInformation.cs" />
-    <Compile Include="ExportImport\ExportGrid.cs" />
-    <Compile Include="ExportImport\ExportSphereSystems.cs" />
-    <Compile Include="Forms\CommanderForm.cs">
+    <Compile Include="EDDiscoveryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CommanderForm.Designer.cs">
-      <DependentUpon>CommanderForm.cs</DependentUpon>
+    <Compile Include="EDDiscoveryForm.Designer.cs">
+      <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DownloadManagerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DownloadManagerForm.Designer.cs">
-      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ImportSphere.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ImportSphere.Designer.cs">
-      <DependentUpon>ImportSphere.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MessageBoxTheme.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MessageBoxTheme.Designer.cs">
-      <DependentUpon>MessageBoxTheme.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PromptDialogs.cs" />
-    <Compile Include="Forms\SetNoteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SetNoteForm.Designer.cs">
-      <DependentUpon>SetNoteForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="HTTP\VersioningManager.cs" />
-    <Compile Include="HTTP\GitHubFile.cs" />
-    <Compile Include="PopOutControl.cs" />
-    <Compile Include="Forms\ShipDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ShipDetails.Designer.cs">
-      <DependentUpon>ShipDetails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Conditions\ConditionLists.cs" />
-    <Compile Include="Conditions\StringParser.cs" />
-    <Compile Include="IDiscoveryController.cs" />
-    <Compile Include="RoutingUtils.cs" />
-    <Compile Include="ExportImport\ExportNotes.cs" />
-    <Compile Include="ExportImport\ImportHistory.cs" />
-    <Compile Include="TraceLog.cs" />
-    <Compile Include="Trilateration\DistanceParser.cs" />
-    <Compile Include="Controls\SplitContainerCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
+    <Compile Include="EDDTheme.cs" />
+    <Compile Include="EDDToolStripRenderer.cs" />
+    <Compile Include="EDSM\EDSMLogFetcher.cs" />
+    <Compile Include="EDSM\EDSMClass.cs" />
+    <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
     <Compile Include="EliteDangerous\Bodies.cs" />
+    <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\EDCommander.cs" />
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
+    <Compile Include="EliteDangerous\EliteDangerous.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
+    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalApproachSettlement.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalBounty.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalBuyAmmo.cs" />
@@ -413,6 +345,8 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalBuyExplorationData.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalBuyTradeData.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCapShipBond.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCargo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalClearSavedGame.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCockpitBreached.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCollectCargo.cs" />
@@ -424,6 +358,10 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewAssign.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewFire.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewHire.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberJoins.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkScan.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkVoucher.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDataScanned.cs" />
@@ -436,8 +374,10 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingRequested.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingTimeout.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockSRV.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEDDCommodityPrices.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEDDItemSet.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEjectCargo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEndCrewSession.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerApply.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerCraft.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
@@ -453,11 +393,14 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalInterdiction.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalJetConeBoost.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalJetConeDamage.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJoinACrew.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLaunchFighter.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLaunchSRV.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLiftoff.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLoadout.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMarketBuy.cs" />
@@ -466,6 +409,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalMaterialCollected.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMaterialDiscarded.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMaterialDiscovered.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalMaterials.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMiningRefined.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMissionAbandoned.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMissionAccepted.cs" />
@@ -478,6 +422,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleStore.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalNewCommander.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPassengers.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPayFines.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPayLegacyFines.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayCollect.cs" />
@@ -492,6 +437,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPromotion.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPVPKill.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalQuitACrew.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRebootRepair.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalReceiveText.cs" />
@@ -503,21 +449,25 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalRestockVehicle.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalResurrect.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScientificResearch.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSelfDestruct.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellDrones.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSendText.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShieldState.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardBuy.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardNew.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSell.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSwap.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardTransfer.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseEntry.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseExit.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSynthesis.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSystemsShutdown.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalTouchdown.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUndocked.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
@@ -526,25 +476,25 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalWingAdd.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingJoin.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingLeave.cs" />
-    <Compile Include="EliteDangerous\StarScan.cs" />
-    <Compile Include="ExportImport\ExportExplorationData.cs" />
-    <Compile Include="ExportImport\ExportFilteredSystems.cs" />
-    <Compile Include="ExportImport\ExportRoute.cs" />
-    <Compile Include="Forms\FindMaterialsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FindMaterialsForm.Designer.cs">
-      <DependentUpon>FindMaterialsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Conditions\ConditionFilterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Conditions\ConditionFilterForm.Designer.cs">
-      <DependentUpon>ConditionFilterForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="JSON\JSONPrettyPrint.cs" />
+    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
+    <Compile Include="EliteDangerous\Ledger.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
+    <Compile Include="EliteDangerous\MaterialCommodities.cs" />
+    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
+    <Compile Include="EliteDangerous\MissionList.cs" />
+    <Compile Include="EliteDangerous\ModuleEDID.cs" />
+    <Compile Include="EliteDangerous\NetLogClass.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
+    <Compile Include="EliteDangerous\ShipInformation.cs" />
+    <Compile Include="EliteDangerous\StarScan.cs" />
+    <Compile Include="EMK\Arc.cs" />
+    <Compile Include="EMK\AStar.cs" />
+    <Compile Include="EMK\Graph.cs" />
+    <Compile Include="EMK\Node.cs" />
+    <Compile Include="EMK\Point3D.cs" />
+    <Compile Include="EMK\SortableList.cs" />
+    <Compile Include="EMK\Track.cs" />
+    <Compile Include="EMK\Vector3D.cs" />
     <Compile Include="ExportImport\ExportBase.cs" />
     <Compile Include="ExportImport\ExportControl.cs">
       <SubType>UserControl</SubType>
@@ -552,8 +502,103 @@
     <Compile Include="ExportImport\ExportControl.Designer.cs">
       <DependentUpon>ExportControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExportImport\ExportExplorationData.cs" />
+    <Compile Include="ExportImport\ExportFilteredSystems.cs" />
     <Compile Include="ExportImport\ExportFSDJump.cs" />
+    <Compile Include="ExportImport\ExportGrid.cs" />
+    <Compile Include="ExportImport\ExportNotes.cs" />
+    <Compile Include="ExportImport\ExportRoute.cs" />
     <Compile Include="ExportImport\ExportScan.cs" />
+    <Compile Include="ExportImport\ExportSphereSystems.cs" />
+    <Compile Include="ExportImport\ImportHistory.cs" />
+    <Compile Include="ExtendedControls\AutoCompleteDGVColumns.cs" />
+    <Compile Include="ExtendedControls\AutoCompleteTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\ButtonExt.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\CheckBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\CheckedListControlCustom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\ComboBoxCustom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\ControlHelpers.cs" />
+    <Compile Include="ExtendedControls\CustomColourTable.cs" />
+    <Compile Include="ExtendedControls\CustomDateTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\DataGridViewExt.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\DataViewScrollerPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\DrawnPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\GroupBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\LabelExt.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\ListControlCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\NumericUpDownCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\PanelVScroll.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\PictureBoxHotspot.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\RadioButtonCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\RichTextBoxScroll.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\SplitContainerCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\StatusStripCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\TabControlCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\TabStrip.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\TabStrip.Designer.cs">
+      <DependentUpon>TabStrip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExtendedControls\TabStyleCustom.cs" />
+    <Compile Include="ExtendedControls\TextBoxBorder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\ToolStripComboBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\UpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedControls\VScrollCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -566,11 +611,78 @@
     <Compile Include="Forms\BookmarkForm.Designer.cs">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\CommanderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CommanderForm.Designer.cs">
+      <DependentUpon>CommanderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DownloadManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DownloadManagerForm.Designer.cs">
+      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FindMaterialsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FindMaterialsForm.Designer.cs">
+      <DependentUpon>FindMaterialsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ImportSphere.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImportSphere.Designer.cs">
+      <DependentUpon>ImportSphere.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\InfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InfoForm.Designer.cs">
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MessageBoxTheme.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MessageBoxTheme.Designer.cs">
+      <DependentUpon>MessageBoxTheme.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MoveToCommander.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MoveToCommander.Designer.cs">
+      <DependentUpon>MoveToCommander.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewReleaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\NewReleaseForm.Designer.cs">
       <DependentUpon>NewReleaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Obsolete\SystemViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Obsolete\SystemViewForm.Designer.cs">
+      <DependentUpon>SystemViewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PromptDialogs.cs" />
+    <Compile Include="Forms\RecordStep.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RecordStep.Designer.cs">
+      <DependentUpon>RecordStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SetNoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetNoteForm.Designer.cs">
+      <DependentUpon>SetNoteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ShipDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShipDetails.Designer.cs">
+      <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SplashForm.cs">
       <SubType>Form</SubType>
@@ -584,23 +696,17 @@
     <Compile Include="Forms\TabControlForm.Designer.cs">
       <DependentUpon>TabControlForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ThemeEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ThemeEditor.Designer.cs">
+      <DependentUpon>ThemeEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\TimedMessage.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\TimedMessage.Designer.cs">
       <DependentUpon>TimedMessage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\InfoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\InfoForm.Designer.cs">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\RecordStep.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RecordStep.Designer.cs">
-      <DependentUpon>RecordStep.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\UserControlForm.cs">
       <SubType>Form</SubType>
@@ -611,130 +717,28 @@
     <Compile Include="HistoryList.cs" />
     <Compile Include="HTTP\DownloadFile.cs" />
     <Compile Include="HTTP\GitHubClass.cs" />
+    <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="HTTP\GitHubRelease.cs" />
-    <Compile Include="JSON\JSONHelper.cs" />
-    <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="Controls\ButtonExt.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\CheckBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\CustomColourTable.cs" />
-    <Compile Include="Controls\StatusStripCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DataViewScrollerPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\GroupBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\NumericUpDownCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\RadioButtonCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\RichTextBoxScroll.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabControlCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStyleCustom.cs" />
-    <Compile Include="Controls\DrawnPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ComboBoxCustom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\ListControlCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TextBoxBorder.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ToolStripComboBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\UpDown.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\VScrollCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DB\SavedRouteClass.cs" />
-    <Compile Include="DB\ISystem.cs" />
-    <Compile Include="DB\InMemory\SystemClass.cs" />
-    <Compile Include="DB\IVisitedSystems.cs" />
-    <Compile Include="DB\TravelLogUnit.cs" />
-    <Compile Include="DB\WantedSystemClass.cs" />
-    <Compile Include="EDDConfig.cs" />
-    <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
-    <Compile Include="EDDTheme.cs" />
-    <Compile Include="EDDToolStripRenderer.cs" />
-    <Compile Include="EDSM\EDSMClass.cs" />
-    <Compile Include="EDSM\EDSMSync.cs" />
-    <Compile Include="EliteDangerous\EDCommander.cs" />
-    <Compile Include="EliteDangerous\EliteDangerous.cs" />
-    <Compile Include="3DMap\FormMap.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="3DMap\FormMap.Designer.cs">
-      <DependentUpon>FormMap.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Trilateration\SysWarning.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Trilateration\SysWarning.Designer.cs">
-      <DependentUpon>SysWarning.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\DataGridViewSorter.cs" />
-    <Compile Include="DB\SQLiteDBClass.cs" />
-    <Compile Include="DB\SystemClass.cs" />
-    <Compile Include="DB\SystemNoteClass.cs" />
-    <Compile Include="Forms\AboutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AboutForm.Designer.cs">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ThemeEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ThemeEditor.Designer.cs">
-      <DependentUpon>ThemeEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
-    <Compile Include="Forms\MoveToCommander.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MoveToCommander.Designer.cs">
-      <DependentUpon>MoveToCommander.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EMK\Arc.cs" />
-    <Compile Include="EMK\AStar.cs" />
-    <Compile Include="EMK\Graph.cs" />
-    <Compile Include="EMK\Node.cs" />
-    <Compile Include="EMK\Point3D.cs" />
-    <Compile Include="EMK\SortableList.cs" />
-    <Compile Include="EMK\Track.cs" />
-    <Compile Include="EMK\Vector3D.cs" />
-    <Compile Include="EDDiscoveryForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EDDiscoveryForm.Designer.cs">
-      <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EliteDangerous\NetLogClass.cs" />
+    <Compile Include="HTTP\VersioningManager.cs" />
+    <Compile Include="IDiscoveryController.cs" />
     <Compile Include="ImageHandler.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ImageHandler.Designer.cs">
       <DependentUpon>ImageHandler.cs</DependentUpon>
     </Compile>
+    <Compile Include="JournalViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="JournalViewControl.Designer.cs">
+      <DependentUpon>JournalViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JSON\JSONHelper.cs" />
+    <Compile Include="JSON\JSONPrettyPrint.cs" />
+    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="PopOutControl.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteControl.cs">
@@ -743,6 +747,7 @@
     <Compile Include="RouteControl.Designer.cs">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="RoutingUtils.cs" />
     <Compile Include="SavedRouteExpeditionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -755,50 +760,32 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Obsolete\SystemViewForm.cs">
+    <Compile Include="Tools.cs" />
+    <Compile Include="TraceLog.cs" />
+    <Compile Include="Trilateration\DistanceParser.cs" />
+    <Compile Include="Trilateration\SysWarning.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Obsolete\SystemViewForm.Designer.cs">
-      <DependentUpon>SystemViewForm.cs</DependentUpon>
+    <Compile Include="Trilateration\SysWarning.Designer.cs">
+      <DependentUpon>SysWarning.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools.cs" />
     <Compile Include="TravelHistoryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TravelHistoryControl.Designer.cs">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\EngineeringFilters.cs" />
-    <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Trilateration\TrilaterationControl.Designer.cs">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="JournalViewControl.cs">
+    <Compile Include="UserControls\DataGridViewSorter.cs" />
+    <Compile Include="UserControls\EngineeringFilters.cs" />
+    <Compile Include="UserControls\TravelHistoryFilter.cs" />
+    <Compile Include="UserControls\UserControlCommonBase.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="JournalViewControl.Designer.cs">
-      <DependentUpon>JournalViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlExploration.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlExploration.Designer.cs">
-      <DependentUpon>UserControlExploration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlMarketData.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlMarketData.Designer.cs">
-      <DependentUpon>UserControlMarketData.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlMissions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlMissions.Designer.cs">
-      <DependentUpon>UserControlMissions.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlEngineering.cs">
       <SubType>UserControl</SubType>
@@ -806,11 +793,47 @@
     <Compile Include="UserControls\UserControlEngineering.Designer.cs">
       <DependentUpon>UserControlEngineering.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlSynthesis.cs">
+    <Compile Include="UserControls\UserControlExploration.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlSynthesis.Designer.cs">
-      <DependentUpon>UserControlSynthesis.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlExploration.Designer.cs">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlJournalGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlJournalGrid.Designer.cs">
+      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlLedger.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlLedger.Designer.cs">
+      <DependentUpon>UserControlLedger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlLog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlLog.Designer.cs">
+      <DependentUpon>UserControlLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlMarketData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlMarketData.Designer.cs">
+      <DependentUpon>UserControlMarketData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlMaterialCommodities.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlMaterialCommodities.Designer.cs">
+      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlMissions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlMissions.Designer.cs">
+      <DependentUpon>UserControlMissions.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlModules.cs">
       <SubType>UserControl</SubType>
@@ -836,50 +859,17 @@
     <Compile Include="UserControls\UserControlScan.Designer.cs">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlSpanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlSpanel.Designer.cs">
-      <DependentUpon>UserControlSpanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlStats.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlStats.Designer.cs">
-      <DependentUpon>UserControlStats.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\UserControlScreenshot.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\UserControlScreenshot.Designer.cs">
       <DependentUpon>UserControlScreenshot.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlCommonBase.cs">
+    <Compile Include="UserControls\UserControlSpanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlJournalGrid.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlJournalGrid.Designer.cs">
-      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlLog.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlLog.Designer.cs">
-      <DependentUpon>UserControlLog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlLedger.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlLedger.Designer.cs">
-      <DependentUpon>UserControlLedger.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlMaterialCommodities.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlMaterialCommodities.Designer.cs">
-      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlSpanel.Designer.cs">
+      <DependentUpon>UserControlSpanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlStarDistance.cs">
       <SubType>UserControl</SubType>
@@ -887,11 +877,23 @@
     <Compile Include="UserControls\UserControlStarDistance.Designer.cs">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlStats.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlStats.Designer.cs">
+      <DependentUpon>UserControlStats.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlStatsTime.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\UserControlStatsTime.Designer.cs">
       <DependentUpon>UserControlStatsTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlSynthesis.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlSynthesis.Designer.cs">
+      <DependentUpon>UserControlSynthesis.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlTravelGrid.cs">
       <SubType>UserControl</SubType>
@@ -929,13 +931,14 @@
     <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
+    <EmbeddedResource Include="ExtendedControls\AutoCompleteTextBox.resx">
       <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\RichTextBoxScroll.resx">
+    <EmbeddedResource Include="ExtendedControls\RichTextBoxScroll.resx">
       <DependentUpon>RichTextBoxScroll.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\TabStrip.resx">
+    <EmbeddedResource Include="ExtendedControls\TabStrip.resx">
       <DependentUpon>TabStrip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CommanderForm.resx">

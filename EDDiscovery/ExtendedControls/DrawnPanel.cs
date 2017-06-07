@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     public class DrawnPanel : Panel
     {

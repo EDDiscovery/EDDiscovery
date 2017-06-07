@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewSynthesis = new System.Windows.Forms.DataGridView();
+            this.dataGridViewSynthesis = new ExtendedControls.DoubleBufferedDataGridView();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -88,10 +88,12 @@ namespace EDDiscovery.UserControls
             this.Available,
             this.Notes,
             this.Recipe});
+            this.dataGridViewSynthesis.DefaultCellStyleWrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewSynthesis.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewSynthesis.Name = "dataGridViewSynthesis";
             this.dataGridViewSynthesis.RowHeadersVisible = false;
             this.dataGridViewSynthesis.RowHeadersWidth = 25;
+            this.dataGridViewSynthesis.RowTemplate.Height = 26;
             this.dataGridViewSynthesis.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewSynthesis.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewSynthesis.TabIndex = 1;
@@ -240,7 +242,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewSynthesis;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewSynthesis;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         internal ExtendedControls.ComboBoxCustom comboBoxSynthesis;

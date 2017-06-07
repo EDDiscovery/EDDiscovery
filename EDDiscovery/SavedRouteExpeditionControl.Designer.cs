@@ -69,7 +69,7 @@ namespace EDDiscovery
             this.labelDateStart = new System.Windows.Forms.Label();
             this.textBoxRouteName = new ExtendedControls.TextBoxBorder();
             this.labelRouteName = new System.Windows.Forms.Label();
-            this.dataGridViewRouteSystems = new System.Windows.Forms.DataGridView();
+            this.dataGridViewRouteSystems = new ExtendedControls.DoubleBufferedDataGridView();
             this.SystemName = new ExtendedControls.AutoCompleteSystemsColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -480,7 +480,7 @@ namespace EDDiscovery
         private System.Windows.Forms.DateTimePicker dateTimePickerStartDate;
         private System.Windows.Forms.Label labelDateStart;
         private System.Windows.Forms.Label labelRouteName;
-        private System.Windows.Forms.DataGridView dataGridViewRouteSystems;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewRouteSystems;
         private ExtendedControls.AutoCompleteSystemsColumn SystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;

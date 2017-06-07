@@ -21,7 +21,7 @@ using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip)]
     public class ToolStripComboBoxCustom : System.Windows.Forms.ToolStripControlHost

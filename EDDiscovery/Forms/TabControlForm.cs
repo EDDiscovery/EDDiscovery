@@ -16,7 +16,7 @@
 using EDDiscovery.DB;
 using EDDiscovery.UserControls;
 using EDDiscovery.Win32Constants;
-using ExtendedControls;
+using EDDiscovery.ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -13,8 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using ExtendedControls;
-
 namespace EDDiscovery
 {
     partial class TrilaterationControl

@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     public class VScrollBarCustom : Control
     {

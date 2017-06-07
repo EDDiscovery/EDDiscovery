@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
+using EDDiscovery.ExtendedControls;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 
@@ -54,10 +54,6 @@ namespace EDDiscovery.UserControls
         {
             discoveryform = ed;
             displaynumber = vn;
-
-            dataGridViewLedger.MakeDoubleBuffered();
-            dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewLedger.RowTemplate.Height = 26;
 
             cfs.ConfigureThirdOption("Cash Transactions", string.Join(";", EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger")));
 

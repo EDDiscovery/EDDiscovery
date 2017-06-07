@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.EliteDangerous.JournalEvents;
-using ExtendedControls;
+using EDDiscovery.ExtendedControls;
 using EDDiscovery.DB;
 using System.Drawing.Drawing2D;
 using EDDiscovery.EliteDangerous;

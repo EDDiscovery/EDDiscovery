@@ -22,7 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     public class DataViewScrollerPanel : Panel      // Must have a DGV and a VScroll added as children by the framework
     {

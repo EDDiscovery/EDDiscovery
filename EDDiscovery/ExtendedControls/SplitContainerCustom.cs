@@ -19,21 +19,16 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery.Controls
+namespace EDDiscovery.ExtendedControls
 {
-    public static class DataGridViewExtensions
+    public class SplitContainerCustom : System.Windows.Forms.SplitContainer
     {
-        public static void MakeDoubleBuffered(this DataGridView datagridView)
+        public bool LayoutChanging { get; private set; } = false;
+        protected override void OnLayout(LayoutEventArgs e)
         {
-            // this improves dataGridView's scrolling performance
-            typeof(DataGridView).InvokeMember(
-                "DoubleBuffered",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance |
-                System.Reflection.BindingFlags.SetProperty,
-                null,
-                datagridView,
-                new object[] {true}
-                );
+            LayoutChanging = true;
+            base.OnLayout(e);
+            LayoutChanging = false;
         }
     }
 }

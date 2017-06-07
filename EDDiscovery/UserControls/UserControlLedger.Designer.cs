@@ -44,9 +44,9 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanel = new EDDiscovery.ExtendedControls.DataViewScrollerPanel();
             this.labelNoItems = new System.Windows.Forms.Label();
-            this.dataGridViewLedger = new System.Windows.Forms.DataGridView();
+            this.dataGridViewLedger = new EDDiscovery.ExtendedControls.DoubleBufferedDataGridView();
             this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,13 +56,13 @@ namespace EDDiscovery.UserControls
             this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustomMC = new EDDiscovery.ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelTime = new System.Windows.Forms.Label();
-            this.buttonFilter = new ExtendedControls.ButtonExt();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.buttonFilter = new EDDiscovery.ExtendedControls.ButtonExt();
+            this.textBoxFilter = new EDDiscovery.ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxHistoryWindow = new EDDiscovery.ExtendedControls.ComboBoxCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
@@ -108,9 +108,11 @@ namespace EDDiscovery.UserControls
             this.Balance,
             this.NormProfit});
             this.dataGridViewLedger.ContextMenuStrip = this.contextMenuStripLedger;
+            this.dataGridViewLedger.DefaultCellStyleWrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewLedger.Name = "dataGridViewLedger";
             this.dataGridViewLedger.RowHeadersVisible = false;
+            this.dataGridViewLedger.RowTemplate.Height = 26;
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewLedger.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewLedger.TabIndex = 1;
@@ -317,7 +319,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewLedger;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewLedger;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.Label labelNoItems;

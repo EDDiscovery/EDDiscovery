@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using ExtendedControls;
+using EDDiscovery.ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +25,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     public partial class PanelVScroll : Panel               // Written because I could not get the manual autoscroll to work when controls dynamically added
     {

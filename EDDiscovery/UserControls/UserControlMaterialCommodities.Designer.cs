@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.labelNoItems = new System.Windows.Forms.Label();
-            this.dataGridViewMC = new System.Windows.Forms.DataGridView();
+            this.dataGridViewMC = new ExtendedControls.DoubleBufferedDataGridView();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ShortName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Category = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -98,9 +98,11 @@ namespace EDDiscovery.UserControls
             this.Type,
             this.Number,
             this.Price});
+            this.dataGridViewMC.DefaultCellStyleWrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewMC.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMC.Name = "dataGridViewMC";
             this.dataGridViewMC.RowHeadersVisible = false;
+            this.dataGridViewMC.RowTemplate.Height = 26;
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewMC.Size = new System.Drawing.Size(684, 532);
             this.dataGridViewMC.TabIndex = 1;
@@ -227,7 +229,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewMC;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewMC;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
