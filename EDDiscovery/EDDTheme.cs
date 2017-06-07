@@ -24,7 +24,7 @@ using Newtonsoft.Json.Linq;
 using EDDiscovery;
 using System.IO;
 using System.Diagnostics;
-using ExtendedControls;
+using EDDiscovery.ExtendedControls;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery
@@ -672,12 +672,17 @@ namespace EDDiscovery
 
             Type controltype = myControl.GetType();
             Type parentcontroltype = parent.GetType();
-            if (!parentcontroltype.Namespace.Equals("ExtendedControls") && (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
-                controltype.Name.Equals("CheckBox") || controltype.Name.Equals("TextBox") ||
-                controltype.Name.Equals("ComboBox") || (controltype.Name.Equals("RichTextBox") ) )
-                )
+            if (!parentcontroltype.Namespace.Equals("EDDiscovery.ExtendedControls") && 
+                new string[] { "Button", "CheckBox", "ComboBox", "DataGridView", "GroupBox", "RadioButton", "RichTextBox", "TextBox" }.Contains(controltype.Name))
             {
-                Debug.Assert(false, myControl.Name + " of " + controltype.Name + " from " + parent.Name + " !!! Use the new controls in Controls folder - not the non visual themed ones!");
+                string myName = string.IsNullOrEmpty(myControl.Name) ? "(null)" : myControl.Name;
+                string pName = string.IsNullOrEmpty(parent.Name) ? "(null)" : parent.Name;
+                string msg = $"{nameof(EDDTheme)}.{nameof(UpdateColorControls)} error:{Environment.NewLine}{Environment.NewLine}" +
+                    $"Control named {myName} of type {controltype.FullName} from {pName} is an unthemed interface control.{Environment.NewLine}" +
+                    "Please change this to instead use a control from the EDDiscovery.ExtendedControls namespace.";
+
+                if (Forms.MessageBoxTheme.Show(msg, "Unthemed Control Detected", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop) != DialogResult.OK)
+                    throw new ApplicationException(msg);
             }
             else if (myControl is MenuStrip || myControl is ToolStrip)
             {
@@ -961,7 +966,7 @@ namespace EDDiscovery
                 ctrl.SelectedColor = ctrl.BackColor.Multiply(0.75F);
                 ctrl.MouseOverColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
             }
-            else if (myControl is DataGridView)                     // we theme this directly
+            else if (controltype.IsOrDerivedFrom<DataGridView>())   // we theme these directly
             {
                 DataGridView ctrl = (DataGridView)myControl;
                 ctrl.EnableHeadersVisualStyles = false;            // without this, the colours for the grid are not applied.

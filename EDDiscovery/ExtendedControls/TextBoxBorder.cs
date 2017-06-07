@@ -22,7 +22,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     public class TextBoxBorder : TextBox
     {

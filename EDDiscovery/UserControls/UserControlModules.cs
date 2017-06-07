@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
+using EDDiscovery.ExtendedControls;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using System.IO;
@@ -49,10 +49,6 @@ namespace EDDiscovery.UserControls
         {
             discoveryform = ed;
             displaynumber = vn;
-
-            dataGridViewModules.MakeDoubleBuffered();
-            dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewModules.RowTemplate.Height = 26;
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;

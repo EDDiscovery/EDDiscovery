@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.Controls;
+using EDDiscovery.ExtendedControls;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using System;
@@ -63,10 +63,6 @@ namespace EDDiscovery.UserControls
         {
             discoveryform = ed;
             displaynumber = vn;
-
-            dataGridViewEngineering.MakeDoubleBuffered();
-            dataGridViewEngineering.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewEngineering.RowTemplate.Height = 26;
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             ed.TravelControl.OnTravelSelectionChanged += Display;

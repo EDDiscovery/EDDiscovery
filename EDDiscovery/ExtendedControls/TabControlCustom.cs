@@ -29,7 +29,7 @@ using System.Windows.Forms;
  * See http://www.codeproject.com/info/cpol10.aspx for details
  */
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     class TabControlCustom : TabControl
     {

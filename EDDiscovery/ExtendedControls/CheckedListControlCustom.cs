@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     public class CheckedListControlCustom : Form
     {

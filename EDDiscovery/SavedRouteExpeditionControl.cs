@@ -26,7 +26,7 @@ using EDDiscovery.EDSM;
 using System.IO;
 using EMK.LightGeometry;
 
-using ExtendedControls;
+using EDDiscovery.ExtendedControls;
 
 namespace EDDiscovery
 {

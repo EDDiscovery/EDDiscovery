@@ -21,7 +21,7 @@ using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery.DB;
 using EDDiscovery.EDSM;
-using ExtendedControls;
+using EDDiscovery.ExtendedControls;
 
 
 namespace EDDiscovery

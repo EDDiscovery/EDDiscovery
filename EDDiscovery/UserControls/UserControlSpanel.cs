@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.DB;
 using EMK.LightGeometry;
-using ExtendedControls;
+using EDDiscovery.ExtendedControls;
 
 namespace EDDiscovery.UserControls
 {

@@ -827,7 +827,27 @@ public static class ObjectExtensionsColours
             (byte)Math.Max(Math.Min(Math.Round((float)c.G * val), 255), 0),
             (byte)Math.Max(Math.Min(Math.Round((float)c.B * val), 255), 0));
     }
-
-    #endregion // Colors
 }
+
+#endregion // Colors
+
+#region Types
+
+public static class ObjectExtensionsTypes
+{
+    /// <summary>
+    /// Determine whether or not this <see cref="Type"/> is of or derives from type <paramref name="T"/>.
+    /// <para>Note: warranty void if using <c>IUnknown</c> interfaces or COM-interop.</para>
+    /// </summary>
+    /// <typeparam name="T">The base type to compare against.</typeparam>
+    /// <param name="derivedTyp">The child type to compare with.</param>
+    /// <returns><c>true</c> if this <see cref="Type"/> is or inherits from <paramref name="T"/>; <c>false</c> otherwise.</returns>
+    public static bool IsOrDerivedFrom<T>(this Type derivedTyp)
+    {
+        Type baseTyp = typeof(T);
+        return baseTyp == derivedTyp || derivedTyp.IsSubclassOf(baseTyp);
+    }
+}
+
+#endregion // Types
 

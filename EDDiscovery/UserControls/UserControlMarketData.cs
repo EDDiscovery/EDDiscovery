@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
+using EDDiscovery.ExtendedControls;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
@@ -49,10 +49,6 @@ namespace EDDiscovery.UserControls
         {
             discoveryform = ed;
             displaynumber = vn;
-
-            dataGridViewMarketData.MakeDoubleBuffered();
-            dataGridViewMarketData.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewMarketData.RowTemplate.Height = 26;
 
             discoveryform.OnNewEntry += OnChanged;
             ed.TravelControl.OnTravelSelectionChanged += OnChanged;

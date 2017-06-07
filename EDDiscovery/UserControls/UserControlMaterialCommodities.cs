@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
+using EDDiscovery.ExtendedControls;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 
@@ -52,16 +52,12 @@ namespace EDDiscovery.UserControls
             travelhistorycontrol = ed.TravelControl;
             displaynumber = vn;
 
-            dataGridViewMC.MakeDoubleBuffered();
-            dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewMC.RowTemplate.Height = 26;
-
             if (materials)
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number
+                dataGridViewMC.Columns.Remove(Price);       // to give name,shortname abv,category,type,number
             else
             {
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //shortname
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //then category to give name,type,number, avg price
+                dataGridViewMC.Columns.Remove(ShortName);   //shortname
+                dataGridViewMC.Columns.Remove(Category);    //then category to give name,type,number, avg price
             }
 
             travelhistorycontrol.OnTravelSelectionChanged += Display;

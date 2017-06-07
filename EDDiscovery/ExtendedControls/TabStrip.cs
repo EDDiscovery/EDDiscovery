@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     public partial class TabStrip : UserControl
     {

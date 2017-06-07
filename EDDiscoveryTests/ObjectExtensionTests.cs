@@ -184,5 +184,53 @@ namespace EDDiscoveryTests
             Check.That(Color.Maroon.Multiply(-1.5f).ToArgb()).Equals(Color.FromArgb(255, 192, 0, 0).ToArgb());
             Check.That(Color.Maroon.Multiply(2.0f).ToArgb()).Equals(Color.Red.ToArgb());
         }
+
+        #region Type.IsOrDerivedFrom
+
+        private class frob
+        {
+            public class Foo : object { }
+            public class BarFoo : Foo { }
+            public class BasFoo : Foo { }
+            public class QuxBasFoo : BasFoo { }
+        }
+
+        [Test]
+        [TestMethod]
+        public void ObjectExtensions_Type_IsOrDerivedFrom()
+        {
+            Type objTyp = typeof(object), fooTyp = typeof(frob.Foo), barFooTyp = typeof(frob.BarFoo), basFooTyp = typeof(frob.BasFoo), quxBasFooTyp = typeof(frob.QuxBasFoo);
+
+            Check.That(objTyp.IsOrDerivedFrom<object>()).IsTrue();                  // Identity
+
+            Check.That(fooTyp.IsOrDerivedFrom<frob.Foo>()).IsTrue();                // Identity
+            Check.That(fooTyp.IsOrDerivedFrom<object>()).IsTrue();
+            Check.That(objTyp.IsOrDerivedFrom<frob.Foo>()).IsFalse();
+
+            Check.That(barFooTyp.IsOrDerivedFrom<frob.BarFoo>()).IsTrue();          // Identity
+            Check.That(barFooTyp.IsOrDerivedFrom<object>()).IsTrue();
+            Check.That(objTyp.IsOrDerivedFrom<frob.BarFoo>()).IsFalse();
+            Check.That(barFooTyp.IsOrDerivedFrom<frob.Foo>()).IsTrue();
+            Check.That(fooTyp.IsOrDerivedFrom<frob.BarFoo>()).IsFalse();
+
+            Check.That(basFooTyp.IsOrDerivedFrom<frob.BasFoo>()).IsTrue();          // Identity
+            Check.That(basFooTyp.IsOrDerivedFrom<object>()).IsTrue();
+            Check.That(objTyp.IsOrDerivedFrom<frob.BasFoo>()).IsFalse();
+            Check.That(basFooTyp.IsOrDerivedFrom<frob.Foo>()).IsTrue();
+            Check.That(fooTyp.IsOrDerivedFrom<frob.BasFoo>()).IsFalse();
+
+            Check.That(quxBasFooTyp.IsOrDerivedFrom<frob.QuxBasFoo>()).IsTrue();    // Identity
+            Check.That(quxBasFooTyp.IsOrDerivedFrom<object>()).IsTrue();
+            Check.That(objTyp.IsOrDerivedFrom<frob.QuxBasFoo>()).IsFalse();
+            Check.That(quxBasFooTyp.IsOrDerivedFrom<frob.Foo>()).IsTrue();
+            Check.That(fooTyp.IsOrDerivedFrom<frob.QuxBasFoo>()).IsFalse();
+            Check.That(quxBasFooTyp.IsOrDerivedFrom<frob.BasFoo>()).IsTrue();
+            Check.That(basFooTyp.IsOrDerivedFrom<frob.QuxBasFoo>()).IsFalse();
+
+            Check.That(barFooTyp.IsOrDerivedFrom<frob.BasFoo>()).IsFalse();
+            Check.That(basFooTyp.IsOrDerivedFrom<frob.BarFoo>()).IsFalse();
+        }
+
+        #endregion // Type.IsOrDerivedFrom
     }
 }

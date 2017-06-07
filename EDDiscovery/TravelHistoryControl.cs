@@ -23,7 +23,7 @@ using EDDiscovery.DB;
 using System.Diagnostics;
 using EDDiscovery.EDSM;
 using System.Threading.Tasks;
-using EDDiscovery.Controls;
+using EDDiscovery.ExtendedControls;
 using System.Threading;
 using System.Collections.Concurrent;
 using EDDiscovery.EliteDangerous;

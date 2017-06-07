@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     partial class TabStrip
     {

@@ -19,7 +19,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace ExtendedControls
+namespace EDDiscovery.ExtendedControls
 {
     /// <summary>
     /// A string-backed <see cref="DataGridViewColumn"/> capable of autocompletion inside of a <see cref="DataGridView"/> control.
