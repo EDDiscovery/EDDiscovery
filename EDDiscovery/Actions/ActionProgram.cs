@@ -159,6 +159,13 @@ namespace EDDiscovery.Actions
                     else
                         cmd = p.NextWord();
 
+                    if (cmd.Equals("Else", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Else " + cmd + " " + p.LineLeft);
+                        if (p.IsStringMoveOn("If", StringComparison.InvariantCultureIgnoreCase))   // if Else followed by IF 
+                            cmd = "Else If";
+                    }
+
                     string line = p.LineLeft;           // and the rest of the line..
 
                     int commentpos = line.LastIndexOf("//");

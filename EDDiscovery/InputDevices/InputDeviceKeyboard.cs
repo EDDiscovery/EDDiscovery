@@ -33,6 +33,7 @@ namespace EDDiscovery.InputDevices
             {
                 keyboard.Unacquire();
                 keyboard.Dispose();
+                keyboard = null;
             }
         }
 

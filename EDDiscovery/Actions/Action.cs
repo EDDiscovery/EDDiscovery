@@ -123,6 +123,7 @@ namespace EDDiscovery.Actions
             new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd),
             new Commands("While", typeof(ActionWhile) , ActionType.While),
             new Commands("//", typeof(ActionFullLineComment) , ActionType.Cmd),
+            new Commands("Else If", typeof(ActionElseIf) , ActionType.ElseIf),
         };
 
         static Dictionary<string, Commands> cmdlookup = null;

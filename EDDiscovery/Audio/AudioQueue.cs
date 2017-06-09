@@ -162,12 +162,8 @@ namespace EDDiscovery.Audio
                     audioqueue[0].linkedq.ReleaseHalt();        // it is waiting, so its stopped.. release halt on other one
                 }
 
-                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "AUDIO start");
                 ad.Start(audioqueue[0].audiodata, audioqueue[0].volume);    // driver, play this
-
                 audioqueue[0].SampleStart(this);     // let callers know a sample started
-
-                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Start audio at " + audioqueue[0].volume);
             }
         }
 
