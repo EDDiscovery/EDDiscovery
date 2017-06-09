@@ -37,21 +37,26 @@ namespace EDDiscovery.InputDevices
             devices.Stop();
         }
 
-        public void Dispose()
-        {
-            devices.Dispose();
-        }
-
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
 
         private void Devices_OnNewEvent(List<InputDeviceEvent> list)
         {
             IntPtr handle = GetForegroundWindow();
-            Process[] processes = Process.GetProcessesByName("4NT");//Process.GetProcessesByName("EliteDangerous64");
-
-            if (processes.Length == 0 || processes[0].MainWindowHandle != handle)
+            Process[] processes = Process.GetProcessesByName("elitedangerous64");//Process.GetProcessesByName("EliteDangerous64");
+            bool ed = false;
+            foreach (Process p in processes)
             {
+                if ( p.MainWindowHandle == handle )     //ED seems to have multiple processes running.. find one
+                {
+                    ed = true;
+                    break;
+                }
+            }
+
+            if ( !ed )
+            {
+                //System.Diagnostics.Debug.WriteLine("Rejected keypress " + processes.Length);
                 return;
             }
 

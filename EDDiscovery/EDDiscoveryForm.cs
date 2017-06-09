@@ -219,22 +219,23 @@ namespace EDDiscovery
             actioncontroller = new Actions.ActionController(this, Controller);
 
             frontierbindings = new BindingsFile();
-            inputdevices = new InputDevices.InputDeviceList();
+            inputdevices = new InputDevices.InputDeviceList(a => BeginInvoke(a));
             inputdevicesactions = new InputDevices.InputDevicesIntoActions(inputdevices, frontierbindings, actioncontroller);
-            InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
-            InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
 
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
         }
 
-        public void EliteInput(bool on)
+        public void EliteInput(bool on, bool axisevents)
         {
             inputdevicesactions.Stop();
+            inputdevices.Clear();
 
             if (on)
             {
+                InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices,axisevents);
+                InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
                 frontierbindings.LoadBindingsFile();
                 inputdevicesactions.Start();
             }
@@ -635,7 +636,8 @@ namespace EDDiscovery
             audioqueuewave.Dispose();
             audiodriverwave.Dispose();
 
-            inputdevicesactions.Dispose();
+            inputdevicesactions.Stop();
+            inputdevices.Clear();
 
             Close();
             Application.Exit();

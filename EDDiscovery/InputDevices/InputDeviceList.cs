@@ -12,9 +12,15 @@ namespace EDDiscovery.InputDevices
     {
         public event Action<List<InputDeviceEvent>> OnNewEvent;
 
+        private Action<Action> invokeAsyncOnUiThread;
         private System.Threading.AutoResetEvent stophandle = new System.Threading.AutoResetEvent(false);        // used by dispose to tell thread to stop
         private System.Threading.Thread waitfordatathread;      // the background worker
         private List<InputDeviceInterface> inputdevices { get; set; } = new List<InputDeviceInterface>();
+
+        public InputDeviceList(Action<Action> i)            // Action context is pass to call in.. 
+        {
+            invokeAsyncOnUiThread = i;
+        }
 
         public void Add(InputDeviceInterface i)
         {
@@ -46,16 +52,15 @@ namespace EDDiscovery.InputDevices
             }
         }
 
-        public void Dispose()       // stop and dispose of all input devices
+        public void Clear()
         {
             Stop();
 
             foreach (InputDeviceInterface i in inputdevices)
                 i.Dispose();
 
-            System.Diagnostics.Debug.WriteLine("IDL Dispose");
+            inputdevices.Clear();
         }
-
 
         private void waitthread()
         {
@@ -78,7 +83,8 @@ namespace EDDiscovery.InputDevices
                 if (list != null)
                 {
                     //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Handle hit " + hhit + " " + inputdevices[hhit].ID().Name);
-                    OnNewEvent?.Invoke(list);
+
+                    invokeAsyncOnUiThread(() => { OnNewEvent?.Invoke(list); }); // call in action context.
                 }
             }
         }

@@ -115,7 +115,7 @@ namespace EDDiscovery.Actions
                         condition = new ConditionLists();
                         if (condition.Read(UserData) != null)
                         {
-                            ap.ReportError("IF condition is not correctly formed");
+                            ap.ReportError("ElseIf condition is not correctly formed");
                             return true;
                         }
                     }

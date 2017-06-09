@@ -239,17 +239,6 @@ namespace EDDiscovery.EliteDangerous
                             }
                         }
                     }
-
-                    foreach (string s in devices.Keys)
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Device " + s + Environment.NewLine + Mappings(s));
-                    }
-
-                    foreach (string s in values.Keys)
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Values " + s + "=" + values[s]);
-                    }
-
                     return true;
                 }
             }
@@ -258,6 +247,28 @@ namespace EDDiscovery.EliteDangerous
             }
 
             return false;
+        }
+
+        public string ListBindings()
+        {
+            string ret = "";
+            foreach (string s in devices.Keys)
+            {
+                ret += s + Environment.NewLine + Mappings(s) + Environment.NewLine;
+            }
+            return ret;
+
+        }
+
+        public string ListValues()
+        {
+            string ret = "";
+            foreach (string s in values.Keys)
+            {
+                ret += s + "=" + values[s] + Environment.NewLine;
+            }
+
+            return ret;
         }
 
         public Device GetDevice(string name)

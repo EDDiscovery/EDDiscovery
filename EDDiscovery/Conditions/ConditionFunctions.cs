@@ -334,6 +334,7 @@ namespace EDDiscovery
                 functions.Add("substring",      new FuncEntry(SubString,        3, 3,   1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
 
                 functions.Add("tell",           new FuncEntry(TellFile,         1, 1,   1, 0));   //first is macro
+                functions.Add("tickcount",      new FuncEntry(TickCount,        0, 0,   0, 0));   // no paras
                 functions.Add("trim",           new FuncEntry(Trim,             1, 2,   1,1));
 
                 functions.Add("upper",          new FuncEntry(Upper,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
@@ -1422,6 +1423,16 @@ namespace EDDiscovery
             }
             else
                 return true;
+        }
+
+        #endregion
+
+        #region Misc
+
+        private bool TickCount(out string output)
+        {
+            output = Environment.TickCount.ToStringInvariant();
+            return true;
         }
 
         #endregion

@@ -92,9 +92,9 @@ namespace EDDiscovery
 
             if (includeevent)                                                                   
             {
-                if ((eventname = sp.NextQuotedWord(",")) == null || !sp.IsCharMoveOn(',') ||
-                    (action = sp.NextQuotedWord(",")) == null || !sp.IsCharMoveOn(',') ||
-                    (actiondata = sp.NextQuotedWord(",")) == null || !sp.IsCharMoveOn(','))
+                if ((eventname = sp.NextQuotedWord(", ")) == null || !sp.IsCharMoveOn(',') ||
+                    (action = sp.NextQuotedWord(", ")) == null || !sp.IsCharMoveOn(',') ||
+                    (actiondata = sp.NextQuotedWord(", ")) == null || !sp.IsCharMoveOn(','))
                 {
                     return "Incorrect format of EVENT data associated with condition";
                 }
