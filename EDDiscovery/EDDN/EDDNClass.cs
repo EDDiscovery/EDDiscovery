@@ -213,12 +213,20 @@ namespace EDDiscovery.EDDN
 
         public bool PostMessage(JObject msg)
         {
+            try
+            {
+                ResponseData resp = RequestPost(msg.ToString(), "");
 
-            ResponseData resp = RequestPost(msg.ToString(), "");
-
-            if (resp.StatusCode == System.Net.HttpStatusCode.OK)
-                return true;
-            else return false;
+                if (resp.StatusCode == System.Net.HttpStatusCode.OK)
+                    return true;
+                else return false;
+            }
+            catch (System.Net.WebException ex)
+            {
+                System.Net.HttpWebResponse response = ex.Response as System.Net.HttpWebResponse;
+                System.Diagnostics.Trace.WriteLine($"EDDN message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()}\nEDDN Message: {msg.ToString()}");
+                return false;
+            }
         }
 
 
