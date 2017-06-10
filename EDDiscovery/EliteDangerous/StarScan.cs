@@ -421,7 +421,7 @@ namespace EDDiscovery.EliteDangerous
 
                 }
 
-                return x.CompareTo(y);
+                return StringComparer.InvariantCultureIgnoreCase.Compare(x, y);
             }
         }
 
