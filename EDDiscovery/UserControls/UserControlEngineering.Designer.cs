@@ -86,6 +86,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.AllowDrop = true;
             this.dataGridViewEngineering.AllowUserToAddRows = false;
             this.dataGridViewEngineering.AllowUserToDeleteRows = false;
+            this.dataGridViewEngineering.AllowUserToOrderColumns = true;
             this.dataGridViewEngineering.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewEngineering.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewEngineering.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
