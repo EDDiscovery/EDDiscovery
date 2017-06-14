@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
 
             Wanted = Restore(DB.SQLiteDBClass.GetSettingString(DbWSave, ""), 0, Recipes.Count);
 
-            List<string> engineers = Recipes.SelectMany(r => r.engineers.ToList()).Distinct().ToList();
+            List<string> engineers = Recipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
             efs = new EngineeringFilterSelector(engineers);
             efs.Changed += FilterChanged;
@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
             ufs = new EngineeringFilterSelector(upgrades);
             ufs.Changed += FilterChanged;
 
-            List<string> matShortNames = Recipes.SelectMany(r => r.ingredients.ToList()).Distinct().ToList();
+            List<string> matShortNames = Recipes.SelectMany(r => r.ingredients).Distinct().ToList();
             matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
@@ -109,17 +109,14 @@ namespace EDDiscovery.UserControls
                 MaterialCommoditiesList.EngineeringRecipe r = Recipes[rno];
 
                 int rown = dataGridViewEngineering.Rows.Add();
-
-                using (DataGridViewRow row = dataGridViewEngineering.Rows[rown])
-                {
-                    row.Cells[0].Value = r.name; // debug rno + ":" + r.name;
-                    row.Cells[1].Value = r.module;
-                    row.Cells[2].Value = r.level;
-                    row.Cells[7].Value = r.ingredientsstring;
-                    row.Cells[8].Value = r.engineersstring;
-                    row.Tag = rno;
-                    row.Visible = false;
-                }
+                DataGridViewRow row = dataGridViewEngineering.Rows[rown];
+                row.Cells[UpgradeCol.Index].Value = r.name; // debug rno + ":" + r.name;
+                row.Cells[Module.Index].Value = r.module;
+                row.Cells[Level.Index].Value = r.level;
+                row.Cells[Recipe.Index].Value = r.ingredientsstring;
+                row.Cells[Engineers.Index].Value = r.engineersstring;
+                row.Tag = rno;
+                row.Visible = false;
             }
         }
 
@@ -165,11 +162,12 @@ namespace EDDiscovery.UserControls
                 List<string> matList;
                 if (materials == "All" || materials == "None") { matList = new List<string>(); }
                 else { matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList(); }
-                
+                List<MaterialCommodities> shoppinglist = new List<MaterialCommodities>();
+
                 for (int i = 0; i < Recipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
-                    dataGridViewEngineering.Rows[i].Cells[3].Value = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno]).Item1.ToStringInvariant();
                     bool visible = true;
                     
                     if (engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All")
@@ -207,36 +205,35 @@ namespace EDDiscovery.UserControls
                     }
 
                     dataGridViewEngineering.Rows[i].Visible = visible;
-                }
 
-                List<MaterialCommodities> shoppinglist = new List<MaterialCommodities>();
-
-                for (int i = 0; i < Recipes.Count; i++)
-                {
-                    if (dataGridViewEngineering.Rows[i].Visible)
+                    if (visible)
                     {
-                        int rno = (int)dataGridViewEngineering.Rows[i].Tag;
                         Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], shoppinglist, Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
-                        using (DataGridViewRow row = dataGridViewEngineering.Rows[i])
-                        {
-                            row.Cells[4].Value = Wanted[rno].ToStringInvariant();
-                            row.Cells[5].Value = res.Item2.ToStringInvariant();
-                            row.Cells[6].Value = res.Item3;
-                        }
+                        dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToStringInvariant();
+                        dataGridViewEngineering[Available.Index, i].Value = res.Item2.ToStringInvariant();
+                        dataGridViewEngineering[Notes.Index, i].Value = res.Item3;
                     }
                 }
 
                 dataGridViewEngineering.RowCount = Recipes.Count;         // truncate previous shopping list..
-
-                shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.name.CompareTo(right.name); });
-
-                foreach( MaterialCommodities c in shoppinglist )        // and add new..
+                foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
                 {
-                    Object[] values = { c.name, "", "", "", c.scratchpad.ToStringInvariant(), "", c.shortname };
-                    int rn = dataGridViewEngineering.Rows.Add(values);
-                    dataGridViewEngineering.Rows[rn].ReadOnly = true;     // disable editing wanted..
+                    int rn = dataGridViewEngineering.Rows.Add();
+
+                    foreach (var cell in dataGridViewEngineering.Rows[rn].Cells.OfType<DataGridViewCell>())
+                    {
+                        if (cell.OwningColumn == UpgradeCol)
+                            cell.Value = c.name;
+                        else if (cell.OwningColumn == WantedCol)
+                            cell.Value = c.scratchpad.ToStringInvariant();
+                        else if (cell.OwningColumn == Notes)
+                            cell.Value = c.shortname;
+                        else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
+                            cell.Value = string.Empty;
+                    }
+                    dataGridViewEngineering.Rows[rn].ReadOnly = true;   // disable editing wanted..
                 }
 
                 if ( fdrow>=0 && dataGridViewEngineering.Rows[fdrow].Visible )        // better check visible, may have changed..
@@ -292,21 +289,21 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            string v = (string)dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-            int iv = 0;
-            int rno = (int)dataGridViewEngineering.Rows[e.RowIndex].Tag;
-
-            if (v.InvariantParse(out iv))
+            if (e.ColumnIndex == WantedCol.Index)
             {
-                if (e.ColumnIndex == 4)
+                string v = (string)dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value;
+                int iv = 0;
+                int rno = (int)dataGridViewEngineering.Rows[e.RowIndex].Tag;
+
+                if (v.InvariantParse(out iv))
                 {
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     Wanted[rno] = iv;
                     Display();
                 }
+                else
+                    dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = Wanted[rno].ToStringInvariant();
             }
-            else
-                dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Wanted[rno].ToStringInvariant();
         }
 
         private Rectangle moveMoveDragBox;
