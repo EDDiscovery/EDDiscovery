@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanelCurrent = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewCurrent = new System.Windows.Forms.DataGridView();
+            this.dataGridViewCurrent = new ExtendedControls.DoubleBufferedDataGridView();
             this.cColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColEndDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomCur = new ExtendedControls.VScrollBarCustom();
             this.panelPrev = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanelPrev = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewPrevious = new System.Windows.Forms.DataGridView();
+            this.dataGridViewPrevious = new ExtendedControls.DoubleBufferedDataGridView();
             this.PcolName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -108,6 +108,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCurrent.AllowUserToAddRows = false;
             this.dataGridViewCurrent.AllowUserToDeleteRows = false;
             this.dataGridViewCurrent.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewCurrent.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewCurrent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewCurrent.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cColName,
@@ -123,6 +124,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCurrent.Name = "dataGridViewCurrent";
             this.dataGridViewCurrent.RowHeadersVisible = false;
             this.dataGridViewCurrent.RowHeadersWidth = 25;
+            this.dataGridViewCurrent.RowTemplate.Height = 26;
             this.dataGridViewCurrent.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCurrent.Size = new System.Drawing.Size(780, 266);
             this.dataGridViewCurrent.TabIndex = 1;
@@ -247,6 +249,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewPrevious.AllowUserToAddRows = false;
             this.dataGridViewPrevious.AllowUserToDeleteRows = false;
             this.dataGridViewPrevious.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewPrevious.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewPrevious.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPrevious.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.PcolName,
@@ -263,6 +266,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewPrevious.Name = "dataGridViewPrevious";
             this.dataGridViewPrevious.RowHeadersVisible = false;
             this.dataGridViewPrevious.RowHeadersWidth = 25;
+            this.dataGridViewPrevious.RowTemplate.Height = 26;
             this.dataGridViewPrevious.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewPrevious.Size = new System.Drawing.Size(780, 270);
             this.dataGridViewPrevious.TabIndex = 2;
@@ -493,12 +497,12 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanelCurrent;
-        private System.Windows.Forms.DataGridView dataGridViewCurrent;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewCurrent;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomCur;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panelPrev;
         private System.Windows.Forms.Panel panelButtons;
-        private System.Windows.Forms.DataGridView dataGridViewPrevious;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewPrevious;
         private System.Windows.Forms.Panel panelCurrent;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanelPrev;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomPrev;

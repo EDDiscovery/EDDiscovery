@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewModules = new System.Windows.Forms.DataGridView();
+            this.dataGridViewModules = new ExtendedControls.DoubleBufferedDataGridView();
             this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -94,6 +94,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewModules.Name = "dataGridViewModules";
             this.dataGridViewModules.RowHeadersVisible = false;
+            this.dataGridViewModules.RowTemplate.Height = 26;
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewModules.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewModules.TabIndex = 1;
@@ -280,7 +281,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewModules;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewModules;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         internal ExtendedControls.ComboBoxCustom comboBoxShips;

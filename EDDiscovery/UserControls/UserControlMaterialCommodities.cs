@@ -22,7 +22,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 
@@ -52,9 +51,7 @@ namespace EDDiscovery.UserControls
             travelhistorycontrol = ed.TravelControl;
             displaynumber = vn;
 
-            dataGridViewMC.MakeDoubleBuffered();
             dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewMC.RowTemplate.Height = 26;
 
             if (materials)
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number

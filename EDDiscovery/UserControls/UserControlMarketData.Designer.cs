@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
+            this.dataGridViewMarketData = new ExtendedControls.DoubleBufferedDataGridView();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.checkBoxBuyOnly = new ExtendedControls.CheckBoxCustom();
@@ -102,6 +102,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMarketData.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMarketData.Name = "dataGridViewMarketData";
             this.dataGridViewMarketData.RowHeadersVisible = false;
+            this.dataGridViewMarketData.RowTemplate.Height = 26;
             this.dataGridViewMarketData.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewMarketData.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewMarketData.TabIndex = 1;
@@ -337,7 +338,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewMarketData;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewMarketData;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.ToolTip toolTip1;

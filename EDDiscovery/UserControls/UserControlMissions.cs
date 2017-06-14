@@ -22,7 +22,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 
@@ -54,15 +53,8 @@ namespace EDDiscovery.UserControls
             discoveryform = ed;
             displaynumber = vn;
 
-            dataGridViewCurrent.MakeDoubleBuffered();
-            dataGridViewCurrent.RowTemplate.Height = 26;
             dataGridViewCurrent.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewCurrent.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-
-            dataGridViewPrevious.MakeDoubleBuffered();
-            dataGridViewPrevious.RowTemplate.Height = 26;
             dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             ed.TravelControl.OnTravelSelectionChanged += Display;

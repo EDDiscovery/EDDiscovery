@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.labelNoItems = new System.Windows.Forms.Label();
-            this.dataGridViewLedger = new System.Windows.Forms.DataGridView();
+            this.dataGridViewLedger = new ExtendedControls.DoubleBufferedDataGridView();
             this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -111,6 +111,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewLedger.Name = "dataGridViewLedger";
             this.dataGridViewLedger.RowHeadersVisible = false;
+            this.dataGridViewLedger.RowTemplate.Height = 26;
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewLedger.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewLedger.TabIndex = 1;
@@ -317,7 +318,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewLedger;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewLedger;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.Label labelNoItems;
