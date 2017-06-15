@@ -341,6 +341,8 @@ namespace EDDiscovery
 
                 functions.Add("version",        new FuncEntry(Version,          1,1,    0));     // don't check first para
 
+                functions.Add("wordlistcount",  new FuncEntry(WordListCount,    1,      1,1));       // first is a var or string
+                functions.Add("wordlistentry",  new FuncEntry(WordListEntry,    2,2,    1,1));       // first is a var or string, second is a var or literal
                 functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a var or string, second is a var or literal, third is a macro or string
                 functions.Add("write",          new FuncEntry(WriteFile,        2, 2,   3, 2));      // first must be a var, second can be macro or string
                 functions.Add("writeline",      new FuncEntry(WriteLineFile,    2, 2,   3, 2));      // first must be a var, second can be macro or string
@@ -719,6 +721,40 @@ namespace EDDiscovery
                 return false;
             }
         }
+
+        private bool WordListCount(out string output)
+        {
+            StringParser l = new StringParser(paras[0].isstring ? paras[0].value : vars[paras[0].value]);
+            List<string> ll = l.NextQuotedWordList();
+            output = ll.Count.ToStringInvariant();
+            return true;
+        }
+
+        private bool WordListEntry(out string output)
+        {
+            StringParser l = new StringParser(paras[0].isstring ? paras[0].value : vars[paras[0].value]);
+            string c = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
+
+            output = "";
+
+            int count;
+            if (c.InvariantParse(out count))
+            {
+                List<string> ll = l.NextQuotedWordList();
+                if (count >= 0 && count < ll.Count)
+                {
+                    output = ll[count];
+                }
+            }
+            else
+            {
+                output = "Parameter should be an integer constant or a variable name with an integer in its value";
+                return false;
+            }
+
+            return true;
+        }
+
 
         private bool Replace(out string output)
         {

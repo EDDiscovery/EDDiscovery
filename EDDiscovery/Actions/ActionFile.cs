@@ -207,7 +207,7 @@ namespace EDDiscovery.Actions
                                 else
                                     return name + " " + lineno + " Incorrectly formatted INSTALL variable" + Environment.NewLine;
                             }
-                            else if (line.StartsWith("//") || line.Length == 0)
+                            else if (line.StartsWith("//") || line.StartsWith("REM", StringComparison.InvariantCultureIgnoreCase) || line.Length == 0)
                             {
                             }
                             else
