@@ -143,6 +143,18 @@ namespace EDDiscovery
             LoadConditions(j);
         }
 
+        public void InitCondition(string t, List<string> varfields, EDDiscoveryForm frm, Condition j)
+        {
+            ConditionLists l = new ConditionLists();
+            if ( j!= null && j.fields != null )
+                l.Add(j);
+            Init(t, null, varfields, false, frm);
+            buttonMore.Visible = true;
+            buttonSort.Visible = false;
+            buttonSort2.Visible = false;
+            LoadConditions(l);
+        }
+
         public void InitAction(string t, List<string> el, List<string> varfields , ConditionVariables ug, 
                             EDDiscovery.Actions.ActionFileList acfilelist , EDDiscoveryForm frm )
         {

@@ -177,6 +177,18 @@ namespace EDDiscovery
             else
                 return false;
         }
+
+        public ConditionEntry()
+        {
+
+        }
+
+        public ConditionEntry(ConditionEntry other)
+        {
+            itemname = other.itemname;
+            matchtype = other.matchtype;
+            matchstring = other.matchstring;
+        }
     };
 
 }

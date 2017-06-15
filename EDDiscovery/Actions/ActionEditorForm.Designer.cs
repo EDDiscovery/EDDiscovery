@@ -34,7 +34,6 @@
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOK = new System.Windows.Forms.Panel();
-            this.buttonExtGlobals = new ExtendedControls.ButtonExt();
             this.checkBoxCustomSetEnabled = new ExtendedControls.CheckBoxCustom();
             this.comboBoxCustomEditProg = new ExtendedControls.ComboBoxCustom();
             this.labelEditProg = new System.Windows.Forms.Label();
@@ -48,6 +47,7 @@
             this.buttonMore = new ExtendedControls.ButtonExt();
             this.contextMenuStripBottom = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.configureInstallationValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -111,29 +111,16 @@
             // 
             // panelOK
             // 
-            this.panelOK.Controls.Add(this.buttonExtGlobals);
             this.panelOK.Controls.Add(this.checkBoxCustomSetEnabled);
             this.panelOK.Controls.Add(this.comboBoxCustomEditProg);
             this.panelOK.Controls.Add(this.labelEditProg);
             this.panelOK.Controls.Add(this.buttonCancel);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(0, 584);
+            this.panelOK.Location = new System.Drawing.Point(0, 562);
             this.panelOK.Name = "panelOK";
             this.panelOK.Size = new System.Drawing.Size(1145, 30);
             this.panelOK.TabIndex = 9;
-            // 
-            // buttonExtGlobals
-            // 
-            this.buttonExtGlobals.BorderColorScaling = 1.25F;
-            this.buttonExtGlobals.ButtonColorScaling = 0.5F;
-            this.buttonExtGlobals.ButtonDisabledScaling = 0.5F;
-            this.buttonExtGlobals.Location = new System.Drawing.Point(534, 4);
-            this.buttonExtGlobals.Name = "buttonExtGlobals";
-            this.buttonExtGlobals.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtGlobals.TabIndex = 11;
-            this.buttonExtGlobals.Text = "Globals";
-            this.buttonExtGlobals.UseVisualStyleBackColor = true;
             // 
             // checkBoxCustomSetEnabled
             // 
@@ -150,6 +137,7 @@
             this.checkBoxCustomSetEnabled.Text = "Enabled";
             this.checkBoxCustomSetEnabled.TickBoxReductionSize = 10;
             this.checkBoxCustomSetEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxCustomSetEnabled.CheckedChanged += new System.EventHandler(this.checkBoxCustomSetEnabled_CheckedChanged);
             // 
             // comboBoxCustomEditProg
             // 
@@ -163,7 +151,7 @@
             this.comboBoxCustomEditProg.DropDownWidth = 200;
             this.comboBoxCustomEditProg.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomEditProg.ItemHeight = 13;
-            this.comboBoxCustomEditProg.Location = new System.Drawing.Point(371, 3);
+            this.comboBoxCustomEditProg.Location = new System.Drawing.Point(181, 3);
             this.comboBoxCustomEditProg.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomEditProg.Name = "comboBoxCustomEditProg";
             this.comboBoxCustomEditProg.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -175,11 +163,12 @@
             this.comboBoxCustomEditProg.Size = new System.Drawing.Size(145, 23);
             this.comboBoxCustomEditProg.TabIndex = 9;
             this.comboBoxCustomEditProg.ValueMember = "";
+            this.comboBoxCustomEditProg.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomEditProg_SelectedIndexChanged);
             // 
             // labelEditProg
             // 
             this.labelEditProg.AutoSize = true;
-            this.labelEditProg.Location = new System.Drawing.Point(298, 7);
+            this.labelEditProg.Location = new System.Drawing.Point(108, 7);
             this.labelEditProg.Name = "labelEditProg";
             this.labelEditProg.Size = new System.Drawing.Size(46, 13);
             this.labelEditProg.TabIndex = 8;
@@ -197,6 +186,7 @@
             this.buttonCancel.TabIndex = 6;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonOK
             // 
@@ -210,6 +200,7 @@
             this.buttonOK.TabIndex = 7;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // panelOuter
             // 
@@ -218,7 +209,7 @@
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(0, 24);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(1145, 560);
+            this.panelOuter.Size = new System.Drawing.Size(1145, 538);
             this.panelOuter.TabIndex = 10;
             // 
             // panelVScroll
@@ -232,7 +223,7 @@
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.ScrollBarWidth = 20;
-            this.panelVScroll.Size = new System.Drawing.Size(1143, 558);
+            this.panelVScroll.Size = new System.Drawing.Size(1143, 536);
             this.panelVScroll.TabIndex = 8;
             this.panelVScroll.VerticalScrollBarDockRight = true;
             // 
@@ -247,6 +238,7 @@
             this.buttonSort2.TabIndex = 6;
             this.buttonSort2.Text = "Sort2";
             this.buttonSort2.UseVisualStyleBackColor = true;
+            this.buttonSort2.Click += new System.EventHandler(this.buttonSort2_Click);
             // 
             // buttonSort
             // 
@@ -259,6 +251,7 @@
             this.buttonSort.TabIndex = 6;
             this.buttonSort.Text = "Sort";
             this.buttonSort.UseVisualStyleBackColor = true;
+            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
             // 
             // vScrollBarCustom1
             // 
@@ -272,12 +265,12 @@
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 32;
             this.vScrollBarCustom1.Location = new System.Drawing.Point(1123, 0);
-            this.vScrollBarCustom1.Maximum = -492;
+            this.vScrollBarCustom1.Maximum = -470;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 558);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 536);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
@@ -286,8 +279,8 @@
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -492;
-            this.vScrollBarCustom1.ValueLimited = -492;
+            this.vScrollBarCustom1.Value = -470;
+            this.vScrollBarCustom1.ValueLimited = -470;
             // 
             // buttonMore
             // 
@@ -300,6 +293,7 @@
             this.buttonMore.TabIndex = 5;
             this.buttonMore.Text = "+";
             this.buttonMore.UseVisualStyleBackColor = true;
+            this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
             // contextMenuStripBottom
             // 
@@ -314,6 +308,14 @@
             this.configureInstallationValuesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.configureInstallationValuesToolStripMenuItem.Text = "Configure Installation Values";
             // 
+            // statusStripCustom
+            // 
+            this.statusStripCustom.Location = new System.Drawing.Point(0, 592);
+            this.statusStripCustom.Name = "statusStripCustom";
+            this.statusStripCustom.Size = new System.Drawing.Size(1145, 22);
+            this.statusStripCustom.TabIndex = 28;
+            this.statusStripCustom.Text = "statusStripCustom1";
+            // 
             // ActionEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -322,6 +324,7 @@
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);
+            this.Controls.Add(this.statusStripCustom);
             this.Name = "ActionEditorForm";
             this.Text = "ActionEditor";
             this.panelTop.ResumeLayout(false);
@@ -332,6 +335,7 @@
             this.panelVScroll.ResumeLayout(false);
             this.contextMenuStripBottom.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -342,7 +346,6 @@
         private ExtendedControls.DrawnPanel panel_minimize;
         private System.Windows.Forms.Label label_index;
         private System.Windows.Forms.Panel panelOK;
-        private ExtendedControls.ButtonExt buttonExtGlobals;
         private ExtendedControls.CheckBoxCustom checkBoxCustomSetEnabled;
         private ExtendedControls.ComboBoxCustom comboBoxCustomEditProg;
         private System.Windows.Forms.Label labelEditProg;
@@ -356,5 +359,6 @@
         private ExtendedControls.ButtonExt buttonMore;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBottom;
         private System.Windows.Forms.ToolStripMenuItem configureInstallationValuesToolStripMenuItem;
+        private ExtendedControls.StatusStripCustom statusStripCustom;
     }
 }
