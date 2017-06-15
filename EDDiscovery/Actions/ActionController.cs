@@ -73,7 +73,7 @@ namespace EDDiscovery.Actions
             ActionConfigureKeys();
         }
 
-        public void EditAddOnActionFile()
+        public void EditAddOnActionFile3()
         {
             EDDiscovery.ConditionFilterForm frm = new ConditionFilterForm();
 
@@ -112,6 +112,53 @@ namespace EDDiscovery.Actions
 
             ActionConfigureKeys();
         }
+
+
+        public void EditAddOnActionFile()
+        {
+            List<string> jevents = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(towords: false);
+            jevents.Sort();
+
+            List<Tuple<string, string>> eventnames = new List<Tuple<string, string>>();
+            foreach (string s in jevents)
+                eventnames.Add(new Tuple<string, string>(s, "Journal"));
+
+            eventnames.Add(new Tuple<string, string>("All","Misc"));
+            eventnames.Add(new Tuple<string, string>("onRefreshStart", "Program"));
+            eventnames.Add(new Tuple<string, string>("onRefreshEnd", "Program"));
+            eventnames.Add(new Tuple<string, string>("onInstall", "Program"));
+            eventnames.Add(new Tuple<string, string>("onStartup", "Program"));
+            eventnames.Add(new Tuple<string, string>("onPostStartup", "Program"));
+            eventnames.Add(new Tuple<string, string>("onShutdown", "Program"));
+            eventnames.Add(new Tuple<string, string>("onKeyPress", "UI"));
+            eventnames.Add(new Tuple<string, string>("onTimer", "Action"));
+            eventnames.Add(new Tuple<string, string>("onPopUp", "UI"));
+            eventnames.Add(new Tuple<string, string>("onPopDown", "UI"));
+            eventnames.Add(new Tuple<string, string>("onTabChange", "UI"));
+            eventnames.Add(new Tuple<string, string>("onPanelChange", "UI"));
+            eventnames.Add(new Tuple<string, string>("onHistorySelection", "UI"));
+            eventnames.Add(new Tuple<string, string>("onSayStarted", "Audio"));
+            eventnames.Add(new Tuple<string, string>("onSayFinished", "Audio"));
+            eventnames.Add(new Tuple<string, string>("onPlayStarted", "Audio"));
+            eventnames.Add(new Tuple<string, string>("onPlayFinished", "Audio"));
+            eventnames.Add(new Tuple<string, string>("onMenuItem", "UI"));
+            eventnames.Add(new Tuple<string, string>("onEliteInputRaw", "EliteUI"));
+            eventnames.Add(new Tuple<string, string>("onEliteInput", "EliteUI"));
+            eventnames.Add(new Tuple<string, string>("onEliteInputOff", "EliteUI"));
+
+            ActionEditorForm frm = new ActionEditorForm();
+
+            frm.Init("Actions: Define actions", actionfiles.CurFile, eventnames, discoveryform);
+            frm.TopMost = discoveryform.FindForm().TopMost;
+
+            frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
+
+            //persistentglobalvariables = frm.userglobalvariables;
+            //globalvariables = new ConditionVariables(programrunglobalvariables, persistentglobalvariables);    // remake
+
+            ActionConfigureKeys();
+        }
+
 
         public void ManageAddOns()
         {

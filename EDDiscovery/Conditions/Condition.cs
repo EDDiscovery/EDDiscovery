@@ -15,6 +15,26 @@ namespace EDDiscovery
         public string action;                           // action associated with a pass
         public string actiondata;                       // any data 
 
+        public Condition()
+        {
+            eventname = action = actiondata = "";
+        }
+
+        public Condition(Condition other)   // full clone
+        {
+            eventname = other.eventname;
+            if (other.fields != null)
+            {
+                fields = new List<ConditionEntry>();
+                foreach (ConditionEntry e in other.fields)
+                    fields.Add(new ConditionEntry(e));
+            }
+            innercondition = other.innercondition;
+            outercondition = other.outercondition;
+            action = other.action;
+            actiondata = other.actiondata;
+        }
+
         public bool Create(string e, string a, string d, string i, string o)   // i,o can have spaces inserted into enum
         {
             try
@@ -59,7 +79,7 @@ namespace EDDiscovery
             if (includeaction)
                 ret += eventname.QuoteString() + ", " + action.QuoteString() + ", " + actiondata.QuoteString() + ", ";
 
-            for (int i = 0; i < fields.Count; i++)
+            for (int i = 0; fields != null && i < fields.Count; i++)
             {
                 if (i > 0)
                     ret += " " + innercondition.ToString() + " ";
