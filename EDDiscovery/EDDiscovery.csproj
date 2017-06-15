@@ -124,7 +124,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CSCore, Version=1.2.1.1, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSCore.1.2.1.1\lib\net35-client\CSCore.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Examples\cscore\CSCore\bin\Debug\CSCore.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -212,6 +213,12 @@
     <Compile Include="Actions\ActionCommands\ActionProgramwindow.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
     <Compile Include="Actions\ActionCommands\ActionScanStar.cs" />
+    <Compile Include="Actions\ActionEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ActionEditorForm.Designer.cs">
+      <DependentUpon>ActionEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\ActionFile.cs" />
     <Compile Include="Actions\ActionFileList.cs" />
     <Compile Include="Actions\ActionProgramList.cs" />
@@ -925,6 +932,9 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Actions\ActionEditorForm.resx">
+      <DependentUpon>ActionEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\ActionProgramForm.resx">
       <DependentUpon>ActionProgramForm.cs</DependentUpon>
     </EmbeddedResource>

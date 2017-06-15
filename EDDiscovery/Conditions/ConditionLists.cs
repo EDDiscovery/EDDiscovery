@@ -206,6 +206,32 @@ namespace EDDiscovery
                                     matched = ret.Contains(leftside, StringComparer.InvariantCultureIgnoreCase);
                                 }
                             }
+                            else if (f.matchtype == ConditionEntry.MatchType.AnyOfAny)
+                            {
+                                StringParser l = new StringParser(leftside);
+                                List<string> ll = l.NextQuotedWordList();
+
+                                StringParser r = new StringParser(rightside);
+                                List<string> rl = r.NextQuotedWordList();
+
+                                if (ll == null || rl == null)
+                                {
+                                    errlist += "AnyOfAny value list is not in a optionally quoted comma separated form on both sides" + Environment.NewLine;
+                                    innerres = false;
+                                    break;                       // stop the loop, its a false
+                                }
+                                else
+                                {
+                                    foreach (string s in ll)        // for all left strings
+                                    {
+                                        if (rl.Contains(s, StringComparer.InvariantCultureIgnoreCase))  // if right has it..
+                                        {
+                                            matched = true;     // matched and break
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                             else if (f.matchtype == ConditionEntry.MatchType.IsEmpty)
                             {
                                 matched = leftside.Length == 0;

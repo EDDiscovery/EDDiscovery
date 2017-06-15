@@ -38,7 +38,8 @@ namespace EDDiscovery
             IsPresent,          // field is present
             IsNotPresent,       // field is not present
 
-            IsOneOf,            // is it one of a quoted comma list..
+            IsOneOf,            // left, is it one of a quoted comma list on right
+            AnyOfAny,           // is any in a comma separ on left, one of a quoted comma list on right
 
             AlwaysTrue,         // Always true
             AlwaysFalse,          // never true
@@ -103,6 +104,7 @@ namespace EDDiscovery
                                        "Is Present",
                                        "Not Present",
                                        "Is One Of",
+                                       "Any Of Any",
                                        "Always True/Enable",
                                        "Always False/Disable"
                                     };
@@ -131,6 +133,7 @@ namespace EDDiscovery
                                        "IsPresent",
                                        "NotPresent",
                                        "IsOneOf",
+                                       "AnyOfAny",
                                        "AlwaysTrue",
                                        "AlwaysFalse"
                                     };
