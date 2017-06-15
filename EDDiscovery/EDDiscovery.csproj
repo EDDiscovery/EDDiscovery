@@ -1396,6 +1396,8 @@
     <ItemGroup>
       <ZipFiles Include="$(OutputPath)\EDDiscovery.exe" />
       <ZipFiles Include="$(OutputPath)\EDDiscovery.pdb" />
+      <ZipFiles Include="$(OutputPath)\ExtendedControls.dll" />
+      <ZipFiles Include="$(OutputPath)\ExtendedControls.pdb" />
       <ZipFiles Include="$(ProjectDir)\App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
