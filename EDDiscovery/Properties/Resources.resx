@@ -877,4 +877,7 @@
   <data name="High_metal_content_world_White3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\High_metal_content_world_White3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="no_entry" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\no_entry.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
