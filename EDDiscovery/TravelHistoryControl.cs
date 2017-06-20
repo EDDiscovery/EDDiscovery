@@ -504,14 +504,17 @@ namespace EDDiscovery
         {
             // ORDER IMPORTANT for right outer/inner splitter, otherwise windows fixes it 
 
-            try
+            if (!EDDConfig.Options.NoWindowReposition)
             {
-                splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
-                splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-                splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
-                splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
+                try
+                {
+                    splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
+                    splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+                    splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
+                    splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
+                }
+                catch { };          // so splitter can except, if values are strange, but we don't really care, so lets throw away the exception
             }
-            catch { };          // so splitter can except, if values are strange, but we don't really care, so lets throw away the exception
 
             userControlTravelGrid.LoadLayout();
 
