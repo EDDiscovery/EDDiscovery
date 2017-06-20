@@ -42,9 +42,8 @@ namespace ExtendedControls
             if (sz.Width > 0 && sz.Height>0 && this.Text.Length>0)
             {
                 using (Bitmap mp = new Bitmap(sz.Width, sz.Height))   // bitmaps .. drawing directly does not work due to aliasing
+                using (Graphics mpg = Graphics.FromImage(mp))
                 {
-                    Graphics mpg = Graphics.FromImage(mp);
-
                     if (!this.TextBackColor.IsFullyTransparent())
                     {
                         using (Brush b = new SolidBrush(this.TextBackColor))
